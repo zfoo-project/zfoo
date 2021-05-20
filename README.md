@@ -4,7 +4,7 @@
 - **极致序列化**，原生集成的目前二进制序列化和反序列化速度最快的 [zfoo protocol](protocol/README.md) 作为网络通讯协议
 - **高可拓展性**，单台服务器部署，集群部署，注册中心加集群部署，网关加集群部署，随意搭配
 
-周边生态较为完善的RPC框架
+完善的工作开发流程，完整的线上解决方案
 
 - **普通java项目，spring项目，spring boot项目，一行代码无差别热更新**  [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
 - **Excel配置自动映射和Excel热更新方案** [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
@@ -14,6 +14,7 @@
 - 时间任务调度 [scheduler](scheduler/README.md)
 
 ### Ⅱ. 背景和适用项目
+
 ```
 用Java做网络游戏涉及到比较复杂的交互场景的时候，远程请求非常多，这时候就需要一个高性能的rpc框架。
 Java生态的rpc框架非常多，但是很少又rpc框架能够又契合到游戏项目的rpc框架，下面列了一些：
@@ -24,6 +25,7 @@ Java生态的rpc框架非常多，但是很少又rpc框架能够又契合到游�
 经过后续的不断优化，还做出了一个目前Java速度最快的序列化框架，然后速度就直接起飞了。
 后来发现其实不仅仅能用来做游戏，只要有对性能有极致需求的rpc场景都能使用的上这个框架。
 ```
+
 - 性能需求极高的项目，如游戏，直播等
 - 节省研发成本的项目，如想节省，开发，部署，运维成本
 - 喜欢 [KISS法则](https://baike.baidu.com/item/KISS原则/3242383) 的项目 ，简单的配置，优雅的代码。
