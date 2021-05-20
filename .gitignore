@@ -1,0 +1,61 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+*.log*
+**/logs/
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+
+# 忽略IntelliJ IDEA生成的项目描述文件
+.idea
+*.iml
+**/target/
+
+# 忽略lucene生成的索引文件
+**/lucene-data/
+
+# 忽略生成的协议文件
+**/jsProtocol/
+**/CsProtocol/
+**/LuaProtocol/
+**/zapp-user/protocol/
+**/protobuf/
+
+# 以下是web前端需要忽略的文件
+# 忽略npm生成的package描述文件
+package-lock.json
+
+
+# 忽略web前端前端package.json，bower.json所有依赖的包
+**/node_modules/
+**/bower_components/
+
+# 忽略npm编译后的文件
+**/dist/
+
+# 忽略webapp中部署的文件
+**/resources/static/
+**/resources/templates/index.html
+
+# test文件
+tests/**/coverage/
+tests/e2e/reports

@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+option java_package = "com.zfoo.protocol.packet";
+option java_outer_classname = "ProtobufObject";
+
+// protoc -I=D:\zfoo\protocol\src\test\resources --java_out=D:\zfoo\protocol\src\test\java D:\zfoo\protocol\src\test\resources\speed.proto
+
+message ObjectB {
+  bool flag = 1;
+}
+
+message ObjectA {
+  int32 a = 1;
+  map<int32, string> m = 2;
+  ObjectB objectB = 3;
+}
+
+message ListInteger {
+  repeated int32 a = 1;
+}
+
+message ListListInteger {
+  repeated ListInteger a = 1;
+}
+
+message ListListListInteger {
+  repeated ListListInteger a = 1;
+}
+
+message ListObjectA {
+  repeated ObjectA a = 1;
+}
+
+message ListListObjectA {
+  repeated ListObjectA a = 1;
+}
+
+message MapObjectA {
+  ObjectA key = 1;
+  ListInteger value = 2;
+}
+
+message MapListListObjectA {
+  ListListObjectA key = 1;
+  ListListListInteger value = 2;
+}
+
+message MapIntegerString {
+  map<int32, string> a = 1;
+}
+
+message ListMapIntegerString {
+  repeated MapIntegerString a = 1;
+}
+
+message MapListMapInteger {
+  ListMapIntegerString key = 1;
+  ListMapIntegerString value = 2;
+}
+
+message ProtobufComplexObject {
+  // protobuf不支持单个byte，用int代替，增加了一点性能开销
+  int32 a = 1;
+  int32 aa = 2;
+  bytes aaa = 3;
+  bytes aaaa = 4;
+
+  // protobuf不支持单个short，用int代替，增加了一点性能开销
+  int32 b = 5;
+  int32 bb = 6;
+  // protobuf不支持单个short，用bytes代替，减少了一点性能开销
+  bytes bbb = 7;
+  bytes bbbb = 8;
+
+  int32 c = 9;
+  int32 cc = 10;
+  repeated int32 ccc = 11;
+  repeated int32 cccc = 12;
+
+  int64 d = 13;
+  int64 dd = 14;
+  repeated int64 ddd = 15;
+  repeated int64 dddd = 16;
+
+  float e = 17;
+  float ee = 18;
+  repeated float eee = 19;
+  repeated float eeee = 20;
+
+  double f = 21;
+  double ff = 22;
+  repeated double fff = 23;
+  repeated double ffff = 24;
+
+  bool g = 25;
+  bool gg = 26;
+  repeated bool ggg = 27;
+  repeated bool gggg = 28;
+
+  // protobuf不支持char，用string代替，增加了一点性能开销
+  string h = 29;
+  string hh = 30;
+  repeated string hhh = 31;
+  repeated string hhhh = 32;
+
+  string jj = 33;
+  repeated string jjj = 34;
+
+  ObjectA kk = 35;
+  repeated ObjectA kkk = 36;
+
+  repeated int32 l = 37;
+  // protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+  repeated ListListInteger ll = 38;
+  repeated ListObjectA lll = 39;
+  repeated string llll = 40;
+  repeated MapIntegerString lllll = 41;
+
+  map<int32, string> m = 51;
+  map<int32, ObjectA> mm = 52;
+  repeated MapObjectA mmm = 53;           // protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+  repeated MapListListObjectA mmmm = 54;  // protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+  repeated MapListMapInteger mmmmm = 55;  // protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+
+
+  repeated int32 s = 61;                  // protobuf不支持set，用数组代替，减少了很多性能开销
+  repeated ListListInteger ss = 62;       // protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+  repeated ListObjectA sss = 63;          // protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+  repeated string ssss = 64;              // protobuf不支持set，用数组代替，减少了很多性能开销
+  repeated MapIntegerString sssss = 65;   // protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+}
+
+
+message ProtobufNormalObject {
+  int32 a = 1;
+  bytes aaa = 3;
+
+  int32 b = 5;
+
+  int32 c = 9;
+
+  int64 d = 13;
+
+  float e = 17;
+
+  double f = 21;
+
+  bool g = 25;
+
+  string jj = 33;
+
+  ObjectA kk = 35;
+
+  repeated int32 l = 37;
+  repeated int64 ll = 38;
+  repeated ObjectA lll = 39;
+  repeated string llll = 40;
+
+  map<int32, string> m = 51;
+  map<int32, ObjectA> mm = 52;
+
+  repeated int32 s = 61;
+  repeated string ssss = 64;
+}
+
+message ProtobufSimpleObject {
+  int32 c = 9;
+  bool g = 25;
+}

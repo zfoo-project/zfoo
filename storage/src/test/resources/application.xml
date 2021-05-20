@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    您也许已经注意到 XML 声明没有关闭标签。这不是错误。声明不属于XML本身的组成部分。
+    它不是 XML 元素，也不需要关闭标签。
+-->
+
+<!--
+    默认的命名空间（Default Namespaces）为元素定义默认的命名空间可以让我们省去在所有的子元素中使用前缀的工作。
+    使用语法：xmlns=".......namespaceURI"，这样做的原因是每个xml都有一个根元素
+-->
+
+<!--
+   1.第一步:添加xmlns:xsi属性，引入xsi命名空间
+   2.第二步:添加命名空间，可添加多个，但没有前缀的命名空间最多只能有1个
+   3.第三步:通过xsi命名空间下的属性schemaLocation指定每个命名空间XSD文件的URI，命名空间和相应URI一一对应，多个命名空间用空格分隔
+           本xml文件中要用到某些来自xsi代表的“http://www.w3.org/2001/XMLSchema-instance”这个命名空间的元素
+           比如用来引入无命名空间schema文件的noNamespaceSchemaLocation="XXX"；
+           以及引入自带命名空间的schema文件的schemaLocation="XXX"这些元素。
+           这些元素是包含在xsi命名空间中的，所有的xml文件只要引用这些元素 就要引入xsi这个命名空间。
+           xsi这三个字母不是硬性规定，只是大家都这么用，方便阅读而已。
+           xsi是http://www.w3.org/2001/XMLSchema-instance的别名。
+           第一个URI是名称空间的名字，第二个URI给出模式文档的位置
+-->
+
+<!--
+   一旦您拥有了可用的 XML Schema 实例命名空间：xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   您就可以使用 schemaLocation 属性了。此属性有两个值。第一个值是需要使用的命名空间。
+   第二个值是供命名空间使用的 XML schema 的位置：
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+
+       xmlns:storage="http://www.zfoo.com/schema/storage"
+
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+
+    http://www.zfoo.com/schema/storage
+    http://www.zfoo.com/schema/storage-1.0.xsd">
+
+
+    <context:component-scan base-package="com.zfoo.storage"/>
+
+    <storage:storage id="resourceManager">
+        <storage:scan package="com.zfoo.**.resource"/>
+        <storage:resource location="classpath:/excel" suffix="xls"/>
+    </storage:storage>
+
+</beans>

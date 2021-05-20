@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Agent-Class: com.zfoo.hotswap.agent.HotSwapAgent
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true
+Can-Set-Native-Method-Prefix: true

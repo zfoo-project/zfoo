@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+
+            xmlns="http://www.zfoo.com/schema/net"
+            targetNamespace="http://www.zfoo.com/schema/net"
+
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:complexType name="addressAttributeType">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="url" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="addressType">
+        <xsd:sequence>
+            <xsd:element name="address" maxOccurs="unbounded" type="addressAttributeType"/>
+        </xsd:sequence>
+        <xsd:attribute name="center" type="xsd:string" use="required"/>
+        <xsd:attribute name="user" type="xsd:string" use="required"/>
+        <xsd:attribute name="password" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="providerAttributeType">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="url" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="providerType">
+        <xsd:sequence>
+            <xsd:element name="module" maxOccurs="unbounded" type="moduleAttributeType" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="dispatch" type="xsd:string" use="required"/>
+        <xsd:attribute name="dispatch-thread" type="xsd:string" use="optional"/>
+        <xsd:attribute name="address" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="consumerType">
+        <xsd:sequence>
+            <xsd:element name="module" maxOccurs="unbounded" type="moduleAttributeType"/>
+        </xsd:sequence>
+        <xsd:attribute name="load-balancer" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="moduleAttributeType">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+
+    <xsd:complexType name="configType">
+        <xsd:sequence>
+            <xsd:choice minOccurs="0" maxOccurs="1">
+                <xsd:element name="registry" type="addressType"/>
+            </xsd:choice>
+            <xsd:choice minOccurs="0" maxOccurs="1">
+                <xsd:element name="monitor" type="addressType"/>
+            </xsd:choice>
+            <xsd:choice minOccurs="0" maxOccurs="1">
+                <xsd:element name="host" type="addressType"/>
+            </xsd:choice>
+            <xsd:choice minOccurs="0" maxOccurs="1">
+                <xsd:element name="provider" type="providerType"/>
+            </xsd:choice>
+            <xsd:choice minOccurs="0" maxOccurs="1">
+                <xsd:element name="consumer" type="consumerType"/>
+            </xsd:choice>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
+        <xsd:attribute name="protocol-location" type="xsd:string" use="required"/>
+        <xsd:attribute name="generate-js-protocol" type="xsd:string" default="false"/>
+        <xsd:attribute name="generate-cs-protocol" type="xsd:string" default="false"/>
+        <xsd:attribute name="generate-lua-protocol" type="xsd:string" default="false"/>
+        <xsd:attribute name="fold-protocol" type="xsd:string" default="false"/>
+        <xsd:attribute name="protocol-param" type="xsd:string" default="false"/>
+    </xsd:complexType>
+
+    <xsd:element name="config" type="configType"/>
+
+
+</xsd:schema>

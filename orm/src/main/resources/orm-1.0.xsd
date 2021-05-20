@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+
+            xmlns="http://www.zfoo.com/schema/orm"
+            targetNamespace="http://www.zfoo.com/schema/orm"
+
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:element name="config">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:choice minOccurs="0" maxOccurs="1">
+                    <xsd:element name="host" type="addressType"/>
+                </xsd:choice>
+                <xsd:choice minOccurs="1" maxOccurs="1">
+                    <xsd:element name="caches" type="caches"/>
+                </xsd:choice>
+                <xsd:choice minOccurs="1" maxOccurs="1">
+                    <xsd:element name="persisters" type="persisters"/>
+                </xsd:choice>
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:string" use="required"/>
+            <xsd:attribute name="entity-package" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="addressType">
+        <xsd:sequence>
+            <xsd:element name="address" maxOccurs="unbounded" type="addressAttributeType"/>
+        </xsd:sequence>
+        <xsd:attribute name="database" type="xsd:string" use="required"/>
+        <xsd:attribute name="user" type="xsd:string" use="required"/>
+        <xsd:attribute name="password" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="addressAttributeType">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="url" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <!-- 缓存 -->
+    <xsd:complexType name="cache">
+        <xsd:attribute name="strategy" type="xsd:string" use="required"/>
+        <xsd:attribute name="size" type="xsd:string" use="required"/>
+        <xsd:attribute name="expire-millisecond" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="caches">
+        <xsd:sequence>
+            <xsd:choice minOccurs="1" maxOccurs="unbounded">
+                <xsd:element name="cache" type="cache"/>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- 持久化管理器 -->
+    <!-- queue:队列的大小（正数有界队列，负数无界队列），列如：(name="example",type="queue",config="-1") -->
+    <!-- time:cron表达式，列如：（time:0,30 * * * * *） -->
+    <xsd:simpleType name="persister-type">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="queue"/>
+            <xsd:enumeration value="cron"/>
+            <xsd:enumeration value="time"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="persister">
+        <xsd:attribute name="strategy" type="xsd:string" use="required"/>
+        <xsd:attribute name="type" type="persister-type" use="required"/>
+        <xsd:attribute name="config" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="persisters">
+        <xsd:sequence>
+            <xsd:choice minOccurs="1" maxOccurs="unbounded">
+                <xsd:element name="persister" type="persister"/>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>
