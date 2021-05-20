@@ -370,7 +370,7 @@ public class ProtocolManager {
         }
     }
 
-    private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+    private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         var protocolId = checkProtocol(clazz);
 
         if (protocols[protocolId] != null) {
@@ -417,7 +417,7 @@ public class ProtocolManager {
         return protocol;
     }
 
-    private static IFieldRegistration toRegistration(Class<?> clazz, Field field) throws NoSuchFieldException, IllegalAccessException {
+    private static IFieldRegistration toRegistration(Class<?> clazz, Field field) {
         Class<?> fieldTypeClazz = field.getType();
 
         ISerializer serializer = tempBaseSerializerMap.get(fieldTypeClazz);
