@@ -12,9 +12,9 @@
 
 package com.zfoo.protocol.serializer.lua;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -30,15 +30,15 @@ public class LuaObjectProtocolSerializer implements ILuaSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("ProtocolManager.getProtocol({}):write(byteBuffer, {})", objectProtocolField.getProtocolId(), objectStr)).append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        var result = "result" + GenerateUtils.index.getAndIncrement();
-        GenerateUtils.addTab(builder, deep);
+        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("local {} = ProtocolManager.getProtocol({}):read(byteBuffer)", result, objectProtocolField.getProtocolId())).append(LS);
         return result;
     }

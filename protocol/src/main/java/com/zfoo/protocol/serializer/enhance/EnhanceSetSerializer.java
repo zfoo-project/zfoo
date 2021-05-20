@@ -13,11 +13,11 @@
 
 package com.zfoo.protocol.serializer.enhance;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
 import com.zfoo.protocol.registration.field.SetField;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -52,16 +52,16 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
             return;
         }
 
-        var set = "set" + GenerateUtils.index.getAndIncrement();
+        var set = "set" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("Set {} = (Set){};", set, objectStr));
 
         builder.append(StringUtils.format("{}.writeInt($1, CollectionUtils.size({}));", EnhanceUtils.byteBufUtils, set));
 
-        var iterator = "iterator" + GenerateUtils.index.getAndIncrement();
+        var iterator = "iterator" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("Iterator {} = CollectionUtils.iterator({});", iterator, set));
         builder.append(StringUtils.format("while({}.hasNext()) {", iterator));
 
-        var element = "element" + GenerateUtils.index.getAndIncrement();
+        var element = "element" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("Object {}={}.next();", element, iterator));
         EnhanceUtils.enhanceSerializer(setField.getSetElementRegistration().serializer())
                 .writeObject(builder, element, field, setField.getSetElementRegistration());
@@ -72,7 +72,7 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var setField = (SetField) fieldRegistration;
-        var set = "set" + GenerateUtils.index.getAndIncrement();
+        var set = "set" + GenerateProtocolFile.index.getAndIncrement();
 
         switch (setField.getType().getTypeName()) {
             case "java.util.Set<java.lang.Integer>":
@@ -93,11 +93,11 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
             return set;
         }
 
-        var size = "size" + GenerateUtils.index.getAndIncrement();
+        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {} = {}.readInt($1);", size, EnhanceUtils.byteBufUtils));
         builder.append(StringUtils.format("Set {} = CollectionUtils.newFixedSet({});", set, size));
 
-        var i = "i" + GenerateUtils.index.getAndIncrement();
+        var i = "i" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("for(int {}=0; {}<{}; {}++){", i, i, size, i));
 
         var readObject = EnhanceUtils.enhanceSerializer(setField.getSetElementRegistration().serializer()).readObject(builder, field, setField.getSetElementRegistration());

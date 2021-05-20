@@ -14,6 +14,7 @@
 package com.zfoo.protocol.serializer.cs;
 
 import com.zfoo.protocol.generate.GenerateProtocolDocument;
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolRegistration;
@@ -93,7 +94,7 @@ public abstract class GenerateCsUtils {
      * 生成协议类
      */
     public static void createCsProtocolFile(ProtocolRegistration registration) {
-        GenerateUtils.index.set(0);
+        GenerateProtocolFile.index.set(0);
 
         var protocolId = registration.protocolId();
         var registrationConstructor = registration.getConstructor();

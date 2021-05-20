@@ -13,9 +13,9 @@
 
 package com.zfoo.protocol.serializer.cs;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.SetField;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -32,71 +32,71 @@ public class CsSetSerializer implements ICsSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         SetField setField = (SetField) fieldRegistration;
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} == null)", objectStr)).append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("buffer.WriteInt(0);").append(LS);
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("else").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.WriteInt({}.Count);", objectStr)).append(LS);
 
-        String element = "i" + GenerateUtils.index.getAndIncrement();
-        GenerateUtils.addTab(builder, deep + 1);
+        String element = "i" + GenerateProtocolFile.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("foreach (var {} in {})", element, objectStr)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
 
         GenerateCsUtils.csSerializer(setField.getSetElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         SetField setField = (SetField) fieldRegistration;
-        var result = "result" + GenerateUtils.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         var typeName = GenerateCsUtils.toCsClassName(setField.getType().toString());
 
-        var i = "index" + GenerateUtils.index.getAndIncrement();
-        var size = "size" + GenerateUtils.index.getAndIncrement();
-        GenerateUtils.addTab(builder, deep);
+        var i = "index" + GenerateProtocolFile.index.getAndIncrement();
+        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("int {} = buffer.ReadInt();", size)).append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         // unity里不支持HashSet的初始化大小
 //        builder.append("var " + result + " = new " + typeName + "(" + size + ");" + LS);
         builder.append(StringUtils.format("var {} = new {}();", result, typeName)).append(LS);
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} > 0)", size)).append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++)", i, i, size, i)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
 
         var readObject = GenerateCsUtils.csSerializer(setField.getSetElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
-        GenerateUtils.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.Add({});", result, readObject)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
 
         return result;

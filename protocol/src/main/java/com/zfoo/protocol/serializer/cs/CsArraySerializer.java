@@ -13,9 +13,9 @@
 
 package com.zfoo.protocol.serializer.cs;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -32,76 +32,76 @@ public class CsArraySerializer implements ICsSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ArrayField arrayField = (ArrayField) fieldRegistration;
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if (({} == null) || ({}.Length == 0))", objectStr, objectStr)).append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("buffer.WriteInt(0);").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
 
         builder.append("}").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("else").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.WriteInt({}.Length);", objectStr)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
-        String length = "length" + GenerateUtils.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep + 1);
+        String length = "length" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {} = {}.Length;", length, objectStr)).append(LS);
 
-        String i = "i" + GenerateUtils.index.getAndIncrement();
-        GenerateUtils.addTab(builder, deep + 1);
+        String i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++)", i, i, length, i)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
 
-        GenerateUtils.addTab(builder, deep + 2);
-        String element = "element" + GenerateUtils.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep + 2);
+        String element = "element" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("{} {} = {}[{}];", GenerateCsUtils.toCsClassName(arrayField.getField().getType().getComponentType().getSimpleName()), element, objectStr, i)).append(LS);
 
         GenerateCsUtils.csSerializer(arrayField.getArrayElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         var arrayField = (ArrayField) fieldRegistration;
-        var result = "result" + GenerateUtils.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         var typeName = GenerateCsUtils.toCsClassName(arrayField.getField().getType().getComponentType().getSimpleName());
 
-        var i = "index" + GenerateUtils.index.getAndIncrement();
-        var size = "size" + GenerateUtils.index.getAndIncrement();
-        GenerateUtils.addTab(builder, deep);
+        var i = "index" + GenerateProtocolFile.index.getAndIncrement();
+        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("int {} = buffer.ReadInt();", size)).append(LS);
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("{}[] {} = new {}[{}];", typeName, result, typeName, size)).append(LS);
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} > 0)", size)).append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++)", i, i, size, i)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
         var readObject = GenerateCsUtils.csSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
-        GenerateUtils.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}[{}] = {};", result, i, readObject));
         builder.append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
 
 

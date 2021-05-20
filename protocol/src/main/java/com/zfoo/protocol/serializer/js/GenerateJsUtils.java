@@ -16,6 +16,7 @@ package com.zfoo.protocol.serializer.js;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.generate.GenerateProtocolDocument;
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
@@ -118,7 +119,7 @@ public abstract class GenerateJsUtils {
 
     public static void createJsProtocolFile(ProtocolRegistration registration) {
         // 初始化index
-        GenerateUtils.index.set(0);
+        GenerateProtocolFile.index.set(0);
 
         var protocolId = registration.protocolId();
         var registrationConstructor = registration.getConstructor();

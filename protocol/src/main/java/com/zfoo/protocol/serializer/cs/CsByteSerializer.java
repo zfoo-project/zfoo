@@ -13,8 +13,8 @@
 
 package com.zfoo.protocol.serializer.cs;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -29,15 +29,15 @@ public class CsByteSerializer implements ICsSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("buffer.WriteByte({});", objectStr)).append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        String result = "result" + GenerateUtils.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("byte {} = buffer.ReadByte();", result)).append(LS);
         return result;
     }

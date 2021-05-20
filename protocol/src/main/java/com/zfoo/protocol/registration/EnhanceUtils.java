@@ -18,6 +18,7 @@ import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.*;
 import com.zfoo.protocol.serializer.enhance.*;
@@ -120,7 +121,7 @@ public abstract class EnhanceUtils {
     public static IProtocolRegistration createProtocolRegistration(ProtocolRegistration registration) throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         var classPool = ClassPool.getDefault();
 
-        GenerateUtils.index.set(0);
+        GenerateProtocolFile.index.set(0);
 
         short protocolId = registration.getId();
         IFieldRegistration[] packetFields = registration.getFieldRegistrations();

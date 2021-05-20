@@ -13,9 +13,9 @@
 
 package com.zfoo.protocol.serializer.enhance;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -37,7 +37,7 @@ public class EnhanceDoubleSerializer implements IEnhanceSerializer {
 
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
-        var result = "result" + GenerateUtils.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         if (field.getType().isPrimitive() || (field.getType().isArray() && field.getType().getComponentType().isPrimitive())) {
             builder.append(StringUtils.format("double {} = {}.readDouble($1);", result, EnhanceUtils.byteBufUtils));

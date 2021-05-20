@@ -260,10 +260,10 @@ public class ProtocolManager {
 
         GenerateProtocolDocument.clear();
         GenerateProtocolPath.clear();
+        GenerateProtocolFile.clear();
         GenerateCsUtils.clear();
         GenerateJsUtils.clear();
         GenerateLuaUtils.clear();
-        GenerateUtils.clear();
 
         EnhanceUtils.clear();
     }

@@ -13,10 +13,10 @@
 
 package com.zfoo.protocol.serializer.enhance;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -87,16 +87,16 @@ public class EnhanceArraySerializer implements IEnhanceSerializer {
             default:
         }
 
-        var array = "array" + GenerateUtils.index.getAndIncrement();
-        var length = "length" + GenerateUtils.index.getAndIncrement();
+        var array = "array" + GenerateProtocolFile.index.getAndIncrement();
+        var length = "length" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("{}[] {} = {};", arrayName, array, objectStr));
         builder.append(StringUtils.format("int {} = ArrayUtils.length({});", length, array));
         builder.append(StringUtils.format("{}.writeInt($1,{});", EnhanceUtils.byteBufUtils, length));
 
-        var i = "i" + GenerateUtils.index.getAndIncrement();
+        var i = "i" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("for(int {}=0; {}<{}; {}++){", i, i, length, i));
 
-        var element = "element" + GenerateUtils.index.getAndIncrement();
+        var element = "element" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("{} {} = {}[{}];", arrayName, element, array, i));
 
         EnhanceUtils.enhanceSerializer(arrayField.getArrayElementRegistration().serializer())
@@ -110,7 +110,7 @@ public class EnhanceArraySerializer implements IEnhanceSerializer {
         var arrayField = (ArrayField) fieldRegistration;
         var arrayName = getArrayClassName(arrayField);
 
-        var array = "array" + GenerateUtils.index.getAndIncrement();
+        var array = "array" + GenerateProtocolFile.index.getAndIncrement();
 
         switch (arrayName) {
             case "boolean":
@@ -167,12 +167,12 @@ public class EnhanceArraySerializer implements IEnhanceSerializer {
             default:
         }
 
-        var length = "length" + GenerateUtils.index.getAndIncrement();
+        var length = "length" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {} = {}.readInt($1);", length, EnhanceUtils.byteBufUtils));
 
         builder.append(StringUtils.format("{}[] {} = new {}[{}];", arrayName, array, arrayName, length));
 
-        var i = "i" + GenerateUtils.index.getAndIncrement();
+        var i = "i" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("for(int {}=0; {} < {}; {}++){", i, i, length, i));
         var readObject = EnhanceUtils.enhanceSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, arrayField.getField(), arrayField.getArrayElementRegistration());

@@ -24,8 +24,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static com.zfoo.protocol.util.StringUtils.TAB;
 
 /**
  * @author jaysunxiao
@@ -38,6 +41,17 @@ public abstract class GenerateProtocolFile {
      */
     public static Predicate<IProtocolRegistration> generateProtocolFilter = registration -> true;
 
+    public static AtomicInteger index = new AtomicInteger();
+
+    public static StringBuilder addTab(StringBuilder builder, int deep) {
+        builder.append(TAB.repeat(Math.max(0, deep)));
+        return builder;
+    }
+
+    public static void clear() {
+        generateProtocolFilter = null;
+        index = null;
+    }
 
     public static void generate(IProtocolRegistration[] protocols, GenerateOperation generateOperation) throws IOException {
 

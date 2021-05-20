@@ -13,9 +13,9 @@
 
 package com.zfoo.protocol.serializer.lua;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ListField;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -32,53 +32,53 @@ public class LuaListSerializer implements ILuaSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ListField listField = (ListField) fieldRegistration;
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if {} == null then", objectStr)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("byteBuffer:writeInt(0)").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
 
         builder.append("else").append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("byteBuffer:writeInt(#{})", objectStr)).append(LS);
 
-        String index = "index" + GenerateUtils.index.getAndIncrement();
-        String element = "element" + GenerateUtils.index.getAndIncrement();
-        GenerateUtils.addTab(builder, deep + 1);
+        String index = "index" + GenerateProtocolFile.index.getAndIncrement();
+        String element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {}, {} in pairs({}) do", index, element, objectStr)).append(LS);
         GenerateLuaUtils.luaSerializer(listField.getListElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, listField.getListElementRegistration());
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("end").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("end").append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         ListField listField = (ListField) fieldRegistration;
-        String result = "result" + GenerateUtils.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("local {} = {}", result)).append(LS);
 
-        GenerateUtils.addTab(builder, deep);
-        String size = "size" + GenerateUtils.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep);
+        String size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("local {} = byteBuffer:readInt()", size)).append(LS);
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if {} > 0 then", size)).append(LS);
 
-        GenerateUtils.addTab(builder, deep + 1);
-        String i = "index" + GenerateUtils.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep + 1);
+        String i = "index" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("for {} = 1, {} do", i, size)).append(LS);
         String readObject = GenerateLuaUtils.luaSerializer(listField.getListElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, listField.getListElementRegistration());
-        GenerateUtils.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("table.insert({}, {})", result, readObject)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("end").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("end").append(LS);
 
         return result;

@@ -13,11 +13,11 @@
 
 package com.zfoo.protocol.serializer.enhance;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ListField;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -52,16 +52,16 @@ public class EnhanceListSerializer implements IEnhanceSerializer {
             return;
         }
 
-        var list = "list" + GenerateUtils.index.getAndIncrement();
+        var list = "list" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("List {} = (List){};", list, objectStr));
 
         builder.append(StringUtils.format("{}.writeInt($1, CollectionUtils.size({}));", EnhanceUtils.byteBufUtils, list));
 
-        var iterator = "iterator" + GenerateUtils.index.getAndIncrement();
+        var iterator = "iterator" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("Iterator {} = CollectionUtils.iterator({});", iterator, list));
         builder.append(StringUtils.format("while({}.hasNext()){", iterator));
 
-        var element = "element" + GenerateUtils.index.getAndIncrement();
+        var element = "element" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("Object {}={}.next();", element, iterator));
         EnhanceUtils.enhanceSerializer(listField.getListElementRegistration().serializer())
                 .writeObject(builder, element, field, listField.getListElementRegistration());
@@ -72,7 +72,7 @@ public class EnhanceListSerializer implements IEnhanceSerializer {
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var listField = (ListField) fieldRegistration;
-        var list = "list" + GenerateUtils.index.getAndIncrement();
+        var list = "list" + GenerateProtocolFile.index.getAndIncrement();
 
         switch (listField.getType().getTypeName()) {
             case "java.util.List<java.lang.Integer>":
@@ -93,12 +93,12 @@ public class EnhanceListSerializer implements IEnhanceSerializer {
             return list;
         }
 
-        var size = "size" + GenerateUtils.index.getAndIncrement();
+        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {}={}.readInt($1);", size, EnhanceUtils.byteBufUtils));
 
         builder.append(StringUtils.format("List {} = CollectionUtils.newFixedList({});", list, size));
 
-        var i = "i" + GenerateUtils.index.getAndIncrement();
+        var i = "i" + GenerateProtocolFile.index.getAndIncrement();
 
         builder.append(StringUtils.format("for(int {}=0; {}<{}; {}++){", i, i, size, i));
         var readObject = EnhanceUtils.enhanceSerializer(listField.getListElementRegistration().serializer()).readObject(builder, field, listField.getListElementRegistration());

@@ -14,10 +14,10 @@
 package com.zfoo.protocol.serializer.enhance;
 
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -39,7 +39,7 @@ public class EnhanceObjectProtocolSerializer implements IEnhanceSerializer {
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        var result = "result" + GenerateUtils.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
         var protocolName = getProtocolClassCanonicalName(objectProtocolField.getProtocolId());
         builder.append(StringUtils.format("{} {} = ({}){}.read($1);", protocolName, result, protocolName, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
         return result;

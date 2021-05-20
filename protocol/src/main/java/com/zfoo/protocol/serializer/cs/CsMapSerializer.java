@@ -13,9 +13,9 @@
 
 package com.zfoo.protocol.serializer.cs;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.MapField;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -32,48 +32,48 @@ public class CsMapSerializer implements ICsSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         MapField mapField = (MapField) fieldRegistration;
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if (({} == null) || ({}.Count == 0))", objectStr, objectStr)).append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("buffer.WriteInt(0);").append(LS);
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("else").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.WriteInt({}.Count);", objectStr)).append(LS);
 
 
-        String i = "i" + GenerateUtils.index.getAndIncrement();
+        String i = "i" + GenerateProtocolFile.index.getAndIncrement();
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("foreach (var {} in {})", i, objectStr)).append(LS);
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
 
-        GenerateUtils.addTab(builder, deep + 2);
-        String key = "keyElement" + GenerateUtils.index.getAndIncrement();
-        String value = "valueElement" + GenerateUtils.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep + 2);
+        String key = "keyElement" + GenerateProtocolFile.index.getAndIncrement();
+        String value = "valueElement" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("var {} = {}.Key;", key, i)).append(LS);
 
-        GenerateUtils.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("var {} = {}.Value;", value, i)).append(LS);
 
         GenerateCsUtils.csSerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
         GenerateCsUtils.csSerializer(mapField.getMapValueRegistration().serializer())
                 .writeObject(builder, value, deep + 2, field, mapField.getMapValueRegistration());
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
     }
 
@@ -81,27 +81,27 @@ public class CsMapSerializer implements ICsSerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         MapField mapField = (MapField) fieldRegistration;
-        String result = "result" + GenerateUtils.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         var typeName = GenerateCsUtils.toCsClassName(mapField.getType().toString());
 
-        GenerateUtils.addTab(builder, deep);
-        String size = "size" + GenerateUtils.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep);
+        String size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {} = buffer.ReadInt();", size)).append(LS);
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("var {} = new {}({});", result, typeName, size)).append(LS);
 
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} > 0)", size)).append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
 
-        String i = "index" + GenerateUtils.index.getAndIncrement();
-        GenerateUtils.addTab(builder, deep + 1);
+        String i = "index" + GenerateProtocolFile.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (var {} = 0; {} < {}; {}++)", i, i, size, i)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
 
         String keyObject = GenerateCsUtils.csSerializer(mapField.getMapKeyRegistration().serializer())
@@ -110,12 +110,12 @@ public class CsMapSerializer implements ICsSerializer {
 
         String valueObject = GenerateCsUtils.csSerializer(mapField.getMapValueRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
-        GenerateUtils.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTab(builder, deep + 2);
 
         builder.append(StringUtils.format("{}[{}] = {};", result, keyObject, valueObject)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
         return result;
     }

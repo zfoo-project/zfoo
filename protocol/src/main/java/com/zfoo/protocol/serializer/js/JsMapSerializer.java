@@ -13,9 +13,9 @@
 
 package com.zfoo.protocol.serializer.js;
 
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.MapField;
-import com.zfoo.protocol.serializer.GenerateUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -32,49 +32,49 @@ public class JsMapSerializer implements IJsSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         MapField mapField = (MapField) fieldRegistration;
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} === null) {", objectStr)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("byteBuffer.writeInt(0);").append(LS);
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("} else {").append(LS);
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("byteBuffer.writeInt({}.size);", objectStr)).append(LS);
 
-        String key = "key" + GenerateUtils.index.getAndIncrement();
-        String value = "value" + GenerateUtils.index.getAndIncrement();
+        String key = "key" + GenerateProtocolFile.index.getAndIncrement();
+        String value = "value" + GenerateProtocolFile.index.getAndIncrement();
 
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach(({}, {}) => {", objectStr, value, key)).append(LS);
         GenerateJsUtils.jsSerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
         GenerateJsUtils.jsSerializer(mapField.getMapValueRegistration().serializer())
                 .writeObject(builder, value, deep + 2, field, mapField.getMapValueRegistration());
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("});").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         MapField mapField = (MapField) fieldRegistration;
-        String result = "result" + GenerateUtils.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("const {} = new Map();", result)).append(LS);
 
-        GenerateUtils.addTab(builder, deep);
-        String size = "size" + GenerateUtils.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep);
+        String size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("const {} = byteBuffer.readInt();", size)).append(LS);
 
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
 
-        String i = "index" + GenerateUtils.index.getAndIncrement();
-        GenerateUtils.addTab(builder, deep + 1);
+        String i = "index" + GenerateProtocolFile.index.getAndIncrement();
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
 
         String keyObject = GenerateJsUtils.jsSerializer(mapField.getMapKeyRegistration().serializer())
@@ -83,12 +83,12 @@ public class JsMapSerializer implements IJsSerializer {
 
         String valueObject = GenerateJsUtils.jsSerializer(mapField.getMapValueRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
-        GenerateUtils.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTab(builder, deep + 2);
 
         builder.append(StringUtils.format("{}.set({}, {});", result, keyObject, valueObject)).append(LS);
-        GenerateUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
-        GenerateUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
 
         return result;
