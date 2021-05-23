@@ -156,6 +156,8 @@ public abstract class ByteBufUtils {
 
 
     private static int writeIntCount(int value) {
+        value = (value << 1) ^ (value >> 31);
+
         if (value >>> 7 == 0) {
             return 1;
         }
