@@ -90,8 +90,10 @@ public abstract class ByteBufUtils {
     //---------------------------------int--------------------------------------
     // 用Zigzag算法压缩int和long的值，再用Varint紧凑算法表示数字的有效位
     public static int writeInt(ByteBuf byteBuf, int value) {
-        value = (value << 1) ^ (value >> 31);
+        return writeVarInt(byteBuf, (value << 1) ^ (value >> 31));
+    }
 
+    private static int writeVarInt(ByteBuf byteBuf, int value) {
         int a = value >>> 7;
         if (a == 0) {
             byteBuf.writeByte(value);
@@ -191,7 +193,7 @@ public abstract class ByteBufUtils {
         long mask = (value << 1) ^ (value >> 63);
 
         if (mask >>> 32 == 0) {
-            writeInt(byteBuf, (int) value);
+            writeVarInt(byteBuf, (int) mask);
             return;
         }
 
