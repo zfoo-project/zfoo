@@ -32,6 +32,7 @@ public class EnhanceArraySerializer implements IEnhanceSerializer {
         var arrayField = (ArrayField) fieldRegistration;
         var arrayName = getArrayClassName(arrayField);
 
+        // 直接在字节码里调用方法是为了减小生成字节码的体积，下面的代码去掉也不会有任何影响
         switch (arrayName) {
             case "boolean":
                 builder.append(StringUtils.format("{}.writeBooleanArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));

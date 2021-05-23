@@ -40,6 +40,7 @@ public class EnhanceMapSerializer implements IEnhanceSerializer {
         var keyRegistration = mapField.getMapKeyRegistration();
         var valueRegistration = mapField.getMapValueRegistration();
 
+        // 直接在字节码里调用方法是为了减小生成字节码的体积，下面的代码去掉也不会有任何影响
         if (keyRegistration instanceof BaseField) {
             if (valueRegistration instanceof BaseField) {
                 var keyBaseRegistration = (BaseField) keyRegistration;

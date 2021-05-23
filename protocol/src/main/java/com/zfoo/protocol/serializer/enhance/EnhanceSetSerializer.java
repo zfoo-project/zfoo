@@ -32,6 +32,7 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
     public void writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration) {
         var setField = (SetField) fieldRegistration;
 
+        // 直接在字节码里调用方法是为了减小生成字节码的体积，下面的代码去掉也不会有任何影响
         switch (setField.getType().getTypeName()) {
             case "java.util.Set<java.lang.Integer>":
                 builder.append(StringUtils.format("{}.writeIntSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));

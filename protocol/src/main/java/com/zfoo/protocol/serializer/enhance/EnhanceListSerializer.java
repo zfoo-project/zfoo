@@ -32,6 +32,7 @@ public class EnhanceListSerializer implements IEnhanceSerializer {
     public void writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration) {
         var listField = (ListField) fieldRegistration;
 
+        // 直接在字节码里调用方法是为了减小生成字节码的体积，下面的代码去掉也不会有任何影响
         switch (listField.getType().getTypeName()) {
             case "java.util.List<java.lang.Integer>":
                 builder.append(StringUtils.format("{}.writeIntList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
