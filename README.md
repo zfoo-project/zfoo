@@ -156,7 +156,11 @@ doc[module]: 增加了什么文档
 del[module]: 删除了某些功能或者无用代码
 ```
 
-### Ⅵ. License
+### Ⅵ. 问题讨论群
+
+- QQ: 876280300
+
+### Ⅶ. License
 
 zfoo使用 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
