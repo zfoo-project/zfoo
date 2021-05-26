@@ -23,10 +23,10 @@ import java.util.concurrent.ExecutorService;
  */
 public class ConsistentHashTaskDispatch extends AbstractTaskDispatch {
 
-    private static ConsistentHashTaskDispatch instance = new ConsistentHashTaskDispatch();
+    private static ConsistentHashTaskDispatch INSTANCE = new ConsistentHashTaskDispatch();
 
-    public static ConsistentHashTaskDispatch getInstance() {
-        return instance;
+    public static ConsistentHashTaskDispatch getINSTANCE() {
+        return INSTANCE;
     }
 
     @Override
