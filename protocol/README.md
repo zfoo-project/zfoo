@@ -30,13 +30,9 @@ cpu： i9900k
 ```
 
 - 单线程测试，横坐标为序列化和反序列化的对象数量，纵坐标为花费的时间单位毫秒
-
 ![Image text](../event/tooltip/protocol/simple_object.png)
-![Image text](../event/tooltip/protocol/simple_data.jpg)
 ![Image text](../event/tooltip/protocol/normal_object.png)
-![Image text](../event/tooltip/protocol/normal_data.jpg)
 ![Image text](../event/tooltip/protocol/complex_object.png)
-![Image text](../event/tooltip/protocol/complex_data.jpg)
 
 
 ### Ⅳ. zfoo的优势
