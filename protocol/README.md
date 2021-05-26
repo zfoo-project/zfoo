@@ -21,13 +21,16 @@ var packet = ProtocolManager.read(buffer);
 ```
 
 ### Ⅲ. 性能测试
-- 下面的是测试环境，横坐标为序列化和发序列化的对象数量，纵坐标为花费的时间毫秒
+- 下面的是测试环境
 ```
 操作系统：win10
 cpu： i9900k
 主板：华硕z390
 内存：64g
 ```
+
+- 单线程测试，横坐标为序列化和反序列化的对象数量，纵坐标为花费的时间单位毫秒
+
 ![Image text](../event/tooltip/protocol/simple_object.png)
 ![Image text](../event/tooltip/protocol/simple_data.jpg)
 ![Image text](../event/tooltip/protocol/normal_object.png)
