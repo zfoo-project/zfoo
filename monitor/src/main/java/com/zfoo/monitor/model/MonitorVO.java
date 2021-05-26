@@ -114,6 +114,33 @@ public class MonitorVO {
         return builder.toString();
     }
 
+    public String toSimpleString() {
+        var builder = new StringBuilder();
+        builder.append(StringUtils.format("**1.cpu: [usage:{}] [{}]**"
+                , OSUtils.toPercent(uptime.getUsage()), TimeUtils.timeToString(uptime.getTimestamp())));
+        builder.append(FileUtils.LS);
+        builder.append(StringUtils.format("**2.memory: [usage:{}] [{}]**"
+                , OSUtils.toPercent(1D * (free.getTotal() - free.getAvailable()) / free.getTotal()), TimeUtils.timeToString(free.getTimestamp())));
+        builder.append(FileUtils.LS);
+        builder.append("**3.disk:**");
+        builder.append(FileUtils.LS);
+        df.stream().forEach(it -> {
+            builder.append(StringUtils.format("> [disk:{}] [usage:{}] [{}]"
+                    , it.getName(), OSUtils.toPercent(1D * (it.getSize() - it.getAvailable()) / it.getSize()), TimeUtils.timeToString(it.getTimestamp())));
+            builder.append(FileUtils.LS);
+        });
+        builder.append(FileUtils.LS);
+        builder.append("**4.network:**");
+        builder.append(FileUtils.LS);
+        sar.stream().forEach(it -> {
+            builder.append(StringUtils.format("> [interface:{}] [rxpck:{}] [txpck:{}] [{}]"
+                    , it.getName(), it.getRxpck(), it.getTxpck(), TimeUtils.timeToString(it.getTimestamp())));
+            builder.append(FileUtils.LS);
+        });
+        builder.append(FileUtils.LS);
+        return builder.toString();
+    }
+
     public String getUuid() {
         return uuid;
     }
