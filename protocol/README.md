@@ -1,6 +1,7 @@
 ### Ⅰ. 简介
 
-- zfoo protocol是目前的Java二进制序列化和反序列化最快的框架，协议跨平台支持Java Javascript C# Lua，并且线程安全
+- zfoo protocol是目前的Java二进制序列化和反序列化最快的框架，并且线程安全
+- 协议目前原生支持Java Javascript C# Lua，理论上协议都可以支持
 - 主要是用Javassist字节码增强动态生成顺序执行的序列化和反序列化函数，顺序执行的函数可以轻易的被JIT编译以达到极致的性能
 - 单线程环境，在没有任何JVM参数调优的情况下速度比Kryo快40%，比Protobuf快110%，[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
 - 多线程环境，zfoo和Protobuf的性能不受任何影响，kryo因为线程不安全性能会有所损失，[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
