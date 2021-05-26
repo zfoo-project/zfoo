@@ -26,7 +26,6 @@ var packet = ProtocolManager.read(buffer);
 ```
 操作系统：win10
 cpu： i9900k
-主板：华硕z390
 内存：64g
 ```
 
