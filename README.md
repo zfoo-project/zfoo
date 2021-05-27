@@ -17,7 +17,7 @@
 
 ```
 用Java做网络游戏涉及到比较复杂的交互场景的时候，远程请求非常多，这时候就需要一个高性能的rpc框架。
-Java生态的rpc框架非常多，但是很少又rpc框架能够又契合到游戏项目的rpc框架，下面列了一些：
+Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏项目的rpc框架，下面列了一些：
     dubbo，代码重量级，异步调用繁琐，没有网关，无法直接和客户端交互；
     grpc，代码重量级，使用复杂，部署复杂，没有网关，很难自定义；
     akka，用Scala语言，学习成本极高，直接放弃；
@@ -141,7 +141,11 @@ public class StudentResource {
 - 服务器热更新和监控无需代码和额外工具，直接内置在程序里，解放运维生产力
 - 使用MVC设计模式，规范开发，保证代码质量，高效执行
 
-### Ⅴ. 提交规范
+### Ⅴ. 完整的工程案例
+- 图片分享聊天网站 [zapp](https://github.com/zfoo-project/zapp)
+
+
+### Ⅵ. 提交规范
 
 - Java项目格式化代码的方式采用IntelliJ Idea默认的格式化
 - 所有的接口的参数和方法返回的参数都默认是非空的，如果参数可空，需要加上org.springframework.lang.Nullable注解
@@ -156,11 +160,11 @@ doc[module]: 增加了什么文档
 del[module]: 删除了某些功能或者无用代码
 ```
 
-### Ⅵ. 问题讨论群
+### Ⅶ. 问题讨论群
 
 - QQ: 876280300
 
-### Ⅶ. License
+### Ⅷ. License
 
 zfoo使用 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 

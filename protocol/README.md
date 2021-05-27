@@ -2,7 +2,7 @@
 
 - zfoo protocol是目前的Java二进制序列化和反序列化最快的框架，并且线程安全
 - 协议目前原生支持Java Javascript C# Lua，协议理论上可以跨平台
-- 主要是用Javassist字节码增强动态生成顺序执行的序列化和反序列化函数，顺序执行的函数可以轻易的被JIT编译以达到极致的性能
+- 使用Javassist字节码增强动态生成顺序执行的序列化和反序列化函数，顺序执行的函数可以轻易的被JIT编译以达到极致的性能
 - 单线程环境，在没有任何JVM参数调优的情况下速度比Kryo快40%，比Protobuf快110%，[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
 - 多线程环境，zfoo和Protobuf的性能不受任何影响，kryo因为线程不安全性能会有所损失，[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
 
@@ -22,7 +22,9 @@ var packet = ProtocolManager.read(buffer);
 ```
 
 ### Ⅲ. 性能测试
+
 - 下面的是测试环境
+
 ```
 操作系统：win10
 cpu： i9900k
@@ -30,26 +32,48 @@ cpu： i9900k
 ```
 
 - 单线程测试，横坐标为序列化和反序列化的对象数量，纵坐标为花费的时间单位毫秒
-![Image text](../event/tooltip/protocol/simple_object.png)
-![Image text](../event/tooltip/protocol/normal_object.png)
-![Image text](../event/tooltip/protocol/complex_object.png)
+  ![Image text](../event/tooltip/protocol/simple_object.png)
+  ![Image text](../event/tooltip/protocol/normal_object.png)
+  ![Image text](../event/tooltip/protocol/complex_object.png)
 
+### Ⅳ. 为什么快
 
-### Ⅳ. zfoo的优势
+- 轻量级实现，核心序列化和反序列化代码一千行左右
+- 没有装箱和拆箱，避免了无效GC
+- 天生线程安全并且无锁化；kryo强制要求每条线程都有自己的一个Kryo实例，这是一个比较重的设计，特别是线程比较多的场景
+- 没有反射，没有unsafe操作；对比kryo中使用objenesis导致大量unsafe，而且在Java11中运行会出现警告
+- 优化了int和long的zigzag和varint编码的算法，避免了一些多余的方法的调用和位操作
+- 扁平化了方法栈的调用深度，数据结构嵌套没有任何性能损失，如List<Set<Map<>>>；对比kryo和protobuf数据结构嵌套会出现性能损失
+- 顺序化序列化和反序列化函数，使用Javassist字节码增强动态生成顺序执行的序列化和反序列化函数可以轻易的被JIT编译以达到极致的性能
+- 其它优点
 
-- 没有反射，没有装箱拆箱
-- 天生线程安全；对比kryo会出现性能损耗
-- 没有unsafe操作；对比kryo中存在大量unsafe，在Java11中运行会出现警告
-- 无漏洞注入风险，只有初始化时会进行字节码增强，后期不会再进行任何字节码的操作
-- 数据结构嵌套没有任何性能损失，如List<Set<Map<>>>；对比kryo和protobuf数据结构嵌套会出现性能损失
-- 数据压缩体积小，压缩体积比kryo和protobuf都要小
-- 跨平台可以轻易实现，目前已经原生支持Java，Javascript，C#，Lua，目前kryo无法跨平台，protobuf可以跨平台
-- 智能语法分析，错误的协议定义将无法启动程序并给出错误警告
-- 提升开发效率，完全支持POJO方式开发，使用非常简单
+```
+无漏洞注入风险，只有初始化时会进行字节码增强，后期不会再进行任何字节码的操作
+数据压缩体积小，压缩体积比kryo和protobuf都要小；比kryo小是因为kryo需要写入每个对象的注册号
+跨平台可以轻易实现，目前已经原生支持Java，Javascript，C#，Lua，目前kryo无法跨平台，protobuf可以跨平台
+智能语法分析，错误的协议定义将无法启动程序并给出错误警告
+提升开发效率，完全支持POJO方式开发，使用非常简单
+```
 
 ### Ⅴ. 待解决的问题
 
-- 为了代码的优雅，zfoo protocol要求全部的协议都要继承IPacket，但是可以保证不损失性能的情况下支持不继承IPacket的设计，这个有待继续讨论。
+- 为了代码的优雅，zfoo protocol要求全部的协议类都要继承IPacket，但是可以保证不损失性能的情况下支持不继承IPacket的设计，这个有待继续讨论。
+- 协议类修改
+
+```
+协议类属性名称修改名称过后无法解析，内部使用变量名称按照字符串的自然顺序来依次读写的，所以修改协议类属性的名称会导致自然顺序改变，进而导致读写顺序变化导致出现异常
+协议类减少字段无法解析，字段不用了，就放在那不赋值就可以，没必要一定要删除，可以等到下个大版本更新再去删除，所以主要考虑增加字段的情况
+协议类增加字段无法解析，这套框架是为通信设计的协议，增加字段服务器不更新也解析不出来新字段，既然服务器要更新为什么不直接通过版本号去控制？
+
+目前的序列化过后对象的大小如下：
+简单对象，zfoo包体大小8，kryo包体大小5，protobuf包体大小8
+常规对象，zfoo包体大小547，kryo包体大小594，protobuf包体大小984
+复杂对象，zfoo包体大小2214，kryo包体大小2525，protobuf包体大小5091
+
+如果考虑支持修改协议类属性名称，要做的就是让协议类属性的读写顺序可控，就要引入很多的注解来标识属性的顺序（protostuff就是这样做的），但是感觉这样不优雅。
+如果考虑支持字段增加和减少，需要消耗5%左右的性能（预估），并且增加一倍的包体积大小（写入字段的顺序），感觉不是非常划算。
+因为可以通过协议版本号来解决这个问题，所以去支持这样的增删操作动力并不是非常的大。
+```
 
 ### Ⅵ. 协议规范
 
