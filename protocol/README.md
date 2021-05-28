@@ -31,7 +31,7 @@ cpu： i9900k
 内存：64g
 ```
 
-- 单线程测试，横坐标为序列化和反序列化的对象数量，纵坐标为花费的时间单位毫秒
+- 单线程测试，横坐标为序列化和反序列化的对象数量，纵坐标为花费的时间（单位毫秒）
   ![Image text](../event/tooltip/protocol/simple_object.png)
   ![Image text](../event/tooltip/protocol/normal_object.png)
   ![Image text](../event/tooltip/protocol/complex_object.png)
@@ -42,7 +42,7 @@ cpu： i9900k
 - 没有装箱和拆箱，避免了无效GC
 - 天生线程安全并且无锁化；kryo强制要求每条线程都有自己的一个Kryo实例，这是一个比较重的设计，特别是线程比较多的场景
 - 没有反射，没有unsafe操作；对比kryo中使用objenesis导致大量unsafe，而且在Java11中运行会出现警告
-- 优化了int和long的zigzag和varint编码的算法，避免了一些多余的方法的调用和位操作
+- 优化了int和long的zigzag和varint编码的算法，避免了一些多余的方法调用和位操作
 - 扁平化了方法栈的调用深度，数据结构嵌套没有任何性能损失，如List<Set<Map<>>>；对比kryo和protobuf数据结构嵌套会出现性能损失
 - 使用Javassist字节码增强动态生成顺序执行的序列化和反序列化函数，顺序化的函数可以轻易的被JIT编译以达到极致的性能
 - 其它优点
