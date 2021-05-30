@@ -30,12 +30,17 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 后来发现其实不仅仅能用来做游戏，只要有对性能有极致需求的rpc场景都能使用的上这个框架。
 ```
 
-### Ⅲ. 问题
+### Ⅲ. 完整的工程案例
+
+- [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，难度5星
+- [tank-game-server](https://github.com/zfoo-project/tank-game-server) 进击的坦克（The Fight of Tanks），难度2星
+
+### Ⅳ. 问题
 
 - 每个工程目录的test文件夹下都有标准的demo展示和注释说明，可以直接运行
 - 问题讨论群QQ: 876280300
 
-### Ⅳ. 安装和使用
+### Ⅴ. 安装和使用
 
 #### 1. 环境要求
 
@@ -136,7 +141,7 @@ public class StudentResource {
 }
 ```
 
-### Ⅴ. 为什么快
+### Ⅵ. 为什么快
 
 - 使用目前性能最好的 [zfoo protocol](protocol/README.md) 作为网关和RPC消息的序列化和反序列化协议
 - 无锁化设计和优雅的线程池设计，用户的请求通过网关总能保证请求在同一台服务器的同一条线程去执行，所以就不需要用锁保证并发
@@ -146,9 +151,6 @@ public class StudentResource {
 - 服务器热更新和监控无需代码和额外工具，直接内置在程序里，解放运维生产力
 - 使用MVC设计模式，规范开发，保证代码质量，高效执行
 
-### Ⅵ. 完整的工程案例
-
-- 图片分享聊天网站 [zapp](https://github.com/zfoo-project/zapp)
 
 ### Ⅶ. 提交规范
 
