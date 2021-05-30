@@ -35,7 +35,7 @@ public class SingleCache<V> {
 
     private volatile V cache;
     private volatile long refreshTime;
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 
 
     /**

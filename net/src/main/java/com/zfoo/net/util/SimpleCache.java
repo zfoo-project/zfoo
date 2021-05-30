@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
- * guava的缓存都是单个存，单个更新，但是实际的项目很多都是批量查询，批量更新。
+ * caffeine的缓存都是单个存，单个更新，但是实际的项目很多都是批量查询，批量更新。
  * <p>
  * 优势：
  * 1.支持批量查找，批量更新。
@@ -48,7 +48,7 @@ public class SimpleCache<K, V> {
     private static final int BATCH_RELOAD_SIZE = 1000;
 
     private LoadingCache<K, V> cache;
-    private ConcurrentLinkedQueue linkedQueue;
+    private ConcurrentLinkedQueue<K> linkedQueue;
 
     private long expiredAccessDuration;
     private long refreshDuration;
