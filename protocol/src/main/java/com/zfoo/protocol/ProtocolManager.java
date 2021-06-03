@@ -70,9 +70,11 @@ public class ProtocolManager {
     // 临时变量，启动完成就会销毁，是一个基本类型序列化器
     private static Map<Class<?>, ISerializer> tempBaseSerializerMap = new HashMap<>();
 
-    // 临时变量，启动完成就会销毁，协议下包含的子协议，只包含一层子协议
-    private static Map<Short, Set<Short>> tempSubProtocolIdMap = new HashMap<>();
+    // 临时变量，启动完成就会销毁，协议Id对应的Class类
+    private static Map<Short, Class<?>> tempProtocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
+    // 临时变量，启动完成就会销毁，协议下包含的子协议，只包含一层子协议
+    private static Map<Short, Set<Short>> tempSubProtocolIdMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
     static {
         // 初始化默认协议模块
@@ -197,6 +199,15 @@ public class ProtocolManager {
                     // 协议号是否和id是否相等
                     AssertionUtils.isTrue(packet.protocolId() == id, "[class:{}]协议序列号[{}]和协议文件里的协议序列号不相等", clazz.getCanonicalName(), PROTOCOL_ID);
 
+                    tempProtocolClassMap.put(id, clazz);
+                }
+            }
+
+            for (var moduleDefinition : xmlProtocols.getModules()) {
+                var module = modules[moduleDefinition.getId()];
+                for (var protocolDefinition : moduleDefinition.getProtocols()) {
+                    var id = protocolDefinition.getId();
+                    var clazz = tempProtocolClassMap.get(id);
                     try {
                         var registration = parseProtocolRegistration(clazz, module);
                         if (protocolDefinition.isEnhance()) {
@@ -370,6 +381,13 @@ public class ProtocolManager {
         }
     }
 
+    private static void checkSubProtocol(Class<?> clazz, short id, Class<?> subClass) {
+        var registerProtocolClass = tempProtocolClassMap.get(id);
+        if (registerProtocolClass == null || !registerProtocolClass.equals(subClass)) {
+            throw new RunException("协议[{}]的子协议[{}][{}]没有注册", clazz.getCanonicalName(), id, subClass.getCanonicalName());
+        }
+    }
+
     private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         var protocolId = checkProtocol(clazz);
 
@@ -469,7 +487,7 @@ public class ProtocolManager {
             }
 
             IFieldRegistration registration = typeToRegistration(clazz, types[0]);
-            return ListField.valueOf(registration, (ParameterizedType) type);
+            return ListField.valueOf(registration, type);
 
         } else if (Map.class.isAssignableFrom(fieldTypeClazz)) {
             if (!fieldTypeClazz.equals(Map.class)) {
@@ -495,6 +513,7 @@ public class ProtocolManager {
         } else {
             // 是一个协议引用变量
             var referenceProtocolId = getProtocolIdByClass(field.getType());
+            checkSubProtocol(clazz, referenceProtocolId, field.getType());
             tempSubProtocolIdMap.computeIfAbsent(getProtocolIdByClass(clazz), it -> new HashSet<>()).add(referenceProtocolId);
             return ObjectProtocolField.valueOf(referenceProtocolId);
         }
@@ -532,6 +551,7 @@ public class ProtocolManager {
             } else {
                 // 是一个协议引用变量
                 var referenceProtocolId = getProtocolIdByClass(clazz);
+                checkSubProtocol(clazz, referenceProtocolId, clazz);
                 tempSubProtocolIdMap.computeIfAbsent(getProtocolIdByClass(currentProtocolClass), it -> new HashSet<>()).add(referenceProtocolId);
                 return ObjectProtocolField.valueOf(referenceProtocolId);
             }
