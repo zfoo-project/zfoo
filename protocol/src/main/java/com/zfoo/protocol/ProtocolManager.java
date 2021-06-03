@@ -150,6 +150,14 @@ public class ProtocolManager {
         AssertionUtils.notNull(tempSubProtocolIdMap, "[{}]已经初始完成，只能parseProtocol一次，请不要重复初始化", ProtocolManager.class.getSimpleName());
         try {
             for (var protocolClass : protocolClassSet) {
+                var id = getProtocolIdByClass(protocolClass);
+                var previous = tempProtocolClassMap.put(id, protocolClass);
+                if (previous != null) {
+                    throw new RunException("[{}][{}]协议号[protocolId:{}]重复", protocolClass.getCanonicalName(), previous.getCanonicalName(), id);
+                }
+            }
+
+            for (var protocolClass : protocolClassSet) {
                 try {
                     var registration = parseProtocolRegistration(protocolClass, ProtocolModule.DEFAULT_PROTOCOL_MODULE);
                     // 注册协议
@@ -199,7 +207,10 @@ public class ProtocolManager {
                     // 协议号是否和id是否相等
                     AssertionUtils.isTrue(packet.protocolId() == id, "[class:{}]协议序列号[{}]和协议文件里的协议序列号不相等", clazz.getCanonicalName(), PROTOCOL_ID);
 
-                    tempProtocolClassMap.put(id, clazz);
+                    var previous = tempProtocolClassMap.put(id, clazz);
+                    if (previous != null) {
+                        throw new RunException("[{}][{}]协议号[protocolId:{}]重复", clazz.getCanonicalName(), previous.getCanonicalName(), id);
+                    }
                 }
             }
 
@@ -390,10 +401,6 @@ public class ProtocolManager {
 
     private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         var protocolId = checkProtocol(clazz);
-
-        if (protocols[protocolId] != null) {
-            throw new RunException("[{}][{}]协议号[protocolId:{}]重复", protocols[protocolId].protocolConstructor().getDeclaringClass().getCanonicalName(), clazz.getCanonicalName(), protocolId);
-        }
 
         var fields = new ArrayList<Field>();
         for (var field : clazz.getDeclaredFields()) {
