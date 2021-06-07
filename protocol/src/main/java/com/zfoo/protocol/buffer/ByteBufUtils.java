@@ -203,16 +203,9 @@ public abstract class ByteBufUtils {
         bytes[index++] = (byte) (mask >>> 7 | 0x80);
         bytes[index++] = (byte) (mask >>> 14 | 0x80);
         bytes[index++] = (byte) (mask >>> 21 | 0x80);
-        bytes[index++] = (byte) (mask >>> 28 | 0x80);
 
-
-        int a = (int) (mask >>> 35);
-        if (a == 0) {
-            byteBuf.writeBytes(bytes, 0, index);
-            return;
-        }
-
-        int b = (int) (mask >>> 42);
+        int a = (int) (mask >>> 28);
+        int b = (int) (mask >>> 35);
         if (b == 0) {
             bytes[index++] = (byte) a;
             byteBuf.writeBytes(bytes, 0, index);
@@ -220,7 +213,7 @@ public abstract class ByteBufUtils {
         }
 
         bytes[index++] = (byte) (a | 0x80);
-        a = (int) (mask >>> 49);
+        a = (int) (mask >>> 42);
         if (a == 0) {
             bytes[index++] = (byte) b;
             byteBuf.writeBytes(bytes, 0, index);
@@ -228,7 +221,7 @@ public abstract class ByteBufUtils {
         }
 
         bytes[index++] = (byte) (b | 0x80);
-        b = (int) (mask >>> 56);
+        b = (int) (mask >>> 49);
         if (b == 0) {
             bytes[index++] = (byte) a;
             byteBuf.writeBytes(bytes, 0, index);
@@ -236,9 +229,18 @@ public abstract class ByteBufUtils {
         }
 
         bytes[index++] = (byte) (a | 0x80);
-        bytes[index++] = (byte) b;
+        a = (int) (mask >>> 56);
+        if (a == 0) {
+            bytes[index++] = (byte) b;
+            byteBuf.writeBytes(bytes, 0, index);
+            return;
+        }
+
+        bytes[index++] = (byte) (b | 0x80);
+        bytes[index++] = (byte) a;
         byteBuf.writeBytes(bytes, 0, index);
     }
+
 
     public static long readLong(ByteBuf byteBuf) {
         int readIndex = byteBuf.readerIndex();
