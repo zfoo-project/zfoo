@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * header(4byte) + protocolId(2byte) + packet
@@ -40,34 +41,31 @@ public class TcpPacketCodecHandler extends ByteToMessageCodec<EncodedPacketInfo>
 
     private static final Logger logger = LoggerFactory.getLogger(TcpPacketCodecHandler.class);
 
-    private int length;
-
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
+        // 不够读一个int
+        if (in.readableBytes() <= ProtocolManager.PROTOCOL_HEAD_LENGTH) {
+            return;
+        }
+        in.markReaderIndex();
+        var length = in.readInt();
+
+        // 如果长度非法，则抛出异常断开连接
+        if (length < 0) {
+            throw new IllegalArgumentException(StringUtils
+                    .format("[session:{}]的包头长度[length:{}]非法"
+                            , SessionUtils.sessionInfo(ctx), length));
+        }
+
+        // ByteBuf里的数据太小
+        if (in.readableBytes() < length) {
+            in.resetReaderIndex();
+            return;
+        }
+
+        var tmpByteBuf = in.readRetainedSlice(length);
         try {
-            // 不够读一个int
-            if (in.readableBytes() <= ProtocolManager.PROTOCOL_HEAD_LENGTH) {
-                return;
-            }
-            in.markReaderIndex();
-            length = in.readInt();
-
-            // 如果长度超过限制，则抛出异常断开连接
-            if (length < 0) {
-                throw new IllegalArgumentException(StringUtils
-                        .format("[session:{}]的包头长度[length:{}]非法[maxLength:{}]"
-                                , SessionUtils.sessionInfo(ctx), length));
-            }
-
-            // ByteBuf里的数据太小
-            if (in.readableBytes() < length) {
-                in.resetReaderIndex();
-                return;
-            }
-
-            var tmpByteBuf = in.readRetainedSlice(length);
             DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
-            ReferenceCountUtil.release(tmpByteBuf);
             out.add(packetInfo);
         } catch (Exception e) {
             logger.error("[session:{}]解码exception异常", SessionUtils.sessionInfo(ctx), e);
@@ -75,6 +73,8 @@ public class TcpPacketCodecHandler extends ByteToMessageCodec<EncodedPacketInfo>
         } catch (Throwable t) {
             logger.error("[session:{}]解码throwable错误", SessionUtils.sessionInfo(ctx), t);
             throw t;
+        } finally {
+            ReferenceCountUtil.release(tmpByteBuf);
         }
     }
 

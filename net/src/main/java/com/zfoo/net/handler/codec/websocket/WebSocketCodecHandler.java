@@ -28,10 +28,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * header(4byte) + protocolId(2byte) + packet
@@ -44,42 +46,33 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
 
     private static final Logger logger = LoggerFactory.getLogger(TcpPacketCodecHandler.class);
 
-    // 数据包的最大长度限制，防止恶意的攻击
-    private static final int MAX_LENGTH = 100 * IOUtils.BYTES_PER_KB;
-
-    private int length;
-    private boolean remain = false;
-
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, WebSocketFrame webSocketFrame, List<Object> list) {
+        ByteBuf in = webSocketFrame.content();
+
+        // 不够读一个int
+        if (in.readableBytes() <= ProtocolManager.PROTOCOL_HEAD_LENGTH) {
+            return;
+        }
+
+        in.markReaderIndex();
+        var length = in.readInt();
+
+        // 如果长度非法，则抛出异常断开连接
+        if (length < 0) {
+            throw new IllegalArgumentException(StringUtils
+                    .format("[session:{}]的包头长度[length:{}]非法"
+                            , SessionUtils.sessionInfo(channelHandlerContext), length));
+        }
+
+        // ByteBuf里的数据太小
+        if (in.readableBytes() < length) {
+            in.resetReaderIndex();
+            return;
+        }
+        var tmpByteBuf = in.readRetainedSlice(length);
         try {
-            ByteBuf in = webSocketFrame.content();
-
-            if (!remain) {
-                // 不够读一个int
-                if (in.readableBytes() <= ProtocolManager.PROTOCOL_HEAD_LENGTH) {
-                    return;
-                }
-                length = in.readInt();
-                remain = true;
-            }
-
-            // 如果长度超过限制，则抛出异常断开连接
-            if (length > MAX_LENGTH) {
-                throw new IllegalArgumentException(StringUtils
-                        .format("[session:{}]的包头长度[length:{}]超过最大长度[maxLength:{}]限制"
-                                , SessionUtils.sessionInfo(channelHandlerContext), length, MAX_LENGTH));
-            }
-
-            // ByteBuf里的数据太小
-            if (in.readableBytes() < length) {
-                return;
-            }
-
-            remain = false;
-
-            DecodedPacketInfo packetInfo = NetContext.getPacketService().read(in);
-
+            DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
             list.add(packetInfo);
         } catch (Exception e) {
             logger.error("exception异常", e);
@@ -87,6 +80,8 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
         } catch (Throwable t) {
             logger.error("throwable错误", t);
             throw t;
+        } finally {
+            ReferenceCountUtil.release(tmpByteBuf);
         }
     }
 
