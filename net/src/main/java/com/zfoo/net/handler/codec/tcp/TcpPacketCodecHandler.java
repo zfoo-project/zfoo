@@ -23,6 +23,7 @@ import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
+import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,40 +40,34 @@ public class TcpPacketCodecHandler extends ByteToMessageCodec<EncodedPacketInfo>
 
     private static final Logger logger = LoggerFactory.getLogger(TcpPacketCodecHandler.class);
 
-    // 数据包的最大长度限制，防止恶意的攻击
-    private static final int MAX_LENGTH = 1 * IOUtils.BITS_PER_MB;
-
     private int length;
-    private boolean remain = false;
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         try {
-            if (!remain) {
-                // 不够读一个int
-                if (in.readableBytes() <= ProtocolManager.PROTOCOL_HEAD_LENGTH) {
-                    return;
-                }
-                length = in.readInt();
-                remain = true;
+            // 不够读一个int
+            if (in.readableBytes() <= ProtocolManager.PROTOCOL_HEAD_LENGTH) {
+                return;
             }
+            in.markReaderIndex();
+            length = in.readInt();
 
             // 如果长度超过限制，则抛出异常断开连接
-            if (length > MAX_LENGTH) {
+            if (length < 0) {
                 throw new IllegalArgumentException(StringUtils
-                        .format("[session:{}]的包头长度[length:{}]超过最大长度[maxLength:{}]限制"
-                                , SessionUtils.sessionInfo(ctx), length, MAX_LENGTH));
+                        .format("[session:{}]的包头长度[length:{}]非法[maxLength:{}]"
+                                , SessionUtils.sessionInfo(ctx), length));
             }
 
             // ByteBuf里的数据太小
             if (in.readableBytes() < length) {
+                in.resetReaderIndex();
                 return;
             }
 
-            remain = false;
-
-            DecodedPacketInfo packetInfo = NetContext.getPacketService().read(in);
-
+            var tmpByteBuf = in.readRetainedSlice(length);
+            DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
+            ReferenceCountUtil.release(tmpByteBuf);
             out.add(packetInfo);
         } catch (Exception e) {
             logger.error("[session:{}]解码exception异常", SessionUtils.sessionInfo(ctx), e);
