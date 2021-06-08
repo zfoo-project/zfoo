@@ -60,9 +60,8 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
 
         // 如果长度非法，则抛出异常断开连接
         if (length < 0) {
-            throw new IllegalArgumentException(StringUtils
-                    .format("[session:{}]的包头长度[length:{}]非法"
-                            , SessionUtils.sessionInfo(channelHandlerContext), length));
+            throw new IllegalArgumentException(StringUtils.format("[session:{}]的包头长度[length:{}]非法"
+                    , SessionUtils.sessionInfo(channelHandlerContext), length));
         }
 
         // ByteBuf里的数据太小
@@ -70,8 +69,10 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
             in.resetReaderIndex();
             return;
         }
-        var tmpByteBuf = in.readRetainedSlice(length);
+
+        ByteBuf tmpByteBuf = null;
         try {
+            tmpByteBuf = in.readRetainedSlice(length);
             DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
             list.add(packetInfo);
         } catch (Exception e) {
