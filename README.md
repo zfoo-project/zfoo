@@ -34,7 +34,7 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 ### Ⅲ. 完整的工程案例
 
 - [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，难度5星
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server) 进击的坦克（The Fight of Tanks），难度2星
+- [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of Tanks）》，难度2星
 
 ### Ⅳ. 问题
 
