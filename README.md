@@ -48,7 +48,7 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 **JDK 11+**，可以在 **OpenJDK** 和 **Oracle JDK** 无缝切换
 
 ```
-如果你的机器没有安装JDK 11+，最快速的安装方法是在Idea中的Project Structure，Platform Settings，SDKs中直接下载
+如果你没有安装JDK 11+，快速的安装方法是在Idea的右上角Project Structure，Platform Settings，SDKs中直接下载
 ```
 
 #### 2. [protocol](protocol/README.md) 目前性能最好的Java序列化和反序列化库
