@@ -1,9 +1,9 @@
 ### Ⅰ. 注意事项
 
+- 轻量级的cron表达式实现，时间可以向前调，也可以向后调，都会出发trigger
 - 每秒钟执行一次SchedulerManager.triggerPerSecond()方法，循环遍历可执行的scheduler
 - triggerPerSecond在计算下一次triggerTimestamp会很耗时间，所以尽量避免配置一秒或者间隔时间很短的cron表达式
 - SchedulerManager的executor只有一条线程，所以使用者要避免做耗时和阻塞的运算，如果有这样的需求可以抛到其它线程池
-- 时间可以向前调，也可以向后调，都会出发trigger
 
 ### Ⅱ. Cron Expression Example
 
