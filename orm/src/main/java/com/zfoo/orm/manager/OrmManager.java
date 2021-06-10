@@ -13,9 +13,8 @@
 
 package com.zfoo.orm.manager;
 
+import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
 import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
@@ -26,10 +25,10 @@ import com.zfoo.orm.model.config.OrmConfig;
 import com.zfoo.orm.model.entity.IEntity;
 import com.zfoo.orm.model.vo.EntityDef;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.net.HostAndPort;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -87,23 +86,16 @@ public class OrmManager implements IOrmManager {
                 .builder()
                 .codecRegistry(pojoCodecRegistry);
 
-        // 设置数据库地址
+        // 设置数据库连接地址，数据库账号密码
         var hostConfig = ormConfig.getHostConfig();
-        if (CollectionUtils.isNotEmpty(hostConfig.getAddressMap())) {
-            var hostList = HostAndPort.toHostAndPortList(hostConfig.getAddressMap().values())
-                    .stream()
-                    .map(it -> new ServerAddress(it.getHost(), it.getPort()))
-                    .collect(Collectors.toList());
-            mongoBuilder.applyToClusterSettings(builder -> builder.hosts(hostList));
+        if (StringUtils.isBlank(hostConfig.getUrl())) {
+            throw new RunException("数据库MongoDB的连接地址url不能为空，请检查orm的配置");
         }
 
-        // 设置数据库账号密码
-        if (!StringUtils.isBlank(hostConfig.getUser()) && !StringUtils.isBlank(hostConfig.getPassword())) {
-            mongoBuilder.credential(MongoCredential.createCredential(hostConfig.getUser(), "admin", hostConfig.getPassword().toCharArray()));
-        }
+        mongoBuilder.applyToClusterSettings(builder -> builder.applyConnectionString(new ConnectionString(hostConfig.getUrl())));
 
         // 设置连接池的大小
-        var maxConnection = Runtime.getRuntime().availableProcessors() * 3 + 1;
+        var maxConnection = Runtime.getRuntime().availableProcessors() * 2 + 1;
         mongoBuilder.applyToConnectionPoolSettings(builder -> builder.maxSize(maxConnection).minSize(1));
 
         mongoClient = MongoClients.create(mongoBuilder.build());

@@ -28,16 +28,7 @@
     </xsd:element>
 
     <xsd:complexType name="addressType">
-        <xsd:sequence>
-            <xsd:element name="address" maxOccurs="unbounded" type="addressAttributeType"/>
-        </xsd:sequence>
         <xsd:attribute name="database" type="xsd:string" use="required"/>
-        <xsd:attribute name="user" type="xsd:string" use="required"/>
-        <xsd:attribute name="password" type="xsd:string" use="required"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="addressAttributeType">
-        <xsd:attribute name="name" type="xsd:string" use="required"/>
         <xsd:attribute name="url" type="xsd:string" use="required"/>
     </xsd:complexType>
 
