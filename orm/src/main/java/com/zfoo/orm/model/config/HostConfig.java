@@ -13,6 +13,8 @@
 
 package com.zfoo.orm.model.config;
 
+import java.util.Map;
+
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -20,8 +22,18 @@ package com.zfoo.orm.model.config;
 public class HostConfig {
 
     private String database;
-    // 连接地址
-    private String url;
+    private String user;
+    private String password;
+    private Map<String, String> addressMap;
+
+    public static HostConfig valueOf(String database, String user, String password, Map<String, String> addressMap) {
+        HostConfig config = new HostConfig();
+        config.database = database;
+        config.user = user;
+        config.password = password;
+        config.addressMap = addressMap;
+        return config;
+    }
 
     public String getDatabase() {
         return database;
@@ -31,11 +43,27 @@ public class HostConfig {
         this.database = database;
     }
 
-    public String getUrl() {
-        return url;
+    public String getUser() {
+        return user;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Map<String, String> getAddressMap() {
+        return addressMap;
+    }
+
+    public void setAddressMap(Map<String, String> addressMap) {
+        this.addressMap = addressMap;
     }
 }

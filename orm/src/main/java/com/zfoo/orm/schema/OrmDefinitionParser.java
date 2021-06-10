@@ -105,7 +105,11 @@ public class OrmDefinitionParser implements BeanDefinitionParser {
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
         resolvePlaceholder("database", "database", builder, element, parserContext);
-        resolvePlaceholder("url", "url", builder, element, parserContext);
+        resolvePlaceholder("user", "user", builder, element, parserContext);
+        resolvePlaceholder("password", "password", builder, element, parserContext);
+
+        var addressMap = parseAddress(element, parserContext);
+        builder.addPropertyValue("addressMap", addressMap);
 
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }

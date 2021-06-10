@@ -42,7 +42,9 @@ OrmContext.getAccessor().update(obj);
 ```
 <orm:config id="config" entity-package="com.zfoo.orm.**.entity">
 
-    <orm:host database="test" url="mongodb://127.0.0.1:27017" />
+    <orm:host database="test" user="" password="">
+        <orm:address name="server0" url="127.0.0.1:27017"/>
+    </orm:host>
 
     <!-- 缓存策略 -->
     <orm:caches>
