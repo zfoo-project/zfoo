@@ -10,6 +10,8 @@
 - 目前支持基本数据属性（byte，short，int，long，float，double，boolean），字符串String，List，Set集合属性的映射，不支持Map
 - 数据库主键能用整数尽量用整数，因为MongoDB默认的主键是一个字符串，比较占空间
 - 数据库使用自研的orm框架，比如一个实体类UserEntity，映射到数据库中的集合为user，首字母小写，去掉Entity
+- 基于 [caffeine](https://github.com/ben-manes/caffeine) 的高性能数据缓存
+- 语法校验，如对没有加上get和set的字段自动语法提示
 
 ### Ⅲ. 使用方法
 
