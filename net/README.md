@@ -33,3 +33,14 @@ task，通用任务线程池
 - [单机服务器教程](src/test/java/com/zfoo/net/core/tcp/server/TcpServerTest.java)
 - [RPC教程](src/test/java/com/zfoo/net/core/provider/ProviderTest.java)
 - [网关教程](src/test/java/com/zfoo/net/core/gateway/GatewayTest.java)
+
+### Ⅴ. 依赖的中间件zookeeper教程
+
+- [zk基础的增删改查](src/test/java/com/zfoo/net/zookeeper/base)
+- [curator的增删改查](src/test/java/com/zfoo/net/zookeeper/curator)
+- [zk分布式ID](src/test/java/com/zfoo/net/zookeeper/recipes/atomicint)
+- [zk分布式Barrier](src/test/java/com/zfoo/net/zookeeper/recipes/distributedbarrier)
+- [zk分布式锁](src/test/java/com/zfoo/net/zookeeper/recipes/distributedbarrier)
+- [zk分布式选举](src/test/java/com/zfoo/net/zookeeper/recipes/mastersel)
+- [zk数据发布/订阅](src/test/java/com/zfoo/net/zookeeper/recipes/nodecache)
+
