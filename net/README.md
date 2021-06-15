@@ -38,9 +38,9 @@ task，通用任务线程池
 
 - [zk基础的增删改查](src/test/java/com/zfoo/net/zookeeper/base)
 - [curator的增删改查](src/test/java/com/zfoo/net/zookeeper/curator)
-- [zk分布式ID](src/test/java/com/zfoo/net/zookeeper/recipes/atomicint)
-- [zk分布式Barrier](src/test/java/com/zfoo/net/zookeeper/recipes/distributedbarrier)
-- [zk分布式锁](src/test/java/com/zfoo/net/zookeeper/recipes/distributedbarrier)
-- [zk分布式选举](src/test/java/com/zfoo/net/zookeeper/recipes/mastersel)
-- [zk数据发布/订阅](src/test/java/com/zfoo/net/zookeeper/recipes/nodecache)
+- [zookeeper实现的分布式自增ID](src/test/java/com/zfoo/net/zookeeper/recipes/atomicint)
+- [分布式Barrier](src/test/java/com/zfoo/net/zookeeper/recipes/distributedbarrier)
+- [分布式锁](src/test/java/com/zfoo/net/zookeeper/recipes/distributedbarrier)
+- [数据发布和订阅](src/test/java/com/zfoo/net/zookeeper/recipes/nodecache)
+- [zookeeper的分布式选举算法](src/test/java/com/zfoo/net/zookeeper/recipes/mastersel)
 
