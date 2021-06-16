@@ -125,7 +125,7 @@ function start() {
     cd ${logPath}
 
     # -XX:+AlwaysPreTouch，并置零内存页面，可能令得启动时慢上一点，但后面访问时会更流畅，比如页面会连续分配
-    nohup java -XX:+UseG1GC -XX:InitialHeapSize=4g -XX:MaxHeapSize=4g -XX:MaxMetaspaceSize=256m -XX:AutoBoxCacheMax=20000 -XX:+UseStringDeduplication -XX:+DisableExplicitGC -XX:+HeapDumpOnOutOfMemoryError -Djdk.attach.allowAttachSelf=true -Dspring.profiles.active=pro -Dfile.encoding=UTF-8 -jar ${jarPath} >/dev/null 2>&1 &
+    nohup java -XX:+UseG1GC -XX:InitialHeapSize=4g -XX:MaxHeapSize=4g -XX:MaxMetaspaceSize=256m -XX:AutoBoxCacheMax=20000 -XX:+UseStringDeduplication -XX:+HeapDumpOnOutOfMemoryError -Djdk.attach.allowAttachSelf=true -Dspring.profiles.active=pro -Dfile.encoding=UTF-8 -jar ${jarPath} >/dev/null 2>&1 &
 
     # 如果没有info的log，则等待一秒钟
     local infoLog
