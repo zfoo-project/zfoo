@@ -35,15 +35,11 @@ public class BooleanSerializer implements ISerializer {
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
-        if (object == null) {
-            ByteBufUtils.writeBoolean(buffer, Boolean.FALSE);
-            return;
-        }
-        ByteBufUtils.writeBoolean(buffer, (Boolean) object);
+        ByteBufUtils.writeBooleanBox(buffer, (Boolean) object);
     }
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        return ByteBufUtils.readBoolean(buffer);
+        return ByteBufUtils.readBooleanBox(buffer);
     }
 }

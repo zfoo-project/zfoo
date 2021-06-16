@@ -36,15 +36,11 @@ public class CharSerializer implements ISerializer {
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
-        if (object == null) {
-            ByteBufUtils.writeChar(buffer, Character.MIN_VALUE);
-            return;
-        }
-        ByteBufUtils.writeChar(buffer, (Character) object);
+        ByteBufUtils.writeCharBox(buffer, (Character) object);
     }
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        return ByteBufUtils.readChar(buffer);
+        return ByteBufUtils.readCharBox(buffer);
     }
 }

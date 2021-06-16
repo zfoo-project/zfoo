@@ -35,15 +35,11 @@ public class DoubleSerializer implements ISerializer {
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
-        if (object == null) {
-            ByteBufUtils.writeDouble(buffer, 0);
-            return;
-        }
-        ByteBufUtils.writeDouble(buffer, (Double) object);
+        ByteBufUtils.writeDoubleBox(buffer, (Double) object);
     }
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        return ByteBufUtils.readDouble(buffer);
+        return ByteBufUtils.readDoubleBox(buffer);
     }
 }

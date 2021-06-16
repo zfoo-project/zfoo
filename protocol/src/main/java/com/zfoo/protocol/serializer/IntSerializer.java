@@ -36,15 +36,11 @@ public class IntSerializer implements ISerializer {
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
-        if (object == null) {
-            ByteBufUtils.writeInt(buffer, 0);
-            return;
-        }
-        ByteBufUtils.writeInt(buffer, (Integer) object);
+        ByteBufUtils.writeIntBox(buffer, (Integer) object);
     }
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        return ByteBufUtils.readInt(buffer);
+        return ByteBufUtils.readIntBox(buffer);
     }
 }

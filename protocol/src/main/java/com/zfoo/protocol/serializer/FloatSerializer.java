@@ -36,15 +36,11 @@ public class FloatSerializer implements ISerializer {
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
-        if (object == null) {
-            ByteBufUtils.writeFloat(buffer, 0F);
-            return;
-        }
-        ByteBufUtils.writeFloat(buffer, (Float) object);
+        ByteBufUtils.writeFloatBox(buffer, (Float) object);
     }
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        return ByteBufUtils.readFloat(buffer);
+        return ByteBufUtils.readFloatBox(buffer);
     }
 }

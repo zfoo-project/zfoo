@@ -35,15 +35,11 @@ public class LongSerializer implements ISerializer {
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
-        if (object == null) {
-            ByteBufUtils.writeLong(buffer, 0L);
-            return;
-        }
-        ByteBufUtils.writeLong(buffer, (Long) object);
+        ByteBufUtils.writeLongBox(buffer, (Long) object);
     }
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        return ByteBufUtils.readLong(buffer);
+        return ByteBufUtils.readLongBox(buffer);
     }
 }

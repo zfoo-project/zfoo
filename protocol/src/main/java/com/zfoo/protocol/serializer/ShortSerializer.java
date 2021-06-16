@@ -36,15 +36,11 @@ public class ShortSerializer implements ISerializer {
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
-        if (object == null) {
-            ByteBufUtils.writeShort(buffer, (short) 0);
-            return;
-        }
-        ByteBufUtils.writeShort(buffer, (Short) object);
+        ByteBufUtils.writeShortBox(buffer, (Short) object);
     }
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        return ByteBufUtils.readShort(buffer);
+        return ByteBufUtils.readShortBox(buffer);
     }
 }

@@ -36,16 +36,12 @@ public class ByteSerializer implements ISerializer {
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
-        if (object == null) {
-            ByteBufUtils.writeByte(buffer, (byte) 0);
-            return;
-        }
-        ByteBufUtils.writeByte(buffer, (Byte) object);
+        ByteBufUtils.writeByteBox(buffer, (Byte) object);
     }
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        return ByteBufUtils.readByte(buffer);
+        return ByteBufUtils.readByteBox(buffer);
     }
 
 }
