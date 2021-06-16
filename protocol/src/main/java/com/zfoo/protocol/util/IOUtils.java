@@ -23,7 +23,7 @@ public abstract class IOUtils {
     // Represents the end-of-file (or stream)
     public static final int EOF = -1;
 
-    // The number of bytes in a kilobyte
+    // The number of bytes in a byte
     public static final int ONE_BYTE = 1;
     // The number of bytes in a kilobyte
     public static final int BYTES_PER_KB = ONE_BYTE * 1024;
