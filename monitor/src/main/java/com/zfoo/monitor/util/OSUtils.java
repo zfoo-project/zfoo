@@ -120,24 +120,32 @@ public abstract class OSUtils {
      */
     public static List<DiskFileSystemVO> df() {
         var fileSystems = os.getFileSystem().getFileStores();
-        var df = new ArrayList<DiskFileSystemVO>();
-        var nameMap = new HashMap<String, Integer>();
+
+        var nameDfMap = new HashMap<String, List<DiskFileSystemVO>>();
         for (var fs : fileSystems) {
             var name = fs.getName();
             var size = fs.getTotalSpace();
             var available = fs.getFreeSpace();
-
-            var value = nameMap.get(name);
-            if (value == null) {
-                nameMap.put(name, 1);
-            } else {
-                name = name + value;
-                nameMap.put(name, ++value);
-            }
-
-            df.add(DiskFileSystemVO.valueOf(name, size, available, TimeUtils.now()));
+            var list = nameDfMap.computeIfAbsent(name, (it) -> new ArrayList<>());
+            list.add(DiskFileSystemVO.valueOf(name, size, available, TimeUtils.now()));
         }
-        return df;
+
+        var dfs = new ArrayList<DiskFileSystemVO>();
+        for (var dfList : nameDfMap.values()) {
+            if (dfList.size() == 1) {
+                dfs.add(dfList.get(0));
+            } else {
+                for (int i = 0; i < dfList.size(); i++) {
+                    var df = dfList.get(i);
+                    var name = df.getName();
+                    var index = i + 1;
+                    df.setName(StringUtils.format("{}-{}", name, index));
+                    dfs.add(df);
+                }
+            }
+        }
+
+        return dfs;
     }
 
     /**
@@ -155,7 +163,7 @@ public abstract class OSUtils {
      * 对应于Linux中的sar -n DEV 1命令，兼容windows
      */
     public static List<SarVO> sar() {
-        var sar = new ArrayList<SarVO>();
+        var nameSarMap = new HashMap<String, List<SarVO>>();
         for (var networkIF : networkIFs) {
             var name = networkIF.getDisplayName() + StringUtils.SPACE + networkIF.getName();
             var oldTimestamp = networkIF.getTimeStamp();
@@ -180,9 +188,26 @@ public abstract class OSUtils {
             var inDrops = networkIF.getInDrops() - oldInDrops;
             var collisions = networkIF.getCollisions() - oldCollisions;
 
-            sar.add(SarVO.valueOf(name, rxpck, txpck, rxBytes, txBytes, inErrors, outErrors, inDrops, collisions, timestamp));
+            var list = nameSarMap.computeIfAbsent(name, (it) -> new ArrayList<>());
+            list.add(SarVO.valueOf(name, rxpck, txpck, rxBytes, txBytes, inErrors, outErrors, inDrops, collisions, timestamp));
         }
-        return sar;
+
+        var sars = new ArrayList<SarVO>();
+        for (var sarList : nameSarMap.values()) {
+            if (sarList.size() == 1) {
+                sars.add(sarList.get(0));
+            } else {
+                for (int i = 0; i < sarList.size(); i++) {
+                    var sar = sarList.get(i);
+                    var name = sar.getName();
+                    var index = i + 1;
+                    sar.setName(StringUtils.format("{}-{}", name, index));
+                    sars.add(sar);
+                }
+            }
+        }
+
+        return sars;
     }
 
     private static UptimeVO maxUptime;
