@@ -25,7 +25,7 @@ public abstract class HotSwapUtils {
     private static final Logger logger = LoggerFactory.getLogger(HotSwapUtils.class);
 
     private static String readClassName(byte[] bytes) {
-        ByteArrayInputStream byteArrayInputStream = null;
+        //ByteArrayInputStream byteArrayInputStream = null;
         DataInputStream dataInputStream = null;
         try {
             dataInputStream = new DataInputStream(new ByteArrayInputStream(bytes));
@@ -34,7 +34,7 @@ public abstract class HotSwapUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
-            IOUtils.closeIO(dataInputStream, byteArrayInputStream);
+            IOUtils.closeIO(dataInputStream);
         }
     }
 
