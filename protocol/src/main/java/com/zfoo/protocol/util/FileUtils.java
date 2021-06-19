@@ -449,14 +449,13 @@ public abstract class FileUtils {
 
     public static void writeInputStreamToFile(File file, InputStream inputStream) {
         FileOutputStream fileOutputStream = null;
-        OutputStreamWriter outputStreamWriter = null;
         try {
             fileOutputStream = openOutputStream(file, true);
             IOUtils.copy(inputStream, fileOutputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
-            IOUtils.closeIO(outputStreamWriter, fileOutputStream);
+            IOUtils.closeIO(fileOutputStream);
         }
     }
 
