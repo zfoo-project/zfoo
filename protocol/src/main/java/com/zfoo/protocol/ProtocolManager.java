@@ -89,7 +89,7 @@ public class ProtocolManager {
     }
 
     public static void initProtocol(Set<Class<?>> protocolClassSet) {
-        ProtocolAnalysis.analyze(protocolClassSet);
+        ProtocolAnalysis.analyze(protocolClassSet, GenerateOperation.NO_OPERATION);
     }
 
     public static void initProtocol(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {

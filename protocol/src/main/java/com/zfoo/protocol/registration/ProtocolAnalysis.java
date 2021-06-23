@@ -82,10 +82,6 @@ public class ProtocolAnalysis {
         tempBaseSerializerMap.put(String.class, StringSerializer.getInstance());
     }
 
-    public static synchronized void analyze(Set<Class<?>> protocolClassSet) {
-        analyze(protocolClassSet, GenerateOperation.NO_OPERATION);
-    }
-
     public static synchronized void analyze(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
         AssertionUtils.notNull(tempSubProtocolIdMap, "[{}]已经初始完成，只能parseProtocol一次，请不要重复初始化", ProtocolAnalysis.class.getSimpleName());
         try {
