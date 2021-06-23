@@ -15,13 +15,18 @@ package com.zfoo.protocol;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.generate.GenerateOperation;
-import com.zfoo.protocol.registration.*;
+import com.zfoo.protocol.registration.IProtocolRegistration;
+import com.zfoo.protocol.registration.ProtocolAnalysis;
+import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.xml.XmlProtocols;
 import io.netty.buffer.ByteBuf;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author jaysunxiao
@@ -29,10 +34,6 @@ import java.util.*;
  */
 public class ProtocolManager {
 
-    /**
-     * 包体的头部的长度，一个int字节长度
-     */
-    public static final int PROTOCOL_HEAD_LENGTH = 4;
     public static final String PROTOCOL_ID = "PROTOCOL_ID";
     public static final short MAX_PROTOCOL_NUM = Short.MAX_VALUE;
     public static final byte MAX_MODULE_NUM = Byte.MAX_VALUE;
@@ -41,12 +42,14 @@ public class ProtocolManager {
     public static final IProtocolRegistration[] protocols = new IProtocolRegistration[MAX_PROTOCOL_NUM];
     public static final ProtocolModule[] modules = new ProtocolModule[MAX_MODULE_NUM];
 
-
     static {
         // 初始化默认协议模块
         modules[0] = ProtocolModule.DEFAULT_PROTOCOL_MODULE;
     }
 
+    /**
+     * 将packet序列化到buffer中
+     */
     public static void write(ByteBuf buffer, IPacket packet) {
         var protocolId = packet.protocolId();
         // 写入协议号
@@ -88,7 +91,6 @@ public class ProtocolManager {
         return moduleOptional.get();
     }
 
-
     public static synchronized void initProtocol(Set<Class<?>> protocolClassSet) {
         ProtocolAnalysis.analyze(protocolClassSet);
     }
@@ -96,7 +98,6 @@ public class ProtocolManager {
     public static synchronized void initProtocol(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
         ProtocolAnalysis.analyze(protocolClassSet,  generateOperation);
     }
-
 
     public static synchronized void initProtocol(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
         ProtocolAnalysis.analyze(xmlProtocols,  generateOperation);

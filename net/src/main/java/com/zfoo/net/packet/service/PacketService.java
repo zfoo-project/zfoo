@@ -42,6 +42,11 @@ public class PacketService implements IPacketService {
     private static final Logger logger = LoggerFactory.getLogger(PacketService.class);
 
     /**
+     * 包体的头部的长度，一个int字节长度
+     */
+    public static final int PACKET_HEAD_LENGTH = 4;
+
+    /**
      * 网络包的约定规则如下：
      * 1. 客户端的请求约定以Request结尾，服务器的响应约定以Response结尾
      * 2. 服务器内部请求约定以Ask结尾，服务器内部的响应约定以Answer结尾
@@ -124,7 +129,7 @@ public class PacketService implements IPacketService {
         buffer.clear();
 
         // 预留写入包的长度，一个int字节大小
-        buffer.writeInt(ProtocolManager.PROTOCOL_HEAD_LENGTH);
+        buffer.writeInt(PACKET_HEAD_LENGTH);
 
         // 写入包packet
         ProtocolManager.write(buffer, packet);
@@ -140,7 +145,7 @@ public class PacketService implements IPacketService {
 
         int length = buffer.readableBytes();
 
-        int packetLength = length - ProtocolManager.PROTOCOL_HEAD_LENGTH;
+        int packetLength = length - PACKET_HEAD_LENGTH;
 
         buffer.writerIndex(0);
 

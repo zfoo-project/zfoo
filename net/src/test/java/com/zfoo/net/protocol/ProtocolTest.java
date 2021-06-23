@@ -18,7 +18,7 @@ import com.zfoo.net.packet.*;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.packet.model.SignalPacketAttachment;
 import com.zfoo.net.packet.service.IPacketService;
-import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.net.packet.service.PacketService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.junit.Assert;
@@ -76,7 +76,7 @@ public class ProtocolTest {
         ByteBuf writeBuff = Unpooled.directBuffer();
         packetService.write(writeBuff, cm, attachment);
 
-        writeBuff.readerIndex(ProtocolManager.PROTOCOL_HEAD_LENGTH);// 信息头的长度
+        writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
@@ -93,7 +93,7 @@ public class ProtocolTest {
         ByteBuf writeBuff = Unpooled.buffer();
         packetService.write(writeBuff, cm, null);
 
-        writeBuff.readerIndex(ProtocolManager.PROTOCOL_HEAD_LENGTH);// 信息头的长度
+        writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
@@ -112,7 +112,7 @@ public class ProtocolTest {
         ByteBuf writeBuff = Unpooled.buffer();
         packetService.write(writeBuff, cm, null);
 
-        writeBuff.readerIndex(ProtocolManager.PROTOCOL_HEAD_LENGTH);// 信息头的长度
+        writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
@@ -131,7 +131,7 @@ public class ProtocolTest {
         ByteBuf writeBuff = Unpooled.buffer();
         packetService.write(writeBuff, cm, null);
 
-        writeBuff.readerIndex(ProtocolManager.PROTOCOL_HEAD_LENGTH);// 信息头的长度
+        writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
@@ -166,7 +166,7 @@ public class ProtocolTest {
         ByteBuf writeBuff = Unpooled.buffer();
         packetService.write(writeBuff, cm, null);
 
-        writeBuff.readerIndex(ProtocolManager.PROTOCOL_HEAD_LENGTH);// 信息头的长度
+        writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
@@ -196,7 +196,7 @@ public class ProtocolTest {
         ByteBuf writeBuff = Unpooled.buffer();
         packetService.write(writeBuff, cm, null);
 
-        writeBuff.readerIndex(ProtocolManager.PROTOCOL_HEAD_LENGTH);// 信息头的长度
+        writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
@@ -215,7 +215,7 @@ public class ProtocolTest {
         ByteBuf writeBuff = Unpooled.buffer();
         packetService.write(writeBuff, cm, null);
 
-        writeBuff.readerIndex(ProtocolManager.PROTOCOL_HEAD_LENGTH);// 信息头的长度
+        writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
@@ -243,7 +243,7 @@ public class ProtocolTest {
         ByteBuf writeBuff = Unpooled.buffer();
         packetService.write(writeBuff, cm, null);
 
-        writeBuff.readerIndex(ProtocolManager.PROTOCOL_HEAD_LENGTH);// 信息头的长度
+        writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 

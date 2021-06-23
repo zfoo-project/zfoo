@@ -16,9 +16,8 @@ package com.zfoo.net.handler.codec.tcp;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.packet.model.EncodedPacketInfo;
+import com.zfoo.net.packet.service.PacketService;
 import com.zfoo.net.util.SessionUtils;
-import com.zfoo.protocol.ProtocolManager;
-import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * header(4byte) + protocolId(2byte) + packet
@@ -44,7 +42,7 @@ public class TcpPacketCodecHandler extends ByteToMessageCodec<EncodedPacketInfo>
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         // 不够读一个int
-        if (in.readableBytes() <= ProtocolManager.PROTOCOL_HEAD_LENGTH) {
+        if (in.readableBytes() <= PacketService.PACKET_HEAD_LENGTH) {
             return;
         }
         in.markReaderIndex();
