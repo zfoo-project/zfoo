@@ -13,7 +13,6 @@
 package com.zfoo.protocol;
 
 import com.zfoo.protocol.buffer.ByteBufUtils;
-import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
@@ -62,11 +61,9 @@ public class ProtocolManager {
         return (IPacket) protocols[ByteBufUtils.readShort(buffer)].read(buffer);
     }
 
-    public static IProtocolRegistration getProtocol(short id) {
-        var protocol = protocols[id];
-        if (protocol == null) {
-            throw new RunException("[protocolId:{}]协议不存在", id);
-        }
+    public static IProtocolRegistration getProtocol(short protocolId) {
+        var protocol = protocols[protocolId];
+        AssertionUtils.notNull(protocol, "[protocolId:{}]协议不存在", protocolId);
         return protocol;
     }
 
