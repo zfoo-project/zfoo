@@ -13,6 +13,7 @@
 package com.zfoo.protocol.registration;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.exception.UnknownException;
@@ -83,7 +84,7 @@ public class ProtocolAnalysis {
     }
 
     public static synchronized void analyze(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
-        AssertionUtils.notNull(tempSubProtocolIdMap, "[{}]已经初始完成，只能parseProtocol一次，请不要重复初始化", ProtocolAnalysis.class.getSimpleName());
+        AssertionUtils.notNull(tempSubProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
         try {
             for (var protocolClass : protocolClassSet) {
                 var id = getProtocolIdByClass(protocolClass);
@@ -116,7 +117,7 @@ public class ProtocolAnalysis {
 
 
     public static synchronized void analyze(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
-        AssertionUtils.notNull(tempSubProtocolIdMap, "[{}]已经初始完成，只能parseProtocol一次，请不要重复初始化", ProtocolAnalysis.class.getSimpleName());
+        AssertionUtils.notNull(tempSubProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
         try {
             var enhanceList = new ArrayList<IProtocolRegistration>();
 
