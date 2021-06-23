@@ -91,15 +91,15 @@ public class ProtocolManager {
         return moduleOptional.get();
     }
 
-    public static synchronized void initProtocol(Set<Class<?>> protocolClassSet) {
+    public static void initProtocol(Set<Class<?>> protocolClassSet) {
         ProtocolAnalysis.analyze(protocolClassSet);
     }
 
-    public static synchronized void initProtocol(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
+    public static void initProtocol(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
         ProtocolAnalysis.analyze(protocolClassSet,  generateOperation);
     }
 
-    public static synchronized void initProtocol(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
+    public static void initProtocol(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
         ProtocolAnalysis.analyze(xmlProtocols,  generateOperation);
     }
 
