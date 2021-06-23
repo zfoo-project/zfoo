@@ -12,7 +12,7 @@
 
 package com.zfoo.protocol.util;
 
-import com.zfoo.protocol.exception.POJOException;
+import com.zfoo.protocol.exception.RunException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -70,13 +70,24 @@ public abstract class ReflectionUtils {
         } while (targetClass != null && targetClass != Object.class);
     }
 
-    public static boolean isPOJOClass(Class<?> clazz) {
+    public static boolean isPojoClass(Class<?> clazz) {
         return clazz.getSuperclass().equals(Object.class);
     }
 
-    public static void assertIsPOJOClass(Class<?> clazz) {
-        if (!isPOJOClass(clazz)) {
-            throw new POJOException(clazz.getName() + "不是简单的javabean");
+    public static void assertIsPojoClass(Class<?> clazz) {
+        if (!isPojoClass(clazz)) {
+            throw new RunException("[class:{}]不是简单的javabean（POJO类不能继承别的类，但是可以继承其它接口）", clazz.getName());
+        }
+    }
+
+    /**
+     * 标准的属性名称更加通用，前缀不能是is，否则属性名称在不同语言很难去统一get和set方法
+     */
+    public static void assertIsStandardFieldName(Field field) {
+        var fieldName = field.getName();
+        if (fieldName.startsWith("is")) {
+            throw new RunException("to avoid different get or set method in different language, [field:{}] can not be started with name of 'is' in class:[{}]"
+                    , field.getName(), field.getDeclaringClass().getCanonicalName());
         }
     }
 
@@ -276,9 +287,7 @@ public abstract class ReflectionUtils {
     public static String fieldToGetMethod(Class<?> clazz, Field field) {
         var fieldName = field.getName();
 
-        if (fieldName.startsWith("is")) {
-            throw new RuntimeException(StringUtils.format("field:[{}] can not be name of 'is' in class:[{}]", field.getName(), clazz.getCanonicalName()));
-        }
+        assertIsStandardFieldName(field);
 
         var methodName = "get" + StringUtils.capitalize(fieldName);
 
@@ -286,6 +295,7 @@ public abstract class ReflectionUtils {
             clazz.getDeclaredMethod(methodName, null);
             return methodName;
         } catch (NoSuchMethodException e) {
+            // java的get方法对boolean值有可能对应get或者is，所以尝试获取两种不同的get方法，当两种都获取不到才抛异常
         }
 
         methodName = "is" + StringUtils.capitalize(fieldName);
@@ -300,9 +310,7 @@ public abstract class ReflectionUtils {
     public static String fieldToSetMethod(Class<?> clazz, Field field) {
         var fieldName = field.getName();
 
-        if (fieldName.startsWith("is")) {
-            throw new RuntimeException(StringUtils.format("field:[{}] can not be name of 'is' in class:[{}]", field.getName(), clazz.getCanonicalName()));
-        }
+        assertIsStandardFieldName(field);
 
         var methodName = "set" + StringUtils.capitalize(fieldName);
         try {

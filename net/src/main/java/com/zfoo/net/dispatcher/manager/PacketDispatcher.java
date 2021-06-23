@@ -41,6 +41,7 @@ import com.zfoo.net.task.TaskManager;
 import com.zfoo.net.task.model.ReceiveTask;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.JsonUtils;
@@ -351,11 +352,12 @@ public class PacketDispatcher implements IPacketDispatcher {
     public void registerPacketReceiverDefinition(Object bean) {
         var clazz = bean.getClass();
 
-        if (!ReflectionUtils.isPOJOClass(clazz)) {
-            return;
+        var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, PacketReceiver.class);
+
+        if (CollectionUtils.isNotEmpty(methods) && !ReflectionUtils.isPojoClass(clazz)) {
+            logger.warn("消息注册类不是POJO类，父类的不会被扫描到");
         }
 
-        var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, PacketReceiver.class);
         for (var method : methods) {
             var paramClazzs = method.getParameterTypes();
 

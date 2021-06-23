@@ -233,7 +233,7 @@ public class ProtocolAnalysis {
 
     private static short checkProtocol(Class<?> clazz) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         // 是否为一个简单的javabean
-        AssertionUtils.isTrue(clazz.getSuperclass().equals(Object.class), "[class:{}]不是简单的javabean，不能继承别的类", clazz.getCanonicalName());
+        ReflectionUtils.assertIsPojoClass(clazz);
         // 是否实现了IPacket接口
         AssertionUtils.isTrue(IPacket.class.isAssignableFrom(clazz), "[class:{}]没有实现接口[IPacket:{}]", clazz.getCanonicalName(), IPacket.class.getCanonicalName());
         // 不能是泛型类
