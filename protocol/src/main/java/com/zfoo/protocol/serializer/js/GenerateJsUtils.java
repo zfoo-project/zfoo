@@ -19,6 +19,7 @@ import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
+import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.*;
@@ -129,7 +130,7 @@ public abstract class GenerateJsUtils {
         var jsBuilder = new StringBuilder();
 
         // 如果协议包含子协议，则需要导入ProtocolManager
-        var subProtocols = ProtocolManager.getAllSubProtocolIds(protocolId);
+        var subProtocols = ProtocolAnalysis.getAllSubProtocolIds(protocolId);
         if (CollectionUtils.isNotEmpty(subProtocols)) {
             var path = GenerateProtocolPath.getProtocolPath(protocolId);
             if (StringUtils.isBlank(path)) {

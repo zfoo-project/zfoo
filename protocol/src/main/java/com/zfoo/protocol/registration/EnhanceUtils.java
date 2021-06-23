@@ -136,7 +136,7 @@ public abstract class EnhanceUtils {
         enhanceClazz.addField(constructorFiled);
 
         // 定义类所包含的所有子协议成员
-        var allSubProtocolIds = ProtocolManager.getAllSubProtocolIds(protocolId)
+        var allSubProtocolIds = ProtocolAnalysis.getAllSubProtocolIds(protocolId)
                 .stream()
                 .sorted((a, b) -> Short.compare(a, b))
                 .collect(Collectors.toList());

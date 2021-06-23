@@ -14,6 +14,7 @@ package com.zfoo.protocol.generate;
 
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.registration.IProtocolRegistration;
+import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.cs.GenerateCsUtils;
 import com.zfoo.protocol.serializer.js.GenerateJsUtils;
@@ -75,7 +76,7 @@ public abstract class GenerateProtocolFile {
 
         // 需要生成的子协议，因为外层协议的内部有其它协议
         var insideGenerateProtocols = outsideGenerateProtocols.stream()
-                .map(it -> ProtocolManager.getAllSubProtocolIds(it.protocolId()))
+                .map(it -> ProtocolAnalysis.getAllSubProtocolIds(it.protocolId()))
                 .flatMap(it -> it.stream())
                 .map(it -> protocols[it])
                 .distinct()
