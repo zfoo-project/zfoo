@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.test;
+package com.zfoo.orm.cache;
 
 import com.zfoo.orm.entity.UserEntity;
 import com.zfoo.orm.model.anno.EntityCachesInjection;
