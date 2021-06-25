@@ -47,7 +47,14 @@ public class BaseDispatcherHandler extends ChannelInboundHandlerAdapter {
             throw new RuntimeException(StringUtils.format("无法设置[channel:{}]的session", channel));
         }
 
-        session.putAttribute(AttributeType.CHANNEL_REMOTE_ADDRESS, StringUtils.substringAfterFirst(channel.remoteAddress().toString(), StringUtils.SLASH));
+        try {
+            session.putAttribute(AttributeType.CHANNEL_REMOTE_ADDRESS, StringUtils.substringAfterFirst(channel.remoteAddress().toString(), StringUtils.SLASH));
+        } catch (Throwable t) {
+            // do nothing
+            // to avoid: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer
+            // 有些情况当建立连接过后迅速关闭，这个时候取remoteAddress会有异常
+        }
+
         return session;
     }
 
