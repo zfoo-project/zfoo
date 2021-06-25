@@ -13,7 +13,6 @@
 
 package com.zfoo.event.schema;
 
-import com.zfoo.event.EventContext;
 import com.zfoo.event.manager.EventBus;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -26,10 +25,8 @@ public class EventRegisterProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (EventContext.getEventContext() == null) {
-            return bean;
-        }
         EventBus.registerEventReceiver(bean);
         return bean;
     }
+
 }

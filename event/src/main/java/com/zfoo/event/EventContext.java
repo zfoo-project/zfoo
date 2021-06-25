@@ -14,7 +14,6 @@
 package com.zfoo.event;
 
 import com.zfoo.event.manager.EventBus;
-import com.zfoo.event.schema.EventRegisterProcessor;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.util.ThreadUtils;
@@ -76,13 +75,6 @@ public class EventContext implements ApplicationListener<ApplicationContextEvent
             // 初始化上下文
             EventContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
-
-            var beanNames = applicationContext.getBeanDefinitionNames();
-            var processor = applicationContext.getBean(EventRegisterProcessor.class);
-
-            for (var beanName : beanNames) {
-                processor.postProcessAfterInitialization(applicationContext.getBean(beanName), beanName);
-            }
         } else if (event instanceof ContextClosedEvent) {
             shutdown();
             ThreadUtils.shutdownForkJoinPool();
