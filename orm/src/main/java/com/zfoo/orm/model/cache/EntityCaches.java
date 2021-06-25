@@ -83,7 +83,7 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
                                 : Filters.eq("_id", entity.id());
                         var result = collection.replaceOne(filter, entity);
                         if (result.getModifiedCount() <= 0) {
-                            logger.error("移除[removalCause:{}]缓存时，更新数据库[{}]中的实体主键[pk:{}]的文档异常"
+                            logger.warn("移除[removalCause:{}]缓存时，更新数据库[{}]中的实体主键[pk:{}]的文档异常"
                                     , removalCause, entityDef.getClazz().getSimpleName(), entity.id());
                         }
                     }
@@ -128,7 +128,7 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
             logger.error("数据库[{}]缓存[pk:{}]加载发生error异常", entityDef.getClazz().getSimpleName(), pk, t);
         }
 
-        logger.error("数据库[{}]无法加载缓存[pk:{}]，返回默认值", entityDef.getClazz().getSimpleName(), pk);
+        logger.warn("数据库[{}]无法加载缓存[pk:{}]，返回默认值", entityDef.getClazz().getSimpleName(), pk);
         var entity = (E) entityDef.newEntity(pk);
         var pnode = new PNode<E>(entity);
         cache.put(pk, pnode);
