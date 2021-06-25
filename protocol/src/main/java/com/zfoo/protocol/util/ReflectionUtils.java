@@ -12,6 +12,7 @@
 
 package com.zfoo.protocol.util;
 
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.RunException;
 
 import java.lang.annotation.Annotation;
@@ -106,7 +107,7 @@ public abstract class ReflectionUtils {
                 list.add(field);
             }
         }
-        return list.toArray(new Field[list.size()]);
+        return ArrayUtils.listToArray(list, Field.class);
     }
 
     public static Field getFieldByNameInPOJOClass(Class<?> clazz, String fieldName) {
@@ -132,7 +133,7 @@ public abstract class ReflectionUtils {
                 list.add(method);
             }
         }
-        return list.toArray(new Method[list.size()]);
+        return ArrayUtils.listToArray(list, Method.class);
     }
 
     public static Method[] getMethodsByNameInPOJOClass(Class<?> clazz, String methodName) {
@@ -143,7 +144,7 @@ public abstract class ReflectionUtils {
                 list.add(method);
             }
         }
-        return list.toArray(new Method[list.size()]);
+        return ArrayUtils.listToArray(list, Method.class);
     }
 
     /**
@@ -162,7 +163,7 @@ public abstract class ReflectionUtils {
             Collections.addAll(list, methods);
             superClazz = superClazz.getSuperclass();
         }
-        return list.toArray(new Method[list.size()]);
+        return ArrayUtils.listToArray(list, Method.class);
     }
     //*************************************操作Class*********************************
 

@@ -14,6 +14,7 @@ package com.zfoo.protocol.registration;
 
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.exception.UnknownException;
@@ -366,8 +367,8 @@ public class ProtocolAnalysis {
         var protocol = new ProtocolRegistration();
         protocol.setId(protocolId);
         protocol.setConstructor(constructor);
-        protocol.setFields(fields.toArray(new Field[fields.size()]));
-        protocol.setFieldRegistrations(registrationList.toArray(new IFieldRegistration[registrationList.size()]));
+        protocol.setFields(ArrayUtils.listToArray(fields, Field.class));
+        protocol.setFieldRegistrations(ArrayUtils.listToArray(registrationList, IFieldRegistration.class));
         protocol.setModule(module.getId());
         return protocol;
     }

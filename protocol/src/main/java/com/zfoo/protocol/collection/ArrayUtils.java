@@ -170,10 +170,7 @@ public abstract class ArrayUtils {
         var length = list.size();
         var objectArray = Array.newInstance(clazz, length);
 
-        for (var i = 0; i < length; i++) {
-            Array.set(objectArray, i, list.get(i));
-        }
-
+        System.arraycopy(list.toArray(), 0, objectArray, 0, length);
         return (T[]) objectArray;
     }
 
