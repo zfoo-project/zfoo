@@ -32,9 +32,9 @@ cpu： i9900k
 ```
 
 - 单线程测试，横坐标为序列化和反序列化的对象数量，纵坐标为花费的时间（单位毫秒）
-  ![Image text](../event/tooltip/protocol/simple_object.png)
-  ![Image text](../event/tooltip/protocol/normal_object.png)
-  ![Image text](../event/tooltip/protocol/complex_object.png)
+  ![Image text](../doc/image/protocol/simple_object.png)
+  ![Image text](../doc/image/protocol/normal_object.png)
+  ![Image text](../doc/image/protocol/complex_object.png)
 
 ### Ⅳ. 为什么快
 

@@ -21,7 +21,7 @@ task，通用任务线程池
 
 ### Ⅱ. 服务器架构图
 
-<img src="./../event/tooltip/general-game-architect.jpg" width="70%" height="70%" alt="服务器架构图"/><br/>
+<img src="./../doc/image/general-game-architect.jpg" width="70%" height="70%" alt="服务器架构图"/><br/>
 
 ### Ⅲ. 网络通信规范
 
