@@ -14,8 +14,19 @@
 package com.zfoo.event.schema;
 
 import com.zfoo.event.manager.EventBus;
+import com.zfoo.event.model.anno.EventReceiver;
+import com.zfoo.event.model.event.IEvent;
+import com.zfoo.event.model.vo.EnhanceUtils;
+import com.zfoo.event.model.vo.EventReceiverDefinition;
+import com.zfoo.protocol.util.ReflectionUtils;
+import com.zfoo.protocol.util.StringUtils;
+import javassist.CannotCompileException;
+import javassist.NotFoundException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 
 /**
  * @author jaysunxiao
@@ -25,7 +36,44 @@ public class EventRegisterProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        EventBus.registerEventReceiver(bean);
+        try {
+            var clazz = bean.getClass();
+            var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, EventReceiver.class);
+            for (var method : methods) {
+                var paramClazzs = method.getParameterTypes();
+                if (paramClazzs.length != 1) {
+                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] must have one parameter!", bean.getClass().getName(), method.getName()));
+                }
+                if (!IEvent.class.isAssignableFrom(paramClazzs[0])) {
+                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] must have one [IEvent] type parameter!", bean.getClass().getName(), method.getName()));
+                }
+
+                var eventClazz = (Class<? extends IEvent>) paramClazzs[0];
+                var eventName = eventClazz.getCanonicalName();
+                var methodName = method.getName();
+
+                if (!Modifier.isPublic(method.getModifiers())) {
+                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] [event:{}] must use 'public' as modifier!", bean.getClass().getName(), methodName, eventName));
+                }
+
+                if (Modifier.isStatic(method.getModifiers())) {
+                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] [event:{}] can not use 'static' as modifier!", bean.getClass().getName(), methodName, eventName));
+                }
+
+                var expectedMethodName = StringUtils.format("on{}", eventClazz.getSimpleName());
+                if (!methodName.equals(expectedMethodName)) {
+                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] [event:{}] expects '{}' as method name!"
+                            , bean.getClass().getName(), methodName, eventName, expectedMethodName));
+                }
+
+                var receiverDefinition = new EventReceiverDefinition(bean, method, eventClazz);
+                var enhanceReceiverDefinition = EnhanceUtils.createEventReceiver(receiverDefinition);
+                EventBus.registerEventReceiver(eventClazz, enhanceReceiverDefinition);
+            }
+        } catch (NotFoundException | CannotCompileException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
         return bean;
     }
 

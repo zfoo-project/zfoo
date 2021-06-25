@@ -13,23 +13,14 @@
 
 package com.zfoo.event.manager;
 
-import com.zfoo.event.model.anno.EventReceiver;
 import com.zfoo.event.model.event.IEvent;
-import com.zfoo.event.model.vo.EnhanceUtils;
-import com.zfoo.event.model.vo.EventReceiverDefinition;
 import com.zfoo.event.model.vo.IEventReceiver;
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.math.RandomUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
-import javassist.CannotCompileException;
-import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -128,8 +119,8 @@ public abstract class EventBus {
         return executors[RandomUtils.randomInt(EXECUTORS_SIZE)];
     }
 
-    private static void doSubmit(IEvent event, List<IEventReceiver> listReceiver) {
-        for (var receiver : listReceiver) {
+    private static void doSubmit(IEvent event, List<IEventReceiver> receiverList) {
+        for (var receiver : receiverList) {
             try {
                 receiver.invoke(event);
             } catch (Exception e) {
@@ -140,49 +131,10 @@ public abstract class EventBus {
         }
     }
 
-    public static void registerEventReceiver(Object bean) {
-        try {
-            var clazz = bean.getClass();
-            var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, EventReceiver.class);
-            for (var method : methods) {
-                var paramClazzs = method.getParameterTypes();
-                if (paramClazzs.length != 1) {
-                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] must have one parameter!", bean.getClass().getName(), method.getName()));
-                }
-                if (!IEvent.class.isAssignableFrom(paramClazzs[0])) {
-                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] must have one [IEvent] type parameter!", bean.getClass().getName(), method.getName()));
-                }
-
-                var eventClazz = (Class<? extends IEvent>) paramClazzs[0];
-                var eventName = eventClazz.getCanonicalName();
-                var methodName = method.getName();
-
-                if (!Modifier.isPublic(method.getModifiers())) {
-                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] [event:{}] must use 'public' as modifier!", bean.getClass().getName(), methodName, eventName));
-                }
-
-                if (Modifier.isStatic(method.getModifiers())) {
-                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] [event:{}] can not use 'static' as modifier!", bean.getClass().getName(), methodName, eventName));
-                }
-
-                var expectedMethodName = StringUtils.format("on{}", eventClazz.getSimpleName());
-                if (!methodName.equals(expectedMethodName)) {
-                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] [event:{}] expects '{}' as method name!"
-                            , bean.getClass().getName(), methodName, eventName, expectedMethodName));
-                }
-
-                var receiverDefinition = new EventReceiverDefinition(bean, method, eventClazz);
-                if (!receiverMap.containsKey(eventClazz)) {
-                    receiverMap.put(eventClazz, new LinkedList<>());
-                }
-
-                var enhanceReceiverDefinition = EnhanceUtils.createEventReceiver(receiverDefinition);
-                receiverMap.get(eventClazz).add(enhanceReceiverDefinition);
-            }
-        } catch (NotFoundException | CannotCompileException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
+    public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver) {
+        receiverMap.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
     }
+
 }
 
 
