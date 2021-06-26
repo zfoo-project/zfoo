@@ -15,7 +15,11 @@ package com.zfoo.storage.manager;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.storage.StorageContext;
+import com.zfoo.storage.model.anno.Id;
+import com.zfoo.storage.model.anno.ResInjection;
 import com.zfoo.storage.model.config.StorageConfig;
 import com.zfoo.storage.model.vo.ResourceDef;
 import com.zfoo.storage.model.vo.Storage;
@@ -26,6 +30,9 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -94,6 +101,54 @@ public class StorageManager implements IStorageManager {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void inject() {
+        var applicationContext = StorageContext.getApplicationContext();
+        var beanNames = applicationContext.getBeanDefinitionNames();
+
+        for (var beanName : beanNames) {
+            var bean = applicationContext.getBean(beanName);
+
+            ReflectionUtils.filterFieldsInClass(bean.getClass()
+                    , field -> field.isAnnotationPresent(ResInjection.class)
+                    , field -> {
+                        Type type = field.getGenericType();
+
+                        if (!(type instanceof ParameterizedType)) {
+                            throw new RuntimeException(StringUtils.format("[bean:{}]类型声明不正确，不是泛型类", bean.getClass().getSimpleName()));
+                        }
+
+                        Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+
+                        // @ResInjection
+                        // Storage<Integer, ActivityResource> resources;
+                        Class<?> keyClazz = (Class<?>) types[0];
+
+                        Class<?> resourceClazz = (Class<?>) types[1];
+
+                        Storage<?, ?> storage = StorageContext.getStorageManager().getStorage(resourceClazz);
+
+                        if (storage == null) {
+                            throw new RuntimeException(StringUtils.format("静态类资源[resource:{}]不存在", resourceClazz.getSimpleName()));
+                        }
+
+                        Field[] idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(resourceClazz, Id.class);
+                        if (idFields.length != 1) {
+                            throw new RuntimeException(StringUtils.format("静态类资源[resource:{}]配置没有注解id", resourceClazz.getSimpleName()));
+                        }
+
+                        if (!keyClazz.getSimpleName().toLowerCase().contains(idFields[0].getType().getSimpleName().toLowerCase())) {
+                            throw new RuntimeException(StringUtils.format("静态类资源[resource:{}]配置注解[id:{}]类型和泛型类型[type:{}]不匹配"
+                                    , resourceClazz.getSimpleName(), idFields[0].getType().getSimpleName(), keyClazz.getSimpleName()));
+                        }
+
+                        ReflectionUtils.makeAccessible(field);
+                        ReflectionUtils.setField(field, bean, storage);
+                        storage.setUsable(true);
+                    });
         }
     }
 

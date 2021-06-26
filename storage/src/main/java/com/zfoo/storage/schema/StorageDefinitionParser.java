@@ -98,12 +98,6 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         registry.registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注入StaticInjectProcessor
-        clazz = ResInjectionProcessor.class;
-        name = StringUtils.uncapitalize(clazz.getName());
-        builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
-        registry.registerBeanDefinition(name, builder.getBeanDefinition());
-
         // 注入ConversionServiceFactoryBean
         clazz = ConversionServiceFactoryBean.class;
         name = StringUtils.uncapitalize(clazz.getName());

@@ -16,7 +16,6 @@ package com.zfoo.storage;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.interpreter.IResourceReader;
 import com.zfoo.storage.manager.IStorageManager;
-import com.zfoo.storage.schema.ResInjectionProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationContextEvent;
@@ -66,16 +65,6 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
         return instance.storageManager;
     }
 
-    public static void injectResource() {
-        var applicationContext = instance.applicationContext;
-        var beanNames = applicationContext.getBeanDefinitionNames();
-        var processor = applicationContext.getBean(ResInjectionProcessor.class);
-
-        for (var beanName : beanNames) {
-            processor.postProcessAfterInitialization(applicationContext.getBean(beanName), beanName);
-        }
-    }
-
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
 
@@ -94,7 +83,7 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
             instance.storageManager.initBefore();
 
             // 注入配置表资源
-            injectResource();
+            instance.storageManager.inject();
 
             // 移除没有被引用的不必要资源，为了节省服务器内存
             instance.storageManager.initAfter();

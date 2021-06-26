@@ -31,6 +31,11 @@ public interface IStorageManager {
     void initBefore();
 
     /**
+     * 注入
+     */
+    void inject();
+
+    /**
      * 程序加载过后，移除没有用到的配置表
      */
     void initAfter();
