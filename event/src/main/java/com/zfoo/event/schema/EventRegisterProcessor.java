@@ -18,8 +18,11 @@ import com.zfoo.event.model.anno.EventReceiver;
 import com.zfoo.event.model.event.IEvent;
 import com.zfoo.event.model.vo.EnhanceUtils;
 import com.zfoo.event.model.vo.EventReceiverDefinition;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
@@ -31,11 +34,21 @@ import java.lang.reflect.Modifier;
  */
 public class EventRegisterProcessor implements BeanPostProcessor {
 
+    private static final Logger logger = LoggerFactory.getLogger(EventRegisterProcessor.class);
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        var clazz = bean.getClass();
+        var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, EventReceiver.class);
+        if (ArrayUtils.isEmpty(methods)) {
+            return bean;
+        }
+
+        if (!ReflectionUtils.isPojoClass(clazz)) {
+            logger.warn("事件注册类[{}]不是POJO类，父类的事件接收不会被扫描到", clazz);
+        }
+
         try {
-            var clazz = bean.getClass();
-            var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, EventReceiver.class);
             for (var method : methods) {
                 var paramClazzs = method.getParameterTypes();
                 if (paramClazzs.length != 1) {

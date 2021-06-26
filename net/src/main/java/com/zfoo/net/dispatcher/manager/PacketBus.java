@@ -15,12 +15,9 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import javassist.CannotCompileException;
-import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
 /**
@@ -57,9 +54,12 @@ public abstract class PacketBus {
         var clazz = bean.getClass();
 
         var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, PacketReceiver.class);
+        if (ArrayUtils.isEmpty(methods)) {
+            return;
+        }
 
-        if (ArrayUtils.isNotEmpty(methods) && !ReflectionUtils.isPojoClass(clazz)) {
-            logger.warn("消息注册类不是POJO类，父类的不会被扫描到");
+        if (!ReflectionUtils.isPojoClass(clazz)) {
+            logger.warn("消息注册类[{}]不是POJO类，父类的消息接收不会被扫描到", clazz);
         }
 
         for (var method : methods) {
@@ -111,7 +111,7 @@ public abstract class PacketBus {
                 var receiverDefinition = new PacketReceiverDefinition(bean, method, packetClazz, attachmentClazz);
                 var enhanceReceiverDefinition = EnhanceUtils.createPacketReceiver(receiverDefinition);
                 packetReceiverList[protocolId] = enhanceReceiverDefinition;
-            } catch (NoSuchFieldException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException | CannotCompileException | NotFoundException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
