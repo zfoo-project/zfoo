@@ -27,8 +27,6 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 
 import java.util.function.BiFunction;
@@ -38,7 +36,6 @@ import java.util.function.BiFunction;
  * @version 3.0
  */
 public class WebsocketGatewayServer extends AbstractServer {
-    private static final Logger logger = LoggerFactory.getLogger(WebsocketGatewayServer.class);
 
     private BiFunction<Session, IPacket, Boolean> packetFilter;
 

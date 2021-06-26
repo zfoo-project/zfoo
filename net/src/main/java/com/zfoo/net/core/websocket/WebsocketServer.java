@@ -24,16 +24,12 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
 public class WebsocketServer extends AbstractServer {
-
-    private static final Logger logger = LoggerFactory.getLogger(WebsocketServer.class);
 
     public WebsocketServer(HostAndPort host) {
         super(host);

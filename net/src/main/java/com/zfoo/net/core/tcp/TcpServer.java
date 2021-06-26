@@ -21,16 +21,12 @@ import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
 public class TcpServer extends AbstractServer {
-
-    private static final Logger logger = LoggerFactory.getLogger(TcpServer.class);
 
     public TcpServer(HostAndPort host) {
         super(host);

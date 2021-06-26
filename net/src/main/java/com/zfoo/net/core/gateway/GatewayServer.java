@@ -23,8 +23,6 @@ import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 
 import java.util.function.BiFunction;
@@ -34,7 +32,6 @@ import java.util.function.BiFunction;
  * @version 3.0
  */
 public class GatewayServer extends AbstractServer {
-    private static final Logger logger = LoggerFactory.getLogger(GatewayServer.class);
 
     private BiFunction<Session, IPacket, Boolean> packetFilter;
 
