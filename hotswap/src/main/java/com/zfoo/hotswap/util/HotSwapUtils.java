@@ -1,6 +1,6 @@
 package com.zfoo.hotswap.util;
 
-import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 import javassist.ClassPool;
@@ -24,20 +24,6 @@ public abstract class HotSwapUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(HotSwapUtils.class);
 
-    private static String readClassName(byte[] bytes) {
-        //ByteArrayInputStream byteArrayInputStream = null;
-        DataInputStream dataInputStream = null;
-        try {
-            dataInputStream = new DataInputStream(new ByteArrayInputStream(bytes));
-            var classFile = new ClassFile(dataInputStream);
-            return classFile.getName().replaceAll(StringUtils.SLASH, StringUtils.PERIOD);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            IOUtils.closeIO(dataInputStream);
-        }
-    }
-
     /**
      * 热更新java文件
      * jvm的启动参数，jdk11过后默认的全款更不允许连接自己，VM: -Djdk.attach.allowAttachSelf=true
@@ -47,18 +33,36 @@ public abstract class HotSwapUtils {
      * @param bytes .class结尾的字节码文件
      */
     public static synchronized void hotswapClass(byte[] bytes) {
-        if (bytes == null || bytes.length <= 0) {
+        if (ArrayUtils.isEmpty(bytes)) {
             return;
         }
 
+        var clazzName = readClassName(bytes);
+
         Class<?> clazz = null;
         try {
-            clazz = Class.forName(readClassName(bytes));
+            clazz = Class.forName(clazzName);
         } catch (ClassNotFoundException e) {
-            logger.error(ExceptionUtils.getMessage(e));
+            logger.info("无法在当前项目找到[class:{}]，所以忽略本次热更新", clazzName);
+            return;
         }
 
         hotswapClassByJavassist(clazz, bytes);
+    }
+
+    private static String readClassName(byte[] bytes) {
+        ByteArrayInputStream byteArrayInputStream = null;
+        DataInputStream dataInputStream = null;
+        try {
+            byteArrayInputStream = new ByteArrayInputStream(bytes);
+            dataInputStream = new DataInputStream(byteArrayInputStream);
+            var classFile = new ClassFile(dataInputStream);
+            return classFile.getName().replaceAll(StringUtils.SLASH, StringUtils.PERIOD);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            IOUtils.closeIO(dataInputStream, byteArrayInputStream);
+        }
     }
 
     private static void hotswapClassByJavassist(Class<?> clazz, byte[] bytes) {
