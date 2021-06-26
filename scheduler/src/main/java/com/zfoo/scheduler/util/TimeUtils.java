@@ -24,6 +24,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author jaysunxiao
@@ -80,7 +81,12 @@ public abstract class TimeUtils {
     };
 
     static {
-        var interval = SchedulerBus.TRIGGER_MILLIS_INTERVAL;
+        SchedulerBus.schedule(new Runnable() {
+            @Override
+            public void run() {
+                currentTimeMillis();
+            }
+        }, 0, TimeUnit.SECONDS);
     }
 
     /**
