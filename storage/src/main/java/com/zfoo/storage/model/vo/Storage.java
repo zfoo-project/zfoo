@@ -39,11 +39,6 @@ public class Storage<K, V> {
     private IdDef idDef;
     private Map<String, IndexDef> indexDefMap;
 
-    /**
-     * 是否被使用
-     */
-    private boolean usable = false;
-
     public Storage() {
     }
 
@@ -140,11 +135,4 @@ public class Storage<K, V> {
         return dataMap.size();
     }
 
-    public boolean isUsable() {
-        return usable;
-    }
-
-    public void setUsable(boolean usable) {
-        this.usable = usable;
-    }
 }

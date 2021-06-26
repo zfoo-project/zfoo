@@ -17,7 +17,6 @@ import com.zfoo.storage.model.vo.Storage;
 import org.springframework.lang.Nullable;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author jaysunxiao
@@ -43,9 +42,9 @@ public interface IStorageManager {
     @Nullable
     Storage<?, ?> getStorage(Class<?> clazz);
 
-    Set<Class<?>> allStorageClassSet();
+    Map<Class<?>, Boolean> allStorageUsableMap();
 
-    Map<Class<?>, Storage<?, ?>> getStorageMap();
+    Map<Class<?>, Storage<?, ?>> storageMap();
 
     void updateStorage(Class<?> clazz, Storage<?, ?> storage);
 

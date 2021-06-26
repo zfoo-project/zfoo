@@ -59,9 +59,9 @@ public class StorageManager implements IStorageManager {
     private Map<Class<?>, Storage<?, ?>> storageMap = new HashMap<>();
 
     /**
-     * 全部的Storage定义
+     * 全部的Storage定义，key为对应的excel配置表，value为当前配置表是否在当前项目中使用
      */
-    private Set<Class<?>> allStorageClassSet = new HashSet<>();
+    private Map<Class<?>, Boolean> allStorageUsableMap = new HashMap<>();
 
     public StorageConfig getStorageConfig() {
         return storageConfig;
@@ -97,7 +97,7 @@ public class StorageManager implements IStorageManager {
                 Storage<?, ?> storage = new Storage<>();
                 storage.init(definition.getResource().getInputStream(), definition.getClazz());
                 storageMap.putIfAbsent(clazz, storage);
-                allStorageClassSet.add(clazz);
+                allStorageUsableMap.put(clazz, false);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -147,15 +147,15 @@ public class StorageManager implements IStorageManager {
 
                         ReflectionUtils.makeAccessible(field);
                         ReflectionUtils.setField(field, bean, storage);
-                        storage.setUsable(true);
+                        allStorageUsableMap.put(resourceClazz, true);
                     });
         }
     }
 
     @Override
     public void initAfter() {
-        var unusableStorageClassList = storageMap.entrySet().stream()
-                .filter(it -> !it.getValue().isUsable())
+        var unusableStorageClassList = allStorageUsableMap.entrySet().stream()
+                .filter(it -> !it.getValue())
                 .map(it -> it.getKey())
                 .collect(Collectors.toList());
 
@@ -170,12 +170,12 @@ public class StorageManager implements IStorageManager {
     }
 
     @Override
-    public Set<Class<?>> allStorageClassSet() {
-        return allStorageClassSet;
+    public Map<Class<?>, Boolean> allStorageUsableMap() {
+        return allStorageUsableMap;
     }
 
     @Override
-    public Map<Class<?>, Storage<?, ?>> getStorageMap() {
+    public Map<Class<?>, Storage<?, ?>> storageMap() {
         return storageMap;
     }
 
