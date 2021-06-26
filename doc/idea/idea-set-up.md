@@ -32,11 +32,29 @@
 然后，File->Invalidate Cache/Restart
 ```
 
-## 4. idea安装
+## 4. idea，mongodb，postman
 
 ## 5. rider安装
 
 ## 6. unity安装
+
+## 7. 办公软件
+
+```
+极速pdf
+tube get
+office
+kms，破解工具
+adobe ps , premiere
+steam
+迅雷迷你版
+```
+
+## 8. 聊天软件
+
+```
+qq，微信，钉钉，discord
+```
 
 # Ⅱ. IntelliJ相关设置
 
