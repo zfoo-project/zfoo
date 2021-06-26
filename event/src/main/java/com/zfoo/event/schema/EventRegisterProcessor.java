@@ -20,12 +20,9 @@ import com.zfoo.event.model.vo.EnhanceUtils;
 import com.zfoo.event.model.vo.EventReceiverDefinition;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import javassist.CannotCompileException;
-import javassist.NotFoundException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
 /**
@@ -70,7 +67,7 @@ public class EventRegisterProcessor implements BeanPostProcessor {
                 var enhanceReceiverDefinition = EnhanceUtils.createEventReceiver(receiverDefinition);
                 EventBus.registerEventReceiver(eventClazz, enhanceReceiverDefinition);
             }
-        } catch (NotFoundException | CannotCompileException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
