@@ -13,8 +13,7 @@
 
 package com.zfoo.scheduler.util;
 
-import com.zfoo.scheduler.SchedulerContext;
-import com.zfoo.scheduler.manager.SchedulerManager;
+import com.zfoo.scheduler.manager.SchedulerBus;
 import io.netty.util.concurrent.FastThreadLocal;
 import org.springframework.scheduling.support.CronExpression;
 
@@ -81,8 +80,7 @@ public abstract class TimeUtils {
     };
 
     static {
-        SchedulerContext.getSchedulerManager();
-        SchedulerManager.getInstance();
+        var interval = SchedulerBus.TRIGGER_MILLIS_INTERVAL;
     }
 
     /**

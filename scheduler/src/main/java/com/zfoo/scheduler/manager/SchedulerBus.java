@@ -15,16 +15,12 @@ package com.zfoo.scheduler.manager;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.SchedulerContext;
-import com.zfoo.scheduler.model.anno.Scheduler;
 import com.zfoo.scheduler.model.vo.SchedulerDefinition;
 import com.zfoo.scheduler.util.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -36,11 +32,9 @@ import java.util.concurrent.TimeUnit;
  * @author jaysunxiao
  * @version 3.0
  */
-public class SchedulerManager implements ISchedulerManager {
+public abstract class SchedulerBus {
 
-    private static final Logger logger = LoggerFactory.getLogger(SchedulerManager.class);
-
-    private static final SchedulerManager INSTANCE = new SchedulerManager();
+    private static final Logger logger = LoggerFactory.getLogger(SchedulerBus.class);
 
     private static final List<SchedulerDefinition> schedulerDefList = new CopyOnWriteArrayList<>();
 
@@ -56,10 +50,10 @@ public class SchedulerManager implements ISchedulerManager {
     private static long minSchedulerTriggerTimestamp = 0;
 
 
-    private static final long TRIGGER_MILLIS_INTERVAL = TimeUtils.MILLIS_PER_SECOND;
+    public static final long TRIGGER_MILLIS_INTERVAL = TimeUtils.MILLIS_PER_SECOND;
 
     /**
-     * scheduler默认只有一个单线程线程池
+     * scheduler默认只有一个单线程的线程池
      */
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new SchedulerThreadFactory(1));
 
@@ -71,15 +65,9 @@ public class SchedulerManager implements ISchedulerManager {
             } catch (Exception e) {
                 logger.error("scheduler triggers an error.", e);
             }
-        }, TimeUtils.MILLIS_PER_SECOND, TRIGGER_MILLIS_INTERVAL, TimeUnit.MILLISECONDS);
+        }, 3 * TimeUtils.MILLIS_PER_SECOND, TRIGGER_MILLIS_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
-    public static SchedulerManager getInstance() {
-        return INSTANCE;
-    }
-
-    private SchedulerManager() {
-    }
 
     private static long minSchedulerTriggerTimestamp() {
         var minSchedulerOptional = schedulerDefList.stream().min(Comparator.comparingLong(schedulerDef -> schedulerDef.getTriggerTimestamp()));
@@ -133,44 +121,16 @@ public class SchedulerManager implements ISchedulerManager {
         minSchedulerTriggerTimestamp = minSchedulerTriggerTimestamp();
     }
 
-    public void registerScheduler(Object bean) {
-        try {
-            var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(bean.getClass(), Scheduler.class);
-            for (var method : methods) {
-                var scheduler = method.getAnnotation(Scheduler.class);
-
-                var paramClazzs = method.getParameterTypes();
-                if (paramClazzs.length >= 1) {
-                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] can not have any parameters", bean.getClass(), method.getName()));
-                }
-
-                var methodName = method.getName();
-
-                if (!Modifier.isPublic(method.getModifiers())) {
-                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] must use 'public' as modifier!", bean.getClass().getName(), methodName));
-                }
-
-                if (Modifier.isStatic(method.getModifiers())) {
-                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] can not use 'static' as modifier!", bean.getClass().getName(), methodName));
-                }
-
-                if (!methodName.startsWith("cron")) {
-                    throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] must start with 'cron' as method name!"
-                            , bean.getClass().getName(), methodName));
-                }
-
-                var schedulerDef = SchedulerDefinition.valueOf(scheduler.cron(), bean, method);
-                schedulerDefList.add(schedulerDef);
-                minSchedulerTriggerTimestamp = minSchedulerTriggerTimestamp();
-            }
-        } catch (Throwable throwable) {
-            throw new RuntimeException(throwable);
-        }
+    public static void registerScheduler(SchedulerDefinition scheduler) {
+        schedulerDefList.add(scheduler);
+        minSchedulerTriggerTimestamp = minSchedulerTriggerTimestamp();
     }
 
 
-    @Override
-    public void scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
+    /**
+     * 不断执行的周期循环任务
+     */
+    public static void scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
         if (SchedulerContext.isStop()) {
             return;
         }
@@ -189,8 +149,11 @@ public class SchedulerManager implements ISchedulerManager {
         }, 0, period, unit);
     }
 
-    @Override
-    public void schedule(Runnable runnable, long delay, TimeUnit unit) {
+
+    /**
+     * 固定延迟执行的任务
+     */
+    public static void schedule(Runnable runnable, long delay, TimeUnit unit) {
         if (SchedulerContext.isStop()) {
             return;
         }
@@ -209,7 +172,9 @@ public class SchedulerManager implements ISchedulerManager {
         }, delay, unit);
     }
 
-    @Override
+    /**
+     * cron表达式执行的任务
+     */
     public void scheduleCron(Runnable runnable, String cron) {
         if (SchedulerContext.isStop()) {
             return;

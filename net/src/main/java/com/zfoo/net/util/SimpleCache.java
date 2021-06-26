@@ -19,7 +19,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.scheduler.manager.SchedulerManager;
+import com.zfoo.scheduler.manager.SchedulerBus;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -92,7 +92,7 @@ public class SimpleCache<K, V> {
                 });
 
 
-        SchedulerManager.getInstance().scheduleAtFixedRate(new Runnable() {
+        SchedulerBus.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 // 不在任务调度线程中执行耗时任务，因为任务调度线程只有一个线程池

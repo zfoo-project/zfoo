@@ -80,8 +80,8 @@ public class EventRegisterProcessor implements BeanPostProcessor {
                 var enhanceReceiverDefinition = EnhanceUtils.createEventReceiver(receiverDefinition);
                 EventBus.registerEventReceiver(eventClazz, enhanceReceiverDefinition);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
         }
 
         return bean;

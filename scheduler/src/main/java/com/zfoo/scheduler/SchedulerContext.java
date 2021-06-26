@@ -14,8 +14,7 @@
 package com.zfoo.scheduler;
 
 import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.scheduler.manager.ISchedulerManager;
-import com.zfoo.scheduler.manager.SchedulerManager;
+import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.scheduler.schema.SchedulerRegisterProcessor;
 import com.zfoo.util.ThreadUtils;
 import org.slf4j.Logger;
@@ -53,11 +52,6 @@ public class SchedulerContext implements ApplicationListener<ApplicationContextE
         return instance.applicationContext;
     }
 
-
-    public static ISchedulerManager getSchedulerManager() {
-        return SchedulerManager.getInstance();
-    }
-
     public static boolean isStop() {
         return stop;
     }
@@ -70,15 +64,10 @@ public class SchedulerContext implements ApplicationListener<ApplicationContextE
 
         stop = true;
 
-        ISchedulerManager schedulerManager = getSchedulerManager();
-        if (schedulerManager == null) {
-            return;
-        }
-
         try {
-            Field field = SchedulerManager.class.getDeclaredField("executor");
+            Field field = SchedulerBus.class.getDeclaredField("executor");
             ReflectionUtils.makeAccessible(field);
-            var executor = (ScheduledExecutorService) ReflectionUtils.getField(field, schedulerManager);
+            var executor = (ScheduledExecutorService) ReflectionUtils.getField(field, null);
             ThreadUtils.shutdown(executor);
         } catch (Throwable e) {
             logger.error("Scheduler thread pool failed shutdown.", e);

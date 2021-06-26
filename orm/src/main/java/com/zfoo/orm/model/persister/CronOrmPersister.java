@@ -18,7 +18,7 @@ import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.model.cache.EntityCaches;
 import com.zfoo.orm.model.vo.EntityDef;
 import com.zfoo.protocol.exception.ExceptionUtils;
-import com.zfoo.scheduler.SchedulerContext;
+import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.scheduler.util.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +74,7 @@ public class CronOrmPersister extends AbstractOrmPersister {
         }
 
         if (!OrmContext.isStop()) {
-            SchedulerContext.getSchedulerManager().schedule(new Runnable() {
+            SchedulerBus.schedule(new Runnable() {
                 @Override
                 public void run() {
                     if (!OrmContext.isStop()) {

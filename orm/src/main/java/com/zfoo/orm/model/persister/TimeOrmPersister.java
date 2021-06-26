@@ -18,7 +18,7 @@ import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.model.cache.EntityCaches;
 import com.zfoo.orm.model.vo.EntityDef;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.scheduler.SchedulerContext;
+import com.zfoo.scheduler.manager.SchedulerBus;
 
 import java.util.concurrent.TimeUnit;
 
@@ -43,7 +43,7 @@ public class TimeOrmPersister extends AbstractOrmPersister {
 
     @Override
     public void start() {
-        SchedulerContext.getSchedulerManager().scheduleAtFixedRate(new Runnable() {
+        SchedulerBus.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 if (!OrmContext.isStop()) {

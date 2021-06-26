@@ -27,7 +27,7 @@ import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.scheduler.SchedulerContext;
+import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.util.concurrent.FastThreadLocalThread;
@@ -317,7 +317,7 @@ public class ZookeeperRegistry implements IRegistry {
                 initConsumerCache();
             } catch (Exception e) {
                 logger.error("zookeeper初始化失败，等待[{}]秒，重新初始化", RETRY_SECONDS, e);
-                SchedulerContext.getSchedulerManager().schedule(new Runnable() {
+                SchedulerBus.schedule(new Runnable() {
                     @Override
                     public void run() {
                         initZookeeper();
@@ -441,7 +441,7 @@ public class ZookeeperRegistry implements IRegistry {
         }
 
         if (recheckFlag) {
-            SchedulerContext.getSchedulerManager().schedule(new Runnable() {
+            SchedulerBus.schedule(new Runnable() {
                 @Override
                 public void run() {
                     checkConsumer();

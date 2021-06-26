@@ -47,8 +47,6 @@ public class SchedulerDefinitionParser implements BeanDefinitionParser {
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注册SchedulerManager
-        String schedulerId = element.getAttribute(SCHEDULER_ID);
         return builder.getBeanDefinition();
     }
 
