@@ -235,7 +235,7 @@ public abstract class ArrayUtils {
     }
 
     public static <T> List<T> toList(T[] array) {
-        if (CollectionUtils.isEmpty(array)) {
+        if (ArrayUtils.isEmpty(array)) {
             return Collections.emptyList();
         }
         return Arrays.asList(array);

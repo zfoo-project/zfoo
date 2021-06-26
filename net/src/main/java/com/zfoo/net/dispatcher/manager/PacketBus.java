@@ -11,7 +11,7 @@ import com.zfoo.net.packet.service.PacketService;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
-import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -58,7 +58,7 @@ public abstract class PacketBus {
 
         var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, PacketReceiver.class);
 
-        if (CollectionUtils.isNotEmpty(methods) && !ReflectionUtils.isPojoClass(clazz)) {
+        if (ArrayUtils.isNotEmpty(methods) && !ReflectionUtils.isPojoClass(clazz)) {
             logger.warn("消息注册类不是POJO类，父类的不会被扫描到");
         }
 

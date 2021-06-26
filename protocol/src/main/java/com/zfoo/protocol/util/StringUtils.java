@@ -12,7 +12,7 @@
 
 package com.zfoo.protocol.util;
 
-import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.collection.ArrayUtils;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -430,7 +430,7 @@ public abstract class StringUtils {
      * @return 结果
      */
     public static String format(final String template, final Object... args) {
-        if (isBlank(template) || CollectionUtils.isEmpty(args)) {
+        if (isBlank(template) || ArrayUtils.isEmpty(args)) {
             return template;
         }
 

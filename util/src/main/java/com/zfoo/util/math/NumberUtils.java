@@ -13,7 +13,7 @@
 
 package com.zfoo.util.math;
 
-import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -54,7 +54,7 @@ public abstract class NumberUtils {
      * @return 和
      */
     public static BigDecimal add(Number... values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (ArrayUtils.isEmpty(values)) {
             return BigDecimal.ZERO;
         }
 
@@ -77,7 +77,7 @@ public abstract class NumberUtils {
      * @return 求和
      */
     public static BigDecimal add(String... values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (ArrayUtils.isEmpty(values)) {
             return BigDecimal.ZERO;
         }
 
@@ -100,7 +100,7 @@ public abstract class NumberUtils {
      * @return 求和
      */
     public static BigDecimal add(BigDecimal... values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (ArrayUtils.isEmpty(values)) {
             return BigDecimal.ZERO;
         }
 
@@ -124,7 +124,7 @@ public abstract class NumberUtils {
      * @return 差
      */
     public static BigDecimal sub(Number... values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (ArrayUtils.isEmpty(values)) {
             return BigDecimal.ZERO;
         }
 
@@ -147,7 +147,7 @@ public abstract class NumberUtils {
      * @return 差
      */
     public static BigDecimal sub(String... values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (ArrayUtils.isEmpty(values)) {
             return BigDecimal.ZERO;
         }
 
@@ -170,7 +170,7 @@ public abstract class NumberUtils {
      * @return 差
      */
     public static BigDecimal sub(BigDecimal... values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (ArrayUtils.isEmpty(values)) {
             return BigDecimal.ZERO;
         }
 
@@ -194,7 +194,7 @@ public abstract class NumberUtils {
      * @return 积
      */
     public static BigDecimal mul(Number... values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (ArrayUtils.isEmpty(values)) {
             return BigDecimal.ZERO;
         }
 
@@ -228,7 +228,7 @@ public abstract class NumberUtils {
      * @return 积
      */
     public static BigDecimal mul(String... values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (ArrayUtils.isEmpty(values)) {
             return BigDecimal.ZERO;
         }
 
@@ -251,7 +251,7 @@ public abstract class NumberUtils {
      * @return 积
      */
     public static BigDecimal mul(BigDecimal... values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (ArrayUtils.isEmpty(values)) {
             return BigDecimal.ZERO;
         }
 
@@ -368,7 +368,7 @@ public abstract class NumberUtils {
      * @return 积
      */
     public static BigDecimal div(BigDecimal... values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (ArrayUtils.isEmpty(values)) {
             return BigDecimal.ZERO;
         }
 

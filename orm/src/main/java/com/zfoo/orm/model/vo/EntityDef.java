@@ -20,7 +20,7 @@ import com.zfoo.orm.model.anno.IndexText;
 import com.zfoo.orm.model.config.CacheStrategy;
 import com.zfoo.orm.model.config.PersisterStrategy;
 import com.zfoo.orm.model.entity.IEntity;
-import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -79,7 +79,7 @@ public class EntityDef {
         entityDef.expireMillisecond = cacheStrategy.getExpireMillisecond();
 
         var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
-        AssertionUtils.isTrue(CollectionUtils.isNotEmpty(idFields) && idFields.length == 1, "实体类Entity[{}]必须只有且仅有一个Id注解", clazz.getSimpleName());
+        AssertionUtils.isTrue(ArrayUtils.isNotEmpty(idFields) && idFields.length == 1, "实体类Entity[{}]必须只有且仅有一个Id注解", clazz.getSimpleName());
         entityDef.idField = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class)[0];
         ReflectionUtils.makeAccessible(entityDef.idField);
         // idField必须用private修饰

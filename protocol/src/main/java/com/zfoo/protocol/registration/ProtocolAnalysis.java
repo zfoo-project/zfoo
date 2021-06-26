@@ -15,7 +15,6 @@ package com.zfoo.protocol.registration;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;
-import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.exception.UnknownException;
 import com.zfoo.protocol.generate.GenerateOperation;
@@ -235,7 +234,7 @@ public class ProtocolAnalysis {
         // 是否实现了IPacket接口
         AssertionUtils.isTrue(IPacket.class.isAssignableFrom(clazz), "[class:{}]没有实现接口[IPacket:{}]", clazz.getCanonicalName(), IPacket.class.getCanonicalName());
         // 不能是泛型类
-        AssertionUtils.isTrue(CollectionUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
+        AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
 
         Field protocolIdField;
         try {

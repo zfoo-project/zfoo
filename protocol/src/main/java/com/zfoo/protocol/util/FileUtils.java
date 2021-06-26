@@ -12,7 +12,7 @@
 
 package com.zfoo.protocol.util;
 
-import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.collection.ArrayUtils;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -80,7 +80,7 @@ public abstract class FileUtils {
         }
         if (file.isDirectory()) {
             var files = file.listFiles();
-            if (CollectionUtils.isEmpty(files)) {
+            if (ArrayUtils.isEmpty(files)) {
                 return null;
             }
 

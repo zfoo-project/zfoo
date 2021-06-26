@@ -40,14 +40,6 @@ public abstract class CollectionUtils {
         return !isEmpty(collection);
     }
 
-    public static boolean isEmpty(Object[] array) {
-        return (array == null || array.length == 0);
-    }
-
-    public static boolean isNotEmpty(Object[] array) {
-        return !isEmpty(array);
-    }
-
     /**
      * Return {@code true} if the supplied Map is {@code null} or empty.
      * Otherwise, return {@code false}.
