@@ -21,15 +21,16 @@ import com.zfoo.scheduler.SchedulerContext;
 import com.zfoo.scheduler.model.anno.Scheduler;
 import com.zfoo.scheduler.model.vo.SchedulerDefinition;
 import com.zfoo.scheduler.util.TimeUtils;
-import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author jaysunxiao
@@ -56,33 +57,12 @@ public class SchedulerManager implements ISchedulerManager {
 
 
     private static final long TRIGGER_MILLIS_INTERVAL = TimeUtils.MILLIS_PER_SECOND;
-    private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new SchedulerThreadFactory());
 
+    /**
+     * scheduler默认只有一个单线程线程池
+     */
+    private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new SchedulerThreadFactory(1));
 
-    private static class SchedulerThreadFactory implements ThreadFactory {
-        private static final AtomicInteger poolNumber = new AtomicInteger(1);
-        private final ThreadGroup group;
-        private final AtomicInteger threadNumber = new AtomicInteger(1);
-        private final String namePrefix;
-
-        // scheduler-p1-t1 = scheduler-pool-1-thread-1
-        SchedulerThreadFactory() {
-            var s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
-            namePrefix = "scheduler-p" + poolNumber.getAndIncrement() + "-t";
-        }
-
-        @Override
-        public Thread newThread(Runnable runnable) {
-            var t = new FastThreadLocalThread(group, runnable, namePrefix + threadNumber.getAndIncrement(), 0);
-            t.setDaemon(false);
-            t.setPriority(Thread.NORM_PRIORITY);
-            t.setUncaughtExceptionHandler((thread, e) -> {
-                logger.error(thread.toString(), e);
-            });
-            return t;
-        }
-    }
 
     static {
         executor.scheduleAtFixedRate(() -> {
