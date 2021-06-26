@@ -19,7 +19,9 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
+import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.model.anno.EntityCache;
+import com.zfoo.orm.model.anno.EntityCachesInjection;
 import com.zfoo.orm.model.cache.EntityCaches;
 import com.zfoo.orm.model.cache.IEntityCaches;
 import com.zfoo.orm.model.config.OrmConfig;
@@ -28,6 +30,7 @@ import com.zfoo.orm.model.vo.EntityDef;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.JsonUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.bson.Document;
@@ -42,6 +45,8 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -158,6 +163,81 @@ public class OrmManager implements IOrmManager {
         }
     }
 
+    @Override
+    public void inject() {
+        var applicationContext = OrmContext.getApplicationContext();
+        var beanNames = applicationContext.getBeanDefinitionNames();
+        for (var beanName : beanNames) {
+            var bean = applicationContext.getBean(beanName);
+
+            ReflectionUtils.filterFieldsInClass(bean.getClass()
+                    , field -> field.isAnnotationPresent(EntityCachesInjection.class)
+                    , field -> {
+                        Type type = field.getGenericType();
+
+                        if (!(type instanceof ParameterizedType)) {
+                            throw new RuntimeException(StringUtils.format("变量[{}]的类型不是泛型类", field.getName()));
+                        }
+
+                        Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+                        Class<? extends IEntity<?>> clazz = (Class<? extends IEntity<?>>) types[1];
+                        IEntityCaches<?, ?> entityCaches = OrmContext.getOrmManager().getEntityCaches(clazz);
+
+                        if (entityCaches == null) {
+                            throw new RuntimeException(StringUtils.format("实体缓存对象[entityCaches:{}]不存在", clazz));
+                        }
+
+                        ReflectionUtils.makeAccessible(field);
+                        ReflectionUtils.setField(field, bean, entityCaches);
+                        entityCaches.setUsable(true);
+                    });
+        }
+    }
+
+    @Override
+    public void initAfter() {
+        var unusableEntityClassList = entityCachesMap.entrySet().stream()
+                .filter(it -> !it.getValue().isUsable())
+                .map(it -> it.getKey())
+                .collect(Collectors.toList());
+
+        unusableEntityClassList.forEach(it -> {
+            entityCachesMap.remove(it);
+        });
+    }
+
+    @Override
+    public <E extends IEntity<?>> IEntityCaches<?, E> getEntityCaches(Class<E> clazz) {
+        return (IEntityCaches<?, E>) entityCachesMap.get(clazz);
+    }
+
+    @Override
+    public Collection<IEntityCaches<?, ?>> getAllEntityCaches() {
+        return Collections.unmodifiableCollection(entityCachesMap.values());
+    }
+
+    @Override
+    public ClientSession getClientSession() {
+        return mongoClient.startSession();
+    }
+
+    @Override
+    public <E extends IEntity<?>> MongoCollection<E> getCollection(Class<E> entityClazz) {
+        var collectionName = collectionNameMap.get(entityClazz);
+        if (collectionName == null) {
+            collectionName = StringUtils.substringBeforeLast(StringUtils.uncapitalize(entityClazz.getSimpleName()), "Entity");
+            collectionNameMap.put(entityClazz, collectionName);
+        }
+
+        return mongodbDatabase.getCollection(collectionName, entityClazz);
+    }
+
+
+    @Override
+    public MongoCollection<Document> getCollection(String collection) {
+        return mongodbDatabase.getCollection(collection);
+    }
+
     private Map<Class<? extends IEntity<?>>, EntityDef> scanEntity() {
         var cacheDefMap = new HashMap<Class<? extends IEntity<?>>, EntityDef>();
         var entityPackage = ormConfig.getEntityPackage();
@@ -206,49 +286,4 @@ public class OrmManager implements IOrmManager {
             throw new RuntimeException("无法读取实体信息:" + e);
         }
     }
-
-    @Override
-    public void initAfter() {
-        var unusableStorageClassList = entityCachesMap.entrySet().stream()
-                .filter(it -> !it.getValue().isUsable())
-                .map(it -> it.getKey())
-                .collect(Collectors.toList());
-
-        unusableStorageClassList.forEach(it -> {
-            entityCachesMap.remove(it);
-        });
-    }
-
-    @Override
-    public <E extends IEntity<?>> IEntityCaches<?, E> getEntityCaches(Class<E> clazz) {
-        return (IEntityCaches<?, E>) entityCachesMap.get(clazz);
-    }
-
-    @Override
-    public Collection<IEntityCaches<?, ?>> getAllEntityCaches() {
-        return Collections.unmodifiableCollection(entityCachesMap.values());
-    }
-
-    @Override
-    public ClientSession getClientSession() {
-        return mongoClient.startSession();
-    }
-
-    @Override
-    public <E extends IEntity<?>> MongoCollection<E> getCollection(Class<E> entityClazz) {
-        var collectionName = collectionNameMap.get(entityClazz);
-        if (collectionName == null) {
-            collectionName = StringUtils.substringBeforeLast(StringUtils.uncapitalize(entityClazz.getSimpleName()), "Entity");
-            collectionNameMap.put(entityClazz, collectionName);
-        }
-
-        return mongodbDatabase.getCollection(collectionName, entityClazz);
-    }
-
-
-    @Override
-    public MongoCollection<Document> getCollection(String collection) {
-        return mongodbDatabase.getCollection(collection);
-    }
-
 }

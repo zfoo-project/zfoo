@@ -18,7 +18,6 @@ import com.zfoo.orm.manager.IOrmManager;
 import com.zfoo.orm.manager.OrmManager;
 import com.zfoo.orm.model.accessor.IAccessor;
 import com.zfoo.orm.model.query.IQuery;
-import com.zfoo.orm.schema.OrmProcessor;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.scheduler.SchedulerContext;
 import org.slf4j.Logger;
@@ -88,13 +87,7 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
             instance.ormManager = applicationContext.getBean(IOrmManager.class);
 
             instance.ormManager.initBefore();
-
-            var beanNames = applicationContext.getBeanDefinitionNames();
-            var processor = applicationContext.getBean(OrmProcessor.class);
-            for (var beanName : beanNames) {
-                processor.postProcessAfterInitialization(applicationContext.getBean(beanName), beanName);
-            }
-
+            instance.ormManager.inject();
             instance.ormManager.initAfter();
         } else if (event instanceof ContextClosedEvent) {
             shutdownBefore();

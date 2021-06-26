@@ -29,6 +29,8 @@ public interface IOrmManager {
 
     void initBefore();
 
+    void inject();
+
     void initAfter();
 
 

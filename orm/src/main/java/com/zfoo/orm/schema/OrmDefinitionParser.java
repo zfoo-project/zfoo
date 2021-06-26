@@ -51,12 +51,6 @@ public class OrmDefinitionParser implements BeanDefinitionParser {
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注册OrmProcessor
-        clazz = OrmProcessor.class;
-        name = StringUtils.uncapitalize(clazz.getSimpleName());
-        builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
-        parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
-
         // 注册OrmManager
         clazz = OrmManager.class;
         name = StringUtils.uncapitalize(clazz.getSimpleName());
