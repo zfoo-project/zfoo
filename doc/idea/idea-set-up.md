@@ -46,6 +46,7 @@ tube get
 office
 kms，破解工具
 adobe ps , premiere
+obs studio
 steam
 迅雷迷你版
 ```
