@@ -36,7 +36,7 @@ public interface IPacketDispatcher {
 
     void receive(Session session, IPacket packet, @Nullable IPacketAttachment packetAttachment);
 
-    void doReceive(Session session, IPacket packet, @Nullable IPacketAttachment packetAttachment);
+    void atReceiver(Session session, IPacket packet, @Nullable IPacketAttachment packetAttachment);
 
     /**
      * attention：syncRequest和asyncRequest只能客户端调用
@@ -60,7 +60,5 @@ public interface IPacketDispatcher {
     <T extends IPacket> SyncAnswer<T> syncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument) throws Exception;
 
     <T extends IPacket> AsyncAnswer<T> asyncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument);
-
-    void registerPacketReceiverDefinition(Object bean);
 
 }

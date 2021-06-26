@@ -1,0 +1,120 @@
+package com.zfoo.net.dispatcher.manager;
+
+import com.zfoo.event.model.event.IEvent;
+import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
+import com.zfoo.net.dispatcher.model.vo.EnhanceUtils;
+import com.zfoo.net.dispatcher.model.vo.IPacketReceiver;
+import com.zfoo.net.dispatcher.model.vo.PacketReceiverDefinition;
+import com.zfoo.net.packet.model.GatewayPacketAttachment;
+import com.zfoo.net.packet.model.IPacketAttachment;
+import com.zfoo.net.packet.service.PacketService;
+import com.zfoo.net.session.model.Session;
+import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
+import com.zfoo.protocol.util.StringUtils;
+import javassist.CannotCompileException;
+import javassist.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+
+/**
+ * @author jaysunxiao
+ * @version 3.0
+ */
+public abstract class PacketBus {
+
+    private static final Logger logger = LoggerFactory.getLogger(PacketBus.class);
+
+    /**
+     * 客户端和服务端都有接受packet的方法，packetReceiverList对应的就是包的接收方法
+     */
+    private static final IPacketReceiver[] packetReceiverList = new IPacketReceiver[ProtocolManager.MAX_PROTOCOL_NUM];
+
+    /**
+     * 正常消息的接收
+     * <p>
+     * 发送者同时能发送多个包
+     * 接收者同时只能处理一个session的一个包，同一个发送者发送过来的包排队处理
+     */
+    public static void submit(Session session, IPacket packet, IPacketAttachment packetAttachment) {
+        var packetReceiver = packetReceiverList[packet.protocolId()];
+        if (packetReceiver == null) {
+            throw new RuntimeException(StringUtils.format("no any packetReceiverDefinition found for this [packet:{}]", packet.getClass().getName()));
+        }
+
+        // 调用PacketReceiver
+        packetReceiver.invoke(session, packet, packetAttachment);
+    }
+
+
+    public static void registerPacketReceiverDefinition(Object bean) {
+        var clazz = bean.getClass();
+
+        var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, PacketReceiver.class);
+
+        if (CollectionUtils.isNotEmpty(methods) && !ReflectionUtils.isPojoClass(clazz)) {
+            logger.warn("消息注册类不是POJO类，父类的不会被扫描到");
+        }
+
+        for (var method : methods) {
+            var paramClazzs = method.getParameterTypes();
+
+            AssertionUtils.isTrue(paramClazzs.length == 2 || paramClazzs.length == 3
+                    , "[class:{}] [method:{}] must have two or three parameter!", bean.getClass().getName(), method.getName());
+
+            AssertionUtils.isTrue(Session.class.isAssignableFrom(paramClazzs[0])
+                    , "[class:{}] [method:{}],the first parameter must be Session type parameter Exception.", bean.getClass().getName(), method.getName());
+
+            AssertionUtils.isTrue(IPacket.class.isAssignableFrom(paramClazzs[1])
+                    , "[class:{}] [method:{}],the second parameter must be IPacket type parameter Exception.", bean.getClass().getName(), method.getName());
+
+            AssertionUtils.isTrue(paramClazzs.length != 3 || IPacketAttachment.class.isAssignableFrom(paramClazzs[2])
+                    , "[class:{}] [method:{}],the third parameter must be IPacketAttachment type parameter Exception.", bean.getClass().getName(), method.getName());
+
+            var packetClazz = (Class<? extends IEvent>) paramClazzs[1];
+            var attachmentClazz = paramClazzs.length == 3 ? paramClazzs[2] : null;
+            var packetName = packetClazz.getCanonicalName();
+            var methodName = method.getName();
+
+            AssertionUtils.isTrue(Modifier.isPublic(method.getModifiers())
+                    , "[class:{}] [method:{}] [packet:{}] must use 'public' as modifier!", bean.getClass().getName(), methodName, packetName);
+
+            AssertionUtils.isTrue(!Modifier.isStatic(method.getModifiers())
+                    , "[class:{}] [method:{}] [packet:{}] can not use 'static' as modifier!", bean.getClass().getName(), methodName, packetName);
+
+            var expectedMethodName = StringUtils.format("at{}", packetClazz.getSimpleName());
+            AssertionUtils.isTrue(methodName.equals(expectedMethodName)
+                    , "[class:{}] [method:{}] [packet:{}] expects '{}' as method name!", bean.getClass().getName(), methodName, packetName, expectedMethodName);
+
+            // 如果以Request结尾的请求，那么attachment应该为GatewayAttachment
+            // 如果以Ask结尾的请求，那么attachment不能为GatewayAttachment
+            if (attachmentClazz != null) {
+                if (packetName.endsWith(PacketService.NET_REQUEST_SUFFIX)) {
+                    AssertionUtils.isTrue(attachmentClazz.equals(GatewayPacketAttachment.class)
+                            , "[class:{}] [method:{}] [packet:{}] must use [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayPacketAttachment.class.getCanonicalName());
+                } else if (packetName.endsWith(PacketService.NET_ASK_SUFFIX)) {
+                    AssertionUtils.isTrue(!attachmentClazz.equals(GatewayPacketAttachment.class)
+                            , "[class:{}] [method:{}] [packet:{}] can not match with [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayPacketAttachment.class.getCanonicalName());
+                }
+            }
+
+            try {
+                var protocolIdField = packetClazz.getDeclaredField(ProtocolManager.PROTOCOL_ID);
+                ReflectionUtils.makeAccessible(protocolIdField);
+                var protocolId = (short) protocolIdField.get(null);
+                var receiverDefinition = new PacketReceiverDefinition(bean, method, packetClazz, attachmentClazz);
+                var enhanceReceiverDefinition = EnhanceUtils.createPacketReceiver(receiverDefinition);
+                packetReceiverList[protocolId] = enhanceReceiverDefinition;
+            } catch (NoSuchFieldException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException | CannotCompileException | NotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+}

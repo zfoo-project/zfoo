@@ -20,7 +20,6 @@ import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.core.tcp.TcpClient;
 import com.zfoo.net.dispatcher.manager.IPacketDispatcher;
 import com.zfoo.net.packet.service.IPacketService;
-import com.zfoo.net.schema.NetProcessor;
 import com.zfoo.net.session.manager.ISessionManager;
 import com.zfoo.net.task.TaskManager;
 import com.zfoo.protocol.exception.ExceptionUtils;
@@ -104,14 +103,8 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
             instance.consumer = applicationContext.getBean(IConsumer.class);
             instance.sessionManager = applicationContext.getBean(ISessionManager.class);
 
-            var beanNames = applicationContext.getBeanDefinitionNames();
-            var processor = applicationContext.getBean(NetProcessor.class);
-            for (var beanName : beanNames) {
-                processor.postProcessAfterInitialization(applicationContext.getBean(beanName), beanName);
-            }
-
-            NetContext.getPacketService().init();
-            NetContext.getConfigManager().initRegistry();
+            instance.packetService.init();
+            instance.configManager.initRegistry();
 
         } else if (event instanceof ContextClosedEvent) {
             shutdownBefore();
@@ -119,11 +112,6 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
         }
     }
 
-
-    @Override
-    public int getOrder() {
-        return 0;
-    }
 
     public synchronized static void shutdownBefore() {
         SchedulerContext.shutdown();
@@ -156,6 +144,11 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
         }
 
         logger.info("Net shutdown gracefully.");
+    }
+
+    @Override
+    public int getOrder() {
+        return 0;
     }
 
 }

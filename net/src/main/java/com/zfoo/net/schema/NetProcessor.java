@@ -13,7 +13,7 @@
 
 package com.zfoo.net.schema;
 
-import com.zfoo.net.NetContext;
+import com.zfoo.net.dispatcher.manager.PacketBus;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
@@ -25,10 +25,7 @@ public class NetProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (NetContext.getNetContext() == null) {
-            return bean;
-        }
-        NetContext.getDispatcher().registerPacketReceiverDefinition(bean);
+        PacketBus.registerPacketReceiverDefinition(bean);
         return bean;
     }
 

@@ -36,7 +36,7 @@ public final class ReceiveTask implements Runnable {
 
     @Override
     public void run() {
-        NetContext.getDispatcher().doReceive(session, packet, packetAttachment);
+        NetContext.getDispatcher().atReceiver(session, packet, packetAttachment);
     }
 
     public Session getSession() {
