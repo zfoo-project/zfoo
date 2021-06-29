@@ -356,10 +356,7 @@ public abstract class ByteBufUtils {
 
     public static String readString(ByteBuf byteBuf) {
         int length = readInt(byteBuf);
-        if (length <= 0) {
-            return StringUtils.EMPTY;
-        }
-        return (String) byteBuf.readCharSequence(length, StringUtils.DEFAULT_CHARSET);
+        return length <= 0 ? StringUtils.EMPTY : (String) byteBuf.readCharSequence(length, StringUtils.DEFAULT_CHARSET);
     }
 
 
