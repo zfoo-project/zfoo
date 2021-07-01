@@ -15,7 +15,7 @@ package com.zfoo.net.core.gateway;
 
 import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.handler.GatewayDispatcherHandler;
-import com.zfoo.net.handler.codec.tcp.TcpPacketCodecHandler;
+import com.zfoo.net.handler.codec.tcp.TcpCodecHandler;
 import com.zfoo.net.handler.idle.ServerIdleHandler;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
@@ -58,7 +58,7 @@ public class GatewayServer extends AbstractServer {
         protected void initChannel(SocketChannel channel) {
             channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
             channel.pipeline().addLast(new ServerIdleHandler());
-            channel.pipeline().addLast(new TcpPacketCodecHandler());
+            channel.pipeline().addLast(new TcpCodecHandler());
             channel.pipeline().addLast(new GatewayDispatcherHandler(packetFilter));
         }
     }

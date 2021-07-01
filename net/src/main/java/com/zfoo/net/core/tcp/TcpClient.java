@@ -15,7 +15,7 @@ package com.zfoo.net.core.tcp;
 
 import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.handler.ClientDispatcherHandler;
-import com.zfoo.net.handler.codec.tcp.TcpPacketCodecHandler;
+import com.zfoo.net.handler.codec.tcp.TcpCodecHandler;
 import com.zfoo.net.handler.idle.ClientIdleHandler;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.Channel;
@@ -44,7 +44,7 @@ public class TcpClient extends AbstractClient {
         protected void initChannel(SocketChannel channel) {
             channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
             channel.pipeline().addLast(new ClientIdleHandler());
-            channel.pipeline().addLast(new TcpPacketCodecHandler());
+            channel.pipeline().addLast(new TcpCodecHandler());
             channel.pipeline().addLast(new ClientDispatcherHandler());
         }
     }

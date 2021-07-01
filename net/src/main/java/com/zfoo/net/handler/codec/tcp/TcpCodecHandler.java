@@ -35,9 +35,9 @@ import java.util.List;
  * @author jaysunxiao
  * @version 3.0
  */
-public class TcpPacketCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
+public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
 
-    private static final Logger logger = LoggerFactory.getLogger(TcpPacketCodecHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(TcpCodecHandler.class);
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {

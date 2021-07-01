@@ -14,7 +14,6 @@
 package com.zfoo.net.handler.codec.websocket;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.handler.codec.tcp.TcpPacketCodecHandler;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.packet.model.EncodedPacketInfo;
 import com.zfoo.net.packet.service.PacketService;
@@ -42,7 +41,7 @@ import java.util.List;
  */
 public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame, EncodedPacketInfo> {
 
-    private static final Logger logger = LoggerFactory.getLogger(TcpPacketCodecHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketCodecHandler.class);
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, WebSocketFrame webSocketFrame, List<Object> list) {
