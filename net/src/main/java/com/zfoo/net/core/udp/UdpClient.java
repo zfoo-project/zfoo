@@ -1,0 +1,89 @@
+/*
+ * Copyright (C) 2020 The zfoo Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
+package com.zfoo.net.core.udp;
+
+import com.zfoo.net.NetContext;
+import com.zfoo.net.core.AbstractClient;
+import com.zfoo.net.handler.BaseDispatcherHandler;
+import com.zfoo.net.handler.ClientDispatcherHandler;
+import com.zfoo.net.handler.codec.udp.UdpCodecHandler;
+import com.zfoo.net.session.model.Session;
+import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.util.net.HostAndPort;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollDatagramChannel;
+import io.netty.channel.socket.nio.NioDatagramChannel;
+
+/**
+ * @author jaysunxiao
+ * @version 3.0
+ */
+public class UdpClient extends AbstractClient {
+
+    public UdpClient(HostAndPort host) {
+        super(host);
+    }
+
+    @Override
+    public synchronized Session start() {
+        try {
+            this.bootstrap = new Bootstrap();
+            this.bootstrap.group(nioEventLoopGroup)
+                    .channel(Epoll.isAvailable() ? EpollDatagramChannel.class : NioDatagramChannel.class)
+                    .option(ChannelOption.SO_BROADCAST, true)
+                    .handler(new ChannelHandlerInitializer());
+
+            // bind(0)随机选择一个端口
+            var channelFuture = bootstrap.bind(0).sync();
+            channelFuture.syncUninterruptibly();
+
+            if (channelFuture.isSuccess()) {
+                if (channelFuture.channel().isActive()) {
+                    var channel = channelFuture.channel();
+                    var session = BaseDispatcherHandler.initChannel(channel);
+                    NetContext.getSessionManager().addClientSession(session);
+                    logger.info("UdpClient started at [{}]", channel.localAddress());
+                    return session;
+                }
+            } else if (channelFuture.cause() != null) {
+                logger.error(ExceptionUtils.getMessage(channelFuture.cause()));
+            } else {
+                logger.error("启动客户端[client:{}]未知错误", this);
+            }
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getMessage(e));
+        }
+        return null;
+    }
+
+    @Override
+    public ChannelInitializer<Channel> channelChannelInitializer() {
+        return new ChannelHandlerInitializer();
+    }
+
+
+    private static class ChannelHandlerInitializer extends ChannelInitializer<Channel> {
+        @Override
+        protected void initChannel(Channel channel) {
+            channel.pipeline().addLast(new UdpCodecHandler());
+            channel.pipeline().addLast(new ClientDispatcherHandler());
+        }
+    }
+
+
+}

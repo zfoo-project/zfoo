@@ -6,7 +6,8 @@
     <module id="1" name="native" minId="0" maxId="100" version="99.99.999">
         <protocol id="0" location="com.zfoo.net.packet.model.SignalPacketAttachment"/>
         <protocol id="1" location="com.zfoo.net.packet.model.GatewayPacketAttachment"/>
-        <protocol id="2" location="com.zfoo.net.packet.model.NoAnswerAttachment"/>
+        <protocol id="2" location="com.zfoo.net.packet.model.UdpPacketAttachment"/>
+        <protocol id="3" location="com.zfoo.net.packet.model.NoAnswerAttachment"/>
 
 
         <protocol id="20" location="com.zfoo.net.core.gateway.model.AuthUidToGatewayCheck"/>
@@ -57,6 +58,9 @@
         <protocol id="1165" location="com.zfoo.net.packet.csharp.CM_CSharpRequest" enhance="false"/>
         <protocol id="1166" location="com.zfoo.net.packet.csharp.CSharpObjectA" enhance="false"/>
         <protocol id="1167" location="com.zfoo.net.packet.csharp.CSharpObjectB" enhance="false"/>
+
+        <protocol id="1200" location="com.zfoo.net.packet.udp.UdpHelloRequest"/>
+        <protocol id="1201" location="com.zfoo.net.packet.udp.UdpHelloResponse"/>
     </module>
 
     <module id="4" name="js" minId="2000" maxId="3000" version="1.0.0">

@@ -38,9 +38,15 @@ public enum PacketAttachmentType {
     GATEWAY_PACKET((byte) 2, GatewayPacketAttachment.class),
 
     /**
+     * udp消息的附加包
+     */
+    UDP_PACKET((byte) 3, NoAnswerAttachment.class),
+
+    /**
      * 无返回消息的附加包
      */
-    NO_ANSWER_PACKET((byte) 3, NoAnswerAttachment.class),
+    NO_ANSWER_PACKET((byte) 4, NoAnswerAttachment.class),
+
 
     ;
 

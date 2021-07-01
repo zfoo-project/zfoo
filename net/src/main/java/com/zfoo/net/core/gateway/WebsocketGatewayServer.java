@@ -46,15 +46,15 @@ public class WebsocketGatewayServer extends AbstractServer {
 
     @Override
     public ChannelInitializer<SocketChannel> channelChannelInitializer() {
-        return new GatewayChannelHandler(packetFilter);
+        return new ChannelHandlerInitializer(packetFilter);
     }
 
 
-    private static class GatewayChannelHandler extends ChannelInitializer<SocketChannel> {
+    private static class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
 
         private BiFunction<Session, IPacket, Boolean> packetFilter;
 
-        public GatewayChannelHandler(BiFunction<Session, IPacket, Boolean> packetFilter) {
+        public ChannelHandlerInitializer(BiFunction<Session, IPacket, Boolean> packetFilter) {
             this.packetFilter = packetFilter;
         }
 

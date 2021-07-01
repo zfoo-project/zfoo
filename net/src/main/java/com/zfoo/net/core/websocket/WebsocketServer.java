@@ -37,11 +37,11 @@ public class WebsocketServer extends AbstractServer {
 
     @Override
     public ChannelInitializer<SocketChannel> channelChannelInitializer() {
-        return new WebSocketServerInitializer();
+        return new ChannelHandlerInitializer();
     }
 
 
-    public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel> {
+    public static class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
 
         @Override
         public void initChannel(SocketChannel channel) {
@@ -59,7 +59,6 @@ public class WebsocketServer extends AbstractServer {
             pipeline.addLast(new WebSocketCodecHandler());
             pipeline.addLast(new ServerDispatcherHandler());
         }
-
     }
 
 }

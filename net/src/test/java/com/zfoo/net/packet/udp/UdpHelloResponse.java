@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,26 +10,31 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.tcp.client.controller;
+package com.zfoo.net.packet.udp;
 
-import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
-import com.zfoo.net.packet.SM_Int;
-import com.zfoo.net.session.model.Session;
-import com.zfoo.protocol.util.JsonUtils;
-import org.springframework.stereotype.Component;
+import com.zfoo.protocol.IPacket;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-@Component
-public class TcpClientPacketController {
+public class UdpHelloResponse implements IPacket {
+
+    public static final transient short PROTOCOL_ID = 1201;
+
+    private String message;
 
 
-    @PacketReceiver
-    public void atSM_Int(Session session, SM_Int sm) {
-        System.out.println("receive packet from server:");
-        System.out.println(JsonUtils.object2String(sm));
+    @Override
+    public short protocolId() {
+        return PROTOCOL_ID;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

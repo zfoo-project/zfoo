@@ -37,21 +37,21 @@ public abstract class AbstractServer implements IServer {
     private static final Logger logger = LoggerFactory.getLogger(AbstractServer.class);
 
     // 所有的服务器都可以在这个列表中取到
-    private static final List<AbstractServer> allServers = new ArrayList<>(1);
+    protected static final List<AbstractServer> allServers = new ArrayList<>(1);
 
-    private String hostAddress;
-    private int port;
+    protected String hostAddress;
+    protected int port;
 
 
     // 配置服务端nio线程组，服务端接受客户端连接
     private EventLoopGroup bossGroup;
 
     // SocketChannel的网络读写
-    private EventLoopGroup workerGroup;
+    protected EventLoopGroup workerGroup;
 
-    private ChannelFuture channelFuture;
+    protected ChannelFuture channelFuture;
 
-    private Channel channel;
+    protected Channel channel;
 
     public AbstractServer(HostAndPort host) {
         this.hostAddress = host.getHost();
@@ -79,7 +79,7 @@ public abstract class AbstractServer implements IServer {
         bootstrap.group(bossGroup, workerGroup)
                 .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .option(ChannelOption.SO_REUSEADDR, true)
-                .option(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(channelChannelInitializer);
         // 绑定端口，同步等待成功
         // channelFuture = bootstrap.bind(hostAddress, port).sync();
@@ -122,6 +122,9 @@ public abstract class AbstractServer implements IServer {
     }
 
     public synchronized static void shutdownEventLoopGracefully(EventExecutorGroup executor) {
+        if (executor == null) {
+            return;
+        }
         try {
             if (executor.isShutdown() || executor.isTerminated()) {
                 executor.shutdownGracefully();

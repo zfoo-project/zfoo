@@ -13,35 +13,34 @@
 
 package com.zfoo.net.packet.model;
 
+import com.zfoo.util.math.RandomUtils;
+
 /**
- * 附加包对业务层透明，禁止在业务层使用
- *
  * @author jaysunxiao
  * @version 3.0
  */
-public class NoAnswerAttachment implements IPacketAttachment {
+public class UdpPacketAttachment implements IPacketAttachment {
 
-    public static final transient short PROTOCOL_ID = 3;
+    public static final transient short PROTOCOL_ID = 2;
 
-    /**
-     * 用来在TaskManage中计算一致性hash的参数
-     */
-    private int executorConsistentHash;
+    private String host;
+    private int port;
 
-    public static NoAnswerAttachment valueOf(int executorConsistentHash) {
-        var attachment = new NoAnswerAttachment();
-        attachment.executorConsistentHash = executorConsistentHash;
+    public static UdpPacketAttachment valueOf(String host, int port) {
+        var attachment = new UdpPacketAttachment();
+        attachment.host = host;
+        attachment.port = port;
         return attachment;
     }
 
     @Override
     public PacketAttachmentType packetType() {
-        return PacketAttachmentType.NO_ANSWER_PACKET;
+        return PacketAttachmentType.UDP_PACKET;
     }
 
     @Override
     public int executorConsistentHash() {
-        return executorConsistentHash;
+        return RandomUtils.randomInt();
     }
 
     @Override
@@ -49,12 +48,19 @@ public class NoAnswerAttachment implements IPacketAttachment {
         return PROTOCOL_ID;
     }
 
-
-    public int getExecutorConsistentHash() {
-        return executorConsistentHash;
+    public String getHost() {
+        return host;
     }
 
-    public void setExecutorConsistentHash(int executorConsistentHash) {
-        this.executorConsistentHash = executorConsistentHash;
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

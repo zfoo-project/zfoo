@@ -61,16 +61,16 @@ public class WebsocketSslGatewayServer extends AbstractServer {
 
     @Override
     public ChannelInitializer<SocketChannel> channelChannelInitializer() {
-        return new GatewayChannelHandler(sslContext, packetFilter);
+        return new ChannelHandlerInitializer(sslContext, packetFilter);
     }
 
 
-    private static class GatewayChannelHandler extends ChannelInitializer<SocketChannel> {
+    private static class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
 
         private SslContext sslContext;
         private BiFunction<Session, IPacket, Boolean> packetFilter;
 
-        public GatewayChannelHandler(SslContext sslContext, BiFunction<Session, IPacket, Boolean> packetFilter) {
+        public ChannelHandlerInitializer(SslContext sslContext, BiFunction<Session, IPacket, Boolean> packetFilter) {
             this.sslContext = sslContext;
             this.packetFilter = packetFilter;
         }

@@ -38,16 +38,16 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractClient implements IClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractClient.class);
+    protected static final Logger logger = LoggerFactory.getLogger(AbstractClient.class);
 
-    private static final EventLoopGroup nioEventLoopGroup = Epoll.isAvailable()
+    protected static final EventLoopGroup nioEventLoopGroup = Epoll.isAvailable()
             ? new EpollEventLoopGroup(Runtime.getRuntime().availableProcessors() + 1, new DefaultThreadFactory("netty-client", true))
             : new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() + 1, new DefaultThreadFactory("netty-client", true));
 
-    private String hostAddress;
-    private int port;
+    protected String hostAddress;
+    protected int port;
 
-    private Bootstrap bootstrap;
+    protected Bootstrap bootstrap;
 
     public AbstractClient(HostAndPort host) {
         this.hostAddress = host.getHost();

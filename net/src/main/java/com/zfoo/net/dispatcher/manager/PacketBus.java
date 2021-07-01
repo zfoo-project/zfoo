@@ -20,6 +20,7 @@ import com.zfoo.net.dispatcher.model.vo.IPacketReceiver;
 import com.zfoo.net.dispatcher.model.vo.PacketReceiverDefinition;
 import com.zfoo.net.packet.model.GatewayPacketAttachment;
 import com.zfoo.net.packet.model.IPacketAttachment;
+import com.zfoo.net.packet.model.UdpPacketAttachment;
 import com.zfoo.net.packet.service.PacketService;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
@@ -109,7 +110,7 @@ public abstract class PacketBus {
             // 如果以Ask结尾的请求，那么attachment不能为GatewayAttachment
             if (attachmentClazz != null) {
                 if (packetName.endsWith(PacketService.NET_REQUEST_SUFFIX)) {
-                    AssertionUtils.isTrue(attachmentClazz.equals(GatewayPacketAttachment.class)
+                    AssertionUtils.isTrue(attachmentClazz.equals(GatewayPacketAttachment.class) || attachmentClazz.equals(UdpPacketAttachment.class)
                             , "[class:{}] [method:{}] [packet:{}] must use [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayPacketAttachment.class.getCanonicalName());
                 } else if (packetName.endsWith(PacketService.NET_ASK_SUFFIX)) {
                     AssertionUtils.isTrue(!attachmentClazz.equals(GatewayPacketAttachment.class)
