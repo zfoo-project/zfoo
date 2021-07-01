@@ -32,14 +32,15 @@ public class UdpClientTest {
     @Test
     public void startClientTest() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("client_config.xml");
-        var client = new UdpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
+        var hostAndPort = HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0"));
+        var client = new UdpClient(hostAndPort);
 
         var session = client.start();
 
         var request = new UdpHelloRequest();
         request.setMessage("Hello, this is the udp client!");
 
-        NetContext.getDispatcher().send(session, request, UdpPacketAttachment.valueOf("127.0.0.1", 9000));
+        NetContext.getDispatcher().send(session, request, UdpPacketAttachment.valueOf(hostAndPort.getHost(), hostAndPort.getPort()));
 
         ThreadUtils.sleep(Long.MAX_VALUE);
     }

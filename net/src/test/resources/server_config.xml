@@ -27,16 +27,6 @@
             <net:address name="client1" url="127.0.0.1:9001"/>
         </net:host>
 
-        <net:provider dispatch="random">
-            <net:module name="test"/>
-            <net:module name="js"/>
-        </net:provider>
-
-        <net:consumer load-balancer="random">
-            <net:module name="test"/>
-            <net:module name="js"/>
-        </net:consumer>
-
     </net:config>
 
 </beans>
