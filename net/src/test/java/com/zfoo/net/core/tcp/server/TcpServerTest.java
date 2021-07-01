@@ -33,7 +33,7 @@ import java.util.concurrent.Executors;
 @Ignore
 public class TcpServerTest {
 
-    private static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("server_config.xml");
+    private static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
     private static final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     /**

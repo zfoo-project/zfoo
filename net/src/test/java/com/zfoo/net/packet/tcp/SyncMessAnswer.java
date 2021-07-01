@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.packet;
+package com.zfoo.net.packet.tcp;
 
 import com.zfoo.protocol.IPacket;
 
@@ -19,13 +18,11 @@ import com.zfoo.protocol.IPacket;
  * @author jaysunxiao
  * @version 3.0
  */
-public class SM_AsyncMess1 implements IPacket {
+public class SyncMessAnswer implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1155;
+    public static final transient short PROTOCOL_ID = 1151;
 
-    private String a;
-
-    private int id;
+    private String message;
 
     @Override
     public short protocolId() {
@@ -33,20 +30,12 @@ public class SM_AsyncMess1 implements IPacket {
     }
 
 
-    public String getA() {
-        return a;
+    public String getMessage() {
+        return message;
     }
 
-    public void setA(String a) {
-        this.a = a;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 }

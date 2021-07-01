@@ -29,7 +29,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 @Ignore
 public class ServerTest {
 
-    private static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("server_config.xml");
+    private static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
 
     @Test
     public void startServer() {

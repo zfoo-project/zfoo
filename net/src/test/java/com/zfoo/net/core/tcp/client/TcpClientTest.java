@@ -15,16 +15,10 @@ package com.zfoo.net.core.tcp.client;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.tcp.TcpClient;
-import com.zfoo.net.packet.CM_AsyncMess0;
-import com.zfoo.net.packet.CM_SyncMess;
-import com.zfoo.net.packet.SM_AsyncMess0;
-import com.zfoo.net.packet.SM_SyncMess;
-import com.zfoo.net.packet.tcp.TcpHelloRequest;
+import com.zfoo.net.packet.tcp.*;
 import com.zfoo.net.session.SessionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
-import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
@@ -33,8 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author jaysunxiao
@@ -42,12 +36,12 @@ import java.util.concurrent.Executors;
  */
 @Ignore
 public class TcpClientTest {
+
     private static final Logger logger = LoggerFactory.getLogger(TcpClientTest.class);
-    private static final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
     @Test
-    public void startClientTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("client_config.xml");
+    public void startClient0() {
+        var context = new ClassPathXmlApplicationContext("config.xml");
         SessionUtils.printSessionInfo();
         var client = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
         var session = client.start();
@@ -67,24 +61,24 @@ public class TcpClientTest {
 
     @Test
     public void syncClientTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("client_config.xml");
-
+        var context = new ClassPathXmlApplicationContext("config.xml");
         SessionUtils.printSessionInfo();
         var client = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server1")));
         var session = client.start();
 
-        for (int i = 0; i < 10000; i++) {
-            int it = i;
+        var executorSize = Runtime.getRuntime().availableProcessors() * 2;
+        var executor = Executors.newFixedThreadPool(executorSize);
+        var atomicInteger = new AtomicInteger(0);
+
+        for (int i = 0; i < executorSize; i++) {
             var thread = new Thread(() -> {
                 try {
-                    CM_SyncMess cm = new CM_SyncMess();
-                    cm.setA("Hello, this is client!");
-                    cm.setId(it);
-                    SM_SyncMess sm = NetContext.getDispatcher().syncAsk(session, cm, SM_SyncMess.class, null).packet();
-                    var info = StringUtils.MULTIPLE_HYPHENS + FileUtils.LS
-                            + JsonUtils.object2String(cm) + FileUtils.LS
-                            + JsonUtils.object2String(sm) + FileUtils.LS;
-                    System.out.println(info);
+                    for (int j = 0; j < 10000; j++) {
+                        var ask = new SyncMessAsk();
+                        ask.setMessage("Hello, this is sync client!");
+                        var answer = NetContext.getDispatcher().syncAsk(session, ask, SyncMessAnswer.class, null).packet();
+                        logger.info("同步请求[{}]收到结果[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
+                    }
                 } catch (Exception e) {
                     logger.error(ExceptionUtils.getMessage(e));
                 }
@@ -97,30 +91,29 @@ public class TcpClientTest {
 
     @Test
     public void asyncClientTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("client_config.xml");
-        var client = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
-        var session = client.start();
+        var context = new ClassPathXmlApplicationContext("config.xml");
+        var client1 = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server1")));
+        var session1 = client1.start();
 
-        for (int i = 0; i < 10000; i++) {
-            Thread thread = new Thread(() -> {
-                try {
-                    CM_AsyncMess0 cm = new CM_AsyncMess0();
-                    cm.setA("Hello, client0 -> server0!");
+        var executorSize = Runtime.getRuntime().availableProcessors() * 2;
+        var executor = Executors.newFixedThreadPool(executorSize);
 
-                    var asyncResponse = NetContext.getDispatcher().asyncAsk(session, cm, SM_AsyncMess0.class, null);
-                    asyncResponse.whenComplete(sm -> {
-                                var info = StringUtils.MULTIPLE_HYPHENS + FileUtils.LS
-                                        + JsonUtils.object2String(cm) + FileUtils.LS
-                                        + JsonUtils.object2String(sm) + FileUtils.LS;
-                                System.out.println(info);
+        for (int i = 0; i < executorSize; i++) {
+            var thread = new Thread(() -> {
+                for (int j = 0; j < 1000; j++) {
+                    var ask = new AsyncMess0Ask();
+                    ask.setMessage("Hello, client0 -> server0!");
+
+                    var answer = NetContext.getDispatcher().asyncAsk(session1, ask, AsyncMess0Answer.class, null);
+                    answer.whenComplete(sm -> {
+                                logger.info("异步请求收到结果[{}]", JsonUtils.object2String(answer));
                             }
                     );
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             });
-            executor.submit(thread);
+            executor.execute(thread);
         }
+
         SessionUtils.printSessionInfo();
 
         ThreadUtils.sleep(Long.MAX_VALUE);

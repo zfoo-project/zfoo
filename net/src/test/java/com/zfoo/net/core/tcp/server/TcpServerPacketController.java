@@ -14,13 +14,9 @@ package com.zfoo.net.core.tcp.server;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
-import com.zfoo.net.packet.*;
-import com.zfoo.net.packet.tcp.TcpHelloRequest;
-import com.zfoo.net.packet.tcp.TcpHelloResponse;
+import com.zfoo.net.packet.tcp.*;
 import com.zfoo.net.session.model.Session;
-import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.protocol.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -39,20 +35,21 @@ public class TcpServerPacketController {
         logger.info("receive [packet:{}] from client", JsonUtils.object2String(request));
 
         var response = new TcpHelloResponse();
-        response.setMessage("Hello, this is the udp server!");
+        response.setMessage("Hello, this is the tcp server!");
 
         NetContext.getDispatcher().send(session, response);
     }
 
     @PacketReceiver
-    public void atCM_SyncMess(Session session, CM_SyncMess cm) {
+    public void atSyncMessAsk(Session session, SyncMessAsk ask) {
+        logger.info("receive [packet:{}] from client", JsonUtils.object2String(ask));
+
         // 测试超时
         // ThreadUtils.sleep(Integer.MAX_VALUE);
 
         // 测试正常返回
-        SM_SyncMess sm = new SM_SyncMess();
-        sm.setA("Hello, this is server!");
-        sm.setId(cm.getId());
+        var answer = new SyncMessAnswer();
+        answer.setMessage("Hello, this is sync server answer!");
 
         // 测试返回不是预期的消息
         // SM_Int sm = new SM_Int();
@@ -60,48 +57,35 @@ public class TcpServerPacketController {
         // 测试错误返回
         // var sm = ErrorResponse.valueOf(1, 1, "this is error response");
 
-
-        NetContext.getDispatcher().send(session, sm);
-
-        var info = StringUtils.MULTIPLE_HYPHENS + FileUtils.LS
-                + JsonUtils.object2String(cm) + FileUtils.LS
-                + JsonUtils.object2String(sm) + FileUtils.LS;
-
-        System.out.println(info);
+        NetContext.getDispatcher().send(session, answer);
     }
 
 
     // client0->server0->server1->server0->client0
     @PacketReceiver
-    public void atCM_AsyncMess0(Session session, CM_AsyncMess0 cm0) {
-        CM_AsyncMess1 cm1 = new CM_AsyncMess1();
-        cm1.setA("Hello, server0 -> server1");
+    public void atAsyncMess0Ask(Session session, AsyncMess0Ask ask0) {
+        var ask1 = new AsyncMess1Ask();
+        ask1.setMessage("Hello, server0 -> server1");
 
         var server1 = NetContext.getSessionManager().getClientSession(0L);
-        NetContext.getDispatcher().asyncAsk(server1, cm1, SM_AsyncMess1.class, null)
+        NetContext.getDispatcher().asyncAsk(server1, ask1, AsyncMess1Answer.class, null)
                 .whenComplete(sm_asyncMess0 -> {
 
-                    SM_AsyncMess0 sm = new SM_AsyncMess0();
-                    sm.setA("Hello, server0 -> client0!");
+                    var answer = new AsyncMess0Answer();
+                    answer.setMessage("Hello, server0 -> client0!");
 
-                    NetContext.getDispatcher().send(session, sm);
-                    var info = StringUtils.MULTIPLE_HYPHENS + FileUtils.LS
-                            + JsonUtils.object2String(cm0) + FileUtils.LS
-                            + JsonUtils.object2String(sm) + FileUtils.LS;
-
-                    System.out.println(info);
-
+                    NetContext.getDispatcher().send(session, answer);
                 });
     }
 
     @PacketReceiver
-    public void atCM_AsyncMess1(Session session, CM_AsyncMess1 cm) {
+    public void atAsyncMess1Ask(Session session, AsyncMess1Ask ask) {
         // 测试超时
         // ThreadUtils.sleep(Integer.MAX_VALUE);
 
         // 测试正常返回
-        SM_AsyncMess1 sm = new SM_AsyncMess1();
-        sm.setA("Hello, server1 -> server0!");
+        var answer = new AsyncMess1Answer();
+        answer.setMessage("Hello, server1 -> server0!");
 
         // 测试返回不是预期的消息
         // SM_Int sm = new SM_Int();
@@ -109,13 +93,7 @@ public class TcpServerPacketController {
         // 测试错误返回
         // var sm = ErrorResponse.valueOf(1, 1, "this is error response");
 
-        NetContext.getDispatcher().send(session, sm);
-
-        var info = StringUtils.MULTIPLE_HYPHENS + FileUtils.LS
-                + JsonUtils.object2String(cm) + FileUtils.LS
-                + JsonUtils.object2String(sm) + FileUtils.LS;
-
-        System.out.println(info);
+        NetContext.getDispatcher().send(session, answer);
     }
 
 }

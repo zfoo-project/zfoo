@@ -228,9 +228,9 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
             updateList.clear();
 
         } catch (Exception e) {
-            logger.error("数据库持久化器[{}]的持久化过程中exception异常退出[e:{}]", entityDef.getClazz().getSimpleName(), e);
+            logger.error("数据库持久化器[{}]的持久化过程中exception异常退出", entityDef.getClazz().getSimpleName(), e);
         } catch (Throwable t) {
-            logger.error("数据库持久化器[{}]的持久化过程中throwable异常退出[t:{}]", entityDef.getClazz().getSimpleName(), t);
+            logger.error("数据库持久化器[{}]的持久化过程中throwable异常退出", entityDef.getClazz().getSimpleName(), t);
         } finally {
         }
     }

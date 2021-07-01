@@ -36,7 +36,7 @@ import java.util.Set;
  */
 public class ProtocolTest {
 
-    private static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("server_config.xml");
+    private static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
     private static final IPacketService packetService = NetContext.getPacketService();
 
     private static SignalPacketAttachment attachment = new SignalPacketAttachment();

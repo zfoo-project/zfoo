@@ -29,7 +29,7 @@ public class UdpServerTest {
 
     @Test
     public void startServerTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("server_config.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
         var server = new UdpServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
         server.start();
         ThreadUtils.sleep(Long.MAX_VALUE);

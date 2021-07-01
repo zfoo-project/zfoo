@@ -304,9 +304,9 @@ public class PacketDispatcher implements IPacketDispatcher {
             // 调用PacketReceiver
             PacketBus.submit(session, packet, packetAttachment);
         } catch (Exception e) {
-            logger.error(StringUtils.format("e[{}][{}]未知exception异常[e:{}]", session.getAttribute(AttributeType.UID), session.getSid(), e.getMessage()), e);
+            logger.error(StringUtils.format("e[uid:{}][sid:{}]未知exception异常", session.getAttribute(AttributeType.UID), session.getSid(), e.getMessage()), e);
         } catch (Throwable t) {
-            logger.error(StringUtils.format("e[{}][{}]未知error错误[t:{}]", session.getAttribute(AttributeType.UID), session.getSid(), t.getMessage()), t);
+            logger.error(StringUtils.format("e[uid:{}][sid:{}]未知error错误", session.getAttribute(AttributeType.UID), session.getSid(), t.getMessage()), t);
         } finally {
             // 如果有服务器在处理同步或者异步消息的时候由于错误没有返回给客户端消息，则可能会残留serverAttachment，所以先移除
             if (packetAttachment != null) {

@@ -31,7 +31,7 @@ public class UdpClientTest {
 
     @Test
     public void startClientTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("client_config.xml");
+        var context = new ClassPathXmlApplicationContext("config.xml");
         var hostAndPort = HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0"));
         var client = new UdpClient(hostAndPort);
 
