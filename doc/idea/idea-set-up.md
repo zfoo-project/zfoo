@@ -41,6 +41,7 @@
 ## 7. 办公软件
 
 ```
+Google浏览器
 极速pdf
 tube get
 office
@@ -172,13 +173,6 @@ See the License for the specific language governing permissions and limitations 
 - VUE格式设置
   ![Image text](../image/idea/idea-setting-html-0.png)
   ![Image text](../image/idea/idea-setting-html-1.png)
-
-## 4.5 浏览器
-
-1. Google浏览器为默认安装方法
-2. 在google浏览器上安装vue devtools插件。
-3. react devtools插件
-4. WEB前端助手插件
 
 ## 5.Lingoes安装
 
