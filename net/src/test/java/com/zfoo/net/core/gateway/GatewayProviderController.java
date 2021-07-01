@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,15 +10,18 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.gateway.controller;
+package com.zfoo.net.core.gateway;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
-import com.zfoo.net.packet.gateway.CM_GatewayProvider;
-import com.zfoo.net.packet.gateway.SM_GatewayProvider;
+import com.zfoo.net.packet.gateway.GatewayToProviderRequest;
+import com.zfoo.net.packet.gateway.GatewayToProviderResponse;
 import com.zfoo.net.packet.model.GatewayPacketAttachment;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
+import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,15 +31,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class GatewayProviderController {
 
+    private static final Logger logger = LoggerFactory.getLogger(GatewayProviderController.class);
+
     @PacketReceiver
-    public void atCM_GatewayProvider(Session session, CM_GatewayProvider cm, GatewayPacketAttachment gatewayAttachment) {
-        System.out.println("服务器收到消息：" + JsonUtils.object2String(cm));
+    public void atGatewayToProviderRequest(Session session, GatewayToProviderRequest request, GatewayPacketAttachment gatewayAttachment) {
+        logger.info("provider receive [packet:{}] from client", JsonUtils.object2String(request));
 
-        var sm = new SM_GatewayProvider();
-        sm.setA(NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString());
-        sm.setB(cm.getB());
+        var response = new GatewayToProviderResponse();
+        response.setMessage(StringUtils.format("Hello, this is the [provider:{}] response!", NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString()));
 
-        System.out.println("服务器返回消息：" + JsonUtils.object2String(sm));
-        NetContext.getDispatcher().send(session, sm, gatewayAttachment);
+        NetContext.getDispatcher().send(session, response, gatewayAttachment);
     }
 }

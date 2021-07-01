@@ -97,6 +97,7 @@ public class TcpClientTest {
 
         var executorSize = Runtime.getRuntime().availableProcessors() * 2;
         var executor = Executors.newFixedThreadPool(executorSize);
+        var atomicInteger = new AtomicInteger(0);
 
         for (int i = 0; i < executorSize; i++) {
             var thread = new Thread(() -> {
@@ -106,7 +107,7 @@ public class TcpClientTest {
 
                     var answer = NetContext.getDispatcher().asyncAsk(session1, ask, AsyncMess0Answer.class, null);
                     answer.whenComplete(sm -> {
-                                logger.info("异步请求收到结果[{}]", JsonUtils.object2String(answer));
+                        logger.info("异步请求[{}]收到结果[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
                             }
                     );
                 }

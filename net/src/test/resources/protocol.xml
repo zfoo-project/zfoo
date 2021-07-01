@@ -75,8 +75,8 @@
     <module id="5" name="providerTest" minId="3000" maxId="8000" version="1.0.0">
         <protocol id="4100" location="com.zfoo.net.packet.provider.CM_Provider" enhance="false"/>
         <protocol id="4101" location="com.zfoo.net.packet.provider.SM_Provider" enhance="false"/>
-        <protocol id="4102" location="com.zfoo.net.packet.gateway.CM_GatewayProvider" enhance="false"/>
-        <protocol id="4103" location="com.zfoo.net.packet.gateway.SM_GatewayProvider" enhance="false"/>
+        <protocol id="4102" location="com.zfoo.net.packet.gateway.GatewayToProviderRequest" enhance="false"/>
+        <protocol id="4103" location="com.zfoo.net.packet.gateway.GatewayToProviderResponse" enhance="false"/>
     </module>
 
 </protocols>

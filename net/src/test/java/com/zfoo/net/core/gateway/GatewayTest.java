@@ -15,17 +15,20 @@ package com.zfoo.net.core.gateway;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.tcp.TcpClient;
-import com.zfoo.net.packet.gateway.CM_GatewayProvider;
-import com.zfoo.net.packet.gateway.SM_GatewayProvider;
+import com.zfoo.net.packet.gateway.GatewayToProviderRequest;
+import com.zfoo.net.packet.gateway.GatewayToProviderResponse;
 import com.zfoo.net.session.SessionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author jaysunxiao
@@ -33,6 +36,8 @@ import java.util.concurrent.Executors;
  */
 @Ignore
 public class GatewayTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(GatewayTest.class);
 
     /**
      * 启动zookeeper，依次运行下面的测试方法启动服务提供者，网关，然后运行clientTest，消息会通过网关转发到服务提供者
@@ -70,27 +75,32 @@ public class GatewayTest {
     @Test
     public void clientTest() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_client_config.xml");
-        var executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         SessionUtils.printSessionInfo();
+
         var client = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
         var session = client.start();
 
-        for (int i = 0; i <= 100; i++) {
-            int finalI = i;
+        var executorSize = Runtime.getRuntime().availableProcessors() * 2;
+        var executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+        var request = new GatewayToProviderRequest();
+        request.setMessage(NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString());
+        var atomicInteger = new AtomicInteger(0);
+
+        for (int i = 0; i < executorSize; i++) {
             var thread = new Thread(() -> {
-                var cm = new CM_GatewayProvider();
-                cm.setA(NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString());
-                cm.setB(finalI);
-                try {
-                    System.out.println("客户端发送消息：" + JsonUtils.object2String(cm));
-                    var sm = NetContext.getDispatcher().syncAsk(session, cm, SM_GatewayProvider.class, null).packet();
-                    System.out.println("客户端收到消息：" + JsonUtils.object2String(sm));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                for (int j = 0; j < 10000; j++) {
+                    try {
+                        var response = NetContext.getDispatcher().syncAsk(session, request, GatewayToProviderResponse.class, null).packet();
+                        logger.info("客户端请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             executor.execute(thread);
         }
+
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 

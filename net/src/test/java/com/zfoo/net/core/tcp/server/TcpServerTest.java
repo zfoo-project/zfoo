@@ -23,7 +23,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -33,9 +32,6 @@ import java.util.concurrent.Executors;
 @Ignore
 public class TcpServerTest {
 
-    private static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
-    private static final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
     /**
      * 单机服务器教程，启动成功过后在com.zfoo.net.core.tcp.client.TcpClientTest中运行startClientTest
      * <p>
@@ -43,6 +39,7 @@ public class TcpServerTest {
      */
     @Test
     public void startServer0() {
+        var context = new ClassPathXmlApplicationContext("config.xml");
         SessionUtils.printSessionInfo();
 
         var server0 = new TcpServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
@@ -52,16 +49,15 @@ public class TcpServerTest {
 
     @Test
     public void startServer1() {
-        SessionUtils.printSessionInfo();
+        var context = new ClassPathXmlApplicationContext("config.xml");
 
-        connectServer0();
+        SessionUtils.printSessionInfo();
 
         var server1 = new TcpServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server1")));
         server1.start();
-        ThreadUtils.sleep(Long.MAX_VALUE);
-    }
 
-    private void connectServer0() {
+        // 连接server0
+        var executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         executor.execute(() -> {
             while (true) {
                 try {
@@ -75,6 +71,9 @@ public class TcpServerTest {
                 }
             }
         });
+
+        ThreadUtils.sleep(Long.MAX_VALUE);
     }
+
 
 }

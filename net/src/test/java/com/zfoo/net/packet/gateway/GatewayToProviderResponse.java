@@ -19,31 +19,23 @@ import com.zfoo.protocol.IPacket;
  * @author jaysunxiao
  * @version 3.0
  */
-public class SM_GatewayProvider implements IPacket {
+public class GatewayToProviderResponse implements IPacket {
 
     public static final transient short PROTOCOL_ID = 4103;
 
-    private String a;
-    private int b;
-
-    public String getA() {
-        return a;
-    }
-
-    public void setA(String a) {
-        this.a = a;
-    }
-
-    public int getB() {
-        return b;
-    }
-
-    public void setB(int b) {
-        this.b = b;
-    }
+    private String message;
 
     @Override
     public short protocolId() {
         return PROTOCOL_ID;
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
 }
