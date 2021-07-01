@@ -15,10 +15,14 @@ package com.zfoo.net.core.tcp.server;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
 import com.zfoo.net.packet.*;
+import com.zfoo.net.packet.tcp.TcpHelloRequest;
+import com.zfoo.net.packet.tcp.TcpHelloResponse;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,21 +32,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class TcpServerPacketController {
 
+    private static final Logger logger = LoggerFactory.getLogger(TcpServerPacketController.class);
+
     @PacketReceiver
-    public void atCM_Int(Session session, CM_Int cm) {
-        System.out.println("receive packet from client:");
-        System.out.println(JsonUtils.object2String(cm));
+    public void atTcpHelloRequest(Session session, TcpHelloRequest request) {
+        logger.info("receive [packet:{}] from client", JsonUtils.object2String(request));
 
-        SM_Int sm = new SM_Int();
-        sm.setFlag(false);
-        sm.setA(Byte.MIN_VALUE);
-        sm.setB(Short.MIN_VALUE);
-        sm.setC(Integer.MIN_VALUE);
-        sm.setD(Long.MIN_VALUE);
-        sm.setE('e');
-        sm.setF("Hello，this is the Server!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        var response = new TcpHelloResponse();
+        response.setMessage("Hello, this is the udp server!");
 
-        NetContext.getDispatcher().send(session, sm);
+        NetContext.getDispatcher().send(session, response);
     }
 
     @PacketReceiver

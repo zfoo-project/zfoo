@@ -15,7 +15,11 @@ package com.zfoo.net.core.tcp.client;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.tcp.TcpClient;
-import com.zfoo.net.packet.*;
+import com.zfoo.net.packet.CM_AsyncMess0;
+import com.zfoo.net.packet.CM_SyncMess;
+import com.zfoo.net.packet.SM_AsyncMess0;
+import com.zfoo.net.packet.SM_SyncMess;
+import com.zfoo.net.packet.tcp.TcpHelloRequest;
 import com.zfoo.net.session.SessionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -48,22 +52,14 @@ public class TcpClientTest {
         var client = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
         var session = client.start();
 
-        new Thread(() -> {
-            CM_Int cm = new CM_Int();
-            cm.setFlag(false);
-            cm.setA(Byte.MIN_VALUE);
-            cm.setB(Short.MIN_VALUE);
-            cm.setC(Integer.MIN_VALUE);
-            cm.setD(Long.MIN_VALUE);
-            cm.setE('e');
-            cm.setF("Hello，this is the client!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        var request = new TcpHelloRequest();
+        request.setMessage("Hello, this is the tcp client!");
 
 
-            for (int i = 0; i < 1000; i++) {
-                ThreadUtils.sleep(2000);
-                NetContext.getDispatcher().send(session, cm);
-            }
-        }).start();
+        for (int i = 0; i < 1000; i++) {
+            ThreadUtils.sleep(2000);
+            NetContext.getDispatcher().send(session, request);
+        }
 
         ThreadUtils.sleep(Long.MAX_VALUE);
     }

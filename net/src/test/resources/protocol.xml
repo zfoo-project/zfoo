@@ -61,6 +61,9 @@
 
         <protocol id="1200" location="com.zfoo.net.packet.udp.UdpHelloRequest"/>
         <protocol id="1201" location="com.zfoo.net.packet.udp.UdpHelloResponse"/>
+
+        <protocol id="1300" location="com.zfoo.net.packet.tcp.TcpHelloRequest"/>
+        <protocol id="1301" location="com.zfoo.net.packet.tcp.TcpHelloResponse"/>
     </module>
 
     <module id="4" name="js" minId="2000" maxId="3000" version="1.0.0">

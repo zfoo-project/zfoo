@@ -54,19 +54,19 @@ public class TcpServerTest {
     public void startServer1() {
         SessionUtils.printSessionInfo();
 
-        connectServer1();
+        connectServer0();
 
         var server1 = new TcpServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server1")));
         server1.start();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
-    private void connectServer1() {
+    private void connectServer0() {
         executor.execute(() -> {
             while (true) {
                 try {
-                    var client1 = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("client0")));
-                    client1.start();
+                    var client0 = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("client0")));
+                    client0.start();
                     break;
                 } catch (Exception e) {
                     System.out.println("连接失败，开始重新连接");

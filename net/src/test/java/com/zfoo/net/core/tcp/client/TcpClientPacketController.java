@@ -14,9 +14,11 @@
 package com.zfoo.net.core.tcp.client;
 
 import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
-import com.zfoo.net.packet.SM_Int;
+import com.zfoo.net.packet.tcp.TcpHelloResponse;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,10 +29,11 @@ import org.springframework.stereotype.Component;
 public class TcpClientPacketController {
 
 
+    private static final Logger logger = LoggerFactory.getLogger(TcpClientPacketController.class);
+
     @PacketReceiver
-    public void atSM_Int(Session session, SM_Int sm) {
-        System.out.println("receive packet from server:");
-        System.out.println(JsonUtils.object2String(sm));
+    public void atTcpHelloResponse(Session session, TcpHelloResponse response) {
+        logger.info("tcp client receive [packet:{}] from server", JsonUtils.object2String(response));
     }
 
 }
