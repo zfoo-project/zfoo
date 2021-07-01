@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,13 +10,15 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.websocket.server.controller;
+package com.zfoo.net.core.websocket.server;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
 import com.zfoo.net.packet.websocket.CM_WebSocketPacket;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,10 +28,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class WebsocketPacketController {
 
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketPacketController.class);
+
     @PacketReceiver
     public void atCM_WebSocketPacket(Session session, CM_WebSocketPacket cm) {
-        System.out.println("receive packet from client:");
-        System.out.println(JsonUtils.object2String(cm));
+        logger.info("websocket server receive [packet:{}] from browser", JsonUtils.object2String(cm));
 
 
         NetContext.getDispatcher().send(session, cm);

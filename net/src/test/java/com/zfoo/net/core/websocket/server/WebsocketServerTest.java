@@ -21,9 +21,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -31,12 +28,10 @@ import java.util.concurrent.Executors;
 @Ignore
 public class WebsocketServerTest {
 
-    private static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
-    private static final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
-
     @Test
     public void startServer() {
+        var context = new ClassPathXmlApplicationContext("config.xml");
+
         var server = new WebsocketServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
         server.start();
 
