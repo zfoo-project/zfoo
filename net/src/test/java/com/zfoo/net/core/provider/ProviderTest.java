@@ -14,14 +14,18 @@
 package com.zfoo.net.core.provider;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.packet.provider.CM_Provider;
-import com.zfoo.net.packet.provider.SM_Provider;
+import com.zfoo.net.packet.provider.ProviderMessAnswer;
+import com.zfoo.net.packet.provider.ProviderMessAsk;
 import com.zfoo.net.session.SessionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author jaysunxiao
@@ -29,6 +33,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 @Ignore
 public class ProviderTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProviderTest.class);
 
     /**
      * RPC教程：
@@ -62,21 +68,16 @@ public class ProviderTest {
      * 随机消费，同步请求的方式
      */
     @Test
-    public void startSyncRandomConsumer() {
+    public void startSyncRandomConsumer() throws Exception {
         var context = new ClassPathXmlApplicationContext("provider/consumer_random_config.xml");
         SessionUtils.printSessionInfo();
 
+        var ask = new ProviderMessAsk();
+        ask.setMessage("Hello, this is the consumer!");
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(3000);
-            var cm = new CM_Provider();
-            cm.setA(NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString());
-            try {
-                System.out.println("客户端发送消息：" + JsonUtils.object2String(cm));
-                var sm = NetContext.getConsumer().syncAsk(cm, SM_Provider.class, null).packet();
-                System.out.println("客户端收到消息：" + JsonUtils.object2String(sm));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            var response = NetContext.getConsumer().syncAsk(ask, ProviderMessAnswer.class, null).packet();
+            logger.info("消费者请求[{}]收到消息[{}]", i, JsonUtils.object2String(response));
         }
 
         ThreadUtils.sleep(Long.MAX_VALUE);
@@ -90,13 +91,14 @@ public class ProviderTest {
         var context = new ClassPathXmlApplicationContext("provider/consumer_random_config.xml");
         SessionUtils.printSessionInfo();
 
+        var ask = new ProviderMessAsk();
+        ask.setMessage("Hello, this is the consumer!");
+        var atomicInteger = new AtomicInteger(0);
+
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(3000);
-            var cm = new CM_Provider();
-            cm.setA(NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString());
-            System.out.println("客户端发送消息：" + JsonUtils.object2String(cm));
-            NetContext.getConsumer().asyncAsk(cm, SM_Provider.class, null).whenComplete(sm -> {
-                System.out.println("客户端收到消息：" + JsonUtils.object2String(sm));
+            NetContext.getConsumer().asyncAsk(ask, ProviderMessAnswer.class, null).whenComplete(answer -> {
+                logger.info("消费者请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
             });
         }
 
@@ -110,14 +112,15 @@ public class ProviderTest {
     public void startConsistentSessionConsumer() {
         var context = new ClassPathXmlApplicationContext("provider/consumer_consistent_session_config.xml");
         SessionUtils.printSessionInfo();
-        ThreadUtils.sleep(3000);
+
+        var ask = new ProviderMessAsk();
+        ask.setMessage("Hello, this is the consumer!");
+        var atomicInteger = new AtomicInteger(0);
+
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(3000);
-            var cm = new CM_Provider();
-            cm.setA(NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString());
-            System.out.println("客户端发送消息：" + JsonUtils.object2String(cm));
-            NetContext.getConsumer().asyncAsk(cm, SM_Provider.class, 100).whenComplete(sm -> {
-                System.out.println("客户端收到消息：" + JsonUtils.object2String(sm));
+            NetContext.getConsumer().asyncAsk(ask, ProviderMessAnswer.class, 100).whenComplete(answer -> {
+                logger.info("消费者请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
             });
         }
 
@@ -131,13 +134,15 @@ public class ProviderTest {
     public void startShortestTimeConsumer() {
         var context = new ClassPathXmlApplicationContext("provider/consumer_shortest_time_config.xml");
         SessionUtils.printSessionInfo();
+
+        var ask = new ProviderMessAsk();
+        ask.setMessage("Hello, this is the consumer!");
+        var atomicInteger = new AtomicInteger(0);
+
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(3000);
-            var cm = new CM_Provider();
-            cm.setA(NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString());
-            System.out.println("客户端发送消息：" + JsonUtils.object2String(cm));
-            NetContext.getConsumer().asyncAsk(cm, SM_Provider.class, null).whenComplete(sm -> {
-                System.out.println("客户端收到消息：" + JsonUtils.object2String(sm));
+            NetContext.getConsumer().asyncAsk(ask, ProviderMessAnswer.class, null).whenComplete(answer -> {
+                logger.info("消费者请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
             });
         }
 

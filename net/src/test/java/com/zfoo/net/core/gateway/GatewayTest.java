@@ -84,7 +84,7 @@ public class GatewayTest {
         var executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         var request = new GatewayToProviderRequest();
-        request.setMessage(NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString());
+        request.setMessage("Hello, this is the client!");
         var atomicInteger = new AtomicInteger(0);
 
         for (int i = 0; i < executorSize; i++) {

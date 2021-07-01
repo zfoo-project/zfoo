@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,14 +10,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.provider.controller;
+package com.zfoo.net.core.provider;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
-import com.zfoo.net.packet.provider.CM_Provider;
-import com.zfoo.net.packet.provider.SM_Provider;
+import com.zfoo.net.packet.provider.ProviderMessAnswer;
+import com.zfoo.net.packet.provider.ProviderMessAsk;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
+import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,15 +30,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProviderController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProviderController.class);
+
     @PacketReceiver
-    public void atCM_Provider(Session session, CM_Provider cm) {
-        System.out.println("服务器收到消息：" + JsonUtils.object2String(cm));
+    public void atProviderMessAsk(Session session, ProviderMessAsk ask) {
+        logger.info("provider receive [packet:{}] from consumer", JsonUtils.object2String(ask));
 
-        var sm = new SM_Provider();
-        sm.setA(NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString());
-        sm.setB(cm.getB());
+        var response = new ProviderMessAnswer();
+        response.setMessage(StringUtils.format("Hello, this is the [provider:{}] answer!", NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString()));
 
-        System.out.println("服务器返回消息：" + JsonUtils.object2String(sm));
-        NetContext.getDispatcher().send(session, sm);
+        NetContext.getDispatcher().send(session, response);
     }
 }
