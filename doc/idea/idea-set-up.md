@@ -15,6 +15,13 @@
 安装好以后，在git bash中输入：git --version，有结果返回则表示安装成功
 ```
 
+- git下载代码慢的解决方法|无法下载代码的解决方法
+```
+使用vpn
+git config --global http.proxy http://127.0.0.1:10809
+git config --global https.proxy https://127.0.0.1:10809
+```
+
 ## 3. nodejs安装
 
 - 直接默认安装
