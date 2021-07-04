@@ -16,6 +16,7 @@
 ```
 
 - git下载代码慢的解决方法|无法下载代码的解决方法
+
 ```
 使用vpn
 git config --global http.proxy http://127.0.0.1:10809
@@ -41,11 +42,15 @@ git config --global https.proxy https://127.0.0.1:10809
 
 ## 4. idea，mongodb，postman
 
-## 5. rider安装
+## 5. 中间件安装
 
-## 6. unity安装
+- zookeeper安装，解压过后，直接运行zkServer.md，zookeeper运行需要依赖JAVA_HOME环境变量
 
-## 7. 办公软件
+## 6. rider安装
+
+## 7. unity安装
+
+## 8. 办公软件
 
 ```
 Google浏览器
@@ -144,29 +149,35 @@ See the License for the specific language governing permissions and limitations 
 
 ## 6 使用Idea默认的快捷键设置
 
-- 使用Cyan Light Theme主题
-- Keymap->Main menu->Code->Completion->Basic，删除ctrl+空格，设置为ctrl+enter
-- Run to Cursor，设置为F9
-- find，设置为ctrl+f
-- replace，设置为alt+f
+- eclipse快捷键设置，个人习惯
+
+```
+Keymap->Main menu->Code->Completion->Basic，删除ctrl+空格，设置为ctrl+enter
+Run to Cursor，设置为F9
+find，设置为ctrl+f
+replace，设置为alt+f
+在输入法上右键，将win10的简体繁体切换ctrl+f快捷键键取消
+```
 
 ### 4.2 服务器插件安装
+
+- Cyan Light Theme主题插件，个人习惯
+- zoolytic，zookeeper客户端管理插件，推荐下载
+- vue.js，vue语法识别，推荐下载
+- jclasslib，字节码查看工具，推荐下载
+- Maven Helper，maven依赖查看工具，推荐下载
 
 - Alibaba Java Coding Guidelines
 - Alibaba Cloud tool
 - Power Mode 2
-- zoolytic
-- Maven Helper
 - EasyApi
-- vue.js
-- jclasslib
 
 ### 4.3 web插件安装
 
 - eslint
   ![Image text](../image/idea/idea-plugin-eslint-setup.png)
 
-## 4.4 格式设置
+## 4.4 格式设置，个人习惯
 
 - CSS格式设置
 - SCSS格式设置

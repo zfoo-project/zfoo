@@ -141,7 +141,7 @@ public class StorageManager implements IStorageManager {
                         }
 
                         if (!keyClazz.getSimpleName().toLowerCase().contains(idFields[0].getType().getSimpleName().toLowerCase())) {
-                            throw new RuntimeException(StringUtils.format("静态类资源[resource:{}]配置注解[id:{}]类型和泛型类型[type:{}]不匹配"
+                            throw new RuntimeException(StringUtils.format("注入静态类配置资源[storage:{}]的[key:{}]类型和泛型类型[type:{}]不匹配"
                                     , resourceClazz.getSimpleName(), idFields[0].getType().getSimpleName(), keyClazz.getSimpleName()));
                         }
 
@@ -222,7 +222,7 @@ public class StorageManager implements IStorageManager {
             try {
                 resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
             } catch (Exception e) {
-
+                // do nothing
             }
 
             // 通配符无法匹配根目录，所以如果找不到，再从根目录查找一遍
