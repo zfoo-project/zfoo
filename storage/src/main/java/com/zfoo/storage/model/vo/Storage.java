@@ -33,7 +33,9 @@ public class Storage<K, V> {
     private Class<V> clazz;
 
     private final Map<K, V> dataMap = new HashMap<>();
+    // 非唯一索引
     private final Map<String, Map<Object, List<V>>> indexMap = new HashMap<>();
+    // 唯一索引
     private final Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>();
 
     private IdDef idDef;

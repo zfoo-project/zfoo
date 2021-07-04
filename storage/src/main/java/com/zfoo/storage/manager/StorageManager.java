@@ -74,7 +74,11 @@ public class StorageManager implements IStorageManager {
     @Override
     public void initBefore() {
         var resourceDefinitionMap = new HashMap<Class<?>, ResourceDef>();
+
+        // 扫描Excel的class类文件
         var clazzNameSet = scanResourceAnno(storageConfig.getScanPackage());
+
+        // 通过class类文件扫描excel文件地址
         for (var clazzName : clazzNameSet) {
             Class<?> resourceClazz;
             try {
