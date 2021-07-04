@@ -15,7 +15,6 @@ package com.zfoo.scheduler;
 
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
-import com.zfoo.scheduler.schema.SchedulerRegisterProcessor;
 import com.zfoo.util.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,14 +86,6 @@ public class SchedulerContext implements ApplicationListener<ApplicationContextE
             // 初始化上下文
             SchedulerContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
-
-            var beanNames = applicationContext.getBeanDefinitionNames();
-            var processor = applicationContext.getBean(SchedulerRegisterProcessor.class);
-
-            for (var beanName : beanNames) {
-                processor.postProcessAfterInitialization(applicationContext.getBean(beanName), beanName);
-            }
-
         } else if (event instanceof ContextClosedEvent) {
             shutdown();
         }
