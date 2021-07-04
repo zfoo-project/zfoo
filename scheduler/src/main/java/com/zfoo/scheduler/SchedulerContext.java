@@ -80,9 +80,6 @@ public class SchedulerContext implements ApplicationListener<ApplicationContextE
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
         if (event instanceof ContextRefreshedEvent) {
-            if (instance != null) {
-                return;
-            }
             // 初始化上下文
             SchedulerContext.instance = this;
             instance.applicationContext = event.getApplicationContext();

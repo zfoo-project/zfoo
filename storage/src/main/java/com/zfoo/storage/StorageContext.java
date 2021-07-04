@@ -69,9 +69,6 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
     public void onApplicationEvent(ApplicationContextEvent event) {
 
         if (event instanceof ContextRefreshedEvent) {
-            if (instance != null) {
-                return;
-            }
             // 初始化上下文
             StorageContext.instance = this;
             instance.applicationContext = event.getApplicationContext();

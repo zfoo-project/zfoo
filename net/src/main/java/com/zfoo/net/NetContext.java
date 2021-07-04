@@ -91,10 +91,6 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
         if (event instanceof ContextRefreshedEvent) {
-            if (instance != null) {
-                return;
-            }
-
             NetContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
             instance.configManager = applicationContext.getBean(IConfigManager.class);

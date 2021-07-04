@@ -76,9 +76,6 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
         if (event instanceof ContextRefreshedEvent) {
-            if (instance != null) {
-                return;
-            }
             OrmContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
 
