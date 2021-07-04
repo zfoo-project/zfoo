@@ -89,9 +89,8 @@ public abstract class SchedulerBus {
             return;
         }
 
-        /*
-          有人向前调整过机器时间，重新计算scheduler里的triggerTimestamp
-         */
+
+        // 有人向前调整过机器时间，重新计算scheduler里的triggerTimestamp
         // var diff = timestamp - lastTriggerTimestamp;
         if (timestamp < lastTriggerTimestamp) {
             for (SchedulerDefinition schedulerDef : schedulerDefList) {
