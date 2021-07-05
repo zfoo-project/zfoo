@@ -36,7 +36,7 @@ public class ApplicationTest {
     @Test
     public void startStorageTest() {
         // 加载配置文件，配置文件中必须引入storage
-        // 配置文件中scan，需要映射Excel的类所在位置
+        // 配置文件中scan，需要映射Excel的类所在位置，会自动搜索文件夹下的Excel文件，Excel文件可以放在指定文件夹的任意目录
         // 配置文件中resource，需要映射Excel的文件所在位置
         var context = new ClassPathXmlApplicationContext("application.xml");
 
