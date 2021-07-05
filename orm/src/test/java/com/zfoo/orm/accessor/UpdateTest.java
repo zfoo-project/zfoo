@@ -15,7 +15,6 @@ package com.zfoo.orm.accessor;
 
 import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.TestUnit;
 import com.zfoo.orm.entity.UserEntity;
 import com.zfoo.orm.model.cache.IEntityCaches;
 import com.zfoo.util.ThreadUtils;
@@ -35,11 +34,11 @@ public class UpdateTest {
 
     @Test
     public void test() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
 
         IEntityCaches<Long, UserEntity> userEntityCaches = (IEntityCaches<Long, UserEntity>) OrmContext.getOrmManager().getEntityCaches(UserEntity.class);
 
-        for (int i = 0; i < TestUnit.NUM; i++) {
+        for (int i = 0; i < 10; i++) {
             var userEnt = userEntityCaches.load((long) i);
             userEnt.setE("update" + i);
             userEnt.setC(i);
@@ -52,7 +51,7 @@ public class UpdateTest {
 
     @Test
     public void collectionTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
 
         var collection = OrmContext.getOrmManager().getCollection(UserEntity.class);
         var result = collection.updateOne(Filters.eq("_id", 1), new Document("$inc", new Document("c", 1L)));

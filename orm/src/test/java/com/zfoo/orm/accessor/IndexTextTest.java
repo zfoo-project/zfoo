@@ -15,7 +15,6 @@ package com.zfoo.orm.accessor;
 
 import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.TestUnit;
 import com.zfoo.orm.entity.UserEntity;
 import com.zfoo.util.ThreadUtils;
 import org.junit.Ignore;
@@ -35,7 +34,7 @@ public class IndexTextTest {
 
     @Test
     public void insertTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
         List<UserEntity> listUser = new ArrayList<>();
         var userEntity = new UserEntity(1, (byte) 1, (short) 1, 1, true, "两个黄鹂鸣翠柳，一行白鹭上青天。窗含西岭千秋雪，门泊东吴万里船。", null);
         listUser.add(userEntity);
@@ -50,7 +49,7 @@ public class IndexTextTest {
 
     @Test
     public void queryTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
         var collection = OrmContext.getOrmManager().getCollection(UserEntity.class);
         collection.find(Filters.text("窗含西岭千秋雪")).forEach(new Consumer<UserEntity>() {
             @Override

@@ -14,7 +14,6 @@
 package com.zfoo.orm.accessor;
 
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.TestUnit;
 import com.zfoo.orm.entity.UserEntity;
 import com.zfoo.orm.model.cache.IEntityCaches;
 import com.zfoo.util.ThreadUtils;
@@ -36,11 +35,11 @@ public class DeleteTest {
 
     @Test
     public void test() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
 
         IEntityCaches<Long, UserEntity> userEntityCaches = (IEntityCaches<Long, UserEntity>) OrmContext.getOrmManager().getEntityCaches(UserEntity.class);
 
-        for (int i = 0; i < TestUnit.NUM; i++) {
+        for (int i = 0; i < 10; i++) {
             UserEntity userEntity = new UserEntity(i, (byte) 1, (short) i, i, true, "helloOrm" + i, "helloOrm" + i);
 
             OrmContext.getAccessor().delete(userEntity);

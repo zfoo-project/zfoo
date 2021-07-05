@@ -14,7 +14,6 @@
 package com.zfoo.orm.accessor;
 
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.TestUnit;
 import com.zfoo.orm.entity.UserEntity;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,7 +21,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * @author jaysunxiao
@@ -33,10 +31,10 @@ public class AccessorTest {
 
     @Test
     public void testBatchInsert() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
-        List<UserEntity> listUser = new ArrayList<>();
-        for (int i = 0; i <= TestUnit.NUM; i++) {
-            UserEntity userEntity = new UserEntity(i, (byte) 1, (short) i, i, true, "helloOrm" + i, "helloOrm" + i);
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        var listUser = new ArrayList<UserEntity>();
+        for (var i = 1; i <= 10; i++) {
+            var userEntity = new UserEntity(i, (byte) 1, (short) i, i, true, "helloOrm" + i, "helloOrm" + i);
             listUser.add(userEntity);
         }
         OrmContext.getAccessor().batchInsert(listUser);
@@ -44,36 +42,36 @@ public class AccessorTest {
 
     @Test
     public void testInsert() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
-        UserEntity userEntity = new UserEntity(1, (byte) 2, (short) 3, 5, true, "helloORM", "helloOrm");
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        var userEntity = new UserEntity(1, (byte) 2, (short) 3, 5, true, "helloORM", "helloOrm");
         OrmContext.getAccessor().insert(userEntity);
     }
 
     @Test
     public void testUpdate() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
-        UserEntity userEntity = new UserEntity(1, (byte) 2, (short) 3, 5, true, "helloUpdate", "helloOrm");
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        var userEntity = new UserEntity(1, (byte) 2, (short) 3, 5, true, "helloUpdate", "helloOrm");
         OrmContext.getAccessor().update(userEntity);
     }
 
     @Test
     public void testBatchUpdate() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
-        UserEntity userEntity = new UserEntity(1, (byte) 2, (short) 3, 5, true, "helloBatchUpdate", "helloOrm");
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        var userEntity = new UserEntity(1, (byte) 2, (short) 3, 5, true, "helloBatchUpdate", "helloOrm");
         userEntity.setC(222);
         OrmContext.getAccessor().batchUpdate(Collections.singletonList(userEntity));
     }
 
     @Test
     public void testLoad() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
-        UserEntity ent = (UserEntity) OrmContext.getAccessor().load(1L, UserEntity.class);
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        var ent = (UserEntity) OrmContext.getAccessor().load(1L, UserEntity.class);
         System.out.println(ent);
     }
 
     @Test
     public void testDelete() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
+        var context = new ClassPathXmlApplicationContext("application.xml");
         OrmContext.getAccessor().delete(1L, UserEntity.class);
     }
 

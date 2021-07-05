@@ -14,7 +14,6 @@
 package com.zfoo.orm.query;
 
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.TestUnit;
 import com.zfoo.orm.entity.UserEntity;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -31,14 +30,14 @@ public class QueryTest {
 
     @Test
     public void queryAllTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
         List<UserEntity> list = OrmContext.getQuery().queryAll(UserEntity.class);
         System.out.println(list);
     }
 
     @Test
     public void queryByFieldTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
         List<UserEntity> list = OrmContext.getQuery().queryFieldEqual("a", 1, UserEntity.class);
         System.out.println(list);
     }

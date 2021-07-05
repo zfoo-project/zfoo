@@ -19,7 +19,6 @@ import com.mongodb.TransactionOptions;
 import com.mongodb.WriteConcern;
 import com.mongodb.client.TransactionBody;
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.TestUnit;
 import com.zfoo.orm.entity.UserEntity;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,7 +35,7 @@ public class TransactionTest {
 
     @Test
     public void transactionTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(TestUnit.CONFIG_LOCATION);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
 
         /* Step 1: Start a client session. */
         var clientSession = OrmContext.getOrmManager().getClientSession();

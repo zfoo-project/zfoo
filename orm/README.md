@@ -35,6 +35,12 @@ OrmContext.getAccessor().delete(obj);
 OrmContext.getAccessor().update(obj);
 ```
 
+- 加载数据库中的数据
+
+```
+OrmContext.getAccessor().load(id, class);
+```
+
 #### 2. IQuery接口，为数据复杂查询接口
 
 #### 3. 缓存使用方法
