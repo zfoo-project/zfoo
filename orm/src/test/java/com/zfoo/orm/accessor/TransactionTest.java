@@ -35,7 +35,7 @@ public class TransactionTest {
 
     @Test
     public void transactionTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
+        var context = new ClassPathXmlApplicationContext("application.xml");
 
         /* Step 1: Start a client session. */
         var clientSession = OrmContext.getOrmManager().getClientSession();
@@ -71,6 +71,7 @@ public class TransactionTest {
             clientSession.withTransaction(txnBody, txnOptions);
         } catch (RuntimeException e) {
             // some error handling
+            e.printStackTrace();
         } finally {
             clientSession.close();
         }

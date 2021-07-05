@@ -26,10 +26,6 @@ import org.springframework.stereotype.Component;
 public class UserManager {
 
     @EntityCachesInjection
-    private IEntityCaches<Long, UserEntity> entityCaches;
-
-    public IEntityCaches<Long, UserEntity> getEntityCaches() {
-        return entityCaches;
-    }
+    public IEntityCaches<Long, UserEntity> userEntityCaches;
 
 }

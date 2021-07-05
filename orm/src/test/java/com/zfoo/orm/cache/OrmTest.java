@@ -28,18 +28,16 @@ public class OrmTest {
 
     @Test
     public void test() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
+        var context = new ClassPathXmlApplicationContext("application.xml");
 
-        UserManager mainOrm = context.getBean(UserManager.class);
+        // 通过注解自动注入的方式去拿到UserEntity的EntityCaches
+        var userEntityCaches = context.getBean(UserManager.class).userEntityCaches;
 
         for (int i = 0; i <= 10; i++) {
-            var entity = mainOrm.getEntityCaches().load((long) i);
-            entity.setA((byte) i);
-            entity.setB((short) i);
+            var entity = userEntityCaches.load((long) i);
+            entity.setE("update" + i);
             entity.setC(i);
-            entity.setD(true);
-            entity.setE("helloOrm" + i);
-            mainOrm.getEntityCaches().update(entity);
+            userEntityCaches.update(entity);
         }
 
         OrmContext.getOrmManager().getAllEntityCaches().forEach(it -> System.out.println(it.recordStatus()));

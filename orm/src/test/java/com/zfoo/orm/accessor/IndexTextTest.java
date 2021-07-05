@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -34,8 +33,8 @@ public class IndexTextTest {
 
     @Test
     public void insertTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
-        List<UserEntity> listUser = new ArrayList<>();
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        var listUser = new ArrayList<UserEntity>();
         var userEntity = new UserEntity(1, (byte) 1, (short) 1, 1, true, "两个黄鹂鸣翠柳，一行白鹭上青天。窗含西岭千秋雪，门泊东吴万里船。", null);
         listUser.add(userEntity);
         userEntity = new UserEntity(2, (byte) 2, (short) 2, 2, true, "床前明月光，疑是地上霜。 举头望明月，低头思故乡。", null);
@@ -49,7 +48,7 @@ public class IndexTextTest {
 
     @Test
     public void queryTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
+        var context = new ClassPathXmlApplicationContext("application.xml");
         var collection = OrmContext.getOrmManager().getCollection(UserEntity.class);
         collection.find(Filters.text("窗含西岭千秋雪")).forEach(new Consumer<UserEntity>() {
             @Override

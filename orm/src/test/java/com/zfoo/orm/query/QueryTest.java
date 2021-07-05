@@ -19,7 +19,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.List;
 
 /**
  * @author jaysunxiao
@@ -30,15 +29,15 @@ public class QueryTest {
 
     @Test
     public void queryAllTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
-        List<UserEntity> list = OrmContext.getQuery().queryAll(UserEntity.class);
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        var list = OrmContext.getQuery().queryAll(UserEntity.class);
         System.out.println(list);
     }
 
     @Test
     public void queryByFieldTest() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
-        List<UserEntity> list = OrmContext.getQuery().queryFieldEqual("a", 1, UserEntity.class);
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        var list = OrmContext.getQuery().queryFieldEqual("a", 1, UserEntity.class);
         System.out.println(list);
     }
 
