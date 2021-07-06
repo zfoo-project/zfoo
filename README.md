@@ -14,6 +14,8 @@
 - 事件总线 [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
 - 时间任务调度 [scheduler](scheduler/README.md)
 
+---
+
 ### Ⅱ. 背景和适用项目
 
 - 性能需求极高的项目，如游戏服务器框架，网站服务器框架，单服滚服，全球服，直播聊天，IM系统，实时推送
@@ -31,17 +33,23 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 后来发现其实不仅仅能用来做游戏，只要有对性能有极致需求的rpc场景都能使用的上这个框架。
 ```
 
+---
+
 ### Ⅲ. 完整的工程案例和视频教程
 
 - [zfoo 视频教程](./doc/视频教程.md)，持续更新中
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of Tanks）》，新手友好，难度2星
 - [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，标准的https企业级网站，难度5星
 
+---
+
 ### Ⅳ. 问题
 
 - 有问题，先看 [FAQ](./doc/FAQ.md)
 - 每个工程目录的test文件夹下都有标准的demo展示和注释说明，可以直接运行
 - 问题讨论群QQ: 876280300
+
+---
 
 ### Ⅴ. 安装和使用
 
@@ -144,6 +152,8 @@ public class StudentResource {
 }
 ```
 
+---
+
 ### Ⅵ. 为什么快
 
 - 使用目前性能最好的 [zfoo protocol](protocol/README.md) 作为网关和RPC消息的序列化和反序列化协议
@@ -153,6 +163,8 @@ public class StudentResource {
   设计了 [zfoo orm](protocol/README.md) 二级缓存，充分释放数据库压力
 - 服务器热更新和监控无需代码和额外工具，直接内置在程序里，解放运维生产力
 - 使用MVC设计模式，规范开发，保证代码质量，高效执行
+
+---
 
 ### Ⅶ. 提交规范
 
@@ -169,6 +181,8 @@ test[module]: 测试了什么东西
 doc[module]: 增加了什么文档
 del[module]: 删除了某些功能或者无用代码
 ```
+
+---
 
 ### Ⅷ. License
 
