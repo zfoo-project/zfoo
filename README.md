@@ -14,7 +14,7 @@
 - 事件总线 [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
 - 时间任务调度 [scheduler](scheduler/README.md)
 
----
+--------------------
 
 ### Ⅱ. 背景和适用项目
 
@@ -33,7 +33,7 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 后来发现其实不仅仅能用来做游戏，只要有对性能有极致需求的rpc场景都能使用的上这个框架。
 ```
 
----
+--------------------
 
 ### Ⅲ. 完整的工程案例和视频教程
 
@@ -41,7 +41,7 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of Tanks）》，新手友好，难度2星
 - [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，标准的https企业级网站，难度5星
 
----
+--------------------
 
 ### Ⅳ. 问题
 
@@ -49,7 +49,7 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 - 每个工程目录的test文件夹下都有标准的demo展示和注释说明，可以直接运行
 - 问题讨论群QQ: 876280300
 
----
+--------------------
 
 ### Ⅴ. 安装和使用
 
@@ -152,7 +152,7 @@ public class StudentResource {
 }
 ```
 
----
+--------------------
 
 ### Ⅵ. 为什么快
 
@@ -164,7 +164,7 @@ public class StudentResource {
 - 服务器热更新和监控无需代码和额外工具，直接内置在程序里，解放运维生产力
 - 使用MVC设计模式，规范开发，保证代码质量，高效执行
 
----
+--------------------
 
 ### Ⅶ. 提交规范
 
@@ -182,7 +182,7 @@ doc[module]: 增加了什么文档
 del[module]: 删除了某些功能或者无用代码
 ```
 
----
+--------------------
 
 ### Ⅷ. License
 
