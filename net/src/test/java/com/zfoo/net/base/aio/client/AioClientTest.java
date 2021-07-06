@@ -10,7 +10,17 @@ import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.concurrent.CountDownLatch;
 
+@Ignore
 public class AioClientTest implements Runnable {
+
+    @Test
+    public void clientTest() {
+        AioClientTest aioClient = new AioClientTest("127.0.0.1", 9999, 1);
+        aioClient.init();
+        new Thread(aioClient, "client").start();
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
+
 
     private AsynchronousSocketChannel client;
     private String host;
@@ -45,13 +55,5 @@ public class AioClientTest implements Runnable {
         }
     }
 
-    @Ignore
-    @Test
-    public void clientTest() {
-        AioClientTest aioClient = new AioClientTest("127.0.0.1", 9999, 1);
-        aioClient.init();
-        new Thread(aioClient, "client").start();
-        ThreadUtils.sleep(Long.MAX_VALUE);
-    }
 
 }

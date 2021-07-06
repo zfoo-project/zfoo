@@ -23,7 +23,17 @@ import org.junit.Test;
  * @version 1.0
  * @since 2017 05.22 18:23
  */
+@Ignore
 public class EchoServerTest {
+
+    @Test
+    public void serverTest() {
+        System.out.println("hello");
+        EchoServerTest server = new EchoServerTest(9999);
+        server.init();
+        System.out.println("hello");
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     private int port;
 
@@ -61,16 +71,6 @@ public class EchoServerTest {
             channel.pipeline().addLast(new StringDecoder());
             channel.pipeline().addLast(new EchoSeverHandler());
         }
-    }
-
-    @Ignore
-    @Test
-    public void serverTest() {
-        System.out.println("hello");
-        EchoServerTest server = new EchoServerTest(9999);
-        server.init();
-        System.out.println("hello");
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

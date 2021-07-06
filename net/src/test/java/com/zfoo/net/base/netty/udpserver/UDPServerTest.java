@@ -17,7 +17,17 @@ import org.junit.Test;
  * @version 1.0
  * @since 2017 05.27 17:24
  */
+@Ignore
 public class UDPServerTest {
+
+    @Test
+    public void serverTest() {
+        System.out.println("hello");
+        UDPServerTest server = new UDPServerTest(9999);
+        server.init();
+        System.out.println("hello");
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     private int port;
 
@@ -42,17 +52,6 @@ public class UDPServerTest {
             //优雅的退出，释放线程池资源
             group.shutdownGracefully();
         }
-    }
-
-
-    @Ignore
-    @Test
-    public void serverTest() {
-        System.out.println("hello");
-        UDPServerTest server = new UDPServerTest(9999);
-        server.init();
-        System.out.println("hello");
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

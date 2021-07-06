@@ -19,7 +19,15 @@ import org.junit.Test;
  * @version 1.0
  * @since 2017 05.22 18:23
  */
+@Ignore
 public class TimeServerTest {
+
+    @Test
+    public void serverTest() {
+        TimeServerTest server = new TimeServerTest(9999);
+        server.init();
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     private int port;
 
@@ -53,14 +61,6 @@ public class TimeServerTest {
         protected void initChannel(SocketChannel channel) throws Exception {
             channel.pipeline().addLast(new TimeServerHandler());
         }
-    }
-
-    @Ignore
-    @Test
-    public void serverTest() {
-        TimeServerTest server = new TimeServerTest(9999);
-        server.init();
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

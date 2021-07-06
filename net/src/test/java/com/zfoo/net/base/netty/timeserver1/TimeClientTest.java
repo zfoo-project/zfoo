@@ -12,7 +12,14 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class TimeClientTest {
+
+    @Test
+    public void clientTest() {
+        new TimeClientTest().connect(9999, "127.0.0.1");
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     public void connect(int port, String host) {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -37,13 +44,5 @@ public class TimeClientTest {
             channel.pipeline().addLast(new TimeClientHandler());
         }
     }
-
-    @Ignore
-    @Test
-    public void clientTest() {
-        new TimeClientTest().connect(9999, "127.0.0.1");
-        ThreadUtils.sleep(Long.MAX_VALUE);
-    }
-
 
 }

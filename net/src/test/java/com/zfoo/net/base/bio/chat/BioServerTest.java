@@ -13,7 +13,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+@Ignore
 public class BioServerTest {
+
+    @Test
+    public void bioTest() {
+        new BioServerTest().launchServer();
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     private List<ServerChannel> listClient = new ArrayList<ServerChannel>();
 
@@ -119,13 +126,6 @@ public class BioServerTest {
 
         } catch (IOException e) {
         }
-    }
-
-    @Ignore
-    @Test
-    public void bioTest() {
-        new BioServerTest().launchServer();
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

@@ -24,7 +24,17 @@ import org.junit.Test;
  * @version 1.0
  * @since 2017 05.23 16:51
  */
+@Ignore
 public class SubscribeServerTest {
+
+    @Test
+    public void serverTest() {
+        System.out.println("hello");
+        SubscribeServerTest server = new SubscribeServerTest(9999);
+        server.init();
+        System.out.println("hello");
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     private int port;
 
@@ -64,17 +74,6 @@ public class SubscribeServerTest {
             channel.pipeline().addLast(new ObjectEncoder());
             channel.pipeline().addLast(new Serverhandler());
         }
-    }
-
-
-    @Ignore
-    @Test
-    public void serverTest() {
-        System.out.println("hello");
-        SubscribeServerTest server = new SubscribeServerTest(9999);
-        server.init();
-        System.out.println("hello");
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

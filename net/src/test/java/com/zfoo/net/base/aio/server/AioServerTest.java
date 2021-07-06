@@ -10,7 +10,17 @@ import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.util.concurrent.CountDownLatch;
 
+@Ignore
 public class AioServerTest implements Runnable {
+
+    @Test
+    public void serverTest() {
+        AioServerTest aioServer = new AioServerTest(9999, 1);
+        aioServer.init();
+        new Thread(aioServer, "server").start();
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
+
 
     private int port;
 
@@ -58,15 +68,6 @@ public class AioServerTest implements Runnable {
 
     public void setLatch(CountDownLatch latch) {
         this.latch = latch;
-    }
-
-    @Ignore
-    @Test
-    public void serverTest() {
-        AioServerTest aioServer = new AioServerTest(9999, 1);
-        aioServer.init();
-        new Thread(aioServer, "server").start();
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

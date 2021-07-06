@@ -20,7 +20,15 @@ import org.junit.Test;
  * @version 1.0
  * @since 2017 05.23 18:02
  */
+@Ignore
 public class SubscribeClientTest {
+
+    @Test
+    public void clientTest() {
+        new SubscribeClientTest().connect(9999, "127.0.0.1");
+        System.out.println("hello");
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
 
     public void connect(int port, String host) {
@@ -48,14 +56,6 @@ public class SubscribeClientTest {
             channel.pipeline().addLast(new ObjectEncoder());
             channel.pipeline().addLast(new ClientHandler());
         }
-    }
-
-    @Ignore
-    @Test
-    public void clientTest() {
-        new SubscribeClientTest().connect(9999, "127.0.0.1");
-        System.out.println("hello");
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

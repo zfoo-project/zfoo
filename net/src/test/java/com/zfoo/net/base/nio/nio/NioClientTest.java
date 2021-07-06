@@ -12,7 +12,16 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
+@Ignore
 public class NioClientTest implements Runnable {
+
+    @Test
+    public void clientTest() {
+        NioClientTest nioClient = new NioClientTest("localhost", 9999);
+        nioClient.init();
+        new Thread(nioClient, "clinetThread").start();
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     private String ip;
     private int port;
@@ -121,15 +130,6 @@ public class NioClientTest implements Runnable {
         if (key.isWritable()) {
             // a channel is ready for writing
         }
-    }
-
-    @Ignore
-    @Test
-    public void clientTest() {
-        NioClientTest nioClient = new NioClientTest("localhost", 9999);
-        nioClient.init();
-        new Thread(nioClient, "clinetThread").start();
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

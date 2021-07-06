@@ -14,7 +14,16 @@ import java.nio.channels.SocketChannel;
 import java.util.Date;
 import java.util.Iterator;
 
+@Ignore
 public class NioServerTest implements Runnable {
+
+    @Test
+    public void serverTest() {
+        NioServerTest nioServer = new NioServerTest();
+        nioServer.init(9999);
+        new Thread(nioServer, "serverThread").start();
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     //多路复用器，一对多
     private Selector selector;
@@ -127,15 +136,6 @@ public class NioServerTest implements Runnable {
                 // a channel is ready for writing
             }
         }
-    }
-
-    @Ignore
-    @Test
-    public void serverTest() {
-        NioServerTest nioServer = new NioServerTest();
-        nioServer.init(9999);
-        new Thread(nioServer, "serverThread").start();
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

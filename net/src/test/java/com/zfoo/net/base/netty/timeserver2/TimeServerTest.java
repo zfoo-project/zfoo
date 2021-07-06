@@ -21,7 +21,17 @@ import org.junit.Test;
  * @version 1.0
  * @since 2017 05.22 18:23
  */
+@Ignore
 public class TimeServerTest {
+
+    @Test
+    public void serverTest() {
+        System.out.println("hello");
+        TimeServerTest server = new TimeServerTest(9999);
+        server.init();
+        System.out.println("hello");
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     private int port;
 
@@ -57,16 +67,6 @@ public class TimeServerTest {
             channel.pipeline().addLast(new StringDecoder());
             channel.pipeline().addLast(new TimeServerHandler());
         }
-    }
-
-    @Ignore
-    @Test
-    public void serverTest() {
-        System.out.println("hello");
-        TimeServerTest server = new TimeServerTest(9999);
-        server.init();
-        System.out.println("hello");
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

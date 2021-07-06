@@ -25,7 +25,17 @@ import org.junit.Test;
  * @version 1.0
  * @since 2017 05.31 09:49
  */
+@Ignore
 public class FileServerTest {
+
+    @Test
+    public void serverTest() {
+        System.out.println("hello");
+        FileServerTest server = new FileServerTest(9999);
+        server.init();
+        System.out.println("hello");
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     private int port;
 
@@ -64,16 +74,6 @@ public class FileServerTest {
             channel.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8));//三者组合起来就是文本换行编码解码器
             channel.pipeline().addLast(new FileServerHandler());
         }
-    }
-
-    @Ignore
-    @Test
-    public void serverTest() {
-        System.out.println("hello");
-        FileServerTest server = new FileServerTest(9999);
-        server.init();
-        System.out.println("hello");
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

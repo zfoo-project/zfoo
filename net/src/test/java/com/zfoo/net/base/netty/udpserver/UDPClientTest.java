@@ -21,7 +21,17 @@ import java.net.InetSocketAddress;
  * @version 1.0
  * @since 2017 05.27 17:48
  */
+@Ignore
 public class UDPClientTest {
+
+    @Test
+    public void clientTest() {
+        System.out.println("hello");
+        UDPClientTest server = new UDPClientTest(9999);
+        server.init();
+        System.out.println("hello");
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
 
     private int port;
@@ -56,16 +66,5 @@ public class UDPClientTest {
             group.shutdownGracefully();
         }
     }
-
-    @Ignore
-    @Test
-    public void clientTest() {
-        System.out.println("hello");
-        UDPClientTest server = new UDPClientTest(9999);
-        server.init();
-        System.out.println("hello");
-        ThreadUtils.sleep(Long.MAX_VALUE);
-    }
-
 
 }

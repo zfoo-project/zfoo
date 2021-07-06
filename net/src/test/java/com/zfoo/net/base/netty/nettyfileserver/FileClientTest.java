@@ -21,7 +21,17 @@ import org.junit.Test;
  * @version 1.0
  * @since 2017 05.31 10:22
  */
+@Ignore
 public class FileClientTest {
+
+    @Test
+    public void clientTest() {
+        FileClientTest client = new FileClientTest(9999, "127.0.0.1", "rainbow.txt");
+        client.connect();
+        System.out.println("hello");
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
+
 
     private int port;
     private String host;
@@ -58,15 +68,6 @@ public class FileClientTest {
             channel.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8));//三者组合起来就是文本换行编码解码器
             channel.pipeline().addLast(new ClientHandler(filePath));
         }
-    }
-
-    @Ignore
-    @Test
-    public void clientTest() {
-        FileClientTest client = new FileClientTest(9999, "127.0.0.1", "rainbow.txt");
-        client.connect();
-        System.out.println("hello");
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 

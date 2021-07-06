@@ -14,8 +14,15 @@ import io.netty.handler.codec.string.StringDecoder;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class EchoClientTest {
 
+    @Test
+    public void clientTest() {
+        new EchoClientTest().connect(9999, "127.0.0.1");
+        System.out.println("hello");
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 
     public void connect(int port, String host) {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -41,14 +48,6 @@ public class EchoClientTest {
             channel.pipeline().addLast(new StringDecoder());
             channel.pipeline().addLast(new EchoClientHandler());
         }
-    }
-
-    @Ignore
-    @Test
-    public void clientTest() {
-        new EchoClientTest().connect(9999, "127.0.0.1");
-        System.out.println("hello");
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }
