@@ -29,90 +29,37 @@ public class MongoIdUtilsTest {
 
     @Test
     public void startApplication0() {
-        var context = new ClassPathXmlApplicationContext("application.xml");
-        ThreadUtils.sleep(8000);
-
-        var count = 0L;
-        for (int i = 0; i < 10000_00; i++) {
-            count = MongoIdUtils.getIncrementIdFromMongoDefault("myDocument");
-        }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                var count = 0L;
-                for (int i = 0; i < 10000_00; i++) {
-                    count = MongoIdUtils.getIncrementIdFromMongoDefault("myDocument");
-                }
-                System.out.println(count);
-            }
-        }).start();
-        System.out.println(count);
-
-        ThreadUtils.sleep(Long.MAX_VALUE);
+        incrementMongoIdTest();
     }
 
     @Test
     public void startApplication1() {
-        var context = new ClassPathXmlApplicationContext("application.xml");
-        ThreadUtils.sleep(6000);
-
-        var count = 0L;
-        for (int i = 0; i < 10000_00; i++) {
-            count = MongoIdUtils.getIncrementIdFromMongoDefault("myDocument");
-        }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                var count = 0L;
-                for (int i = 0; i < 10000_00; i++) {
-                    count = MongoIdUtils.getIncrementIdFromMongoDefault("myDocument");
-                }
-                System.out.println(count);
-            }
-        }).start();
-        System.out.println(count);
-
-        ThreadUtils.sleep(Long.MAX_VALUE);
+        incrementMongoIdTest();
     }
 
     @Test
     public void startApplication2() {
-        var context = new ClassPathXmlApplicationContext("application.xml");
-        ThreadUtils.sleep(4000);
-
-        var count = 0L;
-        for (int i = 0; i < 10000_00; i++) {
-            count = MongoIdUtils.getIncrementIdFromMongoDefault("myDocument");
-        }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                var count = 0L;
-                for (int i = 0; i < 10000_00; i++) {
-                    count = MongoIdUtils.getIncrementIdFromMongoDefault("myDocument");
-                }
-                System.out.println(count);
-            }
-        }).start();
-        System.out.println(count);
-
-        ThreadUtils.sleep(Long.MAX_VALUE);
+        incrementMongoIdTest();
     }
 
     @Test
     public void startApplication3() {
+        incrementMongoIdTest();
+    }
+
+    private void incrementMongoIdTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
-        ThreadUtils.sleep(2000);
+        ThreadUtils.sleep(8000);
 
         var count = 0L;
-        for (int i = 0; i < 10000_00; i++) {
+        for (int i = 0; i < 100_0000; i++) {
             count = MongoIdUtils.getIncrementIdFromMongoDefault("myDocument");
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 var count = 0L;
-                for (int i = 0; i < 10000_00; i++) {
+                for (int i = 0; i < 100_0000; i++) {
                     count = MongoIdUtils.getIncrementIdFromMongoDefault("myDocument");
                 }
                 System.out.println(count);
