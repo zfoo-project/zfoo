@@ -33,7 +33,7 @@ public class OrmTest {
         // 通过注解自动注入的方式去拿到UserEntity的EntityCaches
         var userEntityCaches = context.getBean(UserManager.class).userEntityCaches;
 
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             var entity = userEntityCaches.load((long) i);
             entity.setE("update" + i);
             entity.setC(i);
