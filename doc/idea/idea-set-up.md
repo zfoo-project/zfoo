@@ -38,19 +38,26 @@ git config --global https.proxy https://127.0.0.1:10809
 使用npm install安装需要的node module
 安装完成后，在node module，和static上右键->mark Directory as->excluded
 然后，File->Invalidate Cache/Restart
+
 ```
 
-## 4. idea，mongodb，postman
+## 4. mongodb
 
-## 5. 中间件安装
+1. 直接安装MongoDB，用custom自定义安装目录，一般用默认的安装目录即可，不要勾选mongoDB compass
+2. 将C:\Program Files\MongoDB\Server\4.2\bin配置到环境变量中，便于全局使用
+3. mongo -version # 查看安装的版本
+
+## 5. idea，mongodb，postman
+
+## 6. 中间件安装
 
 - zookeeper安装，解压过后，直接运行zkServer.md，zookeeper运行需要依赖JAVA_HOME环境变量
 
-## 6. rider安装
+## 7. rider安装
 
-## 7. unity安装
+## 8. unity安装
 
-## 8. 办公软件
+## 9. 办公软件
 
 ```
 Google浏览器
@@ -64,7 +71,7 @@ steam
 迅雷迷你版
 ```
 
-## 8. 聊天软件
+## 10. 聊天软件
 
 ```
 qq，微信，钉钉，discord
