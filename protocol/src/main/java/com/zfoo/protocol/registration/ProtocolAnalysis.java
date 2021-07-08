@@ -332,6 +332,7 @@ public class ProtocolAnalysis {
     private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         var protocolId = checkProtocol(clazz);
 
+        // 对象需要被序列化的属性
         var fields = new ArrayList<Field>();
         for (var field : clazz.getDeclaredFields()) {
             var modifiers = field.getModifiers();
