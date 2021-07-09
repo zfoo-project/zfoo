@@ -58,14 +58,14 @@ mongotop        # 读写监控工具
 
 ### 1.MongoDB安装配置
 
+- 把MongoDB下载到/usr/local目录下，在/usr/local下新建文件夹MongoDB
+
 ```
-把MongoDB下载到/usr/local目录下，在/usr/local下新建文件夹MongoDB
+tar -zxvf mongodb-linux-x86_64-enterprise-rhel70-4.2.0.tgz -C /usr/local
+rename /usr/local/mongodb-linux-x86_64-enterprise-rhel70-4.2.0 mongodb /usr/local/mongodb-linux-x86_64-enterprise-rhel70-4.2.0
+vim /usr/local/mongodb/mongodb.config # 创建自定义配置文件，解压的mongodb安装包没有默认的配置文件
 ```
 
-- tar -zxvf mongodb-linux-x86_64-enterprise-rhel70-4.2.0.tgz -C /usr/local
-- rename /usr/local/mongodb-linux-x86_64-enterprise-rhel70-4.2.0 mongodb
-  /usr/local/mongodb-linux-x86_64-enterprise-rhel70-4.2.0
-- vim /usr/local/mongodb/mongodb.config # 创建自定义配置文件，解压的mongodb安装包没有默认的配置文件
 
 - wiredTiger
 
