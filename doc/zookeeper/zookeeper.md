@@ -37,7 +37,7 @@
 2. 一致性（Consistency）事务的执行不能破坏数据库的完整性和一致性
 3. 隔离性（Isolation）[ˌaɪsəˈleʃən] 在标准的SQL规范中有4个事务隔离级别  
    未授权读取，授权读取，可重复读取，串行化。
-   ![Image text](image/isolation.png)
+   ![Image text](../image/zookeeper/isolation.png)
 4. 持久性（Durability）[djʊərə'bɪlətɪ] 事务一旦提交，它对数据库的状态变更就应该是永久性的。
 
 #### CAP定理（CAP theorem /ˈθɪərəm/）
@@ -77,7 +77,7 @@ Eventually consistency（最终一致性），系统中的副本，在经过一�
 当一个事务需要跨多个分布式节点的时候，为了保持事务处理的ACID特性，就需要引入一个称为“协调者”的组件来统一调度所有分布式节点的执行逻辑，来保证一致性。
 
 2PC：Two Phase Commit，二段提交协议，大多数关系型数据库都是采用的这个协议来完成分布式事务的   
-![Image text](image/transaction.png)
+![Image text](../image/zookeeper/transaction.png)
 
 3PC：Three Phase Commit，三阶段提交协议
 
@@ -126,7 +126,7 @@ Paxos和ZAB的本质区别在于两者的设计目标不太一样。前者用于
 - 高性能：Zookeeper将全量数据存储在内存中，并直接服务于客户端的所有非事务请求，因此它尤其适用于以读操作为主的应用场景。Zookeeper性能压测在100%读请求的场景下可以达到12-13W的QPS。
 - 顺序访问：对于每一个客户端的请求，Zookeeper都会生成一个全局唯一的递增序号，这个序号反映了所有事务操作的先后顺序，应用程序可以使用这个特性来实现更高层次的同步原语。
 - Leader服务器在产生一个新的事务的时候，会生成一个序列号ZXID，Zookeeper Transaction ID，这个ID有64位，前32位代表事务编号，每个事务加1，后32位代表发给客户端的计数器，每发给客户端计数器加1。  
-  ![Image text](image/zookeeper-function.png)
+  ![Image text](../image/zookeeper/zookeeper-function.png)
 
 #### Zookeeper的三种选举算法：LeaderElection，AuthFastLeaderElection，FastLeaderElection
 
@@ -141,9 +141,9 @@ Paxos和ZAB的本质区别在于两者的设计目标不太一样。前者用于
 6. 服务器5启动，后面的逻辑同服务器4成为小弟。
 
 崩溃恢复时的选举算法：
-![Image text](image/zookeeper-leader-election.png)
+![Image text](../image/zookeeper/zookeeper-leader-election.png)
 
-![Image text](image/zookeeper-process.png)
+![Image text](../image/zookeeper/zookeeper-process.png)
 
 ## 四.Zookeeper的应用
 
@@ -186,7 +186,7 @@ TCP的连接建立，即三次握手是客户端和服务器直接建立的，�
     1、负载均衡分为L4 switch（四层交换），即在OSI第4层工作，就是TCP层啦。此种Load Balance不理解应用协议（如HTTP/FTP/MySQL等等）。例子：LVS，F5。
     2、另一种叫做L7 switch（七层交换），OSI的最高层，应用层。此时，该Load Balancer能理解应用协议。例子：  haproxy，MySQL Proxy。
 
-![Image text](image/load-balance.png)
+![Image text](../image/zookeeper/load-balance.png)
 
 #### 命名服务
 
