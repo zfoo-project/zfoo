@@ -71,7 +71,7 @@ ProtocolManager.write(byteBuf, complexObject);
 var packet = ProtocolManager.read(byteBuf);
 ```
 
-#### 3. [net](net/README.md) 目前速度最快的RPC框架
+#### 3. [net](net/README.md) 目前速度最快的RPC框架，支持 tcp udp websocket
 
 ```
 // 服务提供者，只需要在方法上加个注解，则自动注册接口
