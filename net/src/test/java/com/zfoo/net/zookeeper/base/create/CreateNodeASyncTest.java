@@ -1,6 +1,5 @@
 package com.zfoo.net.zookeeper.base.create;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
@@ -20,7 +19,7 @@ public class CreateNodeASyncTest {
     // 异步创建一个节点
     @Test
     public void test() throws IOException, InterruptedException {
-        ZooKeeper zookeeper = new ZooKeeper(ZookeeperConstantTest.URL, 5000, new CreateNodeASyncWatcher());
+        ZooKeeper zookeeper = new ZooKeeper("localhost:2181", 5000, new CreateNodeASyncWatcher());
 
         System.out.println(zookeeper.getState());
 

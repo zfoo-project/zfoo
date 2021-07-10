@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.recipes.atomicint;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.atomic.AtomicValue;
@@ -24,7 +24,7 @@ public class DistributedAtomicIntTest {
     static String distatomicint_path = "/node_test";
     static CuratorFramework curator = CuratorFrameworkFactory
             .builder()
-            .connectString(ZookeeperConstantTest.URL)
+            .connectString("localhost:2181")
             .retryPolicy(new ExponentialBackoffRetry(1000, 3))
             .build();
 

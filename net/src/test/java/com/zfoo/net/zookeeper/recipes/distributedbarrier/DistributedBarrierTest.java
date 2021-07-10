@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.recipes.distributedbarrier;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.barriers.DistributedBarrier;
@@ -30,7 +30,7 @@ public class DistributedBarrierTest {
 
                         CuratorFramework client = CuratorFrameworkFactory
                                 .builder()
-                                .connectString(ZookeeperConstantTest.URL)
+                                .connectString("localhost:2181")
                                 .retryPolicy(new ExponentialBackoffRetry(1000, 3))
                                 .build();
                         client.start();

@@ -49,7 +49,6 @@ public class EchoServerTest {
         EventLoopGroup bossGroup = new NioEventLoopGroup();//服务端接受客户端连接
         EventLoopGroup workerGroup = new NioEventLoopGroup();//SocketChannel的网络读写
         try {
-            System.out.println("sdfs");
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 100).handler(new LoggingHandler(LogLevel.INFO))
@@ -59,7 +58,6 @@ public class EchoServerTest {
             ChannelFuture future = bootstrap.bind(port).sync();
             //等待服务端监听端口关闭
             future.channel().closeFuture().sync();
-            System.out.println("sdfs");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {

@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.curator.delete;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -17,7 +17,7 @@ public class DeleteNodeTest {
 
         CuratorFramework client = CuratorFrameworkFactory
                 .builder()
-                .connectString(ZookeeperConstantTest.URL)
+                .connectString("localhost:2181")
                 .sessionTimeoutMs(5000)
                 .connectionTimeoutMs(5000)
                 .retryPolicy(retryPolicy)

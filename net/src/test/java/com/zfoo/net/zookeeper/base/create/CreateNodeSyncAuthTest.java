@@ -1,6 +1,5 @@
 package com.zfoo.net.zookeeper.base.create;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
@@ -26,7 +25,7 @@ public class CreateNodeSyncAuthTest {
 
     @Test
     public void test() throws IOException, InterruptedException {
-        zookeeper = new ZooKeeper(ZookeeperConstantTest.URL, 5000, new CreateNodeSyncAuthWatcher());
+        zookeeper = new ZooKeeper("localhost:2181", 5000, new CreateNodeSyncAuthWatcher());
         System.out.println(zookeeper.getState());
         Thread.sleep(Integer.MAX_VALUE);
     }

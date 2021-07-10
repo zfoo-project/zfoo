@@ -1,6 +1,5 @@
 package com.zfoo.net.zookeeper.base.create;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
@@ -21,7 +20,7 @@ public class CreateNodeSyncTest {
     @Test
     public void test() throws IOException, InterruptedException, KeeperException {
         // 这个创建zookeeper的链接是异步的
-        ZooKeeper zookeeper = new ZooKeeper(ZookeeperConstantTest.URL, 5000, new CreateNodeSyncWatcher());
+        ZooKeeper zookeeper = new ZooKeeper("localhost:2181", 5000, new CreateNodeSyncWatcher());
 
         System.out.println(zookeeper.getState());
 

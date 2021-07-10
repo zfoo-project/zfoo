@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.base.query;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
@@ -21,7 +21,7 @@ public class GetDataASyncTest {
     // ZooKeeper API 获取节点数据内容，使用异步(async)接口。
     @Test
     public void test() throws IOException, InterruptedException, KeeperException {
-        zk = new ZooKeeper(ZookeeperConstantTest.URL, 5000, new GetDataASyncWatcher());
+        zk = new ZooKeeper("localhost:2181", 5000, new GetDataASyncWatcher());
         System.out.println(zk.getState().toString());
 
         String path = "/node_test";

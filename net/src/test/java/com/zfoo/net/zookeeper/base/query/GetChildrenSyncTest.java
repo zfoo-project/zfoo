@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.base.query;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -22,7 +22,7 @@ public class GetChildrenSyncTest {
 
     @Test
     public void test() throws IOException, InterruptedException, KeeperException {
-        zk = new ZooKeeper(ZookeeperConstantTest.URL, 5000, new GetChildrenSyncWatcher());
+        zk = new ZooKeeper("localhost:2181", 5000, new GetChildrenSyncWatcher());
         System.out.println(zk.getState().toString());
 
         connectedSemaphore.await();

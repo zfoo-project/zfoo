@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.curator.cache;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import com.zfoo.util.ThreadUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -21,7 +21,7 @@ import org.junit.Test;
 public class TreeCacheTest {
 
     private static CuratorFramework curator = CuratorFrameworkFactory.builder()
-            .connectString(ZookeeperConstantTest.URL)
+            .connectString("localhost:2181")
             .sessionTimeoutMs(5000)
             .retryPolicy(new ExponentialBackoffRetry(1000, 3))
 //            .retryPolicy(new RetryNTimes(1, 1000))

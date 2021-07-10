@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.base.update;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -20,7 +20,7 @@ public class UpdateNodeSyncTest {
 
     @Test
     public void test() throws IOException, InterruptedException {
-        zooKeeper = new ZooKeeper(ZookeeperConstantTest.URL, 5000, new UpdateNodeSyncWatcher());
+        zooKeeper = new ZooKeeper("localhost:2181", 5000, new UpdateNodeSyncWatcher());
         System.out.println(zooKeeper.getState().toString());
         Thread.sleep(Integer.MAX_VALUE);
     }

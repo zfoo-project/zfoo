@@ -1,6 +1,5 @@
 package com.zfoo.net.zookeeper.base.delete;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
 import org.apache.zookeeper.AsyncCallback;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -21,7 +20,7 @@ public class DeleteNodeASyncTest {
 
     @Test
     public void test() throws IOException, InterruptedException {
-        ZooKeeper zooKeeper = new ZooKeeper(ZookeeperConstantTest.URL, 5000, new DeleteNodeASyncWatcher());
+        ZooKeeper zooKeeper = new ZooKeeper("localhost:2181", 5000, new DeleteNodeASyncWatcher());
         System.out.println(zooKeeper.getState().toString());
 
         connectedSemaphore.await();

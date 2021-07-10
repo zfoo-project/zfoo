@@ -23,7 +23,7 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        System.out.println(StringUtils.format("received msg [{}]", msg));
     }
 
     @Override

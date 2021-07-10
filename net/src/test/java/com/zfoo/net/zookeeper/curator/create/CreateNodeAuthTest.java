@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.curator.create;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -25,7 +25,7 @@ public class CreateNodeAuthTest {
 
         CuratorFramework curator = CuratorFrameworkFactory
                 .builder()
-                .connectString(ZookeeperConstantTest.URL)
+                .connectString("localhost:2181")
                 .sessionTimeoutMs(5000)
                 .connectionTimeoutMs(5000)
                 .retryPolicy(retryPolicy)
@@ -58,7 +58,7 @@ public class CreateNodeAuthTest {
 
         CuratorFramework curator = CuratorFrameworkFactory
                 .builder()
-                .connectString(ZookeeperConstantTest.URL)
+                .connectString("localhost:2181")
                 .sessionTimeoutMs(5000)
                 .authorization("digest", "jaysunxiao:123456".getBytes()) // 授权访问
                 .connectionTimeoutMs(5000)

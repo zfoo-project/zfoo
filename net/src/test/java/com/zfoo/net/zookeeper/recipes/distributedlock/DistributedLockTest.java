@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.recipes.distributedlock;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
@@ -25,7 +25,7 @@ public class DistributedLockTest {
     static String lock_path = "/node";
     static CuratorFramework curator = CuratorFrameworkFactory
             .builder()
-            .connectString(ZookeeperConstantTest.URL)
+            .connectString("localhost:2181")
             .retryPolicy(new ExponentialBackoffRetry(1000, 3))
             .build();
 

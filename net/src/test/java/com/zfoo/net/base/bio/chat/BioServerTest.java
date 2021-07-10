@@ -120,8 +120,7 @@ public class BioServerTest {
                 Thread clienThread = new Thread(serverChannel);
                 listClient.add(serverChannel);
                 clienThread.start();
-                System.out
-                        .println("server started! Connect to client successfully");
+                System.out.println("server started! Connect to client successfully");
             }
 
         } catch (IOException e) {

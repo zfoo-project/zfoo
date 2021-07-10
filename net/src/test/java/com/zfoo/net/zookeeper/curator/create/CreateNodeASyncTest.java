@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.curator.create;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.BackgroundCallback;
@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 public class CreateNodeASyncTest {
 
     private static CuratorFramework curator = CuratorFrameworkFactory.builder()
-            .connectString(ZookeeperConstantTest.URL)
+            .connectString("localhost:2181")
             .sessionTimeoutMs(5000)
             .retryPolicy(new ExponentialBackoffRetry(1000, 3))
             .build();

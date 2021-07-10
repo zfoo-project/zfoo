@@ -1,6 +1,6 @@
 package com.zfoo.net.zookeeper.base.query;
 
-import com.zfoo.net.zookeeper.ZookeeperConstantTest;
+
 import org.apache.zookeeper.AsyncCallback;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -21,7 +21,7 @@ public class NodeExistsASyncTest {
 
     @Test
     public void test() throws IOException, InterruptedException {
-        zooKeeper = new ZooKeeper(ZookeeperConstantTest.URL, 5000, new NodeExistsASynccWatcher());
+        zooKeeper = new ZooKeeper("localhost:2181", 5000, new NodeExistsASynccWatcher());
         System.out.println(zooKeeper.getState().toString());
         Thread.sleep(Integer.MAX_VALUE);
     }
