@@ -26,17 +26,9 @@ public class TimeServerTest {
 
     @Test
     public void serverTest() {
-        System.out.println("hello");
-        TimeServerTest server = new TimeServerTest(9999);
+        var server = new TimeServerTest();
         server.init();
-        System.out.println("hello");
         ThreadUtils.sleep(Long.MAX_VALUE);
-    }
-
-    private int port;
-
-    public TimeServerTest(int port) {
-        this.port = port;
     }
 
     public void init() {
@@ -48,7 +40,7 @@ public class TimeServerTest {
             bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024).childHandler(new ChildChannelHandler());
             //绑定端口，同步等待成功
-            ChannelFuture future = bootstrap.bind(port).sync();
+            ChannelFuture future = bootstrap.bind(9999).sync();
             //等待服务端监听端口关闭
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {

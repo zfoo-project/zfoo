@@ -17,7 +17,8 @@ public class TimeClientTest {
 
     @Test
     public void clientTest() {
-        new TimeClientTest().connect(9999, "127.0.0.1");
+        var client = new TimeClientTest();
+        client.connect(9999, "127.0.0.1");
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 

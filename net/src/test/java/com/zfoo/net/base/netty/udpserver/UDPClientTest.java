@@ -26,19 +26,12 @@ public class UDPClientTest {
 
     @Test
     public void clientTest() {
-        System.out.println("hello");
-        UDPClientTest server = new UDPClientTest(9999);
-        server.init();
-        System.out.println("hello");
+        var client = new UDPClientTest();
+        client.init();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 
-    private int port;
-
-    public UDPClientTest(int port) {
-        this.port = port;
-    }
 
     public void init() {
         //配置服务端nio线程组
@@ -54,11 +47,9 @@ public class UDPClientTest {
 
             //向内网的所有机器广播UDP消息
             channel.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("client"
-                    , CharsetUtil.UTF_8), new InetSocketAddress("127.0.0.1", port))).sync();
+                    , CharsetUtil.UTF_8), new InetSocketAddress("127.0.0.1", 9999))).sync();
 
-            if (!channel.closeFuture().await(5000)) {
-                System.out.println("查询超时！");
-            }
+            channel.closeFuture().await(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {

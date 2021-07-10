@@ -47,7 +47,7 @@ public class UdpTest {
             byte[] data = message.getBytes();
             // 3.打包DatagramPacket,发送的地点及端口
             DatagramPacket packet = new DatagramPacket(data, data.length,
-                    new InetSocketAddress("localhost", 8888));
+                    new InetSocketAddress("localhost", 8000));
             // 4.发送
             client.send(packet);
             // 5.释放资源

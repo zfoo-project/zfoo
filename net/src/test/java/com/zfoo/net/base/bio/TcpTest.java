@@ -21,7 +21,6 @@ public class TcpTest {
             server = new ServerSocket(9999);
             // 2.接受客户端连接，阻塞式
             Socket socket = server.accept();
-            System.out.println("hello http!!!!!!");
 
             // 3.发送数据+接受数据
             String message = "welocme to internet!!!";

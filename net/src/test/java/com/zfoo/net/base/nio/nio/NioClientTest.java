@@ -17,29 +17,23 @@ public class NioClientTest implements Runnable {
 
     @Test
     public void clientTest() {
-        NioClientTest nioClient = new NioClientTest("localhost", 9999);
+        var nioClient = new NioClientTest();
         nioClient.init();
         new Thread(nioClient, "clinetThread").start();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
-    private String ip;
-    private int port;
 
     private Selector selector;
     private SocketChannel channel;
     private volatile boolean stop;
 
-    public NioClientTest(String ip, int port) {
-        this.ip = ip;
-        this.port = port;
-    }
 
     public void init() {
         try {
             channel = SocketChannel.open();
             channel.configureBlocking(false);
-            channel.connect(new InetSocketAddress(ip, port));
+            channel.connect(new InetSocketAddress("localhost", 9999));
 
             this.selector = Selector.open();
             channel.register(selector, SelectionKey.OP_CONNECT);

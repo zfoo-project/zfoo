@@ -28,17 +28,9 @@ public class EchoServerTest {
 
     @Test
     public void serverTest() {
-        System.out.println("hello");
-        EchoServerTest server = new EchoServerTest(9999);
+        var server = new EchoServerTest();
         server.init();
-        System.out.println("hello");
         ThreadUtils.sleep(Long.MAX_VALUE);
-    }
-
-    private int port;
-
-    public EchoServerTest(int port) {
-        this.port = port;
     }
 
     public void init() {
@@ -52,7 +44,7 @@ public class EchoServerTest {
                     .childHandler(new ChildChannelHandler());
 
             //绑定端口，同步等待成功
-            ChannelFuture future = bootstrap.bind(port).sync();
+            ChannelFuture future = bootstrap.bind(9999).sync();
             //等待服务端监听端口关闭
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {

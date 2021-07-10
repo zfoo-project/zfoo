@@ -15,7 +15,7 @@ public class AioClientTest implements Runnable {
 
     @Test
     public void clientTest() {
-        AioClientTest aioClient = new AioClientTest("127.0.0.1", 9999, 1);
+        var aioClient = new AioClientTest();
         aioClient.init();
         new Thread(aioClient, "client").start();
         ThreadUtils.sleep(Long.MAX_VALUE);
@@ -23,15 +23,7 @@ public class AioClientTest implements Runnable {
 
 
     private AsynchronousSocketChannel client;
-    private String host;
-    private int port;
-    private CountDownLatch latch;
-
-    public AioClientTest(String host, int port, int latchNum) {
-        this.host = host;
-        this.port = port;
-        this.latch = new CountDownLatch(latchNum);
-    }
+    private CountDownLatch latch = new CountDownLatch(1);
 
     public void init() {
         try {
@@ -44,7 +36,7 @@ public class AioClientTest implements Runnable {
     @Override
     public void run() {
         ConnectCompletionHandler handler = new ConnectCompletionHandler(client, latch);
-        client.connect(new InetSocketAddress(host, port), handler, handler);
+        client.connect(new InetSocketAddress("127.0.0.1", 9999), handler, handler);
         try {
             latch.await();
             client.close();

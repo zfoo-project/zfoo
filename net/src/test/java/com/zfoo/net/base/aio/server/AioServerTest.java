@@ -15,29 +15,22 @@ public class AioServerTest implements Runnable {
 
     @Test
     public void serverTest() {
-        AioServerTest aioServer = new AioServerTest(9999, 1);
+        AioServerTest aioServer = new AioServerTest();
         aioServer.init();
         new Thread(aioServer, "server").start();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
-
-    private int port;
-
-    private CountDownLatch latch;
+    private CountDownLatch latch = new CountDownLatch(1);
 
     private AsynchronousServerSocketChannel asynchronousServerSocketChannel;
 
-    public AioServerTest(int port, int latchNum) {
-        this.port = port;
-        latch = new CountDownLatch(latchNum);
-    }
 
     public void init() {
         try {
             asynchronousServerSocketChannel = AsynchronousServerSocketChannel.open();
-            asynchronousServerSocketChannel.bind(new InetSocketAddress(port));
-            System.out.println("The Time server is start in port:" + port);
+            asynchronousServerSocketChannel.bind(new InetSocketAddress(9999));
+            System.out.println("The Time server is start in port:" + 9999);
         } catch (IOException e) {
             e.printStackTrace();
         }

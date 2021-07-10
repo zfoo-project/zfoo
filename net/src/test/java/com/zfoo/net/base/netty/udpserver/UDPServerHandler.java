@@ -13,14 +13,12 @@ import io.netty.util.CharsetUtil;
  */
 public class UDPServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
-    private static String DICTIONARY = "aaa";
-
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
         String req = packet.content().toString(CharsetUtil.UTF_8);
         System.out.println(req);
         if (req.equals("client")) {
-            ctx.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer(UDPServerHandler.DICTIONARY, CharsetUtil.UTF_8)
+            ctx.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("this is server", CharsetUtil.UTF_8)
                     , packet.sender()));
         }
     }

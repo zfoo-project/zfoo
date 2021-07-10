@@ -22,17 +22,9 @@ public class UDPServerTest {
 
     @Test
     public void serverTest() {
-        System.out.println("hello");
-        UDPServerTest server = new UDPServerTest(9999);
+        var server = new UDPServerTest();
         server.init();
-        System.out.println("hello");
         ThreadUtils.sleep(Long.MAX_VALUE);
-    }
-
-    private int port;
-
-    public UDPServerTest(int port) {
-        this.port = port;
     }
 
     public void init() {
@@ -43,7 +35,7 @@ public class UDPServerTest {
             bootstrap.group(group).channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true).handler(new UDPServerHandler());
             //绑定端口，同步等待成功
-            ChannelFuture future = bootstrap.bind(port).sync();
+            ChannelFuture future = bootstrap.bind(9999).sync();
             //等待服务端监听端口关闭
             future.channel().closeFuture().await();
         } catch (InterruptedException e) {

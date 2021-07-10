@@ -19,7 +19,7 @@ public class NioServerTest implements Runnable {
 
     @Test
     public void serverTest() {
-        NioServerTest nioServer = new NioServerTest();
+        var nioServer = new NioServerTest();
         nioServer.init(9999);
         new Thread(nioServer, "serverThread").start();
         ThreadUtils.sleep(Long.MAX_VALUE);

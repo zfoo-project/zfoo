@@ -22,8 +22,8 @@ public class EchoClientTest {
 
     @Test
     public void clientTest() {
-        new EchoClientTest().connect(9999, "127.0.0.1");
-        System.out.println("hello");
+        var client = new EchoClientTest();
+        client.connect(9999, "127.0.0.1");
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 

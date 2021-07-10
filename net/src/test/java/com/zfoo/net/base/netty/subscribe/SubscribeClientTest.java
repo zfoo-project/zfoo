@@ -25,8 +25,8 @@ public class SubscribeClientTest {
 
     @Test
     public void clientTest() {
-        new SubscribeClientTest().connect(9999, "127.0.0.1");
-        System.out.println("hello");
+        var client = new SubscribeClientTest();
+        client.connect(9999, "127.0.0.1");
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 

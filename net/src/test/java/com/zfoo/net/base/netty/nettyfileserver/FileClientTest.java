@@ -26,22 +26,11 @@ public class FileClientTest {
 
     @Test
     public void clientTest() {
-        FileClientTest client = new FileClientTest(9999, "127.0.0.1", "rainbow.txt");
+        var client = new FileClientTest();
         client.connect();
-        System.out.println("hello");
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
-
-    private int port;
-    private String host;
-    private String filePath;
-
-    public FileClientTest(int port, String host, String filePath) {
-        this.port = port;
-        this.host = host;
-        this.filePath = filePath;
-    }
 
     public void connect() {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -51,7 +40,7 @@ public class FileClientTest {
                 .handler(new ChildChannelHandler());
         ChannelFuture future = null;
         try {
-            future = bootstrap.connect(host, port).sync();
+            future = bootstrap.connect("127.0.0.1", 9999).sync();
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -66,7 +55,7 @@ public class FileClientTest {
             channel.pipeline().addLast(new StringEncoder(CharsetUtil.UTF_8));
             channel.pipeline().addLast(new LineBasedFrameDecoder(1024));
             channel.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8));//三者组合起来就是文本换行编码解码器
-            channel.pipeline().addLast(new ClientHandler(filePath));
+            channel.pipeline().addLast(new ClientHandler("rainbow.txt"));
         }
     }
 
