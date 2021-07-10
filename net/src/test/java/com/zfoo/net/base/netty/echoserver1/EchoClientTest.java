@@ -30,7 +30,8 @@ public class EchoClientTest {
     public void connect(int port, String host) {
         EventLoopGroup group = new NioEventLoopGroup();
         Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(group).channel(NioSocketChannel.class)
+        bootstrap.group(group)
+                .channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .handler(new ChildChannelHandler());
         ChannelFuture future = null;
