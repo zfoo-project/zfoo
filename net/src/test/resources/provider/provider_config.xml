@@ -25,17 +25,6 @@
             <net:address name="${registry.address.name}" url="${registry.address.url}"/>
         </net:registry>
 
-        <net:monitor center="springboot" user="jaysunxiao" password="123456">
-            <net:address name="firstSpringboot" url="127.0.0.1:8080"/>
-        </net:monitor>
-
-        <net:host center="direct connect" user="jaysunxiao" password="123456">
-            <net:address name="server0" url="127.0.0.1:9000"/>
-            <net:address name="server1" url="127.0.0.1:9001"/>
-            <net:address name="client0" url="127.0.0.1:9000"/>
-            <net:address name="client1" url="127.0.0.1:9001"/>
-        </net:host>
-
         <net:provider dispatch="consistent-hash">
             <net:module name="providerTest"/>
         </net:provider>

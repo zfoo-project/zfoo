@@ -61,18 +61,18 @@ public class TcpServerPacketController {
     }
 
 
-    // client0->server0->server1->server0->client0
+    // client->server1->server0->client
     @PacketReceiver
     public void atAsyncMess0Ask(Session session, AsyncMess0Ask ask0) {
         var ask1 = new AsyncMess1Ask();
         ask1.setMessage("Hello, server0 -> server1");
 
-        var server1 = NetContext.getSessionManager().getClientSession(0L);
-        NetContext.getDispatcher().asyncAsk(server1, ask1, AsyncMess1Answer.class, null)
+        var client0 = NetContext.getSessionManager().getClientSession(0L);
+        NetContext.getDispatcher().asyncAsk(client0, ask1, AsyncMess1Answer.class, null)
                 .whenComplete(sm_asyncMess0 -> {
 
                     var answer = new AsyncMess0Answer();
-                    answer.setMessage("Hello, server0 -> client0!");
+                    answer.setMessage("Hello, server1 -> client!");
 
                     NetContext.getDispatcher().send(session, answer);
                 });
@@ -85,7 +85,7 @@ public class TcpServerPacketController {
 
         // 测试正常返回
         var answer = new AsyncMess1Answer();
-        answer.setMessage("Hello, server1 -> server0!");
+        answer.setMessage("Hello, server0 -> server1!");
 
         // 测试返回不是预期的消息
         // SM_Int sm = new SM_Int();
