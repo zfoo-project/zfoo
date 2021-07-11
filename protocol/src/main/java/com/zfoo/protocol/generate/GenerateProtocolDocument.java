@@ -76,12 +76,16 @@ public abstract class GenerateProtocolDocument {
     public static void initProtocolDocument(List<IProtocolRegistration> protocolRegistrations) {
         AssertionUtils.notNull(tempProtocolDocumentMap, "[{}]已经初始完成，初始化完成过后不能调用initProtocolDocument", GenerateProtocolDocument.class.getSimpleName());
 
+        // 文件的注释生成
+        var proAbsFile = new File(FileUtils.getProAbsPath());
+        var list = FileUtils.getAllReadableFiles(proAbsFile.getParentFile() == null ? proAbsFile : proAbsFile.getParentFile())
+                .stream()
+                .filter(it -> it.getName().endsWith(".java"))
+                .collect(Collectors.toList());
+
         for (var protocolRegistration : protocolRegistrations) {
             var protocolClazzName = protocolRegistration.protocolConstructor().getDeclaringClass().getSimpleName();
 
-            // 文件的注释生成
-            var proAbsFile = new File(FileUtils.getProAbsPath());
-            var list = FileUtils.getAllReadableFiles(proAbsFile.getParentFile() == null ? proAbsFile : proAbsFile.getParentFile());
             var protocolFile = list.stream()
                     .filter(it -> it.getName().equals(StringUtils.format("{}.java", protocolClazzName)))
                     .findFirst();
