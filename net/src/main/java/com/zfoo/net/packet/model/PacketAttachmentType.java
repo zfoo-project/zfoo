@@ -40,7 +40,7 @@ public enum PacketAttachmentType {
     /**
      * udp消息的附加包
      */
-    UDP_PACKET((byte) 3, NoAnswerAttachment.class),
+    UDP_PACKET((byte) 3, UdpPacketAttachment.class),
 
     /**
      * 无返回消息的附加包
