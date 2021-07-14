@@ -21,7 +21,6 @@ import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.handler.codec.MessageToMessageCodec;
@@ -85,9 +84,7 @@ public class UdpCodecHandler extends MessageToMessageCodec<DatagramPacket, Encod
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
         try {
-            ByteBuf byteBuf = Unpooled.directBuffer();
-            byteBuf.clear();
-
+            var byteBuf = channelHandlerContext.alloc().ioBuffer();
             var udpPacketAttachment = (UdpPacketAttachment) out.getPacketAttachment();
 
             NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getPacketAttachment());

@@ -126,8 +126,6 @@ public class PacketService implements IPacketService {
             return;
         }
 
-        buffer.clear();
-
         // 预留写入包的长度，一个int字节大小
         buffer.writeInt(PACKET_HEAD_LENGTH);
 

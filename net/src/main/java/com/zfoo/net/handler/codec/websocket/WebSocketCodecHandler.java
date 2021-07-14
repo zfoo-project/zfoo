@@ -21,7 +21,6 @@ import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
@@ -86,8 +85,7 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
         try {
-            ByteBuf byteBuf = Unpooled.directBuffer();
-            byteBuf.clear();
+            var byteBuf = channelHandlerContext.alloc().ioBuffer();
 
             NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getPacketAttachment());
             list.add(new BinaryWebSocketFrame(byteBuf));
