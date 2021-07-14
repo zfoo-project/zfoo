@@ -17,7 +17,7 @@ import com.zfoo.protocol.IPacket;
 import org.springframework.lang.Nullable;
 
 /**
- * 被解码后的Packet的信息
+ * 被编码后的Packet的信息
  *
  * @author jaysunxiao
  * @version 3.0
@@ -25,12 +25,12 @@ import org.springframework.lang.Nullable;
 public class EncodedPacketInfo {
 
     /**
-     * 解码后的包
+     * 编码后的包
      */
     private IPacket packet;
 
     /**
-     * 解码后的包的附加包
+     * 编码后的包的附加包
      */
     private IPacketAttachment packetAttachment;
 
