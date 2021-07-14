@@ -47,7 +47,6 @@ public enum PacketAttachmentType {
      */
     NO_ANSWER_PACKET((byte) 4, NoAnswerAttachment.class),
 
-
     ;
 
 
