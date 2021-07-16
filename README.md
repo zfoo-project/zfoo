@@ -30,9 +30,10 @@
 
 完善的工作开发流程，完整的线上解决方案
 
-- **普通java项目，spring项目，spring boot项目，一行代码无差别热更新**  [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
-- **Excel配置自动映射和Excel热更新方案** [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
-- mongodb的自动映射框架 [orm](orm/README.md)
+- **普通java项目，spring项目，spring boot项目，分布式项目，**
+  无差别热更新代码 [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
+- **Excel配置自动映射，** 单服和分布式Excel热更新方案 [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
+- MongoDB的自动映射框架 [orm](orm/README.md)
 - 事件总线 [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
 - 时间任务调度 [scheduler](scheduler/README.md)
 - 内置在程序里的**轻量级cpu，内存，硬盘，网络监控，** 无需代码和额外工具，解放运维生产力 [monitor](monitor/src/test/java/com/zfoo/monitor/ApplicationTest.java)
