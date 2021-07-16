@@ -18,11 +18,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.type.ArrayType;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
-import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.protocol.exception.RunException;
 
 import java.io.IOException;
 import java.util.*;
@@ -40,7 +37,7 @@ public abstract class JsonUtils {
 
 
     /**
-     * 使用字节码增强技术，只能转换POJO对象
+     * 涡轮增压的jackson，会使用字节码增强技术
      */
     private static final ObjectMapper MAPPER_TURBO = new ObjectMapper();
 
@@ -63,12 +60,11 @@ public abstract class JsonUtils {
         MAPPER_TURBO.registerModule(new AfterburnerModule());
     }
 
-    public static <T> T string2Object(String json, Class<T> clazz) {//json=json string
+    public static <T> T string2Object(String json, Class<T> clazz) {
         try {
             return MAPPER.readValue(json, clazz);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("将json字符串[json:{}]转换为对象[class:{}]时异常[error:{}]"
-                    , json, clazz, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将json字符串[json:{}]转换为对象[class:{}]时异常", json, clazz);
         }
     }
 
@@ -76,85 +72,75 @@ public abstract class JsonUtils {
         try {
             return MAPPER.writeValueAsString(object);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("将对象[object:{}]转换为json字符串时异常[error:{}]"
-                    , object, e.getMessage()));
+            throw new RunException(e, "将对象[object:{}]转换为json字符串时异常", object);
         }
     }
 
     /**
-     * 涡轮增压，会字节码增强，慎用
+     * 涡轮增压极大提升json转换性能，字节码增强
      */
     public static <T> T string2ObjectTurbo(String json, Class<T> clazz) {
         try {
             return MAPPER_TURBO.readValue(json, clazz);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("将json字符串[json:{}]转换为对象[class:{}]时异常[error:{}]"
-                    , json, clazz, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将json字符串[json:{}]转换为对象[class:{}]时异常", json, clazz);
         }
     }
 
     /**
-     * 涡轮增压，会字节码增强，慎用
+     * 涡轮增压极大提升json转换性能，字节码增强
      */
     public static String object2StringTurbo(Object object) {
         try {
             return MAPPER_TURBO.writeValueAsString(object);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("将对象[object:{}]转换为json字符串时异常[error:{}]", object, e.getMessage()));
+            throw new RunException(e, "将对象[object:{}]转换为json字符串时异常", object);
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> List<T> string2List(String json, Class<T> clazz) {
-        CollectionType collectionType = MAPPER.getTypeFactory().constructCollectionType(ArrayList.class, clazz);
+        var collectionType = MAPPER.getTypeFactory().constructCollectionType(ArrayList.class, clazz);
         try {
-            return (List<T>) MAPPER.readValue(json, collectionType);
+            return MAPPER.readValue(json, collectionType);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("将json字符串[json:{}]转换为list异常[error:{}]", json, e.getMessage()));
+            throw new RunException(e, "将json字符串[json:{}]转换为List[{}]异常", json, clazz);
         }
     }
 
     //元素不可重复
-    @SuppressWarnings("unchecked")
     public static <T> Set<T> string2Set(String json, Class<T> clazz) {
-        CollectionType collectionType = MAPPER.getTypeFactory().constructCollectionType(HashSet.class, clazz);
+        var collectionType = MAPPER.getTypeFactory().constructCollectionType(HashSet.class, clazz);
         try {
-            return (Set<T>) MAPPER.readValue(json, collectionType);
+            return MAPPER.readValue(json, collectionType);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("将json字符串[json:{}]转换为Set[set:{}]异常[error:{}]"
-                    , json, clazz, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将json字符串[json:{}]转换为Set[{}]异常", json, clazz);
         }
     }
 
     public static <C extends Collection<T>, T> C string2Collection(String json, Class<C> collectionType, Class<T> elementType) {
         try {
-            CollectionType e = MAPPER.getTypeFactory().constructCollectionType(collectionType, elementType);
-            return MAPPER.readValue(json, e);
+            var ct = MAPPER.getTypeFactory().constructCollectionType(collectionType, elementType);
+            return MAPPER.readValue(json, ct);
         } catch (IOException e) {
-            throw new RuntimeException(StringUtils.format("将json字符串[json:{}]转换为Collection[collection:{}]异常[error:{}]"
-                    , json, collectionType, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将json字符串[json:{}]转换为Collection[{}]异常", json, collectionType);
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static <K, V> Map<K, V> string2Map(String json, Class<K> kClazz, Class<V> vClazz) {
-        MapType mapType = MAPPER.getTypeFactory().constructMapType(HashMap.class, kClazz, vClazz);
+        var mapType = MAPPER.getTypeFactory().constructMapType(HashMap.class, kClazz, vClazz);
         try {
-            return (Map<K, V>) MAPPER.readValue(json, mapType);
+            return MAPPER.readValue(json, mapType);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("将json字符串[json:{}]转换为map[key:{},value:{}]异常[error:{}]"
-                    , json, kClazz, vClazz, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将json字符串[json:{}]转换为Map[[key:{}], [value:{}]]异常", json, kClazz, vClazz);
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> T[] string2Array(String json, Class<T> clazz) {
-        ArrayType arrayType = MAPPER.getTypeFactory().constructArrayType(clazz);
+        var arrayType = MAPPER.getTypeFactory().constructArrayType(clazz);
         try {
-            return (T[]) MAPPER.readValue(json, arrayType);
+            return MAPPER.readValue(json, arrayType);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("将json字符串[{}]转换为array[element:{}]异常[error:{}]"
-                    , json, clazz, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将json字符串[{}]转换为数组[array:{}]异常", json, clazz);
         }
     }
 
@@ -169,40 +155,43 @@ public abstract class JsonUtils {
      */
     public static JsonNode getNode(String json, String nodeName) {
         try {
-            Queue<JsonNode> queue = new ArrayDeque<>();
-            JsonNode rootNode = MAPPER.readTree(json);//将Json串以树状结构读入内存
-            JsonNode resultNode;
+            var queue = new ArrayDeque<JsonNode>();
+            // 将Json串以树状结构读入内存
+            var rootNode = MAPPER.readTree(json);
             queue.add(rootNode);
-            while (!queue.isEmpty()) {//深度优先遍历算法
-                JsonNode pollNode = queue.poll();
-                resultNode = pollNode.get(nodeName);
+            // 深度优先遍历算法
+            while (!queue.isEmpty()) {
+                var pollNode = queue.poll();
+                var resultNode = pollNode.get(nodeName);
                 if (resultNode != null) {
                     return resultNode;
                 }
-                Iterator<JsonNode> iterator = pollNode.elements();
-                while (iterator.hasNext()) {//循环遍历子节点下的信息
-                    JsonNode node = iterator.next();
+                var iterator = pollNode.elements();
+                // 循环遍历子节点下的信息
+                while (iterator.hasNext()) {
+                    var node = iterator.next();
                     queue.add(node);
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(StringUtils.format("将json字符串[json:{}]转换为jsonTree[nodeName:{}]异常[error:{}]"
-                    , json, nodeName, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将json字符串[json:{}]转换为jsonTree[nodeName:{}]异常", json, nodeName);
         }
         return null;
     }
 
     public static Map<String, String> getJsonMap(String json) {
         try {
-            Map<String, String> jsonMap = new HashMap<>();
-            Queue<JsonNode> queue = new ArrayDeque<>();
-            JsonNode rootNode = MAPPER.readTree(json);//将Json串以树状结构读入内存
-            JsonNode resultNode;
+            var jsonMap = new HashMap<String, String>();
+            var queue = new ArrayDeque<JsonNode>();
+            // 将Json串以树状结构读入内存
+            var rootNode = MAPPER.readTree(json);
             queue.add(rootNode);
-            while (!queue.isEmpty()) {//深度优先遍历算法
+            // 深度优先遍历算法
+            while (!queue.isEmpty()) {
                 var pollNode = queue.poll();
                 var iterator = pollNode.fields();
-                while (iterator.hasNext()) {//循环遍历子节点下的信息
+                // 循环遍历子节点下的信息
+                while (iterator.hasNext()) {
                     var node = iterator.next();
                     var filed = node.getKey();
                     var value = node.getValue().asText();
@@ -211,7 +200,7 @@ public abstract class JsonUtils {
             }
             return jsonMap;
         } catch (IOException e) {
-            throw new RuntimeException(StringUtils.format("将json字符串[json:{}]转换为jsonMap异常[error:{}]", json, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将json字符串[json:{}]转换为jsonMap异常", json);
         }
     }
 }
