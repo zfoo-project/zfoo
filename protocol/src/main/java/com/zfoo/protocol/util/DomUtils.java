@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -9,21 +8,18 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
+ *
  */
 
-package com.zfoo.util;
+package com.zfoo.protocol.util;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.zfoo.protocol.exception.ExceptionUtils;
-import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.exception.RunException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -53,17 +49,17 @@ public abstract class DomUtils {
         try {
             return MAPPER.readValue(xml, clazz);
         } catch (IOException e) {
-            throw new RuntimeException(StringUtils.format("将xml字符串[xml:{}]转换为对象[class:{}]异常[error:{}]", xml, clazz, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将xml字符串[xml:{}]转换为对象[{}]异常", xml, clazz);
         }
     }
 
     public static <T> T file2Object(File xmlFile, Class<T> clazz) {
         try {
-            XMLInputFactory f = XMLInputFactory.newFactory();
-            XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(xmlFile));
+            var f = XMLInputFactory.newFactory();
+            var sr = f.createXMLStreamReader(new FileInputStream(xmlFile));
             return MAPPER.readValue(sr, clazz);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("将xml文件[xml:{}]转换为对象[class:{}]异常[error:{}]", xmlFile, clazz, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将xml文件[xml:{}]转换为对象[{}]异常", xmlFile, clazz);
         }
     }
 
@@ -71,8 +67,7 @@ public abstract class DomUtils {
         try {
             return MAPPER.readValue(xmlInputStream, clazz);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils
-                    .format("将xmlInputStream转换为对象[class:{}]异常[error:{}]", clazz, ExceptionUtils.getStackTrace(e)));
+            throw new RunException(e, "将xmlInputStream转换为对象[{}]异常", clazz);
         }
     }
 
@@ -87,10 +82,10 @@ public abstract class DomUtils {
      */
     public static List<Element> getChildElements(Element element) {
         AssertionUtils.notNull(element, "Element must not be null");
-        NodeList nodeList = element.getChildNodes();
-        List<Element> childEles = new ArrayList<Element>();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
+        var nodeList = element.getChildNodes();
+        var childEles = new ArrayList<Element>();
+        for (var i = 0; i < nodeList.getLength(); i++) {
+            var node = nodeList.item(i);
             if (node instanceof Element) {
                 childEles.add((Element) node);
             }
@@ -112,11 +107,11 @@ public abstract class DomUtils {
     public static List<Element> getChildElementsByTagName(Element element, String... childElementNames) {
         AssertionUtils.notNull(element, "Element must not be null");
         AssertionUtils.notNull(childElementNames, "Element names collection must not be null");
-        List<String> childEleNameList = Arrays.asList(childElementNames);
-        NodeList childNodes = element.getChildNodes();
-        List<Element> elements = new ArrayList<>();
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            Node node = childNodes.item(i);
+        var childEleNameList = Arrays.asList(childElementNames);
+        var childNodes = element.getChildNodes();
+        var elements = new ArrayList<Element>();
+        for (var i = 0; i < childNodes.getLength(); i++) {
+            var node = childNodes.item(i);
             if (node instanceof Element && nodeNameMatch(node, childEleNameList)) {
                 elements.add((Element) node);
             }
@@ -138,9 +133,9 @@ public abstract class DomUtils {
     public static Element getFirstChildElementByTagName(Element ele, String childEleName) {
         AssertionUtils.notNull(ele, "Element must not be null");
         AssertionUtils.notNull(childEleName, "Element name must not be null");
-        NodeList nodeList = ele.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
+        var nodeList = ele.getChildNodes();
+        for (var i = 0; i < nodeList.getLength(); i++) {
+            var node = nodeList.item(i);
             if (node instanceof Element && nodeNameMatch(node, childEleName)) {
                 return (Element) node;
             }
