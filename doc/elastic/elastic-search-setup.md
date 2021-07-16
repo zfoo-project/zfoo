@@ -42,7 +42,7 @@ path.logs: /data/es/logs
 useradd sun  # 新增sun用户
 passwd  sun  # 为sun用户设置密码
 chown -R sun:sun /usr/local/elasticsearch-7.7.0 # 为新用户授权，文件夹所有者
-chown -R sun:sun /data
+chown -R sun:sun /data/es
 su sun
 ./elasticsearch &
 ```
