@@ -38,18 +38,26 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 
 <img src="./../doc/image/general-game-architect.jpg" width="70%" height="70%" alt="服务器架构图"/><br/>
 
-### Ⅲ. 网络通信规范
+### Ⅲ. 为什么快
+----------
+
+- 使用目前性能最好的 [zfoo protocol](protocol/README.md) 作为网关和RPC消息的序列化和反序列化协议
+- 无锁化设计和优雅的线程池设计，用户的请求通过网关总能保证请求在同一台服务器的同一条线程去执行，所以就不需要用锁保证并发
+- rpc调用天生异步支持，并且保证rpc异步调用结束过后在同一条线程去执行，类似于actor的设计思想，特别适合对性能有极高需求的场景
+- 使用MVC设计模式，规范开发，保证代码质量，高效执行
+
+### Ⅳ. 网络通信规范
 
 - 客户端对服务器的请求以Request结尾，返回以Response结尾
 - 服务器内部之间的调用以Ask结尾，返回以Answer结尾。
 
-### Ⅳ. 教程
+### Ⅴ. 教程
 
 - [单机服务器教程](src/test/java/com/zfoo/net/core/tcp/server/TcpServerTest.java)
 - [RPC教程](src/test/java/com/zfoo/net/core/provider/ProviderTest.java)
 - [网关教程](src/test/java/com/zfoo/net/core/gateway/GatewayTest.java)
 
-### Ⅴ. 依赖的中间件zookeeper教程
+### Ⅵ. 依赖的中间件zookeeper教程
 
 - [zk基础的增删改查](src/test/java/com/zfoo/net/zookeeper/base)
 - [curator的增删改查](src/test/java/com/zfoo/net/zookeeper/curator)

@@ -32,10 +32,10 @@
 
 - **普通java项目，spring项目，spring boot项目，一行代码无差别热更新**  [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
 - **Excel配置自动映射和Excel热更新方案** [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
-- **轻量级cpu，内存，硬盘，网络监控，** 拒绝复杂的监控部署 [monitor](monitor/src/test/java/com/zfoo/monitor/ApplicationTest.java)
 - mongodb的自动映射框架 [orm](orm/README.md)
 - 事件总线 [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
 - 时间任务调度 [scheduler](scheduler/README.md)
+- 内置在程序里的**轻量级cpu，内存，硬盘，网络监控，** 无需代码和额外工具，解放运维生产力 [monitor](monitor/src/test/java/com/zfoo/monitor/ApplicationTest.java)
 
 Ⅱ. 背景和适用项目
 ---------------
@@ -43,7 +43,6 @@
 - 性能需求极高的项目，如游戏服务器框架，网站服务器框架，单服滚服，全球服，直播聊天，IM系统，实时推送
 - 节省研发成本的项目，如想节省，开发，部署，运维成本
 - 喜欢 [KISS法则](https://baike.baidu.com/item/KISS原则/3242383) 的项目 ，简单的配置，优雅的代码
-
 
 Ⅲ. 完整的工程案例和视频教程
 --------------------
@@ -110,7 +109,7 @@ NetContext.getCosumer()
 HotSwapUtils.hotswapClass(bytes);
 ```
 
-#### 5. [orm](orm/README.md) 基于mongodb的自动映射框架
+#### 5. [orm](orm/README.md) 基于mongodb的自动映射框架，使用 [caffeine](https://github.com/ben-manes/caffeine) 设计了二级缓存，充分释放数据库压力
 
 ```
 // 无需自己写sql和任何配置，直接通过注解定义在数据库中定义一张表
@@ -161,18 +160,7 @@ public class StudentResource {
 }
 ```
 
-Ⅵ. 为什么快
-----------
-
-- 使用目前性能最好的 [zfoo protocol](protocol/README.md) 作为网关和RPC消息的序列化和反序列化协议
-- 无锁化设计和优雅的线程池设计，用户的请求通过网关总能保证请求在同一台服务器的同一条线程去执行，所以就不需要用锁保证并发
-- rpc调用天生异步支持，并且保证rpc异步调用结束过后在同一条线程去执行，类似于actor的设计思想，特别适合对性能有极高需求的场景
-- 数据库使用高性能分布式数据库 [mongodb](https://github.com/mongodb/mongo) ，在其之上使用 [caffeine](https://github.com/ben-manes/caffeine)
-  设计了 [zfoo orm](protocol/README.md) 二级缓存，充分释放数据库压力
-- 服务器热更新和监控无需代码和额外工具，直接内置在程序里，解放运维生产力
-- 使用MVC设计模式，规范开发，保证代码质量，高效执行
-
-Ⅶ. 提交规范👏
+Ⅵ. 提交规范👏
 ----------
 
 - 欢迎喜欢这个项目的人来一起维护这个项目，提交代码的时候注意下面规范
@@ -189,7 +177,7 @@ doc[module]: 增加了什么文档
 del[module]: 删除了某些功能或者无用代码
 ```
 
-Ⅷ. License
+Ⅶ. License
 -----------
 
 zfoo使用 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
