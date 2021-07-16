@@ -2,7 +2,7 @@
 	<a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg"></a>
 </p>
 <p align="center">
-	👉 <strong>基于Spring的MVC式用法的万能服务器框架</strong>👈
+	👉 <strong>为性能而生的万能服务器框架</strong>👈
 </p>
 
 <p align="center">
