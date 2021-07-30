@@ -198,47 +198,47 @@ public abstract class ByteBufUtils {
         }
 
         byte[] bytes = new byte[9];
-        int index = 0;
-        bytes[index++] = (byte) (mask | 0x80);
-        bytes[index++] = (byte) (mask >>> 7 | 0x80);
-        bytes[index++] = (byte) (mask >>> 14 | 0x80);
-        bytes[index++] = (byte) (mask >>> 21 | 0x80);
+        bytes[0] = (byte) (mask | 0x80);
+        bytes[1] = (byte) (mask >>> 7 | 0x80);
+        bytes[2] = (byte) (mask >>> 14 | 0x80);
+        bytes[3] = (byte) (mask >>> 21 | 0x80);
+
 
         int a = (int) (mask >>> 28);
         int b = (int) (mask >>> 35);
         if (b == 0) {
-            bytes[index++] = (byte) a;
-            byteBuf.writeBytes(bytes, 0, index);
+            bytes[4] = (byte) a;
+            byteBuf.writeBytes(bytes, 0, 5);
             return;
         }
 
-        bytes[index++] = (byte) (a | 0x80);
+        bytes[4] = (byte) (a | 0x80);
         a = (int) (mask >>> 42);
         if (a == 0) {
-            bytes[index++] = (byte) b;
-            byteBuf.writeBytes(bytes, 0, index);
+            bytes[5] = (byte) b;
+            byteBuf.writeBytes(bytes, 0, 6);
             return;
         }
 
-        bytes[index++] = (byte) (b | 0x80);
+        bytes[5] = (byte) (b | 0x80);
         b = (int) (mask >>> 49);
         if (b == 0) {
-            bytes[index++] = (byte) a;
-            byteBuf.writeBytes(bytes, 0, index);
+            bytes[6] = (byte) a;
+            byteBuf.writeBytes(bytes, 0, 7);
             return;
         }
 
-        bytes[index++] = (byte) (a | 0x80);
+        bytes[6] = (byte) (a | 0x80);
         a = (int) (mask >>> 56);
         if (a == 0) {
-            bytes[index++] = (byte) b;
-            byteBuf.writeBytes(bytes, 0, index);
+            bytes[7] = (byte) b;
+            byteBuf.writeBytes(bytes, 0, 8);
             return;
         }
 
-        bytes[index++] = (byte) (b | 0x80);
-        bytes[index++] = (byte) a;
-        byteBuf.writeBytes(bytes, 0, index);
+        bytes[7] = (byte) (b | 0x80);
+        bytes[8] = (byte) a;
+        byteBuf.writeBytes(bytes, 0, 9);
     }
 
 
