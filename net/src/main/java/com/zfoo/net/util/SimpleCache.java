@@ -29,13 +29,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
+ * caffeine是guava cache的威力增强版。
  * caffeine的缓存都是单个存，单个更新，但是实际的项目很多都是批量查询，批量更新。
  * <p>
  * 优势：
  * 1.支持批量查找，批量更新。
  * 2.可以防止缓存穿透，缓存击穿，缓存雪崩
  * <p>
- * 当查找的key不存在的时候，返回defaultValue，并且将defaultValue放入缓存。所以通过
+ * 批量查找通过batchReloadCallback方法查找，当查找的key不存在的时候，调用defaultValueBuilder生成一个默认值放入缓存。
  *
  * @author jaysunxiao
  * @version 3.0
