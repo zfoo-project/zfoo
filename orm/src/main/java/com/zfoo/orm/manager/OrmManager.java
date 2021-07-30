@@ -20,18 +20,22 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.model.anno.EntityCache;
-import com.zfoo.orm.model.anno.EntityCachesInjection;
+import com.zfoo.orm.model.anno.*;
 import com.zfoo.orm.model.cache.EntityCaches;
 import com.zfoo.orm.model.cache.IEntityCaches;
 import com.zfoo.orm.model.config.OrmConfig;
 import com.zfoo.orm.model.entity.IEntity;
 import com.zfoo.orm.model.vo.EntityDef;
+import com.zfoo.orm.model.vo.IndexDef;
+import com.zfoo.orm.model.vo.IndexTextDef;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.util.math.RandomUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -45,6 +49,7 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -77,7 +82,7 @@ public class OrmManager implements IOrmManager {
 
     @Override
     public void initBefore() {
-        var entityDefMap = scanEntity();
+        var entityDefMap = scanEntityClass();
 
         for (var entityDef : entityDefMap.values()) {
             var entityCaches = new EntityCaches(entityDef);
@@ -238,28 +243,25 @@ public class OrmManager implements IOrmManager {
         return mongodbDatabase.getCollection(collection);
     }
 
-    private Map<Class<? extends IEntity<?>>, EntityDef> scanEntity() {
+    private Map<Class<? extends IEntity<?>>, EntityDef> scanEntityClass() {
         var cacheDefMap = new HashMap<Class<? extends IEntity<?>>, EntityDef>();
-        var entityPackage = ormConfig.getEntityPackage();
-        var cacheStrategies = ormConfig.getCachesConfig().getCacheStrategies();
-        var persisterStrategies = ormConfig.getPersistersConfig().getPersisterStrategies();
 
-        var locationSet = getEntityLocation(entityPackage);
+        var locationSet = scanEntityCacheAnno(ormConfig.getEntityPackage());
         for (var location : locationSet) {
-            Class<?> entityClazz;
+            Class<? extends IEntity<?>> entityClazz;
             try {
-                entityClazz = Class.forName(location);
+                entityClazz = (Class<? extends IEntity<?>>) Class.forName(location);
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException(StringUtils.format("无法获取实体类[{}]", location));
+                throw new RunException("无法获取实体类[{}]", location);
             }
-            var cacheDef = EntityDef.valueOf(entityClazz, cacheStrategies, persisterStrategies);
-            var previousCacheDef = cacheDefMap.putIfAbsent((Class<? extends IEntity<?>>) entityClazz, cacheDef);
+            var cacheDef = parserEntityDef(entityClazz);
+            var previousCacheDef = cacheDefMap.putIfAbsent(entityClazz, cacheDef);
             AssertionUtils.isNull(previousCacheDef, "缓存实体不能包含重复的[class:{}]", entityClazz.getSimpleName());
         }
         return cacheDefMap;
     }
 
-    private Set<String> getEntityLocation(String scanLocation) {
+    private Set<String> scanEntityCacheAnno(String scanLocation) {
         var prefixPattern = "classpath*:";
         var suffixPattern = "**/*.class";
 
@@ -285,5 +287,208 @@ public class OrmManager implements IOrmManager {
         } catch (IOException e) {
             throw new RuntimeException("无法读取实体信息:" + e);
         }
+    }
+
+
+    public EntityDef parserEntityDef(Class<? extends IEntity<?>> clazz) {
+        analyze(clazz);
+
+        var cacheStrategies = ormConfig.getCachesConfig().getCacheStrategies();
+        var persisterStrategies = ormConfig.getPersistersConfig().getPersisterStrategies();
+
+        var cache = clazz.getAnnotation(EntityCache.class);
+        var cacheStrategyOptional = cacheStrategies.stream().filter(it -> it.getStrategy().equals(cache.cacheStrategy())).findFirst();
+        AssertionUtils.isTrue(cacheStrategyOptional.isPresent(), "实体类Entity[{}]没有找到缓存策略[{}]", clazz.getSimpleName(), cache.cacheStrategy());
+
+        var cacheStrategy = cacheStrategyOptional.get();
+        var cacheSize = cacheStrategy.getSize();
+        var expireMillisecond = cacheStrategy.getExpireMillisecond();
+
+        var idField = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class)[0];
+        ReflectionUtils.makeAccessible(idField);
+
+        var persister = cache.persister();
+        var persisterStrategyOptional = persisterStrategies.stream().filter(it -> it.getStrategy().equals(persister.value())).findFirst();
+        AssertionUtils.isTrue(persisterStrategyOptional.isPresent(), "实体类Entity[{}]没有找到持久化策略[{}]", clazz.getSimpleName(), persister);
+
+        var persisterStrategy = persisterStrategyOptional.get();
+        var indexDefMap = new HashMap<String, IndexDef>();
+        var fields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Index.class);
+        for (var field : fields) {
+            var indexAnnotation = field.getAnnotation(Index.class);
+            IndexDef indexDef = new IndexDef(field, indexAnnotation.ascending(), indexAnnotation.unique());
+            indexDefMap.put(field.getName(), indexDef);
+        }
+
+        var indexTextDefMap = new HashMap<String, IndexTextDef>();
+        fields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, IndexText.class);
+        for (var field : fields) {
+            IndexTextDef indexTextDef = new IndexTextDef(field, field.getAnnotation(IndexText.class));
+            indexTextDefMap.put(field.getName(), indexTextDef);
+        }
+
+        return EntityDef.valueOf(idField, clazz, cacheSize, expireMillisecond, persisterStrategy, indexDefMap, indexTextDefMap);
+    }
+
+    private void analyze(Class<?> clazz) {
+        // 是否实现了IEntity接口
+        AssertionUtils.isTrue(IEntity.class.isAssignableFrom(clazz), "被[{}]注解标注的实体类[{}]没有实现接口[{}]", EntityCache.class.getName(), clazz.getCanonicalName(), IEntity.class.getCanonicalName());
+        // 实体类Entity必须被注解EntityCache标注
+        AssertionUtils.notNull(clazz.getAnnotation(EntityCache.class), "实体类Entity[{}]必须被注解[{}]标注", clazz.getCanonicalName(), EntityCache.class.getName());
+
+        // 校验entity格式
+        var entitySubClassMap = new HashMap<Class<?>, Set<Class<?>>>();
+        checkEntity(clazz, entitySubClassMap);
+        // 对象循环引用检测
+        for (var entry : entitySubClassMap.entrySet()) {
+            var subClass = entry.getKey();
+            var subClassSet = entry.getValue();
+            if (subClassSet.contains(subClass)) {
+                throw new RunException("ORM[class:{}]在第一层包含循环引用对象[class:{}]", clazz.getSimpleName(), subClass.getSimpleName());
+            }
+
+            var queue = new LinkedList<>(subClassSet);
+            var allSubClassSet = new HashSet<>(queue);
+            while (!queue.isEmpty()) {
+                var firstSubClass = queue.poll();
+                if (entitySubClassMap.containsKey(firstSubClass)) {
+                    for (var elementClass : entitySubClassMap.get(firstSubClass)) {
+                        if (subClass.equals(elementClass)) {
+                            throw new RunException("ORM[class:{}]在下层对象[class:{}]包含循环引用对象[class:{}]", clazz.getSimpleName(), elementClass.getSimpleName(), elementClass.getSimpleName());
+                        }
+
+                        if (!allSubClassSet.contains(elementClass)) {
+                            allSubClassSet.add(elementClass);
+                            queue.offer(elementClass);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 校验id字段和id()方法的格式
+        var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
+        AssertionUtils.isTrue(ArrayUtils.isNotEmpty(idFields) && idFields.length == 1, "实体类Entity[{}]必须只有且仅有一个Id注解", clazz.getSimpleName());
+        var idField = idFields[0];
+        // idField必须用private修饰
+        AssertionUtils.isTrue(Modifier.isPrivate(idField.getModifiers()), "实体类Entity[{}]的id必须是private私有的", clazz.getSimpleName());
+        if (clazz.isPrimitive() || Number.class.isAssignableFrom(clazz)) {
+            var entityInstance = ReflectionUtils.newInstance(clazz);
+            var idFieldType = idField.getType();
+            if (idFieldType.equals(int.class) || idFieldType.equals(Integer.class)) {
+                ReflectionUtils.setField(idField, entityInstance, RandomUtils.randomInt());
+            } else if (idFieldType.equals(long.class) || idFieldType.equals(Long.class)) {
+                ReflectionUtils.setField(idField, entityInstance, (long) RandomUtils.randomInt());
+            } else if (idFieldType.equals(float.class) || idFieldType.equals(Float.class)) {
+                ReflectionUtils.setField(idField, entityInstance, (float) RandomUtils.randomDouble());
+            } else if (idFieldType.equals(double.class) || idFieldType.equals(Double.class)) {
+                ReflectionUtils.setField(idField, entityInstance, (float) RandomUtils.randomDouble());
+            } else if (idFieldType.equals(String.class)) {
+                ReflectionUtils.setField(idField, entityInstance, RandomUtils.randomString(10));
+            }
+        }
+    }
+
+    private void checkEntity(Class<?> clazz, HashMap<Class<?>, Set<Class<?>>> entitySubClassMap) {
+        // 不需要检查重复的协议
+        if (entitySubClassMap.containsKey(clazz)) {
+            return;
+        }
+        entitySubClassMap.put(clazz, new HashSet<>());
+
+        // 是否为一个简单的javabean
+        ReflectionUtils.assertIsPojoClass(clazz);
+        // 不能是泛型类
+        AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
+        // 必须要有一个空的构造器
+        ReflectionUtils.publicEmptyConstructor(clazz);
+
+
+        var filedList = Arrays.stream(clazz.getDeclaredFields())
+                .filter(it -> !Modifier.isTransient(it.getModifiers()))
+                .filter(it -> !Modifier.isStatic(it.getModifiers()))
+                .collect(Collectors.toList());
+
+        for (var field : filedList) {
+            // entity必须包含属性的get和set方法
+            ReflectionUtils.fieldToGetMethod(clazz, field);
+            ReflectionUtils.fieldToSetMethod(clazz, field);
+
+            // 是一个基本类型变量
+            var fieldType = field.getType();
+            if (isBaseType(fieldType)) {
+                // do nothing
+            } else if (fieldType.isArray()) {
+                // 是一个数组
+                Class<?> arrayClazz = fieldType.getComponentType();
+                checkSubEntity(clazz, arrayClazz, entitySubClassMap);
+            } else if (Set.class.isAssignableFrom(fieldType)) {
+                AssertionUtils.isTrue(fieldType.equals(Set.class), "ORM[class:{}]类型声明不正确，必须是Set接口类型", clazz.getCanonicalName());
+
+                Type type = field.getGenericType();
+                AssertionUtils.isTrue(type instanceof ParameterizedType, "ORM[class:{}]类型声明不正确，不是泛型类[field:{}]", clazz.getCanonicalName(), field.getName());
+
+                Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+                AssertionUtils.isTrue(types.length == 1, "ORM[class:{}]中Set类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
+
+                checkSubEntity(clazz, types[0], entitySubClassMap);
+            } else if (List.class.isAssignableFrom(fieldType)) {
+                // 是一个List
+                AssertionUtils.isTrue(fieldType.equals(List.class), "ORM[class:{}]类型声明不正确，必须是List接口类型", clazz.getCanonicalName());
+
+                Type type = field.getGenericType();
+                AssertionUtils.isTrue(type instanceof ParameterizedType, "ORM[class:{}]类型声明不正确，不是泛型类[field:{}]", clazz.getCanonicalName(), field.getName());
+
+                Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+                AssertionUtils.isTrue(types.length == 1, "ORM[class:{}]中List类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
+
+                checkSubEntity(clazz, types[0], entitySubClassMap);
+            } else if (Map.class.isAssignableFrom(fieldType)) {
+                throw new RunException("ORM[class:{}]类型声明不正确，不支持Map类型", clazz.getCanonicalName());
+            } else {
+                entitySubClassMap.get(clazz).add(fieldType);
+                checkEntity(fieldType, entitySubClassMap);
+            }
+        }
+    }
+
+
+    private void checkSubEntity(Class<?> currentEntityClass, Type type, HashMap<Class<?>, Set<Class<?>>> entitySubClassMap) {
+        if (type instanceof ParameterizedType) {
+            // 泛型类
+            Class<?> clazz = (Class<?>) ((ParameterizedType) type).getRawType();
+            if (Set.class.equals(clazz)) {
+                // Set<Set<String>>
+                checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0], entitySubClassMap);
+                return;
+            } else if (List.class.equals(clazz)) {
+                // List<List<String>>
+                checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0], entitySubClassMap);
+                return;
+            } else if (Map.class.equals(clazz)) {
+                // Map<List<String>, List<String>>
+                throw new RunException("ORM不支持Map类型");
+            }
+        } else if (type instanceof Class) {
+            Class<?> clazz = ((Class<?>) type);
+            if (isBaseType(clazz)) {
+                // do nothing
+                return;
+            } else if (clazz.getComponentType() != null) {
+                // 是一个二维以上数组
+                throw new RunException("ORM不支持多维数组或集合嵌套数组[type:{}]类型，仅支持一维数组", type);
+            } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
+                throw new RunException("ORM不支持数组和集合联合使用[type:{}]类型", type);
+            } else {
+                entitySubClassMap.get(currentEntityClass).add(clazz);
+                checkEntity(clazz, entitySubClassMap);
+                return;
+            }
+        }
+        throw new RunException("[type:{}]类型不正确", type);
+    }
+
+    private boolean isBaseType(Class<?> clazz) {
+        return clazz.isPrimitive() || Number.class.isAssignableFrom(clazz) || String.class.isAssignableFrom(clazz);
     }
 }

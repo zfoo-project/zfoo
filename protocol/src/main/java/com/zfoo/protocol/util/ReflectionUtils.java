@@ -14,6 +14,7 @@ package com.zfoo.protocol.util;
 
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.RunException;
+import com.zfoo.protocol.exception.UnknownException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -25,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
 
 /**
  * 反射工具类
@@ -79,6 +81,22 @@ public abstract class ReflectionUtils {
         if (!isPojoClass(clazz)) {
             throw new RunException("[class:{}]不是简单的javabean（POJO类不能继承别的类，但是可以继承其它接口）", clazz.getName());
         }
+    }
+
+    public static Constructor<?> publicEmptyConstructor(Class<?> clazz) {
+        Constructor<?> constructor;
+
+        try {
+            constructor = clazz.getDeclaredConstructor();
+        } catch (NoSuchMethodException e) {
+            throw new UnknownException(e, "[class:{}] should have exactly one public zero-argument constructor", clazz.getCanonicalName());
+        }
+
+        if (!Modifier.isPublic(constructor.getModifiers())) {
+            throw new UnknownException("[class:{}] should have exactly one public zero-argument constructor", clazz.getCanonicalName());
+        }
+
+        return constructor;
     }
 
     /**

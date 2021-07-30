@@ -255,12 +255,8 @@ public class ProtocolAnalysis {
         AssertionUtils.isTrue(clazz.getSimpleName().matches("[a-zA-Z0-9_]*"), "[class:{}]的命名只能包含字母，数字，下划线", clazz.getCanonicalName(), PROTOCOL_ID);
 
         // 必须要有一个空的构造器
-        Constructor<?> constructor;
-        try {
-            constructor = clazz.getDeclaredConstructor();
-        } catch (NoSuchMethodException e) {
-            throw new UnknownException(e, "[class:{}]协议序列号[{}]必须有一个空的构造器", clazz.getCanonicalName(), PROTOCOL_ID);
-        }
+        Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
+
         ReflectionUtils.makeAccessible(protocolIdField);
         IPacket packet = (IPacket) constructor.newInstance();
 
@@ -468,7 +464,7 @@ public class ProtocolAnalysis {
             } else if (List.class.equals(clazz)) {
                 // List<List<String>>
                 IFieldRegistration registration = typeToRegistration(currentProtocolClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
-                return ListField.valueOf(registration, (ParameterizedType) type);
+                return ListField.valueOf(registration, type);
             } else if (Map.class.equals(clazz)) {
                 // Map<List<String>, List<String>>
                 IFieldRegistration keyRegistration = typeToRegistration(currentProtocolClass, ((ParameterizedType) type).getActualTypeArguments()[0]);

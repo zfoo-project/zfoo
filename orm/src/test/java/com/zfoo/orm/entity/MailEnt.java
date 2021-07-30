@@ -28,7 +28,7 @@ import com.zfoo.orm.model.entity.IEntity;
 public class MailEnt implements IEntity<String> {
 
     @Id
-    private String mailId;
+    private String id;
 
     @Index(ascending = true, unique = false)
     private String userName;
@@ -38,23 +38,23 @@ public class MailEnt implements IEntity<String> {
     public MailEnt() {
     }
 
-    public MailEnt(String mailId, String userName, String content) {
-        this.mailId = mailId;
+    public MailEnt(String id, String userName, String content) {
+        this.id = id;
         this.userName = userName;
         this.content = content;
     }
 
     @Override
     public String id() {
-        return mailId;
+        return id;
     }
 
-    public String getMailId() {
-        return mailId;
+    public String getId() {
+        return id;
     }
 
-    public void setMailId(String mailId) {
-        this.mailId = mailId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserName() {
@@ -73,12 +73,4 @@ public class MailEnt implements IEntity<String> {
         this.content = content;
     }
 
-    @Override
-    public String toString() {
-        return "MailEnt{" +
-                "mailId='" + mailId + '\'' +
-                ", playName='" + userName + '\'' +
-                ", content='" + content + '\'' +
-                '}';
-    }
 }
