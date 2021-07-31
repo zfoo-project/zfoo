@@ -372,21 +372,60 @@ public class OrmManager implements IOrmManager {
         var idField = idFields[0];
         // idField必须用private修饰
         AssertionUtils.isTrue(Modifier.isPrivate(idField.getModifiers()), "实体类Entity[{}]的id必须是private私有的", clazz.getSimpleName());
-        if (clazz.isPrimitive() || Number.class.isAssignableFrom(clazz)) {
-            var entityInstance = ReflectionUtils.newInstance(clazz);
-            var idFieldType = idField.getType();
-            if (idFieldType.equals(int.class) || idFieldType.equals(Integer.class)) {
-                ReflectionUtils.setField(idField, entityInstance, RandomUtils.randomInt());
-            } else if (idFieldType.equals(long.class) || idFieldType.equals(Long.class)) {
-                ReflectionUtils.setField(idField, entityInstance, (long) RandomUtils.randomInt());
-            } else if (idFieldType.equals(float.class) || idFieldType.equals(Float.class)) {
-                ReflectionUtils.setField(idField, entityInstance, (float) RandomUtils.randomDouble());
-            } else if (idFieldType.equals(double.class) || idFieldType.equals(Double.class)) {
-                ReflectionUtils.setField(idField, entityInstance, (float) RandomUtils.randomDouble());
-            } else if (idFieldType.equals(String.class)) {
-                ReflectionUtils.setField(idField, entityInstance, RandomUtils.randomString(10));
-            }
+
+        // 随机给id字段赋值，然后调用id()方法，看看两者的返回值是不是一样的，避免出错
+        var entityInstance = ReflectionUtils.newInstance(clazz);
+        var idFieldType = idField.getType();
+        Object idFiledValue = null;
+        if (idFieldType.equals(int.class) || idFieldType.equals(Integer.class)) {
+            idFiledValue = RandomUtils.randomInt();
+        } else if (idFieldType.equals(long.class) || idFieldType.equals(Long.class)) {
+            idFiledValue = RandomUtils.randomLong();
+        } else if (idFieldType.equals(float.class) || idFieldType.equals(Float.class)) {
+            idFiledValue = (float) RandomUtils.randomDouble();
+        } else if (idFieldType.equals(double.class) || idFieldType.equals(Double.class)) {
+            idFiledValue = RandomUtils.randomDouble();
+        } else if (idFieldType.equals(String.class)) {
+            idFiledValue = RandomUtils.randomString(10);
+        } else {
+            throw new RunException("orm现在仅支持int long float double String");
         }
+
+        ReflectionUtils.makeAccessible(idField);
+        ReflectionUtils.setField(idField, entityInstance, idFiledValue);
+        var idMethodOptional = Arrays.stream(ReflectionUtils.getMethodsByNameInPOJOClass(clazz, "id"))
+                .filter(it -> it.getParameterCount() <= 0)
+                .findFirst();
+        AssertionUtils.isTrue(idMethodOptional.isPresent(), "实体类Entity[{}]必须重写id()方法", clazz.getSimpleName());
+        var idMethod = idMethodOptional.get();
+        ReflectionUtils.makeAccessible(idMethod);
+        var idMethodReturnValue = ReflectionUtils.invokeMethod(entityInstance, idMethod);
+        AssertionUtils.isTrue(idFiledValue.equals(idMethodReturnValue), "实体类Entity[{}]的id字段的返回值[field:{}]和id方法的返回值[method:{}]不相等，请检查id()方法实现是否正确"
+                , clazz.getSimpleName(), idFiledValue, idMethodReturnValue);
+
+        // 校验gvs()方法和svs()方法的格式
+        var gvsMethodOptional = Arrays.stream(ReflectionUtils.getAllMethods(clazz))
+                .filter(it -> it.getName().equals("gvs"))
+                .filter(it -> it.getParameterCount() <= 0)
+                .findFirst();
+
+        var svsMethodOptional = Arrays.stream(ReflectionUtils.getAllMethods(clazz))
+                .filter(it -> it.getName().equals("svs"))
+                .filter(it -> it.getParameterCount() == 1)
+                .filter(it -> it.getParameterTypes()[0].equals(long.class))
+                .findFirst();
+        // gvs和svs要实现都实现，不实现都不实现
+        if (gvsMethodOptional.isEmpty() || svsMethodOptional.isEmpty()) {
+            AssertionUtils.isTrue(gvsMethodOptional.isEmpty() && svsMethodOptional.isEmpty(), "实体类Entity[{}]的gvs和svs方法要实现都实现，不实现都不实现", clazz.getSimpleName());
+            return;
+        }
+
+        var gvsMethod = gvsMethodOptional.get();
+        var svsMethod = svsMethodOptional.get();
+        var vsValue = RandomUtils.randomLong();
+        ReflectionUtils.invokeMethod(entityInstance, svsMethod, vsValue);
+        var gvsReturnValue = ReflectionUtils.invokeMethod(entityInstance, gvsMethod);
+        AssertionUtils.isTrue(gvsReturnValue.equals(vsValue), "实体类Entity[{}]的gvs方法和svs方法定义格式不正确", clazz.getSimpleName());
     }
 
     private void checkEntity(Class<?> clazz, HashMap<Class<?>, Set<Class<?>>> entitySubClassMap) {
