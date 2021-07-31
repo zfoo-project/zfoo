@@ -573,6 +573,9 @@ public class ZookeeperRegistry implements IRegistry {
 
     @Override
     public void shutdown() {
+        if (curator == null) {
+            return;
+        }
         try {
             if (curator.getState() == CuratorFrameworkState.STARTED) {
                 // 删除服务提供者的临时节点
