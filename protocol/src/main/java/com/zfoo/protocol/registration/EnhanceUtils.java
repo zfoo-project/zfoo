@@ -14,7 +14,6 @@
 package com.zfoo.protocol.registration;
 
 import com.zfoo.protocol.IPacket;
-import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
