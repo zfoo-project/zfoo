@@ -28,7 +28,7 @@ public class EnhanceLongSerializer implements IEnhanceSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration) {
-        if (field.getType().isPrimitive() || (field.getType().isArray() && field.getType().getComponentType().isPrimitive())) {
+        if (field.getType().isPrimitive()) {
             builder.append(StringUtils.format("{}.writeLong($1, {});", EnhanceUtils.byteBufUtils, objectStr));
         } else {
             builder.append(StringUtils.format("{}.writeLongBox($1, (Long){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -39,7 +39,7 @@ public class EnhanceLongSerializer implements IEnhanceSerializer {
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        if (field.getType().isPrimitive() || (field.getType().isArray() && field.getType().getComponentType().isPrimitive())) {
+        if (field.getType().isPrimitive()) {
             builder.append(StringUtils.format("long {} = {}.readLong($1);", result, EnhanceUtils.byteBufUtils));
         } else {
             builder.append(StringUtils.format("Long {} = {}.readLongBox($1);", result, EnhanceUtils.byteBufUtils));

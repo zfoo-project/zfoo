@@ -28,7 +28,7 @@ public class EnhanceBooleanSerializer implements IEnhanceSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration) {
-        if (field.getType().isPrimitive() || (field.getType().isArray() && field.getType().getComponentType().isPrimitive())) {
+        if (field.getType().isPrimitive()) {
             builder.append(StringUtils.format("{}.writeBoolean($1, {});", EnhanceUtils.byteBufUtils, objectStr));
         } else {
             builder.append(StringUtils.format("{}.writeBooleanBox($1, (Boolean){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -39,7 +39,7 @@ public class EnhanceBooleanSerializer implements IEnhanceSerializer {
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        if (field.getType().isPrimitive() || (field.getType().isArray() && field.getType().getComponentType().isPrimitive())) {
+        if (field.getType().isPrimitive()) {
             builder.append(StringUtils.format("boolean {} = {}.readBoolean($1);", result, EnhanceUtils.byteBufUtils));
         } else {
             builder.append(StringUtils.format("Boolean {} = {}.readBooleanBox($1);", result, EnhanceUtils.byteBufUtils));
