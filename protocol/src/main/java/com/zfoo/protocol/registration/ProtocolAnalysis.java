@@ -51,7 +51,8 @@ public class ProtocolAnalysis {
     private static Set<String> tempProtocolReserved = Set.of("Buffer", "ByteBuf", "ByteBuffer", "LittleEndianByteBuffer", "NormalByteBuffer"
             , "IPacket", "IProtocolRegistration", "ProtocolManager", "IFieldRegistration"
             , "ByteBufUtils", "ArrayUtils", "CollectionUtils"
-            , "Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double", "String", "Character", "Object");
+            , "Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double", "String", "Character", "Object"
+            , "Collections", "Iterator", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet");
 
     // 临时变量，启动完成就会销毁，是一个基本类型序列化器
     private static Map<Class<?>, ISerializer> tempBaseSerializerMap = new HashMap<>();
