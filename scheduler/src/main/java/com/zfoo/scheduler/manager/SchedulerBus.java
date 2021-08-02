@@ -174,7 +174,7 @@ public abstract class SchedulerBus {
     /**
      * cron表达式执行的任务
      */
-    public void scheduleCron(Runnable runnable, String cron) {
+    public static void scheduleCron(Runnable runnable, String cron) {
         if (SchedulerContext.isStop()) {
             return;
         }
