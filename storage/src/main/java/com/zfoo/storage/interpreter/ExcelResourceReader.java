@@ -13,6 +13,7 @@
 
 package com.zfoo.storage.interpreter;
 
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.StorageContext;
@@ -76,7 +77,7 @@ public class ExcelResourceReader implements IResourceReader {
                 // 如果读的是id列的单元格，则判断当前id是否为空
                 if (fieldInfo.field.isAnnotationPresent(Id.class)) {
                     if (cell == null || StringUtils.isEmpty(CellUtils.getCellStringValue(cell))) {
-                        throw new RuntimeException(StringUtils.format("静态资源[resource:{}]存在id未配置的项", clazz.getSimpleName()));
+                        throw new RunException("静态资源[resource:{}]存在id未配置的项", clazz.getSimpleName());
                     }
                 }
             }
@@ -93,8 +94,7 @@ public class ExcelResourceReader implements IResourceReader {
             ReflectionUtils.makeAccessible(field);
             ReflectionUtils.setField(field, instance, value);
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("无法将Excel资源[class:{}]中的[content:{}]转换为属性[field:{}]"
-                    , instance.getClass().getSimpleName(), content, field.getName()), e);
+            throw new RunException(e, "无法将Excel资源[class:{}]中的[content:{}]转换为属性[field:{}]", instance.getClass().getSimpleName(), content, field.getName());
         }
     }
 
@@ -103,7 +103,7 @@ public class ExcelResourceReader implements IResourceReader {
     private Collection<FieldInfo> getFieldInfos(Sheet sheet, Class<?> clazz) {
         var fieldRow = getFieldRow(sheet);
         if (fieldRow == null) {
-            throw new RuntimeException(StringUtils.format("无法获取资源[class:{}]的Excel文件的属性控制列", clazz.getSimpleName()));
+            throw new RunException("无法获取资源[class:{}]的Excel文件的属性控制列", clazz.getSimpleName());
         }
 
         var cellFieldMap = new HashMap<String, Integer>();
@@ -119,8 +119,7 @@ public class ExcelResourceReader implements IResourceReader {
             }
             var previousValue = cellFieldMap.put(name, i);
             if (Objects.nonNull(previousValue)) {
-                throw new RuntimeException(StringUtils.format("资源[class:{}]的Excel文件出现重复的属性控制列[field:{}]"
-                        , clazz.getSimpleName(), name));
+                throw new RunException("资源[class:{}]的Excel文件出现重复的属性控制列[field:{}]", clazz.getSimpleName(), name);
             }
         }
 
@@ -131,7 +130,21 @@ public class ExcelResourceReader implements IResourceReader {
 
         for (var field : fieldList) {
             if (!cellFieldMap.containsKey(field.getName())) {
-                throw new RuntimeException(StringUtils.format("资源类[class:{}]的声明属性[filed:{}]无法获取，请检查配置表的格式", clazz, field.getName()));
+                throw new RunException("资源类[class:{}]的声明属性[filed:{}]无法获取，请检查配置表的格式", clazz, field.getName());
+            }
+
+            if (Modifier.isPublic(field.getModifiers())) {
+                throw new RunException("因为静态资源类是不能被修改的，所以资源类[class:{}]的属性[filed:{}]不能被public修饰，请改为private修饰", clazz, field.getName());
+            }
+
+            var setMethodName = StringUtils.EMPTY;
+            try {
+                setMethodName = ReflectionUtils.fieldToSetMethod(clazz, field);
+            } catch (Exception e) {
+                // 没有setMethod是正确的
+            }
+            if (!StringUtils.isBlank(setMethodName)) {
+                throw new RunException("因为静态资源类是不能被修改的，所以资源类[class:{}]的属性[filed:{}]不能含有set方法[{}]", clazz, field.getName(), setMethodName);
             }
         }
 
@@ -151,7 +164,7 @@ public class ExcelResourceReader implements IResourceReader {
         try {
             return WorkbookFactory.create(input);
         } catch (IOException e) {
-            throw new RuntimeException(StringUtils.format("静态资源[{}]异常，无法读取文件", clazz.getSimpleName()));
+            throw new RunException("静态资源[{}]异常，无法读取文件", clazz.getSimpleName());
         }
     }
 
