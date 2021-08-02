@@ -65,7 +65,7 @@ public abstract class SchedulerBus {
             } catch (Exception e) {
                 logger.error("scheduler triggers an error.", e);
             }
-        }, 3 * TimeUtils.MILLIS_PER_SECOND, TRIGGER_MILLIS_INTERVAL, TimeUnit.MILLISECONDS);
+        }, 7 * TimeUtils.MILLIS_PER_SECOND, TRIGGER_MILLIS_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
 
