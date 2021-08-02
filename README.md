@@ -50,6 +50,9 @@
 
 - [zfoo 视频教程](./doc/视频教程.md)，持续更新中
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of Tanks）》，新手友好，难度2星
+  - 快速体验，tank游戏入口 [tank.zfoo.net](http://tank.zfoo.net)
+  - 快速体验，tank后台入口 [tank-admin.zfoo.net](http://tank-admin.zfoo.net)，账号：a，密码：a
+
 - [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，标准的https企业级网站，难度5星
 
 Ⅳ. 问题
