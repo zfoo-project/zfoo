@@ -189,7 +189,7 @@ public abstract class ReflectionUtils {
         try {
             return newInstance(clazz.getDeclaredConstructor());
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(StringUtils.format("[{}]无法被实例化", clazz));
+            throw new RunException("[{}]无法被实例化", clazz);
         }
     }
 
@@ -197,7 +197,7 @@ public abstract class ReflectionUtils {
         try {
             return constructor.newInstance();
         } catch (Exception e) {
-            throw new RuntimeException(StringUtils.format("[{}]无法被实例化", constructor));
+            throw new RunException("[{}]无法被实例化", constructor);
         }
     }
 
@@ -331,7 +331,7 @@ public abstract class ReflectionUtils {
             clazz.getDeclaredMethod(methodName, null);
             return methodName;
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(StringUtils.format("field:[{}] has no getMethod or isMethod in class:[{}]", field.getName(), clazz.getCanonicalName()));
+            throw new RunException("field:[{}] has no getMethod or isMethod in class:[{}]", field.getName(), clazz.getCanonicalName());
         }
     }
 
@@ -352,7 +352,7 @@ public abstract class ReflectionUtils {
             clazz.getDeclaredMethod(methodName, field.getType());
             return methodName;
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(StringUtils.format("field:[{}] has no setMethod in class:[{}]", field.getName(), clazz.getCanonicalName()));
+            throw new RunException("field:[{}] has no setMethod in class:[{}]", field.getName(), clazz.getCanonicalName());
         }
     }
 
