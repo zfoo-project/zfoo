@@ -69,6 +69,24 @@ public abstract class MongoIdUtils {
         return getIncrementIdFromMongo(COLLECTION_NAME, StringUtils.uncapitalize(clazz.getSimpleName()));
     }
 
+
+    // ----------------------------------------------------------------------------------------------------
+
+    /**
+     * 重置documentName的数值，重置为0
+     *
+     * @param documentName 档id
+     */
+    public static void resetIncrementIdFromMongoDefault(String documentName) {
+        var collection = OrmContext.getOrmManager().getCollection(COLLECTION_NAME);
+
+        collection.findOneAndUpdate(Filters.eq("_id", documentName)
+                , new Document("$set", new Document(COUNT, 0L)));
+    }
+
+
+    // ----------------------------------------------------------------------------------------------------
+
     /**
      * 获取最大的id
      *

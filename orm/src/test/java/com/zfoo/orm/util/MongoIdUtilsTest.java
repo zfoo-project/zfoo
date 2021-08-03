@@ -70,4 +70,12 @@ public class MongoIdUtilsTest {
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
+    @Test
+    public void reset() {
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        var id = MongoIdUtils.getIncrementIdFromMongoDefault("myDocument");
+        System.out.println(id);
+        MongoIdUtils.resetIncrementIdFromMongoDefault("myDocument");
+    }
+
 }
