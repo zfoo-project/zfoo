@@ -35,6 +35,9 @@ fi
 
 command=${1}
 
+# 为了避免一些部署的异常，每次执行脚本都更新一下环境变量
+source /etc/profile
+
 function waitAllProcessesExit() {
     while true; do
         local runningProcesses
