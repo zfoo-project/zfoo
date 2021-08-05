@@ -47,7 +47,7 @@ public class TimeOrmPersister extends AbstractOrmPersister {
             @Override
             public void run() {
                 if (!OrmContext.isStop()) {
-                    EventBus.asyncExecute().execute(new Runnable() {
+                    EventBus.asyncExecute(entityDef.getClazz().hashCode()).execute(new Runnable() {
                         @Override
                         public void run() {
                             entityCaches.persistAll();

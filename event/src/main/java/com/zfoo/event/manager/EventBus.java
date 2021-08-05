@@ -91,6 +91,10 @@ public abstract class EventBus {
         return executors[RandomUtils.randomInt(EXECUTORS_SIZE)];
     }
 
+    public static Executor asyncExecute(int hashcode) {
+        return executors[Math.abs(hashcode % EXECUTORS_SIZE)];
+    }
+
     private static void doSubmit(IEvent event, List<IEventReceiver> receiverList) {
         for (var receiver : receiverList) {
             try {
