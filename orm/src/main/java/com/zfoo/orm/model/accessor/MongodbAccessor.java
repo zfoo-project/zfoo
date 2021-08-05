@@ -67,7 +67,7 @@ public class MongodbAccessor implements IAccessor {
 
             var result = collection.replaceOne(filter, entity);
             if (result.getModifiedCount() <= 0) {
-                logger.error("数据库[{}]中没有[id:{}]的字段，或者需要更新的数据和数据库中的相同", entityClazz.getSimpleName(), entity.id());
+                logger.warn("数据库[{}]中没有[id:{}]的字段，或者需要更新的数据和数据库中的相同", entityClazz.getSimpleName(), entity.id());
                 return false;
             }
             return true;
