@@ -78,4 +78,11 @@ public class MongoIdUtilsTest {
         MongoIdUtils.resetIncrementIdFromMongoDefault("myDocument");
     }
 
+    @Test
+    public void set() {
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        var id = MongoIdUtils.getIncrementIdFromMongoDefault("myDocument");
+        System.out.println(id);
+        MongoIdUtils.setIncrementIdFromMongo(100, "myDocument");
+    }
 }

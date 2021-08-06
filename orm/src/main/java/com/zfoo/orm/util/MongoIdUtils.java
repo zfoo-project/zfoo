@@ -78,10 +78,20 @@ public abstract class MongoIdUtils {
      * @param documentName 档id
      */
     public static void resetIncrementIdFromMongoDefault(String documentName) {
-        var collection = OrmContext.getOrmManager().getCollection(COLLECTION_NAME);
+        setIncrementIdFromMongo(0L, COLLECTION_NAME, documentName);
+    }
 
-        collection.findOneAndUpdate(Filters.eq("_id", documentName)
-                , new Document("$set", new Document(COUNT, 0L)));
+    public static void setIncrementIdFromMongo(long value, Class<?> clazz) {
+        setIncrementIdFromMongo(value, COLLECTION_NAME, StringUtils.uncapitalize(clazz.getSimpleName()));
+    }
+
+    public static void setIncrementIdFromMongo(long value, String documentName) {
+        setIncrementIdFromMongo(value, COLLECTION_NAME, documentName);
+    }
+
+    public static void setIncrementIdFromMongo(long value, String collectionName, String documentName) {
+        var collection = OrmContext.getOrmManager().getCollection(collectionName);
+        collection.findOneAndUpdate(Filters.eq("_id", documentName), new Document("$set", new Document(COUNT, value)));
     }
 
 
