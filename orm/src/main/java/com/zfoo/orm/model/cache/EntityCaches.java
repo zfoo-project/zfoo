@@ -63,7 +63,7 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
                 .expireAfterAccess(entityDef.getExpireMillisecond(), TimeUnit.MILLISECONDS)
                 .maximumSize(entityDef.getCacheSize())
                 .initialCapacity(CollectionUtils.comfortableCapacity(entityDef.getCacheSize()))
-                .recordStats() // 开启统计信息开关，cache.stats()获取统计信息
+                //.recordStats() // 开启统计信息开关，cache.stats()获取统计信息
                 .removalListener(new RemovalListener<PK, PNode<E>>() {
                     @Override
                     public void onRemoval(@Nullable PK pk, @Nullable PNode<E> pnode, @NonNull RemovalCause removalCause) {
