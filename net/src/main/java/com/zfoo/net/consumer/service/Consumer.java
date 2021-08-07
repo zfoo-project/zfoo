@@ -15,6 +15,7 @@ package com.zfoo.net.consumer.service;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.dispatcher.manager.PacketDispatcher;
+import com.zfoo.net.dispatcher.manager.PacketSignal;
 import com.zfoo.net.dispatcher.model.answer.AsyncAnswer;
 import com.zfoo.net.dispatcher.model.answer.SyncAnswer;
 import com.zfoo.net.dispatcher.model.exception.ErrorResponseException;
@@ -71,7 +72,7 @@ public class Consumer implements IConsumer {
         clientAttachment.setExecutorConsistentHash(executorConsistentHash);
 
         try {
-            session.addClientSignalAttachment(clientAttachment);
+            PacketSignal.addSignalAttachment(clientAttachment);
 
             // load balancer之前调用
             loadBalancer.beforeLoadBalancer(session, packet, clientAttachment);
@@ -96,7 +97,7 @@ public class Consumer implements IConsumer {
             throw new NetTimeOutException(StringUtils.format("syncRequest timeout exception, ask:[{}], attachment:[{}]"
                     , JsonUtils.object2String(packet), JsonUtils.object2String(clientAttachment)));
         } finally {
-            session.removeClientSignalAttachment(clientAttachment);
+            PacketSignal.removeSignalAttachment(clientAttachment);
         }
     }
 

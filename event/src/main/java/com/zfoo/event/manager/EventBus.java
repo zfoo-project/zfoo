@@ -37,7 +37,7 @@ public abstract class EventBus {
     private static final Logger logger = LoggerFactory.getLogger(EventBus.class);
 
     // 线程池的大小
-    private static final int EXECUTORS_SIZE = Runtime.getRuntime().availableProcessors() * 2;
+    public static final int EXECUTORS_SIZE = Runtime.getRuntime().availableProcessors() * 2;
 
     private static final ExecutorService[] executors = new ExecutorService[EXECUTORS_SIZE];
 

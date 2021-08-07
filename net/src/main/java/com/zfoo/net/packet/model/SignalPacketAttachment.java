@@ -15,10 +15,10 @@ package com.zfoo.net.packet.model;
 
 import com.zfoo.protocol.IPacket;
 import com.zfoo.scheduler.util.TimeUtils;
-import com.zfoo.util.security.IdUtils;
 
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 附加包对业务层透明，禁止在业务层使用
@@ -30,10 +30,12 @@ public class SignalPacketAttachment implements IPacketAttachment {
 
     public static final transient short PROTOCOL_ID = 0;
 
+    private static final AtomicInteger ATOMIC_PACKET_ID = new AtomicInteger(0);
+
     /**
      * 唯一标识一个packet， 唯一表示一个PacketAttachment，hashcode() and equals() 也通过packetId计算
      */
-    private int packetId = IdUtils.getLocalIntId();
+    private int packetId = ATOMIC_PACKET_ID.incrementAndGet();
 
     /**
      * 用来在TaskManage中计算一致性hash的参数

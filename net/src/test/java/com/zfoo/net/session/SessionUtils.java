@@ -16,7 +16,6 @@ package com.zfoo.net.session;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.FileUtils;
-import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.ThreadUtils;
 
@@ -34,16 +33,14 @@ public abstract class SessionUtils {
                 builder.append(StringUtils.format("clientSession总数：[{}]", NetContext.getSessionManager().getClientSessionMap().size()));
                 builder.append(FileUtils.LS);
                 for (Session session : NetContext.getSessionManager().getClientSessionMap().values()) {
-                    builder.append(StringUtils.format("[session:{}],[attachment:{}]"
-                            , session.getChannel().remoteAddress(), JsonUtils.object2String(session.getClientSignalPacketAttachmentMap())));
+                    builder.append(StringUtils.format("[session:{}]", session.getChannel().remoteAddress()));
                     builder.append(FileUtils.LS);
                 }
 
                 builder.append(StringUtils.format("serverSession总数：[{}]", NetContext.getSessionManager().getServerSessionMap().size()));
                 builder.append(FileUtils.LS);
                 for (Session session : NetContext.getSessionManager().getServerSessionMap().values()) {
-                    builder.append(StringUtils.format("[session:{}],[attachment:{}]"
-                            , session.getChannel().remoteAddress(), JsonUtils.object2String(session.getClientSignalPacketAttachmentMap())));
+                    builder.append(StringUtils.format("[session:{}]", session.getChannel().remoteAddress()));
                     builder.append(FileUtils.LS);
                 }
 

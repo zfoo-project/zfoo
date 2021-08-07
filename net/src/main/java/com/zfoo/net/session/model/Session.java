@@ -13,16 +13,12 @@
 
 package com.zfoo.net.session.model;
 
-import com.zfoo.net.packet.model.IPacketAttachment;
-import com.zfoo.net.packet.model.SignalPacketAttachment;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.Channel;
 
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -45,11 +41,6 @@ public class Session {
      */
     private Map<AttributeType, Object> attributes = new EnumMap<>(AttributeType.class);
 
-    /**
-     * 客户端Session控制同步或异步的附加包，key：packetId
-     */
-    private Map<Integer, SignalPacketAttachment> clientSignalPacketAttachmentMap = new ConcurrentHashMap<>();
-
 
     public Session(Channel channel) {
         if (channel == null) {
@@ -57,15 +48,6 @@ public class Session {
         }
         this.sid = ATOMIC_LONG.getAndIncrement();
         this.channel = channel;
-    }
-
-
-    public void addClientSignalAttachment(SignalPacketAttachment packetAttachment) {
-        clientSignalPacketAttachmentMap.put(packetAttachment.getPacketId(), packetAttachment);
-    }
-
-    public IPacketAttachment removeClientSignalAttachment(SignalPacketAttachment packetAttachment) {
-        return clientSignalPacketAttachmentMap.remove(packetAttachment.getPacketId());
     }
 
 
@@ -112,16 +94,11 @@ public class Session {
         return attributes.get(key);
     }
 
-    public Map<Integer, IPacketAttachment> getClientSignalPacketAttachmentMap() {
-        return Collections.unmodifiableMap(clientSignalPacketAttachmentMap);
-    }
-
     public Channel getChannel() {
         return channel;
     }
 
     public void close() {
         channel.close();
-        clientSignalPacketAttachmentMap.clear();
     }
 }

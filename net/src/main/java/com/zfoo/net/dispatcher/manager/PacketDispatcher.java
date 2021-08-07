@@ -86,7 +86,7 @@ public class PacketDispatcher implements IPacketDispatcher {
 
                     } else {
                         // 客户端收到服务器应答，客户端发送的时候isClient为true，服务器收到的时候将其设置为false
-                        var attachment = (SignalPacketAttachment) session.removeClientSignalAttachment(signalPacketAttachment);
+                        var attachment = (SignalPacketAttachment) PacketSignal.removeSignalAttachment(signalPacketAttachment);
                         if (attachment != null) {
                             attachment.getResponseFuture().complete(packet);
                         } else {
@@ -185,7 +185,7 @@ public class PacketDispatcher implements IPacketDispatcher {
         clientAttachment.setExecutorConsistentHash(executorConsistentHash);
 
         try {
-            session.addClientSignalAttachment(clientAttachment);
+            PacketSignal.addSignalAttachment(clientAttachment);
             send(session, packet, clientAttachment);
 
             IPacket responsePacket = clientAttachment.getResponseFuture().get(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
@@ -203,7 +203,7 @@ public class PacketDispatcher implements IPacketDispatcher {
             throw new NetTimeOutException(StringUtils.format("syncRequest timeout exception, ask:[{}], attachment:[{}]"
                     , JsonUtils.object2String(packet), JsonUtils.object2String(clientAttachment)));
         } finally {
-            session.removeClientSignalAttachment(clientAttachment);
+            PacketSignal.removeSignalAttachment(clientAttachment);
         }
 
     }
@@ -241,7 +241,7 @@ public class PacketDispatcher implements IPacketDispatcher {
                     })
                     .whenCompleteAsync((responsePacket, e) -> {
                         try {
-                            session.removeClientSignalAttachment(clientAttachment);
+                            PacketSignal.removeSignalAttachment(clientAttachment);
 
                             // 如果有异常的话，whenCompleteAsync的下一个thenAccept不会执行
                             if (e != null) {
@@ -269,13 +269,13 @@ public class PacketDispatcher implements IPacketDispatcher {
                     }, TaskManager.getInstance().getExecutorByConsistentHash(executorConsistentHash));
 
 
-            session.addClientSignalAttachment(clientAttachment);
+            PacketSignal.addSignalAttachment(clientAttachment);
 
             // 等到上层调用whenComplete才会发送消息
             asyncAnswer.setAskCallback(() -> send(session, packet, clientAttachment));
             return asyncAnswer;
         } catch (Exception e) {
-            session.removeClientSignalAttachment(clientAttachment);
+            PacketSignal.removeSignalAttachment(clientAttachment);
             throw e;
         }
     }
