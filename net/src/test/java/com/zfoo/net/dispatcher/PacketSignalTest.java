@@ -14,11 +14,12 @@ package com.zfoo.net.dispatcher;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.dispatcher.manager.PacketSignal;
-import com.zfoo.net.packet.model.SignalPacketAttachment;
 import com.zfoo.scheduler.util.TimeUtils;
+import com.zfoo.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,47 +32,90 @@ public class PacketSignalTest {
 
     private AtomicInteger atomicInteger = new AtomicInteger(0);
 
+    private int executorSize = EventBus.EXECUTORS_SIZE / 2;
+    private int count = 100_0000;
+    private int totalIndex = 10;
+
     @Test
     public void test() throws InterruptedException {
         // 预热
-        addAndRemove();
+        arrayTest();
+        mapTest();
 
+        ThreadUtils.sleep(3000);
+
+        arrayTest();
+        mapTest();
+        System.out.println(atomicInteger.get());
+    }
+
+    public void arrayTest() throws InterruptedException {
         var startTime = TimeUtils.currentTimeMillis();
 
-        var countDownLatch = new CountDownLatch(EventBus.EXECUTORS_SIZE);
-        for (int i = 0; i < EventBus.EXECUTORS_SIZE; i++) {
+        var countDownLatch = new CountDownLatch(executorSize);
+        for (var i = 0; i < executorSize; i++) {
             EventBus.asyncExecute(i).execute(new Runnable() {
                 @Override
                 public void run() {
-                    addAndRemove();
+                    addAndRemoveArray();
                     countDownLatch.countDown();
                 }
             });
         }
-
         countDownLatch.await();
-
-        System.out.println(TimeUtils.currentTimeMillis() - startTime);
         PacketSignal.status();
+        System.out.println(TimeUtils.currentTimeMillis() - startTime);
     }
 
-    public void addAndRemove() {
-        for (int count = 0; count < 1_0000; count++) {
-            var startIndex = atomicInteger.incrementAndGet();
-            var endIndex = 0;
-            for (int i = 0; i < 1000; i++) {
-                endIndex = atomicInteger.incrementAndGet();
+    public void mapTest() throws InterruptedException {
+        var startTime = TimeUtils.currentTimeMillis();
+
+        var countDownLatch = new CountDownLatch(executorSize);
+        for (int i = 0; i < executorSize; i++) {
+            EventBus.asyncExecute(i).execute(new Runnable() {
+                @Override
+                public void run() {
+                    addAndRemoveMap();
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
+        PacketSignalMap.status();
+        System.out.println(TimeUtils.currentTimeMillis() - startTime);
+    }
+
+    public void addAndRemoveArray() {
+        var list = new ArrayList<Integer>(totalIndex);
+        for (var i = 0; i < count; i++) {
+            list.clear();
+            for (var j = 0; j < totalIndex; j++) {
+                var index = atomicInteger.incrementAndGet();
+                list.add(index);
+                PacketSignalArray.addSignalAttachment(index);
             }
-            for (int i = startIndex; i < endIndex; i++) {
-                var attachment = new SignalPacketAttachment();
-                attachment.setPacketId(i);
-                PacketSignal.addSignalAttachment(attachment);
-            }
-            for (int i = startIndex; i < endIndex; i++) {
-                PacketSignal.removeSignalAttachment(i);
+
+            for (var index : list) {
+                PacketSignalArray.removeSignalAttachment(index);
             }
         }
     }
 
+
+    public void addAndRemoveMap() {
+        var list = new ArrayList<Integer>(totalIndex);
+        for (var i = 0; i < count; i++) {
+            list.clear();
+            for (var j = 0; j < totalIndex; j++) {
+                var index = atomicInteger.incrementAndGet();
+                list.add(index);
+                PacketSignalMap.addSignalAttachment(index);
+            }
+
+            for (var index : list) {
+                PacketSignalMap.removeSignalAttachment(index);
+            }
+        }
+    }
 
 }
