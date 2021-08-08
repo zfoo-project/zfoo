@@ -26,6 +26,7 @@ import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;
+import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -43,9 +44,10 @@ public abstract class PacketBus {
     private static final Logger logger = LoggerFactory.getLogger(PacketBus.class);
 
     /**
-     * 客户端和服务端都有接受packet的方法，packetReceiverList对应的就是包的接收方法
+     * 客户端和服务端都有接受packet的方法，packetReceiverList对应的就是包的接收方法，将receiver注册到IProtocolRegistration
      */
-    private static final IPacketReceiver[] packetReceiverList = new IPacketReceiver[ProtocolManager.MAX_PROTOCOL_NUM];
+    public static final IProtocolRegistration[] packetReceiverList = ProtocolManager.protocols;
+
 
     /**
      * 正常消息的接收
@@ -54,7 +56,7 @@ public abstract class PacketBus {
      * 接收者同时只能处理一个session的一个包，同一个发送者发送过来的包排队处理
      */
     public static void submit(Session session, IPacket packet, IPacketAttachment packetAttachment) {
-        var packetReceiver = packetReceiverList[packet.protocolId()];
+        var packetReceiver = (IPacketReceiver) packetReceiverList[packet.protocolId()].receiver();
         if (packetReceiver == null) {
             throw new RuntimeException(StringUtils.format("no any packetReceiverDefinition found for this [packet:{}]", packet.getClass().getName()));
         }
@@ -124,7 +126,12 @@ public abstract class PacketBus {
                 var protocolId = (short) protocolIdField.get(null);
                 var receiverDefinition = new PacketReceiverDefinition(bean, method, packetClazz, attachmentClazz);
                 var enhanceReceiverDefinition = EnhanceUtils.createPacketReceiver(receiverDefinition);
-                packetReceiverList[protocolId] = enhanceReceiverDefinition;
+
+                // 将receiver注册到IProtocolRegistration
+                var protocolRegistration = packetReceiverList[protocolId];
+                var receiverField = ReflectionUtils.getFieldByNameInPOJOClass(protocolRegistration.getClass(), "receiver");
+                ReflectionUtils.makeAccessible(receiverField);
+                ReflectionUtils.setField(receiverField, protocolRegistration, enhanceReceiverDefinition);
             } catch (Throwable t) {
                 throw new RuntimeException(t);
             }

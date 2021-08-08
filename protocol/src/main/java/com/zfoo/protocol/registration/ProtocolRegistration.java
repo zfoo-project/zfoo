@@ -37,6 +37,8 @@ public class ProtocolRegistration implements IProtocolRegistration {
     private byte module;
     private Constructor<?> constructor;
 
+    private Object receiver;
+
     private Field[] fields;
 
 
@@ -64,23 +66,11 @@ public class ProtocolRegistration implements IProtocolRegistration {
         return constructor;
     }
 
-
     @Override
-    public Object read(ByteBuf buffer) {
-        if (!ByteBufUtils.readBoolean(buffer)) {
-            return null;
-        }
-        Object object = ReflectionUtils.newInstance(constructor);
-
-        for (int i = 0, length = fields.length; i < length; i++) {
-            Field field = fields[i];
-            IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
-            ISerializer serializer = packetFieldRegistration.serializer();
-            Object fieldValue = serializer.readObject(buffer, packetFieldRegistration);
-            ReflectionUtils.setField(field, object, fieldValue);
-        }
-        return object;
+    public Object receiver() {
+        return receiver;
     }
+
 
     @Override
     public void write(ByteBuf buffer, IPacket packet) {
@@ -98,6 +88,23 @@ public class ProtocolRegistration implements IProtocolRegistration {
             Object fieldValue = ReflectionUtils.getField(field, packet);
             serializer.writeObject(buffer, fieldValue, packetFieldRegistration);
         }
+    }
+
+    @Override
+    public Object read(ByteBuf buffer) {
+        if (!ByteBufUtils.readBoolean(buffer)) {
+            return null;
+        }
+        Object object = ReflectionUtils.newInstance(constructor);
+
+        for (int i = 0, length = fields.length; i < length; i++) {
+            Field field = fields[i];
+            IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
+            ISerializer serializer = packetFieldRegistration.serializer();
+            Object fieldValue = serializer.readObject(buffer, packetFieldRegistration);
+            ReflectionUtils.setField(field, object, fieldValue);
+        }
+        return object;
     }
 
 
