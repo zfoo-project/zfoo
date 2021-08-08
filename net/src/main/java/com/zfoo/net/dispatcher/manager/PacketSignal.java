@@ -51,12 +51,14 @@ public class PacketSignal {
     }
 
     public static SignalPacketAttachment removeSignalAttachment(SignalPacketAttachment packetAttachment) {
-        var packetId = packetAttachment.getPacketId();
+        return removeSignalAttachment(packetAttachment.getPacketId());
+    }
+
+    public static SignalPacketAttachment removeSignalAttachment(int packetId) {
         var hash = packetId & SIGNAL_MASK;
 
         var attachment = signalPacketArray.get(hash);
-        if (attachment != null && attachment.getPacketId() == packetId) {
-            signalPacketArray.lazySet(hash, null);
+        if (attachment != null && attachment.getPacketId() == packetId && signalPacketArray.compareAndSet(hash, attachment, null)) {
             return attachment;
         }
         return signalPacketAttachmentMap.remove(packetId);

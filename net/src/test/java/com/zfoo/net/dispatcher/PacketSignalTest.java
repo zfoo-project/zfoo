@@ -16,7 +16,6 @@ import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.dispatcher.manager.PacketSignal;
 import com.zfoo.net.packet.model.SignalPacketAttachment;
 import com.zfoo.scheduler.util.TimeUtils;
-import com.zfoo.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -50,15 +49,6 @@ public class PacketSignalTest {
             });
         }
 
-        for (int i = 0; i < 100; i++) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    addAndRemoveWithSleep();
-                }
-            }).start();
-        }
-
         countDownLatch.await();
 
         System.out.println(TimeUtils.currentTimeMillis() - startTime);
@@ -66,24 +56,22 @@ public class PacketSignalTest {
     }
 
     public void addAndRemove() {
-        for (int i = 0; i < 1_0000_0000; i++) {
-            var id = atomicInteger.incrementAndGet();
-            var attachment = new SignalPacketAttachment();
-            attachment.setPacketId(id);
-            PacketSignal.addSignalAttachment(attachment);
-            PacketSignal.removeSignalAttachment(attachment);
+        for (int count = 0; count < 1_0000; count++) {
+            var startIndex = atomicInteger.incrementAndGet();
+            var endIndex = 0;
+            for (int i = 0; i < 1000; i++) {
+                endIndex = atomicInteger.incrementAndGet();
+            }
+            for (int i = startIndex; i < endIndex; i++) {
+                var attachment = new SignalPacketAttachment();
+                attachment.setPacketId(i);
+                PacketSignal.addSignalAttachment(attachment);
+            }
+            for (int i = startIndex; i < endIndex; i++) {
+                PacketSignal.removeSignalAttachment(i);
+            }
         }
     }
 
-    public void addAndRemoveWithSleep() {
-        for (int i = 0; i < 1000_0000; i++) {
-            var id = atomicInteger.incrementAndGet();
-            var attachment = new SignalPacketAttachment();
-            attachment.setPacketId(id);
-            PacketSignal.addSignalAttachment(attachment);
-            ThreadUtils.sleep(3000);
-            PacketSignal.removeSignalAttachment(attachment);
-        }
-    }
 
 }
