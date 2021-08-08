@@ -13,35 +13,30 @@
 
 package com.zfoo.net.packet.model;
 
+import com.zfoo.util.math.RandomUtils;
+
 /**
- * 附加包对业务层透明，禁止在业务层使用
- *
  * @author jaysunxiao
  * @version 3.0
  */
-public class NoAnswerAttachment implements IPacketAttachment {
+public class HttpPacketAttachment implements IPacketAttachment {
 
-    public static final transient short PROTOCOL_ID = 4;
+    public static final transient short PROTOCOL_ID = 3;
 
-    /**
-     * 用来在TaskManage中计算一致性hash的参数
-     */
-    private int executorConsistentHash;
 
-    public static NoAnswerAttachment valueOf(int executorConsistentHash) {
-        var attachment = new NoAnswerAttachment();
-        attachment.executorConsistentHash = executorConsistentHash;
+    public static HttpPacketAttachment valueOf() {
+        var attachment = new HttpPacketAttachment();
         return attachment;
     }
 
     @Override
     public PacketAttachmentType packetType() {
-        return PacketAttachmentType.NO_ANSWER_PACKET;
+        return PacketAttachmentType.HTTP_PACKET;
     }
 
     @Override
     public int executorConsistentHash() {
-        return executorConsistentHash;
+        return RandomUtils.randomInt();
     }
 
     @Override
@@ -49,12 +44,4 @@ public class NoAnswerAttachment implements IPacketAttachment {
         return PROTOCOL_ID;
     }
 
-
-    public int getExecutorConsistentHash() {
-        return executorConsistentHash;
-    }
-
-    public void setExecutorConsistentHash(int executorConsistentHash) {
-        this.executorConsistentHash = executorConsistentHash;
-    }
 }

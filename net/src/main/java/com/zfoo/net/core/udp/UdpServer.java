@@ -26,12 +26,16 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
 public class UdpServer extends AbstractServer {
+
+    private static final Logger logger = LoggerFactory.getLogger(UdpServer.class);
 
     public UdpServer(HostAndPort host) {
         super(host);
@@ -58,6 +62,8 @@ public class UdpServer extends AbstractServer {
         channel = channelFuture.channel();
 
         allServers.add(this);
+
+        logger.info("{} started at [{}:{}]", this.getClass().getSimpleName(), hostAddress, port);
     }
 
     @Override
