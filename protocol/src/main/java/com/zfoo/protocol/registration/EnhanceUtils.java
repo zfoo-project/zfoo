@@ -134,6 +134,10 @@ public abstract class EnhanceUtils {
         constructorFiled.setModifiers(Modifier.PRIVATE);
         enhanceClazz.addField(constructorFiled);
 
+        CtField receiverFiled = new CtField(classPool.get(Object.class.getCanonicalName()), "receiver", enhanceClazz);
+        receiverFiled.setModifiers(Modifier.PRIVATE);
+        enhanceClazz.addField(receiverFiled);
+
         // 定义类所包含的所有子协议成员
         var allSubProtocolIds = ProtocolAnalysis.getAllSubProtocolIds(protocolId)
                 .stream()
@@ -142,7 +146,7 @@ public abstract class EnhanceUtils {
 
         for (var subProtocolId : allSubProtocolIds) {
             var protocolRegistrationField = new CtField(classPool.get(IProtocolRegistration.class.getCanonicalName()), getProtocolRegistrationFieldNameByProtocolId(subProtocolId), enhanceClazz);
-            constructorFiled.setModifiers(Modifier.PRIVATE);
+            protocolRegistrationField.setModifiers(Modifier.PRIVATE);
             enhanceClazz.addField(protocolRegistrationField);
         }
 
@@ -162,6 +166,11 @@ public abstract class EnhanceUtils {
         protocolConstructorMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         protocolConstructorMethod.setBody("{return this.constructor;}");
         enhanceClazz.addMethod(protocolConstructorMethod);
+
+        CtMethod receiverMethod = new CtMethod(classPool.get(Object.class.getCanonicalName()), "receiver", null, enhanceClazz);
+        receiverMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
+        receiverMethod.setBody("{return this.receiver;}");
+        enhanceClazz.addMethod(receiverMethod);
 
         CtMethod moduleMethod = new CtMethod(classPool.get(byte.class.getCanonicalName()), "module", null, enhanceClazz);
         moduleMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);

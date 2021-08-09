@@ -11,22 +11,37 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.schema;
+package com.zfoo.net.packet.model;
 
-import com.zfoo.net.dispatcher.manager.PacketBus;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import com.zfoo.util.math.RandomUtils;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-public class NetProcessor implements BeanPostProcessor {
+public class HttpPacketAttachment implements IPacketAttachment {
+
+    public static final transient short PROTOCOL_ID = 3;
+
+
+    public static HttpPacketAttachment valueOf() {
+        var attachment = new HttpPacketAttachment();
+        return attachment;
+    }
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        PacketBus.registerPacketReceiverDefinition(bean);
-        return bean;
+    public PacketAttachmentType packetType() {
+        return PacketAttachmentType.HTTP_PACKET;
+    }
+
+    @Override
+    public int executorConsistentHash() {
+        return RandomUtils.randomInt();
+    }
+
+    @Override
+    public short protocolId() {
+        return PROTOCOL_ID;
     }
 
 }

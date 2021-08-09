@@ -60,11 +60,6 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         builder.addPropertyReference("localConfig", NetConfig.class.getCanonicalName());
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 
-        // 注册NetProcessor
-        clazz = NetProcessor.class;
-        builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
-        parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
-
         // 注册ProtocolManager
         clazz = ProtocolManager.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);

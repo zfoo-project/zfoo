@@ -94,7 +94,7 @@ public abstract class AbstractServer implements IServer {
 
         allServers.add(this);
 
-        logger.info("TcpServer started at [{}:{}]", hostAddress, port);
+        logger.info("{} started at [{}:{}]", this.getClass().getSimpleName(), hostAddress, port);
     }
 
 

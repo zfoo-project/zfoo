@@ -14,6 +14,7 @@
 package com.zfoo.net.packet.service;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.dispatcher.manager.PacketBus;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.packet.model.IPacketAttachment;
 import com.zfoo.protocol.IPacket;
@@ -103,6 +104,13 @@ public class PacketService implements IPacketService {
         } catch (IOException e) {
             logger.error(ExceptionUtils.getMessage(e));
             throw new RuntimeException(e);
+        }
+
+        // 注册协议接收器
+        var beanNames = applicationContext.getBeanDefinitionNames();
+        for (var beanName : beanNames) {
+            var bean = applicationContext.getBean(beanName);
+            PacketBus.registerPacketReceiverDefinition(bean);
         }
     }
 

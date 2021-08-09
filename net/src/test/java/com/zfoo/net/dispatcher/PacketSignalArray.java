@@ -10,9 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.dispatcher.manager;
+package com.zfoo.net.dispatcher;
 
-import com.zfoo.net.packet.model.SignalPacketAttachment;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,43 +26,40 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * @author jaysunxiao
  * @version 3.0
  */
-public class PacketSignal {
+public class PacketSignalArray {
 
-    private static final Logger logger = LoggerFactory.getLogger(PacketSignal.class);
+    private static final Logger logger = LoggerFactory.getLogger(PacketSignalArray.class);
 
-    // equal with 32767
+    // equal with 16383
     private static final int SIGNAL_MASK = 0B00000000_00000000_01111111_11111111;
 
-    private static AtomicReferenceArray<SignalPacketAttachment> signalPacketArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
+    private static AtomicReferenceArray<Integer> signalPacketArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
 
     /**
      * Session控制同步或异步的附加包，key：packetId
      */
-    private static Map<Integer, SignalPacketAttachment> signalPacketAttachmentMap = new ConcurrentHashMap<>(1000);
+    private static Map<Integer, Integer> signalPacketAttachmentMap = new ConcurrentHashMap<>(1000);
 
-    public static void addSignalAttachment(SignalPacketAttachment packetAttachment) {
-        var packetId = packetAttachment.getPacketId();
+    public static void addSignalAttachment(int packetId) {
         var hash = packetId & SIGNAL_MASK;
 
-        if (signalPacketArray.compareAndSet(hash, null, packetAttachment)) {
+        if (signalPacketArray.compareAndSet(hash, null, packetId)) {
             return;
         }
-
-        signalPacketAttachmentMap.put(packetId, packetAttachment);
+//        logger.info("add [packetId:{}] [oldPacketId:{}]", packetId, signalPacketArray.get(hash));
+        signalPacketAttachmentMap.put(packetId, packetId);
     }
 
-    public static SignalPacketAttachment removeSignalAttachment(SignalPacketAttachment packetAttachment) {
-        return removeSignalAttachment(packetAttachment.getPacketId());
-    }
 
-    public static SignalPacketAttachment removeSignalAttachment(int packetId) {
+    public static void removeSignalAttachment(int packetId) {
         var hash = packetId & SIGNAL_MASK;
+        var oldPacketId = signalPacketArray.get(hash);
 
-        var attachment = signalPacketArray.get(hash);
-        if (attachment != null && attachment.getPacketId() == packetId && signalPacketArray.compareAndSet(hash, attachment, null)) {
-            return attachment;
+        if (oldPacketId != null && oldPacketId == packetId && signalPacketArray.compareAndSet(hash, oldPacketId, null)) {
+            return;
         }
-        return signalPacketAttachmentMap.remove(packetId);
+//        logger.info("remove [packetId:{}] [oldPacketId:{}]", packetId, oldPacketId);
+        signalPacketAttachmentMap.remove(packetId);
     }
 
     public static void status() {

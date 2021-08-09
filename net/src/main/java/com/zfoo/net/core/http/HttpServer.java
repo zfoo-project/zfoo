@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -9,29 +8,38 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
+ *
  */
 
-package com.zfoo.net.core.websocket;
+package com.zfoo.net.core.http;
 
 import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.handler.ServerDispatcherHandler;
-import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
+import com.zfoo.net.handler.codec.http.HttpCodecHandler;
+import com.zfoo.protocol.IPacket;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+
+import java.util.function.Function;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-public class WebsocketServer extends AbstractServer {
+public class HttpServer extends AbstractServer {
 
-    public WebsocketServer(HostAndPort host) {
+    /**
+     * http的地址解析器
+     */
+    private Function<String, IPacket> uriResolver;
+
+    public HttpServer(HostAndPort host, Function<String, IPacket> uriResolver) {
         super(host);
+        this.uriResolver = uriResolver;
     }
 
     @Override
@@ -40,23 +48,14 @@ public class WebsocketServer extends AbstractServer {
     }
 
 
-    public static class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
-
+    private class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
         @Override
-        public void initChannel(SocketChannel channel) {
-            // 编解码 http 请求
+        protected void initChannel(SocketChannel channel) {
             channel.pipeline().addLast(new HttpServerCodec());
-            // 写文件内容，支持异步发送大的码流，一般用于发送文件流
             channel.pipeline().addLast(new ChunkedWriteHandler());
-            // 聚合解码 HttpRequest/HttpContent/LastHttpContent 到 FullHttpRequest
-            // 保证接收的 Http 请求的完整性
             channel.pipeline().addLast(new HttpObjectAggregator(64 * 1024));
-            // 处理其他的 WebSocketFrame
-            channel.pipeline().addLast(new WebSocketServerProtocolHandler("/websocket"));
-            // 编解码WebSocketFrame二进制协议
-            channel.pipeline().addLast(new WebSocketCodecHandler());
+            channel.pipeline().addLast(new HttpCodecHandler(uriResolver));
             channel.pipeline().addLast(new ServerDispatcherHandler());
         }
     }
-
 }

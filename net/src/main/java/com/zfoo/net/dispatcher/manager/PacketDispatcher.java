@@ -130,9 +130,6 @@ public class PacketDispatcher implements IPacketDispatcher {
                         return;
                     }
                     break;
-                case NORMAL_PACKET:
-
-                    break;
                 default:
                     break;
             }
