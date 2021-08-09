@@ -25,7 +25,7 @@ import java.util.Set;
  * @version 3.0
  */
 @Ignore
-public class ClassUtilTest {
+public class ClassUtilsTest {
 
     // ClassUtilTest
     @Test
@@ -47,13 +47,13 @@ public class ClassUtilTest {
 
     @Test
     public void getClassPath() {
-        System.out.println(ClassUtils.getClassAbsPath(ClassUtilTest.class));
+        System.out.println(ClassUtils.getClassAbsPath(ClassUtilsTest.class));
     }
 
 
     @Test
     public void getClassFromClassPath() throws IOException {
-        System.out.println(new String(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("com.zfoo.util.ClassUtilsTest"))));
+        System.out.println(new String(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("csTest/CsProtocolTest.cs"))));
     }
 
 }
