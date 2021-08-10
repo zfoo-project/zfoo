@@ -14,6 +14,8 @@
 package com.zfoo.net.packet.model;
 
 import com.zfoo.util.math.RandomUtils;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * @author jaysunxiao
@@ -23,9 +25,14 @@ public class HttpPacketAttachment implements IPacketAttachment {
 
     public static final transient short PROTOCOL_ID = 3;
 
+    private transient FullHttpRequest fullHttpRequest;
 
-    public static HttpPacketAttachment valueOf() {
+    private transient HttpResponseStatus httpResponseStatus;
+
+    public static HttpPacketAttachment valueOf(FullHttpRequest fullHttpRequest, HttpResponseStatus httpResponseStatus) {
         var attachment = new HttpPacketAttachment();
+        attachment.fullHttpRequest = fullHttpRequest;
+        attachment.httpResponseStatus = httpResponseStatus;
         return attachment;
     }
 
@@ -44,4 +51,19 @@ public class HttpPacketAttachment implements IPacketAttachment {
         return PROTOCOL_ID;
     }
 
+    public FullHttpRequest getFullHttpRequest() {
+        return fullHttpRequest;
+    }
+
+    public void setFullHttpRequest(FullHttpRequest fullHttpRequest) {
+        this.fullHttpRequest = fullHttpRequest;
+    }
+
+    public HttpResponseStatus getHttpResponseStatus() {
+        return httpResponseStatus;
+    }
+
+    public void setHttpResponseStatus(HttpResponseStatus httpResponseStatus) {
+        this.httpResponseStatus = httpResponseStatus;
+    }
 }

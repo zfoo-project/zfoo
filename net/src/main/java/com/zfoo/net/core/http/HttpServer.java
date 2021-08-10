@@ -20,6 +20,7 @@ import com.zfoo.protocol.IPacket;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
@@ -35,9 +36,9 @@ public class HttpServer extends AbstractServer {
     /**
      * http的地址解析器
      */
-    private Function<String, IPacket> uriResolver;
+    private Function<FullHttpRequest, IPacket> uriResolver;
 
-    public HttpServer(HostAndPort host, Function<String, IPacket> uriResolver) {
+    public HttpServer(HostAndPort host, Function<FullHttpRequest, IPacket> uriResolver) {
         super(host);
         this.uriResolver = uriResolver;
     }

@@ -26,6 +26,8 @@ public class Message implements IPacket {
 
     public static final transient short PROTOCOL_ID = 100;
 
+    public static final Message DEFAULT = new Message();
+
     private byte module;
 
     /**

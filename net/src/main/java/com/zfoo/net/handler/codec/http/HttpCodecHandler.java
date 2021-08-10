@@ -12,24 +12,18 @@
 
 package com.zfoo.net.handler.codec.http;
 
-import com.zfoo.net.NetContext;
+import com.zfoo.net.packet.common.Message;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.packet.model.EncodedPacketInfo;
 import com.zfoo.net.packet.model.HttpPacketAttachment;
-import com.zfoo.net.packet.service.PacketService;
-import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.handler.codec.http.HttpVersion;
-import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,66 +38,48 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
 
     private static final Logger logger = LoggerFactory.getLogger(HttpCodecHandler.class);
 
-    private Function<String, IPacket> uriResolver;
+    private Function<FullHttpRequest, IPacket> uriResolver;
 
-    public HttpCodecHandler(Function<String, IPacket> uriResolver) {
+    public HttpCodecHandler(Function<FullHttpRequest, IPacket> uriResolver) {
         super();
         this.uriResolver = uriResolver;
     }
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest, List<Object> list) {
-        var uri = fullHttpRequest.uri();
-
-        ByteBuf in = fullHttpRequest.content();
-
-        // 不够读一个int
-        if (in.readableBytes() <= PacketService.PACKET_HEAD_LENGTH) {
-            return;
-        }
-
-        in.markReaderIndex();
-        var length = in.readInt();
-
-        // 如果长度非法，则抛出异常断开连接
-        if (length < 0) {
-            throw new IllegalArgumentException(StringUtils.format("[session:{}]的包头长度[length:{}]非法"
-                    , SessionUtils.sessionInfo(channelHandlerContext), length));
-        }
-
-        // ByteBuf里的数据太小
-        if (in.readableBytes() < length) {
-            in.resetReaderIndex();
-            return;
-        }
-
-        ByteBuf tmpByteBuf = null;
         try {
-            tmpByteBuf = in.readRetainedSlice(length);
-            DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
-
-            packetInfo.setPacketAttachment(HttpPacketAttachment.valueOf());
-            list.add(packetInfo);
+            var packet = uriResolver.apply(fullHttpRequest);
+            var attachment = HttpPacketAttachment.valueOf(fullHttpRequest, HttpResponseStatus.OK);
+            var decodedPacketInfo = DecodedPacketInfo.valueOf(packet, attachment);
+            list.add(decodedPacketInfo);
         } catch (Exception e) {
             logger.error("exception异常", e);
             throw e;
         } catch (Throwable t) {
             logger.error("throwable错误", t);
             throw t;
-        } finally {
-            ReferenceCountUtil.release(tmpByteBuf);
         }
     }
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
+
         try {
-            var byteBuf = channelHandlerContext.alloc().ioBuffer();
-            var httpPacketAttachment = (HttpPacketAttachment) out.getPacketAttachment();
+            var packet = (IPacket) out.getPacket();
+            var attachment = (HttpPacketAttachment) out.getPacketAttachment();
 
-            var fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.wrappedBuffer("I am ok".getBytes()));
-
-            list.add(fullHttpResponse);
+            var protocolVersion = attachment.getFullHttpRequest().protocolVersion();
+            var httpResponseStatus = attachment.getHttpResponseStatus();
+            if (packet.protocolId() == Message.PROTOCOL_ID) {
+                var fullHttpResponse = new DefaultFullHttpResponse(protocolVersion, httpResponseStatus);
+                list.add(fullHttpResponse);
+            } else {
+                var byteBuf = channelHandlerContext.alloc().ioBuffer();
+                var jsonStr = JsonUtils.object2StringTurbo(packet);
+                byteBuf.writeBytes(StringUtils.bytes(jsonStr));
+                var fullHttpResponse = new DefaultFullHttpResponse(protocolVersion, httpResponseStatus, byteBuf);
+                list.add(fullHttpResponse);
+            }
         } catch (Exception e) {
             logger.error("[{}]编码exception异常", JsonUtils.object2String(out), e);
             throw e;
