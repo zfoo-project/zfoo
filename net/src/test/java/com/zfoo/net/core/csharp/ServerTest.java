@@ -13,7 +13,6 @@
 
 package com.zfoo.net.core.csharp;
 
-import com.zfoo.net.NetContext;
 import com.zfoo.net.core.tcp.TcpServer;
 import com.zfoo.net.session.SessionUtils;
 import com.zfoo.util.ThreadUtils;
@@ -36,8 +35,8 @@ public class ServerTest {
         SessionUtils.printSessionInfo();
 //        startClient1();
 
-        var server0 = new TcpServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
-        server0.start();
+        var server = new TcpServer(HostAndPort.valueOf("127.0.0.1:9000"));
+        server.start();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 

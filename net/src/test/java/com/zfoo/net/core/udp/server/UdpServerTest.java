@@ -12,7 +12,6 @@
 
 package com.zfoo.net.core.udp.server;
 
-import com.zfoo.net.NetContext;
 import com.zfoo.net.core.udp.UdpServer;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
@@ -30,7 +29,7 @@ public class UdpServerTest {
     @Test
     public void startServerTest() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
-        var server = new UdpServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
+        var server = new UdpServer(HostAndPort.valueOf("127.0.0.1:9000"));
         server.start();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }

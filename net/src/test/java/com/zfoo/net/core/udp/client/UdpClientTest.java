@@ -32,7 +32,7 @@ public class UdpClientTest {
     @Test
     public void startClientTest() {
         var context = new ClassPathXmlApplicationContext("config.xml");
-        var hostAndPort = HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0"));
+        var hostAndPort = HostAndPort.valueOf("127.0.0.1:9000");
         var client = new UdpClient(hostAndPort);
 
         var session = client.start();

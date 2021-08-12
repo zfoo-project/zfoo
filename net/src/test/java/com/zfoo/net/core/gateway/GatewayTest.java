@@ -67,7 +67,7 @@ public class GatewayTest {
     public void startGateway() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_consistent_session_config.xml");
         SessionUtils.printSessionInfo();
-        var gatewayServer = new GatewayServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")), null);
+        var gatewayServer = new GatewayServer(HostAndPort.valueOf("127.0.0.1:9000"), null);
         gatewayServer.start();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
@@ -77,7 +77,7 @@ public class GatewayTest {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_client_config.xml");
         SessionUtils.printSessionInfo();
 
-        var client = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
+        var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
         var session = client.start();
 
         var executorSize = Runtime.getRuntime().availableProcessors() * 2;
