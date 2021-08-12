@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,30 +10,31 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.websocket.server;
+package com.zfoo.net.packet.websocket;
 
-import com.zfoo.net.core.websocket.WebsocketServer;
-import com.zfoo.util.ThreadUtils;
-import com.zfoo.util.net.HostAndPort;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.zfoo.protocol.IPacket;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-@Ignore
-public class WebsocketServerTest {
+public class WebsocketHelloRequest implements IPacket {
 
-    @Test
-    public void startServer() {
-        var context = new ClassPathXmlApplicationContext("config.xml");
+    public static final transient short PROTOCOL_ID = 1400;
 
-        var server = new WebsocketServer(HostAndPort.valueOf("127.0.0.1:9000"));
-        server.start();
+    private String message;
 
-        ThreadUtils.sleep(Long.MAX_VALUE);
+
+    @Override
+    public short protocolId() {
+        return PROTOCOL_ID;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

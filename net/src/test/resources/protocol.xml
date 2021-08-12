@@ -65,10 +65,13 @@
 
         <protocol id="1300" location="com.zfoo.net.packet.tcp.TcpHelloRequest"/>
         <protocol id="1301" location="com.zfoo.net.packet.tcp.TcpHelloResponse"/>
+
+        <protocol id="1400" location="com.zfoo.net.packet.websocket.WebsocketHelloRequest"/>
+        <protocol id="1401" location="com.zfoo.net.packet.websocket.WebsocketHelloResponse"/>
     </module>
 
     <module id="4" name="js" minId="2000" maxId="3000" version="1.0.0">
-        <protocol id="2070" location="com.zfoo.net.packet.websocket.CM_WebSocketPacket" enhance="false"/>
+        <protocol id="2070" location="com.zfoo.net.packet.websocket.WebSocketPacketRequest" enhance="false"/>
         <protocol id="2071" location="com.zfoo.net.packet.websocket.WebSocketObjectA" enhance="false"/>
         <protocol id="2072" location="com.zfoo.net.packet.websocket.WebSocketObjectB" enhance="false"/>
     </module>
