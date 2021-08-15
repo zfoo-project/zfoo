@@ -27,6 +27,7 @@ import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
@@ -130,11 +131,13 @@ public abstract class PacketBus {
 
                 // 将receiver注册到IProtocolRegistration
                 var protocolRegistration = packetReceiverList[protocolId];
+                AssertionUtils.notNull(protocolRegistration, "协议类[class:{}][protocolId:{}]没有注册", packetClazz.getSimpleName(), protocolId);
+
                 var receiverField = ReflectionUtils.getFieldByNameInPOJOClass(protocolRegistration.getClass(), "receiver");
                 ReflectionUtils.makeAccessible(receiverField);
                 ReflectionUtils.setField(receiverField, protocolRegistration, enhanceReceiverDefinition);
             } catch (Throwable t) {
-                throw new RuntimeException(t);
+                throw new RunException(t, "解析协议类[class:{}]未知异常", packetClazz.getSimpleName());
             }
         }
     }
