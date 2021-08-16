@@ -20,6 +20,7 @@ import com.zfoo.net.core.tcp.TcpClient;
 import com.zfoo.net.core.tcp.TcpServer;
 import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.util.SessionUtils;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.ConcurrentArrayList;
 import com.zfoo.protocol.collection.ConcurrentHashSet;
 import com.zfoo.protocol.exception.ExceptionUtils;
@@ -247,14 +248,14 @@ public class ZookeeperRegistry implements IRegistry {
             if (Objects.isNull(providerStat)) {
                 curator.create()
                         .withMode(CreateMode.PERSISTENT)
-                        .forPath(PROVIDER_ROOT_PATH, StringUtils.EMPTY_BYTES);
+                        .forPath(PROVIDER_ROOT_PATH, ArrayUtils.EMPTY_BYTE_ARRAY);
             }
 
             var consumerStat = curator.checkExists().forPath(CONSUMER_ROOT_PATH);
             if (Objects.isNull(consumerStat)) {
                 curator.create()
                         .withMode(CreateMode.PERSISTENT)
-                        .forPath(CONSUMER_ROOT_PATH, StringUtils.EMPTY_BYTES);
+                        .forPath(CONSUMER_ROOT_PATH, ArrayUtils.EMPTY_BYTE_ARRAY);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -536,7 +537,7 @@ public class ZookeeperRegistry implements IRegistry {
                 curator.create()
                         .creatingParentsIfNeeded()
                         .withMode(CreateMode.PERSISTENT)
-                        .forPath(listenerPath, StringUtils.EMPTY_BYTES);
+                        .forPath(listenerPath, ArrayUtils.EMPTY_BYTE_ARRAY);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

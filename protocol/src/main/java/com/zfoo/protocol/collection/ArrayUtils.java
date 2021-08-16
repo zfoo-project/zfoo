@@ -25,6 +25,17 @@ import java.util.List;
  * @version 3.0
  */
 public abstract class ArrayUtils {
+
+    public static final boolean[] EMPTY_BOOLEAN_ARRAY = new boolean[0];
+    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+    public static final short[] EMPTY_SHORT_ARRAY = new short[0];
+    public static final int[] EMPTY_INT_ARRAY = new int[0];
+    public static final long[] EMPTY_LONG_ARRAY = new long[0];
+    public static final float[] EMPTY_FLOAT_ARRAY = new float[0];
+    public static final double[] EMPTY_DOUBLE_ARRAY = new double[0];
+    public static final char[] EMPTY_CHAR_ARRAY = new char[0];
+
+
     /**
      * length
      */
@@ -241,6 +252,106 @@ public abstract class ArrayUtils {
         return Arrays.asList(array);
     }
 
+
+    /**
+     * toArray
+     */
+    public static boolean[] booleanToArray(List<Boolean> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return EMPTY_BOOLEAN_ARRAY;
+        }
+        var size = list.size();
+        var array = new boolean[size];
+        for (var i = 0; i < size; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    public static byte[] byteToArray(List<Byte> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return EMPTY_BYTE_ARRAY;
+        }
+        var size = list.size();
+        var array = new byte[size];
+        for (var i = 0; i < size; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    public static short[] shortToArray(List<Short> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return EMPTY_SHORT_ARRAY;
+        }
+        var size = list.size();
+        var array = new short[size];
+        for (var i = 0; i < size; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    public static int[] intToArray(List<Integer> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return EMPTY_INT_ARRAY;
+        }
+        var size = list.size();
+        var array = new int[size];
+        for (var i = 0; i < size; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+
+    public static long[] longToArray(List<Long> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return EMPTY_LONG_ARRAY;
+        }
+        var size = list.size();
+        var array = new long[size];
+        for (var i = 0; i < size; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    public static float[] floatToArray(List<Float> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return EMPTY_FLOAT_ARRAY;
+        }
+        var size = list.size();
+        var array = new float[size];
+        for (var i = 0; i < size; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    public static double[] doubleToArray(List<Double> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return EMPTY_DOUBLE_ARRAY;
+        }
+        var size = list.size();
+        var array = new double[size];
+        for (var i = 0; i < size; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    public static char[] charToArray(List<Character> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return EMPTY_CHAR_ARRAY;
+        }
+        var size = list.size();
+        var array = new char[size];
+        for (var i = 0; i < size; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
 
     public static <T> T[] listToArray(List<T> list, Class<T> clazz) {
         AssertionUtils.notNull(list);

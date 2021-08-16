@@ -13,6 +13,7 @@
 package com.zfoo.protocol.buffer;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.util.StringUtils;
@@ -631,7 +632,7 @@ public abstract class ByteBufUtils {
     public static byte[] readByteArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
         if (length == 0) {
-            return StringUtils.EMPTY_BYTES;
+            return ArrayUtils.EMPTY_BYTE_ARRAY;
         }
 
         var bytes = new byte[length];

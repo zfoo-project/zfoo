@@ -30,7 +30,6 @@ import java.util.regex.Pattern;
 public abstract class StringUtils {
 
     public static final String EMPTY = "";
-    public static final byte[] EMPTY_BYTES = new byte[0];
     public static final String[] EMPTY_ARRAY = new String[0];
 
     public static final String SPACE = " ";
@@ -368,7 +367,7 @@ public abstract class StringUtils {
         try {
             return str.getBytes(DEFAULT_CHARSET);
         } catch (Exception e) {
-            return EMPTY_BYTES;
+            return ArrayUtils.EMPTY_BYTE_ARRAY;
         }
     }
 
