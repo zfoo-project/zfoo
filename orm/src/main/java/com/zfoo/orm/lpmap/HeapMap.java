@@ -29,9 +29,9 @@ public class HeapMap<V extends IPacket> implements LpMap<V> {
     /**
      * 没有被使用的key
      */
-    protected Queue<Long> freeKeyQueue = new LinkedList<>();
+    private Queue<Long> freeKeyQueue = new LinkedList<>();
 
-    protected long index = 0;
+    private long index = 0;
 
     public HeapMap(int initialCapacity) {
         map = new LongObjectHashMap<>(initialCapacity);

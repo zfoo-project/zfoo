@@ -83,7 +83,7 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
             buffer.writeBytes(fileChannel, 0L, (int) file.length());
 
             var size = ByteBufUtils.readLong(buffer);
-            for (int i = 0; i < size; i++) {
+            for (var i = 0; i < size; i++) {
                 var key = ByteBufUtils.readLong(buffer);
                 var value = (V) protocolRegistration.read(buffer);
                 put(key, value);

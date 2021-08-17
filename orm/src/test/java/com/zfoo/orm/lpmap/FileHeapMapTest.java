@@ -70,5 +70,6 @@ public class FileHeapMapTest {
     public void readTest() {
         ProtocolManager.initProtocol(Set.of(MyPacket.class));
         var map = new FileHeapMap<MyPacket>(new File("myPacket.db"), 10, MyPacket.class);
+        Assert.assertNotNull(map.get(5));
     }
 }
