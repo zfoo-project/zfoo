@@ -13,7 +13,7 @@
 
 package com.zfoo.net.packet.model;
 
-import com.zfoo.util.math.RandomUtils;
+import com.zfoo.util.math.HashUtils;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 
@@ -24,6 +24,12 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 public class HttpPacketAttachment implements IPacketAttachment {
 
     public static final transient short PROTOCOL_ID = 3;
+
+    private long uid;
+
+    private boolean useExecutorConsistentHash;
+
+    private int executorConsistentHash;
 
     private transient FullHttpRequest fullHttpRequest;
 
@@ -43,12 +49,45 @@ public class HttpPacketAttachment implements IPacketAttachment {
 
     @Override
     public int executorConsistentHash() {
-        return RandomUtils.randomInt();
+        if (useExecutorConsistentHash) {
+            return executorConsistentHash;
+        } else {
+            return HashUtils.fnvHash(uid);
+        }
     }
 
     @Override
     public short protocolId() {
         return PROTOCOL_ID;
+    }
+
+    public void useExecutorConsistentHash(Object argument) {
+        this.useExecutorConsistentHash = true;
+        this.executorConsistentHash = HashUtils.fnvHash(argument);
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public boolean isUseExecutorConsistentHash() {
+        return useExecutorConsistentHash;
+    }
+
+    public void setUseExecutorConsistentHash(boolean useExecutorConsistentHash) {
+        this.useExecutorConsistentHash = useExecutorConsistentHash;
+    }
+
+    public int getExecutorConsistentHash() {
+        return executorConsistentHash;
+    }
+
+    public void setExecutorConsistentHash(int executorConsistentHash) {
+        this.executorConsistentHash = executorConsistentHash;
     }
 
     public FullHttpRequest getFullHttpRequest() {

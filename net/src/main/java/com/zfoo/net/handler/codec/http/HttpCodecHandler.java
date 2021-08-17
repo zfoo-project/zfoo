@@ -23,12 +23,14 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.function.Function;
+
 
 /**
  * @author jaysunxiao
@@ -38,9 +40,9 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
 
     private static final Logger logger = LoggerFactory.getLogger(HttpCodecHandler.class);
 
-    private Function<FullHttpRequest, IPacket> uriResolver;
+    private Function<FullHttpRequest, DecodedPacketInfo> uriResolver;
 
-    public HttpCodecHandler(Function<FullHttpRequest, IPacket> uriResolver) {
+    public HttpCodecHandler(Function<FullHttpRequest, DecodedPacketInfo> uriResolver) {
         super();
         this.uriResolver = uriResolver;
     }
@@ -48,9 +50,7 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest, List<Object> list) {
         try {
-            var packet = uriResolver.apply(fullHttpRequest);
-            var attachment = HttpPacketAttachment.valueOf(fullHttpRequest, HttpResponseStatus.OK);
-            var decodedPacketInfo = DecodedPacketInfo.valueOf(packet, attachment);
+            var decodedPacketInfo = uriResolver.apply(fullHttpRequest);
             list.add(decodedPacketInfo);
         } catch (Exception e) {
             logger.error("exception异常", e);
@@ -63,7 +63,6 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
-
         try {
             var packet = (IPacket) out.getPacket();
             var attachment = (HttpPacketAttachment) out.getPacketAttachment();
@@ -71,13 +70,31 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
             var protocolVersion = attachment.getFullHttpRequest().protocolVersion();
             var httpResponseStatus = attachment.getHttpResponseStatus();
             if (packet.protocolId() == Message.PROTOCOL_ID) {
-                var fullHttpResponse = new DefaultFullHttpResponse(protocolVersion, httpResponseStatus);
-                list.add(fullHttpResponse);
+                var message = (Message) packet;
+                if (StringUtils.isEmpty(message.getMessage())) {
+                    var fullHttpResponse = new DefaultFullHttpResponse(protocolVersion, httpResponseStatus);
+                    fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN);
+                    fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_LENGTH, 0);
+                    list.add(fullHttpResponse);
+                } else {
+                    var byteBuf = channelHandlerContext.alloc().ioBuffer();
+                    byteBuf.writeCharSequence(message.getMessage(), StringUtils.DEFAULT_CHARSET);
+                    var fullHttpResponse = new DefaultFullHttpResponse(protocolVersion, httpResponseStatus, byteBuf);
+
+                    fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN);
+                    fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_LENGTH, byteBuf.readableBytes());
+
+                    list.add(fullHttpResponse);
+                }
             } else {
                 var byteBuf = channelHandlerContext.alloc().ioBuffer();
-                var jsonStr = JsonUtils.object2StringTurbo(packet);
+                var jsonStr = JsonUtils.object2String(packet);
                 byteBuf.writeBytes(StringUtils.bytes(jsonStr));
                 var fullHttpResponse = new DefaultFullHttpResponse(protocolVersion, httpResponseStatus, byteBuf);
+
+                fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
+                fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_LENGTH, byteBuf.readableBytes());
+
                 list.add(fullHttpResponse);
             }
         } catch (Exception e) {

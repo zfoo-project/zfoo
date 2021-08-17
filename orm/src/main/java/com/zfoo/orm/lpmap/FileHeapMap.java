@@ -77,6 +77,11 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
         return heapMap.get(key);
     }
 
+    @Override
+    public long getMaxIndex() {
+        return heapMap.getMaxIndex();
+    }
+
     private void load() {
         FileInputStream fileInputStream = null;
         FileChannel fileChannel = null;

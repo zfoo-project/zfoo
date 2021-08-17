@@ -15,6 +15,8 @@ package com.zfoo.orm.lpmap;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.exception.RunException;
 
+import java.util.function.BiConsumer;
+
 /**
  * 类型固定的map，key为long，value为IPacket
  * 其中long必须大于0，value可以为null
@@ -41,10 +43,16 @@ public interface LpMap<V extends IPacket> {
 
     V get(long key);
 
+    long getMaxIndex();
+
     default void checkKey(long key) {
         if (key <= 0) {
             throw new RunException("key[{}]不能为负数", key);
         }
+    }
+
+    default void forEach(BiConsumer<Long, V> biConsumer) {
+
     }
 
 }

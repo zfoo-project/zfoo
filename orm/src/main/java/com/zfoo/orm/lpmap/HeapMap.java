@@ -17,6 +17,7 @@ import io.netty.util.collection.LongObjectHashMap;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.function.BiConsumer;
 
 /**
  * @author jaysunxiao
@@ -80,5 +81,15 @@ public class HeapMap<V extends IPacket> implements LpMap<V> {
     public V get(long key) {
         checkKey(key);
         return map.get(key);
+    }
+
+    @Override
+    public long getMaxIndex() {
+        return maxIndex;
+    }
+
+    @Override
+    public void forEach(BiConsumer<Long, V> biConsumer) {
+        map.forEach(biConsumer);
     }
 }

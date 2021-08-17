@@ -145,6 +145,19 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
         }
     }
 
+    @Override
+    public long getMaxIndex() {
+        try {
+            clearByteBuf();
+            indexBuffer.writeBytes(indexFileChannel, 0, 8);
+            return indexBuffer.readLong();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            clearByteBuf();
+        }
+    }
+
     protected void setKeyValue(long key, V value) {
         try {
             clearByteBuf();
@@ -187,18 +200,6 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
             clearByteBuf();
             indexBuffer.writeLong(maxIndex);
             indexFileChannel.write(indexBuffer.nioBuffer(), 0);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            clearByteBuf();
-        }
-    }
-
-    protected long getMaxIndex() {
-        try {
-            clearByteBuf();
-            indexBuffer.writeBytes(indexFileChannel, 0, 8);
-            return indexBuffer.readLong();
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {

@@ -52,4 +52,9 @@ public class ConcurrentHeapMap<V extends IPacket> implements LpMap<V> {
         checkKey(key);
         return map.get(key);
     }
+
+    @Override
+    public long getMaxIndex() {
+        return maxIndexAtomic.get();
+    }
 }

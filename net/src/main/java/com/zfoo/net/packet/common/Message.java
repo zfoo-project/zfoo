@@ -49,6 +49,12 @@ public class Message implements IPacket {
         return Message.valueOf(packet, code, null);
     }
 
+    public static Message valueOf(String message) {
+        var mess = new Message();
+        mess.message = message;
+        return mess;
+    }
+
     @Override
     public short protocolId() {
         return PROTOCOL_ID;

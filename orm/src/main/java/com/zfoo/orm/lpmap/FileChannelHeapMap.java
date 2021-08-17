@@ -14,6 +14,8 @@ package com.zfoo.orm.lpmap;
 
 import com.zfoo.protocol.IPacket;
 
+import java.util.function.BiConsumer;
+
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -55,6 +57,11 @@ public class FileChannelHeapMap<V extends IPacket> implements LpMap<V> {
         return heapMap.get(key);
     }
 
+    @Override
+    public long getMaxIndex() {
+        return heapMap.getMaxIndex();
+    }
+
     private void load() {
         var maxIndex = fileChannelMap.getMaxIndex();
         if (maxIndex <= 0) {
@@ -68,7 +75,10 @@ public class FileChannelHeapMap<V extends IPacket> implements LpMap<V> {
             }
             heapMap.put(key, value);
         }
-
     }
 
+    @Override
+    public void forEach(BiConsumer<Long, V> biConsumer) {
+        heapMap.forEach(biConsumer);
+    }
 }
