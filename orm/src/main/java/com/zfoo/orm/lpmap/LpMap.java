@@ -1,0 +1,50 @@
+/*
+ * Copyright (C) 2020 The zfoo Authors
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
+package com.zfoo.orm.lpmap;
+
+import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.exception.RunException;
+
+/**
+ * 类型固定的map，key为long，value为IPacket
+ * 其中long必须大于0，value可以为null
+ *
+ * @author jaysunxiao
+ * @version 3.0
+ */
+public interface LpMap<V extends IPacket> {
+
+    /**
+     * 插入一条数据，返回一个自增的key，效率比较高
+     */
+    long insert(V packet);
+
+    /**
+     * @param packet the previous value associated with key, or null if there was no mapping for key.
+     */
+    V put(long key, V packet);
+
+    /**
+     * @return 返回被删除的那个值
+     */
+    V delete(long key);
+
+    V get(long key);
+
+    default void checkKey(long key) {
+        if (key <= 0) {
+            throw new RunException("key[{}]不能为负数", key);
+        }
+    }
+
+}

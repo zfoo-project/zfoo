@@ -63,7 +63,7 @@ public class ProtocolManager {
 
     public static IProtocolRegistration getProtocol(short protocolId) {
         var protocol = protocols[protocolId];
-        AssertionUtils.notNull(protocol, "[protocolId:{}]协议不存在", protocolId);
+        AssertionUtils.notNull(protocol, "[protocolId:{}]协议不存在，可能没有注册该协议或者协议号错误", protocolId);
         return protocol;
     }
 

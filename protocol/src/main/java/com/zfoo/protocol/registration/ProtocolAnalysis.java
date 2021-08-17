@@ -494,7 +494,7 @@ public class ProtocolAnalysis {
         throw new RunException("[type:{}]类型不正确", type);
     }
 
-    private static short getProtocolIdByClass(Class<?> clazz) {
+    public static short getProtocolIdByClass(Class<?> clazz) {
         var protocolIdField = ReflectionUtils.getFieldByNameInPOJOClass(clazz, PROTOCOL_ID);
         ReflectionUtils.makeAccessible(protocolIdField);
         return (short) ReflectionUtils.getField(protocolIdField, null);
