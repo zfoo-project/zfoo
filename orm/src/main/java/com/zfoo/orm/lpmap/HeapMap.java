@@ -29,37 +29,37 @@ public class HeapMap<V extends IPacket> implements LpMap<V> {
     /**
      * 没有被使用的key
      */
-    private Queue<Long> freeKeyQueue = new LinkedList<>();
+    protected Queue<Long> freeKeyQueue = new LinkedList<>();
 
-    private long index = 0;
+    protected long maxIndex = 0;
 
     public HeapMap(int initialCapacity) {
         map = new LongObjectHashMap<>(initialCapacity);
     }
 
     @Override
-    public long insert(V packet) {
+    public long insert(V value) {
         if (freeKeyQueue.isEmpty()) {
-            map.put(++index, packet);
-            return index;
+            map.put(++maxIndex, value);
+            return maxIndex;
         } else {
             var freeKey = freeKeyQueue.poll();
-            map.put(freeKey, packet);
+            map.put(freeKey, value);
             return freeKey;
         }
     }
 
     @Override
-    public V put(long key, V packet) {
+    public V put(long key, V value) {
         checkKey(key);
-        if (key <= index) {
-            return map.put(key, packet);
+        if (key <= maxIndex) {
+            return map.put(key, value);
         } else {
-            for (var i = index + 1; i < key; i++) {
+            for (var i = maxIndex + 1; i < key; i++) {
                 freeKeyQueue.add(i);
             }
-            index = key;
-            map.put(key, packet);
+            maxIndex = key;
+            map.put(key, value);
             return null;
         }
     }
@@ -67,7 +67,7 @@ public class HeapMap<V extends IPacket> implements LpMap<V> {
     @Override
     public V delete(long key) {
         checkKey(key);
-        if (key > index) {
+        if (key > maxIndex) {
             return null;
         } else {
             var previousValue = map.remove(key);

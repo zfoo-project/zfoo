@@ -19,6 +19,7 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.IOUtils;
+import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.util.ReferenceCountUtil;
@@ -35,30 +36,35 @@ import java.nio.channels.FileChannel;
  */
 public class FileHeapMap<V extends IPacket> implements LpMap<V> {
 
-    private File file;
+    private File dbFile;
 
     private IProtocolRegistration protocolRegistration;
 
     private HeapMap<V> heapMap;
 
-    public FileHeapMap(File file, int initialCapacity, Class<V> clazz) {
-        this.file = file;
-        var protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
-        protocolRegistration = ProtocolManager.getProtocol(protocolId);
-        heapMap = new HeapMap<>(initialCapacity);
+    public FileHeapMap(String dbPath, int initialCapacity, Class<V> clazz) {
+        try {
+            this.dbFile = FileUtils.getOrCreateFile(dbPath, StringUtils.format("{}.db", clazz.getSimpleName()));
 
-        load();
+            var protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
+            protocolRegistration = ProtocolManager.getProtocol(protocolId);
+            heapMap = new HeapMap<>(initialCapacity);
+
+            load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     @Override
-    public long insert(V packet) {
-        return heapMap.insert(packet);
+    public long insert(V value) {
+        return heapMap.insert(value);
     }
 
     @Override
-    public V put(long key, V packet) {
-        return heapMap.put(key, packet);
+    public V put(long key, V value) {
+        return heapMap.put(key, value);
     }
 
     @Override
@@ -76,11 +82,11 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
         FileChannel fileChannel = null;
         ByteBuf buffer = null;
         try {
-            fileInputStream = FileUtils.openInputStream(file);
+            fileInputStream = FileUtils.openInputStream(dbFile);
             fileChannel = fileInputStream.getChannel();
 
             buffer = ByteBufAllocator.DEFAULT.ioBuffer(1000);
-            buffer.writeBytes(fileChannel, 0L, (int) file.length());
+            buffer.writeBytes(fileChannel, 0L, (int) dbFile.length());
 
             var size = ByteBufUtils.readLong(buffer);
             for (var i = 0; i < size; i++) {
@@ -89,6 +95,8 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
                 put(key, value);
             }
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
             IOUtils.closeIO(fileChannel, fileInputStream);
             ReferenceCountUtil.release(buffer);
         }
@@ -98,7 +106,7 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
         FileOutputStream fileOutputStream = null;
         ByteBuf buffer = null;
         try {
-            fileOutputStream = FileUtils.openOutputStream(file, false);
+            fileOutputStream = FileUtils.openOutputStream(dbFile, false);
             buffer = ByteBufAllocator.DEFAULT.heapBuffer(1000);
 
             // 写入长度

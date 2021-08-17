@@ -169,6 +169,20 @@ public abstract class FileUtils {
         return newFile;
     }
 
+    public static File getOrCreateFile(String path, String fileName) throws IOException {
+        var file = createDirectory(path);
+
+        var newFile = new File(file.getAbsoluteFile() + File.separator + fileName);
+        if (newFile.exists()) {
+            return newFile;
+        }
+
+        if (!newFile.createNewFile()) {
+            throw new RuntimeException(StringUtils.format("创建文件[fileName:{}]失败", fileName));
+        }
+        return newFile;
+    }
+
     public static File createDirectory(String path) {
         var file = new File(path);
         if (!file.exists()) {

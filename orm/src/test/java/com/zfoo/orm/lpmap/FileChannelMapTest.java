@@ -14,7 +14,6 @@ package com.zfoo.orm.lpmap;
 
 import com.zfoo.orm.lpmap.model.MyPacket;
 import com.zfoo.protocol.ProtocolManager;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -25,50 +24,40 @@ import java.util.Set;
  * @version 3.0
  */
 @Ignore
-public class FileHeapMapTest {
+public class FileChannelMapTest {
 
     @Test
     public void test() {
         ProtocolManager.initProtocol(Set.of(MyPacket.class));
 
-        var map = new FileHeapMap<MyPacket>("db", 10, MyPacket.class);
+        var map = new FileChannelMap<MyPacket>("db", MyPacket.class);
         var myPacket = new MyPacket();
         myPacket.setA(9999);
 
-        var key = map.insert(myPacket);
-        Assert.assertEquals(key, 1L);
-
-        var packet = map.put(1, myPacket);
-        Assert.assertEquals(packet, myPacket);
-
-        packet = map.put(3, myPacket);
-        Assert.assertNull(packet);
-
-        key = map.insert(myPacket);
-        Assert.assertEquals(key, 2L);
-
-        packet = map.delete(4);
-        Assert.assertNull(packet);
-
-        packet = map.delete(3);
-        Assert.assertEquals(packet, myPacket);
-
-        packet = map.delete(2);
-        Assert.assertEquals(packet, myPacket);
-
-        map.put(1, myPacket);
-        map.put(2, myPacket);
-        map.put(3, myPacket);
-        map.put(4, myPacket);
-        map.put(5, myPacket);
-        map.save();
+        map.insert(myPacket);
+        map.insert(myPacket);
+        map.insert(myPacket);
     }
-
 
     @Test
     public void readTest() {
         ProtocolManager.initProtocol(Set.of(MyPacket.class));
-        var map = new FileHeapMap<MyPacket>("tc", 10, MyPacket.class);
-        Assert.assertNotNull(map.get(5));
+
+        var map = new FileChannelMap<MyPacket>("db", MyPacket.class);
+
+        System.out.println(map.get(1));
+        System.out.println(map.get(2));
+        System.out.println(map.get(3));
+    }
+
+    @Test
+    public void channelHeapTest() {
+        ProtocolManager.initProtocol(Set.of(MyPacket.class));
+
+        var map = new FileChannelHeapMap<MyPacket>("db", 1000, MyPacket.class);
+
+        System.out.println(map.get(1));
+        System.out.println(map.get(2));
+        System.out.println(map.get(3));
     }
 }

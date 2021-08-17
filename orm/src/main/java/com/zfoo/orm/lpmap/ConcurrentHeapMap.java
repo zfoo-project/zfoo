@@ -26,19 +26,19 @@ public class ConcurrentHeapMap<V extends IPacket> implements LpMap<V> {
 
     private ConcurrentNavigableMap<Long, V> map = new ConcurrentSkipListMap<>();
 
-    private AtomicLong index = new AtomicLong(0);
+    private AtomicLong maxIndexAtomic = new AtomicLong(0);
 
     @Override
-    public long insert(V packet) {
-        var key = index.incrementAndGet();
-        map.put(key, packet);
+    public long insert(V value) {
+        var key = maxIndexAtomic.incrementAndGet();
+        map.put(key, value);
         return key;
     }
 
     @Override
-    public V put(long key, V packet) {
+    public V put(long key, V value) {
         checkKey(key);
-        return map.put(key, packet);
+        return map.put(key, value);
     }
 
     @Override
