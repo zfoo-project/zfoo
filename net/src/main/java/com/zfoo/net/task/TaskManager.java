@@ -18,7 +18,6 @@ import com.zfoo.net.task.model.AbstractTaskDispatch;
 import com.zfoo.net.task.model.ITaskDispatch;
 import com.zfoo.net.task.model.ReceiveTask;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.math.RandomUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,10 +102,6 @@ public final class TaskManager implements ITaskManager {
 
     @Override
     public ExecutorService getExecutorByConsistentHash(int executorConsistentHash) {
-        if (executorConsistentHash >= 0) {
-            return executors[Math.abs(executorConsistentHash % EXECUTOR_SIZE)];
-        } else {
-            return executors[RandomUtils.randomInt(TaskManager.EXECUTOR_SIZE)];
-        }
+        return executors[Math.abs(executorConsistentHash % EXECUTOR_SIZE)];
     }
 }
