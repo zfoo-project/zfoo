@@ -13,7 +13,9 @@
 
 package com.zfoo.net.handler;
 
+import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
+import com.zfoo.net.core.tcp.model.ClientSessionInactiveEvent;
 import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelHandler;
@@ -41,15 +43,20 @@ public class ClientDispatcherHandler extends BaseDispatcherHandler {
         super.channelInactive(ctx);
 
         var session = SessionUtils.getSession(ctx);
-        if (session != null) {
-            var consumeAttribute = session.getAttribute(AttributeType.CONSUMER);
-            NetContext.getSessionManager().removeClientSession(session);
 
-            // 如果是消费者inactive，还需要触发客户端消费者检查事件，以便重新连接
-            if (consumeAttribute != null) {
-                NetContext.getConfigManager().getRegistry().checkConsumer();
-            }
+        if (session == null) {
+            return;
         }
+
+        var consumeAttribute = session.getAttribute(AttributeType.CONSUMER);
+        NetContext.getSessionManager().removeClientSession(session);
+        EventBus.asyncSubmit(ClientSessionInactiveEvent.valueOf(session));
+
+        // 如果是消费者inactive，还需要触发客户端消费者检查事件，以便重新连接
+        if (consumeAttribute != null) {
+            NetContext.getConfigManager().getRegistry().checkConsumer();
+        }
+
         logger.warn("[channel:{}] is inactive", SessionUtils.sessionInfo(ctx));
     }
 
