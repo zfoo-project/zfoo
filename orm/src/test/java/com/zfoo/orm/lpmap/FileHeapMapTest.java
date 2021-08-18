@@ -35,23 +35,14 @@ public class FileHeapMapTest {
         var myPacket = new MyPacket();
         myPacket.setA(9999);
 
-        var key = map.insert(myPacket);
-        Assert.assertEquals(key, 1L);
-
         var packet = map.put(1, myPacket);
-        Assert.assertEquals(packet, myPacket);
-
-        packet = map.put(3, myPacket);
         Assert.assertNull(packet);
 
-        key = map.insert(myPacket);
-        Assert.assertEquals(key, 2L);
+        packet = map.put(2, myPacket);
+        Assert.assertNull(packet);
 
         packet = map.delete(4);
         Assert.assertNull(packet);
-
-        packet = map.delete(3);
-        Assert.assertEquals(packet, myPacket);
 
         packet = map.delete(2);
         Assert.assertEquals(packet, myPacket);
@@ -65,10 +56,4 @@ public class FileHeapMapTest {
     }
 
 
-    @Test
-    public void readTest() {
-        ProtocolManager.initProtocol(Set.of(MyPacket.class));
-        var map = new FileHeapMap<MyPacket>("tc", 10, MyPacket.class);
-        Assert.assertNotNull(map.get(5));
-    }
 }

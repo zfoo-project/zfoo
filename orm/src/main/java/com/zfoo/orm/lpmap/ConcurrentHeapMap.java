@@ -28,16 +28,21 @@ public class ConcurrentHeapMap<V extends IPacket> implements LpMap<V> {
 
     private AtomicLong maxIndexAtomic = new AtomicLong(0);
 
-    @Override
-    public long insert(V value) {
-        var key = maxIndexAtomic.incrementAndGet();
-        map.put(key, value);
-        return key;
-    }
 
     @Override
     public V put(long key, V value) {
         checkKey(key);
+
+        while (true) {
+            var maxIndex = maxIndexAtomic.get();
+
+            if (key <= maxIndex) {
+                break;
+            }
+
+            maxIndexAtomic.compareAndExchange(maxIndex, key);
+        }
+
         return map.put(key, value);
     }
 
@@ -56,5 +61,10 @@ public class ConcurrentHeapMap<V extends IPacket> implements LpMap<V> {
     @Override
     public long getMaxIndex() {
         return maxIndexAtomic.get();
+    }
+
+    @Override
+    public long getIncrementIndex() {
+        return maxIndexAtomic.incrementAndGet();
     }
 }

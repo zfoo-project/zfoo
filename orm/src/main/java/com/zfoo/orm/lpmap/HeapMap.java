@@ -15,8 +15,6 @@ package com.zfoo.orm.lpmap;
 import com.zfoo.protocol.IPacket;
 import io.netty.util.collection.LongObjectHashMap;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.function.BiConsumer;
 
 /**
@@ -27,42 +25,22 @@ public class HeapMap<V extends IPacket> implements LpMap<V> {
 
     protected LongObjectHashMap<V> map;
 
-    /**
-     * 没有被使用的key
-     */
-    protected Queue<Long> freeKeyQueue = new LinkedList<>();
-
     protected long maxIndex = 0;
 
     public HeapMap(int initialCapacity) {
         map = new LongObjectHashMap<>(initialCapacity);
     }
 
-    @Override
-    public long insert(V value) {
-        if (freeKeyQueue.isEmpty()) {
-            map.put(++maxIndex, value);
-            return maxIndex;
-        } else {
-            var freeKey = freeKeyQueue.poll();
-            map.put(freeKey, value);
-            return freeKey;
-        }
-    }
 
     @Override
     public V put(long key, V value) {
         checkKey(key);
-        if (key <= maxIndex) {
-            return map.put(key, value);
-        } else {
-            for (var i = maxIndex + 1; i < key; i++) {
-                freeKeyQueue.add(i);
-            }
+
+        if (key > maxIndex) {
             maxIndex = key;
-            map.put(key, value);
-            return null;
         }
+
+        return map.put(key, value);
     }
 
     @Override
@@ -70,11 +48,9 @@ public class HeapMap<V extends IPacket> implements LpMap<V> {
         checkKey(key);
         if (key > maxIndex) {
             return null;
-        } else {
-            var previousValue = map.remove(key);
-            freeKeyQueue.add(key);
-            return previousValue;
         }
+
+        return map.remove(key);
     }
 
     @Override
@@ -85,6 +61,12 @@ public class HeapMap<V extends IPacket> implements LpMap<V> {
 
     @Override
     public long getMaxIndex() {
+        return maxIndex;
+    }
+
+    @Override
+    public long getIncrementIndex() {
+        maxIndex++;
         return maxIndex;
     }
 

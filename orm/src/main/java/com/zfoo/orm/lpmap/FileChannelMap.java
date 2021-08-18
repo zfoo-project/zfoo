@@ -76,17 +76,6 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
 
 
     @Override
-    public long insert(V value) {
-        var maxIndex = getMaxIndex() + 1;
-
-        // index索引文件的头16个字节是当前index的大小
-        setMaxIndex(maxIndex);
-
-        setKeyValue(maxIndex, value);
-        return maxIndex;
-    }
-
-    @Override
     public V put(long key, V packet) {
         checkKey(key);
 
@@ -156,6 +145,15 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
         } finally {
             clearByteBuf();
         }
+    }
+
+    @Override
+    public long getIncrementIndex() {
+        var maxIndex = getMaxIndex() + 1;
+
+        // index索引文件的头16个字节是当前index的大小
+        setMaxIndex(maxIndex);
+        return maxIndex;
     }
 
     protected void setKeyValue(long key, V value) {

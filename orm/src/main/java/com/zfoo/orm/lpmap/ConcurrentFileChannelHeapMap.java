@@ -14,50 +14,63 @@ package com.zfoo.orm.lpmap;
 
 import com.zfoo.protocol.IPacket;
 
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiConsumer;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-public class FileChannelHeapMap<V extends IPacket> implements LpMap<V> {
+public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V> {
+
+    private ReentrantLock fileChannelLock = new ReentrantLock();
 
     private FileChannelMap<V> fileChannelMap;
 
-    private HeapMap<V> heapMap;
+    private ConcurrentHeapMap<V> concurrentHeapMap;
 
-    public FileChannelHeapMap(String dbPath, int initialCapacity, Class<V> clazz) {
+    public ConcurrentFileChannelHeapMap(String dbPath, int initialCapacity, Class<V> clazz) {
         fileChannelMap = new FileChannelMap<>(dbPath, clazz);
-        heapMap = new HeapMap<>(initialCapacity);
+        concurrentHeapMap = new ConcurrentHeapMap<>();
 
         load();
     }
 
     @Override
     public V put(long key, V value) {
-        fileChannelMap.put(key, value);
-        return heapMap.put(key, value);
+        fileChannelLock.lock();
+        try {
+            fileChannelMap.put(key, value);
+        } finally {
+            fileChannelLock.unlock();
+        }
+        return concurrentHeapMap.put(key, value);
     }
 
     @Override
     public V delete(long key) {
-        fileChannelMap.delete(key);
-        return heapMap.delete(key);
+        fileChannelLock.lock();
+        try {
+            fileChannelMap.delete(key);
+        } finally {
+            fileChannelLock.unlock();
+        }
+        return concurrentHeapMap.delete(key);
     }
 
     @Override
     public V get(long key) {
-        return heapMap.get(key);
+        return concurrentHeapMap.get(key);
     }
 
     @Override
     public long getMaxIndex() {
-        return heapMap.getMaxIndex();
+        return concurrentHeapMap.getMaxIndex();
     }
 
     @Override
     public long getIncrementIndex() {
-        return heapMap.getIncrementIndex();
+        return concurrentHeapMap.getIncrementIndex();
     }
 
     private void load() {
@@ -71,12 +84,12 @@ public class FileChannelHeapMap<V extends IPacket> implements LpMap<V> {
             if (value == null) {
                 continue;
             }
-            heapMap.put(key, value);
+            concurrentHeapMap.put(key, value);
         }
     }
 
     @Override
     public void forEach(BiConsumer<Long, V> biConsumer) {
-        heapMap.forEach(biConsumer);
+        concurrentHeapMap.forEach(biConsumer);
     }
 }

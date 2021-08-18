@@ -58,11 +58,6 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
 
 
     @Override
-    public long insert(V value) {
-        return heapMap.insert(value);
-    }
-
-    @Override
     public V put(long key, V value) {
         return heapMap.put(key, value);
     }
@@ -82,6 +77,11 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
         return heapMap.getMaxIndex();
     }
 
+    @Override
+    public long getIncrementIndex() {
+        return heapMap.getIncrementIndex();
+    }
+
     private void load() {
         FileInputStream fileInputStream = null;
         FileChannel fileChannel = null;
@@ -89,6 +89,10 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
         try {
             fileInputStream = FileUtils.openInputStream(dbFile);
             fileChannel = fileInputStream.getChannel();
+
+            if (fileChannel.size() <= 0) {
+                return;
+            }
 
             buffer = ByteBufAllocator.DEFAULT.ioBuffer(1000);
             buffer.writeBytes(fileChannel, 0L, (int) dbFile.length());

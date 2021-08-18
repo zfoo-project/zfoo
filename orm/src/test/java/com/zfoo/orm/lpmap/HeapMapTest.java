@@ -29,25 +29,16 @@ public class HeapMapTest {
         var map = new HeapMap<MyPacket>(10);
         var myPacket = new MyPacket();
 
-        var key = map.insert(myPacket);
-        Assert.assertEquals(key, 1L);
-
         var packet = map.put(1, myPacket);
-        Assert.assertEquals(packet, myPacket);
+        Assert.assertNull(packet);
 
         packet = map.put(3, myPacket);
         Assert.assertNull(packet);
-
-        key = map.insert(myPacket);
-        Assert.assertEquals(key, 2L);
 
         packet = map.delete(4);
         Assert.assertNull(packet);
 
         packet = map.delete(3);
-        Assert.assertEquals(packet, myPacket);
-
-        packet = map.delete(2);
         Assert.assertEquals(packet, myPacket);
     }
 

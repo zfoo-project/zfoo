@@ -34,9 +34,9 @@ public class FileChannelMapTest {
         var myPacket = new MyPacket();
         myPacket.setA(9999);
 
-        map.insert(myPacket);
-        map.insert(myPacket);
-        map.insert(myPacket);
+        map.put(1, myPacket);
+        map.put(2, myPacket);
+        map.put(3, myPacket);
     }
 
     @Test

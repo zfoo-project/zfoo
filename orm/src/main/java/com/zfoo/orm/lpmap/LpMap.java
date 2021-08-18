@@ -27,11 +27,6 @@ import java.util.function.BiConsumer;
 public interface LpMap<V extends IPacket> {
 
     /**
-     * 插入一条数据，返回一个自增的key，效率比较高
-     */
-    long insert(V packet);
-
-    /**
      * @param packet the previous value associated with key, or null if there was no mapping for key.
      */
     V put(long key, V packet);
@@ -45,9 +40,11 @@ public interface LpMap<V extends IPacket> {
 
     long getMaxIndex();
 
+    long getIncrementIndex();
+
     default void checkKey(long key) {
         if (key <= 0) {
-            throw new RunException("key[{}]不能为负数", key);
+            throw new RunException("key[{}]不能为负数或0", key);
         }
     }
 
