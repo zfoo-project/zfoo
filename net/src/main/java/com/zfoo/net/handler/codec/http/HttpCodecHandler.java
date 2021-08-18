@@ -75,6 +75,7 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
                     var fullHttpResponse = new DefaultFullHttpResponse(protocolVersion, httpResponseStatus);
                     fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN);
                     fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_LENGTH, 0);
+                    fullHttpResponse.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
                     list.add(fullHttpResponse);
                 } else {
                     var byteBuf = channelHandlerContext.alloc().ioBuffer();
@@ -83,7 +84,7 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
 
                     fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN);
                     fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_LENGTH, byteBuf.readableBytes());
-
+                    fullHttpResponse.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
                     list.add(fullHttpResponse);
                 }
             } else {
@@ -94,6 +95,8 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
 
                 fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
                 fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_LENGTH, byteBuf.readableBytes());
+                fullHttpResponse.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+//                fullHttpResponse.headers().set(HttpHeaderNames.TRANSFER_ENCODING, HttpHeaderValues.CHUNKED);
 
                 list.add(fullHttpResponse);
             }
