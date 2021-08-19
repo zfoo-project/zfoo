@@ -27,7 +27,7 @@ public class Message implements IPacket {
     public static final transient short PROTOCOL_ID = 100;
 
     public static final Message SUCCESS = valueSuccess(null);
-    public static final Message FAIL = valueSuccess(null);
+    public static final Message FAIL = valueFail(null);
 
     private byte module;
 
@@ -56,12 +56,6 @@ public class Message implements IPacket {
 
     public static Message valueOf(IPacket packet, int code) {
         return Message.valueOf(packet, code, null);
-    }
-
-    public static Message valueOf(String message) {
-        var mess = new Message();
-        mess.message = message;
-        return mess;
     }
 
     public static Message valueFail(String message) {

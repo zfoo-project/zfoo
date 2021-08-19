@@ -198,6 +198,10 @@ public abstract class TimeUtils {
         return DATE_FORMAT_FOR_DAY.get().format(new Date(time));
     }
 
+    public static String dateFormatForDayTimeString(long time) {
+        return DATE_FORMAT.get().format(new Date(time));
+    }
+
     /**
      * 判断两个日期是否是同一周，设置周一为一周的第一天
      * <p>

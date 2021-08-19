@@ -17,6 +17,7 @@ import com.zfoo.protocol.IPacket;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.BiConsumer;
 
 /**
  * @author jaysunxiao
@@ -66,5 +67,10 @@ public class ConcurrentHeapMap<V extends IPacket> implements LpMap<V> {
     @Override
     public long getIncrementIndex() {
         return maxIndexAtomic.incrementAndGet();
+    }
+
+    @Override
+    public void forEach(BiConsumer<Long, V> biConsumer) {
+        map.forEach(biConsumer);
     }
 }
