@@ -26,7 +26,8 @@ public class Message implements IPacket {
 
     public static final transient short PROTOCOL_ID = 100;
 
-    public static final Message DEFAULT = new Message();
+    public static final Message SUCCESS = valueSuccess(null);
+    public static final Message FAIL = valueSuccess(null);
 
     private byte module;
 
@@ -36,6 +37,14 @@ public class Message implements IPacket {
     private int code;
 
     private String message;
+
+    public boolean success() {
+        return code == 1;
+    }
+
+    public boolean fail() {
+        return code == 0;
+    }
 
     public static Message valueOf(IPacket packet, int code, String message) {
         var mess = new Message();
@@ -55,13 +64,23 @@ public class Message implements IPacket {
         return mess;
     }
 
+    public static Message valueFail(String message) {
+        var mess = new Message();
+        mess.code = 0;
+        mess.message = message;
+        return mess;
+    }
+
+    public static Message valueSuccess(String message) {
+        var mess = new Message();
+        mess.code = 1;
+        mess.message = message;
+        return mess;
+    }
+
     @Override
     public short protocolId() {
         return PROTOCOL_ID;
-    }
-
-    public boolean success() {
-        return code == 1;
     }
 
     public byte getModule() {

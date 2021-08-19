@@ -21,10 +21,7 @@ import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.HttpHeaderNames;
-import io.netty.handler.codec.http.HttpHeaderValues;
+import io.netty.handler.codec.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +68,10 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
             var httpResponseStatus = attachment.getHttpResponseStatus();
             if (packet.protocolId() == Message.PROTOCOL_ID) {
                 var message = (Message) packet;
+                if (message.fail()) {
+                    httpResponseStatus = HttpResponseStatus.BAD_REQUEST;
+                }
+
                 if (StringUtils.isEmpty(message.getMessage())) {
                     var fullHttpResponse = new DefaultFullHttpResponse(protocolVersion, httpResponseStatus);
                     fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN);
