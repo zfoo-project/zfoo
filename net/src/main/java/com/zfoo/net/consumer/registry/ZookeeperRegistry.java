@@ -374,6 +374,10 @@ public class ZookeeperRegistry implements IRegistry {
 
     @Override
     public void checkConsumer() {
+        if (curator == null) {
+            return;
+        }
+
         if (curator.getState() == CuratorFrameworkState.STOPPED) {
             return;
         }
