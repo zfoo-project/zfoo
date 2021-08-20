@@ -71,6 +71,12 @@ public class HeapMap<V extends IPacket> implements LpMap<V> {
     }
 
     @Override
+    public void clear() {
+        maxIndex = 0;
+        map.clear();
+    }
+
+    @Override
     public void forEach(BiConsumer<Long, V> biConsumer) {
         map.forEach(biConsumer);
     }

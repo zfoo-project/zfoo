@@ -156,6 +156,17 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
         return maxIndex;
     }
 
+    @Override
+    public void clear() {
+        try {
+            setMaxIndex(0);
+            dbFileRandomAccess.setLength(0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     protected void setKeyValue(long key, V value) {
         try {
             clearByteBuf();

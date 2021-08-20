@@ -60,6 +60,12 @@ public class FileChannelHeapMap<V extends IPacket> implements LpMap<V> {
         return heapMap.getIncrementIndex();
     }
 
+    @Override
+    public void clear() {
+        fileChannelMap.clear();
+        heapMap.clear();
+    }
+
     private void load() {
         var maxIndex = fileChannelMap.getMaxIndex();
         if (maxIndex <= 0) {

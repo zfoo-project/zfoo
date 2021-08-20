@@ -73,6 +73,17 @@ public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V>
         return concurrentHeapMap.getIncrementIndex();
     }
 
+    @Override
+    public void clear() {
+        fileChannelLock.lock();
+        try {
+            fileChannelMap.clear();
+            concurrentHeapMap.clear();
+        } finally {
+            fileChannelLock.unlock();
+        }
+    }
+
     private void load() {
         var maxIndex = fileChannelMap.getMaxIndex();
         if (maxIndex <= 0) {

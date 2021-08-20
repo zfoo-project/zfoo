@@ -42,6 +42,8 @@ public interface LpMap<V extends IPacket> {
 
     long getIncrementIndex();
 
+    void clear();
+
     default void checkKey(long key) {
         if (key <= 0) {
             throw new RunException("key[{}]不能为负数或0", key);

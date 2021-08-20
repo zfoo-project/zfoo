@@ -82,6 +82,12 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
         return heapMap.getIncrementIndex();
     }
 
+    @Override
+    public void clear() {
+        heapMap.clear();
+        save();
+    }
+
     private void load() {
         FileInputStream fileInputStream = null;
         FileChannel fileChannel = null;

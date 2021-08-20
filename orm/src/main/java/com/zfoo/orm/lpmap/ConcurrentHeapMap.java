@@ -70,6 +70,12 @@ public class ConcurrentHeapMap<V extends IPacket> implements LpMap<V> {
     }
 
     @Override
+    public void clear() {
+        map.clear();
+        maxIndexAtomic.set(0);
+    }
+
+    @Override
     public void forEach(BiConsumer<Long, V> biConsumer) {
         map.forEach(biConsumer);
     }
