@@ -24,9 +24,9 @@ import org.springframework.context.event.ApplicationContextEvent;
  * @author jaysunxiao
  * @version 3.0
  */
-public class AppStartEvent extends ApplicationContextEvent {
+public class AppStartAfterEvent extends ApplicationContextEvent {
 
-    public AppStartEvent(ApplicationContext context) {
+    public AppStartAfterEvent(ApplicationContext context) {
         super(context);
     }
 

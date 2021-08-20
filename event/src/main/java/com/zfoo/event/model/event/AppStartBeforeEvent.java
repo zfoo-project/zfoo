@@ -18,6 +18,8 @@ import org.springframework.context.event.ApplicationContextEvent;
 
 /**
  * 应用启动事件，这个使用spring自带的事件机制，自研的event事件仅用在业务逻辑
+ * <p>
+ * 启动顺序为：AppStartBeforeEvent -> AppStartEvent -> AppStartAfterEvent
  *
  * @author jaysunxiao
  * @version 3.0
