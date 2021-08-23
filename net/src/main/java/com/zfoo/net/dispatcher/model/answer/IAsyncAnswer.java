@@ -13,6 +13,7 @@
 
 package com.zfoo.net.dispatcher.model.answer;
 
+import com.zfoo.net.task.model.SafeRunnable;
 import com.zfoo.protocol.IPacket;
 
 import java.util.function.Consumer;
@@ -31,8 +32,8 @@ public interface IAsyncAnswer<T extends IPacket> {
     void whenComplete(Consumer<T> consumer);
 
     /**
-     * 当异步种有异常会回调的方法
+     * 没有执行成功的回调的方法
      */
-    void exceptionally(Consumer<Throwable> exceptionCallback);
+    IAsyncAnswer<T> notComplete(SafeRunnable notCompleteCallback);
 
 }

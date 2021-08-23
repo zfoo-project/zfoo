@@ -14,6 +14,7 @@
 package com.zfoo.net.dispatcher.model.answer;
 
 import com.zfoo.net.packet.model.SignalPacketAttachment;
+import com.zfoo.net.task.model.SafeRunnable;
 import com.zfoo.protocol.IPacket;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {
 
     private Runnable askCallback;
 
-    private Consumer<Throwable> exceptionCallback;
+    private SafeRunnable notCompleteCallback;
 
 
     @Override
@@ -49,8 +50,9 @@ public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {
     }
 
     @Override
-    public void exceptionally(Consumer<Throwable> exceptionCallback) {
-        this.exceptionCallback = exceptionCallback;
+    public IAsyncAnswer<T> notComplete(SafeRunnable notCompleteCallback) {
+        this.notCompleteCallback = notCompleteCallback;
+        return this;
     }
 
     public void consume() {
@@ -81,7 +83,7 @@ public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {
         this.askCallback = askCallback;
     }
 
-    public Consumer<Throwable> getExceptionCallback() {
-        return exceptionCallback;
+    public SafeRunnable getNotCompleteCallback() {
+        return notCompleteCallback;
     }
 }

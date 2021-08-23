@@ -34,7 +34,6 @@ import com.zfoo.net.session.model.Session;
 import com.zfoo.net.task.TaskManager;
 import com.zfoo.net.task.model.ReceiveTask;
 import com.zfoo.protocol.IPacket;
-import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.math.HashUtils;
@@ -220,23 +219,21 @@ public class PacketDispatcher implements IPacketDispatcher {
 
             clientAttachment.getResponseFuture()
                     .completeOnTimeout(null, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
-                    .thenApply(response -> {
-                        if (response == null) {
-                            throw new NetTimeOutException(StringUtils.format("asyncRequest timeout exception, ask:[{}], attachment:[{}]"
-                                    , JsonUtils.object2String(packet), JsonUtils.object2String(clientAttachment)));
+                    .thenApply(answer -> {
+                        if (answer == null) {
+                            throw new NetTimeOutException(StringUtils.format("async ask [{}] timeout exception", packet.getClass().getSimpleName()));
                         }
 
-                        if (response.protocolId() == Error.errorProtocolId()) {
-                            throw new ErrorResponseException((Error) response);
+                        if (answer.protocolId() == Error.errorProtocolId()) {
+                            throw new ErrorResponseException((Error) answer);
                         }
 
-                        if (answerClass != null && answerClass != response.getClass()) {
-                            throw new UnexpectedProtocolException(StringUtils.format("client expect protocol:[{}], but found protocol:[{}]"
-                                    , answerClass, response.getClass().getName()));
+                        if (answerClass != null && answerClass != answer.getClass()) {
+                            throw new UnexpectedProtocolException("client expect protocol:[{}], but found protocol:[{}]", answerClass, answer.getClass().getName());
                         }
-                        return response;
+                        return answer;
                     })
-                    .whenCompleteAsync((responsePacket, throwable) -> {
+                    .whenCompleteAsync((answer, throwable) -> {
                         try {
                             PacketSignal.removeSignalAttachment(clientAttachment);
 
@@ -247,20 +244,18 @@ public class PacketDispatcher implements IPacketDispatcher {
 
                             // 如果有异常的话，whenCompleteAsync的下一个thenAccept不会执行
                             if (throwable != null) {
-                                var exceptionCallback = asyncAnswer.getExceptionCallback();
-                                if (exceptionCallback != null) {
-                                    exceptionCallback.accept(throwable);
+                                var notCompleteCallback = asyncAnswer.getNotCompleteCallback();
+                                if (notCompleteCallback != null) {
+                                    notCompleteCallback.run();
                                 }
-                                logger.error(ExceptionUtils.getMessage(throwable));
                                 return;
                             }
 
                             // 异步返回，回调业务逻辑
-                            asyncAnswer.setFuturePacket((T) responsePacket);
+                            asyncAnswer.setFuturePacket((T) answer);
                             asyncAnswer.consume();
-                        } catch (Exception exception) {
-                            logger.error("consume response error requestPacket:[{}] and responsePacket:[{}]",
-                                    JsonUtils.object2String(packet), JsonUtils.object2String(responsePacket), exception);
+                        } catch (Throwable throwable1) {
+                            logger.error("异步回调方法[ask:{}][answer:{}]错误", packet.getClass().getSimpleName(), answer.getClass().getSimpleName(), throwable1);
                         } finally {
                             if (serverSignalPacketAttachment != null) {
                                 serverReceiveSignalPacketAttachment.set(null);
