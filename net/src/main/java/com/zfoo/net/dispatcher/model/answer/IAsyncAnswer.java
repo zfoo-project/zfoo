@@ -30,4 +30,9 @@ public interface IAsyncAnswer<T extends IPacket> {
      */
     void whenComplete(Consumer<T> consumer);
 
+    /**
+     * 当异步种有异常会回调的方法
+     */
+    void exceptionally(Consumer<Throwable> exceptionCallback);
+
 }

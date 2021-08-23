@@ -33,6 +33,9 @@ public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {
 
     private Runnable askCallback;
 
+    private Consumer<Throwable> exceptionCallback;
+
+
     @Override
     public IAsyncAnswer<T> thenAccept(Consumer<T> consumer) {
         consumerList.add(consumer);
@@ -43,6 +46,11 @@ public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {
     public void whenComplete(Consumer<T> consumer) {
         thenAccept(consumer);
         askCallback.run();
+    }
+
+    @Override
+    public void exceptionally(Consumer<Throwable> exceptionCallback) {
+        this.exceptionCallback = exceptionCallback;
     }
 
     public void consume() {
@@ -71,5 +79,9 @@ public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {
 
     public void setAskCallback(Runnable askCallback) {
         this.askCallback = askCallback;
+    }
+
+    public Consumer<Throwable> getExceptionCallback() {
+        return exceptionCallback;
     }
 }

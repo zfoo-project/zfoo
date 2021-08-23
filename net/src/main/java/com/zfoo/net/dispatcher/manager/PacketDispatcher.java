@@ -236,19 +236,23 @@ public class PacketDispatcher implements IPacketDispatcher {
                         }
                         return response;
                     })
-                    .whenCompleteAsync((responsePacket, e) -> {
+                    .whenCompleteAsync((responsePacket, throwable) -> {
                         try {
                             PacketSignal.removeSignalAttachment(clientAttachment);
-
-                            // 如果有异常的话，whenCompleteAsync的下一个thenAccept不会执行
-                            if (e != null) {
-                                logger.error(ExceptionUtils.getMessage(e));
-                                return;
-                            }
 
                             // 接收者在同步或异步的消息处理中，又调用了异步的方法，这时候threadServerAttachment不为空
                             if (serverSignalPacketAttachment != null) {
                                 serverReceiveSignalPacketAttachment.set(serverSignalPacketAttachment);
+                            }
+
+                            // 如果有异常的话，whenCompleteAsync的下一个thenAccept不会执行
+                            if (throwable != null) {
+                                var exceptionCallback = asyncAnswer.getExceptionCallback();
+                                if (exceptionCallback != null) {
+                                    exceptionCallback.accept(throwable);
+                                }
+                                logger.error(ExceptionUtils.getMessage(throwable));
+                                return;
                             }
 
                             // 异步返回，回调业务逻辑
