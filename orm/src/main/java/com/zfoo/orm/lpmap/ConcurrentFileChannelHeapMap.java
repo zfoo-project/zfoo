@@ -48,6 +48,15 @@ public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V>
     }
 
     @Override
+    public V putIfAbsent(long key, V packet) {
+        var previousValue = concurrentHeapMap.putIfAbsent(key, packet);
+        if (previousValue == null) {
+            previousValue = put(key, packet);
+        }
+        return previousValue;
+    }
+
+    @Override
     public V delete(long key) {
         fileChannelLock.lock();
         try {

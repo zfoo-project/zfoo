@@ -41,10 +41,27 @@ public class ConcurrentHeapMap<V extends IPacket> implements LpMap<V> {
                 break;
             }
 
-            maxIndexAtomic.compareAndExchange(maxIndex, key);
+            maxIndexAtomic.compareAndSet(maxIndex, key);
         }
 
         return map.put(key, value);
+    }
+
+    @Override
+    public V putIfAbsent(long key, V packet) {
+        var previousValue = map.putIfAbsent(key, packet);
+        if (previousValue == null) {
+            while (true) {
+                var maxIndex = maxIndexAtomic.get();
+
+                if (key <= maxIndex) {
+                    break;
+                }
+
+                maxIndexAtomic.compareAndSet(maxIndex, key);
+            }
+        }
+        return previousValue;
     }
 
     @Override

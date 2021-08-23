@@ -31,6 +31,14 @@ public interface LpMap<V extends IPacket> {
      */
     V put(long key, V packet);
 
+    default V putIfAbsent(long key, V packet) {
+        var v = get(key);
+        if (v == null) {
+            v = put(key, packet);
+        }
+        return v;
+    }
+
     /**
      * @return 返回被删除的那个值
      */
