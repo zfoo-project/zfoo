@@ -144,7 +144,7 @@ public class ZookeeperRegistry implements IRegistry {
         var providerConfig = NetContext.getConfigManager().getLocalConfig().getProviderConfig();
 
         if (Objects.isNull(providerConfig)) {
-            logger.warn("没有发现服务提供者，不对外提供服务");
+            logger.info("服务提供者没有配置，不会在zk种注册服务，如果是单机启动请忽略这条日志");
             return;
         }
 
