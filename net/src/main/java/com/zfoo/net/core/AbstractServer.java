@@ -13,6 +13,7 @@
 
 package com.zfoo.net.core;
 
+import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -80,6 +81,7 @@ public abstract class AbstractServer implements IServer {
                 .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .childOption(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_MB))
                 .childHandler(channelChannelInitializer);
         // 绑定端口，同步等待成功
         // channelFuture = bootstrap.bind(hostAddress, port).sync();

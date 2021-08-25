@@ -17,6 +17,7 @@ import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.handler.ServerDispatcherHandler;
 import com.zfoo.net.handler.codec.http.HttpCodecHandler;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
+import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -52,9 +53,9 @@ public class HttpServer extends AbstractServer {
     private class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
         @Override
         protected void initChannel(SocketChannel channel) {
-            channel.pipeline().addLast(new HttpServerCodec());
+            channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
+            channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
             channel.pipeline().addLast(new ChunkedWriteHandler());
-            channel.pipeline().addLast(new HttpObjectAggregator(64 * 1024));
             channel.pipeline().addLast(new HttpCodecHandler(uriResolver));
             channel.pipeline().addLast(new ServerDispatcherHandler());
         }

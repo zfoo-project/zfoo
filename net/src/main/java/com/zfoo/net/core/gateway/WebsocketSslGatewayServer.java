@@ -20,6 +20,7 @@ import com.zfoo.net.handler.idle.ServerIdleHandler;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -81,10 +82,10 @@ public class WebsocketSslGatewayServer extends AbstractServer {
             channel.pipeline().addLast(new ServerIdleHandler());
 
             channel.pipeline().addLast(sslContext.newHandler(channel.alloc()));
-            channel.pipeline().addLast(new HttpServerCodec());
-            channel.pipeline().addLast(new ChunkedWriteHandler());
-            channel.pipeline().addLast(new HttpObjectAggregator(64 * 1024));
+            channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
+            channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
             channel.pipeline().addLast(new WebSocketServerProtocolHandler("/"));
+            channel.pipeline().addLast(new ChunkedWriteHandler());
             channel.pipeline().addLast(new WebSocketCodecHandler());
             channel.pipeline().addLast(new GatewayDispatcherHandler(packetFilter));
         }

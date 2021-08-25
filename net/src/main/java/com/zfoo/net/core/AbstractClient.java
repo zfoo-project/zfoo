@@ -17,12 +17,10 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.handler.BaseDispatcherHandler;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
@@ -66,6 +64,7 @@ public abstract class AbstractClient implements IClient {
         this.bootstrap.group(nioEventLoopGroup)
                 .channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_MB))
                 .handler(channelChannelInitializer());
         var channelFuture = bootstrap.connect(hostAddress, port);
         channelFuture.syncUninterruptibly();

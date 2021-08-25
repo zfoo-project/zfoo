@@ -16,6 +16,7 @@ package com.zfoo.net.core.websocket;
 import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.handler.ClientDispatcherHandler;
 import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
+import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -48,10 +49,10 @@ public class WebsocketClient extends AbstractClient {
     public class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
         @Override
         public void initChannel(SocketChannel channel) {
-            channel.pipeline().addLast(new HttpClientCodec());
-            channel.pipeline().addLast(new ChunkedWriteHandler());
-            channel.pipeline().addLast(new HttpObjectAggregator(64 * 1024));
+            channel.pipeline().addLast(new HttpClientCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
+            channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
             channel.pipeline().addLast(new WebSocketClientProtocolHandler(webSocketClientProtocolConfig));
+            channel.pipeline().addLast(new ChunkedWriteHandler());
             channel.pipeline().addLast(new WebSocketCodecHandler());
             channel.pipeline().addLast(new ClientDispatcherHandler());
         }

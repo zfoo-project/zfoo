@@ -16,6 +16,7 @@ package com.zfoo.net.core.websocket;
 import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.handler.ServerDispatcherHandler;
 import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
+import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -45,14 +46,14 @@ public class WebsocketServer extends AbstractServer {
         @Override
         public void initChannel(SocketChannel channel) {
             // 编解码 http 请求
-            channel.pipeline().addLast(new HttpServerCodec());
-            // 写文件内容，支持异步发送大的码流，一般用于发送文件流
-            channel.pipeline().addLast(new ChunkedWriteHandler());
+            channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
             // 聚合解码 HttpRequest/HttpContent/LastHttpContent 到 FullHttpRequest
             // 保证接收的 Http 请求的完整性
-            channel.pipeline().addLast(new HttpObjectAggregator(64 * 1024));
+            channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
             // 处理其他的 WebSocketFrame
             channel.pipeline().addLast(new WebSocketServerProtocolHandler("/websocket"));
+            // 写文件内容，支持异步发送大的码流，一般用于发送文件流
+            channel.pipeline().addLast(new ChunkedWriteHandler());
             // 编解码WebSocketFrame二进制协议
             channel.pipeline().addLast(new WebSocketCodecHandler());
             channel.pipeline().addLast(new ServerDispatcherHandler());
