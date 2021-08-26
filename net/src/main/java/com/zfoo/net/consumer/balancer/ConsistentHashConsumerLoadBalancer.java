@@ -19,9 +19,9 @@ import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolModule;
-import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.math.ConsistentHash;
 import org.springframework.lang.Nullable;
 
@@ -84,7 +84,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
             consistentHash = updateModuleToConsistentHash(module);
         }
         if (consistentHash == null) {
-            throw new RuntimeException(StringUtils.format("没有服务提供者提供服务[{}]", module));
+            throw new RunException("一致性hash负载均衡[protocolId:{}]参数[argument:{}],没有服务提供者提供服务[module:{}]", packet.protocolId(), argument, module);
         }
         var sid = consistentHash.getRealNode(argument).getValue();
         return NetContext.getSessionManager().getClientSession(sid);

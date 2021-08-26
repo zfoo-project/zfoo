@@ -42,7 +42,7 @@ public class RandomConsumerLoadBalancer extends AbstractConsumerLoadBalancer {
         var sessions = getSessionsByModule(module);
 
         if (sessions.isEmpty()) {
-            throw new RunException("没有服务提供者提供服务[{}]", module);
+            throw new RunException("一致性hash负载均衡[protocolId:{}]参数[argument:{}],没有服务提供者提供服务[module:{}]", packet.protocolId(), argument, module);
         }
 
         return RandomUtils.randomEle(sessions);
