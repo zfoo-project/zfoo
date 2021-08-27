@@ -27,7 +27,11 @@ public class StopWatch {
     }
 
     public float costSecond() {
-        return (TimeUtils.currentTimeMillis() - startTime) / 1000F;
+        return (TimeUtils.currentTimeMillis() - startTime) / (float) TimeUtils.MILLIS_PER_SECOND;
+    }
+
+    public float costMinute() {
+        return (TimeUtils.currentTimeMillis() - startTime) / (float) TimeUtils.MILLIS_PER_MINUTE;
     }
 
     public long getStartTime() {
