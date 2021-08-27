@@ -89,7 +89,7 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
             instance.ormManager.inject();
             instance.ormManager.initAfter();
 
-            logger.info("orm start success and cost [{}] second", stopWatch.costSecond());
+            logger.info("Orm started successfully and cost [{}] seconds", stopWatch.costSeconds());
         } else if (event instanceof ContextClosedEvent) {
             shutdownBefore();
             shutdownBetween();

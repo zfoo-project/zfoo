@@ -90,7 +90,7 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
 
             // 移除没有被引用的不必要资源，为了节省服务器内存
             instance.storageManager.initAfter();
-            logger.info("storage start success and cost [{}] second", stopWatch.costSecond());
+            logger.info("Storage started successfully and cost [{}] seconds", stopWatch.costSeconds());
         } else if (event instanceof ContextClosedEvent) {
 
         }

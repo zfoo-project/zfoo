@@ -14,6 +14,9 @@ package com.zfoo.scheduler.model;
 
 import com.zfoo.scheduler.util.TimeUtils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -26,12 +29,21 @@ public class StopWatch {
         return TimeUtils.currentTimeMillis() - startTime;
     }
 
-    public float costSecond() {
-        return (TimeUtils.currentTimeMillis() - startTime) / (float) TimeUtils.MILLIS_PER_SECOND;
+    /**
+     * 从StopWatch被创建，到调用这个方法消耗的时间
+     *
+     * @return 返回消耗的时间，保留两位小数，格式xx.xx
+     */
+    public String costSeconds() {
+        var cost = cost() / (float) TimeUtils.MILLIS_PER_SECOND;
+        var decimal = new BigDecimal(cost);
+        return decimal.setScale(2, RoundingMode.HALF_UP).toString();
     }
 
-    public float costMinute() {
-        return (TimeUtils.currentTimeMillis() - startTime) / (float) TimeUtils.MILLIS_PER_MINUTE;
+    public String costMinutes() {
+        var cost = cost() / (float) TimeUtils.MILLIS_PER_MINUTE;
+        var decimal = new BigDecimal(cost);
+        return decimal.setScale(2, RoundingMode.HALF_UP).toString();
     }
 
     public long getStartTime() {

@@ -104,7 +104,7 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
             instance.packetService.init();
             instance.configManager.initRegistry();
 
-            logger.info("net start success and cost [{}] second", stopWatch.costSecond());
+            logger.info("Net started successfully and cost [{}] seconds", stopWatch.costSeconds());
         } else if (event instanceof ContextClosedEvent) {
             shutdownBefore();
             shutdownAfter();
