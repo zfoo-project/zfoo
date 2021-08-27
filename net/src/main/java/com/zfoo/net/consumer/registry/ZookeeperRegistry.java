@@ -128,7 +128,7 @@ public class ZookeeperRegistry implements IRegistry {
     public void start() {
         var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistryConfig();
         if (Objects.isNull(registryConfig)) {
-            logger.warn("没有配置注册中心registry，将不能启用服务注册和发现");
+            logger.info("服务提供者没有配置，不会在zk种注册服务，如果是单机启动请忽略这条日志");
             return;
         }
 
