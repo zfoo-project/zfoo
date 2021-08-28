@@ -66,13 +66,13 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
                 indexFileRandomAccess.writeLong(0L);
             }
 
-            maxIndex = readMaxIndex();
-
             var protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
             protocolRegistration = ProtocolManager.getProtocol(protocolId);
 
             indexBuffer = ByteBufAllocator.DEFAULT.ioBuffer(16);
             dbBuffer = ByteBufAllocator.DEFAULT.ioBuffer(100);
+
+            maxIndex = readMaxIndex();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -120,6 +120,7 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
         }
 
         try {
+            clearByteBuf();
             indexBuffer.writeBytes(indexFileChannel, key * 16L, 16);
             var packetPosition = indexBuffer.readLong();
             var packetSize = indexBuffer.readLong();
