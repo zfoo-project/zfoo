@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.function.BiConsumer;
 
 /**
  * @author jaysunxiao
@@ -80,6 +81,11 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
     @Override
     public long getIncrementIndex() {
         return heapMap.getIncrementIndex();
+    }
+
+    @Override
+    public void forEach(BiConsumer<Long, V> biConsumer) {
+        heapMap.forEach(biConsumer);
     }
 
     @Override

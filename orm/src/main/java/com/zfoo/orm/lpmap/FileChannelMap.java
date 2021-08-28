@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.util.function.BiConsumer;
 
 /**
  * @author jaysunxiao
@@ -154,6 +155,16 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
         // index索引文件的头16个字节是当前index的大小
         setMaxIndex(maxIndex);
         return maxIndex;
+    }
+
+    @Override
+    public void forEach(BiConsumer<Long, V> biConsumer) {
+        for (var i = 1L; i < getMaxIndex(); i++) {
+            var value = get(i);
+            if (value != null) {
+                biConsumer.accept(i, value);
+            }
+        }
     }
 
     @Override
