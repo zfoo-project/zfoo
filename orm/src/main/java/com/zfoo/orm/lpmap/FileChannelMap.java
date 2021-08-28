@@ -44,6 +44,7 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
     protected RandomAccessFile indexFileRandomAccess;
     protected FileChannel indexFileChannel;
 
+    protected long maxIndex;
 
     protected IProtocolRegistration protocolRegistration;
 
@@ -65,6 +66,8 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
                 indexFileRandomAccess.writeLong(0L);
             }
 
+            maxIndex = readMaxIndex();
+
             var protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
             protocolRegistration = ProtocolManager.getProtocol(protocolId);
 
@@ -80,7 +83,6 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
     public V put(long key, V packet) {
         checkKey(key);
 
-        var maxIndex = getMaxIndex();
         V previousValue = null;
         if (key <= maxIndex) {
             previousValue = get(key);
@@ -99,7 +101,6 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
     @Override
     public V delete(long key) {
         checkKey(key);
-        var maxIndex = getMaxIndex();
 
         if (key <= maxIndex) {
             var previousValue = get(key);
@@ -114,7 +115,6 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
     public V get(long key) {
         checkKey(key);
 
-        var maxIndex = getMaxIndex();
         if (key > maxIndex) {
             return null;
         }
@@ -137,20 +137,12 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
 
     @Override
     public long getMaxIndex() {
-        try {
-            clearByteBuf();
-            indexBuffer.writeBytes(indexFileChannel, 0, 8);
-            return indexBuffer.readLong();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            clearByteBuf();
-        }
+        return maxIndex;
     }
 
     @Override
     public long getIncrementIndex() {
-        var maxIndex = getMaxIndex() + 1;
+        maxIndex++;
 
         // index索引文件的头16个字节是当前index的大小
         setMaxIndex(maxIndex);
@@ -176,6 +168,18 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private long readMaxIndex() {
+        try {
+            clearByteBuf();
+            indexBuffer.writeBytes(indexFileChannel, 0, 8);
+            return indexBuffer.readLong();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            clearByteBuf();
+        }
     }
 
     protected void setKeyValue(long key, V value) {
