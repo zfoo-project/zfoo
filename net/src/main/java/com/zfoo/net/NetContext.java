@@ -25,6 +25,7 @@ import com.zfoo.net.task.TaskManager;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.scheduler.SchedulerContext;
+import com.zfoo.scheduler.model.StopWatch;
 import com.zfoo.util.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +92,7 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
         if (event instanceof ContextRefreshedEvent) {
+            var stopWatch = new StopWatch();
             NetContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
             instance.configManager = applicationContext.getBean(IConfigManager.class);
@@ -102,6 +104,7 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
             instance.packetService.init();
             instance.configManager.initRegistry();
 
+            logger.info("net start success and cost [{}] second", stopWatch.costSecond());
         } else if (event instanceof ContextClosedEvent) {
             shutdownBefore();
             shutdownAfter();

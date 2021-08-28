@@ -14,8 +14,11 @@
 package com.zfoo.storage;
 
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.scheduler.model.StopWatch;
 import com.zfoo.storage.interpreter.IResourceReader;
 import com.zfoo.storage.manager.IStorageManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationContextEvent;
@@ -30,6 +33,8 @@ import org.springframework.core.convert.ConversionService;
  * @version 3.0
  */
 public class StorageContext implements ApplicationListener<ApplicationContextEvent>, Ordered {
+
+    private static final Logger logger = LoggerFactory.getLogger(StorageContext.class);
 
     private static StorageContext instance;
 
@@ -69,6 +74,7 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
     public void onApplicationEvent(ApplicationContextEvent event) {
 
         if (event instanceof ContextRefreshedEvent) {
+            var stopWatch = new StopWatch();
             // 初始化上下文
             StorageContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
@@ -84,6 +90,7 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
 
             // 移除没有被引用的不必要资源，为了节省服务器内存
             instance.storageManager.initAfter();
+            logger.info("storage start success and cost [{}] second", stopWatch.costSecond());
         } else if (event instanceof ContextClosedEvent) {
 
         }

@@ -105,7 +105,12 @@
 
 
     <dependencies>
-        <!-- 依赖的utils类库 -->
+        <dependency>
+            <groupId>com.zfoo</groupId>
+            <artifactId>scheduler</artifactId>
+            <version>${zfoo.util.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.zfoo</groupId>
             <artifactId>util</artifactId>

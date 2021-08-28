@@ -20,6 +20,7 @@ import com.zfoo.orm.model.accessor.IAccessor;
 import com.zfoo.orm.model.query.IQuery;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.scheduler.SchedulerContext;
+import com.zfoo.scheduler.model.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -76,6 +77,7 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
         if (event instanceof ContextRefreshedEvent) {
+            var stopWatch = new StopWatch();
             OrmContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
 
@@ -86,6 +88,8 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
             instance.ormManager.initBefore();
             instance.ormManager.inject();
             instance.ormManager.initAfter();
+
+            logger.info("orm start success and cost [{}] second", stopWatch.costSecond());
         } else if (event instanceof ContextClosedEvent) {
             shutdownBefore();
             shutdownBetween();
