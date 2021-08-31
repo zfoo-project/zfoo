@@ -13,6 +13,8 @@
 
 package com.zfoo.storage.model.vo;
 
+import com.zfoo.protocol.collection.ArrayUtils;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.model.anno.Index;
@@ -44,6 +46,10 @@ public class IndexDef {
         var fields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Index.class);
         var indexes = new ArrayList<IndexDef>(fields.length);
 
+        var ormIndexes = ReflectionUtils.getFieldsByAnnoNameInPOJOClass(clazz, "com.zfoo.orm.model.anno.Index");
+        if (ArrayUtils.isNotEmpty(ormIndexes)) {
+            throw new RunException("在Storage中只能使用Storage的Index注解，不能使用Orm的Index注解，为了避免不必要的误解和增强项目的健壮性，禁止这样使用");
+        }
 
         for (var field : fields) {
             IndexDef indexDef = new IndexDef(field);

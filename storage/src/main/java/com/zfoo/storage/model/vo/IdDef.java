@@ -28,9 +28,9 @@ public class IdDef {
     private Field field;
 
     public static IdDef valueOf(Class<?> clazz) {
-        Field[] fields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
+        var fields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
         if (fields.length <= 0) {
-            throw new RunException("class[{}]没有主键Id注解", clazz.getName());
+            throw new RunException("class[{}]没有被Id注解标识的主键（如果确实已经被Id注解标注，注意不要使用ORM的Id注解）", clazz.getName());
         }
         if (fields.length > 1) {
             throw new RunException("类[{}]的主键Id注解重复", clazz.getName());
@@ -38,9 +38,9 @@ public class IdDef {
         if (fields[0] == null) {
             throw new RunException("不合法的Id资源映射对象：" + clazz.getName());
         }
-        Field idField = fields[0];
+        var idField = fields[0];
         ReflectionUtils.makeAccessible(idField);
-        IdDef idDef = new IdDef();
+        var idDef = new IdDef();
         idDef.setField(idField);
         return idDef;
     }

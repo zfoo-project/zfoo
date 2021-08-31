@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -65,8 +64,8 @@ public abstract class ReflectionUtils {
         // Keep backing up the inheritance hierarchy.
         Class<?> targetClass = clazz;
         do {
-            Field[] fields = clazz.getDeclaredFields();
-            for (Field field : fields) {
+            var fields = clazz.getDeclaredFields();
+            for (var field : fields) {
                 ReflectionUtils.filterField(field, fieldFilter, fieldCallback);
             }
             targetClass = targetClass.getSuperclass();
@@ -118,11 +117,29 @@ public abstract class ReflectionUtils {
      * @return 数组，可能长度为0
      */
     public static Field[] getFieldsByAnnoInPOJOClass(Class<?> clazz, Class<? extends Annotation> annotation) {
-        List<Field> list = new ArrayList<Field>();
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
+        var list = new ArrayList<Field>();
+        var fields = clazz.getDeclaredFields();
+        for (var field : fields) {
             if (field.isAnnotationPresent(annotation)) {
                 list.add(field);
+            }
+        }
+        return ArrayUtils.listToArray(list, Field.class);
+    }
+
+    public static Field[] getFieldsByAnnoNameInPOJOClass(Class<?> clazz, String annotationName) {
+        var list = new ArrayList<Field>();
+        var fields = clazz.getDeclaredFields();
+        for (var field : fields) {
+            var annotations = field.getAnnotations();
+            if (ArrayUtils.isEmpty(annotations)) {
+                continue;
+            }
+
+            for (var annotation : annotations) {
+                if (annotation.annotationType().getName().equals(annotationName)) {
+                    list.add(field);
+                }
             }
         }
         return ArrayUtils.listToArray(list, Field.class);
@@ -144,9 +161,9 @@ public abstract class ReflectionUtils {
      * @return 数组，可能长度为0
      */
     public static Method[] getMethodsByAnnoInPOJOClass(Class<?> clazz, Class<? extends Annotation> annotation) {
-        List<Method> list = new ArrayList<>();
-        Method[] methods = clazz.getDeclaredMethods();
-        for (Method method : methods) {
+        var list = new ArrayList<Method>();
+        var methods = clazz.getDeclaredMethods();
+        for (var method : methods) {
             if (method.isAnnotationPresent(annotation)) {
                 list.add(method);
             }
@@ -155,9 +172,9 @@ public abstract class ReflectionUtils {
     }
 
     public static Method[] getMethodsByNameInPOJOClass(Class<?> clazz, String methodName) {
-        List<Method> list = new ArrayList<>();
-        Method[] methods = clazz.getDeclaredMethods();
-        for (Method method : methods) {
+        var list = new ArrayList<Method>();
+        var methods = clazz.getDeclaredMethods();
+        for (var method : methods) {
             if (method.getName().equalsIgnoreCase(methodName)) {
                 list.add(method);
             }
@@ -174,10 +191,10 @@ public abstract class ReflectionUtils {
      */
     public static Method[] getAllMethods(Class<?> clazz) {
         AssertionUtils.notNull(clazz, "Class must not be null");
-        List<Method> list = new ArrayList<>();
-        Class<?> superClazz = clazz;
+        var list = new ArrayList<Method>();
+        var superClazz = clazz;
         while (superClazz != null) {
-            Method[] methods = superClazz.getDeclaredMethods();
+            var methods = superClazz.getDeclaredMethods();
             Collections.addAll(list, methods);
             superClazz = superClazz.getSuperclass();
         }

@@ -368,7 +368,8 @@ public class OrmManager implements IOrmManager {
 
         // 校验id字段和id()方法的格式
         var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
-        AssertionUtils.isTrue(ArrayUtils.isNotEmpty(idFields) && idFields.length == 1, "实体类Entity[{}]必须只有且仅有一个Id注解", clazz.getSimpleName());
+        AssertionUtils.isTrue(ArrayUtils.isNotEmpty(idFields) && idFields.length == 1
+                , "实体类Entity[{}]必须只有且仅有一个Id注解（如果确实已经被Id注解标注，注意不要使用Storage的Id注解）", clazz.getSimpleName());
         var idField = idFields[0];
         // idField必须用private修饰
         AssertionUtils.isTrue(Modifier.isPrivate(idField.getModifiers()), "实体类Entity[{}]的id必须是private私有的", clazz.getSimpleName());
@@ -442,6 +443,11 @@ public class OrmManager implements IOrmManager {
         // 必须要有一个空的构造器
         ReflectionUtils.publicEmptyConstructor(clazz);
 
+        // 不能使用Storage的Index注解
+        var storageIndexes = ReflectionUtils.getFieldsByAnnoNameInPOJOClass(clazz, "com.zfoo.storage.model.anno.Index");
+        if (ArrayUtils.isNotEmpty(storageIndexes)) {
+            throw new RunException("在Orm中只能使用Orm的Index注解，不能使用Storage的Index注解，为了避免不必要的误解和增强项目的健壮性，禁止这样使用");
+        }
 
         var filedList = Arrays.stream(clazz.getDeclaredFields())
                 .filter(it -> !Modifier.isTransient(it.getModifiers()))
