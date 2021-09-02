@@ -23,6 +23,13 @@ git config --global http.proxy http://127.0.0.1:10809
 git config --global https.proxy https://127.0.0.1:10809
 ```
 
+- 换行符
+
+```
+提交时转换为LF，检出时不转换，强烈推荐设置，可以减少不同电脑和不同系统之间切换，导致换行符不统一的问题
+git config --global core.autocrlf input
+```
+
 ## 3. nodejs安装
 
 - 直接默认安装
