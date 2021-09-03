@@ -19,7 +19,7 @@ import java.util.function.BiConsumer;
 
 /**
  * 类型固定的map，key为long，value为IPacket
- * 其中long必须大于0，value可以为null
+ * 其中long必须大于等于0，value可以为null
  *
  * @author jaysunxiao
  * @version 3.0
@@ -53,8 +53,8 @@ public interface LpMap<V extends IPacket> {
     void clear();
 
     default void checkKey(long key) {
-        if (key <= 0) {
-            throw new RunException("key[{}]不能为负数或0", key);
+        if (key < 0) {
+            throw new RunException("key[{}]只能为大于等于0的正数", key);
         }
     }
 

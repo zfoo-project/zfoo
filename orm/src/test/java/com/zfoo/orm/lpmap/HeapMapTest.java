@@ -29,7 +29,7 @@ public class HeapMapTest {
         var map = new HeapMap<MyPacket>(10);
         var myPacket = new MyPacket();
 
-        var packet = map.put(1, myPacket);
+        var packet = map.put(0, myPacket);
         Assert.assertNull(packet);
 
         packet = map.put(3, myPacket);

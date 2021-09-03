@@ -14,6 +14,7 @@ package com.zfoo.orm.lpmap;
 
 import com.zfoo.protocol.IPacket;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
@@ -47,6 +48,10 @@ public class ConcurrentFileChannelMap<V extends IPacket> implements LpMap<V> {
     @Override
     public synchronized V get(long key) {
         return fileChannelMap.get(key);
+    }
+
+    public synchronized List<V> getFrom(long startKey, long endKey) {
+        return fileChannelMap.getFrom(startKey, endKey);
     }
 
     @Override

@@ -14,6 +14,7 @@ package com.zfoo.orm.lpmap;
 
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.util.FileUtils;
@@ -28,6 +29,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
@@ -61,18 +65,13 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
             this.indexFileRandomAccess = new RandomAccessFile(indexFile, "rw");
             this.indexFileChannel = this.indexFileRandomAccess.getChannel();
 
-            if (indexFileChannel.size() <= 0) {
-                indexFileRandomAccess.writeLong(0L);
-                indexFileRandomAccess.writeLong(0L);
-            }
-
             var protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
             protocolRegistration = ProtocolManager.getProtocol(protocolId);
 
             indexBuffer = ByteBufAllocator.DEFAULT.ioBuffer(16);
             dbBuffer = ByteBufAllocator.DEFAULT.ioBuffer(100);
 
-            maxIndex = readMaxIndex();
+            maxIndex = indexFileChannel.size() / 16;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -87,11 +86,7 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
         if (key <= maxIndex) {
             previousValue = get(key);
         } else {
-            for (var i = maxIndex + 1; i < key; i++) {
-                resetKey(i);
-            }
             maxIndex = key;
-            setMaxIndex(maxIndex);
         }
 
         setKeyValue(key, packet);
@@ -136,6 +131,35 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
         }
     }
 
+    /**
+     * 获取从startKey到endKey的值
+     *
+     * @param startKey inclusive
+     * @param endKey   exclusive
+     * @return list
+     */
+    public List<V> getFrom(long startKey, long endKey) {
+        checkKey(startKey);
+        checkKey(endKey);
+
+        if (startKey >= endKey) {
+            throw new RunException("range error startKey < endKey");
+        }
+        if (startKey > maxIndex) {
+            return Collections.emptyList();
+        }
+
+        var list = new ArrayList<V>();
+        for (var i = startKey; i < endKey; i++) {
+            var value = get(i);
+            if (value != null) {
+                list.add(value);
+            }
+        }
+        return list;
+    }
+
+
     @Override
     public long getMaxIndex() {
         return maxIndex;
@@ -144,15 +168,12 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
     @Override
     public long getIncrementIndex() {
         maxIndex++;
-
-        // index索引文件的头16个字节是当前index的大小
-        setMaxIndex(maxIndex);
         return maxIndex;
     }
 
     @Override
     public void forEach(BiConsumer<Long, V> biConsumer) {
-        for (var i = 1L; i < getMaxIndex(); i++) {
+        for (var i = 0L; i < getMaxIndex(); i++) {
             var value = get(i);
             if (value != null) {
                 biConsumer.accept(i, value);
@@ -163,7 +184,8 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
     @Override
     public void clear() {
         try {
-            setMaxIndex(0);
+            maxIndex = 0;
+            indexFileRandomAccess.setLength(0);
             dbFileRandomAccess.setLength(0);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -171,17 +193,6 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
 
     }
 
-    private long readMaxIndex() {
-        try {
-            clearByteBuf();
-            indexBuffer.writeBytes(indexFileChannel, 0, 8);
-            return indexBuffer.readLong();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            clearByteBuf();
-        }
-    }
 
     protected void setKeyValue(long key, V value) {
         try {
@@ -213,18 +224,6 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
             indexBuffer.writeLong(0L);
             indexFileChannel.write(indexBuffer.nioBuffer(), key * 16);
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            clearByteBuf();
-        }
-    }
-
-    protected void setMaxIndex(long maxIndex) {
-        try {
-            clearByteBuf();
-            indexBuffer.writeLong(maxIndex);
-            indexFileChannel.write(indexBuffer.nioBuffer(), 0);
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {

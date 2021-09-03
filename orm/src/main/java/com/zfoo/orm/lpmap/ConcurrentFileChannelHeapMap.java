@@ -29,7 +29,7 @@ public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V>
 
     private ConcurrentHeapMap<V> concurrentHeapMap;
 
-    public ConcurrentFileChannelHeapMap(String dbPath, int initialCapacity, Class<V> clazz) {
+    public ConcurrentFileChannelHeapMap(String dbPath, Class<V> clazz) {
         fileChannelMap = new FileChannelMap<>(dbPath, clazz);
         concurrentHeapMap = new ConcurrentHeapMap<>();
 
