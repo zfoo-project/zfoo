@@ -52,14 +52,11 @@ public interface LpMap<V extends IPacket> {
 
     void clear();
 
+    void forEach(BiConsumer<Long, V> biConsumer);
+
     default void checkKey(long key) {
         if (key < 0) {
             throw new RunException("key[{}]只能为大于等于0的正数", key);
         }
     }
-
-    default void forEach(BiConsumer<Long, V> biConsumer) {
-
-    }
-
 }

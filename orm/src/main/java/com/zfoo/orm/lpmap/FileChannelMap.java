@@ -173,7 +173,7 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
 
     @Override
     public void forEach(BiConsumer<Long, V> biConsumer) {
-        for (var i = 0L; i < getMaxIndex(); i++) {
+        for (var i = 0L; i <= getMaxIndex(); i++) {
             var value = get(i);
             if (value != null) {
                 biConsumer.accept(i, value);
