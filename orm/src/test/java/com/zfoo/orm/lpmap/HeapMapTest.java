@@ -26,7 +26,7 @@ public class HeapMapTest {
 
     @Test
     public void test() {
-        var map = new HeapMap<MyPacket>(10);
+        var map = new HeapMap<MyPacket>();
         var myPacket = new MyPacket();
 
         var packet = map.put(0, myPacket);
@@ -40,6 +40,23 @@ public class HeapMapTest {
 
         packet = map.delete(3);
         Assert.assertEquals(packet, myPacket);
+    }
+
+    @Test
+    public void benchmarkTest() {
+        var map = new HeapMap<MyPacket>();
+
+        var count = 1000_0000;
+        for (var i = 0; i < count; i++) {
+            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
+            map.put(i, myPacket);
+        }
+
+        for (var i = 0; i < count; i++) {
+            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
+            var packet = map.get(i);
+            Assert.assertEquals(myPacket, packet);
+        }
     }
 
 }

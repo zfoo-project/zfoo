@@ -14,9 +14,11 @@ package com.zfoo.orm.lpmap;
 
 import com.zfoo.orm.lpmap.model.MyPacket;
 import com.zfoo.protocol.ProtocolManager;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -60,5 +62,30 @@ public class FileChannelMapTest {
         System.out.println(map.get(1));
         System.out.println(map.get(2));
         System.out.println(map.get(3));
+    }
+
+    @Test
+    public void benchmarkTest() throws IOException {
+        ProtocolManager.initProtocol(Set.of(MyPacket.class));
+
+        var map = new FileChannelMap<MyPacket>("db", MyPacket.class);
+        var count = 1000_0000;
+        for (var i = 0; i < count; i++) {
+            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
+            map.put(i, myPacket);
+        }
+
+        for (var i = 0; i < count; i++) {
+            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
+            var packet = map.get(i);
+            Assert.assertEquals(myPacket, packet);
+        }
+        map.close();
+        map = new FileChannelMap<MyPacket>("db", MyPacket.class);
+        for (var i = 0; i < count; i++) {
+            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
+            var packet = map.get(i);
+            Assert.assertEquals(myPacket, packet);
+        }
     }
 }

@@ -14,6 +14,8 @@ package com.zfoo.orm.lpmap;
 
 import com.zfoo.protocol.IPacket;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -21,7 +23,7 @@ import java.util.function.BiConsumer;
  * @author jaysunxiao
  * @version 3.0
  */
-public class ConcurrentFileChannelMap<V extends IPacket> implements LpMap<V> {
+public class ConcurrentFileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
 
 
     private FileChannelMap<V> fileChannelMap;
@@ -70,7 +72,13 @@ public class ConcurrentFileChannelMap<V extends IPacket> implements LpMap<V> {
     }
 
     @Override
+    public synchronized void close() throws IOException {
+        fileChannelMap.close();
+    }
+
+    @Override
     public synchronized void forEach(BiConsumer<Long, V> biConsumer) {
         fileChannelMap.forEach(biConsumer);
     }
+
 }

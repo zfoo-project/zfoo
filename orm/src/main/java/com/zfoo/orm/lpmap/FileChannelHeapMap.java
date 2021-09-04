@@ -14,13 +14,15 @@ package com.zfoo.orm.lpmap;
 
 import com.zfoo.protocol.IPacket;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.function.BiConsumer;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-public class FileChannelHeapMap<V extends IPacket> implements LpMap<V> {
+public class FileChannelHeapMap<V extends IPacket> implements LpMap<V>, Closeable {
 
     private FileChannelMap<V> fileChannelMap;
 
@@ -30,7 +32,7 @@ public class FileChannelHeapMap<V extends IPacket> implements LpMap<V> {
         fileChannelMap = new FileChannelMap<>(dbPath, clazz);
         heapMap = new HeapMap<>(initialCapacity);
 
-        load();
+        fileChannelMap.forEach((key, v) -> heapMap.put(key, v));
     }
 
     @Override
@@ -66,23 +68,15 @@ public class FileChannelHeapMap<V extends IPacket> implements LpMap<V> {
         heapMap.clear();
     }
 
-    private void load() {
-        var maxIndex = fileChannelMap.getMaxIndex();
-        if (maxIndex <= 0) {
-            return;
-        }
-
-        for (var key = 1; key <= maxIndex; key++) {
-            var value = fileChannelMap.get(key);
-            if (value == null) {
-                continue;
-            }
-            heapMap.put(key, value);
-        }
+    @Override
+    public void close() throws IOException {
+        fileChannelMap.close();
+        heapMap.clear();
     }
 
     @Override
     public void forEach(BiConsumer<Long, V> biConsumer) {
         heapMap.forEach(biConsumer);
     }
+
 }

@@ -43,13 +43,13 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
 
     private HeapMap<V> heapMap;
 
-    public FileHeapMap(String dbPath, int initialCapacity, Class<V> clazz) {
+    public FileHeapMap(String dbPath, Class<V> clazz) {
         try {
             this.dbFile = FileUtils.getOrCreateFile(dbPath, StringUtils.format("{}.db", clazz.getSimpleName()));
 
             var protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
             protocolRegistration = ProtocolManager.getProtocol(protocolId);
-            heapMap = new HeapMap<>(initialCapacity);
+            heapMap = new HeapMap<>();
 
             load();
         } catch (IOException e) {

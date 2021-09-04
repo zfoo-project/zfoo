@@ -193,6 +193,12 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
 
     }
 
+    @Override
+    public void close() throws IOException {
+        IOUtils.closeIO(indexFileRandomAccess, indexFileChannel, dbFileRandomAccess, dbFileChannel);
+        ReferenceCountUtil.release(indexBuffer);
+        ReferenceCountUtil.release(dbBuffer);
+    }
 
     protected void setKeyValue(long key, V value) {
         try {
@@ -234,13 +240,6 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
     protected void clearByteBuf() {
         indexBuffer.clear();
         dbBuffer.clear();
-    }
-
-    @Override
-    public void close() throws IOException {
-        IOUtils.closeIO(indexFileRandomAccess, indexFileChannel, dbFileRandomAccess, dbFileChannel);
-        ReferenceCountUtil.release(indexBuffer);
-        ReferenceCountUtil.release(dbBuffer);
     }
 
 }

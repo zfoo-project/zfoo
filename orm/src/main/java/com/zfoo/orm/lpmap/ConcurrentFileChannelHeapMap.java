@@ -14,6 +14,8 @@ package com.zfoo.orm.lpmap;
 
 import com.zfoo.protocol.IPacket;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiConsumer;
 
@@ -21,7 +23,7 @@ import java.util.function.BiConsumer;
  * @author jaysunxiao
  * @version 3.0
  */
-public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V> {
+public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V>, Closeable {
 
     private ReentrantLock fileChannelLock = new ReentrantLock();
 
@@ -33,7 +35,7 @@ public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V>
         fileChannelMap = new FileChannelMap<>(dbPath, clazz);
         concurrentHeapMap = new ConcurrentHeapMap<>();
 
-        load();
+        fileChannelMap.forEach((key, v) -> concurrentHeapMap.put(key, v));
     }
 
     @Override
@@ -93,18 +95,14 @@ public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V>
         }
     }
 
-    private void load() {
-        var maxIndex = fileChannelMap.getMaxIndex();
-        if (maxIndex <= 0) {
-            return;
-        }
-
-        for (var key = 1; key <= maxIndex; key++) {
-            var value = fileChannelMap.get(key);
-            if (value == null) {
-                continue;
-            }
-            concurrentHeapMap.put(key, value);
+    @Override
+    public void close() throws IOException {
+        fileChannelLock.lock();
+        try {
+            fileChannelMap.close();
+            concurrentHeapMap.clear();
+        } finally {
+            fileChannelLock.unlock();
         }
     }
 
@@ -112,4 +110,5 @@ public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V>
     public void forEach(BiConsumer<Long, V> biConsumer) {
         concurrentHeapMap.forEach(biConsumer);
     }
+
 }

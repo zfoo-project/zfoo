@@ -27,6 +27,10 @@ public class HeapMap<V extends IPacket> implements LpMap<V> {
 
     protected long maxIndex = 0;
 
+    public HeapMap() {
+        this(128);
+    }
+
     public HeapMap(int initialCapacity) {
         map = new LongObjectHashMap<>(initialCapacity);
     }

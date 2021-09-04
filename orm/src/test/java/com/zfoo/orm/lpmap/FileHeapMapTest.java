@@ -31,7 +31,7 @@ public class FileHeapMapTest {
     public void test() {
         ProtocolManager.initProtocol(Set.of(MyPacket.class));
 
-        var map = new FileHeapMap<MyPacket>("db", 10, MyPacket.class);
+        var map = new FileHeapMap<MyPacket>("db", MyPacket.class);
         var myPacket = new MyPacket();
         myPacket.setA(9999);
 
@@ -55,5 +55,36 @@ public class FileHeapMapTest {
         map.save();
     }
 
+    @Test
+    public void benchmarkTest() {
+        ProtocolManager.initProtocol(Set.of(MyPacket.class));
 
+        var map = new FileHeapMap<MyPacket>("db", MyPacket.class);
+        var count = 1000_0000;
+        for (var i = 0; i < count; i++) {
+            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
+            map.put(i, myPacket);
+        }
+
+        for (var i = 0; i < count; i++) {
+            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
+            var packet = map.get(i);
+            Assert.assertEquals(myPacket, packet);
+        }
+        map.save();
+    }
+
+    @Test
+    public void loadTest() {
+        ProtocolManager.initProtocol(Set.of(MyPacket.class));
+
+        var map = new FileHeapMap<MyPacket>("db", MyPacket.class);
+        var count = 1000_0000;
+
+        for (var i = 0; i < count; i++) {
+            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
+            var packet = map.get(i);
+            Assert.assertEquals(myPacket, packet);
+        }
+    }
 }

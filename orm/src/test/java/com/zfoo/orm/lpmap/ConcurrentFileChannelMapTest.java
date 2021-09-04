@@ -27,30 +27,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author jaysunxiao
  * @version 3.0
  */
-public class ConcurrentHeapMapTest {
-
-    @Test
-    public void putIfAbsentTest() {
-        ProtocolManager.initProtocol(Set.of(MyPacket.class));
-        var myPacket = new MyPacket();
-        myPacket.setA(1);
-
-        var map = new ConcurrentHeapMap<MyPacket>();
-
-        var previous1 = map.put(1, myPacket);
-        var previous2 = map.put(2, myPacket);
-        var previous3 = map.put(2, new MyPacket());
-
-        Assert.assertNull(previous1);
-        Assert.assertNull(previous2);
-        Assert.assertEquals(previous3, myPacket);
-    }
+public class ConcurrentFileChannelMapTest {
 
     @Test
     public void benchmarkTest() throws IOException, InterruptedException {
         ProtocolManager.initProtocol(Set.of(MyPacket.class));
 
-        var map = new ConcurrentHeapMap<MyPacket>();
+        var map = new ConcurrentFileChannelMap<MyPacket>("db", MyPacket.class);
         var atomicInt = new AtomicInteger(0);
         var count = 1000_0000;
 
@@ -73,6 +56,14 @@ public class ConcurrentHeapMapTest {
         for (var i = 0; i < count; i++) {
             var myPacket = MyPacket.valueOf(i, String.valueOf(i));
             var packet = map.get(i);
+            Assert.assertEquals(myPacket, packet);
+        }
+
+        map.close();
+        var newMap = new ConcurrentFileChannelMap<MyPacket>("db", MyPacket.class);
+        for (var i = 0; i < count; i++) {
+            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
+            var packet = newMap.get(i);
             Assert.assertEquals(myPacket, packet);
         }
     }
