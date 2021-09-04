@@ -16,6 +16,7 @@ import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.lpmap.model.MyPacket;
 import com.zfoo.protocol.ProtocolManager;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author jaysunxiao
  * @version 3.0
  */
+@Ignore
 public class ConcurrentHeapMapTest {
 
     @Test
