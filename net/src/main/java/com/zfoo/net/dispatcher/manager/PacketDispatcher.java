@@ -34,6 +34,7 @@ import com.zfoo.net.session.model.Session;
 import com.zfoo.net.task.TaskManager;
 import com.zfoo.net.task.model.ReceiveTask;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.math.HashUtils;
@@ -247,6 +248,8 @@ public class PacketDispatcher implements IPacketDispatcher {
                                 var notCompleteCallback = asyncAnswer.getNotCompleteCallback();
                                 if (notCompleteCallback != null) {
                                     notCompleteCallback.run();
+                                } else {
+                                    logger.error(ExceptionUtils.getMessage(throwable));
                                 }
                                 return;
                             }

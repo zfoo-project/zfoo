@@ -17,6 +17,7 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.core.tcp.TcpClient;
 import com.zfoo.net.packet.tcp.*;
 import com.zfoo.net.session.SessionUtils;
+import com.zfoo.net.task.model.SafeRunnable;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.util.ThreadUtils;
@@ -105,11 +106,17 @@ public class TcpClientTest {
                     var ask = new AsyncMess0Ask();
                     ask.setMessage("Hello, client0 -> server0!");
 
-                    var answer = NetContext.getDispatcher().asyncAsk(session1, ask, AsyncMess0Answer.class, null);
-                    answer.whenComplete(sm -> {
-                        logger.info("异步请求[{}]收到结果[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
-                            }
-                    );
+                    NetContext.getDispatcher().asyncAsk(null, ask, AsyncMess0Answer.class, null)
+                            .notComplete(new SafeRunnable() {
+                                @Override
+                                public void doRun() {
+                                    logger.info("异步请求没有完成");
+                                }
+                            })
+                            .whenComplete(answer -> {
+                                        logger.info("异步请求[{}]收到结果[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
+                                    }
+                            );
                 }
             });
             executor.execute(thread);
