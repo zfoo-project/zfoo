@@ -37,16 +37,16 @@ public class NetConfig {
     private boolean generateCsProtocol;
     private boolean generateLuaProtocol;
 
-    private RegistryConfig registryConfig;
-    private MonitorConfig monitorConfig;
-    private HostConfig hostConfig;
+    private RegistryConfig registry;
+    private MonitorConfig monitor;
+    private HostConfig host;
 
-    private ProviderConfig providerConfig;
-    private ConsumerConfig consumerConfig;
+    private ProviderConfig provider;
+    private ConsumerConfig consumer;
 
 
     public RegisterVO toLocalRegisterVO() {
-        return RegisterVO.valueOf(id, providerConfig, consumerConfig);
+        return RegisterVO.valueOf(id, provider, consumer);
     }
 
     public String getId() {
@@ -105,44 +105,44 @@ public class NetConfig {
         this.generateLuaProtocol = generateLuaProtocol;
     }
 
-    public RegistryConfig getRegistryConfig() {
-        return registryConfig;
+    public RegistryConfig getRegistry() {
+        return registry;
     }
 
-    public void setRegistryConfig(RegistryConfig registryConfig) {
-        this.registryConfig = registryConfig;
+    public void setRegistry(RegistryConfig registry) {
+        this.registry = registry;
     }
 
-    public MonitorConfig getMonitorConfig() {
-        return monitorConfig;
+    public MonitorConfig getMonitor() {
+        return monitor;
     }
 
-    public void setMonitorConfig(MonitorConfig monitorConfig) {
-        this.monitorConfig = monitorConfig;
+    public void setMonitor(MonitorConfig monitor) {
+        this.monitor = monitor;
     }
 
-    public HostConfig getHostConfig() {
-        return hostConfig;
+    public HostConfig getHost() {
+        return host;
     }
 
-    public void setHostConfig(HostConfig hostConfig) {
-        this.hostConfig = hostConfig;
+    public void setHost(HostConfig host) {
+        this.host = host;
     }
 
-    public ProviderConfig getProviderConfig() {
-        return providerConfig;
+    public ProviderConfig getProvider() {
+        return provider;
     }
 
-    public void setProviderConfig(ProviderConfig providerConfig) {
-        this.providerConfig = providerConfig;
+    public void setProvider(ProviderConfig provider) {
+        this.provider = provider;
     }
 
-    public ConsumerConfig getConsumerConfig() {
-        return consumerConfig;
+    public ConsumerConfig getConsumer() {
+        return consumer;
     }
 
-    public void setConsumerConfig(ConsumerConfig consumerConfig) {
-        this.consumerConfig = consumerConfig;
+    public void setConsumer(ConsumerConfig consumer) {
+        this.consumer = consumer;
     }
 
     @Override
@@ -157,15 +157,15 @@ public class NetConfig {
         return generateJsProtocol == netConfig.generateJsProtocol &&
                 Objects.equals(id, netConfig.id) &&
                 Objects.equals(protocolLocation, netConfig.protocolLocation) &&
-                Objects.equals(registryConfig, netConfig.registryConfig) &&
-                Objects.equals(monitorConfig, netConfig.monitorConfig) &&
-                Objects.equals(hostConfig, netConfig.hostConfig) &&
-                Objects.equals(providerConfig, netConfig.providerConfig) &&
-                Objects.equals(consumerConfig, netConfig.consumerConfig);
+                Objects.equals(registry, netConfig.registry) &&
+                Objects.equals(monitor, netConfig.monitor) &&
+                Objects.equals(host, netConfig.host) &&
+                Objects.equals(provider, netConfig.provider) &&
+                Objects.equals(consumer, netConfig.consumer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, protocolLocation, generateJsProtocol, registryConfig, monitorConfig, hostConfig, providerConfig, consumerConfig);
+        return Objects.hash(id, protocolLocation, generateJsProtocol, registry, monitor, host, provider, consumer);
     }
 }

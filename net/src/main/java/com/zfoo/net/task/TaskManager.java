@@ -50,7 +50,7 @@ public final class TaskManager implements ITaskManager {
 
     static {
         var localConfig = NetContext.getConfigManager().getLocalConfig();
-        var providerConfig = localConfig.getProviderConfig();
+        var providerConfig = localConfig.getProvider();
 
         var dispatch = providerConfig == null ? "consistent-hash" : providerConfig.getDispatch();
         var dispatchThread = (providerConfig == null || StringUtils.isBlank(providerConfig.getDispatchThread()))

@@ -24,6 +24,7 @@
     <!-- 没有用<dependencyManagement>来管理这个root，是为了让下面的module不依赖于任何parent，复制出来就可以用 -->
     <!-- 聚合，把下面的几个module一起打包，packaging必须为pom -->
     <modules>
+        <module>boot</module>
         <module>event</module>
         <module>hotswap</module>
         <module>monitor</module>
@@ -38,6 +39,7 @@
 
     <properties>
         <!-- 本项目的其它module版本号 -->
+        <zfoo.boot.version>3.0</zfoo.boot.version>
         <zfoo.event.version>3.0</zfoo.event.version>
         <zfoo.hotswap.version>3.0</zfoo.hotswap.version>
         <zfoo.monitor.version>3.0</zfoo.monitor.version>

@@ -23,12 +23,14 @@ public class CacheStrategy {
     private int size;
     private long expireMillisecond;
 
-    public CacheStrategy(String strategy, int cacheSize, long expireMillisecond) {
-        this.strategy = strategy;
-        this.size = cacheSize;
-        this.expireMillisecond = expireMillisecond;
+    public CacheStrategy() {
     }
 
+    public CacheStrategy(String strategy, int size, long expireMillisecond) {
+        this.strategy = strategy;
+        this.size = size;
+        this.expireMillisecond = expireMillisecond;
+    }
 
     public String getStrategy() {
         return strategy;

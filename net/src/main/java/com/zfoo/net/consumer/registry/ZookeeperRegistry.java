@@ -126,7 +126,7 @@ public class ZookeeperRegistry implements IRegistry {
 
     @Override
     public void start() {
-        var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistryConfig();
+        var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
         if (Objects.isNull(registryConfig)) {
             logger.info("服务提供者没有配置，不会在zk种注册服务，如果是单机启动请忽略这条日志");
             return;
@@ -141,7 +141,7 @@ public class ZookeeperRegistry implements IRegistry {
     }
 
     private void startProvider() {
-        var providerConfig = NetContext.getConfigManager().getLocalConfig().getProviderConfig();
+        var providerConfig = NetContext.getConfigManager().getLocalConfig().getProvider();
 
         if (Objects.isNull(providerConfig)) {
             logger.info("服务提供者没有配置，不会在zk种注册服务，如果是单机启动请忽略这条日志");
@@ -153,14 +153,14 @@ public class ZookeeperRegistry implements IRegistry {
     }
 
     private void startCurator() {
-        var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistryConfig();
+        var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
 
         if (!registryConfig.getCenter().toLowerCase().matches("zookeeper")) {
             throw new IllegalArgumentException(StringUtils
                     .format("[center:{}]注册中心只能是zookeeper", JsonUtils.object2String(registryConfig)));
         }
 
-        var zookeeperConnectStr = HostAndPort.toHostAndPortListStr(HostAndPort.toHostAndPortList(registryConfig.getAddressMap().values()));
+        var zookeeperConnectStr = HostAndPort.toHostAndPortListStr(HostAndPort.toHostAndPortList(registryConfig.getAddress().values()));
         var builder = CuratorFrameworkFactory.builder();
         builder.connectString(zookeeperConnectStr);
         if (registryConfig.hasZookeeperAuthor()) {
@@ -207,7 +207,7 @@ public class ZookeeperRegistry implements IRegistry {
             // 创建zookeeper的根路径
             var rootStat = curator.checkExists().forPath(ROOT_PATH);
             if (Objects.isNull(rootStat)) {
-                var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistryConfig();
+                var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
                 var builder = curator.create();
                 builder.creatingParentsIfNeeded();
                 if (registryConfig.hasZookeeperAuthor()) {
@@ -218,7 +218,7 @@ public class ZookeeperRegistry implements IRegistry {
                 builder.withMode(CreateMode.PERSISTENT);
                 builder.forPath(ROOT_PATH, StringUtils.bytes(registryConfig.getCenter()));
             } else {
-                var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistryConfig();
+                var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
                 var bytes = curator.getData().storingStatIn(new Stat()).forPath(ROOT_PATH);
                 var rootPathData = StringUtils.bytesToString(bytes);
 

@@ -13,6 +13,8 @@
 
 package com.zfoo.orm.model.config;
 
+import java.util.List;
+
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -23,11 +25,11 @@ public class OrmConfig {
 
     private String entityPackage;
 
-    private HostConfig hostConfig;
+    private HostConfig host;
 
-    private CachesConfig cachesConfig;
+    private List<CacheStrategy> caches;
 
-    private PersistersConfig persistersConfig;
+    private List<PersisterStrategy> persisters;
 
     public String getId() {
         return id;
@@ -45,27 +47,27 @@ public class OrmConfig {
         this.entityPackage = entityPackage;
     }
 
-    public HostConfig getHostConfig() {
-        return hostConfig;
+    public HostConfig getHost() {
+        return host;
     }
 
-    public void setHostConfig(HostConfig hostConfig) {
-        this.hostConfig = hostConfig;
+    public void setHost(HostConfig host) {
+        this.host = host;
     }
 
-    public CachesConfig getCachesConfig() {
-        return cachesConfig;
+    public List<CacheStrategy> getCaches() {
+        return caches;
     }
 
-    public void setCachesConfig(CachesConfig cachesConfig) {
-        this.cachesConfig = cachesConfig;
+    public void setCaches(List<CacheStrategy> caches) {
+        this.caches = caches;
     }
 
-    public PersistersConfig getPersistersConfig() {
-        return persistersConfig;
+    public List<PersisterStrategy> getPersisters() {
+        return persisters;
     }
 
-    public void setPersistersConfig(PersistersConfig persistersConfig) {
-        this.persistersConfig = persistersConfig;
+    public void setPersisters(List<PersisterStrategy> persisters) {
+        this.persisters = persisters;
     }
 }

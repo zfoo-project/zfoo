@@ -24,14 +24,14 @@ public class HostConfig {
     private String database;
     private String user;
     private String password;
-    private Map<String, String> addressMap;
+    private Map<String, String> address;
 
     public static HostConfig valueOf(String database, String user, String password, Map<String, String> addressMap) {
         HostConfig config = new HostConfig();
         config.database = database;
         config.user = user;
         config.password = password;
-        config.addressMap = addressMap;
+        config.address = addressMap;
         return config;
     }
 
@@ -59,11 +59,11 @@ public class HostConfig {
         this.password = password;
     }
 
-    public Map<String, String> getAddressMap() {
-        return addressMap;
+    public Map<String, String> getAddress() {
+        return address;
     }
 
-    public void setAddressMap(Map<String, String> addressMap) {
-        this.addressMap = addressMap;
+    public void setAddress(Map<String, String> address) {
+        this.address = address;
     }
 }

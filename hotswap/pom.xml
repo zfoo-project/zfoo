@@ -12,6 +12,7 @@
 
     <properties>
         <!-- 本项目的其它module版本号 -->
+        <zfoo.boot.version>3.0</zfoo.boot.version>
         <zfoo.event.version>3.0</zfoo.event.version>
         <zfoo.hotswap.version>3.0</zfoo.hotswap.version>
         <zfoo.monitor.version>3.0</zfoo.monitor.version>

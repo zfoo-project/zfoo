@@ -25,7 +25,7 @@ public class HostConfig {
     private String center;
     private String user;
     private String password;
-    private Map<String, String> addressMap;
+    private Map<String, String> address;
 
     public void setCenter(String center) {
         this.center = center;
@@ -51,12 +51,12 @@ public class HostConfig {
         this.password = password;
     }
 
-    public Map<String, String> getAddressMap() {
-        return addressMap;
+    public Map<String, String> getAddress() {
+        return address;
     }
 
-    public void setAddressMap(Map<String, String> addressMap) {
-        this.addressMap = addressMap;
+    public void setAddress(Map<String, String> address) {
+        this.address = address;
     }
 
     @Override
@@ -71,11 +71,11 @@ public class HostConfig {
         return Objects.equals(center, that.center) &&
                 Objects.equals(user, that.user) &&
                 Objects.equals(password, that.password) &&
-                Objects.equals(addressMap, that.addressMap);
+                Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(center, user, password, addressMap);
+        return Objects.hash(center, user, password, address);
     }
 }

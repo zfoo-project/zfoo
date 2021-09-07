@@ -20,7 +20,6 @@ import com.zfoo.net.consumer.service.Consumer;
 import com.zfoo.net.dispatcher.manager.PacketDispatcher;
 import com.zfoo.net.packet.service.PacketService;
 import com.zfoo.net.session.manager.SessionManager;
-import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.DomUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -58,11 +57,6 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         clazz = ConfigManager.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         builder.addPropertyReference("localConfig", NetConfig.class.getCanonicalName());
-        parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
-
-        // 注册ProtocolManager
-        clazz = ProtocolManager.class;
-        builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 
         // 注册PacketService
@@ -104,31 +98,31 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         var registryElement = DomUtils.getFirstChildElementByTagName(element, "registry");
         if (registryElement != null) {
             parseRegistryConfig(registryElement, parserContext);
-            builder.addPropertyReference("registryConfig", RegistryConfig.class.getCanonicalName());
+            builder.addPropertyReference("registry", RegistryConfig.class.getCanonicalName());
         }
 
         var monitorElement = DomUtils.getFirstChildElementByTagName(element, "monitor");
         if (monitorElement != null) {
             parseMonitorConfig(monitorElement, parserContext);
-            builder.addPropertyReference("monitorConfig", MonitorConfig.class.getCanonicalName());
+            builder.addPropertyReference("monitor", MonitorConfig.class.getCanonicalName());
         }
 
         var hostElement = DomUtils.getFirstChildElementByTagName(element, "host");
         if (hostElement != null) {
-            builder.addPropertyReference("hostConfig", HostConfig.class.getCanonicalName());
+            builder.addPropertyReference("host", HostConfig.class.getCanonicalName());
             parseHostConfig(hostElement, parserContext);
         }
 
         var providerElement = DomUtils.getFirstChildElementByTagName(element, "provider");
         if (providerElement != null) {
-            builder.addPropertyReference("providerConfig", ProviderConfig.class.getCanonicalName());
+            builder.addPropertyReference("provider", ProviderConfig.class.getCanonicalName());
             parseProviderConfig(providerElement, parserContext);
         }
 
         var consumerElement = DomUtils.getFirstChildElementByTagName(element, "consumer");
         if (consumerElement != null) {
             parseConsumerConfig(consumerElement, parserContext);
-            builder.addPropertyReference("consumerConfig", ConsumerConfig.class.getCanonicalName());
+            builder.addPropertyReference("consumer", ConsumerConfig.class.getCanonicalName());
         }
 
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
@@ -142,7 +136,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("user", "user", builder, element, parserContext);
         resolvePlaceholder("password", "password", builder, element, parserContext);
         var addressMap = parseAddress(element, parserContext);
-        builder.addPropertyValue("addressMap", addressMap);
+        builder.addPropertyValue("address", addressMap);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
 
@@ -154,7 +148,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("user", "user", builder, element, parserContext);
         resolvePlaceholder("password", "password", builder, element, parserContext);
         var addressMap = parseAddress(element, parserContext);
-        builder.addPropertyValue("addressMap", addressMap);
+        builder.addPropertyValue("address", addressMap);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
 
@@ -166,7 +160,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("user", "user", builder, element, parserContext);
         resolvePlaceholder("password", "password", builder, element, parserContext);
         var addressMap = parseAddress(element, parserContext);
-        builder.addPropertyValue("addressMap", addressMap);
+        builder.addPropertyValue("address", addressMap);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
 

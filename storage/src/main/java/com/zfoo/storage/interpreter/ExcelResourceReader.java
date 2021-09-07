@@ -16,13 +16,14 @@ package com.zfoo.storage.interpreter;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.model.anno.Id;
+import com.zfoo.storage.strategy.*;
 import com.zfoo.storage.util.CellUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.TypeDescriptor;
 
 import java.io.IOException;
@@ -39,6 +40,20 @@ import java.util.stream.Collectors;
 public class ExcelResourceReader implements IResourceReader {
 
     private static final TypeDescriptor TYPE_DESCRIPTOR = TypeDescriptor.valueOf(String.class);
+
+    private static final ConversionServiceFactoryBean conversionServiceFactoryBean = new ConversionServiceFactoryBean();
+
+    static {
+        var converters = new HashSet<>();
+        converters.add(new JsonToArrayConverter());
+        converters.add(new JsonToMapConverter());
+        converters.add(new JsonToObjectConverter());
+        converters.add(new StringToClassConverter());
+        converters.add(new StringToDateConverter());
+        converters.add(new StringToMapConverter());
+        conversionServiceFactoryBean.setConverters(converters);
+        conversionServiceFactoryBean.afterPropertiesSet();
+    }
 
     @Override
     public <T> List<T> read(InputStream inputStream, Class<T> clazz) {
@@ -90,7 +105,7 @@ public class ExcelResourceReader implements IResourceReader {
     private void inject(Object instance, Field field, String content) {
         try {
             var targetType = new TypeDescriptor(field);
-            var value = StorageContext.getConversionService().convert(content, TYPE_DESCRIPTOR, targetType);
+            var value = conversionServiceFactoryBean.getObject().convert(content, TYPE_DESCRIPTOR, targetType);
             ReflectionUtils.makeAccessible(field);
             ReflectionUtils.setField(field, instance, value);
         } catch (Exception e) {

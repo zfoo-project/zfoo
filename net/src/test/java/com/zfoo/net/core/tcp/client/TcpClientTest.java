@@ -44,7 +44,7 @@ public class TcpClientTest {
     public void startClient0() {
         var context = new ClassPathXmlApplicationContext("config.xml");
         SessionUtils.printSessionInfo();
-        var client = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
+        var client = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHost().getAddress().get("server0")));
         var session = client.start();
 
         var request = new TcpHelloRequest();
@@ -64,7 +64,7 @@ public class TcpClientTest {
     public void syncClientTest() {
         var context = new ClassPathXmlApplicationContext("config.xml");
         SessionUtils.printSessionInfo();
-        var client = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server1")));
+        var client = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHost().getAddress().get("server1")));
         var session = client.start();
 
         var executorSize = Runtime.getRuntime().availableProcessors() * 2;
@@ -93,7 +93,7 @@ public class TcpClientTest {
     @Test
     public void asyncClientTest() {
         var context = new ClassPathXmlApplicationContext("config.xml");
-        var client1 = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server1")));
+        var client1 = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHost().getAddress().get("server1")));
         var session1 = client1.start();
 
         var executorSize = Runtime.getRuntime().availableProcessors() * 2;

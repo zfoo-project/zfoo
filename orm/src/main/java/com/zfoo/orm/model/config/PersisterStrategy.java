@@ -25,6 +25,9 @@ public class PersisterStrategy {
 
     private String config;
 
+    public PersisterStrategy() {
+    }
+
     public PersisterStrategy(String strategy, String type, String config) {
         this.strategy = strategy;
         this.config = config;

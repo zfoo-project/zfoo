@@ -42,7 +42,7 @@ public class TcpServerTest {
         var context = new ClassPathXmlApplicationContext("config.xml");
         SessionUtils.printSessionInfo();
 
-        var server0 = new TcpServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server0")));
+        var server0 = new TcpServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHost().getAddress().get("server0")));
         server0.start();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
@@ -53,7 +53,7 @@ public class TcpServerTest {
 
         SessionUtils.printSessionInfo();
 
-        var server1 = new TcpServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("server1")));
+        var server1 = new TcpServer(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHost().getAddress().get("server1")));
         server1.start();
 
         // 连接server0
@@ -61,7 +61,7 @@ public class TcpServerTest {
         executor.execute(() -> {
             while (true) {
                 try {
-                    var client0 = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHostConfig().getAddressMap().get("client0")));
+                    var client0 = new TcpClient(HostAndPort.valueOf(NetContext.getConfigManager().getLocalConfig().getHost().getAddress().get("client0")));
                     client0.start();
                     break;
                 } catch (Exception e) {

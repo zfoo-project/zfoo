@@ -19,16 +19,11 @@ import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.interpreter.ExcelResourceReader;
 import com.zfoo.storage.manager.StorageManager;
 import com.zfoo.storage.model.config.StorageConfig;
-import com.zfoo.storage.strategy.*;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
-import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.w3c.dom.Element;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author jaysunxiao
@@ -96,20 +91,6 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
         clazz = ExcelResourceReader.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
-        registry.registerBeanDefinition(name, builder.getBeanDefinition());
-
-        // 注入ConversionServiceFactoryBean
-        clazz = ConversionServiceFactoryBean.class;
-        name = StringUtils.uncapitalize(clazz.getName());
-        builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
-        List<Object> converters = new ArrayList<>();
-        converters.add(new JsonToArrayConverter());
-        converters.add(new JsonToMapConverter());
-        converters.add(new JsonToObjectConverter());
-        converters.add(new StringToClassConverter());
-        converters.add(new StringToDateConverter());
-        converters.add(new StringToMapConverter());
-        builder.addPropertyValue("converters", converters);
         registry.registerBeanDefinition(name, builder.getBeanDefinition());
     }
 

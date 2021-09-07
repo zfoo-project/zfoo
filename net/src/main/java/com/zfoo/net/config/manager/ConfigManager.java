@@ -64,7 +64,7 @@ public class ConfigManager implements IConfigManager {
     @Override
     public void initRegistry() {
         // 通过protocol，写入provider的module的id和version
-        var providerConfig = localConfig.getProviderConfig();
+        var providerConfig = localConfig.getProvider();
         if (Objects.nonNull(providerConfig) && CollectionUtils.isNotEmpty(providerConfig.getModules())) {
             var providerModules = new ArrayList<ProtocolModule>(providerConfig.getModules().size());
             for (var providerModule : providerConfig.getModules()) {
@@ -76,7 +76,7 @@ public class ConfigManager implements IConfigManager {
         }
 
         // 通过protocol，写入consumer的module的id和version
-        var consumerConfig = localConfig.getConsumerConfig();
+        var consumerConfig = localConfig.getConsumer();
         if (Objects.nonNull(consumerConfig) && CollectionUtils.isNotEmpty(consumerConfig.getModules())) {
             var consumerModules = new ArrayList<ProtocolModule>(consumerConfig.getModules().size());
             for (var providerModule : consumerConfig.getModules()) {

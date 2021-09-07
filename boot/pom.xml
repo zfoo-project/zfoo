@@ -5,10 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.zfoo</groupId>
-    <artifactId>orm</artifactId>
+    <artifactId>boot</artifactId>
     <version>3.0</version>
 
     <packaging>jar</packaging>
+
 
     <properties>
         <!-- 本项目的其它module版本号 -->
@@ -104,12 +105,23 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
-        <!-- 依赖的util类库 -->
         <dependency>
             <groupId>com.zfoo</groupId>
-            <artifactId>util</artifactId>
-            <version>${zfoo.util.version}</version>
+            <artifactId>net</artifactId>
+            <version>${zfoo.net.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zfoo</groupId>
+            <artifactId>orm</artifactId>
+            <version>${zfoo.orm.version}</version>
         </dependency>
 
         <dependency>
@@ -125,47 +137,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-            <version>${mongodb-driver-sync.version}</version>
-        </dependency>
-
-        <!-- 数据结构操作库 -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${google.guava.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>error_prone_annotations</artifactId>
-                    <groupId>com.google.errorprone</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>checker-qual</artifactId>
-                    <groupId>org.checkerframework</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-            <version>${caffeine.version}</version>
-        </dependency>
-
-        <!-- 动态生成二进制字节码的javassist类库 -->
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>${javassist.version}</version>
-        </dependency>
-
-        <!-- 依赖的Spring模块类库 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
+            <groupId>com.zfoo</groupId>
+            <artifactId>storage</artifactId>
+            <version>${zfoo.storage.version}</version>
         </dependency>
 
         <!-- slf4j-api -->
@@ -227,7 +201,6 @@
                 </configuration>
             </plugin>
 
-
             <!-- resource资源管理插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -272,8 +245,8 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>${maven-jar-plugin.version}</version>
             </plugin>
-
         </plugins>
     </build>
+
 
 </project>

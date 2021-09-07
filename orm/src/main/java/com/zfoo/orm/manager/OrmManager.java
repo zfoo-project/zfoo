@@ -98,9 +98,9 @@ public class OrmManager implements IOrmManager {
                 .codecRegistry(pojoCodecRegistry);
 
         // 设置数据库地址
-        var hostConfig = ormConfig.getHostConfig();
-        if (CollectionUtils.isNotEmpty(hostConfig.getAddressMap())) {
-            var hostList = HostAndPort.toHostAndPortList(hostConfig.getAddressMap().values())
+        var hostConfig = ormConfig.getHost();
+        if (CollectionUtils.isNotEmpty(hostConfig.getAddress())) {
+            var hostList = HostAndPort.toHostAndPortList(hostConfig.getAddress().values())
                     .stream()
                     .map(it -> new ServerAddress(it.getHost(), it.getPort()))
                     .collect(Collectors.toList());
@@ -293,8 +293,8 @@ public class OrmManager implements IOrmManager {
     public EntityDef parserEntityDef(Class<? extends IEntity<?>> clazz) {
         analyze(clazz);
 
-        var cacheStrategies = ormConfig.getCachesConfig().getCacheStrategies();
-        var persisterStrategies = ormConfig.getPersistersConfig().getPersisterStrategies();
+        var cacheStrategies = ormConfig.getCaches();
+        var persisterStrategies = ormConfig.getPersisters();
 
         var cache = clazz.getAnnotation(EntityCache.class);
         var cacheStrategyOptional = cacheStrategies.stream().filter(it -> it.getStrategy().equals(cache.cacheStrategy())).findFirst();

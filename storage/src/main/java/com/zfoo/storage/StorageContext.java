@@ -13,7 +13,6 @@
 
 package com.zfoo.storage;
 
-import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.model.StopWatch;
 import com.zfoo.storage.interpreter.IResourceReader;
 import com.zfoo.storage.manager.IStorageManager;
@@ -24,9 +23,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.Ordered;
-import org.springframework.core.convert.ConversionService;
 
 /**
  * @author jaysunxiao
@@ -44,8 +41,6 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
 
     private IStorageManager storageManager;
 
-    private ConversionService conversionService;
-
     public static StorageContext getStorageContext() {
         return instance;
     }
@@ -56,10 +51,6 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
 
     public static StorageContext getInstance() {
         return instance;
-    }
-
-    public static ConversionService getConversionService() {
-        return instance.conversionService;
     }
 
     public static IResourceReader getResourceReader() {
@@ -78,7 +69,6 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
             // 初始化上下文
             StorageContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
-            instance.conversionService = (ConversionService) applicationContext.getBean(StringUtils.uncapitalize(ConversionServiceFactoryBean.class.getName()));
             instance.resourceReader = applicationContext.getBean(IResourceReader.class);
             instance.storageManager = applicationContext.getBean(IStorageManager.class);
 
