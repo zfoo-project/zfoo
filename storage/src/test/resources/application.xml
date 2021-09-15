@@ -49,7 +49,7 @@
     <storage:storage id="resourceManager">
         <storage:scan package="com.zfoo.**.resource"/>
         <!-- 如果是类路径一classpath开头，如果是其它目录则以file开头-->
-        <storage:resource location="classpath:/excel" suffix="xls"/>
+        <storage:resource location="classpath:/excel" suffix="xlsx"/>
         <!-- <storage:resource location="file:C:\Users\jaysunxiao\Desktop\excel" suffix="xls"/>-->
     </storage:storage>
 
