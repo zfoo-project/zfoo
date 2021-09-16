@@ -46,7 +46,7 @@ public class SpeedTest {
     /**
      * 单线程性能测试
      * <p>
-     * 不使用任何JVM参数：zfoo比kryo快40%，zfoo比protobuf快110%
+     * 不使用任何JVM参数：zfoo比protobuf快20%，zfoo比kryo快40%
      * <p>
      * 包体大小：
      * 简单对象，zfoo包体大小8，kryo包体大小5，protobuf包体大小8
@@ -63,8 +63,8 @@ public class SpeedTest {
         System.out.println(StringUtils.format("[单线程性能测试-->[benchmark:{}]]", benchmark));
 
         zfooTest();
-        kryoTest();
         protobufTest();
+        kryoTest();
 
         benchmark = benchmark * 2;
         singleThreadBenchmarks();
@@ -83,8 +83,8 @@ public class SpeedTest {
         System.out.println(StringUtils.format("[多线程性能测试-->[benchmark:{}]]", benchmark));
 
         zfooMultipleThreadTest();
-        kryoMultipleThreadTest();
         protobufMultipleThreadTest();
+        kryoMultipleThreadTest();
 
         benchmark = benchmark * 2;
         multipleThreadBenchmarks();
