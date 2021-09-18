@@ -24,7 +24,6 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author jaysunxiao
@@ -81,12 +80,9 @@ public abstract class TimeUtils {
     };
 
     static {
-        SchedulerBus.schedule(new Runnable() {
-            @Override
-            public void run() {
-                currentTimeMillis();
-            }
-        }, 0, TimeUnit.SECONDS);
+        currentTimeMillis();
+        // 调用一下静态方法，使SchedulerBus静态代码块初始化
+        SchedulerBus.refreshMinTriggerTimestamp();
     }
 
     /**

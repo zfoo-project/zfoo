@@ -13,7 +13,6 @@
 package com.zfoo.boot;
 
 import com.zfoo.scheduler.SchedulerContext;
-import com.zfoo.scheduler.schema.SchedulerRegisterProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,12 +23,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration(proxyBeanMethods = false)
 public class SchedulerAutoConfiguration {
-
-    @Bean
-    @ConditionalOnMissingBean
-    public SchedulerRegisterProcessor schedulerRegisterProcessor() {
-        return new SchedulerRegisterProcessor();
-    }
 
     @Bean
     @ConditionalOnMissingBean

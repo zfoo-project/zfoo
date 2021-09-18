@@ -41,12 +41,6 @@ public class SchedulerDefinitionParser implements BeanDefinitionParser {
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注册SchedulerRegisterProcessor
-        clazz = SchedulerRegisterProcessor.class;
-        name = StringUtils.uncapitalize(clazz.getName());
-        builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
-        parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
-
         return builder.getBeanDefinition();
     }
 
