@@ -26,7 +26,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 @Ignore
 public class ApplicationTest {
 
-    // 事件总线教程
+    // 事件总线教程，核心思想是设计模式中的观察者模式
     @Test
     public void startEventTest() {
         // 加载配置文件，配置文件中必须引入event

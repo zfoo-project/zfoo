@@ -206,7 +206,7 @@ public class ProtocolAnalysis {
         checkAllModules();
 
         // 生成协议
-        GenerateProtocolFile.generate(protocols, generateOperation);
+        GenerateProtocolFile.generate(generateOperation);
     }
 
     private static void enhanceProtocolAfter() {

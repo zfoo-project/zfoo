@@ -12,6 +12,7 @@
 
 package com.zfoo.protocol.generate;
 
+import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
@@ -53,7 +54,8 @@ public abstract class GenerateProtocolFile {
         index = null;
     }
 
-    public static void generate(IProtocolRegistration[] protocols, GenerateOperation generateOperation) throws IOException {
+    public static void generate(GenerateOperation generateOperation) throws IOException {
+        var protocols = ProtocolManager.protocols;
 
         // 如果没有需要生成的协议则直接返回
         var generateProtocolFlag = Arrays.stream(generateOperation.getClass().getDeclaredFields())
@@ -120,7 +122,7 @@ public abstract class GenerateProtocolFile {
             allSortedGenerateProtocols.forEach(it -> GenerateLuaUtils.createLuaProtocolFile((ProtocolRegistration) it));
         }
 
-        // 参数，以后可能会用，比如给Lua修改一个后缀名称
+        // 预留参数，以后可能会用，比如给Lua修改一个后缀名称
         var protocolParam = generateOperation.getProtocolParam();
     }
 
