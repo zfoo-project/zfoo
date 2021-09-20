@@ -128,7 +128,7 @@ public class UserEntity implements IEntity<Long> {
 entityCaches.update(userEntity);
 ```
 
-#### 6. [event](event/src/test/java/com/zfoo/event/ApplicationTest.java) 事件总线解耦不同模块，提高代码的质量
+#### 6. [event](event/src/test/java/com/zfoo/event/ApplicationTest.java) 事件总线解耦不同模块，提高代码的质量，核心思想是观察者设计模式
 
 ```
 // 接收一个事件，只需要在需要接收事件的方法上加一个注解就会自动监听这个事件
