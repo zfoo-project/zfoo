@@ -17,19 +17,15 @@ import com.zfoo.event.schema.EventRegisterProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
 @Configuration(proxyBeanMethods = false)
+@Import({EventRegisterProcessor.class})
 public class EventAutoConfiguration {
-
-    @Bean
-    @ConditionalOnMissingBean
-    public EventRegisterProcessor eventRegisterProcessor() {
-        return new EventRegisterProcessor();
-    }
 
     @Bean
     @ConditionalOnMissingBean
