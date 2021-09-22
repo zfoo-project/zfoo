@@ -15,8 +15,8 @@ package com.zfoo.protocol;
 
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.io.ByteBufferInput;
+import com.esotericsoftware.kryo.io.ByteBufferOutput;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 import com.zfoo.protocol.collection.ArrayUtils;
@@ -26,6 +26,7 @@ import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
+import io.netty.buffer.UnpooledUnsafeHeapByteBuf;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -93,7 +94,12 @@ public class SpeedTest {
     @Ignore
     @Test
     public void zfooTest() {
-        ByteBuf buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
+        // netty的ByteBuf做了更多的安全检测，java自带的ByteBuffer并没有做安全检测，为了公平，把不需要的检测去掉
+        // java通过ByteBuffer.allocate(1024 * 8)构造出来的是使用了unsafe的HeapByteBuffer，为了公平，使用netty中带有unsafe操作的UnpooledUnsafeHeapByteBuf
+        System.setProperty("io.netty.buffer.checkAccessible", "false");
+        System.setProperty("io.netty.buffer.checkBounds", "false");
+
+        ByteBuf buffer = new UnpooledUnsafeHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
 
         // 序列化和反序列化简单对象
         long startTime = System.currentTimeMillis();
@@ -131,52 +137,54 @@ public class SpeedTest {
     public void kryoTest() {
         var kryo = kryos.get();
 
-        var output = new Output(1_0000);
-        var input = new Input();
+        var buffer = ByteBuffer.allocate(1024 * 8);
 
         // 序列化和反序列化简单对象
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
-            output.reset();
-            input.reset();
+            buffer.clear();
 
+            var output = new ByteBufferOutput(buffer);
             kryo.writeObject(output, simpleObject);
-            input.setBuffer(output.getBuffer());
-            input.setLimit(output.position());
+            output.flush();
+            buffer.flip();
 
+            var input = new ByteBufferInput(buffer);
             var mess = kryo.readObject(input, SimpleObject.class);
         }
 
-        System.out.println(StringUtils.format("[kryo]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[kryo]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
 
         // 序列化和反序列化常规对象
         startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
-            output.reset();
-            input.reset();
+            buffer.clear();
 
+            var output = new ByteBufferOutput(buffer);
             kryo.writeObject(output, normalObject);
-            input.setBuffer(output.getBuffer());
-            input.setLimit(output.position());
+            output.flush();
+            buffer.flip();
 
+            var input = new ByteBufferInput(buffer);
             var mess = kryo.readObject(input, NormalObject.class);
         }
 
-        System.out.println(StringUtils.format("[kryo]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[kryo]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
 
         // 序列化和反序列化复杂对象
         startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
-            output.reset();
-            input.reset();
+            buffer.clear();
 
+            var output = new ByteBufferOutput(buffer);
             kryo.writeObject(output, complexObject);
-            input.setBuffer(output.getBuffer());
-            input.setLimit(output.position());
+            output.flush();
+            buffer.flip();
 
+            var input = new ByteBufferInput(buffer);
             var mess = kryo.readObject(input, ComplexObject.class);
         }
-        System.out.println(StringUtils.format("[kryo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[kryo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
     }
 
     @Ignore
