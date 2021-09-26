@@ -42,6 +42,4 @@ public interface ISessionManager {
 
     int getClientSessionChangeId();
 
-    void shutdown();
-
 }

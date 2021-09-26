@@ -110,24 +110,4 @@ public class SessionManager implements ISessionManager {
         return clientSessionChangeId;
     }
 
-    @Override
-    public synchronized void shutdown() {
-        clientSessionMap.values().forEach(it -> {
-            try {
-                it.close();
-            } catch (Exception e) {
-                logger.error("关闭[session:{}]发生未知异常", SessionUtils.sessionInfo(it), e);
-            }
-        });
-
-        serverSessionMap.values().forEach(it -> {
-            try {
-                it.close();
-            } catch (Exception e) {
-                logger.error("关闭[session:{}]发生未知异常", SessionUtils.sessionInfo(it), e);
-            }
-        });
-
-        logger.info("已关闭客户端和服务器所有的session");
-    }
 }

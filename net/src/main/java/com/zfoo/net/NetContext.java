@@ -13,16 +13,18 @@
 
 package com.zfoo.net;
 
-import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.config.manager.IConfigManager;
 import com.zfoo.net.consumer.service.IConsumer;
+import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.core.AbstractServer;
-import com.zfoo.net.core.tcp.TcpClient;
 import com.zfoo.net.dispatcher.manager.IPacketDispatcher;
 import com.zfoo.net.packet.service.IPacketService;
 import com.zfoo.net.session.manager.ISessionManager;
+import com.zfoo.net.session.model.Session;
 import com.zfoo.net.task.TaskManager;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.scheduler.SchedulerContext;
 import com.zfoo.scheduler.model.StopWatch;
@@ -37,6 +39,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -112,25 +115,25 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
     }
 
 
-    public synchronized static void shutdownBefore() {
+    public synchronized void shutdownBefore() {
         SchedulerContext.shutdown();
     }
 
-    public static synchronized void shutdownAfter() {
+    public synchronized void shutdownAfter() {
         // 关闭zookeeper的客户端
-        NetContext.getConfigManager().getRegistry().shutdown();
-
+        configManager.getRegistry().shutdown();
 
         // 先关闭所有session
-        NetContext.getSessionManager().shutdown();
+        IOUtils.closeIO(ArrayUtils.listToArray(new ArrayList<>(sessionManager.getClientSessionMap().values()), Session.class));
+        IOUtils.closeIO(ArrayUtils.listToArray(new ArrayList<>(sessionManager.getServerSessionMap().values()), Session.class));
 
         // 关闭客户端和服务器
-        TcpClient.shutdown();
+        AbstractClient.shutdown();
         AbstractServer.shutdownAllServers();
 
         // 关闭TaskManager
         try {
-            Field field = EventBus.class.getDeclaredField("executors");
+            Field field = TaskManager.class.getDeclaredField("executors");
             ReflectionUtils.makeAccessible(field);
 
             var executors = (ExecutorService[]) ReflectionUtils.getField(field, TaskManager.getInstance());

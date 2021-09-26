@@ -16,6 +16,7 @@ package com.zfoo.net.session.model;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.Channel;
 
+import java.io.Closeable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author jaysunxiao
  * @version 3.0
  */
-public class Session {
+public class Session implements Closeable {
 
     private static final AtomicLong ATOMIC_LONG = new AtomicLong(0);
 
@@ -73,6 +74,11 @@ public class Session {
         return Objects.hash(sid);
     }
 
+    @Override
+    public void close() {
+        channel.close();
+    }
+
     public long getSid() {
         return sid;
     }
@@ -98,7 +104,4 @@ public class Session {
         return channel;
     }
 
-    public void close() {
-        channel.close();
-    }
 }

@@ -26,7 +26,6 @@ import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 
-import java.lang.reflect.Field;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -49,13 +48,13 @@ public class EventContext implements ApplicationListener<ApplicationContextEvent
         return instance.applicationContext;
     }
 
-    public synchronized static void shutdown() {
+    private synchronized void shutdown() {
         try {
-            Field field = EventBus.class.getDeclaredField("executors");
+            var field = EventBus.class.getDeclaredField("executors");
             ReflectionUtils.makeAccessible(field);
 
             var executors = (ExecutorService[]) ReflectionUtils.getField(field, null);
-            for (ExecutorService executor : executors) {
+            for (var executor : executors) {
                 ThreadUtils.shutdown(executor);
             }
         } catch (Throwable e) {
