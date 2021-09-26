@@ -21,23 +21,25 @@ import com.zfoo.protocol.util.ReflectionUtils;
 import java.lang.reflect.Method;
 
 /**
+ * 动态代理被PacketReceiver注解标注的方法，为了避免反射最终会用javassist字节码增强的方法去代理PacketReceiverDefinition
+ *
  * @author jaysunxiao
  * @version 3.0
  */
 public class PacketReceiverDefinition implements IPacketReceiver {
 
     /**
-     * 一个facade的bean，这个bean里有void methodName(Session session,CM_Int cm)接受的方法
+     * 一个controller的bean
      */
     private Object bean;
 
     /**
-     * 接受的方法void methodName(Session session,CM_Int cm)
+     * 被PacketReceiver注解标注的方法，接受的方法public void atTcpHelloRequest(Session session, TcpHelloRequest request)
      */
     private Method method;
 
     /**
-     * 接收的包的Class类，如CM_Int
+     * 接收的包的Class类，如TcpHelloRequest
      */
     private Class<?> packetClazz;
 

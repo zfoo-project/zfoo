@@ -19,6 +19,8 @@ import com.zfoo.protocol.util.ReflectionUtils;
 import java.lang.reflect.Method;
 
 /**
+ * 动态代理被EventReceiver注解标注的方法，为了避免反射最终会用javassist字节码增强的方法去代理EventReceiverDefinition
+ *
  * @author jaysunxiao
  * @version 3.0
  */
@@ -27,7 +29,7 @@ public class EventReceiverDefinition implements IEventReceiver {
 
     private Object bean;
 
-    // 被ReceiveEvent注解的方法
+    // 被EventReceiver注解标注的方法
     private Method method;
 
     // 接收的参数Class
