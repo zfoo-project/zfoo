@@ -16,7 +16,6 @@ package com.zfoo.net.packet.model;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.scheduler.util.TimeUtils;
 
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -94,12 +93,12 @@ public class SignalPacketAttachment implements IPacketAttachment {
             return false;
         }
         SignalPacketAttachment that = (SignalPacketAttachment) o;
-        return Objects.equals(packetId, that.packetId);
+        return packetId == that.packetId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(packetId);
+        return packetId;
     }
 
     public int getPacketId() {
