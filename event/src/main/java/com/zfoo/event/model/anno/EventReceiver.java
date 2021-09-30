@@ -16,7 +16,7 @@ package com.zfoo.event.model.anno;
 import java.lang.annotation.*;
 
 /**
- * 接受时间注解
+ * 接收事件的注解
  *
  * @author jaysunxiao
  * @version 3.0
