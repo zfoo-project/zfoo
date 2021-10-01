@@ -86,7 +86,7 @@ ProtocolManager.write(byteBuf, complexObject);
 var packet = ProtocolManager.read(byteBuf);
 ```
 
-#### 3. [net](net/README.md) 目前速度最快的RPC框架，支持 tcp udp websocket
+#### 3. [net](net/README.md) 目前速度最快的RPC框架，支持 tcp udp websocket http
 
 ```
 // 服务提供者，只需要在方法上加个注解，则自动注册接口
@@ -133,7 +133,7 @@ entityCaches.update(userEntity);
 ```
 // 接收一个事件，只需要在需要接收事件的方法上加一个注解就会自动监听这个事件
 @EventReceiver
-public void onNoticeEvent(NoticeEvent event) {
+public void onMyNoticeEvent(MyNoticeEvent event) {
     // do something
 }
 
@@ -169,8 +169,7 @@ public class StudentResource {
 
 - 欢迎喜欢这个项目的人来一起维护这个项目，提交代码的时候注意下面规范
 - Java项目格式化代码的方式采用IntelliJ Idea默认的格式化
-- 所有的接口的参数和方法返回的参数都默认是非空的，如果参数可空，需要加上org.springframework.lang.Nullable注解
-- 代码提交的时候需要固定格式，如给net增加了一个功能，feat[net]: 功能描述，下面给出了一些常用的格式
+- 代码提交的说明(commit message)按照下面给出的些常用格式
 
 ```
 feat[module]: 新增某一项功能
