@@ -44,7 +44,7 @@ public abstract class SchedulerBus {
     static {
         executor.scheduleAtFixedRate(() -> {
             try {
-                timer.advanceClock(1);
+                timer.advanceClock(10);
             } catch (Exception e) {
                 logger.error("scheduler triggers an error.", e);
             }
