@@ -82,7 +82,7 @@ public abstract class TimeUtils {
     static {
         currentTimeMillis();
         // 调用一下静态方法，使SchedulerBus静态代码块初始化
-        SchedulerBus.refreshMinTriggerTimestamp();
+        //SchedulerBus.refreshMinTriggerTimestamp();
     }
 
     /**
