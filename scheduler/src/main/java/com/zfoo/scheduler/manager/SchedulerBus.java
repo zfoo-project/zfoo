@@ -13,7 +13,6 @@
 
 package com.zfoo.scheduler.manager;
 
-import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.scheduler.SchedulerContext;
 import com.zfoo.scheduler.model.vo.SchedulerDefinition;
 import com.zfoo.scheduler.timeWheelUtils.Timer;
@@ -22,8 +21,6 @@ import com.zfoo.scheduler.util.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -96,22 +93,6 @@ public abstract class SchedulerBus {
                 }
             }
         }, delay, unit);
-    }
-
-    /**
-     * cron表达式执行的任务
-     */
-    public static void scheduleCron(Runnable runnable, String cron) {
-        if (SchedulerContext.isStop()) {
-            return;
-        }
-
-        SchedulerDefinition scheduler = SchedulerDefinition.valueOf(cron, runnable);
-        var timerTask = new TimerTask(scheduler.getTriggerTimestamp(), () -> {
-            scheduler.getScheduler().invoke();
-            refreshTask(scheduler);
-        });
-        timer.addTask(timerTask);
     }
 
     public static void refreshTask(SchedulerDefinition schedulerDefinition) {

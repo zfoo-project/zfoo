@@ -25,7 +25,7 @@ public abstract class IdUtils {
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger(0);
 
     /**
-     * 本地int的id，如果达到最大值则重新从最小值重新计算
+     * 获取本地int的唯一id，如果达到最大值则重新从最小值重新计算，线程安全
      */
     public static int getLocalIntId() {
         return ATOMIC_INTEGER.incrementAndGet();
