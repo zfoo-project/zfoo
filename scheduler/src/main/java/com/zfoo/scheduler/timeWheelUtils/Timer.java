@@ -1,11 +1,11 @@
 package com.zfoo.scheduler.timeWheelUtils;
 
+import com.zfoo.scheduler.manager.SchedulerThreadFactory;
 import com.zfoo.scheduler.util.TimeUtils;
 
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+
+import static com.zfoo.scheduler.manager.SchedulerBus.executor;
 
 /**
  * 定时器
@@ -22,30 +22,12 @@ public class Timer {
      */
     private DelayQueue<Bucket> delayQueue = new DelayQueue<>();
 
-    /**
-     * 过期任务执行线程
-     */
-    private ExecutorService workerThreadPool;
-
-    /**
-     * 轮询delayQueue获取过期任务线程
-     */
-    private ExecutorService bossThreadPool;
 
     /**
      * 构造函数
      */
     public Timer() {
         timeWheel = new TimeWheel(1000, 20, TimeUtils.currentTimeMillis(), delayQueue);
-        bossThreadPool = Executors.newFixedThreadPool(1);
-        workerThreadPool = Executors.newFixedThreadPool(10);
-
-        //20ms获取一次过期任务
-        bossThreadPool.submit(() -> {
-            while (true) {
-                this.advanceClock(20);
-            }
-        });
     }
 
     /**
@@ -54,14 +36,14 @@ public class Timer {
     public void addTask(TimerTask timerTask) {
         //添加失败任务直接执行
         if (!timeWheel.addTask(timerTask)) {
-            workerThreadPool.submit(timerTask.getTask());
+            executor.submit(timerTask.getTask());
         }
     }
 
     /**
      * 获取过期任务
      */
-    private void advanceClock(long timestamp) {
+    public void advanceClock(long timestamp) {
         try {
             //阻塞获取队头元素
             Bucket bucket = delayQueue.poll(timestamp, TimeUnit.MILLISECONDS);

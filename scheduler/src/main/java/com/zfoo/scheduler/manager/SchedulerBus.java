@@ -35,11 +35,21 @@ public abstract class SchedulerBus {
 
     private static Timer timer = new Timer();
 
+    public static final long TRIGGER_MILLIS_INTERVAL = TimeUtils.MILLIS_PER_SECOND;
     /**
      * scheduler默认只有一个单线程的线程池
      */
-    private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new SchedulerThreadFactory(1));
+    public static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new SchedulerThreadFactory(1));
 
+    static {
+        executor.scheduleAtFixedRate(() -> {
+            try {
+                timer.advanceClock(10);
+            } catch (Exception e) {
+                logger.error("scheduler triggers an error.", e);
+            }
+        }, 0, TRIGGER_MILLIS_INTERVAL, TimeUnit.MILLISECONDS);
+    }
 
     public static void registerScheduler(SchedulerDefinition scheduler) {
         var timerTask = new TimerTask(scheduler.getTriggerTimestamp(), () -> {

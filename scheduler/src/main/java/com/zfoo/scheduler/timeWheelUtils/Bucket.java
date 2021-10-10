@@ -73,7 +73,7 @@ public class Bucket implements Delayed {
     /**
      * 重新分配
      */
-    public synchronized void flush(Consumer<TimerTask> flush) {
+    public void flush(Consumer<TimerTask> flush) {
         TimerTask timerTask = root.next;
         while (!timerTask.equals(root)) {
             this.removeTask(timerTask);

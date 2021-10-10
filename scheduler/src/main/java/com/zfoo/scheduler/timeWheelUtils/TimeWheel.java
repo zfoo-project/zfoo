@@ -77,7 +77,6 @@ public class TimeWheel {
         long expiration = timerTask.getDelayMs();
         //过期任务直接执行
         if (expiration < currentTime + tickMs) {
-            //TODO这里可以直接执行定时任务
             return false;
         } else if (expiration < currentTime + interval) {
             //当前时间轮可以容纳该任务 加入时间槽
