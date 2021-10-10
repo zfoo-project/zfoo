@@ -82,7 +82,7 @@ public abstract class TimeUtils {
     static {
         currentTimeMillis();
         // 调用一下静态方法，使SchedulerBus静态代码块初始化
-        //SchedulerBus.refreshMinTriggerTimestamp();
+        SchedulerBus.refreshMinTriggerTimestamp();
     }
 
     /**
@@ -364,8 +364,13 @@ public abstract class TimeUtils {
     }
 
     // --------------------------------------cron表达式--------------------------------------
-    public static long getNextTimestampByCronExpression(CronExpression expression, long currentTimestamp) {
-        var next = expression.next(ZonedDateTime.ofInstant(Instant.ofEpochMilli(currentTimestamp), DEFAULT_ZONE_ID));
+    public static long nextTimestampByCronExpression(CronExpression expression, long currentTimestamp) {
+        var zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(currentTimestamp), DEFAULT_ZONE_ID);
+        return nextTimestampByCronExpression(expression, zonedDateTime);
+    }
+
+    public static long nextTimestampByCronExpression(CronExpression expression, ZonedDateTime zonedDateTime) {
+        var next = expression.next(zonedDateTime);
 
         if (next == null) {
             return Long.MAX_VALUE;

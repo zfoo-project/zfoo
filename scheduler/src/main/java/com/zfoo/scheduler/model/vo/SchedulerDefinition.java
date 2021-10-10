@@ -43,7 +43,7 @@ public class SchedulerDefinition {
         schedulerDef.cronExpression = cronExpression;
         // 字节码增强，避免反射
         schedulerDef.scheduler = EnhanceUtils.createScheduler(ReflectScheduler.valueOf(bean, method));
-        schedulerDef.triggerTimestamp = TimeUtils.getNextTimestampByCronExpression(cronExpression, TimeUtils.currentTimeMillis());
+        schedulerDef.triggerTimestamp = TimeUtils.nextTimestampByCronExpression(cronExpression, TimeUtils.currentTimeMillis());
         ReflectionUtils.makeAccessible(method);
         return schedulerDef;
     }
@@ -53,7 +53,7 @@ public class SchedulerDefinition {
         var cronExpression = CronExpression.parse(cron);
         schedulerDef.cronExpression = cronExpression;
         schedulerDef.scheduler = RunnableScheduler.valueOf(runnable);
-        schedulerDef.triggerTimestamp = TimeUtils.getNextTimestampByCronExpression(cronExpression, TimeUtils.currentTimeMillis());
+        schedulerDef.triggerTimestamp = TimeUtils.nextTimestampByCronExpression(cronExpression, TimeUtils.currentTimeMillis());
         return schedulerDef;
     }
 
