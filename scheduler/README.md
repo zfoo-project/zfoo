@@ -1,8 +1,9 @@
 ### Ⅰ. 注意事项
 
-- 轻量级的cron表达式实现，时间可以向前调，也可以向后调，都会出发trigger
+- 轻量级的cron表达式实现
 - 每秒钟执行一次SchedulerManager.triggerPerSecond()方法，循环遍历可执行的scheduler
 - SchedulerManager的executor只有一条线程，所以使用者要避免做耗时和阻塞的运算，如果有这样的需求可以抛到其它线程池
+- 最大亮点是前后调整本地机器时间都会触发任务调度，本地开发非常有用。java和spring自带的任务调度不支持调整机器时间
 
 ### Ⅱ. Cron Expression Example
 
