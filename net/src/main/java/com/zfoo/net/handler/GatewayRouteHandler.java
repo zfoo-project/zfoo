@@ -44,13 +44,13 @@ import java.util.function.BiFunction;
  * @version 3.0
  */
 @ChannelHandler.Sharable
-public class GatewayDispatcherHandler extends ServerDispatcherHandler {
+public class GatewayRouteHandler extends ServerRouteHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(GatewayDispatcherHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(GatewayRouteHandler.class);
 
     private BiFunction<Session, IPacket, Boolean> packetFilter;
 
-    public GatewayDispatcherHandler(BiFunction<Session, IPacket, Boolean> packetFilter) {
+    public GatewayRouteHandler(BiFunction<Session, IPacket, Boolean> packetFilter) {
         this.packetFilter = packetFilter;
     }
 

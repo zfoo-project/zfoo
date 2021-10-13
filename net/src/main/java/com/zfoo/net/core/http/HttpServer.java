@@ -14,7 +14,7 @@
 package com.zfoo.net.core.http;
 
 import com.zfoo.net.core.AbstractServer;
-import com.zfoo.net.handler.ServerDispatcherHandler;
+import com.zfoo.net.handler.ServerRouteHandler;
 import com.zfoo.net.handler.codec.http.HttpCodecHandler;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.protocol.util.IOUtils;
@@ -57,7 +57,7 @@ public class HttpServer extends AbstractServer {
             channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
             channel.pipeline().addLast(new ChunkedWriteHandler());
             channel.pipeline().addLast(new HttpCodecHandler(uriResolver));
-            channel.pipeline().addLast(new ServerDispatcherHandler());
+            channel.pipeline().addLast(new ServerRouteHandler());
         }
     }
 }

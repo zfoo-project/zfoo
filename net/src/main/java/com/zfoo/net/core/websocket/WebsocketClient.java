@@ -14,7 +14,7 @@
 package com.zfoo.net.core.websocket;
 
 import com.zfoo.net.core.AbstractClient;
-import com.zfoo.net.handler.ClientDispatcherHandler;
+import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
@@ -54,7 +54,7 @@ public class WebsocketClient extends AbstractClient {
             channel.pipeline().addLast(new WebSocketClientProtocolHandler(webSocketClientProtocolConfig));
             channel.pipeline().addLast(new ChunkedWriteHandler());
             channel.pipeline().addLast(new WebSocketCodecHandler());
-            channel.pipeline().addLast(new ClientDispatcherHandler());
+            channel.pipeline().addLast(new ClientRouteHandler());
         }
     }
 

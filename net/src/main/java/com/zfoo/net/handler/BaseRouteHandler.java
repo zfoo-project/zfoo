@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
  * @version 3.0
  */
 @ChannelHandler.Sharable
-public class BaseDispatcherHandler extends ChannelInboundHandlerAdapter {
+public class BaseRouteHandler extends ChannelInboundHandlerAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(BaseDispatcherHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(BaseRouteHandler.class);
 
     public static final AttributeKey<Session> SESSION_KEY = AttributeKey.valueOf("session");
 

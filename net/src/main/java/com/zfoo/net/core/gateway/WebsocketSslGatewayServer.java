@@ -14,7 +14,7 @@
 package com.zfoo.net.core.gateway;
 
 import com.zfoo.net.core.AbstractServer;
-import com.zfoo.net.handler.GatewayDispatcherHandler;
+import com.zfoo.net.handler.GatewayRouteHandler;
 import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
 import com.zfoo.net.handler.idle.ServerIdleHandler;
 import com.zfoo.net.session.model.Session;
@@ -87,7 +87,7 @@ public class WebsocketSslGatewayServer extends AbstractServer {
             channel.pipeline().addLast(new WebSocketServerProtocolHandler("/"));
             channel.pipeline().addLast(new ChunkedWriteHandler());
             channel.pipeline().addLast(new WebSocketCodecHandler());
-            channel.pipeline().addLast(new GatewayDispatcherHandler(packetFilter));
+            channel.pipeline().addLast(new GatewayRouteHandler(packetFilter));
         }
     }
 }

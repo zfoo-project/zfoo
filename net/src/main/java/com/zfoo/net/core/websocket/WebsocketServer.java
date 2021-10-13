@@ -14,7 +14,7 @@
 package com.zfoo.net.core.websocket;
 
 import com.zfoo.net.core.AbstractServer;
-import com.zfoo.net.handler.ServerDispatcherHandler;
+import com.zfoo.net.handler.ServerRouteHandler;
 import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
@@ -56,7 +56,7 @@ public class WebsocketServer extends AbstractServer {
             channel.pipeline().addLast(new ChunkedWriteHandler());
             // 编解码WebSocketFrame二进制协议
             channel.pipeline().addLast(new WebSocketCodecHandler());
-            channel.pipeline().addLast(new ServerDispatcherHandler());
+            channel.pipeline().addLast(new ServerRouteHandler());
         }
     }
 

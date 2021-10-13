@@ -15,8 +15,8 @@ package com.zfoo.net.core.udp;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.AbstractClient;
-import com.zfoo.net.handler.BaseDispatcherHandler;
-import com.zfoo.net.handler.ClientDispatcherHandler;
+import com.zfoo.net.handler.BaseRouteHandler;
+import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.handler.codec.udp.UdpCodecHandler;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.exception.ExceptionUtils;
@@ -55,7 +55,7 @@ public class UdpClient extends AbstractClient {
             if (channelFuture.isSuccess()) {
                 if (channelFuture.channel().isActive()) {
                     var channel = channelFuture.channel();
-                    var session = BaseDispatcherHandler.initChannel(channel);
+                    var session = BaseRouteHandler.initChannel(channel);
                     NetContext.getSessionManager().addClientSession(session);
                     logger.info("UdpClient started at [{}]", channel.localAddress());
                     return session;
@@ -81,7 +81,7 @@ public class UdpClient extends AbstractClient {
         @Override
         protected void initChannel(Channel channel) {
             channel.pipeline().addLast(new UdpCodecHandler());
-            channel.pipeline().addLast(new ClientDispatcherHandler());
+            channel.pipeline().addLast(new ClientRouteHandler());
         }
     }
 

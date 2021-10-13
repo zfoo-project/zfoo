@@ -14,7 +14,7 @@
 package com.zfoo.net.core;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.handler.BaseDispatcherHandler;
+import com.zfoo.net.handler.BaseRouteHandler;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.IOUtils;
@@ -72,7 +72,7 @@ public abstract class AbstractClient implements IClient {
         if (channelFuture.isSuccess()) {
             if (channelFuture.channel().isActive()) {
                 var channel = channelFuture.channel();
-                var session = BaseDispatcherHandler.initChannel(channel);
+                var session = BaseRouteHandler.initChannel(channel);
                 NetContext.getSessionManager().addClientSession(session);
                 logger.info("TcpClient started at [{}]", channel.localAddress());
                 return session;

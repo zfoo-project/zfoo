@@ -15,8 +15,7 @@ package com.zfoo.net.handler;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
-import com.zfoo.net.core.tcp.model.ClientSessionInactiveEvent;
-import com.zfoo.net.session.model.AttributeType;
+import com.zfoo.net.core.tcp.model.ServerSessionInactiveEvent;
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,14 +27,16 @@ import org.slf4j.LoggerFactory;
  * @version 3.0
  */
 @ChannelHandler.Sharable
-public class ClientDispatcherHandler extends BaseDispatcherHandler {
+public class ServerRouteHandler extends BaseRouteHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(ClientDispatcherHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServerRouteHandler.class);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        logger.info("client channel [{}] is active", SessionUtils.sessionInfo(ctx));
+        var session = initChannel(ctx.channel());
+        NetContext.getSessionManager().addServerSession(session);
+        logger.info("server channel [{}] is active", SessionUtils.sessionInfo(ctx));
     }
 
     @Override
@@ -43,26 +44,11 @@ public class ClientDispatcherHandler extends BaseDispatcherHandler {
         super.channelInactive(ctx);
 
         var session = SessionUtils.getSession(ctx);
-
         if (session == null) {
             return;
         }
-
-        var consumeAttribute = session.getAttribute(AttributeType.CONSUMER);
-        NetContext.getSessionManager().removeClientSession(session);
-        EventBus.asyncSubmit(ClientSessionInactiveEvent.valueOf(session));
-
-        // 如果是消费者inactive，还需要触发客户端消费者检查事件，以便重新连接
-        if (consumeAttribute != null) {
-            NetContext.getConfigManager().getRegistry().checkConsumer();
-        }
-
+        NetContext.getSessionManager().removeServerSession(session);
+        EventBus.asyncSubmit(ServerSessionInactiveEvent.valueOf(session));
         logger.warn("[channel:{}] is inactive", SessionUtils.sessionInfo(ctx));
     }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        logger.error("[session{}]未知异常", SessionUtils.sessionInfo(ctx), cause);
-    }
-
 }

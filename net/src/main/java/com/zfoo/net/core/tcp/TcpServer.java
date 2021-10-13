@@ -14,7 +14,7 @@
 package com.zfoo.net.core.tcp;
 
 import com.zfoo.net.core.AbstractServer;
-import com.zfoo.net.handler.ServerDispatcherHandler;
+import com.zfoo.net.handler.ServerRouteHandler;
 import com.zfoo.net.handler.codec.tcp.TcpCodecHandler;
 import com.zfoo.net.handler.idle.ServerIdleHandler;
 import com.zfoo.util.net.HostAndPort;
@@ -44,7 +44,7 @@ public class TcpServer extends AbstractServer {
             channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
             channel.pipeline().addLast(new ServerIdleHandler());
             channel.pipeline().addLast(new TcpCodecHandler());
-            channel.pipeline().addLast(new ServerDispatcherHandler());
+            channel.pipeline().addLast(new ServerRouteHandler());
         }
     }
 }

@@ -19,7 +19,7 @@ import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 
-import static com.zfoo.net.handler.BaseDispatcherHandler.SESSION_KEY;
+import static com.zfoo.net.handler.BaseRouteHandler.SESSION_KEY;
 
 /**
  * @author jaysunxiao
