@@ -368,15 +368,19 @@ public abstract class ByteBufUtils {
     }
 
     public static char readChar(ByteBuf byteBuf) {
-        return readString(byteBuf).charAt(0);
+        var value = readString(byteBuf);
+        if (StringUtils.isEmpty(value)) {
+            return Character.MIN_VALUE;
+        }
+        return value.charAt(0);
     }
 
     public static void writeCharBox(ByteBuf byteBuf, Character value) {
-        writeString(byteBuf, String.valueOf(value == null ? Character.MIN_VALUE : value));
+        writeChar(byteBuf, value == null ? Character.MIN_VALUE : value);
     }
 
     public static Character readCharBox(ByteBuf byteBuf) {
-        return readString(byteBuf).charAt(0);
+        return readChar(byteBuf);
     }
 
     //-----------------------------------------------------------------------
