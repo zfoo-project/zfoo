@@ -11,29 +11,18 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.tcp.client;
+package com.zfoo.net.router.receiver;
 
-import com.zfoo.net.packet.tcp.TcpHelloResponse;
-import com.zfoo.net.router.receiver.PacketReceiver;
+import com.zfoo.net.packet.model.IPacketAttachment;
 import com.zfoo.net.session.model.Session;
-import com.zfoo.protocol.util.JsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import com.zfoo.protocol.IPacket;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-@Component
-public class TcpClientPacketController {
+public interface IPacketReceiver {
 
-
-    private static final Logger logger = LoggerFactory.getLogger(TcpClientPacketController.class);
-
-    @PacketReceiver
-    public void atTcpHelloResponse(Session session, TcpHelloResponse response) {
-        logger.info("tcp client receive [packet:{}] from server", JsonUtils.object2String(response));
-    }
+    void invoke(Session session, IPacket packet, IPacketAttachment attachment);
 
 }

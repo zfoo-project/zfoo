@@ -14,9 +14,9 @@
 package com.zfoo.net.task;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.task.model.ReceiveTask;
-import com.zfoo.net.task.route.AbstractTaskRoute;
-import com.zfoo.net.task.route.ITaskRoute;
+import com.zfoo.net.task.dispatcher.AbstractTaskDispatcher;
+import com.zfoo.net.task.dispatcher.ITaskDispatcher;
+import com.zfoo.net.task.model.PacketReceiverTask;
 import com.zfoo.protocol.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public final class TaskBus {
     // 线程池的大小
     public static final int EXECUTOR_SIZE;
 
-    private static final ITaskRoute taskRoute;
+    private static final ITaskDispatcher taskRoute;
 
 
     /**
@@ -52,7 +52,7 @@ public final class TaskBus {
                 ? "default" : providerConfig.getDispatchThread();
 
         EXECUTOR_SIZE = "default".equals(dispatchThread) ? (Runtime.getRuntime().availableProcessors() + 1) : Integer.parseInt(dispatchThread);
-        taskRoute = AbstractTaskRoute.valueOf(dispatch);
+        taskRoute = AbstractTaskDispatcher.valueOf(dispatch);
 
         executors = new ExecutorService[EXECUTOR_SIZE];
         for (int i = 0; i < executors.length; i++) {
@@ -62,7 +62,7 @@ public final class TaskBus {
     }
 
 
-    public static void submit(ReceiveTask task) {
+    public static void submit(PacketReceiverTask task) {
         taskRoute.getExecutor(task).execute(task);
     }
 

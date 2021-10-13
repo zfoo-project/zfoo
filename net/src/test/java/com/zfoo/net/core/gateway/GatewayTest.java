@@ -91,7 +91,7 @@ public class GatewayTest {
             var thread = new Thread(() -> {
                 for (int j = 0; j < 10000; j++) {
                     try {
-                        var response = NetContext.getDispatcher().syncAsk(session, request, GatewayToProviderResponse.class, null).packet();
+                        var response = NetContext.getRouter().syncAsk(session, request, GatewayToProviderResponse.class, null).packet();
                         logger.info("客户端请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));
                     } catch (Exception e) {
                         e.printStackTrace();

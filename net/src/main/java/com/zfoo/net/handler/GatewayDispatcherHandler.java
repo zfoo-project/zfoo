@@ -68,7 +68,7 @@ public class GatewayDispatcherHandler extends ServerDispatcherHandler {
             return;
         }
         if (packet.protocolId() == Ping.pingProtocolId()) {
-            NetContext.getDispatcher().send(session, Pong.valueOf(TimeUtils.now()), null);
+            NetContext.getRouter().send(session, Pong.valueOf(TimeUtils.now()), null);
             return;
         }
 
@@ -107,7 +107,7 @@ public class GatewayDispatcherHandler extends ServerDispatcherHandler {
     private void forwardingPacket(IPacket packet, IPacketAttachment attachment, Object argument) {
         try {
             var consumerSession = ConsistentHashConsumerLoadBalancer.getInstance().loadBalancer(packet, argument);
-            NetContext.getDispatcher().send(consumerSession, packet, attachment);
+            NetContext.getRouter().send(consumerSession, packet, attachment);
         } catch (Exception e) {
             logger.error("网关发生异常", e);
         } catch (Throwable t) {

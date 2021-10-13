@@ -40,7 +40,7 @@ public class UdpClientTest {
         var request = new UdpHelloRequest();
         request.setMessage("Hello, this is the udp client!");
 
-        NetContext.getDispatcher().send(session, request, UdpPacketAttachment.valueOf(hostAndPort.getHost(), hostAndPort.getPort()));
+        NetContext.getRouter().send(session, request, UdpPacketAttachment.valueOf(hostAndPort.getHost(), hostAndPort.getPort()));
 
         ThreadUtils.sleep(Long.MAX_VALUE);
     }

@@ -13,10 +13,10 @@
 package com.zfoo.net.core.udp.server;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
 import com.zfoo.net.packet.model.UdpPacketAttachment;
 import com.zfoo.net.packet.udp.UdpHelloRequest;
 import com.zfoo.net.packet.udp.UdpHelloResponse;
+import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class UdpServerPacketController {
         var response = new UdpHelloResponse();
         response.setMessage("Hello, this is the udp server!");
 
-        NetContext.getDispatcher().send(session, response, attachment);
+        NetContext.getRouter().send(session, response, attachment);
     }
 
 }

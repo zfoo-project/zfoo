@@ -14,9 +14,9 @@
 package com.zfoo.net.packet.service;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.dispatcher.manager.PacketBus;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.packet.model.IPacketAttachment;
+import com.zfoo.net.router.route.PacketRoute;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
@@ -110,7 +110,7 @@ public class PacketService implements IPacketService {
         var beanNames = applicationContext.getBeanDefinitionNames();
         for (var beanName : beanNames) {
             var bean = applicationContext.getBean(beanName);
-            PacketBus.registerPacketReceiverDefinition(bean);
+            PacketRoute.registerPacketReceiverDefinition(bean);
         }
     }
 

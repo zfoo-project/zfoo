@@ -13,9 +13,9 @@
 package com.zfoo.net.core.provider;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
 import com.zfoo.net.packet.provider.ProviderMessAnswer;
 import com.zfoo.net.packet.provider.ProviderMessAsk;
+import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -39,6 +39,6 @@ public class ProviderController {
         var response = new ProviderMessAnswer();
         response.setMessage(StringUtils.format("Hello, this is the [provider:{}] answer!", NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString()));
 
-        NetContext.getDispatcher().send(session, response);
+        NetContext.getRouter().send(session, response);
     }
 }

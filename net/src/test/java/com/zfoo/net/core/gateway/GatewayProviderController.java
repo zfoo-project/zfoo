@@ -13,10 +13,10 @@
 package com.zfoo.net.core.gateway;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
 import com.zfoo.net.packet.gateway.GatewayToProviderRequest;
 import com.zfoo.net.packet.gateway.GatewayToProviderResponse;
 import com.zfoo.net.packet.model.GatewayPacketAttachment;
+import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -40,6 +40,6 @@ public class GatewayProviderController {
         var response = new GatewayToProviderResponse();
         response.setMessage(StringUtils.format("Hello, this is the [provider:{}] response!", NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString()));
 
-        NetContext.getDispatcher().send(session, response, gatewayAttachment);
+        NetContext.getRouter().send(session, response, gatewayAttachment);
     }
 }

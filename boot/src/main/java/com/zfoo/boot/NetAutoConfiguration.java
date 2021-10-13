@@ -15,9 +15,9 @@ package com.zfoo.boot;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.config.manager.ConfigManager;
 import com.zfoo.net.config.model.NetConfig;
-import com.zfoo.net.consumer.service.Consumer;
-import com.zfoo.net.dispatcher.manager.PacketDispatcher;
+import com.zfoo.net.consumer.Consumer;
 import com.zfoo.net.packet.service.PacketService;
+import com.zfoo.net.router.Router;
 import com.zfoo.net.session.manager.SessionManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -48,8 +48,8 @@ public class NetAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public PacketDispatcher packetDispatcher() {
-        return new PacketDispatcher();
+    public Router packetDispatcher() {
+        return new Router();
     }
 
     @Bean

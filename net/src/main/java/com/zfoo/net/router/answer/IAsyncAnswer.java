@@ -11,28 +11,29 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.csharp;
+package com.zfoo.net.router.answer;
 
-import com.zfoo.net.NetContext;
-import com.zfoo.net.packet.csharp.CM_CSharpRequest;
-import com.zfoo.net.router.receiver.PacketReceiver;
-import com.zfoo.net.session.model.Session;
-import com.zfoo.protocol.util.JsonUtils;
-import org.springframework.stereotype.Component;
+import com.zfoo.net.task.model.SafeRunnable;
+import com.zfoo.protocol.IPacket;
+
+import java.util.function.Consumer;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-@Component
-public class ServerPacketController {
+public interface IAsyncAnswer<T extends IPacket> {
 
-    @PacketReceiver
-    public void atCM_CSharpRequest(Session session, CM_CSharpRequest cm) {
-        System.out.println("receive packet from client:");
-        System.out.println(JsonUtils.object2String(cm));
+    IAsyncAnswer<T> thenAccept(Consumer<T> consumer);
 
-        NetContext.getRouter().send(session, cm);
-    }
+    /**
+     * 接收到异步返回的消息，并处理这个消息，异步请求必须要调用这个方法
+     */
+    void whenComplete(Consumer<T> consumer);
+
+    /**
+     * 没有执行成功的回调的方法
+     */
+    IAsyncAnswer<T> notComplete(SafeRunnable notCompleteCallback);
 
 }

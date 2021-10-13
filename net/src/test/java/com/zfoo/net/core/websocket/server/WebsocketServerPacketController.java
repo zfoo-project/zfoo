@@ -13,9 +13,9 @@
 package com.zfoo.net.core.websocket.server;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
 import com.zfoo.net.packet.websocket.WebsocketHelloRequest;
 import com.zfoo.net.packet.websocket.WebsocketHelloResponse;
+import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ public class WebsocketServerPacketController {
         var response = new WebsocketHelloResponse();
         response.setMessage("Hello, this is the websocket server!");
 
-        NetContext.getDispatcher().send(session, response);
+        NetContext.getRouter().send(session, response);
     }
 
 }

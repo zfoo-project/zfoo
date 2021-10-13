@@ -11,28 +11,16 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.csharp;
-
-import com.zfoo.net.NetContext;
-import com.zfoo.net.packet.csharp.CM_CSharpRequest;
-import com.zfoo.net.router.receiver.PacketReceiver;
-import com.zfoo.net.session.model.Session;
-import com.zfoo.protocol.util.JsonUtils;
-import org.springframework.stereotype.Component;
+package com.zfoo.net.router.exception;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-@Component
-public class ServerPacketController {
+public class NetTimeOutException extends RuntimeException {
 
-    @PacketReceiver
-    public void atCM_CSharpRequest(Session session, CM_CSharpRequest cm) {
-        System.out.println("receive packet from client:");
-        System.out.println(JsonUtils.object2String(cm));
-
-        NetContext.getRouter().send(session, cm);
+    public NetTimeOutException(String s) {
+        super(s);
     }
 
 }

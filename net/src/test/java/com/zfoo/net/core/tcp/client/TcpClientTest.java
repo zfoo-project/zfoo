@@ -53,7 +53,7 @@ public class TcpClientTest {
 
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(2000);
-            NetContext.getDispatcher().send(session, request);
+            NetContext.getRouter().send(session, request);
         }
 
         ThreadUtils.sleep(Long.MAX_VALUE);
@@ -77,7 +77,7 @@ public class TcpClientTest {
                     for (int j = 0; j < 10000; j++) {
                         var ask = new SyncMessAsk();
                         ask.setMessage("Hello, this is sync client!");
-                        var answer = NetContext.getDispatcher().syncAsk(session, ask, SyncMessAnswer.class, null).packet();
+                        var answer = NetContext.getRouter().syncAsk(session, ask, SyncMessAnswer.class, null).packet();
                         logger.info("同步请求[{}]收到结果[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
                     }
                 } catch (Exception e) {
@@ -106,7 +106,7 @@ public class TcpClientTest {
                     var ask = new AsyncMess0Ask();
                     ask.setMessage("Hello, client0 -> server0!");
 
-                    NetContext.getDispatcher().asyncAsk(null, ask, AsyncMess0Answer.class, null)
+                    NetContext.getRouter().asyncAsk(null, ask, AsyncMess0Answer.class, null)
                             .notComplete(new SafeRunnable() {
                                 @Override
                                 public void doRun() {

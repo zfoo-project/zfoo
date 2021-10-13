@@ -13,8 +13,8 @@
 
 package com.zfoo.net.core.websocket.client;
 
-import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
 import com.zfoo.net.packet.websocket.WebsocketHelloResponse;
+import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;

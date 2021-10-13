@@ -13,8 +13,8 @@
 package com.zfoo.net.core.tcp.server;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.dispatcher.model.anno.PacketReceiver;
 import com.zfoo.net.packet.tcp.*;
+import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public class TcpServerPacketController {
         var response = new TcpHelloResponse();
         response.setMessage("Hello, this is the tcp server!");
 
-        NetContext.getDispatcher().send(session, response);
+        NetContext.getRouter().send(session, response);
     }
 
     @PacketReceiver
@@ -57,7 +57,7 @@ public class TcpServerPacketController {
         // 测试错误返回
         // var sm = ErrorResponse.valueOf(1, 1, "this is error response");
 
-        NetContext.getDispatcher().send(session, answer);
+        NetContext.getRouter().send(session, answer);
     }
 
 
@@ -68,13 +68,13 @@ public class TcpServerPacketController {
         ask1.setMessage("Hello, server0 -> server1");
 
         var client0 = NetContext.getSessionManager().getClientSession(0L);
-        NetContext.getDispatcher().asyncAsk(client0, ask1, AsyncMess1Answer.class, null)
+        NetContext.getRouter().asyncAsk(client0, ask1, AsyncMess1Answer.class, null)
                 .whenComplete(sm_asyncMess0 -> {
 
                     var answer = new AsyncMess0Answer();
                     answer.setMessage("Hello, server1 -> client!");
 
-                    NetContext.getDispatcher().send(session, answer);
+                    NetContext.getRouter().send(session, answer);
                 });
     }
 
@@ -93,7 +93,7 @@ public class TcpServerPacketController {
         // 测试错误返回
         // var sm = ErrorResponse.valueOf(1, 1, "this is error response");
 
-        NetContext.getDispatcher().send(session, answer);
+        NetContext.getRouter().send(session, answer);
     }
 
 }

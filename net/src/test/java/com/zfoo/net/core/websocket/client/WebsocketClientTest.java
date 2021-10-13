@@ -46,7 +46,7 @@ public class WebsocketClientTest {
 
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(2000);
-            NetContext.getDispatcher().send(session, request);
+            NetContext.getRouter().send(session, request);
         }
 
         ThreadUtils.sleep(Long.MAX_VALUE);

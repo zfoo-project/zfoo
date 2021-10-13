@@ -16,9 +16,9 @@ package com.zfoo.net.schema;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.config.manager.ConfigManager;
 import com.zfoo.net.config.model.*;
-import com.zfoo.net.consumer.service.Consumer;
-import com.zfoo.net.dispatcher.manager.PacketDispatcher;
+import com.zfoo.net.consumer.Consumer;
 import com.zfoo.net.packet.service.PacketService;
+import com.zfoo.net.router.Router;
 import com.zfoo.net.session.manager.SessionManager;
 import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.DomUtils;
@@ -65,7 +65,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 
         // 注册PacketDispatcherManager
-        clazz = PacketDispatcher.class;
+        clazz = Router.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 

@@ -11,28 +11,25 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.csharp;
+package com.zfoo.net.router.answer;
 
-import com.zfoo.net.NetContext;
-import com.zfoo.net.packet.csharp.CM_CSharpRequest;
-import com.zfoo.net.router.receiver.PacketReceiver;
-import com.zfoo.net.session.model.Session;
-import com.zfoo.protocol.util.JsonUtils;
-import org.springframework.stereotype.Component;
+import com.zfoo.net.packet.model.SignalPacketAttachment;
+import com.zfoo.protocol.IPacket;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-@Component
-public class ServerPacketController {
+public interface ISyncAnswer<T extends IPacket> {
 
-    @PacketReceiver
-    public void atCM_CSharpRequest(Session session, CM_CSharpRequest cm) {
-        System.out.println("receive packet from client:");
-        System.out.println(JsonUtils.object2String(cm));
+    /**
+     * @return 请求的返回包
+     */
+    T packet();
 
-        NetContext.getRouter().send(session, cm);
-    }
+    /**
+     * @return 同步和异步控制的附加包
+     */
+    SignalPacketAttachment attachment();
 
 }

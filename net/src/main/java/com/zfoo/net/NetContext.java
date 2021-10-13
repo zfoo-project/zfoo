@@ -14,11 +14,11 @@
 package com.zfoo.net;
 
 import com.zfoo.net.config.manager.IConfigManager;
-import com.zfoo.net.consumer.service.IConsumer;
+import com.zfoo.net.consumer.IConsumer;
 import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.core.AbstractServer;
-import com.zfoo.net.dispatcher.manager.IPacketDispatcher;
 import com.zfoo.net.packet.service.IPacketService;
+import com.zfoo.net.router.IRouter;
 import com.zfoo.net.session.manager.ISessionManager;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.net.task.TaskBus;
@@ -54,15 +54,16 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
 
     private ApplicationContext applicationContext;
 
+    private IRouter router;
+
+    private IConsumer consumer;
+
     private IConfigManager configManager;
 
     private IPacketService packetService;
 
-    private IPacketDispatcher packetDispatcher;
-
     private ISessionManager sessionManager;
 
-    private IConsumer consumer;
 
     public static NetContext getNetContext() {
         return instance;
@@ -70,6 +71,14 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
 
     public static ApplicationContext getApplicationContext() {
         return instance.applicationContext;
+    }
+
+    public static IRouter getRouter() {
+        return instance.router;
+    }
+
+    public static IConsumer getConsumer() {
+        return instance.consumer;
     }
 
     public static IConfigManager getConfigManager() {
@@ -84,14 +93,6 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
         return instance.sessionManager;
     }
 
-    public static IPacketDispatcher getDispatcher() {
-        return instance.packetDispatcher;
-    }
-
-    public static IConsumer getConsumer() {
-        return instance.consumer;
-    }
-
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
         if (event instanceof ContextRefreshedEvent) {
@@ -100,7 +101,7 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
             instance.applicationContext = event.getApplicationContext();
             instance.configManager = applicationContext.getBean(IConfigManager.class);
             instance.packetService = applicationContext.getBean(IPacketService.class);
-            instance.packetDispatcher = applicationContext.getBean(IPacketDispatcher.class);
+            instance.router = applicationContext.getBean(IRouter.class);
             instance.consumer = applicationContext.getBean(IConsumer.class);
             instance.sessionManager = applicationContext.getBean(ISessionManager.class);
 
