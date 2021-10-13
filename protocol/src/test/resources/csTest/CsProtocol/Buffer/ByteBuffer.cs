@@ -56,7 +56,7 @@ namespace CsProtocol.Buffer
 
         public void SetWriteOffset(int writeIndex)
         {
-            if (writeOffset > buffer.Length)
+            if (writeIndex > buffer.Length)
             {
                 throw new Exception("writeIndex[" + writeIndex + "] out of bounds exception: readerIndex: " + readOffset +
                                     ", writerIndex: " + writeOffset +
