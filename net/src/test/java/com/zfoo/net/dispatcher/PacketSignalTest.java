@@ -54,7 +54,7 @@ public class PacketSignalTest {
 
         var countDownLatch = new CountDownLatch(executorSize);
         for (var i = 0; i < executorSize; i++) {
-            EventBus.asyncExecute(i).execute(new Runnable() {
+            EventBus.execute(i).execute(new Runnable() {
                 @Override
                 public void run() {
                     addAndRemoveArray();
@@ -72,7 +72,7 @@ public class PacketSignalTest {
 
         var countDownLatch = new CountDownLatch(executorSize);
         for (int i = 0; i < executorSize; i++) {
-            EventBus.asyncExecute(i).execute(new Runnable() {
+            EventBus.execute(i).execute(new Runnable() {
                 @Override
                 public void run() {
                     addAndRemoveMap();

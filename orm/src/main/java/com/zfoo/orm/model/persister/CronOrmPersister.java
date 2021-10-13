@@ -78,7 +78,7 @@ public class CronOrmPersister extends AbstractOrmPersister {
                 @Override
                 public void run() {
                     if (!OrmContext.isStop()) {
-                        EventBus.asyncExecute(entityDef.getClazz().hashCode()).execute(new Runnable() {
+                        EventBus.execute(entityDef.getClazz().hashCode()).execute(new Runnable() {
                             @Override
                             public void run() {
                                 entityCaches.persistAll();

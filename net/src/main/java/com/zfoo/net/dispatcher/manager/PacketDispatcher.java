@@ -31,7 +31,7 @@ import com.zfoo.net.packet.model.IPacketAttachment;
 import com.zfoo.net.packet.model.SignalPacketAttachment;
 import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.session.model.Session;
-import com.zfoo.net.task.TaskManager;
+import com.zfoo.net.task.TaskBus;
 import com.zfoo.net.task.model.ReceiveTask;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.exception.ExceptionUtils;
@@ -136,7 +136,7 @@ public class PacketDispatcher implements IPacketDispatcher {
         }
 
         // 正常发送消息的接收
-        TaskManager.getInstance().addTask(new ReceiveTask(session, packet, packetAttachment));
+        TaskBus.submit(new ReceiveTask(session, packet, packetAttachment));
     }
 
     @Override
@@ -265,7 +265,7 @@ public class PacketDispatcher implements IPacketDispatcher {
                             }
                         }
 
-                    }, TaskManager.getInstance().getExecutorByConsistentHash(executorConsistentHash));
+                    }, TaskBus.executor(executorConsistentHash));
 
 
             PacketSignal.addSignalAttachment(clientAttachment);

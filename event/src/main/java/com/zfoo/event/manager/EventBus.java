@@ -91,7 +91,7 @@ public abstract class EventBus {
         return executors[RandomUtils.randomInt(EXECUTORS_SIZE)];
     }
 
-    public static Executor asyncExecute(int hashcode) {
+    public static Executor execute(int hashcode) {
         return executors[Math.abs(hashcode % EXECUTORS_SIZE)];
     }
 

@@ -14,33 +14,28 @@
 package com.zfoo.net.task;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.task.model.AbstractTaskDispatch;
-import com.zfoo.net.task.model.ITaskDispatch;
 import com.zfoo.net.task.model.ReceiveTask;
+import com.zfoo.net.task.route.AbstractTaskRoute;
+import com.zfoo.net.task.route.ITaskRoute;
 import com.zfoo.protocol.util.StringUtils;
-import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-public final class TaskManager implements ITaskManager {
+public final class TaskBus {
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskManager.class);
-
-    private static final TaskManager INSTANCE = new TaskManager();
+    private static final Logger logger = LoggerFactory.getLogger(TaskBus.class);
 
     // 线程池的大小
     public static final int EXECUTOR_SIZE;
 
-    private static final ITaskDispatch taskDispatch;
+    private static final ITaskRoute taskRoute;
 
 
     /**
@@ -57,7 +52,7 @@ public final class TaskManager implements ITaskManager {
                 ? "default" : providerConfig.getDispatchThread();
 
         EXECUTOR_SIZE = "default".equals(dispatchThread) ? (Runtime.getRuntime().availableProcessors() + 1) : Integer.parseInt(dispatchThread);
-        taskDispatch = AbstractTaskDispatch.valueOf(dispatch);
+        taskRoute = AbstractTaskRoute.valueOf(dispatch);
 
         executors = new ExecutorService[EXECUTOR_SIZE];
         for (int i = 0; i < executors.length; i++) {
@@ -66,42 +61,12 @@ public final class TaskManager implements ITaskManager {
         }
     }
 
-    private static class TaskThreadFactory implements ThreadFactory {
-        private static final AtomicInteger poolNumber = new AtomicInteger(1);
-        private final ThreadGroup group;
-        private final AtomicInteger threadNumber = new AtomicInteger(1);
-        private final String namePrefix;
 
-        TaskThreadFactory() {
-            var s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
-            namePrefix = "task-p" + poolNumber.getAndIncrement() + "-t";
-        }
-
-        @Override
-        public Thread newThread(Runnable runnable) {
-            var t = new FastThreadLocalThread(group, runnable, namePrefix + threadNumber.getAndIncrement(), 0);
-            t.setDaemon(false);
-            t.setPriority(Thread.NORM_PRIORITY);
-            t.setUncaughtExceptionHandler((thread, e) -> logger.error(thread.toString(), e));
-            return t;
-        }
+    public static void submit(ReceiveTask task) {
+        taskRoute.getExecutor(task).execute(task);
     }
 
-    private TaskManager() {
-    }
-
-    public static TaskManager getInstance() {
-        return INSTANCE;
-    }
-
-    @Override
-    public void addTask(ReceiveTask task) {
-        taskDispatch.getExecutor(task).execute(task);
-    }
-
-    @Override
-    public ExecutorService getExecutorByConsistentHash(int executorConsistentHash) {
+    public static ExecutorService executor(int executorConsistentHash) {
         return executors[Math.abs(executorConsistentHash % EXECUTOR_SIZE)];
     }
 }

@@ -176,8 +176,9 @@ feat[module]: 新增某一项功能
 perf[module]: 优化了模块代码或者优化了什么功能
 fix[module]: 修改了什么bug
 test[module]: 测试了什么东西
-doc[module]: 增加了什么文档
 del[module]: 删除了某些功能或者无用代码
+ref[module]: 重命名或者重构了模块
+doc[module]: 增加了什么文档
 ```
 
 Ⅶ. License

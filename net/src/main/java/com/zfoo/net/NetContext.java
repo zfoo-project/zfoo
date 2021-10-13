@@ -21,7 +21,7 @@ import com.zfoo.net.dispatcher.manager.IPacketDispatcher;
 import com.zfoo.net.packet.service.IPacketService;
 import com.zfoo.net.session.manager.ISessionManager;
 import com.zfoo.net.session.model.Session;
-import com.zfoo.net.task.TaskManager;
+import com.zfoo.net.task.TaskBus;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.IOUtils;
@@ -133,10 +133,10 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
 
         // 关闭TaskManager
         try {
-            Field field = TaskManager.class.getDeclaredField("executors");
+            Field field = TaskBus.class.getDeclaredField("executors");
             ReflectionUtils.makeAccessible(field);
 
-            var executors = (ExecutorService[]) ReflectionUtils.getField(field, TaskManager.getInstance());
+            var executors = (ExecutorService[]) ReflectionUtils.getField(field, null);
             for (ExecutorService executor : executors) {
                 ThreadUtils.shutdown(executor);
             }

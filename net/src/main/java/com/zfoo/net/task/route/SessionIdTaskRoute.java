@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -9,29 +8,35 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
+ *
  */
 
-package com.zfoo.net.task.model;
+package com.zfoo.net.task.route;
 
-import com.zfoo.net.task.TaskManager;
+import com.zfoo.net.task.TaskBus;
+import com.zfoo.net.task.model.ReceiveTask;
+import com.zfoo.util.math.HashUtils;
 
 import java.util.concurrent.ExecutorService;
 
 /**
+ * 同一个session总是分配到同一个线程池执行
+ *
  * @author jaysunxiao
  * @version 3.0
  */
-public class RandomTaskDispatch extends AbstractTaskDispatch {
+public class SessionIdTaskRoute extends AbstractTaskRoute {
 
-    private static final RandomTaskDispatch INSTANCE = new RandomTaskDispatch();
+    private static final SessionIdTaskRoute INSTANCE = new SessionIdTaskRoute();
 
-    public static RandomTaskDispatch getInstance() {
+    public static SessionIdTaskRoute getInstance() {
         return INSTANCE;
     }
 
     @Override
     public ExecutorService getExecutor(ReceiveTask receiveTask) {
-        return TaskManager.getInstance().getExecutorByConsistentHash(-1);
+        var session = receiveTask.getSession();
+        return TaskBus.executor(HashUtils.fnvHash(session.getSid()));
     }
 
 }
