@@ -16,6 +16,7 @@ package com.zfoo.orm.util;
 import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import org.bson.Document;
 
@@ -54,7 +55,8 @@ public abstract class MongoIdUtils {
                 , new Document("$inc", new Document(COUNT, 1L)));
 
         if (document == null) {
-            collection.insertOne(new Document("_id", documentName).append(COUNT, INIT_ID));
+            var result = collection.insertOne(new Document("_id", documentName).append(COUNT, INIT_ID));
+            AssertionUtils.notNull(result.getInsertedId());
             return INIT_ID;
         }
 
@@ -78,20 +80,25 @@ public abstract class MongoIdUtils {
      * @param documentName 档id
      */
     public static void resetIncrementIdFromMongoDefault(String documentName) {
-        setIncrementIdFromMongo(0L, COLLECTION_NAME, documentName);
+        setIncrementIdFromMongo(COLLECTION_NAME, documentName, 0L);
     }
 
-    public static void setIncrementIdFromMongo(long value, Class<?> clazz) {
-        setIncrementIdFromMongo(value, COLLECTION_NAME, StringUtils.uncapitalize(clazz.getSimpleName()));
+    public static void setIncrementIdFromMongo(Class<?> clazz, long value) {
+        setIncrementIdFromMongo(COLLECTION_NAME, StringUtils.uncapitalize(clazz.getSimpleName()), value);
     }
 
-    public static void setIncrementIdFromMongo(long value, String documentName) {
-        setIncrementIdFromMongo(value, COLLECTION_NAME, documentName);
+    public static void setIncrementIdFromMongo(String documentName, long value) {
+        setIncrementIdFromMongo(COLLECTION_NAME, documentName, value);
     }
 
-    public static void setIncrementIdFromMongo(long value, String collectionName, String documentName) {
+    public static void setIncrementIdFromMongo(String collectionName, String documentName, long value) {
         var collection = OrmContext.getOrmManager().getCollection(collectionName);
-        collection.findOneAndUpdate(Filters.eq("_id", documentName), new Document("$set", new Document(COUNT, value)));
+        var document = collection.findOneAndUpdate(Filters.eq("_id", documentName), new Document("$set", new Document(COUNT, value)));
+
+        if (document == null) {
+            var result = collection.insertOne(new Document("_id", documentName).append(COUNT, value));
+            AssertionUtils.notNull(result.getInsertedId());
+        }
     }
 
 

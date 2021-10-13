@@ -35,7 +35,7 @@ public abstract class StringUtils {
     public static final String SPACE = " ";
 
     public static final String TAB = "    ";
-
+    public static final String TAB_ASCII = "\t";
 
     public static final String COMMA = ",";// [com·ma || 'kɒmə] n.  逗点; 逗号
     public static final String COMMA_REGEX = ",|，";
