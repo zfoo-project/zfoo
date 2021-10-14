@@ -16,7 +16,7 @@ package com.zfoo.protocol.registration;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.serializer.ISerializer;
+import com.zfoo.protocol.serializer.reflect.ISerializer;
 import com.zfoo.protocol.util.ReflectionUtils;
 import io.netty.buffer.ByteBuf;
 

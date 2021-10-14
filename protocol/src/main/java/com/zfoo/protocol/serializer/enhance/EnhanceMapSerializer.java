@@ -19,10 +19,10 @@ import com.zfoo.protocol.registration.field.BaseField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
-import com.zfoo.protocol.serializer.IntSerializer;
-import com.zfoo.protocol.serializer.LongSerializer;
-import com.zfoo.protocol.serializer.ObjectProtocolSerializer;
-import com.zfoo.protocol.serializer.StringSerializer;
+import com.zfoo.protocol.serializer.reflect.IntSerializer;
+import com.zfoo.protocol.serializer.reflect.LongSerializer;
+import com.zfoo.protocol.serializer.reflect.ObjectProtocolSerializer;
+import com.zfoo.protocol.serializer.reflect.StringSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -45,43 +45,43 @@ public class EnhanceMapSerializer implements IEnhanceSerializer {
         // 直接在字节码里调用方法是为了减小生成字节码的体积，下面的代码去掉也不会有任何影响
         if (keyRegistration instanceof BaseField) {
             if (valueRegistration instanceof BaseField) {
-                if (keySerializer == IntSerializer.getInstance() && valueSerializer == IntSerializer.getInstance()) {
+                if (keySerializer == IntSerializer.INSTANCE && valueSerializer == IntSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeIntIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                     return;
-                } else if (keySerializer == IntSerializer.getInstance() && valueSerializer == LongSerializer.getInstance()) {
+                } else if (keySerializer == IntSerializer.INSTANCE && valueSerializer == LongSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeIntLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                     return;
-                } else if (keySerializer == IntSerializer.getInstance() && valueSerializer == StringSerializer.getInstance()) {
+                } else if (keySerializer == IntSerializer.INSTANCE && valueSerializer == StringSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeIntStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                     return;
-                } else if (keySerializer == LongSerializer.getInstance() && valueSerializer == IntSerializer.getInstance()) {
+                } else if (keySerializer == LongSerializer.INSTANCE && valueSerializer == IntSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeLongIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                     return;
-                } else if (keySerializer == LongSerializer.getInstance() && valueSerializer == LongSerializer.getInstance()) {
+                } else if (keySerializer == LongSerializer.INSTANCE && valueSerializer == LongSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeLongLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                     return;
-                } else if (keySerializer == LongSerializer.getInstance() && valueSerializer == StringSerializer.getInstance()) {
+                } else if (keySerializer == LongSerializer.INSTANCE && valueSerializer == StringSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeLongStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                     return;
-                } else if (keySerializer == StringSerializer.getInstance() && valueSerializer == IntSerializer.getInstance()) {
+                } else if (keySerializer == StringSerializer.INSTANCE && valueSerializer == IntSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeStringIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                     return;
-                } else if (keySerializer == StringSerializer.getInstance() && valueSerializer == LongSerializer.getInstance()) {
+                } else if (keySerializer == StringSerializer.INSTANCE && valueSerializer == LongSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeStringLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                     return;
-                } else if (keySerializer == StringSerializer.getInstance() && valueSerializer == StringSerializer.getInstance()) {
+                } else if (keySerializer == StringSerializer.INSTANCE && valueSerializer == StringSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeStringStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                     return;
                 }
             } else if (valueRegistration instanceof ObjectProtocolField) {
                 var valueProtocolRegistration = (ObjectProtocolField) valueRegistration;
-                if (keySerializer == IntSerializer.getInstance() && valueSerializer == ObjectProtocolSerializer.getInstance()) {
+                if (keySerializer == IntSerializer.INSTANCE && valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeIntPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(valueProtocolRegistration.getProtocolId())));
                     return;
-                } else if (keySerializer == LongSerializer.getInstance() && valueSerializer == ObjectProtocolSerializer.getInstance()) {
+                } else if (keySerializer == LongSerializer.INSTANCE && valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeLongPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(valueProtocolRegistration.getProtocolId())));
                     return;
-                } else if (keySerializer == StringSerializer.getInstance() && valueSerializer == ObjectProtocolSerializer.getInstance()) {
+                } else if (keySerializer == StringSerializer.INSTANCE && valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     builder.append(StringUtils.format("{}.writeStringPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(valueProtocolRegistration.getProtocolId())));
                     return;
                 }
@@ -123,43 +123,43 @@ public class EnhanceMapSerializer implements IEnhanceSerializer {
 
         if (keyRegistration instanceof BaseField) {
             if (valueRegistration instanceof BaseField) {
-                if (keySerializer == IntSerializer.getInstance() && valueSerializer == IntSerializer.getInstance()) {
+                if (keySerializer == IntSerializer.INSTANCE && valueSerializer == IntSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readIntIntMap($1);", map, EnhanceUtils.byteBufUtils));
                     return map;
-                } else if (keySerializer == IntSerializer.getInstance() && valueSerializer == LongSerializer.getInstance()) {
+                } else if (keySerializer == IntSerializer.INSTANCE && valueSerializer == LongSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readIntLongMap($1);", map, EnhanceUtils.byteBufUtils));
                     return map;
-                } else if (keySerializer == IntSerializer.getInstance() && valueSerializer == StringSerializer.getInstance()) {
+                } else if (keySerializer == IntSerializer.INSTANCE && valueSerializer == StringSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readIntStringMap($1);", map, EnhanceUtils.byteBufUtils));
                     return map;
-                } else if (keySerializer == LongSerializer.getInstance() && valueSerializer == IntSerializer.getInstance()) {
+                } else if (keySerializer == LongSerializer.INSTANCE && valueSerializer == IntSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readLongIntMap($1);", map, EnhanceUtils.byteBufUtils));
                     return map;
-                } else if (keySerializer == LongSerializer.getInstance() && valueSerializer == LongSerializer.getInstance()) {
+                } else if (keySerializer == LongSerializer.INSTANCE && valueSerializer == LongSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readLongLongMap($1);", map, EnhanceUtils.byteBufUtils));
                     return map;
-                } else if (keySerializer == LongSerializer.getInstance() && valueSerializer == StringSerializer.getInstance()) {
+                } else if (keySerializer == LongSerializer.INSTANCE && valueSerializer == StringSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readLongStringMap($1);", map, EnhanceUtils.byteBufUtils));
                     return map;
-                } else if (keySerializer == StringSerializer.getInstance() && valueSerializer == IntSerializer.getInstance()) {
+                } else if (keySerializer == StringSerializer.INSTANCE && valueSerializer == IntSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readStringIntMap($1);", map, EnhanceUtils.byteBufUtils));
                     return map;
-                } else if (keySerializer == StringSerializer.getInstance() && valueSerializer == LongSerializer.getInstance()) {
+                } else if (keySerializer == StringSerializer.INSTANCE && valueSerializer == LongSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readStringLongMap($1);", map, EnhanceUtils.byteBufUtils));
                     return map;
-                } else if (keySerializer == StringSerializer.getInstance() && valueSerializer == StringSerializer.getInstance()) {
+                } else if (keySerializer == StringSerializer.INSTANCE && valueSerializer == StringSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readStringStringMap($1);", map, EnhanceUtils.byteBufUtils));
                     return map;
                 }
             } else if (valueRegistration instanceof ObjectProtocolField) {
                 var valueProtocolRegistration = (ObjectProtocolField) valueRegistration;
-                if (keySerializer == IntSerializer.getInstance() && valueSerializer == ObjectProtocolSerializer.getInstance()) {
+                if (keySerializer == IntSerializer.INSTANCE && valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readIntPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(valueProtocolRegistration.getProtocolId())));
                     return map;
-                } else if (keySerializer == LongSerializer.getInstance() && valueSerializer == ObjectProtocolSerializer.getInstance()) {
+                } else if (keySerializer == LongSerializer.INSTANCE && valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readLongPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(valueProtocolRegistration.getProtocolId())));
                     return map;
-                } else if (keySerializer == StringSerializer.getInstance() && valueSerializer == ObjectProtocolSerializer.getInstance()) {
+                } else if (keySerializer == StringSerializer.INSTANCE && valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     builder.append(StringUtils.format("Map {} = {}.readStringPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(valueProtocolRegistration.getProtocolId())));
                     return map;
                 }

@@ -13,7 +13,7 @@
 
 package com.zfoo.protocol.registration.field;
 
-import com.zfoo.protocol.serializer.ISerializer;
+import com.zfoo.protocol.serializer.reflect.ISerializer;
 
 /**
  * 标记性接口，所有协议里描述变量都要实现这个接口

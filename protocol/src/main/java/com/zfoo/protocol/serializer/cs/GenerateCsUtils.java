@@ -19,7 +19,7 @@ import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.serializer.*;
+import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -52,20 +52,20 @@ public abstract class GenerateCsUtils {
         FileUtils.createDirectory(PROTOCOL_OUTPUT_ROOT_PATH);
 
         csSerializerMap = new HashMap<>();
-        csSerializerMap.put(BooleanSerializer.getInstance(), new CsBooleanSerializer());
-        csSerializerMap.put(ByteSerializer.getInstance(), new CsByteSerializer());
-        csSerializerMap.put(ShortSerializer.getInstance(), new CsShortSerializer());
-        csSerializerMap.put(IntSerializer.getInstance(), new CsIntSerializer());
-        csSerializerMap.put(LongSerializer.getInstance(), new CsLongSerializer());
-        csSerializerMap.put(FloatSerializer.getInstance(), new CsFloatSerializer());
-        csSerializerMap.put(DoubleSerializer.getInstance(), new CsDoubleSerializer());
-        csSerializerMap.put(CharSerializer.getInstance(), new CsCharSerializer());
-        csSerializerMap.put(StringSerializer.getInstance(), new CsStringSerializer());
-        csSerializerMap.put(ArraySerializer.getInstance(), new CsArraySerializer());
-        csSerializerMap.put(ListSerializer.getInstance(), new CsListSerializer());
-        csSerializerMap.put(SetSerializer.getInstance(), new CsSetSerializer());
-        csSerializerMap.put(MapSerializer.getInstance(), new CsMapSerializer());
-        csSerializerMap.put(ObjectProtocolSerializer.getInstance(), new CsObjectProtocolSerializer());
+        csSerializerMap.put(BooleanSerializer.INSTANCE, new CsBooleanSerializer());
+        csSerializerMap.put(ByteSerializer.INSTANCE, new CsByteSerializer());
+        csSerializerMap.put(ShortSerializer.INSTANCE, new CsShortSerializer());
+        csSerializerMap.put(IntSerializer.INSTANCE, new CsIntSerializer());
+        csSerializerMap.put(LongSerializer.INSTANCE, new CsLongSerializer());
+        csSerializerMap.put(FloatSerializer.INSTANCE, new CsFloatSerializer());
+        csSerializerMap.put(DoubleSerializer.INSTANCE, new CsDoubleSerializer());
+        csSerializerMap.put(CharSerializer.INSTANCE, new CsCharSerializer());
+        csSerializerMap.put(StringSerializer.INSTANCE, new CsStringSerializer());
+        csSerializerMap.put(ArraySerializer.INSTANCE, new CsArraySerializer());
+        csSerializerMap.put(ListSerializer.INSTANCE, new CsListSerializer());
+        csSerializerMap.put(SetSerializer.INSTANCE, new CsSetSerializer());
+        csSerializerMap.put(MapSerializer.INSTANCE, new CsMapSerializer());
+        csSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new CsObjectProtocolSerializer());
     }
 
     public static void clear() {

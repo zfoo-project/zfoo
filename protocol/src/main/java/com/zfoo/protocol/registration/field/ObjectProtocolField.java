@@ -13,8 +13,8 @@
 
 package com.zfoo.protocol.registration.field;
 
-import com.zfoo.protocol.serializer.ISerializer;
-import com.zfoo.protocol.serializer.ObjectProtocolSerializer;
+import com.zfoo.protocol.serializer.reflect.ISerializer;
+import com.zfoo.protocol.serializer.reflect.ObjectProtocolSerializer;
 
 /**
  * @author jaysunxiao
@@ -39,6 +39,6 @@ public class ObjectProtocolField implements IFieldRegistration {
 
     @Override
     public ISerializer serializer() {
-        return ObjectProtocolSerializer.getInstance();
+        return ObjectProtocolSerializer.INSTANCE;
     }
 }

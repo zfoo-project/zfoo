@@ -13,8 +13,8 @@
 
 package com.zfoo.protocol.registration.field;
 
-import com.zfoo.protocol.serializer.ISerializer;
-import com.zfoo.protocol.serializer.SetSerializer;
+import com.zfoo.protocol.serializer.reflect.ISerializer;
+import com.zfoo.protocol.serializer.reflect.SetSerializer;
 
 import java.lang.reflect.Type;
 
@@ -36,7 +36,7 @@ public class SetField implements IFieldRegistration {
 
     @Override
     public ISerializer serializer() {
-        return SetSerializer.getInstance();
+        return SetSerializer.INSTANCE;
     }
 
     public IFieldRegistration getSetElementRegistration() {

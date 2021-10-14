@@ -13,8 +13,8 @@
 
 package com.zfoo.protocol.registration.field;
 
-import com.zfoo.protocol.serializer.ArraySerializer;
-import com.zfoo.protocol.serializer.ISerializer;
+import com.zfoo.protocol.serializer.reflect.ArraySerializer;
+import com.zfoo.protocol.serializer.reflect.ISerializer;
 
 import java.lang.reflect.Field;
 
@@ -42,7 +42,7 @@ public class ArrayField implements IFieldRegistration {
 
     @Override
     public ISerializer serializer() {
-        return ArraySerializer.getInstance();
+        return ArraySerializer.INSTANCE;
     }
 
     public IFieldRegistration getArrayElementRegistration() {

@@ -19,8 +19,8 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.serializer.*;
 import com.zfoo.protocol.serializer.enhance.*;
+import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
@@ -82,20 +82,20 @@ public abstract class EnhanceUtils {
             }
         }
 
-        tempEnhanceSerializerMap.put(BooleanSerializer.getInstance(), new EnhanceBooleanSerializer());
-        tempEnhanceSerializerMap.put(ByteSerializer.getInstance(), new EnhanceByteSerializer());
-        tempEnhanceSerializerMap.put(ShortSerializer.getInstance(), new EnhanceShortSerializer());
-        tempEnhanceSerializerMap.put(IntSerializer.getInstance(), new EnhanceIntSerializer());
-        tempEnhanceSerializerMap.put(LongSerializer.getInstance(), new EnhanceLongSerializer());
-        tempEnhanceSerializerMap.put(FloatSerializer.getInstance(), new EnhanceFloatSerializer());
-        tempEnhanceSerializerMap.put(DoubleSerializer.getInstance(), new EnhanceDoubleSerializer());
-        tempEnhanceSerializerMap.put(CharSerializer.getInstance(), new EnhanceCharSerializer());
-        tempEnhanceSerializerMap.put(StringSerializer.getInstance(), new EnhanceStringSerializer());
-        tempEnhanceSerializerMap.put(ObjectProtocolSerializer.getInstance(), new EnhanceObjectProtocolSerializer());
-        tempEnhanceSerializerMap.put(ListSerializer.getInstance(), new EnhanceListSerializer());
-        tempEnhanceSerializerMap.put(SetSerializer.getInstance(), new EnhanceSetSerializer());
-        tempEnhanceSerializerMap.put(MapSerializer.getInstance(), new EnhanceMapSerializer());
-        tempEnhanceSerializerMap.put(ArraySerializer.getInstance(), new EnhanceArraySerializer());
+        tempEnhanceSerializerMap.put(BooleanSerializer.INSTANCE, new EnhanceBooleanSerializer());
+        tempEnhanceSerializerMap.put(ByteSerializer.INSTANCE, new EnhanceByteSerializer());
+        tempEnhanceSerializerMap.put(ShortSerializer.INSTANCE, new EnhanceShortSerializer());
+        tempEnhanceSerializerMap.put(IntSerializer.INSTANCE, new EnhanceIntSerializer());
+        tempEnhanceSerializerMap.put(LongSerializer.INSTANCE, new EnhanceLongSerializer());
+        tempEnhanceSerializerMap.put(FloatSerializer.INSTANCE, new EnhanceFloatSerializer());
+        tempEnhanceSerializerMap.put(DoubleSerializer.INSTANCE, new EnhanceDoubleSerializer());
+        tempEnhanceSerializerMap.put(CharSerializer.INSTANCE, new EnhanceCharSerializer());
+        tempEnhanceSerializerMap.put(StringSerializer.INSTANCE, new EnhanceStringSerializer());
+        tempEnhanceSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new EnhanceObjectProtocolSerializer());
+        tempEnhanceSerializerMap.put(ListSerializer.INSTANCE, new EnhanceListSerializer());
+        tempEnhanceSerializerMap.put(SetSerializer.INSTANCE, new EnhanceSetSerializer());
+        tempEnhanceSerializerMap.put(MapSerializer.INSTANCE, new EnhanceMapSerializer());
+        tempEnhanceSerializerMap.put(ArraySerializer.INSTANCE, new EnhanceArraySerializer());
     }
 
     public static IEnhanceSerializer enhanceSerializer(ISerializer serializer) {

@@ -21,7 +21,7 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.serializer.*;
+import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.IOUtils;
@@ -55,20 +55,20 @@ public abstract class GenerateLuaUtils {
         FileUtils.createDirectory(PROTOCOL_OUTPUT_ROOT_PATH);
 
         luaSerializerMap = new HashMap<>();
-        luaSerializerMap.put(BooleanSerializer.getInstance(), new LuaBooleanSerializer());
-        luaSerializerMap.put(ByteSerializer.getInstance(), new LuaByteSerializer());
-        luaSerializerMap.put(ShortSerializer.getInstance(), new LuaShortSerializer());
-        luaSerializerMap.put(IntSerializer.getInstance(), new LuaIntSerializer());
-        luaSerializerMap.put(LongSerializer.getInstance(), new LuaLongSerializer());
-        luaSerializerMap.put(FloatSerializer.getInstance(), new LuaFloatSerializer());
-        luaSerializerMap.put(DoubleSerializer.getInstance(), new LuaDoubleSerializer());
-        luaSerializerMap.put(CharSerializer.getInstance(), new LuaCharSerializer());
-        luaSerializerMap.put(StringSerializer.getInstance(), new LuaStringSerializer());
-        luaSerializerMap.put(ArraySerializer.getInstance(), new LuaArraySerializer());
-        luaSerializerMap.put(ListSerializer.getInstance(), new LuaListSerializer());
-        luaSerializerMap.put(SetSerializer.getInstance(), new LuaSetSerializer());
-        luaSerializerMap.put(MapSerializer.getInstance(), new LuaMapSerializer());
-        luaSerializerMap.put(ObjectProtocolSerializer.getInstance(), new LuaObjectProtocolSerializer());
+        luaSerializerMap.put(BooleanSerializer.INSTANCE, new LuaBooleanSerializer());
+        luaSerializerMap.put(ByteSerializer.INSTANCE, new LuaByteSerializer());
+        luaSerializerMap.put(ShortSerializer.INSTANCE, new LuaShortSerializer());
+        luaSerializerMap.put(IntSerializer.INSTANCE, new LuaIntSerializer());
+        luaSerializerMap.put(LongSerializer.INSTANCE, new LuaLongSerializer());
+        luaSerializerMap.put(FloatSerializer.INSTANCE, new LuaFloatSerializer());
+        luaSerializerMap.put(DoubleSerializer.INSTANCE, new LuaDoubleSerializer());
+        luaSerializerMap.put(CharSerializer.INSTANCE, new LuaCharSerializer());
+        luaSerializerMap.put(StringSerializer.INSTANCE, new LuaStringSerializer());
+        luaSerializerMap.put(ArraySerializer.INSTANCE, new LuaArraySerializer());
+        luaSerializerMap.put(ListSerializer.INSTANCE, new LuaListSerializer());
+        luaSerializerMap.put(SetSerializer.INSTANCE, new LuaSetSerializer());
+        luaSerializerMap.put(MapSerializer.INSTANCE, new LuaMapSerializer());
+        luaSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new LuaObjectProtocolSerializer());
     }
 
     public static void clear() {

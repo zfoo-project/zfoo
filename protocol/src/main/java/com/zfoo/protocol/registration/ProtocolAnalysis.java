@@ -22,10 +22,10 @@ import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.field.*;
-import com.zfoo.protocol.serializer.*;
 import com.zfoo.protocol.serializer.cs.GenerateCsUtils;
 import com.zfoo.protocol.serializer.js.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
+import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -65,23 +65,23 @@ public class ProtocolAnalysis {
 
     static {
         // 初始化基础类型序列化器
-        tempBaseSerializerMap.put(boolean.class, BooleanSerializer.getInstance());
-        tempBaseSerializerMap.put(Boolean.class, BooleanSerializer.getInstance());
-        tempBaseSerializerMap.put(byte.class, ByteSerializer.getInstance());
-        tempBaseSerializerMap.put(Byte.class, ByteSerializer.getInstance());
-        tempBaseSerializerMap.put(short.class, ShortSerializer.getInstance());
-        tempBaseSerializerMap.put(Short.class, ShortSerializer.getInstance());
-        tempBaseSerializerMap.put(int.class, IntSerializer.getInstance());
-        tempBaseSerializerMap.put(Integer.class, IntSerializer.getInstance());
-        tempBaseSerializerMap.put(long.class, LongSerializer.getInstance());
-        tempBaseSerializerMap.put(Long.class, LongSerializer.getInstance());
-        tempBaseSerializerMap.put(float.class, FloatSerializer.getInstance());
-        tempBaseSerializerMap.put(Float.class, FloatSerializer.getInstance());
-        tempBaseSerializerMap.put(double.class, DoubleSerializer.getInstance());
-        tempBaseSerializerMap.put(Double.class, DoubleSerializer.getInstance());
-        tempBaseSerializerMap.put(char.class, CharSerializer.getInstance());
-        tempBaseSerializerMap.put(Character.class, CharSerializer.getInstance());
-        tempBaseSerializerMap.put(String.class, StringSerializer.getInstance());
+        tempBaseSerializerMap.put(boolean.class, BooleanSerializer.INSTANCE);
+        tempBaseSerializerMap.put(Boolean.class, BooleanSerializer.INSTANCE);
+        tempBaseSerializerMap.put(byte.class, ByteSerializer.INSTANCE);
+        tempBaseSerializerMap.put(Byte.class, ByteSerializer.INSTANCE);
+        tempBaseSerializerMap.put(short.class, ShortSerializer.INSTANCE);
+        tempBaseSerializerMap.put(Short.class, ShortSerializer.INSTANCE);
+        tempBaseSerializerMap.put(int.class, IntSerializer.INSTANCE);
+        tempBaseSerializerMap.put(Integer.class, IntSerializer.INSTANCE);
+        tempBaseSerializerMap.put(long.class, LongSerializer.INSTANCE);
+        tempBaseSerializerMap.put(Long.class, LongSerializer.INSTANCE);
+        tempBaseSerializerMap.put(float.class, FloatSerializer.INSTANCE);
+        tempBaseSerializerMap.put(Float.class, FloatSerializer.INSTANCE);
+        tempBaseSerializerMap.put(double.class, DoubleSerializer.INSTANCE);
+        tempBaseSerializerMap.put(Double.class, DoubleSerializer.INSTANCE);
+        tempBaseSerializerMap.put(char.class, CharSerializer.INSTANCE);
+        tempBaseSerializerMap.put(Character.class, CharSerializer.INSTANCE);
+        tempBaseSerializerMap.put(String.class, StringSerializer.INSTANCE);
     }
 
     public static synchronized void analyze(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {

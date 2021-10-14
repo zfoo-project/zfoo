@@ -13,7 +13,7 @@
 
 package com.zfoo.protocol.registration.field;
 
-import com.zfoo.protocol.serializer.ISerializer;
+import com.zfoo.protocol.serializer.reflect.ISerializer;
 
 /**
  * 一个包里所包含的变量还有这个变量的序列化器

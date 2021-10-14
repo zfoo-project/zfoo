@@ -21,7 +21,7 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.serializer.*;
+import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.IOUtils;
@@ -55,20 +55,20 @@ public abstract class GenerateJsUtils {
         FileUtils.createDirectory(PROTOCOL_OUTPUT_ROOT_PATH);
 
         jsSerializerMap = new HashMap<>();
-        jsSerializerMap.put(BooleanSerializer.getInstance(), new JsBooleanSerializer());
-        jsSerializerMap.put(ByteSerializer.getInstance(), new JsByteSerializer());
-        jsSerializerMap.put(ShortSerializer.getInstance(), new JsShortSerializer());
-        jsSerializerMap.put(IntSerializer.getInstance(), new JsIntSerializer());
-        jsSerializerMap.put(LongSerializer.getInstance(), new JsLongSerializer());
-        jsSerializerMap.put(FloatSerializer.getInstance(), new JsFloatSerializer());
-        jsSerializerMap.put(DoubleSerializer.getInstance(), new JsDoubleSerializer());
-        jsSerializerMap.put(CharSerializer.getInstance(), new JsCharSerializer());
-        jsSerializerMap.put(StringSerializer.getInstance(), new JsStringSerializer());
-        jsSerializerMap.put(ArraySerializer.getInstance(), new JsArraySerializer());
-        jsSerializerMap.put(ListSerializer.getInstance(), new JsListSerializer());
-        jsSerializerMap.put(SetSerializer.getInstance(), new JsSetSerializer());
-        jsSerializerMap.put(MapSerializer.getInstance(), new JsMapSerializer());
-        jsSerializerMap.put(ObjectProtocolSerializer.getInstance(), new JsObjectProtocolSerializer());
+        jsSerializerMap.put(BooleanSerializer.INSTANCE, new JsBooleanSerializer());
+        jsSerializerMap.put(ByteSerializer.INSTANCE, new JsByteSerializer());
+        jsSerializerMap.put(ShortSerializer.INSTANCE, new JsShortSerializer());
+        jsSerializerMap.put(IntSerializer.INSTANCE, new JsIntSerializer());
+        jsSerializerMap.put(LongSerializer.INSTANCE, new JsLongSerializer());
+        jsSerializerMap.put(FloatSerializer.INSTANCE, new JsFloatSerializer());
+        jsSerializerMap.put(DoubleSerializer.INSTANCE, new JsDoubleSerializer());
+        jsSerializerMap.put(CharSerializer.INSTANCE, new JsCharSerializer());
+        jsSerializerMap.put(StringSerializer.INSTANCE, new JsStringSerializer());
+        jsSerializerMap.put(ArraySerializer.INSTANCE, new JsArraySerializer());
+        jsSerializerMap.put(ListSerializer.INSTANCE, new JsListSerializer());
+        jsSerializerMap.put(SetSerializer.INSTANCE, new JsSetSerializer());
+        jsSerializerMap.put(MapSerializer.INSTANCE, new JsMapSerializer());
+        jsSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new JsObjectProtocolSerializer());
     }
 
     public static void clear() {

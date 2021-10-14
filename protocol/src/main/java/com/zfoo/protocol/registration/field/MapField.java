@@ -13,8 +13,8 @@
 
 package com.zfoo.protocol.registration.field;
 
-import com.zfoo.protocol.serializer.ISerializer;
-import com.zfoo.protocol.serializer.MapSerializer;
+import com.zfoo.protocol.serializer.reflect.ISerializer;
+import com.zfoo.protocol.serializer.reflect.MapSerializer;
 
 import java.lang.reflect.Type;
 
@@ -40,7 +40,7 @@ public class MapField implements IFieldRegistration {
 
     @Override
     public ISerializer serializer() {
-        return MapSerializer.getInstance();
+        return MapSerializer.INSTANCE;
     }
 
     public IFieldRegistration getMapKeyRegistration() {

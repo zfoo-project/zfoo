@@ -13,8 +13,8 @@
 
 package com.zfoo.protocol.registration.field;
 
-import com.zfoo.protocol.serializer.ISerializer;
-import com.zfoo.protocol.serializer.ListSerializer;
+import com.zfoo.protocol.serializer.reflect.ISerializer;
+import com.zfoo.protocol.serializer.reflect.ListSerializer;
 
 import java.lang.reflect.Type;
 
@@ -36,7 +36,7 @@ public class ListField implements IFieldRegistration {
 
     @Override
     public ISerializer serializer() {
-        return ListSerializer.getInstance();
+        return ListSerializer.INSTANCE;
     }
 
     public IFieldRegistration getListElementRegistration() {
