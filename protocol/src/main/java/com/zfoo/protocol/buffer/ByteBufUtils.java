@@ -470,48 +470,6 @@ public abstract class ByteBufUtils {
         return map;
     }
 
-    public static void writeLongIntMap(ByteBuf byteBuf, Map<Long, Integer> map) {
-        if (map == null) {
-            byteBuf.writeByte(0);
-            return;
-        }
-        writeInt(byteBuf, map.size());
-        for (var entry : map.entrySet()) {
-            writeLongBox(byteBuf, entry.getKey());
-            writeIntBox(byteBuf, entry.getValue());
-        }
-    }
-
-    public static Map<Long, Integer> readLongIntMap(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var map = (Map<Long, Integer>) CollectionUtils.newFixedMap(length);
-        for (var i = 0; i < length; i++) {
-            map.put(readLongBox(byteBuf), readIntBox(byteBuf));
-        }
-        return map;
-    }
-
-    public static void writeLongLongMap(ByteBuf byteBuf, Map<Long, Long> map) {
-        if (map == null) {
-            byteBuf.writeByte(0);
-            return;
-        }
-        writeInt(byteBuf, map.size());
-        for (var entry : map.entrySet()) {
-            writeLongBox(byteBuf, entry.getKey());
-            writeLongBox(byteBuf, entry.getValue());
-        }
-    }
-
-    public static Map<Long, Long> readLongLongMap(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var map = (Map<Long, Long>) CollectionUtils.newFixedMap(length);
-        for (var i = 0; i < length; i++) {
-            map.put(readLongBox(byteBuf), readLongBox(byteBuf));
-        }
-        return map;
-    }
-
     public static void writeIntStringMap(ByteBuf byteBuf, Map<Integer, String> map) {
         if (map == null) {
             byteBuf.writeByte(0);
@@ -554,6 +512,69 @@ public abstract class ByteBufUtils {
         return map;
     }
 
+    public static void writeLongIntMap(ByteBuf byteBuf, Map<Long, Integer> map) {
+        if (map == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, map.size());
+        for (var entry : map.entrySet()) {
+            writeLongBox(byteBuf, entry.getKey());
+            writeIntBox(byteBuf, entry.getValue());
+        }
+    }
+
+    public static Map<Long, Integer> readLongIntMap(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var map = (Map<Long, Integer>) CollectionUtils.newFixedMap(length);
+        for (var i = 0; i < length; i++) {
+            map.put(readLongBox(byteBuf), readIntBox(byteBuf));
+        }
+        return map;
+    }
+
+    public static void writeLongLongMap(ByteBuf byteBuf, Map<Long, Long> map) {
+        if (map == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, map.size());
+        for (var entry : map.entrySet()) {
+            writeLongBox(byteBuf, entry.getKey());
+            writeLongBox(byteBuf, entry.getValue());
+        }
+    }
+
+    public static Map<Long, Long> readLongLongMap(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var map = (Map<Long, Long>) CollectionUtils.newFixedMap(length);
+        for (var i = 0; i < length; i++) {
+            map.put(readLongBox(byteBuf), readLongBox(byteBuf));
+        }
+        return map;
+    }
+
+    public static void writeLongStringMap(ByteBuf byteBuf, Map<Long, String> map) {
+        if (map == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, map.size());
+        for (var entry : map.entrySet()) {
+            writeLongBox(byteBuf, entry.getKey());
+            writeString(byteBuf, entry.getValue());
+        }
+    }
+
+    public static Map<Long, String> readLongStringMap(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var map = (Map<Long, String>) CollectionUtils.newFixedMap(length);
+        for (var i = 0; i < length; i++) {
+            map.put(readLongBox(byteBuf), readString(byteBuf));
+        }
+        return map;
+    }
+
     public static void writeLongPacketMap(ByteBuf byteBuf, Map<Long, ? extends IPacket> map, IProtocolRegistration protocolRegistration) {
         if (map == null) {
             byteBuf.writeByte(0);
@@ -575,6 +596,89 @@ public abstract class ByteBufUtils {
         return map;
     }
 
+    public static void writeStringIntMap(ByteBuf byteBuf, Map<String, Integer> map) {
+        if (map == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, map.size());
+        for (var entry : map.entrySet()) {
+            writeString(byteBuf, entry.getKey());
+            writeIntBox(byteBuf, entry.getValue());
+        }
+    }
+
+    public static Map<String, Integer> readStringIntMap(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var map = (Map<String, Integer>) CollectionUtils.newFixedMap(length);
+        for (var i = 0; i < length; i++) {
+            map.put(readString(byteBuf), readIntBox(byteBuf));
+        }
+        return map;
+    }
+
+    public static void writeStringLongMap(ByteBuf byteBuf, Map<String, Long> map) {
+        if (map == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, map.size());
+        for (var entry : map.entrySet()) {
+            writeString(byteBuf, entry.getKey());
+            writeLongBox(byteBuf, entry.getValue());
+        }
+    }
+
+    public static Map<String, Long> readStringLongMap(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var map = (Map<String, Long>) CollectionUtils.newFixedMap(length);
+        for (var i = 0; i < length; i++) {
+            map.put(readString(byteBuf), readLongBox(byteBuf));
+        }
+        return map;
+    }
+
+    public static void writeStringStringMap(ByteBuf byteBuf, Map<String, String> map) {
+        if (map == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, map.size());
+        for (var entry : map.entrySet()) {
+            writeString(byteBuf, entry.getKey());
+            writeString(byteBuf, entry.getValue());
+        }
+    }
+
+    public static Map<String, String> readStringStringMap(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var map = (Map<String, String>) CollectionUtils.newFixedMap(length);
+        for (var i = 0; i < length; i++) {
+            map.put(readString(byteBuf), readString(byteBuf));
+        }
+        return map;
+    }
+
+    public static void writeStringPacketMap(ByteBuf byteBuf, Map<String, ? extends IPacket> map, IProtocolRegistration protocolRegistration) {
+        if (map == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, map.size());
+        for (var entry : map.entrySet()) {
+            writeString(byteBuf, entry.getKey());
+            protocolRegistration.write(byteBuf, entry.getValue());
+        }
+    }
+
+    public static Map<String, IPacket> readStringPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
+        var length = readInt(byteBuf);
+        var map = (Map<String, IPacket>) CollectionUtils.newFixedMap(length);
+        for (var i = 0; i < length; i++) {
+            map.put(readString(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
+        }
+        return map;
+    }
 
     //---------------------------------boolean--------------------------------------
     public static void writeBooleanArray(ByteBuf byteBuf, boolean[] array) {
