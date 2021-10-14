@@ -48,7 +48,7 @@ public class NetAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public Router packetDispatcher() {
+    public Router router() {
         return new Router();
     }
 

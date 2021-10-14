@@ -64,7 +64,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 
-        // 注册PacketDispatcherManager
+        // 注册Router
         clazz = Router.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());

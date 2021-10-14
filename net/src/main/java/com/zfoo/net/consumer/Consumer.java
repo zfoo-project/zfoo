@@ -38,7 +38,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * 服务调度和负载均衡，两个关键点：摘除故障节点，负载均衡
  * <p>
- * 在clientSession中选择一个可用的session，最终还是调用的IPacketDispatcherManager中的方法
+ * 在clientSession中选择一个可用的session，最终还是调用的IRouter中的方法
  *
  * @author jaysunxiao
  * @version 3.0
@@ -66,7 +66,7 @@ public class Consumer implements IConsumer {
         var session = loadBalancer.loadBalancer(packet, argument);
 
 
-        // 下面的代码逻辑同PacketDispatcher的syncAsk，如果修改的话，记得一起修改
+        // 下面的代码逻辑同Router的syncAsk，如果修改的话，记得一起修改
         var clientAttachment = new SignalPacketAttachment();
         var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
         clientAttachment.setExecutorConsistentHash(executorConsistentHash);
