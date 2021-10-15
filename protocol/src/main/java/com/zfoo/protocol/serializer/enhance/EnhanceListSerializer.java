@@ -17,7 +17,8 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ListField;
-import com.zfoo.protocol.registration.field.ObjectProtocolField;
+import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.CutDownListSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -30,28 +31,11 @@ public class EnhanceListSerializer implements IEnhanceSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration) {
-        var listField = (ListField) fieldRegistration;
-
-        // 直接在字节码里调用方法是为了减小生成字节码的体积，下面的代码去掉也不会有任何影响
-        switch (listField.getType().getTypeName()) {
-            case "java.util.List<java.lang.Integer>":
-                builder.append(StringUtils.format("{}.writeIntList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
-                return;
-            case "java.util.List<java.lang.Long>":
-                builder.append(StringUtils.format("{}.writeLongList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
-                return;
-            case "java.util.List<java.lang.String>":
-                builder.append(StringUtils.format("{}.writeStringList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
-                return;
-            default:
-        }
-
-        // List<IPacket>
-        if (listField.getListElementRegistration() instanceof ObjectProtocolField) {
-            var objectProtocolField = (ObjectProtocolField) listField.getListElementRegistration();
-            builder.append(StringUtils.format("{}.writePacketList($1, (List){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
+        if (CutDownListSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Enhance)) {
             return;
         }
+
+        var listField = (ListField) fieldRegistration;
 
         var list = "list" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("List {} = (List){};", list, objectStr));
@@ -72,27 +56,13 @@ public class EnhanceListSerializer implements IEnhanceSerializer {
 
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
+        var cutDown = CutDownListSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Enhance);
+        if (cutDown != null) {
+            return cutDown;
+        }
+
         var listField = (ListField) fieldRegistration;
         var list = "list" + GenerateProtocolFile.index.getAndIncrement();
-
-        switch (listField.getType().getTypeName()) {
-            case "java.util.List<java.lang.Integer>":
-                builder.append(StringUtils.format("List {} = {}.readIntList($1);", list, EnhanceUtils.byteBufUtils));
-                return list;
-            case "java.util.List<java.lang.Long>":
-                builder.append(StringUtils.format("List {} = {}.readLongList($1);", list, EnhanceUtils.byteBufUtils));
-                return list;
-            case "java.util.List<java.lang.String>":
-                builder.append(StringUtils.format("List {} = {}.readStringList($1);", list, EnhanceUtils.byteBufUtils));
-                return list;
-            default:
-        }
-
-        if (listField.getListElementRegistration() instanceof ObjectProtocolField) {
-            var objectProtocolField = (ObjectProtocolField) listField.getListElementRegistration();
-            builder.append(StringUtils.format("List {} = {}.readPacketList($1, {});", list, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
-            return list;
-        }
 
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {}={}.readInt($1);", size, EnhanceUtils.byteBufUtils));

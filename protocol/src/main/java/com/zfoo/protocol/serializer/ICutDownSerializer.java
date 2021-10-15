@@ -12,21 +12,20 @@
 
 package com.zfoo.protocol.serializer;
 
+import com.zfoo.protocol.registration.field.IFieldRegistration;
+
+import java.lang.reflect.Field;
+
 /**
+ * 减少生成的字节码和代码的体积，即使不调用这个方法，程序也依然能够正常运行
+ *
  * @author jaysunxiao
  * @version 3.0
  */
-public enum CodeLanguage {
+public interface ICutDownSerializer {
 
-    /**
-     * Javassist字节码增强
-     */
-    Enhance,
+    boolean writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration, CodeLanguage language);
 
-    JavaScript,
-
-    Lua,
-
-    CSharp;
+    String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration, CodeLanguage language);
 
 }

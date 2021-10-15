@@ -16,8 +16,9 @@ package com.zfoo.protocol.serializer.enhance;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.registration.field.ObjectProtocolField;
 import com.zfoo.protocol.registration.field.SetField;
+import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.CutDownSetSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -30,29 +31,11 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration) {
-        var setField = (SetField) fieldRegistration;
-
-        // 直接在字节码里调用方法是为了减小生成字节码的体积，下面的代码去掉也不会有任何影响
-        switch (setField.getType().getTypeName()) {
-            case "java.util.Set<java.lang.Integer>":
-                builder.append(StringUtils.format("{}.writeIntSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
-                return;
-            case "java.util.Set<java.lang.Long>":
-                builder.append(StringUtils.format("{}.writeLongSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
-                return;
-            case "java.util.Set<java.lang.String>":
-                builder.append(StringUtils.format("{}.writeStringSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
-                return;
-            default:
-        }
-
-        // Set<IPacket>
-        if (setField.getSetElementRegistration() instanceof ObjectProtocolField) {
-            var objectProtocolField = (ObjectProtocolField) setField.getSetElementRegistration();
-            builder.append(StringUtils.format("{}.writePacketSet($1, (Set){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
+        if (CutDownSetSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Enhance)) {
             return;
         }
 
+        var setField = (SetField) fieldRegistration;
         var set = "set" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("Set {} = (Set){};", set, objectStr));
 
@@ -72,27 +55,13 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
 
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
+        var cutDown = CutDownSetSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Enhance);
+        if (cutDown != null) {
+            return cutDown;
+        }
+
         var setField = (SetField) fieldRegistration;
         var set = "set" + GenerateProtocolFile.index.getAndIncrement();
-
-        switch (setField.getType().getTypeName()) {
-            case "java.util.Set<java.lang.Integer>":
-                builder.append(StringUtils.format("Set {} = {}.readIntSet($1);", set, EnhanceUtils.byteBufUtils));
-                return set;
-            case "java.util.Set<java.lang.Long>":
-                builder.append(StringUtils.format("Set {} = {}.readLongSet($1);", set, EnhanceUtils.byteBufUtils));
-                return set;
-            case "java.util.Set<java.lang.String>":
-                builder.append(StringUtils.format("Set {} = {}.readStringSet($1);", set, EnhanceUtils.byteBufUtils));
-                return set;
-            default:
-        }
-
-        if (setField.getSetElementRegistration() instanceof ObjectProtocolField) {
-            var objectProtocolField = (ObjectProtocolField) setField.getSetElementRegistration();
-            builder.append(StringUtils.format("Set {} = {}.readPacketSet($1, {});", set, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
-            return set;
-        }
 
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {} = {}.readInt($1);", size, EnhanceUtils.byteBufUtils));
