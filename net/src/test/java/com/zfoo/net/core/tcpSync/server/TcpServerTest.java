@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.tcp.server;
+package com.zfoo.net.core.tcpSync.server;
 
 import com.zfoo.net.core.tcp.TcpServer;
 import com.zfoo.util.ThreadUtils;
@@ -38,6 +38,7 @@ public class TcpServerTest {
 
         var server = new TcpServer(HostAndPort.valueOf("127.0.0.1:9000"));
         server.start();
+
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 

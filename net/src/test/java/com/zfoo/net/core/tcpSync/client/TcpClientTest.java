@@ -11,13 +11,19 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.tcp.server;
+package com.zfoo.net.core.tcpSync.client;
 
-import com.zfoo.net.core.tcp.TcpServer;
+import com.zfoo.net.NetContext;
+import com.zfoo.net.core.tcp.TcpClient;
+import com.zfoo.net.packet.tcp.SyncMessAnswer;
+import com.zfoo.net.packet.tcp.SyncMessAsk;
+import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -25,19 +31,25 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @version 3.0
  */
 @Ignore
-public class TcpServerTest {
+public class TcpClientTest {
 
-    /**
-     * 单机服务器教程，启动成功过后在com.zfoo.net.core.tcp.client.TcpClientTest中运行startClientTest
-     * <p>
-     * startClientTest连接服务器成功过后，会不断的发消息给服务器
-     */
+    private static final Logger logger = LoggerFactory.getLogger(TcpClientTest.class);
+
     @Test
-    public void startServer() {
+    public void startClient() throws Exception {
         var context = new ClassPathXmlApplicationContext("config.xml");
 
-        var server = new TcpServer(HostAndPort.valueOf("127.0.0.1:9000"));
-        server.start();
+        var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
+        var session = client.start();
+
+        for (int i = 0; i < 1000; i++) {
+            var ask = new SyncMessAsk();
+            ask.setMessage("Hello, this is sync client!");
+            var answer = NetContext.getRouter().syncAsk(session, ask, SyncMessAnswer.class, null).packet();
+            logger.info("同步请求收到结果[{}]", JsonUtils.object2String(answer));
+            ThreadUtils.sleep(1000);
+        }
+
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 

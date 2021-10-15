@@ -26,10 +26,10 @@ import org.springframework.stereotype.Component;
  * @version 3.0
  */
 @Component
-public class TcpClientPacketController {
+public class TcpClientController {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(TcpClientPacketController.class);
+    private static final Logger logger = LoggerFactory.getLogger(TcpClientController.class);
 
     @PacketReceiver
     public void atTcpHelloResponse(Session session, TcpHelloResponse response) {

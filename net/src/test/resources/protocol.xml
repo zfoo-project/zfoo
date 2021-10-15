@@ -51,10 +51,8 @@
 
         <protocol id="1150" location="com.zfoo.net.packet.tcp.SyncMessAsk" enhance="false"/>
         <protocol id="1151" location="com.zfoo.net.packet.tcp.SyncMessAnswer" enhance="false"/>
-        <protocol id="1152" location="com.zfoo.net.packet.tcp.AsyncMess0Ask" enhance="false"/>
-        <protocol id="1153" location="com.zfoo.net.packet.tcp.AsyncMess0Answer" enhance="false"/>
-        <protocol id="1154" location="com.zfoo.net.packet.tcp.AsyncMess1Ask" enhance="false"/>
-        <protocol id="1155" location="com.zfoo.net.packet.tcp.AsyncMess1Answer" enhance="false"/>
+        <protocol id="1152" location="com.zfoo.net.packet.tcp.AsyncMessAsk" enhance="false"/>
+        <protocol id="1153" location="com.zfoo.net.packet.tcp.AsyncMessAnswer" enhance="false"/>
 
         <protocol id="1165" location="com.zfoo.net.packet.csharp.CM_CSharpRequest" enhance="false"/>
         <protocol id="1166" location="com.zfoo.net.packet.csharp.CSharpObjectA" enhance="false"/>

@@ -14,8 +14,8 @@
 package com.zfoo.net.task;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.task.dispatcher.AbstractTaskDispatcher;
-import com.zfoo.net.task.dispatcher.ITaskDispatcher;
+import com.zfoo.net.task.dispatcher.AbstractTaskDispatch;
+import com.zfoo.net.task.dispatcher.ITaskDispatch;
 import com.zfoo.net.task.model.PacketReceiverTask;
 import com.zfoo.protocol.util.StringUtils;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public final class TaskBus {
     // 线程池的大小
     public static final int EXECUTOR_SIZE;
 
-    private static final ITaskDispatcher taskRoute;
+    private static final ITaskDispatch taskDispatch;
 
 
     /**
@@ -47,12 +47,11 @@ public final class TaskBus {
         var localConfig = NetContext.getConfigManager().getLocalConfig();
         var providerConfig = localConfig.getProvider();
 
-        var dispatch = providerConfig == null ? "consistent-hash" : providerConfig.getDispatch();
-        var dispatchThread = (providerConfig == null || StringUtils.isBlank(providerConfig.getDispatchThread()))
-                ? "default" : providerConfig.getDispatchThread();
+        taskDispatch = AbstractTaskDispatch.valueOf(providerConfig == null ? "consistent-hash" : providerConfig.getTaskDispatch());
 
-        EXECUTOR_SIZE = "default".equals(dispatchThread) ? (Runtime.getRuntime().availableProcessors() + 1) : Integer.parseInt(dispatchThread);
-        taskRoute = AbstractTaskDispatcher.valueOf(dispatch);
+        EXECUTOR_SIZE = (providerConfig == null || StringUtils.isBlank(providerConfig.getThread()))
+                ? (Runtime.getRuntime().availableProcessors() + 1)
+                : Integer.parseInt(providerConfig.getThread());
 
         executors = new ExecutorService[EXECUTOR_SIZE];
         for (int i = 0; i < executors.length; i++) {
@@ -63,7 +62,7 @@ public final class TaskBus {
 
 
     public static void submit(PacketReceiverTask task) {
-        taskRoute.getExecutor(task).execute(task);
+        taskDispatch.getExecutor(task).execute(task);
     }
 
     public static ExecutorService executor(int executorConsistentHash) {

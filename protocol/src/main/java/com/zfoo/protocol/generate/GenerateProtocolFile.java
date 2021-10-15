@@ -16,10 +16,10 @@ import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.cs.GenerateCsUtils;
 import com.zfoo.protocol.serializer.js.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -58,14 +58,7 @@ public abstract class GenerateProtocolFile {
         var protocols = ProtocolManager.protocols;
 
         // 如果没有需要生成的协议则直接返回
-        var generateProtocolFlag = Arrays.stream(generateOperation.getClass().getDeclaredFields())
-                .filter(it -> it.getName().startsWith("generate"))
-                .peek(it -> ReflectionUtils.makeAccessible(it))
-                .map(it -> ReflectionUtils.getField(it, generateOperation))
-                .filter(it -> it instanceof Boolean)
-                .anyMatch(it -> ((Boolean) it).booleanValue() == true);
-
-        if (!generateProtocolFlag) {
+        if (generateOperation.getGenerateLanguages().isEmpty()) {
             return;
         }
 
@@ -102,21 +95,22 @@ public abstract class GenerateProtocolFile {
         }
 
         // 生成C#协议
-        if (generateOperation.isGenerateCsharpProtocol()) {
+        var generateLanguages = generateOperation.getGenerateLanguages();
+        if (generateLanguages.contains(CodeLanguage.CSharp)) {
             GenerateCsUtils.init();
             GenerateCsUtils.createProtocolManager();
             allSortedGenerateProtocols.forEach(it -> GenerateCsUtils.createCsProtocolFile((ProtocolRegistration) it));
         }
 
         // 生成Javascript协议
-        if (generateOperation.isGenerateJsProtocol()) {
+        if (generateLanguages.contains(CodeLanguage.JavaScript)) {
             GenerateJsUtils.init();
             allSortedGenerateProtocols.forEach(it -> GenerateJsUtils.createJsProtocolFile((ProtocolRegistration) it));
             GenerateJsUtils.createProtocolManager(allSortedGenerateProtocols);
         }
 
         // 生成Lua协议
-        if (generateOperation.isGenerateLuaProtocol()) {
+        if (generateLanguages.contains(CodeLanguage.Lua)) {
             GenerateLuaUtils.init();
             GenerateLuaUtils.createProtocolManager(allSortedGenerateProtocols);
             allSortedGenerateProtocols.forEach(it -> GenerateLuaUtils.createLuaProtocolFile((ProtocolRegistration) it));

@@ -24,6 +24,7 @@ import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.IProtocolRegistration;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.DomUtils;
 import com.zfoo.protocol.xml.XmlProtocols;
 import io.netty.buffer.ByteBuf;
@@ -89,9 +90,15 @@ public class PacketService implements IPacketService {
         var generateOperation = new GenerateOperation();
         generateOperation.setFoldProtocol(foldProtocol);
         generateOperation.setProtocolParam(protocolParam);
-        generateOperation.setGenerateJsProtocol(generateJsProtocol);
-        generateOperation.setGenerateCsharpProtocol(generateCsharpProtocol);
-        generateOperation.setGenerateLuaProtocol(generateLuaProtocol);
+        if (generateJsProtocol) {
+            generateOperation.getGenerateLanguages().add(CodeLanguage.JavaScript);
+        }
+        if (generateCsharpProtocol) {
+            generateOperation.getGenerateLanguages().add(CodeLanguage.CSharp);
+        }
+        if (generateLuaProtocol) {
+            generateOperation.getGenerateLanguages().add(CodeLanguage.Lua);
+        }
 
         // 设置生成协议的过滤器
         GenerateProtocolFile.generateProtocolFilter = netGenerateProtocolFilter;

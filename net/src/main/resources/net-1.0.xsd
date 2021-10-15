@@ -32,8 +32,8 @@
         <xsd:sequence>
             <xsd:element name="module" maxOccurs="unbounded" type="moduleAttributeType" minOccurs="0"/>
         </xsd:sequence>
-        <xsd:attribute name="dispatch" type="xsd:string" use="required"/>
-        <xsd:attribute name="dispatch-thread" type="xsd:string" use="optional"/>
+        <xsd:attribute name="task-dispatch" type="xsd:string" use="required"/>
+        <xsd:attribute name="thread" type="xsd:string" use="optional"/>
         <xsd:attribute name="address" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
@@ -56,9 +56,6 @@
             </xsd:choice>
             <xsd:choice minOccurs="0" maxOccurs="1">
                 <xsd:element name="monitor" type="addressType"/>
-            </xsd:choice>
-            <xsd:choice minOccurs="0" maxOccurs="1">
-                <xsd:element name="host" type="addressType"/>
             </xsd:choice>
             <xsd:choice minOccurs="0" maxOccurs="1">
                 <xsd:element name="provider" type="providerType"/>

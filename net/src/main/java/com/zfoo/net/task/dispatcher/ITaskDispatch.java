@@ -8,32 +8,21 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
+ *
  */
 
-package com.zfoo.net.packet.tcp;
+package com.zfoo.net.task.dispatcher;
 
-import com.zfoo.protocol.IPacket;
+import com.zfoo.net.task.model.PacketReceiverTask;
+
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-public class AsyncMess1Ask implements IPacket {
+public interface ITaskDispatch {
 
-    public static final transient short PROTOCOL_ID = 1154;
+    ExecutorService getExecutor(PacketReceiverTask packetReceiverTask);
 
-    private String message;
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

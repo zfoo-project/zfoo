@@ -107,12 +107,6 @@ public class NetDefinitionParser implements BeanDefinitionParser {
             builder.addPropertyReference("monitor", MonitorConfig.class.getCanonicalName());
         }
 
-        var hostElement = DomUtils.getFirstChildElementByTagName(element, "host");
-        if (hostElement != null) {
-            builder.addPropertyReference("host", HostConfig.class.getCanonicalName());
-            parseHostConfig(hostElement, parserContext);
-        }
-
         var providerElement = DomUtils.getFirstChildElementByTagName(element, "provider");
         if (providerElement != null) {
             builder.addPropertyReference("provider", ProviderConfig.class.getCanonicalName());
@@ -152,24 +146,12 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
 
-    private void parseHostConfig(Element element, ParserContext parserContext) {
-        var clazz = HostConfig.class;
-        var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
-
-        resolvePlaceholder("center", "center", builder, element, parserContext);
-        resolvePlaceholder("user", "user", builder, element, parserContext);
-        resolvePlaceholder("password", "password", builder, element, parserContext);
-        var addressMap = parseAddress(element, parserContext);
-        builder.addPropertyValue("address", addressMap);
-        parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
-    }
-
     private void parseProviderConfig(Element element, ParserContext parserContext) {
         var clazz = ProviderConfig.class;
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
-        resolvePlaceholder("dispatch", "dispatch", builder, element, parserContext);
-        resolvePlaceholder("dispatch-thread", "dispatchThread", builder, element, parserContext);
+        resolvePlaceholder("task-dispatch", "taskDispatch", builder, element, parserContext);
+        resolvePlaceholder("thread", "thread", builder, element, parserContext);
         resolvePlaceholder("address", "address", builder, element, parserContext);
 
         var providerModules = parseModules("provider", element, parserContext);

@@ -13,26 +13,25 @@
 
 package com.zfoo.net.task.dispatcher;
 
-import com.zfoo.net.task.TaskBus;
-import com.zfoo.net.task.model.PacketReceiverTask;
-
-import java.util.concurrent.ExecutorService;
+import com.zfoo.protocol.util.StringUtils;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-public class RandomTaskDispatcher extends AbstractTaskDispatcher {
+public abstract class AbstractTaskDispatch implements ITaskDispatch {
 
-    private static final RandomTaskDispatcher INSTANCE = new RandomTaskDispatcher();
-
-    public static RandomTaskDispatcher getInstance() {
-        return INSTANCE;
-    }
-
-    @Override
-    public ExecutorService getExecutor(PacketReceiverTask packetReceiverTask) {
-        return TaskBus.executor(-1);
+    public static ITaskDispatch valueOf(String taskDispatchName) {
+        switch (taskDispatchName) {
+            case "random":
+                return new RandomTaskDispatch();
+            case "sessionId":
+                return new SessionIdTaskDispatch();
+            case "consistent-hash":
+                return new ConsistentHashTaskDispatch();
+            default:
+                throw new RuntimeException(StringUtils.format("没有找到对应的taskDispatch[{}]", taskDispatchName));
+        }
     }
 
 }

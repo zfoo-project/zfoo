@@ -25,7 +25,7 @@
             <net:address name="${registry.address.name}" url="${registry.address.url}"/>
         </net:registry>
 
-        <net:provider dispatch="consistent-hash">
+        <net:provider task-dispatch="consistent-hash">
             <net:module name="providerTest"/>
         </net:provider>
 

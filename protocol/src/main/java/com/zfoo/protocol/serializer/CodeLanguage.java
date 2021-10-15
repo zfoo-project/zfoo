@@ -10,31 +10,18 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.packet.tcp;
-
-import com.zfoo.protocol.IPacket;
+package com.zfoo.protocol.serializer;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-public class AsyncMess0Ask implements IPacket {
+public enum CodeLanguage {
 
-    public static final transient short PROTOCOL_ID = 1152;
+    JavaScript,
 
-    private String message;
+    Lua,
 
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    CSharp;
 
 }

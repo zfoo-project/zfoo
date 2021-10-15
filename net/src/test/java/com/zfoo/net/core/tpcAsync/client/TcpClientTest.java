@@ -11,11 +11,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.tcp.client;
+package com.zfoo.net.core.tpcAsync.client;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.tcp.TcpClient;
-import com.zfoo.net.packet.tcp.TcpHelloRequest;
+import com.zfoo.net.packet.tcp.AsyncMessAnswer;
+import com.zfoo.net.packet.tcp.AsyncMessAsk;
+import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
@@ -34,19 +36,23 @@ public class TcpClientTest {
     private static final Logger logger = LoggerFactory.getLogger(TcpClientTest.class);
 
     @Test
-    public void startClient() {
+    public void startClient() throws Exception {
         var context = new ClassPathXmlApplicationContext("config.xml");
 
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
         var session = client.start();
 
-        var request = new TcpHelloRequest();
-        request.setMessage("Hello, this is the tcp client!");
-
-
         for (int i = 0; i < 1000; i++) {
-            ThreadUtils.sleep(2000);
-            NetContext.getRouter().send(session, request);
+            var ask = new AsyncMessAsk();
+            ask.setMessage("Hello, this is async client!");
+
+            NetContext.getRouter().asyncAsk(session, ask, AsyncMessAnswer.class, null)
+                    .whenComplete(answer -> {
+                                logger.info("同步请求收到结果[{}]", JsonUtils.object2String(answer));
+                            }
+                    );
+
+            ThreadUtils.sleep(1000);
         }
 
         ThreadUtils.sleep(Long.MAX_VALUE);

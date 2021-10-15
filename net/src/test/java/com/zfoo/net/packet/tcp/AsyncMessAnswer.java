@@ -18,11 +18,12 @@ import com.zfoo.protocol.IPacket;
  * @author jaysunxiao
  * @version 3.0
  */
-public class AsyncMess1Answer implements IPacket {
+public class AsyncMessAnswer implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1155;
+    public static final transient short PROTOCOL_ID = 1153;
 
     private String message;
+
 
     @Override
     public short protocolId() {

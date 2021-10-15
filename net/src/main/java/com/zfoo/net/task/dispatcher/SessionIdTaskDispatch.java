@@ -13,16 +13,30 @@
 
 package com.zfoo.net.task.dispatcher;
 
+import com.zfoo.net.task.TaskBus;
 import com.zfoo.net.task.model.PacketReceiverTask;
+import com.zfoo.util.math.HashUtils;
 
 import java.util.concurrent.ExecutorService;
 
 /**
+ * 同一个session总是分配到同一个线程池执行
+ *
  * @author jaysunxiao
  * @version 3.0
  */
-public interface ITaskDispatcher {
+public class SessionIdTaskDispatch extends AbstractTaskDispatch {
 
-    ExecutorService getExecutor(PacketReceiverTask packetReceiverTask);
+    private static final SessionIdTaskDispatch INSTANCE = new SessionIdTaskDispatch();
+
+    public static SessionIdTaskDispatch getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    public ExecutorService getExecutor(PacketReceiverTask packetReceiverTask) {
+        var session = packetReceiverTask.getSession();
+        return TaskBus.executor(HashUtils.fnvHash(session.getSid()));
+    }
 
 }

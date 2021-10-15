@@ -32,9 +32,9 @@ public class ProviderConfig {
     /**
      * 对应于ITaskDispatch
      */
-    private String dispatch;
+    private String taskDispatch;
 
-    private String dispatchThread;
+    private String thread;
 
     private String address;
 
@@ -56,20 +56,20 @@ public class ProviderConfig {
         return HostAndPort.valueOf(address);
     }
 
-    public String getDispatch() {
-        return dispatch;
+    public String getTaskDispatch() {
+        return taskDispatch;
     }
 
-    public void setDispatch(String dispatch) {
-        this.dispatch = dispatch;
+    public void setTaskDispatch(String taskDispatch) {
+        this.taskDispatch = taskDispatch;
     }
 
-    public String getDispatchThread() {
-        return dispatchThread;
+    public String getThread() {
+        return thread;
     }
 
-    public void setDispatchThread(String dispatchThread) {
-        this.dispatchThread = dispatchThread;
+    public void setThread(String thread) {
+        this.thread = thread;
     }
 
     public String getAddress() {

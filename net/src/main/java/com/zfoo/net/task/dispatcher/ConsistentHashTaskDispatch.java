@@ -22,11 +22,11 @@ import java.util.concurrent.ExecutorService;
  * @author jaysunxiao
  * @version 3.0
  */
-public class ConsistentHashTaskDispatcher extends AbstractTaskDispatcher {
+public class ConsistentHashTaskDispatch extends AbstractTaskDispatch {
 
-    private static ConsistentHashTaskDispatcher INSTANCE = new ConsistentHashTaskDispatcher();
+    private static ConsistentHashTaskDispatch INSTANCE = new ConsistentHashTaskDispatch();
 
-    public static ConsistentHashTaskDispatcher getINSTANCE() {
+    public static ConsistentHashTaskDispatch getINSTANCE() {
         return INSTANCE;
     }
 
@@ -35,7 +35,7 @@ public class ConsistentHashTaskDispatcher extends AbstractTaskDispatcher {
         var packetAttachment = packetReceiverTask.getPacketAttachment();
 
         if (packetAttachment == null) {
-            return SessionIdTaskDispatcher.getInstance().getExecutor(packetReceiverTask);
+            return SessionIdTaskDispatch.getInstance().getExecutor(packetReceiverTask);
         }
 
         return TaskBus.executor(packetAttachment.executorConsistentHash());

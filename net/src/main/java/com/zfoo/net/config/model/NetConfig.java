@@ -39,7 +39,6 @@ public class NetConfig {
 
     private RegistryConfig registry;
     private MonitorConfig monitor;
-    private HostConfig host;
 
     private ProviderConfig provider;
     private ConsumerConfig consumer;
@@ -121,14 +120,6 @@ public class NetConfig {
         this.monitor = monitor;
     }
 
-    public HostConfig getHost() {
-        return host;
-    }
-
-    public void setHost(HostConfig host) {
-        this.host = host;
-    }
-
     public ProviderConfig getProvider() {
         return provider;
     }
@@ -159,13 +150,12 @@ public class NetConfig {
                 Objects.equals(protocolLocation, netConfig.protocolLocation) &&
                 Objects.equals(registry, netConfig.registry) &&
                 Objects.equals(monitor, netConfig.monitor) &&
-                Objects.equals(host, netConfig.host) &&
                 Objects.equals(provider, netConfig.provider) &&
                 Objects.equals(consumer, netConfig.consumer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, protocolLocation, generateJsProtocol, registry, monitor, host, provider, consumer);
+        return Objects.hash(id, protocolLocation, generateJsProtocol, registry, monitor, provider, consumer);
     }
 }

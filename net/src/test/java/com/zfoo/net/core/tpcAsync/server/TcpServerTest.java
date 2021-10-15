@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -10,33 +11,30 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.packet.tcp;
+package com.zfoo.net.core.tpcAsync.server;
 
-import com.zfoo.protocol.IPacket;
+import com.zfoo.net.core.tcp.TcpServer;
+import com.zfoo.util.ThreadUtils;
+import com.zfoo.util.net.HostAndPort;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-public class AsyncMess0Answer implements IPacket {
+@Ignore
+public class TcpServerTest {
 
-    public static final transient short PROTOCOL_ID = 1153;
+    @Test
+    public void startServer() {
+        var context = new ClassPathXmlApplicationContext("config.xml");
 
-    private String message;
+        var server = new TcpServer(HostAndPort.valueOf("127.0.0.1:9000"));
+        server.start();
 
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
-
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }
