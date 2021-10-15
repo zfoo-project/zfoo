@@ -74,7 +74,6 @@ public abstract class FileUtils {
      * @return 搜索到的文件
      */
     private static File searchFileInProject(File file, String fileName) {
-        // System.out.println(file.getName());
         if (file.isFile() && file.getName().equals(fileName)) {
             return file;
         }
@@ -84,8 +83,8 @@ public abstract class FileUtils {
                 return null;
             }
 
-            for (File temp : files) {
-                File result = searchFileInProject(temp, fileName);
+            for (var f : files) {
+                File result = searchFileInProject(f, fileName);
                 if (result == null) {
                     continue;
                 }
@@ -106,9 +105,9 @@ public abstract class FileUtils {
         Queue<File> queue = new LinkedList<>();
         queue.add(fileOrDirectory);
         while (!queue.isEmpty()) {
-            File file = queue.poll();
+            var file = queue.poll();
             if (file.isDirectory()) {
-                for (File f : file.listFiles()) {
+                for (var f : file.listFiles()) {
                     queue.offer(f);
                 }
                 continue;
@@ -201,9 +200,9 @@ public abstract class FileUtils {
      */
     public static void deleteFile(final File file) {
         if (file.isDirectory()) {
-            File[] files = file.listFiles();
+            var files = file.listFiles();
             if (files != null) {
-                for (File subFile : files) {
+                for (var subFile : files) {
                     deleteFile(subFile);
                 }
             }

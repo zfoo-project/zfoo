@@ -113,7 +113,6 @@ public abstract class ClassUtils {
             // 获取下一个元素，如果是jar：//得到的结果大概是：jar:file:/C:/Users/ibm/.m2/repository/junit/junit/4.12/junit-4.12.jar!/org/junit
             URL url = urlEnumeration.nextElement();
             String protocol = url.getProtocol();
-            System.out.println(url);
             if (StringUtils.isBlank(protocol)) {
                 continue;
             }

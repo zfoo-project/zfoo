@@ -48,48 +48,48 @@ public class ProtocolAnalysis {
 
 
     // 临时变量，启动完成就会销毁，协议名称保留字符，即协议的名称不能用以下名称命名
-    private static Set<String> tempProtocolReserved = Set.of("Buffer", "ByteBuf", "ByteBuffer", "LittleEndianByteBuffer", "NormalByteBuffer"
+    private static Set<String> protocolReserved = Set.of("Buffer", "ByteBuf", "ByteBuffer", "LittleEndianByteBuffer", "NormalByteBuffer"
             , "IPacket", "IProtocolRegistration", "ProtocolManager", "IFieldRegistration"
             , "ByteBufUtils", "ArrayUtils", "CollectionUtils"
             , "Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double", "String", "Character", "Object"
             , "Collections", "Iterator", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet");
 
     // 临时变量，启动完成就会销毁，是一个基本类型序列化器
-    private static Map<Class<?>, ISerializer> tempBaseSerializerMap = new HashMap<>();
+    private static Map<Class<?>, ISerializer> baseSerializerMap = new HashMap<>();
 
     // 临时变量，启动完成就会销毁，协议Id对应的Class类
-    private static Map<Short, Class<?>> tempProtocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
+    private static Map<Short, Class<?>> protocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
     // 临时变量，启动完成就会销毁，协议下包含的子协议，只包含一层子协议
-    private static Map<Short, Set<Short>> tempSubProtocolIdMap = new HashMap<>(MAX_PROTOCOL_NUM);
+    private static Map<Short, Set<Short>> subProtocolIdMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
     static {
         // 初始化基础类型序列化器
-        tempBaseSerializerMap.put(boolean.class, BooleanSerializer.INSTANCE);
-        tempBaseSerializerMap.put(Boolean.class, BooleanSerializer.INSTANCE);
-        tempBaseSerializerMap.put(byte.class, ByteSerializer.INSTANCE);
-        tempBaseSerializerMap.put(Byte.class, ByteSerializer.INSTANCE);
-        tempBaseSerializerMap.put(short.class, ShortSerializer.INSTANCE);
-        tempBaseSerializerMap.put(Short.class, ShortSerializer.INSTANCE);
-        tempBaseSerializerMap.put(int.class, IntSerializer.INSTANCE);
-        tempBaseSerializerMap.put(Integer.class, IntSerializer.INSTANCE);
-        tempBaseSerializerMap.put(long.class, LongSerializer.INSTANCE);
-        tempBaseSerializerMap.put(Long.class, LongSerializer.INSTANCE);
-        tempBaseSerializerMap.put(float.class, FloatSerializer.INSTANCE);
-        tempBaseSerializerMap.put(Float.class, FloatSerializer.INSTANCE);
-        tempBaseSerializerMap.put(double.class, DoubleSerializer.INSTANCE);
-        tempBaseSerializerMap.put(Double.class, DoubleSerializer.INSTANCE);
-        tempBaseSerializerMap.put(char.class, CharSerializer.INSTANCE);
-        tempBaseSerializerMap.put(Character.class, CharSerializer.INSTANCE);
-        tempBaseSerializerMap.put(String.class, StringSerializer.INSTANCE);
+        baseSerializerMap.put(boolean.class, BooleanSerializer.INSTANCE);
+        baseSerializerMap.put(Boolean.class, BooleanSerializer.INSTANCE);
+        baseSerializerMap.put(byte.class, ByteSerializer.INSTANCE);
+        baseSerializerMap.put(Byte.class, ByteSerializer.INSTANCE);
+        baseSerializerMap.put(short.class, ShortSerializer.INSTANCE);
+        baseSerializerMap.put(Short.class, ShortSerializer.INSTANCE);
+        baseSerializerMap.put(int.class, IntSerializer.INSTANCE);
+        baseSerializerMap.put(Integer.class, IntSerializer.INSTANCE);
+        baseSerializerMap.put(long.class, LongSerializer.INSTANCE);
+        baseSerializerMap.put(Long.class, LongSerializer.INSTANCE);
+        baseSerializerMap.put(float.class, FloatSerializer.INSTANCE);
+        baseSerializerMap.put(Float.class, FloatSerializer.INSTANCE);
+        baseSerializerMap.put(double.class, DoubleSerializer.INSTANCE);
+        baseSerializerMap.put(Double.class, DoubleSerializer.INSTANCE);
+        baseSerializerMap.put(char.class, CharSerializer.INSTANCE);
+        baseSerializerMap.put(Character.class, CharSerializer.INSTANCE);
+        baseSerializerMap.put(String.class, StringSerializer.INSTANCE);
     }
 
     public static synchronized void analyze(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
-        AssertionUtils.notNull(tempSubProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
+        AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
         try {
             for (var protocolClass : protocolClassSet) {
                 var id = getProtocolIdByClass(protocolClass);
-                var previous = tempProtocolClassMap.put(id, protocolClass);
+                var previous = protocolClassMap.put(id, protocolClass);
                 if (previous != null) {
                     throw new RunException("[{}][{}]协议号[protocolId:{}]重复", protocolClass.getCanonicalName(), previous.getCanonicalName(), id);
                 }
@@ -118,7 +118,7 @@ public class ProtocolAnalysis {
 
 
     public static synchronized void analyze(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
-        AssertionUtils.notNull(tempSubProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
+        AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
         try {
             var enhanceList = new ArrayList<IProtocolRegistration>();
 
@@ -145,7 +145,7 @@ public class ProtocolAnalysis {
                     // 协议号是否和id是否相等
                     AssertionUtils.isTrue(packet.protocolId() == id, "[class:{}]协议序列号[{}]和协议文件里的协议序列号不相等", clazz.getCanonicalName(), PROTOCOL_ID);
 
-                    var previous = tempProtocolClassMap.put(id, clazz);
+                    var previous = protocolClassMap.put(id, clazz);
                     if (previous != null) {
                         throw new RunException("[{}][{}]协议号[protocolId:{}]重复", clazz.getCanonicalName(), previous.getCanonicalName(), id);
                     }
@@ -156,7 +156,7 @@ public class ProtocolAnalysis {
                 var module = modules[moduleDefinition.getId()];
                 for (var protocolDefinition : moduleDefinition.getProtocols()) {
                     var id = protocolDefinition.getId();
-                    var clazz = tempProtocolClassMap.get(id);
+                    var clazz = protocolClassMap.get(id);
                     try {
                         var registration = parseProtocolRegistration(clazz, module);
                         if (protocolDefinition.isEnhance()) {
@@ -210,13 +210,13 @@ public class ProtocolAnalysis {
     }
 
     private static void enhanceProtocolAfter() {
-        tempSubProtocolIdMap.clear();
-        tempSubProtocolIdMap = null;
+        subProtocolIdMap.clear();
+        subProtocolIdMap = null;
 
-        tempProtocolReserved = null;
+        protocolReserved = null;
 
-        tempBaseSerializerMap.clear();
-        tempBaseSerializerMap = null;
+        baseSerializerMap.clear();
+        baseSerializerMap = null;
 
         GenerateProtocolDocument.clear();
         GenerateProtocolPath.clear();
@@ -298,7 +298,7 @@ public class ProtocolAnalysis {
                 throw new RunException("[class:{}]和[class:{}]协议名称重复，协议不能含有重复的名称", protocolClass.getCanonicalName(), allProtocolNameMap.get(protocolName).getCanonicalName());
             }
 
-            if (tempProtocolReserved.stream().anyMatch(it -> it.equalsIgnoreCase(protocolName))) {
+            if (protocolReserved.stream().anyMatch(it -> it.equalsIgnoreCase(protocolName))) {
                 throw new RunException("协议的名称[class:{}]不能是保留名称[{}]", protocolClass.getCanonicalName(), protocolName);
             }
 
@@ -307,7 +307,7 @@ public class ProtocolAnalysis {
 
 
         // 检查循环协议
-        for (var protocolEntry : tempSubProtocolIdMap.entrySet()) {
+        for (var protocolEntry : subProtocolIdMap.entrySet()) {
             var protocolId = protocolEntry.getKey();
             var subProtocolSet = protocolEntry.getValue();
             if (subProtocolSet.contains(protocolId)) {
@@ -320,7 +320,7 @@ public class ProtocolAnalysis {
     }
 
     private static void checkSubProtocol(Class<?> clazz, short id, Class<?> subClass) {
-        var registerProtocolClass = tempProtocolClassMap.get(id);
+        var registerProtocolClass = protocolClassMap.get(id);
         if (registerProtocolClass == null || !registerProtocolClass.equals(subClass)) {
             throw new RunException("协议[{}]的子协议[{}][{}]没有注册", clazz.getCanonicalName(), id, subClass.getCanonicalName());
         }
@@ -373,7 +373,7 @@ public class ProtocolAnalysis {
     private static IFieldRegistration toRegistration(Class<?> clazz, Field field) {
         Class<?> fieldTypeClazz = field.getType();
 
-        ISerializer serializer = tempBaseSerializerMap.get(fieldTypeClazz);
+        ISerializer serializer = baseSerializerMap.get(fieldTypeClazz);
 
         // 是一个基本类型变量
         if (serializer != null) {
@@ -449,7 +449,7 @@ public class ProtocolAnalysis {
             // 是一个协议引用变量
             var referenceProtocolId = getProtocolIdByClass(field.getType());
             checkSubProtocol(clazz, referenceProtocolId, field.getType());
-            tempSubProtocolIdMap.computeIfAbsent(getProtocolIdByClass(clazz), it -> new HashSet<>()).add(referenceProtocolId);
+            subProtocolIdMap.computeIfAbsent(getProtocolIdByClass(clazz), it -> new HashSet<>()).add(referenceProtocolId);
             return ObjectProtocolField.valueOf(referenceProtocolId);
         }
     }
@@ -474,7 +474,7 @@ public class ProtocolAnalysis {
             }
         } else if (type instanceof Class) {
             Class<?> clazz = ((Class<?>) type);
-            ISerializer serializer = tempBaseSerializerMap.get(clazz);
+            ISerializer serializer = baseSerializerMap.get(clazz);
             if (serializer != null) {
                 // 基础类型
                 return BaseField.valueOf(serializer);
@@ -487,7 +487,7 @@ public class ProtocolAnalysis {
                 // 是一个协议引用变量
                 var referenceProtocolId = getProtocolIdByClass(clazz);
                 checkSubProtocol(clazz, referenceProtocolId, clazz);
-                tempSubProtocolIdMap.computeIfAbsent(getProtocolIdByClass(currentProtocolClass), it -> new HashSet<>()).add(referenceProtocolId);
+                subProtocolIdMap.computeIfAbsent(getProtocolIdByClass(currentProtocolClass), it -> new HashSet<>()).add(referenceProtocolId);
                 return ObjectProtocolField.valueOf(referenceProtocolId);
             }
         }
@@ -505,20 +505,20 @@ public class ProtocolAnalysis {
      * 此方法仅在生成协议的时候调用，一旦运行，不能调用
      */
     public static Set<Short> getAllSubProtocolIds(short protocolId) {
-        AssertionUtils.notNull(tempSubProtocolIdMap, "[{}]已经初始完成，初始化完成过后不能调用getAllSubProtocolIds", ProtocolAnalysis.class.getSimpleName());
+        AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，初始化完成过后不能调用getAllSubProtocolIds", ProtocolAnalysis.class.getSimpleName());
 
-        if (!tempSubProtocolIdMap.containsKey(protocolId)) {
+        if (!subProtocolIdMap.containsKey(protocolId)) {
             return Collections.emptySet();
         }
 
         var protocolClass = protocols[protocolId].protocolConstructor().getDeclaringClass();
 
-        var queue = new LinkedList<>(tempSubProtocolIdMap.get(protocolId));
+        var queue = new LinkedList<>(subProtocolIdMap.get(protocolId));
         var allSubProtocolIdSet = new HashSet<>(queue);
         while (!queue.isEmpty()) {
             var firstSubProtocolId = queue.poll();
-            if (tempSubProtocolIdMap.containsKey(firstSubProtocolId)) {
-                for (var subClassId : tempSubProtocolIdMap.get(firstSubProtocolId)) {
+            if (subProtocolIdMap.containsKey(firstSubProtocolId)) {
+                for (var subClassId : subProtocolIdMap.get(firstSubProtocolId)) {
                     if (subClassId == protocolId) {
                         throw new RunException("[class:{}]在下层协议[class:{}]包含循环引用协议[class:{}]", protocolClass.getSimpleName(), protocols[firstSubProtocolId].protocolConstructor().getDeclaringClass(), protocolClass.getSimpleName());
                     }

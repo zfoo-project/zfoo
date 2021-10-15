@@ -31,21 +31,21 @@ import java.util.stream.Collectors;
 public abstract class GenerateProtocolPath {
 
     // 临时变量，启动完成就会销毁，协议生成的路径
-    private static Map<Short, String> tempProtocolPathMap = new HashMap<>();
+    private static Map<Short, String> protocolPathMap = new HashMap<>();
 
 
     public static void clear() {
-        tempProtocolPathMap.clear();
-        tempProtocolPathMap = null;
+        protocolPathMap.clear();
+        protocolPathMap = null;
     }
 
     /**
      * 获取协议生成的路径
      */
     public static String getProtocolPath(short protocolId) {
-        AssertionUtils.notNull(tempProtocolPathMap, "[{}]已经初始完成，初始化完成过后不能调用getProtocolPath", GenerateProtocolPath.class.getSimpleName());
+        AssertionUtils.notNull(protocolPathMap, "[{}]已经初始完成，初始化完成过后不能调用getProtocolPath", GenerateProtocolPath.class.getSimpleName());
 
-        var protocolPath = tempProtocolPathMap.get(protocolId);
+        var protocolPath = protocolPathMap.get(protocolId);
         if (StringUtils.isBlank(protocolPath)) {
             return StringUtils.EMPTY;
         }
@@ -66,7 +66,7 @@ public abstract class GenerateProtocolPath {
      * @param protocolRegistrations 需要解析的路径
      */
     public static void initProtocolPath(List<IProtocolRegistration> protocolRegistrations) {
-        AssertionUtils.notNull(tempProtocolPathMap, "[{}]已经初始完成，初始化完成过后不能调用initProtocolPath", GenerateProtocolPath.class.getSimpleName());
+        AssertionUtils.notNull(protocolPathMap, "[{}]已经初始完成，初始化完成过后不能调用initProtocolPath", GenerateProtocolPath.class.getSimpleName());
 
         // 将需要生成的协议的路径添加到多叉树中
         var protocolPathTree = new GeneralTree<IProtocolRegistration>();
@@ -113,7 +113,7 @@ public abstract class GenerateProtocolPath {
                     .split(StringUtils.PERIOD_REGEX))
                     .filter(it -> !StringUtils.isBlank(it))
                     .toArray();
-            tempProtocolPathMap.put(child.getData().protocolId(), StringUtils.joinWith(StringUtils.PERIOD, splits));
+            protocolPathMap.put(child.getData().protocolId(), StringUtils.joinWith(StringUtils.PERIOD, splits));
         }
     }
 

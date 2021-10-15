@@ -50,12 +50,12 @@ public abstract class GenerateProtocolDocument {
      * // byte的包装类型
      * // 优先使用基础类型，包装类型会有装箱拆箱
      */
-    private static Map<Short, Pair<String, Map<String, String>>> tempProtocolDocumentMap = new HashMap<>();
+    private static Map<Short, Pair<String, Map<String, String>>> protocolDocumentMap = new HashMap<>();
 
 
     public static void clear() {
-        tempProtocolDocumentMap.clear();
-        tempProtocolDocumentMap = null;
+        protocolDocumentMap.clear();
+        protocolDocumentMap = null;
     }
 
 
@@ -63,9 +63,9 @@ public abstract class GenerateProtocolDocument {
      * 此方法仅在生成协议的时候调用，一旦运行，不能调用
      */
     public static Pair<String, Map<String, String>> getProtocolDocument(short protocolId) {
-        AssertionUtils.notNull(tempProtocolDocumentMap, "[{}]已经初始完成，初始化完成过后不能调用getProtocolDocument", GenerateProtocolDocument.class.getSimpleName());
+        AssertionUtils.notNull(protocolDocumentMap, "[{}]已经初始完成，初始化完成过后不能调用getProtocolDocument", GenerateProtocolDocument.class.getSimpleName());
 
-        var protocolDocument = tempProtocolDocumentMap.get(protocolId);
+        var protocolDocument = protocolDocumentMap.get(protocolId);
         if (protocolDocument == null) {
             return new Pair<>(StringUtils.EMPTY, Collections.emptyMap());
         }
@@ -74,7 +74,7 @@ public abstract class GenerateProtocolDocument {
 
 
     public static void initProtocolDocument(List<IProtocolRegistration> protocolRegistrations) {
-        AssertionUtils.notNull(tempProtocolDocumentMap, "[{}]已经初始完成，初始化完成过后不能调用initProtocolDocument", GenerateProtocolDocument.class.getSimpleName());
+        AssertionUtils.notNull(protocolDocumentMap, "[{}]已经初始完成，初始化完成过后不能调用initProtocolDocument", GenerateProtocolDocument.class.getSimpleName());
 
         // 文件的注释生成
         var proAbsFile = new File(FileUtils.getProAbsPath());
@@ -181,7 +181,7 @@ public abstract class GenerateProtocolDocument {
                 docBuilder = new StringBuilder();
             }
 
-            tempProtocolDocumentMap.put(protocolRegistration.protocolId(), new Pair<>(docTitle, docFieldMap));
+            protocolDocumentMap.put(protocolRegistration.protocolId(), new Pair<>(docTitle, docFieldMap));
         }
     }
 
