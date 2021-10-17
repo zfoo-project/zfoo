@@ -4,16 +4,16 @@ import ProtocolManager from './jsProtocol/ProtocolManager.js';
 const fs = require('fs');
 
 describe('jsProtocolTest', () => {
-
     it('complexObjectTest', () => {
-        const data = fs.readFileSync('D:\\zfoo\\protocol\\src\\test\\resources\\ComplexObject.bytes');
-
-        console.log(data.buffer);
+        const data = fs.readFileSync('C:\\zfoo\\protocol\\src\\test\\resources\\ComplexObject.bytes');
 
         ProtocolManager.initProtocol();
 
+        const arrayBytes = new Uint8Array(data.length);
+        data.copy(arrayBytes, 0, 0, data.length);
+
         const byteBuffer = new ByteBuffer();
-        byteBuffer.writeBytes(data.buffer);
+        byteBuffer.writeBytes(arrayBytes);
 
         const packet = ProtocolManager.read(byteBuffer);
         console.log(packet);

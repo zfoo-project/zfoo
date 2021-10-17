@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 public class ObjectB implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1117;
+    public static final transient short PROTOCOL_ID = 103;
 
     private boolean flag;
 

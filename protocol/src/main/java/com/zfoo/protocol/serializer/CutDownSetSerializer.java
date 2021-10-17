@@ -21,6 +21,8 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
 
+import static com.zfoo.protocol.util.FileUtils.LS;
+
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -35,89 +37,256 @@ public class CutDownSetSerializer implements ICutDownSerializer {
 
     @Override
     public boolean writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration, CodeLanguage language) {
-
         var setField = (SetField) fieldRegistration;
+        var flag = true;
 
         // 直接在字节码里调用方法是为了减小生成字节码的体积，下面的代码去掉也不会有任何影响
         switch (setField.getType().getTypeName()) {
+            case "java.util.Set<java.lang.Boolean>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("{}.writeBooleanSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeBooleanArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.Set<java.lang.Byte>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("{}.writeByteSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeByteArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.Set<java.lang.Short>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("{}.writeShortSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeShortArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
             case "java.util.Set<java.lang.Integer>":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeIntSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
-                        return true;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeIntArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             case "java.util.Set<java.lang.Long>":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeLongSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
-                        return true;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeLongArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.Set<java.lang.Float>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("{}.writeFloatSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeFloatArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.Set<java.lang.Double>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("{}.writeDoubleSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeDoubleArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             case "java.util.Set<java.lang.String>":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeStringSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
-                        return true;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeStringArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             default:
+                // Set<IPacket>
+                if (setField.getSetElementRegistration() instanceof ObjectProtocolField) {
+                    var objectProtocolField = (ObjectProtocolField) setField.getSetElementRegistration();
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writePacketSet($1, (Set){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
+                            break;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writePacketArray({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        default:
+                            flag = false;
+                    }
+                } else {
+                    flag = false;
+                }
         }
 
-        // Set<IPacket>
-        if (setField.getSetElementRegistration() instanceof ObjectProtocolField) {
-            var objectProtocolField = (ObjectProtocolField) setField.getSetElementRegistration();
-            switch (language) {
-                case Enhance:
-                    builder.append(StringUtils.format("{}.writePacketSet($1, (Set){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
-                    return true;
-            }
-        }
-
-        return false;
+        return flag;
     }
 
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration, CodeLanguage language) {
         var setField = (SetField) fieldRegistration;
         var set = "set" + GenerateProtocolFile.index.getAndIncrement();
+        var flag = true;
 
         switch (setField.getType().getTypeName()) {
+            case "java.util.Set<java.lang.Boolean>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("Set {} = {}.readBooleanSet($1);", set, EnhanceUtils.byteBufUtils));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readBooleanArray();", set)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.Set<java.lang.Byte>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("Set {} = {}.readByteSet($1);", set, EnhanceUtils.byteBufUtils));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readByteArray();", set)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.Set<java.lang.Short>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("Set {} = {}.readShortSet($1);", set, EnhanceUtils.byteBufUtils));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readShortArray();", set)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
             case "java.util.Set<java.lang.Integer>":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("Set {} = {}.readIntSet($1);", set, EnhanceUtils.byteBufUtils));
-                        return set;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readIntArray();", set)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             case "java.util.Set<java.lang.Long>":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("Set {} = {}.readLongSet($1);", set, EnhanceUtils.byteBufUtils));
-                        return set;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readLongArray();", set)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.Set<java.lang.Float>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("Set {} = {}.readFloatSet($1);", set, EnhanceUtils.byteBufUtils));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readFloatArray();", set)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.Set<java.lang.Double>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("Set {} = {}.readDoubleSet($1);", set, EnhanceUtils.byteBufUtils));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readDoubleArray();", set)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             case "java.util.Set<java.lang.String>":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("Set {} = {}.readStringSet($1);", set, EnhanceUtils.byteBufUtils));
-                        return set;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readStringArray();", set)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             default:
+                if (setField.getSetElementRegistration() instanceof ObjectProtocolField) {
+                    var objectProtocolField = (ObjectProtocolField) setField.getSetElementRegistration();
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Set {} = {}.readPacketSet($1, {});", set, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
+                            break;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readPacketArray({});", set, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        default:
+                            flag = false;
+                    }
+                } else {
+                    flag = false;
+                }
         }
 
-        if (setField.getSetElementRegistration() instanceof ObjectProtocolField) {
-            var objectProtocolField = (ObjectProtocolField) setField.getSetElementRegistration();
-            switch (language) {
-                case Enhance:
-                    builder.append(StringUtils.format("Set {} = {}.readPacketSet($1, {});", set, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
-                    return set;
-            }
+
+        if (flag) {
             return set;
+        } else {
+            GenerateProtocolFile.index.getAndDecrement();
+            return null;
         }
-
-        GenerateProtocolFile.index.getAndDecrement();
-        return null;
     }
 }

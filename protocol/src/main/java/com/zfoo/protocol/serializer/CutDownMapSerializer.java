@@ -26,6 +26,8 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
 
+import static com.zfoo.protocol.util.FileUtils.LS;
+
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -50,50 +52,120 @@ public class CutDownMapSerializer implements ICutDownSerializer {
         if (keyRegistration instanceof BaseField) {
             if (keySerializer == IntSerializer.INSTANCE) {
                 if (valueSerializer == IntSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeIntIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeIntIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeIntIntMap({});", objectStr)).append(LS);
+                            return true;
+                    }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeIntLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeIntLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeIntLongMap({});", objectStr)).append(LS);
+                            return true;
+                    }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeIntStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeIntStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeIntStringMap({});", objectStr)).append(LS);
+                            return true;
+                    }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeIntPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeIntPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeIntPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return true;
+                    }
                 }
             } else if (keySerializer == LongSerializer.INSTANCE) {
                 if (valueSerializer == IntSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeLongIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeLongIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeLongIntMap({});", objectStr)).append(LS);
+                            return true;
+                    }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeLongLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeLongLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeLongLongMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return true;
+                    }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeLongStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeLongStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeLongStringMap({});", objectStr)).append(LS);
+                            return true;
+                    }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeLongPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeLongPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeLongPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return true;
+                    }
                 }
-
             } else if (keySerializer == StringSerializer.INSTANCE) {
                 if (valueSerializer == IntSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeStringIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeStringIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeStringIntMap({});", objectStr)).append(LS);
+                            return true;
+                    }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeStringLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeStringLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeStringLongMap({});", objectStr)).append(LS);
+                            return true;
+                    }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeStringStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeStringStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeStringStringMap({});", objectStr)).append(LS);
+                            return true;
+                    }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("{}.writeStringPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
-                    return true;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writeStringPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
+                            return true;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writeStringPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return true;
+                    }
                 }
             }
         }
-
         return false;
     }
 
@@ -110,49 +182,120 @@ public class CutDownMapSerializer implements ICutDownSerializer {
         if (keyRegistration instanceof BaseField) {
             if (keySerializer == IntSerializer.INSTANCE) {
                 if (valueSerializer == IntSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readIntIntMap($1);", map, EnhanceUtils.byteBufUtils));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readIntIntMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readIntIntMap();", map)).append(LS);
+                            return map;
+                    }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readIntLongMap($1);", map, EnhanceUtils.byteBufUtils));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readIntLongMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readIntLongMap();", map)).append(LS);
+                            return map;
+                    }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readIntStringMap($1);", map, EnhanceUtils.byteBufUtils));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readIntStringMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readIntStringMap();", map)).append(LS);
+                            return map;
+                    }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readIntPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readIntPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readIntPacketMap({});", map, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return map;
+                    }
                 }
             } else if (keySerializer == LongSerializer.INSTANCE) {
                 if (valueSerializer == IntSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readLongIntMap($1);", map, EnhanceUtils.byteBufUtils));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readLongIntMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readLongIntMap();", map)).append(LS);
+                            return map;
+                    }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readLongLongMap($1);", map, EnhanceUtils.byteBufUtils));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readLongLongMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readLongLongMap();", map)).append(LS);
+                            return map;
+                    }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readLongStringMap($1);", map, EnhanceUtils.byteBufUtils));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readLongStringMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readLongStringMap();", map)).append(LS);
+                            return map;
+                    }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readLongPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readLongPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readLongPacketMap({});", map, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return map;
+                    }
                 }
             } else if (keySerializer == StringSerializer.INSTANCE) {
                 if (valueSerializer == IntSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readStringIntMap($1);", map, EnhanceUtils.byteBufUtils));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readStringIntMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readStringIntMap();", map)).append(LS);
+                            return map;
+                    }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readStringLongMap($1);", map, EnhanceUtils.byteBufUtils));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readStringLongMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readStringLongMap();", map)).append(LS);
+                            return map;
+                    }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readStringStringMap($1);", map, EnhanceUtils.byteBufUtils));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readStringStringMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readStringStringMap();", map)).append(LS);
+                            return map;
+                    }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
-                    builder.append(StringUtils.format("Map {} = {}.readStringPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
-                    return map;
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("Map {} = {}.readStringPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
+                            return map;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readStringPacketMap({});", map, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return map;
+                    }
                 }
             }
         }
-
         GenerateProtocolFile.index.getAndDecrement();
         return null;
     }

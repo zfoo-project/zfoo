@@ -128,19 +128,6 @@ public abstract class GenerateJsUtils {
 
         var jsBuilder = new StringBuilder();
 
-        // 如果协议包含子协议，则需要导入ProtocolManager
-        var subProtocols = ProtocolAnalysis.getAllSubProtocolIds(protocolId);
-        if (CollectionUtils.isNotEmpty(subProtocols)) {
-            var path = GenerateProtocolPath.getProtocolPath(protocolId);
-            if (StringUtils.isBlank(path)) {
-                jsBuilder.append("import ProtocolManager from './ProtocolManager.js';").append(LS);
-            } else {
-                jsBuilder.append("import ProtocolManager from '");
-                Arrays.stream(path.split(StringUtils.SLASH)).forEach(it -> jsBuilder.append("../"));
-                jsBuilder.append("ProtocolManager.js';").append(LS);
-            }
-        }
-
         // export object
         jsBuilder.append(exportFunction(registration));
 
@@ -223,14 +210,11 @@ public abstract class GenerateJsUtils {
         var protocolClazzName = registration.getConstructor().getDeclaringClass().getSimpleName();
 
         var jsBuilder = new StringBuilder();
-        jsBuilder.append(StringUtils.format("{}.writeObject = function(byteBuffer, packet) {", protocolClazzName)).append(LS);
+        jsBuilder.append(StringUtils.format("{}.write = function(byteBuffer, packet) {", protocolClazzName)).append(LS);
 
-        jsBuilder.append(TAB).append("if (packet === null) {").append(LS);
-        jsBuilder.append(TAB + TAB).append("byteBuffer.writeBoolean(false);").append(LS);
+        jsBuilder.append(TAB).append("if (byteBuffer.writePacketFlag(packet)) {").append(LS);
         jsBuilder.append(TAB + TAB).append("return;").append(LS);
         jsBuilder.append(TAB).append("}").append(LS);
-
-        jsBuilder.append(TAB).append("byteBuffer.writeBoolean(true);").append(LS);
 
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
@@ -250,7 +234,7 @@ public abstract class GenerateJsUtils {
         var protocolClazzName = registration.getConstructor().getDeclaringClass().getSimpleName();
 
         var jsBuilder = new StringBuilder();
-        jsBuilder.append(StringUtils.format("{}.readObject = function(byteBuffer) {", protocolClazzName)).append(LS);
+        jsBuilder.append(StringUtils.format("{}.read = function(byteBuffer) {", protocolClazzName)).append(LS);
         jsBuilder.append(TAB).append("if (!byteBuffer.readBoolean()) {").append(LS);
         jsBuilder.append(TAB + TAB).append("return null;").append(LS);
         jsBuilder.append(TAB).append("}").append(LS);

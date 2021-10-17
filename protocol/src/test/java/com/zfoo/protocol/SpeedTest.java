@@ -22,6 +22,7 @@ import com.google.protobuf.CodedOutputStream;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.*;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -323,10 +324,8 @@ public class SpeedTest {
 
     static {
         var op = GenerateOperation.NO_OPERATION;
-//        op.setGenerateLuaProtocol(true);
-//        op.setGenerateCsharpProtocol(true);
-//        op.setGenerateJsProtocol(true);
-//        op.setFoldProtocol(true);
+        op.getGenerateLanguages().add(CodeLanguage.JavaScript);
+        op.setFoldProtocol(true);
         // zfoo协议注册
         ProtocolManager.initProtocol(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, ObjectA.class, ObjectB.class), op);
 

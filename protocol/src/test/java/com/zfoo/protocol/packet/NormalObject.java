@@ -25,7 +25,7 @@ import java.util.Set;
  */
 public class NormalObject implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1161;
+    public static final transient short PROTOCOL_ID = 101;
 
     private byte a;
     private byte[] aaa;

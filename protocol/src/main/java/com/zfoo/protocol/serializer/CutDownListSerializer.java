@@ -21,6 +21,8 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
 
+import static com.zfoo.protocol.util.FileUtils.LS;
+
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -36,20 +38,93 @@ public class CutDownListSerializer implements ICutDownSerializer {
     @Override
     public boolean writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration, CodeLanguage language) {
         var listField = (ListField) fieldRegistration;
+        var flag = true;
 
         switch (listField.getType().getTypeName()) {
+            case "java.util.List<java.lang.Boolean>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("{}.writeBooleanList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeBooleanArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.List<java.lang.Byte>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("{}.writeByteList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeByteArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.List<java.lang.Short>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("{}.writeShortList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeShortArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
             case "java.util.List<java.lang.Integer>":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeIntList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
-                        return true;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeIntArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             case "java.util.List<java.lang.Long>": {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeLongList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
-                        return true;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeLongArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            }
+            case "java.util.List<java.lang.Float>": {
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("{}.writeFloatList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeFloatArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            }
+            case "java.util.List<java.lang.Double>": {
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("{}.writeDoubleList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeDoubleArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             }
@@ -57,64 +132,163 @@ public class CutDownListSerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeStringList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
-                        return true;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("byteBuffer.writeStringArray({});", objectStr)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             default:
+                // List<IPacket>
+                if (listField.getListElementRegistration() instanceof ObjectProtocolField) {
+                    var objectProtocolField = (ObjectProtocolField) listField.getListElementRegistration();
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writePacketList($1, (List){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
+                            break;
+                        case JavaScript:
+                            builder.append(StringUtils.format("byteBuffer.writePacketArray({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        default:
+                            flag = false;
+                    }
+                } else {
+                    flag = false;
+                }
         }
 
-        // List<IPacket>
-        if (listField.getListElementRegistration() instanceof ObjectProtocolField) {
-            var objectProtocolField = (ObjectProtocolField) listField.getListElementRegistration();
-            switch (language) {
-                case Enhance:
-                    builder.append(StringUtils.format("{}.writePacketList($1, (List){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
-                    return true;
-            }
-        }
-        return false;
+        return flag;
     }
 
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration, CodeLanguage language) {
         var listField = (ListField) fieldRegistration;
         var list = "list" + GenerateProtocolFile.index.getAndIncrement();
+        var flag = true;
 
         switch (listField.getType().getTypeName()) {
+            case "java.util.List<java.lang.Boolean>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("List {} = {}.readBooleanList($1);", list, EnhanceUtils.byteBufUtils));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readBooleanArray();", list)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.List<java.lang.Byte>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("List {} = {}.readByteList($1);", list, EnhanceUtils.byteBufUtils));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readByteArray();", list)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.List<java.lang.Short>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("List {} = {}.readShortList($1);", list, EnhanceUtils.byteBufUtils));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readShortArray();", list)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
             case "java.util.List<java.lang.Integer>":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readIntList($1);", list, EnhanceUtils.byteBufUtils));
-                        return list;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readIntArray();", list)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             case "java.util.List<java.lang.Long>":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readLongList($1);", list, EnhanceUtils.byteBufUtils));
-                        return list;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readLongArray();", list)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.List<java.lang.Float>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("List {} = {}.readFloatList($1);", list, EnhanceUtils.byteBufUtils));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readFloatArray();", list)).append(LS);
+                        break;
+                    default:
+                        flag = false;
+                }
+                break;
+            case "java.util.List<java.lang.Double>":
+                switch (language) {
+                    case Enhance:
+                        builder.append(StringUtils.format("List {} = {}.readDoubleList($1);", list, EnhanceUtils.byteBufUtils));
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readDoubleArray();", list)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             case "java.util.List<java.lang.String>":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readStringList($1);", list, EnhanceUtils.byteBufUtils));
-                        return list;
+                        break;
+                    case JavaScript:
+                        builder.append(StringUtils.format("const {} = byteBuffer.readStringArray();", list)).append(LS);
+                        break;
+                    default:
+                        flag = false;
                 }
                 break;
             default:
+                if (listField.getListElementRegistration() instanceof ObjectProtocolField) {
+                    var objectProtocolField = (ObjectProtocolField) listField.getListElementRegistration();
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("List {} = {}.readPacketList($1, {});", list, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
+                            break;
+                        case JavaScript:
+                            builder.append(StringUtils.format("const {} = byteBuffer.readPacketArray({});", list, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        default:
+                            flag = false;
+                    }
+                } else {
+                    flag = false;
+                }
         }
 
-        if (listField.getListElementRegistration() instanceof ObjectProtocolField) {
-            var objectProtocolField = (ObjectProtocolField) listField.getListElementRegistration();
-            switch (language) {
-                case Enhance:
-                    builder.append(StringUtils.format("List {} = {}.readPacketList($1, {});", list, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
-                    return list;
-            }
-        }
 
-        GenerateProtocolFile.index.getAndDecrement();
-        return null;
+        if (flag) {
+            return list;
+        } else {
+            GenerateProtocolFile.index.getAndDecrement();
+            return null;
+        }
     }
 }

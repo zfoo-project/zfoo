@@ -32,7 +32,7 @@ public class JsObjectProtocolSerializer implements IJsSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("ProtocolManager.getProtocol({}).writeObject(byteBuffer, {});", objectProtocolField.getProtocolId(), objectStr)).append(LS);
+        builder.append(StringUtils.format("byteBuffer.writePacket({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class JsObjectProtocolSerializer implements IJsSerializer {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("const {} = ProtocolManager.getProtocol({}).readObject(byteBuffer);", result, objectProtocolField.getProtocolId())).append(LS);
+        builder.append(StringUtils.format("const {} = byteBuffer.readPacket({});", result, objectProtocolField.getProtocolId())).append(LS);
         return result;
     }
 }

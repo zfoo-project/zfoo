@@ -16,6 +16,8 @@ package com.zfoo.protocol.serializer.js;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
+import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.CutDownArraySerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -31,9 +33,13 @@ public class JsArraySerializer implements IJsSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
+        GenerateProtocolFile.addTab(builder, deep);
+        if (CutDownArraySerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.JavaScript)) {
+            return;
+        }
+
         ArrayField arrayField = (ArrayField) fieldRegistration;
 
-        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} === null) {", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("byteBuffer.writeInt(0);").append(LS);
@@ -56,10 +62,15 @@ public class JsArraySerializer implements IJsSerializer {
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
+        GenerateProtocolFile.addTab(builder, deep);
+        var cutDown = CutDownArraySerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.JavaScript);
+        if (cutDown != null) {
+            return cutDown;
+        }
+
         ArrayField arrayField = (ArrayField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("const {} = [];", result)).append(LS);
 
         String i = "index" + GenerateProtocolFile.index.getAndIncrement();

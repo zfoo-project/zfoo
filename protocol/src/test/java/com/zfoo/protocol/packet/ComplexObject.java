@@ -26,7 +26,7 @@ import java.util.*;
  */
 public class ComplexObject implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1160;
+    public static final transient short PROTOCOL_ID = 100;
 
     // byte类型，最简单的整形
     private byte a;

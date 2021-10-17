@@ -726,6 +726,42 @@ public abstract class ByteBufUtils {
         return array;
     }
 
+    public static void writeBooleanCollection(ByteBuf byteBuf, Collection<Boolean> collection) {
+        if (collection == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, collection.size());
+        for (var value : collection) {
+            writeBooleanBox(byteBuf, value);
+        }
+    }
+
+    public static void writeBooleanList(ByteBuf byteBuf, List<Boolean> list) {
+        writeBooleanCollection(byteBuf, list);
+    }
+
+    public static List<Boolean> readBooleanList(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var list = (List<Boolean>) CollectionUtils.newFixedList(length);
+        for (var i = 0; i < length; i++) {
+            list.add(readBooleanBox(byteBuf));
+        }
+        return list;
+    }
+
+    public static void writeBooleanSet(ByteBuf byteBuf, Set<Boolean> set) {
+        writeBooleanCollection(byteBuf, set);
+    }
+
+    public static Set<Boolean> readBooleanSet(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var set = (Set<Boolean>) CollectionUtils.newFixedSet(length);
+        for (var i = 0; i < length; i++) {
+            set.add(readBooleanBox(byteBuf));
+        }
+        return set;
+    }
 
     //---------------------------------byte--------------------------------------
     public static void writeByteArray(ByteBuf byteBuf, byte[] array) {
@@ -768,6 +804,42 @@ public abstract class ByteBufUtils {
         return bytesBox;
     }
 
+    public static void writeByteCollection(ByteBuf byteBuf, Collection<Byte> collection) {
+        if (collection == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, collection.size());
+        for (var value : collection) {
+            writeByteBox(byteBuf, value);
+        }
+    }
+
+    public static void writeByteList(ByteBuf byteBuf, List<Byte> list) {
+        writeByteCollection(byteBuf, list);
+    }
+
+    public static List<Byte> readByteList(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var list = (List<Byte>) CollectionUtils.newFixedList(length);
+        for (var i = 0; i < length; i++) {
+            list.add(readByteBox(byteBuf));
+        }
+        return list;
+    }
+
+    public static void writeByteSet(ByteBuf byteBuf, Set<Byte> set) {
+        writeByteCollection(byteBuf, set);
+    }
+
+    public static Set<Byte> readByteSet(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var set = (Set<Byte>) CollectionUtils.newFixedSet(length);
+        for (var i = 0; i < length; i++) {
+            set.add(readByteBox(byteBuf));
+        }
+        return set;
+    }
 
     //---------------------------------short--------------------------------------
     public static void writeShortArray(ByteBuf byteBuf, short[] array) {
@@ -816,6 +888,43 @@ public abstract class ByteBufUtils {
             shorts[i] = readShortBox(byteBuf);
         }
         return shorts;
+    }
+
+    public static void writeShortCollection(ByteBuf byteBuf, Collection<Short> collection) {
+        if (collection == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, collection.size());
+        for (var value : collection) {
+            writeShortBox(byteBuf, value);
+        }
+    }
+
+    public static void writeShortList(ByteBuf byteBuf, List<Short> list) {
+        writeShortCollection(byteBuf, list);
+    }
+
+    public static List<Short> readShortList(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var list = (List<Short>) CollectionUtils.newFixedList(length);
+        for (var i = 0; i < length; i++) {
+            list.add(readShortBox(byteBuf));
+        }
+        return list;
+    }
+
+    public static void writeShortSet(ByteBuf byteBuf, Set<Short> set) {
+        writeShortCollection(byteBuf, set);
+    }
+
+    public static Set<Short> readShortSet(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var set = (Set<Short>) CollectionUtils.newFixedSet(length);
+        for (var i = 0; i < length; i++) {
+            set.add(readShortBox(byteBuf));
+        }
+        return set;
     }
 
 
@@ -890,11 +999,11 @@ public abstract class ByteBufUtils {
 
     public static Set<Integer> readIntSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = (Set<Integer>) CollectionUtils.newFixedSet(length);
+        var set = (Set<Integer>) CollectionUtils.newFixedSet(length);
         for (var i = 0; i < length; i++) {
-            list.add(readIntBox(byteBuf));
+            set.add(readIntBox(byteBuf));
         }
-        return list;
+        return set;
     }
 
 
@@ -1025,6 +1134,42 @@ public abstract class ByteBufUtils {
         return floats;
     }
 
+    public static void writeFloatCollection(ByteBuf byteBuf, Collection<Float> collection) {
+        if (collection == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, collection.size());
+        for (var value : collection) {
+            writeFloatBox(byteBuf, value);
+        }
+    }
+
+    public static void writeFloatList(ByteBuf byteBuf, List<Float> list) {
+        writeFloatCollection(byteBuf, list);
+    }
+
+    public static List<Float> readFloatList(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var list = (List<Float>) CollectionUtils.newFixedList(length);
+        for (var i = 0; i < length; i++) {
+            list.add(readFloatBox(byteBuf));
+        }
+        return list;
+    }
+
+    public static void writeFloatSet(ByteBuf byteBuf, Set<Float> set) {
+        writeFloatCollection(byteBuf, set);
+    }
+
+    public static Set<Float> readFloatSet(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var set = (Set<Float>) CollectionUtils.newFixedSet(length);
+        for (var i = 0; i < length; i++) {
+            set.add(readFloatBox(byteBuf));
+        }
+        return set;
+    }
 
     //---------------------------------double--------------------------------------
     public static void writeDoubleArray(ByteBuf byteBuf, double[] array) {
@@ -1075,6 +1220,42 @@ public abstract class ByteBufUtils {
         return doubles;
     }
 
+    public static void writeDoubleCollection(ByteBuf byteBuf, Collection<Double> collection) {
+        if (collection == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, collection.size());
+        for (var value : collection) {
+            writeDoubleBox(byteBuf, value);
+        }
+    }
+
+    public static void writeDoubleList(ByteBuf byteBuf, List<Double> list) {
+        writeDoubleCollection(byteBuf, list);
+    }
+
+    public static List<Double> readDoubleList(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var list = (List<Double>) CollectionUtils.newFixedList(length);
+        for (var i = 0; i < length; i++) {
+            list.add(readDoubleBox(byteBuf));
+        }
+        return list;
+    }
+
+    public static void writeDoubleSet(ByteBuf byteBuf, Set<Double> set) {
+        writeDoubleCollection(byteBuf, set);
+    }
+
+    public static Set<Double> readDoubleSet(ByteBuf byteBuf) {
+        var length = readInt(byteBuf);
+        var set = (Set<Double>) CollectionUtils.newFixedSet(length);
+        for (var i = 0; i < length; i++) {
+            set.add(readDoubleBox(byteBuf));
+        }
+        return set;
+    }
 
     //---------------------------------string--------------------------------------
     public static void writeStringArray(ByteBuf byteBuf, String[] array) {
@@ -1127,11 +1308,11 @@ public abstract class ByteBufUtils {
 
     public static Set<String> readStringSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = (Set<String>) CollectionUtils.newFixedSet(length);
+        var set = (Set<String>) CollectionUtils.newFixedSet(length);
         for (var i = 0; i < length; i++) {
-            list.add(readString(byteBuf));
+            set.add(readString(byteBuf));
         }
-        return list;
+        return set;
     }
 
 

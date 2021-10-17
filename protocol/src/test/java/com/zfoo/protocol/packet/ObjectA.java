@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class ObjectA implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1116;
+    public static final transient short PROTOCOL_ID = 102;
 
     private int a;
 

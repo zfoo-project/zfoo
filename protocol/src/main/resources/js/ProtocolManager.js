@@ -14,13 +14,13 @@ ProtocolManager.write = function write(byteBuffer, packet) {
     const protocolId = packet.protocolId();
     byteBuffer.writeShort(protocolId);
     const protocol = ProtocolManager.getProtocol(protocolId);
-    protocol.writeObject(byteBuffer, packet);
+    protocol.write(byteBuffer, packet);
 };
 
 ProtocolManager.read = function read(byteBuffer) {
     const protocolId = byteBuffer.readShort();
     const protocol = ProtocolManager.getProtocol(protocolId);
-    const packet = protocol.readObject(byteBuffer);
+    const packet = protocol.read(byteBuffer);
     return packet;
 };
 

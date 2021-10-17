@@ -21,7 +21,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class SimpleObject implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1163;
+    public static final transient short PROTOCOL_ID = 104;
 
     private int c;
 
