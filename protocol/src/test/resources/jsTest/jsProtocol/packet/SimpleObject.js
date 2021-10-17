@@ -9,22 +9,22 @@ SimpleObject.prototype.protocolId = function() {
     return 104;
 };
 
-SimpleObject.write = function(byteBuffer, packet) {
-    if (byteBuffer.writePacketFlag(packet)) {
+SimpleObject.write = function(buffer, packet) {
+    if (buffer.writePacketFlag(packet)) {
         return;
     }
-    byteBuffer.writeInt(packet.c);
-    byteBuffer.writeBoolean(packet.g);
+    buffer.writeInt(packet.c);
+    buffer.writeBoolean(packet.g);
 };
 
-SimpleObject.read = function(byteBuffer) {
-    if (!byteBuffer.readBoolean()) {
+SimpleObject.read = function(buffer) {
+    if (!buffer.readBoolean()) {
         return null;
     }
     const packet = new SimpleObject();
-    const result0 = byteBuffer.readInt();
+    const result0 = buffer.readInt();
     packet.c = result0;
-    const result1 = byteBuffer.readBoolean(); 
+    const result1 = buffer.readBoolean(); 
     packet.g = result1;
     return packet;
 };

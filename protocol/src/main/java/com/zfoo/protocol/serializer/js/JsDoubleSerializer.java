@@ -31,7 +31,7 @@ public class JsDoubleSerializer implements IJsSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("byteBuffer.writeDouble({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeDouble({});", objectStr)).append(LS);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class JsDoubleSerializer implements IJsSerializer {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("const {} = byteBuffer.readDouble();", result)).append(LS);
+        builder.append(StringUtils.format("const {} = buffer.readDouble();", result)).append(LS);
         return result;
     }
 }

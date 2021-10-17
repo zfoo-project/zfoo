@@ -25,70 +25,70 @@ NormalObject.prototype.protocolId = function() {
     return 101;
 };
 
-NormalObject.write = function(byteBuffer, packet) {
-    if (byteBuffer.writePacketFlag(packet)) {
+NormalObject.write = function(buffer, packet) {
+    if (buffer.writePacketFlag(packet)) {
         return;
     }
-    byteBuffer.writeByte(packet.a);
-    byteBuffer.writeByteArray(packet.aaa);
-    byteBuffer.writeShort(packet.b);
-    byteBuffer.writeInt(packet.c);
-    byteBuffer.writeLong(packet.d);
-    byteBuffer.writeFloat(packet.e);
-    byteBuffer.writeDouble(packet.f);
-    byteBuffer.writeBoolean(packet.g);
-    byteBuffer.writeString(packet.jj);
-    byteBuffer.writePacket(packet.kk, 102);
-    byteBuffer.writeIntArray(packet.l);
-    byteBuffer.writeLongArray(packet.ll);
-    byteBuffer.writePacketArray(packet.lll, 102);
-    byteBuffer.writeStringArray(packet.llll);
-    byteBuffer.writeIntStringMap(packet.m);
-    byteBuffer.writeIntPacketMap(packet.mm, 102);
-    byteBuffer.writeIntArray(packet.s);
-    byteBuffer.writeStringArray(packet.ssss);
+    buffer.writeByte(packet.a);
+    buffer.writeByteArray(packet.aaa);
+    buffer.writeShort(packet.b);
+    buffer.writeInt(packet.c);
+    buffer.writeLong(packet.d);
+    buffer.writeFloat(packet.e);
+    buffer.writeDouble(packet.f);
+    buffer.writeBoolean(packet.g);
+    buffer.writeString(packet.jj);
+    buffer.writePacket(packet.kk, 102);
+    buffer.writeIntArray(packet.l);
+    buffer.writeLongArray(packet.ll);
+    buffer.writePacketArray(packet.lll, 102);
+    buffer.writeStringArray(packet.llll);
+    buffer.writeIntStringMap(packet.m);
+    buffer.writeIntPacketMap(packet.mm, 102);
+    buffer.writeIntArray(packet.s);
+    buffer.writeStringArray(packet.ssss);
 };
 
-NormalObject.read = function(byteBuffer) {
-    if (!byteBuffer.readBoolean()) {
+NormalObject.read = function(buffer) {
+    if (!buffer.readBoolean()) {
         return null;
     }
     const packet = new NormalObject();
-    const result0 = byteBuffer.readByte();
+    const result0 = buffer.readByte();
     packet.a = result0;
-    const array1 = byteBuffer.readByteArray();
+    const array1 = buffer.readByteArray();
     packet.aaa = array1;
-    const result2 = byteBuffer.readShort();
+    const result2 = buffer.readShort();
     packet.b = result2;
-    const result3 = byteBuffer.readInt();
+    const result3 = buffer.readInt();
     packet.c = result3;
-    const result4 = byteBuffer.readLong();
+    const result4 = buffer.readLong();
     packet.d = result4;
-    const result5 = byteBuffer.readFloat();
+    const result5 = buffer.readFloat();
     packet.e = result5;
-    const result6 = byteBuffer.readDouble();
+    const result6 = buffer.readDouble();
     packet.f = result6;
-    const result7 = byteBuffer.readBoolean(); 
+    const result7 = buffer.readBoolean(); 
     packet.g = result7;
-    const result8 = byteBuffer.readString();
+    const result8 = buffer.readString();
     packet.jj = result8;
-    const result9 = byteBuffer.readPacket(102);
+    const result9 = buffer.readPacket(102);
     packet.kk = result9;
-    const list10 = byteBuffer.readIntArray();
+    const list10 = buffer.readIntArray();
     packet.l = list10;
-    const list11 = byteBuffer.readLongArray();
+    const list11 = buffer.readLongArray();
     packet.ll = list11;
-    const list12 = byteBuffer.readPacketArray(102);
+    const list12 = buffer.readPacketArray(102);
     packet.lll = list12;
-    const list13 = byteBuffer.readStringArray();
+    const list13 = buffer.readStringArray();
     packet.llll = list13;
-    const map14 = byteBuffer.readIntStringMap();
+    const map14 = buffer.readIntStringMap();
     packet.m = map14;
-    const map15 = byteBuffer.readIntPacketMap(102);
+    const map15 = buffer.readIntPacketMap(102);
     packet.mm = map15;
-    const set16 = byteBuffer.readIntArray();
+    const set16 = buffer.readIntArray();
     packet.s = set16;
-    const set17 = byteBuffer.readStringArray();
+    const set17 = buffer.readStringArray();
     packet.ssss = set17;
     return packet;
 };

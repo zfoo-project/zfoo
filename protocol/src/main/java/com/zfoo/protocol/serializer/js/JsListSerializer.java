@@ -41,12 +41,12 @@ public class JsListSerializer implements IJsSerializer {
 
         builder.append(StringUtils.format("if ({} === null) {", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append("byteBuffer.writeInt(0);").append(LS);
+        builder.append("buffer.writeInt(0);").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
 
         builder.append("} else {").append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("byteBuffer.writeInt({}.length);", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeInt({}.length);", objectStr)).append(LS);
 
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
         GenerateProtocolFile.addTab(builder, deep + 1);
@@ -74,7 +74,7 @@ public class JsListSerializer implements IJsSerializer {
 
         GenerateProtocolFile.addTab(builder, deep);
         String size = "size" + GenerateProtocolFile.index.getAndIncrement();
-        builder.append(StringUtils.format("const {} = byteBuffer.readInt();", size)).append(LS);
+        builder.append(StringUtils.format("const {} = buffer.readInt();", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);

@@ -48,7 +48,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("{}.writeBooleanSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("byteBuffer.writeBooleanArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBooleanArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -60,7 +60,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("{}.writeByteSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("byteBuffer.writeByteArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeByteArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -72,7 +72,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("{}.writeShortSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("byteBuffer.writeShortArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeShortArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -84,7 +84,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("{}.writeIntSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("byteBuffer.writeIntArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeIntArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -96,7 +96,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("{}.writeLongSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("byteBuffer.writeLongArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeLongArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -108,7 +108,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("{}.writeFloatSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("byteBuffer.writeFloatArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeFloatArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -120,7 +120,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("{}.writeDoubleSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("byteBuffer.writeDoubleArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeDoubleArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -132,7 +132,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("{}.writeStringSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("byteBuffer.writeStringArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeStringArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -147,7 +147,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writePacketSet($1, (Set){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
                             break;
                         case JavaScript:
-                            builder.append(StringUtils.format("byteBuffer.writePacketArray({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writePacketArray({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
@@ -173,7 +173,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("Set {} = {}.readBooleanSet($1);", set, EnhanceUtils.byteBufUtils));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = byteBuffer.readBooleanArray();", set)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readBooleanArray();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -185,7 +185,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("Set {} = {}.readByteSet($1);", set, EnhanceUtils.byteBufUtils));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = byteBuffer.readByteArray();", set)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readByteArray();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -197,7 +197,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("Set {} = {}.readShortSet($1);", set, EnhanceUtils.byteBufUtils));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = byteBuffer.readShortArray();", set)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readShortArray();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -209,7 +209,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("Set {} = {}.readIntSet($1);", set, EnhanceUtils.byteBufUtils));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = byteBuffer.readIntArray();", set)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readIntArray();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -221,7 +221,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("Set {} = {}.readLongSet($1);", set, EnhanceUtils.byteBufUtils));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = byteBuffer.readLongArray();", set)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readLongArray();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -233,7 +233,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("Set {} = {}.readFloatSet($1);", set, EnhanceUtils.byteBufUtils));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = byteBuffer.readFloatArray();", set)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readFloatArray();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -245,7 +245,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("Set {} = {}.readDoubleSet($1);", set, EnhanceUtils.byteBufUtils));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = byteBuffer.readDoubleArray();", set)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readDoubleArray();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -257,7 +257,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("Set {} = {}.readStringSet($1);", set, EnhanceUtils.byteBufUtils));
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = byteBuffer.readStringArray();", set)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readStringArray();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -271,7 +271,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("Set {} = {}.readPacketSet($1, {});", set, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
                             break;
                         case JavaScript:
-                            builder.append(StringUtils.format("const {} = byteBuffer.readPacketArray({});", set, objectProtocolField.getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("const {} = buffer.readPacketArray({});", set, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;

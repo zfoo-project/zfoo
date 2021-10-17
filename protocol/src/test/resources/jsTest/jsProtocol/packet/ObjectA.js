@@ -10,25 +10,25 @@ ObjectA.prototype.protocolId = function() {
     return 102;
 };
 
-ObjectA.write = function(byteBuffer, packet) {
-    if (byteBuffer.writePacketFlag(packet)) {
+ObjectA.write = function(buffer, packet) {
+    if (buffer.writePacketFlag(packet)) {
         return;
     }
-    byteBuffer.writeInt(packet.a);
-    byteBuffer.writeIntStringMap(packet.m);
-    byteBuffer.writePacket(packet.objectB, 103);
+    buffer.writeInt(packet.a);
+    buffer.writeIntStringMap(packet.m);
+    buffer.writePacket(packet.objectB, 103);
 };
 
-ObjectA.read = function(byteBuffer) {
-    if (!byteBuffer.readBoolean()) {
+ObjectA.read = function(buffer) {
+    if (!buffer.readBoolean()) {
         return null;
     }
     const packet = new ObjectA();
-    const result0 = byteBuffer.readInt();
+    const result0 = buffer.readInt();
     packet.a = result0;
-    const map1 = byteBuffer.readIntStringMap();
+    const map1 = buffer.readIntStringMap();
     packet.m = map1;
-    const result2 = byteBuffer.readPacket(103);
+    const result2 = buffer.readPacket(103);
     packet.objectB = result2;
     return packet;
 };

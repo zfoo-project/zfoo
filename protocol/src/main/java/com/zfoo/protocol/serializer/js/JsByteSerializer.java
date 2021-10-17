@@ -31,7 +31,7 @@ public class JsByteSerializer implements IJsSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("byteBuffer.writeByte({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeByte({});", objectStr)).append(LS);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class JsByteSerializer implements IJsSerializer {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("const {} = byteBuffer.readByte();", result)).append(LS);
+        builder.append(StringUtils.format("const {} = buffer.readByte();", result)).append(LS);
         return result;
     }
 }

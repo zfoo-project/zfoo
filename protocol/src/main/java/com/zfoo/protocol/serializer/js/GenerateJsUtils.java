@@ -210,9 +210,9 @@ public abstract class GenerateJsUtils {
         var protocolClazzName = registration.getConstructor().getDeclaringClass().getSimpleName();
 
         var jsBuilder = new StringBuilder();
-        jsBuilder.append(StringUtils.format("{}.write = function(byteBuffer, packet) {", protocolClazzName)).append(LS);
+        jsBuilder.append(StringUtils.format("{}.write = function(buffer, packet) {", protocolClazzName)).append(LS);
 
-        jsBuilder.append(TAB).append("if (byteBuffer.writePacketFlag(packet)) {").append(LS);
+        jsBuilder.append(TAB).append("if (buffer.writePacketFlag(packet)) {").append(LS);
         jsBuilder.append(TAB + TAB).append("return;").append(LS);
         jsBuilder.append(TAB).append("}").append(LS);
 
@@ -234,8 +234,8 @@ public abstract class GenerateJsUtils {
         var protocolClazzName = registration.getConstructor().getDeclaringClass().getSimpleName();
 
         var jsBuilder = new StringBuilder();
-        jsBuilder.append(StringUtils.format("{}.read = function(byteBuffer) {", protocolClazzName)).append(LS);
-        jsBuilder.append(TAB).append("if (!byteBuffer.readBoolean()) {").append(LS);
+        jsBuilder.append(StringUtils.format("{}.read = function(buffer) {", protocolClazzName)).append(LS);
+        jsBuilder.append(TAB).append("if (!buffer.readBoolean()) {").append(LS);
         jsBuilder.append(TAB + TAB).append("return null;").append(LS);
         jsBuilder.append(TAB).append("}").append(LS);
 

@@ -30,14 +30,14 @@ public class JsCharSerializer implements IJsSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("byteBuffer.writeChar({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeChar({});", objectStr)).append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("const {} = byteBuffer.readChar();", result)).append(LS);
+        builder.append(StringUtils.format("const {} = buffer.readChar();", result)).append(LS);
         return result;
     }
 }
