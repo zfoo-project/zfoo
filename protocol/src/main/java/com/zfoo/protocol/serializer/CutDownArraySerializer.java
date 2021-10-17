@@ -52,6 +52,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeBooleanArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteBooleanArray({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -63,6 +66,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeBooleanArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteBooleanArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -76,6 +82,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteByteArray({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -87,6 +96,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteByteArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -100,6 +112,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteShortArray({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -111,6 +126,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteShortArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -124,6 +142,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteIntArray({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -135,6 +156,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteIntArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -148,6 +172,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteLongArray({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -159,6 +186,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteLongArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -172,6 +202,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteFloatArray({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -183,6 +216,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteFloatArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -196,6 +232,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteDoubleArray({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -207,6 +246,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteDoubleArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -220,6 +262,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeStringArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteStringArray({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -232,6 +277,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeCharArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteCharArray({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -243,6 +291,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeCharArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteCharArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -257,6 +308,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                             break;
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        case CSharp:
+                            builder.append(StringUtils.format("buffer.WritePacketArray<{}>({}, {});", getArrayClassSimpleName(arrayField), objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
@@ -486,9 +540,12 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 if (arrayField.getArrayElementRegistration() instanceof ObjectProtocolField) {
                     var objectProtocolField = (ObjectProtocolField) arrayField.getArrayElementRegistration();
                     switch (language) {
-                        // Java不支持泛型的数组初始化，这边就不做任何操作
+                        // Java不支持泛型的数组初始化，这里不做任何操作
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readPacketArray({});", array, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        case CSharp:
+                            builder.append(StringUtils.format("var {} = buffer.ReadPacketArray<{}>({});", array, getArrayClassSimpleName(arrayField), objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
@@ -509,6 +566,10 @@ public class CutDownArraySerializer implements ICutDownSerializer {
     public String getArrayClassName(ArrayField arrayField) {
         // 去掉包装类型的前缀java.lang
         return arrayField.getField().getType().getComponentType().getCanonicalName().replaceFirst("java.lang.", StringUtils.EMPTY);
+    }
+
+    public String getArrayClassSimpleName(ArrayField arrayField) {
+        return arrayField.getField().getType().getComponentType().getSimpleName();
     }
 
 }

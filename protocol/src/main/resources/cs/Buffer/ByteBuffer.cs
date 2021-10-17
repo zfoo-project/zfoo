@@ -557,5 +557,636 @@ namespace CsProtocol.Buffer
 
             return Encoding.UTF8.GetString(value, 0, value.Length);
         }
+
+        public bool WritePacketFlag(IPacket packet)
+        {
+            bool flag = packet == null;
+            WriteBool(!flag);
+            return flag;
+        }
+        
+        public void WriteBooleanArray(bool[] array)
+        {
+            if ((array == null) || (array.Length == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(array.Length);
+                int length = array.Length;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteBool(array[index]);
+                }
+            }
+        }
+        
+        public bool[] ReadBooleanArray()
+        {
+            int size = ReadInt();
+            bool[] array = new bool[size];
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    array[index] = ReadBool();
+                }
+            }
+            return array;
+        }
+
+        public void WriteByteArray(byte[] array)
+        {
+            if ((array == null) || (array.Length == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(array.Length);
+                int length = array.Length;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteByte(array[index]);
+                }
+            }
+        }
+
+        public byte[] ReadByteArray()
+        {
+            int size = ReadInt();
+            byte[] array = new byte[size];
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    array[index] = ReadByte();
+                }
+            }
+            return array;
+        }
+
+        public void WriteShortArray(short[] array)
+        {
+            if ((array == null) || (array.Length == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(array.Length);
+                int length = array.Length;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteShort(array[index]);
+                }
+            }
+        }
+        
+        public short[] ReadShortArray()
+        {
+            int size = ReadInt();
+            short[] array = new short[size];
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    array[index] = ReadShort();
+                }
+            }
+            return array;
+        }
+        
+        public void WriteIntArray(int[] array)
+        {
+            if ((array == null) || (array.Length == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(array.Length);
+                int length = array.Length;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteInt(array[index]);
+                }
+            }
+        }
+        
+        public int[] ReadIntArray()
+        {
+            int size = ReadInt();
+            int[] array = new int[size];
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    array[index] = ReadInt();
+                }
+            }
+            return array;
+        }
+        
+        public void WriteLongArray(long[] array)
+        {
+            if ((array == null) || (array.Length == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(array.Length);
+                int length = array.Length;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteLong(array[index]);
+                }
+            }
+        }
+        
+        public long[] ReadLongArray()
+        {
+            int size = ReadInt();
+            long[] array = new long[size];
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    array[index] = ReadLong();
+                }
+            }
+            return array;
+        }
+        
+        public void WriteFloatArray(float[] array)
+        {
+            if ((array == null) || (array.Length == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(array.Length);
+                int length = array.Length;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteFloat(array[index]);
+                }
+            }
+        }
+        
+        public float[] ReadFloatArray()
+        {
+            int size = ReadInt();
+            float[] array = new float[size];
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    array[index] = ReadLong();
+                }
+            }
+            return array;
+        }
+        
+        public void WriteDoubleArray(double[] array)
+        {
+            if ((array == null) || (array.Length == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(array.Length);
+                int length = array.Length;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteDouble(array[index]);
+                }
+            }
+        }
+        
+        public double[] ReadDoubleArray()
+        {
+            int size = ReadInt();
+            double[] array = new double[size];
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    array[index] = ReadLong();
+                }
+            }
+            return array;
+        }
+        
+        public void WriteCharArray(char[] array)
+        {
+            if ((array == null) || (array.Length == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(array.Length);
+                int length = array.Length;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteChar(array[index]);
+                }
+            }
+        }
+        
+        public char[] ReadCharArray()
+        {
+            int size = ReadInt();
+            char[] array = new char[size];
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    array[index] = ReadChar();
+                }
+            }
+            return array;
+        }
+        
+        public void WriteStringArray(string[] array)
+        {
+            if ((array == null) || (array.Length == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(array.Length);
+                int length = array.Length;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteString(array[index]);
+                }
+            }
+        }
+        
+        public string[] ReadStringArray()
+        {
+            int size = ReadInt();
+            string[] array = new string[size];
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    array[index] = ReadString();
+                }
+            }
+            return array;
+        }
+        
+        public void WritePacketArray<T>(T[] array, short protocolId)
+        {
+            if ((array == null) || (array.Length == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                WriteInt(array.Length);
+                int length = array.Length;
+                for (int index = 0; index < length; index++)
+                {
+                    protocolRegistration.Write(this, (IPacket) array[index]);
+                }
+            }
+        }
+        
+        public T[] ReadPacketArray<T>(short protocolId)
+        {
+            int size = ReadInt();
+            T[] array = new T[size];
+            if (size > 0)
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                for (int index = 0; index < size; index++)
+                {
+                    array[index] = (T) protocolRegistration.Read(this);
+                }
+            }
+            return array;
+        }
+        
+        public void WriteBooleanList(List<bool> list)
+        {
+            if ((list == null) || (list.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(list.Count);
+                int length = list.Count;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteBool(list[index]);
+                }
+            }
+        }
+        
+        public List<bool> ReadBooleanList()
+        {
+            int size = ReadInt();
+            List<bool> list = new List<bool>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    list.Add(ReadBool());
+                }
+            }
+            return list;
+        }
+        
+        public void WriteByteList(List<byte> list)
+        {
+            if ((list == null) || (list.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(list.Count);
+                int length = list.Count;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteByte(list[index]);
+                }
+            }
+        }
+        
+        public List<byte> ReadByteList()
+        {
+            int size = ReadInt();
+            List<byte> list = new List<byte>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    list.Add(ReadByte());
+                }
+            }
+            return list;
+        }
+        
+        public void WriteShortList(List<short> list)
+        {
+            if ((list == null) || (list.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(list.Count);
+                int length = list.Count;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteShort(list[index]);
+                }
+            }
+        }
+        
+        public List<short> ReadShortList()
+        {
+            int size = ReadInt();
+            List<short> list = new List<short>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    list.Add(ReadShort());
+                }
+            }
+            return list;
+        }
+        
+        public void WriteIntList(List<int> list)
+        {
+            if ((list == null) || (list.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(list.Count);
+                int length = list.Count;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteInt(list[index]);
+                }
+            }
+        }
+        
+        public List<int> ReadIntList()
+        {
+            int size = ReadInt();
+            List<int> list = new List<int>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    list.Add(ReadInt());
+                }
+            }
+            return list;
+        }
+
+        public void WriteLongList(List<long> list)
+        {
+            if ((list == null) || (list.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(list.Count);
+                int length = list.Count;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteLong(list[index]);
+                }
+            }
+        }
+
+        public List<long> ReadLongList()
+        {
+            int size = ReadInt();
+            List<long> list = new List<long>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    list.Add(ReadLong());
+                }
+            }
+            return list;
+        }
+
+        public void WriteFloatList(List<float> list)
+        {
+            if ((list == null) || (list.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(list.Count);
+                int length = list.Count;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteFloat(list[index]);
+                }
+            }
+        }
+        
+        public List<float> ReadFloatList()
+        {
+            int size = ReadInt();
+            List<float> list = new List<float>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    list.Add(ReadFloat());
+                }
+            }
+            return list;
+        }
+        
+        public void WriteDoubleList(List<double> list)
+        {
+            if ((list == null) || (list.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(list.Count);
+                int length = list.Count;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteDouble(list[index]);
+                }
+            }
+        }
+        
+        public List<double> ReadDoubleList()
+        {
+            int size = ReadInt();
+            List<double> list = new List<double>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    list.Add(ReadDouble());
+                }
+            }
+            return list;
+        }
+        
+        public void WriteCharList(List<char> list)
+        {
+            if ((list == null) || (list.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(list.Count);
+                int length = list.Count;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteDouble(list[index]);
+                }
+            }
+        }
+        
+        public List<char> ReadCharList()
+        {
+            int size = ReadInt();
+            List<char> list = new List<char>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    list.Add(ReadChar());
+                }
+            }
+            return list;
+        }
+        
+        public void WriteStringList(List<string> list)
+        {
+            if ((list == null) || (list.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(list.Count);
+                int length = list.Count;
+                for (int index = 0; index < length; index++)
+                {
+                    WriteString(list[index]);
+                }
+            }
+        }
+        
+        public List<string> ReadStringList()
+        {
+            int size = ReadInt();
+            List<string> list = new List<string>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    list.Add(ReadString());
+                }
+            }
+            return list;
+        }
+        
+        public void WritePacketList<T>(List<T> list, short protocolId)
+        {
+            if ((list == null) || (list.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                WriteInt(list.Count);
+                int length = list.Count;
+                for (int index = 0; index < length; index++)
+                {
+                    protocolRegistration.Write(this, (IPacket) list[index]);
+                }
+            }
+        }
+        
+        public List<T> ReadPacketList<T>(short protocolId)
+        {
+            int size = ReadInt();
+            List<T> list = new List<T>(size);
+            if (size > 0)
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                for (int index = 0; index < size; index++)
+                {
+                    list.Add((T) protocolRegistration.Read(this));
+                }
+            }
+            return list;
+        }
     }
 }

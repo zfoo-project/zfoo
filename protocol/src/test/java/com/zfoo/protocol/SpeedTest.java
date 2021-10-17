@@ -324,8 +324,7 @@ public class SpeedTest {
 
     static {
         var op = GenerateOperation.NO_OPERATION;
-        op.getGenerateLanguages().add(CodeLanguage.JavaScript);
-        op.setFoldProtocol(true);
+//        op.getGenerateLanguages().add(CodeLanguage.JavaScript);
         // zfoo协议注册
         ProtocolManager.initProtocol(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, ObjectA.class, ObjectB.class), op);
 

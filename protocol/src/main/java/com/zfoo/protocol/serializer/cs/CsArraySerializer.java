@@ -16,6 +16,8 @@ package com.zfoo.protocol.serializer.cs;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
+import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.CutDownArraySerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -30,9 +32,13 @@ public class CsArraySerializer implements ICsSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
+        GenerateProtocolFile.addTab(builder, deep);
+        if (CutDownArraySerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.CSharp)) {
+            return;
+        }
+
         ArrayField arrayField = (ArrayField) fieldRegistration;
 
-        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if (({} == null) || ({}.Length == 0))", objectStr, objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
@@ -72,6 +78,13 @@ public class CsArraySerializer implements ICsSerializer {
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
+        GenerateProtocolFile.addTab(builder, deep);
+        var cutDown = CutDownArraySerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.CSharp);
+        if (cutDown != null) {
+            return cutDown;
+        }
+
+
         var arrayField = (ArrayField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
@@ -79,7 +92,6 @@ public class CsArraySerializer implements ICsSerializer {
 
         var i = "index" + GenerateProtocolFile.index.getAndIncrement();
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();
-        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("int {} = buffer.ReadInt();", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);

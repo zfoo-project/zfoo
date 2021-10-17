@@ -20,6 +20,7 @@ import com.zfoo.protocol.registration.field.ObjectProtocolField;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 
@@ -49,6 +50,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeBooleanArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteBooleanList({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -60,6 +64,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteByteList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -73,6 +80,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteShortList({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -85,6 +95,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteIntList({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -96,6 +109,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteLongList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -110,6 +126,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteFloatList({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -123,6 +142,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({});", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteDoubleList({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -135,6 +157,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("buffer.writeStringArray({});", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteStringList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -150,6 +175,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             break;
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        case CSharp:
+                            builder.append(StringUtils.format("buffer.WritePacketList<{}>({}, {});", getListClassSimpleName(listField), objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
@@ -177,6 +205,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("const {} = buffer.readBooleanArray();", list)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanList();", list)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -188,6 +219,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("const {} = buffer.readByteArray();", list)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadByteList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -201,6 +235,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("const {} = buffer.readShortArray();", list)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadShortList();", list)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -212,6 +249,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("const {} = buffer.readIntArray();", list)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadIntList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -225,6 +265,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("const {} = buffer.readLongArray();", list)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadLongList();", list)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -236,6 +279,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("const {} = buffer.readFloatArray();", list)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadFloatList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -249,6 +295,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case JavaScript:
                         builder.append(StringUtils.format("const {} = buffer.readDoubleArray();", list)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadDoubleList();", list)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -260,6 +309,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case JavaScript:
                         builder.append(StringUtils.format("const {} = buffer.readStringArray();", list)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadStringList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -274,6 +326,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             break;
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readPacketArray({});", list, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        case CSharp:
+                            builder.append(StringUtils.format("var {} = buffer.ReadPacketList<{}>({});", list, getListClassSimpleName(listField), objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
@@ -291,4 +346,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
             return null;
         }
     }
+
+    public String getListClassSimpleName(ListField listField) {
+        return ((Class<?>) ((ParameterizedType) listField.getType()).getActualTypeArguments()[0]).getSimpleName();
+    }
+
 }

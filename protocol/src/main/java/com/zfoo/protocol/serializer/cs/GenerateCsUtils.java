@@ -325,12 +325,10 @@ public abstract class GenerateCsUtils {
         var csBuilder = new StringBuilder();
         csBuilder.append(TAB + TAB).append("public void Write(ByteBuffer buffer, IPacket packet)").append(LS);
         csBuilder.append(TAB + TAB).append("{").append(LS);
-        csBuilder.append(TAB + TAB + TAB).append("if (packet == null)").append(LS);
+        csBuilder.append(TAB + TAB + TAB).append("if (buffer.WritePacketFlag(packet))").append(LS);
         csBuilder.append(TAB + TAB + TAB).append("{").append(LS);
-        csBuilder.append(TAB + TAB + TAB + TAB).append("buffer.WriteBool(false);").append(LS);
         csBuilder.append(TAB + TAB + TAB + TAB).append("return;").append(LS);
         csBuilder.append(TAB + TAB + TAB + "}").append(LS);
-        csBuilder.append(TAB + TAB + TAB).append("buffer.WriteBool(true);").append(LS);
 
         csBuilder.append(TAB + TAB + TAB)
                 .append(StringUtils.format("{} message = ({}) packet;", protocolClazzName, protocolClazzName))
