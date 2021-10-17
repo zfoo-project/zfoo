@@ -16,6 +16,7 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
+import com.zfoo.protocol.registration.field.ObjectProtocolField;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -160,6 +161,14 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 }
                 break;
             default:
+                if (arrayField.getArrayElementRegistration() instanceof ObjectProtocolField) {
+                    var objectProtocolField = (ObjectProtocolField) arrayField.getArrayElementRegistration();
+                    switch (language) {
+                        case Enhance:
+                            builder.append(StringUtils.format("{}.writePacketArray($1, {}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId())));
+                            return true;
+                    }
+                }
         }
 
         return false;
@@ -293,6 +302,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 }
                 break;
             default:
+                // Java不支持泛型的数组初始化，这边就不做任何操作
         }
 
         GenerateProtocolFile.index.getAndDecrement();

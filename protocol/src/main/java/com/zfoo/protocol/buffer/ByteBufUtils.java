@@ -1176,4 +1176,15 @@ public abstract class ByteBufUtils {
         return chars;
     }
 
+    public static <T extends IPacket> void writePacketArray(ByteBuf byteBuf, T[] array, IProtocolRegistration protocolRegistration) {
+        if (array == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        writeInt(byteBuf, array.length);
+        for (var value : array) {
+            protocolRegistration.write(byteBuf, value);
+        }
+    }
+
 }
