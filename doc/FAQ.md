@@ -15,3 +15,7 @@
 - 然interface写同步rpc比较方便，不适合异步的写法。现在流行异步调用链的写法，基于interface有点过时了
 - 并不是所有编程语言都有interface的，你用了interface的话其它编程语言就没法用了，就无法跨平台了
 - 基于packet的容易扩展，可以轻易跨平台
+
+#### 接下来的计划
+
+- 参看一下akka的actor实现，进一步优化net的线程模型，统一异步回调的argument参数

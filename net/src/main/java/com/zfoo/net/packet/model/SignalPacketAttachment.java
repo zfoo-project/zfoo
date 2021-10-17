@@ -37,7 +37,7 @@ public class SignalPacketAttachment implements IPacketAttachment {
     private int packetId = ATOMIC_PACKET_ID.incrementAndGet();
 
     /**
-     * 用来在TaskManage中计算一致性hash的参数
+     * 用来在TaskBus中计算一致性hash的参数
      */
     private int executorConsistentHash = -1;
 

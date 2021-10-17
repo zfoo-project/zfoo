@@ -24,7 +24,7 @@ public class NoAnswerAttachment implements IPacketAttachment {
     public static final transient short PROTOCOL_ID = 4;
 
     /**
-     * 用来在TaskManage中计算一致性hash的参数
+     * 用来在TaskBus中计算一致性hash的参数
      */
     private int executorConsistentHash;
 

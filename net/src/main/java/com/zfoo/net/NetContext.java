@@ -132,7 +132,7 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
         AbstractClient.shutdown();
         AbstractServer.shutdownAllServers();
 
-        // 关闭TaskManager
+        // 关闭TaskBus
         try {
             Field field = TaskBus.class.getDeclaredField("executors");
             ReflectionUtils.makeAccessible(field);
