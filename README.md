@@ -37,7 +37,8 @@
 - 事件总线 [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
 - 时间任务调度 [scheduler](scheduler/README.md)
 - 内置在程序里的**轻量级cpu，内存，硬盘，网络监控，** 无需代码和额外工具，解放运维生产力 [monitor](monitor/src/test/java/com/zfoo/monitor/ApplicationTest.java)
-- 平台支持 **Godot，Unity，Cocos，** 网络通信协议支持**Java Javascript C# Lua GDScript**，不依赖任何第三方库和插件
+- 支持 **Godot，Unity，Cocos，Webgl**，网络通信协议支持 tcp udp websocket http
+- 语言支持**Java Javascript C# Lua GDScript**，protocol协议文件生成不依赖任何第三方库和插件
 
 Ⅱ. 背景和适用项目
 ---------------
