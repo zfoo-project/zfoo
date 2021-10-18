@@ -50,20 +50,20 @@ namespace CsProtocol
             return protocol;
         }
 
-        public static void Write(ByteBuffer byteBuffer, IPacket packet)
+        public static void Write(ByteBuffer buffer, IPacket packet)
         {
             var protocolId = packet.ProtocolId();
             // 写入协议号
-            byteBuffer.WriteShort(protocolId);
+            buffer.WriteShort(protocolId);
 
             // 写入包体
-            GetProtocol(protocolId).Write(byteBuffer, packet);
+            GetProtocol(protocolId).Write(buffer, packet);
         }
 
-        public static IPacket Read(ByteBuffer byteBuffer)
+        public static IPacket Read(ByteBuffer buffer)
         {
-            var protocolId = byteBuffer.ReadShort();
-            return GetProtocol(protocolId).Read(byteBuffer);
+            var protocolId = buffer.ReadShort();
+            return GetProtocol(protocolId).Read(buffer);
         }
     }
 }
