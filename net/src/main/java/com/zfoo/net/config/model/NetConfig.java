@@ -36,6 +36,7 @@ public class NetConfig {
     private boolean generateJsProtocol;
     private boolean generateCsProtocol;
     private boolean generateLuaProtocol;
+    private boolean generateGdProtocol;
 
     private RegistryConfig registry;
     private MonitorConfig monitor;
@@ -136,6 +137,14 @@ public class NetConfig {
         this.consumer = consumer;
     }
 
+    public boolean isGenerateGdProtocol() {
+        return generateGdProtocol;
+    }
+
+    public void setGenerateGdProtocol(boolean generateGdProtocol) {
+        this.generateGdProtocol = generateGdProtocol;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -145,8 +154,7 @@ public class NetConfig {
             return false;
         }
         NetConfig netConfig = (NetConfig) o;
-        return generateJsProtocol == netConfig.generateJsProtocol &&
-                Objects.equals(id, netConfig.id) &&
+        return Objects.equals(id, netConfig.id) &&
                 Objects.equals(protocolLocation, netConfig.protocolLocation) &&
                 Objects.equals(registry, netConfig.registry) &&
                 Objects.equals(monitor, netConfig.monitor) &&
@@ -156,6 +164,6 @@ public class NetConfig {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, protocolLocation, generateJsProtocol, registry, monitor, provider, consumer);
+        return Objects.hash(id, protocolLocation, registry, monitor, provider, consumer);
     }
 }

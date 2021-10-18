@@ -66,7 +66,7 @@ public class PacketService implements IPacketService {
 
     public static final String NET_COMMON_MODULE = "common";
 
-    private Predicate<IProtocolRegistration> netGenerateProtocolFilter = registration
+    private final Predicate<IProtocolRegistration> netGenerateProtocolFilter = registration
             -> ProtocolManager.moduleByModuleId(registration.module()).getName().matches(NET_COMMON_MODULE)
             || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_REQUEST_SUFFIX)
             || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_RESPONSE_SUFFIX)
@@ -87,6 +87,7 @@ public class PacketService implements IPacketService {
         var generateJsProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateJsProtocol();
         var generateCsharpProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateCsProtocol();
         var generateLuaProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateLuaProtocol();
+        var generateGdProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateGdProtocol();
         var generateOperation = new GenerateOperation();
         generateOperation.setFoldProtocol(foldProtocol);
         generateOperation.setProtocolParam(protocolParam);
@@ -98,6 +99,9 @@ public class PacketService implements IPacketService {
         }
         if (generateLuaProtocol) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.Lua);
+        }
+        if (generateGdProtocol) {
+            generateOperation.getGenerateLanguages().add(CodeLanguage.GdScript);
         }
 
         // 设置生成协议的过滤器

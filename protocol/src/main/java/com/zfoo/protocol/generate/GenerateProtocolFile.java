@@ -18,6 +18,7 @@ import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.cs.GenerateCsUtils;
+import com.zfoo.protocol.serializer.gd.GenerateGdUtils;
 import com.zfoo.protocol.serializer.js.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
 
@@ -114,6 +115,13 @@ public abstract class GenerateProtocolFile {
             GenerateLuaUtils.init();
             GenerateLuaUtils.createProtocolManager(allSortedGenerateProtocols);
             allSortedGenerateProtocols.forEach(it -> GenerateLuaUtils.createLuaProtocolFile((ProtocolRegistration) it));
+        }
+
+        // 生成GdScript协议
+        if (generateLanguages.contains(CodeLanguage.GdScript)) {
+            GenerateGdUtils.init();
+            GenerateGdUtils.createProtocolManager(allSortedGenerateProtocols);
+            allSortedGenerateProtocols.forEach(it -> GenerateGdUtils.createGdProtocolFile((ProtocolRegistration) it));
         }
 
         // 预留参数，以后可能会用，比如给Lua修改一个后缀名称

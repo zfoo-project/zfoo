@@ -13,12 +13,10 @@
 
 package com.zfoo.protocol.serializer.js;
 
-import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
-import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.reflect.*;
@@ -182,8 +180,7 @@ public abstract class GenerateJsUtils {
 
             jsBuilder.append(TAB)
                     .append(StringUtils.format("this.{} = {};", propertyName, propertyName))
-                    // 生成类型的注释
-                    .append(" // ").append(field.getGenericType().getTypeName())
+                    .append(" // ").append(field.getGenericType().getTypeName())// 生成类型的注释
                     .append(LS);
         }
 

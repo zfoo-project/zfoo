@@ -23,6 +23,7 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.field.*;
 import com.zfoo.protocol.serializer.cs.GenerateCsUtils;
+import com.zfoo.protocol.serializer.gd.GenerateGdUtils;
 import com.zfoo.protocol.serializer.js.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
 import com.zfoo.protocol.serializer.reflect.*;
@@ -58,7 +59,7 @@ public class ProtocolAnalysis {
     private static Map<Class<?>, ISerializer> baseSerializerMap = new HashMap<>();
 
     // 临时变量，启动完成就会销毁，协议Id对应的Class类
-    private static Map<Short, Class<?>> protocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
+    private static final Map<Short, Class<?>> protocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
     // 临时变量，启动完成就会销毁，协议下包含的子协议，只包含一层子协议
     private static Map<Short, Set<Short>> subProtocolIdMap = new HashMap<>(MAX_PROTOCOL_NUM);
@@ -224,6 +225,7 @@ public class ProtocolAnalysis {
         GenerateCsUtils.clear();
         GenerateJsUtils.clear();
         GenerateLuaUtils.clear();
+        GenerateGdUtils.clear();
 
         EnhanceUtils.clear();
     }

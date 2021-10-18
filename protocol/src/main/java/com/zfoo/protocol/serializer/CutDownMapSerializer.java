@@ -59,6 +59,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeIntIntMap({});", objectStr)).append(LS);
                             return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeIntIntMap({})", objectStr)).append(LS);
+                            return true;
                     }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
                     switch (language) {
@@ -67,6 +70,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeIntLongMap({});", objectStr)).append(LS);
+                            return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeIntLongMap({})", objectStr)).append(LS);
                             return true;
                     }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
@@ -77,6 +83,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeIntStringMap({});", objectStr)).append(LS);
                             return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeIntStringMap({})", objectStr)).append(LS);
+                            return true;
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     switch (language) {
@@ -85,6 +94,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                     }
                 }
@@ -97,6 +109,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeLongIntMap({});", objectStr)).append(LS);
                             return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeLongIntMap({})", objectStr)).append(LS);
+                            return true;
                     }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
                     switch (language) {
@@ -105,6 +120,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeLongLongMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeLongLongMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                     }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
@@ -115,6 +133,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeLongStringMap({});", objectStr)).append(LS);
                             return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeLongStringMap({})", objectStr)).append(LS);
+                            return true;
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     switch (language) {
@@ -123,6 +144,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                     }
                 }
@@ -135,6 +159,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeStringIntMap({});", objectStr)).append(LS);
                             return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeStringIntMap({})", objectStr)).append(LS);
+                            return true;
                     }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
                     switch (language) {
@@ -143,6 +170,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeStringLongMap({});", objectStr)).append(LS);
+                            return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeStringLongMap({})", objectStr)).append(LS);
                             return true;
                     }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
@@ -153,6 +183,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeStringStringMap({});", objectStr)).append(LS);
                             return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeStringStringMap({})", objectStr)).append(LS);
+                            return true;
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     switch (language) {
@@ -161,6 +194,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case JavaScript:
                             builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return true;
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                     }
                 }
@@ -189,6 +225,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntIntMap();", map)).append(LS);
                             return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readIntIntMap()", map)).append(LS);
+                            return map;
                     }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
                     switch (language) {
@@ -197,6 +236,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntLongMap();", map)).append(LS);
+                            return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readIntLongMap()", map)).append(LS);
                             return map;
                     }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
@@ -207,6 +249,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntStringMap();", map)).append(LS);
                             return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readIntStringMap()", map)).append(LS);
+                            return map;
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     switch (language) {
@@ -215,6 +260,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntPacketMap({});", map, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readIntPacketMap({})", map, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return map;
                     }
                 }
@@ -227,6 +275,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongIntMap();", map)).append(LS);
                             return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readLongIntMap()", map)).append(LS);
+                            return map;
                     }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
                     switch (language) {
@@ -235,6 +286,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongLongMap();", map)).append(LS);
+                            return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readLongLongMap()", map)).append(LS);
                             return map;
                     }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
@@ -245,6 +299,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongStringMap();", map)).append(LS);
                             return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readLongStringMap()", map)).append(LS);
+                            return map;
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     switch (language) {
@@ -253,6 +310,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongPacketMap({});", map, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readLongPacketMap({})", map, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return map;
                     }
                 }
@@ -265,6 +325,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringIntMap();", map)).append(LS);
                             return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readStringIntMap()", map)).append(LS);
+                            return map;
                     }
                 } else if (valueSerializer == LongSerializer.INSTANCE) {
                     switch (language) {
@@ -273,6 +336,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringLongMap();", map)).append(LS);
+                            return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readStringLongMap()", map)).append(LS);
                             return map;
                     }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
@@ -283,6 +349,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringStringMap();", map)).append(LS);
                             return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readStringStringMap()", map)).append(LS);
+                            return map;
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     switch (language) {
@@ -291,6 +360,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case JavaScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringPacketMap({});", map, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            return map;
+                        case GdScript:
+                            builder.append(StringUtils.format("var {} = buffer.readStringPacketMap({})", map, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return map;
                     }
                 }
