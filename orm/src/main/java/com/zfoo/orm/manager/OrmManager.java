@@ -63,12 +63,17 @@ import java.util.stream.Collectors;
  */
 public class OrmManager implements IOrmManager {
 
-    private static final Map<Class<? extends IEntity<?>>, IEntityCaches<?, ?>> entityCachesMap = new HashMap<>();
-
     private OrmConfig ormConfig;
 
     private MongoClient mongoClient;
     private MongoDatabase mongodbDatabase;
+
+    /**
+     * 全部的Entity定义，key为对应的class，value为当前的Entity是否在当前项目中以缓存的形式使用
+     */
+    private final Map<Class<?>, Boolean> allEntityCachesUsableMap = new HashMap<>();
+
+    private final Map<Class<? extends IEntity<?>>, IEntityCaches<?, ?>> entityCachesMap = new HashMap<>();
 
     private final Map<Class<? extends IEntity<?>>, String> collectionNameMap = new ConcurrentHashMap<>();
 
@@ -87,6 +92,7 @@ public class OrmManager implements IOrmManager {
         for (var entityDef : entityDefMap.values()) {
             var entityCaches = new EntityCaches(entityDef);
             entityCachesMap.put(entityDef.getClazz(), entityCaches);
+            allEntityCachesUsableMap.put(entityDef.getClazz(), false);
         }
 
         CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
@@ -172,6 +178,7 @@ public class OrmManager implements IOrmManager {
     public void inject() {
         var applicationContext = OrmContext.getApplicationContext();
         var beanNames = applicationContext.getBeanDefinitionNames();
+
         for (var beanName : beanNames) {
             var bean = applicationContext.getBean(beanName);
 
@@ -185,34 +192,37 @@ public class OrmManager implements IOrmManager {
                         }
 
                         Type[] types = ((ParameterizedType) type).getActualTypeArguments();
-                        Class<? extends IEntity<?>> clazz = (Class<? extends IEntity<?>>) types[1];
-                        IEntityCaches<?, ?> entityCaches = OrmContext.getOrmManager().getEntityCaches(clazz);
+                        Class<? extends IEntity<?>> entityClazz = (Class<? extends IEntity<?>>) types[1];
+                        IEntityCaches<?, ?> entityCaches = entityCachesMap.get(entityClazz);
 
                         if (entityCaches == null) {
-                            throw new RuntimeException(StringUtils.format("实体缓存对象[entityCaches:{}]不存在", clazz));
+                            throw new RuntimeException(StringUtils.format("实体缓存对象[entityCaches:{}]不存在", entityClazz));
                         }
 
                         ReflectionUtils.makeAccessible(field);
                         ReflectionUtils.setField(field, bean, entityCaches);
-                        entityCaches.setUsable(true);
+                        allEntityCachesUsableMap.put(entityClazz, true);
                     });
         }
     }
 
     @Override
     public void initAfter() {
-        var unusableEntityClassList = entityCachesMap.entrySet().stream()
-                .filter(it -> !it.getValue().isUsable())
+        allEntityCachesUsableMap.entrySet().stream()
+                .filter(it -> !it.getValue())
                 .map(it -> it.getKey())
-                .collect(Collectors.toList());
-
-        unusableEntityClassList.forEach(it -> {
-            entityCachesMap.remove(it);
-        });
+                .forEach(it -> entityCachesMap.remove(it));
     }
 
     @Override
     public <E extends IEntity<?>> IEntityCaches<?, E> getEntityCaches(Class<E> clazz) {
+        var usable = allEntityCachesUsableMap.get(clazz);
+        if (usable == null) {
+            throw new RunException("没有定义[]的EntityCaches，无法获取", clazz.getCanonicalName());
+        }
+        if (!usable) {
+            throw new RunException("Orm没有使用[]的EntityCaches，为了节省内存提前释放了它；只有使用EntityCachesInjection注解的Entity才能被动态获取", clazz.getCanonicalName());
+        }
         return (IEntityCaches<?, E>) entityCachesMap.get(clazz);
     }
 
@@ -233,7 +243,6 @@ public class OrmManager implements IOrmManager {
             collectionName = StringUtils.substringBeforeLast(StringUtils.uncapitalize(entityClazz.getSimpleName()), "Entity");
             collectionNameMap.put(entityClazz, collectionName);
         }
-
         return mongodbDatabase.getCollection(collectionName, entityClazz);
     }
 

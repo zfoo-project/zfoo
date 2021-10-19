@@ -55,10 +55,6 @@ public interface IEntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>>
 
     long size();
 
-    boolean isUsable();
-
-    void setUsable(boolean usable);
-
     /**
      * 统计缓存命中率
      */

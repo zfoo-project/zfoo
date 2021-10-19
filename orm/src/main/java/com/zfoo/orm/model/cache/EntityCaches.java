@@ -50,11 +50,9 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
 
     private static final int BATCH_SIZE = 512;
 
-    private EntityDef entityDef;
+    private final EntityDef entityDef;
 
-    private LoadingCache<PK, PNode<E>> cache;
-
-    private boolean usable;
+    private final LoadingCache<PK, PNode<E>> cache;
 
     public EntityCaches(EntityDef entityDef) {
         this.entityDef = entityDef;
@@ -302,16 +300,6 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
     @Override
     public long size() {
         return cache.estimatedSize();
-    }
-
-    @Override
-    public boolean isUsable() {
-        return this.usable;
-    }
-
-    @Override
-    public void setUsable(boolean usable) {
-        this.usable = usable;
     }
 
     @Override

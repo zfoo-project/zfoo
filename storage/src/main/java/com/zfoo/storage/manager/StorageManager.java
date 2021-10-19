@@ -15,6 +15,7 @@ package com.zfoo.storage.manager;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.StorageContext;
@@ -34,7 +35,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author jaysunxiao
@@ -56,12 +56,12 @@ public class StorageManager implements IStorageManager {
     /**
      * 在当前项目被依赖注入，被使用的Storage
      */
-    private Map<Class<?>, Storage<?, ?>> storageMap = new HashMap<>();
+    private final Map<Class<?>, Storage<?, ?>> storageMap = new HashMap<>();
 
     /**
      * 全部的Storage定义，key为对应的excel配置表，value为当前配置表是否在当前项目中使用
      */
-    private Map<Class<?>, Boolean> allStorageUsableMap = new HashMap<>();
+    private final Map<Class<?>, Boolean> allStorageUsableMap = new HashMap<>();
 
     public StorageConfig getStorageConfig() {
         return storageConfig;
@@ -133,7 +133,7 @@ public class StorageManager implements IStorageManager {
 
                         Class<?> resourceClazz = (Class<?>) types[1];
 
-                        Storage<?, ?> storage = StorageContext.getStorageManager().getStorage(resourceClazz);
+                        Storage<?, ?> storage = storageMap.get(resourceClazz);
 
                         if (storage == null) {
                             throw new RuntimeException(StringUtils.format("静态类资源[resource:{}]不存在", resourceClazz.getSimpleName()));
@@ -158,18 +158,21 @@ public class StorageManager implements IStorageManager {
 
     @Override
     public void initAfter() {
-        var unusableStorageClassList = allStorageUsableMap.entrySet().stream()
+        allStorageUsableMap.entrySet().stream()
                 .filter(it -> !it.getValue())
                 .map(it -> it.getKey())
-                .collect(Collectors.toList());
-
-        unusableStorageClassList.forEach(it -> {
-            storageMap.remove(it);
-        });
+                .forEach(it -> storageMap.remove(it));
     }
 
     @Override
     public Storage<?, ?> getStorage(Class<?> clazz) {
+        var usable = allStorageUsableMap.get(clazz);
+        if (usable == null) {
+            throw new RunException("没有定义[{}]的Storage，无法获取", clazz.getCanonicalName());
+        }
+        if (!usable) {
+            throw new RunException("Storage没有使用[{}]，为了节省内存提前释放了它；只有使用ResInjection注解的Storage才能被动态获取", clazz.getCanonicalName());
+        }
         return storageMap.get(clazz);
     }
 
