@@ -15,7 +15,7 @@ package com.zfoo.protocol.generate;
 
 import com.zfoo.protocol.serializer.CodeLanguage;
 
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 /**
@@ -44,7 +44,7 @@ public class GenerateOperation {
     /**
      * 需要生成的协议文件
      */
-    private Set<CodeLanguage> generateLanguages = new HashSet<>();
+    private final Set<CodeLanguage> generateLanguages = EnumSet.noneOf(CodeLanguage.class);
 
     public boolean isFoldProtocol() {
         return foldProtocol;
