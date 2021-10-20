@@ -15,15 +15,15 @@ package com.zfoo.net.consumer;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.common.Error;
-import com.zfoo.net.packet.model.NoAnswerAttachment;
-import com.zfoo.net.packet.model.SignalPacketAttachment;
 import com.zfoo.net.router.Router;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
+import com.zfoo.net.router.attachment.NoAnswerAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
-import com.zfoo.net.router.route.PacketSignal;
+import com.zfoo.net.router.route.SignalBridge;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -67,19 +67,19 @@ public class Consumer implements IConsumer {
 
 
         // 下面的代码逻辑同Router的syncAsk，如果修改的话，记得一起修改
-        var clientAttachment = new SignalPacketAttachment();
+        var clientSignalAttachment = new SignalAttachment();
         var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
-        clientAttachment.setExecutorConsistentHash(executorConsistentHash);
+        clientSignalAttachment.setExecutorConsistentHash(executorConsistentHash);
 
         try {
-            PacketSignal.addSignalAttachment(clientAttachment);
+            SignalBridge.addSignalAttachment(clientSignalAttachment);
 
             // load balancer之前调用
-            loadBalancer.beforeLoadBalancer(session, packet, clientAttachment);
+            loadBalancer.beforeLoadBalancer(session, packet, clientSignalAttachment);
 
-            NetContext.getRouter().send(session, packet, clientAttachment);
+            NetContext.getRouter().send(session, packet, clientSignalAttachment);
 
-            IPacket responsePacket = clientAttachment.getResponseFuture().get(Router.DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
+            IPacket responsePacket = clientSignalAttachment.getResponseFuture().get(Router.DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
 
             if (responsePacket.protocolId() == Error.errorProtocolId()) {
                 throw new ErrorResponseException((Error) responsePacket);
@@ -88,16 +88,16 @@ public class Consumer implements IConsumer {
                 throw new UnexpectedProtocolException(StringUtils.format("client expect protocol:[{}], but found protocol:[{}]"
                         , answerClass, responsePacket.getClass().getName()));
             }
-            var syncAnswer = new SyncAnswer<>((T) responsePacket, clientAttachment);
+            var syncAnswer = new SyncAnswer<>((T) responsePacket, clientSignalAttachment);
 
             // load balancer之后调用
-            loadBalancer.afterLoadBalancer(session, packet, clientAttachment);
+            loadBalancer.afterLoadBalancer(session, packet, clientSignalAttachment);
             return syncAnswer;
         } catch (TimeoutException e) {
             throw new NetTimeOutException(StringUtils.format("syncRequest timeout exception, ask:[{}], attachment:[{}]"
-                    , JsonUtils.object2String(packet), JsonUtils.object2String(clientAttachment)));
+                    , JsonUtils.object2String(packet), JsonUtils.object2String(clientSignalAttachment)));
         } finally {
-            PacketSignal.removeSignalAttachment(clientAttachment);
+            SignalBridge.removeSignalAttachment(clientSignalAttachment);
         }
     }
 
@@ -108,10 +108,10 @@ public class Consumer implements IConsumer {
         var asyncAnswer = NetContext.getRouter().asyncAsk(session, packet, answerClass, argument);
 
         // load balancer之前调用
-        loadBalancer.beforeLoadBalancer(session, packet, asyncAnswer.getFutureAttachment());
+        loadBalancer.beforeLoadBalancer(session, packet, asyncAnswer.getSignalAttachment());
 
         // load balancer之后调用
-        asyncAnswer.thenAccept(responsePacket -> loadBalancer.afterLoadBalancer(session, packet, asyncAnswer.getFutureAttachment()));
+        asyncAnswer.thenAccept(responsePacket -> loadBalancer.afterLoadBalancer(session, packet, asyncAnswer.getSignalAttachment()));
         return asyncAnswer;
     }
 

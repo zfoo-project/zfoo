@@ -15,7 +15,7 @@ package com.zfoo.net.core.gateway;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.gateway.GatewayToProviderRequest;
 import com.zfoo.net.packet.gateway.GatewayToProviderResponse;
-import com.zfoo.net.packet.model.GatewayPacketAttachment;
+import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
@@ -34,7 +34,7 @@ public class GatewayProviderController {
     private static final Logger logger = LoggerFactory.getLogger(GatewayProviderController.class);
 
     @PacketReceiver
-    public void atGatewayToProviderRequest(Session session, GatewayToProviderRequest request, GatewayPacketAttachment gatewayAttachment) {
+    public void atGatewayToProviderRequest(Session session, GatewayToProviderRequest request, GatewayAttachment gatewayAttachment) {
         logger.info("provider receive [packet:{}] from client", JsonUtils.object2String(request));
 
         var response = new GatewayToProviderResponse();

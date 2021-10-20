@@ -12,7 +12,7 @@
 
 package com.zfoo.net.router.route;
 
-import com.zfoo.net.packet.model.SignalPacketAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,61 +22,61 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
- * 同步或异步的调用控制器
+ * 同步或异步的调用控制器，同步和异步调用的信号沟通桥梁
  *
  * @author jaysunxiao
  * @version 3.0
  */
-public class PacketSignal {
+public class SignalBridge {
 
-    private static final Logger logger = LoggerFactory.getLogger(PacketSignal.class);
+    private static final Logger logger = LoggerFactory.getLogger(SignalBridge.class);
 
     // equal with 32767
     private static final int SIGNAL_MASK = 0B00000000_00000000_01111111_11111111;
 
-    private static AtomicReferenceArray<SignalPacketAttachment> signalPacketArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
+    private static final AtomicReferenceArray<SignalAttachment> signalAttachmentArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
 
     /**
      * Session控制同步或异步的附加包，key：packetId
      */
-    private static Map<Integer, SignalPacketAttachment> signalPacketAttachmentMap = new ConcurrentHashMap<>(1000);
+    private static final Map<Integer, SignalAttachment> signalAttachmentMap = new ConcurrentHashMap<>(1000);
 
-    public static void addSignalAttachment(SignalPacketAttachment packetAttachment) {
-        var packetId = packetAttachment.getPacketId();
+    public static void addSignalAttachment(SignalAttachment signalAttachment) {
+        var packetId = signalAttachment.getSignalId();
         var hash = packetId & SIGNAL_MASK;
 
-        if (signalPacketArray.compareAndSet(hash, null, packetAttachment)) {
+        if (signalAttachmentArray.compareAndSet(hash, null, signalAttachment)) {
             return;
         }
 
-        signalPacketAttachmentMap.put(packetId, packetAttachment);
+        signalAttachmentMap.put(packetId, signalAttachment);
     }
 
-    public static SignalPacketAttachment removeSignalAttachment(SignalPacketAttachment packetAttachment) {
-        return removeSignalAttachment(packetAttachment.getPacketId());
+    public static SignalAttachment removeSignalAttachment(SignalAttachment signalAttachment) {
+        return removeSignalAttachment(signalAttachment.getSignalId());
     }
 
-    public static SignalPacketAttachment removeSignalAttachment(int packetId) {
+    public static SignalAttachment removeSignalAttachment(int packetId) {
         var hash = packetId & SIGNAL_MASK;
 
-        var attachment = signalPacketArray.get(hash);
-        if (attachment != null && attachment.getPacketId() == packetId && signalPacketArray.compareAndSet(hash, attachment, null)) {
+        var attachment = signalAttachmentArray.get(hash);
+        if (attachment != null && attachment.getSignalId() == packetId && signalAttachmentArray.compareAndSet(hash, attachment, null)) {
             return attachment;
         }
-        return signalPacketAttachmentMap.remove(packetId);
+        return signalAttachmentMap.remove(packetId);
     }
 
     public static void status() {
         var count = 0;
         for (int i = 0; i < SIGNAL_MASK + 1; i++) {
-            var value = signalPacketArray.get(i);
+            var value = signalAttachmentArray.get(i);
             if (value != null) {
                 logger.info("signalPacketArray has attachment [index:{}][count:{}][value:{}]", i, ++count, JsonUtils.object2String(value));
             }
         }
 
-        signalPacketAttachmentMap.forEach((key, value) -> {
-            logger.info("signalPacketAttachmentMap has attachment [key:{}][value:{}]", key, JsonUtils.object2String(value));
+        signalAttachmentMap.forEach((key, value) -> {
+            logger.info("signalAttachmentMap has attachment [key:{}][value:{}]", key, JsonUtils.object2String(value));
         });
     }
 

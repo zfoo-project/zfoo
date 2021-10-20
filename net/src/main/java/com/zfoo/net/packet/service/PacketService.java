@@ -15,7 +15,7 @@ package com.zfoo.net.packet.service;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
-import com.zfoo.net.packet.model.IPacketAttachment;
+import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.route.PacketRoute;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
@@ -132,13 +132,13 @@ public class PacketService implements IPacketService {
         // 解析包体
         var packet = ProtocolManager.read(buffer);
         // 解析包的附加包
-        var attachment = ByteBufUtils.readBoolean(buffer);
-        var packetAttachment = attachment ? ((IPacketAttachment) ProtocolManager.read(buffer)) : null;
-        return DecodedPacketInfo.valueOf(packet, packetAttachment);
+        var hasAttachment = ByteBufUtils.readBoolean(buffer);
+        var attachment = hasAttachment ? ((IAttachment) ProtocolManager.read(buffer)) : null;
+        return DecodedPacketInfo.valueOf(packet, attachment);
     }
 
     @Override
-    public void write(ByteBuf buffer, IPacket packet, IPacketAttachment packetAttachment) {
+    public void write(ByteBuf buffer, IPacket packet, IAttachment attachment) {
 
         if (packet == null) {
             logger.error("packet is null and can not be sent.");
@@ -151,13 +151,13 @@ public class PacketService implements IPacketService {
         // 写入包packet
         ProtocolManager.write(buffer, packet);
 
-        // 写入包的附加包packetAttachment
-        if (packetAttachment == null) {
+        // 写入包的附加包attachment
+        if (attachment == null) {
             ByteBufUtils.writeBoolean(buffer, false);
         } else {
             ByteBufUtils.writeBoolean(buffer, true);
             // 写入包的附加包attachment
-            ProtocolManager.write(buffer, packetAttachment);
+            ProtocolManager.write(buffer, attachment);
         }
 
         int length = buffer.readableBytes();

@@ -87,7 +87,7 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
         try {
             var byteBuf = channelHandlerContext.alloc().ioBuffer();
 
-            NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getPacketAttachment());
+            NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getAttachment());
             list.add(new BinaryWebSocketFrame(byteBuf));
         } catch (Exception e) {
             logger.error("[{}]编码exception异常", JsonUtils.object2String(out), e);

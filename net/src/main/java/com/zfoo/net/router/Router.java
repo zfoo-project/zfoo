@@ -21,16 +21,16 @@ import com.zfoo.net.core.gateway.model.AuthUidToGatewayEvent;
 import com.zfoo.net.packet.common.Error;
 import com.zfoo.net.packet.common.Heartbeat;
 import com.zfoo.net.packet.model.EncodedPacketInfo;
-import com.zfoo.net.packet.model.GatewayPacketAttachment;
-import com.zfoo.net.packet.model.IPacketAttachment;
-import com.zfoo.net.packet.model.SignalPacketAttachment;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
+import com.zfoo.net.router.attachment.GatewayAttachment;
+import com.zfoo.net.router.attachment.IAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
 import com.zfoo.net.router.route.PacketRoute;
-import com.zfoo.net.router.route.PacketSignal;
+import com.zfoo.net.router.route.SignalBridge;
 import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.net.task.TaskBus;
@@ -62,53 +62,53 @@ public class Router implements IRouter {
     public static final long DEFAULT_TIMEOUT = 3000;
 
     /**
-     * 会把receive收到的attachment存储在这个地方，只针对task线程。
-     * doWithReceivePacket会设置receivePacketAttachment，但是在方法调用完成会取消，不需要过多关注。
-     * asyncRequest会再次设置receivePacketAttachment，需要重点关注。
+     * 作为服务器接收方，会把receive收到的attachment存储在这个地方，只针对task线程。
+     * atReceiver会设置attachment，但是在方法调用完成会取消，不需要过多关注。
+     * asyncAsk会再次设置attachment，需要重点关注。
      */
-    private final FastThreadLocal<SignalPacketAttachment> serverReceiveSignalPacketAttachment = new FastThreadLocal<>();
+    private final FastThreadLocal<SignalAttachment> serverReceiveSignalAttachmentThreadLocal = new FastThreadLocal<>();
 
 
     @Override
-    public void receive(Session session, IPacket packet, @Nullable IPacketAttachment packetAttachment) {
+    public void receive(Session session, IPacket packet, @Nullable IAttachment attachment) {
         if (packet.protocolId() == Heartbeat.heartbeatProtocolId()) {
             logger.info("heartbeat");
             return;
         }
 
         // 发送者（客户端）同步和异步消息的接收，发送者通过packetId判断重复
-        if (packetAttachment != null) {
-            switch (packetAttachment.packetType()) {
+        if (attachment != null) {
+            switch (attachment.packetType()) {
                 case SIGNAL_PACKET:
-                    var signalPacketAttachment = (SignalPacketAttachment) packetAttachment;
+                    var signalAttachment = (SignalAttachment) attachment;
 
-                    if (signalPacketAttachment.isClient()) {
-                        // 服务器收到signalPacketAttachment，不做任何处理
-                        signalPacketAttachment.setClient(false);
+                    if (signalAttachment.isClient()) {
+                        // 服务器收到signalAttachment，不做任何处理
+                        signalAttachment.setClient(false);
 
                     } else {
                         // 客户端收到服务器应答，客户端发送的时候isClient为true，服务器收到的时候将其设置为false
-                        var attachment = (SignalPacketAttachment) PacketSignal.removeSignalAttachment(signalPacketAttachment);
-                        if (attachment != null) {
-                            attachment.getResponseFuture().complete(packet);
+                        var removedAttachment = (SignalAttachment) SignalBridge.removeSignalAttachment(signalAttachment);
+                        if (removedAttachment != null) {
+                            removedAttachment.getResponseFuture().complete(packet);
                         } else {
-                            logger.error("client receives packet:[{}] and packetAttachment:[{}] from server, but clientPacketAttachmentMap has no attachment, perhaps timeout exception."
-                                    , JsonUtils.object2String(packet), JsonUtils.object2String(packetAttachment));
+                            logger.error("client receives packet:[{}] and attachment:[{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception."
+                                    , JsonUtils.object2String(packet), JsonUtils.object2String(attachment));
                         }
                         return;
                     }
 
                     break;
                 case GATEWAY_PACKET:
-                    var gatewayPacketAttachment = (GatewayPacketAttachment) packetAttachment;
-                    if (gatewayPacketAttachment.isClient()) {
-                        gatewayPacketAttachment.setClient(false);
+                    var gatewayAttachment = (GatewayAttachment) attachment;
+                    if (gatewayAttachment.isClient()) {
+                        gatewayAttachment.setClient(false);
                     } else {
-                        var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayPacketAttachment.getSid());
+                        var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
                         if (gatewaySession != null) {
-                            var signalAttachment = gatewayPacketAttachment.getSignalPacketAttachment();
-                            if (signalAttachment != null) {
-                                signalAttachment.setClient(false);
+                            var signalAttachmentInGatewayAttachment = gatewayAttachment.getSignalAttachment();
+                            if (signalAttachmentInGatewayAttachment != null) {
+                                signalAttachmentInGatewayAttachment.setClient(false);
                             }
                             // 网关授权，授权完成直接返回
                             if (AuthUidToGatewayCheck.getAuthProtocolId() == packet.protocolId()) {
@@ -120,14 +120,14 @@ public class Router implements IRouter {
                                 gatewaySession.putAttribute(AttributeType.UID, uid);
                                 EventBus.asyncSubmit(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
 
-                                NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayPacketAttachment(gatewaySession, null));
+                                NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession, null));
                                 return;
                             }
-                            send(gatewaySession, packet, signalAttachment);
+                            send(gatewaySession, packet, signalAttachmentInGatewayAttachment);
                         } else {
-                            logger.error("gateway receives packet:[{}] and packetAttachment:[{}] from server" +
+                            logger.error("gateway receives packet:[{}] and attachment:[{}] from server" +
                                             ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway."
-                                    , JsonUtils.object2String(packet), JsonUtils.object2String(packetAttachment), gatewayPacketAttachment.getSid());
+                                    , JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
                         }
                         return;
                     }
@@ -138,11 +138,11 @@ public class Router implements IRouter {
         }
 
         // 正常发送消息的接收
-        TaskBus.submit(new PacketReceiverTask(session, packet, packetAttachment));
+        TaskBus.submit(new PacketReceiverTask(session, packet, attachment));
     }
 
     @Override
-    public void send(Session session, IPacket packet, IPacketAttachment packetAttachment) {
+    public void send(Session session, IPacket packet, IAttachment attachment) {
         if (session == null) {
             logger.error("session is null and can not be sent.");
             return;
@@ -152,7 +152,7 @@ public class Router implements IRouter {
             return;
         }
 
-        var packetInfo = EncodedPacketInfo.valueOf(packet, packetAttachment);
+        var packetInfo = EncodedPacketInfo.valueOf(packet, attachment);
 
         var channel = session.getChannel();
         channel.writeAndFlush(packetInfo);
@@ -160,34 +160,34 @@ public class Router implements IRouter {
 
     @Override
     public void send(Session session, IPacket packet) {
-        // 服务器异步返回的消息的发送会有signalPacketAttachment，验证返回的消息是否满足
-        var serverSignalPacketAttachment = serverReceiveSignalPacketAttachment.get();
+        // 服务器异步返回的消息的发送会有signalAttachment，验证返回的消息是否满足
+        var serverSignalAttachment = serverReceiveSignalAttachmentThreadLocal.get();
 
-        if (serverSignalPacketAttachment != null) {
-            if (serverSignalPacketAttachment.isClient()) {
-                // 客户端发送的时候不应该有serverSignalPacketAttachment
-                logger.error("client can not have serverSignalPacketAttachment:[{}] and packet:[{}]", serverSignalPacketAttachment, packet);
+        if (serverSignalAttachment != null) {
+            if (serverSignalAttachment.isClient()) {
+                // 客户端发送的时候不应该有serverSignalAttachment
+                logger.error("client can not have serverSignalAttachment:[{}] and packet:[{}]", serverSignalAttachment, packet);
             } else if (Error.errorProtocolId() == packet.protocolId()) {
                 // 错误信息直接返回
             }
         }
 
 
-        send(session, packet, serverSignalPacketAttachment);
+        send(session, packet, serverSignalAttachment);
     }
 
 
     @Override
     public <T extends IPacket> SyncAnswer<T> syncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument) throws Exception {
-        var clientAttachment = new SignalPacketAttachment();
+        var clientSignalAttachment = new SignalAttachment();
         var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
-        clientAttachment.setExecutorConsistentHash(executorConsistentHash);
+        clientSignalAttachment.setExecutorConsistentHash(executorConsistentHash);
 
         try {
-            PacketSignal.addSignalAttachment(clientAttachment);
-            send(session, packet, clientAttachment);
+            SignalBridge.addSignalAttachment(clientSignalAttachment);
+            send(session, packet, clientSignalAttachment);
 
-            IPacket responsePacket = clientAttachment.getResponseFuture().get(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
+            IPacket responsePacket = clientSignalAttachment.getResponseFuture().get(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
 
             if (responsePacket.protocolId() == Error.errorProtocolId()) {
                 throw new ErrorResponseException((Error) responsePacket);
@@ -197,30 +197,30 @@ public class Router implements IRouter {
                         , answerClass, responsePacket.getClass().getName()));
             }
 
-            return new SyncAnswer<>((T) responsePacket, clientAttachment);
+            return new SyncAnswer<>((T) responsePacket, clientSignalAttachment);
         } catch (TimeoutException e) {
             throw new NetTimeOutException(StringUtils.format("syncRequest timeout exception, ask:[{}], attachment:[{}]"
-                    , JsonUtils.object2String(packet), JsonUtils.object2String(clientAttachment)));
+                    , JsonUtils.object2String(packet), JsonUtils.object2String(clientSignalAttachment)));
         } finally {
-            PacketSignal.removeSignalAttachment(clientAttachment);
+            SignalBridge.removeSignalAttachment(clientSignalAttachment);
         }
 
     }
 
     @Override
     public <T extends IPacket> AsyncAnswer<T> asyncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument) {
-        var clientAttachment = new SignalPacketAttachment();
+        var clientSignalAttachment = new SignalAttachment();
         var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
-        clientAttachment.setExecutorConsistentHash(executorConsistentHash);
+        clientSignalAttachment.setExecutorConsistentHash(executorConsistentHash);
 
         // 服务器在同步或异步的消息处理中，又调用了同步或异步的方法，这时候threadReceiverAttachment不为空
-        var serverSignalPacketAttachment = serverReceiveSignalPacketAttachment.get();
+        var serverSignalAttachment = serverReceiveSignalAttachmentThreadLocal.get();
 
         try {
             var asyncAnswer = new AsyncAnswer<T>();
-            asyncAnswer.setFutureAttachment(clientAttachment);
+            asyncAnswer.setSignalAttachment(clientSignalAttachment);
 
-            clientAttachment.getResponseFuture()
+            clientSignalAttachment.getResponseFuture()
                     .completeOnTimeout(null, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
                     .thenApply(answer -> {
                         if (answer == null) {
@@ -238,11 +238,11 @@ public class Router implements IRouter {
                     })
                     .whenCompleteAsync((answer, throwable) -> {
                         try {
-                            PacketSignal.removeSignalAttachment(clientAttachment);
+                            SignalBridge.removeSignalAttachment(clientSignalAttachment);
 
                             // 接收者在同步或异步的消息处理中，又调用了异步的方法，这时候threadServerAttachment不为空
-                            if (serverSignalPacketAttachment != null) {
-                                serverReceiveSignalPacketAttachment.set(serverSignalPacketAttachment);
+                            if (serverSignalAttachment != null) {
+                                serverReceiveSignalAttachmentThreadLocal.set(serverSignalAttachment);
                             }
 
                             // 如果有异常的话，whenCompleteAsync的下一个thenAccept不会执行
@@ -262,21 +262,21 @@ public class Router implements IRouter {
                         } catch (Throwable throwable1) {
                             logger.error("异步回调方法[ask:{}][answer:{}]错误", packet.getClass().getSimpleName(), answer.getClass().getSimpleName(), throwable1);
                         } finally {
-                            if (serverSignalPacketAttachment != null) {
-                                serverReceiveSignalPacketAttachment.set(null);
+                            if (serverSignalAttachment != null) {
+                                serverReceiveSignalAttachmentThreadLocal.set(null);
                             }
                         }
 
                     }, TaskBus.executor(executorConsistentHash));
 
 
-            PacketSignal.addSignalAttachment(clientAttachment);
+            SignalBridge.addSignalAttachment(clientSignalAttachment);
 
             // 等到上层调用whenComplete才会发送消息
-            asyncAnswer.setAskCallback(() -> send(session, packet, clientAttachment));
+            asyncAnswer.setAskCallback(() -> send(session, packet, clientSignalAttachment));
             return asyncAnswer;
         } catch (Exception e) {
-            PacketSignal.removeSignalAttachment(clientAttachment);
+            SignalBridge.removeSignalAttachment(clientSignalAttachment);
             throw e;
         }
     }
@@ -289,13 +289,13 @@ public class Router implements IRouter {
      * 接收者同时只能处理一个session的一个包，同一个发送者发送过来的包排队处理
      */
     @Override
-    public void atReceiver(Session session, IPacket packet, IPacketAttachment packetAttachment) {
+    public void atReceiver(Session session, IPacket packet, IAttachment attachment) {
         try {
             // 接收者（服务器）同步和异步消息的接收
-            if (packetAttachment != null) {
-                switch (packetAttachment.packetType()) {
+            if (attachment != null) {
+                switch (attachment.packetType()) {
                     case SIGNAL_PACKET:
-                        serverReceiveSignalPacketAttachment.set((SignalPacketAttachment) packetAttachment);
+                        serverReceiveSignalAttachmentThreadLocal.set((SignalAttachment) attachment);
                         break;
                     default:
                         break;
@@ -303,17 +303,17 @@ public class Router implements IRouter {
             }
 
             // 调用PacketReceiver
-            PacketRoute.submit(session, packet, packetAttachment);
+            PacketRoute.submit(session, packet, attachment);
         } catch (Exception e) {
             logger.error(StringUtils.format("e[uid:{}][sid:{}]未知exception异常", session.getAttribute(AttributeType.UID), session.getSid(), e.getMessage()), e);
         } catch (Throwable t) {
             logger.error(StringUtils.format("e[uid:{}][sid:{}]未知error错误", session.getAttribute(AttributeType.UID), session.getSid(), t.getMessage()), t);
         } finally {
             // 如果有服务器在处理同步或者异步消息的时候由于错误没有返回给客户端消息，则可能会残留serverAttachment，所以先移除
-            if (packetAttachment != null) {
-                switch (packetAttachment.packetType()) {
+            if (attachment != null) {
+                switch (attachment.packetType()) {
                     case SIGNAL_PACKET:
-                        serverReceiveSignalPacketAttachment.set(null);
+                        serverReceiveSignalAttachmentThreadLocal.set(null);
                         break;
                     default:
                         break;

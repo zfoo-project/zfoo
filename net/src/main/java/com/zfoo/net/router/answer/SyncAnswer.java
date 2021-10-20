@@ -13,7 +13,7 @@
 
 package com.zfoo.net.router.answer;
 
-import com.zfoo.net.packet.model.SignalPacketAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.protocol.IPacket;
 
 /**
@@ -23,10 +23,10 @@ import com.zfoo.protocol.IPacket;
 public class SyncAnswer<T extends IPacket> implements ISyncAnswer<T> {
 
 
-    private T packet;
-    private SignalPacketAttachment attachment;
+    private final T packet;
+    private final SignalAttachment attachment;
 
-    public SyncAnswer(T packet, SignalPacketAttachment attachment) {
+    public SyncAnswer(T packet, SignalAttachment attachment) {
         this.packet = packet;
         this.attachment = attachment;
     }
@@ -37,7 +37,7 @@ public class SyncAnswer<T extends IPacket> implements ISyncAnswer<T> {
     }
 
     @Override
-    public SignalPacketAttachment attachment() {
+    public SignalAttachment attachment() {
         return attachment;
     }
 

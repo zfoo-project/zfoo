@@ -14,8 +14,8 @@ package com.zfoo.net.core.udp.client;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.udp.UdpClient;
-import com.zfoo.net.packet.model.UdpPacketAttachment;
 import com.zfoo.net.packet.udp.UdpHelloRequest;
+import com.zfoo.net.router.attachment.UdpAttachment;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
@@ -40,7 +40,7 @@ public class UdpClientTest {
         var request = new UdpHelloRequest();
         request.setMessage("Hello, this is the udp client!");
 
-        NetContext.getRouter().send(session, request, UdpPacketAttachment.valueOf(hostAndPort.getHost(), hostAndPort.getPort()));
+        NetContext.getRouter().send(session, request, UdpAttachment.valueOf(hostAndPort.getHost(), hostAndPort.getPort()));
 
         ThreadUtils.sleep(Long.MAX_VALUE);
     }

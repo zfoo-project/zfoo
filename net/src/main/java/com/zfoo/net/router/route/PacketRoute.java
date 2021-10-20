@@ -14,11 +14,11 @@
 package com.zfoo.net.router.route;
 
 import com.zfoo.event.model.event.IEvent;
-import com.zfoo.net.packet.model.GatewayPacketAttachment;
-import com.zfoo.net.packet.model.HttpPacketAttachment;
-import com.zfoo.net.packet.model.IPacketAttachment;
-import com.zfoo.net.packet.model.UdpPacketAttachment;
 import com.zfoo.net.packet.service.PacketService;
+import com.zfoo.net.router.attachment.GatewayAttachment;
+import com.zfoo.net.router.attachment.HttpAttachment;
+import com.zfoo.net.router.attachment.IAttachment;
+import com.zfoo.net.router.attachment.UdpAttachment;
 import com.zfoo.net.router.receiver.EnhanceUtils;
 import com.zfoo.net.router.receiver.IPacketReceiver;
 import com.zfoo.net.router.receiver.PacketReceiver;
@@ -38,6 +38,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Modifier;
 
 /**
+ * 包的接收路线，服务器收到packet调用对应的Receiver
+ *
  * @author jaysunxiao
  * @version 3.0
  */
@@ -57,14 +59,14 @@ public abstract class PacketRoute {
      * 发送者同时能发送多个包
      * 接收者同时只能处理一个session的一个包，同一个发送者发送过来的包排队处理
      */
-    public static void submit(Session session, IPacket packet, IPacketAttachment packetAttachment) {
+    public static void submit(Session session, IPacket packet, IAttachment attachment) {
         var packetReceiver = (IPacketReceiver) packetReceiverList[packet.protocolId()].receiver();
         if (packetReceiver == null) {
             throw new RuntimeException(StringUtils.format("no any packetReceiverDefinition found for this [packet:{}]", packet.getClass().getName()));
         }
 
         // 调用PacketReceiver
-        packetReceiver.invoke(session, packet, packetAttachment);
+        packetReceiver.invoke(session, packet, attachment);
     }
 
 
@@ -92,8 +94,8 @@ public abstract class PacketRoute {
             AssertionUtils.isTrue(IPacket.class.isAssignableFrom(paramClazzs[1])
                     , "[class:{}] [method:{}],the second parameter must be IPacket type parameter Exception.", bean.getClass().getName(), method.getName());
 
-            AssertionUtils.isTrue(paramClazzs.length != 3 || IPacketAttachment.class.isAssignableFrom(paramClazzs[2])
-                    , "[class:{}] [method:{}],the third parameter must be IPacketAttachment type parameter Exception.", bean.getClass().getName(), method.getName());
+            AssertionUtils.isTrue(paramClazzs.length != 3 || IAttachment.class.isAssignableFrom(paramClazzs[2])
+                    , "[class:{}] [method:{}],the third parameter must be IAttachment type parameter Exception.", bean.getClass().getName(), method.getName());
 
             var packetClazz = (Class<? extends IEvent>) paramClazzs[1];
             var attachmentClazz = paramClazzs.length == 3 ? paramClazzs[2] : null;
@@ -114,11 +116,11 @@ public abstract class PacketRoute {
             // 如果以Ask结尾的请求，那么attachment不能为GatewayAttachment
             if (attachmentClazz != null) {
                 if (packetName.endsWith(PacketService.NET_REQUEST_SUFFIX)) {
-                    AssertionUtils.isTrue(attachmentClazz.equals(GatewayPacketAttachment.class) || attachmentClazz.equals(UdpPacketAttachment.class) || attachmentClazz.equals(HttpPacketAttachment.class)
-                            , "[class:{}] [method:{}] [packet:{}] must use [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayPacketAttachment.class.getCanonicalName());
+                    AssertionUtils.isTrue(attachmentClazz.equals(GatewayAttachment.class) || attachmentClazz.equals(UdpAttachment.class) || attachmentClazz.equals(HttpAttachment.class)
+                            , "[class:{}] [method:{}] [packet:{}] must use [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayAttachment.class.getCanonicalName());
                 } else if (packetName.endsWith(PacketService.NET_ASK_SUFFIX)) {
-                    AssertionUtils.isTrue(!attachmentClazz.equals(GatewayPacketAttachment.class)
-                            , "[class:{}] [method:{}] [packet:{}] can not match with [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayPacketAttachment.class.getCanonicalName());
+                    AssertionUtils.isTrue(!attachmentClazz.equals(GatewayAttachment.class)
+                            , "[class:{}] [method:{}] [packet:{}] can not match with [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayAttachment.class.getCanonicalName());
                 }
             }
 

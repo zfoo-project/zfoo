@@ -13,7 +13,7 @@
 
 package com.zfoo.net.router.answer;
 
-import com.zfoo.net.packet.model.SignalPacketAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.task.model.SafeRunnable;
 import com.zfoo.protocol.IPacket;
 
@@ -28,9 +28,9 @@ import java.util.function.Consumer;
 public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {
 
     private T futurePacket;
-    private SignalPacketAttachment futureAttachment;
 
-    private List<Consumer<T>> consumerList = new ArrayList<>(2);
+    private final List<Consumer<T>> consumerList = new ArrayList<>(2);
+    private SignalAttachment signalAttachment;
 
     private Runnable askCallback;
 
@@ -67,12 +67,12 @@ public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {
         this.futurePacket = futurePacket;
     }
 
-    public SignalPacketAttachment getFutureAttachment() {
-        return futureAttachment;
+    public SignalAttachment getSignalAttachment() {
+        return signalAttachment;
     }
 
-    public void setFutureAttachment(SignalPacketAttachment futureAttachment) {
-        this.futureAttachment = futureAttachment;
+    public void setSignalAttachment(SignalAttachment signalAttachment) {
+        this.signalAttachment = signalAttachment;
     }
 
     public Runnable getAskCallback() {

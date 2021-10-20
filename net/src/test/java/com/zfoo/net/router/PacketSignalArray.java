@@ -33,12 +33,12 @@ public class PacketSignalArray {
     // equal with 16383
     private static final int SIGNAL_MASK = 0B00000000_00000000_01111111_11111111;
 
-    private static AtomicReferenceArray<Integer> signalPacketArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
+    private static final AtomicReferenceArray<Integer> signalPacketArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
 
     /**
      * Session控制同步或异步的附加包，key：packetId
      */
-    private static Map<Integer, Integer> signalPacketAttachmentMap = new ConcurrentHashMap<>(1000);
+    private static final Map<Integer, Integer> signalAttachmentMap = new ConcurrentHashMap<>(1000);
 
     public static void addSignalAttachment(int packetId) {
         var hash = packetId & SIGNAL_MASK;
@@ -47,7 +47,7 @@ public class PacketSignalArray {
             return;
         }
 //        logger.info("add [packetId:{}] [oldPacketId:{}]", packetId, signalPacketArray.get(hash));
-        signalPacketAttachmentMap.put(packetId, packetId);
+        signalAttachmentMap.put(packetId, packetId);
     }
 
 
@@ -59,7 +59,7 @@ public class PacketSignalArray {
             return;
         }
 //        logger.info("remove [packetId:{}] [oldPacketId:{}]", packetId, oldPacketId);
-        signalPacketAttachmentMap.remove(packetId);
+        signalAttachmentMap.remove(packetId);
     }
 
     public static void status() {
@@ -71,8 +71,8 @@ public class PacketSignalArray {
             }
         }
 
-        signalPacketAttachmentMap.forEach((key, value) -> {
-            logger.info("signalPacketAttachmentMap has attachment [key:{}][value:{}]", key, JsonUtils.object2String(value));
+        signalAttachmentMap.forEach((key, value) -> {
+            logger.info("signalAttachmentMap has attachment [key:{}][value:{}]", key, JsonUtils.object2String(value));
         });
     }
 

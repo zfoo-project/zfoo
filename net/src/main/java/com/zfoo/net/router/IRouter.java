@@ -13,9 +13,9 @@
 
 package com.zfoo.net.router;
 
-import com.zfoo.net.packet.model.IPacketAttachment;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
+import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import org.springframework.lang.Nullable;
@@ -32,11 +32,11 @@ public interface IRouter {
     /**
      * send()和receive()是消息的发送和接收的入口，可以直接调用，是最轻量级发送和接收方式
      */
-    void send(Session session, IPacket packet, @Nullable IPacketAttachment packetAttachment);
+    void send(Session session, IPacket packet, @Nullable IAttachment attachment);
 
-    void receive(Session session, IPacket packet, @Nullable IPacketAttachment packetAttachment);
+    void receive(Session session, IPacket packet, @Nullable IAttachment attachment);
 
-    void atReceiver(Session session, IPacket packet, @Nullable IPacketAttachment packetAttachment);
+    void atReceiver(Session session, IPacket packet, @Nullable IAttachment attachment);
 
     /**
      * attention：syncRequest和asyncRequest只能客户端调用

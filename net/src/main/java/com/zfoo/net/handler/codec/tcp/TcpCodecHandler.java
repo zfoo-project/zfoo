@@ -79,7 +79,7 @@ public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
     @Override
     protected void encode(ChannelHandlerContext ctx, EncodedPacketInfo packetInfo, ByteBuf out) {
         try {
-            NetContext.getPacketService().write(out, packetInfo.getPacket(), packetInfo.getPacketAttachment());
+            NetContext.getPacketService().write(out, packetInfo.getPacket(), packetInfo.getAttachment());
         } catch (Exception e) {
             logger.error("[session:{}][{}]编码exception异常", SessionUtils.sessionInfo(ctx), packetInfo.getPacket().getClass().getSimpleName(), e);
             throw e;

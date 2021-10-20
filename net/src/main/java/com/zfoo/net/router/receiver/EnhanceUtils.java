@@ -13,7 +13,7 @@
 
 package com.zfoo.net.router.receiver;
 
-import com.zfoo.net.packet.model.IPacketAttachment;
+import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.StringUtils;
@@ -34,7 +34,7 @@ public abstract class EnhanceUtils {
     static {
         var classArray = new Class<?>[]{
                 IPacket.class,
-                IPacketAttachment.class,
+                IAttachment.class,
                 IPacketReceiver.class,
                 Session.class
         };
@@ -73,7 +73,7 @@ public abstract class EnhanceUtils {
         enhanceClazz.addConstructor(constructor);
 
         // 定义类实现的接口方法
-        CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "invoke", classPool.get(new String[]{Session.class.getCanonicalName(), IPacket.class.getCanonicalName(), IPacketAttachment.class.getCanonicalName()}), enhanceClazz);
+        CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "invoke", classPool.get(new String[]{Session.class.getCanonicalName(), IPacket.class.getCanonicalName(), IAttachment.class.getCanonicalName()}), enhanceClazz);
         invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         if (attachmentClazz == null) {
             // 强制类型转换

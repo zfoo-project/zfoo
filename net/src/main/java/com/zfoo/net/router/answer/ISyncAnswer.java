@@ -13,7 +13,7 @@
 
 package com.zfoo.net.router.answer;
 
-import com.zfoo.net.packet.model.SignalPacketAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.protocol.IPacket;
 
 /**
@@ -30,6 +30,6 @@ public interface ISyncAnswer<T extends IPacket> {
     /**
      * @return 同步和异步控制的附加包
      */
-    SignalPacketAttachment attachment();
+    SignalAttachment attachment();
 
 }

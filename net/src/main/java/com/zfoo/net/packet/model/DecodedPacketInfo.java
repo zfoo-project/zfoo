@@ -13,6 +13,7 @@
 
 package com.zfoo.net.packet.model;
 
+import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.protocol.IPacket;
 
 /**
@@ -29,13 +30,13 @@ public class DecodedPacketInfo {
     /**
      * 解码后的包的附加包
      */
-    private IPacketAttachment packetAttachment;
+    private IAttachment attachment;
 
 
-    public static DecodedPacketInfo valueOf(IPacket packet, IPacketAttachment packetAttachment) {
+    public static DecodedPacketInfo valueOf(IPacket packet, IAttachment attachment) {
         DecodedPacketInfo packetInfo = new DecodedPacketInfo();
         packetInfo.packet = packet;
-        packetInfo.packetAttachment = packetAttachment;
+        packetInfo.attachment = attachment;
         return packetInfo;
     }
 
@@ -48,12 +49,12 @@ public class DecodedPacketInfo {
         this.packet = packet;
     }
 
-    public IPacketAttachment getPacketAttachment() {
-        return packetAttachment;
+    public IAttachment getAttachment() {
+        return attachment;
     }
 
-    public void setPacketAttachment(IPacketAttachment packetAttachment) {
-        this.packetAttachment = packetAttachment;
+    public void setAttachment(IAttachment attachment) {
+        this.attachment = attachment;
     }
 
 }

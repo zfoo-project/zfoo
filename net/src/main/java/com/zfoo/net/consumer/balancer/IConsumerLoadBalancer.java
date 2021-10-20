@@ -13,7 +13,7 @@
 
 package com.zfoo.net.consumer.balancer;
 
-import com.zfoo.net.packet.model.SignalPacketAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import org.springframework.lang.Nullable;
@@ -33,10 +33,10 @@ public interface IConsumerLoadBalancer {
      */
     Session loadBalancer(IPacket packet, @Nullable Object argument);
 
-    default void beforeLoadBalancer(Session session, IPacket packet, SignalPacketAttachment attachment) {
+    default void beforeLoadBalancer(Session session, IPacket packet, SignalAttachment attachment) {
     }
 
-    default void afterLoadBalancer(Session session, IPacket packet, SignalPacketAttachment attachment) {
+    default void afterLoadBalancer(Session session, IPacket packet, SignalAttachment attachment) {
     }
 
 }

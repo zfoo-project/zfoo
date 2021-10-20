@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutorService;
  */
 public class ConsistentHashTaskDispatch extends AbstractTaskDispatch {
 
-    private static ConsistentHashTaskDispatch INSTANCE = new ConsistentHashTaskDispatch();
+    private static final ConsistentHashTaskDispatch INSTANCE = new ConsistentHashTaskDispatch();
 
     public static ConsistentHashTaskDispatch getINSTANCE() {
         return INSTANCE;
@@ -32,13 +32,13 @@ public class ConsistentHashTaskDispatch extends AbstractTaskDispatch {
 
     @Override
     public ExecutorService getExecutor(PacketReceiverTask packetReceiverTask) {
-        var packetAttachment = packetReceiverTask.getPacketAttachment();
+        var attachment = packetReceiverTask.getAttachment();
 
-        if (packetAttachment == null) {
+        if (attachment == null) {
             return SessionIdTaskDispatch.getInstance().getExecutor(packetReceiverTask);
         }
 
-        return TaskBus.executor(packetAttachment.executorConsistentHash());
+        return TaskBus.executor(attachment.executorConsistentHash());
     }
 
 }

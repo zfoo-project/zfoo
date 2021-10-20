@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.packet.model;
+package com.zfoo.net.router.attachment;
 
 import com.zfoo.util.math.HashUtils;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -21,7 +20,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
  * @author jaysunxiao
  * @version 3.0
  */
-public class HttpPacketAttachment implements IPacketAttachment {
+public class HttpAttachment implements IAttachment {
 
     public static final transient short PROTOCOL_ID = 3;
 
@@ -35,16 +34,16 @@ public class HttpPacketAttachment implements IPacketAttachment {
 
     private transient HttpResponseStatus httpResponseStatus;
 
-    public static HttpPacketAttachment valueOf(FullHttpRequest fullHttpRequest, HttpResponseStatus httpResponseStatus) {
-        var attachment = new HttpPacketAttachment();
+    public static HttpAttachment valueOf(FullHttpRequest fullHttpRequest, HttpResponseStatus httpResponseStatus) {
+        var attachment = new HttpAttachment();
         attachment.fullHttpRequest = fullHttpRequest;
         attachment.httpResponseStatus = httpResponseStatus;
         return attachment;
     }
 
     @Override
-    public PacketAttachmentType packetType() {
-        return PacketAttachmentType.HTTP_PACKET;
+    public AttachmentType packetType() {
+        return AttachmentType.HTTP_PACKET;
     }
 
     @Override

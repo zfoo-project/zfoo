@@ -29,20 +29,20 @@ public class PacketSignalMap {
 
     private static final Logger logger = LoggerFactory.getLogger(PacketSignalMap.class);
 
-    private static Map<Integer, Integer> signalPacketAttachmentMap = new ConcurrentHashMap<>(1_0000);
+    private static final Map<Integer, Integer> signalAttachmentMap = new ConcurrentHashMap<>(1_0000);
 
     public static void addSignalAttachment(int packetId) {
-        signalPacketAttachmentMap.put(packetId, packetId);
+        signalAttachmentMap.put(packetId, packetId);
     }
 
 
     public static void removeSignalAttachment(int packetId) {
-        signalPacketAttachmentMap.remove(packetId);
+        signalAttachmentMap.remove(packetId);
     }
 
     public static void status() {
-        signalPacketAttachmentMap.forEach((key, value) -> {
-            logger.info("signalPacketAttachmentMap has attachment [key:{}][value:{}]", key, JsonUtils.object2String(value));
+        signalAttachmentMap.forEach((key, value) -> {
+            logger.info("signalAttachmentMap has attachment [key:{}][value:{}]", key, JsonUtils.object2String(value));
         });
     }
 

@@ -12,8 +12,8 @@
 
 package com.zfoo.net.core.udp.client;
 
-import com.zfoo.net.packet.model.UdpPacketAttachment;
 import com.zfoo.net.packet.udp.UdpHelloResponse;
+import com.zfoo.net.router.attachment.UdpAttachment;
 import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.util.JsonUtils;
@@ -31,7 +31,7 @@ public class UdpClientPacketController {
     private static final Logger logger = LoggerFactory.getLogger(UdpClientPacketController.class);
 
     @PacketReceiver
-    public void atUdpHelloResponse(Session session, UdpHelloResponse response, UdpPacketAttachment attachment) {
+    public void atUdpHelloResponse(Session session, UdpHelloResponse response, UdpAttachment attachment) {
         logger.info("udp client receive [packet:{}] from server", JsonUtils.object2String(response));
     }
 

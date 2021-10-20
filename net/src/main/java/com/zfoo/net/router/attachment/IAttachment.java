@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.packet.model;
+package com.zfoo.net.router.attachment;
 
 import com.zfoo.protocol.IPacket;
 
@@ -19,9 +18,9 @@ import com.zfoo.protocol.IPacket;
  * @author jaysunxiao
  * @version 3.0
  */
-public interface IPacketAttachment extends IPacket {
+public interface IAttachment extends IPacket {
 
-    PacketAttachmentType packetType();
+    AttachmentType packetType();
 
     /**
      * 用来确定这条消息在哪一个线程处理

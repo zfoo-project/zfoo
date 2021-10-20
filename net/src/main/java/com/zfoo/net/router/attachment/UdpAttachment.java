@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.packet.model;
+package com.zfoo.net.router.attachment;
 
 import com.zfoo.util.math.RandomUtils;
 
@@ -19,23 +18,23 @@ import com.zfoo.util.math.RandomUtils;
  * @author jaysunxiao
  * @version 3.0
  */
-public class UdpPacketAttachment implements IPacketAttachment {
+public class UdpAttachment implements IAttachment {
 
     public static final transient short PROTOCOL_ID = 2;
 
     private String host;
     private int port;
 
-    public static UdpPacketAttachment valueOf(String host, int port) {
-        var attachment = new UdpPacketAttachment();
+    public static UdpAttachment valueOf(String host, int port) {
+        var attachment = new UdpAttachment();
         attachment.host = host;
         attachment.port = port;
         return attachment;
     }
 
     @Override
-    public PacketAttachmentType packetType() {
-        return PacketAttachmentType.UDP_PACKET;
+    public AttachmentType packetType() {
+        return AttachmentType.UDP_PACKET;
     }
 
     @Override

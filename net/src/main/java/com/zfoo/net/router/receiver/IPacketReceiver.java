@@ -13,7 +13,7 @@
 
 package com.zfoo.net.router.receiver;
 
-import com.zfoo.net.packet.model.IPacketAttachment;
+import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 
@@ -23,6 +23,6 @@ import com.zfoo.protocol.IPacket;
  */
 public interface IPacketReceiver {
 
-    void invoke(Session session, IPacket packet, IPacketAttachment attachment);
+    void invoke(Session session, IPacket packet, IAttachment attachment);
 
 }

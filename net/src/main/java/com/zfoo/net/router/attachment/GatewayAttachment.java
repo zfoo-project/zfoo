@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.packet.model;
+package com.zfoo.net.router.attachment;
 
 import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.session.model.Session;
@@ -24,7 +23,7 @@ import org.springframework.lang.Nullable;
  * @author jaysunxiao
  * @version 3.0
  */
-public class GatewayPacketAttachment implements IPacketAttachment {
+public class GatewayAttachment implements IAttachment {
 
     public static final transient short PROTOCOL_ID = 1;
 
@@ -56,29 +55,29 @@ public class GatewayPacketAttachment implements IPacketAttachment {
     /**
      * 客户端发到网关的可能是一个带有同步或者异步的附加包，网关转发的时候需要把这个附加包给带上
      */
-    private SignalPacketAttachment signalPacketAttachment;
+    private SignalAttachment signalAttachment;
 
 
-    public GatewayPacketAttachment() {
+    public GatewayAttachment() {
     }
 
-    public GatewayPacketAttachment(Session session, @Nullable SignalPacketAttachment signalPacketAttachment) {
+    public GatewayAttachment(Session session, @Nullable SignalAttachment signalAttachment) {
         this.client = true;
         this.sid = session.getSid();
         var uid = session.getAttribute(AttributeType.UID);
         this.uid = uid == null ? 0 : (long) uid;
-        this.signalPacketAttachment = signalPacketAttachment;
+        this.signalAttachment = signalAttachment;
     }
 
-    public GatewayPacketAttachment(long sid, long uid) {
+    public GatewayAttachment(long sid, long uid) {
         this.sid = sid;
         this.uid = uid;
     }
 
 
     @Override
-    public PacketAttachmentType packetType() {
-        return PacketAttachmentType.GATEWAY_PACKET;
+    public AttachmentType packetType() {
+        return AttachmentType.GATEWAY_PACKET;
     }
 
     @Override
@@ -141,11 +140,11 @@ public class GatewayPacketAttachment implements IPacketAttachment {
     }
 
 
-    public SignalPacketAttachment getSignalPacketAttachment() {
-        return signalPacketAttachment;
+    public SignalAttachment getSignalAttachment() {
+        return signalAttachment;
     }
 
-    public void setSignalPacketAttachment(SignalPacketAttachment signalPacketAttachment) {
-        this.signalPacketAttachment = signalPacketAttachment;
+    public void setSignalAttachment(SignalAttachment signalAttachment) {
+        this.signalAttachment = signalAttachment;
     }
 }

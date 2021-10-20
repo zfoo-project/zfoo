@@ -15,7 +15,7 @@ package com.zfoo.net.handler.codec.http;
 import com.zfoo.net.packet.common.Message;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.packet.model.EncodedPacketInfo;
-import com.zfoo.net.packet.model.HttpPacketAttachment;
+import com.zfoo.net.router.attachment.HttpAttachment;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -37,7 +37,7 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
 
     private static final Logger logger = LoggerFactory.getLogger(HttpCodecHandler.class);
 
-    private Function<FullHttpRequest, DecodedPacketInfo> uriResolver;
+    private final Function<FullHttpRequest, DecodedPacketInfo> uriResolver;
 
     public HttpCodecHandler(Function<FullHttpRequest, DecodedPacketInfo> uriResolver) {
         super();
@@ -62,7 +62,7 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
         try {
             var packet = (IPacket) out.getPacket();
-            var attachment = (HttpPacketAttachment) out.getPacketAttachment();
+            var attachment = (HttpAttachment) out.getAttachment();
 
             var protocolVersion = attachment.getFullHttpRequest().protocolVersion();
             var httpResponseStatus = attachment.getHttpResponseStatus();

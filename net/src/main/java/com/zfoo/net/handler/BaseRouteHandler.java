@@ -65,7 +65,7 @@ public class BaseRouteHandler extends ChannelInboundHandlerAdapter {
             return;
         }
         DecodedPacketInfo decodedPacketInfo = (DecodedPacketInfo) msg;
-        NetContext.getRouter().receive(session, decodedPacketInfo.getPacket(), decodedPacketInfo.getPacketAttachment());
+        NetContext.getRouter().receive(session, decodedPacketInfo.getPacket(), decodedPacketInfo.getAttachment());
     }
 
     @Override

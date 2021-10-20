@@ -13,6 +13,7 @@
 
 package com.zfoo.net.packet.model;
 
+import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.protocol.IPacket;
 import org.springframework.lang.Nullable;
 
@@ -32,7 +33,7 @@ public class EncodedPacketInfo {
     /**
      * 解码后的包的附加包
      */
-    private IPacketAttachment packetAttachment;
+    private IAttachment attachment;
 
     /**
      * 长度
@@ -43,10 +44,10 @@ public class EncodedPacketInfo {
      */
     private long encodedTime;
 
-    public static EncodedPacketInfo valueOf(IPacket packet, @Nullable IPacketAttachment packetAttachment) {
+    public static EncodedPacketInfo valueOf(IPacket packet, @Nullable IAttachment attachment) {
         EncodedPacketInfo packetInfo = new EncodedPacketInfo();
         packetInfo.packet = packet;
-        packetInfo.packetAttachment = packetAttachment;
+        packetInfo.attachment = attachment;
         return packetInfo;
     }
 
@@ -58,12 +59,12 @@ public class EncodedPacketInfo {
         this.packet = packet;
     }
 
-    public IPacketAttachment getPacketAttachment() {
-        return packetAttachment;
+    public IAttachment getAttachment() {
+        return attachment;
     }
 
-    public void setPacketAttachment(IPacketAttachment packetAttachment) {
-        this.packetAttachment = packetAttachment;
+    public void setAttachment(IAttachment attachment) {
+        this.attachment = attachment;
     }
 
     public int getLength() {

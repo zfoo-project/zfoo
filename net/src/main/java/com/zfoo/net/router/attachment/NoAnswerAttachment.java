@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.packet.model;
+package com.zfoo.net.router.attachment;
 
 /**
  * 附加包对业务层透明，禁止在业务层使用
@@ -19,7 +18,7 @@ package com.zfoo.net.packet.model;
  * @author jaysunxiao
  * @version 3.0
  */
-public class NoAnswerAttachment implements IPacketAttachment {
+public class NoAnswerAttachment implements IAttachment {
 
     public static final transient short PROTOCOL_ID = 4;
 
@@ -35,8 +34,8 @@ public class NoAnswerAttachment implements IPacketAttachment {
     }
 
     @Override
-    public PacketAttachmentType packetType() {
-        return PacketAttachmentType.NO_ANSWER_PACKET;
+    public AttachmentType packetType() {
+        return AttachmentType.NO_ANSWER_PACKET;
     }
 
     @Override

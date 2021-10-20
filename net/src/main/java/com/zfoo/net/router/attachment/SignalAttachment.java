@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.packet.model;
+package com.zfoo.net.router.attachment;
 
 import com.zfoo.protocol.IPacket;
 import com.zfoo.scheduler.util.TimeUtils;
@@ -25,16 +24,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author jaysunxiao
  * @version 3.0
  */
-public class SignalPacketAttachment implements IPacketAttachment {
+public class SignalAttachment implements IAttachment {
 
     public static final transient short PROTOCOL_ID = 0;
 
-    private static final AtomicInteger ATOMIC_PACKET_ID = new AtomicInteger(0);
+    private static final AtomicInteger ATOMIC_ID = new AtomicInteger(0);
 
     /**
-     * 唯一标识一个packet， 唯一表示一个PacketAttachment，hashcode() and equals() 也通过packetId计算
+     * 唯一标识一个packet， 唯一表示一个Attachment，hashcode() and equals() 也通过signalId计算
      */
-    private int packetId = ATOMIC_PACKET_ID.incrementAndGet();
+    private int signalId = ATOMIC_ID.incrementAndGet();
 
     /**
      * 用来在TaskBus中计算一致性hash的参数
@@ -56,13 +55,13 @@ public class SignalPacketAttachment implements IPacketAttachment {
      */
     private transient CompletableFuture<IPacket> responseFuture = new CompletableFuture<>();
 
-    public SignalPacketAttachment() {
+    public SignalAttachment() {
     }
 
 
     @Override
-    public PacketAttachmentType packetType() {
-        return PacketAttachmentType.SIGNAL_PACKET;
+    public AttachmentType packetType() {
+        return AttachmentType.SIGNAL_PACKET;
     }
 
     @Override
@@ -92,21 +91,21 @@ public class SignalPacketAttachment implements IPacketAttachment {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        SignalPacketAttachment that = (SignalPacketAttachment) o;
-        return packetId == that.packetId;
+        SignalAttachment that = (SignalAttachment) o;
+        return signalId == that.signalId;
     }
 
     @Override
     public int hashCode() {
-        return packetId;
+        return signalId;
     }
 
-    public int getPacketId() {
-        return packetId;
+    public int getSignalId() {
+        return signalId;
     }
 
-    public void setPacketId(int packetId) {
-        this.packetId = packetId;
+    public void setSignalId(int signalId) {
+        this.signalId = signalId;
     }
 
     public int getExecutorConsistentHash() {

@@ -13,7 +13,7 @@
 package com.zfoo.net.router;
 
 import com.zfoo.event.manager.EventBus;
-import com.zfoo.net.router.route.PacketSignal;
+import com.zfoo.net.router.route.SignalBridge;
 import com.zfoo.scheduler.util.TimeUtils;
 import com.zfoo.util.ThreadUtils;
 import org.junit.Ignore;
@@ -28,13 +28,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @version 3.0
  */
 @Ignore
-public class PacketSignalTest {
+public class SignalBridgeTest {
 
-    private AtomicInteger atomicInteger = new AtomicInteger(0);
+    private final AtomicInteger atomicInteger = new AtomicInteger(0);
 
-    private int executorSize = EventBus.EXECUTORS_SIZE / 2;
-    private int count = 100_0000;
-    private int totalIndex = 10;
+    private final int executorSize = EventBus.EXECUTORS_SIZE / 2;
+    private final int count = 100_0000;
+    private final int totalIndex = 10;
 
     @Test
     public void test() throws InterruptedException {
@@ -63,7 +63,7 @@ public class PacketSignalTest {
             });
         }
         countDownLatch.await();
-        PacketSignal.status();
+        SignalBridge.status();
         System.out.println(TimeUtils.currentTimeMillis() - startTime);
     }
 

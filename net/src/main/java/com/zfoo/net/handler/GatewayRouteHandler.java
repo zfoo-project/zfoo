@@ -22,9 +22,9 @@ import com.zfoo.net.packet.common.Heartbeat;
 import com.zfoo.net.packet.common.Ping;
 import com.zfoo.net.packet.common.Pong;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
-import com.zfoo.net.packet.model.GatewayPacketAttachment;
-import com.zfoo.net.packet.model.IPacketAttachment;
-import com.zfoo.net.packet.model.SignalPacketAttachment;
+import com.zfoo.net.router.attachment.GatewayAttachment;
+import com.zfoo.net.router.attachment.IAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.net.util.SessionUtils;
@@ -48,7 +48,7 @@ public class GatewayRouteHandler extends ServerRouteHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GatewayRouteHandler.class);
 
-    private BiFunction<Session, IPacket, Boolean> packetFilter;
+    private final BiFunction<Session, IPacket, Boolean> packetFilter;
 
     public GatewayRouteHandler(BiFunction<Session, IPacket, Boolean> packetFilter) {
         this.packetFilter = packetFilter;
@@ -78,33 +78,33 @@ public class GatewayRouteHandler extends ServerRouteHandler {
                     , SessionUtils.sessionInfo(ctx), JsonUtils.object2String(packet)));
         }
 
-        var signalAttachment = (SignalPacketAttachment) decodedPacketInfo.getPacketAttachment();
-        var gatewayPacketAttachment = new GatewayPacketAttachment(session, signalAttachment);
+        var signalAttachment = (SignalAttachment) decodedPacketInfo.getAttachment();
+        var gatewayAttachment = new GatewayAttachment(session, signalAttachment);
 
         // 网关优先使用IGatewayLoadBalancer作为一致性hash的计算参数，然后才会使用客户端的session做参数
         if (packet instanceof IGatewayLoadBalancer) {
             var loadBalancerConsistentHashObject = ((IGatewayLoadBalancer) packet).loadBalancerConsistentHashObject();
-            gatewayPacketAttachment.useExecutorConsistentHash(loadBalancerConsistentHashObject);
-            forwardingPacket(packet, gatewayPacketAttachment, loadBalancerConsistentHashObject);
+            gatewayAttachment.useExecutorConsistentHash(loadBalancerConsistentHashObject);
+            forwardingPacket(packet, gatewayAttachment, loadBalancerConsistentHashObject);
             return;
         } else {
             // 使用用户的uid做一致性hash
             var uid = (Long) session.getAttribute(AttributeType.UID);
             if (uid != null) {
-                forwardingPacket(packet, gatewayPacketAttachment, uid);
+                forwardingPacket(packet, gatewayAttachment, uid);
                 return;
             }
         }
         // 再使用session的sid做一致性hash，因为每次客户端连接过来sid都会改变，所以客户端重写建立连接的话可能会被路由到其它的服务器
         // 如果有特殊需求的话，可以考虑去重写网关的转发策略
         var sid = session.getSid();
-        forwardingPacket(packet, gatewayPacketAttachment, sid);
+        forwardingPacket(packet, gatewayAttachment, sid);
     }
 
     /**
      * 转发网关收到的包
      */
-    private void forwardingPacket(IPacket packet, IPacketAttachment attachment, Object argument) {
+    private void forwardingPacket(IPacket packet, IAttachment attachment, Object argument) {
         try {
             var consumerSession = ConsistentHashConsumerLoadBalancer.getInstance().loadBalancer(packet, argument);
             NetContext.getRouter().send(consumerSession, packet, attachment);

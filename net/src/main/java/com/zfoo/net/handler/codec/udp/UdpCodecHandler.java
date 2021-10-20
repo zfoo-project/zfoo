@@ -15,8 +15,8 @@ package com.zfoo.net.handler.codec.udp;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.packet.model.EncodedPacketInfo;
-import com.zfoo.net.packet.model.UdpPacketAttachment;
 import com.zfoo.net.packet.service.PacketService;
+import com.zfoo.net.router.attachment.UdpAttachment;
 import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -68,7 +68,7 @@ public class UdpCodecHandler extends MessageToMessageCodec<DatagramPacket, Encod
             tmpByteBuf = in.readRetainedSlice(length);
             DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
             var sender = datagramPacket.sender();
-            packetInfo.setPacketAttachment(UdpPacketAttachment.valueOf(sender.getHostString(), sender.getPort()));
+            packetInfo.setAttachment(UdpAttachment.valueOf(sender.getHostString(), sender.getPort()));
             list.add(packetInfo);
         } catch (Exception e) {
             logger.error("exception异常", e);
@@ -85,10 +85,10 @@ public class UdpCodecHandler extends MessageToMessageCodec<DatagramPacket, Encod
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
         try {
             var byteBuf = channelHandlerContext.alloc().ioBuffer();
-            var udpPacketAttachment = (UdpPacketAttachment) out.getPacketAttachment();
+            var udpAttachment = (UdpAttachment) out.getAttachment();
 
-            NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getPacketAttachment());
-            list.add(new DatagramPacket(byteBuf, new InetSocketAddress(udpPacketAttachment.getHost(), udpPacketAttachment.getPort())));
+            NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getAttachment());
+            list.add(new DatagramPacket(byteBuf, new InetSocketAddress(udpAttachment.getHost(), udpAttachment.getPort())));
         } catch (Exception e) {
             logger.error("[{}]编码exception异常", JsonUtils.object2String(out), e);
             throw e;

@@ -16,9 +16,9 @@ package com.zfoo.net.protocol;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.*;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
-import com.zfoo.net.packet.model.SignalPacketAttachment;
 import com.zfoo.net.packet.service.IPacketService;
 import com.zfoo.net.packet.service.PacketService;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.junit.Assert;
@@ -39,11 +39,15 @@ public class ProtocolTest {
     private static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
     private static final IPacketService packetService = NetContext.getPacketService();
 
-    private static SignalPacketAttachment attachment = new SignalPacketAttachment();
+    private static final SignalAttachment attachment = new SignalAttachment();
 
-    private static ObjectA objectA0 = new ObjectA();
-    private static ObjectA objectA1 = new ObjectA();
-    private static ObjectB objectB = new ObjectB();
+    private static final ObjectA objectA0 = new ObjectA();
+    private static final ObjectA objectA1 = new ObjectA();
+    private static final ObjectB objectB = new ObjectB();
+    private static final List<Integer> list = List.of(Integer.MIN_VALUE, -99, 0, 99, Integer.MAX_VALUE);
+    private static final Map<Integer, String> mapWithIntegerAndString = Map.of(Integer.MIN_VALUE, "min", -99, "-99", 0, "0", 99, "99", Integer.MAX_VALUE, "max");
+    private static final Map<Integer, ObjectA> mapWithObject = Map.of(Integer.MIN_VALUE, objectA0, -99, objectA0, 0, objectA0, 99, objectA0, Integer.MAX_VALUE, objectA0);
+    private static final List<Map<Integer, ObjectA>> listWithMapWithObject = List.of(mapWithObject, mapWithObject, mapWithObject);
 
     static {
         objectA0.setA(Integer.MAX_VALUE);
@@ -52,15 +56,8 @@ public class ProtocolTest {
         objectA1.setObjectB(objectB);
         objectB.setFlag(false);
 
-        attachment.setPacketId(Integer.MAX_VALUE);
+        attachment.setSignalId(Integer.MAX_VALUE);
     }
-
-    private static List<Integer> list = List.of(Integer.MIN_VALUE, -99, 0, 99, Integer.MAX_VALUE);
-
-    private static Map<Integer, String> mapWithIntegerAndString = Map.of(Integer.MIN_VALUE, "min", -99, "-99", 0, "0", 99, "99", Integer.MAX_VALUE, "max");
-    private static Map<Integer, ObjectA> mapWithObject = Map.of(Integer.MIN_VALUE, objectA0, -99, objectA0, 0, objectA0, 99, objectA0, Integer.MAX_VALUE, objectA0);
-    private static List<Map<Integer, ObjectA>> listWithMapWithObject = List.of(mapWithObject, mapWithObject, mapWithObject);
-
 
     @Test
     public void testCMInt() {
@@ -81,7 +78,7 @@ public class ProtocolTest {
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
         Assert.assertEquals(packetInfo.getPacket(), cm);
-        Assert.assertEquals(packetInfo.getPacketAttachment(), attachment);
+        Assert.assertEquals(packetInfo.getAttachment(), attachment);
     }
 
     @Test
@@ -98,7 +95,7 @@ public class ProtocolTest {
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
         Assert.assertEquals(packetInfo.getPacket(), cm);
-        Assert.assertNull(packetInfo.getPacketAttachment());
+        Assert.assertNull(packetInfo.getAttachment());
     }
 
     @Test
@@ -117,7 +114,7 @@ public class ProtocolTest {
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
         Assert.assertEquals(packetInfo.getPacket(), cm);
-        Assert.assertNull(packetInfo.getPacketAttachment());
+        Assert.assertNull(packetInfo.getAttachment());
     }
 
     @Test
@@ -136,7 +133,7 @@ public class ProtocolTest {
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
         Assert.assertEquals(packetInfo.getPacket(), cm);
-        Assert.assertNull(packetInfo.getPacketAttachment());
+        Assert.assertNull(packetInfo.getAttachment());
     }
 
     @Test
@@ -171,7 +168,7 @@ public class ProtocolTest {
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
         Assert.assertEquals(packetInfo.getPacket(), cm);
-        Assert.assertNull(packetInfo.getPacketAttachment());
+        Assert.assertNull(packetInfo.getAttachment());
     }
 
 
@@ -201,7 +198,7 @@ public class ProtocolTest {
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
         Assert.assertEquals(packetInfo.getPacket(), cm);
-        Assert.assertNull(packetInfo.getPacketAttachment());
+        Assert.assertNull(packetInfo.getAttachment());
     }
 
     @Test
@@ -220,7 +217,7 @@ public class ProtocolTest {
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
         Assert.assertEquals(packetInfo.getPacket(), cm);
-        Assert.assertNull(packetInfo.getPacketAttachment());
+        Assert.assertNull(packetInfo.getAttachment());
     }
 
     @Test
@@ -248,7 +245,7 @@ public class ProtocolTest {
         DecodedPacketInfo packetInfo = packetService.read(writeBuff);
 
         Assert.assertEquals(packetInfo.getPacket(), cm);
-        Assert.assertNull(packetInfo.getPacketAttachment());
+        Assert.assertNull(packetInfo.getAttachment());
     }
 
 }

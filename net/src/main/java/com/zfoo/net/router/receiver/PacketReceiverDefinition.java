@@ -13,7 +13,7 @@
 
 package com.zfoo.net.router.receiver;
 
-import com.zfoo.net.packet.model.IPacketAttachment;
+import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.ReflectionUtils;
@@ -44,7 +44,7 @@ public class PacketReceiverDefinition implements IPacketReceiver {
     private Class<?> packetClazz;
 
     /**
-     * 接收的包的附加包的Class类，如GatewayPacketAttachment
+     * 接收的包的附加包的Class类，如GatewayAttachment
      */
     private Class<?> attachmentClazz;
 
@@ -57,7 +57,7 @@ public class PacketReceiverDefinition implements IPacketReceiver {
     }
 
     @Override
-    public void invoke(Session session, IPacket packet, IPacketAttachment attachment) {
+    public void invoke(Session session, IPacket packet, IAttachment attachment) {
         if (attachmentClazz == null) {
             ReflectionUtils.invokeMethod(bean, method, session, packet);
         } else {

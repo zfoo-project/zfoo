@@ -13,7 +13,7 @@
 
 package com.zfoo.net.consumer.balancer;
 
-import com.zfoo.net.packet.model.SignalPacketAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
@@ -74,13 +74,13 @@ public class ShortestTimeConsumerLoadBalancer extends AbstractConsumerLoadBalanc
     }
 
     @Override
-    public void beforeLoadBalancer(Session session, IPacket packet, SignalPacketAttachment attachment) {
+    public void beforeLoadBalancer(Session session, IPacket packet, SignalAttachment attachment) {
         // 因为要通过最短响应时间来路由分发消息，这里使用更精确的时间
         attachment.setTimestamp(TimeUtils.currentTimeMillis());
     }
 
     @Override
-    public void afterLoadBalancer(Session session, IPacket packet, SignalPacketAttachment attachment) {
+    public void afterLoadBalancer(Session session, IPacket packet, SignalAttachment attachment) {
         var map = (Map<Short, Long>) session.getAttribute(AttributeType.RESPONSE_TIME);
         if (map == null) {
             map = new ConcurrentHashMap<>();
