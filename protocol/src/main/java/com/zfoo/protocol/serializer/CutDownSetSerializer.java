@@ -17,6 +17,7 @@ import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
 import com.zfoo.protocol.registration.field.SetField;
+import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -53,6 +54,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeBooleanArray({})", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteBooleanSet({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -67,6 +71,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({})", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteByteSet({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -83,6 +90,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({})", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteShortSet({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -97,6 +107,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({})", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteIntSet({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -113,6 +126,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({})", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteLongSet({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -127,6 +143,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({})", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteFloatSet({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -143,6 +162,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({})", objectStr)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteDoubleSet({});", objectStr)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -157,6 +179,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeStringArray({})", objectStr)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("buffer.WriteStringSet({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -175,6 +200,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                             break;
                         case GdScript:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        case CSharp:
+                            builder.append(StringUtils.format("buffer.WritePacketSet<>({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
@@ -205,6 +233,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readBooleanArray()", set)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanSet();", set)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -219,6 +250,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readByteArray()", set)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadByteSet();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -235,6 +269,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readShortArray()", set)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadShortSet();", set)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -249,6 +286,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readIntArray()", set)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadIntSet();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -265,6 +305,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readLongArray()", set)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadLongSet();", set)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -279,6 +322,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readFloatArray()", set)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadFloatSet();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -295,6 +341,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleArray()", set)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadDoubleSet();", set)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -309,6 +358,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readStringArray()", set)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadStringSet();", set)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -327,6 +379,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", set, objectProtocolField.getProtocolId())).append(LS);
                             break;
+                        case CSharp:
+                            builder.append(StringUtils.format("var {} = buffer.ReadPacketSet<{}>({});", set, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId()), objectProtocolField.getProtocolId())).append(LS);
+                            break;
                         default:
                             flag = false;
                     }
@@ -343,4 +398,5 @@ public class CutDownSetSerializer implements ICutDownSerializer {
             return null;
         }
     }
+
 }

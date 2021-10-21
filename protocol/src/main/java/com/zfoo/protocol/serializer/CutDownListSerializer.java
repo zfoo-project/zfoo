@@ -17,10 +17,10 @@ import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ListField;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
+import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 
@@ -204,7 +204,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WritePacketList<{}>({}, {});", getListClassSimpleName(listField), objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WritePacketList<>({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
@@ -382,7 +382,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", list, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         case CSharp:
-                            builder.append(StringUtils.format("var {} = buffer.ReadPacketList<{}>({});", list, getListClassSimpleName(listField), objectProtocolField.getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.ReadPacketList<{}>({});", list, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId()), objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
@@ -399,10 +399,6 @@ public class CutDownListSerializer implements ICutDownSerializer {
             GenerateProtocolFile.index.getAndDecrement();
             return null;
         }
-    }
-
-    public String getListClassSimpleName(ListField listField) {
-        return ((Class<?>) ((ParameterizedType) listField.getType()).getActualTypeArguments()[0]).getSimpleName();
     }
 
 }

@@ -1188,5 +1188,682 @@ namespace CsProtocol.Buffer
             }
             return list;
         }
+
+        public void WriteBooleanSet(HashSet<bool> set)
+        {
+            if ((set == null) || (set.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(set.Count);
+                foreach (var element in set)
+                {
+                    WriteBool(element);
+                }
+            }
+        }
+
+        public HashSet<bool> ReadBooleanSet()
+        {
+            int size = ReadInt();
+            HashSet<bool> set = new HashSet<bool>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    set.Add(ReadBool());
+                }
+            }
+            return set;
+        }
+
+        public void WriteShortSet(HashSet<short> set)
+        {
+            if ((set == null) || (set.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(set.Count);
+                foreach (var element in set)
+                {
+                    WriteShort(element);
+                }
+            }
+        }
+
+        public HashSet<short> ReadShortSet()
+        {
+            int size = ReadInt();
+            HashSet<short> set = new HashSet<short>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    set.Add(ReadShort());
+                }
+            }
+            return set;
+        }
+
+        public void WriteIntSet(HashSet<int> set)
+        {
+            if ((set == null) || (set.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(set.Count);
+                foreach (var element in set)
+                {
+                    WriteInt(element);
+                }
+            }
+        }
+
+        public HashSet<int> ReadIntSet()
+        {
+            int size = ReadInt();
+            HashSet<int> set = new HashSet<int>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    set.Add(ReadInt());
+                }
+            }
+            return set;
+        }
+
+        public void WriteLongSet(HashSet<long> set)
+        {
+            if ((set == null) || (set.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(set.Count);
+                foreach (var element in set)
+                {
+                    WriteLong(element);
+                }
+            }
+        }
+
+        public HashSet<long> ReadLongSet()
+        {
+            int size = ReadInt();
+            HashSet<long> set = new HashSet<long>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    set.Add(ReadLong());
+                }
+            }
+            return set;
+        }
+
+        public void WriteFloatSet(HashSet<float> set)
+        {
+            if ((set == null) || (set.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(set.Count);
+                foreach (var element in set)
+                {
+                    WriteFloat(element);
+                }
+            }
+        }
+
+        public HashSet<float> ReadFloatSet()
+        {
+            int size = ReadInt();
+            HashSet<float> set = new HashSet<float>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    set.Add(ReadFloat());
+                }
+            }
+            return set;
+        }
+
+        public void WriteDoubleSet(HashSet<double> set)
+        {
+            if ((set == null) || (set.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(set.Count);
+                foreach (var element in set)
+                {
+                    WriteDouble(element);
+                }
+            }
+        }
+
+        public HashSet<double> ReadDoubleSet()
+        {
+            int size = ReadInt();
+            HashSet<double> set = new HashSet<double>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    set.Add(ReadDouble());
+                }
+            }
+            return set;
+        }
+
+        public void WriteCharSet(HashSet<char> set)
+        {
+            if ((set == null) || (set.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(set.Count);
+                foreach (var element in set)
+                {
+                    WriteChar(element);
+                }
+            }
+        }
+
+        public HashSet<char> ReadCharSet()
+        {
+            int size = ReadInt();
+            HashSet<char> set = new HashSet<char>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    set.Add(ReadChar());
+                }
+            }
+            return set;
+        }
+
+        public void WriteStringSet(HashSet<string> set)
+        {
+            if ((set == null) || (set.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(set.Count);
+                foreach (var element in set)
+                {
+                    WriteString(element);
+                }
+            }
+        }
+
+        public HashSet<string> ReadStringSet()
+        {
+            int size = ReadInt();
+            HashSet<string> set = new HashSet<string>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    set.Add(ReadString());
+                }
+            }
+            return set;
+        }
+
+        public void WritePacketSet<T>(HashSet<T> set, short protocolId)
+        {
+            if ((set == null) || (set.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                WriteInt(set.Count);
+                foreach (var element in set)
+                {
+                    protocolRegistration.Write(this, (IPacket) element);
+                }
+            }
+        }
+
+        public HashSet<T> ReadPacketSet<T>(short protocolId)
+        {
+            int size = ReadInt();
+            HashSet<T> set = new HashSet<T>(size);
+            if (size > 0)
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                for (int index = 0; index < size; index++)
+                {
+                    set.Add((T) protocolRegistration.Read(this));
+                }
+            }
+            return set;
+        }
+
+        public void WriteIntIntMap(Dictionary<int, int> map)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteInt(element.Key);
+                    WriteInt(element.Value);
+                }
+            }
+        }
+
+        public Dictionary<int, int> ReadIntIntMap()
+        {
+            int size = ReadInt();
+            Dictionary<int, int> map = new Dictionary<int, int>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadInt();
+                    var value = ReadInt();
+                    map[key] = value;
+                }
+            }
+            return map;
+        }
+
+        public void WriteIntLongMap(Dictionary<int, long> map)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteInt(element.Key);
+                    WriteLong(element.Value);
+                }
+            }
+        }
+
+        public Dictionary<int, long> ReadIntLongMap()
+        {
+            int size = ReadInt();
+            Dictionary<int, long> map = new Dictionary<int, long>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadInt();
+                    var value = ReadLong();
+                    map[key] = value;
+                }
+            }
+            return map;
+        }
+
+        public void WriteIntStringMap(Dictionary<int, string> map)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteInt(element.Key);
+                    WriteString(element.Value);
+                }
+            }
+        }
+
+        public Dictionary<int, string> ReadIntStringMap()
+        {
+            int size = ReadInt();
+            Dictionary<int, string> map = new Dictionary<int, string>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadInt();
+                    var value = ReadString();
+                    map[key] = value;
+                }
+            }
+            return map;
+        }
+
+
+         public void WriteIntPacketMap<T>(Dictionary<int, T> map, short protocolId)
+         {
+             if ((map == null) || (map.Count == 0))
+             {
+                 WriteInt(0);
+             }
+             else
+             {
+                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                 WriteInt(map.Count);
+                 foreach (var element in map)
+                 {
+                     WriteInt(element.Key);
+                     protocolRegistration.Write(this, (IPacket) element.Value);
+                 }
+             }
+         }
+
+         public Dictionary<int, T> ReadIntPacketMap<T>(short protocolId)
+         {
+             int size = ReadInt();
+             Dictionary<int, T> map = new Dictionary<int, T>(size);
+             if (size > 0)
+             {
+                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                 for (int index = 0; index < size; index++)
+                 {
+                     var key = ReadInt();
+                     var value = (T) protocolRegistration.Read(this);
+                     map[key] = value;
+                 }
+             }
+             return map;
+         }
+
+        public void WriteLongIntMap(Dictionary<long, int> map)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteLong(element.Key);
+                    WriteInt(element.Value);
+                }
+            }
+        }
+
+        public Dictionary<long, int> ReadLongIntMap()
+        {
+            int size = ReadInt();
+            Dictionary<long, int> map = new Dictionary<long, int>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadLong();
+                    var value = ReadInt();
+                    map[key] = value;
+                }
+            }
+            return map;
+        }
+
+        public void WriteLongLongMap(Dictionary<long, long> map)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteLong(element.Key);
+                    WriteLong(element.Value);
+                }
+            }
+        }
+
+        public Dictionary<long, long> ReadLongLongMap()
+        {
+            int size = ReadInt();
+            Dictionary<long, long> map = new Dictionary<long, long>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadLong();
+                    var value = ReadLong();
+                    map[key] = value;
+                }
+            }
+            return map;
+        }
+
+        public void WriteLongStringMap(Dictionary<long, string> map)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteLong(element.Key);
+                    WriteString(element.Value);
+                }
+            }
+        }
+
+        public Dictionary<long, string> ReadLongStringMap()
+        {
+            int size = ReadInt();
+            Dictionary<long, string> map = new Dictionary<long, string>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadLong();
+                    var value = ReadString();
+                    map[key] = value;
+                }
+            }
+            return map;
+        }
+
+
+         public void WriteLongPacketMap<T>(Dictionary<long, T> map, short protocolId)
+         {
+             if ((map == null) || (map.Count == 0))
+             {
+                 WriteInt(0);
+             }
+             else
+             {
+                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                 WriteInt(map.Count);
+                 foreach (var element in map)
+                 {
+                     WriteLong(element.Key);
+                     protocolRegistration.Write(this, (IPacket) element.Value);
+                 }
+             }
+         }
+
+         public Dictionary<long, T> ReadLongPacketMap<T>(short protocolId)
+         {
+             int size = ReadInt();
+             Dictionary<long, T> map = new Dictionary<long, T>(size);
+             if (size > 0)
+             {
+                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                 for (int index = 0; index < size; index++)
+                 {
+                     var key = ReadLong();
+                     var value = (T) protocolRegistration.Read(this);
+                     map[key] = value;
+                 }
+             }
+             return map;
+         }
+
+        public void WriteStringIntMap(Dictionary<string, int> map)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteString(element.Key);
+                    WriteInt(element.Value);
+                }
+            }
+        }
+
+        public Dictionary<string, int> ReadStringIntMap()
+        {
+            int size = ReadInt();
+            Dictionary<string, int> map = new Dictionary<string, int>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadString();
+                    var value = ReadInt();
+                    map[key] = value;
+                }
+            }
+            return map;
+        }
+
+        public void WriteStringLongMap(Dictionary<string, long> map)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteString(element.Key);
+                    WriteLong(element.Value);
+                }
+            }
+        }
+
+        public Dictionary<string, long> ReadStringLongMap()
+        {
+            int size = ReadInt();
+            Dictionary<string, long> map = new Dictionary<string, long>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadString();
+                    var value = ReadLong();
+                    map[key] = value;
+                }
+            }
+            return map;
+        }
+
+        public void WriteStringStringMap(Dictionary<string, string> map)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteString(element.Key);
+                    WriteString(element.Value);
+                }
+            }
+        }
+
+        public Dictionary<string, string> ReadStringStringMap()
+        {
+            int size = ReadInt();
+            Dictionary<string, string> map = new Dictionary<string, string>(size);
+            if (size > 0)
+            {
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadString();
+                    var value = ReadString();
+                    map[key] = value;
+                }
+            }
+            return map;
+        }
+
+
+         public void WriteStringPacketMap<T>(Dictionary<string, T> map, short protocolId)
+         {
+             if ((map == null) || (map.Count == 0))
+             {
+                 WriteInt(0);
+             }
+             else
+             {
+                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                 WriteInt(map.Count);
+                 foreach (var element in map)
+                 {
+                     WriteString(element.Key);
+                     protocolRegistration.Write(this, (IPacket) element.Value);
+                 }
+             }
+         }
+
+         public Dictionary<string, T> ReadStringPacketMap<T>(short protocolId)
+         {
+             int size = ReadInt();
+             Dictionary<string, T> map = new Dictionary<string, T>(size);
+             if (size > 0)
+             {
+                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                 for (int index = 0; index < size; index++)
+                 {
+                     var key = ReadString();
+                     var value = (T) protocolRegistration.Read(this);
+                     map[key] = value;
+                 }
+             }
+             return map;
+         }
     }
 }

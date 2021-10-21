@@ -16,6 +16,8 @@ package com.zfoo.protocol.serializer.cs;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.MapField;
+import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.CutDownMapSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -30,9 +32,13 @@ public class CsMapSerializer implements ICsSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
+        GenerateProtocolFile.addTab(builder, deep);
+        if (CutDownMapSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.CSharp)) {
+            return;
+        }
+
         MapField mapField = (MapField) fieldRegistration;
 
-        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if (({} == null) || ({}.Count == 0))", objectStr, objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         builder.append("{").append(LS);
@@ -80,12 +86,17 @@ public class CsMapSerializer implements ICsSerializer {
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
+        GenerateProtocolFile.addTab(builder, deep);
+        var cutDown = CutDownMapSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.CSharp);
+        if (cutDown != null) {
+            return cutDown;
+        }
+
         MapField mapField = (MapField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         var typeName = GenerateCsUtils.toCsClassName(mapField.getType().toString());
 
-        GenerateProtocolFile.addTab(builder, deep);
         String size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {} = buffer.ReadInt();", size)).append(LS);
 

@@ -45,7 +45,11 @@ public class EnhanceObjectProtocolSerializer implements IEnhanceSerializer {
         return result;
     }
 
-    private String getProtocolClassCanonicalName(short protocolId) {
+    public static String getProtocolClassSimpleName(short protocolId) {
+        return ProtocolManager.getProtocol(protocolId).protocolConstructor().getDeclaringClass().getSimpleName();
+    }
+
+    public static String getProtocolClassCanonicalName(short protocolId) {
         return ProtocolManager.getProtocol(protocolId).protocolConstructor().getDeclaringClass().getCanonicalName();
     }
 

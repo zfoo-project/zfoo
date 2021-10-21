@@ -17,6 +17,7 @@ import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
+import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -364,7 +365,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WritePacketArray<{}>({}, {});", getArrayClassSimpleName(arrayField), objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WritePacketArray<{}>({}, {});", EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId()), objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
@@ -397,6 +398,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readBooleanArray()", array)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray();", array)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -411,6 +415,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readBooleanArray()", array)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -427,6 +434,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readByteArray()", array)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadByteArray();", array)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -441,6 +451,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readByteArray()", array)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadByteArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -457,6 +470,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readShortArray()", array)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadShortArray();", array)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -471,6 +487,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readShortArray()", array)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadShortArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -487,6 +506,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readIntArray()", array)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadIntArray();", array)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -501,6 +523,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readIntArray()", array)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadIntArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -517,6 +542,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readLongArray()", array)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadLongArray();", array)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -531,6 +559,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readLongArray()", array)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadLongArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -547,6 +578,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readFloatArray()", array)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadFloatArray();", array)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -561,6 +595,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readFloatArray()", array)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadFloatArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -577,6 +614,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleArray()", array)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadDoubleArray();", array)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -591,6 +631,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleArray()", array)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadDoubleArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -607,6 +650,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readStringArray()", array)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadStringArray();", array)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -622,6 +668,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readCharArray()", array)).append(LS);
                         break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadCharArray();", array)).append(LS);
+                        break;
                     default:
                         flag = false;
                 }
@@ -636,6 +685,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readCharArray()", array)).append(LS);
+                        break;
+                    case CSharp:
+                        builder.append(StringUtils.format("var {} = buffer.ReadCharArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -653,7 +705,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", array, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         case CSharp:
-                            builder.append(StringUtils.format("var {} = buffer.ReadPacketArray<{}>({});", array, getArrayClassSimpleName(arrayField), objectProtocolField.getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.ReadPacketArray<{}>({});", array, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId()), objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
@@ -674,10 +726,6 @@ public class CutDownArraySerializer implements ICutDownSerializer {
     public String getArrayClassName(ArrayField arrayField) {
         // 去掉包装类型的前缀java.lang
         return arrayField.getField().getType().getComponentType().getCanonicalName().replaceFirst("java.lang.", StringUtils.EMPTY);
-    }
-
-    public String getArrayClassSimpleName(ArrayField arrayField) {
-        return arrayField.getField().getType().getComponentType().getSimpleName();
     }
 
 }
