@@ -24,25 +24,31 @@ import org.apache.poi.ss.usermodel.FormulaError;
  * @version 3.0
  */
 public abstract class CellUtils {
+
+    public static String getCellStringValue(Cell cell) {
+        if (cell == null) {
+            return StringUtils.EMPTY;
+        }
+        return getCellValue(cell).toString().trim();
+    }
+
     /**
      * 获取单元格值
      *
      * @return 值，类型可能为：Date、Double、Boolean、String
      */
     public static Object getCellValue(Cell cell) {
+        if (cell == null) {
+            return StringUtils.EMPTY;
+        }
         return getCellValue(cell, cell.getCellType());
     }
-
-    public static String getCellStringValue(Cell cell) {
-        return getCellValue(cell).toString().trim();
-    }
-
 
     /**
      * 获取单元格值<br>
      * 如果单元格值为数字格式，则判断其格式中是否有小数部分，无则返回Long类型，否则返回Double类型
      */
-    public static Object getCellValue(Cell cell, CellType cellType) {
+    private static Object getCellValue(Cell cell, CellType cellType) {
         Object value;
         switch (cellType) {
             case NUMERIC:
@@ -94,10 +100,7 @@ public abstract class CellUtils {
         // 普通数字
         if (null != format && !format.contains(StringUtils.PERIOD)) {
             var longValue = (long) value;
-            if (longValue == value) {
-                // 对于无小数部分的数字类型，转为Long
-                return longValue;
-            }
+            // 对于无小数部分的数字类型，转为Long
         }
         return value;
     }

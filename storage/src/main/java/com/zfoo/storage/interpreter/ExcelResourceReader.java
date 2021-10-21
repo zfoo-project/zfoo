@@ -76,27 +76,17 @@ public class ExcelResourceReader implements IResourceReader {
             var instance = ReflectionUtils.newInstance(clazz);
 
             var idCell = row.getCell(0);
-            if (idCell == null || StringUtils.isBlank(CellUtils.getCellStringValue(idCell))) {
+            if (StringUtils.isBlank(CellUtils.getCellStringValue(idCell))) {
                 continue;
             }
 
             for (var fieldInfo : fieldInfos) {
                 var cell = row.getCell(fieldInfo.index);
-                if (cell != null) {
-                    var content = CellUtils.getCellStringValue(cell);
-                    if (!StringUtils.isEmpty(content)) {
-                        inject(instance, fieldInfo.field, content);
-                    }
-                }
-
-                // 如果读的是id列的单元格，则判断当前id是否为空
-                if (fieldInfo.field.isAnnotationPresent(Id.class)) {
-                    if (cell == null || StringUtils.isEmpty(CellUtils.getCellStringValue(cell))) {
-                        throw new RunException("静态资源[resource:{}]存在id未配置的项", clazz.getSimpleName());
-                    }
+                var content = CellUtils.getCellStringValue(cell);
+                if (StringUtils.isNotEmpty(content)) {
+                    inject(instance, fieldInfo.field, content);
                 }
             }
-
             result.add(instance);
         }
         return result;
@@ -146,6 +136,13 @@ public class ExcelResourceReader implements IResourceReader {
         for (var field : fieldList) {
             if (!cellFieldMap.containsKey(field.getName())) {
                 throw new RunException("资源类[class:{}]的声明属性[filed:{}]无法获取，请检查配置表的格式", clazz, field.getName());
+            }
+
+            if (field.isAnnotationPresent(Id.class)) {
+                var cellIndex = cellFieldMap.get(field.getName());
+                if (cellIndex != 0) {
+                    throw new RunException("资源类[class:{}]的主键[Id:{}]必须放在Excel配置表的第一列，请检查配置表的格式", clazz, field.getName());
+                }
             }
 
             if (Modifier.isPublic(field.getModifiers())) {

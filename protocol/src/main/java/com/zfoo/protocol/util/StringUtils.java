@@ -145,6 +145,9 @@ public abstract class StringUtils {
         return cs == null || cs.length() == 0;
     }
 
+    public static boolean isNotEmpty(final CharSequence cs) {
+        return !isEmpty(cs);
+    }
 
     /**
      * StringUtils.isBlank(null)=true
@@ -166,6 +169,10 @@ public abstract class StringUtils {
             }
         }
         return true;
+    }
+
+    public static boolean isNotBlank(final CharSequence cs) {
+        return !isBlank(cs);
     }
 
     public static String trim(String str) {
