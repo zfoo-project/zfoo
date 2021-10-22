@@ -1,4 +1,4 @@
-namespace CsProtocol.Buffer
+﻿namespace CsProtocol.Buffer
 {
     public interface IPacket
     {

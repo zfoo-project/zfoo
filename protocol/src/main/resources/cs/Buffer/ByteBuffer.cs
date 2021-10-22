@@ -60,7 +60,8 @@ namespace CsProtocol.Buffer
         {
             if (writeIndex > buffer.Length)
             {
-                throw new Exception("writeIndex[" + writeIndex + "] out of bounds exception: readerIndex: " + readOffset +
+                throw new Exception("writeIndex[" + writeIndex + "] out of bounds exception: readerIndex: " +
+                                    readOffset +
                                     ", writerIndex: " + writeOffset +
                                     "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + buffer.Length);
             }
@@ -564,7 +565,7 @@ namespace CsProtocol.Buffer
             WriteBool(!flag);
             return flag;
         }
-        
+
         public void WriteBooleanArray(bool[] array)
         {
             if ((array == null) || (array.Length == 0))
@@ -581,7 +582,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public bool[] ReadBooleanArray()
         {
             int size = ReadInt();
@@ -593,6 +594,7 @@ namespace CsProtocol.Buffer
                     array[index] = ReadBool();
                 }
             }
+
             return array;
         }
 
@@ -624,6 +626,7 @@ namespace CsProtocol.Buffer
                     array[index] = ReadByte();
                 }
             }
+
             return array;
         }
 
@@ -643,7 +646,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public short[] ReadShortArray()
         {
             int size = ReadInt();
@@ -655,9 +658,10 @@ namespace CsProtocol.Buffer
                     array[index] = ReadShort();
                 }
             }
+
             return array;
         }
-        
+
         public void WriteIntArray(int[] array)
         {
             if ((array == null) || (array.Length == 0))
@@ -674,7 +678,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public int[] ReadIntArray()
         {
             int size = ReadInt();
@@ -686,9 +690,10 @@ namespace CsProtocol.Buffer
                     array[index] = ReadInt();
                 }
             }
+
             return array;
         }
-        
+
         public void WriteLongArray(long[] array)
         {
             if ((array == null) || (array.Length == 0))
@@ -705,7 +710,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public long[] ReadLongArray()
         {
             int size = ReadInt();
@@ -717,9 +722,10 @@ namespace CsProtocol.Buffer
                     array[index] = ReadLong();
                 }
             }
+
             return array;
         }
-        
+
         public void WriteFloatArray(float[] array)
         {
             if ((array == null) || (array.Length == 0))
@@ -736,7 +742,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public float[] ReadFloatArray()
         {
             int size = ReadInt();
@@ -748,9 +754,10 @@ namespace CsProtocol.Buffer
                     array[index] = ReadLong();
                 }
             }
+
             return array;
         }
-        
+
         public void WriteDoubleArray(double[] array)
         {
             if ((array == null) || (array.Length == 0))
@@ -767,7 +774,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public double[] ReadDoubleArray()
         {
             int size = ReadInt();
@@ -779,9 +786,10 @@ namespace CsProtocol.Buffer
                     array[index] = ReadLong();
                 }
             }
+
             return array;
         }
-        
+
         public void WriteCharArray(char[] array)
         {
             if ((array == null) || (array.Length == 0))
@@ -798,7 +806,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public char[] ReadCharArray()
         {
             int size = ReadInt();
@@ -810,9 +818,10 @@ namespace CsProtocol.Buffer
                     array[index] = ReadChar();
                 }
             }
+
             return array;
         }
-        
+
         public void WriteStringArray(string[] array)
         {
             if ((array == null) || (array.Length == 0))
@@ -829,7 +838,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public string[] ReadStringArray()
         {
             int size = ReadInt();
@@ -841,9 +850,10 @@ namespace CsProtocol.Buffer
                     array[index] = ReadString();
                 }
             }
+
             return array;
         }
-        
+
         public void WritePacketArray<T>(T[] array, short protocolId)
         {
             if ((array == null) || (array.Length == 0))
@@ -861,7 +871,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public T[] ReadPacketArray<T>(short protocolId)
         {
             int size = ReadInt();
@@ -874,9 +884,10 @@ namespace CsProtocol.Buffer
                     array[index] = (T) protocolRegistration.Read(this);
                 }
             }
+
             return array;
         }
-        
+
         public void WriteBooleanList(List<bool> list)
         {
             if ((list == null) || (list.Count == 0))
@@ -893,7 +904,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public List<bool> ReadBooleanList()
         {
             int size = ReadInt();
@@ -905,9 +916,10 @@ namespace CsProtocol.Buffer
                     list.Add(ReadBool());
                 }
             }
+
             return list;
         }
-        
+
         public void WriteByteList(List<byte> list)
         {
             if ((list == null) || (list.Count == 0))
@@ -924,7 +936,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public List<byte> ReadByteList()
         {
             int size = ReadInt();
@@ -936,9 +948,10 @@ namespace CsProtocol.Buffer
                     list.Add(ReadByte());
                 }
             }
+
             return list;
         }
-        
+
         public void WriteShortList(List<short> list)
         {
             if ((list == null) || (list.Count == 0))
@@ -955,7 +968,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public List<short> ReadShortList()
         {
             int size = ReadInt();
@@ -967,9 +980,10 @@ namespace CsProtocol.Buffer
                     list.Add(ReadShort());
                 }
             }
+
             return list;
         }
-        
+
         public void WriteIntList(List<int> list)
         {
             if ((list == null) || (list.Count == 0))
@@ -986,7 +1000,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public List<int> ReadIntList()
         {
             int size = ReadInt();
@@ -998,6 +1012,7 @@ namespace CsProtocol.Buffer
                     list.Add(ReadInt());
                 }
             }
+
             return list;
         }
 
@@ -1029,6 +1044,7 @@ namespace CsProtocol.Buffer
                     list.Add(ReadLong());
                 }
             }
+
             return list;
         }
 
@@ -1048,7 +1064,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public List<float> ReadFloatList()
         {
             int size = ReadInt();
@@ -1060,9 +1076,10 @@ namespace CsProtocol.Buffer
                     list.Add(ReadFloat());
                 }
             }
+
             return list;
         }
-        
+
         public void WriteDoubleList(List<double> list)
         {
             if ((list == null) || (list.Count == 0))
@@ -1079,7 +1096,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public List<double> ReadDoubleList()
         {
             int size = ReadInt();
@@ -1091,9 +1108,10 @@ namespace CsProtocol.Buffer
                     list.Add(ReadDouble());
                 }
             }
+
             return list;
         }
-        
+
         public void WriteCharList(List<char> list)
         {
             if ((list == null) || (list.Count == 0))
@@ -1110,7 +1128,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public List<char> ReadCharList()
         {
             int size = ReadInt();
@@ -1122,9 +1140,10 @@ namespace CsProtocol.Buffer
                     list.Add(ReadChar());
                 }
             }
+
             return list;
         }
-        
+
         public void WriteStringList(List<string> list)
         {
             if ((list == null) || (list.Count == 0))
@@ -1141,7 +1160,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public List<string> ReadStringList()
         {
             int size = ReadInt();
@@ -1153,9 +1172,10 @@ namespace CsProtocol.Buffer
                     list.Add(ReadString());
                 }
             }
+
             return list;
         }
-        
+
         public void WritePacketList<T>(List<T> list, short protocolId)
         {
             if ((list == null) || (list.Count == 0))
@@ -1173,7 +1193,7 @@ namespace CsProtocol.Buffer
                 }
             }
         }
-        
+
         public List<T> ReadPacketList<T>(short protocolId)
         {
             int size = ReadInt();
@@ -1186,6 +1206,7 @@ namespace CsProtocol.Buffer
                     list.Add((T) protocolRegistration.Read(this));
                 }
             }
+
             return list;
         }
 
@@ -1208,7 +1229,7 @@ namespace CsProtocol.Buffer
         public HashSet<bool> ReadBooleanSet()
         {
             int size = ReadInt();
-            HashSet<bool> set = new HashSet<bool>(size);
+            HashSet<bool> set = new HashSet<bool>();
             if (size > 0)
             {
                 for (int index = 0; index < size; index++)
@@ -1216,6 +1237,7 @@ namespace CsProtocol.Buffer
                     set.Add(ReadBool());
                 }
             }
+
             return set;
         }
 
@@ -1238,7 +1260,7 @@ namespace CsProtocol.Buffer
         public HashSet<short> ReadShortSet()
         {
             int size = ReadInt();
-            HashSet<short> set = new HashSet<short>(size);
+            HashSet<short> set = new HashSet<short>();
             if (size > 0)
             {
                 for (int index = 0; index < size; index++)
@@ -1246,6 +1268,7 @@ namespace CsProtocol.Buffer
                     set.Add(ReadShort());
                 }
             }
+
             return set;
         }
 
@@ -1268,7 +1291,7 @@ namespace CsProtocol.Buffer
         public HashSet<int> ReadIntSet()
         {
             int size = ReadInt();
-            HashSet<int> set = new HashSet<int>(size);
+            HashSet<int> set = new HashSet<int>();
             if (size > 0)
             {
                 for (int index = 0; index < size; index++)
@@ -1276,6 +1299,7 @@ namespace CsProtocol.Buffer
                     set.Add(ReadInt());
                 }
             }
+
             return set;
         }
 
@@ -1298,7 +1322,7 @@ namespace CsProtocol.Buffer
         public HashSet<long> ReadLongSet()
         {
             int size = ReadInt();
-            HashSet<long> set = new HashSet<long>(size);
+            HashSet<long> set = new HashSet<long>();
             if (size > 0)
             {
                 for (int index = 0; index < size; index++)
@@ -1306,6 +1330,7 @@ namespace CsProtocol.Buffer
                     set.Add(ReadLong());
                 }
             }
+
             return set;
         }
 
@@ -1328,7 +1353,7 @@ namespace CsProtocol.Buffer
         public HashSet<float> ReadFloatSet()
         {
             int size = ReadInt();
-            HashSet<float> set = new HashSet<float>(size);
+            HashSet<float> set = new HashSet<float>();
             if (size > 0)
             {
                 for (int index = 0; index < size; index++)
@@ -1336,6 +1361,7 @@ namespace CsProtocol.Buffer
                     set.Add(ReadFloat());
                 }
             }
+
             return set;
         }
 
@@ -1358,7 +1384,7 @@ namespace CsProtocol.Buffer
         public HashSet<double> ReadDoubleSet()
         {
             int size = ReadInt();
-            HashSet<double> set = new HashSet<double>(size);
+            HashSet<double> set = new HashSet<double>();
             if (size > 0)
             {
                 for (int index = 0; index < size; index++)
@@ -1366,6 +1392,7 @@ namespace CsProtocol.Buffer
                     set.Add(ReadDouble());
                 }
             }
+
             return set;
         }
 
@@ -1388,7 +1415,7 @@ namespace CsProtocol.Buffer
         public HashSet<char> ReadCharSet()
         {
             int size = ReadInt();
-            HashSet<char> set = new HashSet<char>(size);
+            HashSet<char> set = new HashSet<char>();
             if (size > 0)
             {
                 for (int index = 0; index < size; index++)
@@ -1396,6 +1423,7 @@ namespace CsProtocol.Buffer
                     set.Add(ReadChar());
                 }
             }
+
             return set;
         }
 
@@ -1418,7 +1446,7 @@ namespace CsProtocol.Buffer
         public HashSet<string> ReadStringSet()
         {
             int size = ReadInt();
-            HashSet<string> set = new HashSet<string>(size);
+            HashSet<string> set = new HashSet<string>();
             if (size > 0)
             {
                 for (int index = 0; index < size; index++)
@@ -1426,6 +1454,7 @@ namespace CsProtocol.Buffer
                     set.Add(ReadString());
                 }
             }
+
             return set;
         }
 
@@ -1449,7 +1478,7 @@ namespace CsProtocol.Buffer
         public HashSet<T> ReadPacketSet<T>(short protocolId)
         {
             int size = ReadInt();
-            HashSet<T> set = new HashSet<T>(size);
+            HashSet<T> set = new HashSet<T>();
             if (size > 0)
             {
                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
@@ -1458,6 +1487,7 @@ namespace CsProtocol.Buffer
                     set.Add((T) protocolRegistration.Read(this));
                 }
             }
+
             return set;
         }
 
@@ -1491,6 +1521,7 @@ namespace CsProtocol.Buffer
                     map[key] = value;
                 }
             }
+
             return map;
         }
 
@@ -1524,6 +1555,7 @@ namespace CsProtocol.Buffer
                     map[key] = value;
                 }
             }
+
             return map;
         }
 
@@ -1557,44 +1589,46 @@ namespace CsProtocol.Buffer
                     map[key] = value;
                 }
             }
+
             return map;
         }
 
 
-         public void WriteIntPacketMap<T>(Dictionary<int, T> map, short protocolId)
-         {
-             if ((map == null) || (map.Count == 0))
-             {
-                 WriteInt(0);
-             }
-             else
-             {
-                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-                 WriteInt(map.Count);
-                 foreach (var element in map)
-                 {
-                     WriteInt(element.Key);
-                     protocolRegistration.Write(this, (IPacket) element.Value);
-                 }
-             }
-         }
+        public void WriteIntPacketMap<T>(Dictionary<int, T> map, short protocolId)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteInt(element.Key);
+                    protocolRegistration.Write(this, (IPacket) element.Value);
+                }
+            }
+        }
 
-         public Dictionary<int, T> ReadIntPacketMap<T>(short protocolId)
-         {
-             int size = ReadInt();
-             Dictionary<int, T> map = new Dictionary<int, T>(size);
-             if (size > 0)
-             {
-                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-                 for (int index = 0; index < size; index++)
-                 {
-                     var key = ReadInt();
-                     var value = (T) protocolRegistration.Read(this);
-                     map[key] = value;
-                 }
-             }
-             return map;
-         }
+        public Dictionary<int, T> ReadIntPacketMap<T>(short protocolId)
+        {
+            int size = ReadInt();
+            Dictionary<int, T> map = new Dictionary<int, T>(size);
+            if (size > 0)
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadInt();
+                    var value = (T) protocolRegistration.Read(this);
+                    map[key] = value;
+                }
+            }
+
+            return map;
+        }
 
         public void WriteLongIntMap(Dictionary<long, int> map)
         {
@@ -1626,6 +1660,7 @@ namespace CsProtocol.Buffer
                     map[key] = value;
                 }
             }
+
             return map;
         }
 
@@ -1659,6 +1694,7 @@ namespace CsProtocol.Buffer
                     map[key] = value;
                 }
             }
+
             return map;
         }
 
@@ -1692,44 +1728,46 @@ namespace CsProtocol.Buffer
                     map[key] = value;
                 }
             }
+
             return map;
         }
 
 
-         public void WriteLongPacketMap<T>(Dictionary<long, T> map, short protocolId)
-         {
-             if ((map == null) || (map.Count == 0))
-             {
-                 WriteInt(0);
-             }
-             else
-             {
-                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-                 WriteInt(map.Count);
-                 foreach (var element in map)
-                 {
-                     WriteLong(element.Key);
-                     protocolRegistration.Write(this, (IPacket) element.Value);
-                 }
-             }
-         }
+        public void WriteLongPacketMap<T>(Dictionary<long, T> map, short protocolId)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteLong(element.Key);
+                    protocolRegistration.Write(this, (IPacket) element.Value);
+                }
+            }
+        }
 
-         public Dictionary<long, T> ReadLongPacketMap<T>(short protocolId)
-         {
-             int size = ReadInt();
-             Dictionary<long, T> map = new Dictionary<long, T>(size);
-             if (size > 0)
-             {
-                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-                 for (int index = 0; index < size; index++)
-                 {
-                     var key = ReadLong();
-                     var value = (T) protocolRegistration.Read(this);
-                     map[key] = value;
-                 }
-             }
-             return map;
-         }
+        public Dictionary<long, T> ReadLongPacketMap<T>(short protocolId)
+        {
+            int size = ReadInt();
+            Dictionary<long, T> map = new Dictionary<long, T>(size);
+            if (size > 0)
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadLong();
+                    var value = (T) protocolRegistration.Read(this);
+                    map[key] = value;
+                }
+            }
+
+            return map;
+        }
 
         public void WriteStringIntMap(Dictionary<string, int> map)
         {
@@ -1761,6 +1799,7 @@ namespace CsProtocol.Buffer
                     map[key] = value;
                 }
             }
+
             return map;
         }
 
@@ -1794,6 +1833,7 @@ namespace CsProtocol.Buffer
                     map[key] = value;
                 }
             }
+
             return map;
         }
 
@@ -1827,43 +1867,45 @@ namespace CsProtocol.Buffer
                     map[key] = value;
                 }
             }
+
             return map;
         }
 
 
-         public void WriteStringPacketMap<T>(Dictionary<string, T> map, short protocolId)
-         {
-             if ((map == null) || (map.Count == 0))
-             {
-                 WriteInt(0);
-             }
-             else
-             {
-                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-                 WriteInt(map.Count);
-                 foreach (var element in map)
-                 {
-                     WriteString(element.Key);
-                     protocolRegistration.Write(this, (IPacket) element.Value);
-                 }
-             }
-         }
+        public void WriteStringPacketMap<T>(Dictionary<string, T> map, short protocolId)
+        {
+            if ((map == null) || (map.Count == 0))
+            {
+                WriteInt(0);
+            }
+            else
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                WriteInt(map.Count);
+                foreach (var element in map)
+                {
+                    WriteString(element.Key);
+                    protocolRegistration.Write(this, (IPacket) element.Value);
+                }
+            }
+        }
 
-         public Dictionary<string, T> ReadStringPacketMap<T>(short protocolId)
-         {
-             int size = ReadInt();
-             Dictionary<string, T> map = new Dictionary<string, T>(size);
-             if (size > 0)
-             {
-                 IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-                 for (int index = 0; index < size; index++)
-                 {
-                     var key = ReadString();
-                     var value = (T) protocolRegistration.Read(this);
-                     map[key] = value;
-                 }
-             }
-             return map;
-         }
+        public Dictionary<string, T> ReadStringPacketMap<T>(short protocolId)
+        {
+            int size = ReadInt();
+            Dictionary<string, T> map = new Dictionary<string, T>(size);
+            if (size > 0)
+            {
+                IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+                for (int index = 0; index < size; index++)
+                {
+                    var key = ReadString();
+                    var value = (T) protocolRegistration.Read(this);
+                    map[key] = value;
+                }
+            }
+
+            return map;
+        }
     }
 }

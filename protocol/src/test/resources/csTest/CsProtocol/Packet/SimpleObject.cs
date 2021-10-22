@@ -5,8 +5,7 @@ using CsProtocol.Buffer;
 namespace CsProtocol
 {
     // @author jaysunxiao
-    // @version 1.0
-    // @since 2021-03-27 15:18
+    // @version 3.0
     public class SimpleObject : IPacket
     {
         public int c;
@@ -23,7 +22,7 @@ namespace CsProtocol
 
         public short ProtocolId()
         {
-            return 1163;
+            return 104;
         }
     }
 
@@ -32,17 +31,15 @@ namespace CsProtocol
     {
         public short ProtocolId()
         {
-            return 1163;
+            return 104;
         }
 
         public void Write(ByteBuffer buffer, IPacket packet)
         {
-            if (packet == null)
+            if (buffer.WritePacketFlag(packet))
             {
-                buffer.WriteBool(false);
                 return;
             }
-            buffer.WriteBool(true);
             SimpleObject message = (SimpleObject) packet;
             buffer.WriteInt(message.c);
             buffer.WriteBool(message.g);

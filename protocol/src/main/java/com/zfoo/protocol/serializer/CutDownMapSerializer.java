@@ -109,7 +109,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WriteIntPacketMap<>({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WriteIntPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                     }
                 }
@@ -171,7 +171,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WriteLongPacketMap<>({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WriteLongPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                     }
                 }
@@ -233,7 +233,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WriteStringPacketMap<>({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WriteStringPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                     }
                 }
@@ -312,7 +312,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("var {} = buffer.readIntPacketMap({})", map, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return map;
                         case CSharp:
-                            builder.append(StringUtils.format("var {} = buffer.ReadIntPacket<{}>Map({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.ReadIntPacketMap<{}>({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
                             return map;
                     }
                 }

@@ -5,8 +5,7 @@ using CsProtocol.Buffer;
 namespace CsProtocol
 {
     // @author jaysunxiao
-    // @version 1.0
-    // @since 2017 10.12 15:39
+    // @version 3.0
     public class ObjectB : IPacket
     {
         public bool flag;
@@ -21,7 +20,7 @@ namespace CsProtocol
 
         public short ProtocolId()
         {
-            return 1117;
+            return 103;
         }
     }
 
@@ -30,17 +29,15 @@ namespace CsProtocol
     {
         public short ProtocolId()
         {
-            return 1117;
+            return 103;
         }
 
         public void Write(ByteBuffer buffer, IPacket packet)
         {
-            if (packet == null)
+            if (buffer.WritePacketFlag(packet))
             {
-                buffer.WriteBool(false);
                 return;
             }
-            buffer.WriteBool(true);
             ObjectB message = (ObjectB) packet;
             buffer.WriteBool(message.flag);
         }

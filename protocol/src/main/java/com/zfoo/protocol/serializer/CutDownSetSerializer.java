@@ -202,7 +202,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WritePacketSet<>({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WritePacketSet({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         default:
                             flag = false;
