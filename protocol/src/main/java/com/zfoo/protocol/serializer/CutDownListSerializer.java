@@ -14,6 +14,7 @@ package com.zfoo.protocol.serializer;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.EnhanceUtils;
+import com.zfoo.protocol.registration.field.BaseField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ListField;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
@@ -21,6 +22,7 @@ import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 
@@ -41,8 +43,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
         var listField = (ListField) fieldRegistration;
         var flag = true;
 
-        switch (listField.getType().getTypeName()) {
-            case "java.util.List<java.lang.Boolean>":
+        var listName = getListClassName(listField);
+        switch (listName) {
+            case "Boolean":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeBooleanList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -53,6 +56,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeBooleanArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanList({});", objectStr)).append(LS);
                         break;
@@ -60,7 +66,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.Byte>":
+            case "Byte":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeByteList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -71,6 +77,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeByteArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteByteList({});", objectStr)).append(LS);
                         break;
@@ -78,7 +87,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.Short>":
+            case "Short":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeShortList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -89,6 +98,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeShortArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteShortList({});", objectStr)).append(LS);
                         break;
@@ -96,7 +108,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.Integer>":
+            case "Integer":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeIntList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -107,6 +119,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeIntArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteIntList({});", objectStr)).append(LS);
                         break;
@@ -114,7 +129,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.Long>": {
+            case "Long": {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeLongList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -125,6 +140,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeLongArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteLongList({});", objectStr)).append(LS);
                         break;
@@ -133,7 +151,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                 }
                 break;
             }
-            case "java.util.List<java.lang.Float>": {
+            case "Float": {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeFloatList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -144,6 +162,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeFloatArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteFloatList({});", objectStr)).append(LS);
                         break;
@@ -152,7 +173,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                 }
                 break;
             }
-            case "java.util.List<java.lang.Double>": {
+            case "Double": {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeDoubleList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -163,6 +184,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeDoubleArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteDoubleList({});", objectStr)).append(LS);
                         break;
@@ -171,7 +195,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                 }
                 break;
             }
-            case "java.util.List<java.lang.String>":
+            case "String":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeStringList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -181,6 +205,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeStringArray({})", objectStr)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeStringArray({})", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteStringList({});", objectStr)).append(LS);
@@ -203,6 +230,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
+                        case Lua:
+                            builder.append(StringUtils.format("buffer:writePacketArray({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            break;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WritePacketList({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
@@ -223,8 +253,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
         var list = "list" + GenerateProtocolFile.index.getAndIncrement();
         var flag = true;
 
-        switch (listField.getType().getTypeName()) {
-            case "java.util.List<java.lang.Boolean>":
+        var listName = getListClassName(listField);
+        switch (listName) {
+            case "Boolean":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readBooleanList($1);", list, EnhanceUtils.byteBufUtils));
@@ -235,6 +266,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readBooleanArray()", list)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readBooleanArray()", list)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanList();", list)).append(LS);
                         break;
@@ -242,7 +276,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.Byte>":
+            case "Byte":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readByteList($1);", list, EnhanceUtils.byteBufUtils));
@@ -253,6 +287,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readByteArray()", list)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readByteArray()", list)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadByteList();", list)).append(LS);
                         break;
@@ -260,7 +297,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.Short>":
+            case "Short":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readShortList($1);", list, EnhanceUtils.byteBufUtils));
@@ -271,6 +308,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readShortArray()", list)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readShortArray()", list)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadShortList();", list)).append(LS);
                         break;
@@ -278,7 +318,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.Integer>":
+            case "Integer":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readIntList($1);", list, EnhanceUtils.byteBufUtils));
@@ -289,6 +329,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readIntArray()", list)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readIntArray()", list)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadIntList();", list)).append(LS);
                         break;
@@ -296,7 +339,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.Long>":
+            case "Long":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readLongList($1);", list, EnhanceUtils.byteBufUtils));
@@ -307,6 +350,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readLongArray()", list)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readLongArray()", list)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadLongList();", list)).append(LS);
                         break;
@@ -314,7 +360,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.Float>":
+            case "Float":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readFloatList($1);", list, EnhanceUtils.byteBufUtils));
@@ -325,6 +371,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readFloatArray()", list)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readFloatArray()", list)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadFloatList();", list)).append(LS);
                         break;
@@ -332,7 +381,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.Double>":
+            case "Double":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readDoubleList($1);", list, EnhanceUtils.byteBufUtils));
@@ -343,6 +392,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleArray()", list)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readDoubleArray()", list)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadDoubleList();", list)).append(LS);
                         break;
@@ -350,7 +402,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "java.util.List<java.lang.String>":
+            case "String":
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("List {} = {}.readStringList($1);", list, EnhanceUtils.byteBufUtils));
@@ -360,6 +412,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readStringArray()", list)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readStringArray()", list)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadStringList();", list)).append(LS);
@@ -381,6 +436,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", list, objectProtocolField.getProtocolId())).append(LS);
                             break;
+                        case Lua:
+                            builder.append(StringUtils.format("local {} = buffer:readPacketArray({})", list, objectProtocolField.getProtocolId())).append(LS);
+                            break;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadPacketList<{}>({});", list, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId()), objectProtocolField.getProtocolId())).append(LS);
                             break;
@@ -401,4 +459,11 @@ public class CutDownListSerializer implements ICutDownSerializer {
         }
     }
 
+    public String getListClassName(ListField listField) {
+        if (listField.getListElementRegistration() instanceof BaseField) {
+            return ((Class<?>) ((ParameterizedType) listField.getType()).getActualTypeArguments()[0]).getSimpleName();
+        } else {
+            return listField.getType().getTypeName();
+        }
+    }
 }

@@ -65,7 +65,7 @@ public class CsArraySerializer implements ICsSerializer {
 
         GenerateProtocolFile.addTab(builder, deep + 2);
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
-        builder.append(StringUtils.format("{} {} = {}[{}];", GenerateCsUtils.toCsClassName(arrayField.getField().getType().getComponentType().getSimpleName()), element, objectStr, i)).append(LS);
+        builder.append(StringUtils.format("{} {} = {}[{}];", GenerateCsUtils.toCsClassName(arrayField.getType().getSimpleName()), element, objectStr, i)).append(LS);
 
         GenerateCsUtils.csSerializer(arrayField.getArrayElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
@@ -88,7 +88,7 @@ public class CsArraySerializer implements ICsSerializer {
         var arrayField = (ArrayField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        var typeName = GenerateCsUtils.toCsClassName(arrayField.getField().getType().getComponentType().getSimpleName());
+        var typeName = GenerateCsUtils.toCsClassName(arrayField.getType().getSimpleName());
 
         var i = "index" + GenerateProtocolFile.index.getAndIncrement();
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();

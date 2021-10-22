@@ -13,10 +13,10 @@
 
 package com.zfoo.protocol.serializer.cs;
 
-import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
+import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -34,7 +34,7 @@ public class CsObjectProtocolSerializer implements ICsSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("ProtocolManager.GetProtocol({}).Write(buffer, {});", objectProtocolField.getProtocolId(), objectStr))
+        builder.append(StringUtils.format("buffer.Write({}, {});", objectStr, objectProtocolField.getProtocolId()))
                 .append(LS);
     }
 
@@ -43,14 +43,12 @@ public class CsObjectProtocolSerializer implements ICsSerializer {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
+        var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
+
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("{} {} = ({}) ProtocolManager.GetProtocol({}).Read(buffer);", getProtocolSimpleName(objectProtocolField), result, getProtocolSimpleName(objectProtocolField), objectProtocolField.getProtocolId()))
+        builder.append(StringUtils.format("{} {} = buffer.Read<{}>({});", protocolSimpleName, result, protocolSimpleName, objectProtocolField.getProtocolId()))
                 .append(LS);
         return result;
-    }
-
-    private String getProtocolSimpleName(ObjectProtocolField objectProtocolField) {
-        return ProtocolManager.getProtocol(objectProtocolField.getProtocolId()).protocolConstructor().getDeclaringClass().getSimpleName();
     }
 
 }

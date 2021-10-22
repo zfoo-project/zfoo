@@ -16,6 +16,8 @@ package com.zfoo.protocol.serializer.lua;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.SetField;
+import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.CutDownSetSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -30,9 +32,12 @@ public class LuaSetSerializer implements ILuaSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
-        SetField setField = (SetField) fieldRegistration;
-
         GenerateProtocolFile.addTab(builder, deep);
+        if (CutDownSetSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Lua)) {
+            return;
+        }
+
+        SetField setField = (SetField) fieldRegistration;
         builder.append(StringUtils.format("if {} == null then", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("byteBuffer:writeInt(0)").append(LS);
@@ -57,10 +62,14 @@ public class LuaSetSerializer implements ILuaSerializer {
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
+        GenerateProtocolFile.addTab(builder, deep);
+        var cutDown = CutDownSetSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Lua);
+        if (cutDown != null) {
+            return cutDown;
+        }
+
         SetField setField = (SetField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
-
-        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("local {} = {}", result)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);

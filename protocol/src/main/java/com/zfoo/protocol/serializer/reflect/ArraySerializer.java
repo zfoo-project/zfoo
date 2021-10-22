@@ -56,10 +56,10 @@ public class ArraySerializer implements ISerializer {
         var length = ByteBufUtils.readInt(buffer);
         ArrayField arrayField = (ArrayField) fieldRegistration;
         if (length <= 0) {
-            return Array.newInstance(arrayField.getField().getType().getComponentType(), 0);
+            return Array.newInstance(arrayField.getType(), 0);
         }
 
-        Object array = Array.newInstance(arrayField.getField().getType().getComponentType(), length);
+        Object array = Array.newInstance(arrayField.getType(), length);
 
         for (var i = 0; i < length; i++) {
             Object value = arrayField.getArrayElementRegistration().serializer().readObject(buffer, arrayField.getArrayElementRegistration());

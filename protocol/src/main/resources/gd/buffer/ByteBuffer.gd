@@ -258,12 +258,12 @@ func readPacket(protocolId):
 func newInstance(protocolId: int):
 	return ProtocolManager.newInstance(protocolId)
 
-func writeBooleanArray(value):
+func writeBooleanArray(array):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size());
-		for element in value:
+		writeInt(array.size());
+		for element in array:
 			writeBool(element)
 			
 func readBooleanArray():
@@ -274,12 +274,12 @@ func readBooleanArray():
 			array.append(readBool())
 	return array
 	
-func writeByteArray(value):
+func writeByteArray(array):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size());
-		for element in value:
+		writeInt(array.size());
+		for element in array:
 			writeByte(element)
 			
 func readByteArray():
@@ -290,12 +290,12 @@ func readByteArray():
 			array.append(readByte())
 	return array
 	
-func writeShortArray(value):
+func writeShortArray(array):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size());
-		for element in value:
+		writeInt(array.size());
+		for element in array:
 			writeShort(element)
 			
 func readShortArray():
@@ -306,12 +306,12 @@ func readShortArray():
 			array.append(readShort())
 	return array
 	
-func writeIntArray(value):
+func writeIntArray(array):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size());
-		for element in value:
+		writeInt(array.size());
+		for element in array:
 			writeInt(element)
 			
 func readIntArray():
@@ -322,12 +322,12 @@ func readIntArray():
 			array.append(readInt())
 	return array
 	
-func writeLongArray(value):
+func writeLongArray(array):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size());
-		for element in value:
+		writeInt(array.size());
+		for element in array:
 			writeLong(element)
 			
 func readLongArray():
@@ -338,12 +338,12 @@ func readLongArray():
 			array.append(readLong())
 	return array
 	
-func writeFloatArray(value):
+func writeFloatArray(array):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size());
-		for element in value:
+		writeInt(array.size());
+		for element in array:
 			writeFloat(element)
 			
 func readFloatArray():
@@ -354,12 +354,12 @@ func readFloatArray():
 			array.append(readFloat())
 	return array
 	
-func writeDoubleArray(value):
+func writeDoubleArray(array):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size());
-		for element in value:
+		writeInt(array.size());
+		for element in array:
 			writeDouble(element)
 			
 func readDoubleArray():
@@ -370,12 +370,12 @@ func readDoubleArray():
 			array.append(readDouble())
 	return array
 	
-func writeCharArray(value):
+func writeCharArray(array):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size());
-		for element in value:
+		writeInt(array.size());
+		for element in array:
 			writeChar(element)
 			
 func readCharArray():
@@ -386,12 +386,12 @@ func readCharArray():
 			array.append(readChar())
 	return array
 	
-func writeStringArray(value):
+func writeStringArray(array):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size());
-		for element in value:
+		writeInt(array.size());
+		for element in array:
 			writeString(element)
 			
 func readStringArray():
@@ -403,13 +403,13 @@ func readStringArray():
 	return array
 
 	
-func writePacketArray(value, protocolId):
+func writePacketArray(array, protocolId):
 	if (value == null):
 		writeInt(0)
 	else:
 		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-		writeInt(value.size());
-		for element in value:
+		writeInt(array.size());
+		for element in array:
 			protocolRegistration.write(self, element)
 			
 func readPacketArray(protocolId):
@@ -421,14 +421,14 @@ func readPacketArray(protocolId):
 			array.append(protocolRegistration.read(self))
 	return array
 
-func writeIntIntMap(value):
+func writeIntIntMap(map):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeInt(key)
-			writeInt(value[key])
+			writeInt(map[key])
 			
 func readIntIntMap():
 	var map = {}
@@ -440,14 +440,14 @@ func readIntIntMap():
 			map[key] = value
 	return map
 	
-func writeIntLongMap(value):
+func writeIntLongMap(map):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size())
-		for key in value:
-			writeInt(key)
-			writeLong(value[key])
+		writeInt(map.size())
+		for key in map:
+			writeInt(map)
+			writeLong(map[key])
 			
 func readIntLongMap():
 	var map = {}
@@ -459,14 +459,14 @@ func readIntLongMap():
 			map[key] = value
 	return map
 	
-func writeIntStringMap(value):
+func writeIntStringMap(map):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeInt(key)
-			writeString(value[key])
+			writeString(map[key])
 			
 func readIntStringMap():
 	var map = {}
@@ -479,15 +479,15 @@ func readIntStringMap():
 	return map
 
 
-func writeIntPacketMap(value, protocolId):
+func writeIntPacketMap(map, protocolId):
 	if (value == null):
 		writeInt(0)
 	else:
 		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeInt(key)
-			protocolRegistration.write(self, value[key])
+			protocolRegistration.write(self, map[key])
 
 func readIntPacketMap(protocolId):
 	var map = {}
@@ -501,14 +501,14 @@ func readIntPacketMap(protocolId):
 	return map
 	
 	
-func writeLongIntMap(value):
+func writeLongIntMap(map):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeLong(key)
-			writeInt(value[key])
+			writeInt(map[key])
 			
 func readLongIntMap():
 	var map = {}
@@ -520,14 +520,14 @@ func readLongIntMap():
 			map[key] = value
 	return map
 	
-func writeLongLongMap(value):
+func writeLongLongMap(map):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeLong(key)
-			writeLong(value[key])
+			writeLong(map[key])
 			
 func readLongLongMap():
 	var map = {}
@@ -539,14 +539,14 @@ func readLongLongMap():
 			map[key] = value
 	return map
 	
-func writeLongStringMap(value):
+func writeLongStringMap(map):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeLong(key)
-			writeString(value[key])
+			writeString(map[key])
 			
 func readLongStringMap():
 	var map = {}
@@ -559,15 +559,15 @@ func readLongStringMap():
 	return map
 
 
-func writeLongPacketMap(value, protocolId):
+func writeLongPacketMap(map, protocolId):
 	if (value == null):
 		writeInt(0)
 	else:
 		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeLong(key)
-			protocolRegistration.write(self, value[key])
+			protocolRegistration.write(self, map[key])
 
 func readLongPacketMap(protocolId):
 	var map = {}
@@ -581,14 +581,14 @@ func readLongPacketMap(protocolId):
 	return map
 	
 
-func writeStringIntMap(value):
+func writeStringIntMap(map):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeString(key)
-			writeInt(value[key])
+			writeInt(map[key])
 			
 func readStringIntMap():
 	var map = {}
@@ -600,14 +600,14 @@ func readStringIntMap():
 			map[key] = value
 	return map
 	
-func writeStringLongMap(value):
+func writeStringLongMap(map):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeString(key)
-			writeLong(value[key])
+			writeLong(map[key])
 			
 func readStringLongMap():
 	var map = {}
@@ -619,14 +619,14 @@ func readStringLongMap():
 			map[key] = value
 	return map
 	
-func writeStringStringMap(value):
+func writeStringStringMap(map):
 	if (value == null):
 		writeInt(0)
 	else:
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeString(key)
-			writeString(value[key])
+			writeString(map[key])
 			
 func readStringStringMap():
 	var map = {}
@@ -639,15 +639,15 @@ func readStringStringMap():
 	return map
 
 
-func writeStringPacketMap(value, protocolId):
+func writeStringPacketMap(map, protocolId):
 	if (value == null):
 		writeInt(0)
 	else:
 		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-		writeInt(value.size())
-		for key in value:
+		writeInt(map.size())
+		for key in map:
 			writeString(key)
-			protocolRegistration.write(self, value[key])
+			protocolRegistration.write(self, map[key])
 
 func readStringPacketMap(protocolId):
 	var map = {}

@@ -16,8 +16,6 @@ package com.zfoo.protocol.registration.field;
 import com.zfoo.protocol.serializer.reflect.ArraySerializer;
 import com.zfoo.protocol.serializer.reflect.ISerializer;
 
-import java.lang.reflect.Field;
-
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -25,20 +23,18 @@ import java.lang.reflect.Field;
 public class ArrayField implements IFieldRegistration {
 
     private IFieldRegistration arrayElementRegistration;
-    private Field field;
+    private Class<?> type;
 
-    public static ArrayField valueOf(Field field, IFieldRegistration arrayElementRegistration) {
+    public static ArrayField valueOf(IFieldRegistration arrayElementRegistration, Class<?> type) {
         ArrayField arrayField = new ArrayField();
-        arrayField.field = field;
         arrayField.arrayElementRegistration = arrayElementRegistration;
+        arrayField.type = type;
         return arrayField;
     }
 
-
-    public Field getField() {
-        return field;
+    public Class<?> getType() {
+        return type;
     }
-
 
     @Override
     public ISerializer serializer() {

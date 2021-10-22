@@ -15,6 +15,7 @@ package com.zfoo.protocol.serializer;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.EnhanceUtils;
 import com.zfoo.protocol.registration.field.ArrayField;
+import com.zfoo.protocol.registration.field.BaseField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
@@ -832,8 +833,11 @@ public class CutDownArraySerializer implements ICutDownSerializer {
     }
 
     public String getArrayClassName(ArrayField arrayField) {
-        // 去掉包装类型的前缀java.lang
-        return arrayField.getField().getType().getComponentType().getCanonicalName().replaceFirst("java.lang.", StringUtils.EMPTY);
+        if (arrayField.getArrayElementRegistration() instanceof BaseField) {
+            return arrayField.getType().getSimpleName();
+        } else {
+            return arrayField.getType().getCanonicalName();
+        }
     }
 
 }

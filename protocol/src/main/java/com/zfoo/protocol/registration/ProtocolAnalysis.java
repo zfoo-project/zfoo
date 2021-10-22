@@ -385,7 +385,7 @@ public class ProtocolAnalysis {
             Class<?> arrayClazz = fieldTypeClazz.getComponentType();
 
             IFieldRegistration registration = typeToRegistration(clazz, arrayClazz);
-            return ArrayField.valueOf(field, registration);
+            return ArrayField.valueOf(registration, field.getType().getComponentType());
         } else if (Set.class.isAssignableFrom(fieldTypeClazz)) {
             if (!fieldTypeClazz.equals(Set.class)) {
                 throw new RunException("[class:{}]类型声明不正确，必须是Set接口类型", clazz.getCanonicalName());
