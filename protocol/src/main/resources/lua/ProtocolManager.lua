@@ -30,24 +30,24 @@ function ProtocolManager.getProtocol(protocolId)
     return protocol
 end
 
-function ProtocolManager.write(byteBuffer, packet)
+function ProtocolManager.write(buffer, packet)
     local protocolId = packet:protocolId()
     -- 写入协议号
-    byteBuffer:writeShort(protocolId)
+    buffer:writeShort(protocolId)
     -- 写入包体
-    ProtocolManager.getProtocol(protocolId):write(byteBuffer, packet)
+    ProtocolManager.getProtocol(protocolId):write(buffer, packet)
 end
 
-function ProtocolManager.read(byteBuffer)
-    local protocolId = byteBuffer:readShort()
-    return ProtocolManager.getProtocol(protocolId):read(byteBuffer)
+function ProtocolManager.read(buffer)
+    local protocolId = buffer:readShort()
+    return ProtocolManager.getProtocol(protocolId):read(buffer)
 end
 
 -- C#传进来的byte数组到lua里就会变成string
 function readBytes(bytes)
-    local byteBuffer = ByteBuffer:new()
-    byteBuffer:writeBuffer(bytes)
-    local packet = ProtocolManager.read(byteBuffer)
+    local buffer = ByteBuffer:new()
+    buffer:writeBuffer(bytes)
+    local packet = ProtocolManager.read(buffer)
     return packet
 end
 

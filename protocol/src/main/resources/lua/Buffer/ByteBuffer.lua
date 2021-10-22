@@ -5,6 +5,8 @@
 --右移操作>>是无符号右移
 --local Long = require("Long")
 
+local ProtocolManager = require("LuaProtocol.ProtocolManager")
+
 local maxInt = 2147483647
 local minInt = -2147483648
 local initSize = 128
@@ -32,6 +34,14 @@ function ByteBuffer:new()
     return obj
 end
 
+
+-- C#传进来的byte数组到lua里就会变成string
+function readBytes(bytes)
+    local buffer = ByteBuffer:new()
+    buffer:writeBuffer(bytes)
+    local packet = ProtocolManager.read(buffer)
+    return packet
+end
 
 -------------------------------------UTF8-------------------------------------
 -- 判断utf8字符byte长度
@@ -396,9 +406,8 @@ end
 
 --char
 function ByteBuffer:writeChar(charValue)
-    if str == nil or #str == 0 then
-        self:writeInt(0)
-        self:writeByte(0)
+    if charValue == nil or #charValue == 0 then
+        self:writeString("")
         return
     end
     local str = utf8sub(charValue, 1, 1)
@@ -448,6 +457,255 @@ function ByteBuffer:getBytes(startIndex, endIndex)
     startIndex = startIndex or 1
     endIndex = endIndex or #self.buffer
     return table.concat(self.buffer, "", startIndex, endIndex)
+end
+
+function ByteBuffer:writePacketFlag(value)
+    local flag = (value == null)
+    self:writeBoolean(not flag)
+    return flag
+end
+
+function ByteBuffer:writePacket(value, protocolId)
+    local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+    protocolRegistration:write(self, value)
+    return self
+end
+
+function ByteBuffer:readPacket(protocolId)
+    local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+    return protocolRegistration:read(self)
+end
+
+function ByteBuffer:writeBooleanArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeBoolean(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readBooleanArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readBoolean())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeByteArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeByte(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readByteArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readByte())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeShortArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeShort(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readShortArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readShort())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeIntArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeInt(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readIntArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readInt())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeLongArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeLong(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readLongArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readLong())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeFloatArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeFloat(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readFloatArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readFloat())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeDoubleArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeDouble(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readDoubleArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readDouble())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeCharArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeChar(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readCharArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readChar())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeStringArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeString(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readStringArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readString())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writePacketArray(array, protocolId)
+    if array == null then
+        self:writeInt(0)
+    else
+        local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            protocolRegistration:write(self, element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readPacketArray(protocolId)
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+        for index = 1, size do
+            table.insert(array, protocolRegistration:read(self))
+        end
+    end
+    return array
 end
 
 return ByteBuffer

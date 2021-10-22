@@ -56,6 +56,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeBooleanArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanArray({});", objectStr)).append(LS);
                         break;
@@ -73,6 +76,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeBooleanArray({})", objectStr)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanArray({});", objectStr)).append(LS);
@@ -92,6 +98,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeByteArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteByteArray({});", objectStr)).append(LS);
                         break;
@@ -109,6 +118,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({})", objectStr)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeByteArray({})", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteByteArray({});", objectStr)).append(LS);
@@ -128,6 +140,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeShortArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteShortArray({});", objectStr)).append(LS);
                         break;
@@ -145,6 +160,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({})", objectStr)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeShortArray({})", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteShortArray({});", objectStr)).append(LS);
@@ -164,6 +182,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeIntArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteIntArray({});", objectStr)).append(LS);
                         break;
@@ -181,6 +202,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({})", objectStr)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeIntArray({})", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteIntArray({});", objectStr)).append(LS);
@@ -200,6 +224,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeLongArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteLongArray({});", objectStr)).append(LS);
                         break;
@@ -217,6 +244,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({})", objectStr)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeLongArray({})", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteLongArray({});", objectStr)).append(LS);
@@ -236,6 +266,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeFloatArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteFloatArray({});", objectStr)).append(LS);
                         break;
@@ -253,6 +286,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({})", objectStr)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeFloatArray({})", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteFloatArray({});", objectStr)).append(LS);
@@ -272,6 +308,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeDoubleArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteDoubleArray({});", objectStr)).append(LS);
                         break;
@@ -289,6 +328,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({})", objectStr)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeDoubleArray({})", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteDoubleArray({});", objectStr)).append(LS);
@@ -308,6 +350,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeStringArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeStringArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteStringArray({});", objectStr)).append(LS);
                         break;
@@ -326,6 +371,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeCharArray({})", objectStr)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeCharArray({})", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteCharArray({});", objectStr)).append(LS);
                         break;
@@ -343,6 +391,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeCharArray({})", objectStr)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("buffer:writeCharArray({})", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteCharArray({});", objectStr)).append(LS);
@@ -363,6 +414,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                             break;
                         case GdScript:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        case Lua:
+                            builder.append(StringUtils.format("buffer:writePacketArray({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WritePacketArray<{}>({}, {});", EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId()), objectStr, objectProtocolField.getProtocolId())).append(LS);
@@ -398,6 +452,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readBooleanArray()", array)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readBooleanArray()", array)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray();", array)).append(LS);
                         break;
@@ -415,6 +472,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readBooleanArray()", array)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readBooleanArray()", array)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray();", array)).append(LS);
@@ -434,6 +494,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readByteArray()", array)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readByteArray()", array)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadByteArray();", array)).append(LS);
                         break;
@@ -451,6 +514,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readByteArray()", array)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readByteArray()", array)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadByteArray();", array)).append(LS);
@@ -470,6 +536,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readShortArray()", array)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readShortArray()", array)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadShortArray();", array)).append(LS);
                         break;
@@ -487,6 +556,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readShortArray()", array)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readShortArray()", array)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadShortArray();", array)).append(LS);
@@ -506,6 +578,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readIntArray()", array)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readIntArray()", array)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadIntArray();", array)).append(LS);
                         break;
@@ -523,6 +598,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readIntArray()", array)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readIntArray()", array)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadIntArray();", array)).append(LS);
@@ -542,6 +620,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readLongArray()", array)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readLongArray()", array)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadLongArray();", array)).append(LS);
                         break;
@@ -559,6 +640,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readLongArray()", array)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readLongArray()", array)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadLongArray();", array)).append(LS);
@@ -578,6 +662,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readFloatArray()", array)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readFloatArray()", array)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadFloatArray();", array)).append(LS);
                         break;
@@ -595,6 +682,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readFloatArray()", array)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readFloatArray()", array)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadFloatArray();", array)).append(LS);
@@ -614,6 +704,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleArray()", array)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readDoubleArray()", array)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadDoubleArray();", array)).append(LS);
                         break;
@@ -631,6 +724,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleArray()", array)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readDoubleArray()", array)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadDoubleArray();", array)).append(LS);
@@ -650,6 +746,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readStringArray()", array)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readStringArray()", array)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadStringArray();", array)).append(LS);
                         break;
@@ -667,6 +766,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readCharArray()", array)).append(LS);
+                        break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readCharArray()", array)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadCharArray();", array)).append(LS);
@@ -686,6 +788,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readCharArray()", array)).append(LS);
                         break;
+                    case Lua:
+                        builder.append(StringUtils.format("local {} = buffer:readCharArray()", array)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadCharArray();", array)).append(LS);
                         break;
@@ -703,6 +808,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                             break;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", array, objectProtocolField.getProtocolId())).append(LS);
+                            break;
+                        case Lua:
+                            builder.append(StringUtils.format("local {} = buffer:readPacketArray({})", array, objectProtocolField.getProtocolId())).append(LS);
                             break;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadPacketArray<{}>({});", array, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId()), objectProtocolField.getProtocolId())).append(LS);

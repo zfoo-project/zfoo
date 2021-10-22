@@ -243,14 +243,14 @@ public abstract class GenerateLuaUtils {
         var protocolClazzName = registration.getConstructor().getDeclaringClass().getSimpleName();
 
         var luaBuilder = new StringBuilder();
-        luaBuilder.append(StringUtils.format("function {}:write(byteBuffer, packet)", protocolClazzName)).append(LS);
+        luaBuilder.append(StringUtils.format("function {}:write(buffer, packet)", protocolClazzName)).append(LS);
 
         luaBuilder.append(TAB).append("if packet == null then").append(LS);
-        luaBuilder.append(TAB + TAB).append("byteBuffer:writeBoolean(false)").append(LS);
+        luaBuilder.append(TAB + TAB).append("buffer:writeBoolean(false)").append(LS);
         luaBuilder.append(TAB + TAB).append("return").append(LS);
         luaBuilder.append(TAB).append("end").append(LS);
 
-        luaBuilder.append(TAB).append("byteBuffer:writeBoolean(true)").append(LS);
+        luaBuilder.append(TAB).append("buffer:writeBoolean(true)").append(LS);
 
 
         for (var i = 0; i < fields.length; i++) {
@@ -271,8 +271,8 @@ public abstract class GenerateLuaUtils {
         var protocolClazzName = registration.getConstructor().getDeclaringClass().getSimpleName();
 
         var jsBuilder = new StringBuilder();
-        jsBuilder.append(StringUtils.format("function {}:read(byteBuffer)", protocolClazzName)).append(LS);
-        jsBuilder.append(TAB).append("if not(byteBuffer:readBoolean()) then").append(LS);
+        jsBuilder.append(StringUtils.format("function {}:read(buffer)", protocolClazzName)).append(LS);
+        jsBuilder.append(TAB).append("if not(buffer:readBoolean()) then").append(LS);
         jsBuilder.append(TAB + TAB).append("return nil").append(LS);
         jsBuilder.append(TAB).append("end").append(LS);
 
