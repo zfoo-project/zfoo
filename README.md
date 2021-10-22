@@ -37,14 +37,14 @@
 - 事件总线 [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
 - 时间任务调度 [scheduler](scheduler/README.md)
 - 内置在程序里的**轻量级cpu，内存，硬盘，网络监控，** 无需代码和额外工具，解放运维生产力 [monitor](monitor/src/test/java/com/zfoo/monitor/ApplicationTest.java)
-- 支持 **Godot，Unity，Cocos，Webgl**，网络通信协议支持 tcp udp websocket http
-- 语言支持**Java Javascript C# Lua GDScript**，protocol协议文件生成不依赖任何第三方库和插件
 
 Ⅱ. 背景和适用项目
 ---------------
 
 - 性能需求极高的项目，如游戏服务器框架，网站服务器框架，单服滚服，全球服，直播聊天，IM系统，实时推送
 - 节省研发成本的项目，如想节省，开发，部署，运维成本
+- 适合作为 **Godot，Unity，Cocos，Webgl，H5** 的后端基础框架，网络通信协议支持 tcp udp websocket http
+- 语言支持 **Java Javascript C# Lua GDScript**，可以轻易实现跨平台
 - 喜欢 [KISS法则](https://baike.baidu.com/item/KISS原则/3242383) 的项目 ，简单的配置，优雅的代码
 
 Ⅲ. 完整的工程案例和视频教程
@@ -200,3 +200,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ```
+
+Ⅷ. Stargazers over time
+-----------------------
+
+[![Stargazers over time](https://starchart.cc/zfoo-project/zfoo.svg)](https://starchart.cc/zfoo-project/zfoo)
