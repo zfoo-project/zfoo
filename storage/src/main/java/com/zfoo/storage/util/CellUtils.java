@@ -100,7 +100,9 @@ public abstract class CellUtils {
         // 普通数字
         if (null != format && !format.contains(StringUtils.PERIOD)) {
             var longValue = (long) value;
-            // 对于无小数部分的数字类型，转为Long
+            if (longValue == value) {
+                return Long.valueOf(longValue);
+            }
         }
         return value;
     }

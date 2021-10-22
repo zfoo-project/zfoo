@@ -34,6 +34,7 @@ public class StudentResource {
     private String name;
 
     private int age;
+    private float score;
     private String[] courses;
     private User[] users;
     private User user;
@@ -53,6 +54,10 @@ public class StudentResource {
 
     public int getAge() {
         return age;
+    }
+
+    public float getScore() {
+        return score;
     }
 
     public String[] getCourses() {
