@@ -40,13 +40,9 @@ public class TcpClientTest {
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
         var session = client.start();
 
-        var request = new TcpHelloRequest();
-        request.setMessage("Hello, this is the tcp client!");
-
-
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(2000);
-            NetContext.getRouter().send(session, request);
+            NetContext.getRouter().send(session, TcpHelloRequest.valueOf("Hello, this is the tcp client!"));
         }
 
         ThreadUtils.sleep(Long.MAX_VALUE);

@@ -12,7 +12,7 @@
 
 ### Ⅲ. 分布式热更新
 
-- 将需要热更新的class文件上传到zookeeper注册中心中，其它服务器监听需要更新的class文件， 中有分布式热更新实现
+- 将需要热更新的class文件上传到zookeeper注册中心中，其它服务器监听需要更新的class文件，监听到了就去热更新代码
 
 - [tank](https://github.com/zfoo-project/tank-game-server/blob/main/common/src/main/java/com/zfoo/tank/common/util/HotUtils.java)
   分布式热更新代码实现

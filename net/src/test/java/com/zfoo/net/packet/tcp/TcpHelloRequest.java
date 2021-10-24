@@ -24,6 +24,11 @@ public class TcpHelloRequest implements IPacket {
 
     private String message;
 
+    public static TcpHelloRequest valueOf(String message) {
+        var request = new TcpHelloRequest();
+        request.message = message;
+        return request;
+    }
 
     @Override
     public short protocolId() {

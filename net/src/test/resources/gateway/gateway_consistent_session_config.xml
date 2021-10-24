@@ -24,13 +24,6 @@
             <net:address name="firstZookeeper" url="127.0.0.1:2181"/>
         </net:registry>
 
-        <net:host center="direct connect" user="jaysunxiao" password="123456">
-            <net:address name="server0" url="127.0.0.1:9000"/>
-            <net:address name="server1" url="127.0.0.1:9001"/>
-            <net:address name="client0" url="127.0.0.1:9000"/>
-            <net:address name="client1" url="127.0.0.1:9001"/>
-        </net:host>
-
         <net:consumer load-balancer="consistent-hash">
             <net:module name="providerTest"/>
         </net:consumer>
