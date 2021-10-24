@@ -5,7 +5,7 @@
 1. 优雅的同步和异步请求，速度更快，支持 tcp udp websocket
 2. 服务注册和发现，配置中心使用的是zookeeper，可扩展成其它注册中心
 3. 自带高性能网关，自定义转发策略
-4. 服务可伸缩，负载均衡，集群监控，应有尽有。
+4. 服务可伸缩，负载均衡，集群监控，应有尽有
 4. 基于Java11，所有的依赖包都是最新的jar包
 
 ### Ⅱ. 相关模块
@@ -60,65 +60,100 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 
 ### Ⅳ. 服务器架构演进
 
-- 单台服务器+数据库
-  ![Image text](../doc/image/net/framework01.png)
+- 单台服务器+数据库，[zfoo net单台服务器教程](src/test/java/com/zfoo/net/core/tcp/server/TcpServerTest.java)
+
+![Image text](../doc/image/net/framework01.png)
+
+----------
 
 - 添加反向代理，类似网关
-  ![Image text](../doc/image/net/framework02.png)
-  ```
-  更大规模的架构做准备的第一步是添加一个“反向代理”
-  路由将请求转发到正确的端点
-  健康检查
-  身份验证确保实际允许用户访问服务器
-  防火墙确保用户只能访问我们允许他们使用的部分网络
-  ```
 
-- 引入负载均衡器
-  ![Image text](../doc/image/net/framework03.png)
-  ```
-  负载均衡器的把请求分发到两台服务器上。用户 1 往左，用户 2 往右，用户 3 再往左。
-  ```
+```
+更大规模的架构做准备的第一步是添加一个“反向代理”
+路由将请求转发到正确的端点
+健康检查
+身份验证确保实际允许用户访问服务器
+防火墙确保用户只能访问我们允许他们使用的部分网络
+```
+
+![Image text](../doc/image/net/framework02.png)
+
+----------
+
+- 引入负载均衡器， [zfoo net网关教程](src/test/java/com/zfoo/net/core/gateway/GatewayTest.java)
+
+```
+负载均衡器的把请求分发到两台服务器上。用户 1 往左，用户 2 往右，用户 3 再往左。
+```
+
+![Image text](../doc/image/net/framework03.png)
+
+----------
 
 - 扩展数据库
-  ![Image text](../doc/image/net/framework04.png)
-  ```
-  集成的orm基于mongodb，可以支持分布式部署
-  mongodb，副本集部署（主从模式），可以数据同步，读写分离，
-  mongodb，分片部署，故障转移（容灾）
-  ```
 
-- 微服务，随着开发团队随着应用的发展而增长，越来越多的开发人员工作在同一台服务器上，发生冲突的可能性很大
-  ![Image text](../doc/image/net/framework05.png)
-  ```
-  微服务可以单独扩展，更好地适应需求。开发团队之间相互独立，每个团队都负责自己的微服务生命周期
-  每个微服务都有自己的资源，比如数据库
-  ```
+```
+集成的orm基于mongodb，可以支持分布式部署
+mongodb，副本集部署（主从模式），可以数据同步，读写分离，
+mongodb，分片部署，故障转移（容灾）
+```
+
+![Image text](../doc/image/net/framework04.png)
+
+----------
+
+- 微服务，[微服务RPC教程](src/test/java/com/zfoo/net/core/provider/ProviderTest.java)
+
+```
+随着开发团队随着应用的发展而增长，越来越多的开发人员工作在同一台服务器上，发生冲突的可能性很大。
+这个时候把通过微服务，把业务拆分出来是更好的选择。
+
+微服务可以单独扩展，更好地适应需求。开发团队之间相互独立，每个团队都负责自己的微服务生命周期
+每个微服务都有自己的资源，比如数据库
+```
+
+![Image text](../doc/image/net/framework05.png)
+
+----------
 
 - 缓存和内容分发网络(CDN)
-  ![Image text](../doc/image/net/framework06.png)
-  ```
-  网络应用的很大一部由静态资源构成，如图片、CSS 样式文件、Java 脚本以及一些针对特定产品提前渲染好的页面等等。
-  游戏应用也包含了大量的图片资源，3D建模的资源
-  缓存的加强版叫内容分发网络（Content Delivery Network），遍布全球的大量缓存。
-  这使得用户可以从物理上靠近他们的地方来获取网页内容，而不是每次都把数据从源头搬到用户那里。
-  ```
+
+```
+网络应用的很大一部由静态资源构成，如图片、CSS 样式文件、Java 脚本以及一些针对特定产品提前渲染好的页面等等。
+游戏应用也包含了大量的图片资源，3D建模的资源
+缓存的加强版叫内容分发网络（Content Delivery Network），遍布全球的大量缓存。
+这使得用户可以从物理上靠近他们的地方来获取网页内容，而不是每次都把数据从源头搬到用户那里。
+```
+
+![Image text](../doc/image/net/framework06.png)
+
+----------
 
 - 消息队列
-  ![Image text](../doc/image/net/framework07.png)
-  ```
-  流量消峰，有时需要处理大量比如双11抢购秒杀，让突然的大量请求排队去处理任务
-  应用解耦
-  消息分发
-  ```
+
+```
+流量消峰，有时需要处理大量比如双11抢购秒杀，让突然的大量请求排队去处理任务
+应用解耦
+消息分发
+```
+
+![Image text](../doc/image/net/framework07.png)
+
+----------
 
 - 分片，分区，比如将用户分配到与其最近的服务器提供服务
-  ![Image text](../doc/image/net/framework08.png)
-  ```
-  比如，两地三中心，容灾备份
-  ```
+
+```
+比如，两地三中心，容灾备份
+```
+
+![Image text](../doc/image/net/framework08.png)
+
+----------
 
 - 对负载均衡器进行负载均衡
-  ![Image text](../doc/image/net/framework09.png)
+
+![Image text](../doc/image/net/framework09.png)
 
 ### Ⅴ. 教程
 
