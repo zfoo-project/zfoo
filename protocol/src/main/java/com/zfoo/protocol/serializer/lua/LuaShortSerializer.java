@@ -31,7 +31,7 @@ public class LuaShortSerializer implements ILuaSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("byteBuffer:writeShort({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer:writeShort({})", objectStr)).append(LS);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class LuaShortSerializer implements ILuaSerializer {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("local {} = byteBuffer:readShort()", result)).append(LS);
+        builder.append(StringUtils.format("local {} = buffer:readShort()", result)).append(LS);
         return result;
     }
 }

@@ -575,7 +575,7 @@ namespace CsProtocol.Buffer
         public T ReadPacket<T>(short protocolId)
         {
             IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-            return protocolRegistration.Read(this);;
+            return (T) protocolRegistration.Read(this);
         }
 
         public void WriteBooleanArray(bool[] array)
@@ -763,7 +763,7 @@ namespace CsProtocol.Buffer
             {
                 for (int index = 0; index < size; index++)
                 {
-                    array[index] = ReadLong();
+                    array[index] = ReadFloat();
                 }
             }
 
@@ -795,7 +795,7 @@ namespace CsProtocol.Buffer
             {
                 for (int index = 0; index < size; index++)
                 {
-                    array[index] = ReadLong();
+                    array[index] = ReadDouble();
                 }
             }
 

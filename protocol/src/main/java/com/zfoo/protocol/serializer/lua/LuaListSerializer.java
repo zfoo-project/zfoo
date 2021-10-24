@@ -40,12 +40,12 @@ public class LuaListSerializer implements ILuaSerializer {
         ListField listField = (ListField) fieldRegistration;
         builder.append(StringUtils.format("if {} == null then", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append("byteBuffer:writeInt(0)").append(LS);
+        builder.append("buffer:writeInt(0)").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
 
         builder.append("else").append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("byteBuffer:writeInt(#{})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer:writeInt(#{})", objectStr)).append(LS);
 
         String index = "index" + GenerateProtocolFile.index.getAndIncrement();
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
@@ -73,7 +73,7 @@ public class LuaListSerializer implements ILuaSerializer {
 
         GenerateProtocolFile.addTab(builder, deep);
         String size = "size" + GenerateProtocolFile.index.getAndIncrement();
-        builder.append(StringUtils.format("local {} = byteBuffer:readInt()", size)).append(LS);
+        builder.append(StringUtils.format("local {} = buffer:readInt()", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if {} > 0 then", size)).append(LS);

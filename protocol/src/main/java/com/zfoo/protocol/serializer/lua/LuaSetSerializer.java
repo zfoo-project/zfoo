@@ -40,13 +40,13 @@ public class LuaSetSerializer implements ILuaSerializer {
         SetField setField = (SetField) fieldRegistration;
         builder.append(StringUtils.format("if {} == null then", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append("byteBuffer:writeInt(0)").append(LS);
+        builder.append("buffer:writeInt(0)").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
 
         builder.append("else").append(LS);
 
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("byteBuffer:writeInt(table.setSize({}))", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer:writeInt(#{})", objectStr)).append(LS);
 
         String index = "index" + GenerateProtocolFile.index.getAndIncrement();
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
@@ -74,7 +74,7 @@ public class LuaSetSerializer implements ILuaSerializer {
 
         GenerateProtocolFile.addTab(builder, deep);
         String size = "size" + GenerateProtocolFile.index.getAndIncrement();
-        builder.append(StringUtils.format("local {} = byteBuffer:readInt()", size)).append(LS);
+        builder.append(StringUtils.format("local {} = buffer:readInt()", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if {} > 0 then", size)).append(LS);
@@ -85,7 +85,7 @@ public class LuaSetSerializer implements ILuaSerializer {
         String readObject = GenerateLuaUtils.luaSerializer(setField.getSetElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
-        builder.append(StringUtils.format("{}[{}] = {}", result, readObject, readObject)).append(LS);
+        builder.append(StringUtils.format("table.insert({}, {})", result, readObject)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("end").append(LS);
         GenerateProtocolFile.addTab(builder, deep);

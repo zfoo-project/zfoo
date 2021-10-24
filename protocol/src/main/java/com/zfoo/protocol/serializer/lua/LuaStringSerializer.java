@@ -30,14 +30,14 @@ public class LuaStringSerializer implements ILuaSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("byteBuffer:writeString({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer:writeString({})", objectStr)).append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("local {} = byteBuffer:readString()", result)).append(LS);
+        builder.append(StringUtils.format("local {} = buffer:readString()", result)).append(LS);
         return result;
     }
 }

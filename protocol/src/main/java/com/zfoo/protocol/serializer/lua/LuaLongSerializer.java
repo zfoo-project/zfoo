@@ -30,7 +30,7 @@ public class LuaLongSerializer implements ILuaSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("byteBuffer:writeLong({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer:writeLong({})", objectStr)).append(LS);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class LuaLongSerializer implements ILuaSerializer {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("local {} = byteBuffer:readLong()", result)).append(LS);
+        builder.append(StringUtils.format("local {} = buffer:readLong()", result)).append(LS);
         return result;
     }
 }

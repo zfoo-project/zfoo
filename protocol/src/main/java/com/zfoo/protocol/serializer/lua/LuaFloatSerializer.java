@@ -31,7 +31,7 @@ public class LuaFloatSerializer implements ILuaSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("byteBuffer:writeFloat({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer:writeFloat({})", objectStr)).append(LS);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class LuaFloatSerializer implements ILuaSerializer {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("local {} = byteBuffer:readFloat()", result)).append(LS);
+        builder.append(StringUtils.format("local {} = buffer:readFloat()", result)).append(LS);
         return result;
     }
 }

@@ -397,7 +397,7 @@ function ByteBuffer:writeString(str)
     self:writeInt(#str)
     self:writeBuffer(str)
     return self
-    end
+end
 
 function ByteBuffer:readString()
     local length = self:readInt()
@@ -712,7 +712,7 @@ function ByteBuffer:writeIntIntMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeInt(key)
             self:writeInt(value)
@@ -738,7 +738,7 @@ function ByteBuffer:writeIntLongMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeInt(key)
             self:writeLong(value)
@@ -764,7 +764,7 @@ function ByteBuffer:writeIntStringMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeInt(key)
             self:writeString(value)
@@ -791,7 +791,7 @@ function ByteBuffer:writeIntPacketMap(map, protocolId)
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeInt(key)
             protocolRegistration:write(self, value)
@@ -818,7 +818,7 @@ function ByteBuffer:writeLongIntMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeLong(key)
             self:writeInt(value)
@@ -844,7 +844,7 @@ function ByteBuffer:writeLongLongMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeLong(key)
             self:writeLong(value)
@@ -870,7 +870,7 @@ function ByteBuffer:writeLongStringMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeLong(key)
             self:writeString(value)
@@ -897,7 +897,7 @@ function ByteBuffer:writeLongPacketMap(map, protocolId)
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeLong(key)
             protocolRegistration:write(self, value)
@@ -924,7 +924,7 @@ function ByteBuffer:writeStringIntMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeString(key)
             self:writeInt(value)
@@ -950,7 +950,7 @@ function ByteBuffer:writeStringLongMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeString(key)
             self:writeLong(value)
@@ -976,7 +976,7 @@ function ByteBuffer:writeStringStringMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeString(key)
             self:writeString(value)
@@ -1003,7 +1003,7 @@ function ByteBuffer:writeStringPacketMap(map, protocolId)
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
-        self:writeInt(#map);
+        self:writeInt(table.mapSize(map));
         for key, value in pairs(map) do
             self:writeString(key)
             protocolRegistration:write(self, value)

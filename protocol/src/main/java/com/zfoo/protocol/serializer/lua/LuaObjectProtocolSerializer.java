@@ -31,7 +31,7 @@ public class LuaObjectProtocolSerializer implements ILuaSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("ProtocolManager.getProtocol({}):write(byteBuffer, {})", objectProtocolField.getProtocolId(), objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer:writePacket({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class LuaObjectProtocolSerializer implements ILuaSerializer {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("local {} = ProtocolManager.getProtocol({}):read(byteBuffer)", result, objectProtocolField.getProtocolId())).append(LS);
+        builder.append(StringUtils.format("local {} = buffer:readPacket({})", result, objectProtocolField.getProtocolId())).append(LS);
         return result;
     }
 }

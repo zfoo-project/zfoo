@@ -34,7 +34,7 @@ public class CsObjectProtocolSerializer implements ICsSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.Write({}, {});", objectStr, objectProtocolField.getProtocolId()))
+        builder.append(StringUtils.format("buffer.WritePacket({}, {});", objectStr, objectProtocolField.getProtocolId()))
                 .append(LS);
     }
 
@@ -46,7 +46,7 @@ public class CsObjectProtocolSerializer implements ICsSerializer {
         var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("{} {} = buffer.Read<{}>({});", protocolSimpleName, result, protocolSimpleName, objectProtocolField.getProtocolId()))
+        builder.append(StringUtils.format("{} {} = buffer.ReadPacket<{}>({});", protocolSimpleName, result, protocolSimpleName, objectProtocolField.getProtocolId()))
                 .append(LS);
         return result;
     }

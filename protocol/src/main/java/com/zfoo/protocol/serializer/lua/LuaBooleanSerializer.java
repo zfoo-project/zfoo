@@ -31,7 +31,7 @@ public class LuaBooleanSerializer implements ILuaSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("byteBuffer:writeBoolean({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer:writeBoolean({})", objectStr)).append(LS);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class LuaBooleanSerializer implements ILuaSerializer {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("local {} = byteBuffer:readBoolean()", result)).append(LS);
+        builder.append(StringUtils.format("local {} = buffer:readBoolean()", result)).append(LS);
         return result;
     }
 }

@@ -13,12 +13,10 @@
 
 package com.zfoo.protocol.serializer.lua;
 
-import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
-import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.reflect.*;
@@ -128,7 +126,7 @@ public abstract class GenerateLuaUtils {
         var luaBuilder = new StringBuilder();
 
         // document
-        luaBuilder.append(documentTitleAndImport(registration));
+        luaBuilder.append(documentTitle(registration));
 
         // new object
         luaBuilder.append(newFunction(registration));
@@ -153,7 +151,7 @@ public abstract class GenerateLuaUtils {
         FileUtils.writeStringToFile(new File(protocolOutputPath), luaBuilder.toString());
     }
 
-    private static String documentTitleAndImport(ProtocolRegistration registration) {
+    private static String documentTitle(ProtocolRegistration registration) {
         var protocolId = registration.protocolId();
         var registrationConstructor = registration.getConstructor();
         var fieldRegistrations = registration.getFieldRegistrations();
@@ -165,13 +163,6 @@ public abstract class GenerateLuaUtils {
         if (!StringUtils.isBlank(docTitle)) {
             Arrays.stream(docTitle.split(LS)).forEach(it -> luaBuilder.append(docToLuaDoc(it)).append(LS));
             luaBuilder.append(LS);
-        }
-
-
-        // 如果协议包含子协议，则需要导入ProtocolManager
-        var subProtocols = ProtocolAnalysis.getAllSubProtocolIds(protocolId);
-        if (CollectionUtils.isNotEmpty(subProtocols)) {
-            luaBuilder.append("local ProtocolManager = require(\"LuaProtocol.ProtocolManager\")").append(LS + LS);
         }
 
         return luaBuilder.toString();
@@ -245,13 +236,9 @@ public abstract class GenerateLuaUtils {
         var luaBuilder = new StringBuilder();
         luaBuilder.append(StringUtils.format("function {}:write(buffer, packet)", protocolClazzName)).append(LS);
 
-        luaBuilder.append(TAB).append("if packet == null then").append(LS);
-        luaBuilder.append(TAB + TAB).append("buffer:writeBoolean(false)").append(LS);
+        luaBuilder.append(TAB).append("if buffer:writePacketFlag(packet) then").append(LS);
         luaBuilder.append(TAB + TAB).append("return").append(LS);
         luaBuilder.append(TAB).append("end").append(LS);
-
-        luaBuilder.append(TAB).append("buffer:writeBoolean(true)").append(LS);
-
 
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
