@@ -1,6 +1,6 @@
 ### Ⅰ. 简介
 
-- [event](https://github.com/zfoo-project/zfoo/blob/main/event/README.md) 事件总线解耦不同模块，提高代码的质量，核心思想是观察者设计模式
+- [event](https://github.com/zfoo-project/zfoo/blob/main/event/README.md) 事件总线用来解耦不同模块，提高代码的质量，核心思想是观察者设计模式
 
 ### Ⅱ. 硬件层面的事件总线
 
