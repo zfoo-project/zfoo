@@ -1,11 +1,17 @@
-### Ⅰ. 注意事项
+### Ⅰ. 简介
 
-- 轻量级的cron表达式实现
-- 每秒钟执行一次SchedulerManager.triggerPerSecond()方法，循环遍历可执行的scheduler
-- SchedulerManager的executor只有一条线程，所以使用者要避免做耗时和阻塞的运算，如果有这样的需求可以抛到其它线程池
-- 最大亮点是前后调整本地机器时间都会触发任务调度，本地开发非常有用。java和spring自带的任务调度不支持调整机器时间
+- [scheduler](https://github.com/zfoo-project/zfoo/blob/main/scheduler/README.md) 时间任务调度总线，cron表达式的解析使用了spring自带的解释器模式
 
-### Ⅱ. Cron Expression Example
+### Ⅱ. 时间任务调度
+
+![Image text](../doc/image/scheduler/scheduler01.png)
+
+- 前后调整本地机器时间都会触发任务调度，本地开发非常有用
+- ScheduledExecutorService每秒钟执行一次triggerPerSecond()方法，循环遍历可执行的scheduler
+- zfoo认为一个程序中不会有太多的时间任务掉地，所以ScheduledExecutorService只有一条线程，所以使用者要避免做耗时和阻塞的运算，如果有这样的需求可以抛到其它线程池
+- zfoo scheduler使用Javassist字节码增强技术动态代理时间调度任务，避免了反射，没有性能损耗
+
+### Ⅲ. Cron Expression Example
 
 ```
 30 * * * * ?           每半分钟触发任务

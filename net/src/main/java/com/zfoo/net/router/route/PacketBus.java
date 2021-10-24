@@ -43,9 +43,9 @@ import java.lang.reflect.Modifier;
  * @author jaysunxiao
  * @version 3.0
  */
-public abstract class PacketRoute {
+public abstract class PacketBus {
 
-    private static final Logger logger = LoggerFactory.getLogger(PacketRoute.class);
+    private static final Logger logger = LoggerFactory.getLogger(PacketBus.class);
 
     /**
      * 客户端和服务端都有接受packet的方法，packetReceiverList对应的就是包的接收方法，将receiver注册到IProtocolRegistration

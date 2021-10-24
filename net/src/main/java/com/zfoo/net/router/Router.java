@@ -29,7 +29,7 @@ import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
-import com.zfoo.net.router.route.PacketRoute;
+import com.zfoo.net.router.route.PacketBus;
 import com.zfoo.net.router.route.SignalBridge;
 import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.session.model.Session;
@@ -303,7 +303,7 @@ public class Router implements IRouter {
             }
 
             // 调用PacketReceiver
-            PacketRoute.submit(session, packet, attachment);
+            PacketBus.submit(session, packet, attachment);
         } catch (Exception e) {
             logger.error(StringUtils.format("e[uid:{}][sid:{}]未知exception异常", session.getAttribute(AttributeType.UID), session.getSid(), e.getMessage()), e);
         } catch (Throwable t) {

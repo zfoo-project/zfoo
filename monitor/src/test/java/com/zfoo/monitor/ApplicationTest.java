@@ -28,7 +28,7 @@ import oshi.SystemInfo;
 public class ApplicationTest {
 
     /**
-     * 仿Linux的uptime指令，可以用来监控cpu的负载
+     * 仿Linux的uptime指令，可以用来监控cpu的负载，windows中无法统计，所以在windows返回的结果默认是-1
      */
     @Test
     public void uptimeTest() {

@@ -153,7 +153,7 @@ public void cronSchedulerPerSecond() {
 }
 ````
 
-#### 8. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) excel和Java类自动映射框架，无需代码和任何工具只需要定义一个和excel对应的类，直接解析excel
+#### 8. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel和Java类自动映射框架，只需要定义一个和Excel对应的类，直接解析Excel
 
 ```
 @Resource

@@ -24,7 +24,7 @@ import com.zfoo.orm.model.entity.IEntity;
  * @author jaysunxiao
  * @version 3.0
  */
-@EntityCache(cacheStrategy = "tenThousand", persister = @Persister("time30s"))
+@EntityCache(cacheStrategy = "thousand", persister = @Persister("time30s"))
 public class MailEnt implements IEntity<String> {
 
     @Id

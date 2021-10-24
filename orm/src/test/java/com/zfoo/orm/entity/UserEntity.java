@@ -23,7 +23,7 @@ import java.util.List;
  * @author jaysunxiao
  * @version 3.0
  */
-@EntityCache(cacheStrategy = "tenThousand", persister = @Persister("time30s"))
+@EntityCache(cacheStrategy = "thousand", persister = @Persister("time30s"))
 public class UserEntity implements IEntity<Long> {
 
     @Id
