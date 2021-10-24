@@ -60,7 +60,7 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 
 ### Ⅳ. 服务器架构演进
 
-- 单台服务器+数据库，[zfoo net单台服务器教程](src/test/java/com/zfoo/net/core/tcp/server/TcpServerTest.java)
+- 单台服务器+数据库，[zfoo net 单台服务器使用教程](src/test/java/com/zfoo/net/core/tcp/server/TcpServerTest.java)
 
 ![Image text](../doc/image/net/framework01.png)
 
@@ -80,7 +80,7 @@ Java生态的rpc框架非常多，但是很少有rpc框架能够契合到游戏�
 
 ----------
 
-- 引入负载均衡器， [zfoo net网关教程](src/test/java/com/zfoo/net/core/gateway/GatewayTest.java)
+- 引入负载均衡器， [zfoo net 网关负载均衡教程](src/test/java/com/zfoo/net/core/gateway/GatewayTest.java)
 
 ```
 负载均衡器的把请求分发到两台服务器上。用户 1 往左，用户 2 往右，用户 3 再往左。
@@ -155,13 +155,7 @@ mongodb，分片部署，故障转移（容灾）
 
 ![Image text](../doc/image/net/framework09.png)
 
-### Ⅴ. 教程
-
-- [单台服务器教程](src/test/java/com/zfoo/net/core/tcp/server/TcpServerTest.java)
-- [网关教程](src/test/java/com/zfoo/net/core/gateway/GatewayTest.java)
-- [微服务RPC教程](src/test/java/com/zfoo/net/core/provider/ProviderTest.java)
-
-### Ⅵ. 依赖的中间件zookeeper教程
+### Ⅴ. 依赖的中间件zookeeper教程
 
 - [zk基础的增删改查](src/test/java/com/zfoo/net/zookeeper/base)
 - [curator的增删改查](src/test/java/com/zfoo/net/zookeeper/curator)
@@ -171,6 +165,6 @@ mongodb，分片部署，故障转移（容灾）
 - [数据发布和订阅](src/test/java/com/zfoo/net/zookeeper/recipes/nodecache)
 - [zookeeper的分布式选举算法](src/test/java/com/zfoo/net/zookeeper/recipes/mastersel)
 
-### Ⅶ. 参考文章
+### Ⅵ. 参考文章
 
 - [Scaling webapps for newbs](https://arcentry.com/blog/scaling-webapps-for-newbs-and-non-techies/)
