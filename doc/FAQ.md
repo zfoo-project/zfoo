@@ -18,13 +18,39 @@
 
 ---
 
+#### zfoo的RPC实现原理
+
+- zfoo的RPC和dubbo实现的原理一样，主要使用CompletableFuture，利用了唯一id
+
+```
+zfoo的RPC请求消息体会在IPacket的包后面附加上一个IAttachmet（SignalAttachment）作为同步和异步的信号。
+SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过这个唯一ID就可以确定哪个RPC请求对应了哪一个RPC回调。
+```
+
+---
+
+#### protocol的实现原理
+
+- 通过递归解析对象的结构，用字节码增强生成顺序的序列化和反序列化函数，可以自己线生成C#协议，就能看到Javassist生成的是什么样的结构
+
+---
+
 #### 为什么选择mongodb
 
 - mongodb可以单机部署也可以分布式部署，是万能的数据库，而且速度足够快
 - mongodb，副本集部署（主从模式），可以数据同步，读写分离
 - mongodb，分片部署，故障转移（容灾）
 
+---
+
 #### TODO：
 
-- 参看一下akka的actor实现，进一步优化net的线程模型，统一异步回调的argument参数
-- protocol需要支持更多的语言，python，go，C++
+1. 参看一下akka的actor实现，进一步优化net的线程模型，统一异步回调的argument参数
+
+2. protocol需要支持更多的语言，python，go，C++
+
+3. Router中的ThreadLocal主要就是让上层@PacketReceiver所表示的收包方法少传一个参数IAttachment，这块设计可以优化
+
+```
+提前把这个参数存起来，就不用传到上层去用了，便于优雅的调用，但是也带来了一些不必要的性能损耗
+```
