@@ -43,6 +43,15 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 
 ---
 
+#### 前端h5的后台管理界面使用的技术栈
+
+- 基础框架使用的，vue 2.6，https://cn.vuejs.org/
+- UI框架使用的，vuetify 2.3，https://vuetifyjs.com
+- 工具库使用的，lodash 4.17，https://www.lodashjs.com/
+- icon使用的material font，mdi 5.3.45，https://pictogrammers.github.io/@mdi/font/5.3.45/
+
+---
+
 #### TODO：
 
 1. 参看一下akka的actor实现，进一步优化net的线程模型，统一异步回调的argument参数
