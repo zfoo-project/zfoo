@@ -23,18 +23,9 @@ public class Heartbeat implements IPacket {
 
     public static final transient short PROTOCOL_ID = 102;
 
-    private static Heartbeat INSTANCE = new Heartbeat();
-
-    public static Heartbeat getInstance() {
-        return INSTANCE;
-    }
-
     @Override
     public short protocolId() {
         return PROTOCOL_ID;
     }
 
-    public static short heartbeatProtocolId() {
-        return PROTOCOL_ID;
-    }
 }

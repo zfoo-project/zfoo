@@ -23,10 +23,6 @@ public class Ping implements IPacket {
 
     public static final transient short PROTOCOL_ID = 103;
 
-    public static short pingProtocolId() {
-        return PROTOCOL_ID;
-    }
-
     @Override
     public short protocolId() {
         return PROTOCOL_ID;

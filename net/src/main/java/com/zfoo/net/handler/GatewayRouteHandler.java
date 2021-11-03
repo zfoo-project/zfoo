@@ -64,10 +64,10 @@ public class GatewayRouteHandler extends ServerRouteHandler {
 
         var decodedPacketInfo = (DecodedPacketInfo) msg;
         var packet = decodedPacketInfo.getPacket();
-        if (packet.protocolId() == Heartbeat.heartbeatProtocolId()) {
+        if (packet.protocolId() == Heartbeat.PROTOCOL_ID) {
             return;
         }
-        if (packet.protocolId() == Ping.pingProtocolId()) {
+        if (packet.protocolId() == Ping.PROTOCOL_ID) {
             NetContext.getRouter().send(session, Pong.valueOf(TimeUtils.now()), null);
             return;
         }

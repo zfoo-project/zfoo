@@ -71,7 +71,7 @@ public class Router implements IRouter {
 
     @Override
     public void receive(Session session, IPacket packet, @Nullable IAttachment attachment) {
-        if (packet.protocolId() == Heartbeat.heartbeatProtocolId()) {
+        if (packet.protocolId() == Heartbeat.PROTOCOL_ID) {
             logger.info("heartbeat");
             return;
         }
