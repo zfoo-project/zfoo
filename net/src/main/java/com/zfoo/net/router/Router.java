@@ -199,7 +199,7 @@ public class Router implements IRouter {
 
             return new SyncAnswer<>((T) responsePacket, clientSignalAttachment);
         } catch (TimeoutException e) {
-            throw new NetTimeOutException(StringUtils.format("syncRequest timeout exception, ask:[{}], attachment:[{}]"
+            throw new NetTimeOutException(StringUtils.format("syncAsk timeout exception, ask:[{}], attachment:[{}]"
                     , JsonUtils.object2String(packet), JsonUtils.object2String(clientSignalAttachment)));
         } finally {
             SignalBridge.removeSignalAttachment(clientSignalAttachment);

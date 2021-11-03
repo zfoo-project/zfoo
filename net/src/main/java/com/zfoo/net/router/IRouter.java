@@ -39,7 +39,7 @@ public interface IRouter {
     void atReceiver(Session session, IPacket packet, @Nullable IAttachment attachment);
 
     /**
-     * attention：syncRequest和asyncRequest只能客户端调用
+     * attention：syncAsk和asyncAsk只能客户端调用
      * 同一个客户端可以同时发送多条同步或者异步消息。
      * 服务器对每个请求消息也只能回复一条消息，不能在处理一条不同或者异步消息的时候回复多条消息。
      *
