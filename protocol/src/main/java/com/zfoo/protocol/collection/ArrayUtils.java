@@ -359,9 +359,95 @@ public abstract class ArrayUtils {
 
         var length = list.size();
         var objectArray = Array.newInstance(clazz, length);
-
-        System.arraycopy(list.toArray(), 0, objectArray, 0, length);
-        return (T[]) objectArray;
+        return (T[]) copy(list.toArray(), objectArray, length);
     }
 
+
+    /**
+     * copy
+     */
+    public static boolean[] copy(boolean[] source) {
+        if (isEmpty(source)) {
+            return EMPTY_BOOLEAN_ARRAY;
+        }
+        var length = source.length;
+        var target = new boolean[length];
+        return (boolean[]) copy(source, target, length);
+    }
+
+    public static byte[] copy(byte[] source) {
+        if (isEmpty(source)) {
+            return EMPTY_BYTE_ARRAY;
+        }
+        var length = source.length;
+        var target = new byte[length];
+        return (byte[]) copy(source, target, length);
+    }
+
+    public static short[] copy(short[] source) {
+        if (isEmpty(source)) {
+            return EMPTY_SHORT_ARRAY;
+        }
+        var length = source.length;
+        var target = new short[length];
+        return (short[]) copy(source, target, length);
+    }
+
+    public static int[] copy(int[] source) {
+        if (isEmpty(source)) {
+            return EMPTY_INT_ARRAY;
+        }
+        var length = source.length;
+        var target = new int[length];
+        return (int[]) copy(source, target, length);
+    }
+
+    public static long[] copy(long[] source) {
+        if (isEmpty(source)) {
+            return EMPTY_LONG_ARRAY;
+        }
+        var length = source.length;
+        var target = new long[length];
+        return (long[]) copy(source, target, length);
+    }
+
+    public static float[] copy(float[] source) {
+        if (isEmpty(source)) {
+            return EMPTY_FLOAT_ARRAY;
+        }
+        var length = source.length;
+        var target = new float[length];
+        return (float[]) copy(source, target, length);
+    }
+
+    public static double[] copy(double[] source) {
+        if (isEmpty(source)) {
+            return EMPTY_DOUBLE_ARRAY;
+        }
+        var length = source.length;
+        var target = new double[length];
+        return (double[]) copy(source, target, length);
+    }
+
+    public static char[] copy(char[] source) {
+        if (isEmpty(source)) {
+            return EMPTY_CHAR_ARRAY;
+        }
+        var length = source.length;
+        var target = new char[length];
+        return (char[]) copy(source, target, length);
+    }
+
+    public static <T> T[] copy(T[] source, Class<T> clazz) {
+        AssertionUtils.notNull(source);
+        AssertionUtils.notNull(clazz);
+        var length = source.length;
+        var target = Array.newInstance(clazz, length);
+        return (T[]) copy(source, target, length);
+    }
+
+    private static Object copy(Object source, Object target, int length) {
+        System.arraycopy(source, 0, target, 0, length);
+        return target;
+    }
 }
