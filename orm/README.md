@@ -2,40 +2,48 @@
 
 - [orm](https://github.com/zfoo-project/zfoo/blob/main/orm/README.md) 基于MongoDB的orm框架，提供POJO对象和MongoDB数据库之间的映射
 - mongodb是分布式数据库，可以单机使用，也可以分布式使用
+- 基于 [caffeine](https://github.com/ben-manes/caffeine) 的高性能数据库实体对象Entity缓存
 
-### Ⅱ. 直接使用方法(low level api)
+### Ⅱ. 使用
 
-#### 1. IAccessor接口，为数据访问接口
+#### 1. 直接使用(low level api)，通过MongoDB官方提供的底层Api操作数据库
 
-- 插入数据到数据库，会以对象的id()方法的返回值作为主键
-
-```
-OrmContext.getAccessor().insert(obj)
-```
-
-- 删除数据库中的数据，会以对象的id()方法的返回值作为查找关键字，删除以这个id()为主键的数据
+- 首先通过OrmManager获取Collection
 
 ```
-OrmContext.getAccessor().delete(obj);
+var collection = OrmContext.getOrmManager().getCollection(UserEntity.class)
 ```
 
-- 修改数据库中的数据
+- 通过collection操作集合
+  - 增，collection.insertOne(obj)
+  - 删，collection.deleteOne(obj)
+  - 改，collection.updateOne(obj)
+  - 查，collection.find(Filters.eq("_id", userId))
 
-```
-OrmContext.getAccessor().update(obj);
-```
+#### 2. 间接使用(middle level api)，通过collection的简易包装类IAccessor和IQuery接口访问数据
 
-- 加载数据库中的数据
+- IAccessor接口，为数据访问接口
+  - 插入数据到数据库，会以对象的id()方法的返回值作为主键
+  ```
+  OrmContext.getAccessor().insert(obj)
+  ```
+  - 删除数据库中的数据，会以对象的id()方法的返回值作为查找关键字，删除以这个id()为主键的数据
+  ```
+  OrmContext.getAccessor().delete(obj);
+  ```
+  - 修改数据库中的数据
+  ```
+  OrmContext.getAccessor().update(obj);
+  ```
+  - 加载数据库中的数据
+  ```
+  OrmContext.getAccessor().load(id, class);
+  ```
 
-```
-OrmContext.getAccessor().load(id, class);
-```
+- IQuery接口，为数据复杂查询接口
+  - 目前提供的方法有：queryFieldLike，queryAll，queryFieldEqual，queryFieldIn，pageQuery
 
-#### 2. IQuery接口，为数据复杂查询接口
-
-- 目前提供的方法有：queryFieldLike，queryAll，queryFieldEqual，queryFieldIn，pageQuery
-
-### Ⅲ. 缓存使用方法(high level api)
+#### 3. 缓存使用(high level api)，缓存Entity定时刷新缓存到数据库
 
 - 通过下列配置指定数据库和缓存的策略列表
 
@@ -98,14 +106,13 @@ persisters表示一个持久化的策略，如time30s这个策略表示，将Ent
 userEntityCaches.update(entity);
 ```
 
-### Ⅳ. 注意事项
+### Ⅲ. 注意事项
 
-- POJO对象的属性必须提供get和set方法，否则无法映射
 - 如果不想映射某属性，直接加上transient关键字
-- 目前支持基本数据属性（byte，short，int，long，float，double，boolean），字符串String，List，Set集合属性的映射，不支持Map
+- 支持基本数据属性（byte，short，int，long，float，double，boolean），字符串String，自定义对象，不支持泛型
+- 数组支持一维数组，集合支持List，Set，不支持Map
 - 数据库主键能用整数尽量用整数，因为MongoDB默认的主键是一个字符串，比较占空间
 - 数据库使用自研的orm框架，比如一个实体类UserEntity，映射到数据库中的集合为user，首字母小写，去掉Entity
-- 基于 [caffeine](https://github.com/ben-manes/caffeine) 的高性能数据缓存
 - 智能语法分析，不支持泛型和循环引用的对象，错误的entity对象定义将无法启动程序并给出错误警告
 
 ### Ⅳ. 教程
