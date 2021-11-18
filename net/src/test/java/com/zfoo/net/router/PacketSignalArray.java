@@ -36,30 +36,28 @@ public class PacketSignalArray {
     private static final AtomicReferenceArray<Integer> signalPacketArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
 
     /**
-     * Session控制同步或异步的附加包，key：packetId
+     * Session控制同步或异步的附加包，key：signalId
      */
     private static final Map<Integer, Integer> signalAttachmentMap = new ConcurrentHashMap<>(1000);
 
-    public static void addSignalAttachment(int packetId) {
-        var hash = packetId & SIGNAL_MASK;
+    public static void addSignalAttachment(int signalId) {
+        var hash = signalId & SIGNAL_MASK;
 
-        if (signalPacketArray.compareAndSet(hash, null, packetId)) {
+        if (signalPacketArray.compareAndSet(hash, null, signalId)) {
             return;
         }
-//        logger.info("add [packetId:{}] [oldPacketId:{}]", packetId, signalPacketArray.get(hash));
-        signalAttachmentMap.put(packetId, packetId);
+        signalAttachmentMap.put(signalId, signalId);
     }
 
 
-    public static void removeSignalAttachment(int packetId) {
-        var hash = packetId & SIGNAL_MASK;
-        var oldPacketId = signalPacketArray.get(hash);
+    public static void removeSignalAttachment(int signalId) {
+        var hash = signalId & SIGNAL_MASK;
+        var oldSignalId = signalPacketArray.get(hash);
 
-        if (oldPacketId != null && oldPacketId == packetId && signalPacketArray.compareAndSet(hash, oldPacketId, null)) {
+        if (oldSignalId != null && oldSignalId == signalId && signalPacketArray.compareAndSet(hash, oldSignalId, null)) {
             return;
         }
-//        logger.info("remove [packetId:{}] [oldPacketId:{}]", packetId, oldPacketId);
-        signalAttachmentMap.remove(packetId);
+        signalAttachmentMap.remove(signalId);
     }
 
     public static void status() {

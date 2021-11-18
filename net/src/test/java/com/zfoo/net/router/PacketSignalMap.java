@@ -31,13 +31,13 @@ public class PacketSignalMap {
 
     private static final Map<Integer, Integer> signalAttachmentMap = new ConcurrentHashMap<>(1_0000);
 
-    public static void addSignalAttachment(int packetId) {
-        signalAttachmentMap.put(packetId, packetId);
+    public static void addSignalAttachment(int signalId) {
+        signalAttachmentMap.put(signalId, signalId);
     }
 
 
-    public static void removeSignalAttachment(int packetId) {
-        signalAttachmentMap.remove(packetId);
+    public static void removeSignalAttachment(int signalId) {
+        signalAttachmentMap.remove(signalId);
     }
 
     public static void status() {

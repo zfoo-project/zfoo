@@ -34,36 +34,40 @@ public class SignalBridge {
     // equal with 32767
     private static final int SIGNAL_MASK = 0B00000000_00000000_01111111_11111111;
 
+    /**
+     * 用来保存同步或异步请求的SignalAttachment附加包，signalId和SIGNAL_MASK取与的结果hash作为数组索引，使用AtomicReferenceArray只是为了提升性能
+     */
     private static final AtomicReferenceArray<SignalAttachment> signalAttachmentArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
 
     /**
-     * Session控制同步或异步的附加包，key：packetId
+     * 用来保存同步或异步请求的SignalAttachment附加包，key：signalId
      */
     private static final Map<Integer, SignalAttachment> signalAttachmentMap = new ConcurrentHashMap<>(1000);
 
     public static void addSignalAttachment(SignalAttachment signalAttachment) {
-        var packetId = signalAttachment.getSignalId();
-        var hash = packetId & SIGNAL_MASK;
+        var signalId = signalAttachment.getSignalId();
+        var hash = signalId & SIGNAL_MASK;
 
+        // 使用AtomicReferenceArray只是为了提升性能，仅使用ConcurrentHashMap依然可以运行
         if (signalAttachmentArray.compareAndSet(hash, null, signalAttachment)) {
             return;
         }
 
-        signalAttachmentMap.put(packetId, signalAttachment);
+        signalAttachmentMap.put(signalId, signalAttachment);
     }
 
     public static SignalAttachment removeSignalAttachment(SignalAttachment signalAttachment) {
         return removeSignalAttachment(signalAttachment.getSignalId());
     }
 
-    public static SignalAttachment removeSignalAttachment(int packetId) {
-        var hash = packetId & SIGNAL_MASK;
+    public static SignalAttachment removeSignalAttachment(int signalId) {
+        var hash = signalId & SIGNAL_MASK;
 
         var attachment = signalAttachmentArray.get(hash);
-        if (attachment != null && attachment.getSignalId() == packetId && signalAttachmentArray.compareAndSet(hash, attachment, null)) {
+        if (attachment != null && attachment.getSignalId() == signalId && signalAttachmentArray.compareAndSet(hash, attachment, null)) {
             return attachment;
         }
-        return signalAttachmentMap.remove(packetId);
+        return signalAttachmentMap.remove(signalId);
     }
 
     public static void status() {

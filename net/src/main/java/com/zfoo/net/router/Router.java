@@ -76,7 +76,7 @@ public class Router implements IRouter {
             return;
         }
 
-        // 发送者（客户端）同步和异步消息的接收，发送者通过packetId判断重复
+        // 发送者（客户端）同步和异步消息的接收，发送者通过signalId判断重复
         if (attachment != null) {
             switch (attachment.packetType()) {
                 case SIGNAL_PACKET:
