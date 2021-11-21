@@ -24,14 +24,13 @@
 -----------
 
 - **极致性能，天生异步，Actor设计思想，无锁化设计，基于Spring的MVC式用法的万能RPC框架**
-- **极致序列化**，原生集成的目前二进制序列化和反序列化速度最快的 [zfoo protocol](protocol/README.md) 作为网络通讯协议
+- **极致序列化**，原生集成目前二进制序列化和反序列化速度最快的 [zfoo protocol](protocol/README.md) 作为网络通讯协议
 - **高可拓展性**，单台服务器部署，集群部署，注册中心加集群部署，网关加集群部署，随意搭配
 - **上能做游戏服务器框架，下能做应用网站服务器框架**
 
 完善的工作开发流程，完整的线上解决方案
 
-- **普通java项目，spring项目，spring boot项目，分布式项目，**
-  无差别热更新代码 [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
+- **普通java项目，spring项目，分布式项目，容器项目，** 不停机无差别热更新代码 [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
 - **Excel配置自动映射，** 单服和分布式Excel热更新方案 [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
 - MongoDB的自动映射框架 [orm](orm/README.md)
 - 事件总线 [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
