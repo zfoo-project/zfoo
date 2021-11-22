@@ -83,7 +83,7 @@ public class ExcelResourceReader implements IResourceReader {
             for (var fieldInfo : fieldInfos) {
                 var cell = row.getCell(fieldInfo.index);
                 var content = CellUtils.getCellStringValue(cell);
-                if (StringUtils.isNotEmpty(content)) {
+                if (StringUtils.isNotEmpty(content) || fieldInfo.field.getType() == String.class) {
                     inject(instance, fieldInfo.field, content);
                 }
             }
