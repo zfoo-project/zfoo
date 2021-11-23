@@ -44,7 +44,7 @@ public abstract class TimeUtils {
     // 一天对应的毫秒数
     public static final long MILLIS_PER_DAY = 1 * 24 * MILLIS_PER_HOUR;
     // 一周对应的毫秒数
-    public static final long MILLIS_PER_WEEK = 1 * 7 * MILLIS_PER_HOUR;
+    public static final long MILLIS_PER_WEEK = 1 * 7 * MILLIS_PER_DAY;
     // 默认的时区
     public static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getDefault();
     // 默认的时区Id
@@ -215,19 +215,13 @@ public abstract class TimeUtils {
         int yearDiff = cal1.get(Calendar.YEAR) - cal2.get(Calendar.YEAR);
         if (yearDiff == 0 && cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)) {
             // yearDiff==0,说明是同一年
-            if (cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)) {
-                return true;
-            }
+            return cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR);
         } else if (yearDiff == 1 && cal2.get(Calendar.MONTH) == 11) {
             //yearDiff==1,说明cal比cal2大一年;java的一月用"0"标识，那么12月用"11"
-            if (cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)) {
-                return true;
-            }
+            return cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR);
         } else if (yearDiff == -1 && cal1.get(Calendar.MONTH) == 11) {
             //yearDiff==-1,说明cal比cal2小一年
-            if (cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)) {
-                return true;
-            }
+            return cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR);
         }
         return false;
     }
