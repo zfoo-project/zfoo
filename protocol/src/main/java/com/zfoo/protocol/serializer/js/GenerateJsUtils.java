@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.serializer.js;
 
+import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
@@ -40,7 +41,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateJsUtils {
 
-    private static final String PROTOCOL_OUTPUT_ROOT_PATH = "jsProtocol/";
+    private static String protocolOutputRootPath = "jsProtocol/";
 
     private static Map<ISerializer, IJsSerializer> jsSerializerMap;
 
@@ -48,9 +49,11 @@ public abstract class GenerateJsUtils {
         return jsSerializerMap.get(serializer);
     }
 
-    public static void init() {
-        FileUtils.deleteFile(new File(PROTOCOL_OUTPUT_ROOT_PATH));
-        FileUtils.createDirectory(PROTOCOL_OUTPUT_ROOT_PATH);
+    public static void init(GenerateOperation generateOperation) {
+        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+
+        FileUtils.deleteFile(new File(protocolOutputRootPath));
+        FileUtils.createDirectory(protocolOutputRootPath);
 
         jsSerializerMap = new HashMap<>();
         jsSerializerMap.put(BooleanSerializer.INSTANCE, new JsBooleanSerializer());
@@ -71,6 +74,7 @@ public abstract class GenerateJsUtils {
 
     public static void clear() {
         jsSerializerMap = null;
+        protocolOutputRootPath = null;
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
@@ -80,7 +84,7 @@ public abstract class GenerateJsUtils {
 
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}{}", PROTOCOL_OUTPUT_ROOT_PATH, StringUtils.substringAfterFirst(fileName, "js/")));
+            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "js/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
@@ -112,7 +116,7 @@ public abstract class GenerateJsUtils {
 
         jsBuilder.append("export default ProtocolManager;").append(LS);
 
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}{}", PROTOCOL_OUTPUT_ROOT_PATH, "ProtocolManager.js")), jsBuilder.toString());
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.js")), jsBuilder.toString());
     }
 
     public static void createJsProtocolFile(ProtocolRegistration registration) {
@@ -142,8 +146,8 @@ public abstract class GenerateJsUtils {
         jsBuilder.append(LS).append(StringUtils.format("export default {};", protocolClazzName)).append(LS);
 
 
-        var protocolOutputPath = StringUtils.format("{}{}/{}.js"
-                , PROTOCOL_OUTPUT_ROOT_PATH
+        var protocolOutputPath = StringUtils.format("{}/{}/{}.js"
+                , protocolOutputRootPath
                 , GenerateProtocolPath.getProtocolPath(protocolId)
                 , protocolClazzName);
         FileUtils.writeStringToFile(new File(protocolOutputPath), jsBuilder.toString());

@@ -32,6 +32,7 @@ public class NetConfig {
      * 协议生成属性变量对应于{@link GenerateOperation}
      */
     private boolean foldProtocol;
+    private String protocolPath;
     private String protocolParam;
     private boolean generateJsProtocol;
     private boolean generateCsProtocol;
@@ -71,6 +72,14 @@ public class NetConfig {
 
     public void setFoldProtocol(boolean foldProtocol) {
         this.foldProtocol = foldProtocol;
+    }
+
+    public String getProtocolPath() {
+        return protocolPath;
+    }
+
+    public void setProtocolPath(String protocolPath) {
+        this.protocolPath = protocolPath;
     }
 
     public String getProtocolParam() {

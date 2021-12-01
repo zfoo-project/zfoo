@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.serializer.gd;
 
+import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
@@ -39,7 +40,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateGdUtils {
 
-    private static final String PROTOCOL_OUTPUT_ROOT_PATH = "gdProtocol/";
+    private static String protocolOutputRootPath = "gdProtocol/";
 
     private static Map<ISerializer, IGdSerializer> gdSerializerMap;
 
@@ -47,9 +48,11 @@ public abstract class GenerateGdUtils {
         return gdSerializerMap.get(serializer);
     }
 
-    public static void init() {
-        FileUtils.deleteFile(new File(PROTOCOL_OUTPUT_ROOT_PATH));
-        FileUtils.createDirectory(PROTOCOL_OUTPUT_ROOT_PATH);
+    public static void init(GenerateOperation generateOperation) {
+        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+
+        FileUtils.deleteFile(new File(protocolOutputRootPath));
+        FileUtils.createDirectory(protocolOutputRootPath);
 
         gdSerializerMap = new HashMap<>();
         gdSerializerMap.put(BooleanSerializer.INSTANCE, new GdBooleanSerializer());
@@ -70,6 +73,7 @@ public abstract class GenerateGdUtils {
 
     public static void clear() {
         gdSerializerMap = null;
+        protocolOutputRootPath = null;
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
@@ -77,7 +81,7 @@ public abstract class GenerateGdUtils {
 
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}{}", PROTOCOL_OUTPUT_ROOT_PATH, StringUtils.substringAfterFirst(fileName, "gd/")));
+            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "gd/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
@@ -104,7 +108,7 @@ public abstract class GenerateGdUtils {
                 .filter(it -> Objects.nonNull(it))
                 .forEach(it -> gdBuilder.append(TAB).append(StringUtils.format("protocols[{}] = {}", it.protocolId(), it.protocolConstructor().getDeclaringClass().getSimpleName())).append(LS));
 
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}{}", PROTOCOL_OUTPUT_ROOT_PATH, "ProtocolManager.gd")), gdBuilder.toString());
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.gd")), gdBuilder.toString());
     }
 
     public static void createGdProtocolFile(ProtocolRegistration registration) {
@@ -130,8 +134,8 @@ public abstract class GenerateGdUtils {
         // readObject method
         gdBuilder.append(readObject(registration));
 
-        var protocolOutputPath = StringUtils.format("{}{}/{}.gd"
-                , PROTOCOL_OUTPUT_ROOT_PATH
+        var protocolOutputPath = StringUtils.format("{}/{}/{}.gd"
+                , protocolOutputRootPath
                 , GenerateProtocolPath.getProtocolPath(protocolId)
                 , protocolClazzName);
         FileUtils.writeStringToFile(new File(protocolOutputPath), gdBuilder.toString());

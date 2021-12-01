@@ -94,6 +94,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("generate-lua-protocol", "generateLuaProtocol", builder, element, parserContext);
         resolvePlaceholder("generate-gd-protocol", "generateGdProtocol", builder, element, parserContext);
         resolvePlaceholder("fold-protocol", "foldProtocol", builder, element, parserContext);
+        resolvePlaceholder("protocol-path", "protocolPath", builder, element, parserContext);
         resolvePlaceholder("protocol-param", "protocolParam", builder, element, parserContext);
 
         var registryElement = DomUtils.getFirstChildElementByTagName(element, "registry");

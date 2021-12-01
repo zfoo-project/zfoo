@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.serializer.cs;
 
+import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
@@ -39,7 +40,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateCsUtils {
 
-    private static final String PROTOCOL_OUTPUT_ROOT_PATH = "CsProtocol/";
+    private static String protocolOutputRootPath = "CsProtocol/";
 
     private static Map<ISerializer, ICsSerializer> csSerializerMap;
 
@@ -47,9 +48,11 @@ public abstract class GenerateCsUtils {
         return csSerializerMap.get(serializer);
     }
 
-    public static void init() {
-        FileUtils.deleteFile(new File(PROTOCOL_OUTPUT_ROOT_PATH));
-        FileUtils.createDirectory(PROTOCOL_OUTPUT_ROOT_PATH);
+    public static void init(GenerateOperation generateOperation) {
+        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+
+        FileUtils.deleteFile(new File(protocolOutputRootPath));
+        FileUtils.createDirectory(protocolOutputRootPath);
 
         csSerializerMap = new HashMap<>();
         csSerializerMap.put(BooleanSerializer.INSTANCE, new CsBooleanSerializer());
@@ -70,6 +73,7 @@ public abstract class GenerateCsUtils {
 
     public static void clear() {
         csSerializerMap = null;
+        protocolOutputRootPath = null;
     }
 
     /**
@@ -85,7 +89,7 @@ public abstract class GenerateCsUtils {
 
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}{}", PROTOCOL_OUTPUT_ROOT_PATH, StringUtils.substringAfterFirst(fileName, "cs/")));
+            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "cs/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
     }
@@ -128,8 +132,8 @@ public abstract class GenerateCsUtils {
         csBuilder.append(TAB).append("}").append(LS);
         csBuilder.append("}").append(LS);
 
-        var protocolOutputPath = StringUtils.format("{}{}/{}.cs"
-                , PROTOCOL_OUTPUT_ROOT_PATH
+        var protocolOutputPath = StringUtils.format("{}/{}/{}.cs"
+                , protocolOutputRootPath
                 , GenerateProtocolPath.getCapitalizeProtocolPath(protocolId)
                 , protocolClazzName);
         FileUtils.writeStringToFile(new File(protocolOutputPath), csBuilder.toString());

@@ -32,12 +32,17 @@ public class GenerateOperation {
     public static final GenerateOperation NO_OPERATION = new GenerateOperation();
 
     /**
-     * 折叠协议，生成协议文件会和Java源文件保持相同的目录结构
+     * 折叠协议，生成协议文件会和Java源文件保持相同的目录结构，默认不折叠
      */
     private boolean foldProtocol;
 
     /**
-     * 生成协议文件的后缀名称，如果不指定，用语言约定的默认名称
+     * 生成协议的路径，默认为当前运行项目的路径
+     */
+    private String protocolPath;
+
+    /**
+     * 保留参数
      */
     private String protocolParam;
 
@@ -45,6 +50,14 @@ public class GenerateOperation {
      * 需要生成的协议文件
      */
     private final Set<CodeLanguage> generateLanguages = EnumSet.noneOf(CodeLanguage.class);
+
+    public String getProtocolPath() {
+        return protocolPath;
+    }
+
+    public void setProtocolPath(String protocolPath) {
+        this.protocolPath = protocolPath;
+    }
 
     public boolean isFoldProtocol() {
         return foldProtocol;

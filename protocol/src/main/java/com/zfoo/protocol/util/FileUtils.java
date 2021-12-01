@@ -64,6 +64,23 @@ public abstract class FileUtils {
         return System.getProperty("user.dir");
     }
 
+    /**
+     * 连接父路径和子路径
+     *
+     * @return 绝对路径
+     */
+    public static String joinPath(String parentPath, String childPath) {
+        if (StringUtils.isEmpty(parentPath)) {
+            return new File(childPath).getAbsolutePath();
+        }
+
+        if (StringUtils.isEmpty(childPath)) {
+            return new File(parentPath).getAbsolutePath();
+        }
+
+        return new File(parentPath, childPath).getAbsolutePath();
+    }
+
     //---------------------------------搜索文件--------------------------------------
 
     /**

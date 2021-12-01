@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.serializer.lua;
 
+import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
@@ -40,7 +41,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateLuaUtils {
 
-    private static final String PROTOCOL_OUTPUT_ROOT_PATH = "LuaProtocol/";
+    private static String protocolOutputRootPath = "LuaProtocol/";
 
     private static Map<ISerializer, ILuaSerializer> luaSerializerMap;
 
@@ -48,9 +49,11 @@ public abstract class GenerateLuaUtils {
         return luaSerializerMap.get(serializer);
     }
 
-    public static void init() {
-        FileUtils.deleteFile(new File(PROTOCOL_OUTPUT_ROOT_PATH));
-        FileUtils.createDirectory(PROTOCOL_OUTPUT_ROOT_PATH);
+    public static void init(GenerateOperation generateOperation) {
+        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+
+        FileUtils.deleteFile(new File(protocolOutputRootPath));
+        FileUtils.createDirectory(protocolOutputRootPath);
 
         luaSerializerMap = new HashMap<>();
         luaSerializerMap.put(BooleanSerializer.INSTANCE, new LuaBooleanSerializer());
@@ -71,6 +74,7 @@ public abstract class GenerateLuaUtils {
 
     public static void clear() {
         luaSerializerMap = null;
+        protocolOutputRootPath = null;
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
@@ -78,7 +82,7 @@ public abstract class GenerateLuaUtils {
 
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}{}", PROTOCOL_OUTPUT_ROOT_PATH, StringUtils.substringAfterFirst(fileName, "lua/")));
+            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "lua/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
@@ -110,7 +114,7 @@ public abstract class GenerateLuaUtils {
         luaBuilder.append("ProtocolManager.initProtocol = initProtocol").append(LS);
         luaBuilder.append("return ProtocolManager").append(LS);
 
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}{}", PROTOCOL_OUTPUT_ROOT_PATH, "ProtocolManager.lua")), luaBuilder.toString());
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua")), luaBuilder.toString());
     }
 
     public static void createLuaProtocolFile(ProtocolRegistration registration) {
@@ -144,8 +148,8 @@ public abstract class GenerateLuaUtils {
         luaBuilder.append(StringUtils.format("return {}", protocolClazzName)).append(LS);
 
 
-        var protocolOutputPath = StringUtils.format("{}{}/{}.lua"
-                , PROTOCOL_OUTPUT_ROOT_PATH
+        var protocolOutputPath = StringUtils.format("{}/{}/{}.lua"
+                , protocolOutputRootPath
                 , GenerateProtocolPath.getCapitalizeProtocolPath(protocolId)
                 , protocolClazzName);
         FileUtils.writeStringToFile(new File(protocolOutputPath), luaBuilder.toString());

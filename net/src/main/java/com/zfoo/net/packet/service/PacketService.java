@@ -83,6 +83,7 @@ public class PacketService implements IPacketService {
         var protocolLocation = NetContext.getConfigManager().getLocalConfig().getProtocolLocation();
 
         var foldProtocol = NetContext.getConfigManager().getLocalConfig().isFoldProtocol();
+        var protocolPath = NetContext.getConfigManager().getLocalConfig().getProtocolPath();
         var protocolParam = NetContext.getConfigManager().getLocalConfig().getProtocolParam();
         var generateJsProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateJsProtocol();
         var generateCsharpProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateCsProtocol();
@@ -90,6 +91,7 @@ public class PacketService implements IPacketService {
         var generateGdProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateGdProtocol();
         var generateOperation = new GenerateOperation();
         generateOperation.setFoldProtocol(foldProtocol);
+        generateOperation.setProtocolPath(protocolPath);
         generateOperation.setProtocolParam(protocolParam);
         if (generateJsProtocol) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.JavaScript);
