@@ -109,7 +109,11 @@ public abstract class SchedulerBus {
             var triggerTimestamp = scheduler.getTriggerTimestamp();
             if (triggerTimestamp <= currentTimeMillis) {
                 // 到达触发时间，则执行runnable方法
-                scheduler.getScheduler().invoke();
+                try {
+                    scheduler.getScheduler().invoke();
+                } catch (Throwable t) {
+                    logger.error("scheduler任务调度未知异常", t);
+                }
                 // 重新设置下一次的触发时间戳
                 triggerTimestamp = TimeUtils.nextTimestampByCronExpression(scheduler.getCronExpression(), timestampZonedDataTime);
                 scheduler.setTriggerTimestamp(triggerTimestamp);
