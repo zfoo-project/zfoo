@@ -15,6 +15,7 @@ package com.zfoo.protocol.util;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,10 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * DOM(Document Object Model)文档对象模型
@@ -69,6 +67,35 @@ public abstract class DomUtils {
         } catch (Exception e) {
             throw new RunException(e, "将xmlInputStream转换为对象[{}]异常", clazz);
         }
+    }
+
+
+    /**
+     * 获取包含有指定属性的Element
+     */
+    public static List<Element> getElementsByAttribute(Element element, String attribute, String attributeValue) {
+        var elements = new ArrayList<Element>();
+
+        var queue = new LinkedList<Element>();
+        queue.add(element);
+        while (!queue.isEmpty()) {
+            var ele = queue.poll();
+
+            var eleClassName = ele.getAttribute(attribute);
+            if (StringUtils.isNotEmpty(eleClassName) && eleClassName.equalsIgnoreCase(attributeValue)) {
+                elements.add(ele);
+                continue;
+            }
+
+            var eles = DomUtils.getChildElements(ele);
+            if (CollectionUtils.isNotEmpty(eles)) {
+                for (var e : eles) {
+                    queue.offer(e);
+                }
+            }
+        }
+
+        return elements;
     }
 
     /**

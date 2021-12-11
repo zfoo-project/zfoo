@@ -357,6 +357,12 @@ public abstract class TimeUtils {
         return LocalDateTime.ofInstant(instant, zone);
     }
 
+    // --------------------------------------时间大小判断--------------------------------------
+    public static boolean timeBetween(long time, long from, long end) {
+        return from <= time && time <= end;
+    }
+
+
     // --------------------------------------cron表达式--------------------------------------
     public static long nextTimestampByCronExpression(CronExpression expression, long currentTimestamp) {
         var zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(currentTimestamp), DEFAULT_ZONE_ID);
