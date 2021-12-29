@@ -27,7 +27,7 @@ import java.util.Map;
  * @version 3.0
  */
 @Ignore
-public class ProtostuffTest {
+public class JProtobufTest {
 
     private static final Map<Integer, String> mapWithInteger = new HashMap<>(Map.of(Integer.MIN_VALUE, "a", -99, "b", 0, "c", 99, "d", Integer.MAX_VALUE, "e"));
 
