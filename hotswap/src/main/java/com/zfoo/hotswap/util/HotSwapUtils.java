@@ -26,9 +26,9 @@ public abstract class HotSwapUtils {
 
     /**
      * 热更新java文件
-     * jvm的启动参数，jdk11过后默认的全款更不允许连接自己，VM: -Djdk.attach.allowAttachSelf=true
+     * JVM的启动参数，jdk11过后默认JVM不允许连接自己，需要加上JVM启动参数: -Djdk.attach.allowAttachSelf=true
      * <p>
-     * 优先使用简单的Javassist做热更新，因为Byte Buddy使用了更为复杂的ASM，spring boot中会使用Byte Buddy热更新
+     * 优先使用简单的Javassist做热更新，因为Byte Buddy使用了更为复杂的ASM，spring boot web项目中会优先使用Byte Buddy热更新
      *
      * @param bytes .class结尾的字节码文件
      */
