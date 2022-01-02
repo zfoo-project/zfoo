@@ -98,6 +98,31 @@ public abstract class DomUtils {
         return elements;
     }
 
+    public static List<Element> getElementsByTag(Element element, String tag) {
+        var elements = new ArrayList<Element>();
+
+        var queue = new LinkedList<Element>();
+        queue.add(element);
+        while (!queue.isEmpty()) {
+            var ele = queue.poll();
+
+            var tagName = ele.getTagName();
+            if (StringUtils.isNotEmpty(tagName) && tagName.equalsIgnoreCase(tag)) {
+                elements.add(ele);
+                continue;
+            }
+
+            var eles = DomUtils.getChildElements(ele);
+            if (CollectionUtils.isNotEmpty(eles)) {
+                for (var e : eles) {
+                    queue.offer(e);
+                }
+            }
+        }
+
+        return elements;
+    }
+
     /**
      * 只返回第一层的孩子节点，不返回第一层孩子节点的孩子节点
      * <p>
