@@ -8,7 +8,7 @@
 
 - 前后调整本地机器时间都会触发任务调度，本地开发非常有用
 - ScheduledExecutorService每秒钟执行一次triggerPerSecond()方法，循环遍历可执行的scheduler
-- zfoo认为一个程序中不会有太多的时间任务掉地，所以ScheduledExecutorService只有一条线程，所以使用者要避免做耗时和阻塞的运算，如果有这样的需求可以抛到其它线程池
+- zfoo认为一个程序中不会有太多的时间任务调度，所以ScheduledExecutorService只有一条线程，所以使用者要避免做耗时和阻塞的运算，如果有这样的需求可以抛到其它线程池
 - zfoo scheduler使用Javassist字节码增强技术动态代理时间调度任务，避免了反射，没有性能损耗
 
 ### Ⅲ. Cron Expression Example
