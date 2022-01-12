@@ -13,6 +13,7 @@
 
 package com.zfoo.net.packet.common;
 
+import com.baidu.bjf.remoting.protobuf.annotation.Ignore;
 import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.IPacket;
 
@@ -23,6 +24,7 @@ import com.zfoo.protocol.IPacket;
 @ProtobufClass
 public class Heartbeat implements IPacket {
 
+    @Ignore
     public static final transient short PROTOCOL_ID = 102;
 
     @Override
