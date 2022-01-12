@@ -134,6 +134,19 @@
             <version>${netty.version}</version>
         </dependency>
 
+        <!-- Protobuf -->
+        <dependency>
+            <groupId>com.baidu</groupId>
+            <artifactId>jprotobuf</artifactId>
+            <version>${jprotobuf.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- 动态生成二进制字节码的javassist类库 -->
         <dependency>
             <groupId>org.javassist</groupId>

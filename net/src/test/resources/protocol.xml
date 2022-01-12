@@ -66,6 +66,9 @@
 
         <protocol id="1400" location="com.zfoo.net.packet.websocket.WebsocketHelloRequest"/>
         <protocol id="1401" location="com.zfoo.net.packet.websocket.WebsocketHelloResponse"/>
+
+        <protocol id="1500" location="com.zfoo.net.packet.jprotobuf.JProtobufHelloRequest"/>
+        <protocol id="1501" location="com.zfoo.net.packet.jprotobuf.JProtobufHelloResponse"/>
     </module>
 
     <module id="4" name="js" minId="2000" maxId="3000" version="1.0.0">

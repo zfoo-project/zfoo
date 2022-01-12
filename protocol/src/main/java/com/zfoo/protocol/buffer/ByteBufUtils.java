@@ -46,6 +46,10 @@ public abstract class ByteBufUtils {
         return byteBuf.readBoolean();
     }
 
+    public static boolean tryReadBoolean(ByteBuf byteBuf) {
+        return byteBuf.isReadable() && readBoolean(byteBuf);
+    }
+
     public static void writeBooleanBox(ByteBuf byteBuf, Boolean value) {
         byteBuf.writeBoolean(value != null && value);
     }
@@ -69,6 +73,13 @@ public abstract class ByteBufUtils {
 
     public static Byte readByteBox(ByteBuf byteBuf) {
         return byteBuf.readByte();
+    }
+
+    public static byte[] readAllBytes(ByteBuf byteBuf) {
+        var readableBytes = byteBuf.readableBytes();
+        var bytes = new byte[readableBytes];
+        byteBuf.readBytes(bytes);
+        return bytes;
     }
 
     //---------------------------------short--------------------------------------

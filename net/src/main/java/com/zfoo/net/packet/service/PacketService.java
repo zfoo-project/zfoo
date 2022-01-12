@@ -134,7 +134,7 @@ public class PacketService implements IPacketService {
         // 解析包体
         var packet = ProtocolManager.read(buffer);
         // 解析包的附加包
-        var hasAttachment = ByteBufUtils.readBoolean(buffer);
+        var hasAttachment = ByteBufUtils.tryReadBoolean(buffer);
         var attachment = hasAttachment ? ((IAttachment) ProtocolManager.read(buffer)) : null;
         return DecodedPacketInfo.valueOf(packet, attachment);
     }
