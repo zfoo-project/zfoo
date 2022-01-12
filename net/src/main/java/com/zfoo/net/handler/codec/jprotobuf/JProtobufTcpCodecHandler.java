@@ -34,8 +34,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 
-import static com.zfoo.protocol.ProtocolManager.protocols;
-
 /**
  * header(4byte) + protocolId(2byte) + packet
  * header = body(bytes.length) + protocolId.length(2byte)
@@ -47,24 +45,6 @@ public class JProtobufTcpCodecHandler extends ByteToMessageCodec<EncodedPacketIn
 
     private static final Logger logger = LoggerFactory.getLogger(JProtobufTcpCodecHandler.class);
 
-    public static DecodedPacketInfo read(ByteBuf buffer) throws IOException {
-        var protocolId = ByteBufUtils.readShort(buffer);
-        var protocolRegistration = ProtocolManager.getProtocol(protocolId);
-        var protocolClass = protocols[protocolId].protocolConstructor().getDeclaringClass();
-
-        var protobufCodec = ProtobufProxy.create(protocolClass);
-
-        var bytes = ByteBufUtils.readAllBytes(buffer);
-        var packet = protobufCodec.decode(bytes);
-
-        // 解析包的附加包
-        var hasAttachment = ByteBufUtils.tryReadBoolean(buffer);
-        IAttachment attachment = null;
-        if (hasAttachment) {
-
-        }
-        return DecodedPacketInfo.valueOf((IPacket) packet, attachment);
-    }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
@@ -112,6 +92,19 @@ public class JProtobufTcpCodecHandler extends ByteToMessageCodec<EncodedPacketIn
         }
     }
 
+    public static DecodedPacketInfo read(ByteBuf buffer) throws IOException {
+        var protocolId = ByteBufUtils.readShort(buffer);
+        var protocolRegistration = ProtocolManager.getProtocol(protocolId);
+        var protocolClass = protocolRegistration.protocolConstructor().getDeclaringClass();
+
+        var protobufCodec = ProtobufProxy.create(protocolClass);
+
+        var bytes = ByteBufUtils.readAllBytes(buffer);
+        var packet = protobufCodec.decode(bytes);
+
+        return DecodedPacketInfo.valueOf((IPacket) packet, null);
+    }
+
     public void write(ByteBuf buffer, IPacket packet, IAttachment attachment) throws IOException {
         if (packet == null) {
             logger.error("packet is null and can not be sent.");
@@ -124,19 +117,17 @@ public class JProtobufTcpCodecHandler extends ByteToMessageCodec<EncodedPacketIn
         // 写入协议号
         ByteBufUtils.writeShort(buffer, protocolId);
 
+        // 写入protobuf协议
         var protobufCodec = (Codec<IPacket>) ProtobufProxy.create(packet.getClass());
         byte[] bytes = protobufCodec.encode(packet);
 
         buffer.writeBytes(bytes);
 
         int length = buffer.readableBytes();
-
         int packetLength = length - PacketService.PACKET_HEAD_LENGTH;
 
         buffer.writerIndex(0);
-
         buffer.writeInt(packetLength);
-
         buffer.writerIndex(length);
     }
 }
