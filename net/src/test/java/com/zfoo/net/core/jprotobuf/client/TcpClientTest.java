@@ -16,8 +16,6 @@ package com.zfoo.net.core.jprotobuf.client;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.jprotobuf.JProtobufTcpClient;
 import com.zfoo.net.packet.jprotobuf.JProtobufHelloRequest;
-import com.zfoo.net.packet.jprotobuf.JProtobufHelloResponse;
-import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
@@ -45,8 +43,7 @@ public class TcpClientTest {
         for (int i = 0; i < 1000; i++) {
             var ask = new JProtobufHelloRequest();
             ask.setMessage("Hello, this is jprotobuf client!");
-            var answer = NetContext.getRouter().syncAsk(session, ask, JProtobufHelloResponse.class, null).packet();
-            logger.info("同步请求收到结果[{}]", JsonUtils.object2String(answer));
+            NetContext.getRouter().send(session, ask);
             ThreadUtils.sleep(1000);
         }
 
