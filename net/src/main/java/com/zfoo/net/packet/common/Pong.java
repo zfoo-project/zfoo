@@ -13,12 +13,15 @@
 
 package com.zfoo.net.packet.common;
 
+import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
+import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.IPacket;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
+@ProtobufClass
 public class Pong implements IPacket {
 
     public static final transient short PROTOCOL_ID = 104;
@@ -26,6 +29,7 @@ public class Pong implements IPacket {
     /**
      * 服务器当前的时间戳
      */
+    @Protobuf(order = 1)
     private long time;
 
     public static Pong valueOf(long time) {

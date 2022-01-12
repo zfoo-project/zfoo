@@ -13,12 +13,14 @@
 
 package com.zfoo.net.packet.common;
 
+import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.IPacket;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
+@ProtobufClass
 public class Heartbeat implements IPacket {
 
     public static final transient short PROTOCOL_ID = 102;
