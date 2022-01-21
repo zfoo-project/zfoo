@@ -112,23 +112,23 @@ public class ZookeeperRegistry implements IRegistry {
     /**
      * consumer需要消费的provider集合
      */
-    private Set<RegisterVO> providerCacheSet = new ConcurrentHashSet<>();
+    private final Set<RegisterVO> providerCacheSet = new ConcurrentHashSet<>();
     /**
      * 本地注册信息
      */
-    private RegisterVO localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
+    private final RegisterVO localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
 
 
     /**
      * addListener中的cache全部会被添加到这个集合中，这个集合不包括providerCuratorCache
      */
-    private List<CuratorCache> listenerList = new ConcurrentArrayList<>();
+    private final List<CuratorCache> listenerList = new ConcurrentArrayList<>();
 
     @Override
     public void start() {
         var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
         if (Objects.isNull(registryConfig)) {
-            logger.info("服务提供者没有配置，不会在zk种注册服务，如果是单机启动请忽略这条日志");
+            logger.info("服务提供者没有配置，不会在zk中注册服务，如果是单机启动请忽略这条日志");
             return;
         }
 
@@ -144,7 +144,7 @@ public class ZookeeperRegistry implements IRegistry {
         var providerConfig = NetContext.getConfigManager().getLocalConfig().getProvider();
 
         if (Objects.isNull(providerConfig)) {
-            logger.info("服务提供者没有配置，不会在zk种注册服务，如果是单机启动请忽略这条日志");
+            logger.info("服务提供者没有配置，不会在zk中注册服务，如果是单机启动请忽略这条日志");
             return;
         }
 
