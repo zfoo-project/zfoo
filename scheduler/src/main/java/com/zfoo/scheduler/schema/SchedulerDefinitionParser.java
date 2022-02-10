@@ -35,7 +35,7 @@ public class SchedulerDefinitionParser implements BeanDefinitionParser {
         String name;
         BeanDefinitionBuilder builder;
 
-        // 注册SchedulerSpringContext
+        // 注册SchedulerContext
         clazz = SchedulerContext.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);

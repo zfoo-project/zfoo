@@ -44,10 +44,10 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         String name;
         BeanDefinitionBuilder builder;
 
-        // 注册NetConfig
+        // 解析NetConfig的配置
         parseNetConfig(element, parserContext);
 
-        // 注册NetSpringContext
+        // 注册NetContext
         clazz = NetContext.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
