@@ -164,7 +164,7 @@ public abstract class GenerateJsUtils {
 
         var jsBuilder = new StringBuilder();
 
-        if (!StringUtils.isBlank(docTitle)) {
+        if (StringUtils.isNotBlank(docTitle)) {
             jsBuilder.append(docTitle).append(LS);
         }
 
@@ -178,7 +178,7 @@ public abstract class GenerateJsUtils {
 
             // 生成注释
             var doc = docFieldMap.get(propertyName);
-            if (!StringUtils.isBlank(doc)) {
+            if (StringUtils.isNotBlank(doc)) {
                 Arrays.stream(doc.split(LS)).forEach(it -> jsBuilder.append(TAB).append(it).append(LS));
             }
 

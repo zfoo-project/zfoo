@@ -359,7 +359,7 @@ public class ZookeeperRegistry implements IRegistry {
     private void initConsumerCache() throws Exception {
         // 初始化providerCacheSet
         var remoteProviderSet = curator.getChildren().forPath(PROVIDER_ROOT_PATH).stream()
-                .filter(it -> !StringUtils.isBlank(it) && !"null".equals(it))
+                .filter(it -> StringUtils.isNotBlank(it) && !"null".equals(it))
                 .map(it -> RegisterVO.parseString(it))
                 .filter(it -> Objects.nonNull(it))
                 .filter(it -> RegisterVO.providerHasConsumerModule(it, localRegisterVO))
@@ -505,7 +505,7 @@ public class ZookeeperRegistry implements IRegistry {
     public List<String> children(String path) {
         try {
             var children = curator.getChildren().forPath(path).stream()
-                    .filter(it -> !StringUtils.isBlank(it) && !"null".equals(it))
+                    .filter(it -> StringUtils.isNotBlank(it) && !"null".equals(it))
                     .collect(Collectors.toList());
             return children;
         } catch (Exception e) {
@@ -520,7 +520,7 @@ public class ZookeeperRegistry implements IRegistry {
     public Set<RegisterVO> remoteProviderRegisterSet() {
         try {
             var remoteProviderSet = curator.getChildren().forPath(PROVIDER_ROOT_PATH).stream()
-                    .filter(it -> !StringUtils.isBlank(it) && !"null".equals(it))
+                    .filter(it -> StringUtils.isNotBlank(it) && !"null".equals(it))
                     .map(it -> RegisterVO.parseString(it))
                     .filter(it -> Objects.nonNull(it))
                     .collect(Collectors.toSet());

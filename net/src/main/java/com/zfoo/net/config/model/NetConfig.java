@@ -38,6 +38,7 @@ public class NetConfig {
     private boolean generateCsProtocol;
     private boolean generateLuaProtocol;
     private boolean generateGdProtocol;
+    private boolean generateProtobufProtocol;
 
     private RegistryConfig registry;
     private MonitorConfig monitor;
@@ -152,6 +153,14 @@ public class NetConfig {
 
     public void setGenerateGdProtocol(boolean generateGdProtocol) {
         this.generateGdProtocol = generateGdProtocol;
+    }
+
+    public boolean isGenerateProtobufProtocol() {
+        return generateProtobufProtocol;
+    }
+
+    public void setGenerateProtobufProtocol(boolean generateProtobufProtocol) {
+        this.generateProtobufProtocol = generateProtobufProtocol;
     }
 
     @Override

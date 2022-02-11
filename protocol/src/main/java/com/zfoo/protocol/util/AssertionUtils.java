@@ -202,7 +202,7 @@ public abstract class AssertionUtils {
         notNull(type, "Type to check against must not be null");
         if (!type.isInstance(obj)) {
             throw new AssertException(
-                    (!StringUtils.isBlank(message) ? message + " " : "") +
+                    (StringUtils.isNotBlank(message) ? message + " " : "") +
                             "Object of class [" + (obj != null ? obj.getClass().getName() : "null") +
                             "] must be an instance of " + type);
         }
@@ -227,7 +227,7 @@ public abstract class AssertionUtils {
     public static void isAssignable(Class<?> superType, Class<?> subType, String message) {
         notNull(superType, "Type to check against must not be null");
         if (subType == null || !superType.isAssignableFrom(subType)) {
-            throw new AssertException((!StringUtils.isBlank(message) ? message + " " : "")
+            throw new AssertException((StringUtils.isNotBlank(message) ? message + " " : "")
                     + subType + " is not assignable to " + superType);
         }
     }

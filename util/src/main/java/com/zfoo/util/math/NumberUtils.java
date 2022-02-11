@@ -448,7 +448,7 @@ public abstract class NumberUtils {
      * @return 新值
      */
     public static BigDecimal round(String numberStr, int scale, RoundingMode roundingMode) {
-        AssertionUtils.isTrue(!StringUtils.isBlank(numberStr));
+        AssertionUtils.isTrue(StringUtils.isNotBlank(numberStr));
         if (scale < 0) {
             scale = 0;
         }
@@ -659,10 +659,7 @@ public abstract class NumberUtils {
     public static boolean isDouble(String s) {
         try {
             Double.parseDouble(s);
-            if (s.contains(".")) {
-                return true;
-            }
-            return false;
+            return s.contains(".");
         } catch (NumberFormatException e) {
             return false;
         }

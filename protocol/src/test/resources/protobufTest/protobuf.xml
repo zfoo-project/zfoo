@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<protobuf syntax="proto3" option="java_package=com.zfoo.zgame.common.proto.protobuf;java_outer_classname=Protocols">
+
+    <proto name="common" import=""
+           option="java_package=com.zfoo.zgame.common.proto.protobuf;java_outer_classname=ProtobufCommon">
+        <protocol location="com.zfoo.protocol.jprotobuf.ObjectA"/>
+        <protocol location="com.zfoo.protocol.jprotobuf.ObjectB"/>
+    </proto>
+
+    <proto name="other" import="common"
+           option="java_package=com.zfoo.zgame.common.proto.protobuf;java_outer_classname=ProtobufOther">
+        <protocol location="com.zfoo.protocol.jprotobuf.ObjectC"/>
+    </proto>
+
+</protobuf>

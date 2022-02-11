@@ -70,6 +70,7 @@
         <xsd:attribute name="generate-cs-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="generate-lua-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="generate-gd-protocol" type="xsd:string" default="false"/>
+        <xsd:attribute name="generate-protobuf-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="fold-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="protocol-path" type="xsd:string"/>
         <xsd:attribute name="protocol-param" type="xsd:string"/>

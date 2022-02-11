@@ -84,10 +84,11 @@ public abstract class GenerateProtocolDocument {
                 .collect(Collectors.toList());
 
         for (var protocolRegistration : protocolRegistrations) {
-            var protocolClazzName = protocolRegistration.protocolConstructor().getDeclaringClass().getSimpleName();
+            var protocolClazz = protocolRegistration.protocolConstructor().getDeclaringClass();
+            var protocolClazzName = protocolClazz.getName();
 
             var protocolFile = list.stream()
-                    .filter(it -> it.getName().equals(StringUtils.format("{}.java", protocolClazzName)))
+                    .filter(it -> it.getAbsolutePath().replace(StringUtils.SLASH, StringUtils.PERIOD).replace(StringUtils.BACK_SLASH, StringUtils.PERIOD).endsWith(StringUtils.format("{}.java", protocolClazzName)))
                     .findFirst();
 
             // 如果搜索不到协议文件则直接返回
@@ -104,7 +105,7 @@ public abstract class GenerateProtocolDocument {
                     .collect(Collectors.toList());
 
             // 搜索包名，报名不匹配则直接返回
-            var protocolClassTitle = StringUtils.format("public class {}", protocolClazzName);
+            var protocolClassTitle = StringUtils.format("public class {}", protocolClazz.getSimpleName());
             if (protocolStringList.stream().noneMatch(it -> it.contains(protocolClassTitle))) {
                 continue;
             }

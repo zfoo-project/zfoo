@@ -29,6 +29,8 @@ public enum CodeLanguage {
 
     CSharp,
 
-    GdScript
+    GdScript,
+
+    Protobuf
 
 }

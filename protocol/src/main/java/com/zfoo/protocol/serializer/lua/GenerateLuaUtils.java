@@ -164,7 +164,7 @@ public abstract class GenerateLuaUtils {
         var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
         var docTitle = protocolDocument.getKey();
 
-        if (!StringUtils.isBlank(docTitle)) {
+        if (StringUtils.isNotBlank(docTitle)) {
             Arrays.stream(docTitle.split(LS)).forEach(it -> luaBuilder.append(docToLuaDoc(it)).append(LS));
             luaBuilder.append(LS);
         }
@@ -196,7 +196,7 @@ public abstract class GenerateLuaUtils {
 
             // 生成注释
             var doc = docFieldMap.get(propertyName);
-            if (!StringUtils.isBlank(doc)) {
+            if (StringUtils.isNotBlank(doc)) {
                 Arrays.stream(doc.split(LS)).forEach(it -> luaBuilder.append(TAB + TAB).append(docToLuaDoc(it)).append(LS));
             }
 

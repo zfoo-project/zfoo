@@ -93,6 +93,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("generate-cs-protocol", "generateCsProtocol", builder, element, parserContext);
         resolvePlaceholder("generate-lua-protocol", "generateLuaProtocol", builder, element, parserContext);
         resolvePlaceholder("generate-gd-protocol", "generateGdProtocol", builder, element, parserContext);
+        resolvePlaceholder("generate-protobuf-protocol", "generateProtobufProtocol", builder, element, parserContext);
         resolvePlaceholder("fold-protocol", "foldProtocol", builder, element, parserContext);
         resolvePlaceholder("protocol-path", "protocolPath", builder, element, parserContext);
         resolvePlaceholder("protocol-param", "protocolParam", builder, element, parserContext);

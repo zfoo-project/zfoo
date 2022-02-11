@@ -11,34 +11,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.xml;
+package com.zfoo.protocol.serializer.protobuf;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-@JsonPropertyOrder({"id", "location", "enhance"})
-public class XmlProtocolDefinition {
-
-    @JacksonXmlProperty(isAttribute = true, localName = "id")
-    private short id;
+public class XmlProtobufProtocol {
 
     @JacksonXmlProperty(isAttribute = true, localName = "location")
     private String location;
 
-    @JacksonXmlProperty(isAttribute = true, localName = "enhance")
-    private final boolean enhance = true;
-
-
-    public short getId() {
-        return id;
-    }
-
     public String getLocation() {
         return location;
-    }
-
-    public boolean isEnhance() {
-        return enhance;
     }
 
 }
