@@ -4,8 +4,7 @@
   是目前的Java二进制序列化和反序列化最快的框架，并且为序列化后字节最少的框架
 - 协议目前原生支持Java Javascript C# Lua GDScript，协议理论上可以跨平台
 - 使用Javassist字节码增强动态生成顺序执行的序列化和反序列化函数，顺序执行的函数可以轻易的被JIT编译以达到极致的性能
-- 单线程环境，在没有任何JVM参数调优的情况下速度比Protobuf快20%，比Kryo快40%，[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
-- 线程安全，zfoo和Protobuf的性能不受任何影响，kryo因为线程不安全性能会有所损失，[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
+- 兼容protobuf，支持生成protobuf协议文件，提供从pojo到proto的生成方式
 
 ### Ⅱ. 快速使用
 
@@ -23,6 +22,10 @@ var packet = ProtocolManager.read(buffer);
 ```
 
 ### Ⅲ. 性能测试
+
+- 单线程环境，在没有任何JVM参数调优的情况下速度比Protobuf快20%，比Kryo快40%，[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
+- 线程安全，zfoo和Protobuf的性能不受任何影响，kryo因为线程不安全性能会有所损失，[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
+
 
 - 测试环境
 
@@ -86,12 +89,12 @@ cpu： i9900k
 - 协议类必须是简单的javabean，不能继承任何其它的类，但是可以继承接口
 
 - 默认的数据格式支持，无需用户手动注册，[参考类定义](src/test/java/com/zfoo/protocol/packet/ComplexObject.java)
-    - boolean，byte，short，int，long，float，double，char，String
-    - Boolean，Byte，Short，Integer，Long，Float，Double，Character，序列化的时候如果null，会给个默认值0（Character默认值为Character.MIN_VALUE）
-    - int[]，Integer[]，如果是null，则解析后的为一个长度为0的数组
-        - 原生泛型List，Set，Map，反序列化返回类型为HashSet，ArrayList，HashMap，并且空指针安全（返回大小为0的集合）
-        - List<Integer>，必须指定泛型类，如果发送的是[1,1,null,1]，接收到的是[1,1,0,1]
-        - List<XXXClass>，如果发送的是[obj,obj,null,obj]，接收到的是[obj,obj,null,obj]，即引用类型序列化之前为null，序列化之后同样为null
+  - boolean，byte，short，int，long，float，double，char，String
+  - Boolean，Byte，Short，Integer，Long，Float，Double，Character，序列化的时候如果null，会给个默认值0（Character默认值为Character.MIN_VALUE）
+  - int[]，Integer[]，如果是null，则解析后的为一个长度为0的数组
+    - 原生泛型List，Set，Map，反序列化返回类型为HashSet，ArrayList，HashMap，并且空指针安全（返回大小为0的集合）
+    - List<Integer>，必须指定泛型类，如果发送的是[1,1,null,1]，接收到的是[1,1,0,1]
+    - List<XXXClass>，如果发送的是[obj,obj,null,obj]，接收到的是[obj,obj,null,obj]，即引用类型序列化之前为null，序列化之后同样为null
 
 - 不支持的数据格式，因为zfoo会自动识别不支持的类型并且给出错误警告，所以用户不必太关心
   - int[][]，二维以上数组，考虑到不是所有语言都支持多维数组
