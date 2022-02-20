@@ -37,52 +37,54 @@ public abstract class StringUtils {
     public static final String TAB = "    ";
     public static final String TAB_ASCII = "\t";
 
-    public static final String COMMA = ",";// [com·ma || 'kɒmə] n.  逗点; 逗号
+    public static final String COMMA = ",";     // [com·ma || 'kɒmə] n.  逗点; 逗号
     public static final String COMMA_REGEX = ",|，";
 
-    public static final String PERIOD = ".";// 句号
+    public static final String PERIOD = ".";    // 句号
     public static final String PERIOD_REGEX = "\\.";
 
-    public static final String LEFT_SQUARE_BRACKET = "[";//左方括号
+    public static final String LEFT_SQUARE_BRACKET = "[";   // 左方括号
 
-    public static final String RIGHT_SQUARE_BRACKET = "]";//右方括号
+    public static final String RIGHT_SQUARE_BRACKET = "]";  // 右方括号
 
-    public static final String COLON = ":";//冒号[co·lon || 'kəʊlən]
+    public static final String COLON = ":";     // 冒号[co·lon || 'kəʊlən]
     public static final String COLON_REGEX = ":|：";
 
-    public static final String SEMICOLON = ";";//分号['semi'kәulәn]
+    public static final String SEMICOLON = ";";     // 分号['semi'kәulәn]
     public static final String SEMICOLON_REGEX = ";|；";
 
-    public static final String QUOTATION_MARK = "\"";//引号[quo·ta·tion || kwəʊ'teɪʃn]
+    public static final String QUOTATION_MARK = "\"";   // 引号[quo·ta·tion || kwəʊ'teɪʃn]
 
-    public static final String ELLIPSIS = "...";//省略号
+    public static final String ELLIPSIS = "...";    // 省略号
 
-    public static final String EXCLAMATION_POINT = "!";//感叹号
+    public static final String EXCLAMATION_POINT = "!"; // 感叹号
 
-    public static final String DASH = "-";//破折号
+    public static final String DASH = "-";      //  破折号
 
-    public static final String QUESTION_MARK = "?";//问号
+    public static final String QUESTION_MARK = "?"; // 问号
 
-    public static final String HYPHEN = "-";//连接号，连接号与破折号的区别是，连接号的两头不用空格
+    public static final String HYPHEN = "-";    // 连接号，连接号与破折号的区别是，连接号的两头不用空格
 
-    public static final String SLASH = "/";//斜线号
+    public static final String SLASH = "/";     // 斜线号
 
-    public static final String BACK_SLASH = "\\";//反斜线号
+    public static final String EQUAL = "=";     // 等于号
 
-    public static final String VERTICAL_BAR = "|";// 竖线
+    public static final String BACK_SLASH = "\\";   //反斜线号
+
+    public static final String VERTICAL_BAR = "|";  // 竖线
     public static final String VERTICAL_BAR_REGEX = "\\|";
 
     public static final String SHARP = "#";
     public static final String SHARP_REGEX = "\\#";
 
-    public static final String DOLLAR = "$";// 美元符号
+    public static final String DOLLAR = "$";    // 美元符号
 
     public static final String EMPTY_JSON = "{}";
 
     public static final String MULTIPLE_HYPHENS = "-----------------------------------------------------------------------";
 
 
-    public static final int INDEX_NOT_FOUND = -1;//Represents a failed index search.
+    public static final int INDEX_NOT_FOUND = -1;   // Represents a failed index search.
 
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
     public static final Charset DEFAULT_CHARSET = Charset.forName(DEFAULT_CHARSET_NAME);

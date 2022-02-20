@@ -37,13 +37,13 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
 
     @Override
     public AbstractBeanDefinition parse(Element element, ParserContext parserContext) {
-        // 注册StorageConfig
+        // 解析StorageConfig的配置
         parseStorageConfig(element, parserContext);
 
-        // 注入StorageSpringContext，ExcelResourceReader，ResInjectionProcessor，ConversionService
+        // 注册StorageContext，ExcelResourceReader
         registerBeanDefinition(parserContext);
 
-        // 注入StorageManager
+        // 注册StorageManager
         var clazz = StorageManager.class;
         var name = StringUtils.uncapitalize(clazz.getName());
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
@@ -81,13 +81,13 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
         String name;
         BeanDefinitionBuilder builder;
 
-        // 注入StorageSpringContext
+        // 注册StorageContext
         clazz = StorageContext.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         registry.registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注入ExcelResourceReader
+        // 注册ExcelResourceReader
         clazz = ExcelResourceReader.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);

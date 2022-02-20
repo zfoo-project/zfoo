@@ -53,26 +53,26 @@ public class MonitorVO {
         var messages = new ArrayList<String>();
 
         var uptimeMessage = uptime.pressure();
-        if (!StringUtils.isBlank(uptimeMessage)) {
+        if (StringUtils.isNotBlank(uptimeMessage)) {
             messages.add(uptimeMessage);
         }
 
         for (var fileSystem : df) {
             var dfMessage = fileSystem.pressure();
-            if (!StringUtils.isBlank(dfMessage)) {
+            if (StringUtils.isNotBlank(dfMessage)) {
                 messages.add(dfMessage);
             }
         }
 
 
         var freeMessage = free.pressure();
-        if (!StringUtils.isBlank(freeMessage)) {
+        if (StringUtils.isNotBlank(freeMessage)) {
             messages.add(freeMessage);
         }
 
         for (var networkIF : sar) {
             var sarMessage = networkIF.pressure();
-            if (!StringUtils.isBlank(sarMessage)) {
+            if (StringUtils.isNotBlank(sarMessage)) {
                 messages.add(sarMessage);
             }
         }

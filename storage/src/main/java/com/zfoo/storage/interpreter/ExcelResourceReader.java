@@ -155,7 +155,7 @@ public class ExcelResourceReader implements IResourceReader {
             } catch (Exception e) {
                 // 没有setMethod是正确的
             }
-            if (!StringUtils.isBlank(setMethodName)) {
+            if (StringUtils.isNotBlank(setMethodName)) {
                 throw new RunException("因为静态资源类是不能被修改的，所以资源类[class:{}]的属性[filed:{}]不能含有set方法[{}]", clazz, field.getName(), setMethodName);
             }
         }

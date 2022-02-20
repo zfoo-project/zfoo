@@ -111,7 +111,7 @@ public abstract class GenerateProtocolPath {
             var protocolSimpleName = child.getData().protocolConstructor().getDeclaringClass().getSimpleName();
             var splits = Arrays.stream(StringUtils.substringBeforeLast(StringUtils.substringAfterFirst(child.fullName(), pathBefore), protocolSimpleName)
                     .split(StringUtils.PERIOD_REGEX))
-                    .filter(it -> !StringUtils.isBlank(it))
+                    .filter(it -> StringUtils.isNotBlank(it))
                     .toArray();
             protocolPathMap.put(child.getData().protocolId(), StringUtils.joinWith(StringUtils.PERIOD, splits));
         }

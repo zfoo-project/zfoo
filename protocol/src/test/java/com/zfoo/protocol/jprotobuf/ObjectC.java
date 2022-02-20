@@ -19,15 +19,14 @@ import com.zfoo.protocol.IPacket;
 import java.util.Map;
 
 /**
- * protobuf的测试类型
- * 包括了各种复杂的结构，对象，map
+ * ObjectC的测试类型
  *
  * @author jaysunxiao
  * @version 3.0
  */
-public class ObjectA implements IPacket {
+public class ObjectC implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 102;
+    public static final transient short PROTOCOL_ID = 104;
 
     // int类型，在protobuf中叫int32
     @Protobuf(order = 1)

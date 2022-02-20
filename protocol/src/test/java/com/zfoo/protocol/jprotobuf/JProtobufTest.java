@@ -13,7 +13,10 @@
 package com.zfoo.protocol.jprotobuf;
 
 import com.baidu.bjf.remoting.protobuf.ProtobufProxy;
+import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.ProtobufObject;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.JsonUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,6 +24,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author jaysunxiao
@@ -65,6 +69,16 @@ public class JProtobufTest {
         var simpleTypeCodec = ProtobufProxy.create(ObjectA.class);
         var newObj = simpleTypeCodec.decode(bytes);
         System.out.println(JsonUtils.object2String(newObj));
+    }
+
+    @Test
+    public void generateTest() throws IOException {
+        var op = GenerateOperation.NO_OPERATION;
+        op.getGenerateLanguages().add(CodeLanguage.Protobuf);
+        op.setFoldProtocol(true);
+        op.setProtocolParam("protobuf=protobufTest/protobuf.xml");
+
+        ProtocolManager.initProtocol(Set.of(ObjectA.class, ObjectB.class, ObjectC.class), op);
     }
 
 }

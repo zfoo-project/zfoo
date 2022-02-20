@@ -33,7 +33,7 @@ public class EventDefinitionParser implements BeanDefinitionParser {
         String name;
         BeanDefinitionBuilder builder;
 
-        // 注册EventSpringContext
+        // 注册EventContext
         clazz = EventContext.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);

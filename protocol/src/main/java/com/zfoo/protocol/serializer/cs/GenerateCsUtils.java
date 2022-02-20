@@ -255,7 +255,7 @@ public abstract class GenerateCsUtils {
         var docFieldMap = protocolDocument.getValue();
 
         var csBuilder = new StringBuilder();
-        if (!StringUtils.isBlank(docTitle)) {
+        if (StringUtils.isNotBlank(docTitle)) {
             Arrays.stream(docTitle.split(LS)).forEach(it -> csBuilder.append(TAB).append(it).append(LS));
         }
         csBuilder.append(TAB)
@@ -272,7 +272,7 @@ public abstract class GenerateCsUtils {
             var propertyFullName = StringUtils.format("public {} {};", propertyType, propertyName);
             // 生成注释
             var doc = docFieldMap.get(propertyName);
-            if (!StringUtils.isBlank(doc)) {
+            if (StringUtils.isNotBlank(doc)) {
                 Arrays.stream(doc.split(LS)).forEach(it -> csBuilder.append(TAB + TAB).append(it).append(LS));
             }
 

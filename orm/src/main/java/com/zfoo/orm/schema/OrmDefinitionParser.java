@@ -45,10 +45,10 @@ public class OrmDefinitionParser implements BeanDefinitionParser {
         String name;
         BeanDefinitionBuilder builder;
 
-        // 注册OrmConfig
+        // 解析OrmConfig的配置
         parseOrmConfig(element, parserContext);
 
-        // 注册OrmSpringContext
+        // 注册OrmContext
         clazz = OrmContext.class;
         name = StringUtils.uncapitalize(clazz.getSimpleName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);

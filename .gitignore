@@ -38,8 +38,7 @@ hs_err_pid*
 **/gdProtocol/
 **/CsProtocol/
 **/LuaProtocol/
-**/zapp-user/protocol/
-**/protobuf/
+**/protos/
 
 # 以下是web前端需要忽略的文件
 # 忽略npm生成的package描述文件

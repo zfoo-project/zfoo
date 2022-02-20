@@ -44,10 +44,10 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         String name;
         BeanDefinitionBuilder builder;
 
-        // 注册NetConfig
+        // 解析NetConfig的配置
         parseNetConfig(element, parserContext);
 
-        // 注册NetSpringContext
+        // 注册NetContext
         clazz = NetContext.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
@@ -93,6 +93,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("generate-cs-protocol", "generateCsProtocol", builder, element, parserContext);
         resolvePlaceholder("generate-lua-protocol", "generateLuaProtocol", builder, element, parserContext);
         resolvePlaceholder("generate-gd-protocol", "generateGdProtocol", builder, element, parserContext);
+        resolvePlaceholder("generate-protobuf-protocol", "generateProtobufProtocol", builder, element, parserContext);
         resolvePlaceholder("fold-protocol", "foldProtocol", builder, element, parserContext);
         resolvePlaceholder("protocol-path", "protocolPath", builder, element, parserContext);
         resolvePlaceholder("protocol-param", "protocolParam", builder, element, parserContext);

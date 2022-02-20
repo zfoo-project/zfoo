@@ -89,6 +89,7 @@ public class PacketService implements IPacketService {
         var generateCsharpProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateCsProtocol();
         var generateLuaProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateLuaProtocol();
         var generateGdProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateGdProtocol();
+        var generateProtobufProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateProtobufProtocol();
         var generateOperation = new GenerateOperation();
         generateOperation.setFoldProtocol(foldProtocol);
         generateOperation.setProtocolPath(protocolPath);
@@ -104,6 +105,9 @@ public class PacketService implements IPacketService {
         }
         if (generateGdProtocol) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.GdScript);
+        }
+        if (generateProtobufProtocol) {
+            generateOperation.getGenerateLanguages().add(CodeLanguage.Protobuf);
         }
 
         // 设置生成协议的过滤器

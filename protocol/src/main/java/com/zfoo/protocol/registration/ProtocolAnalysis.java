@@ -26,6 +26,7 @@ import com.zfoo.protocol.serializer.cs.GenerateCsUtils;
 import com.zfoo.protocol.serializer.gd.GenerateGdUtils;
 import com.zfoo.protocol.serializer.js.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
+import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
@@ -199,7 +200,7 @@ public class ProtocolAnalysis {
         }
     }
 
-    private static void enhanceProtocolBefore(GenerateOperation generateOperation) throws IOException {
+    private static void enhanceProtocolBefore(GenerateOperation generateOperation) throws IOException, ClassNotFoundException {
         // 检查协议格式
         checkAllProtocolClass();
 
@@ -226,6 +227,7 @@ public class ProtocolAnalysis {
         GenerateJsUtils.clear();
         GenerateLuaUtils.clear();
         GenerateGdUtils.clear();
+        GenerateProtobufUtils.clear();
 
         EnhanceUtils.clear();
     }

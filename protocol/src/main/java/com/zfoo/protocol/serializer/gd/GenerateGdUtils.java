@@ -152,7 +152,7 @@ public abstract class GenerateGdUtils {
 
         var gdBuilder = new StringBuilder();
 
-        if (!StringUtils.isBlank(docTitle)) {
+        if (StringUtils.isNotBlank(docTitle)) {
             gdBuilder.append(gdDocument(docTitle)).append(LS);
         }
 
@@ -161,7 +161,7 @@ public abstract class GenerateGdUtils {
 
             // 生成注释
             var doc = docFieldMap.get(propertyName);
-            if (!StringUtils.isBlank(doc)) {
+            if (StringUtils.isNotBlank(doc)) {
                 Arrays.stream(doc.split(LS)).forEach(it -> gdBuilder.append(gdDocument(it)).append(LS));
             }
 

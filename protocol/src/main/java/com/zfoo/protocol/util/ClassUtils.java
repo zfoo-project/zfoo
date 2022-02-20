@@ -129,7 +129,7 @@ public abstract class ClassUtils {
                     }
                     // 如果是java类文件，则去掉后面的.class 只留下类名
                     String className = StringUtils.substringBeforeLast(fileName, CLASS_SUFFIX);
-                    if (!StringUtils.isBlank(packageName)) {
+                    if (StringUtils.isNotBlank(packageName)) {
                         String a = StringUtils.substringAfterFirst(file.getAbsolutePath(), FileUtils.getProAbsPath() + File.separator);
                         a = a.replaceAll(StringUtils.BACK_SLASH + File.separator, StringUtils.PERIOD);
                         String b = StringUtils.substringBeforeFirst(a, packageName);

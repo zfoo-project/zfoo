@@ -11,9 +11,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.xml;
+package com.zfoo.protocol.serializer.protobuf;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
@@ -23,49 +22,35 @@ import java.util.List;
  * @author jaysunxiao
  * @version 3.0
  */
-@JsonPropertyOrder({"id", "name", "minId", "maxId", "version"})
-public class XmlModuleDefinition {
+public class XmlProtobufProto {
 
-    @JacksonXmlProperty(isAttribute = true, localName = "id")
-    private byte id;
 
     @JacksonXmlProperty(isAttribute = true, localName = "name")
     private String name;
 
-    @JacksonXmlProperty(isAttribute = true, localName = "minId")
-    private short minId;
+    @JacksonXmlProperty(isAttribute = true, localName = "import")
+    private String importProto;
 
-    @JacksonXmlProperty(isAttribute = true, localName = "maxId")
-    private short maxId;
-
-    @JacksonXmlProperty(isAttribute = true, localName = "version")
-    private String version;
+    @JacksonXmlProperty(isAttribute = true, localName = "option")
+    private String option;
 
     @JacksonXmlProperty(localName = "protocol")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<XmlProtocolDefinition> protocols;
-
-    public byte getId() {
-        return id;
-    }
+    private List<XmlProtobufProtocol> protocols;
 
     public String getName() {
         return name;
     }
 
-    public short getMinId() {
-        return minId;
+    public String getImportProto() {
+        return importProto;
     }
 
-    public short getMaxId() {
-        return maxId;
+    public String getOption() {
+        return option;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
-    public List<XmlProtocolDefinition> getProtocols() {
+    public List<XmlProtobufProtocol> getProtocols() {
         return protocols;
     }
 }

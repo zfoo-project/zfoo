@@ -21,6 +21,7 @@ import com.zfoo.protocol.serializer.cs.GenerateCsUtils;
 import com.zfoo.protocol.serializer.gd.GenerateGdUtils;
 import com.zfoo.protocol.serializer.js.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
+import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -55,7 +56,7 @@ public abstract class GenerateProtocolFile {
         index = null;
     }
 
-    public static void generate(GenerateOperation generateOperation) throws IOException {
+    public static void generate(GenerateOperation generateOperation) throws IOException, ClassNotFoundException {
         var protocols = ProtocolManager.protocols;
 
         // 如果没有需要生成的协议则直接返回
@@ -122,6 +123,13 @@ public abstract class GenerateProtocolFile {
             GenerateGdUtils.init(generateOperation);
             GenerateGdUtils.createProtocolManager(allSortedGenerateProtocols);
             allSortedGenerateProtocols.forEach(it -> GenerateGdUtils.createGdProtocolFile((ProtocolRegistration) it));
+        }
+
+        // 生成Protobuf协议
+        if (generateLanguages.contains(CodeLanguage.Protobuf)) {
+            GenerateProtobufUtils.init(generateOperation);
+            GenerateProtobufUtils.createProtocolManager();
+            GenerateProtobufUtils.createProtocols();
         }
 
         // 预留参数，以后可能会用，比如给Lua修改一个后缀名称

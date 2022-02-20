@@ -156,7 +156,6 @@
             <groupId>com.baidu</groupId>
             <artifactId>jprotobuf</artifactId>
             <version>${jprotobuf.version}</version>
-            <scope>test</scope>
             <exclusions>
                 <exclusion>
                     <artifactId>slf4j-api</artifactId>

@@ -114,7 +114,7 @@ public class OrmManager implements IOrmManager {
         }
 
         // 设置数据库账号密码
-        if (!StringUtils.isBlank(hostConfig.getUser()) && !StringUtils.isBlank(hostConfig.getPassword())) {
+        if (StringUtils.isNotBlank(hostConfig.getUser()) && StringUtils.isNotBlank(hostConfig.getPassword())) {
             mongoBuilder.credential(MongoCredential.createCredential(hostConfig.getUser(), "admin", hostConfig.getPassword().toCharArray()));
         }
 

@@ -77,8 +77,8 @@ public class Storage<K, V> {
 
     public V get(K id) {
         V result = dataMap.get(id);
-        AssertionUtils.notNull(result, "静态资源[resource:{}]种表示为[id:{}]的静态资源不存在", clazz.getSimpleName(), id);
-        return (V) result;
+        AssertionUtils.notNull(result, "静态资源[resource:{}]中表示为[id:{}]的静态资源不存在", clazz.getSimpleName(), id);
+        return result;
     }
 
     public List<V> getIndex(String indexName, Object key) {
