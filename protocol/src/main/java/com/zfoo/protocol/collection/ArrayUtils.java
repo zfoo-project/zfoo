@@ -158,7 +158,7 @@ public abstract class ArrayUtils {
      * toList
      */
     public static List<Boolean> toList(boolean[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return Collections.emptyList();
         }
         var list = new ArrayList<Boolean>();
@@ -169,7 +169,7 @@ public abstract class ArrayUtils {
     }
 
     public static List<Byte> toList(byte[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return Collections.emptyList();
         }
         var list = new ArrayList<Byte>();
@@ -180,7 +180,7 @@ public abstract class ArrayUtils {
     }
 
     public static List<Short> toList(short[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return Collections.emptyList();
         }
         var list = new ArrayList<Short>();
@@ -191,7 +191,7 @@ public abstract class ArrayUtils {
     }
 
     public static List<Integer> toList(int[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return Collections.emptyList();
         }
         var list = new ArrayList<Integer>();
@@ -202,7 +202,7 @@ public abstract class ArrayUtils {
     }
 
     public static List<Long> toList(long[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return Collections.emptyList();
         }
         var list = new ArrayList<Long>();
@@ -213,7 +213,7 @@ public abstract class ArrayUtils {
     }
 
     public static List<Float> toList(float[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return Collections.emptyList();
         }
         var list = new ArrayList<Float>();
@@ -224,7 +224,7 @@ public abstract class ArrayUtils {
     }
 
     public static List<Double> toList(double[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return Collections.emptyList();
         }
         var list = new ArrayList<Double>();
@@ -235,7 +235,7 @@ public abstract class ArrayUtils {
     }
 
     public static List<Character> toList(char[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return Collections.emptyList();
         }
         var list = new ArrayList<Character>();
@@ -246,7 +246,7 @@ public abstract class ArrayUtils {
     }
 
     public static <T> List<T> toList(T[] array) {
-        if (ArrayUtils.isEmpty(array)) {
+        if (isEmpty(array)) {
             return Collections.emptyList();
         }
         return Arrays.asList(array);
