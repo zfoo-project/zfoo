@@ -445,12 +445,12 @@ public class OrmManager implements IOrmManager {
         }
         entitySubClassMap.put(clazz, new HashSet<>());
 
-        // 是否为一个简单的javabean
-        ReflectionUtils.assertIsPojoClass(clazz);
-        // 不能是泛型类
-        AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
-        // 必须要有一个空的构造器
-        ReflectionUtils.publicEmptyConstructor(clazz);
+//        // 是否为一个简单的javabean
+//        ReflectionUtils.assertIsPojoClass(clazz);
+//        // 不能是泛型类
+//        AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
+//        // 必须要有一个空的构造器
+//        ReflectionUtils.publicEmptyConstructor(clazz);
 
         // 不能使用Storage的Index注解
         var storageIndexes = ReflectionUtils.getFieldsByAnnoNameInPOJOClass(clazz, "com.zfoo.storage.model.anno.Index");
@@ -497,9 +497,11 @@ public class OrmManager implements IOrmManager {
                 AssertionUtils.isTrue(types.length == 1, "ORM[class:{}]中List类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
 
                 checkSubEntity(clazz, types[0], entitySubClassMap);
-            } else if (Map.class.isAssignableFrom(fieldType)) {
-                throw new RunException("ORM[class:{}]类型声明不正确，不支持Map类型", clazz.getCanonicalName());
-            } else {
+            }
+//            else if (Map.class.isAssignableFrom(fieldType)) {
+//                throw new RunException("ORM[class:{}]类型声明不正确，不支持Map类型", clazz.getCanonicalName());
+//            }
+            else {
                 entitySubClassMap.get(clazz).add(fieldType);
                 checkEntity(fieldType, entitySubClassMap);
             }
