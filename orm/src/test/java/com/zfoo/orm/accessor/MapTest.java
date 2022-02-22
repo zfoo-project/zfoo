@@ -17,11 +17,14 @@ import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.entity.bag.BagItem;
 import com.zfoo.orm.entity.bag.Item;
 import com.zfoo.orm.entity.bag.MapEntity;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.HashMap;
 
 @Ignore
 public class MapTest {
@@ -29,19 +32,32 @@ public class MapTest {
 
     @Test
     public void insertMapData() {
-
         var context = new ClassPathXmlApplicationContext("application.xml");
-        MapEntity entity = OrmContext.getAccessor().load(1, MapEntity.class);
-        if (entity == null) {
-            entity = new MapEntity();
-            entity.setId(1);
-            entity.getRoleBag().computeIfAbsent("1", k -> new BagItem())
-                    .getMapItem().computeIfAbsent("2", k -> new Item());
-            OrmContext.getAccessor().insert(entity);
-            log.info("数据插入成功 {}", entity);
-        } else {
-            log.info("entity已存在 {}", entity);
-        }
 
+        OrmContext.getAccessor().delete(1, MapEntity.class);
+
+        var entity = new MapEntity();
+        entity.setId(1);
+
+        var bagMap = new HashMap<String, BagItem>();
+        entity.setBagMap(bagMap);
+
+        var itemMap = new HashMap<String, Item>();
+        itemMap.put("1", new Item(1, "item1"));
+        itemMap.put("2", new Item(2, "item1"));
+        itemMap.put("3", new Item(3, "item1"));
+
+        var bagItem1 = new BagItem(1, "desc1", itemMap);
+        var bagItem2 = new BagItem(2, "desc2", itemMap);
+        var bagItem3 = new BagItem(3, "desc3", itemMap);
+
+        bagMap.put("bag1", bagItem1);
+        bagMap.put("bag2", bagItem2);
+        bagMap.put("bag3", bagItem3);
+
+        OrmContext.getAccessor().insert(entity);
+
+        var myEntity = OrmContext.getAccessor().load(1, MapEntity.class);
+        Assert.assertEquals(entity, myEntity);
     }
 }

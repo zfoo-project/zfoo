@@ -15,16 +15,22 @@ package com.zfoo.orm.entity.bag;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class BagItem {
+
     private int id;
     private String desc;
 
-    private Map<String, Item> mapItem = new HashMap<>();
+    private Map<String, Item> itemMap = new HashMap<>();
 
     public BagItem() {
-        this.id = 1;
-        this.desc = "desc";
+    }
+
+    public BagItem(int id, String desc, Map<String, Item> itemMap) {
+        this.id = id;
+        this.desc = desc;
+        this.itemMap = itemMap;
     }
 
     public int getId() {
@@ -43,20 +49,24 @@ public class BagItem {
         this.desc = desc;
     }
 
-    public Map<String, Item> getMapItem() {
-        return mapItem;
+    public Map<String, Item> getItemMap() {
+        return itemMap;
     }
 
-    public void setMapItem(Map<String, Item> mapItem) {
-        this.mapItem = mapItem;
+    public void setItemMap(Map<String, Item> itemMap) {
+        this.itemMap = itemMap;
     }
 
     @Override
-    public String toString() {
-        return "BagItem{" +
-                "id=" + id +
-                ", desc='" + desc + '\'' +
-                ", mapItem=" + mapItem +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BagItem bagItem = (BagItem) o;
+        return id == bagItem.id && Objects.equals(desc, bagItem.desc) && Objects.equals(itemMap, bagItem.itemMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, desc, itemMap);
     }
 }

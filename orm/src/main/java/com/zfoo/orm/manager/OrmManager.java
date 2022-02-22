@@ -347,7 +347,7 @@ public class OrmManager implements IOrmManager {
 
         // 校验entity格式
         var entitySubClassMap = new HashMap<Class<?>, Set<Class<?>>>();
-        checkEntity(clazz, entitySubClassMap);
+        checkEntity(clazz);
         // 对象循环引用检测
         for (var entry : entitySubClassMap.entrySet()) {
             var subClass = entry.getKey();
@@ -438,19 +438,13 @@ public class OrmManager implements IOrmManager {
         AssertionUtils.isTrue(gvsReturnValue.equals(vsValue), "实体类Entity[{}]的gvs方法和svs方法定义格式不正确", clazz.getSimpleName());
     }
 
-    private void checkEntity(Class<?> clazz, HashMap<Class<?>, Set<Class<?>>> entitySubClassMap) {
-        // 不需要检查重复的协议
-        if (entitySubClassMap.containsKey(clazz)) {
-            return;
-        }
-        entitySubClassMap.put(clazz, new HashSet<>());
-
-//        // 是否为一个简单的javabean
-//        ReflectionUtils.assertIsPojoClass(clazz);
-//        // 不能是泛型类
-//        AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
-//        // 必须要有一个空的构造器
-//        ReflectionUtils.publicEmptyConstructor(clazz);
+    private void checkEntity(Class<?> clazz) {
+        // 是否为一个简单的javabean
+        ReflectionUtils.assertIsPojoClass(clazz);
+        // 不能是泛型类
+        AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
+        // 必须要有一个空的构造器
+        ReflectionUtils.publicEmptyConstructor(clazz);
 
         // 不能使用Storage的Index注解
         var storageIndexes = ReflectionUtils.getFieldsByAnnoNameInPOJOClass(clazz, "com.zfoo.storage.model.anno.Index");
@@ -475,51 +469,71 @@ public class OrmManager implements IOrmManager {
             } else if (fieldType.isArray()) {
                 // 是一个数组
                 Class<?> arrayClazz = fieldType.getComponentType();
-                checkSubEntity(clazz, arrayClazz, entitySubClassMap);
+                checkSubEntity(clazz, arrayClazz);
             } else if (Set.class.isAssignableFrom(fieldType)) {
                 AssertionUtils.isTrue(fieldType.equals(Set.class), "ORM[class:{}]类型声明不正确，必须是Set接口类型", clazz.getCanonicalName());
 
-                Type type = field.getGenericType();
+                var type = field.getGenericType();
                 AssertionUtils.isTrue(type instanceof ParameterizedType, "ORM[class:{}]类型声明不正确，不是泛型类[field:{}]", clazz.getCanonicalName(), field.getName());
 
-                Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+                var types = ((ParameterizedType) type).getActualTypeArguments();
                 AssertionUtils.isTrue(types.length == 1, "ORM[class:{}]中Set类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
 
-                checkSubEntity(clazz, types[0], entitySubClassMap);
+                checkSubEntity(clazz, types[0]);
             } else if (List.class.isAssignableFrom(fieldType)) {
                 // 是一个List
                 AssertionUtils.isTrue(fieldType.equals(List.class), "ORM[class:{}]类型声明不正确，必须是List接口类型", clazz.getCanonicalName());
 
-                Type type = field.getGenericType();
+                var type = field.getGenericType();
                 AssertionUtils.isTrue(type instanceof ParameterizedType, "ORM[class:{}]类型声明不正确，不是泛型类[field:{}]", clazz.getCanonicalName(), field.getName());
 
-                Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+                var types = ((ParameterizedType) type).getActualTypeArguments();
                 AssertionUtils.isTrue(types.length == 1, "ORM[class:{}]中List类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
 
-                checkSubEntity(clazz, types[0], entitySubClassMap);
-            }
-//            else if (Map.class.isAssignableFrom(fieldType)) {
-//                throw new RunException("ORM[class:{}]类型声明不正确，不支持Map类型", clazz.getCanonicalName());
-//            }
-            else {
-                entitySubClassMap.get(clazz).add(fieldType);
-                checkEntity(fieldType, entitySubClassMap);
+                checkSubEntity(clazz, types[0]);
+            } else if (Map.class.isAssignableFrom(fieldType)) {
+                if (!fieldType.equals(Map.class)) {
+                    throw new RunException("ORM[class:{}]类型声明不正确，必须是Map接口类型", clazz.getCanonicalName());
+                }
+
+                var type = field.getGenericType();
+
+                if (!(type instanceof ParameterizedType)) {
+                    throw new RunException("ORM[class:{}]中数组类型声明不正确，[field:{}]不是泛型类", clazz.getCanonicalName(), field.getName());
+                }
+
+                var types = ((ParameterizedType) type).getActualTypeArguments();
+
+                if (types.length != 2) {
+                    throw new RunException("ORM[class:{}]中数组类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
+                }
+
+                var keyType = types[0];
+                var valueType = types[1];
+
+                if (!isBaseType((Class<?>) keyType)) {
+                    throw new RunException("ORM[class:{}]类型声明不正确，Map的key类型必须为基础类型", clazz.getCanonicalName());
+                }
+
+                checkSubEntity(clazz, valueType);
+            } else {
+                checkEntity(fieldType);
             }
         }
     }
 
 
-    private void checkSubEntity(Class<?> currentEntityClass, Type type, HashMap<Class<?>, Set<Class<?>>> entitySubClassMap) {
+    private void checkSubEntity(Class<?> currentEntityClass, Type type) {
         if (type instanceof ParameterizedType) {
             // 泛型类
             Class<?> clazz = (Class<?>) ((ParameterizedType) type).getRawType();
             if (Set.class.equals(clazz)) {
                 // Set<Set<String>>
-                checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0], entitySubClassMap);
+                checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
                 return;
             } else if (List.class.equals(clazz)) {
                 // List<List<String>>
-                checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0], entitySubClassMap);
+                checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
                 return;
             } else if (Map.class.equals(clazz)) {
                 // Map<List<String>, List<String>>
@@ -536,8 +550,7 @@ public class OrmManager implements IOrmManager {
             } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
                 throw new RunException("ORM不支持数组和集合联合使用[type:{}]类型", type);
             } else {
-                entitySubClassMap.get(currentEntityClass).add(clazz);
-                checkEntity(clazz, entitySubClassMap);
+                checkEntity(clazz);
                 return;
             }
         }

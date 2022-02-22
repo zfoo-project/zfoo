@@ -20,17 +20,14 @@ import com.zfoo.orm.model.entity.IEntity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @EntityCache(cacheStrategy = "thousand", persister = @Persister("time30s"))
 public class MapEntity implements IEntity<Long> {
     @Id
     private long id;
 
-    private Map<String, BagItem> roleBag = new HashMap<>();
-
-    public MapEntity() {
-
-    }
+    private Map<String, BagItem> bagMap = new HashMap<>();
 
     @Override
     public Long id() {
@@ -45,19 +42,25 @@ public class MapEntity implements IEntity<Long> {
         this.id = id;
     }
 
-    public Map<String, BagItem> getRoleBag() {
-        return roleBag;
+    public Map<String, BagItem> getBagMap() {
+        return bagMap;
     }
 
-    public void setRoleBag(Map<String, BagItem> roleBag) {
-        this.roleBag = roleBag;
+    public void setBagMap(Map<String, BagItem> bagMap) {
+        this.bagMap = bagMap;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MapEntity mapEntity = (MapEntity) o;
+        return id == mapEntity.id && Objects.equals(bagMap, mapEntity.bagMap);
     }
 
     @Override
-    public String toString() {
-        return "MapEntity{" +
-                "id=" + id +
-                ", roleBag=" + roleBag +
-                '}';
+    public int hashCode() {
+        return Objects.hash(id, bagMap);
     }
 }

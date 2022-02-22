@@ -13,13 +13,19 @@
 
 package com.zfoo.orm.entity.bag;
 
+import java.util.Objects;
+
 public class Item {
+
     private int a;
     private String b;
 
     public Item() {
-        this.a = 1;
-        this.b = "bbbb";
+    }
+
+    public Item(int a, String b) {
+        this.a = a;
+        this.b = b;
     }
 
     public int getA() {
@@ -38,11 +44,17 @@ public class Item {
         this.b = b;
     }
 
+
     @Override
-    public String toString() {
-        return "Item{" +
-                "a=" + a +
-                ", b='" + b + '\'' +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return a == item.a && Objects.equals(b, item.b);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(a, b);
     }
 }
