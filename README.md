@@ -2,7 +2,7 @@
 	<a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg"></a>
 </p>
 <p align="center">
-	👉 <strong>为性能而生的万能服务器框架</strong>👈
+	👉 <strong>为性能而生的Java服务器框架</strong>👈
 </p>
 
 <p align="center">
@@ -25,7 +25,7 @@
 
 - **极致性能，天生异步，Actor设计思想，无锁化设计，基于Spring的MVC式用法的万能RPC框架**
 - **极致序列化**，原生集成目前二进制序列化和反序列化速度最快的 [zfoo protocol](protocol/README.md) 作为网络通讯协议
-- **高可拓展性**，单台服务器部署，集群部署，注册中心加集群部署，网关加集群部署，随意搭配
+- **高可拓展性**，单台服务器部署，微服务部署，注册中心加集群部署，网关加集群部署，随意搭配
 - **上能做游戏服务器框架，下能做应用网站服务器框架**
 
 完善的工作开发流程，完整的线上解决方案
@@ -46,8 +46,12 @@
 - 语言支持 **Java Javascript C# Lua GDScript**，可以轻易实现跨平台
 - 喜欢 [KISS法则](https://baike.baidu.com/item/KISS原则/3242383) 的项目 ，简单的配置，优雅的代码
 
-Ⅲ. 完整的工程案例和视频教程
+Ⅲ. 详细的教程和完整的工程案例
 --------------------
+
+- 有问题，先看 [FAQ](./doc/FAQ.md)，每个工程目录的test文件夹下都有标准的demo展示和注释说明，可以直接运行
+  - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
+
 
 - [zfoo 视频教程](./doc/视频教程.md)，持续更新中
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of Tanks）》，新手友好，难度2星
@@ -56,14 +60,7 @@
 
 - [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，标准的https企业级网站，难度5星
 
-Ⅳ. 问题
--------
-
-- 有问题，先看 [FAQ](./doc/FAQ.md)
-- 每个工程目录的test文件夹下都有标准的demo展示和注释说明，可以直接运行
-- [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
-
-Ⅴ. 安装和使用⭐
+Ⅳ. 安装和使用⭐
 ------------
 
 #### 1. 环境要求
@@ -165,7 +162,7 @@ public class StudentResource {
 }
 ```
 
-Ⅵ. 提交规范👏
+Ⅴ. 提交规范👏
 ----------
 
 - 欢迎喜欢这个项目的人来一起维护这个项目，提交代码的时候注意下面规范
@@ -182,7 +179,7 @@ ref[module]: 重命名或者重构了模块
 doc[module]: 增加了什么文档
 ```
 
-Ⅶ. License
+Ⅵ. License
 -----------
 
 zfoo使用 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
@@ -199,8 +196,3 @@ Unless required by applicable law or agreed to in writing, software distributed 
 on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ```
-
-Ⅷ. Stargazers over time
------------------------
-
-[![Stargazers over time](https://starchart.cc/zfoo-project/zfoo.svg)](https://starchart.cc/zfoo-project/zfoo)
