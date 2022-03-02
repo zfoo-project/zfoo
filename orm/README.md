@@ -110,7 +110,8 @@ userEntityCaches.update(entity);
 
 - 如果不想映射某属性，直接加上transient关键字
 - 支持基本数据属性（byte，short，int，long，float，double，boolean），字符串String，自定义对象，不支持泛型
-- 数组支持一维数组，集合支持List，Set，不支持Map
+- 数组支持一维数组，集合支持List，Set
+- Map类型MongoDB官方限定了key只能为String
 - 数据库主键能用整数尽量用整数，因为MongoDB默认的主键是一个字符串，比较占空间
 - 数据库使用自研的orm框架，比如一个实体类UserEntity，映射到数据库中的集合为user，首字母小写，去掉Entity
 - 智能语法分析，不支持泛型和循环引用的对象，错误的entity对象定义将无法启动程序并给出错误警告
