@@ -22,7 +22,6 @@ import com.google.protobuf.CodedOutputStream;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.*;
-import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -139,18 +138,20 @@ public class SpeedTest {
         var kryo = kryos.get();
 
         var buffer = ByteBuffer.allocate(1024 * 8);
+        var output = new ByteBufferOutput(buffer);
+        var input = new ByteBufferInput(buffer);
 
         // 序列化和反序列化简单对象
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.clear();
+            output.setBuffer(buffer);
 
-            var output = new ByteBufferOutput(buffer);
             kryo.writeObject(output, simpleObject);
             output.flush();
             buffer.flip();
 
-            var input = new ByteBufferInput(buffer);
+            input.setBuffer(buffer);
             var mess = kryo.readObject(input, SimpleObject.class);
         }
 
@@ -160,13 +161,13 @@ public class SpeedTest {
         startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.clear();
+            output.setBuffer(buffer);
 
-            var output = new ByteBufferOutput(buffer);
             kryo.writeObject(output, normalObject);
             output.flush();
             buffer.flip();
 
-            var input = new ByteBufferInput(buffer);
+            input.setBuffer(buffer);
             var mess = kryo.readObject(input, NormalObject.class);
         }
 
@@ -176,13 +177,13 @@ public class SpeedTest {
         startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.clear();
+            output.setBuffer(buffer);
 
-            var output = new ByteBufferOutput(buffer);
             kryo.writeObject(output, complexObject);
             output.flush();
             buffer.flip();
 
-            var input = new ByteBufferInput(buffer);
+            input.setBuffer(buffer);
             var mess = kryo.readObject(input, ComplexObject.class);
         }
         System.out.println(StringUtils.format("[kryo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
@@ -334,65 +335,65 @@ public class SpeedTest {
     }
 
     // -------------------------------------------以下为测试用例---------------------------------------------------------------
-    private static byte byteValue = 99;
-    private static short shortValue = 9999;
-    private static int intValue = 99999999;
-    private static long longValue = 9999999999999999L;
-    private static float floatValue = 99999999.9F;
-    private static double doubleValue = 99999999.9D;
-    private static char charValue = 'c';
-    private static String charValueString = "c";
-    private static String stringValue = "hello";
+    private static final byte byteValue = 99;
+    private static final short shortValue = 9999;
+    private static final int intValue = 99999999;
+    private static final long longValue = 9999999999999999L;
+    private static final float floatValue = 99999999.9F;
+    private static final double doubleValue = 99999999.9D;
+    private static final char charValue = 'c';
+    private static final String charValueString = "c";
+    private static final String stringValue = "hello";
 
 
-    private static boolean[] booleanArray = new boolean[]{true, false, true, false, true};
-    private static byte[] byteArray = new byte[]{Byte.MIN_VALUE, -99, 0, 99, Byte.MAX_VALUE};
-    private static short[] shortArray = new short[]{Short.MIN_VALUE, -99, 0, 99, Short.MAX_VALUE};
-    private static int[] intArray = new int[]{Integer.MIN_VALUE, -99999999, -99, 0, 99, 99999999, Integer.MAX_VALUE};
-    private static int[] intArray1 = new int[]{Integer.MIN_VALUE, -99999999, -99, 0, 99, 99999999, Integer.MAX_VALUE - 1};
-    private static int[] intArray2 = new int[]{Integer.MIN_VALUE, -99999999, -99, 0, 99, 99999999, Integer.MAX_VALUE - 2};
-    private static long[] longArray = new long[]{Long.MIN_VALUE, -9999999999999999L, -99999999L, -99L, 0L, 99L, 99999999L, 9999999999999999L, Long.MAX_VALUE};
-    private static float[] floatArray = new float[]{Float.MIN_VALUE, -99999999.9F, -99.9F, 0F, 99.9F, 99999999.9F, Float.MAX_VALUE};
-    private static double[] doubleArray = new double[]{Double.MIN_VALUE, -99999999.9F, -99.9D, 0D, 99.9D, 99999999.9F, Double.MAX_VALUE};
-    private static char[] charArray = new char[]{'a', 'b', 'c', 'd', 'e'};
-    private static String[] stringArray = new String[]{"a", "b", "c", "d", "e"};
+    private static final boolean[] booleanArray = new boolean[]{true, false, true, false, true};
+    private static final byte[] byteArray = new byte[]{Byte.MIN_VALUE, -99, 0, 99, Byte.MAX_VALUE};
+    private static final short[] shortArray = new short[]{Short.MIN_VALUE, -99, 0, 99, Short.MAX_VALUE};
+    private static final int[] intArray = new int[]{Integer.MIN_VALUE, -99999999, -99, 0, 99, 99999999, Integer.MAX_VALUE};
+    private static final int[] intArray1 = new int[]{Integer.MIN_VALUE, -99999999, -99, 0, 99, 99999999, Integer.MAX_VALUE - 1};
+    private static final int[] intArray2 = new int[]{Integer.MIN_VALUE, -99999999, -99, 0, 99, 99999999, Integer.MAX_VALUE - 2};
+    private static final long[] longArray = new long[]{Long.MIN_VALUE, -9999999999999999L, -99999999L, -99L, 0L, 99L, 99999999L, 9999999999999999L, Long.MAX_VALUE};
+    private static final float[] floatArray = new float[]{Float.MIN_VALUE, -99999999.9F, -99.9F, 0F, 99.9F, 99999999.9F, Float.MAX_VALUE};
+    private static final double[] doubleArray = new double[]{Double.MIN_VALUE, -99999999.9F, -99.9D, 0D, 99.9D, 99999999.9F, Double.MAX_VALUE};
+    private static final char[] charArray = new char[]{'a', 'b', 'c', 'd', 'e'};
+    private static final String[] stringArray = new String[]{"a", "b", "c", "d", "e"};
 
-    private static ObjectA objectA = new ObjectA();
-    private static ObjectB objectB = new ObjectB();
-    private static Map<Integer, String> mapWithInteger = new HashMap<>(Map.of(Integer.MIN_VALUE, "a", -99, "b", 0, "c", 99, "d", Integer.MAX_VALUE, "e"));
-    private static List<Integer> listWithInteger = new ArrayList<>(ArrayUtils.toList(intArray));
-    private static List<Integer> listWithInteger1 = new ArrayList<>(ArrayUtils.toList(intArray1));
-    private static List<Integer> listWithInteger2 = new ArrayList<>(ArrayUtils.toList(intArray2));
-    private static List<ObjectA> listWithObject = new ArrayList<>(List.of(objectA, objectA, objectA));
-    private static List<List<ObjectA>> listListWithObject = new ArrayList<>(List.of(listWithObject, listWithObject, listWithObject));
-    private static List<List<Integer>> listListWithInteger = new ArrayList<>(List.of(listWithInteger, listWithInteger, listWithInteger));
-    private static List<List<List<Integer>>> listListListWithInteger = new ArrayList<>(List.of(listListWithInteger, listListWithInteger, listListWithInteger));
-    private static List<String> listWithString = new ArrayList<>(ArrayUtils.toList(stringArray));
-    private static Set<Integer> setWithInteger = new HashSet<>(ArrayUtils.toList(intArray));
-    private static Set<Set<List<Integer>>> setSetListWithInteger = new HashSet<>(Set.of(new HashSet<>(Set.of(listWithInteger)), new HashSet<>(Set.of(listWithInteger1)), new HashSet<>(Set.of(listWithInteger2))));
-    private static Set<Set<ObjectA>> setSetWithObject = new HashSet<>(Set.of(new HashSet<>(Set.of(objectA))));
-    private static Set<String> setWithString = new HashSet<>(ArrayUtils.toList(stringArray));
-    private static Map<Integer, ObjectA> mapWithObject = new HashMap<>(Map.of(1, objectA, 2, objectA, 3, objectA));
-    private static Map<ObjectA, List<Integer>> mapWithList = new HashMap<>(Map.of(objectA, listWithInteger));
-    private static Map<List<List<ObjectA>>, List<List<List<Integer>>>> mapWithListList = new HashMap<>(Map.of(new ArrayList<>(List.of(listWithObject, listWithObject, listWithObject)), listListListWithInteger));
-    private static List<Map<Integer, String>> listMap = new ArrayList<>(List.of(mapWithInteger, mapWithInteger, mapWithInteger));
-    private static Set<Map<Integer, String>> setMapWithInteger = new HashSet<>(Set.of(mapWithInteger));
-    private static Map<List<Map<Integer, String>>, Set<Map<Integer, String>>> mapListSet = new HashMap<>(Map.of(listMap, setMapWithInteger));
-    private static Byte[] byteBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(byteArray), Byte.class);
-    private static Short[] shortBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(shortArray), Short.class);
-    private static Integer[] integerArray = ArrayUtils.listToArray(ArrayUtils.toList(intArray), Integer.class);
-    private static Long[] longBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(longArray), Long.class);
-    private static List<Long> listWithLong = ArrayUtils.toList(longArray);
-    private static Float[] floatBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(floatArray), Float.class);
-    private static List<Float> listWithFloat = ArrayUtils.toList(floatArray);
-    private static Double[] doubleBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(doubleArray), Double.class);
-    private static List<Double> listWithDouble = ArrayUtils.toList(doubleArray);
-    private static Boolean[] booleanBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(booleanArray), Boolean.class);
-    private static List<Boolean> listWithBoolean = ArrayUtils.toList(booleanArray);
-    private static Character[] charBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(charArray), Character.class);
-    private static ComplexObject complexObject = new ComplexObject();
-    private static NormalObject normalObject = new NormalObject();
-    private static SimpleObject simpleObject = new SimpleObject();
+    private static final ObjectA objectA = new ObjectA();
+    private static final ObjectB objectB = new ObjectB();
+    private static final Map<Integer, String> mapWithInteger = new HashMap<>(Map.of(Integer.MIN_VALUE, "a", -99, "b", 0, "c", 99, "d", Integer.MAX_VALUE, "e"));
+    private static final List<Integer> listWithInteger = new ArrayList<>(ArrayUtils.toList(intArray));
+    private static final List<Integer> listWithInteger1 = new ArrayList<>(ArrayUtils.toList(intArray1));
+    private static final List<Integer> listWithInteger2 = new ArrayList<>(ArrayUtils.toList(intArray2));
+    private static final List<ObjectA> listWithObject = new ArrayList<>(List.of(objectA, objectA, objectA));
+    private static final List<List<ObjectA>> listListWithObject = new ArrayList<>(List.of(listWithObject, listWithObject, listWithObject));
+    private static final List<List<Integer>> listListWithInteger = new ArrayList<>(List.of(listWithInteger, listWithInteger, listWithInteger));
+    private static final List<List<List<Integer>>> listListListWithInteger = new ArrayList<>(List.of(listListWithInteger, listListWithInteger, listListWithInteger));
+    private static final List<String> listWithString = new ArrayList<>(ArrayUtils.toList(stringArray));
+    private static final Set<Integer> setWithInteger = new HashSet<>(ArrayUtils.toList(intArray));
+    private static final Set<Set<List<Integer>>> setSetListWithInteger = new HashSet<>(Set.of(new HashSet<>(Set.of(listWithInteger)), new HashSet<>(Set.of(listWithInteger1)), new HashSet<>(Set.of(listWithInteger2))));
+    private static final Set<Set<ObjectA>> setSetWithObject = new HashSet<>(Set.of(new HashSet<>(Set.of(objectA))));
+    private static final Set<String> setWithString = new HashSet<>(ArrayUtils.toList(stringArray));
+    private static final Map<Integer, ObjectA> mapWithObject = new HashMap<>(Map.of(1, objectA, 2, objectA, 3, objectA));
+    private static final Map<ObjectA, List<Integer>> mapWithList = new HashMap<>(Map.of(objectA, listWithInteger));
+    private static final Map<List<List<ObjectA>>, List<List<List<Integer>>>> mapWithListList = new HashMap<>(Map.of(new ArrayList<>(List.of(listWithObject, listWithObject, listWithObject)), listListListWithInteger));
+    private static final List<Map<Integer, String>> listMap = new ArrayList<>(List.of(mapWithInteger, mapWithInteger, mapWithInteger));
+    private static final Set<Map<Integer, String>> setMapWithInteger = new HashSet<>(Set.of(mapWithInteger));
+    private static final Map<List<Map<Integer, String>>, Set<Map<Integer, String>>> mapListSet = new HashMap<>(Map.of(listMap, setMapWithInteger));
+    private static final Byte[] byteBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(byteArray), Byte.class);
+    private static final Short[] shortBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(shortArray), Short.class);
+    private static final Integer[] integerArray = ArrayUtils.listToArray(ArrayUtils.toList(intArray), Integer.class);
+    private static final Long[] longBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(longArray), Long.class);
+    private static final List<Long> listWithLong = ArrayUtils.toList(longArray);
+    private static final Float[] floatBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(floatArray), Float.class);
+    private static final List<Float> listWithFloat = ArrayUtils.toList(floatArray);
+    private static final Double[] doubleBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(doubleArray), Double.class);
+    private static final List<Double> listWithDouble = ArrayUtils.toList(doubleArray);
+    private static final Boolean[] booleanBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(booleanArray), Boolean.class);
+    private static final List<Boolean> listWithBoolean = ArrayUtils.toList(booleanArray);
+    private static final Character[] charBoxArray = ArrayUtils.listToArray(ArrayUtils.toList(charArray), Character.class);
+    private static final ComplexObject complexObject = new ComplexObject();
+    private static final NormalObject normalObject = new NormalObject();
+    private static final SimpleObject simpleObject = new SimpleObject();
     private static ProtobufObject.ProtobufComplexObject protobufComplexObject = null;
     private static ProtobufObject.ProtobufNormalObject protobufNormalObject = null;
     private static ProtobufObject.ProtobufSimpleObject protobufSimpleObject = null;

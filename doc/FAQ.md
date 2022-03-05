@@ -43,6 +43,15 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 
 ---
 
+#### 为什么部署的时候才用main，平时开发的时候从test启动
+
+- 可以很好的隔离部署环境和开发测试环境
+- 部署的时候从main启动，平时开发的时候从test启动
+- 这样正式环境的配置放在main的resources里，测试环境的配置放在test的resources里，互不干扰
+- 从test下启动的程序的配置文件会覆盖main中的配置文件
+
+---
+
 #### 前端h5的后台管理界面使用的技术栈
 
 - 基础框架使用的，vue 2.6，https://cn.vuejs.org/
