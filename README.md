@@ -53,7 +53,6 @@
   - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
 
 
-- [zfoo 视频教程](./doc/视频教程.md)，持续更新中
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of Tanks）》，新手友好，难度2星
   - 快速体验，tank游戏入口 [tank.zfoo.net](http://tank.zfoo.net)
   - 快速体验，tank后台管理 [tank-admin.zfoo.net](http://tank-admin.zfoo.net)
