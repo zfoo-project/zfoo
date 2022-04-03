@@ -158,7 +158,7 @@ See the License for the specific language governing permissions and limitations 
 - idea代理设置
   ![Image text](../image/idea/idea-proxy.jpg)
 
-- maven代理设置，-DproxySet=true -DproxyHost=127.0.0.1 -DproxyPort=10809
+- maven代理设置（非全局），-DproxySet=true -DproxyHost=127.0.0.1 -DproxyPort=10809
   ![Image text](../image/idea/idea-proxy-maven.jpg)
 
 ## 6 使用Idea默认的快捷键设置
