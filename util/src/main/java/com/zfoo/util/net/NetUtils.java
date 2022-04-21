@@ -114,9 +114,12 @@ public class NetUtils {
             // 给定的IP未在指定端口范围中
             return false;
         }
-        try (ServerSocket ss = new ServerSocket(port)) {
+        try {
+            InetAddress localHost = InetAddress.getLocalHost();
+            ServerSocket ss = new ServerSocket(port, 50, localHost);
+            ss.close();
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             return false;
         }
     }
