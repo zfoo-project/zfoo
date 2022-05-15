@@ -38,6 +38,7 @@ hs_err_pid*
 **/gdProtocol/
 **/CsProtocol/
 **/LuaProtocol/
+**/zfoocpp/
 **/protos/
 
 # 以下是web前端需要忽略的文件
@@ -69,3 +70,6 @@ export_presets.cfg
 # Mono-specific ignores
 .mono/
 data_*/
+
+# C++ CMake
+**/cmake-build-debug/
