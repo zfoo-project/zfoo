@@ -22,6 +22,7 @@ import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.field.*;
+import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.cs.GenerateCsUtils;
 import com.zfoo.protocol.serializer.gd.GenerateGdUtils;
 import com.zfoo.protocol.serializer.js.GenerateJsUtils;
@@ -112,7 +113,7 @@ public class ProtocolAnalysis {
             // 通过指定类注册的协议，全部使用字节码增强
             enhanceProtocolRegistration(Arrays.stream(protocols).filter(it -> Objects.nonNull(it)).collect(Collectors.toList()));
 
-            enhanceProtocolAfter();
+            enhanceProtocolAfter(generateOperation);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -176,7 +177,7 @@ public class ProtocolAnalysis {
 
             enhanceProtocolRegistration(enhanceList);
 
-            enhanceProtocolAfter();
+            enhanceProtocolAfter(generateOperation);
         } catch (Exception e) {
             throw new UnknownException(e);
         }
@@ -211,7 +212,7 @@ public class ProtocolAnalysis {
         GenerateProtocolFile.generate(generateOperation);
     }
 
-    private static void enhanceProtocolAfter() {
+    private static void enhanceProtocolAfter(GenerateOperation generateOperation) {
         subProtocolIdMap.clear();
         subProtocolIdMap = null;
 
@@ -220,16 +221,21 @@ public class ProtocolAnalysis {
         baseSerializerMap.clear();
         baseSerializerMap = null;
 
+        EnhanceUtils.clear();
+
+        if (generateOperation.getGenerateLanguages().isEmpty()) {
+            return;
+        }
+
         GenerateProtocolDocument.clear();
         GenerateProtocolPath.clear();
         GenerateProtocolFile.clear();
+        GenerateCppUtils.clear();
         GenerateCsUtils.clear();
         GenerateJsUtils.clear();
         GenerateLuaUtils.clear();
         GenerateGdUtils.clear();
         GenerateProtobufUtils.clear();
-
-        EnhanceUtils.clear();
     }
 
 

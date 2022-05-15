@@ -17,6 +17,7 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.cs.GenerateCsUtils;
 import com.zfoo.protocol.serializer.gd.GenerateGdUtils;
 import com.zfoo.protocol.serializer.js.GenerateJsUtils;
@@ -96,8 +97,16 @@ public abstract class GenerateProtocolFile {
             GenerateProtocolPath.initProtocolPath(allSortedGenerateProtocols);
         }
 
-        // 生成C#协议
+        // 生成C++协议
         var generateLanguages = generateOperation.getGenerateLanguages();
+        if (generateLanguages.contains(CodeLanguage.Cpp)) {
+            GenerateCppUtils.init(generateOperation);
+            GenerateCppUtils.createProtocolManager(allSortedGenerateProtocols);
+            for (var protocolRegistration : allSortedGenerateProtocols) {
+                GenerateCppUtils.createCppProtocolFile((ProtocolRegistration) protocolRegistration);
+            }
+        }
+
         if (generateLanguages.contains(CodeLanguage.CSharp)) {
             GenerateCsUtils.init(generateOperation);
             GenerateCsUtils.createProtocolManager();
