@@ -5,7 +5,7 @@ const fs = require('fs');
 
 describe('jsProtocolTest', () => {
     it('complexObjectTest', () => {
-        const data = fs.readFileSync('resources\\ComplexObject.bytes');
+        const data = fs.readFileSync('../resources/ComplexObject.bytes');
 
         ProtocolManager.initProtocol();
 

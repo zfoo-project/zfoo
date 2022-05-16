@@ -46,7 +46,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateCppUtils {
 
-    private static String protocolOutputRootPath = "zfoocpp";
+    private static String protocolOutputRootPath = "cppProtocol";
     private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, ICppSerializer> cppSerializerMap;
@@ -142,7 +142,7 @@ public abstract class GenerateCppUtils {
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
-        protocolTemplate = StringUtils.format(protocolTemplate, defineProtocolName, defineProtocolName, includeHeaders, docTitle
+        protocolTemplate = StringUtils.format(protocolTemplate, defineProtocolName, defineProtocolName, protocolOutputRootPath, includeHeaders, docTitle
                 , protocolClazzName, fieldDefinition, protocolClazzName, protocolClazzName, valueOfMethod.getKey(), protocolClazzName
                 , valueOfMethod.getValue().trim(), protocolId, protocolClazzName, operator.trim(),
                 protocolClazzName, protocolId, protocolClazzName, writeObject.trim(), protocolClazzName, readObject.trim());

@@ -1,7 +1,7 @@
 #ifndef ZFOO_{}_H
 #define ZFOO_{}_H
 
-#include "zfoocpp/ByteBuffer.h"
+#include "{}/ByteBuffer.h"
 {}
 namespace zfoo {
 
