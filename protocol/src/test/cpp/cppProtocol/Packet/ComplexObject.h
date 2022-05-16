@@ -1,9 +1,9 @@
 #ifndef ZFOO_COMPLEXOBJECT_H
 #define ZFOO_COMPLEXOBJECT_H
 
-#include "zfoocpp/ByteBuffer.h"
-#include "zfoocpp/ObjectA.h"
-#include "zfoocpp/ObjectB.h"
+#include "cppProtocol/ByteBuffer.h"
+#include "cppProtocol/Packet/ObjectA.h"
+#include "cppProtocol/Packet/ObjectB.h"
 
 namespace zfoo {
 

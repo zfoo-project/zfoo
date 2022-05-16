@@ -1,8 +1,8 @@
 #ifndef ZFOO_OBJECTA_H
 #define ZFOO_OBJECTA_H
 
-#include "zfoocpp/ByteBuffer.h"
-#include "zfoocpp/ObjectB.h"
+#include "cppProtocol/ByteBuffer.h"
+#include "cppProtocol/Packet/ObjectB.h"
 
 namespace zfoo {
 

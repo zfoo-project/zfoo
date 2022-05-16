@@ -417,7 +417,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (const auto &value : array) {
+            for (auto value : array) {
                 writeBool(value);
             }
         }
@@ -439,7 +439,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writeBool(value);
             }
         }
@@ -460,7 +460,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (const auto &value : set) {
+            for (auto value : set) {
                 writeBool(value);
             }
         }
@@ -482,7 +482,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (const auto &value : array) {
+            for (auto value : array) {
                 writeByte(value);
             }
         }
@@ -504,7 +504,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writeByte(value);
             }
         }
@@ -525,7 +525,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (const auto &value : set) {
+            for (auto value : set) {
                 writeByte(value);
             }
         }
@@ -547,7 +547,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (const auto &value : array) {
+            for (auto value : array) {
                 writeShort(value);
             }
         }
@@ -568,7 +568,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writeShort(value);
             }
         }
@@ -589,7 +589,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (const auto &value : set) {
+            for (auto value : set) {
                 writeShort(value);
             }
         }
@@ -611,7 +611,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (const auto &value : array) {
+            for (auto value : array) {
                 writeInt(value);
             }
         }
@@ -632,7 +632,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writeInt(value);
             }
         }
@@ -653,7 +653,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (const auto &value : set) {
+            for (auto value : set) {
                 writeInt(value);
             }
         }
@@ -675,7 +675,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (const auto &value : array) {
+            for (auto value : array) {
                 writeLong(value);
             }
         }
@@ -696,7 +696,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writeLong(value);
             }
         }
@@ -717,7 +717,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (const auto &value : set) {
+            for (auto value : set) {
                 writeLong(value);
             }
         }
@@ -739,7 +739,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (const auto &value : array) {
+            for (auto value : array) {
                 writeFloat(value);
             }
         }
@@ -760,7 +760,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writeFloat(value);
             }
         }
@@ -781,7 +781,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writeFloat(value);
             }
         }
@@ -803,7 +803,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (const auto &value : array) {
+            for (auto value : array) {
                 writeDouble(value);
             }
         }
@@ -824,7 +824,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writeDouble(value);
             }
         }
@@ -845,7 +845,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (const auto &value : set) {
+            for (auto value : set) {
                 writeDouble(value);
             }
         }
@@ -867,7 +867,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (const auto &value : array) {
+            for (auto value : array) {
                 writeChar(value);
             }
         }
@@ -888,7 +888,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writeChar(value);
             }
         }
@@ -909,7 +909,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (const auto &value : set) {
+            for (auto value : set) {
                 writeChar(value);
             }
         }
@@ -931,7 +931,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (const auto &value : array) {
+            for (auto value : array) {
                 writeString(value);
             }
         }
@@ -952,7 +952,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writeString(value);
             }
         }
@@ -973,7 +973,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (const auto &value : set) {
+            for (auto value : set) {
                 writeString(value);
             }
         }
@@ -1282,7 +1282,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (const auto &value : array) {
+            for (auto value : array) {
                 writePacket((IPacket *) &value, protocolId);
             }
         }
@@ -1307,7 +1307,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (const auto &value : list) {
+            for (auto value : list) {
                 writePacket((IPacket *) &value, protocolId);
             }
         }
@@ -1332,7 +1332,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (const auto &value : set) {
+            for (auto value : set) {
                 writePacket((IPacket *) &value, protocolId);
             }
         }

@@ -2,11 +2,11 @@
 #define ZFOO_PROTOCOLMANAGER_H
 
 #include "ByteBuffer.h"
-#include "zfoocpp/ComplexObject.h"
-#include "zfoocpp/NormalObject.h"
-#include "zfoocpp/ObjectA.h"
-#include "zfoocpp/ObjectB.h"
-#include "zfoocpp/SimpleObject.h"
+#include "cppProtocol/packet/ComplexObject.h"
+#include "cppProtocol/packet/NormalObject.h"
+#include "cppProtocol/packet/ObjectA.h"
+#include "cppProtocol/packet/ObjectB.h"
+#include "cppProtocol/packet/SimpleObject.h"
 
 namespace zfoo {
 

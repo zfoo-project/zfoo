@@ -1,7 +1,7 @@
 #ifndef ZFOO_SIMPLEOBJECT_H
 #define ZFOO_SIMPLEOBJECT_H
 
-#include "zfoocpp/ByteBuffer.h"
+#include "cppProtocol/ByteBuffer.h"
 
 namespace zfoo {
 
