@@ -1,5 +1,4 @@
-{
-}
+{}
 
 const protocols = new Map();
 
@@ -28,8 +27,7 @@ ProtocolManager.read = function read(buffer) {
 };
 
 ProtocolManager.initProtocol = function initProtocol() {
-    {
-    }
+    {}
 };
 
 export default ProtocolManager;
