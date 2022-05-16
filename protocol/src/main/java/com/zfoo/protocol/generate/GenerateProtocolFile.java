@@ -116,7 +116,9 @@ public abstract class GenerateProtocolFile {
         // 生成Javascript协议
         if (generateLanguages.contains(CodeLanguage.JavaScript)) {
             GenerateJsUtils.init(generateOperation);
-            allSortedGenerateProtocols.forEach(it -> GenerateJsUtils.createJsProtocolFile((ProtocolRegistration) it));
+            for (var protocolRegistration : allSortedGenerateProtocols) {
+                GenerateJsUtils.createJsProtocolFile((ProtocolRegistration) protocolRegistration);
+            }
             GenerateJsUtils.createProtocolManager(allSortedGenerateProtocols);
         }
 

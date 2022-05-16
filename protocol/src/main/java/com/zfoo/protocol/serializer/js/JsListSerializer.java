@@ -90,8 +90,6 @@ public class JsListSerializer implements IJsSerializer {
         builder.append("}").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
-
-
         return result;
     }
 }

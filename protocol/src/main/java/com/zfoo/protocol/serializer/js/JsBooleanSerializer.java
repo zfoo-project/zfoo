@@ -21,7 +21,6 @@ import java.lang.reflect.Field;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 
-
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -37,7 +36,6 @@ public class JsBooleanSerializer implements IJsSerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
-
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("const {} = buffer.readBoolean(); ", result)).append(LS);
         return result;

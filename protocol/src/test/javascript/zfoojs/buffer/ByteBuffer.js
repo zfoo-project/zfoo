@@ -1,4 +1,4 @@
-import { readInt64, writeInt64 } from './longbits.js';
+import {readInt64, writeInt64} from './longbits.js';
 import ProtocolManager from '../ProtocolManager.js';
 
 const empty_str = '';
@@ -19,6 +19,7 @@ const minInt = -2147483648;
 const util = require('util');
 const encoder = new util.TextEncoder('utf-8');
 const decoder = new util.TextDecoder('utf-8');
+
 // 在js中long可以支持的最大值
 // const maxLong = 9007199254740992;
 // const minLong = -9007199254740992;
@@ -343,28 +344,28 @@ const ByteBuffer = function() {
         return flag;
     };
 
-    this.writePacket = function(value, protocolId) {
+    this.writePacket = function (packet, protocolId) {
         const protocolRegistration = ProtocolManager.getProtocol(protocolId);
-        protocolRegistration.write(this, value);
+        protocolRegistration.write(this, packet);
     };
 
-    this.readPacket = function(protocolId) {
+    this.readPacket = function (protocolId) {
         const protocolRegistration = ProtocolManager.getProtocol(protocolId);
         return protocolRegistration.read(this);
     };
 
-    this.writeBooleanArray = function(value) {
-        if (value === null) {
+    this.writeBooleanArray = function (array) {
+        if (array === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.length);
-            value.forEach(element => {
+            this.writeInt(array.length);
+            array.forEach(element => {
                 this.writeBoolean(element);
             });
         }
     };
 
-    this.readBooleanArray = function() {
+    this.readBooleanArray = function () {
         const array = [];
         const length = this.readInt();
         if (length > 0) {
@@ -375,18 +376,18 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writeByteArray = function(value) {
-        if (value === null) {
+    this.writeByteArray = function (array) {
+        if (array === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.length);
-            value.forEach(element => {
+            this.writeInt(array.length);
+            array.forEach(element => {
                 this.writeByte(element);
             });
         }
     };
 
-    this.readByteArray = function() {
+    this.readByteArray = function () {
         const array = [];
         const length = this.readInt();
         if (length > 0) {
@@ -397,18 +398,18 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writeShortArray = function(value) {
-        if (value === null) {
+    this.writeShortArray = function (array) {
+        if (array === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.length);
-            value.forEach(element => {
+            this.writeInt(array.length);
+            array.forEach(element => {
                 this.writeShort(element);
             });
         }
     };
 
-    this.readShortArray = function() {
+    this.readShortArray = function () {
         const array = [];
         const length = this.readInt();
         if (length > 0) {
@@ -419,18 +420,18 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writeIntArray = function(value) {
-        if (value === null) {
+    this.writeIntArray = function (array) {
+        if (array === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.length);
-            value.forEach(element => {
+            this.writeInt(array.length);
+            array.forEach(element => {
                 this.writeInt(element);
             });
         }
     };
 
-    this.readIntArray = function() {
+    this.readIntArray = function () {
         const array = [];
         const length = this.readInt();
         if (length > 0) {
@@ -441,18 +442,18 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writeLongArray = function(value) {
-        if (value === null) {
+    this.writeLongArray = function (array) {
+        if (array === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.length);
-            value.forEach(element => {
+            this.writeInt(array.length);
+            array.forEach(element => {
                 this.writeLong(element);
             });
         }
     };
 
-    this.readLongArray = function() {
+    this.readLongArray = function () {
         const array = [];
         const length = this.readInt();
         if (length > 0) {
@@ -463,18 +464,18 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writeFloatArray = function(value) {
-        if (value === null) {
+    this.writeFloatArray = function (array) {
+        if (array === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.length);
-            value.forEach(element => {
+            this.writeInt(array.length);
+            array.forEach(element => {
                 this.writeFloat(element);
             });
         }
     };
 
-    this.readFloatArray = function() {
+    this.readFloatArray = function () {
         const array = [];
         const length = this.readInt();
         if (length > 0) {
@@ -485,18 +486,18 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writeDoubleArray = function(value) {
-        if (value === null) {
+    this.writeDoubleArray = function (array) {
+        if (array === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.length);
-            value.forEach(element => {
+            this.writeInt(array.length);
+            array.forEach(element => {
                 this.writeDouble(element);
             });
         }
     };
 
-    this.readDoubleArray = function() {
+    this.readDoubleArray = function () {
         const array = [];
         const length = this.readInt();
         if (length > 0) {
@@ -507,18 +508,18 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writeStringArray = function(value) {
-        if (value === null) {
+    this.writeStringArray = function (array) {
+        if (array === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.length);
-            value.forEach(element => {
+            this.writeInt(array.length);
+            array.forEach(element => {
                 this.writeString(element);
             });
         }
     };
 
-    this.readStringArray = function() {
+    this.readStringArray = function () {
         const array = [];
         const length = this.readInt();
         if (length > 0) {
@@ -529,18 +530,18 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writeCharArray = function(value) {
-        if (value === null) {
+    this.writeCharArray = function (array) {
+        if (array === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.length);
-            value.forEach(element => {
+            this.writeInt(array.length);
+            array.forEach(element => {
                 this.writeChar(element);
             });
         }
     };
 
-    this.readCharArray = function() {
+    this.readCharArray = function () {
         const array = [];
         const length = this.readInt();
         if (length > 0) {
@@ -551,13 +552,13 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writePacketArray = function(value, protocolId) {
-        if (value === null) {
+    this.writePacketArray = function (array, protocolId) {
+        if (array === null) {
             this.writeInt(0);
         } else {
             const protocolRegistration = ProtocolManager.getProtocol(protocolId);
-            this.writeInt(value.length);
-            value.forEach(element => {
+            this.writeInt(array.length);
+            array.forEach(element => {
                 protocolRegistration.write(this, element);
             });
         }
@@ -575,12 +576,12 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writeIntIntMap = function(value) {
-        if (value === null) {
+    this.writeIntIntMap = function (map) {
+        if (map === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeInt(key);
                 this.writeInt(value);
             });
@@ -600,12 +601,12 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeIntLongMap = function(value) {
-        if (value === null) {
+    this.writeIntLongMap = function (map) {
+        if (map === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeInt(key);
                 this.writeLong(value);
             });
@@ -625,12 +626,12 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeIntStringMap = function(value) {
-        if (value === null) {
+    this.writeIntStringMap = function (map) {
+        if (map === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeInt(key);
                 this.writeString(value);
             });
@@ -650,13 +651,13 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeIntPacketMap = function(value, protocolId) {
-        if (value === null) {
+    this.writeIntPacketMap = function (map, protocolId) {
+        if (map === null) {
             this.writeInt(0);
         } else {
             const protocolRegistration = ProtocolManager.getProtocol(protocolId);
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeInt(key);
                 protocolRegistration.write(this, value);
             });
@@ -677,12 +678,12 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeLongIntMap = function(value) {
-        if (value === null) {
+    this.writeLongIntMap = function (map) {
+        if (map === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeLong(key);
                 this.writeInt(value);
             });
@@ -702,12 +703,12 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeLongLongMap = function(value) {
-        if (value === null) {
+    this.writeLongLongMap = function (map) {
+        if (map === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeLong(key);
                 this.writeLong(value);
             });
@@ -727,12 +728,12 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeLongStringMap = function(value) {
-        if (value === null) {
+    this.writeLongStringMap = function (map) {
+        if (map === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeLong(key);
                 this.writeString(value);
             });
@@ -752,13 +753,13 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeLongPacketMap = function(value, protocolId) {
-        if (value === null) {
+    this.writeLongPacketMap = function (map, protocolId) {
+        if (map === null) {
             this.writeInt(0);
         } else {
             const protocolRegistration = ProtocolManager.getProtocol(protocolId);
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeLong(key);
                 protocolRegistration.write(this, value);
             });
@@ -779,12 +780,12 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeStringIntMap = function(value) {
-        if (value === null) {
+    this.writeStringIntMap = function (map) {
+        if (map === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeString(key);
                 this.writeInt(value);
             });
@@ -804,12 +805,12 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeStringLongMap = function(value) {
-        if (value === null) {
+    this.writeStringLongMap = function (map) {
+        if (map === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeString(key);
                 this.writeLong(value);
             });
@@ -829,12 +830,12 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeStringStringMap = function(value) {
-        if (value === null) {
+    this.writeStringStringMap = function (map) {
+        if (map === null) {
             this.writeInt(0);
         } else {
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeString(key);
                 this.writeString(value);
             });
@@ -854,13 +855,13 @@ const ByteBuffer = function() {
         return map;
     };
 
-    this.writeStringPacketMap = function(value, protocolId) {
-        if (value === null) {
+    this.writeStringPacketMap = function (map, protocolId) {
+        if (map === null) {
             this.writeInt(0);
         } else {
             const protocolRegistration = ProtocolManager.getProtocol(protocolId);
-            this.writeInt(value.size);
-            value.forEach((value, key) => {
+            this.writeInt(map.size);
+            map.forEach((value, key) => {
                 this.writeString(key);
                 protocolRegistration.write(this, value);
             });

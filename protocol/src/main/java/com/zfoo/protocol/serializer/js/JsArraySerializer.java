@@ -24,7 +24,6 @@ import java.lang.reflect.Field;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 
-
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -91,8 +90,6 @@ public class JsArraySerializer implements IJsSerializer {
         builder.append("}").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
-
-
         return result;
     }
 }

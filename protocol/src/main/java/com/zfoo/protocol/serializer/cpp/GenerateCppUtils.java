@@ -219,19 +219,16 @@ public abstract class GenerateCppUtils {
     }
 
     private static Pair<String, String> valueOfMethod(ProtocolRegistration registration) {
-        var protocolId = registration.getId();
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
 
         var filedList = new ArrayList<Pair<String, String>>();
-
         for (int i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             var propertyTypeAndName = cppSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
             filedList.add(propertyTypeAndName);
         }
-
 
         // ValueOf()方法
         var valueOfParams = filedList.stream()
@@ -241,7 +238,6 @@ public abstract class GenerateCppUtils {
 
         var cppBuilder = new StringBuilder();
         filedList.forEach(it -> cppBuilder.append(TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", it.getValue(), it.getValue())).append(LS));
-
         return new Pair<>(valueOfParamsStr, cppBuilder.toString());
     }
 

@@ -1,11 +1,11 @@
-import ByteBuffer from './jsProtocol/buffer/ByteBuffer.js';
-import ProtocolManager from './jsProtocol/ProtocolManager.js';
+import ByteBuffer from './zfoojs/buffer/ByteBuffer.js';
+import ProtocolManager from './zfoojs/ProtocolManager.js';
 
 const fs = require('fs');
 
 describe('jsProtocolTest', () => {
     it('complexObjectTest', () => {
-        const data = fs.readFileSync('C:\\zfoo\\protocol\\src\\test\\resources\\ComplexObject.bytes');
+        const data = fs.readFileSync('resources\\ComplexObject.bytes');
 
         ProtocolManager.initProtocol();
 

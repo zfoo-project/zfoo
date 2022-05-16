@@ -1,6 +1,16 @@
+import ComplexObject from './packet/ComplexObject.js';
+import NormalObject from './packet/NormalObject.js';
+import ObjectA from './packet/ObjectA.js';
+import ObjectB from './packet/ObjectB.js';
+import SimpleObject from './packet/SimpleObject.js';
+
 const protocols = new Map();
 
-const ProtocolManager = {};
+const ProtocolManager = protocols.set(100, ComplexObject);
+protocols.set(101, NormalObject);
+protocols.set(102, ObjectA);
+protocols.set(103, ObjectB);
+protocols.set(104, SimpleObject);
 
 ProtocolManager.getProtocol = function getProtocol(protocolId) {
     const protocol = protocols.get(protocolId);
@@ -24,3 +34,9 @@ ProtocolManager.read = function read(buffer) {
     return packet;
 };
 
+ProtocolManager.initProtocol = function initProtocol() {
+    {
+    }
+};
+
+export default ProtocolManager;
