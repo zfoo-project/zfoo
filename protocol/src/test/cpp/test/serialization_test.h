@@ -75,7 +75,7 @@ namespace serialization_test {
 
     void complexObjectTest() {
         // 读取二进制文件
-        ifstream file("../resources/ComplexObject.bytes", ios::out | ios::binary);
+        ifstream file("../../resources/ComplexObject.bytes", ios::out | ios::binary);
         unsigned char carray[10000];
         int length = 0;
         while (file.read((char *) &carray[length], sizeof(unsigned char))) {
