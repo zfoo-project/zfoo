@@ -19,15 +19,14 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -80,16 +79,16 @@ public abstract class GenerateCsUtils {
      * 生成协议依赖的工具类
      */
     public static void createProtocolManager() throws IOException {
-        var list = List.of("cs/ProtocolManager.cs"
-                , "cs/IProtocolRegistration.cs"
-                , "cs/IPacket.cs"
-                , "cs/Buffer/ByteBuffer.cs"
-                , "cs/Buffer/LittleEndianByteBuffer.cs"
-                , "cs/Buffer/BigEndianByteBuffer.cs");
+        var list = List.of("csharp/ProtocolManager.cs"
+                , "csharp/IProtocolRegistration.cs"
+                , "csharp/IPacket.cs"
+                , "csharp/Buffer/ByteBuffer.cs"
+                , "csharp/Buffer/LittleEndianByteBuffer.cs"
+                , "csharp/Buffer/BigEndianByteBuffer.cs");
 
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "cs/")));
+            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "csharp/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
     }
@@ -97,48 +96,111 @@ public abstract class GenerateCsUtils {
     /**
      * 生成协议类
      */
-    public static void createCsProtocolFile(ProtocolRegistration registration) {
+    public static void createCsProtocolFile(ProtocolRegistration registration) throws IOException {
         GenerateProtocolFile.index.set(0);
 
         var protocolId = registration.protocolId();
         var registrationConstructor = registration.getConstructor();
-        IFieldRegistration[] fieldRegistrations = registration.getFieldRegistrations();
-
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
 
-        var csBuilder = new StringBuilder();
-        csBuilder.append("using System;").append(LS);
-        csBuilder.append("using System.Collections.Generic;").append(LS);
-        csBuilder.append("using CsProtocol.Buffer;").append(LS).append(LS);
-        csBuilder.append("namespace CsProtocol").append(LS);
-        csBuilder.append("{").append(LS);
+        var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("csharp/ProtocolTemplate.cs")));
 
-
-        // protocol object
-        csBuilder.append(protocolClass(registration));
-
-        csBuilder.append(TAB).append(StringUtils.format("public class {}Registration : IProtocolRegistration", protocolClazzName)).append(LS);
-        csBuilder.append(TAB).append("{").append(LS);
-
-        // ProtocolId method
-        csBuilder.append(packetProtocolId(registration));
-
-        // writeObject method
-        csBuilder.append(writeObject(registration));
-
-        // readObject method
-        csBuilder.append(readObject(registration));
-
-        csBuilder.append(TAB).append("}").append(LS);
-        csBuilder.append("}").append(LS);
+        var docTitle = docTitle(registration);
+        var fieldDefinition = fieldDefinition(registration);
+        var valueOfMethod = valueOfMethod(registration);
+        var writeObject = writeObject(registration);
+        var readObject = readObject(registration);
+        protocolTemplate = StringUtils.format(protocolTemplate, docTitle, protocolClazzName,  fieldDefinition.trim()
+                , protocolClazzName, valueOfMethod.getKey().trim(), protocolClazzName, valueOfMethod.getValue().trim()
+                , protocolId, protocolClazzName, protocolId, protocolClazzName, protocolClazzName,writeObject.trim()
+                , protocolClazzName, protocolClazzName, readObject.trim());
 
         var protocolOutputPath = StringUtils.format("{}/{}/{}.cs"
                 , protocolOutputRootPath
                 , GenerateProtocolPath.getCapitalizeProtocolPath(protocolId)
                 , protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), csBuilder.toString());
+        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate);
     }
 
+    private static String docTitle(ProtocolRegistration registration) {
+        var protocolId = registration.getId();
+        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
+        var docTitle = protocolDocument.getKey();
+
+        var csBuilder = new StringBuilder();
+        if (StringUtils.isNotBlank(docTitle)) {
+            Arrays.stream(docTitle.split(LS)).forEach(it -> csBuilder.append(TAB).append(it).append(LS));
+        }
+        return csBuilder.toString().trim();
+    }
+
+    private static String fieldDefinition(ProtocolRegistration registration) {
+        var protocolId = registration.getId();
+        var fields = registration.getFields();
+        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
+        var docFieldMap = protocolDocument.getValue();
+
+        var csBuilder = new StringBuilder();
+        // 协议的属性生成
+        for (var field : fields) {
+            var propertyType = toCsClassName(field.getGenericType().getTypeName());
+            var propertyName = field.getName();
+            var propertyFullName = StringUtils.format("public {} {};", propertyType, propertyName);
+            // 生成注释
+            var doc = docFieldMap.get(propertyName);
+            if (StringUtils.isNotBlank(doc)) {
+                Arrays.stream(doc.split(LS)).forEach(it -> csBuilder.append(TAB + TAB).append(it).append(LS));
+            }
+            csBuilder.append(TAB + TAB).append(propertyFullName).append(LS);
+        }
+        return csBuilder.toString();
+    }
+
+    private static Pair<String, String> valueOfMethod(ProtocolRegistration registration) {
+        var fields = registration.getFields();
+        var filedList = new ArrayList<Pair<String, String>>();
+        for (var field : fields) {
+            var propertyType = toCsClassName(field.getGenericType().getTypeName());
+            var propertyName = field.getName();
+            filedList.add(new Pair<>(propertyType, propertyName));
+        }
+
+        // ValueOf()方法
+        var valueOfParams = filedList.stream().map(it -> StringUtils.format("{} {}", it.getKey(), it.getValue())).collect(Collectors.toList());
+        var valueOfParamsStr = StringUtils.joinWith(StringUtils.COMMA + " ", valueOfParams.toArray());
+
+        var csBuilder = new StringBuilder();
+        filedList.forEach(it -> csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", it.getValue(), it.getValue())).append(LS));
+        return new Pair<>(valueOfParamsStr, csBuilder.toString());
+    }
+
+    private static String writeObject(ProtocolRegistration registration) {
+        var fields = registration.getFields();
+        var fieldRegistrations = registration.getFieldRegistrations();
+        var csBuilder = new StringBuilder();
+        for (int i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            var fieldRegistration = fieldRegistrations[i];
+            csSerializer(fieldRegistration.serializer()).writeObject(csBuilder, "message." + field.getName(), 3, field, fieldRegistration);
+        }
+        return csBuilder.toString();
+    }
+
+
+    private static String readObject(ProtocolRegistration registration) {
+        var fields = registration.getFields();
+        var fieldRegistrations = registration.getFieldRegistrations();
+        var csBuilder = new StringBuilder();
+        for (int i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            var fieldRegistration = fieldRegistrations[i];
+            String readObject = csSerializer(fieldRegistration.serializer()).readObject(csBuilder, 3, field, fieldRegistration);
+            csBuilder.append(TAB + TAB + TAB)
+                    .append(StringUtils.format("packet.{} = {};", field.getName(), readObject))
+                    .append(LS);
+        }
+        return csBuilder.toString();
+    }
 
     public static String toCsClassName(String typeName) {
         typeName = typeName.replaceAll("java.util.|java.lang.", StringUtils.EMPTY);
@@ -244,144 +306,4 @@ public abstract class GenerateCsUtils {
 
         return typeName;
     }
-
-    private static String protocolClass(ProtocolRegistration registration) {
-        short protocolId = registration.getId();
-        Field[] fields = registration.getFields();
-        var protocolClazzName = registration.getConstructor().getDeclaringClass().getSimpleName();
-
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docTitle = protocolDocument.getKey();
-        var docFieldMap = protocolDocument.getValue();
-
-        var csBuilder = new StringBuilder();
-        if (StringUtils.isNotBlank(docTitle)) {
-            Arrays.stream(docTitle.split(LS)).forEach(it -> csBuilder.append(TAB).append(it).append(LS));
-        }
-        csBuilder.append(TAB)
-                .append(StringUtils.format("public class {} : IPacket", protocolClazzName))
-                .append(LS);
-        csBuilder.append(TAB).append("{").append(LS);
-
-        // 协议的属性生成
-        var filedList = new ArrayList<Pair<String, String>>();
-        for (var field : fields) {
-            var propertyType = toCsClassName(field.getGenericType().getTypeName());
-            var propertyName = field.getName();
-
-            var propertyFullName = StringUtils.format("public {} {};", propertyType, propertyName);
-            // 生成注释
-            var doc = docFieldMap.get(propertyName);
-            if (StringUtils.isNotBlank(doc)) {
-                Arrays.stream(doc.split(LS)).forEach(it -> csBuilder.append(TAB + TAB).append(it).append(LS));
-            }
-
-            csBuilder.append(TAB + TAB).append(propertyFullName).append(LS);
-            filedList.add(new Pair<>(propertyType, propertyName));
-        }
-
-        csBuilder.append(LS);
-
-        // ValueOf()方法
-        var valueOfParams = filedList.stream()
-                .map(it -> StringUtils.format("{} {}", it.getKey(), it.getValue()))
-                .collect(Collectors.toList());
-
-        csBuilder.append(TAB + TAB)
-                .append(StringUtils.format("public static {} ValueOf({})", protocolClazzName, StringUtils.joinWith(StringUtils.COMMA + " ", valueOfParams.toArray())))
-                .append(LS);
-
-        csBuilder.append(TAB + TAB).append("{").append(LS);
-        csBuilder.append(TAB + TAB + TAB)
-                .append(StringUtils.format("var packet = new {}();", protocolClazzName))
-                .append(LS);
-        filedList.forEach(it -> csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", it.getValue(), it.getValue())).append(LS));
-        csBuilder.append(TAB + TAB + TAB).append("return packet;").append(LS);
-        csBuilder.append(TAB + TAB).append("}").append(LS);
-        csBuilder.append(LS).append(LS);
-
-        // ProtocolId()方法
-        csBuilder.append(TAB + TAB).append("public short ProtocolId()").append(LS);
-        csBuilder.append(TAB + TAB).append("{").append(LS);
-        csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("return {};", registration.protocolId())).append(LS);
-        csBuilder.append(TAB + TAB).append("}").append(LS);
-        csBuilder.append(TAB).append("}").append(LS);
-        csBuilder.append(LS).append(LS);
-
-        return csBuilder.toString();
-    }
-
-    private static String packetProtocolId(ProtocolRegistration registration) {
-        var csBuilder = new StringBuilder();
-        csBuilder.append(TAB + TAB).append("public short ProtocolId()").append(LS);
-        csBuilder.append(TAB + TAB).append("{").append(LS);
-        csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("return {};", registration.protocolId())).append(LS);
-        csBuilder.append(TAB + TAB).append("}");
-        csBuilder.append(LS).append(LS);
-        return csBuilder.toString();
-    }
-
-    private static String writeObject(ProtocolRegistration registration) {
-        Field[] fields = registration.getFields();
-        IFieldRegistration[] fieldRegistrations = registration.getFieldRegistrations();
-        var protocolClazzName = registration.getConstructor().getDeclaringClass().getSimpleName();
-
-        var csBuilder = new StringBuilder();
-        csBuilder.append(TAB + TAB).append("public void Write(ByteBuffer buffer, IPacket packet)").append(LS);
-        csBuilder.append(TAB + TAB).append("{").append(LS);
-        csBuilder.append(TAB + TAB + TAB).append("if (buffer.WritePacketFlag(packet))").append(LS);
-        csBuilder.append(TAB + TAB + TAB).append("{").append(LS);
-        csBuilder.append(TAB + TAB + TAB + TAB).append("return;").append(LS);
-        csBuilder.append(TAB + TAB + TAB + "}").append(LS);
-
-        csBuilder.append(TAB + TAB + TAB)
-                .append(StringUtils.format("{} message = ({}) packet;", protocolClazzName, protocolClazzName))
-                .append(LS);
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            IFieldRegistration fieldRegistration = fieldRegistrations[i];
-
-            csSerializer(fieldRegistration.serializer()).writeObject(csBuilder, "message." + field.getName(), 3, field, fieldRegistration);
-        }
-
-        csBuilder.append(TAB + TAB + "}").append(LS).append(LS);
-        return csBuilder.toString();
-    }
-
-
-    private static String readObject(ProtocolRegistration registration) {
-        Field[] fields = registration.getFields();
-        IFieldRegistration[] fieldRegistrations = registration.getFieldRegistrations();
-        var protocolClazzName = registration.getConstructor().getDeclaringClass().getSimpleName();
-
-        var csBuilder = new StringBuilder();
-        csBuilder.append(TAB + TAB).append("public IPacket Read(ByteBuffer buffer)").append(LS);
-        csBuilder.append(TAB + TAB).append("{").append(LS);
-        csBuilder.append(TAB + TAB + TAB).append("if (!buffer.ReadBool())").append(LS);
-        csBuilder.append(TAB + TAB + TAB).append("{").append(LS);
-        csBuilder.append(TAB + TAB + TAB + TAB).append("return null;").append(LS);
-        csBuilder.append(TAB + TAB + TAB).append("}").append(LS);
-
-        csBuilder.append(TAB + TAB + TAB)
-                .append(StringUtils.format("{} packet = new {}();", protocolClazzName, protocolClazzName))
-                .append(LS);
-
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            IFieldRegistration fieldRegistration = fieldRegistrations[i];
-
-            String readObject = csSerializer(fieldRegistration.serializer()).readObject(csBuilder, 3, field, fieldRegistration);
-            csBuilder.append(TAB + TAB + TAB)
-                    .append(StringUtils.format("packet.{} = {};", field.getName(), readObject))
-                    .append(LS);
-        }
-
-        csBuilder.append(TAB + TAB + TAB).append("return packet;").append(LS);
-
-        csBuilder.append(TAB + TAB).append("}").append(LS);
-
-        return csBuilder.toString();
-    }
-
-
 }

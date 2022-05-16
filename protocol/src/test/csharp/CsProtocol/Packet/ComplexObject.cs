@@ -180,7 +180,7 @@ namespace CsProtocol
             buffer.WriteCharArray(message.hhhh);
             buffer.WriteString(message.jj);
             buffer.WriteStringArray(message.jjj);
-            ProtocolManager.GetProtocol(102).Write(buffer, message.kk);
+            buffer.WritePacket(message.kk, 102);
             buffer.WritePacketArray<ObjectA>(message.kkk, 102);
             buffer.WriteIntList(message.l);
             if (message.ll == null)
@@ -252,7 +252,7 @@ namespace CsProtocol
                 {
                     var keyElement13 = i12.Key;
                     var valueElement14 = i12.Value;
-                    ProtocolManager.GetProtocol(102).Write(buffer, keyElement13);
+                    buffer.WritePacket(keyElement13, 102);
                     buffer.WriteIntList(valueElement14);
                 }
             }
@@ -475,7 +475,7 @@ namespace CsProtocol
             packet.jj = result70;
             var array71 = buffer.ReadStringArray();
             packet.jjj = array71;
-            ObjectA result72 = (ObjectA) ProtocolManager.GetProtocol(102).Read(buffer);
+            ObjectA result72 = buffer.ReadPacket<ObjectA>(102);
             packet.kk = result72;
             var array73 = buffer.ReadPacketArray<ObjectA>(102);
             packet.kkk = array73;
@@ -535,7 +535,7 @@ namespace CsProtocol
             {
                 for (var index95 = 0; index95 < size94; index95++)
                 {
-                    ObjectA result96 = (ObjectA) ProtocolManager.GetProtocol(102).Read(buffer);
+                    ObjectA result96 = buffer.ReadPacket<ObjectA>(102);
                     var list97 = buffer.ReadIntList();
                     result93[result96] = list97;
                 }

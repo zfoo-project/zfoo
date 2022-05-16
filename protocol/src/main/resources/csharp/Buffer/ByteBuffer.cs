@@ -566,18 +566,6 @@ namespace CsProtocol.Buffer
             return flag;
         }
 
-        public void WritePacket<T>(T packet, short protocolId)
-        {
-            IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-            protocolRegistration.Write(this, (IPacket) packet);
-        }
-
-        public T ReadPacket<T>(short protocolId)
-        {
-            IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-            return (T) protocolRegistration.Read(this);
-        }
-
         public void WriteBooleanArray(bool[] array)
         {
             if ((array == null) || (array.Length == 0))
@@ -1918,6 +1906,18 @@ namespace CsProtocol.Buffer
             }
 
             return map;
+        }
+        
+        public void WritePacket<T>(T packet, short protocolId)
+        {
+            IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+            protocolRegistration.Write(this, (IPacket) packet);
+        }
+
+        public T ReadPacket<T>(short protocolId)
+        {
+            IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+            return (T) protocolRegistration.Read(this);
         }
     }
 }

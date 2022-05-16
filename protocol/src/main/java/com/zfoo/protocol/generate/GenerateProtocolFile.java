@@ -110,7 +110,9 @@ public abstract class GenerateProtocolFile {
         if (generateLanguages.contains(CodeLanguage.CSharp)) {
             GenerateCsUtils.init(generateOperation);
             GenerateCsUtils.createProtocolManager();
-            allSortedGenerateProtocols.forEach(it -> GenerateCsUtils.createCsProtocolFile((ProtocolRegistration) it));
+            for (var protocolRegistration : allSortedGenerateProtocols) {
+                GenerateCsUtils.createCsProtocolFile((ProtocolRegistration) protocolRegistration);
+            }
         }
 
         // 生成Javascript协议

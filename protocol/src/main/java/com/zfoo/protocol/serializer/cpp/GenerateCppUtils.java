@@ -130,7 +130,7 @@ public abstract class GenerateCppUtils {
 
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
 
-        var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("cpp/PacketTemplate.h")));
+        var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("cpp/ProtocolTemplate.h")));
 
         // protocol object
         var defineProtocolName = protocolClazzName.toUpperCase();

@@ -82,7 +82,7 @@ namespace CsProtocol
             buffer.WriteDouble(message.f);
             buffer.WriteBool(message.g);
             buffer.WriteString(message.jj);
-            ProtocolManager.GetProtocol(102).Write(buffer, message.kk);
+            buffer.WritePacket(message.kk, 102);
             buffer.WriteIntList(message.l);
             buffer.WriteLongList(message.ll);
             buffer.WritePacketList(message.lll, 102);
@@ -118,7 +118,7 @@ namespace CsProtocol
             packet.g = result7;
             string result8 = buffer.ReadString();
             packet.jj = result8;
-            ObjectA result9 = (ObjectA) ProtocolManager.GetProtocol(102).Read(buffer);
+            ObjectA result9 = buffer.ReadPacket<ObjectA>(102);
             packet.kk = result9;
             var list10 = buffer.ReadIntList();
             packet.l = list10;

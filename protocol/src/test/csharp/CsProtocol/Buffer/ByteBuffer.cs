@@ -751,7 +751,7 @@ namespace CsProtocol.Buffer
             {
                 for (int index = 0; index < size; index++)
                 {
-                    array[index] = ReadLong();
+                    array[index] = ReadFloat();
                 }
             }
 
@@ -783,7 +783,7 @@ namespace CsProtocol.Buffer
             {
                 for (int index = 0; index < size; index++)
                 {
-                    array[index] = ReadLong();
+                    array[index] = ReadDouble();
                 }
             }
 
@@ -1906,6 +1906,18 @@ namespace CsProtocol.Buffer
             }
 
             return map;
+        }
+        
+        public void WritePacket<T>(T packet, short protocolId)
+        {
+            IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+            protocolRegistration.Write(this, (IPacket) packet);
+        }
+
+        public T ReadPacket<T>(short protocolId)
+        {
+            IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
+            return (T) protocolRegistration.Read(this);
         }
     }
 }

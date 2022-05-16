@@ -1,19 +1,19 @@
-using System;
+﻿using System;
 using System.IO;
 using CsProtocol;
 using CsProtocol.Buffer;
-using NUnit.Framework;
 
-namespace Test.Editor.Net
+namespace csharp
 {
-    public class CsProtocolTest
+    class Program
     {
-        [Test]
-        public void ComplexObjectTest()
+        static void Main(string[] args)
         {
+            ByteBufferTest();
+            
             ProtocolManager.InitProtocol();
             // 获取复杂对象的字节流
-            var complexObjectBytes = File.ReadAllBytes("D:\\zfoo\\protocol\\src\\test\\resources\\ComplexObject.bytes");
+            var complexObjectBytes = File.ReadAllBytes("C:\\zfoo\\protocol\\src\\test\\resources\\ComplexObject.bytes");
             var buffer = ByteBuffer.ValueOf();
             buffer.WriteBytes(complexObjectBytes);
             var packet = ProtocolManager.Read(buffer);
@@ -23,12 +23,9 @@ namespace Test.Editor.Net
             var bytes = newBuffer.ToBytes();
 
             // set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
-            AssertEquals(complexObjectBytes, bytes);
         }
-
-
-        [Test]
-        public void ByteBufferTest()
+        
+        public static void ByteBufferTest()
         {
             byteTest();
             bytesTest();
@@ -42,7 +39,7 @@ namespace Test.Editor.Net
         }
 
 
-        public void byteTest()
+        public static void byteTest()
         {
             byte value = 9;
             ByteBuffer writerByteBuffer = ByteBuffer.ValueOf();
@@ -55,7 +52,7 @@ namespace Test.Editor.Net
             AssertEquals(value, readValue);
         }
 
-        public void bytesTest()
+        public static void bytesTest()
         {
             var value = new byte[] {1, 2, 3};
             ByteBuffer writerByteBuffer = ByteBuffer.ValueOf();
@@ -68,7 +65,7 @@ namespace Test.Editor.Net
             AssertEquals<byte>(value, readValue);
         }
 
-        public void shortTest()
+        public static void shortTest()
         {
             short value = 9999;
             ByteBuffer writerByteBuffer = ByteBuffer.ValueOf();
@@ -81,7 +78,7 @@ namespace Test.Editor.Net
             AssertEquals(value, readValue);
         }
 
-        public void intTest()
+        public static void intTest()
         {
             int value = 99999999;
             ByteBuffer writerByteBuffer = ByteBuffer.ValueOf();
@@ -94,7 +91,7 @@ namespace Test.Editor.Net
             AssertEquals(value, readValue);
         }
 
-        public void longTest()
+        public static void longTest()
         {
             long value = 9999999999999999L;
             ByteBuffer writerByteBuffer = ByteBuffer.ValueOf();
@@ -107,7 +104,7 @@ namespace Test.Editor.Net
             AssertEquals(value, readValue);
         }
 
-        public void floatTest()
+        public static void floatTest()
         {
             float value = 999999.56F;
             ByteBuffer writerByteBuffer = ByteBuffer.ValueOf();
@@ -120,7 +117,7 @@ namespace Test.Editor.Net
             AssertEquals(value, readValue);
         }
 
-        public void doubleTest()
+        public static void doubleTest()
         {
             double value = 999999.56;
             ByteBuffer writerByteBuffer = ByteBuffer.ValueOf();
@@ -133,7 +130,7 @@ namespace Test.Editor.Net
             AssertEquals(value, readValue);
         }
 
-        public void charTest()
+        public static void charTest()
         {
             char value = 'a';
             ByteBuffer writerByteBuffer = ByteBuffer.ValueOf();
@@ -146,7 +143,7 @@ namespace Test.Editor.Net
             AssertEquals(value, readValue);
         }
 
-        public void stringTest()
+        public static void stringTest()
         {
             string value = "aaa";
             ByteBuffer writerByteBuffer = ByteBuffer.ValueOf();

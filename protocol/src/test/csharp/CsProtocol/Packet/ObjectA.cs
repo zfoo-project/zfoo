@@ -45,7 +45,7 @@ namespace CsProtocol
             ObjectA message = (ObjectA) packet;
             buffer.WriteInt(message.a);
             buffer.WriteIntStringMap(message.m);
-            ProtocolManager.GetProtocol(103).Write(buffer, message.objectB);
+            buffer.WritePacket(message.objectB, 103);
         }
 
         public IPacket Read(ByteBuffer buffer)
@@ -59,7 +59,7 @@ namespace CsProtocol
             packet.a = result0;
             var map1 = buffer.ReadIntStringMap();
             packet.m = map1;
-            ObjectB result2 = (ObjectB) ProtocolManager.GetProtocol(103).Read(buffer);
+            ObjectB result2 = buffer.ReadPacket<ObjectB>(103);
             packet.objectB = result2;
             return packet;
         }
