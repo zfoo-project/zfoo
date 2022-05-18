@@ -128,7 +128,9 @@ public abstract class GenerateProtocolFile {
         if (generateLanguages.contains(CodeLanguage.Lua)) {
             GenerateLuaUtils.init(generateOperation);
             GenerateLuaUtils.createProtocolManager(allSortedGenerateProtocols);
-            allSortedGenerateProtocols.forEach(it -> GenerateLuaUtils.createLuaProtocolFile((ProtocolRegistration) it));
+            for (var protocolRegistration : allSortedGenerateProtocols) {
+                GenerateLuaUtils.createLuaProtocolFile((ProtocolRegistration) protocolRegistration);
+            }
         }
 
         // 生成GdScript协议

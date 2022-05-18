@@ -32,3 +32,10 @@ function ProtocolManager.read(buffer)
     return ProtocolManager.getProtocol(protocolId):read(buffer)
 end
 
+function initProtocol()
+    {}
+    {}
+end
+
+ProtocolManager.initProtocol = initProtocol
+return ProtocolManager

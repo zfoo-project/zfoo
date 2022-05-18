@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using NUnit.Framework;
+using Spring.Util;
 using XLua;
 
 namespace Test.Editor.LuaTest
@@ -18,7 +19,7 @@ namespace Test.Editor.LuaTest
             var luaEnv = new LuaEnv();
             var luaDebugBuilder = new StringBuilder();
             // Rider的断点调试
-            // luaDebugBuilder.Append("package.cpath = package.cpath .. ';C:/Users/jm/AppData/Roaming/JetBrains/Rider2020.1/plugins/intellij-emmylua/classes/debugger/emmy/windows/x64/?.dll'").Append(FileUtils.LS);
+            // luaDebugBuilder.Append("package.cpath = package.cpath .. ';C:/Users/jaysunxiao/AppData/Roaming/JetBrains/Rider2021.1/plugins/EmmyLua/classes/debugger/emmy/windows/x64/?.dll'").Append(FileUtils.LS);
             // luaDebugBuilder.Append("local dbg = require('emmy_core')").Append(FileUtils.LS);
             // luaDebugBuilder.Append("dbg.tcpListen('localhost', 9966)").Append(FileUtils.LS);
             // luaDebugBuilder.Append("dbg.waitIDE()").Append(FileUtils.LS);
@@ -27,8 +28,8 @@ namespace Test.Editor.LuaTest
 
             luaEnv.AddLoader(CustomLoader);
 
-            var luaProtocolTestStr = File.ReadAllText(TEST_PATH + "LuaProtocolTest.lua");
-            luaEnv.DoString(luaProtocolTestStr, "LuaProtocolTest");
+            var luaProtocolTestStr = File.ReadAllText(TEST_PATH + "main.lua");
+            luaEnv.DoString(luaProtocolTestStr, "main");
 
             LuaFunction byteBufferTestFunction = luaEnv.Global.Get<LuaFunction>("byteBufferTest");
             byteBufferTestFunction.Call();
