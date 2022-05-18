@@ -19,7 +19,7 @@ import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
-import com.zfoo.protocol.serializer.gd.GenerateGdUtils;
+import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
 import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
@@ -137,7 +137,9 @@ public abstract class GenerateProtocolFile {
         if (generateLanguages.contains(CodeLanguage.GdScript)) {
             GenerateGdUtils.init(generateOperation);
             GenerateGdUtils.createProtocolManager(allSortedGenerateProtocols);
-            allSortedGenerateProtocols.forEach(it -> GenerateGdUtils.createGdProtocolFile((ProtocolRegistration) it));
+            for (var protocolRegistration : allSortedGenerateProtocols) {
+                GenerateGdUtils.createGdProtocolFile((ProtocolRegistration) protocolRegistration);
+            }
         }
 
         // 生成Protobuf协议

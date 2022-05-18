@@ -104,7 +104,7 @@ public abstract class GenerateLuaUtils {
 
             protocolBuilder.append(TAB).append(StringUtils.format("protocols[{}] = {}", protocolId, name)).append(LS);
         }
-        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, "{}", "{}", fieldBuilder.toString().trim(), protocolBuilder.toString().trim());
+        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, StringUtils.EMPTY_JSON, StringUtils.EMPTY_JSON, fieldBuilder.toString().trim(), protocolBuilder.toString().trim());
         FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua")), protocolManagerTemplate);
     }
 
@@ -122,7 +122,7 @@ public abstract class GenerateLuaUtils {
         var writePacket = writePacket(registration);
         var readPacket = readPacket(registration);
 
-        protocolTemplate = StringUtils.format(protocolTemplate, docTitle, protocolClazzName, "{}", protocolClazzName
+        protocolTemplate = StringUtils.format(protocolTemplate, docTitle, protocolClazzName, StringUtils.EMPTY_JSON, protocolClazzName
                 , valueOfMethod.getKey().trim(), valueOfMethod.getValue().trim(), protocolClazzName, protocolId
                 , protocolClazzName, writePacket.trim(), protocolClazzName, protocolClazzName, readPacket.trim(), protocolClazzName);
 
