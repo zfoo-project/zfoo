@@ -19,6 +19,7 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
+import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
+import static com.zfoo.protocol.util.StringUtils.TAB;
 import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
 
 /**
@@ -169,6 +171,10 @@ public abstract class GenerateGdUtils {
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
+            if (field.isAnnotationPresent(Compatible.class)) {
+                gdBuilder.append(TAB_ASCII).append("if (!buffer.isReadable()):").append(LS);
+                gdBuilder.append(TAB_ASCII + TAB_ASCII).append("return packet").append(LS);
+            }
             var readObject = gdSerializer(fieldRegistration.serializer()).readObject(gdBuilder, 1, field, fieldRegistration);
             gdBuilder.append(TAB_ASCII).append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);
         }

@@ -2,8 +2,10 @@
 --支持的lua版本为>=5.3
 --支持标准的Lua是使用64-bit的int以及64-bit的双精度float
 --当lua只能支持32位的整数类型时，可以考虑用Long来替代，需要修改原代码
-
+--右移操作>>是无符号右移
 --local Long = require("Long")
+
+local ProtocolManager = require("LuaProtocol.ProtocolManager")
 
 local maxInt = 2147483647
 local minInt = -2147483648
@@ -32,6 +34,14 @@ function ByteBuffer:new()
     return obj
 end
 
+
+-- C#传进来的byte数组到lua里就会变成string
+function readBytes(bytes)
+    local buffer = ByteBuffer:new()
+    buffer:writeBuffer(bytes)
+    local packet = ProtocolManager.read(buffer)
+    return packet
+end
 
 -------------------------------------UTF8-------------------------------------
 -- 判断utf8字符byte长度
@@ -113,6 +123,10 @@ end
 
 function ByteBuffer:getAvailable()
     return #self.buffer - self.writeOffset + 1
+end
+
+function ByteBuffer:isReadable()
+    return self.writeOffset > self.readOffset
 end
 
 -------------------------------------write和read-------------------------------------
@@ -387,7 +401,7 @@ function ByteBuffer:writeString(str)
     self:writeInt(#str)
     self:writeBuffer(str)
     return self
-    end
+end
 
 function ByteBuffer:readString()
     local length = self:readInt()
@@ -396,6 +410,10 @@ end
 
 --char
 function ByteBuffer:writeChar(charValue)
+    if charValue == nil or #charValue == 0 then
+        self:writeString("")
+        return
+    end
     local str = utf8sub(charValue, 1, 1)
     self:writeString(str)
     return self
@@ -443,6 +461,573 @@ function ByteBuffer:getBytes(startIndex, endIndex)
     startIndex = startIndex or 1
     endIndex = endIndex or #self.buffer
     return table.concat(self.buffer, "", startIndex, endIndex)
+end
+
+function ByteBuffer:writePacketFlag(value)
+    local flag = (value == null)
+    self:writeBoolean(not flag)
+    return flag
+end
+
+function ByteBuffer:writePacket(value, protocolId)
+    local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+    protocolRegistration:write(self, value)
+    return self
+end
+
+function ByteBuffer:readPacket(protocolId)
+    local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+    return protocolRegistration:read(self)
+end
+
+function ByteBuffer:writeBooleanArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeBoolean(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readBooleanArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readBoolean())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeByteArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeByte(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readByteArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readByte())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeShortArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeShort(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readShortArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readShort())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeIntArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeInt(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readIntArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readInt())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeLongArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeLong(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readLongArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readLong())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeFloatArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeFloat(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readFloatArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readFloat())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeDoubleArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeDouble(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readDoubleArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readDouble())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeCharArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeChar(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readCharArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readChar())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeStringArray(array)
+    if array == null then
+        self:writeInt(0)
+    else
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            self:writeString(element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readStringArray()
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            table.insert(array, self:readString())
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writePacketArray(array, protocolId)
+    if array == null then
+        self:writeInt(0)
+    else
+        local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+        self:writeInt(#array);
+        for index, element in pairs(array) do
+            protocolRegistration:write(self, element)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readPacketArray(protocolId)
+    local array = {}
+    local size = self:readInt()
+    if size > 0 then
+        local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+        for index = 1, size do
+            table.insert(array, protocolRegistration:read(self))
+        end
+    end
+    return array
+end
+
+function ByteBuffer:writeIntIntMap(map)
+    if map == null then
+        self:writeInt(0)
+    else
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeInt(key)
+            self:writeInt(value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readIntIntMap()
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            local key = self:readInt()
+            local value = self:readInt()
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeIntLongMap(map)
+    if map == null then
+        self:writeInt(0)
+    else
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeInt(key)
+            self:writeLong(value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readIntLongMap()
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            local key = self:readInt()
+            local value = self:readLong()
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeIntStringMap(map)
+    if map == null then
+        self:writeInt(0)
+    else
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeInt(key)
+            self:writeString(value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readIntStringMap()
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            local key = self:readInt()
+            local value = self:readString()
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeIntPacketMap(map, protocolId)
+    if map == null then
+        self:writeInt(0)
+    else
+        local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeInt(key)
+            protocolRegistration:write(self, value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readIntPacketMap(protocolId)
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+        for index = 1, size do
+            local key = self:readInt()
+            local value = protocolRegistration:read(self)
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeLongIntMap(map)
+    if map == null then
+        self:writeInt(0)
+    else
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeLong(key)
+            self:writeInt(value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readLongIntMap()
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            local key = self:readLong()
+            local value = self:readInt()
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeLongLongMap(map)
+    if map == null then
+        self:writeInt(0)
+    else
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeLong(key)
+            self:writeLong(value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readLongLongMap()
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            local key = self:readLong()
+            local value = self:readLong()
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeLongStringMap(map)
+    if map == null then
+        self:writeInt(0)
+    else
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeLong(key)
+            self:writeString(value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readLongStringMap()
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            local key = self:readLong()
+            local value = self:readString()
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeLongPacketMap(map, protocolId)
+    if map == null then
+        self:writeInt(0)
+    else
+        local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeLong(key)
+            protocolRegistration:write(self, value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readLongPacketMap(protocolId)
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+        for index = 1, size do
+            local key = self:readLong()
+            local value = protocolRegistration:read(self)
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeStringIntMap(map)
+    if map == null then
+        self:writeInt(0)
+    else
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeString(key)
+            self:writeInt(value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readStringIntMap()
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            local key = self:readString()
+            local value = self:readInt()
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeStringLongMap(map)
+    if map == null then
+        self:writeInt(0)
+    else
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeString(key)
+            self:writeLong(value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readStringLongMap()
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            local key = self:readString()
+            local value = self:readLong()
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeStringStringMap(map)
+    if map == null then
+        self:writeInt(0)
+    else
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeString(key)
+            self:writeString(value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readStringStringMap()
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        for index = 1, size do
+            local key = self:readString()
+            local value = self:readString()
+            map[key] = value
+        end
+    end
+    return map
+end
+
+function ByteBuffer:writeStringPacketMap(map, protocolId)
+    if map == null then
+        self:writeInt(0)
+    else
+        local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+        self:writeInt(table.mapSize(map));
+        for key, value in pairs(map) do
+            self:writeString(key)
+            protocolRegistration:write(self, value)
+        end
+    end
+    return self
+end
+
+function ByteBuffer:readStringPacketMap(protocolId)
+    local map = {}
+    local size = self:readInt()
+    if size > 0 then
+        local protocolRegistration = ProtocolManager.getProtocol(protocolId)
+        for index = 1, size do
+            local key = self:readString()
+            local value = protocolRegistration:read(self)
+            map[key] = value
+        end
+    end
+    return map
 end
 
 return ByteBuffer

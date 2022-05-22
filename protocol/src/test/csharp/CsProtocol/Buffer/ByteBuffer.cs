@@ -88,6 +88,10 @@ namespace CsProtocol.Buffer
             return bytes;
         }
 
+        public bool IsReadable()
+        {
+            return writeOffset > readOffset;
+        }
 
         // -------------------------------------------------write/read-------------------------------------------------
         public void WriteBool(bool value)
@@ -1907,7 +1911,7 @@ namespace CsProtocol.Buffer
 
             return map;
         }
-        
+
         public void WritePacket<T>(T packet, short protocolId)
         {
             IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);

@@ -19,6 +19,7 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolRegistration;
+import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -178,7 +179,7 @@ public abstract class GenerateCsUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var csBuilder = new StringBuilder();
-        for (int i = 0; i < fields.length; i++) {
+        for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             csSerializer(fieldRegistration.serializer()).writeObject(csBuilder, "message." + field.getName(), 3, field, fieldRegistration);
@@ -191,13 +192,17 @@ public abstract class GenerateCsUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var csBuilder = new StringBuilder();
-        for (int i = 0; i < fields.length; i++) {
+        for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            String readObject = csSerializer(fieldRegistration.serializer()).readObject(csBuilder, 3, field, fieldRegistration);
-            csBuilder.append(TAB + TAB + TAB)
-                    .append(StringUtils.format("packet.{} = {};", field.getName(), readObject))
-                    .append(LS);
+            if (field.isAnnotationPresent(Compatible.class)) {
+                csBuilder.append(TAB + TAB + TAB).append("if (!buffer.IsReadable())").append(LS);
+                csBuilder.append(TAB + TAB + TAB).append("{").append(LS);
+                csBuilder.append(TAB + TAB + TAB + TAB).append("return packet;").append(LS);
+                csBuilder.append(TAB + TAB + TAB).append("}").append(LS);
+            }
+            var readObject = csSerializer(fieldRegistration.serializer()).readObject(csBuilder, 3, field, fieldRegistration);
+            csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
         }
         return csBuilder.toString();
     }

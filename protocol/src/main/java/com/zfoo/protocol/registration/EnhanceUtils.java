@@ -235,7 +235,7 @@ public abstract class EnhanceUtils {
             var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
             // 协议向后兼容
             if (field.isAnnotationPresent(Compatible.class)) {
-                builder.append(StringUtils.format("if(!$1.isReadable()){ return packet; }"));
+                builder.append("if(!$1.isReadable()){ return packet; }");
             }
 
             if (Modifier.isPublic(field.getModifiers())) {

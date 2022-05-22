@@ -59,6 +59,9 @@ var ss # java.util.Set<java.util.Set<java.util.List<java.lang.Integer>>>
 var sss # java.util.Set<java.util.Set<com.zfoo.protocol.packet.ObjectA>>
 var ssss # java.util.Set<java.lang.String>
 var sssss # java.util.Set<java.util.Map<java.lang.Integer, java.lang.String>>
+# 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
+var myCompatible # int
+var myObject # com.zfoo.protocol.packet.ObjectA
 
 const PROTOCOL_ID = 100
 
@@ -202,6 +205,8 @@ static func write(buffer, packet):
 		buffer.writeInt(packet.sssss.size())
 		for element18 in packet.sssss:
 			buffer.writeIntStringMap(element18)
+	buffer.writeInt(packet.myCompatible)
+	buffer.writePacket(packet.myObject, 102)
 
 
 static func read(buffer):
@@ -393,4 +398,12 @@ static func read(buffer):
 			var map120 = buffer.readIntStringMap()
 			result117.append(map120)
 	packet.sssss = result117
+	if (!buffer.isReadable()):
+		return packet
+	var result121 = buffer.readInt()
+	packet.myCompatible = result121
+	if (!buffer.isReadable()):
+		return packet
+	var result122 = buffer.readPacket(102)
+	packet.myObject = result122
 	return packet

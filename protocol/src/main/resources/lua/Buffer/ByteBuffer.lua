@@ -125,6 +125,10 @@ function ByteBuffer:getAvailable()
     return #self.buffer - self.writeOffset + 1
 end
 
+function ByteBuffer:isReadable()
+    return self.writeOffset > self.readOffset
+end
+
 -------------------------------------write和read-------------------------------------
 
 --bool

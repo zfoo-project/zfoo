@@ -1,6 +1,5 @@
 -- @author jaysunxiao
--- @version 1.0
--- @since 2017 10.12 15:39
+-- @version 3.0
 
 local ObjectB = {}
 
@@ -14,24 +13,22 @@ function ObjectB:new(flag)
 end
 
 function ObjectB:protocolId()
-    return 1117
+    return 103
 end
 
-function ObjectB:write(byteBuffer, packet)
-    if packet == null then
-        byteBuffer:writeBoolean(false)
+function ObjectB:write(buffer, packet)
+    if buffer:writePacketFlag(packet) then
         return
     end
-    byteBuffer:writeBoolean(true)
-    byteBuffer:writeBoolean(packet.flag)
+    buffer:writeBoolean(packet.flag)
 end
 
-function ObjectB:read(byteBuffer)
-    if not(byteBuffer:readBoolean()) then
+function ObjectB:read(buffer)
+    if not(buffer:readBoolean()) then
         return nil
     end
     local packet = ObjectB:new()
-    local result0 = byteBuffer:readBoolean()
+    local result0 = buffer:readBoolean()
     packet.flag = result0
     return packet
 end

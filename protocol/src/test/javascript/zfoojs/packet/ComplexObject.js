@@ -3,7 +3,7 @@
 //
 // @author jaysunxiao
 // @version 3.0
-const ComplexObject = function(a, aa, aaa, aaaa, b, bb, bbb, bbbb, c, cc, ccc, cccc, d, dd, ddd, dddd, e, ee, eee, eeee, f, ff, fff, ffff, g, gg, ggg, gggg, h, hh, hhh, hhhh, jj, jjj, kk, kkk, l, ll, lll, llll, lllll, m, mm, mmm, mmmm, mmmmm, s, ss, sss, ssss, sssss) {
+const ComplexObject = function(a, aa, aaa, aaaa, b, bb, bbb, bbbb, c, cc, ccc, cccc, d, dd, ddd, dddd, e, ee, eee, eeee, f, ff, fff, ffff, g, gg, ggg, gggg, h, hh, hhh, hhhh, jj, jjj, kk, kkk, l, ll, lll, llll, lllll, m, mm, mmm, mmmm, mmmmm, s, ss, sss, ssss, sssss, myCompatible, myObject) {
     // byte类型，最简单的整形
     this.a = a; // byte
     // byte的包装类型
@@ -59,6 +59,9 @@ const ComplexObject = function(a, aa, aaa, aaaa, b, bb, bbb, bbbb, c, cc, ccc, c
     this.sss = sss; // java.util.Set<java.util.Set<com.zfoo.protocol.packet.ObjectA>>
     this.ssss = ssss; // java.util.Set<java.lang.String>
     this.sssss = sssss; // java.util.Set<java.util.Map<java.lang.Integer, java.lang.String>>
+    // 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
+    this.myCompatible = myCompatible; // int
+    this.myObject = myObject; // com.zfoo.protocol.packet.ObjectA
 };
 
 ComplexObject.prototype.protocolId = function() {
@@ -235,6 +238,8 @@ ComplexObject.write = function(buffer, packet) {
             buffer.writeIntStringMap(element18);
         });
     }
+    buffer.writeInt(packet.myCompatible);
+    buffer.writePacket(packet.myObject, 102);
 };
 
 ComplexObject.read = function(buffer) {
@@ -459,6 +464,16 @@ ComplexObject.read = function(buffer) {
         }
     }
     packet.sssss = result117;
+    if (!buffer.isReadable()) {
+        return packet;
+    }
+    const result121 = buffer.readInt();
+    packet.myCompatible = result121;
+    if (!buffer.isReadable()) {
+        return packet;
+    }
+    const result122 = buffer.readPacket(102);
+    packet.myObject = result122;
     return packet;
 };
 

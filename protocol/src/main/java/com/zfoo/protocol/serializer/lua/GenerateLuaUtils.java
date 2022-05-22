@@ -20,6 +20,7 @@ import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
+import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -193,6 +194,11 @@ public abstract class GenerateLuaUtils {
         for (int i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
+            if (field.isAnnotationPresent(Compatible.class)) {
+                luaBuilder.append(TAB).append("if not(buffer:isReadable()) then").append(LS);
+                luaBuilder.append(TAB + TAB).append("return packet").append(LS);
+                luaBuilder.append(TAB).append("end").append(LS);
+            }
             var readObject = luaSerializer(fieldRegistration.serializer()).readObject(luaBuilder, 1, field, fieldRegistration);
             luaBuilder.append(TAB).append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);
         }

@@ -66,8 +66,11 @@ namespace CsProtocol
         public HashSet<HashSet<ObjectA>> sss;
         public HashSet<string> ssss;
         public HashSet<Dictionary<int, string>> sssss;
+        // 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
+        public int myCompatible;
+        public ObjectA myObject;
 
-        public static ComplexObject ValueOf(byte a, byte aa, byte[] aaa, byte[] aaaa, short b, short bb, short[] bbb, short[] bbbb, int c, int cc, int[] ccc, int[] cccc, long d, long dd, long[] ddd, long[] dddd, float e, float ee, float[] eee, float[] eeee, double f, double ff, double[] fff, double[] ffff, bool g, bool gg, bool[] ggg, bool[] gggg, char h, char hh, char[] hhh, char[] hhhh, string jj, string[] jjj, ObjectA kk, ObjectA[] kkk, List<int> l, List<List<List<int>>> ll, List<List<ObjectA>> lll, List<string> llll, List<Dictionary<int, string>> lllll, Dictionary<int, string> m, Dictionary<int, ObjectA> mm, Dictionary<ObjectA, List<int>> mmm, Dictionary<List<List<ObjectA>>, List<List<List<int>>>> mmmm, Dictionary<List<Dictionary<int, string>>, HashSet<Dictionary<int, string>>> mmmmm, HashSet<int> s, HashSet<HashSet<List<int>>> ss, HashSet<HashSet<ObjectA>> sss, HashSet<string> ssss, HashSet<Dictionary<int, string>> sssss)
+        public static ComplexObject ValueOf(byte a, byte aa, byte[] aaa, byte[] aaaa, short b, short bb, short[] bbb, short[] bbbb, int c, int cc, int[] ccc, int[] cccc, long d, long dd, long[] ddd, long[] dddd, float e, float ee, float[] eee, float[] eeee, double f, double ff, double[] fff, double[] ffff, bool g, bool gg, bool[] ggg, bool[] gggg, char h, char hh, char[] hhh, char[] hhhh, string jj, string[] jjj, ObjectA kk, ObjectA[] kkk, List<int> l, List<List<List<int>>> ll, List<List<ObjectA>> lll, List<string> llll, List<Dictionary<int, string>> lllll, Dictionary<int, string> m, Dictionary<int, ObjectA> mm, Dictionary<ObjectA, List<int>> mmm, Dictionary<List<List<ObjectA>>, List<List<List<int>>>> mmmm, Dictionary<List<Dictionary<int, string>>, HashSet<Dictionary<int, string>>> mmmmm, HashSet<int> s, HashSet<HashSet<List<int>>> ss, HashSet<HashSet<ObjectA>> sss, HashSet<string> ssss, HashSet<Dictionary<int, string>> sssss, int myCompatible, ObjectA myObject)
         {
             var packet = new ComplexObject();
             packet.a = a;
@@ -121,6 +124,8 @@ namespace CsProtocol
             packet.sss = sss;
             packet.ssss = ssss;
             packet.sssss = sssss;
+            packet.myCompatible = myCompatible;
+            packet.myObject = myObject;
             return packet;
         }
 
@@ -398,6 +403,8 @@ namespace CsProtocol
                     buffer.WriteIntStringMap(i37);
                 }
             }
+            buffer.WriteInt(message.myCompatible);
+            buffer.WritePacket(message.myObject, 102);
         }
 
         public IPacket Read(ByteBuffer buffer)
@@ -656,6 +663,18 @@ namespace CsProtocol
                 }
             }
             packet.sssss = result136;
+            if (!buffer.IsReadable())
+            {
+                return packet;
+            }
+            int result140 = buffer.ReadInt();
+            packet.myCompatible = result140;
+            if (!buffer.IsReadable())
+            {
+                return packet;
+            }
+            ObjectA result141 = buffer.ReadPacket<ObjectA>(102);
+            packet.myObject = result141;
             return packet;
         }
     }

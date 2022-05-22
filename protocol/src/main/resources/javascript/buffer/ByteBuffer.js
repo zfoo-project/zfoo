@@ -82,6 +82,10 @@ const ByteBuffer = function() {
         }
     };
 
+    this.isReadable = function() {
+        return this.writeOffset > this.readOffset;
+    };
+
     this.writeBoolean = function(value) {
         if (!(value === true || value === false)) {
             throw new Error('value must be true of false');
@@ -339,7 +343,7 @@ const ByteBuffer = function() {
     };
 
     this.writePacketFlag = function(value) {
-        const flag = value === null;
+        const flag = (value === null) || (value === undefined);
         this.writeBoolean(!flag);
         return flag;
     };

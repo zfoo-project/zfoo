@@ -1,8 +1,5 @@
 -- @author jaysunxiao
--- @version 1.0
--- @since 2017 10.12 15:39
-
-local ProtocolManager = require("LuaProtocol.ProtocolManager")
+-- @version 3.0
 
 local ObjectA = {}
 
@@ -18,47 +15,29 @@ function ObjectA:new(a, m, objectB)
 end
 
 function ObjectA:protocolId()
-    return 1116
+    return 102
 end
 
-function ObjectA:write(byteBuffer, packet)
-    if packet == null then
-        byteBuffer:writeBoolean(false)
+function ObjectA:write(buffer, packet)
+    if buffer:writePacketFlag(packet) then
         return
     end
-    byteBuffer:writeBoolean(true)
-    byteBuffer:writeInt(packet.a)
-    if packet.m == null then
-        byteBuffer:writeInt(0)
-    else
-        byteBuffer:writeInt(table.mapSize(packet.m))
-        for key0, value1 in pairs(packet.m) do
-            byteBuffer:writeInt(key0)
-            byteBuffer:writeString(value1)
-        end
-    end
-    ProtocolManager.getProtocol(1117):write(byteBuffer, packet.objectB)
+    buffer:writeInt(packet.a)
+    buffer:writeIntStringMap(packet.m)
+    buffer:writePacket(packet.objectB, 103)
 end
 
-function ObjectA:read(byteBuffer)
-    if not(byteBuffer:readBoolean()) then
+function ObjectA:read(buffer)
+    if not(buffer:readBoolean()) then
         return nil
     end
     local packet = ObjectA:new()
-    local result2 = byteBuffer:readInt()
-    packet.a = result2
-    local result3 = {}
-    local size4 = byteBuffer:readInt()
-    if size4 > 0 then
-        for index5 = 1, size4 do
-            local result6 = byteBuffer:readInt()
-            local result7 = byteBuffer:readString()
-            result3[result6] = result7
-        end
-    end
-    packet.m = result3
-    local result8 = ProtocolManager.getProtocol(1117):read(byteBuffer)
-    packet.objectB = result8
+    local result0 = buffer:readInt()
+    packet.a = result0
+    local map1 = buffer:readIntStringMap()
+    packet.m = map1
+    local result2 = buffer:readPacket(103)
+    packet.objectB = result2
     return packet
 end
 

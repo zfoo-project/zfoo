@@ -16,6 +16,8 @@ describe('jsProtocolTest', () => {
         byteBuffer.writeBytes(arrayBytes);
 
         const packet = ProtocolManager.read(byteBuffer);
+        // complexObjec是老的协议，所以序列化回来myCompatible是nil，所以要重新赋值
+        packet.myCompatible = 0
         console.log(packet);
 
         const newByteBuffer = new ByteBuffer();
@@ -24,7 +26,7 @@ describe('jsProtocolTest', () => {
         const newPacket = ProtocolManager.read(newByteBuffer);
         console.log(newPacket);
 
-        expect(byteBuffer.readOffset).toBe(newByteBuffer.writeOffset);
+        expect(byteBuffer.readOffset).toBeLessThan(newByteBuffer.writeOffset);
 
         // set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
         const length = newByteBuffer.writeOffset;

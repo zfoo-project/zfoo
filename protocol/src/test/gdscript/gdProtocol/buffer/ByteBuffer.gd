@@ -31,6 +31,9 @@ func setReadOffset(readIndex: int) -> void:
 func getReadOffset() -> int:
 	return readOffset
 
+func isReadable() -> bool:
+	return writeOffset > readOffset
+
 # -------------------------------------------------write/read-------------------------------------------------
 func writePoolByteArray(value: PoolByteArray):
 	var length = value.size()

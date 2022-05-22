@@ -10,9 +10,11 @@ function complexObjectTest(bytes)
     byteBuffer:writeBuffer(bytes)
     local packet = ProtocolManager.read(byteBuffer)
 
+    -- complexObjec是老的协议，所以序列化回来myCompatible是nil，所以要重新赋值
+    packet.myCompatible = 0
     local newByteBuffer = ByteBuffer:new()
     ProtocolManager.write(newByteBuffer, packet)
-    assert(#byteBuffer.buffer == #newByteBuffer.buffer)
+    assert(#byteBuffer.buffer <= #newByteBuffer.buffer)
 
     -- set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
     --for i = 1, #byteBuffer.buffer do
@@ -134,4 +136,5 @@ function byteBufferTest()
 
 
     print("----------------------------------------------------")
+    print("Hello")
 end

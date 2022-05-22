@@ -20,6 +20,7 @@ import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
+import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -183,7 +184,11 @@ public abstract class GenerateJsUtils {
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-
+            if (field.isAnnotationPresent(Compatible.class)) {
+                jsBuilder.append( TAB).append("if (!buffer.isReadable()) {").append(LS);
+                jsBuilder.append( TAB + TAB).append("return packet;").append(LS);
+                jsBuilder.append( TAB).append("}").append(LS);
+            }
             var readObject = jsSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 1, field, fieldRegistration);
             jsBuilder.append(TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
         }
