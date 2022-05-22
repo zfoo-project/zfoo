@@ -36,7 +36,6 @@ public class ProtocolManager {
     public static final String PROTOCOL_ID = "PROTOCOL_ID";
     public static final short MAX_PROTOCOL_NUM = Short.MAX_VALUE;
     public static final byte MAX_MODULE_NUM = Byte.MAX_VALUE;
-    public static final Comparator<Field> PACKET_FIELD_COMPARATOR = (a, b) -> a.getName().compareTo(b.getName());
 
     public static final IProtocolRegistration[] protocols = new IProtocolRegistration[MAX_PROTOCOL_NUM];
     public static final ProtocolModule[] modules = new ProtocolModule[MAX_MODULE_NUM];

@@ -193,9 +193,9 @@ public abstract class JsonUtils {
                 // 循环遍历子节点下的信息
                 while (iterator.hasNext()) {
                     var node = iterator.next();
-                    var filed = node.getKey();
+                    var field = node.getKey();
                     var value = node.getValue().asText();
-                    jsonMap.put(filed, value);
+                    jsonMap.put(field, value);
                 }
             }
             return jsonMap;

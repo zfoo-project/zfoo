@@ -14,6 +14,7 @@
 package com.zfoo.protocol.packet;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.registration.anno.Compatible;
 
 import java.util.*;
 
@@ -98,6 +99,12 @@ public class ComplexObject implements IPacket {
     private Set<Set<ObjectA>> sss;
     private Set<String> ssss;
     private Set<Map<Integer, String>> sssss;
+
+    // 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
+    @Compatible(order = 1)
+    private int myCompatible;
+    @Compatible(order = 2)
+    private ObjectA myObject;
 
     @Override
     public short protocolId() {
@@ -510,6 +517,22 @@ public class ComplexObject implements IPacket {
 
     public void setSssss(Set<Map<Integer, String>> sssss) {
         this.sssss = sssss;
+    }
+
+    public int getMyCompatible() {
+        return myCompatible;
+    }
+
+    public void setMyCompatible(int myCompatible) {
+        this.myCompatible = myCompatible;
+    }
+
+    public ObjectA getMyObject() {
+        return myObject;
+    }
+
+    public void setMyObject(ObjectA myObject) {
+        this.myObject = myObject;
     }
 
     @Override

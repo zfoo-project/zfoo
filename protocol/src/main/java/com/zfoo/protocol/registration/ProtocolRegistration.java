@@ -15,6 +15,7 @@ package com.zfoo.protocol.registration;
 
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.buffer.ByteBufUtils;
+import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.reflect.ISerializer;
 import com.zfoo.protocol.util.ReflectionUtils;
@@ -99,6 +100,10 @@ public class ProtocolRegistration implements IProtocolRegistration {
 
         for (int i = 0, length = fields.length; i < length; i++) {
             Field field = fields[i];
+            // 协议向后兼容
+            if (field.isAnnotationPresent(Compatible.class) && !buffer.isReadable()) {
+                break;
+            }
             IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
             ISerializer serializer = packetFieldRegistration.serializer();
             Object fieldValue = serializer.readObject(buffer, packetFieldRegistration);

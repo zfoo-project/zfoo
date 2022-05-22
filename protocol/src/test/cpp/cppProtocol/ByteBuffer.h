@@ -132,6 +132,10 @@ namespace zfoo {
             }
         }
 
+        inline bool isReadable() {
+            return m_writerIndex > m_readerIndex;
+        }
+
         inline void writeBool(const bool &value) {
             ensureCapacity(1);
             int8_t v = value ? 1 : 0;

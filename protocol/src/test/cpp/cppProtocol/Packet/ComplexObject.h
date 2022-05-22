@@ -69,10 +69,13 @@ namespace zfoo {
         set<set<ObjectA>> sss;
         set<string> ssss;
         set<map<int32_t, string>> sssss;
+        // 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
+        int32_t myCompatible;
+        ObjectA myObject;
 
         ~ComplexObject() override = default;
 
-        static ComplexObject valueOf(int8_t a, int8_t aa, vector<int8_t> aaa, vector<int8_t> aaaa, int16_t b, int16_t bb, vector<int16_t> bbb, vector<int16_t> bbbb, int32_t c, int32_t cc, vector<int32_t> ccc, vector<int32_t> cccc, int64_t d, int64_t dd, vector<int64_t> ddd, vector<int64_t> dddd, float e, float ee, vector<float> eee, vector<float> eeee, double f, double ff, vector<double> fff, vector<double> ffff, bool g, bool gg, vector<bool> ggg, vector<bool> gggg, char h, char hh, vector<char> hhh, vector<char> hhhh, string jj, vector<string> jjj, ObjectA kk, vector<ObjectA> kkk, list<int32_t> l, list<list<list<int32_t>>> ll, list<list<ObjectA>> lll, list<string> llll, list<map<int32_t, string>> lllll, map<int32_t, string> m, map<int32_t, ObjectA> mm, map<ObjectA, list<int32_t>> mmm, map<list<list<ObjectA>>, list<list<list<int32_t>>>> mmmm, map<list<map<int32_t, string>>, set<map<int32_t, string>>> mmmmm, set<int32_t> s, set<set<list<int32_t>>> ss, set<set<ObjectA>> sss, set<string> ssss, set<map<int32_t, string>> sssss) {
+        static ComplexObject valueOf(int8_t a, int8_t aa, vector<int8_t> aaa, vector<int8_t> aaaa, int16_t b, int16_t bb, vector<int16_t> bbb, vector<int16_t> bbbb, int32_t c, int32_t cc, vector<int32_t> ccc, vector<int32_t> cccc, int64_t d, int64_t dd, vector<int64_t> ddd, vector<int64_t> dddd, float e, float ee, vector<float> eee, vector<float> eeee, double f, double ff, vector<double> fff, vector<double> ffff, bool g, bool gg, vector<bool> ggg, vector<bool> gggg, char h, char hh, vector<char> hhh, vector<char> hhhh, string jj, vector<string> jjj, ObjectA kk, vector<ObjectA> kkk, list<int32_t> l, list<list<list<int32_t>>> ll, list<list<ObjectA>> lll, list<string> llll, list<map<int32_t, string>> lllll, map<int32_t, string> m, map<int32_t, ObjectA> mm, map<ObjectA, list<int32_t>> mmm, map<list<list<ObjectA>>, list<list<list<int32_t>>>> mmmm, map<list<map<int32_t, string>>, set<map<int32_t, string>>> mmmmm, set<int32_t> s, set<set<list<int32_t>>> ss, set<set<ObjectA>> sss, set<string> ssss, set<map<int32_t, string>> sssss, int32_t myCompatible, ObjectA myObject) {
             auto packet = ComplexObject();
             packet.a = a;
             packet.aa = aa;
@@ -125,6 +128,8 @@ namespace zfoo {
             packet.sss = sss;
             packet.ssss = ssss;
             packet.sssss = sssss;
+            packet.myCompatible = myCompatible;
+            packet.myObject = myObject;
             return packet;
         }
 
@@ -235,6 +240,10 @@ namespace zfoo {
             if (_.ssss < ssss) { return false; }
             if (sssss < _.sssss) { return true; }
             if (_.sssss < sssss) { return false; }
+            if (myCompatible < _.myCompatible) { return true; }
+            if (_.myCompatible < myCompatible) { return false; }
+            if (myObject < _.myObject) { return true; }
+            if (_.myObject < myObject) { return false; }
             return false;
         }
     };
@@ -353,6 +362,8 @@ namespace zfoo {
             for (auto i18 : message->sssss) {
                 buffer.writeIntStringMap(i18);
             }
+            buffer.writeInt(message->myCompatible);
+            buffer.writePacket(&message->myObject, 102);
         }
 
         IPacket *read(ByteBuffer &buffer) override {
@@ -547,6 +558,13 @@ namespace zfoo {
                 result119.emplace(map122);
             }
             packet->sssss = result119;
+            if (!buffer.isReadable()) { return packet; }
+            int32_t result123 = buffer.readInt();
+            packet->myCompatible = result123;
+            if (!buffer.isReadable()) { return packet; }
+            auto result124 = buffer.readPacket(102);
+            auto *result125 = (ObjectA *) result124.get();
+            packet->myObject = *result125;
             return packet;
         }
     };

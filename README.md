@@ -43,7 +43,7 @@
 - 性能需求极高的项目，如网站和游戏服务器框架，单服滚服，全球服，直播聊天，IM系统，实时推送
 - 节省研发成本的项目，如想节省，开发，部署，运维成本
 - 适合作为 **Godot，Unity，Cocos，Webgl，H5** 的后端基础框架，网络通信协议支持 tcp udp websocket http
-- 语言支持 **Java Javascript C# Lua GDScript**，可以轻易实现跨平台
+- 协议目前原生支持 **C++ Java Javascript C# Lua GDScript**，可以轻易实现跨平台
 - 喜欢 [KISS法则](https://baike.baidu.com/item/KISS原则/3242383) 的项目 ，简单的配置，优雅的代码
 
 Ⅲ. 详细的教程和完整的工程案例

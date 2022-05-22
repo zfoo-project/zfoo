@@ -15,12 +15,14 @@ package com.zfoo.protocol.registration;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.exception.UnknownException;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
+import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.*;
 import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
@@ -49,6 +51,11 @@ import static com.zfoo.protocol.ProtocolManager.*;
  */
 public class ProtocolAnalysis {
 
+    // 临时变量，启动完成就会销毁，协议Id对应的Class类
+    private static final Map<Short, Class<?>> protocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
+
+    // 临时变量，启动完成就会销毁，协议下包含的子协议，只包含一层子协议
+    private static Map<Short, Set<Short>> subProtocolIdMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
     // 临时变量，启动完成就会销毁，协议名称保留字符，即协议的名称不能用以下名称命名
     private static Set<String> protocolReserved = Set.of("Buffer", "ByteBuf", "ByteBuffer", "LittleEndianByteBuffer", "NormalByteBuffer"
@@ -58,13 +65,7 @@ public class ProtocolAnalysis {
             , "Collections", "Iterator", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet");
 
     // 临时变量，启动完成就会销毁，是一个基本类型序列化器
-    private static Map<Class<?>, ISerializer> baseSerializerMap = new HashMap<>();
-
-    // 临时变量，启动完成就会销毁，协议Id对应的Class类
-    private static final Map<Short, Class<?>> protocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
-
-    // 临时变量，启动完成就会销毁，协议下包含的子协议，只包含一层子协议
-    private static Map<Short, Set<Short>> subProtocolIdMap = new HashMap<>(MAX_PROTOCOL_NUM);
+    private static Map<Class<?>, ISerializer> baseSerializerMap = new HashMap<>(128);
 
     static {
         // 初始化基础类型序列化器
@@ -91,29 +92,15 @@ public class ProtocolAnalysis {
         AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
         try {
             for (var protocolClass : protocolClassSet) {
-                var id = getProtocolIdByClass(protocolClass);
-                var previous = protocolClassMap.put(id, protocolClass);
-                if (previous != null) {
-                    throw new RunException("[{}][{}]协议号[protocolId:{}]重复", protocolClass.getCanonicalName(), previous.getCanonicalName(), id);
-                }
+                checkProtocol(protocolClass);
             }
-
             for (var protocolClass : protocolClassSet) {
-                try {
-                    var registration = parseProtocolRegistration(protocolClass, ProtocolModule.DEFAULT_PROTOCOL_MODULE);
-                    // 注册协议
-                    protocols[registration.protocolId()] = registration;
-                } catch (Exception e) {
-                    throw new RuntimeException(StringUtils.format("解析协议[class:{}]异常", protocolClass), e);
-                }
+                var registration = parseProtocolRegistration(protocolClass, ProtocolModule.DEFAULT_PROTOCOL_MODULE);
+                protocols[registration.protocolId()] = registration;
             }
-
-            enhanceProtocolBefore(generateOperation);
-
             // 通过指定类注册的协议，全部使用字节码增强
-            enhanceProtocolRegistration(Arrays.stream(protocols).filter(it -> Objects.nonNull(it)).collect(Collectors.toList()));
-
-            enhanceProtocolAfter(generateOperation);
+            var enhanceList = Arrays.stream(protocols).filter(it -> Objects.nonNull(it)).collect(Collectors.toList());
+            enhance(generateOperation, enhanceList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -143,15 +130,9 @@ public class ProtocolAnalysis {
                     AssertionUtils.isTrue(id < moduleDefinition.getMaxId(), "模块[{}]中的协议[{}]的协议号必须小于[{}]", moduleDefinition.getName(), clazz.getSimpleName(), moduleDefinition.getMaxId());
                     AssertionUtils.isNull(protocols[id], "duplicate definition [id:{}] Exception!", id);
 
-                    var packet = (IPacket) ReflectionUtils.newInstance(clazz);
-
                     // 协议号是否和id是否相等
-                    AssertionUtils.isTrue(packet.protocolId() == id, "[class:{}]协议序列号[{}]和协议文件里的协议序列号不相等", clazz.getCanonicalName(), PROTOCOL_ID);
-
-                    var previous = protocolClassMap.put(id, clazz);
-                    if (previous != null) {
-                        throw new RunException("[{}][{}]协议号[protocolId:{}]重复", clazz.getCanonicalName(), previous.getCanonicalName(), id);
-                    }
+                    AssertionUtils.isTrue(getProtocolIdByClass(clazz) == id, "[class:{}]协议序列号[{}]和协议文件里的协议序列号不相等", clazz.getCanonicalName(), PROTOCOL_ID);
+                    checkProtocol(clazz);
                 }
             }
 
@@ -160,27 +141,33 @@ public class ProtocolAnalysis {
                 for (var protocolDefinition : moduleDefinition.getProtocols()) {
                     var id = protocolDefinition.getId();
                     var clazz = protocolClassMap.get(id);
-                    try {
-                        var registration = parseProtocolRegistration(clazz, module);
-                        if (protocolDefinition.isEnhance()) {
-                            enhanceList.add(registration);
-                        }
-                        // 注册协议
-                        protocols[id] = registration;
-                    } catch (Exception e) {
-                        throw new UnknownException(e, "解析协议[id:{}][class:{}]异常", id, clazz);
+                    var registration = parseProtocolRegistration(clazz, module);
+                    if (protocolDefinition.isEnhance()) {
+                        enhanceList.add(registration);
                     }
+                    // 注册协议
+                    protocols[id] = registration;
                 }
             }
-
-            enhanceProtocolBefore(generateOperation);
-
-            enhanceProtocolRegistration(enhanceList);
-
-            enhanceProtocolAfter(generateOperation);
+            enhance(generateOperation, enhanceList);
         } catch (Exception e) {
             throw new UnknownException(e);
         }
+    }
+
+    private static void enhance(GenerateOperation generateOperation, List<IProtocolRegistration> enhanceList) throws IOException, ClassNotFoundException, NotFoundException, CannotCompileException, NoSuchFieldException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+        enhanceProtocolBefore(generateOperation);
+        enhanceProtocolRegistration(enhanceList);
+        enhanceProtocolAfter(generateOperation);
+    }
+
+    private static void enhanceProtocolBefore(GenerateOperation generateOperation) throws IOException, ClassNotFoundException {
+        // 检查协议格式
+        checkAllProtocolClass();
+        // 检查模块格式
+        checkAllModules();
+        // 生成协议
+        GenerateProtocolFile.generate(generateOperation);
     }
 
     private static void enhanceProtocolRegistration(List<IProtocolRegistration> enhanceList) throws NoSuchMethodException, IllegalAccessException, InstantiationException, CannotCompileException, NotFoundException, InvocationTargetException, NoSuchFieldException {
@@ -201,29 +188,14 @@ public class ProtocolAnalysis {
         }
     }
 
-    private static void enhanceProtocolBefore(GenerateOperation generateOperation) throws IOException, ClassNotFoundException {
-        // 检查协议格式
-        checkAllProtocolClass();
-
-        // 检查模块格式
-        checkAllModules();
-
-        // 生成协议
-        GenerateProtocolFile.generate(generateOperation);
-    }
-
     private static void enhanceProtocolAfter(GenerateOperation generateOperation) {
-        subProtocolIdMap.clear();
         subProtocolIdMap = null;
-
         protocolReserved = null;
-
-        baseSerializerMap.clear();
         baseSerializerMap = null;
 
         EnhanceUtils.clear();
 
-        if (generateOperation.getGenerateLanguages().isEmpty()) {
+        if (CollectionUtils.isEmpty(generateOperation.getGenerateLanguages())) {
             return;
         }
 
@@ -238,146 +210,70 @@ public class ProtocolAnalysis {
         GenerateProtobufUtils.clear();
     }
 
-
-    private static short checkProtocol(Class<?> clazz) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        // 是否为一个简单的javabean
-        ReflectionUtils.assertIsPojoClass(clazz);
-        // 是否实现了IPacket接口
-        AssertionUtils.isTrue(IPacket.class.isAssignableFrom(clazz), "[class:{}]没有实现接口[IPacket:{}]", clazz.getCanonicalName(), IPacket.class.getCanonicalName());
-        // 不能是泛型类
-        AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
-
-        Field protocolIdField;
-        try {
-            protocolIdField = clazz.getDeclaredField(PROTOCOL_ID);
-        } catch (NoSuchFieldException e) {
-            throw new UnknownException(e, "[class:{}]没有[{}]协议序列号", clazz.getCanonicalName(), PROTOCOL_ID);
-        }
-
-        // 是否被public修饰
-        AssertionUtils.isTrue(Modifier.isPublic(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被public修饰", clazz.getCanonicalName(), PROTOCOL_ID);
-        // 是否被static修饰
-        AssertionUtils.isTrue(Modifier.isStatic(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被static修饰", clazz.getCanonicalName(), PROTOCOL_ID);
-        // 是否被final修饰
-        AssertionUtils.isTrue(Modifier.isFinal(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被final修饰", clazz.getCanonicalName(), PROTOCOL_ID);
-        // 是否被transient修饰
-        AssertionUtils.isTrue(Modifier.isTransient(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被transient修饰", clazz.getCanonicalName(), PROTOCOL_ID);
-        // 命名只能包含字母，数字，下划线
-        AssertionUtils.isTrue(clazz.getSimpleName().matches("[a-zA-Z0-9_]*"), "[class:{}]的命名只能包含字母，数字，下划线", clazz.getCanonicalName(), PROTOCOL_ID);
-
-        // 必须要有一个空的构造器
-        Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
-
-        ReflectionUtils.makeAccessible(protocolIdField);
-        IPacket packet = (IPacket) constructor.newInstance();
-
-        // 验证protocol()方法的返回是否和PROTOCOL_ID相等
-        AssertionUtils.isTrue(Short.valueOf(packet.protocolId()).equals(protocolIdField.get(null)), "[class:{}]的protocolId返回的值和协议号的静态变量[{}]不相等", clazz.getCanonicalName(), PROTOCOL_ID);
-        return packet.protocolId();
-    }
-
-    private static void checkAllModules() {
-        // 模块id不能重复
-        var moduleIdSet = new HashSet<Byte>();
-        Arrays.stream(modules)
-                .filter(it -> Objects.nonNull(it))
-                .peek(it -> AssertionUtils.isTrue(!moduleIdSet.contains(it.getId()), "模块[{}]存在重复的id，模块的id不能重复", it))
-                .forEach(it -> moduleIdSet.add(it.getId()));
-
-        // 模块名称不能重复
-        var moduleNameSet = new HashSet<String>();
-        Arrays.stream(modules)
-                .filter(it -> Objects.nonNull(it))
-                .peek(it -> AssertionUtils.isTrue(!moduleNameSet.contains(it.getName()), "模块[{}]存在重复的name，模块名称不能重复", it))
-                .forEach(it -> moduleNameSet.add(it.getName()));
-    }
-
-    private static void checkAllProtocolClass() {
-        // 检查协议格式
-
-        // 协议的名称不能重复
-        var allProtocolNameMap = new HashMap<String, Class<?>>();
-        for (var protocolRegistration : protocols) {
-            if (protocolRegistration == null) {
-                continue;
-            }
-
-            var protocolClass = protocolRegistration.protocolConstructor().getDeclaringClass();
-            var protocolName = protocolClass.getSimpleName();
-            if (allProtocolNameMap.containsKey(protocolName)) {
-                throw new RunException("[class:{}]和[class:{}]协议名称重复，协议不能含有重复的名称", protocolClass.getCanonicalName(), allProtocolNameMap.get(protocolName).getCanonicalName());
-            }
-
-            if (protocolReserved.stream().anyMatch(it -> it.equalsIgnoreCase(protocolName))) {
-                throw new RunException("协议的名称[class:{}]不能是保留名称[{}]", protocolClass.getCanonicalName(), protocolName);
-            }
-
-            allProtocolNameMap.put(protocolName, protocolClass);
-        }
-
-
-        // 检查循环协议
-        for (var protocolEntry : subProtocolIdMap.entrySet()) {
-            var protocolId = protocolEntry.getKey();
-            var subProtocolSet = protocolEntry.getValue();
-            if (subProtocolSet.contains(protocolId)) {
-                var protocolClass = protocols[protocolId].protocolConstructor().getDeclaringClass();
-                throw new RunException("[class:{}]在第一层包含循环引用协议[class:{}]", protocolClass.getSimpleName(), protocolClass.getSimpleName());
-            }
-
-            getAllSubProtocolIds(protocolId);
-        }
-    }
-
-    private static void checkSubProtocol(Class<?> clazz, short id, Class<?> subClass) {
-        var registerProtocolClass = protocolClassMap.get(id);
-        if (registerProtocolClass == null || !registerProtocolClass.equals(subClass)) {
-            throw new RunException("协议[{}]的子协议[{}][{}]没有注册", clazz.getCanonicalName(), id, subClass.getCanonicalName());
-        }
-    }
-
-    private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
-        var protocolId = checkProtocol(clazz);
-
-        // 对象需要被序列化的属性
-        var fields = new ArrayList<Field>();
+    private static List<Field> customFieldOrder(Class<?> clazz) {
+        var notCompatibleFields = new ArrayList<Field>();
+        var compatibleFieldMap = new HashMap<Integer, Field>();
         for (var field : clazz.getDeclaredFields()) {
             var modifiers = field.getModifiers();
             if (Modifier.isTransient(modifiers) || Modifier.isStatic(modifiers)) {
                 continue;
             }
-
             if (Modifier.isFinal(modifiers)) {
-                throw new RunException("[{}]协议号[protocolId:{}]中的[filed:{}]属性的访问修饰符不能为final"
-                        , clazz.getCanonicalName(), protocolId, field.getName());
+                throw new RunException("[{}]协议号中的[field:{}]属性的访问修饰符不能为final", clazz.getCanonicalName(), field.getName());
             }
-
             if (!Modifier.isPublic(modifiers) && !Modifier.isPrivate(modifiers)) {
-                throw new RunException("[{}]协议号[protocolId:{}]中的[filed:{}]属性的访问修饰符必须是public或者private"
-                        , clazz.getCanonicalName(), protocolId, field.getName());
+                throw new RunException("[{}]协议号中的[field:{}]属性的访问修饰符必须是public或者private", clazz.getCanonicalName(), field.getName());
             }
 
             ReflectionUtils.makeAccessible(field);
-            fields.add(field);
+            if (field.isAnnotationPresent(Compatible.class)) {
+                var order = field.getAnnotation(Compatible.class).order();
+                var oldField = compatibleFieldMap.put(order, field);
+                if (oldField != null) {
+                    throw new RunException("[{}]协议号中的[field:{}]和[field:{}]不能有相同的Compatible顺序[order:{}]", clazz.getCanonicalName(), oldField.getName(), field.getName(), oldField, order);
+                }
+            } else {
+                notCompatibleFields.add(field);
+            }
         }
 
-        // 按变量名称从小到大排序
-        fields.sort(PACKET_FIELD_COMPARATOR);
+        // 默认无法兼容的协议变量名称从小到大排序，如果想自定义私有协议规则，修改这个排序规则即可
+        // 如果为了增加协议的安全性，每个版本都可以重新修改协议排序规则，让每个版本的协议都不相同，间接实现加密
+        notCompatibleFields.sort((a, b) -> a.getName().compareTo(b.getName()));
 
-        var registrationList = new ArrayList<IFieldRegistration>();
-        for (var field : fields) {
-            registrationList.add(toRegistration(clazz, field));
+        // 可兼容的协议变量默认都添加到最后
+        var compatibleFields = compatibleFieldMap.entrySet()
+                .stream()
+                .sorted((a, b) -> a.getKey() - b.getKey())
+                .map(it -> it.getValue())
+                .collect(Collectors.toList());
+        notCompatibleFields.addAll(compatibleFields);
+        return notCompatibleFields;
+    }
+
+    private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) {
+        var protocolId = getProtocolIdByClass(clazz);
+        // 对象需要被序列化的属性
+        var fields = customFieldOrder(clazz);
+
+        try {
+            var registrationList = new ArrayList<IFieldRegistration>();
+            for (var field : fields) {
+                registrationList.add(toRegistration(clazz, field));
+            }
+
+            var constructor = clazz.getDeclaredConstructor();
+            ReflectionUtils.makeAccessible(constructor);
+            var protocol = new ProtocolRegistration();
+            protocol.setId(protocolId);
+            protocol.setConstructor(constructor);
+            protocol.setFields(ArrayUtils.listToArray(fields, Field.class));
+            protocol.setFieldRegistrations(ArrayUtils.listToArray(registrationList, IFieldRegistration.class));
+            protocol.setModule(module.getId());
+            return protocol;
+        } catch (Exception e) {
+            throw new RuntimeException(StringUtils.format("解析协议[class:{}]异常", clazz), e);
         }
-
-        var constructor = clazz.getDeclaredConstructor();
-        ReflectionUtils.makeAccessible(constructor);
-        var protocol = new ProtocolRegistration();
-        protocol.setId(protocolId);
-        protocol.setConstructor(constructor);
-        protocol.setFields(ArrayUtils.listToArray(fields, Field.class));
-        protocol.setFieldRegistrations(ArrayUtils.listToArray(registrationList, IFieldRegistration.class));
-        protocol.setModule(module.getId());
-        return protocol;
     }
 
     private static IFieldRegistration toRegistration(Class<?> clazz, Field field) {
@@ -541,6 +437,110 @@ public class ProtocolAnalysis {
             }
         }
         return allSubProtocolIdSet;
+    }
+
+    // 协议智能语法分析，错误的协议定义将无法启动程序并给出错误警告
+    //-----------------------------------------------------------------------
+
+    private static void checkProtocol(Class<?> clazz) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        // 是否为一个简单的javabean
+        ReflectionUtils.assertIsPojoClass(clazz);
+        // 是否实现了IPacket接口
+        AssertionUtils.isTrue(IPacket.class.isAssignableFrom(clazz), "[class:{}]没有实现接口[IPacket:{}]", clazz.getCanonicalName(), IPacket.class.getCanonicalName());
+        // 不能是泛型类
+        AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
+
+        Field protocolIdField;
+        try {
+            protocolIdField = clazz.getDeclaredField(PROTOCOL_ID);
+        } catch (NoSuchFieldException e) {
+            throw new UnknownException(e, "[class:{}]没有[{}]协议序列号", clazz.getCanonicalName(), PROTOCOL_ID);
+        }
+
+        // 是否被public修饰
+        AssertionUtils.isTrue(Modifier.isPublic(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被public修饰", clazz.getCanonicalName(), PROTOCOL_ID);
+        // 是否被static修饰
+        AssertionUtils.isTrue(Modifier.isStatic(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被static修饰", clazz.getCanonicalName(), PROTOCOL_ID);
+        // 是否被final修饰
+        AssertionUtils.isTrue(Modifier.isFinal(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被final修饰", clazz.getCanonicalName(), PROTOCOL_ID);
+        // 是否被transient修饰
+        AssertionUtils.isTrue(Modifier.isTransient(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被transient修饰", clazz.getCanonicalName(), PROTOCOL_ID);
+        // 命名只能包含字母，数字，下划线
+        AssertionUtils.isTrue(clazz.getSimpleName().matches("[a-zA-Z0-9_]*"), "[class:{}]的命名只能包含字母，数字，下划线", clazz.getCanonicalName(), PROTOCOL_ID);
+
+        // 必须要有一个空的构造器
+        Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
+
+        ReflectionUtils.makeAccessible(protocolIdField);
+        IPacket packet = (IPacket) constructor.newInstance();
+        var protocolId = (short) protocolIdField.get(null);
+        // 验证protocol()方法的返回是否和PROTOCOL_ID相等
+        AssertionUtils.isTrue(packet.protocolId() == protocolId, "[class:{}]的protocolId返回的值和协议号的静态变量[{}]不相等", clazz.getCanonicalName(), PROTOCOL_ID);
+
+        var previous = protocolClassMap.put(protocolId, clazz);
+        if (previous != null) {
+            throw new RunException("[{}][{}]协议号[protocolId:{}]重复", clazz.getCanonicalName(), previous.getCanonicalName(), protocolId);
+        }
+    }
+
+    private static void checkSubProtocol(Class<?> clazz, short id, Class<?> subClass) {
+        var registerProtocolClass = protocolClassMap.get(id);
+        if (registerProtocolClass == null || !registerProtocolClass.equals(subClass)) {
+            throw new RunException("协议[{}]的子协议[{}][{}]没有注册", clazz.getCanonicalName(), id, subClass.getCanonicalName());
+        }
+    }
+
+    private static void checkAllModules() {
+        // 模块id不能重复
+        var moduleIdSet = new HashSet<Byte>();
+        Arrays.stream(modules)
+                .filter(it -> Objects.nonNull(it))
+                .peek(it -> AssertionUtils.isTrue(!moduleIdSet.contains(it.getId()), "模块[{}]存在重复的id，模块的id不能重复", it))
+                .forEach(it -> moduleIdSet.add(it.getId()));
+
+        // 模块名称不能重复
+        var moduleNameSet = new HashSet<String>();
+        Arrays.stream(modules)
+                .filter(it -> Objects.nonNull(it))
+                .peek(it -> AssertionUtils.isTrue(!moduleNameSet.contains(it.getName()), "模块[{}]存在重复的name，模块名称不能重复", it))
+                .forEach(it -> moduleNameSet.add(it.getName()));
+    }
+
+    private static void checkAllProtocolClass() {
+        // 检查协议格式
+
+        // 协议的名称不能重复
+        var allProtocolNameMap = new HashMap<String, Class<?>>();
+        for (var protocolRegistration : protocols) {
+            if (protocolRegistration == null) {
+                continue;
+            }
+
+            var protocolClass = protocolRegistration.protocolConstructor().getDeclaringClass();
+            var protocolName = protocolClass.getSimpleName();
+            if (allProtocolNameMap.containsKey(protocolName)) {
+                throw new RunException("[class:{}]和[class:{}]协议名称重复，协议不能含有重复的名称", protocolClass.getCanonicalName(), allProtocolNameMap.get(protocolName).getCanonicalName());
+            }
+
+            if (protocolReserved.stream().anyMatch(it -> it.equalsIgnoreCase(protocolName))) {
+                throw new RunException("协议的名称[class:{}]不能是保留名称[{}]", protocolClass.getCanonicalName(), protocolName);
+            }
+
+            allProtocolNameMap.put(protocolName, protocolClass);
+        }
+
+
+        // 检查循环协议
+        for (var protocolEntry : subProtocolIdMap.entrySet()) {
+            var protocolId = protocolEntry.getKey();
+            var subProtocolSet = protocolEntry.getValue();
+            if (subProtocolSet.contains(protocolId)) {
+                var protocolClass = protocols[protocolId].protocolConstructor().getDeclaringClass();
+                throw new RunException("[class:{}]在第一层包含循环引用协议[class:{}]", protocolClass.getSimpleName(), protocolClass.getSimpleName());
+            }
+
+            getAllSubProtocolIds(protocolId);
+        }
     }
 
 }

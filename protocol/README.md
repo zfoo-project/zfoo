@@ -2,7 +2,7 @@
 
 - [zfoo protocol](https://github.com/zfoo-project/zfoo/blob/main/protocol/README.md)
   是目前的Java二进制序列化和反序列化最快的框架，并且为序列化后字节最少的框架
-- 协议目前原生支持Java Javascript C# Lua GDScript，协议理论上可以跨平台
+- 协议目前原生支持 **C++ Java Javascript C# Lua GDScript**，可以轻易实现跨平台
 - 使用Javassist字节码增强动态生成顺序执行的序列化和反序列化函数，顺序执行的函数可以轻易的被JIT编译以达到极致的性能
 - 兼容protobuf，支持生成protobuf协议文件，提供从pojo到proto的生成方式
 
@@ -54,7 +54,6 @@ cpu： i9900k
 ```
 无漏洞注入风险，只有初始化时会进行字节码增强，后期不会再进行任何字节码的操作
 数据压缩体积小，压缩体积比kryo和protobuf都要小；比kryo小是因为kryo需要写入每个对象的注册号
-跨平台可以轻易实现，目前已经原生支持Java，Javascript，C#，Lua，目前kryo无法跨平台，protobuf可以跨平台
 智能语法分析，错误的协议定义将无法启动程序并给出错误警告
 提升开发效率，完全支持POJO方式开发，使用非常简单
 ```

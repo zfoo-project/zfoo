@@ -23,6 +23,7 @@ import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
+import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
@@ -267,18 +268,18 @@ public abstract class GenerateCppUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
 
-        var csBuilder = new StringBuilder();
+        var cppBuilder = new StringBuilder();
         for (int i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             var serializer = cppSerializer(fieldRegistration.serializer());
             if (IPacket.class.isAssignableFrom(field.getType())) {
-                serializer.writeObject(csBuilder, "&message->" + field.getName(), 3, field, fieldRegistration);
+                serializer.writeObject(cppBuilder, "&message->" + field.getName(), 3, field, fieldRegistration);
             } else {
-                serializer.writeObject(csBuilder, "message->" + field.getName(), 3, field, fieldRegistration);
+                serializer.writeObject(cppBuilder, "message->" + field.getName(), 3, field, fieldRegistration);
             }
         }
-        return csBuilder.toString();
+        return cppBuilder.toString();
     }
 
 
@@ -286,21 +287,26 @@ public abstract class GenerateCppUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
 
-        var csBuilder = new StringBuilder();
+        var cppBuilder = new StringBuilder();
         for (int i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            var readObject = cppSerializer(fieldRegistration.serializer()).readObject(csBuilder, 3, field, fieldRegistration);
-            csBuilder.append(TAB + TAB + TAB);
-            if (IPacket.class.isAssignableFrom(field.getType())) {
-                csBuilder.append(StringUtils.format("packet->{} = *{};", field.getName(), readObject));
-            } else {
-                csBuilder.append(StringUtils.format("packet->{} = {};", field.getName(), readObject));
+
+            if (field.isAnnotationPresent(Compatible.class)) {
+                cppBuilder.append(TAB + TAB + TAB).append(StringUtils.format("if (!buffer.isReadable()) { return packet; }")).append(LS);
             }
 
-            csBuilder.append(LS);
+            var readObject = cppSerializer(fieldRegistration.serializer()).readObject(cppBuilder, 3, field, fieldRegistration);
+            cppBuilder.append(TAB + TAB + TAB);
+            if (IPacket.class.isAssignableFrom(field.getType())) {
+                cppBuilder.append(StringUtils.format("packet->{} = *{};", field.getName(), readObject));
+            } else {
+                cppBuilder.append(StringUtils.format("packet->{} = {};", field.getName(), readObject));
+            }
+
+            cppBuilder.append(LS);
         }
-        return csBuilder.toString();
+        return cppBuilder.toString();
     }
 
 
