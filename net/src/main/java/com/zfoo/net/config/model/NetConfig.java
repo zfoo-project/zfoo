@@ -34,11 +34,13 @@ public class NetConfig {
     private boolean foldProtocol;
     private String protocolPath;
     private String protocolParam;
-    private boolean generateJsProtocol;
-    private boolean generateCsProtocol;
-    private boolean generateLuaProtocol;
-    private boolean generateGdProtocol;
-    private boolean generateProtobufProtocol;
+    // 是否生成对应语言的协议
+    private boolean javascriptProtocol;
+    private boolean csharpProtocol;
+    private boolean luaProtocol;
+    private boolean gdscriptProtocol;
+    private boolean cppProtocol;
+    private boolean protobufProtocol;
 
     private RegistryConfig registry;
     private MonitorConfig monitor;
@@ -91,28 +93,28 @@ public class NetConfig {
         this.protocolParam = protocolParam;
     }
 
-    public boolean isGenerateJsProtocol() {
-        return generateJsProtocol;
+    public boolean isJavascriptProtocol() {
+        return javascriptProtocol;
     }
 
-    public void setGenerateJsProtocol(boolean generateJsProtocol) {
-        this.generateJsProtocol = generateJsProtocol;
+    public void setJavascriptProtocol(boolean javascriptProtocol) {
+        this.javascriptProtocol = javascriptProtocol;
     }
 
-    public boolean isGenerateCsProtocol() {
-        return generateCsProtocol;
+    public boolean isCsharpProtocol() {
+        return csharpProtocol;
     }
 
-    public void setGenerateCsProtocol(boolean generateCsProtocol) {
-        this.generateCsProtocol = generateCsProtocol;
+    public void setCsharpProtocol(boolean csharpProtocol) {
+        this.csharpProtocol = csharpProtocol;
     }
 
-    public boolean isGenerateLuaProtocol() {
-        return generateLuaProtocol;
+    public boolean isLuaProtocol() {
+        return luaProtocol;
     }
 
-    public void setGenerateLuaProtocol(boolean generateLuaProtocol) {
-        this.generateLuaProtocol = generateLuaProtocol;
+    public void setLuaProtocol(boolean luaProtocol) {
+        this.luaProtocol = luaProtocol;
     }
 
     public RegistryConfig getRegistry() {
@@ -147,20 +149,28 @@ public class NetConfig {
         this.consumer = consumer;
     }
 
-    public boolean isGenerateGdProtocol() {
-        return generateGdProtocol;
+    public boolean isGdscriptProtocol() {
+        return gdscriptProtocol;
     }
 
-    public void setGenerateGdProtocol(boolean generateGdProtocol) {
-        this.generateGdProtocol = generateGdProtocol;
+    public void setGdscriptProtocol(boolean gdscriptProtocol) {
+        this.gdscriptProtocol = gdscriptProtocol;
     }
 
-    public boolean isGenerateProtobufProtocol() {
-        return generateProtobufProtocol;
+    public boolean isProtobufProtocol() {
+        return protobufProtocol;
     }
 
-    public void setGenerateProtobufProtocol(boolean generateProtobufProtocol) {
-        this.generateProtobufProtocol = generateProtobufProtocol;
+    public void setProtobufProtocol(boolean protobufProtocol) {
+        this.protobufProtocol = protobufProtocol;
+    }
+
+    public boolean isCppProtocol() {
+        return cppProtocol;
+    }
+
+    public void setCppProtocol(boolean cppProtocol) {
+        this.cppProtocol = cppProtocol;
     }
 
     @Override

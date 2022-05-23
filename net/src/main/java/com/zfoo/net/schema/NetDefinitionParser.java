@@ -89,11 +89,12 @@ public class NetDefinitionParser implements BeanDefinitionParser {
 
         resolvePlaceholder("id", "id", builder, element, parserContext);
         resolvePlaceholder("protocol-location", "protocolLocation", builder, element, parserContext);
-        resolvePlaceholder("generate-js-protocol", "generateJsProtocol", builder, element, parserContext);
-        resolvePlaceholder("generate-cs-protocol", "generateCsProtocol", builder, element, parserContext);
-        resolvePlaceholder("generate-lua-protocol", "generateLuaProtocol", builder, element, parserContext);
-        resolvePlaceholder("generate-gd-protocol", "generateGdProtocol", builder, element, parserContext);
-        resolvePlaceholder("generate-protobuf-protocol", "generateProtobufProtocol", builder, element, parserContext);
+        resolvePlaceholder("javascript-protocol", "javascriptProtocol", builder, element, parserContext);
+        resolvePlaceholder("csharp-protocol", "csharpProtocol", builder, element, parserContext);
+        resolvePlaceholder("lua-protocol", "luaProtocol", builder, element, parserContext);
+        resolvePlaceholder("gdscript-protocol", "gdscriptProtocol", builder, element, parserContext);
+        resolvePlaceholder("cpp-protocol", "cppProtocol", builder, element, parserContext);
+        resolvePlaceholder("protobuf-protocol", "protobufProtocol", builder, element, parserContext);
         resolvePlaceholder("fold-protocol", "foldProtocol", builder, element, parserContext);
         resolvePlaceholder("protocol-path", "protocolPath", builder, element, parserContext);
         resolvePlaceholder("protocol-param", "protocolParam", builder, element, parserContext);

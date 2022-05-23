@@ -80,33 +80,29 @@ public class PacketService implements IPacketService {
     public void init() {
         var applicationContext = NetContext.getApplicationContext();
 
-        var protocolLocation = NetContext.getConfigManager().getLocalConfig().getProtocolLocation();
+        var netConfig = NetContext.getConfigManager().getLocalConfig();
+        var protocolLocation = netConfig.getProtocolLocation();
 
-        var foldProtocol = NetContext.getConfigManager().getLocalConfig().isFoldProtocol();
-        var protocolPath = NetContext.getConfigManager().getLocalConfig().getProtocolPath();
-        var protocolParam = NetContext.getConfigManager().getLocalConfig().getProtocolParam();
-        var generateJsProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateJsProtocol();
-        var generateCsharpProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateCsProtocol();
-        var generateLuaProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateLuaProtocol();
-        var generateGdProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateGdProtocol();
-        var generateProtobufProtocol = NetContext.getConfigManager().getLocalConfig().isGenerateProtobufProtocol();
         var generateOperation = new GenerateOperation();
-        generateOperation.setFoldProtocol(foldProtocol);
-        generateOperation.setProtocolPath(protocolPath);
-        generateOperation.setProtocolParam(protocolParam);
-        if (generateJsProtocol) {
+        generateOperation.setFoldProtocol(netConfig.isFoldProtocol());
+        generateOperation.setProtocolPath(netConfig.getProtocolPath());
+        generateOperation.setProtocolParam(netConfig.getProtocolParam());
+        if (netConfig.isJavascriptProtocol()) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.JavaScript);
         }
-        if (generateCsharpProtocol) {
+        if (netConfig.isCsharpProtocol()) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.CSharp);
         }
-        if (generateLuaProtocol) {
+        if (netConfig.isLuaProtocol()) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.Lua);
         }
-        if (generateGdProtocol) {
+        if (netConfig.isGdscriptProtocol()) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.GdScript);
         }
-        if (generateProtobufProtocol) {
+        if (netConfig.isCppProtocol()) {
+            generateOperation.getGenerateLanguages().add(CodeLanguage.Cpp);
+        }
+        if (netConfig.isProtobufProtocol()) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.Protobuf);
         }
 
