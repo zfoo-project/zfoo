@@ -17,6 +17,8 @@ package com.zfoo.protocol;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.ByteBufferInput;
 import com.esotericsoftware.kryo.io.ByteBufferOutput;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 import com.zfoo.protocol.collection.ArrayUtils;
@@ -137,56 +139,40 @@ public class SpeedTest {
     public void kryoTest() {
         var kryo = kryos.get();
 
-        var buffer = ByteBuffer.allocate(1024 * 8);
-        var output = new ByteBufferOutput(buffer);
-        var input = new ByteBufferInput(buffer);
+        var output = new Output(1024 * 8);
+        var input = new Input(output.getBuffer());
 
         // 序列化和反序列化简单对象
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
-            buffer.clear();
-            output.setBuffer(buffer);
-
+            input.reset();
+            output.reset();
             kryo.writeObject(output, simpleObject);
-            output.flush();
-            buffer.flip();
-
-            input.setBuffer(buffer);
             var mess = kryo.readObject(input, SimpleObject.class);
         }
 
-        System.out.println(StringUtils.format("[kryo]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[kryo]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
 
         // 序列化和反序列化常规对象
         startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
-            buffer.clear();
-            output.setBuffer(buffer);
-
+            input.reset();
+            output.reset();
             kryo.writeObject(output, normalObject);
-            output.flush();
-            buffer.flip();
-
-            input.setBuffer(buffer);
             var mess = kryo.readObject(input, NormalObject.class);
         }
 
-        System.out.println(StringUtils.format("[kryo]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[kryo]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
 
         // 序列化和反序列化复杂对象
         startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
-            buffer.clear();
-            output.setBuffer(buffer);
-
+            input.reset();
+            output.reset();
             kryo.writeObject(output, complexObject);
-            output.flush();
-            buffer.flip();
-
-            input.setBuffer(buffer);
             var mess = kryo.readObject(input, ComplexObject.class);
         }
-        System.out.println(StringUtils.format("[kryo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[kryo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
     }
 
     @Ignore
@@ -207,8 +193,7 @@ public class SpeedTest {
                 var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(buffer);
             }
 
-            System.out.println(StringUtils.format("[protobuf] [简单对象] [thread:{}] [size:{}] [time:{}]",
-                    Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[protobuf] [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
 
 
             // 序列化和反序列化常规对象
@@ -222,9 +207,7 @@ public class SpeedTest {
                 var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(buffer);
             }
 
-            System.out.println(StringUtils.format("[protobuf] [常规对象] [thread:{}] [size:{}] [time:{}]",
-                    Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
-
+            System.out.println(StringUtils.format("[protobuf] [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
 
             // 序列化和反序列化复杂对象
             startTime = System.currentTimeMillis();
@@ -237,8 +220,7 @@ public class SpeedTest {
                 var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(buffer);
             }
 
-            System.out.println(StringUtils.format("[protobuf] [复杂对象] [thread:{}] [size:{}] [time:{}]",
-                    Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[protobuf] [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
