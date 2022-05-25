@@ -20,6 +20,7 @@ import com.esotericsoftware.kryo.io.ByteBufferOutput;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.CodedOutputStream;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
@@ -179,48 +180,41 @@ public class SpeedTest {
     @Test
     public void protobufTest() {
         try {
-            var buffer = ByteBuffer.allocate(1024 * 8);
-
+            var buffer = new byte[1024 * 8];
+            var length = 0;
 
             // 序列化和反序列化简单对象
             long startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
-                buffer.clear();
                 var codedOutputStream = CodedOutputStream.newInstance(buffer);
                 protobufSimpleObject.writeTo(codedOutputStream);
-                codedOutputStream.flush();
-                buffer.flip();
-                var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(buffer);
+                length = codedOutputStream.getTotalBytesWritten();
+                var codeInput = CodedInputStream.newInstance(buffer, 0, length);
+                var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(codeInput);
             }
-
-            System.out.println(StringUtils.format("[protobuf] [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
-
+            System.out.println(StringUtils.format("[protobuf] [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
 
             // 序列化和反序列化常规对象
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
-                buffer.clear();
                 var codedOutputStream = CodedOutputStream.newInstance(buffer);
                 protobufNormalObject.writeTo(codedOutputStream);
-                codedOutputStream.flush();
-                buffer.flip();
-                var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(buffer);
+                length = codedOutputStream.getTotalBytesWritten();
+                var codeInput = CodedInputStream.newInstance(buffer, 0, length);
+                var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(codeInput);
             }
-
-            System.out.println(StringUtils.format("[protobuf] [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[protobuf] [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
 
             // 序列化和反序列化复杂对象
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
-                buffer.clear();
                 var codedOutputStream = CodedOutputStream.newInstance(buffer);
                 protobufComplexObject.writeTo(codedOutputStream);
-                codedOutputStream.flush();
-                buffer.flip();
-                var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(buffer);
+                length = codedOutputStream.getTotalBytesWritten();
+                var codeInput = CodedInputStream.newInstance(buffer, 0, length);
+                var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(codeInput);
             }
-
-            System.out.println(StringUtils.format("[protobuf] [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.limit(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[protobuf] [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
