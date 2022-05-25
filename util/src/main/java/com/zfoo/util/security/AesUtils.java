@@ -15,10 +15,13 @@ package com.zfoo.util.security;
 
 
 import com.zfoo.protocol.util.StringUtils;
+import io.netty.util.concurrent.FastThreadLocal;
 
 import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 /**
@@ -43,6 +46,13 @@ public abstract class AesUtils {
      */
     private static final String ALGORITHM_STR = "AES/ECB/PKCS5Padding";
 
+    private static final FastThreadLocal<Cipher> LOCAL_CIPHER = new FastThreadLocal<Cipher>() {
+        @Override
+        protected Cipher initialValue() throws NoSuchPaddingException, NoSuchAlgorithmException {
+            return Cipher.getInstance(ALGORITHM_STR);
+        }
+    };
+
     static {
         try {
             KEY = new SecretKeySpec(KEY_STR.getBytes(StringUtils.DEFAULT_CHARSET_NAME), ALGORITHM);
@@ -61,11 +71,19 @@ public abstract class AesUtils {
     public static String getEncryptString(String str) {
         try {
             var base64Encoder = Base64.getEncoder();
-            var strBytes = str.getBytes(StringUtils.DEFAULT_CHARSET_NAME);
-            var cipher = Cipher.getInstance(ALGORITHM_STR);
-            cipher.init(Cipher.ENCRYPT_MODE, KEY);
-            var encryptStrBytes = cipher.doFinal(strBytes);
+            var strBytes = StringUtils.bytes(str);
+            var encryptStrBytes = encrypt(strBytes);
             return base64Encoder.encodeToString(encryptStrBytes);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static byte[] encrypt(byte[] bytes) {
+        try {
+            var cipher = LOCAL_CIPHER.get();
+            cipher.init(Cipher.ENCRYPT_MODE, KEY);
+            return cipher.doFinal(bytes);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -81,13 +99,20 @@ public abstract class AesUtils {
         try {
             var base64Decoder = Base64.getDecoder();
             var strBytes = base64Decoder.decode(str);
-            var cipher = Cipher.getInstance(ALGORITHM_STR);
-            cipher.init(Cipher.DECRYPT_MODE, KEY);
-            var decryptStrBytes = cipher.doFinal(strBytes);
-            return new String(decryptStrBytes, StringUtils.DEFAULT_CHARSET_NAME);
+            var decryptStrBytes = decrypt(strBytes);
+            return StringUtils.bytesToString(decryptStrBytes);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public static byte[] decrypt(byte[] bytes) {
+        try {
+            var cipher = LOCAL_CIPHER.get();
+            cipher.init(Cipher.DECRYPT_MODE, KEY);
+            return cipher.doFinal(bytes);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
