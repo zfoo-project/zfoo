@@ -4,6 +4,9 @@ const protocols = new Map();
 
 const ProtocolManager = {};
 
+// initProtocol
+{}
+
 ProtocolManager.getProtocol = function getProtocol(protocolId) {
     const protocol = protocols.get(protocolId);
     if (protocol === null) {
@@ -24,10 +27,6 @@ ProtocolManager.read = function read(buffer) {
     const protocol = ProtocolManager.getProtocol(protocolId);
     const packet = protocol.read(buffer);
     return packet;
-};
-
-ProtocolManager.initProtocol = function initProtocol() {
-    {}
 };
 
 export default ProtocolManager;

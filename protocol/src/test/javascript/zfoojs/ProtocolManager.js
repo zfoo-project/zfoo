@@ -6,7 +6,14 @@ import SimpleObject from './packet/SimpleObject.js';
 
 const protocols = new Map();
 
-const ProtocolManager = protocols.set(100, ComplexObject);    protocols.set(101, NormalObject);    protocols.set(102, ObjectA);    protocols.set(103, ObjectB);    protocols.set(104, SimpleObject);
+const ProtocolManager = {};
+
+// initProtocol
+protocols.set(100, ComplexObject);
+protocols.set(101, NormalObject);
+protocols.set(102, ObjectA);
+protocols.set(103, ObjectB);
+protocols.set(104, SimpleObject);
 
 ProtocolManager.getProtocol = function getProtocol(protocolId) {
     const protocol = protocols.get(protocolId);
@@ -28,10 +35,6 @@ ProtocolManager.read = function read(buffer) {
     const protocol = ProtocolManager.getProtocol(protocolId);
     const packet = protocol.read(buffer);
     return packet;
-};
-
-ProtocolManager.initProtocol = function initProtocol() {
-    {}
 };
 
 export default ProtocolManager;

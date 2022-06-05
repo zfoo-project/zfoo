@@ -7,8 +7,6 @@ describe('jsProtocolTest', () => {
     it('complexObjectTest', () => {
         const data = fs.readFileSync('../resources/ComplexObject.bytes');
 
-        ProtocolManager.initProtocol();
-
         const arrayBytes = new Uint8Array(data.length);
         data.copy(arrayBytes, 0, 0, data.length);
 

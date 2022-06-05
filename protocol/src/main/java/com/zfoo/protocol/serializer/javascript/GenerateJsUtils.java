@@ -103,10 +103,10 @@ public abstract class GenerateJsUtils {
                 importBuilder.append(StringUtils.format("import {} from './{}/{}.js';", protocolName, path, protocolName)).append(LS);
             }
 
-            initProtocolBuilder.append(TAB).append(StringUtils.format("protocols.set({}, {});", protocolId, protocolName));
+            initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, protocolName)).append(LS);
         }
 
-        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), initProtocolBuilder.toString().trim());
+        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), StringUtils.EMPTY_JSON, initProtocolBuilder.toString().trim());
         FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.js")), protocolManagerTemplate);
     }
 
@@ -185,9 +185,9 @@ public abstract class GenerateJsUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                jsBuilder.append( TAB).append("if (!buffer.isReadable()) {").append(LS);
-                jsBuilder.append( TAB + TAB).append("return packet;").append(LS);
-                jsBuilder.append( TAB).append("}").append(LS);
+                jsBuilder.append(TAB).append("if (!buffer.isReadable()) {").append(LS);
+                jsBuilder.append(TAB + TAB).append("return packet;").append(LS);
+                jsBuilder.append(TAB).append("}").append(LS);
             }
             var readObject = jsSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 1, field, fieldRegistration);
             jsBuilder.append(TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
