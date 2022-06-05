@@ -12,13 +12,13 @@ const maxInt = 2147483647;
 const minInt = -2147483648;
 
 // UTF-8编码与解码
-// const encoder = new TextEncoder('utf-8');
-// const decoder = new TextDecoder('utf-8');
+const encoder = new TextEncoder('utf-8');
+const decoder = new TextDecoder('utf-8');
 
 // nodejs的测试环境需要用以下方式特殊处理
-const util = require('util');
-const encoder = new util.TextEncoder('utf-8');
-const decoder = new util.TextDecoder('utf-8');
+// const util = require('util');
+// const encoder = new util.TextEncoder('utf-8');
+// const decoder = new util.TextDecoder('utf-8');
 
 // 在js中long可以支持的最大值
 // const maxLong = 9007199254740992;
@@ -110,6 +110,12 @@ const ByteBuffer = function() {
         this.ensureCapacity(length);
         new Uint8Array(this.buffer).set(new Uint8Array(byteArray), this.writeOffset);
         this.writeOffset += length;
+    };
+
+    this.toBytes = function() {
+        const result = new ArrayBuffer(this.writeOffset);
+        new Uint8Array(result).set(new Uint8Array(this.buffer.slice(0, this.writeOffset)));
+        return result;
     };
 
     this.writeByte = function(value) {
@@ -334,12 +340,6 @@ const ByteBuffer = function() {
         const value = decoder.decode(uint8Array);
         this.readOffset += length;
         return value;
-    };
-
-    this.toBytes = function() {
-        const result = new ArrayBuffer(this.writeOffset);
-        new Uint8Array(result).set(new Uint8Array(this.buffer.slice(0, this.writeOffset)));
-        return result;
     };
 
     this.writePacketFlag = function(value) {
@@ -580,6 +580,240 @@ const ByteBuffer = function() {
         return array;
     };
 
+    // ---------------------------------------------list-------------------------------------------
+    this.writeBooleanList = function(list) {
+        this.writeBooleanArray(list);
+    };
+
+    this.readBooleanList = function() {
+        return this.readBooleanArray();
+    };
+
+    this.writeByteList = function(list) {
+        this.writeByteArray(list);
+    };
+
+    this.readByteList = function() {
+        return this.readByteArray();
+    };
+
+    this.writeShortList = function(list) {
+        this.writeShortArray(list);
+    };
+
+    this.readShortList = function() {
+        return this.readShortArray();
+    };
+
+    this.writeIntList = function(list) {
+        this.writeIntArray(list);
+    };
+
+    this.readIntList = function() {
+        return this.readIntArray();
+    };
+
+    this.writeLongList = function(list) {
+        this.writeLongArray(list);
+    };
+
+    this.readLongList = function() {
+        return this.readLongArray();
+    };
+
+    this.writeFloatList = function(list) {
+        this.writeFloatArray(list);
+    };
+
+    this.readFloatList = function() {
+        return this.readFloatArray();
+    };
+
+    this.writeDoubleList = function(list) {
+        this.writeDoubleArray(list);
+    };
+
+    this.readDoubleList = function() {
+        return this.readDoubleArray();
+    };
+
+    this.writeStringList = function(list) {
+        this.writeStringArray(list);
+    };
+
+    this.readStringList = function() {
+        return this.readStringArray();
+    };
+
+    this.writeCharList = function(list) {
+        this.writeCharArray(list);
+    };
+
+    this.readCharList = function() {
+        return this.readCharArray();
+    };
+
+    this.writePacketList = function(list, protocolId) {
+        this.writePacketArray(list, protocolId);
+    };
+
+    this.readPacketList = function(protocolId) {
+        return this.readPacketArray(protocolId);
+    };
+
+    // ---------------------------------------------set-------------------------------------------
+    this.writeBooleanSet = function(set) {
+        if (set === null) {
+            this.writeInt(0);
+        } else {
+            this.writeInt(set.size);
+            set.forEach(element => {
+                this.writeBoolean(element);
+            });
+        }
+    };
+
+    this.readBooleanSet = function() {
+        return new Set(this.readBooleanArray());
+    };
+
+    this.writeByteSet = function(set) {
+        if (set === null) {
+            this.writeInt(0);
+        } else {
+            this.writeInt(set.size);
+            set.forEach(element => {
+                this.writeByte(element);
+            });
+        }
+    };
+
+    this.readByteSet = function() {
+        return new Set(this.readByteArray());
+    };
+
+    this.writeShortSet = function(set) {
+        if (set === null) {
+            this.writeInt(0);
+        } else {
+            this.writeInt(set.size);
+            set.forEach(element => {
+                this.writeShort(element);
+            });
+        }
+    };
+
+    this.readShortSet = function() {
+        return new Set(this.readShortArray());
+    };
+
+    this.writeIntSet = function(set) {
+        if (set === null) {
+            this.writeInt(0);
+        } else {
+            this.writeInt(set.size);
+            set.forEach(element => {
+                this.writeInt(element);
+            });
+        }
+    };
+
+    this.readIntSet = function() {
+        return new Set(this.readIntArray());
+    };
+
+    this.writeLongSet = function(set) {
+        if (array === null) {
+            set.writeInt(0);
+        } else {
+            this.writeInt(set.size);
+            set.forEach(element => {
+                this.writeLong(element);
+            });
+        }
+    };
+
+    this.readLongSet = function() {
+        return new Set(this.readLongArray());
+    };
+
+    this.writeFloatSet = function(set) {
+        if (set === null) {
+            this.writeInt(0);
+        } else {
+            this.writeInt(set.size);
+            set.forEach(element => {
+                this.writeFloat(element);
+            });
+        }
+    };
+
+    this.readFloatSet = function() {
+        return new Set(this.readFloatArray());
+    };
+
+    this.writeDoubleSet = function(set) {
+        if (set === null) {
+            this.writeInt(0);
+        } else {
+            this.writeInt(set.size);
+            set.forEach(element => {
+                this.writeDouble(element);
+            });
+        }
+    };
+
+    this.readDoubleSet = function() {
+        return new Set(this.readDoubleArray());
+    };
+
+    this.writeStringSet = function(set) {
+        if (set === null) {
+            this.writeInt(0);
+        } else {
+            this.writeInt(set.size);
+            set.forEach(element => {
+                this.writeString(element);
+            });
+        }
+    };
+
+    this.readStringSet = function() {
+        return new Set(this.readStringArray());
+    };
+
+    this.writeCharSet = function(set) {
+        if (set === null) {
+            this.writeInt(0);
+        } else {
+            this.writeInt(set.size);
+            set.forEach(element => {
+                this.writeChar(element);
+            });
+        }
+    };
+
+    this.readCharSet = function() {
+        return new Set(this.readCharArray());
+    };
+
+    this.writePacketSet = function(set, protocolId) {
+        if (set === null) {
+            this.writeInt(0);
+        } else {
+            const protocolRegistration = ProtocolManager.getProtocol(protocolId);
+            this.writeInt(set.size);
+            set.forEach(element => {
+                protocolRegistration.write(this, element);
+            });
+        }
+    };
+
+    this.readPacketSet = function(protocolId) {
+        return new Set(this.readPacketArray(protocolId));
+    };
+
+    // ---------------------------------------------map-------------------------------------------
     this.writeIntIntMap = function(map) {
         if (map === null) {
             this.writeInt(0);

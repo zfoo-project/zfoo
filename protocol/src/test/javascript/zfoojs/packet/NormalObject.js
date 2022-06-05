@@ -39,14 +39,14 @@ NormalObject.write = function(buffer, packet) {
     buffer.writeBoolean(packet.g);
     buffer.writeString(packet.jj);
     buffer.writePacket(packet.kk, 102);
-    buffer.writeIntArray(packet.l);
-    buffer.writeLongArray(packet.ll);
-    buffer.writePacketArray(packet.lll, 102);
-    buffer.writeStringArray(packet.llll);
+    buffer.writeIntList(packet.l);
+    buffer.writeLongList(packet.ll);
+    buffer.writePacketList(packet.lll, 102);
+    buffer.writeStringList(packet.llll);
     buffer.writeIntStringMap(packet.m);
     buffer.writeIntPacketMap(packet.mm, 102);
-    buffer.writeIntArray(packet.s);
-    buffer.writeStringArray(packet.ssss);
+    buffer.writeIntSet(packet.s);
+    buffer.writeStringSet(packet.ssss);
 };
 
 NormalObject.read = function(buffer) {
@@ -74,21 +74,21 @@ NormalObject.read = function(buffer) {
     packet.jj = result8;
     const result9 = buffer.readPacket(102);
     packet.kk = result9;
-    const list10 = buffer.readIntArray();
+    const list10 = buffer.readIntList();
     packet.l = list10;
-    const list11 = buffer.readLongArray();
+    const list11 = buffer.readLongList();
     packet.ll = list11;
-    const list12 = buffer.readPacketArray(102);
+    const list12 = buffer.readPacketList(102);
     packet.lll = list12;
-    const list13 = buffer.readStringArray();
+    const list13 = buffer.readStringList();
     packet.llll = list13;
     const map14 = buffer.readIntStringMap();
     packet.m = map14;
     const map15 = buffer.readIntPacketMap(102);
     packet.mm = map15;
-    const set16 = buffer.readIntArray();
+    const set16 = buffer.readIntSet();
     packet.s = set16;
-    const set17 = buffer.readStringArray();
+    const set17 = buffer.readStringSet();
     packet.ssss = set17;
     return packet;
 };

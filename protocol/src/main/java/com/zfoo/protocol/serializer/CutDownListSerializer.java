@@ -60,10 +60,8 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer.WriteBooleanList({});", objectStr)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("buffer.writeBooleanList({});", objectStr)).append(LS);
-                        break;
                     case JavaScript:
-                        builder.append(StringUtils.format("buffer.writeBooleanArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBooleanList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -84,10 +82,8 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer.WriteByteList({});", objectStr)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("buffer.writeByteList({});", objectStr)).append(LS);
-                        break;
                     case JavaScript:
-                        builder.append(StringUtils.format("buffer.writeByteArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeByteList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -108,10 +104,8 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer.WriteShortList({});", objectStr)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("buffer.writeShortList({});", objectStr)).append(LS);
-                        break;
                     case JavaScript:
-                        builder.append(StringUtils.format("buffer.writeShortArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeShortList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -132,10 +126,8 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer.WriteIntList({});", objectStr)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("buffer.writeIntList({});", objectStr)).append(LS);
-                        break;
                     case JavaScript:
-                        builder.append(StringUtils.format("buffer.writeIntArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeIntList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -156,10 +148,8 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer.WriteLongList({});", objectStr)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("buffer.writeLongList({});", objectStr)).append(LS);
-                        break;
                     case JavaScript:
-                        builder.append(StringUtils.format("buffer.writeLongArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeLongList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -181,10 +171,8 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer.WriteFloatList({});", objectStr)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("buffer.writeFloatList({});", objectStr)).append(LS);
-                        break;
                     case JavaScript:
-                        builder.append(StringUtils.format("buffer.writeFloatArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeFloatList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -206,10 +194,8 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer.WriteDoubleList({});", objectStr)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("buffer.writeDoubleList({});", objectStr)).append(LS);
-                        break;
                     case JavaScript:
-                        builder.append(StringUtils.format("buffer.writeDoubleArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeDoubleList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -231,10 +217,8 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer.WriteStringList({});", objectStr)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("buffer.writeStringList({});", objectStr)).append(LS);
-                        break;
                     case JavaScript:
-                        builder.append(StringUtils.format("buffer.writeStringArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeStringList({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -258,10 +242,8 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("buffer.WritePacketList({}, {});", objectStr, protocolId)).append(LS);
                             break;
                         case Cpp:
-                            builder.append(StringUtils.format("buffer.writePacketList({}, {});", objectStr, protocolId)).append(LS);
-                            break;
                         case JavaScript:
-                            builder.append(StringUtils.format("buffer.writePacketArray({}, {});", objectStr, protocolId)).append(LS);
+                            builder.append(StringUtils.format("buffer.writePacketList({}, {});", objectStr, protocolId)).append(LS);
                             break;
                         default:
                             flag = false;
@@ -300,7 +282,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readBooleanList();", list)).append(LS);
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = buffer.readBooleanArray();", list)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readBooleanList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -324,7 +306,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readByteList();", list)).append(LS);
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = buffer.readByteArray();", list)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readByteList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -348,7 +330,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readShortList();", list)).append(LS);
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = buffer.readShortArray();", list)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readShortList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -372,7 +354,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readIntList();", list)).append(LS);
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = buffer.readIntArray();", list)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readIntList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -396,7 +378,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readLongList();", list)).append(LS);
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = buffer.readLongArray();", list)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readLongList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -420,7 +402,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readFloatList();", list)).append(LS);
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = buffer.readFloatArray();", list)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readFloatList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -444,7 +426,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readDoubleList();", list)).append(LS);
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = buffer.readDoubleArray();", list)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readDoubleList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -468,7 +450,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readStringList();", list)).append(LS);
                         break;
                     case JavaScript:
-                        builder.append(StringUtils.format("const {} = buffer.readStringArray();", list)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readStringList();", list)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -494,7 +476,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readPacketList<{}>({});", list, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
                             break;
                         case JavaScript:
-                            builder.append(StringUtils.format("const {} = buffer.readPacketArray({});", list, protocolId)).append(LS);
+                            builder.append(StringUtils.format("const {} = buffer.readPacketList({});", list, protocolId)).append(LS);
                             break;
                         default:
                             flag = false;

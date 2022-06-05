@@ -108,7 +108,7 @@ ComplexObject.write = function(buffer, packet) {
     buffer.writeStringArray(packet.jjj);
     buffer.writePacket(packet.kk, 102);
     buffer.writePacketArray(packet.kkk, 102);
-    buffer.writeIntArray(packet.l);
+    buffer.writeIntList(packet.l);
     if (packet.ll === null) {
         buffer.writeInt(0);
     } else {
@@ -119,7 +119,7 @@ ComplexObject.write = function(buffer, packet) {
             } else {
                 buffer.writeInt(element0.length);
                 element0.forEach(element1 => {
-                    buffer.writeIntArray(element1);
+                    buffer.writeIntList(element1);
                 });
             }
         });
@@ -129,10 +129,10 @@ ComplexObject.write = function(buffer, packet) {
     } else {
         buffer.writeInt(packet.lll.length);
         packet.lll.forEach(element2 => {
-            buffer.writePacketArray(element2, 102);
+            buffer.writePacketList(element2, 102);
         });
     }
-    buffer.writeStringArray(packet.llll);
+    buffer.writeStringList(packet.llll);
     if (packet.lllll === null) {
         buffer.writeInt(0);
     } else {
@@ -149,7 +149,7 @@ ComplexObject.write = function(buffer, packet) {
         buffer.writeInt(packet.mmm.size);
         packet.mmm.forEach((value5, key4) => {
             buffer.writePacket(key4, 102);
-            buffer.writeIntArray(value5);
+            buffer.writeIntList(value5);
         });
     }
     if (packet.mmmm === null) {
@@ -162,7 +162,7 @@ ComplexObject.write = function(buffer, packet) {
             } else {
                 buffer.writeInt(key6.length);
                 key6.forEach(element8 => {
-                    buffer.writePacketArray(element8, 102);
+                    buffer.writePacketList(element8, 102);
                 });
             }
             if (value7 === null) {
@@ -175,7 +175,7 @@ ComplexObject.write = function(buffer, packet) {
                     } else {
                         buffer.writeInt(element9.length);
                         element9.forEach(element10 => {
-                            buffer.writeIntArray(element10);
+                            buffer.writeIntList(element10);
                         });
                     }
                 });
@@ -205,7 +205,7 @@ ComplexObject.write = function(buffer, packet) {
             }
         });
     }
-    buffer.writeIntArray(packet.s);
+    buffer.writeIntSet(packet.s);
     if (packet.ss === null) {
         buffer.writeInt(0);
     } else {
@@ -216,7 +216,7 @@ ComplexObject.write = function(buffer, packet) {
             } else {
                 buffer.writeInt(element15.size);
                 element15.forEach(element16 => {
-                    buffer.writeIntArray(element16);
+                    buffer.writeIntList(element16);
                 });
             }
         });
@@ -226,10 +226,10 @@ ComplexObject.write = function(buffer, packet) {
     } else {
         buffer.writeInt(packet.sss.size);
         packet.sss.forEach(element17 => {
-            buffer.writePacketArray(element17, 102);
+            buffer.writePacketSet(element17, 102);
         });
     }
-    buffer.writeStringArray(packet.ssss);
+    buffer.writeStringSet(packet.ssss);
     if (packet.sssss === null) {
         buffer.writeInt(0);
     } else {
@@ -319,7 +319,7 @@ ComplexObject.read = function(buffer) {
     packet.kk = result53;
     const array54 = buffer.readPacketArray(102);
     packet.kkk = array54;
-    const list55 = buffer.readIntArray();
+    const list55 = buffer.readIntList();
     packet.l = list55;
     const result56 = [];
     const size57 = buffer.readInt();
@@ -329,7 +329,7 @@ ComplexObject.read = function(buffer) {
             const size60 = buffer.readInt();
             if (size60 > 0) {
                 for (let index61 = 0; index61 < size60; index61++) {
-                    const list62 = buffer.readIntArray();
+                    const list62 = buffer.readIntList();
                     result59.push(list62);
                 }
             }
@@ -341,12 +341,12 @@ ComplexObject.read = function(buffer) {
     const size64 = buffer.readInt();
     if (size64 > 0) {
         for (let index65 = 0; index65 < size64; index65++) {
-            const list66 = buffer.readPacketArray(102);
+            const list66 = buffer.readPacketList(102);
             result63.push(list66);
         }
     }
     packet.lll = result63;
-    const list67 = buffer.readStringArray();
+    const list67 = buffer.readStringList();
     packet.llll = list67;
     const result68 = [];
     const size69 = buffer.readInt();
@@ -366,7 +366,7 @@ ComplexObject.read = function(buffer) {
     if (size75 > 0) {
         for (let index76 = 0; index76 < size75; index76++) {
             const result77 = buffer.readPacket(102);
-            const list78 = buffer.readIntArray();
+            const list78 = buffer.readIntList();
             result74.set(result77, list78);
         }
     }
@@ -379,7 +379,7 @@ ComplexObject.read = function(buffer) {
             const size83 = buffer.readInt();
             if (size83 > 0) {
                 for (let index84 = 0; index84 < size83; index84++) {
-                    const list85 = buffer.readPacketArray(102);
+                    const list85 = buffer.readPacketList(102);
                     result82.push(list85);
                 }
             }
@@ -391,7 +391,7 @@ ComplexObject.read = function(buffer) {
                     const size90 = buffer.readInt();
                     if (size90 > 0) {
                         for (let index91 = 0; index91 < size90; index91++) {
-                            const list92 = buffer.readIntArray();
+                            const list92 = buffer.readIntList();
                             result89.push(list92);
                         }
                     }
@@ -426,7 +426,7 @@ ComplexObject.read = function(buffer) {
         }
     }
     packet.mmmmm = result93;
-    const set104 = buffer.readIntArray();
+    const set104 = buffer.readIntSet();
     packet.s = set104;
     const result105 = new Set();
     const size106 = buffer.readInt();
@@ -436,7 +436,7 @@ ComplexObject.read = function(buffer) {
             const size109 = buffer.readInt();
             if (size109 > 0) {
                 for (let index110 = 0; index110 < size109; index110++) {
-                    const list111 = buffer.readIntArray();
+                    const list111 = buffer.readIntList();
                     result108.add(list111);
                 }
             }
@@ -448,12 +448,12 @@ ComplexObject.read = function(buffer) {
     const size113 = buffer.readInt();
     if (size113 > 0) {
         for (let index114 = 0; index114 < size113; index114++) {
-            const set115 = buffer.readPacketArray(102);
+            const set115 = buffer.readPacketSet(102);
             result112.add(set115);
         }
     }
     packet.sss = result112;
-    const set116 = buffer.readStringArray();
+    const set116 = buffer.readStringSet();
     packet.ssss = set116;
     const result117 = new Set();
     const size118 = buffer.readInt();
