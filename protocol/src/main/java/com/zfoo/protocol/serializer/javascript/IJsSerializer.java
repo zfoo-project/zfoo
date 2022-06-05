@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.serializer.javascript;
 
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 
 import java.lang.reflect.Field;
@@ -22,6 +23,11 @@ import java.lang.reflect.Field;
  * @version 3.0
  */
 public interface IJsSerializer {
+
+    /**
+     * 获取属性的类型和名称
+     */
+    Pair<String, String> field(Field field, IFieldRegistration fieldRegistration);
 
     void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration);
 

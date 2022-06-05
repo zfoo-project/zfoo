@@ -157,7 +157,7 @@ public abstract class GenerateCppUtils {
 
 
     private static String includeSubProtocol(ProtocolRegistration registration) {
-        short protocolId = registration.getId();
+        var protocolId = registration.getId();
         var subProtocols = ProtocolAnalysis.getAllSubProtocolIds(protocolId);
 
         if (CollectionUtils.isEmpty(subProtocols)) {

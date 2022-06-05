@@ -42,7 +42,7 @@ import java.util.concurrent.Executors;
  */
 public class SpeedTest {
 
-    private static int benchmark = 10_0000;
+    private static int benchmark = 1;
 
     /**
      * 单线程性能测试

@@ -61,6 +61,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("buffer.writeBooleanList({});", objectStr)).append(LS);
                         break;
                     default:
@@ -83,6 +84,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("buffer.writeByteList({});", objectStr)).append(LS);
                         break;
                     default:
@@ -105,6 +107,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("buffer.writeShortList({});", objectStr)).append(LS);
                         break;
                     default:
@@ -127,6 +130,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("buffer.writeIntList({});", objectStr)).append(LS);
                         break;
                     default:
@@ -149,6 +153,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("buffer.writeLongList({});", objectStr)).append(LS);
                         break;
                     default:
@@ -172,6 +177,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("buffer.writeFloatList({});", objectStr)).append(LS);
                         break;
                     default:
@@ -195,6 +201,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("buffer.writeDoubleList({});", objectStr)).append(LS);
                         break;
                     default:
@@ -218,6 +225,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("buffer.writeStringList({});", objectStr)).append(LS);
                         break;
                     default:
@@ -243,6 +251,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             break;
                         case Cpp:
                         case JavaScript:
+                        case TypeScript:
                             builder.append(StringUtils.format("buffer.writePacketList({}, {});", objectStr, protocolId)).append(LS);
                             break;
                         default:
@@ -282,6 +291,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readBooleanList();", list)).append(LS);
                         break;
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readBooleanList();", list)).append(LS);
                         break;
                     default:
@@ -306,6 +316,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readByteList();", list)).append(LS);
                         break;
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readByteList();", list)).append(LS);
                         break;
                     default:
@@ -330,6 +341,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readShortList();", list)).append(LS);
                         break;
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readShortList();", list)).append(LS);
                         break;
                     default:
@@ -354,6 +366,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readIntList();", list)).append(LS);
                         break;
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readIntList();", list)).append(LS);
                         break;
                     default:
@@ -378,6 +391,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readLongList();", list)).append(LS);
                         break;
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readLongList();", list)).append(LS);
                         break;
                     default:
@@ -402,6 +416,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readFloatList();", list)).append(LS);
                         break;
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readFloatList();", list)).append(LS);
                         break;
                     default:
@@ -426,6 +441,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readDoubleList();", list)).append(LS);
                         break;
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readDoubleList();", list)).append(LS);
                         break;
                     default:
@@ -450,6 +466,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readStringList();", list)).append(LS);
                         break;
                     case JavaScript:
+                    case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readStringList();", list)).append(LS);
                         break;
                     default:
@@ -476,6 +493,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readPacketList<{}>({});", list, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
                             break;
                         case JavaScript:
+                        case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readPacketList({});", list, protocolId)).append(LS);
                             break;
                         default:

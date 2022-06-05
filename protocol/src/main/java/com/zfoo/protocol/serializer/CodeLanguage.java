@@ -27,6 +27,8 @@ public enum CodeLanguage {
 
     JavaScript,
 
+    TypeScript,
+
     Lua,
 
     CSharp,

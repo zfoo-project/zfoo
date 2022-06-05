@@ -23,6 +23,7 @@ import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
 import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
+import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -122,6 +123,15 @@ public abstract class GenerateProtocolFile {
                 GenerateJsUtils.createJsProtocolFile((ProtocolRegistration) protocolRegistration);
             }
             GenerateJsUtils.createProtocolManager(allSortedGenerateProtocols);
+        }
+
+        // 生成TypeScript协议
+        if (generateLanguages.contains(CodeLanguage.TypeScript)) {
+            GenerateTsUtils.init(generateOperation);
+            for (var protocolRegistration : allSortedGenerateProtocols) {
+                GenerateTsUtils.createTsProtocolFile((ProtocolRegistration) protocolRegistration);
+            }
+            GenerateTsUtils.createProtocolManager(allSortedGenerateProtocols);
         }
 
         // 生成Lua协议
