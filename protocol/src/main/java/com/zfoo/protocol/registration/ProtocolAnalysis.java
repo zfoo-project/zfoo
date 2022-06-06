@@ -31,6 +31,7 @@ import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
 import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
 import com.zfoo.protocol.serializer.reflect.*;
+import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -205,6 +206,7 @@ public class ProtocolAnalysis {
         GenerateCppUtils.clear();
         GenerateCsUtils.clear();
         GenerateJsUtils.clear();
+        GenerateTsUtils.clear();
         GenerateLuaUtils.clear();
         GenerateGdUtils.clear();
         GenerateProtobufUtils.clear();

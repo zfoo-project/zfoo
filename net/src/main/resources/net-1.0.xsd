@@ -67,6 +67,7 @@
         <xsd:attribute name="id" type="xsd:string" use="required"/>
         <xsd:attribute name="protocol-location" type="xsd:string" use="required"/>
         <xsd:attribute name="javascript-protocol" type="xsd:string" default="false"/>
+        <xsd:attribute name="typescript-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="csharp-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="lua-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="gdscript-protocol" type="xsd:string" default="false"/>

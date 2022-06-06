@@ -36,6 +36,7 @@ public class NetConfig {
     private String protocolParam;
     // 是否生成对应语言的协议
     private boolean javascriptProtocol;
+    private boolean typescriptProtocol;
     private boolean csharpProtocol;
     private boolean luaProtocol;
     private boolean gdscriptProtocol;
@@ -171,6 +172,14 @@ public class NetConfig {
 
     public void setCppProtocol(boolean cppProtocol) {
         this.cppProtocol = cppProtocol;
+    }
+
+    public boolean isTypescriptProtocol() {
+        return typescriptProtocol;
+    }
+
+    public void setTypescriptProtocol(boolean typescriptProtocol) {
+        this.typescriptProtocol = typescriptProtocol;
     }
 
     @Override

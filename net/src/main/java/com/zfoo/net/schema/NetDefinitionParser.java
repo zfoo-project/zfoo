@@ -90,6 +90,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("id", "id", builder, element, parserContext);
         resolvePlaceholder("protocol-location", "protocolLocation", builder, element, parserContext);
         resolvePlaceholder("javascript-protocol", "javascriptProtocol", builder, element, parserContext);
+        resolvePlaceholder("typescript-protocol", "typescriptProtocol", builder, element, parserContext);
         resolvePlaceholder("csharp-protocol", "csharpProtocol", builder, element, parserContext);
         resolvePlaceholder("lua-protocol", "luaProtocol", builder, element, parserContext);
         resolvePlaceholder("gdscript-protocol", "gdscriptProtocol", builder, element, parserContext);
