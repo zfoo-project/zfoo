@@ -19,7 +19,6 @@ import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.CutDownArraySerializer;
-import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -58,7 +57,7 @@ public class TsArraySerializer implements ITsSerializer {
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach({} => {", objectStr, element)).append(LS);
-        GenerateJsUtils.jsSerializer(arrayField.getArrayElementRegistration().serializer())
+        GenerateTsUtils.tsSerializer(arrayField.getArrayElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("});").append(LS);
@@ -89,7 +88,7 @@ public class TsArraySerializer implements ITsSerializer {
         builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
-        String readObject = GenerateJsUtils.jsSerializer(arrayField.getArrayElementRegistration().serializer())
+        String readObject = GenerateTsUtils.tsSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.push({});", result, readObject)).append(LS);

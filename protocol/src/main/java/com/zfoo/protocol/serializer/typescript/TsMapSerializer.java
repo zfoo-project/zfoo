@@ -19,7 +19,6 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.CutDownMapSerializer;
-import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -60,9 +59,9 @@ public class TsMapSerializer implements ITsSerializer {
 
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach(({}, {}) => {", objectStr, value, key)).append(LS);
-        GenerateJsUtils.jsSerializer(mapField.getMapKeyRegistration().serializer())
+        GenerateTsUtils.tsSerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
-        GenerateJsUtils.jsSerializer(mapField.getMapValueRegistration().serializer())
+        GenerateTsUtils.tsSerializer(mapField.getMapValueRegistration().serializer())
                 .writeObject(builder, value, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("});").append(LS);
@@ -94,11 +93,11 @@ public class TsMapSerializer implements ITsSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
 
-        String keyObject = GenerateJsUtils.jsSerializer(mapField.getMapKeyRegistration().serializer())
+        String keyObject = GenerateTsUtils.tsSerializer(mapField.getMapKeyRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapKeyRegistration());
 
 
-        String valueObject = GenerateJsUtils.jsSerializer(mapField.getMapValueRegistration().serializer())
+        String valueObject = GenerateTsUtils.tsSerializer(mapField.getMapValueRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
 
