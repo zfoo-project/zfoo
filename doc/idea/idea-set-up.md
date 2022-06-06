@@ -15,7 +15,7 @@
 安装好以后，在git bash中输入：git --version，有结果返回则表示安装成功
 ```
 
-- git下载代码慢的解决方法|无法下载代码的解决方法
+- git下载代码慢的解决方法|无法下载代码的解决方法，取消git配置使用git config --global --unset http.proxy
 
 ```
 使用vpn

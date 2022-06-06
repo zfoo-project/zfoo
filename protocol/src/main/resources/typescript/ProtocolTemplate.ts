@@ -4,19 +4,22 @@ class {} {
 
     {}
 
-    constructor({}) {
-        {}
-    }
-
     protocolId(): number {
         return {};
     }
 
-    static write(buffer: Any, packet: {}) {
+    static write(buffer: any, packet: {} | null) {
+        if (buffer.writePacketFlag(packet)) {
+            return;
+        }
+        if (packet === null) {
+            return;
+        }
+
         {}
     }
 
-    static read(buffer: Any): {} {
+    static read(buffer: any): {} | null {
         if (!buffer.readBoolean()) {
             return null;
         }

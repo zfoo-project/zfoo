@@ -14,6 +14,7 @@
 package com.zfoo.protocol.serializer.typescript;
 
 import com.zfoo.protocol.model.Pair;
+import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 
 import java.lang.reflect.Field;
@@ -25,9 +26,9 @@ import java.lang.reflect.Field;
 public interface ITsSerializer {
 
     /**
-     * 获取属性的类型和名称
+     * 获取属性的类型，名称，默认值
      */
-    Pair<String, String> field(Field field, IFieldRegistration fieldRegistration);
+    Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration);
 
     void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration);
 

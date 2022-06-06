@@ -122,13 +122,11 @@ public abstract class GenerateTsUtils {
         var importSubProtocol = importSubProtocol(registration);
         var docTitle = docTitle(registration);
         var fieldDefinition = fieldDefinition(registration);
-        var valueOfMethod = valueOfMethod(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
         protocolTemplate = StringUtils.format(protocolTemplate, importSubProtocol, docTitle, protocolClazzName, fieldDefinition.trim()
-                , valueOfMethod.getKey().trim(), valueOfMethod.getValue().trim(), protocolId, protocolClazzName
-                , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
+                , protocolId, protocolClazzName, writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
         var protocolOutputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputRootPath
                 , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate);
@@ -144,8 +142,12 @@ public abstract class GenerateTsUtils {
         var importBuilder = new StringBuilder();
         for (var subProtocolId : subProtocols) {
             var protocolClassName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
-            var path = GenerateProtocolPath.getProtocolPath(protocolId);
-            importBuilder.append(StringUtils.format("import {} from './{}';", protocolClassName, protocolClassName)).append(LS);
+            var path = GenerateProtocolPath.getRelativePath(protocolId, subProtocolId);
+            if (StringUtils.isBlank(path)) {
+                importBuilder.append(StringUtils.format("import {} from './{}';", protocolClassName, protocolClassName)).append(LS);
+            } else {
+                importBuilder.append(StringUtils.format("import {} from '{}/{}';", protocolClassName, path, protocolClassName)).append(LS);
+            }
         }
         return importBuilder.toString();
     }
@@ -178,33 +180,10 @@ public abstract class GenerateTsUtils {
                 Arrays.stream(doc.split(LS)).forEach(it -> fieldDefinitionBuilder.append(TAB).append(it).append(LS));
             }
 
-            var propertyTypeAndName = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
-            fieldDefinitionBuilder.append(TAB).append(StringUtils.format("{}: {};", propertyTypeAndName.getValue(), propertyTypeAndName.getKey())).append(LS);
+            var triple = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
+            fieldDefinitionBuilder.append(TAB).append(StringUtils.format("{}{} = {};", triple.getMiddle(), triple.getLeft(), triple.getRight())).append(LS);
         }
         return fieldDefinitionBuilder.toString();
-    }
-
-    private static Pair<String, String> valueOfMethod(ProtocolRegistration registration) {
-        var protocolId = registration.getId();
-        var fields = registration.getFields();
-        var fieldRegistrations = registration.getFieldRegistrations();
-
-        var filedList = new ArrayList<Pair<String, String>>();
-        for (int i = 0; i < fields.length; i++) {
-            var field = fields[i];
-            var fieldRegistration = fieldRegistrations[i];
-            var propertyTypeAndName = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
-            filedList.add(propertyTypeAndName);
-        }
-
-        var valueOfParams = filedList.stream()
-                .map(it -> StringUtils.format("{}: {}", it.getValue(), it.getKey()))
-                .collect(Collectors.toList());
-        var valueOfParamsStr = StringUtils.joinWith(StringUtils.COMMA + " ", valueOfParams.toArray());
-
-        var cppBuilder = new StringBuilder();
-        filedList.forEach(it -> cppBuilder.append(TAB + TAB).append(StringUtils.format("this.{} = {};", it.getValue(), it.getValue())).append(LS));
-        return new Pair<>(valueOfParamsStr, cppBuilder.toString());
     }
 
     private static String writeObject(ProtocolRegistration registration) {
@@ -227,13 +206,98 @@ public abstract class GenerateTsUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                jsBuilder.append(TAB).append("if (!buffer.isReadable()) {").append(LS);
-                jsBuilder.append(TAB + TAB).append("return packet;").append(LS);
-                jsBuilder.append(TAB).append("}").append(LS);
+                jsBuilder.append(TAB + TAB).append("if (!buffer.isReadable()) {").append(LS);
+                jsBuilder.append(TAB + TAB + TAB).append("return packet;").append(LS);
+                jsBuilder.append(TAB + TAB).append("}").append(LS);
             }
             var readObject = tsSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 2, field, fieldRegistration);
             jsBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
         }
         return jsBuilder.toString();
+    }
+
+    public static String toTsClassName(String typeName) {
+        typeName = typeName.replaceAll("java.util.|java.lang.", StringUtils.EMPTY);
+        typeName = typeName.replaceAll("com\\.[a-zA-Z0-9_.]*\\.", StringUtils.EMPTY);
+
+        // CSharp不适用基础类型的泛型，会影响性能
+        switch (typeName) {
+            case "boolean":
+            case "Boolean":
+                typeName = "boolean";
+                return typeName;
+            case "byte":
+            case "Byte":
+            case "short":
+            case "Short":
+            case "int":
+            case "Integer":
+            case "long":
+            case "Long":
+            case "float":
+            case "Float":
+            case "double":
+            case "Double":
+                typeName = "number";
+                return typeName;
+            case "char":
+            case "Character":
+            case "String":
+                typeName = "string";
+                return typeName;
+            default:
+        }
+
+        // 将boolean转为bool
+        typeName = typeName.replaceAll("[B|b]oolean\\[", "boolean");
+        typeName = typeName.replace("<Boolean", "<boolean");
+        typeName = typeName.replace("Boolean>", "boolean>");
+
+        // 将Byte转为byte
+        typeName = typeName.replace("Byte[", "number");
+        typeName = typeName.replace("Byte>", "number>");
+        typeName = typeName.replace("<Byte", "<number");
+
+        // 将Short转为short
+        typeName = typeName.replace("Short[", "number");
+        typeName = typeName.replace("Short>", "number>");
+        typeName = typeName.replace("<Short", "<number");
+
+        // 将Integer转为int
+        typeName = typeName.replace("Integer[", "number");
+        typeName = typeName.replace("Integer>", "number>");
+        typeName = typeName.replace("<Integer", "<number");
+
+
+        // 将Long转为long
+        typeName = typeName.replace("Long[", "number");
+        typeName = typeName.replace("Long>", "number>");
+        typeName = typeName.replace("<Long", "<number");
+
+        // 将Float转为float
+        typeName = typeName.replace("Float[", "number");
+        typeName = typeName.replace("Float>", "number>");
+        typeName = typeName.replace("<Float", "<number");
+
+        // 将Double转为double
+        typeName = typeName.replace("Double[", "number");
+        typeName = typeName.replace("Double>", "number>");
+        typeName = typeName.replace("<Double", "<number");
+
+        // 将Character转为Char
+        typeName = typeName.replace("Character[", "string");
+        typeName = typeName.replace("Character>", "string>");
+        typeName = typeName.replace("<Character", "<string");
+
+        // 将String转为string
+        typeName = typeName.replace("String[", "string");
+        typeName = typeName.replace("String>", "string>");
+        typeName = typeName.replace("<String", "<string");
+
+        typeName = typeName.replace("Map<", "Map<");
+        typeName = typeName.replace("Set<", "Set<");
+        typeName = typeName.replace("List<", "Array<");
+
+        return typeName;
     }
 }

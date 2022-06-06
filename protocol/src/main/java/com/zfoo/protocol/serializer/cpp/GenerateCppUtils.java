@@ -408,6 +408,4 @@ public abstract class GenerateCppUtils {
 
         return typeName;
     }
-
-
 }

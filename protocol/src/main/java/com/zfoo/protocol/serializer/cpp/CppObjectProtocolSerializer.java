@@ -37,8 +37,7 @@ public class CppObjectProtocolSerializer implements ICppSerializer {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
         var type = StringUtils.format("{}", protocolSimpleName);
-        var name = field.getName();
-        return new Pair<>(type, name);
+        return new Pair<>(type, field.getName());
     }
 
     @Override

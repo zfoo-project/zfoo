@@ -57,13 +57,13 @@ public abstract class GenerateProtocolPath {
         var protocolPath = protocolPathMap.get(protocolId);
         var relativePath = protocolPathMap.get(relativeProtocolId);
         if (relativePath.startsWith(protocolPath)) {
-            return StringUtils.substringAfterFirst(relativePath, protocolPath).replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH);
+            return StringUtils.format(".{}", StringUtils.substringAfterFirst(relativePath, protocolPath).replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH));
         }
 
         var splits = protocolPath.split(StringUtils.PERIOD_REGEX);
         var builder = new StringBuilder();
 
-        for (var i = splits.length - 1; i > 0; i--) {
+        for (var i = splits.length; i > 0; i--) {
             builder.append("../");
             var path = StringUtils.joinWith(StringUtils.PERIOD, Arrays.stream(splits).limit(i).collect(Collectors.toList()).toArray());
             if (relativePath.startsWith(path)) {

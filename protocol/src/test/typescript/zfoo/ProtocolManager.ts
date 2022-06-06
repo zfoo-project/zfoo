@@ -1,9 +1,17 @@
-{}
+import ComplexObject from './packet/ComplexObject';
+import NormalObject from './packet/NormalObject';
+import ObjectA from './packet/ObjectA';
+import ObjectB from './packet/ObjectB';
+import SimpleObject from './packet/SimpleObject';
 
 const protocols = new Map<number, any>();
 
 // initProtocol
-{}
+protocols.set(100, ComplexObject);
+protocols.set(101, NormalObject);
+protocols.set(102, ObjectA);
+protocols.set(103, ObjectB);
+protocols.set(104, SimpleObject);
 
 class ProtocolManager {
     static getProtocol(protocolId: number): any {

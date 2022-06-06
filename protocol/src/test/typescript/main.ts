@@ -1,4 +1,5 @@
-import ByteBuffer from './zfoojs/buffer/ByteBuffer';
+import ByteBuffer from './zfoo/buffer/ByteBuffer';
+import ProtocolManager from './zfoo/ProtocolManager';
 
 function assert(flag: boolean): void {
     if (!flag) {
@@ -8,6 +9,37 @@ function assert(flag: boolean): void {
 
 // 如果是在idea中运行，需要先安装插件：Run Configuration for TypeScript
 console.log("Hello world");
+
+
+const data = fs.readFileSync('C:\\zfoo\\protocol\\src\\test\\resources\\ComplexObject.bytes');
+
+const arrayBytes = new Uint8Array(data.length);
+data.copy(arrayBytes, 0, 0, data.length);
+
+const byteBuffer = new ByteBuffer();
+byteBuffer.writeBytes(arrayBytes);
+
+const packet = ProtocolManager.read(byteBuffer);
+// complexObjec是老的协议，所以序列化回来myCompatible是nil，所以要重新赋值
+packet.myCompatible = 0
+console.log(packet);
+
+const newByteBuffer = new ByteBuffer();
+ProtocolManager.write(newByteBuffer, packet);
+
+const newPacket = ProtocolManager.read(newByteBuffer);
+console.log(newPacket);
+
+assert(byteBuffer.readOffset <= newByteBuffer.writeOffset);
+
+// set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
+const length = newByteBuffer.writeOffset;
+byteBuffer.setReadOffset(0);
+newByteBuffer.setReadOffset(0);
+for (let i = 0; i < length; i++) {
+    assert(byteBuffer.readByte() == newByteBuffer.readByte());
+}
+
 
 
 

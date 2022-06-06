@@ -35,8 +35,7 @@ public class CppSetSerializer implements ICppSerializer {
     @Override
     public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
         var type = GenerateCppUtils.toCppClassName(field.getGenericType().toString());
-        var name = StringUtils.format("{}", field.getName());
-        return new Pair<>(type, name);
+        return new Pair<>(type, field.getName());
     }
 
     @Override

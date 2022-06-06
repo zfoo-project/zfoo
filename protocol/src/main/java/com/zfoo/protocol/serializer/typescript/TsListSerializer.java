@@ -14,7 +14,7 @@
 package com.zfoo.protocol.serializer.typescript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Pair;
+import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ListField;
 import com.zfoo.protocol.serializer.CodeLanguage;
@@ -32,8 +32,9 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class TsListSerializer implements ITsSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Pair<>("Array", field.getName());
+    public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
+        var type = StringUtils.format(": {} | null", GenerateTsUtils.toTsClassName(field.getGenericType().toString()));
+        return new Triple<>(type, field.getName(), "null");
     }
 
     @Override
@@ -75,8 +76,8 @@ public class TsListSerializer implements ITsSerializer {
 
         ListField listField = (ListField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
-
-        builder.append(StringUtils.format("const {} = [];", result)).append(LS);
+        var typeName = GenerateTsUtils.toTsClassName(listField.getType().toString());
+        builder.append(StringUtils.format("const {} = new {}();", result, typeName)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         String size = "size" + GenerateProtocolFile.index.getAndIncrement();

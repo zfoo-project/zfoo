@@ -723,8 +723,8 @@ const ByteBuffer = function() {
     };
 
     this.writeLongSet = function(set) {
-        if (array === null) {
-            set.writeInt(0);
+        if (set === null) {
+            this.writeInt(0);
         } else {
             this.writeInt(set.size);
             set.forEach(element => {
