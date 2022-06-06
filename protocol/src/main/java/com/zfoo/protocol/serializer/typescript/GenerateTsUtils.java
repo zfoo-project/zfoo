@@ -24,7 +24,6 @@ import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
-import com.zfoo.protocol.serializer.javascript.*;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -47,11 +46,33 @@ public abstract class GenerateTsUtils {
 
     private static String protocolOutputRootPath = "tsProtocol/";
 
+    private static Map<ISerializer, ITsSerializer> tsSerializerMap;
+
+    public static ITsSerializer tsSerializer(ISerializer serializer) {
+        return tsSerializerMap.get(serializer);
+    }
+
     public static void init(GenerateOperation generateOperation) {
         protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
 
         FileUtils.deleteFile(new File(protocolOutputRootPath));
         FileUtils.createDirectory(protocolOutputRootPath);
+
+        tsSerializerMap = new HashMap<>();
+        tsSerializerMap.put(BooleanSerializer.INSTANCE, new TsBooleanSerializer());
+        tsSerializerMap.put(ByteSerializer.INSTANCE, new TsByteSerializer());
+        tsSerializerMap.put(ShortSerializer.INSTANCE, new TsShortSerializer());
+        tsSerializerMap.put(IntSerializer.INSTANCE, new TsIntSerializer());
+        tsSerializerMap.put(LongSerializer.INSTANCE, new TsLongSerializer());
+        tsSerializerMap.put(FloatSerializer.INSTANCE, new TsFloatSerializer());
+        tsSerializerMap.put(DoubleSerializer.INSTANCE, new TsDoubleSerializer());
+        tsSerializerMap.put(CharSerializer.INSTANCE, new TsCharSerializer());
+        tsSerializerMap.put(StringSerializer.INSTANCE, new TsStringSerializer());
+        tsSerializerMap.put(ArraySerializer.INSTANCE, new TsArraySerializer());
+        tsSerializerMap.put(ListSerializer.INSTANCE, new TsListSerializer());
+        tsSerializerMap.put(SetSerializer.INSTANCE, new TsSetSerializer());
+        tsSerializerMap.put(MapSerializer.INSTANCE, new TsMapSerializer());
+        tsSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new TsObjectProtocolSerializer());
     }
 
     public static void clear() {
@@ -157,7 +178,7 @@ public abstract class GenerateTsUtils {
                 Arrays.stream(doc.split(LS)).forEach(it -> fieldDefinitionBuilder.append(TAB).append(it).append(LS));
             }
 
-            var propertyTypeAndName = GenerateJsUtils.jsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
+            var propertyTypeAndName = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
             fieldDefinitionBuilder.append(TAB).append(StringUtils.format("{}: {};", propertyTypeAndName.getValue(), propertyTypeAndName.getKey())).append(LS);
         }
         return fieldDefinitionBuilder.toString();
@@ -172,7 +193,7 @@ public abstract class GenerateTsUtils {
         for (int i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            var propertyTypeAndName = GenerateJsUtils.jsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
+            var propertyTypeAndName = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
             filedList.add(propertyTypeAndName);
         }
 
@@ -193,7 +214,7 @@ public abstract class GenerateTsUtils {
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            GenerateJsUtils.jsSerializer(fieldRegistration.serializer()).writeObject(jsBuilder, "packet." + field.getName(), 2, field, fieldRegistration);
+            tsSerializer(fieldRegistration.serializer()).writeObject(jsBuilder, "packet." + field.getName(), 2, field, fieldRegistration);
         }
         return jsBuilder.toString();
     }
@@ -210,7 +231,7 @@ public abstract class GenerateTsUtils {
                 jsBuilder.append(TAB + TAB).append("return packet;").append(LS);
                 jsBuilder.append(TAB).append("}").append(LS);
             }
-            var readObject = GenerateJsUtils.jsSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 2, field, fieldRegistration);
+            var readObject = tsSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 2, field, fieldRegistration);
             jsBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
         }
         return jsBuilder.toString();

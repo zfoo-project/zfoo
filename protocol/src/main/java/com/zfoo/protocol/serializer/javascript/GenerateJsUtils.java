@@ -48,7 +48,17 @@ public abstract class GenerateJsUtils {
 
     private static Map<ISerializer, IJsSerializer> jsSerializerMap;
 
-    static {
+
+    public static IJsSerializer jsSerializer(ISerializer serializer) {
+        return jsSerializerMap.get(serializer);
+    }
+
+    public static void init(GenerateOperation generateOperation) {
+        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+
+        FileUtils.deleteFile(new File(protocolOutputRootPath));
+        FileUtils.createDirectory(protocolOutputRootPath);
+
         jsSerializerMap = new HashMap<>();
         jsSerializerMap.put(BooleanSerializer.INSTANCE, new JsBooleanSerializer());
         jsSerializerMap.put(ByteSerializer.INSTANCE, new JsByteSerializer());
@@ -64,17 +74,6 @@ public abstract class GenerateJsUtils {
         jsSerializerMap.put(SetSerializer.INSTANCE, new JsSetSerializer());
         jsSerializerMap.put(MapSerializer.INSTANCE, new JsMapSerializer());
         jsSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new JsObjectProtocolSerializer());
-    }
-
-    public static IJsSerializer jsSerializer(ISerializer serializer) {
-        return jsSerializerMap.get(serializer);
-    }
-
-    public static void init(GenerateOperation generateOperation) {
-        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
-
-        FileUtils.deleteFile(new File(protocolOutputRootPath));
-        FileUtils.createDirectory(protocolOutputRootPath);
     }
 
     public static void clear() {

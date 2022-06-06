@@ -11,9 +11,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.javascript;
+package com.zfoo.protocol.serializer.typescript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -25,18 +26,24 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  * @author jaysunxiao
  * @version 3.0
  */
-public class JsShortSerializer implements IJsSerializer {
+public class TsIntSerializer implements ITsSerializer {
+
+    @Override
+    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+        return new Pair<>("number", field.getName());
+    }
+
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeShort({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeInt({});", objectStr)).append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("const {} = buffer.readShort();", result)).append(LS);
+        builder.append(StringUtils.format("const {} = buffer.readInt();", result)).append(LS);
         return result;
     }
 }

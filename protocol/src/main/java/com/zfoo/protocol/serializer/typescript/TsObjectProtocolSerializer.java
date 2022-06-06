@@ -11,10 +11,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.javascript;
+package com.zfoo.protocol.serializer.typescript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
+import com.zfoo.protocol.registration.field.ObjectProtocolField;
+import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -25,18 +28,29 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  * @author jaysunxiao
  * @version 3.0
  */
-public class JsShortSerializer implements IJsSerializer {
+public class TsObjectProtocolSerializer implements ITsSerializer {
+
+    @Override
+    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+        ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
+        var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
+        var type = StringUtils.format("{}", protocolSimpleName);
+        return new Pair<>(type, field.getName());
+    }
+
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
+        ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeShort({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writePacket({}, {});", objectStr, objectProtocolField.getProtocolId())).append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
+        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("const {} = buffer.readShort();", result)).append(LS);
+        builder.append(StringUtils.format("const {} = buffer.readPacket({});", result, objectProtocolField.getProtocolId())).append(LS);
         return result;
     }
 }

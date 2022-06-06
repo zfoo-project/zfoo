@@ -53,6 +53,28 @@ public abstract class GenerateProtocolPath {
         return protocolPath.replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH);
     }
 
+    public static String getRelativePath(short protocolId, short relativeProtocolId) {
+        var protocolPath = protocolPathMap.get(protocolId);
+        var relativePath = protocolPathMap.get(relativeProtocolId);
+        if (relativePath.startsWith(protocolPath)) {
+            return StringUtils.substringAfterFirst(relativePath, protocolPath).replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH);
+        }
+
+        var splits = protocolPath.split(StringUtils.PERIOD_REGEX);
+        var builder = new StringBuilder();
+
+        for (var i = splits.length - 1; i > 0; i--) {
+            builder.append("../");
+            var path = StringUtils.joinWith(StringUtils.PERIOD, Arrays.stream(splits).limit(i).collect(Collectors.toList()).toArray());
+            if (relativePath.startsWith(path)) {
+                builder.append(StringUtils.substringAfterFirst(relativePath, path).replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH));
+                return builder.toString();
+            }
+        }
+        builder.append(relativePath.replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH));
+        return builder.toString();
+    }
+
     /**
      * 获取协议生成的首字母大写的路径
      */

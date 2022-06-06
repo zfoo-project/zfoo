@@ -14,7 +14,6 @@
 package com.zfoo.protocol.serializer.javascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.SetField;
 import com.zfoo.protocol.serializer.CodeLanguage;
@@ -30,12 +29,6 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  * @version 3.0
  */
 public class JsSetSerializer implements IJsSerializer {
-
-    @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Pair<>("Set", field.getName());
-    }
-
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);

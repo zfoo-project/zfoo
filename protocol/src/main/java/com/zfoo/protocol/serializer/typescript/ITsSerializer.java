@@ -11,8 +11,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.javascript;
+package com.zfoo.protocol.serializer.typescript;
 
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 
 import java.lang.reflect.Field;
@@ -21,7 +22,12 @@ import java.lang.reflect.Field;
  * @author jaysunxiao
  * @version 3.0
  */
-public interface IJsSerializer {
+public interface ITsSerializer {
+
+    /**
+     * 获取属性的类型和名称
+     */
+    Pair<String, String> field(Field field, IFieldRegistration fieldRegistration);
 
     void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration);
 

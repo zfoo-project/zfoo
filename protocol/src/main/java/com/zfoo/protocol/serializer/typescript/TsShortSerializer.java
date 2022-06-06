@@ -11,9 +11,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.javascript;
+package com.zfoo.protocol.serializer.typescript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -25,7 +26,13 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  * @author jaysunxiao
  * @version 3.0
  */
-public class JsShortSerializer implements IJsSerializer {
+public class TsShortSerializer implements ITsSerializer {
+
+    @Override
+    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+        return new Pair<>("number", field.getName());
+    }
+
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
