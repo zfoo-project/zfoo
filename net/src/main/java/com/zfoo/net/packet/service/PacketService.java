@@ -90,6 +90,9 @@ public class PacketService implements IPacketService {
         if (netConfig.isJavascriptProtocol()) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.JavaScript);
         }
+        if (netConfig.isTypescriptProtocol()) {
+            generateOperation.getGenerateLanguages().add(CodeLanguage.TypeScript);
+        }
         if (netConfig.isCsharpProtocol()) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.CSharp);
         }

@@ -77,6 +77,7 @@ public abstract class GenerateTsUtils {
 
     public static void clear() {
         protocolOutputRootPath = null;
+        tsSerializerMap = null;
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
