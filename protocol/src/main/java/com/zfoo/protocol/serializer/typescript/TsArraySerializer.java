@@ -76,7 +76,7 @@ public class TsArraySerializer implements ITsSerializer {
 
         ArrayField arrayField = (ArrayField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
-        var typeName = GenerateTsUtils.toTsClassName(arrayField.getType().getSimpleName());
+        var typeName =  StringUtils.format("Array<{}>", GenerateTsUtils.toTsClassName(arrayField.getType().getSimpleName()));
         builder.append(StringUtils.format("const {} = new {};", result, typeName)).append(LS);
 
         String i = "index" + GenerateProtocolFile.index.getAndIncrement();
