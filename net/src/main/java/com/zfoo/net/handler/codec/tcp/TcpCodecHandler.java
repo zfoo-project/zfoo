@@ -62,6 +62,7 @@ public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
 
         ByteBuf tmpByteBuf = null;
         try {
+            // readRetainedSlice和byte[]数组相比，readRetainedSlice减少了垃圾回收
             tmpByteBuf = in.readRetainedSlice(length);
             DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
             out.add(packetInfo);
