@@ -21,7 +21,6 @@ import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
-import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.*;
 import com.zfoo.protocol.serializer.reflect.*;
@@ -122,7 +121,7 @@ public abstract class GenerateProtobufUtils {
         for (var protos : xmlProtobuf.getProtos()) {
             for (var protocol : protos.getProtocols()) {
                 var protocolClass = Class.forName(protocol.getLocation());
-                var protocolId = ProtocolAnalysis.getProtocolIdByClass(protocolClass);
+                var protocolId = ProtocolManager.getProtocolIdByClass(protocolClass);
                 var protocolRegistration = ProtocolManager.getProtocol(protocolId);
 
                 if (allGenerateProtocols.contains(protocolRegistration)) {
@@ -189,7 +188,7 @@ public abstract class GenerateProtobufUtils {
 
             for (var protocol : protos.getProtocols()) {
                 var protocolClass = Class.forName(protocol.getLocation());
-                var protocolId = ProtocolAnalysis.getProtocolIdByClass(protocolClass);
+                var protocolId = ProtocolManager.getProtocolIdByClass(protocolClass);
                 var protocolRegistration = ProtocolManager.getProtocol(protocolId);
 
                 var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);

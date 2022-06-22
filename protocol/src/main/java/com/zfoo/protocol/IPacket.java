@@ -23,9 +23,15 @@ public interface IPacket {
 
     /**
      * 这个类的协议号
+     * <p>
+     * 子类可以不用重写这个方法，也能够通过反射自动获取到PROTOCOL_ID这个协议号，序列化一次对象只会调用一次，性能损失很小
+     * <p>
+     * 重写这个方法，使用多态获取协议号，可以提高一点性能
      *
      * @return 协议号Id
      */
-    short protocolId();
+    default short protocolId() {
+        return ProtocolManager.getProtocolIdByClass(this.getClass());
+    }
 
 }

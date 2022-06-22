@@ -402,12 +402,6 @@ public class ProtocolAnalysis {
         throw new RunException("[type:{}]类型不正确", type);
     }
 
-    public static short getProtocolIdByClass(Class<?> clazz) {
-        var protocolIdField = ReflectionUtils.getFieldByNameInPOJOClass(clazz, PROTOCOL_ID);
-        ReflectionUtils.makeAccessible(protocolIdField);
-        return (short) ReflectionUtils.getField(protocolIdField, null);
-    }
-
 
     /**
      * 此方法仅在生成协议的时候调用，一旦运行，不能调用

@@ -18,12 +18,11 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.xml.XmlProtocols;
 import io.netty.buffer.ByteBuf;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -87,16 +86,21 @@ public class ProtocolManager {
         return moduleOptional.get();
     }
 
+    public static short getProtocolIdByClass(Class<?> clazz) {
+        var protocolIdField = ReflectionUtils.getFieldByNameInPOJOClass(clazz, PROTOCOL_ID);
+        return (short) ReflectionUtils.getField(protocolIdField, null);
+    }
+
     public static void initProtocol(Set<Class<?>> protocolClassSet) {
         ProtocolAnalysis.analyze(protocolClassSet, GenerateOperation.NO_OPERATION);
     }
 
     public static void initProtocol(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
-        ProtocolAnalysis.analyze(protocolClassSet,  generateOperation);
+        ProtocolAnalysis.analyze(protocolClassSet, generateOperation);
     }
 
     public static void initProtocol(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
-        ProtocolAnalysis.analyze(xmlProtocols,  generateOperation);
+        ProtocolAnalysis.analyze(xmlProtocols, generateOperation);
     }
 
 }

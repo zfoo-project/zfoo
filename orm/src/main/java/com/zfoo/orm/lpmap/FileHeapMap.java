@@ -16,7 +16,6 @@ import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.registration.IProtocolRegistration;
-import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -37,17 +36,17 @@ import java.util.function.BiConsumer;
  */
 public class FileHeapMap<V extends IPacket> implements LpMap<V> {
 
-    private File dbFile;
+    private final File dbFile;
 
-    private IProtocolRegistration protocolRegistration;
+    private final IProtocolRegistration protocolRegistration;
 
-    private HeapMap<V> heapMap;
+    private final HeapMap<V> heapMap;
 
     public FileHeapMap(String dbPath, Class<V> clazz) {
         try {
             this.dbFile = FileUtils.getOrCreateFile(dbPath, StringUtils.format("{}.db", clazz.getSimpleName()));
 
-            var protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
+            var protocolId = ProtocolManager.getProtocolIdByClass(clazz);
             protocolRegistration = ProtocolManager.getProtocol(protocolId);
             heapMap = new HeapMap<>();
 

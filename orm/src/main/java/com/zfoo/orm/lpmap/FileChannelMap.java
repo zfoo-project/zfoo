@@ -16,7 +16,6 @@ import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.registration.IProtocolRegistration;
-import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -40,11 +39,11 @@ import java.util.function.BiConsumer;
  */
 public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
 
-    private File dbFile;
+    private final File dbFile;
     protected RandomAccessFile dbFileRandomAccess;
     protected FileChannel dbFileChannel;
 
-    private File indexFile;
+    private final File indexFile;
     protected RandomAccessFile indexFileRandomAccess;
     protected FileChannel indexFileChannel;
 
@@ -65,7 +64,7 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
             this.indexFileRandomAccess = new RandomAccessFile(indexFile, "rw");
             this.indexFileChannel = this.indexFileRandomAccess.getChannel();
 
-            var protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
+            var protocolId = ProtocolManager.getProtocolIdByClass(clazz);
             protocolRegistration = ProtocolManager.getProtocol(protocolId);
 
             indexBuffer = ByteBufAllocator.DEFAULT.ioBuffer(16);
