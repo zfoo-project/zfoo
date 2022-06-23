@@ -511,8 +511,8 @@ public class OrmManager implements IOrmManager {
                 var keyType = types[0];
                 var valueType = types[1];
 
-                if (!isBaseType((Class<?>) keyType)) {
-                    throw new RunException("ORM[class:{}]类型声明不正确，Map的key类型必须为基础类型，value必须是普通的pojo", clazz.getCanonicalName());
+                if (!String.class.isAssignableFrom((Class<?>) keyType)) {
+                    throw new RunException("ORM[class:{}]类型声明不正确，Map的key类型必须为String类型", clazz.getCanonicalName());
                 }
 
                 checkSubEntity(clazz, valueType);
@@ -536,8 +536,7 @@ public class OrmManager implements IOrmManager {
                 checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
                 return;
             } else if (Map.class.equals(clazz)) {
-                // Map<List<String>, List<String>>
-                throw new RunException("ORM不支持Map类型");
+                return;
             }
         } else if (type instanceof Class) {
             Class<?> clazz = ((Class<?>) type);

@@ -29,6 +29,8 @@ public class MapEntity implements IEntity<Long> {
 
     private Map<String, BagItem> bagMap = new HashMap<>();
 
+    private Map<String, Map<String, String>> baseMap = new HashMap<>();
+
     @Override
     public Long id() {
         return id;
@@ -50,6 +52,13 @@ public class MapEntity implements IEntity<Long> {
         this.bagMap = bagMap;
     }
 
+    public Map<String, Map<String, String>> getBaseMap() {
+        return baseMap;
+    }
+
+    public void setBaseMap(Map<String, Map<String, String>> baseMap) {
+        this.baseMap = baseMap;
+    }
 
     @Override
     public boolean equals(Object o) {
