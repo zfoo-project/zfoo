@@ -18,13 +18,10 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.xml.XmlProtocols;
 import io.netty.buffer.ByteBuf;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author jaysunxiao
@@ -38,6 +35,8 @@ public class ProtocolManager {
 
     public static final IProtocolRegistration[] protocols = new IProtocolRegistration[MAX_PROTOCOL_NUM];
     public static final ProtocolModule[] modules = new ProtocolModule[MAX_MODULE_NUM];
+
+    private static final Map<Class<?>, Short> protocolIdMap = new HashMap<>();
 
     static {
         // 初始化默认协议模块
@@ -86,9 +85,15 @@ public class ProtocolManager {
         return moduleOptional.get();
     }
 
-    public static short getProtocolIdByClass(Class<?> clazz) {
-        var protocolIdField = ReflectionUtils.getFieldByNameInPOJOClass(clazz, PROTOCOL_ID);
-        return (short) ReflectionUtils.getField(protocolIdField, null);
+    public static short protocolId(Class<?> clazz) {
+        var protocolId = protocolIdMap.get(clazz);
+        if (protocolId == null) {
+            protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
+            synchronized (protocolIdMap) {
+                protocolIdMap.put(clazz, protocolId);
+            }
+        }
+        return protocolId;
     }
 
     public static void initProtocol(Set<Class<?>> protocolClassSet) {

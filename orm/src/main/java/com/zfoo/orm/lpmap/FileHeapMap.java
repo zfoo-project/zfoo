@@ -46,7 +46,7 @@ public class FileHeapMap<V extends IPacket> implements LpMap<V> {
         try {
             this.dbFile = FileUtils.getOrCreateFile(dbPath, StringUtils.format("{}.db", clazz.getSimpleName()));
 
-            var protocolId = ProtocolManager.getProtocolIdByClass(clazz);
+            var protocolId = ProtocolManager.protocolId(clazz);
             protocolRegistration = ProtocolManager.getProtocol(protocolId);
             heapMap = new HeapMap<>();
 

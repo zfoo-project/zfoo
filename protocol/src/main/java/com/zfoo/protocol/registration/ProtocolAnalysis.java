@@ -435,6 +435,11 @@ public class ProtocolAnalysis {
         return allSubProtocolIdSet;
     }
 
+    public static short getProtocolIdByClass(Class<?> clazz) {
+        var protocolIdField = ReflectionUtils.getFieldByNameInPOJOClass(clazz, PROTOCOL_ID);
+        return (short) ReflectionUtils.getField(protocolIdField, null);
+    }
+
     // 协议智能语法分析，错误的协议定义将无法启动程序并给出错误警告
     //-----------------------------------------------------------------------
 

@@ -31,7 +31,7 @@ public interface IPacket {
      * @return 协议号Id
      */
     default short protocolId() {
-        return ProtocolManager.getProtocolIdByClass(this.getClass());
+        return ProtocolManager.protocolId(this.getClass());
     }
 
 }

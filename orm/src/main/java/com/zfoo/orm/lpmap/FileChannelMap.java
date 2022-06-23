@@ -64,7 +64,7 @@ public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
             this.indexFileRandomAccess = new RandomAccessFile(indexFile, "rw");
             this.indexFileChannel = this.indexFileRandomAccess.getChannel();
 
-            var protocolId = ProtocolManager.getProtocolIdByClass(clazz);
+            var protocolId = ProtocolManager.protocolId(clazz);
             protocolRegistration = ProtocolManager.getProtocol(protocolId);
 
             indexBuffer = ByteBufAllocator.DEFAULT.ioBuffer(16);
