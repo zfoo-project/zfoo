@@ -512,7 +512,7 @@ public class OrmManager implements IOrmManager {
                 var valueType = types[1];
 
                 if (!String.class.isAssignableFrom((Class<?>) keyType)) {
-                    throw new RunException("ORM中Map的key必须是String类型");
+                    throw new RunException("ORM[class:{}]类型声明不正确，Map的key类型必须为String类型", clazz.getCanonicalName());
                 }
 
                 checkSubEntity(clazz, valueType);

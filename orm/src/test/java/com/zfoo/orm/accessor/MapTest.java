@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Ignore
 public class MapTest {
@@ -54,6 +55,10 @@ public class MapTest {
         bagMap.put("bag1", bagItem1);
         bagMap.put("bag2", bagItem2);
         bagMap.put("bag3", bagItem3);
+
+        var map = new HashMap<String, Map<String, String>>();
+        map.put("a", Map.of("b", "b"));
+        entity.setBaseMap(map);
 
         OrmContext.getAccessor().insert(entity);
 
