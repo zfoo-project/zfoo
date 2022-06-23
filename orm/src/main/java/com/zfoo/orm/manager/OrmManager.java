@@ -512,7 +512,7 @@ public class OrmManager implements IOrmManager {
                 var valueType = types[1];
 
                 if (!isBaseType((Class<?>) keyType)) {
-                    throw new RunException("ORM[class:{}]类型声明不正确，Map的key类型必须为基础类型", clazz.getCanonicalName());
+                    throw new RunException("ORM[class:{}]类型声明不正确，Map的key类型必须为基础类型，value必须是普通的pojo", clazz.getCanonicalName());
                 }
 
                 checkSubEntity(clazz, valueType);
