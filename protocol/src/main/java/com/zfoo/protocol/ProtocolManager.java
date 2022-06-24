@@ -89,6 +89,7 @@ public class ProtocolManager {
         var protocolId = protocolIdMap.get(clazz);
         if (protocolId == null) {
             protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
+            // 使用懒加载的方式，主要是想节省一点空间，实际运行只有IPacket没有重写protocolId的Response和Answer才会放进去
             synchronized (protocolIdMap) {
                 protocolIdMap.put(clazz, protocolId);
             }
