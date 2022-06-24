@@ -123,16 +123,18 @@ public class ProtocolAnalysis {
                 modules[module.getId()] = module;
 
                 for (var protocolDefinition : moduleDefinition.getProtocols()) {
-                    var id = protocolDefinition.getId();
                     var location = protocolDefinition.getLocation();
                     var clazz = Class.forName(location);
+                    var id = getProtocolIdByClass(clazz);
 
                     AssertionUtils.isTrue(id >= moduleDefinition.getMinId(), "模块[{}]中的协议[{}]的协议号必须大于或者等于[{}]", moduleDefinition.getName(), clazz.getSimpleName(), moduleDefinition.getMinId());
                     AssertionUtils.isTrue(id < moduleDefinition.getMaxId(), "模块[{}]中的协议[{}]的协议号必须小于[{}]", moduleDefinition.getName(), clazz.getSimpleName(), moduleDefinition.getMaxId());
                     AssertionUtils.isNull(protocols[id], "duplicate definition [id:{}] Exception!", id);
 
-                    // 协议号是否和id是否相等
-                    AssertionUtils.isTrue(getProtocolIdByClass(clazz) == id, "[class:{}]协议序列号[{}]和协议文件里的协议序列号不相等", clazz.getCanonicalName(), PROTOCOL_ID);
+                    // 协议号是否和id是否相等，如果xml文件中没有填protocolId则不检测
+                    if (protocolDefinition.getId() >= 0) {
+                        AssertionUtils.isTrue(protocolDefinition.getId() == id, "[class:{}]协议序列号[{}]和协议文件里的协议序列号不相等", clazz.getCanonicalName(), PROTOCOL_ID);
+                    }
                     checkProtocol(clazz);
                 }
             }
@@ -140,8 +142,9 @@ public class ProtocolAnalysis {
             for (var moduleDefinition : xmlProtocols.getModules()) {
                 var module = modules[moduleDefinition.getId()];
                 for (var protocolDefinition : moduleDefinition.getProtocols()) {
-                    var id = protocolDefinition.getId();
-                    var clazz = protocolClassMap.get(id);
+                    var location = protocolDefinition.getLocation();
+                    var clazz = Class.forName(location);
+                    var id = getProtocolIdByClass(clazz);
                     var registration = parseProtocolRegistration(clazz, module);
                     if (protocolDefinition.isEnhance()) {
                         enhanceList.add(registration);

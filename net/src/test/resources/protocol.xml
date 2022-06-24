@@ -4,20 +4,21 @@
 <protocols author="jaysunxiao">
 
     <module id="1" name="native" minId="0" maxId="100" version="99.99.999">
-        <protocol id="0" location="com.zfoo.net.router.attachment.SignalAttachment"/>
-        <protocol id="1" location="com.zfoo.net.router.attachment.GatewayAttachment"/>
-        <protocol id="2" location="com.zfoo.net.router.attachment.UdpAttachment"/>
-        <protocol id="3" location="com.zfoo.net.router.attachment.HttpAttachment"/>
-        <protocol id="4" location="com.zfoo.net.router.attachment.NoAnswerAttachment"/>
+        <protocol location="com.zfoo.net.router.attachment.SignalAttachment"/>
+        <protocol location="com.zfoo.net.router.attachment.GatewayAttachment"/>
+        <protocol location="com.zfoo.net.router.attachment.UdpAttachment"/>
+        <protocol location="com.zfoo.net.router.attachment.HttpAttachment"/>
+        <protocol location="com.zfoo.net.router.attachment.NoAnswerAttachment"/>
 
 
-        <protocol id="20" location="com.zfoo.net.core.gateway.model.AuthUidToGatewayCheck"/>
-        <protocol id="21" location="com.zfoo.net.core.gateway.model.AuthUidToGatewayConfirm"/>
-        <protocol id="22" location="com.zfoo.net.core.gateway.model.AuthUidAsk"/>
-        <protocol id="23" location="com.zfoo.net.core.gateway.model.GatewaySessionInactiveAsk"/>
-        <protocol id="24" location="com.zfoo.net.core.gateway.model.GatewaySynchronizeSidAsk"/>
+        <protocol location="com.zfoo.net.core.gateway.model.AuthUidToGatewayCheck"/>
+        <protocol location="com.zfoo.net.core.gateway.model.AuthUidToGatewayConfirm"/>
+        <protocol location="com.zfoo.net.core.gateway.model.AuthUidAsk"/>
+        <protocol location="com.zfoo.net.core.gateway.model.GatewaySessionInactiveAsk"/>
+        <protocol location="com.zfoo.net.core.gateway.model.GatewaySynchronizeSidAsk"/>
     </module>
 
+    <!-- 在xml文件中写协议号是为了统一规划协议号，更加直观；不写协议号也没有影响 -->
     <module id="2" name="common" minId="100" maxId="1000" version="99.99.999">
         <protocol id="100" location="com.zfoo.net.packet.common.Message"/>
         <protocol id="101" location="com.zfoo.net.packet.common.Error"/>

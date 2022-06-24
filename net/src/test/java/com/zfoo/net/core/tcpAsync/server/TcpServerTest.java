@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.tpcAsync.server;
+package com.zfoo.net.core.tcpAsync.server;
 
 import com.zfoo.net.core.tcp.TcpServer;
 import com.zfoo.util.ThreadUtils;

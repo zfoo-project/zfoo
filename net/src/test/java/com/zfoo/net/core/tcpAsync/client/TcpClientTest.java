@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.core.tpcAsync.client;
+package com.zfoo.net.core.tcpAsync.client;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.tcp.TcpClient;

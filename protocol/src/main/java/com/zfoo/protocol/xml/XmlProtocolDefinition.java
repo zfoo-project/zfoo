@@ -20,7 +20,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 public class XmlProtocolDefinition {
 
     @JacksonXmlProperty(isAttribute = true, localName = "id")
-    private short id;
+    private final short id = -1;
 
     @JacksonXmlProperty(isAttribute = true, localName = "location")
     private String location;
