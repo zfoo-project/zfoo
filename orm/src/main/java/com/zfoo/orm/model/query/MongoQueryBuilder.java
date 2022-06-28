@@ -1,9 +1,21 @@
+/*
+ * Copyright (C) 2020 The zfoo Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 package com.zfoo.orm.model.query;
 
 import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.model.entity.IEntity;
-import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.StringUtils;
 import org.bson.conversions.Bson;
@@ -12,71 +24,76 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>{
-    private Class<E> entity;
-    private Bson builer;
-    MongoQueryBuilder(Class<E> entityClazz)
-    {
+public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E> {
+
+    private final Class<E> entity;
+    private Bson builder;
+
+    public MongoQueryBuilder(Class<E> entityClazz) {
         entity = entityClazz;
     }
 
+    private void wrapBuilder(Bson bson) {
+        if (builder != null) {
+            builder = Filters.and(builder, bson);
+        } else {
+            builder = bson;
+        }
+    }
 
     @Override
     public IQueryBuilder<E> eq(String fieldName, Object fieldValue) {
         var bson = Filters.eq(fieldName, fieldValue);
-        if(builer!=null) builer = Filters.and(builer, bson);
-        else builer = bson;
+        wrapBuilder(bson);
         return this;
     }
+
     @Override
     public IQueryBuilder<E> ne(String fieldName, Object fieldValue) {
         var bson = Filters.ne(fieldName, fieldValue);
-        if(builer!=null) builer = Filters.and(builer, bson);
-        else builer = bson;
+        wrapBuilder(bson);
         return this;
     }
+
     @Override
     public IQueryBuilder<E> lt(String fieldName, Object fieldValue) {
         var bson = Filters.lt(fieldName, fieldValue);
-        if(builer!=null) builer = Filters.and(builer, bson);
-        else builer = bson;
+        wrapBuilder(bson);
         return this;
     }
+
     @Override
     public IQueryBuilder<E> lte(String fieldName, Object fieldValue) {
         var bson = Filters.lte(fieldName, fieldValue);
-        if(builer!=null) builer = Filters.and(builer, bson);
-        else builer = bson;
+        wrapBuilder(bson);
         return this;
     }
+
     @Override
     public IQueryBuilder<E> gt(String fieldName, Object fieldValue) {
         var bson = Filters.gt(fieldName, fieldValue);
-        if(builer!=null) builer = Filters.and(builer, bson);
-        else builer = bson;
+        wrapBuilder(bson);
         return this;
     }
+
     @Override
     public IQueryBuilder<E> gte(String fieldName, Object fieldValue) {
         var bson = Filters.gte(fieldName, fieldValue);
-        if(builer!=null) builer = Filters.and(builer, bson);
-        else builer = bson;
+        wrapBuilder(bson);
         return this;
     }
 
     @Override
     public IQueryBuilder<E> in(String fieldName, List<?> fieldValueList) {
         var bson = Filters.in(fieldName, fieldValueList);
-        if(builer!=null) builer = Filters.and(builer, bson);
-        else builer = bson;
+        wrapBuilder(bson);
         return this;
     }
 
     @Override
     public IQueryBuilder<E> nin(String fieldName, List<?> fieldValueList) {
         var bson = Filters.nin(fieldName, fieldValueList);
-        if(builer!=null) builer = Filters.and(builer, bson);
-        else builer = bson;
+        wrapBuilder(bson);
         return this;
     }
 
@@ -84,8 +101,7 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
     public IQueryBuilder<E> like(String fieldName, String fieldValue) {
         var regex = StringUtils.format("^{}.*", fieldValue);
         var bson = Filters.regex(fieldName, regex);
-        if(builer!=null) builer = Filters.and(builer, bson);
-        else builer = bson;
+        wrapBuilder(bson);
         return this;
     }
 
@@ -93,11 +109,11 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
     public List<E> queryAll() {
         var collection = OrmContext.getOrmManager().getCollection(entity);
         var list = new ArrayList<E>();
-        var result = builer!=null?collection.find(builer):collection.find();
+        var result = builder != null ? collection.find(builder) : collection.find();
         result.forEach(new Consumer<IEntity<?>>() {
             @Override
             public void accept(IEntity<?> entity) {
-                list.add((E)entity);
+                list.add((E) entity);
             }
         });
         return list;
@@ -106,7 +122,7 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
     @Override
     public E find() {
         var collection = OrmContext.getOrmManager().getCollection(entity);
-        var list = builer!=null?collection.find(builer):collection.find();
+        var list = builder != null ? collection.find(builder) : collection.find();
         for (E row : list) {
             return row;
         }
@@ -119,10 +135,9 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
 
         var p = Page.valueOf(page, itemsPerPage, collection.countDocuments());
 
-        var result = builer!=null?collection.find(builer):collection.find();
+        var result = builder != null ? collection.find(builder) : collection.find();
         var list = new ArrayList<E>();
-        result
-                .skip(p.skipNum())
+        result.skip(p.skipNum())
                 .limit(p.getItemsPerPage())
                 .forEach(new Consumer<IEntity<?>>() {
                     @Override

@@ -64,7 +64,7 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
         return instance.accessor;
     }
 
-    public static <E extends IEntity<?>> IQueryBuilder getQuery(Class<E> entityClazz) {
+    public static <E extends IEntity<?>> IQueryBuilder<E> getQuery(Class<E> entityClazz) {
         return instance.query.builder(entityClazz);
     }
 

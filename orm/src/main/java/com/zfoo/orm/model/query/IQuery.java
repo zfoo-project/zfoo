@@ -22,5 +22,7 @@ import com.zfoo.orm.model.entity.IEntity;
  * @version 3.0
  */
 public interface IQuery {
-    <E extends IEntity<?>> IQueryBuilder builder(Class<E> entityClazz);
+
+    <E extends IEntity<?>> IQueryBuilder<E> builder(Class<E> entityClazz);
+
 }

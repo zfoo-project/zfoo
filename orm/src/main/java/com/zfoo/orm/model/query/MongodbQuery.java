@@ -25,4 +25,5 @@ public class MongodbQuery implements IQuery {
     public <E extends IEntity<?>> IQueryBuilder<E> builder(Class<E> entityClazz) {
         return new MongoQueryBuilder<E>(entityClazz);
     }
+
 }
