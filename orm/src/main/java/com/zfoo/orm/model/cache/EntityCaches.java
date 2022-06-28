@@ -241,7 +241,7 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
         var ids = updateList.stream().map(it -> it.id()).collect(Collectors.toList());
 
         try {
-            List<IEntity> dbList = OrmContext.getQuery(entityDef.getClazz()).in("_id", ids).queryAll();
+            var dbList = OrmContext.getQuery((Class<E>)entityDef.getClazz()).in("_id", ids).queryAll();
             var dbMap = dbList.stream().collect(Collectors.toMap(key -> key.id(), value -> value));
             for (var entity : updateList) {
                 var dbEntity = dbMap.get(entity.id());

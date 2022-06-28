@@ -54,8 +54,6 @@ public interface IQueryBuilder<E extends IEntity> {
 
     List<E> queryAll();
 
-    E find();
-
 
     /**
      * 分页查询，默认按照id排序
@@ -63,5 +61,7 @@ public interface IQueryBuilder<E extends IEntity> {
      * @param page         第几页
      * @param itemsPerPage 每页容量
      */
-    Pair<Page, List<E>> page(int page, int itemsPerPage);
+    Pair<Page, List<E>> queryPage(int page, int itemsPerPage);
+
+    E queryFirst();
 }

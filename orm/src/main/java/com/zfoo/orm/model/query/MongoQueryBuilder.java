@@ -120,17 +120,7 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
     }
 
     @Override
-    public E find() {
-        var collection = OrmContext.getOrmManager().getCollection(entity);
-        var list = builder != null ? collection.find(builder) : collection.find();
-        for (E row : list) {
-            return row;
-        }
-        return null;
-    }
-
-    @Override
-    public Pair<Page, List<E>> page(int page, int itemsPerPage) {
+    public Pair<Page, List<E>> queryPage(int page, int itemsPerPage) {
         var collection = OrmContext.getOrmManager().getCollection(entity);
 
         var p = Page.valueOf(page, itemsPerPage, collection.countDocuments());
@@ -147,5 +137,15 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
                 });
 
         return new Pair<>(p, list);
+    }
+
+    @Override
+    public E queryFirst() {
+        var collection = OrmContext.getOrmManager().getCollection(entity);
+        var list = builder != null ? collection.find(builder) : collection.find();
+        for (E row : list) {
+            return row;
+        }
+        return null;
     }
 }
