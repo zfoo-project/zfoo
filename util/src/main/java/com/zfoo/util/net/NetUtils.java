@@ -116,7 +116,7 @@ public class NetUtils {
         }
 
         // try-with-resources会自动调用close方法
-        try (ServerSocket ss = new ServerSocket(port)) {
+        try (ServerSocket ss = new ServerSocket(port, 0, getLocalhost())) {
             return true;
         } catch (Exception e) {
             return false;
