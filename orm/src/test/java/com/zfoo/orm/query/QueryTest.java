@@ -15,6 +15,7 @@ package com.zfoo.orm.query;
 
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.entity.UserEntity;
+import com.zfoo.orm.util.MongoIdUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -30,14 +31,21 @@ public class QueryTest {
     @Test
     public void queryAllTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
-        var list = OrmContext.getQuery().queryAll(UserEntity.class);
+
+        var id = MongoIdUtils.getIncrementIdFromMongoDefault(UserEntity.class);
+        var entity = new UserEntity();
+        entity.setId(id);
+        entity.setC((int)id);
+        entity.setE("User_"+id);
+        OrmContext.getAccessor().insert(entity);
+        var list = OrmContext.getQuery(UserEntity.class).eq("e", "User_1").eq("f", null).queryAll();
         System.out.println(list);
     }
 
     @Test
     public void queryByFieldTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
-        var list = OrmContext.getQuery().queryFieldEqual("a", 1, UserEntity.class);
+        var list = OrmContext.getQuery(UserEntity.class).eq("a", 1).queryAll();
         System.out.println(list);
     }
 
