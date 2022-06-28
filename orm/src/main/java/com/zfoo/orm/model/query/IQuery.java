@@ -14,9 +14,6 @@
 package com.zfoo.orm.model.query;
 
 import com.zfoo.orm.model.entity.IEntity;
-import com.zfoo.protocol.model.Pair;
-
-import java.util.List;
 
 /**
  * 对数据库进行（查找）的相关方法
@@ -25,22 +22,5 @@ import java.util.List;
  * @version 3.0
  */
 public interface IQuery {
-
-    <E extends IEntity<?>> List<E> queryFieldLike(String fieldName, String fieldValue, Class<E> entityClazz);
-
-    <E extends IEntity<?>> List<E> queryAll(Class<E> entityClazz);
-
-    <E extends IEntity<?>> List<E> queryFieldEqual(String fieldName, Object fieldValue, Class<E> entityClazz);
-
-    <E extends IEntity<?>> List<E> queryFieldIn(String fieldName, List<?> fieldValueList, Class<E> entityClazz);
-
-    /**
-     * 分页查询，默认按照id排序
-     *
-     * @param page         第几页
-     * @param itemsPerPage 每页容量
-     * @param entityClazz  实体类
-     */
-    <E extends IEntity<?>> Pair<Page, List<E>> pageQuery(int page, int itemsPerPage, Class<E> entityClazz);
-
+    <E extends IEntity<?>> IQueryBuilder builder(Class<E> entityClazz);
 }
