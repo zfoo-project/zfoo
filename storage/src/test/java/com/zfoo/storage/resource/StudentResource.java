@@ -21,7 +21,7 @@ import com.zfoo.storage.model.anno.Resource;
  * @author jaysunxiao
  * @version 3.0
  */
-@Resource
+//@Resource
 public class StudentResource {
 
     @Id

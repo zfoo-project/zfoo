@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Map;
+
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -60,5 +62,27 @@ public class ApplicationTest {
         // 通过索引找对应的行
         var valuesByIndex = studentResources.getIndex("name", "james0");
         logger.info(JsonUtils.object2String(valuesByIndex));
+    }
+
+    @Test
+    public void startStorageTestTxt() {
+        // 加载配置文件，配置文件中必须引入storage
+        // 配置文件中scan，需要映射Excel的类所在位置，会自动搜索文件夹下的Excel文件，Excel文件可以放在指定文件夹的任意目录
+        // 配置文件中resource，需要映射Excel的文件所在位置
+        var context = new ClassPathXmlApplicationContext("application.xml");
+
+        // Excel的映射内容需要在被Spring管理的bean的方法上加上@ResInjection注解，即可自动注入Excel对应的对象
+        var testManager = context.getBean(TestManager.class);
+        var testResources = testManager.testResources;
+        for (com.zfoo.storage.resource.TestResource resource : testResources.getAll()) {
+            Map<Integer, String> map = resource.getType9();
+            logger.info(map.get(1));
+//            logger.info(JsonUtils.object2String(resource));
+        }
+        // 通过id找到对应的行
+        var id = 2;
+        var valueById = testResources.get(id);
+        logger.info(JsonUtils.object2String(valueById));
+        logger.info(StringUtils.MULTIPLE_HYPHENS);
     }
 }

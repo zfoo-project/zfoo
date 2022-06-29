@@ -11,21 +11,27 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage;
-
-import com.zfoo.storage.model.anno.ResInjection;
-import com.zfoo.storage.model.vo.Storage;
-import com.zfoo.storage.resource.StudentResource;
-import org.springframework.stereotype.Component;
+package com.zfoo.storage.resource;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-//@Component
-public class StudentManager {
+public class Item {
 
-    @ResInjection
-    public Storage<Integer, StudentResource> studentResources;
-
+	private int id;
+    private int attr;
+    private String name;
+    
+	public int getId() {
+		return id;
+	}
+		
+	public int getAttr() {
+		return attr;
+	}
+		
+	public String getName() {
+		return name;
+	}
 }
