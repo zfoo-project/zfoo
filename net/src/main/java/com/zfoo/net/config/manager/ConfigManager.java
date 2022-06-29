@@ -70,6 +70,7 @@ public class ConfigManager implements IConfigManager {
             for (var providerModule : providerConfig.getModules()) {
                 var module = ProtocolManager.moduleByModuleName(providerModule.getName());
                 AssertionUtils.isTrue(module != null, "服务提供者[name:{}]在协议文件中不存在", providerModule.getName());
+                module.setGroup(providerModule.getGroup());
                 providerModules.add(module);
             }
             providerConfig.setModules(providerModules);
@@ -82,6 +83,7 @@ public class ConfigManager implements IConfigManager {
             for (var providerModule : consumerConfig.getModules()) {
                 var module = ProtocolManager.moduleByModuleName(providerModule.getName());
                 AssertionUtils.isTrue(module != null, "消费者[name:{}]在协议文件中不存在", providerModule.getName());
+                module.setGroup(providerModule.getGroup());
                 consumerModules.add(module);
             }
             consumerConfig.setModules(consumerModules);

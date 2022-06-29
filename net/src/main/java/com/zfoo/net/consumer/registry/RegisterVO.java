@@ -99,7 +99,7 @@ public class RegisterVO {
         var modules = Arrays.stream(moduleSplits)
                 .map(it -> it.trim())
                 .map(it -> it.split(StringUtils.HYPHEN))
-                .map(it -> new ProtocolModule(Byte.parseByte(it[0]), it[1], it[2]))
+                .map(it -> new ProtocolModule(Byte.parseByte(it[0]), it[1], it[2], Integer.parseInt(it[3])))
                 .collect(Collectors.toList());
         return modules;
     }
@@ -129,7 +129,7 @@ public class RegisterVO {
 
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
             var providerModules = providerConfig.getModules().stream()
-                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getId(), it.getName(), ProtocolModule.versionNumToStr(it.getVersion())))
+                    .map(it -> joinWith(StringUtils.HYPHEN, it))
                     .collect(Collectors.toList());
             builder.append(StringUtils.format("provider:[{}]"
                     , StringUtils.joinWith(StringUtils.COMMA + StringUtils.SPACE, providerModules.toArray())));
@@ -139,7 +139,7 @@ public class RegisterVO {
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
 
             var consumerModules = consumerConfig.getModules().stream()
-                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getId(), it.getName(), ProtocolModule.versionNumToStr(it.getVersion())))
+                    .map(it -> joinWith(StringUtils.HYPHEN, it))
                     .collect(Collectors.toList());
             builder.append(StringUtils.format("consumer:[{}]"
                     , StringUtils.joinWith(StringUtils.COMMA + StringUtils.SPACE, consumerModules.toArray())));
@@ -148,6 +148,9 @@ public class RegisterVO {
         return builder.toString();
     }
 
+    public String joinWith(String sep, ProtocolModule module) {
+        return StringUtils.joinWith(sep, module.getId(), module.getName(), ProtocolModule.versionNumToStr(module.getVersion()), module.getGroup());
+    }
 
     public String getId() {
         return id;
