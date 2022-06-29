@@ -16,16 +16,18 @@ package com.zfoo.storage;
 import com.zfoo.storage.model.anno.ResInjection;
 import com.zfoo.storage.model.vo.Storage;
 import com.zfoo.storage.resource.StudentResource;
+import com.zfoo.storage.resource.TestResource;
+
 import org.springframework.stereotype.Component;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-//@Component
-public class StudentManager {
+@Component
+public class TestManager {
 
     @ResInjection
-    public Storage<Integer, StudentResource> studentResources;
+    public Storage<Integer, TestResource> testResources;
 
 }
