@@ -46,6 +46,7 @@
 
     <xsd:complexType name="moduleAttributeType">
         <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="group" type="xsd:string" default="0"/>
     </xsd:complexType>
 
 

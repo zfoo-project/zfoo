@@ -44,6 +44,9 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
             case "shortest-time":
                 balancer = ShortestTimeConsumerLoadBalancer.getInstance();
                 break;
+            case "fixed":
+                balancer = FixedConsumerLoadBalancer.getInstance();
+                break;
             default:
                 throw new RuntimeException(StringUtils.format("无法识别负载均衡器[{}]", loadBalancer));
         }

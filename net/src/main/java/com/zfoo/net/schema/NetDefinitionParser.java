@@ -185,6 +185,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
             var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
             builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("name")));
+            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("group")));
 
             modules.add(new BeanDefinitionHolder(builder.getBeanDefinition(), StringUtils.format("{}.{}{}", clazz.getCanonicalName(), param, i)));
         }

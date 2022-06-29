@@ -32,6 +32,8 @@ public class ProtocolModule {
      */
     private int version;
 
+    private int group;
+
     private transient int hash;
 
 
@@ -46,8 +48,17 @@ public class ProtocolModule {
         this.perfectHash();
     }
 
-    public ProtocolModule(String name) {
+    public ProtocolModule(byte id, String name, String version, int group) {
+        this.id = id;
         this.name = name;
+        this.version = versionStrToNum(version);
+        this.group = group;
+        this.perfectHash();
+    }
+    
+    public ProtocolModule(String name, String group) {
+        this.name = name;
+        this.group = Integer.parseInt(group);
     }
 
     public static void assertVersion(String version) {
@@ -103,6 +114,14 @@ public class ProtocolModule {
         this.version = version;
     }
 
+    public int getGroup() {
+        return group;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -112,7 +131,10 @@ public class ProtocolModule {
             return false;
         }
         ProtocolModule module = (ProtocolModule) o;
-        return id == module.id && version == module.version;
+        if (group == 0 || module.group == 0) {
+            return id == module.id && version == module.version;
+        }
+        return id == module.id && version == module.version && group == module.group;
     }
 
     @Override
@@ -122,6 +144,6 @@ public class ProtocolModule {
 
     @Override
     public String toString() {
-        return StringUtils.format("[id:{}][name:{}][version:{}][hash:{}]", id, name, version, hash);
+        return StringUtils.format("[id:{}][name:{}][version:{}][group:{}][hash:{}]", id, name, version, group, hash);
     }
 }
