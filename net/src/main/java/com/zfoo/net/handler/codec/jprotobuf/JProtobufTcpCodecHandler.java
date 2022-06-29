@@ -111,23 +111,16 @@ public class JProtobufTcpCodecHandler extends ByteToMessageCodec<EncodedPacketIn
             return;
         }
 
-        // 预留写入包的长度，一个int字节大小
-        buffer.writeInt(PacketService.PACKET_HEAD_LENGTH);
+        // 写入protobuf协议
+        var protobufCodec = (Codec<IPacket>) ProtobufProxy.create(packet.getClass());
+        byte[] bytes = protobufCodec.encode(packet);
+        // header(4byte) + protocolId(2byte)
+        buffer.writeInt(bytes.length + 2);
+
         var protocolId = packet.protocolId();
         // 写入协议号
         ByteBufUtils.writeShort(buffer, protocolId);
 
-        // 写入protobuf协议
-        var protobufCodec = (Codec<IPacket>) ProtobufProxy.create(packet.getClass());
-        byte[] bytes = protobufCodec.encode(packet);
-
         buffer.writeBytes(bytes);
-
-        int length = buffer.readableBytes();
-        int packetLength = length - PacketService.PACKET_HEAD_LENGTH;
-
-        buffer.writerIndex(0);
-        buffer.writeInt(packetLength);
-        buffer.writerIndex(length);
     }
 }
