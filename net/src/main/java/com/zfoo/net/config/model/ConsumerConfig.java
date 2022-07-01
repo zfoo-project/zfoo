@@ -25,29 +25,12 @@ import java.util.Objects;
  */
 public class ConsumerConfig {
 
-    private String loadBalancer;
-
     private List<ProtocolModule> modules;
-
-    public static ConsumerConfig valueOf(String loadBalancer, List<ProtocolModule> modules) {
-        ConsumerConfig config = new ConsumerConfig();
-        config.loadBalancer = loadBalancer;
-        config.modules = modules;
-        return config;
-    }
 
     public static ConsumerConfig valueOf(List<ProtocolModule> modules) {
         ConsumerConfig config = new ConsumerConfig();
         config.modules = modules;
         return config;
-    }
-
-    public String getLoadBalancer() {
-        return loadBalancer;
-    }
-
-    public void setLoadBalancer(String loadBalancer) {
-        this.loadBalancer = loadBalancer;
     }
 
     public List<ProtocolModule> getModules() {

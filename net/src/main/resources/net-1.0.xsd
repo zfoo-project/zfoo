@@ -41,11 +41,11 @@
         <xsd:sequence>
             <xsd:element name="module" maxOccurs="unbounded" type="moduleAttributeType"/>
         </xsd:sequence>
-        <xsd:attribute name="load-balancer" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="moduleAttributeType">
         <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="load-balancer" type="xsd:string" default="consistent-hash"/>
         <xsd:attribute name="group" type="xsd:string" default="0"/>
     </xsd:complexType>
 

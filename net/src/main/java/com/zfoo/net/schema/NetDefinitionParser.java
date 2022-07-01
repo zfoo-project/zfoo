@@ -168,8 +168,6 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         var clazz = ConsumerConfig.class;
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
-        resolvePlaceholder("load-balancer", "loadBalancer", builder, element, parserContext);
-
         var consumerModules = parseModules("consumer", element, parserContext);
         builder.addPropertyValue("modules", consumerModules);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
@@ -185,6 +183,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
             var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
             builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("name")));
+            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("load-balancer")));
             builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("group")));
 
             modules.add(new BeanDefinitionHolder(builder.getBeanDefinition(), StringUtils.format("{}.{}{}", clazz.getCanonicalName(), param, i)));

@@ -15,7 +15,9 @@ package com.zfoo.net.config.manager;
 
 import com.zfoo.net.config.model.NetConfig;
 import com.zfoo.net.consumer.balancer.AbstractConsumerLoadBalancer;
+import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
 import com.zfoo.net.consumer.registry.IRegistry;
+import com.zfoo.protocol.registration.ProtocolModule;
 
 /**
  * @author jaysunxiao
@@ -25,7 +27,7 @@ public interface IConfigManager {
 
     NetConfig getLocalConfig();
 
-    AbstractConsumerLoadBalancer consumerLoadBalancer();
+    IConsumerLoadBalancer consumerLoadBalancer(ProtocolModule module);
 
     void initRegistry();
 
