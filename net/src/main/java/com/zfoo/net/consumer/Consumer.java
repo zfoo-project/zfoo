@@ -25,6 +25,7 @@ import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
 import com.zfoo.net.router.route.SignalBridge;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.math.HashUtils;
@@ -51,7 +52,8 @@ public class Consumer implements IConsumer {
     @Override
     public void send(IPacket packet, Object argument) {
         try {
-            var loadBalancer = NetContext.getConfigManager().consumerLoadBalancer();
+            var module = ProtocolManager.moduleByProtocolId(packet.protocolId());
+            var loadBalancer = NetContext.getConfigManager().consumerLoadBalancer(module);
             var session = loadBalancer.loadBalancer(packet, argument);
             var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
             NetContext.getRouter().send(session, packet, NoAnswerAttachment.valueOf(executorConsistentHash));
@@ -62,7 +64,8 @@ public class Consumer implements IConsumer {
 
     @Override
     public <T extends IPacket> SyncAnswer<T> syncAsk(IPacket packet, Class<T> answerClass, Object argument) throws Exception {
-        var loadBalancer = NetContext.getConfigManager().consumerLoadBalancer();
+        var module = ProtocolManager.moduleByProtocolId(packet.protocolId());
+        var loadBalancer = NetContext.getConfigManager().consumerLoadBalancer(module);
         var session = loadBalancer.loadBalancer(packet, argument);
 
 
@@ -103,7 +106,8 @@ public class Consumer implements IConsumer {
 
     @Override
     public <T extends IPacket> AsyncAnswer<T> asyncAsk(IPacket packet, Class<T> answerClass, Object argument) {
-        var loadBalancer = NetContext.getConfigManager().consumerLoadBalancer();
+        var module = ProtocolManager.moduleByProtocolId(packet.protocolId());
+        var loadBalancer = NetContext.getConfigManager().consumerLoadBalancer(module);
         var session = loadBalancer.loadBalancer(packet, argument);
         var asyncAnswer = NetContext.getRouter().asyncAsk(session, packet, answerClass, argument);
 

@@ -15,8 +15,10 @@ package com.zfoo.net.config.manager;
 
 import com.zfoo.net.config.model.NetConfig;
 import com.zfoo.net.consumer.balancer.AbstractConsumerLoadBalancer;
+import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
 import com.zfoo.net.consumer.registry.IRegistry;
 import com.zfoo.net.consumer.registry.ZookeeperRegistry;
+import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.registration.ProtocolModule;
@@ -25,7 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author jaysunxiao
@@ -42,6 +47,8 @@ public class ConfigManager implements IConfigManager {
 
     private AbstractConsumerLoadBalancer consumerLoadBalancer;
 
+    private final Map<String, IConsumerLoadBalancer> consumerLoadBalancerMap = new ConcurrentHashMap<>();
+
     /**
      * 注册中心
      */
@@ -57,8 +64,8 @@ public class ConfigManager implements IConfigManager {
     }
 
     @Override
-    public AbstractConsumerLoadBalancer consumerLoadBalancer() {
-        return consumerLoadBalancer;
+    public IConsumerLoadBalancer consumerLoadBalancer(ProtocolModule module) {
+        return consumerLoadBalancerMap.get(module.getName());
     }
 
     @Override
@@ -84,10 +91,12 @@ public class ConfigManager implements IConfigManager {
                 var module = ProtocolManager.moduleByModuleName(providerModule.getName());
                 AssertionUtils.isTrue(module != null, "消费者[name:{}]在协议文件中不存在", providerModule.getName());
                 module.setGroup(providerModule.getGroup());
+                module.setLoadBalancer(providerModule.getLoadBalancer());
                 consumerModules.add(module);
+                consumerLoadBalancerMap.put(module.getName(), AbstractConsumerLoadBalancer.valueOf(module.getLoadBalancer()));
             }
             consumerConfig.setModules(consumerModules);
-            consumerLoadBalancer = AbstractConsumerLoadBalancer.valueOf(consumerConfig.getLoadBalancer());
+//            consumerLoadBalancer = AbstractConsumerLoadBalancer.valueOf(consumerConfig.getLoadBalancer());
         }
 
         registry = new ZookeeperRegistry();

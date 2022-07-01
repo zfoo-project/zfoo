@@ -32,6 +32,8 @@ public class ProtocolModule {
      */
     private int version;
 
+    private String loadBalancer;
+
     private int group;
 
     private transient int hash;
@@ -56,8 +58,9 @@ public class ProtocolModule {
         this.perfectHash();
     }
     
-    public ProtocolModule(String name, String group) {
+    public ProtocolModule(String name, String loadBalancer, String group) {
         this.name = name;
+        this.loadBalancer = loadBalancer;
         this.group = Integer.parseInt(group);
     }
 
@@ -112,6 +115,14 @@ public class ProtocolModule {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public String getLoadBalancer() {
+        return loadBalancer;
+    }
+
+    public void setLoadBalancer(String loadBalancer) {
+        this.loadBalancer = loadBalancer;
     }
 
     public int getGroup() {
