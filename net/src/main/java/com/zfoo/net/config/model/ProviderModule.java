@@ -14,24 +14,26 @@ package com.zfoo.net.config.model;
 
 import com.zfoo.protocol.registration.ProtocolModule;
 
+import java.util.Objects;
+
 /**
  * @author jaysunxiao
  * @version 3.0
  */
 public class ProviderModule {
 
-    private String provider;
-
     private ProtocolModule protocolModule;
 
-    public ProviderModule(String provider, ProtocolModule protocolModule) {
-        this.provider = provider;
+    private String provider;
+
+    public ProviderModule(ProtocolModule protocolModule, String provider) {
         this.protocolModule = protocolModule;
+        this.provider = provider;
     }
 
-    public ProviderModule(String provider, String protocolModule) {
-        this.provider = provider;
+    public ProviderModule(String protocolModule, String provider) {
         this.protocolModule = new ProtocolModule((byte) 0, protocolModule);
+        this.provider = provider;
     }
 
     public String getProvider() {
@@ -48,5 +50,22 @@ public class ProviderModule {
 
     public void setProtocolModule(ProtocolModule protocolModule) {
         this.protocolModule = protocolModule;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ProviderModule that = (ProviderModule) o;
+        return Objects.equals(protocolModule, that.protocolModule) && Objects.equals(provider, that.provider);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(protocolModule, provider);
     }
 }

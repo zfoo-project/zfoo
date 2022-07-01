@@ -20,7 +20,6 @@ import com.zfoo.net.config.model.ProviderModule;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
-import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.security.IdUtils;
 import org.slf4j.Logger;
@@ -47,13 +46,17 @@ public class RegisterVO {
     private ConsumerConfig consumerConfig;
 
 
-    public static boolean providerHasConsumerModule(RegisterVO provider, RegisterVO consumer) {
-        if (Objects.isNull(provider) || Objects.isNull(provider.providerConfig) || CollectionUtils.isEmpty(provider.providerConfig.getProviders())
-                || Objects.isNull(consumer) || Objects.isNull(consumer.consumerConfig) || CollectionUtils.isEmpty(consumer.consumerConfig.getConsumers())) {
+    public static boolean providerHasConsumerModule(RegisterVO providerVO, RegisterVO consumerVO) {
+        if (Objects.isNull(providerVO) || Objects.isNull(providerVO.providerConfig) || CollectionUtils.isEmpty(providerVO.providerConfig.getProviders())
+                || Objects.isNull(consumerVO) || Objects.isNull(consumerVO.consumerConfig) || CollectionUtils.isEmpty(consumerVO.consumerConfig.getConsumers())) {
             return false;
         }
-
-        return provider.getProviderConfig().getProviders().stream().anyMatch(it -> consumer.getConsumerConfig().getConsumers().contains(it));
+        for (var provider : providerVO.getProviderConfig().getProviders()) {
+            if (consumerVO.getConsumerConfig().getConsumers().stream().anyMatch(it -> it.getConsumer().equals(provider.getProvider()))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static RegisterVO valueOf(String id, ProviderConfig providerConfig, ConsumerConfig consumerConfig) {
@@ -74,7 +77,7 @@ public class RegisterVO {
 
             String providerAddress = null;
 
-            for (int i = 1; i < splits.length; i++) {
+            for (var i = 1; i < splits.length; i++) {
                 var s = splits[i].trim();
                 if (s.startsWith("provider")) {
                     var providerModules = parseProviderModules(s);
@@ -103,7 +106,7 @@ public class RegisterVO {
         var modules = Arrays.stream(moduleSplits)
                 .map(it -> it.trim())
                 .map(it -> it.split(StringUtils.HYPHEN))
-                .map(it -> new ProviderModule(StringUtils.trim(it[1]), ProtocolManager.moduleByModuleName(StringUtils.trim(it[0]))))
+                .map(it -> new ProviderModule(ProtocolManager.moduleByModuleName(StringUtils.trim(it[0])), StringUtils.trim(it[1])))
                 .collect(Collectors.toList());
         return modules;
     }
@@ -116,7 +119,7 @@ public class RegisterVO {
         var modules = Arrays.stream(moduleSplits)
                 .map(it -> it.trim())
                 .map(it -> it.split(StringUtils.HYPHEN))
-                .map(it -> new ConsumerModule(StringUtils.trim(it[0]), StringUtils.trim(it[1])))
+                .map(it -> new ConsumerModule(ProtocolManager.moduleByModuleName(StringUtils.trim(it[0])), StringUtils.trim(it[1]), StringUtils.trim(it[2])))
                 .collect(Collectors.toList());
         return modules;
     }
@@ -156,7 +159,7 @@ public class RegisterVO {
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
 
             var consumerModules = consumerConfig.getConsumers().stream()
-                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getConsumer(), it.getLoadBalancer()))
+                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule().getName(), it.getLoadBalancer(), it.getConsumer()))
                     .collect(Collectors.toList());
             builder.append(StringUtils.format("consumer:[{}]"
                     , StringUtils.joinWith(StringUtils.COMMA + StringUtils.SPACE, consumerModules.toArray())));

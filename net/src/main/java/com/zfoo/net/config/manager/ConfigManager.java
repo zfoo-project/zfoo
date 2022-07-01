@@ -14,8 +14,6 @@
 package com.zfoo.net.config.manager;
 
 import com.zfoo.net.config.model.NetConfig;
-import com.zfoo.net.consumer.balancer.AbstractConsumerLoadBalancer;
-import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
 import com.zfoo.net.consumer.registry.IRegistry;
 import com.zfoo.net.consumer.registry.ZookeeperRegistry;
 import com.zfoo.protocol.ProtocolManager;
@@ -25,10 +23,8 @@ import com.zfoo.protocol.util.AssertionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author jaysunxiao
@@ -63,14 +59,30 @@ public class ConfigManager implements IConfigManager {
         var providerConfig = localConfig.getProvider();
         if (Objects.nonNull(providerConfig) && CollectionUtils.isNotEmpty(providerConfig.getProviders())) {
             // 检查并且替换配置文件中的ProtocolModule
-            for (var provider : providerConfig.getProviders()) {
-                var protocolModuleName = provider.getProtocolModule().getName();
+            var set = new HashSet<String>();
+            for (var providerModule : providerConfig.getProviders()) {
+                var provider = providerModule.getProvider();
+                var protocolModuleName = providerModule.getProtocolModule().getName();
                 var protocolModule = ProtocolManager.moduleByModuleName(protocolModuleName);
                 AssertionUtils.isTrue(protocolModule != null, "服务提供者[name:{}]在协议文件中不存在", protocolModuleName);
-                provider.setProtocolModule(protocolModule);
+                providerModule.setProtocolModule(protocolModule);
+                AssertionUtils.isTrue(set.add(provider), "服务提供者[name:{}]配置重复", provider);
             }
         }
-
+        var consumerConfig = localConfig.getConsumer();
+        if (Objects.nonNull(consumerConfig) && CollectionUtils.isNotEmpty(consumerConfig.getConsumers())) {
+            var set = new HashSet<String>();
+            var protocolModuleSet = new HashSet<ProtocolModule>();
+            for (var consumerModule : consumerConfig.getConsumers()) {
+                var consumer = consumerModule.getConsumer();
+                var protocolModuleName = consumerModule.getProtocolModule().getName();
+                var protocolModule = ProtocolManager.moduleByModuleName(protocolModuleName);
+                AssertionUtils.isTrue(protocolModule != null, "服务消费者[name:{}]在协议文件中不存在", protocolModuleName);
+                consumerModule.setProtocolModule(protocolModule);
+                AssertionUtils.isTrue(set.add(consumer), "服务消费者[name:{}]配置重复", consumer);
+                AssertionUtils.isTrue(protocolModuleSet.add(protocolModule), "服务消费者[name:{}]重复消费了协议模块{}", consumer, protocolModule);
+            }
+        }
         registry = new ZookeeperRegistry();
         registry.start();
     }
@@ -79,5 +91,4 @@ public class ConfigManager implements IConfigManager {
     public IRegistry getRegistry() {
         return registry;
     }
-
 }

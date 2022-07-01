@@ -58,35 +58,17 @@ public class Consumer implements IConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
-    private IConsumerLoadBalancer loadBalancer(ProtocolModule protocolModule) {
+    @Override
+    public IConsumerLoadBalancer loadBalancer(ProtocolModule protocolModule) {
         var consumerConfig = NetContext.getConfigManager().getLocalConfig().getConsumer();
         if (consumerConfig == null || CollectionUtils.isEmpty(consumerConfig.getConsumers())) {
             throw new RunException("没有配置服务消费者，无法消费");
         }
 
         var consumers = consumerConfig.getConsumers();
-        var clientSessionMap = NetContext.getSessionManager().getClientSessionMap();
-        for (var clientSession : clientSessionMap.values()) {
-            var attribute = clientSession.getAttribute(AttributeType.CONSUMER);
-            if (attribute == null) {
-                continue;
-            }
-
-            var registerVO = (RegisterVO) attribute;
-            var providerConfig = registerVO.getProviderConfig();
-            if (providerConfig == null) {
-                continue;
-            }
-
-            for (var provider : providerConfig.getProviders()) {
-                if (provider.getProtocolModule().getId() != protocolModule.getId()) {
-                    continue;
-                }
-                for (var consumer : consumers) {
-                    if (consumer.getConsumer().equals(provider.getProvider())) {
-                        return AbstractConsumerLoadBalancer.valueOf(consumer.getLoadBalancer());
-                    }
-                }
+        for (var consumer : consumers) {
+            if (consumer.getProtocolModule().equals(protocolModule)) {
+                return AbstractConsumerLoadBalancer.valueOf(consumer.getLoadBalancer());
             }
         }
         return null;

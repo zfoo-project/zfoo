@@ -44,8 +44,9 @@
     </xsd:complexType>
 
     <xsd:complexType name="consumerAttributeType">
-        <xsd:attribute name="consumer" type="xsd:string" use="required"/>
+        <xsd:attribute name="protocol-module" type="xsd:string" use="required"/>
         <xsd:attribute name="load-balancer" type="xsd:string" default="consistent-hash"/>
+        <xsd:attribute name="consumer" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="configType">

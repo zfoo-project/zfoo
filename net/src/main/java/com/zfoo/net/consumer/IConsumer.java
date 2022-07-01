@@ -13,9 +13,11 @@
 
 package com.zfoo.net.consumer;
 
+import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.registration.ProtocolModule;
 import org.springframework.lang.Nullable;
 
 /**
@@ -23,6 +25,8 @@ import org.springframework.lang.Nullable;
  * @version 3.0
  */
 public interface IConsumer {
+
+    IConsumerLoadBalancer loadBalancer(ProtocolModule protocolModule);
 
     /**
      * 直接发送，不需要任何返回值

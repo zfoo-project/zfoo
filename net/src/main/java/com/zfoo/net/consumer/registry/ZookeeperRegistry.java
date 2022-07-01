@@ -391,7 +391,7 @@ public class ZookeeperRegistry implements IRegistry {
             return;
         }
 
-        logger.info("开始通过[providerCacheSet:{}]检查[consumer:{}]", providerCacheSet, NetContext.getSessionManager().getClientSessionMap().size());
+        logger.info("开始通过providerCacheSet:{}检查[consumer:{}]", providerCacheSet, NetContext.getSessionManager().getClientSessionMap().size());
 
         var recheckFlag = false;
 

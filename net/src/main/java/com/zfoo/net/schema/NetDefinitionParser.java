@@ -182,8 +182,8 @@ public class NetDefinitionParser implements BeanDefinitionParser {
             var clazz = ProviderModule.class;
             var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
-            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("provider")));
             builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("protocol-module")));
+            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("provider")));
 
             providers.add(new BeanDefinitionHolder(builder.getBeanDefinition(), StringUtils.format("{}.{}{}", clazz.getCanonicalName(), param, i)));
         }
@@ -199,8 +199,9 @@ public class NetDefinitionParser implements BeanDefinitionParser {
             var clazz = ConsumerModule.class;
             var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
-            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("consumer")));
+            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("protocol-module")));
             builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("load-balancer")));
+            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("consumer")));
 
             modules.add(new BeanDefinitionHolder(builder.getBeanDefinition(), StringUtils.format("{}.{}{}", clazz.getCanonicalName(), param, i)));
         }

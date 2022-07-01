@@ -149,25 +149,4 @@ public class ProviderTest {
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
-    /**
-     * 固定消费方式
-     */
-    @Test
-    public void startFixedConsumer() {
-        var context = new ClassPathXmlApplicationContext("provider/consumer_fixed_config.xml");
-        SessionUtils.printSessionInfo();
-
-        var ask = new ProviderMessAsk();
-        ask.setMessage("Hello, this is the consumer!");
-        var atomicInteger = new AtomicInteger(0);
-
-        for (int i = 0; i < 1000; i++) {
-            ThreadUtils.sleep(3000);
-            NetContext.getConsumer().asyncAsk(ask, ProviderMessAnswer.class, 0).whenComplete(answer -> {
-                logger.info("消费者请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
-            });
-        }
-
-        ThreadUtils.sleep(Long.MAX_VALUE);
-    }
 }
