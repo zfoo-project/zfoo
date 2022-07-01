@@ -114,7 +114,7 @@ public class ProtocolAnalysis {
             var enhanceList = new ArrayList<IProtocolRegistration>();
 
             for (var moduleDefinition : xmlProtocols.getModules()) {
-                var module = new ProtocolModule(moduleDefinition.getId(), moduleDefinition.getName(), moduleDefinition.getVersion());
+                var module = new ProtocolModule(moduleDefinition.getId(), moduleDefinition.getName());
 
                 AssertionUtils.isTrue(module.getId() > 0, "[module:{}] [id:{}] 模块必须大于等于1", module.getName(), module.getId());
                 AssertionUtils.isNull(modules[module.getId()], "duplicate [module:{}] [id:{}] Exception!", module.getName(), module.getId());

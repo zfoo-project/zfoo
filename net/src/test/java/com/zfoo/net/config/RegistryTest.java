@@ -33,8 +33,8 @@ public class RegistryTest {
 
     @Test
     public void registerVoTest() {
-        var modules = List.of(new ProtocolModule((byte) 100, "aaa", "1.0.0")
-                , new ProtocolModule((byte) 120, "bbb", "1.0.0"));
+        var modules = List.of(new ProtocolModule((byte) 100, "aaa")
+                , new ProtocolModule((byte) 120, "bbb"));
         var providerConfig = ProviderConfig.valueOf(HostAndPort.valueOf("127.0.0.1", 80).toHostAndPortStr(), modules);
         var consumerConfig = ConsumerConfig.valueOf(modules);
 
@@ -49,59 +49,6 @@ public class RegistryTest {
         System.out.println(NetUtil.LOCALHOST6);
         System.out.println(NetUtil.SOMAXCONN);
         System.out.println(NetUtil.LOOPBACK_IF);
-    }
-
-    @Test
-    public void moduleTest() {
-        var moduleId = (byte) 1;
-        var str = "1.0.0";
-        var module = new ProtocolModule(moduleId, "", str);
-
-        str = "0.0.0";
-        module = new ProtocolModule(moduleId, "", str);
-
-        str = "10.0.0";
-        module = new ProtocolModule(moduleId, "", str);
-
-        str = "10.11.10";
-        module = new ProtocolModule(moduleId, "", str);
-
-        str = "10.11.101";
-        module = new ProtocolModule(moduleId, "", str);
-
-        str = "99.99.999";
-        module = new ProtocolModule(moduleId, "", str);
-
-        module = null;
-
-        str = "1.00.001";
-        try {
-            module = new ProtocolModule(moduleId, "", str);
-        } catch (Exception e) {
-        }
-        Assert.assertNull(module);
-
-        str = "1.00.111";
-        try {
-            module = new ProtocolModule(moduleId, "", str);
-        } catch (Exception e) {
-        }
-        Assert.assertNull(module);
-
-        str = "1.001.0";
-        try {
-            module = new ProtocolModule(moduleId, "", str);
-        } catch (Exception e) {
-        }
-        Assert.assertNull(module);
-
-        str = "99.999.999";
-        try {
-            module = new ProtocolModule(moduleId, "", str);
-        } catch (Exception e) {
-        }
-        Assert.assertNotNull(module);
-
     }
 
 }

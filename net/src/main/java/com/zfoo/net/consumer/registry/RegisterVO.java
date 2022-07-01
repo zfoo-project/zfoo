@@ -99,7 +99,7 @@ public class RegisterVO {
         var modules = Arrays.stream(moduleSplits)
                 .map(it -> it.trim())
                 .map(it -> it.split(StringUtils.HYPHEN))
-                .map(it -> new ProtocolModule(Byte.parseByte(it[0]), it[1], it[2], Integer.parseInt(it[3])))
+                .map(it -> new ProtocolModule(Byte.parseByte(it[0]), it[1], Integer.parseInt(it[2])))
                 .collect(Collectors.toList());
         return modules;
     }
@@ -109,7 +109,7 @@ public class RegisterVO {
     }
 
     public String toConsumerString() {
-        return toString() +
+        return this +
                 StringUtils.SPACE + StringUtils.VERTICAL_BAR + StringUtils.SPACE +
                 uuid;
     }
@@ -149,7 +149,7 @@ public class RegisterVO {
     }
 
     public String joinWith(String sep, ProtocolModule module) {
-        return StringUtils.joinWith(sep, module.getId(), module.getName(), ProtocolModule.versionNumToStr(module.getVersion()), module.getGroup());
+        return StringUtils.joinWith(sep, module.getId(), module.getName(), module.getGroup());
     }
 
     public String getId() {
