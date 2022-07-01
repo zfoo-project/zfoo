@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,23 +10,39 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.config.manager;
+package com.zfoo.net.config.model;
 
-import com.zfoo.net.config.model.NetConfig;
-import com.zfoo.net.consumer.balancer.AbstractConsumerLoadBalancer;
-import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
-import com.zfoo.net.consumer.registry.IRegistry;
 import com.zfoo.protocol.registration.ProtocolModule;
 
 /**
  * @author jaysunxiao
  * @version 3.0
  */
-public interface IConfigManager {
+public class ConsumerModule {
 
-    NetConfig getLocalConfig();
+    // 消费哪个provider
+    private String consumer;
 
-    void initRegistry();
+    private String loadBalancer;
 
-    IRegistry getRegistry();
+    public ConsumerModule(String consumer, String loadBalancer) {
+        this.consumer = consumer;
+        this.loadBalancer = loadBalancer;
+    }
+
+    public String getConsumer() {
+        return consumer;
+    }
+
+    public void setConsumer(String consumer) {
+        this.consumer = consumer;
+    }
+
+    public String getLoadBalancer() {
+        return loadBalancer;
+    }
+
+    public void setLoadBalancer(String loadBalancer) {
+        this.loadBalancer = loadBalancer;
+    }
 }

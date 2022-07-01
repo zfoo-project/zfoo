@@ -25,20 +25,20 @@ import java.util.Objects;
  */
 public class ConsumerConfig {
 
-    private List<ProtocolModule> modules;
+    private List<ConsumerModule> consumers;
 
-    public static ConsumerConfig valueOf(List<ProtocolModule> modules) {
+    public static ConsumerConfig valueOf(List<ConsumerModule> modules) {
         ConsumerConfig config = new ConsumerConfig();
-        config.modules = modules;
+        config.consumers = modules;
         return config;
     }
 
-    public List<ProtocolModule> getModules() {
-        return modules;
+    public List<ConsumerModule> getConsumers() {
+        return consumers;
     }
 
-    public void setModules(List<ProtocolModule> modules) {
-        this.modules = modules;
+    public void setConsumers(List<ConsumerModule> consumers) {
+        this.consumers = consumers;
     }
 
     @Override
@@ -50,11 +50,11 @@ public class ConsumerConfig {
             return false;
         }
         ConsumerConfig that = (ConsumerConfig) o;
-        return Objects.equals(modules, that.modules);
+        return Objects.equals(consumers, that.consumers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(modules);
+        return Objects.hash(consumers);
     }
 }

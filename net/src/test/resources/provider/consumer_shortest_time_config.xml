@@ -25,9 +25,9 @@
         </net:registry>
 
 
-        <net:consumer>
-            <net:module name="providerTest" load-balancer="shortest-time"/>
-        </net:consumer>
+        <net:consumers>
+            <net:consumer consumer="providerTest" load-balancer="shortest-time"/>
+        </net:consumers>
 
     </net:config>
 

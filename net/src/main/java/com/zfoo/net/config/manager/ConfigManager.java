@@ -18,7 +18,6 @@ import com.zfoo.net.consumer.balancer.AbstractConsumerLoadBalancer;
 import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
 import com.zfoo.net.consumer.registry.IRegistry;
 import com.zfoo.net.consumer.registry.ZookeeperRegistry;
-import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.registration.ProtocolModule;
@@ -27,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,10 +43,6 @@ public class ConfigManager implements IConfigManager {
      */
     private NetConfig localConfig;
 
-    private AbstractConsumerLoadBalancer consumerLoadBalancer;
-
-    private final Map<String, IConsumerLoadBalancer> consumerLoadBalancerMap = new ConcurrentHashMap<>();
-
     /**
      * 注册中心
      */
@@ -64,39 +58,17 @@ public class ConfigManager implements IConfigManager {
     }
 
     @Override
-    public IConsumerLoadBalancer consumerLoadBalancer(ProtocolModule module) {
-        return consumerLoadBalancerMap.get(module.getName());
-    }
-
-    @Override
     public void initRegistry() {
         // 通过protocol，写入provider的module的id和version
         var providerConfig = localConfig.getProvider();
-        if (Objects.nonNull(providerConfig) && CollectionUtils.isNotEmpty(providerConfig.getModules())) {
-            var providerModules = new ArrayList<ProtocolModule>(providerConfig.getModules().size());
-            for (var providerModule : providerConfig.getModules()) {
-                var module = ProtocolManager.moduleByModuleName(providerModule.getName());
-                AssertionUtils.isTrue(module != null, "服务提供者[name:{}]在协议文件中不存在", providerModule.getName());
-                module.setGroup(providerModule.getGroup());
-                providerModules.add(module);
+        if (Objects.nonNull(providerConfig) && CollectionUtils.isNotEmpty(providerConfig.getProviders())) {
+            // 检查并且替换配置文件中的ProtocolModule
+            for (var provider : providerConfig.getProviders()) {
+                var protocolModuleName = provider.getProtocolModule().getName();
+                var protocolModule = ProtocolManager.moduleByModuleName(protocolModuleName);
+                AssertionUtils.isTrue(protocolModule != null, "服务提供者[name:{}]在协议文件中不存在", protocolModuleName);
+                provider.setProtocolModule(protocolModule);
             }
-            providerConfig.setModules(providerModules);
-        }
-
-        // 通过protocol，写入consumer的module的id和version
-        var consumerConfig = localConfig.getConsumer();
-        if (Objects.nonNull(consumerConfig) && CollectionUtils.isNotEmpty(consumerConfig.getModules())) {
-            var consumerModules = new ArrayList<ProtocolModule>(consumerConfig.getModules().size());
-            for (var providerModule : consumerConfig.getModules()) {
-                var module = ProtocolManager.moduleByModuleName(providerModule.getName());
-                AssertionUtils.isTrue(module != null, "消费者[name:{}]在协议文件中不存在", providerModule.getName());
-                module.setGroup(providerModule.getGroup());
-                module.setLoadBalancer(providerModule.getLoadBalancer());
-                consumerModules.add(module);
-                consumerLoadBalancerMap.put(module.getName(), AbstractConsumerLoadBalancer.valueOf(module.getLoadBalancer()));
-            }
-            consumerConfig.setModules(consumerModules);
-//            consumerLoadBalancer = AbstractConsumerLoadBalancer.valueOf(consumerConfig.getLoadBalancer());
         }
 
         registry = new ZookeeperRegistry();

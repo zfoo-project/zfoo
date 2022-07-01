@@ -24,10 +24,9 @@
             <net:address name="${registry.address.name}" url="${registry.address.url}"/>
         </net:registry>
 
-        <net:consumer>
-            <net:module name="providerTest" load-balancer="random"/>
-        </net:consumer>
-
+        <net:consumers>
+            <net:consumer consumer="providerTest" load-balancer="random"/>
+        </net:consumers>
     </net:config>
 
 </beans>

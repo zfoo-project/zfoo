@@ -14,6 +14,9 @@
 package com.zfoo.net.consumer;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.consumer.balancer.AbstractConsumerLoadBalancer;
+import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
+import com.zfoo.net.consumer.registry.RegisterVO;
 import com.zfoo.net.packet.common.Error;
 import com.zfoo.net.router.Router;
 import com.zfoo.net.router.answer.AsyncAnswer;
@@ -24,8 +27,13 @@ import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
 import com.zfoo.net.router.route.SignalBridge;
+import com.zfoo.net.session.model.AttributeType;
+import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.exception.RunException;
+import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.math.HashUtils;
@@ -33,6 +41,8 @@ import com.zfoo.util.math.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -48,12 +58,45 @@ public class Consumer implements IConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
+    private IConsumerLoadBalancer loadBalancer(ProtocolModule protocolModule) {
+        var consumerConfig = NetContext.getConfigManager().getLocalConfig().getConsumer();
+        if (consumerConfig == null || CollectionUtils.isEmpty(consumerConfig.getConsumers())) {
+            throw new RunException("没有配置服务消费者，无法消费");
+        }
+
+        var consumers = consumerConfig.getConsumers();
+        var clientSessionMap = NetContext.getSessionManager().getClientSessionMap();
+        for (var clientSession : clientSessionMap.values()) {
+            var attribute = clientSession.getAttribute(AttributeType.CONSUMER);
+            if (attribute == null) {
+                continue;
+            }
+
+            var registerVO = (RegisterVO) attribute;
+            var providerConfig = registerVO.getProviderConfig();
+            if (providerConfig == null) {
+                continue;
+            }
+
+            for (var provider : providerConfig.getProviders()) {
+                if (provider.getProtocolModule().getId() != protocolModule.getId()) {
+                    continue;
+                }
+                for (var consumer : consumers) {
+                    if (consumer.getConsumer().equals(provider.getProvider())) {
+                        return AbstractConsumerLoadBalancer.valueOf(consumer.getLoadBalancer());
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     @Override
     public void send(IPacket packet, Object argument) {
         try {
             var module = ProtocolManager.moduleByProtocolId(packet.protocolId());
-            var loadBalancer = NetContext.getConfigManager().consumerLoadBalancer(module);
+            var loadBalancer = loadBalancer(module);
             var session = loadBalancer.loadBalancer(packet, argument);
             var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
             NetContext.getRouter().send(session, packet, NoAnswerAttachment.valueOf(executorConsistentHash));
@@ -65,7 +108,7 @@ public class Consumer implements IConsumer {
     @Override
     public <T extends IPacket> SyncAnswer<T> syncAsk(IPacket packet, Class<T> answerClass, Object argument) throws Exception {
         var module = ProtocolManager.moduleByProtocolId(packet.protocolId());
-        var loadBalancer = NetContext.getConfigManager().consumerLoadBalancer(module);
+        var loadBalancer = loadBalancer(module);
         var session = loadBalancer.loadBalancer(packet, argument);
 
 
@@ -107,7 +150,7 @@ public class Consumer implements IConsumer {
     @Override
     public <T extends IPacket> AsyncAnswer<T> asyncAsk(IPacket packet, Class<T> answerClass, Object argument) {
         var module = ProtocolManager.moduleByProtocolId(packet.protocolId());
-        var loadBalancer = NetContext.getConfigManager().consumerLoadBalancer(module);
+        var loadBalancer = loadBalancer(module);
         var session = loadBalancer.loadBalancer(packet, argument);
         var asyncAnswer = NetContext.getRouter().asyncAsk(session, packet, answerClass, argument);
 

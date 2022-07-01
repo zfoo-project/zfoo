@@ -13,7 +13,6 @@
 
 package com.zfoo.net.config.model;
 
-import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.net.HostAndPort;
 import com.zfoo.util.net.NetUtils;
@@ -38,12 +37,12 @@ public class ProviderConfig {
 
     private String address;
 
-    private List<ProtocolModule> modules;
+    private List<ProviderModule> providers;
 
-    public static ProviderConfig valueOf(String address, List<ProtocolModule> modules) {
+    public static ProviderConfig valueOf(String address, List<ProviderModule> modules) {
         ProviderConfig config = new ProviderConfig();
         config.address = address;
-        config.modules = modules;
+        config.providers = modules;
         return config;
     }
 
@@ -80,12 +79,12 @@ public class ProviderConfig {
         this.address = address;
     }
 
-    public List<ProtocolModule> getModules() {
-        return modules;
+    public List<ProviderModule> getProviders() {
+        return providers;
     }
 
-    public void setModules(List<ProtocolModule> modules) {
-        this.modules = modules;
+    public void setProviders(List<ProviderModule> providers) {
+        this.providers = providers;
     }
 
     @Override
@@ -97,11 +96,11 @@ public class ProviderConfig {
             return false;
         }
         ProviderConfig that = (ProviderConfig) o;
-        return Objects.equals(address, that.address) && Objects.equals(modules, that.modules);
+        return Objects.equals(address, that.address) && Objects.equals(providers, that.providers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(address, modules);
+        return Objects.hash(address, providers);
     }
 }

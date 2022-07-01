@@ -27,11 +27,6 @@ public class ProtocolModule {
 
     private String name;
 
-    private String loadBalancer;
-
-    private int group;
-
-
     public ProtocolModule(byte id, String name) {
         if (id < 0) {
             throw new IllegalArgumentException(StringUtils.format("模块[{}]的id[{}]必须大于0", name, id));
@@ -39,18 +34,6 @@ public class ProtocolModule {
 
         this.id = id;
         this.name = name;
-    }
-
-    public ProtocolModule(byte id, String name, int group) {
-        this.id = id;
-        this.name = name;
-        this.group = group;
-    }
-
-    public ProtocolModule(String name, String loadBalancer, String group) {
-        this.name = name;
-        this.loadBalancer = loadBalancer;
-        this.group = Integer.parseInt(group);
     }
 
 
@@ -70,22 +53,6 @@ public class ProtocolModule {
         this.name = name;
     }
 
-    public String getLoadBalancer() {
-        return loadBalancer;
-    }
-
-    public void setLoadBalancer(String loadBalancer) {
-        this.loadBalancer = loadBalancer;
-    }
-
-    public int getGroup() {
-        return group;
-    }
-
-    public void setGroup(int group) {
-        this.group = group;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -95,10 +62,7 @@ public class ProtocolModule {
             return false;
         }
         ProtocolModule module = (ProtocolModule) o;
-        if (group == 0 || module.group == 0) {
-            return id == module.id;
-        }
-        return id == module.id && group == module.group;
+        return id == module.id;
     }
 
     @Override
@@ -108,6 +72,6 @@ public class ProtocolModule {
 
     @Override
     public String toString() {
-        return StringUtils.format("[id:{}][name:{}][group:{}]", id, name, group);
+        return StringUtils.format("[id:{}][name:{}]", id, name);
     }
 }

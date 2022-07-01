@@ -20,7 +20,6 @@ import com.zfoo.net.consumer.Consumer;
 import com.zfoo.net.packet.service.PacketService;
 import com.zfoo.net.router.Router;
 import com.zfoo.net.session.manager.SessionManager;
-import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.DomUtils;
 import com.zfoo.protocol.util.StringUtils;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -112,13 +111,13 @@ public class NetDefinitionParser implements BeanDefinitionParser {
             builder.addPropertyReference("monitor", MonitorConfig.class.getCanonicalName());
         }
 
-        var providerElement = DomUtils.getFirstChildElementByTagName(element, "provider");
+        var providerElement = DomUtils.getFirstChildElementByTagName(element, "providers");
         if (providerElement != null) {
             builder.addPropertyReference("provider", ProviderConfig.class.getCanonicalName());
             parseProviderConfig(providerElement, parserContext);
         }
 
-        var consumerElement = DomUtils.getFirstChildElementByTagName(element, "consumer");
+        var consumerElement = DomUtils.getFirstChildElementByTagName(element, "consumers");
         if (consumerElement != null) {
             parseConsumerConfig(consumerElement, parserContext);
             builder.addPropertyReference("consumer", ConsumerConfig.class.getCanonicalName());
@@ -159,8 +158,8 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("thread", "thread", builder, element, parserContext);
         resolvePlaceholder("address", "address", builder, element, parserContext);
 
-        var providerModules = parseModules("provider", element, parserContext);
-        builder.addPropertyValue("modules", providerModules);
+        var providerModules = parseProviderModules("providers", element, parserContext);
+        builder.addPropertyValue("providers", providerModules);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
 
@@ -168,23 +167,40 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         var clazz = ConsumerConfig.class;
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
-        var consumerModules = parseModules("consumer", element, parserContext);
-        builder.addPropertyValue("modules", consumerModules);
+        var consumerModules = parseConsumerModules("consumers", element, parserContext);
+        builder.addPropertyValue("consumers", consumerModules);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
 
-    private ManagedList<BeanDefinitionHolder> parseModules(String param, Element element, ParserContext parserContext) {
-        var moduleElementList = DomUtils.getChildElementsByTagName(element, "module");
+
+    private ManagedList<BeanDefinitionHolder> parseProviderModules(String param, Element element, ParserContext parserContext) {
+        var moduleElementList = DomUtils.getChildElementsByTagName(element, "provider");
+        var providers = new ManagedList<BeanDefinitionHolder>();
+        var environment = parserContext.getReaderContext().getEnvironment();
+        for (var i = 0; i < moduleElementList.size(); i++) {
+            var addressElement = moduleElementList.get(i);
+            var clazz = ProviderModule.class;
+            var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
+
+            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("provider")));
+            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("protocol-module")));
+
+            providers.add(new BeanDefinitionHolder(builder.getBeanDefinition(), StringUtils.format("{}.{}{}", clazz.getCanonicalName(), param, i)));
+        }
+        return providers;
+    }
+
+    private ManagedList<BeanDefinitionHolder> parseConsumerModules(String param, Element element, ParserContext parserContext) {
+        var moduleElementList = DomUtils.getChildElementsByTagName(element, "consumer");
         var modules = new ManagedList<BeanDefinitionHolder>();
         var environment = parserContext.getReaderContext().getEnvironment();
         for (var i = 0; i < moduleElementList.size(); i++) {
             var addressElement = moduleElementList.get(i);
-            var clazz = ProtocolModule.class;
+            var clazz = ConsumerModule.class;
             var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
-            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("name")));
+            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("consumer")));
             builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("load-balancer")));
-            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("group")));
 
             modules.add(new BeanDefinitionHolder(builder.getBeanDefinition(), StringUtils.format("{}.{}{}", clazz.getCanonicalName(), param, i)));
         }
