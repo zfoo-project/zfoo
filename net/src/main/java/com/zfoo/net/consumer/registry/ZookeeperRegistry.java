@@ -112,13 +112,7 @@ public class ZookeeperRegistry implements IRegistry {
     /**
      * consumer需要消费的provider集合
      */
-    private final Set<RegisterVO> providerCacheSet = new ConcurrentHashSet<>();
-    /**
-     * 本地注册信息
-     */
-    private final RegisterVO localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
-
-
+    private final Set<RegisterVO> providerHashConsumerSet = new ConcurrentHashSet<>();
     /**
      * addListener中的cache全部会被添加到这个集合中，这个集合不包括providerCuratorCache
      */
@@ -282,8 +276,9 @@ public class ZookeeperRegistry implements IRegistry {
                     case NODE_CREATED:
                         var providerStr = StringUtils.substringAfterFirst(newData.getPath(), PROVIDER_ROOT_PATH + StringUtils.SLASH);
                         var provider = RegisterVO.parseString(providerStr);
-                        if (RegisterVO.providerHasConsumerModule(provider, localRegisterVO)) {
-                            providerCacheSet.add(provider);
+                        var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
+                        if (RegisterVO.providerHasConsumer(provider, localRegisterVO)) {
+                            providerHashConsumerSet.add(provider);
                             checkConsumer();
                             logger.info("发现新的订阅服务[{}]", providerStr);
                         }
@@ -291,8 +286,8 @@ public class ZookeeperRegistry implements IRegistry {
                     case NODE_DELETED:
                         var oldProviderStr = StringUtils.substringAfterFirst(oldData.getPath(), PROVIDER_ROOT_PATH + StringUtils.SLASH);
                         var oldProvider = RegisterVO.parseString(oldProviderStr);
-                        if (providerCacheSet.contains(oldProvider)) {
-                            providerCacheSet.remove(oldProvider);
+                        if (providerHashConsumerSet.contains(oldProvider)) {
+                            providerHashConsumerSet.remove(oldProvider);
                             checkConsumer();
                             logger.info("取消订阅服务[{}]", oldProviderStr);
                         }
@@ -329,6 +324,7 @@ public class ZookeeperRegistry implements IRegistry {
     }
 
     private void initLocalProvider() throws Exception {
+        var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
         if (Objects.nonNull(localRegisterVO.getProviderConfig())) {
             var localProviderVoStr = localRegisterVO.toProviderString();
             var localProviderPath = PROVIDER_ROOT_PATH + StringUtils.SLASH + localProviderVoStr;
@@ -357,16 +353,17 @@ public class ZookeeperRegistry implements IRegistry {
     }
 
     private void initConsumerCache() throws Exception {
+        var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
         // 初始化providerCacheSet
         var remoteProviderSet = curator.getChildren().forPath(PROVIDER_ROOT_PATH).stream()
                 .filter(it -> StringUtils.isNotBlank(it) && !"null".equals(it))
                 .map(it -> RegisterVO.parseString(it))
                 .filter(it -> Objects.nonNull(it))
-                .filter(it -> RegisterVO.providerHasConsumerModule(it, localRegisterVO))
+                .filter(it -> RegisterVO.providerHasConsumer(it, localRegisterVO))
                 .collect(Collectors.toSet());
 
-        providerCacheSet.clear();
-        providerCacheSet.addAll(remoteProviderSet);
+        providerHashConsumerSet.clear();
+        providerHashConsumerSet.addAll(remoteProviderSet);
 
         // 初始化consumer，providerCacheSet改变会导致消费者改变
         checkConsumer();
@@ -391,11 +388,12 @@ public class ZookeeperRegistry implements IRegistry {
             return;
         }
 
-        logger.info("开始通过providerCacheSet:{}检查[consumer:{}]", providerCacheSet, NetContext.getSessionManager().getClientSessionMap().size());
+        logger.info("开始通过providerHashConsumerSet:{}检查[consumer:{}]", providerHashConsumerSet, NetContext.getSessionManager().getClientSessionMap().size());
 
         var recheckFlag = false;
 
-        for (var providerCache : providerCacheSet) {
+        for (var providerCache : providerHashConsumerSet) {
+            // 先排除已经启动的consumer
             var consumerClientList = NetContext.getSessionManager().getClientSessionMap().values().stream()
                     .filter(it -> {
                         var attribute = it.getAttribute(AttributeType.CONSUMER);
@@ -428,6 +426,7 @@ public class ZookeeperRegistry implements IRegistry {
                 EventBus.asyncSubmit(ConsumerStartEvent.valueOf(providerCache, session));
 
                 try {
+                    var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
                     var path = CONSUMER_ROOT_PATH + StringUtils.SLASH + localRegisterVO.toConsumerString();
                     var stat = curator.checkExists().forPath(path);
                     if (Objects.isNull(stat)) {
@@ -446,12 +445,7 @@ public class ZookeeperRegistry implements IRegistry {
         }
 
         if (recheckFlag) {
-            SchedulerBus.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    checkConsumer();
-                }
-            }, RETRY_SECONDS, TimeUnit.SECONDS);
+            SchedulerBus.schedule(() -> checkConsumer(), RETRY_SECONDS, TimeUnit.SECONDS);
         }
     }
 
@@ -582,6 +576,7 @@ public class ZookeeperRegistry implements IRegistry {
             return;
         }
         try {
+            var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
             if (curator.getState() == CuratorFrameworkState.STARTED) {
                 // 删除服务提供者的临时节点
                 if (Objects.nonNull(localRegisterVO.getProviderConfig())) {

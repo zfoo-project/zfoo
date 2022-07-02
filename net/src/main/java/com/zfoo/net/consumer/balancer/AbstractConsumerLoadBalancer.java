@@ -63,7 +63,7 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
                     var attribute = it.getAttribute(AttributeType.CONSUMER);
                     if (Objects.nonNull(attribute)) {
                         var registerVO = (RegisterVO) attribute;
-                        return Objects.nonNull(registerVO.getProviderConfig()) && registerVO.getProviderConfig().getProviders().stream().anyMatch(provider -> provider.getProtocolModule().getId() == module.getId());
+                        return Objects.nonNull(registerVO.getProviderConfig()) && registerVO.getProviderConfig().getProviders().stream().anyMatch(provider -> provider.getProtocolModule().equals(module));
                     } else {
                         return false;
                     }

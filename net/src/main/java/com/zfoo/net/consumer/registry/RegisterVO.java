@@ -17,9 +17,9 @@ import com.zfoo.net.config.model.ConsumerConfig;
 import com.zfoo.net.config.model.ConsumerModule;
 import com.zfoo.net.config.model.ProviderConfig;
 import com.zfoo.net.config.model.ProviderModule;
-import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.security.IdUtils;
 import org.slf4j.Logger;
@@ -46,13 +46,13 @@ public class RegisterVO {
     private ConsumerConfig consumerConfig;
 
 
-    public static boolean providerHasConsumerModule(RegisterVO providerVO, RegisterVO consumerVO) {
+    public static boolean providerHasConsumer(RegisterVO providerVO, RegisterVO consumerVO) {
         if (Objects.isNull(providerVO) || Objects.isNull(providerVO.providerConfig) || CollectionUtils.isEmpty(providerVO.providerConfig.getProviders())
                 || Objects.isNull(consumerVO) || Objects.isNull(consumerVO.consumerConfig) || CollectionUtils.isEmpty(consumerVO.consumerConfig.getConsumers())) {
             return false;
         }
         for (var provider : providerVO.getProviderConfig().getProviders()) {
-            if (consumerVO.getConsumerConfig().getConsumers().stream().anyMatch(it -> it.getConsumer().equals(provider.getProvider()))) {
+            if (consumerVO.getConsumerConfig().getConsumers().stream().anyMatch(it -> provider.getProvider().equals(it.getConsumer()))) {
                 return true;
             }
         }
@@ -106,7 +106,7 @@ public class RegisterVO {
         var modules = Arrays.stream(moduleSplits)
                 .map(it -> it.trim())
                 .map(it -> it.split(StringUtils.HYPHEN))
-                .map(it -> new ProviderModule(ProtocolManager.moduleByModuleName(StringUtils.trim(it[0])), StringUtils.trim(it[1])))
+                .map(it -> new ProviderModule(new ProtocolModule(Byte.parseByte(it[0]), it[1]), it[2]))
                 .collect(Collectors.toList());
         return modules;
     }
@@ -119,7 +119,7 @@ public class RegisterVO {
         var modules = Arrays.stream(moduleSplits)
                 .map(it -> it.trim())
                 .map(it -> it.split(StringUtils.HYPHEN))
-                .map(it -> new ConsumerModule(ProtocolManager.moduleByModuleName(StringUtils.trim(it[0])), StringUtils.trim(it[1]), StringUtils.trim(it[2])))
+                .map(it -> new ConsumerModule(new ProtocolModule(Byte.parseByte(it[0]), it[1]), it[2], it[3]))
                 .collect(Collectors.toList());
         return modules;
     }
@@ -149,7 +149,7 @@ public class RegisterVO {
 
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
             var providerModules = providerConfig.getProviders().stream()
-                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule().getName(), it.getProvider()))
+                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule().getId(), it.getProtocolModule().getName(), it.getProvider()))
                     .collect(Collectors.toList());
             builder.append(StringUtils.format("provider:[{}]"
                     , StringUtils.joinWith(StringUtils.COMMA + StringUtils.SPACE, providerModules.toArray())));
@@ -159,7 +159,7 @@ public class RegisterVO {
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
 
             var consumerModules = consumerConfig.getConsumers().stream()
-                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule().getName(), it.getLoadBalancer(), it.getConsumer()))
+                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule().getId(), it.getProtocolModule().getName(), it.getLoadBalancer(), it.getConsumer()))
                     .collect(Collectors.toList());
             builder.append(StringUtils.format("consumer:[{}]"
                     , StringUtils.joinWith(StringUtils.COMMA + StringUtils.SPACE, consumerModules.toArray())));

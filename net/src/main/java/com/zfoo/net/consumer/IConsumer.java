@@ -26,6 +26,8 @@ import org.springframework.lang.Nullable;
  */
 public interface IConsumer {
 
+    void init();
+
     IConsumerLoadBalancer loadBalancer(ProtocolModule protocolModule);
 
     /**
