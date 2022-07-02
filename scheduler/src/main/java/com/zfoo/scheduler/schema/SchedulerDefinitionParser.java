@@ -22,6 +22,15 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
 /**
+ * SchedulerContext注入到Spring容器中的时机分析：
+ * 首先运行测试工程：com.zfoo.scheduler.ApplicationTest
+ * 打断点可以发现，在解析application.xml时，这种自定义的解析是在DefaultBeanDefinitionDocumentReader.java类的parseBeanDefinitions中解析xml的"scheduler元素"时
+ * 发现不是自定义元素(是否是spring的命名空间为依据作为判断)，就会调用 parseCustomElement解析自定义标签从而调用到实现BeanDefinitionParser接口的parse方法，
+ * 从而接着走自己的逻辑在spring容器中注入SchedulerContext这个bean对象。
+ * <p>
+ * 从而可以得出结论：在基于zfoo的SpringBoot工程中，由于压根不解析xml对象，注册bean也是通过@Configuration配置类注册bean的，
+ * 因此这些实现BeanDefinitionParser接口的parse方法是都不会执行的。
+ *
  * @author jaysunxiao
  * @version 3.0
  */
