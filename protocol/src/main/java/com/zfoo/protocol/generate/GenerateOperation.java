@@ -47,7 +47,7 @@ public class GenerateOperation {
     private String protocolParam;
 
     /**
-     * 需要生成的协议文件
+     * 需要生成的协议文件(c#、js、ts...等需要生成协议的语言都列出来)
      */
     private final Set<CodeLanguage> generateLanguages = EnumSet.noneOf(CodeLanguage.class);
 

@@ -29,6 +29,9 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import java.lang.reflect.Modifier;
 
 /**
+ * 这是一个后置处理器，在boot项目中注册EventContext时，会import导入EventRegisterProcessor这个组件，这是一个后置处理器，
+ * 断点发现 在AbstractAutowireCapableBeanFactory或调用getBeanPostProcessors，这样子每一个后置处理器都会走postProcessAfterInitialization这个方法
+ *
  * @author jaysunxiao
  * @version 3.0
  */

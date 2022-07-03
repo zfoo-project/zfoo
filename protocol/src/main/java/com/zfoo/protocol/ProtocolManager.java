@@ -33,9 +33,19 @@ public class ProtocolManager {
     public static final short MAX_PROTOCOL_NUM = Short.MAX_VALUE;
     public static final byte MAX_MODULE_NUM = Byte.MAX_VALUE;
 
+    /**
+     * 索引：协议号protocolId
+     */
     public static final IProtocolRegistration[] protocols = new IProtocolRegistration[MAX_PROTOCOL_NUM];
+    /**
+     * 索引：模块号
+     */
     public static final ProtocolModule[] modules = new ProtocolModule[MAX_MODULE_NUM];
 
+    /**
+     * key:协议class
+     * value:protocolId
+     */
     private static final Map<Class<?>, Short> protocolIdMap = new HashMap<>();
 
     static {
@@ -68,12 +78,24 @@ public class ProtocolManager {
         return modules[protocols[id].module()];
     }
 
+    /**
+     * 根据模块id查找模块
+     *
+     * @param moduleId
+     * @return
+     */
     public static ProtocolModule moduleByModuleId(byte moduleId) {
         var module = modules[moduleId];
         AssertionUtils.notNull(module, "[moduleId:{}]不存在", moduleId);
         return module;
     }
 
+    /**
+     * 根据模块名字查找模块
+     *
+     * @param name
+     * @return
+     */
     public static ProtocolModule moduleByModuleName(String name) {
         var moduleOptional = Arrays.stream(modules)
                 .filter(it -> Objects.nonNull(it))

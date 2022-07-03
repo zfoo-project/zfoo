@@ -58,6 +58,13 @@ public abstract class GenerateProtocolFile {
         index = null;
     }
 
+    /**
+     * 生成各种语言的协议文件
+     *
+     * @param generateOperation
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static void generate(GenerateOperation generateOperation) throws IOException, ClassNotFoundException {
         var protocols = ProtocolManager.protocols;
 
