@@ -89,16 +89,26 @@ public class ProtocolAnalysis {
         baseSerializerMap.put(String.class, StringSerializer.INSTANCE);
     }
 
+    /**
+     * 真正的注册协议，将协议id和协议信息关联起来
+     *
+     * @param protocolClassSet
+     * @param generateOperation
+     */
     public static synchronized void analyze(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
         AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
         try {
+            // 检查协议类是否合法
             for (var protocolClass : protocolClassSet) {
                 checkProtocol(protocolClass);
             }
+
+            // 协议id和协议信息对应起来
             for (var protocolClass : protocolClassSet) {
                 var registration = parseProtocolRegistration(protocolClass, ProtocolModule.DEFAULT_PROTOCOL_MODULE);
                 protocols[registration.protocolId()] = registration;
             }
+
             // 通过指定类注册的协议，全部使用字节码增强
             var enhanceList = Arrays.stream(protocols).filter(it -> Objects.nonNull(it)).collect(Collectors.toList());
             enhance(generateOperation, enhanceList);

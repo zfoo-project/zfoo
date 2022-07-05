@@ -23,6 +23,7 @@ import com.google.protobuf.CodedOutputStream;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.*;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -67,6 +68,7 @@ public class SpeedTest {
         protobufTest();
         kryoTest();
 
+        // 递归执行，多跑几遍
         benchmark = benchmark * 2;
         singleThreadBenchmarks();
     }
@@ -105,7 +107,10 @@ public class SpeedTest {
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.clear();
+            // 把对象序列化到buffer中
             ProtocolManager.write(buffer, simpleObject);
+
+            // 从buffer中反序列化出对象
             var packet = ProtocolManager.read(buffer);
         }
 
@@ -298,8 +303,12 @@ public class SpeedTest {
 
     static {
         var op = GenerateOperation.NO_OPERATION;
-//        op.getGenerateLanguages().add(CodeLanguage.JavaScript);
-        // zfoo协议注册
+
+        // 这行加上，会在protocol目录下，生成jsProtocol文件夹及其对应的js协议文件
+        op.getGenerateLanguages().add(CodeLanguage.JavaScript);
+        op.getGenerateLanguages().add(CodeLanguage.TypeScript);
+
+        // zfoo协议注册(其实就是：将Set里面的协议号和对应的类注册好，这样子就可以根据协议号知道是反序列化为哪个类)
         ProtocolManager.initProtocol(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, ObjectA.class, ObjectB.class), op);
 
         for (int i = 0; i < executors.length; i++) {
@@ -308,6 +317,7 @@ public class SpeedTest {
     }
 
     // -------------------------------------------以下为测试用例---------------------------------------------------------------
+    // 简单类型
     private static final byte byteValue = 99;
     private static final short shortValue = 9999;
     private static final int intValue = 99999999;
@@ -318,7 +328,7 @@ public class SpeedTest {
     private static final String charValueString = "c";
     private static final String stringValue = "hello";
 
-
+    // 数组类型
     private static final boolean[] booleanArray = new boolean[]{true, false, true, false, true};
     private static final byte[] byteArray = new byte[]{Byte.MIN_VALUE, -99, 0, 99, Byte.MAX_VALUE};
     private static final short[] shortArray = new short[]{Short.MIN_VALUE, -99, 0, 99, Short.MAX_VALUE};
@@ -586,16 +596,24 @@ public class SpeedTest {
     }
 
 
+    /**
+     * 简单和复杂对象的序列化和反序列化测试，这个其实是基于ProtoManager.initProtocol初始化协议后执行的
+     */
     @Test
     public void cmEnhanceMessTest() {
         var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
-        // 序列化和反序列化简单对象
+        // 简单对象序列化和反序列化测试
+        // 序列化：把normalObject序列化一下写到buffer中
         ProtocolManager.write(buffer, normalObject);
+        // 反序列化：从buffer中反序列化为协议包
         var packet = ProtocolManager.read(buffer);
+
         buffer.clear();
 
+        // 复杂对象序列化和反序列化测试
         ProtocolManager.write(buffer, complexObject);
         packet = ProtocolManager.read(buffer);
+
         buffer.clear();
     }
 }

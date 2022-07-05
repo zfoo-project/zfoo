@@ -54,6 +54,10 @@ public abstract class GenerateProtocolPath {
     }
 
     public static String getRelativePath(short protocolId, short relativeProtocolId) {
+        // 不是折叠协议的话，protocolPathMap一定是空，这里返回“”，上层会解析为同一个文件下
+        if(protocolPathMap.size() == 0){
+            return "";
+        }
         var protocolPath = protocolPathMap.get(protocolId);
         var relativePath = protocolPathMap.get(relativeProtocolId);
         if (relativePath.startsWith(protocolPath)) {

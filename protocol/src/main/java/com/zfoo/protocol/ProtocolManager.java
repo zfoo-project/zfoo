@@ -123,6 +123,12 @@ public class ProtocolManager {
         ProtocolAnalysis.analyze(protocolClassSet, GenerateOperation.NO_OPERATION);
     }
 
+    /**
+     * 注册协议：将协议id和对应的协议信息关联起来
+     *
+     * @param protocolClassSet  需要初始化的协议列表
+     * @param generateOperation 协议配置：需要生成哪些语言的协议文件 是否折叠等信息
+     */
     public static void initProtocol(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
         ProtocolAnalysis.analyze(protocolClassSet, generateOperation);
     }
