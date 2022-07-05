@@ -23,7 +23,6 @@ import com.google.protobuf.CodedOutputStream;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.*;
-import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -305,8 +304,16 @@ public class SpeedTest {
         var op = GenerateOperation.NO_OPERATION;
 
         // 这行加上，会在protocol目录下，生成jsProtocol文件夹及其对应的js协议文件
-        op.getGenerateLanguages().add(CodeLanguage.JavaScript);
-        op.getGenerateLanguages().add(CodeLanguage.TypeScript);
+//        op.getGenerateLanguages().add(CodeLanguage.Cpp);
+//        op.getGenerateLanguages().add(CodeLanguage.JavaScript);
+//        op.getGenerateLanguages().add(CodeLanguage.TypeScript);
+//        op.getGenerateLanguages().add(CodeLanguage.Lua);
+//        op.getGenerateLanguages().add(CodeLanguage.CSharp);
+//        op.getGenerateLanguages().add(CodeLanguage.GdScript);
+
+        // 需要protocol协议的字段里面都加上JProtobuf注解才能用
+//        op.setProtocolParam("protobuf=protobuf.xml");
+//        op.getGenerateLanguages().add(CodeLanguage.Protobuf);
 
         // zfoo协议注册(其实就是：将Set里面的协议号和对应的类注册好，这样子就可以根据协议号知道是反序列化为哪个类)
         ProtocolManager.initProtocol(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, ObjectA.class, ObjectB.class), op);
