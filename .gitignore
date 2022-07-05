@@ -39,6 +39,7 @@ hs_err_pid*
 **/CsProtocol/
 **/LuaProtocol/
 **/cppProtocol/
+**/tsProtocol/
 **/protos/
 
 # 以下是web前端需要忽略的文件
