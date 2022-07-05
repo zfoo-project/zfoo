@@ -23,7 +23,7 @@ import java.util.List;
  * @author jaysunxiao
  * @version 3.0
  */
-@JsonPropertyOrder({"id", "name", "minId", "maxId", "version"})
+@JsonPropertyOrder({"id", "name", "minId", "maxId"})
 public class XmlModuleDefinition {
 
     @JacksonXmlProperty(isAttribute = true, localName = "id")
