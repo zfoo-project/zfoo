@@ -48,7 +48,7 @@ public class TcpClientTest {
 
             NetContext.getRouter().asyncAsk(session, ask, AsyncMessAnswer.class, null)
                     .whenComplete(answer -> {
-                                logger.info("同步请求收到结果[{}]", JsonUtils.object2String(answer));
+                                logger.info("异步请求收到结果[{}]", JsonUtils.object2String(answer));
                             }
                     );
 

@@ -26,9 +26,9 @@ import io.netty.handler.timeout.IdleStateHandler;
  * @author jaysunxiao
  * @version 3.0
  */
-public class JProtobufTpcServer extends AbstractServer {
+public class JProtobufTcpServer extends AbstractServer {
 
-    public JProtobufTpcServer(HostAndPort host) {
+    public JProtobufTcpServer(HostAndPort host) {
         super(host);
     }
 

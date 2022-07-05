@@ -13,7 +13,7 @@
 
 package com.zfoo.net.core.jprotobuf.server;
 
-import com.zfoo.net.core.jprotobuf.JProtobufTpcServer;
+import com.zfoo.net.core.jprotobuf.JProtobufTcpServer;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
@@ -31,7 +31,7 @@ public class JProtobufTcpServerTest {
     public void startServer() {
         var context = new ClassPathXmlApplicationContext("config.xml");
 
-        var server = new JProtobufTpcServer(HostAndPort.valueOf("127.0.0.1:9000"));
+        var server = new JProtobufTcpServer(HostAndPort.valueOf("127.0.0.1:9000"));
         server.start();
 
         ThreadUtils.sleep(Long.MAX_VALUE);
