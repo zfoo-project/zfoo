@@ -69,6 +69,13 @@ public class Router implements IRouter {
     private final FastThreadLocal<SignalAttachment> serverReceiveSignalAttachmentThreadLocal = new FastThreadLocal<>();
 
 
+    /**
+     * 在服务端收到数据后，会调用这个方法. 这个方法在BaseRouteHandler.java的channelRead中被调用
+     *
+     * @param session
+     * @param packet
+     * @param attachment
+     */
     @Override
     public void receive(Session session, IPacket packet, @Nullable IAttachment attachment) {
         if (packet.protocolId() == Heartbeat.PROTOCOL_ID) {
@@ -90,11 +97,14 @@ public class Router implements IRouter {
                         // 客户端收到服务器应答，客户端发送的时候isClient为true，服务器收到的时候将其设置为false
                         var removedAttachment = (SignalAttachment) SignalBridge.removeSignalAttachment(signalAttachment);
                         if (removedAttachment != null) {
+                            // 这里会让之前的CompletableFuture得到结果，从而像asyncAsk之类的回调到结果
                             removedAttachment.getResponseFuture().complete(packet);
                         } else {
                             logger.error("client receives packet:[{}] and attachment:[{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception."
                                     , JsonUtils.object2String(packet), JsonUtils.object2String(attachment));
                         }
+
+                        // 注意：这个return，这样子，asyncAsk的结果就返回了。
                         return;
                     }
 
@@ -137,7 +147,8 @@ public class Router implements IRouter {
             }
         }
 
-        // 正常发送消息的接收
+        // 正常发送消息的接收,把客户端的业务请求包装下到路由策略指定的线程进行业务处理
+        // 注意：像客户端以asyncAsk发送请求，在服务器处理完后返回结果，也是进入这个receive方法，但是attachment不为空，会提前return掉不会走到这
         TaskBus.submit(new PacketReceiverTask(session, packet, attachment));
     }
 
@@ -207,10 +218,23 @@ public class Router implements IRouter {
 
     }
 
+    /**
+     * 注意：这个里面其实还是调用send发送的消息
+     *
+     * @param session
+     * @param packet
+     * @param answerClass
+     * @param argument
+     * @param <T>
+     * @return
+     */
     @Override
     public <T extends IPacket> AsyncAnswer<T> asyncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument) {
         var clientSignalAttachment = new SignalAttachment();
+        // 因此第3个参数传null，会得到一个随机的值，在得到结果回调时，是随机的线程
+        // 这个值用于返回时，在CompletableFuture中选择哪个线程执行，也就是回到哪个线程
         var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
+
         clientSignalAttachment.setExecutorConsistentHash(executorConsistentHash);
 
         // 服务器在同步或异步的消息处理中，又调用了同步或异步的方法，这时候threadReceiverAttachment不为空
@@ -221,6 +245,7 @@ public class Router implements IRouter {
             asyncAnswer.setSignalAttachment(clientSignalAttachment);
 
             clientSignalAttachment.getResponseFuture()
+                    // 因此超时的情况，返回的是null
                     .completeOnTimeout(null, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
                     .thenApply(answer -> {
                         if (answer == null) {
@@ -237,6 +262,7 @@ public class Router implements IRouter {
                         return answer;
                     })
                     .whenCompleteAsync((answer, throwable) -> {
+                        // 注意：进入这个方法的时机是：在上面的receive方法中，由于是asyncAsk的消息，attachment不为空，会调用CompletableFuture的complete方法
                         try {
                             SignalBridge.removeSignalAttachment(clientSignalAttachment);
 
@@ -302,7 +328,7 @@ public class Router implements IRouter {
                 }
             }
 
-            // 调用PacketReceiver
+            // 调用PacketReceiver,进行真正的业务处理
             PacketBus.submit(session, packet, attachment);
         } catch (Exception e) {
             logger.error(StringUtils.format("e[uid:{}][sid:{}]未知exception异常", session.getAttribute(AttributeType.UID), session.getSid(), e.getMessage()), e);

@@ -17,13 +17,20 @@ import com.zfoo.protocol.registration.ProtocolModule;
 import java.util.Objects;
 
 /**
+ *
  * @author jaysunxiao
  * @version 3.0
  */
 public class ProviderModule {
 
+    /**
+     * 模块id和模块名
+     */
     private ProtocolModule protocolModule;
 
+    /**
+     * 提供者名字
+     */
     private String provider;
 
     public ProviderModule(ProtocolModule protocolModule, String provider) {
