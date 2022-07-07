@@ -30,7 +30,7 @@ import java.util.Base64;
  * <p>
  * 默认AES/ECB/PKCS5Padding
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class AesUtils {
@@ -93,8 +93,7 @@ public abstract class AesUtils {
 
     public static byte[] encrypt(byte[] bytes) {
         try {
-            var cipher = LOCAL_ENCRYPT_CIPHER.get();
-            return cipher.doFinal(bytes);
+            return LOCAL_ENCRYPT_CIPHER.get().doFinal(bytes);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -119,8 +118,7 @@ public abstract class AesUtils {
 
     public static byte[] decrypt(byte[] bytes) {
         try {
-            var cipher = LOCAL_DECRYPT_CIPHER.get();
-            return cipher.doFinal(bytes);
+            return LOCAL_DECRYPT_CIPHER.get().doFinal(bytes);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
