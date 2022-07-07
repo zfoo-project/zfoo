@@ -16,8 +16,7 @@ package com.zfoo.storage.schema;
 import com.zfoo.protocol.util.DomUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.StorageContext;
-import com.zfoo.storage.interpreter.ExcelResourceReader;
-import com.zfoo.storage.interpreter.JsonResourceReader;
+import com.zfoo.storage.interpreter.ResourceReader;
 import com.zfoo.storage.manager.StorageManager;
 import com.zfoo.storage.model.config.StorageConfig;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -70,20 +69,9 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("id", "id", builder, element, parserContext);
         resolvePlaceholder("package", "scanPackage", builder, scanElement, parserContext);
         resolvePlaceholder("location", "resourceLocation", builder, resourceElement, parserContext);
-        resolvePlaceholder("suffix", "resourceSuffix", builder, resourceElement, parserContext);
 
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
-
-        // 注册ExcelResourceReader
-        Class<?> readerClazz = ExcelResourceReader.class;
-        var resourceSuffix = resourceElement.getAttribute("suffix");
-        if (resourceSuffix.equals("txt")) {
-            readerClazz = JsonResourceReader.class;
-        }
-
-        var readerName = StringUtils.uncapitalize(readerClazz.getName());
-        builder = BeanDefinitionBuilder.rootBeanDefinition(readerClazz);
-        parserContext.getRegistry().registerBeanDefinition(readerName, builder.getBeanDefinition());
+        
     }
 
     private void registerBeanDefinition(ParserContext parserContext) {
@@ -99,11 +87,11 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         registry.registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注册ExcelResourceReader
-//        clazz = ExcelResourceReader.class;
-//        name = StringUtils.uncapitalize(clazz.getName());
-//        builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
-//        registry.registerBeanDefinition(name, builder.getBeanDefinition());
+        // 注册ResourceReader
+        clazz = ResourceReader.class;
+        name = StringUtils.uncapitalize(clazz.getName());
+        builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
+        registry.registerBeanDefinition(name, builder.getBeanDefinition());
     }
 
     private void resolvePlaceholder(String attributeName, String fieldName, BeanDefinitionBuilder builder, Element element, ParserContext parserContext) {

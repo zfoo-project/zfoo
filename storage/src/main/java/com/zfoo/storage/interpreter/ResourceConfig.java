@@ -7,11 +7,11 @@ import java.util.List;
  *  配置文件资源
  * 
  */
-public class JsonResource {
+public class ResourceConfig {
     // 文件名
     private String name;
     //配置表字段名
-    private List<ColumnMeta> columns = new ArrayList<>();
+    private List<Header> header = new ArrayList<>();
     // 配置表数据
     private List<List<String>> data = new ArrayList<>();
 
@@ -23,12 +23,12 @@ public class JsonResource {
         this.name = name;
     }
 
-    public List<ColumnMeta> getColumns() {
-        return columns;
+    public List<Header> getHeader() {
+        return header;
     }
 
-    public void setColumns(List<ColumnMeta> columns) {
-        this.columns = columns;
+    public void setHeader(List<Header> header) {
+        this.header = header;
     }
 
     public List<List<String>> getData() {
@@ -39,7 +39,7 @@ public class JsonResource {
         this.data = data;
     }
    
-    public static class ColumnMeta {
+    public static class Header {
         //字段名
         private String name;
         //类型
@@ -47,10 +47,10 @@ public class JsonResource {
         //列
         private int index;
 
-        public ColumnMeta() {
+        public Header() {
         }
 
-        public ColumnMeta(String name, String type, int index) {
+        public Header(String name, String type, int index) {
             this.name = name;
             this.type = type;
             this.index = index;

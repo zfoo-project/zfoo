@@ -25,8 +25,6 @@ public class StorageConfig {
 
     private String resourceLocation;
 
-    private String resourceSuffix;
-
     public String getId() {
         return id;
     }
@@ -49,13 +47,5 @@ public class StorageConfig {
 
     public void setResourceLocation(String resourceLocation) {
         this.resourceLocation = resourceLocation;
-    }
-
-    public String getResourceSuffix() {
-        return resourceSuffix;
-    }
-
-    public void setResourceSuffix(String resourceSuffix) {
-        this.resourceSuffix = resourceSuffix;
     }
 }

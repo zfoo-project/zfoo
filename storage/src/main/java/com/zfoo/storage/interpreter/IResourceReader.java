@@ -27,6 +27,6 @@ import java.util.List;
  */
 public interface IResourceReader {
 
-    <T> List<T> read(InputStream inputStream, Class<T> clazz);
+    <T> List<T> read(InputStream inputStream, Class<T> clazz, String suffix);
 
 }

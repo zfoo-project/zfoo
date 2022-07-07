@@ -45,8 +45,6 @@
     <xsd:complexType name="resource">
         <!-- 本地资源路径 -->
         <xsd:attribute name="location" type="xsd:string" use="required"/>
-        <!-- 资源文件后缀 -->
-        <xsd:attribute name="suffix" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="configType">

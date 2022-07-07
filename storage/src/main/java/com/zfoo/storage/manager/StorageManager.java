@@ -16,6 +16,7 @@ package com.zfoo.storage.manager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.exception.RunException;
+import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.StorageContext;
@@ -98,8 +99,10 @@ public class StorageManager implements IStorageManager {
         try {
             for (var definition : resourceDefinitionMap.values()) {
                 var clazz = definition.getClazz();
+                var resource = definition.getResource();
+                var fileExtName = FileUtils.fileExtName(resource.getFilename());
                 Storage<?, ?> storage = new Storage<>();
-                storage.init(definition.getResource().getInputStream(), definition.getClazz());
+                storage.init(resource.getInputStream(), definition.getClazz(), fileExtName);
                 storageMap.putIfAbsent(clazz, storage);
                 allStorageUsableMap.put(clazz, false);
             }
@@ -224,7 +227,7 @@ public class StorageManager implements IStorageManager {
         try {
             var resourceList = new ArrayList<Resource>();
 
-            var packageSearchPath = StringUtils.format("{}/**/{}.{}", storageConfig.getResourceLocation(), clazz.getSimpleName(), storageConfig.getResourceSuffix());
+            var packageSearchPath = StringUtils.format("{}/**/{}.*", storageConfig.getResourceLocation(), clazz.getSimpleName());
             packageSearchPath = packageSearchPath.replaceAll("//", "/");
             try {
                 resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
@@ -234,7 +237,7 @@ public class StorageManager implements IStorageManager {
 
             // 通配符无法匹配根目录，所以如果找不到，再从根目录查找一遍
             if (CollectionUtils.isEmpty(resourceList)) {
-                packageSearchPath = StringUtils.format("{}/{}.{}", storageConfig.getResourceLocation(), clazz.getSimpleName(), storageConfig.getResourceSuffix());
+                packageSearchPath = StringUtils.format("{}/{}.*", storageConfig.getResourceLocation(), clazz.getSimpleName());
                 packageSearchPath = packageSearchPath.replaceAll("//", "/");
                 resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
             }

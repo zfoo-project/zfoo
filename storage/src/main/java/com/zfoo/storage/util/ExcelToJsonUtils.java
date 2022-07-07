@@ -16,8 +16,8 @@ package com.zfoo.storage.util;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.interpreter.JsonResource;
-import com.zfoo.storage.interpreter.JsonResource.ColumnMeta;
+import com.zfoo.storage.interpreter.ResourceConfig;
+import com.zfoo.storage.interpreter.ResourceConfig.Header;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,15 +34,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 /**
- * @author jaysunxiao
+ * @author meiwei666
  * @version 3.0
  */
 public class ExcelToJsonUtils {
     
-    public static void main(String[] args) throws Exception{
-        File inputDir = new File("E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel");
-        String outputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
-        var listFiles = FileUtils.listFiles(inputDir, new String[] { "xls", "xlsx"}, true);
+    public static void excelConvertJson(String inputDir, String outputDir) throws Exception{
+        var listFiles = FileUtils.listFiles(new File(inputDir), new String[] { "xls", "xlsx"}, true);
         for (var file : listFiles) {
             var fileName = getFileName(file);
             var inputStream = FileUtils.openInputStream(file);
@@ -51,7 +49,7 @@ public class ExcelToJsonUtils {
         }
     }
     
-    public static void writeJsonFile(String outDir, String jsonStr, String name) {
+    private static void writeJsonFile(String outDir, String jsonStr, String name) {
         System.out.println("resource: " + name + ".txt");
         PrintWriter pw = null;
         try {
@@ -79,13 +77,13 @@ public class ExcelToJsonUtils {
 
     public static String read(InputStream inputStream, String fileName) {
         var wb = createWorkbook(inputStream, fileName);
-        var resource = new JsonResource();
+        var resource = new ResourceConfig();
         resource.setName(fileName);
         // 默认取到第一个sheet页
         var sheet = wb.getSheetAt(0);
         //设置所有列
-        var columns = getColumnMetas(sheet, fileName);
-        resource.setColumns(columns);
+        var headers = getHeaders(sheet, fileName);
+        resource.setHeader(headers);
 
         // 行数定位到有效数据行，默认是第四行为有效数据行
         var iterator = sheet.iterator();
@@ -97,8 +95,8 @@ public class ExcelToJsonUtils {
         while (iterator.hasNext()) {
             var row = iterator.next();
             List<String> rowData = new ArrayList<>();
-            for (var column : columns) {
-                var cell = row.getCell(column.getIndex());
+            for (var header : headers) {
+                var cell = row.getCell(header.getIndex());
                 var content = CellUtils.getCellStringValue(cell);
                 rowData.add(content);
             }
@@ -109,7 +107,7 @@ public class ExcelToJsonUtils {
     }
     
     // 只读取代码里写的字段
-    private static List<ColumnMeta> getColumnMetas(Sheet sheet, String fileName) {
+    private static List<Header> getHeaders(Sheet sheet, String fileName) {
         var iterator = sheet.iterator();
         // 获取配置表的有效列名称，默认第一行就是字段名称
         var fieldRow = iterator.next();
@@ -122,7 +120,7 @@ public class ExcelToJsonUtils {
             throw new RunException("无法获取资源[class:{}]的Excel文件的类型控制列", fileName);
         }
 
-        var columnMetaList = new ArrayList<ColumnMeta>();
+        var headerList = new ArrayList<Header>();
         var cellFieldMap = new HashMap<String, Integer>();
         for (var i = 0; i < fieldRow.getLastCellNum(); i++) {
             var fieldCell = fieldRow.getCell(i);
@@ -145,9 +143,9 @@ public class ExcelToJsonUtils {
             if (Objects.nonNull(previousValue)) {
                 throw new RunException("资源[class:{}]的Excel文件出现重复的属性控制列[field:{}]", fileName, fieldName);
             }
-            columnMetaList.add(new ColumnMeta(fieldName, typeName, i));
+            headerList.add(new Header(fieldName, typeName, i));
         }
-       return columnMetaList;
+       return headerList;
     }
 
     private static Workbook createWorkbook(InputStream input, String fileName) {
@@ -157,6 +155,5 @@ public class ExcelToJsonUtils {
             throw new RunException("静态资源[{}]异常，无法读取文件", fileName);
         }
     }
-    
  
 }
