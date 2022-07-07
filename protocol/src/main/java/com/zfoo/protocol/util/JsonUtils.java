@@ -14,9 +14,13 @@ package com.zfoo.protocol.util;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.PrettyPrinter;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.zfoo.protocol.exception.RunException;
@@ -53,6 +57,13 @@ public abstract class JsonUtils {
         //反序列化
         //当反序列化有未知属性则抛异常，true打开这个设置
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        //美化输出
+        SerializationConfig config = MAPPER.getSerializationConfig();
+        PrettyPrinter prettyPrinter = config.getDefaultPrettyPrinter();
+        DefaultPrettyPrinter defpp = (DefaultPrettyPrinter) prettyPrinter;
+        DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter("   ", DefaultIndenter.SYS_LF);
+        defpp.indentArraysWith(indenter);
+        defpp.indentObjectsWith(indenter);
 
         MAPPER_TURBO.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         MAPPER_TURBO.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -68,9 +79,19 @@ public abstract class JsonUtils {
         }
     }
 
+    //普通输出
     public static String object2String(Object object) {
         try {
             return MAPPER.writeValueAsString(object);
+        } catch (Exception e) {
+            throw new RunException(e, "将对象[object:{}]转换为json字符串时异常", object);
+        }
+    }
+
+    //格式化/美化/优雅的输出
+    public static String object2StringPrettyPrinter(Object object) {
+        try {
+            return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (Exception e) {
             throw new RunException(e, "将对象[object:{}]转换为json字符串时异常", object);
         }
@@ -193,9 +214,9 @@ public abstract class JsonUtils {
                 // 循环遍历子节点下的信息
                 while (iterator.hasNext()) {
                     var node = iterator.next();
-                    var field = node.getKey();
+                    var filed = node.getKey();
                     var value = node.getValue().asText();
-                    jsonMap.put(field, value);
+                    jsonMap.put(filed, value);
                 }
             }
             return jsonMap;

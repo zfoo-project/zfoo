@@ -44,7 +44,18 @@ public class JsonResource {
         private String name;
         //类型
         private String type;
-        
+        //列
+        private int index;
+
+        public ColumnMeta() {
+        }
+
+        public ColumnMeta(String name, String type, int index) {
+            this.name = name;
+            this.type = type;
+            this.index = index;
+        }
+
         public String getName() {
             return name;
         }
@@ -59,6 +70,14 @@ public class JsonResource {
         
         public void setType(String type) {
             this.type = type;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
         }
     }
 }

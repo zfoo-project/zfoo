@@ -1,0 +1,78 @@
+{
+   "name" : "StudentResource",
+   "columns" : [
+      {
+         "name" : "id",
+         "type" : "string",
+         "index" : 0
+      },
+      {
+         "name" : "name",
+         "type" : "string",
+         "index" : 1
+      },
+      {
+         "name" : "age",
+         "type" : "int",
+         "index" : 2
+      },
+      {
+         "name" : "score",
+         "type" : "float",
+         "index" : 3
+      },
+      {
+         "name" : "courses",
+         "type" : "array",
+         "index" : 4
+      },
+      {
+         "name" : "users",
+         "type" : "array",
+         "index" : 5
+      },
+      {
+         "name" : "user",
+         "type" : "string",
+         "index" : 6
+      }
+   ],
+   "data" : [
+      [
+         "1000",
+         "james0",
+         "10",
+         "60.8",
+         "[\"History\",\"Chiness\"]",
+         "[{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":22},{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":22}]",
+         "{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":22}"
+      ],
+      [
+         "1001",
+         "james1",
+         "10",
+         "70.1",
+         "[\"History\",\"Chiness\"]",
+         "[{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":22},{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":23}]",
+         "{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":22}"
+      ],
+      [
+         "1002",
+         "james2",
+         "10",
+         "80.2",
+         "[\"History\",\"Chiness\"]",
+         "[{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":22},{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":24}]",
+         "{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":22}"
+      ],
+      [
+         "1003",
+         "james3",
+         "10",
+         "59",
+         "[\"History\",\"Chiness\"]",
+         "[{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":22},{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":25}]",
+         "{\"id\":\"1000\",\"name\":\"SunInsanity\",\"sex\":\"boy\",\"age\":22}"
+      ]
+   ]
+}

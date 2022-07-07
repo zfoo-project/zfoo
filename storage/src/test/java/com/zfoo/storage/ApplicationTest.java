@@ -72,17 +72,49 @@ public class ApplicationTest {
         var context = new ClassPathXmlApplicationContext("application.xml");
 
         // Excel的映射内容需要在被Spring管理的bean的方法上加上@ResInjection注解，即可自动注入Excel对应的对象
+        // 参考StudentManager中的标准用法
+
+        var studentManager = context.getBean(StudentManager.class);
+        var studentResources = studentManager.studentResources;
+        // 类名称和Excel名称必须完全一致，Excel的列名称必须对应对象的属性名称
+        // 类名称和Excel名称必须完全一致，Excel的列名称必须对应对象的属性名称
+        for (StudentResource resource : studentResources.getAll()) {
+            logger.info(JsonUtils.object2String(resource));
+        }
+        System.out.println(StringUtils.MULTIPLE_HYPHENS);
+
+        // 通过id找到对应的行
+        var id = 1002;
+        var valueById = studentResources.get(id);
+        logger.info(JsonUtils.object2String(valueById));
+        System.out.println(StringUtils.MULTIPLE_HYPHENS);
+
+        // 通过索引找对应的行
+        var valuesByIndex = studentResources.getIndex("name", "james0");
+        logger.info(JsonUtils.object2String(valuesByIndex));
+    }
+
+
+    // storage教程
+    @Test
+    public void startStorageTestTxt2() {
+        // 加载配置文件，配置文件中必须引入storage
+        // 配置文件中scan，需要映射Excel的类所在位置，会自动搜索文件夹下的Excel文件，Excel文件可以放在指定文件夹的任意目录
+        // 配置文件中resource，需要映射Excel的文件所在位置
+        var context = new ClassPathXmlApplicationContext("application.xml");
+
+        // Excel的映射内容需要在被Spring管理的bean的方法上加上@ResInjection注解，即可自动注入Excel对应的对象
         var testManager = context.getBean(TestManager.class);
         var testResources = testManager.testResources;
         for (com.zfoo.storage.resource.TestResource resource : testResources.getAll()) {
             Map<Integer, String> map = resource.getType9();
-            logger.info(map.get(1));
-//            logger.info(JsonUtils.object2String(resource));
+            System.err.println(map.get(1));
+            logger.info(JsonUtils.object2String(resource));
         }
         // 通过id找到对应的行
         var id = 2;
         var valueById = testResources.get(id);
         logger.info(JsonUtils.object2String(valueById));
-        logger.info(StringUtils.MULTIPLE_HYPHENS);
+        System.out.println(StringUtils.MULTIPLE_HYPHENS);
     }
 }
