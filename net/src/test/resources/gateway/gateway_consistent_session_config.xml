@@ -24,9 +24,13 @@
             <net:address name="firstZookeeper" url="127.0.0.1:2181"/>
         </net:registry>
 
-        <net:consumer load-balancer="consistent-hash">
-            <net:module name="providerTest"/>
-        </net:consumer>
+<!--        <net:consumer load-balancer="consistent-hash">-->
+<!--            <net:module name="providerTest"/>-->
+<!--        </net:consumer>-->
+
+        <net:consumers>
+            <net:consumer protocol-module="test" consumer="myProvider1" load-balancer="consistent-hash"/>
+        </net:consumers>
 
     </net:config>
 

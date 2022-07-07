@@ -80,6 +80,7 @@ public final class TaskBus {
      * SignalAttachment：executorConsistentHash通过IRouter和IConsumer的argument参数指定
      */
     public static void submit(PacketReceiverTask task) {
+        // 里面会看到是：其中一致性hash是根据附加包记录的hashId进行选择哪个线程进行业务处理
         taskDispatch.getExecutor(task).execute(task);
     }
 

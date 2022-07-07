@@ -38,6 +38,7 @@ public class ConsistentHashTaskDispatch extends AbstractTaskDispatch {
             return SessionIdTaskDispatch.getInstance().getExecutor(packetReceiverTask);
         }
 
+        // 可见最终是根据附加包的信息选择服务端由哪个线程执行这个业务
         return TaskBus.executor(attachment.executorConsistentHash());
     }
 

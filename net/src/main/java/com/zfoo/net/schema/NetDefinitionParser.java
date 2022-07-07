@@ -55,6 +55,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         // 注册ConfigManager
         clazz = ConfigManager.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
+        // 把Spring容器中的NetConfig引用赋值给ConfigManager中的localConfig属性
         builder.addPropertyReference("localConfig", NetConfig.class.getCanonicalName());
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 
@@ -74,6 +75,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 
         // 注册SessionManager
+        // 里面的serverSessionMap 和 clientSessionMap 是根据自己是客户端还是服务器保存连接自己 和 自己连接 的网络节点信息
         clazz = SessionManager.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());

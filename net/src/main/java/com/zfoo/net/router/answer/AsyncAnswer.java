@@ -46,6 +46,8 @@ public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {
     @Override
     public void whenComplete(Consumer<T> consumer) {
         thenAccept(consumer);
+
+        // 这里其实会触发发送消息
         askCallback.run();
     }
 

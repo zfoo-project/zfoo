@@ -42,9 +42,11 @@ public class RegisterVO {
     private static final String uuid = IdUtils.getUUID();
 
     private String id;
-    private ProviderConfig providerConfig;
-    private ConsumerConfig consumerConfig;
 
+    // 服务提供者配置
+    private ProviderConfig providerConfig;
+    // 服务消费者配置
+    private ConsumerConfig consumerConfig;
 
     public static boolean providerHasConsumer(RegisterVO providerVO, RegisterVO consumerVO) {
         if (Objects.isNull(providerVO) || Objects.isNull(providerVO.providerConfig) || CollectionUtils.isEmpty(providerVO.providerConfig.getProviders())
@@ -137,30 +139,39 @@ public class RegisterVO {
     @Override
     public String toString() {
         var builder = new StringBuilder();
+
+        // 模块模块名
         builder.append(id);
 
+        // 服务提供者相关配置信息
         if (Objects.nonNull(providerConfig)) {
             var providerAddress = providerConfig.getAddress();
             if (StringUtils.isBlank(providerAddress)) {
                 throw new RuntimeException(StringUtils.format("providerConfig的address不能为空"));
             }
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
+            // 服务提供者地址
             builder.append(providerAddress);
 
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
             var providerModules = providerConfig.getProviders().stream()
                     .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule().getId(), it.getProtocolModule().getName(), it.getProvider()))
                     .collect(Collectors.toList());
+
+            // 服务提供者模块信息列表
             builder.append(StringUtils.format("provider:[{}]"
                     , StringUtils.joinWith(StringUtils.COMMA + StringUtils.SPACE, providerModules.toArray())));
         }
 
+        // 服务消费者相关信息
         if (Objects.nonNull(consumerConfig)) {
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
 
             var consumerModules = consumerConfig.getConsumers().stream()
                     .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule().getId(), it.getProtocolModule().getName(), it.getLoadBalancer(), it.getConsumer()))
                     .collect(Collectors.toList());
+
+            // 服务消费者模块信息列表
             builder.append(StringUtils.format("consumer:[{}]"
                     , StringUtils.joinWith(StringUtils.COMMA + StringUtils.SPACE, consumerModules.toArray())));
         }

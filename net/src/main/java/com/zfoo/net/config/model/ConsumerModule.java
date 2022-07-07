@@ -24,6 +24,7 @@ public class ConsumerModule {
 
     private ProtocolModule protocolModule;
 
+    // 负载均衡方式
     private String loadBalancer;
 
     // 消费哪个provider
