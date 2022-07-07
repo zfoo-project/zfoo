@@ -1,6 +1,6 @@
 {
   "name": "Test",
-  "columns": [
+  "header": [
     {
       "name": "Id",
       "type": "int",
