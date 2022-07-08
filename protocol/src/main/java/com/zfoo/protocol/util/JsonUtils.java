@@ -14,13 +14,11 @@ package com.zfoo.protocol.util;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.zfoo.protocol.exception.RunException;
@@ -29,7 +27,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class JsonUtils {
@@ -58,12 +56,10 @@ public abstract class JsonUtils {
         //当反序列化有未知属性则抛异常，true打开这个设置
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
         //美化输出
-        SerializationConfig config = MAPPER.getSerializationConfig();
-        PrettyPrinter prettyPrinter = config.getDefaultPrettyPrinter();
-        DefaultPrettyPrinter defpp = (DefaultPrettyPrinter) prettyPrinter;
-        DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter("   ", DefaultIndenter.SYS_LF);
-        defpp.indentArraysWith(indenter);
-        defpp.indentObjectsWith(indenter);
+        DefaultPrettyPrinter prettyPrinter = (DefaultPrettyPrinter) MAPPER.getSerializationConfig().getDefaultPrettyPrinter();
+        DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter(StringUtils.TAB_ASCII, FileUtils.LS);
+        prettyPrinter.indentObjectsWith(indenter);
+        prettyPrinter.indentArraysWith(indenter);
 
         MAPPER_TURBO.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         MAPPER_TURBO.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -88,7 +84,7 @@ public abstract class JsonUtils {
         }
     }
 
-    //格式化/美化/优雅的输出
+    // 格式化/美化/优雅的输出
     public static String object2StringPrettyPrinter(Object object) {
         try {
             return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(object);
@@ -214,9 +210,9 @@ public abstract class JsonUtils {
                 // 循环遍历子节点下的信息
                 while (iterator.hasNext()) {
                     var node = iterator.next();
-                    var filed = node.getKey();
+                    var field = node.getKey();
                     var value = node.getValue().asText();
-                    jsonMap.put(filed, value);
+                    jsonMap.put(field, value);
                 }
             }
             return jsonMap;

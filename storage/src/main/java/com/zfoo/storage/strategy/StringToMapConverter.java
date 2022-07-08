@@ -19,8 +19,8 @@ import org.springframework.core.convert.converter.Converter;
 import java.util.Map;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public class StringToMapConverter implements Converter<String, Map<String, Object>> {
     @Override

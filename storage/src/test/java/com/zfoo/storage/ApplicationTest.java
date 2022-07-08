@@ -25,8 +25,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.Map;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 
 @Ignore

@@ -10,33 +10,52 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-
-package com.zfoo.storage.resource;
+package com.zfoo.storage.model.resource;
 
 /**
  * @author godotg
  * @version 4.0
  */
-public class User {
+public class ResourceHeader {
 
-    private String id;
+    //字段名
     private String name;
-    private String sex;
-    private int age;
+    //类型
+    private String type;
+    //列
+    private int index;
 
-    public String getId() {
-        return id;
+    public ResourceHeader() {
+    }
+
+    public ResourceHeader(String name, String type, int index) {
+        this.name = name;
+        this.type = type;
+        this.index = index;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getSex() {
-        return sex;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getAge() {
-        return age;
+    public String getType() {
+        return type;
     }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
 }

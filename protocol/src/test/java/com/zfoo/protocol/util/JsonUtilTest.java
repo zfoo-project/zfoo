@@ -10,7 +10,6 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-
 package com.zfoo.protocol.util;
 
 import com.zfoo.protocol.model.Triple;
@@ -21,11 +20,9 @@ import org.junit.Test;
 import java.util.*;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
-
-
 public class JsonUtilTest {
 
     public static String id = "\"id\":\"1000\"";
@@ -113,6 +110,12 @@ public class JsonUtilTest {
         var triple = new Triple<String, String, String>("a", "b", "c");
         var tripleStr = JsonUtils.object2String(triple);
         var temp = JsonUtils.string2Object(tripleStr, Triple.class);
+    }
+
+    @Test
+    public void prettyPrinterTest() {
+        var user = JsonUtils.string2Object(userJson, User.class);
+        System.out.println(JsonUtils.object2StringPrettyPrinter(user));
     }
 }
 

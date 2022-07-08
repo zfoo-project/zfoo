@@ -18,8 +18,8 @@ import java.lang.annotation.*;
 /**
  * 资源注解
  *
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

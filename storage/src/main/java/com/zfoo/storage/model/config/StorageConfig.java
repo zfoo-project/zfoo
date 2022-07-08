@@ -14,8 +14,8 @@
 package com.zfoo.storage.model.config;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public class StorageConfig {
 

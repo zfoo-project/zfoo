@@ -27,8 +27,8 @@ import java.util.Map;
 /**
  * 简化索引的名称，使用字段的名称作为索引的名称
  *
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public class IndexDef {
 

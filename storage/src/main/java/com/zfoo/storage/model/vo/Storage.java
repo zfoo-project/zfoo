@@ -25,8 +25,8 @@ import java.io.InputStream;
 import java.util.*;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public class Storage<K, V> {
 

@@ -22,8 +22,8 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import java.io.IOException;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 @Ignore
 public class PathMatchTest {

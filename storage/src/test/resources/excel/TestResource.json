@@ -1,15 +1,15 @@
 {
   "name": "Test",
-  "header": [
+  "headers": [
     {
       "name": "Id",
       "type": "int",
-      "index" : 0
+      "index": 0
     },
     {
       "name": "Type0",
       "type": "long",
-      "index" : 0
+      "index": 0
     },
     {
       "name": "Type1",
@@ -52,7 +52,7 @@
       "index" : 0
     }
   ],
-  "data": [
+  "rows": [
     [
       "1",
       "0",

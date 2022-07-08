@@ -29,8 +29,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public class ConversionTest {
     private static final ConversionServiceFactoryBean csfb = new ConversionServiceFactoryBean();

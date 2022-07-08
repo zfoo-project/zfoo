@@ -15,14 +15,12 @@ package com.zfoo.storage;
 
 import com.zfoo.storage.model.anno.ResInjection;
 import com.zfoo.storage.model.vo.Storage;
-import com.zfoo.storage.resource.StudentResource;
 import com.zfoo.storage.resource.TestResource;
-
 import org.springframework.stereotype.Component;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 @Component
 public class TestManager {

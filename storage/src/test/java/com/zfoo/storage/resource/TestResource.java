@@ -13,16 +13,14 @@
 
 package com.zfoo.storage.resource;
 
-import java.util.List;
-import java.util.Map;
-
 import com.zfoo.storage.model.anno.Id;
-import com.zfoo.storage.model.anno.Index;
 import com.zfoo.storage.model.anno.Resource;
 
+import java.util.Map;
+
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 @Resource
 public class TestResource {
