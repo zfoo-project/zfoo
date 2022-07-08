@@ -16,41 +16,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 配置文件资源
- *
- * @author meiwei666
+ * @author godotg
+ * @version 4.0
  */
-public class ResourceData {
+public class ResourceRow {
 
-    // 文件名
-    private String name;
-    // 配置表字段名
-    private List<ResourceHeader> headers = new ArrayList<>();
-    // 配置表数据
-    private List<ResourceRow> rows = new ArrayList<>();
+    private int row;
 
-    public String getName() {
-        return name;
+    private List<String> columns = new ArrayList<>();
+
+    public static ResourceRow valueOf(int row, List<String> columns) {
+        var resourceRow = new ResourceRow();
+        resourceRow.row = row;
+        resourceRow.columns = columns;
+        return resourceRow;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getRow() {
+        return row;
     }
 
-    public List<ResourceHeader> getHeaders() {
-        return headers;
+    public void setRow(int row) {
+        this.row = row;
     }
 
-    public void setHeaders(List<ResourceHeader> headers) {
-        this.headers = headers;
+    public List<String> getColumns() {
+        return columns;
     }
 
-    public List<ResourceRow> getRows() {
-        return rows;
-    }
-
-    public void setRows(List<ResourceRow> rows) {
-        this.rows = rows;
+    public void setColumns(List<String> columns) {
+        this.columns = columns;
     }
 
 }

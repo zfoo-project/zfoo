@@ -76,11 +76,11 @@ public class ResourceReader implements IResourceReader {
         var iterator = resource.getRows().iterator();
         // 从ROW_SERVER这行开始读取数据
         while (iterator.hasNext()) {
-            var row = iterator.next();
+            var columns = iterator.next().getColumns();
             var instance = ReflectionUtils.newInstance(clazz);
 
             for (var fieldInfo : fieldInfos) {
-                var content = row.get(fieldInfo.index);
+                var content = columns.get(fieldInfo.index);
                 if (StringUtils.isNotEmpty(content) || fieldInfo.field.getType() == String.class) {
                     inject(instance, fieldInfo.field, content);
                 }

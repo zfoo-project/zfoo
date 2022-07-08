@@ -59,6 +59,11 @@ public enum ResourceEnum {
         return typeMap.containsKey(type);
     }
 
+    public static boolean isExcel(String type) {
+        var resourceEnum = getResourceEnumByType(type);
+        return resourceEnum == ResourceEnum.EXCEL_XLS || resourceEnum == ResourceEnum.EXCEL_XLSX;
+    }
+
     public static String typesToString() {
         return StringUtils.joinWith(StringUtils.SPACE, typeMap.values().toArray());
     }
