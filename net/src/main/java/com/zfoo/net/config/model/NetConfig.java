@@ -23,8 +23,6 @@ import java.util.Objects;
  * @version 3.0
  */
 public class NetConfig {
-
-
     private String id;
     private String protocolLocation;
 
@@ -34,7 +32,10 @@ public class NetConfig {
     private boolean foldProtocol;
     private String protocolPath;
     private String protocolParam;
-    // 是否生成对应语言的协议
+
+    /**
+     * 是否生成对应语言的协议
+     */
     private boolean javascriptProtocol;
     private boolean typescriptProtocol;
     private boolean csharpProtocol;
@@ -43,10 +44,24 @@ public class NetConfig {
     private boolean cppProtocol;
     private boolean protobufProtocol;
 
+    /**
+     * 注册中心
+     */
     private RegistryConfig registry;
+
+    /**
+     * 监控
+     */
     private MonitorConfig monitor;
 
+    /**
+     * 生产者配置
+     */
     private ProviderConfig provider;
+
+    /**
+     * 消费者配置
+     */
     private ConsumerConfig consumer;
 
 

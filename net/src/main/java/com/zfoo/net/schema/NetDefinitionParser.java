@@ -84,12 +84,25 @@ public class NetDefinitionParser implements BeanDefinitionParser {
     }
 
 
+    /**
+     * 解析config标签，并且注册NetConfig类到Spring容器
+     *
+     * @param element
+     * @param parserContext
+     */
     private void parseNetConfig(Element element, ParserContext parserContext) {
+        // 要注册到Spring的类，下面都是进行解析自定义标签，把值赋值给NetConfig的属性
         var clazz = NetConfig.class;
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
+        // -----config属性解析-----
+        // 解析id
         resolvePlaceholder("id", "id", builder, element, parserContext);
+
+        // 协议protocol.xml文件的位置。 注意：直接写protocol.xml 则是从resources目录下读
         resolvePlaceholder("protocol-location", "protocolLocation", builder, element, parserContext);
+
+        // 各种语言的文件是否生成
         resolvePlaceholder("javascript-protocol", "javascriptProtocol", builder, element, parserContext);
         resolvePlaceholder("typescript-protocol", "typescriptProtocol", builder, element, parserContext);
         resolvePlaceholder("csharp-protocol", "csharpProtocol", builder, element, parserContext);
@@ -97,26 +110,34 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("gdscript-protocol", "gdscriptProtocol", builder, element, parserContext);
         resolvePlaceholder("cpp-protocol", "cppProtocol", builder, element, parserContext);
         resolvePlaceholder("protobuf-protocol", "protobufProtocol", builder, element, parserContext);
+
+        // 文件是否折叠
         resolvePlaceholder("fold-protocol", "foldProtocol", builder, element, parserContext);
+
         resolvePlaceholder("protocol-path", "protocolPath", builder, element, parserContext);
+
         resolvePlaceholder("protocol-param", "protocolParam", builder, element, parserContext);
 
+        // -----注册中心解析-----
+        // 上面解析的都是config标签的属性，这里开始解析registry元素
         var registryElement = DomUtils.getFirstChildElementByTagName(element, "registry");
         if (registryElement != null) {
             parseRegistryConfig(registryElement, parserContext);
             builder.addPropertyReference("registry", RegistryConfig.class.getCanonicalName());
         }
 
+        // ----- monitor解析-----
         var monitorElement = DomUtils.getFirstChildElementByTagName(element, "monitor");
         if (monitorElement != null) {
             parseMonitorConfig(monitorElement, parserContext);
             builder.addPropertyReference("monitor", MonitorConfig.class.getCanonicalName());
         }
 
+        // -----服务器生产者解析-----
         var providerElement = DomUtils.getFirstChildElementByTagName(element, "providers");
         if (providerElement != null) {
-            builder.addPropertyReference("provider", ProviderConfig.class.getCanonicalName());
             parseProviderConfig(providerElement, parserContext);
+            builder.addPropertyReference("provider", ProviderConfig.class.getCanonicalName());
         }
 
         var consumerElement = DomUtils.getFirstChildElementByTagName(element, "consumers");
@@ -125,6 +146,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
             builder.addPropertyReference("consumer", ConsumerConfig.class.getCanonicalName());
         }
 
+        // 注册NetConfig到Spring容器中
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
 
@@ -162,6 +184,8 @@ public class NetDefinitionParser implements BeanDefinitionParser {
 
         var providerModules = parseProviderModules("providers", element, parserContext);
         builder.addPropertyValue("providers", providerModules);
+
+        // 注册Consumer到Spring容器中
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
 
