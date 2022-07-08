@@ -13,7 +13,7 @@
 package com.zfoo.boot;
 
 import com.zfoo.storage.StorageContext;
-import com.zfoo.storage.interpreter.ExcelResourceReader;
+import com.zfoo.storage.interpreter.ResourceReader;
 import com.zfoo.storage.manager.StorageManager;
 import com.zfoo.storage.model.config.StorageConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -40,8 +40,8 @@ public class StorageAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ExcelResourceReader excelResourceReader() {
-        return new ExcelResourceReader();
+    public ResourceReader excelResourceReader() {
+        return new ResourceReader();
     }
 
     @Bean

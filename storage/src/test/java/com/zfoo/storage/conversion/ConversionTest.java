@@ -75,7 +75,8 @@ public class ConversionTest {
 
         Map<Integer, Integer> map = new HashMap<Integer, Integer>();
 
-        map = (Map<Integer, Integer>) conversionService.convert(str, TypeDescriptor.valueOf(String.class), TypeDescriptor.valueOf(map.getClass()));
+        // 注意：第3个参数不能写成TypeDescriptor.valueOf(map.getClass())  而是要明确指定Map的key和value的类型
+        map = (Map<Integer, Integer>) conversionService.convert(str, TypeDescriptor.valueOf(String.class), TypeDescriptor.map(map.getClass(), TypeDescriptor.valueOf(String.class), TypeDescriptor.valueOf(Integer.class)));
 
         Assert.assertEquals(3, map.size());
     }

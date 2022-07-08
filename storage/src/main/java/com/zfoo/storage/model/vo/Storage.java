@@ -44,14 +44,14 @@ public class Storage<K, V> {
     public Storage() {
     }
 
-    public void init(InputStream inputStream, Class<?> resourceClazz) {
+    public void init(InputStream inputStream, Class<?> resourceClazz, String suffix) {
         try {
             this.clazz = (Class<V>) resourceClazz;
             var reader = StorageContext.getResourceReader();
             idDef = IdDef.valueOf(resourceClazz);
             indexDefMap = IndexDef.createResourceIndexes(resourceClazz);
 
-            var list = reader.read(inputStream, resourceClazz);
+            var list = reader.read(inputStream, resourceClazz, suffix);
 
             dataMap.clear();
             indexMap.clear();

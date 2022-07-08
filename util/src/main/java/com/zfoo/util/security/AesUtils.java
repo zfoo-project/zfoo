@@ -20,6 +20,7 @@ import io.netty.util.concurrent.FastThreadLocal;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -29,7 +30,7 @@ import java.util.Base64;
  * <p>
  * 默认AES/ECB/PKCS5Padding
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class AesUtils {
@@ -46,13 +47,6 @@ public abstract class AesUtils {
      */
     private static final String ALGORITHM_STR = "AES/ECB/PKCS5Padding";
 
-    private static final FastThreadLocal<Cipher> LOCAL_CIPHER = new FastThreadLocal<Cipher>() {
-        @Override
-        protected Cipher initialValue() throws NoSuchPaddingException, NoSuchAlgorithmException {
-            return Cipher.getInstance(ALGORITHM_STR);
-        }
-    };
-
     static {
         try {
             KEY = new SecretKeySpec(KEY_STR.getBytes(StringUtils.DEFAULT_CHARSET_NAME), ALGORITHM);
@@ -60,6 +54,24 @@ public abstract class AesUtils {
             throw new RuntimeException(e);
         }
     }
+
+    private static final FastThreadLocal<Cipher> LOCAL_ENCRYPT_CIPHER = new FastThreadLocal<Cipher>() {
+        @Override
+        protected Cipher initialValue() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
+            var cipher = Cipher.getInstance(ALGORITHM_STR);
+            cipher.init(Cipher.ENCRYPT_MODE, KEY);
+            return cipher;
+        }
+    };
+
+    private static final FastThreadLocal<Cipher> LOCAL_DECRYPT_CIPHER = new FastThreadLocal<Cipher>() {
+        @Override
+        protected Cipher initialValue() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
+            var cipher = Cipher.getInstance(ALGORITHM_STR);
+            cipher.init(Cipher.DECRYPT_MODE, KEY);
+            return cipher;
+        }
+    };
 
 
     /**
@@ -81,9 +93,7 @@ public abstract class AesUtils {
 
     public static byte[] encrypt(byte[] bytes) {
         try {
-            var cipher = LOCAL_CIPHER.get();
-            cipher.init(Cipher.ENCRYPT_MODE, KEY);
-            return cipher.doFinal(bytes);
+            return LOCAL_ENCRYPT_CIPHER.get().doFinal(bytes);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -108,9 +118,7 @@ public abstract class AesUtils {
 
     public static byte[] decrypt(byte[] bytes) {
         try {
-            var cipher = LOCAL_CIPHER.get();
-            cipher.init(Cipher.DECRYPT_MODE, KEY);
-            return cipher.doFinal(bytes);
+            return LOCAL_DECRYPT_CIPHER.get().doFinal(bytes);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
