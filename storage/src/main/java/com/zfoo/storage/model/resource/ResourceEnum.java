@@ -13,6 +13,7 @@
 package com.zfoo.storage.model.resource;
 
 import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.StringUtils;
 import org.springframework.lang.Nullable;
 
 import java.util.HashMap;
@@ -56,6 +57,15 @@ public enum ResourceEnum {
 
     public static boolean containsResourceEnum(String type) {
         return typeMap.containsKey(type);
+    }
+
+    public static boolean isExcel(String type) {
+        var resourceEnum = getResourceEnumByType(type);
+        return resourceEnum == ResourceEnum.EXCEL_XLS || resourceEnum == ResourceEnum.EXCEL_XLSX;
+    }
+
+    public static String typesToString() {
+        return StringUtils.joinWith(StringUtils.SPACE, typeMap.values().toArray());
     }
 
     public String getType() {

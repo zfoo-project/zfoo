@@ -59,7 +59,6 @@ public abstract class JsonUtils {
         DefaultPrettyPrinter prettyPrinter = (DefaultPrettyPrinter) MAPPER.getSerializationConfig().getDefaultPrettyPrinter();
         DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter(StringUtils.TAB_ASCII, FileUtils.LS);
         prettyPrinter.indentObjectsWith(indenter);
-        prettyPrinter.indentArraysWith(indenter);
 
         MAPPER_TURBO.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         MAPPER_TURBO.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);

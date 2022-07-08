@@ -27,7 +27,15 @@ public class ResourceData {
     // 配置表字段名
     private List<ResourceHeader> headers = new ArrayList<>();
     // 配置表数据
-    private List<List<String>> rows = new ArrayList<>();
+    private List<ResourceRow> rows = new ArrayList<>();
+
+    public static ResourceData valueOf(String name, List<ResourceHeader> headers, List<ResourceRow> rows) {
+        var resourceData = new ResourceData();
+        resourceData.name = name;
+        resourceData.headers = headers;
+        resourceData.rows = rows;
+        return resourceData;
+    }
 
     public String getName() {
         return name;
@@ -45,11 +53,11 @@ public class ResourceData {
         this.headers = headers;
     }
 
-    public List<List<String>> getRows() {
+    public List<ResourceRow> getRows() {
         return rows;
     }
 
-    public void setRows(List<List<String>> rows) {
+    public void setRows(List<ResourceRow> rows) {
         this.rows = rows;
     }
 

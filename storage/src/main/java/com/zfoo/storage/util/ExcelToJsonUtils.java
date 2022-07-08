@@ -20,6 +20,7 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.model.resource.ResourceData;
 import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.model.resource.ResourceHeader;
+import com.zfoo.storage.model.resource.ResourceRow;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -42,27 +43,28 @@ public class ExcelToJsonUtils {
     public static void excelConvertJson(String inputDir, String outputDir) throws IOException {
         var listFiles = FileUtils.getAllReadableFiles(new File(inputDir))
                 .stream()
-                .filter(it -> ResourceEnum.containsResourceEnum(FileUtils.fileExtName(it.getName())))
+                .filter(it -> ResourceEnum.isExcel(FileUtils.fileExtName(it.getName())))
                 .collect(Collectors.toList());
 
         for (var file : listFiles) {
-            var fileName = StringUtils.format("{}.json", FileUtils.fileSimpleName(file.getName()));
+            var fileSimpleName = FileUtils.fileSimpleName(file.getName());
+            var jsonFileName = StringUtils.format("{}.json", fileSimpleName);
             var inputStream = FileUtils.openInputStream(file);
-            var resourceData = readResourceDataFromExcel(inputStream, fileName);
-            FileUtils.writeStringToFile(new File(FileUtils.joinPath(outputDir, fileName)), JsonUtils.object2StringPrettyPrinter(resourceData));
+            var resourceData = readResourceDataFromExcel(inputStream, file.getName());
+
+            var outputFilePath = FileUtils.joinPath(outputDir, jsonFileName);
+            FileUtils.deleteFile(new File(outputFilePath));
+            FileUtils.writeStringToFile(new File(outputFilePath), JsonUtils.object2StringPrettyPrinter(resourceData));
         }
     }
 
     public static ResourceData readResourceDataFromExcel(InputStream inputStream, String fileName) {
         // 只读取代码里写的字段
         var wb = createWorkbook(inputStream, fileName);
-        var resource = new ResourceData();
-        resource.setName(fileName);
         // 默认取到第一个sheet页
         var sheet = wb.getSheetAt(0);
         //设置所有列
         var headers = getHeaders(sheet, fileName);
-        resource.setHeaders(headers);
 
         // 行数定位到有效数据行，默认是第四行为有效数据行
         var iterator = sheet.iterator();
@@ -70,19 +72,18 @@ public class ExcelToJsonUtils {
         iterator.next();
         iterator.next();
         // 从ROW_SERVER这行开始读取数据
-        List<List<String>> data = new ArrayList<>();
+        List<ResourceRow> rows = new ArrayList<>();
         while (iterator.hasNext()) {
             var row = iterator.next();
-            List<String> rowData = new ArrayList<>();
+            var columns = new ArrayList<String>();
             for (var header : headers) {
                 var cell = row.getCell(header.getIndex());
                 var content = CellUtils.getCellStringValue(cell);
-                rowData.add(content);
+                columns.add(content);
             }
-            data.add(rowData);
+            rows.add(ResourceRow.valueOf(row.getRowNum() + 1, columns));
         }
-        resource.setRows(data);
-        return resource;
+        return ResourceData.valueOf(fileName, headers, rows);
     }
 
     // 只读取代码里写的字段
@@ -122,7 +123,7 @@ public class ExcelToJsonUtils {
             if (Objects.nonNull(previousValue)) {
                 throw new RunException("资源[class:{}]的Excel文件出现重复的属性控制列[field:{}]", fileName, fieldName);
             }
-            headerList.add(new ResourceHeader(fieldName, typeName, i));
+            headerList.add(ResourceHeader.valueOf(fieldName, typeName, i));
         }
         return headerList;
     }
