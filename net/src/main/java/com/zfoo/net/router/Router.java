@@ -196,6 +196,8 @@ public class Router implements IRouter {
 
         try {
             SignalBridge.addSignalAttachment(clientSignalAttachment);
+
+            // 里面调用的依然是：send方法发送消息
             send(session, packet, clientSignalAttachment);
 
             IPacket responsePacket = clientSignalAttachment.getResponseFuture().get(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);

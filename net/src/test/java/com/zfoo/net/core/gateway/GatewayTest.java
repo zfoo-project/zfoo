@@ -31,6 +31,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 这是客户端连接网关，网关转发到服务提供者的测试用例
+ *
  * @author jaysunxiao
  * @version 3.0
  */
@@ -40,7 +42,12 @@ public class GatewayTest {
     private static final Logger logger = LoggerFactory.getLogger(GatewayTest.class);
 
     /**
-     * 启动zookeeper，依次运行下面的测试方法启动服务提供者，网关，然后运行clientTest，消息会通过网关转发到服务提供者
+     * 启动zookeeper，依次运行下面的测试方法启动：
+     * 1.服务提供者
+     * 2.网关
+     * 3.然后运行clientTest
+     * <p>
+     * 消息会通过网关转发到服务提供者
      */
     @Test
     public void startProvider0() {
@@ -63,6 +70,9 @@ public class GatewayTest {
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
+    /**
+     * 这是网关
+     */
     @Test
     public void startGateway() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_consistent_session_config.xml");
@@ -72,11 +82,15 @@ public class GatewayTest {
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
+    /**
+     * 这里是客户端，客户端先请求数据到到网关(毕竟自己连接的就是网关)
+     */
     @Test
     public void clientTest() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_client_config.xml");
         SessionUtils.printSessionInfo();
 
+        // 这里的地址是网关的地址
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
         var session = client.start();
 
@@ -91,6 +105,7 @@ public class GatewayTest {
             var thread = new Thread(() -> {
                 for (int j = 0; j < 10000; j++) {
                     try {
+                        // 注意：这里的ask请求参数是 xxxRequest，不是xxxAsk
                         var response = NetContext.getRouter().syncAsk(session, request, GatewayToProviderResponse.class, null).packet();
                         logger.info("客户端请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));
                     } catch (Exception e) {
