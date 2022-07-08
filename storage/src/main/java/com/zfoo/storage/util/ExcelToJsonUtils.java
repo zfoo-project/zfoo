@@ -61,13 +61,10 @@ public class ExcelToJsonUtils {
     public static ResourceData readResourceDataFromExcel(InputStream inputStream, String fileName) {
         // 只读取代码里写的字段
         var wb = createWorkbook(inputStream, fileName);
-        var resource = new ResourceData();
-        resource.setName(fileName);
         // 默认取到第一个sheet页
         var sheet = wb.getSheetAt(0);
         //设置所有列
         var headers = getHeaders(sheet, fileName);
-        resource.setHeaders(headers);
 
         // 行数定位到有效数据行，默认是第四行为有效数据行
         var iterator = sheet.iterator();
@@ -84,10 +81,9 @@ public class ExcelToJsonUtils {
                 var content = CellUtils.getCellStringValue(cell);
                 columns.add(content);
             }
-            rows.add(ResourceRow.valueOf(row.getRowNum(), columns));
+            rows.add(ResourceRow.valueOf(row.getRowNum() + 1, columns));
         }
-        resource.setRows(rows);
-        return resource;
+        return ResourceData.valueOf(fileName, headers, rows);
     }
 
     // 只读取代码里写的字段
@@ -127,7 +123,7 @@ public class ExcelToJsonUtils {
             if (Objects.nonNull(previousValue)) {
                 throw new RunException("资源[class:{}]的Excel文件出现重复的属性控制列[field:{}]", fileName, fieldName);
             }
-            headerList.add(new ResourceHeader(fieldName, typeName, i));
+            headerList.add(ResourceHeader.valueOf(fieldName, typeName, i));
         }
         return headerList;
     }

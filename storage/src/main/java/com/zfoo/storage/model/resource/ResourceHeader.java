@@ -25,13 +25,12 @@ public class ResourceHeader {
     //列
     private int index;
 
-    public ResourceHeader() {
-    }
-
-    public ResourceHeader(String name, String type, int index) {
-        this.name = name;
-        this.type = type;
-        this.index = index;
+    public static ResourceHeader valueOf(String name, String type, int index) {
+        var resourceHeader = new ResourceHeader();
+        resourceHeader.name = name;
+        resourceHeader.type = type;
+        resourceHeader.index = index;
+        return resourceHeader;
     }
 
     public String getName() {

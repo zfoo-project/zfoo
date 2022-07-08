@@ -29,6 +29,14 @@ public class ResourceData {
     // 配置表数据
     private List<ResourceRow> rows = new ArrayList<>();
 
+    public static ResourceData valueOf(String name, List<ResourceHeader> headers, List<ResourceRow> rows) {
+        var resourceData = new ResourceData();
+        resourceData.name = name;
+        resourceData.headers = headers;
+        resourceData.rows = rows;
+        return resourceData;
+    }
+
     public String getName() {
         return name;
     }
