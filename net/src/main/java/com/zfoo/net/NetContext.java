@@ -55,13 +55,13 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
     private ApplicationContext applicationContext;
 
     /**
-     * 使用Router时，使用的send方法依然是通过Session发送消息
-     * 如：创建了一个TcpClient，那明确得到了这个Session，则可以通过这个session发送消息
+     * 使用Router时，使用的send方法的第1个参数指定session发送消息
+     * 如：创建了一个TcpClient，那明确得到了这个session，则可以通过这个session发送消息
      */
     private IRouter router;
 
     /**
-     * 使用Consumer时，提供的接口是没有Session参数的，都是通过负载均衡策略从而拿到Session，然后再发送消息。
+     * 使用Consumer时，提供的接口是没有Session参数的，都是通过负载均衡策略从而拿到ConsumerSession，然后再发送消息。
      * 如：通过web端向游戏服务器发送请求，web端压根没保存任何session，因此就要通过Consumer去请求
      */
     private IConsumer consumer;
