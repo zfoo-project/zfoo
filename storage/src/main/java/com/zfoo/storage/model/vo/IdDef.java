@@ -20,8 +20,8 @@ import com.zfoo.storage.model.anno.Id;
 import java.lang.reflect.Field;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public class IdDef {
 

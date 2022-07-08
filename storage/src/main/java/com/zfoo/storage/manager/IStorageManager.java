@@ -19,8 +19,8 @@ import org.springframework.lang.Nullable;
 import java.util.Map;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public interface IStorageManager {
 

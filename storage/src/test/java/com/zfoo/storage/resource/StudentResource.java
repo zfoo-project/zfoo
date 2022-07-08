@@ -18,8 +18,8 @@ import com.zfoo.storage.model.anno.Index;
 import com.zfoo.storage.model.anno.Resource;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 @Resource
 public class StudentResource {

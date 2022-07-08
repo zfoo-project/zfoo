@@ -18,8 +18,8 @@ import com.zfoo.storage.StorageContext;
 import org.springframework.core.convert.converter.Converter;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public class StringToClassConverter implements Converter<String, Class<?>> {
 

@@ -18,8 +18,8 @@ import java.lang.annotation.*;
 /**
  * 索引，索引的名称使用字段属性的名称，用HaspMap实现
  *
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 
 @Documented

@@ -16,8 +16,8 @@ package com.zfoo.storage.model.vo;
 import org.springframework.core.io.Resource;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public class ResourceDef {
 

@@ -19,8 +19,8 @@ import com.zfoo.storage.resource.StudentResource;
 import org.springframework.stereotype.Component;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 @Component
 public class StudentManager {

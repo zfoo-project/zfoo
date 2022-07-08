@@ -10,20 +10,18 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-
 package com.zfoo.storage.interpreter;
 
 import com.zfoo.protocol.exception.RunException;
+import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.interpreter.ResourceConfig.Header;
 import com.zfoo.storage.model.anno.Id;
+import com.zfoo.storage.model.resource.ResourceData;
+import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.strategy.*;
-import com.zfoo.storage.util.CellUtils;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.poi.ss.usermodel.Sheet;
+import com.zfoo.storage.util.ExcelToJsonUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.context.support.ConversionServiceFactoryBean;
@@ -33,13 +31,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public class ResourceReader implements IResourceReader {
 
@@ -60,20 +57,23 @@ public class ResourceReader implements IResourceReader {
     }
 
     @Override
-    public <T> List<T> read(InputStream inputStream, Class<T> clazz, String suffix) {
-        ResourceConfig resource = null;
-       if (suffix.equals("txt")) {
-           resource = readJson(inputStream, clazz.getSimpleName());
-       } else {
-           resource = readExcel(inputStream, clazz.getSimpleName());
-       }
-        
+    public <T> List<T> read(InputStream inputStream, Class<T> clazz, String suffix) throws IOException {
+        ResourceData resource = null;
+        var resourceEnum = ResourceEnum.getResourceEnumByType(suffix);
+        if (resourceEnum == ResourceEnum.JSON) {
+            resource = JsonUtils.string2Object(StringUtils.bytesToString(IOUtils.toByteArray(inputStream)), ResourceData.class);
+        } else if (resourceEnum == ResourceEnum.EXCEL_XLS || resourceEnum == ResourceEnum.EXCEL_XLSX) {
+            resource = ExcelToJsonUtils.readResourceDataFromExcel(inputStream, clazz.getSimpleName());
+        } else {
+            throw new RunException("不支持文件[{}]的配置类型[{}]", clazz.getSimpleName(), suffix);
+        }
+
         var result = new ArrayList<T>();
         //获取所有字段
         var cellFieldMap = getFieldMap(resource, clazz);
         var fieldInfos = getFieldInfos(cellFieldMap, clazz);
 
-        var iterator = resource.getData().iterator();
+        var iterator = resource.getRows().iterator();
         // 从ROW_SERVER这行开始读取数据
         while (iterator.hasNext()) {
             var row = iterator.next();
@@ -89,81 +89,7 @@ public class ResourceReader implements IResourceReader {
         }
         return result;
     }
-    
-    public ResourceConfig readExcel(InputStream inputStream, String name) {
-        var wb = createWorkbook(inputStream, name);
-        var resource = new ResourceConfig();
-        resource.setName(name);
-        // 默认取到第一个sheet页
-        var sheet = wb.getSheetAt(0);
-        //设置所有列
-        var headers = getHeaders(sheet, name);
-        resource.setHeader(headers);
 
-        // 行数定位到有效数据行，默认是第四行为有效数据行
-        var iterator = sheet.iterator();
-        iterator.next();
-        iterator.next();
-        iterator.next();
-        // 从ROW_SERVER这行开始读取数据
-        List<List<String>> data = new ArrayList<>();
-        while (iterator.hasNext()) {
-            var row = iterator.next();
-            List<String> rowData = new ArrayList<>();
-            for (var header : headers) {
-                var cell = row.getCell(header.getIndex());
-                var content = CellUtils.getCellStringValue(cell);
-                rowData.add(content);
-            }
-            data.add(rowData);
-        }
-        resource.setData(data);
-        return resource;
-    }
-    
-    // 只读取代码里写的字段
-    private List<Header> getHeaders(Sheet sheet, String fileName) {
-        var iterator = sheet.iterator();
-        // 获取配置表的有效列名称，默认第一行就是字段名称
-        var fieldRow = iterator.next();
-        if (fieldRow == null) {
-            throw new RunException("无法获取资源[class:{}]的Excel文件的属性控制列", fileName);
-        }
-        //默认第二行字段类型
-        var typeRow = iterator.next();
-        if (typeRow == null) {
-            throw new RunException("无法获取资源[class:{}]的Excel文件的类型控制列", fileName);
-        }
-
-        var headerList = new ArrayList<Header>();
-        var cellFieldMap = new HashMap<String, Integer>();
-        for (var i = 0; i < fieldRow.getLastCellNum(); i++) {
-            var fieldCell = fieldRow.getCell(i);
-            if (Objects.isNull(fieldCell)) {
-                continue;
-            }
-            var typeCell = typeRow.getCell(i);
-            if (Objects.isNull(typeCell)) {
-                continue;
-            }
-            var fieldName = CellUtils.getCellStringValue(fieldCell);
-            if (StringUtils.isEmpty(fieldName)) {
-                continue;
-            }
-            var typeName = CellUtils.getCellStringValue(typeCell);
-            if (StringUtils.isEmpty(typeName)) {
-                continue;
-            }
-            var previousValue = cellFieldMap.put(fieldName, i);
-            if (Objects.nonNull(previousValue)) {
-                throw new RunException("资源[class:{}]的Excel文件出现重复的属性控制列[field:{}]", fileName, fieldName);
-            }
-            headerList.add(new Header(fieldName, typeName, i));
-        }
-       return headerList;
-    }
-    
-    
     private void inject(Object instance, Field field, String content) {
         try {
             var targetType = new TypeDescriptor(field);
@@ -229,9 +155,9 @@ public class ResourceReader implements IResourceReader {
             this.field = field;
         }
     }
-    
-    public Map<String, Integer> getFieldMap(ResourceConfig resource, Class<?> clazz) {
-        var header = resource.getHeader();
+
+    public Map<String, Integer> getFieldMap(ResourceData resource, Class<?> clazz) {
+        var header = resource.getHeaders();
         if (header == null) {
             throw new RunException("无法获取资源[class:{}]的Excel文件的属性控制列", clazz.getSimpleName());
         }
@@ -255,13 +181,4 @@ public class ResourceReader implements IResourceReader {
         return cellFieldMap;
     }
 
-    private ResourceConfig readJson(InputStream input, String name) {
-        try {
-            var jsonStr = IOUtils.toString(input, StandardCharsets.UTF_8);
-            //将json字符转换成对象
-            return JsonUtils.string2Object(jsonStr, ResourceConfig.class);
-        } catch (IOException e) {
-            throw new RunException("静态资源[{}]异常，无法读取文件", name);
-        }
-    }
 }

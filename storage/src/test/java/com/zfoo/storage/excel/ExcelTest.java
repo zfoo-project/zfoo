@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.util.Iterator;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 @Ignore
 public class ExcelTest {

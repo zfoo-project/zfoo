@@ -16,8 +16,8 @@ package com.zfoo.storage.schema;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public class NamespaceHandler extends NamespaceHandlerSupport {
 

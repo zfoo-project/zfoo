@@ -13,6 +13,7 @@
 
 package com.zfoo.storage.interpreter;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -22,11 +23,11 @@ import java.util.List;
  * interpreter  [in'ter·pret·er || ɪn'tɜrprɪtə(r) /-'tɜːp-]
  * n.  直译程序, 翻译员, 解释者
  *
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
+ * @version 4.0
  */
 public interface IResourceReader {
 
-    <T> List<T> read(InputStream inputStream, Class<T> clazz, String suffix);
+    <T> List<T> read(InputStream inputStream, Class<T> clazz, String suffix) throws IOException;
 
 }
