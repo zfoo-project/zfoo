@@ -148,7 +148,7 @@ public class Router implements IRouter {
         }
 
         // 正常发送消息的接收,把客户端的业务请求包装下到路由策略指定的线程进行业务处理
-        // 注意：像客户端以asyncAsk发送请求，在服务器处理完后返回结果，也是进入这个receive方法，但是attachment不为空，会提前return掉不会走到这
+        // 注意：像客户端以asyncAsk发送请求，在服务器处理完后返回结果，在请求方也是进入这个receive方法，但是attachment不为空，会提前return掉不会走到这
         TaskBus.submit(new PacketReceiverTask(session, packet, attachment));
     }
 
@@ -196,6 +196,8 @@ public class Router implements IRouter {
 
         try {
             SignalBridge.addSignalAttachment(clientSignalAttachment);
+
+            // 里面调用的依然是：send方法发送消息
             send(session, packet, clientSignalAttachment);
 
             IPacket responsePacket = clientSignalAttachment.getResponseFuture().get(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
@@ -219,7 +221,9 @@ public class Router implements IRouter {
     }
 
     /**
-     * 注意：这个里面其实还是调用send发送的消息
+     * 注意：
+     * 1.这个里面其实还是调用send发送的消息
+     * 2.这个argument的参数，不仅是在asyncAsk回调时要到哪个线程用， 在provider执行方也用
      *
      * @param session
      * @param packet
@@ -328,7 +332,8 @@ public class Router implements IRouter {
                 }
             }
 
-            // 调用PacketReceiver,进行真正的业务处理
+            // 调用PacketReceiver,进行真正的业务处理,这个submit只是根据packet找到protocolId，然后进行反射调用
+            // 这个在哪个线程处理取决于：这个上层的PacketReceiverTask被丢到了哪个线程中
             PacketBus.submit(session, packet, attachment);
         } catch (Exception e) {
             logger.error(StringUtils.format("e[uid:{}][sid:{}]未知exception异常", session.getAttribute(AttributeType.UID), session.getSid(), e.getMessage()), e);

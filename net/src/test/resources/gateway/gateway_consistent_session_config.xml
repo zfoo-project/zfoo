@@ -24,12 +24,9 @@
             <net:address name="firstZookeeper" url="127.0.0.1:2181"/>
         </net:registry>
 
-<!--        <net:consumer load-balancer="consistent-hash">-->
-<!--            <net:module name="providerTest"/>-->
-<!--        </net:consumer>-->
-
+        <!--1.声明自己是个消费者 2.指明自己可以消费的接口是providerTest中声明的接口 3.消费的接口是服务提供者是myProvider1提供的具体实现-->
         <net:consumers>
-            <net:consumer protocol-module="test" consumer="myProvider1" load-balancer="consistent-hash"/>
+            <net:consumer protocol-module="providerTest" consumer="myProvider1"/>
         </net:consumers>
 
     </net:config>
