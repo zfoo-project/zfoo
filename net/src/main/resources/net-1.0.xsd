@@ -27,7 +27,7 @@
         <xsd:sequence>
             <xsd:element name="provider" maxOccurs="unbounded" type="providerAttributeType" minOccurs="0"/>
         </xsd:sequence>
-        <xsd:attribute name="task-dispatch" type="xsd:string" use="required"/>
+        <xsd:attribute name="task-dispatch" type="xsd:string" default="consistent-hash"/>
         <xsd:attribute name="thread" type="xsd:string" use="optional"/>
         <xsd:attribute name="address" type="xsd:string" use="optional"/>
     </xsd:complexType>
@@ -39,8 +39,8 @@
     </xsd:complexType>
 
     <xsd:complexType name="providerAttributeType">
-        <xsd:attribute name="provider" type="xsd:string" use="required"/>
         <xsd:attribute name="protocol-module" type="xsd:string" use="required"/>
+        <xsd:attribute name="provider" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="consumerAttributeType">
