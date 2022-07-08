@@ -33,6 +33,13 @@ public class GatewayProviderController {
 
     private static final Logger logger = LoggerFactory.getLogger(GatewayProviderController.class);
 
+    /**
+     * 注意：这里第2个请求参数以Request结尾，那么第3个参数必须是 GatewayAttachment类型(参加：PacketBus中扫描时的校验)
+     *
+     * @param session
+     * @param request
+     * @param gatewayAttachment
+     */
     @PacketReceiver
     public void atGatewayToProviderRequest(Session session, GatewayToProviderRequest request, GatewayAttachment gatewayAttachment) {
         logger.info("provider receive [packet:{}] from client", JsonUtils.object2String(request));

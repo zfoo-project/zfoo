@@ -77,6 +77,8 @@ public class GatewayTest {
     public void startGateway() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_consistent_session_config.xml");
         SessionUtils.printSessionInfo();
+
+        // 注意：这里创建的是GatewayServer里面是GatewayRouteHandler(而不是BaseRouteHandler),里面会通过ConsumerSession把消息转发到Provider
         var gatewayServer = new GatewayServer(HostAndPort.valueOf("127.0.0.1:9000"), null);
         gatewayServer.start();
         ThreadUtils.sleep(Long.MAX_VALUE);
@@ -105,7 +107,8 @@ public class GatewayTest {
             var thread = new Thread(() -> {
                 for (int j = 0; j < 10000; j++) {
                     try {
-                        // 注意：这里的ask请求参数是 xxxRequest，不是xxxAsk
+                        // 注意：这里的第2个请求参数是 xxxRequest，不是xxxAsk。  因为这里是网关要将数据转发给Provider的，因此当然不能是xxxAsk这种请求。
+                        // 第3个参数argument是null，这样子随机一个服务提供者进行消息处理
                         var response = NetContext.getRouter().syncAsk(session, request, GatewayToProviderResponse.class, null).packet();
                         logger.info("客户端请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));
                     } catch (Exception e) {
