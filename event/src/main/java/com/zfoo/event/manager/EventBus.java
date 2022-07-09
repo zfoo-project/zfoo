@@ -36,13 +36,14 @@ public abstract class EventBus {
 
     private static final Logger logger = LoggerFactory.getLogger(EventBus.class);
 
-    // 线程池的大小
+    /**
+     * 线程池的大小. event的线程池比较大
+     */
     public static final int EXECUTORS_SIZE = Runtime.getRuntime().availableProcessors() * 2;
 
     private static final ExecutorService[] executors = new ExecutorService[EXECUTORS_SIZE];
 
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
-
 
     static {
         for (int i = 0; i < executors.length; i++) {
@@ -85,16 +86,28 @@ public abstract class EventBus {
     }
 
     /**
-     * 随机获取一个线程池
+     * 随机获取一个线程
      */
     public static Executor asyncExecute() {
         return executors[RandomUtils.randomInt(EXECUTORS_SIZE)];
     }
 
+    /**
+     * 用指定线程执行
+     *
+     * @param hashcode
+     * @return
+     */
     public static Executor execute(int hashcode) {
         return executors[Math.abs(hashcode % EXECUTORS_SIZE)];
     }
 
+    /**
+     * 执行方法调用
+     *
+     * @param event        事件
+     * @param receiverList 所有的观察者
+     */
     private static void doSubmit(IEvent event, List<IEventReceiver> receiverList) {
         for (var receiver : receiverList) {
             try {
@@ -107,6 +120,12 @@ public abstract class EventBus {
         }
     }
 
+    /**
+     * 注册事件及其对应观察者
+     *
+     * @param eventType
+     * @param receiver
+     */
     public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver) {
         receiverMap.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
     }

@@ -81,6 +81,8 @@ public class EventRegisterProcessor implements BeanPostProcessor {
 
                 var receiverDefinition = new EventReceiverDefinition(bean, method, eventClazz);
                 var enhanceReceiverDefinition = EnhanceUtils.createEventReceiver(receiverDefinition);
+
+                // key:class类型 value:观察者 注册Event的receiverMap中
                 EventBus.registerEventReceiver(eventClazz, enhanceReceiverDefinition);
             }
         } catch (Throwable t) {
