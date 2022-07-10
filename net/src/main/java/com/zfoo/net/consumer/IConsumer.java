@@ -32,6 +32,8 @@ public interface IConsumer {
 
     /**
      * 直接发送，不需要任何返回值
+     * <p>
+     * 例子：参考 com.zfoo.app.zapp.chat.controller。FrinedController 的 atApplyFriendRequest方法，客户端发起申请请求，chat服务处理后，再把消息直接发给网关
      *
      * @param packet   需要发送的包
      * @param argument 计算负载均衡的参数，比如用户的id
