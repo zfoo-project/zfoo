@@ -111,6 +111,9 @@ public class Router implements IRouter {
                     break;
                 case GATEWAY_PACKET:
                     var gatewayAttachment = (GatewayAttachment) attachment;
+
+                    // 如：在网关监听到GatewaySessionInactiveEvent后，这时告诉home时，这个client参数设置的true
+                    // 注意：此时并没有return，这样子网关的消息才能发给home，在home进行处理LogoutRequest消息的处理
                     if (gatewayAttachment.isClient()) {
                         gatewayAttachment.setClient(false);
                     } else {
