@@ -114,13 +114,16 @@ public class Router implements IRouter {
                     if (gatewayAttachment.isClient()) {
                         gatewayAttachment.setClient(false);
                     } else {
+                        // 这里是：别的服务提供者提供授权给网关，比如：在玩家登录后，home服查到了玩家uid，然后发给Gateway服
                         var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
                         if (gatewaySession != null) {
                             var signalAttachmentInGatewayAttachment = gatewayAttachment.getSignalAttachment();
                             if (signalAttachmentInGatewayAttachment != null) {
                                 signalAttachmentInGatewayAttachment.setClient(false);
                             }
+
                             // 网关授权，授权完成直接返回
+                            // 注意：这个 AuthUidToGatewayCheck 是在home的LoginController中处理完登录后，把消息发给网关进行授权
                             if (AuthUidToGatewayCheck.getAuthProtocolId() == packet.protocolId()) {
                                 var uid = ((AuthUidToGatewayCheck) packet).getUid();
                                 if (uid <= 0) {
