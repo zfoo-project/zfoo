@@ -75,6 +75,12 @@ public class ExcelToJsonUtils {
         List<ResourceRow> rows = new ArrayList<>();
         while (iterator.hasNext()) {
             var row = iterator.next();
+
+            var idCell = row.getCell(0);
+            if (StringUtils.isBlank(CellUtils.getCellStringValue(idCell))) {
+                continue;
+            }
+
             var columns = new ArrayList<String>();
             for (var header : headers) {
                 var cell = row.getCell(header.getIndex());
