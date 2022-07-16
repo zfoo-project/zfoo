@@ -13,6 +13,8 @@
 
 package com.zfoo.orm.model.entity;
 
+import com.zfoo.protocol.util.StringUtils;
+
 /**
  * @author jaysunxiao
  * @version 3.0
@@ -46,4 +48,25 @@ public interface IEntity<PK extends Comparable<PK>> {
     default void svs(long vs) {
     }
 
+    /**
+     * 由于查询不存在时缓存中也会有一份，因此判断为空需要根据实际类型才能决定
+     *
+     * @return
+     */
+    default boolean isNull() {
+        PK idValue = id();
+        if (idValue == null) {
+            return true;
+        }
+        if (idValue instanceof Integer) {
+            return idValue.equals(0);
+        }
+        if (idValue instanceof Long) {
+            return idValue.equals(0L);
+        }
+        if (idValue instanceof String) {
+            return StringUtils.isEmpty((CharSequence) idValue);
+        }
+        return false;
+    }
 }

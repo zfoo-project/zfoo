@@ -94,7 +94,6 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
                         // 如果数据库中不存在则给一个默认值
                         if (entity == null) {
                             entity = (E) entityDef.newEntity(pk);
-                            logger.error("数据库[{}]没有包含主键[pk:{}]的文档，返回默认值", entityDef.getClazz().getSimpleName(), pk);
                         }
 
                         return new PNode<E>(entity);
@@ -142,6 +141,11 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
         if (currentPnode == null) {
             currentPnode = new PNode<>(entity);
             cache.put(entity.id(), currentPnode);
+        }
+
+        if (currentPnode.getThreadId() != Thread.currentThread().getId()) {
+            logger.error("[{}]被多线程访问了,先后2次访问线程分别是[{}] [{}]", entity.getClass().getSimpleName(),
+                    currentPnode.getThreadName(), Thread.currentThread().getName());
         }
 
         // 加100以防止，立刻加载并且立刻修改数据的情况发生时，服务器取到的时间戳相同
@@ -241,7 +245,7 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
         var ids = updateList.stream().map(it -> it.id()).collect(Collectors.toList());
 
         try {
-            var dbList = OrmContext.getQuery((Class<E>)entityDef.getClazz()).in("_id", ids).queryAll();
+            var dbList = OrmContext.getQuery((Class<E>) entityDef.getClazz()).in("_id", ids).queryAll();
             var dbMap = dbList.stream().collect(Collectors.toMap(key -> key.id(), value -> value));
             for (var entity : updateList) {
                 var dbEntity = dbMap.get(entity.id());

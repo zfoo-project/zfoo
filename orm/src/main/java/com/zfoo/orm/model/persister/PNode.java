@@ -31,8 +31,11 @@ public class PNode<E extends IEntity<?>> {
     // 修改数据的时间
     private volatile long modifiedTime;
 
-
     private volatile E entity;
+
+    // 记录最初访问时的线程信息
+    private long threadId;
+    private String threadName;
 
     public PNode(E entity) {
         this.entity = entity;
@@ -40,6 +43,9 @@ public class PNode<E extends IEntity<?>> {
         var currentTime = TimeUtils.now();
         this.writeToDbTime = currentTime;
         this.modifiedTime = currentTime;
+
+        this.threadId = Thread.currentThread().getId();
+        this.threadName = Thread.currentThread().getName();
     }
 
     public E getEntity() {
@@ -64,5 +70,21 @@ public class PNode<E extends IEntity<?>> {
 
     public void setModifiedTime(long modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    public long getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(long threadId) {
+        this.threadId = threadId;
+    }
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
     }
 }
