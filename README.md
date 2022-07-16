@@ -22,6 +22,7 @@
 -----------
 Why is zfoo protocol ?
 -----------
+
 - Java二进制序列化速度最快的自定义格式框架，并且为序列化字节最少的框架，更加安全，可前后兼容
 - 协议目前原生支持 C++ C# Java Javascript TypeScript GDScript Lua，可以轻易实现跨平台
 - 单线程的Benchmark测试中，序列化和反序列化速度比Protobuf快50%，比Kryo快100%
@@ -55,12 +56,12 @@ Why is zfoo protocol ?
 --------------------
 
 - 有问题，先看 [FAQ](./doc/FAQ.md)，每个工程目录的test文件夹下都有标准的demo展示和注释说明，可以直接运行
-  - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
+    - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
 
 
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of Tanks）》，新手友好，难度2星
-  - 快速体验，tank游戏入口 [tank.zfoo.net](http://tank.zfoo.net)
-  - 快速体验，tank后台管理 [tank-admin.zfoo.net](http://tank-admin.zfoo.net)
+    - 快速体验，tank游戏入口 [tank.zfoo.net](http://tank.zfoo.net)
+    - 快速体验，tank后台管理 [tank-admin.zfoo.net](http://tank-admin.zfoo.net)
 
 - [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，标准的https企业级网站，难度5星
 
@@ -171,7 +172,7 @@ public class StudentResource {
 
 - 欢迎喜欢这个项目的人来一起维护这个项目，提交代码的时候注意下面规范
 - Java项目格式化代码的方式采用IntelliJ Idea默认的格式化
-- 代码提交的说明(commit message)按照下面给出的些常用格式
+- [代码提交的说明(commit message)](https://github.com/pvdlg/conventional-changelog-metahub#commit-types) 按照下面给出的些常用格式
 
 ```
 feat[module]: 新增某一项功能
