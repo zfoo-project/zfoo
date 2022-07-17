@@ -22,7 +22,7 @@ import com.zfoo.protocol.util.StringUtils;
 public interface IEntity<PK extends Comparable<PK>> {
 
     /**
-     * 一个文档的主键
+     * 一个文档的主键 primary key
      */
     PK id();
 
