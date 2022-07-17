@@ -51,22 +51,18 @@ public interface IEntity<PK extends Comparable<PK>> {
     /**
      * 由于查询不存在时缓存中也会有一份，因此判断为空需要根据实际类型才能决定
      *
-     * @return
+     * @return EntityCaches中取出的值在数据库中是否存在
      */
     default boolean isNull() {
         PK idValue = id();
         if (idValue == null) {
             return true;
         }
-        if (idValue instanceof Integer) {
-            return idValue.equals(0);
-        }
-        if (idValue instanceof Long) {
-            return idValue.equals(0L);
-        }
-        if (idValue instanceof String) {
+        // id在启动的时候做过校验，只能是int long float double String几种类型
+        if (idValue instanceof Number) {
+            return ((Number) idValue).doubleValue() == 0D;
+        } else {
             return StringUtils.isEmpty((CharSequence) idValue);
         }
-        return false;
     }
 }
