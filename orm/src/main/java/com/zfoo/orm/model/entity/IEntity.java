@@ -53,7 +53,7 @@ public interface IEntity<PK extends Comparable<PK>> {
      *
      * @return EntityCaches中取出的值在数据库中是否存在
      */
-    default boolean isNull() {
+    default boolean checkNull() {
         PK idValue = id();
         if (idValue == null) {
             return true;
