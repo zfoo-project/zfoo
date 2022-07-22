@@ -41,6 +41,10 @@ public class ConsumerModule {
         this.consumer = consumer;
         this.loadBalancer = loadBalancer;
     }
+    
+    public boolean matchProvider(ProviderModule providerModule) {
+        return Objects.equals(protocolModule.getName(), providerModule.getProtocolModule().getName()) && Objects.equals(consumer, providerModule.getProvider());
+    }
 
     public String getConsumer() {
         return consumer;

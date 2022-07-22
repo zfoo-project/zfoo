@@ -20,6 +20,7 @@ import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,8 +80,7 @@ public class ConfigManager implements IConfigManager {
 
         var consumerConfig = localConfig.getConsumer();
         if (Objects.nonNull(consumerConfig) && CollectionUtils.isNotEmpty(consumerConfig.getConsumers())) {
-            var set = new HashSet<String>();
-            var protocolModuleSet = new HashSet<ProtocolModule>();
+            var protocolModuleSet = new HashSet<String>();
             for (var consumerModule : consumerConfig.getConsumers()) {
                 // 提供的接口实现 提供者名
                 var consumer = consumerModule.getConsumer();
@@ -88,8 +88,7 @@ public class ConfigManager implements IConfigManager {
                 var protocolModule = ProtocolManager.moduleByModuleName(protocolModuleName);
                 AssertionUtils.isTrue(protocolModule != null, "服务消费者[name:{}]在协议文件中不存在", protocolModuleName);
                 consumerModule.setProtocolModule(protocolModule);
-                AssertionUtils.isTrue(set.add(consumer), "服务消费者[name:{}]配置重复", consumer);
-                AssertionUtils.isTrue(protocolModuleSet.add(protocolModule), "服务消费者[name:{}]重复消费了协议模块{}", consumer, protocolModule);
+                AssertionUtils.isTrue(protocolModuleSet.add(StringUtils.joinWith(StringUtils.HYPHEN, protocolModuleName, consumer)), "服务消费者[name:{}]重复消费了协议模块{}", consumer, protocolModule);
             }
         }
 

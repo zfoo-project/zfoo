@@ -54,7 +54,7 @@ public class RegisterVO {
             return false;
         }
         for (var provider : providerVO.getProviderConfig().getProviders()) {
-            if (consumerVO.getConsumerConfig().getConsumers().stream().anyMatch(it -> provider.getProvider().equals(it.getConsumer()))) {
+            if (consumerVO.getConsumerConfig().getConsumers().stream().anyMatch(it -> it.matchProvider(provider))) {
                 return true;
             }
         }
