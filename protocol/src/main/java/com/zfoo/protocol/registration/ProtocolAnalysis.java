@@ -489,12 +489,23 @@ public class ProtocolAnalysis {
         IPacket packet = (IPacket) constructor.newInstance();
         var protocolId = (short) protocolIdField.get(null);
         // 验证protocol()方法的返回是否和PROTOCOL_ID相等
-        AssertionUtils.isTrue(packet.protocolId() == protocolId, "[class:{}]的protocolId返回的值和协议号的静态变量[{}]不相等", clazz.getCanonicalName(), PROTOCOL_ID);
+        Method protocolMethod;
+        try {
+            protocolMethod = clazz.getDeclaredMethod(PROTOCOL_METHOD);
+        } catch (NoSuchMethodException e) {
+            protocolMethod = null;
+        }
+        if (protocolMethod != null) {
+            var methodReturnId = (short) protocolMethod.invoke(packet);
+            AssertionUtils.isTrue(methodReturnId == protocolId, "[class:{}]的protocolId返回的值和协议号的静态变量[{}]不相等", clazz.getCanonicalName(), PROTOCOL_ID);
+        }
 
         var previous = protocolClassMap.put(protocolId, clazz);
         if (previous != null) {
             throw new RunException("[{}][{}]协议号[protocolId:{}]重复", clazz.getCanonicalName(), previous.getCanonicalName(), protocolId);
         }
+        //存储class和protocolId的映射
+        protocolIdMap.put(clazz, protocolId);
     }
 
     private static void checkSubProtocol(Class<?> clazz, short id, Class<?> subClass) {

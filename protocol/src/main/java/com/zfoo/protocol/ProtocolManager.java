@@ -30,6 +30,7 @@ import java.util.*;
 public class ProtocolManager {
 
     public static final String PROTOCOL_ID = "PROTOCOL_ID";
+    public static final String PROTOCOL_METHOD = "protocolId";
     public static final short MAX_PROTOCOL_NUM = Short.MAX_VALUE;
     public static final byte MAX_MODULE_NUM = Byte.MAX_VALUE;
 
@@ -46,7 +47,7 @@ public class ProtocolManager {
      * key:协议class
      * value:protocolId
      */
-    private static final Map<Class<?>, Short> protocolIdMap = new HashMap<>();
+    public static final Map<Class<?>, Short> protocolIdMap = new HashMap<>();
 
     static {
         // 初始化默认协议模块
@@ -109,16 +110,9 @@ public class ProtocolManager {
 
     public static short protocolId(Class<?> clazz) {
         var protocolId = protocolIdMap.get(clazz);
-        if (protocolId == null) {
-            protocolId = ProtocolAnalysis.getProtocolIdByClass(clazz);
-            // 使用懒加载的方式，主要是想节省一点空间，实际运行只有IPacket没有重写protocolId的Response和Answer才会放进去
-            synchronized (protocolIdMap) {
-                protocolIdMap.put(clazz, protocolId);
-            }
-        }
         return protocolId;
     }
-
+    
     public static void initProtocol(Set<Class<?>> protocolClassSet) {
         ProtocolAnalysis.analyze(protocolClassSet, GenerateOperation.NO_OPERATION);
     }
