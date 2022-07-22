@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
@@ -199,6 +200,7 @@ public abstract class GenerateProtobufUtils {
                     Arrays.stream(docTitle.split(LS)).forEach(it -> builder.append(it).append(LS));
                 }
 
+                builder.append("//id = ").append(protocolId).append(LS);
                 builder.append(StringUtils.format("message {} {", protocolClass.getSimpleName())).append(LS);
                 builder.append(protocolClass((ProtocolRegistration) protocolRegistration));
                 builder.append("}").append(LS).append(LS);
@@ -209,26 +211,33 @@ public abstract class GenerateProtobufUtils {
         }
     }
 
+    /**
+     * 优化一下生成协议顺序
+     * @param registration
+     * @return
+     */
     private static String protocolClass(ProtocolRegistration registration) {
-        var builder = new StringBuilder();
-
         var protocolId = registration.getId();
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
 
         var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
         var docFieldMap = protocolDocument.getValue();
-
+        // 先检查注解id顺序是否有重复
+        var orderMap = new TreeMap<Integer, String>();
         for (int i = 0, length = fields.length; i < length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
 
             var protobuf = field.getDeclaredAnnotation(Protobuf.class);
             if (protobuf == null) {
-                throw new RunException("protobu协议类必须加上注解[{}]，并且标识order的顺序", Protobuf.class.getSimpleName());
+                throw new RunException("protobuf协议类必须加上注解[{}]，并且标识order的顺序", Protobuf.class.getSimpleName());
             }
             var order = protobuf.order();
-
+            if (orderMap.containsKey(order)) {
+                throw new RunException("protobuf协议类注解[{}]，order的顺序重复[{}]", Protobuf.class.getSimpleName(), order);
+            }
+            var builder = new StringBuilder();
             var propertyName = field.getName();
             // 生成注释
             var doc = docFieldMap.get(propertyName);
@@ -239,6 +248,7 @@ public abstract class GenerateProtobufUtils {
             var singleFieldStr = toFieldTypeName(fieldRegistration);
             if (StringUtils.isNotBlank(singleFieldStr)) {
                 builder.append(TAB).append(StringUtils.format("{} {} = {};", singleFieldStr, propertyName, order)).append(LS);
+                orderMap.put(order, builder.toString());
                 continue;
             }
 
@@ -262,8 +272,13 @@ public abstract class GenerateProtobufUtils {
             } else {
                 throw new RunException("无法识别的protobuf类型[{}]", field.getName());
             }
+            orderMap.put(order, builder.toString());
         }
-
+        
+        var builder = new StringBuilder();
+        for (var entry : orderMap.entrySet()) {
+            builder.append(entry.getValue());
+        }
         return builder.toString();
     }
 
