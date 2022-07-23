@@ -80,6 +80,7 @@ Why is zfoo protocol ?
 
 ```
 // zfoo协议注册，只能初始化一次
+// 注意：实际项目中是通过读取protocol.xml文件自动完成协议注册的，无需调用此方法手动注册
 ProtocolManager.initProtocol(Set.of(ComplexObject.class, ObjectA.class, ObjectB.class));
 
 // 序列化
