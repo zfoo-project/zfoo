@@ -35,7 +35,6 @@ public class PNode<E extends IEntity<?>> {
 
     // 记录最初访问时的线程信息
     private long threadId;
-    private String threadName;
 
     public PNode(E entity) {
         this.entity = entity;
@@ -45,7 +44,6 @@ public class PNode<E extends IEntity<?>> {
         this.modifiedTime = currentTime;
 
         this.threadId = Thread.currentThread().getId();
-        this.threadName = Thread.currentThread().getName();
     }
 
     public E getEntity() {
@@ -80,11 +78,4 @@ public class PNode<E extends IEntity<?>> {
         this.threadId = threadId;
     }
 
-    public String getThreadName() {
-        return threadName;
-    }
-
-    public void setThreadName(String threadName) {
-        this.threadName = threadName;
-    }
 }

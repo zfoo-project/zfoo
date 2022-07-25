@@ -144,8 +144,8 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
         }
 
         if (currentPnode.getThreadId() != Thread.currentThread().getId()) {
-            logger.error("[{}]被多线程访问了,先后2次访问线程分别是[{}] [{}]", entity.getClass().getSimpleName(),
-                    currentPnode.getThreadName(), Thread.currentThread().getName());
+            logger.error("[{}]被多线程访问了,先后2次访问线程ID分别是[{}] [{}]", entity.getClass().getSimpleName(),
+                    currentPnode.getThreadId(), Thread.currentThread().getId());
         }
 
         // 加100以防止，立刻加载并且立刻修改数据的情况发生时，服务器取到的时间戳相同
