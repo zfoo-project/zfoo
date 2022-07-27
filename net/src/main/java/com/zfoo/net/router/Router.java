@@ -229,7 +229,7 @@ public class Router implements IRouter {
     /**
      * 注意：
      * 1.这个里面其实还是调用send发送的消息
-     * 2.这个argument的参数，不仅是在asyncAsk回调时要到哪个线程用， 在provider执行方也用
+     * 2.这个argument的参数，只用于provider处哪个线程执行，其实就是hashId，如：工会业务，则传入guildId，回调回来后，一定会在发起者线程。
      *
      * @param session
      * @param packet
@@ -303,7 +303,7 @@ public class Router implements IRouter {
                             }
                         }
 
-                    }, TaskBus.executor(executorConsistentHash));
+                    }, TaskBus.currentThreadExecutor());
 
 
             SignalBridge.addSignalAttachment(clientSignalAttachment);
