@@ -131,6 +131,7 @@ public final class TaskBus {
         var threadId = Thread.currentThread().getId();
         var executor = threadMap.get(threadId);
         if (executor == null) {
+            logger.error("threadId:[{}]找不到对应的executor", threadId);
             return executor(RandomUtils.randomInt());
         }
         return executor;
