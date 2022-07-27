@@ -303,7 +303,7 @@ public class Router implements IRouter {
                             }
                         }
 
-                    }, TaskBus.executor(executorConsistentHash));
+                    }, TaskBus.currentThreadExecutor());
 
 
             SignalBridge.addSignalAttachment(clientSignalAttachment);

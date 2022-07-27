@@ -17,12 +17,19 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.task.dispatcher.AbstractTaskDispatch;
 import com.zfoo.net.task.dispatcher.ITaskDispatch;
 import com.zfoo.net.task.model.PacketReceiverTask;
+import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.util.math.RandomUtils;
+import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author jaysunxiao
@@ -43,6 +50,8 @@ public final class TaskBus {
      */
     private static final ExecutorService[] executors;
 
+    private static final Map<Long, ExecutorService> threadMap = new ConcurrentHashMap<>();
+
     static {
         var localConfig = NetContext.getConfigManager().getLocalConfig();
         var providerConfig = localConfig.getProvider();
@@ -55,11 +64,40 @@ public final class TaskBus {
 
         executors = new ExecutorService[EXECUTOR_SIZE];
         for (int i = 0; i < executors.length; i++) {
-            var namedThreadFactory = new TaskThreadFactory();
-            executors[i] = Executors.newSingleThreadExecutor(namedThreadFactory);
+            var namedThreadFactory = new TaskThreadFactory(i + 1);
+            var executor = Executors.newSingleThreadExecutor(namedThreadFactory);
+            namedThreadFactory.executor = executor;
+            executors[i] = executor;
         }
     }
 
+    public static class TaskThreadFactory implements ThreadFactory {
+
+        public ExecutorService executor;
+
+        private final int poolNumber;
+        private final AtomicInteger threadNumber = new AtomicInteger(1);
+        private final ThreadGroup group;
+
+        public TaskThreadFactory(int poolNumber) {
+            var s = System.getSecurityManager();
+            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+            this.poolNumber = poolNumber;
+        }
+
+        @Override
+        public Thread newThread(Runnable runnable) {
+            var threadName = StringUtils.format("task-p{}-t{}", poolNumber, threadNumber.getAndIncrement());
+            var t = new FastThreadLocalThread(group, runnable, threadName, 0);
+            t.setDaemon(false);
+            t.setPriority(Thread.NORM_PRIORITY);
+            t.setUncaughtExceptionHandler((thread, e) -> logger.error(thread.toString(), e));
+            AssertionUtils.notNull(executor);
+            var threadId = t.getId();
+            threadMap.put(threadId, executor);
+            return t;
+        }
+    }
 
     /**
      * Actor模型，最主要的就是线程模型，Actor模型保证了某个Actor所代表的任务永远不会同时在两条线程同时处理任务，这就就避免了并发。
@@ -87,4 +125,15 @@ public final class TaskBus {
     public static ExecutorService executor(int executorConsistentHash) {
         return executors[Math.abs(executorConsistentHash % EXECUTOR_SIZE)];
     }
+
+    // 在task线程的异步请求，请求成功过后依然在相同的task线程执行回调任务
+    public static ExecutorService currentThreadExecutor() {
+        var threadId = Thread.currentThread().getId();
+        var executor = threadMap.get(threadId);
+        if (executor == null) {
+            return executor(RandomUtils.randomInt());
+        }
+        return executor;
+    }
+
 }
