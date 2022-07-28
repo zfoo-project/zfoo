@@ -15,18 +15,15 @@ package com.zfoo.protocol.generate;
 
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
+import com.zfoo.protocol.registration.ProtocolRegistration;
+import com.zfoo.protocol.serializer.anno.Description;
 import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-import static com.zfoo.protocol.util.FileUtils.LS;
 
 /**
  * 生成协议的时候，协议的文档注释和字段注释会使用这个类
@@ -77,109 +74,25 @@ public abstract class GenerateProtocolDocument {
         AssertionUtils.notNull(protocolDocumentMap, "[{}]已经初始完成，初始化完成过后不能调用initProtocolDocument", GenerateProtocolDocument.class.getSimpleName());
 
         // 文件的注释生成
-        var proAbsFile = new File(FileUtils.getProAbsPath());
-        var list = FileUtils.getAllReadableFiles(proAbsFile.getParentFile() == null ? proAbsFile : proAbsFile.getParentFile())
-                .stream()
-                .filter(it -> it.getName().endsWith(".java"))
-                .collect(Collectors.toList());
-
         for (var protocolRegistration : protocolRegistrations) {
             var protocolClazz = protocolRegistration.protocolConstructor().getDeclaringClass();
-            var protocolClazzName = protocolClazz.getName();
-
-            var protocolFile = list.stream()
-                    .filter(it -> it.getAbsolutePath().replace(StringUtils.SLASH, StringUtils.PERIOD).replace(StringUtils.BACK_SLASH, StringUtils.PERIOD).endsWith(StringUtils.format("{}.java", protocolClazzName)))
-                    .findFirst();
-
-            // 如果搜索不到协议文件则直接返回
-            if (protocolFile.isEmpty()) {
-                continue;
-            }
-
             var docFieldMap = new HashMap<String, String>();
             var docTitle = StringUtils.EMPTY;
-
-            var protocolStringList = FileUtils.readFileToStringList(protocolFile.get())
-                    .stream()
-                    .dropWhile(it -> !it.startsWith("package")) // 过滤掉package之上的版权信息
-                    .collect(Collectors.toList());
-
-            // 搜索包名，报名不匹配则直接返回
-            var protocolClassTitle = StringUtils.format("public class {}", protocolClazz.getSimpleName());
-            if (protocolStringList.stream().noneMatch(it -> it.contains(protocolClassTitle))) {
-                continue;
+            var description = protocolClazz.getDeclaredAnnotation(Description.class);
+            if (description != null) {
+                var docTitleBuilder = new StringBuilder().append("//").append(description.value());
+                docTitle = docTitleBuilder.toString();
             }
 
-            protocolStringList = protocolStringList.stream()
-                    .dropWhile(it -> !it.startsWith("package"))
-                    .collect(Collectors.toList());
-
-            var docBuilder = new StringBuilder();
-            var docTitleBuilder = new StringBuilder();
-            for (var line : protocolStringList) {
-                var startLineStr = line.trim();
-
-                // 排除java的包头
-                if (startLineStr.startsWith("package") || startLineStr.startsWith("import")) {
+            var registration = (ProtocolRegistration) protocolRegistration;
+            for (var field : registration.getFields()) {
+                var fieldDescrption = field.getDeclaredAnnotation(Description.class);
+                if (fieldDescrption == null) {
                     continue;
                 }
-
-
-                if (startLineStr.startsWith("public class ")) {
-                    if (docTitleBuilder != null) {
-                        docTitle = docTitleBuilder.toString();
-                        docTitle = docTitle.replace("/**", StringUtils.EMPTY);
-                        docTitle = docTitle.replace(" */", StringUtils.EMPTY);
-                        docTitle = docTitle.replace(" *", "//");
-                        docTitle = docTitle.trim();
-                        docBuilder = new StringBuilder();
-                        docTitleBuilder = null;
-                    }
-                } else {
-                    if (docTitleBuilder != null) {
-                        docTitleBuilder.append(line).append(LS);
-                    }
-                }
-
-                // 保留注释
-                if (startLineStr.startsWith("*/")) {
-                    continue;
-                }
-
-                if (startLineStr.startsWith("//") || startLineStr.startsWith("*")) {
-                    startLineStr = startLineStr.replaceFirst("//", StringUtils.EMPTY);
-                    startLineStr = startLineStr.replaceFirst("\\*", StringUtils.EMPTY);
-                    docBuilder.append("//").append(startLineStr).append(LS);
-                    continue;
-                }
-
-                if (startLineStr.startsWith("private static ")) {
-                    continue;
-                }
-
-                if (startLineStr.contains(" transient ")) {
-                    continue;
-                }
-
-                if (startLineStr.startsWith("public void set") || startLineStr.startsWith("public bool equals")
-                        || startLineStr.startsWith("public int hashCode") || startLineStr.startsWith("@Override")) {
-                    continue;
-                }
-
-                if (startLineStr.endsWith("{") || startLineStr.startsWith("return ") || startLineStr.startsWith("}")) {
-                    continue;
-                }
-
-                if (!startLineStr.endsWith(";")) {
-                    continue;
-                }
-                if (!(startLineStr.startsWith("private ") || startLineStr.startsWith("public "))) {
-                    continue;
-                }
-
-                var fieldName = StringUtils.substringBeforeLast(StringUtils.substringAfterLast(startLineStr, StringUtils.SPACE), StringUtils.SEMICOLON).trim();
+                var docBuilder = new StringBuilder().append("//").append(fieldDescrption.value());
+                var fieldName = field.getName();
                 docFieldMap.put(fieldName, docBuilder.toString());
-                docBuilder = new StringBuilder();
             }
 
             protocolDocumentMap.put(protocolRegistration.protocolId(), new Pair<>(docTitle, docFieldMap));

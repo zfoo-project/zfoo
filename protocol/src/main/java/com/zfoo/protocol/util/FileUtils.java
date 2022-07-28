@@ -445,6 +445,38 @@ public abstract class FileUtils {
         return list;
     }
 
+    /**
+     * 写入一个content
+     *
+     * @param file    文件的绝对路径
+     * @param content 写入的内容
+     * @param append 是否追加
+     */
+    public static void writeStringToFile(File file, String content, boolean append) {
+        // 字节流
+        FileOutputStream fileOutputStream = null;
+        // 转换流，设置编码集和解码集 .处理乱码问题，是字节到字符的桥梁
+        OutputStreamWriter outputStreamWriter = null;
+        //处理流中的缓冲流，提高效率
+        BufferedWriter bufferedWriter = null;
+        // 如果不用缓冲流的话，程序是读一个数据，写一个数据，这样在数据量大的程序中非常影响效率。
+        // 缓冲流作用是把数据先写入缓冲区，等缓冲区满了，再把数据写到文件里。这样效率就大大提高了
+        try {
+            // 以追加的方式打开文件
+            fileOutputStream = openOutputStream(file, append);
+            outputStreamWriter = new OutputStreamWriter(fileOutputStream, StringUtils.DEFAULT_CHARSET_NAME);
+            bufferedWriter = new BufferedWriter(outputStreamWriter);
+            bufferedWriter.write(content);// 写数据
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            // Java的垃圾回收机制不会回收任何的物理资源，只会回收堆内存中对象所占用的内存
+            // finally总会被执行，即使try块中和catch块中有return，也会被执行。
+            // 用来显示回收数据库连接，网络连接，磁盘文件
+            IOUtils.closeIO(bufferedWriter, outputStreamWriter, fileOutputStream);
+        }
+    }
+
 
     /**
      * 以追加的方式写入一个content

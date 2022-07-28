@@ -61,9 +61,9 @@ public class ConfigManager implements IConfigManager {
     public void initRegistry() {
         // 通过protocol，写入provider的module的id和version
         var providerConfig = localConfig.getProvider();
-        // 服务提供者名字Set列表
-        var providerSet = new HashSet<String>();
         if (Objects.nonNull(providerConfig) && CollectionUtils.isNotEmpty(providerConfig.getProviders())) {
+            // 服务提供者名字Set列表
+            var providerSet = new HashSet<String>();
             // 检查并且替换配置文件中的ProtocolModule
             for (var providerModule : providerConfig.getProviders()) {
                 var provider = providerModule.getProvider();
@@ -93,8 +93,6 @@ public class ConfigManager implements IConfigManager {
                 AssertionUtils.isTrue(protocolModuleSet.add(protocolModuleName), "服务消费者[name:{}]重复消费了协议模块", protocolModuleName);
                 var consumerName = StringUtils.joinWith(StringUtils.HYPHEN, protocolModuleName, consumer);
                 AssertionUtils.isTrue(consumerSet.add(consumerName), "服务消费者[name:{}]重复消费了协议模块[consumer:{}]", protocolModuleName, consumer);
-                //检查是否消费了自己
-                AssertionUtils.isTrue(!providerSet.contains(consumerName), "服务消费者[name:{}]不允许消费自己[consumer:{}]", protocolModuleName, consumer);
             }
         }
 
