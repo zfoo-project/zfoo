@@ -32,6 +32,8 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * Task线程池一半是用来接收客户都安的请求做一些cpu密集型任务，尽量避免做一些阻塞操作，IO密集型任务可以放在Event线程池去做
+ *
  * @author godotg
  * @version 3.0
  */
@@ -125,7 +127,7 @@ public final class TaskBus {
         return Math.abs(executorConsistentHash % EXECUTOR_SIZE);
     }
 
-    public static void executor(int executorConsistentHash, SafeRunnable runnable) {
+    public static void execute(int executorConsistentHash, SafeRunnable runnable) {
         executors[executorIndex(executorConsistentHash)].execute(runnable);
     }
 
