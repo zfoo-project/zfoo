@@ -16,7 +16,7 @@ package com.zfoo.scheduler.schema;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class NamespaceHandler extends NamespaceHandlerSupport {

@@ -15,7 +15,6 @@ package com.zfoo.orm.lpmap;
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.lpmap.model.MyPacket;
 import com.zfoo.protocol.ProtocolManager;
-import com.zfoo.util.SafeRunnable;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -59,17 +58,14 @@ public class ConcurrentHeapMapTest {
 
         var countdown = new CountDownLatch(EventBus.EXECUTORS_SIZE);
         for (int i = 0; i < EventBus.EXECUTORS_SIZE; i++) {
-            EventBus.asyncExecute(new SafeRunnable() {
-                @Override
-                public void doRun() {
-                    var key = atomicInt.getAndIncrement();
-                    while (key < count) {
-                        var myPacket = MyPacket.valueOf(key, String.valueOf(key));
-                        map.put(key, myPacket);
-                        key = atomicInt.getAndIncrement();
-                    }
-                    countdown.countDown();
+            EventBus.asyncExecute(() -> {
+                var key = atomicInt.getAndIncrement();
+                while (key < count) {
+                    var myPacket = MyPacket.valueOf(key, String.valueOf(key));
+                    map.put(key, myPacket);
+                    key = atomicInt.getAndIncrement();
                 }
+                countdown.countDown();
             });
         }
         countdown.await();

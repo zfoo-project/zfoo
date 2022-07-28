@@ -20,7 +20,6 @@ import com.zfoo.event.manager.EventBus;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.scheduler.manager.SchedulerBus;
-import com.zfoo.util.SafeRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -94,31 +93,25 @@ public class SimpleCache<K, V> {
                 });
 
 
-        SchedulerBus.scheduleAtFixedRate(new SafeRunnable() {
-            @Override
-            public void doRun() {
-                // 不在任务调度线程中执行耗时任务，因为任务调度线程只有一个线程池
-                EventBus.asyncExecute(new SafeRunnable() {
-                    @Override
-                    public void doRun() {
-                        var list = new ArrayList<K>();
-                        while (!linkedQueue.isEmpty()) {
-                            var key = linkedQueue.poll();
-                            list.add(key);
-                            if (list.size() >= BATCH_RELOAD_SIZE) {
-                                var result = batchLoadCallback.apply(list);
-                                result.forEach(it -> cache.put(it.getKey(), it.getValue()));
-                                list.clear();
-                            }
-                        }
-
-                        if (CollectionUtils.isNotEmpty(list)) {
-                            var result = batchLoadCallback.apply(list);
-                            result.forEach(it -> cache.put(it.getKey(), it.getValue()));
-                        }
+        SchedulerBus.scheduleAtFixedRate(() -> {
+            // 不在任务调度线程中执行耗时任务，因为任务调度线程只有一个线程池
+            EventBus.asyncExecute(() -> {
+                var list = new ArrayList<K>();
+                while (!linkedQueue.isEmpty()) {
+                    var key = linkedQueue.poll();
+                    list.add(key);
+                    if (list.size() >= BATCH_RELOAD_SIZE) {
+                        var result = batchLoadCallback.apply(list);
+                        result.forEach(it -> cache.put(it.getKey(), it.getValue()));
+                        list.clear();
                     }
-                });
-            }
+                }
+
+                if (CollectionUtils.isNotEmpty(list)) {
+                    var result = batchLoadCallback.apply(list);
+                    result.forEach(it -> cache.put(it.getKey(), it.getValue()));
+                }
+            });
         }, refreshDuration, TimeUnit.MILLISECONDS);
 
 

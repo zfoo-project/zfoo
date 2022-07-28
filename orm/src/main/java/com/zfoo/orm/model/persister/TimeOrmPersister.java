@@ -19,7 +19,6 @@ import com.zfoo.orm.model.cache.EntityCaches;
 import com.zfoo.orm.model.vo.EntityDef;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
-import com.zfoo.util.SafeRunnable;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +31,7 @@ public class TimeOrmPersister extends AbstractOrmPersister {
     /**
      * 执行的频率
      */
-    private long rate;
+    private final long rate;
 
     public TimeOrmPersister(EntityDef entityDef, EntityCaches<?, ?> entityCaches) {
         super(entityDef, entityCaches);
@@ -44,17 +43,9 @@ public class TimeOrmPersister extends AbstractOrmPersister {
 
     @Override
     public void start() {
-        SchedulerBus.scheduleAtFixedRate(new SafeRunnable() {
-            @Override
-            public void doRun() {
-                if (!OrmContext.isStop()) {
-                    EventBus.execute(entityDef.getClazz().hashCode(), new SafeRunnable() {
-                        @Override
-                        public void doRun() {
-                            entityCaches.persistAll();
-                        }
-                    });
-                }
+        SchedulerBus.scheduleAtFixedRate(() -> {
+            if (!OrmContext.isStop()) {
+                EventBus.execute(entityDef.getClazz().hashCode(), () -> entityCaches.persistAll());
             }
         }, rate, TimeUnit.MILLISECONDS);
     }

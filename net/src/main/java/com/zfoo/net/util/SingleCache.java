@@ -15,7 +15,6 @@ package com.zfoo.net.util;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.scheduler.util.TimeUtils;
-import com.zfoo.util.SafeRunnable;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -62,12 +61,7 @@ public class SingleCache<V> {
             try {
                 if (now > refreshTime) {
                     refreshTime = now + refreshDuration;
-                    EventBus.asyncExecute(new SafeRunnable() {
-                        @Override
-                        public void doRun() {
-                            cache = supplier.get();
-                        }
-                    });
+                    EventBus.asyncExecute(() -> cache = supplier.get());
                 }
             } finally {
                 lock.unlock();

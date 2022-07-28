@@ -16,7 +16,7 @@ package com.zfoo.event;
 import com.zfoo.event.model.event.IEvent;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class MyNoticeEvent implements IEvent {

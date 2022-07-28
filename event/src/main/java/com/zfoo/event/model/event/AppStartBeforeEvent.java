@@ -21,7 +21,7 @@ import org.springframework.context.event.ApplicationContextEvent;
  * <p>
  * 启动顺序为：AppStartBeforeEvent -> AppStartEvent -> AppStartAfterEvent
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class AppStartBeforeEvent extends ApplicationContextEvent {

@@ -34,7 +34,7 @@ import java.lang.reflect.Modifier;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SchedulerContext implements ApplicationListener<ApplicationContextEvent>, Ordered {

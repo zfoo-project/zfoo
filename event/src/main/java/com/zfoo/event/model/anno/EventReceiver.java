@@ -18,7 +18,7 @@ import java.lang.annotation.*;
 /**
  * 接收事件的注解
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 

@@ -31,7 +31,7 @@ import org.w3c.dom.Element;
  * 从而可以得出结论：在基于zfoo的SpringBoot工程中，由于压根不解析xml对象，注册bean也是通过@Configuration配置类注册bean的，
  * 因此这些实现BeanDefinitionParser接口的parse方法是都不会执行的。
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SchedulerDefinitionParser implements BeanDefinitionParser {

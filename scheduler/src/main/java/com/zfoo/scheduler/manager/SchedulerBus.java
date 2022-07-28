@@ -72,7 +72,7 @@ public abstract class SchedulerBus {
 
     public static class SchedulerThreadFactory implements ThreadFactory {
 
-        private int poolNumber;
+        private final int poolNumber;
         private final AtomicInteger threadNumber = new AtomicInteger(1);
         private final ThreadGroup group;
 
@@ -166,24 +166,24 @@ public abstract class SchedulerBus {
     /**
      * 不断执行的周期循环任务
      */
-    public static void scheduleAtFixedRate(SafeRunnable runnable, long period, TimeUnit unit) {
+    public static void scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
         if (SchedulerContext.isStop()) {
             return;
         }
 
-        executor.scheduleAtFixedRate(runnable, 0, period, unit);
+        executor.scheduleAtFixedRate(SafeRunnable.valueOf(runnable), 0, period, unit);
     }
 
 
     /**
      * 固定延迟执行的任务
      */
-    public static void schedule(SafeRunnable runnable, long delay, TimeUnit unit) {
+    public static void schedule(Runnable runnable, long delay, TimeUnit unit) {
         if (SchedulerContext.isStop()) {
             return;
         }
 
-        executor.schedule(runnable, delay, unit);
+        executor.schedule(SafeRunnable.valueOf(runnable), delay, unit);
     }
 
     /**

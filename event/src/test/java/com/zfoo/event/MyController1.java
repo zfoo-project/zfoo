@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Component

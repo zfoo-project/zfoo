@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SchedulerDefinition {

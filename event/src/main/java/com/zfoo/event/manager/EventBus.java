@@ -59,9 +59,9 @@ public abstract class EventBus {
     }
 
     public static class EventThreadFactory implements ThreadFactory {
-        private int poolNumber;
-        private AtomicInteger threadNumber = new AtomicInteger(1);
-        private ThreadGroup group;
+        private final int poolNumber;
+        private final AtomicInteger threadNumber = new AtomicInteger(1);
+        private final ThreadGroup group;
 
         public EventThreadFactory(int poolNumber) {
             var s = System.getSecurityManager();
@@ -111,7 +111,7 @@ public abstract class EventBus {
         executors[Math.abs(event.threadId() % EXECUTORS_SIZE)].execute(() -> doSubmit(event, list));
     }
 
-    public static void asyncExecute(SafeRunnable runnable) {
+    public static void asyncExecute(Runnable runnable) {
         execute(RandomUtils.randomInt(EXECUTORS_SIZE), runnable);
     }
 
@@ -121,8 +121,8 @@ public abstract class EventBus {
      * @param hashcode
      * @return
      */
-    public static void execute(int hashcode, SafeRunnable runnable) {
-        executors[Math.abs(hashcode % EXECUTORS_SIZE)].execute(runnable);
+    public static void execute(int hashcode, Runnable runnable) {
+        executors[Math.abs(hashcode % EXECUTORS_SIZE)].execute(SafeRunnable.valueOf(runnable));
     }
 
     /**

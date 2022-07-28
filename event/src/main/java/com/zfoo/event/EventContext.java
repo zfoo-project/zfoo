@@ -29,7 +29,7 @@ import org.springframework.core.Ordered;
 import java.util.concurrent.ExecutorService;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  * <p>
  * 在EventRegisterProcessor 中完成扫描

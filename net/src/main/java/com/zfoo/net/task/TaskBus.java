@@ -73,9 +73,9 @@ public final class TaskBus {
     }
 
     public static class TaskThreadFactory implements ThreadFactory {
-        private int poolNumber;
-        private AtomicInteger threadNumber = new AtomicInteger(1);
-        private ThreadGroup group;
+        private final int poolNumber;
+        private final AtomicInteger threadNumber = new AtomicInteger(1);
+        private final ThreadGroup group;
 
         public TaskThreadFactory(int poolNumber) {
             var s = System.getSecurityManager();
@@ -124,8 +124,8 @@ public final class TaskBus {
         return Math.abs(executorConsistentHash % EXECUTOR_SIZE);
     }
 
-    public static void execute(int executorConsistentHash, SafeRunnable runnable) {
-        executors[executorIndex(executorConsistentHash)].execute(runnable);
+    public static void execute(int executorConsistentHash, Runnable runnable) {
+        executors[executorIndex(executorConsistentHash)].execute(SafeRunnable.valueOf(runnable));
     }
 
     // 在task，event，scheduler线程执行的异步请求，请求成功过后依然在相同的线程执行回调任务

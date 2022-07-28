@@ -18,12 +18,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class StopWatch {
 
-    private long startTime = TimeUtils.currentTimeMillis();
+    private final long startTime = TimeUtils.currentTimeMillis();
 
     public long cost() {
         return TimeUtils.currentTimeMillis() - startTime;

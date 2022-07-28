@@ -16,7 +16,7 @@ package com.zfoo.event.model.event;
 import com.zfoo.util.math.RandomUtils;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IEvent {

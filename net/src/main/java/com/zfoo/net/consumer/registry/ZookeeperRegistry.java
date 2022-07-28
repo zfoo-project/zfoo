@@ -29,7 +29,6 @@ import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
-import com.zfoo.util.SafeRunnable;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.util.concurrent.FastThreadLocalThread;
@@ -361,12 +360,7 @@ public class ZookeeperRegistry implements IRegistry {
             } catch (Exception e) {
                 //
                 logger.error("zookeeper初始化失败，等待[{}]秒，重新初始化", RETRY_SECONDS, e);
-                SchedulerBus.schedule(new SafeRunnable() {
-                    @Override
-                    public void doRun() {
-                        initZookeeper();
-                    }
-                }, RETRY_SECONDS, TimeUnit.SECONDS);
+                SchedulerBus.schedule(() -> initZookeeper(), RETRY_SECONDS, TimeUnit.SECONDS);
             }
         });
     }
@@ -522,12 +516,7 @@ public class ZookeeperRegistry implements IRegistry {
         }
 
         if (recheckFlag) {
-            SchedulerBus.schedule(new SafeRunnable() {
-                @Override
-                public void doRun() {
-                    checkConsumer();
-                }
-            }, RETRY_SECONDS, TimeUnit.SECONDS);
+            SchedulerBus.schedule(() -> checkConsumer(), RETRY_SECONDS, TimeUnit.SECONDS);
         }
     }
 

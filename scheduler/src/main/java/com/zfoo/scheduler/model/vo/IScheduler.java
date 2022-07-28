@@ -14,7 +14,7 @@
 package com.zfoo.scheduler.model.vo;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IScheduler {
