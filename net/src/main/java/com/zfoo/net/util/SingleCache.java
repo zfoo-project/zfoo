@@ -15,6 +15,7 @@ package com.zfoo.net.util;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.scheduler.util.TimeUtils;
+import com.zfoo.util.SafeRunnable;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -23,7 +24,7 @@ import java.util.function.Supplier;
 /**
  * 单值缓存，会隔一段时间在后台刷新一下缓存
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SingleCache<V> {
@@ -61,9 +62,9 @@ public class SingleCache<V> {
             try {
                 if (now > refreshTime) {
                     refreshTime = now + refreshDuration;
-                    EventBus.asyncExecute().execute(new Runnable() {
+                    EventBus.asyncExecute(new SafeRunnable() {
                         @Override
-                        public void run() {
+                        public void doRun() {
                             cache = supplier.get();
                         }
                     });

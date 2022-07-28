@@ -13,27 +13,26 @@
 
 package com.zfoo.net.task;
 
+import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.task.dispatcher.AbstractTaskDispatch;
 import com.zfoo.net.task.dispatcher.ITaskDispatch;
 import com.zfoo.net.task.model.PacketReceiverTask;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.math.HashUtils;
+import com.zfoo.scheduler.manager.SchedulerBus;
+import com.zfoo.util.SafeRunnable;
 import com.zfoo.util.math.RandomUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public final class TaskBus {
@@ -76,9 +75,9 @@ public final class TaskBus {
 
         public ExecutorService executor;
 
-        private final int poolNumber;
-        private final AtomicInteger threadNumber = new AtomicInteger(1);
-        private final ThreadGroup group;
+        private int poolNumber;
+        private AtomicInteger threadNumber = new AtomicInteger(1);
+        private ThreadGroup group;
 
         public TaskThreadFactory(int poolNumber) {
             var s = System.getSecurityManager();
@@ -89,14 +88,13 @@ public final class TaskBus {
         @Override
         public Thread newThread(Runnable runnable) {
             var threadName = StringUtils.format("task-p{}-t{}", poolNumber, threadNumber.getAndIncrement());
-            var t = new FastThreadLocalThread(group, runnable, threadName, 0);
-            t.setDaemon(false);
-            t.setPriority(Thread.NORM_PRIORITY);
-            t.setUncaughtExceptionHandler((thread, e) -> logger.error(thread.toString(), e));
+            var thread = new FastThreadLocalThread(group, runnable, threadName, 0);
+            thread.setDaemon(false);
+            thread.setPriority(Thread.NORM_PRIORITY);
+            thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
             AssertionUtils.notNull(executor);
-            var threadId = t.getId();
-            threadMap.put(threadId, executor);
-            return t;
+            threadMap.put(thread.getId(), executor);
+            return thread;
         }
     }
 
@@ -120,22 +118,36 @@ public final class TaskBus {
      */
     public static void submit(PacketReceiverTask task) {
         // 里面会看到是：其中一致性hash是根据附加包记录的hashId进行选择哪个线程进行业务处理
-        taskDispatch.getExecutor(task).execute(task);
+        taskDispatch.getExecutor(executors, task).execute(task);
     }
 
-    public static ExecutorService executor(Object hashObj) {
-        return executors[Math.abs(HashUtils.fnvHash(hashObj.hashCode()) % EXECUTOR_SIZE)];
+    public static int executorIndex(int executorConsistentHash) {
+        return Math.abs(executorConsistentHash % EXECUTOR_SIZE);
     }
 
-    // 在task线程的异步请求，请求成功过后依然在相同的task线程执行回调任务
-    public static ExecutorService currentThreadExecutor() {
+    public static void executor(int executorConsistentHash, SafeRunnable runnable) {
+        executors[executorIndex(executorConsistentHash)].execute(runnable);
+    }
+
+    // 在task，event，scheduler线程执行的异步请求，请求成功过后依然在相同的线程执行回调任务
+    public static Executor currentThreadExecutor() {
         var threadId = Thread.currentThread().getId();
-        var executor = threadMap.get(threadId);
-        if (executor == null) {
-            logger.error("threadId:[{}]找不到对应的executor", threadId);
-            return executor(RandomUtils.randomInt());
+        var taskExecutor = threadMap.get(threadId);
+        if (taskExecutor != null) {
+            return taskExecutor;
         }
-        return executor;
+
+        var eventExecutor = EventBus.threadExecutor(threadId);
+        if (eventExecutor != null) {
+            return eventExecutor;
+        }
+
+        var schedulerExecutor = SchedulerBus.threadExecutor(threadId);
+        if (schedulerExecutor != null) {
+            return schedulerExecutor;
+        }
+
+        return executors[executorIndex(RandomUtils.randomInt())];
     }
 
 }

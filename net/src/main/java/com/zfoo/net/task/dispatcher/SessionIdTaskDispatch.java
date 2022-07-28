@@ -17,12 +17,13 @@ import com.zfoo.net.task.TaskBus;
 import com.zfoo.net.task.model.PacketReceiverTask;
 import com.zfoo.util.math.HashUtils;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 /**
  * 同一个session总是分配到同一个线程池执行
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SessionIdTaskDispatch extends AbstractTaskDispatch {
@@ -34,9 +35,9 @@ public class SessionIdTaskDispatch extends AbstractTaskDispatch {
     }
 
     @Override
-    public ExecutorService getExecutor(PacketReceiverTask packetReceiverTask) {
+    public Executor getExecutor(ExecutorService[] executors, PacketReceiverTask packetReceiverTask) {
         var session = packetReceiverTask.getSession();
-        return TaskBus.executor(session.getSid());
+        return executors[TaskBus.executorIndex(HashUtils.fnvHash(session.getSid()))];
     }
 
 }

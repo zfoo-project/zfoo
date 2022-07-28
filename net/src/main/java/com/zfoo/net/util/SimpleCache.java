@@ -20,6 +20,7 @@ import com.zfoo.event.manager.EventBus;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.scheduler.manager.SchedulerBus;
+import com.zfoo.util.SafeRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -38,7 +39,7 @@ import java.util.function.Function;
  * <p>
  * 批量查找通过batchLoadCallback方法查找，当查找的key不存在的时候，调用defaultValueBuilder生成一个默认值放入缓存。
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SimpleCache<K, V> {
@@ -93,13 +94,13 @@ public class SimpleCache<K, V> {
                 });
 
 
-        SchedulerBus.scheduleAtFixedRate(new Runnable() {
+        SchedulerBus.scheduleAtFixedRate(new SafeRunnable() {
             @Override
-            public void run() {
+            public void doRun() {
                 // 不在任务调度线程中执行耗时任务，因为任务调度线程只有一个线程池
-                EventBus.asyncExecute().execute(new Runnable() {
+                EventBus.asyncExecute(new SafeRunnable() {
                     @Override
-                    public void run() {
+                    public void doRun() {
                         var list = new ArrayList<K>();
                         while (!linkedQueue.isEmpty()) {
                             var key = linkedQueue.poll();

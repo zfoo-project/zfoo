@@ -23,7 +23,7 @@ import java.util.TreeMap;
 /**
  * 带虚拟节点的一致性Hash算法，参考：http://www.zsythink.net/archives/1182
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 
@@ -35,7 +35,7 @@ public class ConsistentHash<K, V> {
     // 虚拟节点，key表示虚拟节点的hash值，value表示虚拟节点的名称
     private TreeMap<Integer, Pair<K, V>> virtualNodeTreeMap = new TreeMap<>();
 
-    // 虚拟节点的数目，数量越大约均匀，经验值150
+    // 虚拟节点的数目，数量越大约均匀
     private int virtualNodes = 0;
 
     public ConsistentHash(List<Pair<K, V>> realNodes, int virtualNodes) {

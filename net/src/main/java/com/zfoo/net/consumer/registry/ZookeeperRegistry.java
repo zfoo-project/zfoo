@@ -29,6 +29,7 @@ import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
+import com.zfoo.util.SafeRunnable;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.util.concurrent.FastThreadLocalThread;
@@ -66,7 +67,7 @@ import java.util.stream.Collectors;
 /**
  * 服务注册，服务发现
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ZookeeperRegistry implements IRegistry {
@@ -360,9 +361,9 @@ public class ZookeeperRegistry implements IRegistry {
             } catch (Exception e) {
                 //
                 logger.error("zookeeper初始化失败，等待[{}]秒，重新初始化", RETRY_SECONDS, e);
-                SchedulerBus.schedule(new Runnable() {
+                SchedulerBus.schedule(new SafeRunnable() {
                     @Override
-                    public void run() {
+                    public void doRun() {
                         initZookeeper();
                     }
                 }, RETRY_SECONDS, TimeUnit.SECONDS);
@@ -521,7 +522,12 @@ public class ZookeeperRegistry implements IRegistry {
         }
 
         if (recheckFlag) {
-            SchedulerBus.schedule(() -> checkConsumer(), RETRY_SECONDS, TimeUnit.SECONDS);
+            SchedulerBus.schedule(new SafeRunnable() {
+                @Override
+                public void doRun() {
+                    checkConsumer();
+                }
+            }, RETRY_SECONDS, TimeUnit.SECONDS);
         }
     }
 

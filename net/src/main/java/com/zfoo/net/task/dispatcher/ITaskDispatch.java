@@ -15,14 +15,15 @@ package com.zfoo.net.task.dispatcher;
 
 import com.zfoo.net.task.model.PacketReceiverTask;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface ITaskDispatch {
 
-    ExecutorService getExecutor(PacketReceiverTask packetReceiverTask);
+    Executor getExecutor(ExecutorService[] executors, PacketReceiverTask packetReceiverTask);
 
 }

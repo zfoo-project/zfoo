@@ -16,7 +16,11 @@ package com.zfoo.event.manager;
 import com.zfoo.event.model.event.IEvent;
 import com.zfoo.event.model.vo.IEventReceiver;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.util.SafeRunnable;
 import com.zfoo.util.math.RandomUtils;
+import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +28,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class EventBus {
@@ -43,12 +46,43 @@ public abstract class EventBus {
 
     private static final ExecutorService[] executors = new ExecutorService[EXECUTORS_SIZE];
 
+    private static final Map<Long, ExecutorService> threadMap = new ConcurrentHashMap<>();
+
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
 
     static {
         for (int i = 0; i < executors.length; i++) {
             var namedThreadFactory = new EventThreadFactory(i + 1);
-            executors[i] = Executors.newSingleThreadExecutor(namedThreadFactory);
+            var executor = Executors.newSingleThreadExecutor(namedThreadFactory);
+            namedThreadFactory.executor = executor;
+            executors[i] = executor;
+        }
+    }
+
+    public static class EventThreadFactory implements ThreadFactory {
+
+        public ExecutorService executor;
+
+        private int poolNumber;
+        private AtomicInteger threadNumber = new AtomicInteger(1);
+        private ThreadGroup group;
+
+        public EventThreadFactory(int poolNumber) {
+            var s = System.getSecurityManager();
+            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+            this.poolNumber = poolNumber;
+        }
+
+        @Override
+        public Thread newThread(Runnable runnable) {
+            var threadName = StringUtils.format("event-p{}-t{}", poolNumber, threadNumber.getAndIncrement());
+            var thread = new FastThreadLocalThread(group, runnable, threadName, 0);
+            thread.setDaemon(false);
+            thread.setPriority(Thread.NORM_PRIORITY);
+            thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
+            AssertionUtils.notNull(executor);
+            threadMap.put(thread.getId(), executor);
+            return thread;
         }
     }
 
@@ -77,19 +111,11 @@ public abstract class EventBus {
             return;
         }
 
-        executors[Math.abs(event.threadId() % EXECUTORS_SIZE)].execute(new Runnable() {
-            @Override
-            public void run() {
-                doSubmit(event, list);
-            }
-        });
+        executors[Math.abs(event.threadId() % EXECUTORS_SIZE)].execute(() -> doSubmit(event, list));
     }
 
-    /**
-     * 随机获取一个线程
-     */
-    public static Executor asyncExecute() {
-        return executors[RandomUtils.randomInt(EXECUTORS_SIZE)];
+    public static void asyncExecute(SafeRunnable runnable) {
+        execute(RandomUtils.randomInt(EXECUTORS_SIZE), runnable);
     }
 
     /**
@@ -98,8 +124,8 @@ public abstract class EventBus {
      * @param hashcode
      * @return
      */
-    public static Executor execute(int hashcode) {
-        return executors[Math.abs(hashcode % EXECUTORS_SIZE)];
+    public static void execute(int hashcode, SafeRunnable runnable) {
+        executors[Math.abs(hashcode % EXECUTORS_SIZE)].execute(runnable);
     }
 
     /**
@@ -123,6 +149,7 @@ public abstract class EventBus {
     /**
      * 注册事件及其对应观察者
      *
+     *
      * @param eventType
      * @param receiver
      */
@@ -130,6 +157,9 @@ public abstract class EventBus {
         receiverMap.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
     }
 
+    public static Executor threadExecutor(long currentThreadId) {
+        return threadMap.get(currentThreadId);
+    }
 }
 
 

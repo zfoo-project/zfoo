@@ -14,22 +14,23 @@
 package com.zfoo.scheduler.manager;
 
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.SchedulerContext;
 import com.zfoo.scheduler.model.vo.SchedulerDefinition;
 import com.zfoo.scheduler.util.TimeUtils;
+import com.zfoo.util.SafeRunnable;
+import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class SchedulerBus {
@@ -41,6 +42,9 @@ public abstract class SchedulerBus {
      * scheduler默认只有一个单线程的线程池
      */
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new SchedulerThreadFactory(1));
+
+    private static long threadId = 0;
+
     /**
      * 上一次trigger触发时间
      */
@@ -61,6 +65,31 @@ public abstract class SchedulerBus {
                 logger.error("scheduler triggers an error.", e);
             }
         }, 0, TRIGGER_MILLIS_INTERVAL, TimeUnit.MILLISECONDS);
+    }
+
+    public static class SchedulerThreadFactory implements ThreadFactory {
+
+        private int poolNumber;
+        private final AtomicInteger threadNumber = new AtomicInteger(1);
+        private final ThreadGroup group;
+
+        public SchedulerThreadFactory(int poolNumber) {
+            var s = System.getSecurityManager();
+            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+            this.poolNumber = poolNumber;
+        }
+
+        @Override
+        public Thread newThread(Runnable runnable) {
+            var threadName = StringUtils.format("scheduler-p{}-t{}", poolNumber, threadNumber.getAndIncrement());
+            var thread = new FastThreadLocalThread(group, runnable, threadName, 0);
+            thread.setDaemon(false);
+            thread.setPriority(Thread.NORM_PRIORITY);
+            thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
+            threadId = thread.getId();
+            return thread;
+        }
+
     }
 
 
@@ -134,46 +163,24 @@ public abstract class SchedulerBus {
     /**
      * 不断执行的周期循环任务
      */
-    public static void scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
+    public static void scheduleAtFixedRate(SafeRunnable runnable, long period, TimeUnit unit) {
         if (SchedulerContext.isStop()) {
             return;
         }
 
-        executor.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    runnable.run();
-                } catch (Exception e) {
-                    logger.error("scheduleAtFixedRate未知exception异常", e);
-                } catch (Throwable t) {
-                    logger.error("scheduleAtFixedRate未知error异常", t);
-                }
-            }
-        }, 0, period, unit);
+        executor.scheduleAtFixedRate(runnable, 0, period, unit);
     }
 
 
     /**
      * 固定延迟执行的任务
      */
-    public static void schedule(Runnable runnable, long delay, TimeUnit unit) {
+    public static void schedule(SafeRunnable runnable, long delay, TimeUnit unit) {
         if (SchedulerContext.isStop()) {
             return;
         }
 
-        executor.schedule(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    runnable.run();
-                } catch (Exception e) {
-                    logger.error("schedule未知exception异常", e);
-                } catch (Throwable t) {
-                    logger.error("schedule未知error异常", t);
-                }
-            }
-        }, delay, unit);
+        executor.schedule(runnable, delay, unit);
     }
 
     /**
@@ -185,5 +192,9 @@ public abstract class SchedulerBus {
         }
 
         schedulerDefList.add(SchedulerDefinition.valueOf(cron, runnable));
+    }
+
+    public static Executor threadExecutor(long currentThreadId) {
+        return threadId == currentThreadId ? executor : null;
     }
 }

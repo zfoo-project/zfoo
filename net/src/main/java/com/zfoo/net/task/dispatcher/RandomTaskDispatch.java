@@ -15,11 +15,13 @@ package com.zfoo.net.task.dispatcher;
 
 import com.zfoo.net.task.TaskBus;
 import com.zfoo.net.task.model.PacketReceiverTask;
+import com.zfoo.util.math.RandomUtils;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class RandomTaskDispatch extends AbstractTaskDispatch {
@@ -31,8 +33,8 @@ public class RandomTaskDispatch extends AbstractTaskDispatch {
     }
 
     @Override
-    public ExecutorService getExecutor(PacketReceiverTask packetReceiverTask) {
-        return TaskBus.executor(-1);
+    public Executor getExecutor(ExecutorService[] executors, PacketReceiverTask packetReceiverTask) {
+        return executors[TaskBus.executorIndex(RandomUtils.randomInt())];
     }
 
 }

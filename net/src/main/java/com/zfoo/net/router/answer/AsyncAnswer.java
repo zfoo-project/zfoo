@@ -14,15 +14,15 @@
 package com.zfoo.net.router.answer;
 
 import com.zfoo.net.router.attachment.SignalAttachment;
-import com.zfoo.net.task.model.SafeRunnable;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.util.SafeRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {

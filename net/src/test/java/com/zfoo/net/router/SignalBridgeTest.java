@@ -15,6 +15,7 @@ package com.zfoo.net.router;
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.router.route.SignalBridge;
 import com.zfoo.scheduler.util.TimeUtils;
+import com.zfoo.util.SafeRunnable;
 import com.zfoo.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -24,7 +25,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Ignore
@@ -54,9 +55,9 @@ public class SignalBridgeTest {
 
         var countDownLatch = new CountDownLatch(executorSize);
         for (var i = 0; i < executorSize; i++) {
-            EventBus.execute(i).execute(new Runnable() {
+            EventBus.execute(i, new SafeRunnable() {
                 @Override
-                public void run() {
+                public void doRun() {
                     addAndRemoveArray();
                     countDownLatch.countDown();
                 }
@@ -72,9 +73,9 @@ public class SignalBridgeTest {
 
         var countDownLatch = new CountDownLatch(executorSize);
         for (int i = 0; i < executorSize; i++) {
-            EventBus.execute(i).execute(new Runnable() {
+            EventBus.execute(i, new SafeRunnable() {
                 @Override
-                public void run() {
+                public void doRun() {
                     addAndRemoveMap();
                     countDownLatch.countDown();
                 }

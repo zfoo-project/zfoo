@@ -1,10 +1,10 @@
-package com.zfoo.net.task.model;
+package com.zfoo.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class SafeRunnable implements Runnable {

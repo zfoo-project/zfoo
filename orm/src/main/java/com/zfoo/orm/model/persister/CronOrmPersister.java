@@ -20,6 +20,7 @@ import com.zfoo.orm.model.vo.EntityDef;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.scheduler.util.TimeUtils;
+import com.zfoo.util.SafeRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.support.CronExpression;
@@ -27,7 +28,7 @@ import org.springframework.scheduling.support.CronExpression;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class CronOrmPersister extends AbstractOrmPersister {
@@ -74,13 +75,13 @@ public class CronOrmPersister extends AbstractOrmPersister {
         }
 
         if (!OrmContext.isStop()) {
-            SchedulerBus.schedule(new Runnable() {
+            SchedulerBus.schedule(new SafeRunnable() {
                 @Override
-                public void run() {
+                public void doRun() {
                     if (!OrmContext.isStop()) {
-                        EventBus.execute(entityDef.getClazz().hashCode()).execute(new Runnable() {
+                        EventBus.execute(entityDef.getClazz().hashCode(), new SafeRunnable() {
                             @Override
-                            public void run() {
+                            public void doRun() {
                                 entityCaches.persistAll();
                                 schedulePersist();
                             }

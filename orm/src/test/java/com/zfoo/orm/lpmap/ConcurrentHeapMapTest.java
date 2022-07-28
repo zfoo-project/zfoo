@@ -15,6 +15,7 @@ package com.zfoo.orm.lpmap;
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.lpmap.model.MyPacket;
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.util.SafeRunnable;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -25,7 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Ignore
@@ -58,9 +59,9 @@ public class ConcurrentHeapMapTest {
 
         var countdown = new CountDownLatch(EventBus.EXECUTORS_SIZE);
         for (int i = 0; i < EventBus.EXECUTORS_SIZE; i++) {
-            EventBus.asyncExecute().execute(new Runnable() {
+            EventBus.asyncExecute(new SafeRunnable() {
                 @Override
-                public void run() {
+                public void doRun() {
                     var key = atomicInt.getAndIncrement();
                     while (key < count) {
                         var myPacket = MyPacket.valueOf(key, String.valueOf(key));
