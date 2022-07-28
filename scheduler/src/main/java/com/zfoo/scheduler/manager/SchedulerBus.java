@@ -43,6 +43,9 @@ public abstract class SchedulerBus {
      */
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new SchedulerThreadFactory(1));
 
+    /**
+     * executor创建的线程id号
+     */
     private static long threadId = 0;
 
     /**

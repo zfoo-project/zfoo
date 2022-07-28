@@ -66,17 +66,13 @@ public final class TaskBus {
 
         executors = new ExecutorService[EXECUTOR_SIZE];
         for (int i = 0; i < executors.length; i++) {
-            var namedThreadFactory = new TaskThreadFactory(i + 1);
+            var namedThreadFactory = new TaskThreadFactory(i);
             var executor = Executors.newSingleThreadExecutor(namedThreadFactory);
-            namedThreadFactory.executor = executor;
             executors[i] = executor;
         }
     }
 
     public static class TaskThreadFactory implements ThreadFactory {
-
-        public ExecutorService executor;
-
         private int poolNumber;
         private AtomicInteger threadNumber = new AtomicInteger(1);
         private ThreadGroup group;
@@ -89,11 +85,12 @@ public final class TaskBus {
 
         @Override
         public Thread newThread(Runnable runnable) {
-            var threadName = StringUtils.format("task-p{}-t{}", poolNumber, threadNumber.getAndIncrement());
+            var threadName = StringUtils.format("task-p{}-t{}", poolNumber + 1, threadNumber.getAndIncrement());
             var thread = new FastThreadLocalThread(group, runnable, threadName, 0);
             thread.setDaemon(false);
             thread.setPriority(Thread.NORM_PRIORITY);
             thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
+            var executor = executors[poolNumber];
             AssertionUtils.notNull(executor);
             threadMap.put(thread.getId(), executor);
             return thread;

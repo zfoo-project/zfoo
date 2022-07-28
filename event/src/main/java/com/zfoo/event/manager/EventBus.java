@@ -52,17 +52,13 @@ public abstract class EventBus {
 
     static {
         for (int i = 0; i < executors.length; i++) {
-            var namedThreadFactory = new EventThreadFactory(i + 1);
+            var namedThreadFactory = new EventThreadFactory(i);
             var executor = Executors.newSingleThreadExecutor(namedThreadFactory);
-            namedThreadFactory.executor = executor;
             executors[i] = executor;
         }
     }
 
     public static class EventThreadFactory implements ThreadFactory {
-
-        public ExecutorService executor;
-
         private int poolNumber;
         private AtomicInteger threadNumber = new AtomicInteger(1);
         private ThreadGroup group;
@@ -75,11 +71,12 @@ public abstract class EventBus {
 
         @Override
         public Thread newThread(Runnable runnable) {
-            var threadName = StringUtils.format("event-p{}-t{}", poolNumber, threadNumber.getAndIncrement());
+            var threadName = StringUtils.format("event-p{}-t{}", poolNumber + 1, threadNumber.getAndIncrement());
             var thread = new FastThreadLocalThread(group, runnable, threadName, 0);
             thread.setDaemon(false);
             thread.setPriority(Thread.NORM_PRIORITY);
             thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
+            var executor = executors[poolNumber];
             AssertionUtils.notNull(executor);
             threadMap.put(thread.getId(), executor);
             return thread;
@@ -148,10 +145,6 @@ public abstract class EventBus {
 
     /**
      * 注册事件及其对应观察者
-     *
-     *
-     * @param eventType
-     * @param receiver
      */
     public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver) {
         receiverMap.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
