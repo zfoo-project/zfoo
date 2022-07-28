@@ -42,7 +42,7 @@ public class ConsistentHashTaskDispatch extends AbstractTaskDispatch {
             if (uid == null) {
                 return SessionIdTaskDispatch.getInstance().getExecutor(packetReceiverTask);
             } else {
-                return TaskBus.executor(Math.toIntExact(uid));
+                return TaskBus.executor(uid);
             }
         }
 

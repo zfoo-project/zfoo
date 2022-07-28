@@ -19,6 +19,7 @@ import com.zfoo.net.task.dispatcher.ITaskDispatch;
 import com.zfoo.net.task.model.PacketReceiverTask;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.util.math.HashUtils;
 import com.zfoo.util.math.RandomUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
@@ -122,8 +123,8 @@ public final class TaskBus {
         taskDispatch.getExecutor(task).execute(task);
     }
 
-    public static ExecutorService executor(int executorConsistentHash) {
-        return executors[Math.abs(executorConsistentHash % EXECUTOR_SIZE)];
+    public static ExecutorService executor(Object hashObj) {
+        return executors[Math.abs(HashUtils.fnvHash(hashObj.hashCode()) % EXECUTOR_SIZE)];
     }
 
     // 在task线程的异步请求，请求成功过后依然在相同的task线程执行回调任务

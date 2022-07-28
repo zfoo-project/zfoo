@@ -36,7 +36,7 @@ public class SessionIdTaskDispatch extends AbstractTaskDispatch {
     @Override
     public ExecutorService getExecutor(PacketReceiverTask packetReceiverTask) {
         var session = packetReceiverTask.getSession();
-        return TaskBus.executor(HashUtils.fnvHash(session.getSid()));
+        return TaskBus.executor(session.getSid());
     }
 
 }
