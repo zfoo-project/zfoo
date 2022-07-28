@@ -13,6 +13,7 @@
 
 package com.zfoo.net.task.dispatcher;
 
+import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.task.TaskBus;
 import com.zfoo.net.task.model.PacketReceiverTask;
 
@@ -35,7 +36,14 @@ public class ConsistentHashTaskDispatch extends AbstractTaskDispatch {
         var attachment = packetReceiverTask.getAttachment();
 
         if (attachment == null) {
-            return SessionIdTaskDispatch.getInstance().getExecutor(packetReceiverTask);
+            var session = packetReceiverTask.getSession();
+            Long uid = session.getAttribute(AttributeType.UID);
+
+            if (uid == null) {
+                return SessionIdTaskDispatch.getInstance().getExecutor(packetReceiverTask);
+            } else {
+                return TaskBus.executor(uid);
+            }
         }
 
         // 可见最终是根据附加包的信息选择服务端由哪个线程执行这个业务

@@ -96,8 +96,8 @@ public class Session implements Closeable {
     }
 
 
-    public Object getAttribute(AttributeType key) {
-        return attributes.get(key);
+    public <T> T getAttribute(AttributeType key) {
+        return (T) attributes.get(key);
     }
 
     public Channel getChannel() {
