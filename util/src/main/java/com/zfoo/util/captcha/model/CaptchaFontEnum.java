@@ -21,7 +21,7 @@ import java.awt.*;
 import java.io.InputStream;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public enum CaptchaFontEnum {
@@ -53,7 +53,7 @@ public enum CaptchaFontEnum {
 
     private static final Font DEFAULT_FONT = new Font("Arial", Font.BOLD, 32);
 
-    private Font font;
+    private final Font font;
 
     CaptchaFontEnum() {
         InputStream inputStream = null;

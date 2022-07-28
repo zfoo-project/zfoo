@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 import static com.mongodb.client.model.Filters.eq;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2018-07-11 12:20
  */
@@ -32,7 +32,7 @@ import static com.mongodb.client.model.Filters.eq;
 public class SingleMongoTest {
 
     // To connect to mongodb server
-    private MongoClient mongoClient = MongoClients.create(MongoClientSettings.builder()
+    private final MongoClient mongoClient = MongoClients.create(MongoClientSettings.builder()
             .applyToClusterSettings(builder -> builder.hosts(Arrays.asList(new ServerAddress("localhost", 27017))))
 //            .applyToConnectionPoolSettings(builder -> builder.applySettings(ConnectionPoolSettings.builder().maxSize(300).build()))
 //            .credential(MongoCredential.createCredential("root", "admin", "123456".toCharArray()))
@@ -40,7 +40,7 @@ public class SingleMongoTest {
 
     // If MongoDB in secure mode, authentication is required.
     // Now connect to your databases
-    private MongoDatabase mongodb = mongoClient.getDatabase("test");
+    private final MongoDatabase mongodb = mongoClient.getDatabase("test");
 
     @Test
     public void findTest() {
@@ -55,13 +55,13 @@ public class SingleMongoTest {
         // 查找并且遍历集合student的所有文档
         MongoCollection<Document> collection = mongodb.getCollection("student");
         System.out.println("Collection created successfully");
-        collection.find().forEach((Consumer<Document>) document -> System.out.println(document));
+        collection.find().forEach(document -> System.out.println(document));
     }
 
     @Test
     public void findEqTest() {
         var collection = mongodb.getCollection("student");
-        collection.find(eq("_id", 1)).forEach((Consumer<Document>) document -> System.out.println(document));
+        collection.find(eq("_id", 1)).forEach(document -> System.out.println(document));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class SingleMongoTest {
         var pattern = Pattern.compile("jay");
         var query = new BasicDBObject("name", pattern);
         var collection = mongodb.getCollection("student");
-        collection.find(query).forEach((Consumer<Document>) document -> System.out.println(document));
+        collection.find(query).forEach(document -> System.out.println(document));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class SingleMongoTest {
                 .append("name", "hello mongodb");
         collection.insertOne(document);
 
-        collection.find().forEach((Consumer<Document>) doc -> System.out.println(doc.toJson()));
+        collection.find().forEach(doc -> System.out.println(doc.toJson()));
     }
 
     @Test
@@ -123,7 +123,7 @@ public class SingleMongoTest {
         // 更新一个文档，updateOne方法第一个参数是查询条件，如果查出多条也只修改第一条;第二个参数是修改条件。
         collection.updateOne(eq("age", 10), new Document("$set", new Document("name", "new hello mongodb")));
 
-        collection.find().forEach((Consumer<Document>) doc -> System.out.println(doc.toJson()));
+        collection.find().forEach(doc -> System.out.println(doc.toJson()));
     }
 
 
@@ -135,7 +135,7 @@ public class SingleMongoTest {
         // 更新一个文档
         collection.updateMany(eq("age", 10), new Document("$set", new Document("name", "new hello mongodb")));
 
-        collection.find().forEach((Consumer<Document>) doc -> System.out.println(doc.toJson()));
+        collection.find().forEach(doc -> System.out.println(doc.toJson()));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class SingleMongoTest {
         // 删除一个文档
         collection.deleteOne(eq("_id", 1));
 
-        collection.find().forEach((Consumer<Document>) doc -> System.out.println(doc.toJson()));
+        collection.find().forEach(doc -> System.out.println(doc.toJson()));
     }
 
     @Test
@@ -343,7 +343,7 @@ public class SingleMongoTest {
                 public void run() {
                     for (var j = 0; j < count; j++) {
                         try {
-                            collection.find(eq("_id", j)).forEach((Consumer<Document>) document -> {
+                            collection.find(eq("_id", j)).forEach(document -> {
                                 if (document == null) {
 
                                 }

@@ -20,13 +20,13 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ConcurrentFileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
 
 
-    private FileChannelMap<V> fileChannelMap;
+    private final FileChannelMap<V> fileChannelMap;
 
     public ConcurrentFileChannelMap(String dbPath, Class<V> clazz) {
         fileChannelMap = new FileChannelMap<>(dbPath, clazz);

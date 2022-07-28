@@ -20,16 +20,16 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiConsumer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V>, Closeable {
 
-    private ReentrantLock fileChannelLock = new ReentrantLock();
+    private final ReentrantLock fileChannelLock = new ReentrantLock();
 
-    private FileChannelMap<V> fileChannelMap;
+    private final FileChannelMap<V> fileChannelMap;
 
-    private ConcurrentHeapMap<V> concurrentHeapMap;
+    private final ConcurrentHeapMap<V> concurrentHeapMap;
 
     public ConcurrentFileChannelHeapMap(String dbPath, Class<V> clazz) {
         fileChannelMap = new FileChannelMap<>(dbPath, clazz);

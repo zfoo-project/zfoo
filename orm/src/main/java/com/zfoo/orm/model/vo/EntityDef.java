@@ -21,7 +21,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class EntityDef {

@@ -25,19 +25,19 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Ignore
 public class ConsistentHashTest {
 
     //待添加入Hash环的服务器列表
-    private static List<Pair<String, String>> servers = List.of(new Pair<>("192.168.0.0:111", "192.168.0.0:111")
+    private static final List<Pair<String, String>> servers = List.of(new Pair<>("192.168.0.0:111", "192.168.0.0:111")
             , new Pair<>("192.168.0.1:111", "192.168.0.1:111"), new Pair<>("192.168.0.2:111", "192.168.0.2:111"));
 
-    private static List<Pair<String, String>> nums = List.of(new Pair<>("1", "1"), new Pair<>("2", "2"), new Pair<>("3", "3"));
+    private static final List<Pair<String, String>> nums = List.of(new Pair<>("1", "1"), new Pair<>("2", "2"), new Pair<>("3", "3"));
 
-    private static List<Pair<String, String>> chars = List.of(new Pair<>("a", "a"), new Pair<>("b", "b"), new Pair<>("c", "c"));
+    private static final List<Pair<String, String>> chars = List.of(new Pair<>("a", "a"), new Pair<>("b", "b"), new Pair<>("c", "c"));
 
 
     @Test

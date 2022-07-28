@@ -19,14 +19,14 @@ import java.io.IOException;
 import java.util.function.BiConsumer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class FileChannelHeapMap<V extends IPacket> implements LpMap<V>, Closeable {
 
-    private FileChannelMap<V> fileChannelMap;
+    private final FileChannelMap<V> fileChannelMap;
 
-    private HeapMap<V> heapMap;
+    private final HeapMap<V> heapMap;
 
     public FileChannelHeapMap(String dbPath, int initialCapacity, Class<V> clazz) {
         fileChannelMap = new FileChannelMap<>(dbPath, clazz);

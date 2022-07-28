@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * 词法分析器
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class LexicalAnalysis {

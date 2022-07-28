@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class Encoder {
@@ -52,7 +52,7 @@ public class Encoder {
     // for the decompressor.  Late addition:  construct the table according to
     // file size for noticeable speed improvement on small files.  Please direct
     // questions about this implementation to ames!jaw.
-    int masks[] =
+    int[] masks =
             {
                     0x0000,
                     0x0001,
@@ -91,9 +91,10 @@ public class Encoder {
     // fit in it exactly).  Use the VAX insv instruction to insert each
     // code in turn.  When the buffer fills up empty it and start over.
     // 图片的宽高
-    private int imgW, imgH;
-    private byte[] pixAry;
-    private int initCodeSize;  // 验证码位数
+    private final int imgW;
+    private final int imgH;
+    private final byte[] pixAry;
+    private final int initCodeSize;  // 验证码位数
     private int remaining;  // 剩余数量
     private int curPixel;  // 像素
 

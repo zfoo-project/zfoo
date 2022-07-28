@@ -3,7 +3,7 @@ package com.zfoo.hotswap.model;
 import com.zfoo.util.security.MD5Utils;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ClassFileDef {

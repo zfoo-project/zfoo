@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Ignore

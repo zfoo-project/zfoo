@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.springframework.util.DigestUtils;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class MD5UtilsTest {

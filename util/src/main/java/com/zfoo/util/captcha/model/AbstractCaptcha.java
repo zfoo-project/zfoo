@@ -27,7 +27,7 @@ import java.util.Base64;
 /**
  * 验证码抽象类
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class AbstractCaptcha {

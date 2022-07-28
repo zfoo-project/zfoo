@@ -27,7 +27,7 @@ import java.io.OutputStream;
 /**
  * Gif验证码类
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class GifCaptcha extends AbstractCaptcha {
@@ -37,7 +37,7 @@ public class GifCaptcha extends AbstractCaptcha {
         try {
             char[] captchaChars = captcha.toCharArray();  // 获取验证码数组
             // 随机生成每个文字的颜色
-            Color fontColor[] = new Color[length];
+            Color[] fontColor = new Color[length];
             for (int i = 0; i < length; i++) {
                 fontColor[i] = color();
             }

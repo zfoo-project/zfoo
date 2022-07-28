@@ -17,14 +17,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 
 enum Num {
     ONE,
     TWO,
-    THREE;
+    THREE
 }
 
 public class EnumUtilsTest {

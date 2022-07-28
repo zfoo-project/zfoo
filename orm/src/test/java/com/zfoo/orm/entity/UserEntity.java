@@ -20,7 +20,7 @@ import java.util.List;
 
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @EntityCache(cacheStrategy = "thousand", persister = @Persister("time30s"))

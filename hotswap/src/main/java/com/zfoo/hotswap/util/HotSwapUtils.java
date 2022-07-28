@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.lang.instrument.ClassDefinition;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class HotSwapUtils {

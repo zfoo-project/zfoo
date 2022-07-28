@@ -17,7 +17,7 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.util.TimeUtils;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SarVO implements Comparable<SarVO> {

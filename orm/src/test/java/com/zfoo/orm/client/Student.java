@@ -2,7 +2,7 @@ package com.zfoo.orm.client;
 
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2019-05-01 23:34
  */

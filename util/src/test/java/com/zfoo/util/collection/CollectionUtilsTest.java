@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class CollectionUtilsTest {

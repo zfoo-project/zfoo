@@ -36,7 +36,7 @@ import java.util.Map;
  * 根据JMX描述，MBean接口包括一些可读或者可写的属性，还有一些定义好的方法，这些方法能够被MBean管理应用程序调用。
  * 实现类，类名必须为接口sufixMBean的前缀。也就是Hello。如果不按这个命名注册MBean就会有问题。
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 

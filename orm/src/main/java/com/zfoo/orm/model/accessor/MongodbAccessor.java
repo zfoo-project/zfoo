@@ -24,14 +24,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.in;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class MongodbAccessor implements IAccessor {
@@ -137,7 +136,7 @@ public class MongodbAccessor implements IAccessor {
     public <E extends IEntity<?>> E load(Object pk, Class<E> entityClazz) {
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
         var result = new ArrayList<E>(1);
-        collection.find(eq("_id", pk)).forEach((Consumer<E>) document -> result.add(document));
+        collection.find(eq("_id", pk)).forEach(document -> result.add(document));
         if (CollectionUtils.isEmpty(result)) {
             return null;
         }

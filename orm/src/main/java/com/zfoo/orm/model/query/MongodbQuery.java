@@ -16,7 +16,7 @@ package com.zfoo.orm.model.query;
 import com.zfoo.orm.model.entity.IEntity;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class MongodbQuery implements IQuery {

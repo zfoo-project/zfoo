@@ -21,7 +21,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * MongoDB分布式唯一Id测试
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Ignore

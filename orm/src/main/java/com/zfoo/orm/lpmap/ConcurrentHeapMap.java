@@ -20,14 +20,14 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ConcurrentHeapMap<V extends IPacket> implements LpMap<V> {
 
-    private ConcurrentNavigableMap<Long, V> map = new ConcurrentSkipListMap<>();
+    private final ConcurrentNavigableMap<Long, V> map = new ConcurrentSkipListMap<>();
 
-    private AtomicLong maxIndexAtomic = new AtomicLong(0);
+    private final AtomicLong maxIndexAtomic = new AtomicLong(0);
 
 
     @Override

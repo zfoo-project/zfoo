@@ -14,7 +14,7 @@
 package com.zfoo.orm.model.config;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class PersisterStrategy {

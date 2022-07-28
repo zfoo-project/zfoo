@@ -14,7 +14,7 @@
 package com.zfoo.util.math;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class Combinatorics {// |kɒmbinəˋtɒ:riks|n.组合学

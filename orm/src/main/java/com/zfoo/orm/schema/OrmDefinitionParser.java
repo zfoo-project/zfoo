@@ -33,7 +33,7 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class OrmDefinitionParser implements BeanDefinitionParser {

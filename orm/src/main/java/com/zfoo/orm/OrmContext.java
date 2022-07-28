@@ -33,7 +33,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class OrmContext implements ApplicationListener<ApplicationContextEvent>, Ordered {

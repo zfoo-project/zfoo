@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  */
 @Ignore
 public class ApplicationTest {

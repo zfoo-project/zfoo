@@ -19,7 +19,7 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class IdUtilsTest {

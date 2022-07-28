@@ -21,7 +21,7 @@ import com.zfoo.orm.model.vo.EntityDef;
 import com.zfoo.protocol.util.StringUtils;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public enum PersisterTypeEnum {

@@ -35,7 +35,7 @@ import java.util.Collection;
  * <p>
  * 这是因为0.1无法准确的表示为double。因此应该使用new BigDecimal(String)。
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class NumberUtils {

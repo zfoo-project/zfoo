@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {

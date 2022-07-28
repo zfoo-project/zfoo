@@ -3,7 +3,7 @@ package com.zfoo.hotswap.service;
 import javax.management.MXBean;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @MXBean

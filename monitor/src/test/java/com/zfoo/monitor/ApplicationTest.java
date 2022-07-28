@@ -22,7 +22,7 @@ import org.junit.Test;
 import oshi.SystemInfo;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ApplicationTest {

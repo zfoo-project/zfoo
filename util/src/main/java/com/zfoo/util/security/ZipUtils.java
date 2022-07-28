@@ -21,7 +21,7 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class ZipUtils {

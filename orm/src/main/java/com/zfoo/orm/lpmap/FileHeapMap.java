@@ -31,7 +31,7 @@ import java.nio.channels.FileChannel;
 import java.util.function.BiConsumer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class FileHeapMap<V extends IPacket> implements LpMap<V> {

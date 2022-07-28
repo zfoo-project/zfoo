@@ -21,7 +21,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class NetUtilsTest {

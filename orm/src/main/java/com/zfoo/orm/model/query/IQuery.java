@@ -18,7 +18,7 @@ import com.zfoo.orm.model.entity.IEntity;
 /**
  * 对数据库进行（查找）的相关方法
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IQuery {

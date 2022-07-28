@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class HostAndPort {

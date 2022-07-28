@@ -20,14 +20,14 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class RandomSelector<T> {
 
     private int cursor = 0;
 
-    private TreeMap<Integer, T> elementMap = new TreeMap<>();
+    private final TreeMap<Integer, T> elementMap = new TreeMap<>();
 
     public void addElement(@Nullable T value, int weight) {
         if (value == null || weight <= 0) {

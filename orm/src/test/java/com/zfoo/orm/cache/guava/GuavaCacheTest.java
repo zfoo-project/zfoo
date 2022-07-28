@@ -24,7 +24,7 @@ import org.junit.Test;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2019-08-13 11:15
  */

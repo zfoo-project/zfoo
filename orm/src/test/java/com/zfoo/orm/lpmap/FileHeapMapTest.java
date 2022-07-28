@@ -21,7 +21,7 @@ import org.junit.Test;
 import java.util.Set;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Ignore

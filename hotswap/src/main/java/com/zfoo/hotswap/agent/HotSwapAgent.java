@@ -12,7 +12,7 @@ import java.lang.instrument.Instrumentation;
  * 甚至能够替换和修改某些类的定义。有了这样的功能，开发者就可以实现更为灵活的运行时虚拟机监控和 Java 类操作了，
  * 这样的特性实际上提供了一种虚拟机级别支持的 AOP 实现方式，使得开发者无需对 JDK 做任何升级和改动，就可以实现某些 AOP 的功能了。
  *
- * @author jaysunxiao
+ * @author godotg
  */
 public class HotSwapAgent {
 

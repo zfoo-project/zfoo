@@ -34,7 +34,7 @@ import java.security.NoSuchAlgorithmException;
  * 这就是所谓的数字签名应用。MD5还广泛用于加密和解密技术上，在很多操作系统中，用户的密码是以MD5值（或类似的其它算法）的方式保存的，
  * 用户Login的时候，系统是把用户输入的密码计算成MD5值，然后再去和系统中保存的MD5值进行比较，而系统并不“知道”用户的密码是什么。
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class MD5Utils {

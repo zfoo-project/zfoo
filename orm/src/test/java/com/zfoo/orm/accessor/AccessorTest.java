@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Ignore

@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import java.lang.reflect.Field;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Configuration(proxyBeanMethods = false)

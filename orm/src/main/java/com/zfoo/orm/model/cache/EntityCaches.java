@@ -41,7 +41,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> implements IEntityCaches<PK, E> {

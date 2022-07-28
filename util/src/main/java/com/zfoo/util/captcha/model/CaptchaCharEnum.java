@@ -14,7 +14,7 @@
 package com.zfoo.util.captcha.model;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public enum CaptchaCharEnum {
@@ -33,7 +33,5 @@ public enum CaptchaCharEnum {
      * 数字和英文结合
      */
     ARAB_ENGLISH,
-
-    ;
 
 }

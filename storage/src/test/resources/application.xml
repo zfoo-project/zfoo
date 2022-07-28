@@ -50,7 +50,7 @@
         <storage:scan package="com.zfoo.**.resource"/>
         <!-- 如果是类路径一classpath开头，如果是其它目录则以file开头-->
         <storage:resource location="classpath:/excel"/>
-        <!-- <storage:resource location="file:C:\Users\jaysunxiao\Desktop\excel"/>-->
+        <!-- <storage:resource location="file:C:\Users\godotg\Desktop\excel"/>-->
     </storage:storage>
 
 </beans>

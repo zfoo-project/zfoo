@@ -22,7 +22,7 @@ import org.bson.Document;
 import java.util.Collection;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IOrmManager {

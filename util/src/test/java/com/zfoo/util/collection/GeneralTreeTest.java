@@ -17,7 +17,7 @@ import com.zfoo.protocol.collection.tree.GeneralTree;
 import org.junit.Test;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class GeneralTreeTest {

@@ -16,7 +16,7 @@ package com.zfoo.util.math;
 /**
  * 改进的hash算法虽然发布比较均匀，但是没有Java自带的hash算法速度快，所以需要知道自己需要什么
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class HashUtils {

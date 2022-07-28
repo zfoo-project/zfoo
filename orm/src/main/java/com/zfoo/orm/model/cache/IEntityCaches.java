@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IEntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> {

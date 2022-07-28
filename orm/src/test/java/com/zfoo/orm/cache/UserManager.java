@@ -19,7 +19,7 @@ import com.zfoo.orm.model.cache.IEntityCaches;
 import org.springframework.stereotype.Component;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Component

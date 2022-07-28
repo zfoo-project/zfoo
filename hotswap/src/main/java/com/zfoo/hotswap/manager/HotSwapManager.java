@@ -6,14 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class HotSwapManager implements IHotSwapManager {
 
     private static final HotSwapManager HOT_SWAP_MANAGER = new HotSwapManager();
 
-    private static Map<String, ClassFileDef> classFileDefMap = new HashMap<>();
+    private static final Map<String, ClassFileDef> classFileDefMap = new HashMap<>();
 
     public static volatile byte[] updateBytes;
 

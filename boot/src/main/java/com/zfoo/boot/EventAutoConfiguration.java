@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Configuration(proxyBeanMethods = false)

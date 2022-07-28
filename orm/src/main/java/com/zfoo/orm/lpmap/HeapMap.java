@@ -18,7 +18,7 @@ import io.netty.util.collection.LongObjectHashMap;
 import java.util.function.BiConsumer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class HeapMap<V extends IPacket> implements LpMap<V> {

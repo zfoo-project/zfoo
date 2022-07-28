@@ -17,7 +17,7 @@ import com.zfoo.orm.model.cache.EntityCaches;
 import com.zfoo.orm.model.vo.EntityDef;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class AbstractOrmPersister implements IOrmPersister {

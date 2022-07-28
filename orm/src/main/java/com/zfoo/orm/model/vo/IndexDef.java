@@ -16,7 +16,7 @@ package com.zfoo.orm.model.vo;
 import java.lang.reflect.Field;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class IndexDef {

@@ -16,7 +16,7 @@ package com.zfoo.orm.model.entity;
 import com.zfoo.protocol.util.StringUtils;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IEntity<PK extends Comparable<PK>> {
