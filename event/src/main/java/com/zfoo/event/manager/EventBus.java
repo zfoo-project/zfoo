@@ -112,7 +112,7 @@ public abstract class EventBus {
     }
 
     public static void asyncExecute(Runnable runnable) {
-        execute(RandomUtils.randomInt(EXECUTORS_SIZE), runnable);
+        execute(RandomUtils.randomInt(), runnable);
     }
 
     /**
