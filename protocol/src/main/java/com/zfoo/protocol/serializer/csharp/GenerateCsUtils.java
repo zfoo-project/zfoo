@@ -35,7 +35,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class GenerateCsUtils {
@@ -120,7 +120,7 @@ public abstract class GenerateCsUtils {
                 , protocolOutputRootPath
                 , GenerateProtocolPath.getCapitalizeProtocolPath(protocolId)
                 , protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate);
+        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
     }
 
     private static String docTitle(ProtocolRegistration registration) {

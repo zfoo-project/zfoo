@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Ignore
@@ -45,7 +45,7 @@ public class FileUtilTest {
 
     @Test
     public void writeFile() {
-        FileUtils.writeStringToFile(new File(FileUtils.getProAbsPath() + File.separator + "test.txt"), "hello world!");
+        FileUtils.writeStringToFile(new File(FileUtils.getProAbsPath() + File.separator + "test.txt"), "hello world!", true);
     }
 
 

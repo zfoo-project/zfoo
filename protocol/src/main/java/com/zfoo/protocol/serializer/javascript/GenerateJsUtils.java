@@ -39,7 +39,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class GenerateJsUtils {
@@ -108,7 +108,7 @@ public abstract class GenerateJsUtils {
         }
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), StringUtils.EMPTY_JSON, initProtocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.js")), protocolManagerTemplate);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.js")), protocolManagerTemplate, true);
     }
 
     public static void createJsProtocolFile(ProtocolRegistration registration) throws IOException {
@@ -131,7 +131,7 @@ public abstract class GenerateJsUtils {
                 , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
         var protocolOutputPath = StringUtils.format("{}/{}/{}.js", protocolOutputRootPath
                 , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate);
+        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
     }
 
     private static String docTitle(ProtocolRegistration registration) {

@@ -42,7 +42,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class GenerateCppUtils {
@@ -116,7 +116,7 @@ public abstract class GenerateCppUtils {
                 .forEach(it -> initProtocolBuilder.append(TAB).append(TAB).append(StringUtils.format("protocols[{}] = new {}Registration();", it.protocolId(), it.protocolConstructor().getDeclaringClass().getSimpleName())).append(LS));
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, headerBuilder.toString(), initProtocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.h")), protocolManagerTemplate);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.h")), protocolManagerTemplate, true);
     }
 
     /**
@@ -152,7 +152,7 @@ public abstract class GenerateCppUtils {
                 , GenerateCppUtils.protocolOutputPath
                 , GenerateProtocolPath.getCapitalizeProtocolPath(protocolId)
                 , protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate);
+        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
     }
 
 

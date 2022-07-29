@@ -54,7 +54,7 @@ public class ExcelToJsonUtils {
 
             var outputFilePath = FileUtils.joinPath(outputDir, jsonFileName);
             FileUtils.deleteFile(new File(outputFilePath));
-            FileUtils.writeStringToFile(new File(outputFilePath), JsonUtils.object2StringPrettyPrinter(resourceData));
+            FileUtils.writeStringToFile(new File(outputFilePath), JsonUtils.object2StringPrettyPrinter(resourceData), true);
         }
     }
 

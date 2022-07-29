@@ -42,7 +42,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class GenerateProtobufUtils {
@@ -159,7 +159,7 @@ public abstract class GenerateProtobufUtils {
         builder.append("}").append(LS);
 
         var protocolOutputPath = StringUtils.format("{}/{}.proto", protocolOutputRootPath, protocolManagerName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), builder.toString());
+        FileUtils.writeStringToFile(new File(protocolOutputPath), builder.toString(), true);
     }
 
     public static void createProtocols() throws ClassNotFoundException {
@@ -207,7 +207,7 @@ public abstract class GenerateProtobufUtils {
             }
 
             var protocolOutputPath = StringUtils.format("{}/{}.proto", protocolOutputRootPath, protos.getName());
-            FileUtils.writeStringToFile(new File(protocolOutputPath), builder.toString());
+            FileUtils.writeStringToFile(new File(protocolOutputPath), builder.toString(), true);
         }
     }
 

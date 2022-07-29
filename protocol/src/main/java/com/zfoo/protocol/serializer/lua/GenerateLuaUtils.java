@@ -39,7 +39,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class GenerateLuaUtils {
@@ -106,7 +106,7 @@ public abstract class GenerateLuaUtils {
             protocolBuilder.append(TAB).append(StringUtils.format("protocols[{}] = {}", protocolId, name)).append(LS);
         }
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, StringUtils.EMPTY_JSON, StringUtils.EMPTY_JSON, fieldBuilder.toString().trim(), protocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua")), protocolManagerTemplate);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua")), protocolManagerTemplate, true);
     }
 
     public static void createLuaProtocolFile(ProtocolRegistration registration) throws IOException {
@@ -129,7 +129,7 @@ public abstract class GenerateLuaUtils {
 
         var protocolOutputPath = StringUtils.format("{}/{}/{}.lua"
                 , protocolOutputRootPath, GenerateProtocolPath.getCapitalizeProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate);
+        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
     }
 
     private static String docTitle(ProtocolRegistration registration) {

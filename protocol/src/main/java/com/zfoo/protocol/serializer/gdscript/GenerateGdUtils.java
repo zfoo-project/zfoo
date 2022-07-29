@@ -34,11 +34,10 @@ import java.util.List;
 import java.util.Map;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
-import static com.zfoo.protocol.util.StringUtils.TAB;
 import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class GenerateGdUtils {
@@ -99,7 +98,7 @@ public abstract class GenerateGdUtils {
             initBuilder.append(TAB_ASCII).append(StringUtils.format("protocols[{}] = {}", protocolId, name)).append(LS);
         }
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), StringUtils.EMPTY_JSON, initBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.gd")), protocolManagerTemplate);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.gd")), protocolManagerTemplate, true);
     }
 
     public static void createGdProtocolFile(ProtocolRegistration registration) throws IOException {
@@ -119,7 +118,7 @@ public abstract class GenerateGdUtils {
         protocolTemplate = StringUtils.format(protocolTemplate, docTitle, fieldDefinition.trim(), protocolId, writeObject.trim(), readObject.trim());
 
         var protocolOutputPath = StringUtils.format("{}/{}/{}.gd", protocolOutputRootPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate);
+        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
     }
 
     private static String docTitle(ProtocolRegistration registration) {
