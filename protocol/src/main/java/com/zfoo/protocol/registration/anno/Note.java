@@ -1,16 +1,15 @@
-package com.zfoo.protocol.serializer.anno;
+package com.zfoo.protocol.registration.anno;
 
 import java.lang.annotation.*;
 
 /**
  * @author meiw
  * @version 3.0
- * 
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-public @interface ProtocolField {
+public @interface Note {
 
     String value() default "";
 

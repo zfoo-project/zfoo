@@ -1,19 +1,18 @@
-package com.zfoo.protocol.serializer.anno;
+package com.zfoo.protocol.registration.anno;
 
 import java.lang.annotation.*;
 
 /**
  * @author meiw
  * @version 3.0
- * 
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface ProtocolClass {
+public @interface Protocol {
 
-    short protocolId() default 0;
+    short id() default 0;
 
-    String desc() default "";
+    String note() default "";
 
 }

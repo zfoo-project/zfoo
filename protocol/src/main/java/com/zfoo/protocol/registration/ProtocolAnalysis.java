@@ -23,8 +23,8 @@ import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.anno.Compatible;
+import com.zfoo.protocol.registration.anno.Protocol;
 import com.zfoo.protocol.registration.field.*;
-import com.zfoo.protocol.serializer.anno.ProtocolClass;
 import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
@@ -486,12 +486,12 @@ public class ProtocolAnalysis {
     }
 
     public static short getProtocolIdByClass(Class<?> clazz) {
-        var protocolClass = clazz.getDeclaredAnnotation(ProtocolClass.class);
+        var protocolClass = clazz.getDeclaredAnnotation(Protocol.class);
         short annoProtocolId = 0;
-        if (protocolClass != null && protocolClass.protocolId() != 0) {
-            annoProtocolId = protocolClass.protocolId();
+        if (protocolClass != null && protocolClass.id() != 0) {
+            annoProtocolId = protocolClass.id();
         }
-        
+
         Field protocolIdField = null;
         try {
             protocolIdField = clazz.getDeclaredField(PROTOCOL_ID);
