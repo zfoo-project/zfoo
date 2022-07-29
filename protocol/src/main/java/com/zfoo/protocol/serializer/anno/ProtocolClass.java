@@ -14,6 +14,6 @@ public @interface ProtocolClass {
 
     short protocolId() default 0;
 
-    String description() default "";
+    String desc() default "";
 
 }

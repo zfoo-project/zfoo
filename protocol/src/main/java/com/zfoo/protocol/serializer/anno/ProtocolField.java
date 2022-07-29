@@ -12,6 +12,6 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 public @interface ProtocolField {
 
-    String description() default "";
+    String value() default "";
 
 }

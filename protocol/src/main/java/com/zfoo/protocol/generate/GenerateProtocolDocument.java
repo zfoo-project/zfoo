@@ -79,18 +79,18 @@ public abstract class GenerateProtocolDocument {
             var docFieldMap = new HashMap<String, String>();
             var docTitle = StringUtils.EMPTY;
             var protocolClass = protocolClazz.getDeclaredAnnotation(ProtocolClass.class);
-            if (protocolClass != null && StringUtils.isNotEmpty(protocolClass.description())) {
-                var docTitleBuilder = new StringBuilder().append("//").append(protocolClass.description());
+            if (protocolClass != null && StringUtils.isNotEmpty(protocolClass.desc())) {
+                var docTitleBuilder = new StringBuilder().append("//").append(protocolClass.desc());
                 docTitle = docTitleBuilder.toString();
             }
 
             var registration = (ProtocolRegistration) protocolRegistration;
             for (var field : registration.getFields()) {
                 var protocolField = field.getDeclaredAnnotation(ProtocolField.class);
-                if (protocolField == null || StringUtils.isEmpty(protocolField.description())) {
+                if (protocolField == null || StringUtils.isEmpty(protocolField.value())) {
                     continue;
                 }
-                var docBuilder = new StringBuilder().append("//").append(protocolField.description());
+                var docBuilder = new StringBuilder().append("//").append(protocolField.value());
                 var fieldName = field.getName();
                 docFieldMap.put(fieldName, docBuilder.toString());
             }
