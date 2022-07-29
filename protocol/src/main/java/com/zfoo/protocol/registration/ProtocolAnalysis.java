@@ -24,6 +24,7 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.*;
+import com.zfoo.protocol.serializer.anno.ProtocolClass;
 import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
@@ -448,11 +449,6 @@ public class ProtocolAnalysis {
         return allSubProtocolIdSet;
     }
 
-    public static short getProtocolIdByClass(Class<?> clazz) {
-        var protocolIdField = ReflectionUtils.getFieldByNameInPOJOClass(clazz, PROTOCOL_ID);
-        return (short) ReflectionUtils.getField(protocolIdField, null);
-    }
-
     // 协议智能语法分析，错误的协议定义将无法启动程序并给出错误警告
     //-----------------------------------------------------------------------
 
@@ -464,13 +460,49 @@ public class ProtocolAnalysis {
         // 不能是泛型类
         AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
 
-        Field protocolIdField;
+        var protocolId = getProtocolIdByClass(clazz);
+        // 验证protocol()方法的返回是否和PROTOCOL_ID相等
+        Method protocolMethod;
+        try {
+            protocolMethod = clazz.getDeclaredMethod(PROTOCOL_METHOD);
+        } catch (NoSuchMethodException e) {
+            protocolMethod = null;
+        }
+        
+        if (protocolMethod != null) {
+            // 必须要有一个空的构造器
+            Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
+            IPacket packet = (IPacket) constructor.newInstance();
+            var methodReturnId = (short) protocolMethod.invoke(packet);
+            AssertionUtils.isTrue(methodReturnId == protocolId, "[class:{}]的protocolId方法返回的值[{}]和协议号返回值[{}]不相等", clazz.getCanonicalName(), methodReturnId, protocolId);
+        }
+
+        var previous = protocolClassMap.put(protocolId, clazz);
+        if (previous != null) {
+            throw new RunException("[{}][{}]协议号[protocolId:{}]重复", clazz.getCanonicalName(), previous.getCanonicalName(), protocolId);
+        }
+        //存储class和protocolId的映射
+        protocolIdMap.put(clazz, protocolId);
+    }
+
+    public static short getProtocolIdByClass(Class<?> clazz) {
+        var protocolClass = clazz.getDeclaredAnnotation(ProtocolClass.class);
+        short annoProtocolId = 0;
+        if (protocolClass != null && protocolClass.protocolId() != 0) {
+            annoProtocolId = protocolClass.protocolId();
+        }
+        
+        Field protocolIdField = null;
         try {
             protocolIdField = clazz.getDeclaredField(PROTOCOL_ID);
         } catch (NoSuchFieldException e) {
-            throw new UnknownException(e, "[class:{}]没有[{}]协议序列号", clazz.getCanonicalName(), PROTOCOL_ID);
+            if (annoProtocolId != 0) {
+                return annoProtocolId;
+            }
         }
 
+        // 是否被public修饰
+        AssertionUtils.isTrue(protocolIdField != null, "[class:{}]协议序列号[{}]没有被public修饰", clazz.getCanonicalName(), PROTOCOL_ID);
         // 是否被public修饰
         AssertionUtils.isTrue(Modifier.isPublic(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被public修饰", clazz.getCanonicalName(), PROTOCOL_ID);
         // 是否被static修饰
@@ -481,31 +513,13 @@ public class ProtocolAnalysis {
         AssertionUtils.isTrue(Modifier.isTransient(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被transient修饰", clazz.getCanonicalName(), PROTOCOL_ID);
         // 命名只能包含字母，数字，下划线
         AssertionUtils.isTrue(clazz.getSimpleName().matches("[a-zA-Z0-9_]*"), "[class:{}]的命名只能包含字母，数字，下划线", clazz.getCanonicalName(), PROTOCOL_ID);
-
-        // 必须要有一个空的构造器
-        Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
-
+        
         ReflectionUtils.makeAccessible(protocolIdField);
-        IPacket packet = (IPacket) constructor.newInstance();
-        var protocolId = (short) protocolIdField.get(null);
-        // 验证protocol()方法的返回是否和PROTOCOL_ID相等
-        Method protocolMethod;
-        try {
-            protocolMethod = clazz.getDeclaredMethod(PROTOCOL_METHOD);
-        } catch (NoSuchMethodException e) {
-            protocolMethod = null;
+        var protocolId = (short) ReflectionUtils.getField(protocolIdField, null);
+        if (annoProtocolId != 0) {
+            AssertionUtils.isTrue(annoProtocolId == protocolId, "[class:{}]协议序列号[{}]:[{}]与注解协议号[{}]值不相等", clazz.getCanonicalName(), PROTOCOL_ID, protocolId, annoProtocolId);
         }
-        if (protocolMethod != null) {
-            var methodReturnId = (short) protocolMethod.invoke(packet);
-            AssertionUtils.isTrue(methodReturnId == protocolId, "[class:{}]的protocolId返回的值和协议号的静态变量[{}]不相等", clazz.getCanonicalName(), PROTOCOL_ID);
-        }
-
-        var previous = protocolClassMap.put(protocolId, clazz);
-        if (previous != null) {
-            throw new RunException("[{}][{}]协议号[protocolId:{}]重复", clazz.getCanonicalName(), previous.getCanonicalName(), protocolId);
-        }
-        //存储class和protocolId的映射
-        protocolIdMap.put(clazz, protocolId);
+        return protocolId;
     }
 
     private static void checkSubProtocol(Class<?> clazz, short id, Class<?> subClass) {

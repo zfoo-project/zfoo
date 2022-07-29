@@ -9,9 +9,9 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE})
-public @interface Description {
+@Target({ElementType.FIELD})
+public @interface ProtocolField {
 
-    String value() default "";
+    String description() default "";
 
 }

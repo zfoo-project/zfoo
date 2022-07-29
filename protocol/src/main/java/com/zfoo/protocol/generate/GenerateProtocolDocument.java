@@ -16,7 +16,8 @@ package com.zfoo.protocol.generate;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.serializer.anno.Description;
+import com.zfoo.protocol.serializer.anno.ProtocolClass;
+import com.zfoo.protocol.serializer.anno.ProtocolField;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -72,25 +73,24 @@ public abstract class GenerateProtocolDocument {
 
     public static void initProtocolDocument(List<IProtocolRegistration> protocolRegistrations) {
         AssertionUtils.notNull(protocolDocumentMap, "[{}]已经初始完成，初始化完成过后不能调用initProtocolDocument", GenerateProtocolDocument.class.getSimpleName());
-
-        // 文件的注释生成
+        
         for (var protocolRegistration : protocolRegistrations) {
             var protocolClazz = protocolRegistration.protocolConstructor().getDeclaringClass();
             var docFieldMap = new HashMap<String, String>();
             var docTitle = StringUtils.EMPTY;
-            var description = protocolClazz.getDeclaredAnnotation(Description.class);
-            if (description != null) {
-                var docTitleBuilder = new StringBuilder().append("//").append(description.value());
+            var protocolClass = protocolClazz.getDeclaredAnnotation(ProtocolClass.class);
+            if (protocolClass != null && StringUtils.isNotEmpty(protocolClass.description())) {
+                var docTitleBuilder = new StringBuilder().append("//").append(protocolClass.description());
                 docTitle = docTitleBuilder.toString();
             }
 
             var registration = (ProtocolRegistration) protocolRegistration;
             for (var field : registration.getFields()) {
-                var fieldDescrption = field.getDeclaredAnnotation(Description.class);
-                if (fieldDescrption == null) {
+                var protocolField = field.getDeclaredAnnotation(ProtocolField.class);
+                if (protocolField == null || StringUtils.isEmpty(protocolField.description())) {
                     continue;
                 }
-                var docBuilder = new StringBuilder().append("//").append(fieldDescrption.value());
+                var docBuilder = new StringBuilder().append("//").append(protocolField.description());
                 var fieldName = field.getName();
                 docFieldMap.put(fieldName, docBuilder.toString());
             }
