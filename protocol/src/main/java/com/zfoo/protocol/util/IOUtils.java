@@ -15,7 +15,7 @@ package com.zfoo.protocol.util;
 import java.io.*;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class IOUtils {

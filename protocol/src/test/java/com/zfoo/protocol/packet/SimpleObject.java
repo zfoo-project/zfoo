@@ -16,7 +16,7 @@ package com.zfoo.protocol.packet;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SimpleObject implements IPacket {

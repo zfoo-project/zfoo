@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * ObjectC的测试类型
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ObjectC implements IPacket {

@@ -18,7 +18,7 @@ import com.zfoo.protocol.serializer.reflect.ISerializer;
 /**
  * 标记性接口，所有协议里描述变量都要实现这个接口
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IFieldRegistration {

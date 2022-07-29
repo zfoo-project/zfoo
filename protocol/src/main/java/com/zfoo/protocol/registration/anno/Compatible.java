@@ -16,7 +16,7 @@ package com.zfoo.protocol.registration.anno;
 import java.lang.annotation.*;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Documented

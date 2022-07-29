@@ -23,7 +23,7 @@ import java.util.Map;
  * This class is similar to JUnit's assertion library. If an argument value is
  * deemed invalid, an {@link IllegalArgumentException} is thrown (typically).
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class AssertionUtils {

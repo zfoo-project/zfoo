@@ -17,7 +17,7 @@ import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ObjectB implements IPacket {

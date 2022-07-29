@@ -28,7 +28,6 @@ import io.netty.buffer.ByteBuf;
 import javassist.*;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -37,7 +36,7 @@ import java.util.stream.Collectors;
 /**
  * 对应于ProtocolRegistration
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class EnhanceUtils {

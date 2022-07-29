@@ -26,7 +26,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class LuaArraySerializer implements ILuaSerializer {

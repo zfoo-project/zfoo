@@ -18,7 +18,7 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import java.lang.reflect.Field;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface ILuaSerializer {

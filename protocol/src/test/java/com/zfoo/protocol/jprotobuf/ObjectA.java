@@ -22,7 +22,7 @@ import java.util.Map;
  * protobuf的测试类型
  * 包括了各种复杂的结构，对象，map
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ObjectA implements IPacket {

@@ -1,6 +1,6 @@
 import ObjectB from './ObjectB';
 
-// @author jaysunxiao
+// @author godotg
 // @version 3.0
 class ObjectA {
 

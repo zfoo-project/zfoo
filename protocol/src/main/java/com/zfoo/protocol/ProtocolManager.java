@@ -24,7 +24,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.*;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ProtocolManager {

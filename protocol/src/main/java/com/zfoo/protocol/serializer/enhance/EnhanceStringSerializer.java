@@ -21,7 +21,7 @@ import com.zfoo.protocol.util.StringUtils;
 import java.lang.reflect.Field;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class EnhanceStringSerializer implements IEnhanceSerializer {

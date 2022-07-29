@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */ //@JsonIgnoreProperties({"name", "age"})//可以将它看做是@JsonIgnore的批量操作
 public class User {

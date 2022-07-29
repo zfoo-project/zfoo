@@ -33,7 +33,7 @@ import java.util.*;
  * Convenience methods for working with the DOM API,in particular for working with DOM Nodes and DOM Elements.
  * </p>
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class DomUtils {

@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 /**
  * Operations on {@link String} that are null safe and thread safe.
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class StringUtils {

@@ -21,7 +21,7 @@ import java.util.Set;
 /**
  * 创建协议文件的操作类
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class GenerateOperation {

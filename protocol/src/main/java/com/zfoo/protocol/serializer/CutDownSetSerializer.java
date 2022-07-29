@@ -27,7 +27,7 @@ import java.lang.reflect.ParameterizedType;
 import static com.zfoo.protocol.util.FileUtils.LS;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class CutDownSetSerializer implements ICutDownSerializer {

@@ -16,7 +16,7 @@ package com.zfoo.protocol.util;
 import org.junit.Test;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class AssertionUtilsTest {

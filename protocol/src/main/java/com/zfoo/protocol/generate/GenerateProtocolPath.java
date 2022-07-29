@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * 生成协议的时候，协议的最终生成路径会使用这个类
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class GenerateProtocolPath {

@@ -1,7 +1,7 @@
 // 复杂的对象
 // 包括了各种复杂的结构，数组，List，Set，Map
 //
-// @author jaysunxiao
+// @author godotg
 // @version 3.0
 const ComplexObject = function(a, aa, aaa, aaaa, b, bb, bbb, bbbb, c, cc, ccc, cccc, d, dd, ddd, dddd, e, ee, eee, eeee, f, ff, fff, ffff, g, gg, ggg, gggg, h, hh, hhh, hhhh, jj, jjj, kk, kkk, l, ll, lll, llll, lllll, m, mm, mmm, mmmm, mmmmm, s, ss, sss, ssss, sssss, myCompatible, myObject) {
     // byte类型，最简单的整形

@@ -16,7 +16,7 @@ package com.zfoo.protocol;
 /**
  * 所有协议类都必须实现这个接口
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IPacket {

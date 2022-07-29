@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 import static com.zfoo.protocol.ProtocolManager.*;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ProtocolAnalysis {

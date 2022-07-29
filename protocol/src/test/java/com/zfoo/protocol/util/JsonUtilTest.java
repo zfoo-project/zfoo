@@ -26,7 +26,7 @@ import java.util.*;
 public class JsonUtilTest {
 
     public static String id = "\"id\":\"1000\"";
-    public static String name = "\"name\":\"jaysunxiao\"";
+    public static String name = "\"name\":\"godotg\"";
     public static String sex = "\"sex\":\"man\"";
     public static String age = "\"age\":22";
     public static String list = "\"list\":[1,2,3]";
@@ -39,7 +39,7 @@ public class JsonUtilTest {
     public void string2Object() {
         User user = JsonUtils.string2Object(userJson, User.class);
         Assert.assertEquals(user.getId(), "1000");
-        Assert.assertEquals(user.getName(), "jaysunxiao");
+        Assert.assertEquals(user.getName(), "godotg");
         Assert.assertEquals(user.getSex(), "man");
         Assert.assertEquals(user.getList().size(), 3);
         Assert.assertEquals(user.getMap().size(), 3);
@@ -49,7 +49,7 @@ public class JsonUtilTest {
     public void object2String() {
         User user = new User();
         user.setId("1000");
-        user.setName("jaysunxiao");
+        user.setName("godotg");
         user.setSex("man");
         user.setAge(22);
         //数组，链表，list

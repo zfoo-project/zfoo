@@ -19,7 +19,7 @@ import java.lang.reflect.Field;
 /**
  * 减少生成的字节码和代码的体积，即使不调用这个方法，程序也依然能够正常运行
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface ICutDownSerializer {

@@ -16,14 +16,14 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ConcurrentArrayList<E> implements List<E> {
 
-    private ReentrantLock lock;
+    private final ReentrantLock lock;
 
-    private ArrayList<E> list;
+    private final ArrayList<E> list;
 
     public ConcurrentArrayList() {
         this.lock = new ReentrantLock();

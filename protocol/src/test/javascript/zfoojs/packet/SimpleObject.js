@@ -1,4 +1,4 @@
-// @author jaysunxiao
+// @author godotg
 // @version 3.0
 const SimpleObject = function(c, g) {
     this.c = c; // int

@@ -19,7 +19,7 @@ import io.netty.buffer.ByteBuf;
 import java.lang.reflect.Constructor;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IProtocolRegistration {

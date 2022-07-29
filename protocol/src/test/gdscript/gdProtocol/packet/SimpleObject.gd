@@ -1,4 +1,4 @@
-# @author jaysunxiao
+# @author godotg
 # @version 3.0
 
 var c # int

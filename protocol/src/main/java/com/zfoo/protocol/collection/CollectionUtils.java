@@ -20,7 +20,7 @@ import com.zfoo.protocol.util.AssertionUtils;
 import java.util.*;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class CollectionUtils {

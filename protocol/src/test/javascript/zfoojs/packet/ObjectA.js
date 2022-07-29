@@ -1,4 +1,4 @@
-// @author jaysunxiao
+// @author godotg
 // @version 3.0
 const ObjectA = function(a, m, objectB) {
     this.a = a; // int

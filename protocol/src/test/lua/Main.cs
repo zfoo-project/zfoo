@@ -19,7 +19,7 @@ namespace Test.Editor.LuaTest
             var luaEnv = new LuaEnv();
             var luaDebugBuilder = new StringBuilder();
             // Rider的断点调试
-            // luaDebugBuilder.Append("package.cpath = package.cpath .. ';C:/Users/jaysunxiao/AppData/Roaming/JetBrains/Rider2021.1/plugins/EmmyLua/classes/debugger/emmy/windows/x64/?.dll'").Append(FileUtils.LS);
+            // luaDebugBuilder.Append("package.cpath = package.cpath .. ';C:/Users/godotg/AppData/Roaming/JetBrains/Rider2021.1/plugins/EmmyLua/classes/debugger/emmy/windows/x64/?.dll'").Append(FileUtils.LS);
             // luaDebugBuilder.Append("local dbg = require('emmy_core')").Append(FileUtils.LS);
             // luaDebugBuilder.Append("dbg.tcpListen('localhost', 9966)").Append(FileUtils.LS);
             // luaDebugBuilder.Append("dbg.waitIDE()").Append(FileUtils.LS);

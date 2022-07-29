@@ -13,14 +13,13 @@
 
 package com.zfoo.protocol.serializer.typescript;
 
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 
 import java.lang.reflect.Field;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface ITsSerializer {

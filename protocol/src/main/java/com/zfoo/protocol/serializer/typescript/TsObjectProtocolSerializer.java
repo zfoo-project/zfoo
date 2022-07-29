@@ -14,7 +14,6 @@
 package com.zfoo.protocol.serializer.typescript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
@@ -26,7 +25,7 @@ import java.lang.reflect.Field;
 import static com.zfoo.protocol.util.FileUtils.LS;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class TsObjectProtocolSerializer implements ITsSerializer {

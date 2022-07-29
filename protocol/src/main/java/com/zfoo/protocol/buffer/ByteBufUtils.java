@@ -31,7 +31,7 @@ import java.util.Set;
  * <p>
  * google的ProtocolBuffer和Facebook的thrift底层的通信协议都是由这个算法实现
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class ByteBufUtils {

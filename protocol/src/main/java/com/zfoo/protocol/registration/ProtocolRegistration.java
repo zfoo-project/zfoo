@@ -28,7 +28,7 @@ import java.lang.reflect.Field;
  * 协议必须为一个简单的POJO对象，必须有一个标识为private static final transient的PROTOCOL_ID号
  * 必须实现IPacket接口,返回的protocolId必须和PROTOCOL_ID号一致
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ProtocolRegistration implements IProtocolRegistration {

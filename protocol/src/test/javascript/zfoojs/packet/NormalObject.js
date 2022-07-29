@@ -1,4 +1,4 @@
-// @author jaysunxiao
+// @author godotg
 // @version 3.0
 const NormalObject = function(a, aaa, b, c, d, e, f, g, jj, kk, l, ll, lll, llll, m, mm, s, ssss) {
     this.a = a; // byte

@@ -13,7 +13,7 @@
 package com.zfoo.protocol.serializer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public enum CodeLanguage {

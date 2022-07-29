@@ -7,7 +7,7 @@
 
 namespace zfoo {
 
-    // @author jaysunxiao
+    // @author godotg
     // @version 3.0
     class NormalObject : public IPacket {
     public:

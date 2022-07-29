@@ -14,7 +14,7 @@
 package com.zfoo.protocol.javassist;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class C {

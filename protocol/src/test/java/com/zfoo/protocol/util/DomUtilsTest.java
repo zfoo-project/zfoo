@@ -21,7 +21,7 @@ public class DomUtilsTest {
 
     private static final String XML_WITH_HEAD = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n" +
             "\n" +
-            "<protocols author=\"jaysunxiao\">\n" +
+            "<protocols author=\"godotg\">\n" +
             "    <module id=\"1\" name=\"common\" minId=\"1000\" maxId=\"2000\">\n" +
             "        <protocol id=\"1000\" location=\"com.zfoo.test.CM_Int\"/>\n" +
             "        <protocol id=\"2000\" location=\"com.zfoo.test.SM_Int\"/>\n" +
@@ -32,7 +32,7 @@ public class DomUtilsTest {
             "    </module>\n" +
             "</protocols>";
 
-    private static final String XML_OF_STANDARD_TEXT = "<protocols author=\"jaysunxiao\">\n" +
+    private static final String XML_OF_STANDARD_TEXT = "<protocols author=\"godotg\">\n" +
             "    <module id=\"1\" name=\"common\" minId=\"1000\" maxId=\"2000\">\n" +
             "        <protocol id=\"1000\" location=\"com.zfoo.test.CM_Int\"/>\n" +
             "        <protocol id=\"2000\" location=\"com.zfoo.test.SM_Int\"/>\n" +
@@ -46,13 +46,13 @@ public class DomUtilsTest {
     @Test
     public void testXmlWithHead() {
         var protos = DomUtils.string2Object(XML_WITH_HEAD, XmlProtocols.class);
-        Assert.assertEquals("jaysunxiao", protos.getAuthor());
+        Assert.assertEquals("godotg", protos.getAuthor());
     }
 
     @Test
     public void testXmlOfStandardText() {
         var protos = DomUtils.string2Object(XML_OF_STANDARD_TEXT, XmlProtocols.class);
-        Assert.assertEquals("jaysunxiao", protos.getAuthor());
+        Assert.assertEquals("godotg", protos.getAuthor());
     }
 
 }

@@ -10,7 +10,7 @@ namespace zfoo {
     // 复杂的对象
     // 包括了各种复杂的结构，数组，List，Set，Map
     //
-    // @author jaysunxiao
+    // @author godotg
     // @version 3.0
     class ComplexObject : public IPacket {
     public:

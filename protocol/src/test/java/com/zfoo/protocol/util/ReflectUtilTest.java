@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 

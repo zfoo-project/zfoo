@@ -18,12 +18,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ConcurrentHashSet<E> extends AbstractSet<E> {
 
-    private Map<E, Boolean> map;
+    private final Map<E, Boolean> map;
 
     public ConcurrentHashSet() {
         this.map = new ConcurrentHashMap<>();
