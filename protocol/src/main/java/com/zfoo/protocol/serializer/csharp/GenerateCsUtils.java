@@ -14,12 +14,13 @@
 package com.zfoo.protocol.serializer.csharp;
 
 import com.zfoo.protocol.generate.GenerateOperation;
-import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.anno.Compatible;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -28,7 +29,10 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
@@ -106,14 +110,14 @@ public abstract class GenerateCsUtils {
 
         var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("csharp/ProtocolTemplate.cs")));
 
-        var docTitle = docTitle(registration);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.CSharp);
         var fieldDefinition = fieldDefinition(registration);
         var valueOfMethod = valueOfMethod(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
-        protocolTemplate = StringUtils.format(protocolTemplate, docTitle, protocolClazzName,  fieldDefinition.trim()
+        protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, fieldDefinition.trim()
                 , protocolClazzName, valueOfMethod.getKey().trim(), protocolClazzName, valueOfMethod.getValue().trim()
-                , protocolId, protocolClazzName, protocolId, protocolClazzName, protocolClazzName,writeObject.trim()
+                , protocolId, protocolClazzName, protocolId, protocolClazzName, protocolClazzName, writeObject.trim()
                 , protocolClazzName, protocolClazzName, readObject.trim());
 
         var protocolOutputPath = StringUtils.format("{}/{}/{}.cs"
@@ -123,34 +127,19 @@ public abstract class GenerateCsUtils {
         FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
     }
 
-    private static String docTitle(ProtocolRegistration registration) {
-        var protocolId = registration.getId();
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docTitle = protocolDocument.getKey();
-
-        var csBuilder = new StringBuilder();
-        if (StringUtils.isNotBlank(docTitle)) {
-            Arrays.stream(docTitle.split(LS)).forEach(it -> csBuilder.append(TAB).append(it).append(LS));
-        }
-        return csBuilder.toString().trim();
-    }
-
     private static String fieldDefinition(ProtocolRegistration registration) {
-        var protocolId = registration.getId();
+        var protocolId = registration.protocolId();
         var fields = registration.getFields();
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docFieldMap = protocolDocument.getValue();
-
         var csBuilder = new StringBuilder();
         // 协议的属性生成
         for (var field : fields) {
+            var fieldName = field.getName();
             var propertyType = toCsClassName(field.getGenericType().getTypeName());
-            var propertyName = field.getName();
-            var propertyFullName = StringUtils.format("public {} {};", propertyType, propertyName);
+            var propertyFullName = StringUtils.format("public {} {};", propertyType, fieldName);
             // 生成注释
-            var doc = docFieldMap.get(propertyName);
-            if (StringUtils.isNotBlank(doc)) {
-                Arrays.stream(doc.split(LS)).forEach(it -> csBuilder.append(TAB + TAB).append(it).append(LS));
+            var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.CSharp);
+            if (StringUtils.isNotBlank(fieldNote)) {
+                csBuilder.append(TAB + TAB).append(fieldNote).append(LS);
             }
             csBuilder.append(TAB + TAB).append(propertyFullName).append(LS);
         }

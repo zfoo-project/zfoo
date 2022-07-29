@@ -97,7 +97,7 @@ public abstract class GenerateProtocolFile {
                 .collect(Collectors.toList());
 
         // 解析协议的文档注释
-        GenerateProtocolDocument.initProtocolDocument(allSortedGenerateProtocols);
+        GenerateProtocolNote.initProtocolNote(allSortedGenerateProtocols);
 
 
         // 计算协议生成的路径

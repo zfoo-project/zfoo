@@ -19,8 +19,8 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.exception.UnknownException;
 import com.zfoo.protocol.generate.GenerateOperation;
-import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.anno.Protocol;
@@ -214,7 +214,7 @@ public class ProtocolAnalysis {
             return;
         }
 
-        GenerateProtocolDocument.clear();
+        GenerateProtocolNote.clear();
         GenerateProtocolPath.clear();
         GenerateProtocolFile.clear();
         GenerateCppUtils.clear();

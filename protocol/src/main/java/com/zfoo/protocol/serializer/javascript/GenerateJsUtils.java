@@ -14,13 +14,14 @@
 package com.zfoo.protocol.serializer.javascript;
 
 import com.zfoo.protocol.generate.GenerateOperation;
-import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.anno.Compatible;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -121,24 +122,17 @@ public abstract class GenerateJsUtils {
 
         var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("javascript/ProtocolTemplate.js")));
 
-        var docTitle = docTitle(registration);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.JavaScript);
         var valueOfMethod = valueOfMethod(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
-        protocolTemplate = StringUtils.format(protocolTemplate, docTitle, protocolClazzName
+        protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName
                 , valueOfMethod.getKey().trim(), valueOfMethod.getValue().trim(), protocolClazzName, protocolId, protocolClazzName
                 , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
         var protocolOutputPath = StringUtils.format("{}/{}/{}.js", protocolOutputRootPath
                 , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
-    }
-
-    private static String docTitle(ProtocolRegistration registration) {
-        var protocolId = registration.getId();
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docTitle = protocolDocument.getKey();
-        return docTitle;
     }
 
     private static Pair<String, String> valueOfMethod(ProtocolRegistration registration) {
@@ -148,18 +142,15 @@ public abstract class GenerateJsUtils {
         var fieldValueOf = StringUtils.joinWith(", ", Arrays.stream(fields).map(it -> it.getName()).collect(Collectors.toList()).toArray());
         var fieldDefinitionBuilder = new StringBuilder();
 
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docFieldMap = protocolDocument.getValue();
         for (var field : fields) {
-            var propertyName = field.getName();
+            var fieldName = field.getName();
             // 生成注释
-            var doc = docFieldMap.get(propertyName);
-            if (StringUtils.isNotBlank(doc)) {
-                Arrays.stream(doc.split(LS)).forEach(it -> fieldDefinitionBuilder.append(TAB).append(it).append(LS));
+            var fileNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.JavaScript);
+            if (StringUtils.isNotBlank(fileNote)) {
+                fieldDefinitionBuilder.append(TAB).append(fileNote).append(LS);
             }
-
             fieldDefinitionBuilder.append(TAB)
-                    .append(StringUtils.format("this.{} = {};", propertyName, propertyName))
+                    .append(StringUtils.format("this.{} = {};", fieldName, fieldName))
                     .append(" // ").append(field.getGenericType().getTypeName())// 生成类型的注释
                     .append(LS);
         }

@@ -16,8 +16,8 @@ package com.zfoo.protocol.serializer.cpp;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
-import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
@@ -25,6 +25,7 @@ import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
@@ -127,23 +128,21 @@ public abstract class GenerateCppUtils {
 
         var protocolId = registration.protocolId();
         var registrationConstructor = registration.getConstructor();
-        var fieldRegistrations = registration.getFieldRegistrations();
 
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
-
         var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("cpp/ProtocolTemplate.h")));
 
         // protocol object
         var defineProtocolName = protocolClazzName.toUpperCase();
         var includeHeaders = includeSubProtocol(registration);
-        var docTitle = docTitle(registration);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Cpp);
         var fieldDefinition = fieldDefinition(registration);
         var valueOfMethod = valueOfMethod(registration);
         var operator = operator(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
-        protocolTemplate = StringUtils.format(protocolTemplate, defineProtocolName, defineProtocolName, protocolOutputRootPath, includeHeaders, docTitle
+        protocolTemplate = StringUtils.format(protocolTemplate, defineProtocolName, defineProtocolName, protocolOutputRootPath, includeHeaders, classNote
                 , protocolClazzName, fieldDefinition, protocolClazzName, protocolClazzName, valueOfMethod.getKey(), protocolClazzName
                 , valueOfMethod.getValue().trim(), protocolId, protocolClazzName, operator.trim(),
                 protocolClazzName, protocolId, protocolClazzName, writeObject.trim(), protocolClazzName, readObject.trim());
@@ -177,41 +176,26 @@ public abstract class GenerateCppUtils {
         return cppBuilder.toString();
     }
 
-    private static String docTitle(ProtocolRegistration registration) {
-        var protocolId = registration.getId();
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docTitle = protocolDocument.getKey();
-
-        var cppBuilder = new StringBuilder();
-        if (StringUtils.isNotBlank(docTitle)) {
-            Arrays.stream(docTitle.split(LS)).forEach(it -> cppBuilder.append(TAB).append(it).append(LS));
-        }
-        return cppBuilder.toString().trim();
-    }
-
     private static String fieldDefinition(ProtocolRegistration registration) {
         var protocolId = registration.getId();
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
-
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docFieldMap = protocolDocument.getValue();
 
         var cppBuilder = new StringBuilder();
         // 协议的属性生成
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
             IFieldRegistration fieldRegistration = fieldRegistrations[i];
-
+            var fieldName = field.getName();
             var propertyTypeAndName = cppSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
             var propertyType = propertyTypeAndName.getKey();
             var propertyName = propertyTypeAndName.getValue();
 
             var propertyFullName = StringUtils.format("{} {};", propertyType, propertyName);
             // 生成注释
-            var doc = docFieldMap.get(propertyName);
-            if (StringUtils.isNotBlank(doc)) {
-                Arrays.stream(doc.split(LS)).forEach(it -> cppBuilder.append(TAB + TAB).append(it).append(LS));
+            var filedNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Cpp);
+            if (StringUtils.isNotBlank(filedNote)) {
+                cppBuilder.append(TAB + TAB).append(filedNote).append(LS);
             }
             cppBuilder.append(TAB + TAB).append(propertyFullName).append(LS);
         }

@@ -14,13 +14,14 @@
 package com.zfoo.protocol.serializer.lua;
 
 import com.zfoo.protocol.generate.GenerateOperation;
-import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.anno.Compatible;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -118,12 +119,12 @@ public abstract class GenerateLuaUtils {
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
         var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("lua/ProtocolTemplate.lua")));
 
-        var docTitle = docTitle(registration);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Lua);
         var valueOfMethod = valueOfMethod(registration);
         var writePacket = writePacket(registration);
         var readPacket = readPacket(registration);
 
-        protocolTemplate = StringUtils.format(protocolTemplate, docTitle, protocolClazzName, StringUtils.EMPTY_JSON, protocolClazzName
+        protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, StringUtils.EMPTY_JSON, protocolClazzName
                 , valueOfMethod.getKey().trim(), valueOfMethod.getValue().trim(), protocolClazzName, protocolId
                 , protocolClazzName, writePacket.trim(), protocolClazzName, protocolClazzName, readPacket.trim(), protocolClazzName);
 
@@ -132,41 +133,26 @@ public abstract class GenerateLuaUtils {
         FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
     }
 
-    private static String docTitle(ProtocolRegistration registration) {
-        var protocolId = registration.protocolId();
-        var luaBuilder = new StringBuilder();
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docTitle = protocolDocument.getKey();
-        if (StringUtils.isNotBlank(docTitle)) {
-            Arrays.stream(docTitle.split(LS)).forEach(it -> luaBuilder.append(docToLuaDoc(it)).append(LS));
-        }
-        return luaBuilder.toString();
-    }
-
     private static Pair<String, String> valueOfMethod(ProtocolRegistration registration) {
         var protocolId = registration.getId();
         var fields = registration.getFields();
-
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docFieldMap = protocolDocument.getValue();
 
         var valueOfParams = StringUtils.joinWith(", ", Arrays.stream(fields).map(it -> it.getName()).collect(Collectors.toList()).toArray());
         var luaBuilder = new StringBuilder();
 
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
-            var propertyName = field.getName();
-
+            var fieldName = field.getName();
             // 生成注释
-            var doc = docFieldMap.get(propertyName);
-            if (StringUtils.isNotBlank(doc)) {
-                Arrays.stream(doc.split(LS)).forEach(it -> luaBuilder.append(TAB + TAB).append(docToLuaDoc(it)).append(LS));
+            var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Lua);
+            if (StringUtils.isNotBlank(fieldNote)) {
+                luaBuilder.append(TAB + TAB).append(fieldNote).append(LS);
             }
 
             if (i == fields.length - 1) {
-                luaBuilder.append(TAB + TAB).append(StringUtils.format("{} = {}", propertyName, propertyName));
+                luaBuilder.append(TAB + TAB).append(StringUtils.format("{} = {}", fieldName, fieldName));
             } else {
-                luaBuilder.append(TAB + TAB).append(StringUtils.format("{} = {},", propertyName, propertyName));
+                luaBuilder.append(TAB + TAB).append(StringUtils.format("{} = {},", fieldName, fieldName));
             }
             // 生成类型的注释
             luaBuilder.append(" -- ").append(field.getGenericType().getTypeName()).append(LS);
@@ -205,7 +191,4 @@ public abstract class GenerateLuaUtils {
         return luaBuilder.toString();
     }
 
-    private static String docToLuaDoc(String doc) {
-        return doc.replaceFirst("//", "--");
-    }
 }

@@ -15,13 +15,14 @@ package com.zfoo.protocol.serializer.typescript;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
-import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.anno.Compatible;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
@@ -31,7 +32,6 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,12 +122,12 @@ public abstract class GenerateTsUtils {
         var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("typescript/ProtocolTemplate.ts")));
 
         var importSubProtocol = importSubProtocol(registration);
-        var docTitle = docTitle(registration);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.TypeScript);
         var fieldDefinition = fieldDefinition(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
-        protocolTemplate = StringUtils.format(protocolTemplate, importSubProtocol, docTitle, protocolClazzName, fieldDefinition.trim()
+        protocolTemplate = StringUtils.format(protocolTemplate, importSubProtocol, classNote, protocolClazzName, fieldDefinition.trim()
                 , protocolId, protocolClazzName, writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
         var protocolOutputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputRootPath
                 , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
@@ -154,34 +154,21 @@ public abstract class GenerateTsUtils {
         return importBuilder.toString();
     }
 
-    private static String docTitle(ProtocolRegistration registration) {
-        var protocolId = registration.getId();
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docTitle = protocolDocument.getKey();
-        return docTitle;
-    }
-
     private static String fieldDefinition(ProtocolRegistration registration) {
-        var protocolId = registration.getId();
+        var protocolId = registration.protocolId();
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
 
         var fieldDefinitionBuilder = new StringBuilder();
-
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docFieldMap = protocolDocument.getValue();
-
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-
-            var propertyName = field.getName();
+            var fieldName = field.getName();
             // 生成注释
-            var doc = docFieldMap.get(propertyName);
-            if (StringUtils.isNotBlank(doc)) {
-                Arrays.stream(doc.split(LS)).forEach(it -> fieldDefinitionBuilder.append(TAB).append(it).append(LS));
+            var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.TypeScript);
+            if (StringUtils.isNotBlank(fieldNote)) {
+                fieldDefinitionBuilder.append(TAB).append(fieldNote).append(LS);
             }
-
             var triple = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
             fieldDefinitionBuilder.append(TAB).append(StringUtils.format("{}{} = {};", triple.getMiddle(), triple.getLeft(), triple.getRight())).append(LS);
         }

@@ -14,12 +14,13 @@
 package com.zfoo.protocol.serializer.gdscript;
 
 import com.zfoo.protocol.generate.GenerateOperation;
-import com.zfoo.protocol.generate.GenerateProtocolDocument;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.anno.Compatible;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -28,7 +29,6 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,44 +109,31 @@ public abstract class GenerateGdUtils {
         var registrationConstructor = registration.getConstructor();
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
 
-        var docTitle = docTitle(registration);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.GdScript);
         var fieldDefinition = fieldDefinition(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
         var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("gdscript/ProtocolTemplate.gd")));
-        protocolTemplate = StringUtils.format(protocolTemplate, docTitle, fieldDefinition.trim(), protocolId, writeObject.trim(), readObject.trim());
+        protocolTemplate = StringUtils.format(protocolTemplate, classNote, fieldDefinition.trim(), protocolId, writeObject.trim(), readObject.trim());
 
         var protocolOutputPath = StringUtils.format("{}/{}/{}.gd", protocolOutputRootPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
     }
 
-    private static String docTitle(ProtocolRegistration registration) {
-        var protocolId = registration.getId();
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docTitle = protocolDocument.getKey();
-        var gdBuilder = new StringBuilder();
-        if (StringUtils.isNotBlank(docTitle)) {
-            gdBuilder.append(gdDocument(docTitle));
-        }
-        return gdBuilder.toString();
-    }
-
     private static String fieldDefinition(ProtocolRegistration registration) {
         var protocolId = registration.getId();
         var fields = registration.getFields();
-        var protocolDocument = GenerateProtocolDocument.getProtocolDocument(protocolId);
-        var docFieldMap = protocolDocument.getValue();
         var gdBuilder = new StringBuilder();
         for (var field : fields) {
-            var propertyName = field.getName();
+            var fieldName = field.getName();
             // 生成注释
-            var doc = docFieldMap.get(propertyName);
-            if (StringUtils.isNotBlank(doc)) {
-                Arrays.stream(doc.split(LS)).forEach(it -> gdBuilder.append(gdDocument(it)).append(LS));
+            var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.GdScript);
+            if (StringUtils.isNotBlank(fieldNote)) {
+                gdBuilder.append(fieldNote).append(LS);
             }
             // 生成类型的注释
-            gdBuilder.append(StringUtils.format("var {} # ", propertyName)).append(field.getGenericType().getTypeName()).append(LS);
+            gdBuilder.append(StringUtils.format("var {} # ", fieldName)).append(field.getGenericType().getTypeName()).append(LS);
         }
         return gdBuilder.toString();
     }
@@ -178,10 +165,6 @@ public abstract class GenerateGdUtils {
             gdBuilder.append(TAB_ASCII).append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);
         }
         return gdBuilder.toString();
-    }
-
-    private static String gdDocument(String doc) {
-        return doc.replaceAll("//", "#");
     }
 
     public static StringBuilder addTab(StringBuilder builder, int deep) {
