@@ -33,6 +33,7 @@ public abstract class StringUtils {
     public static final String[] EMPTY_ARRAY = new String[0];
 
     public static final String SPACE = " ";
+    public static final String SPACE_REGEX = "\\s+";
 
     public static final String TAB = "    ";
     public static final String TAB_ASCII = "\t";
