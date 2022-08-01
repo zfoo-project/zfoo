@@ -18,8 +18,8 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.core.gateway.model.AuthUidToGatewayCheck;
 import com.zfoo.net.core.gateway.model.AuthUidToGatewayConfirm;
 import com.zfoo.net.core.gateway.model.AuthUidToGatewayEvent;
+import com.zfoo.net.core.tcp.model.ServerExceptionEvent;
 import com.zfoo.net.packet.common.Error;
-import com.zfoo.net.packet.common.ErrorCode;
 import com.zfoo.net.packet.common.Heartbeat;
 import com.zfoo.net.packet.model.EncodedPacketInfo;
 import com.zfoo.net.router.answer.AsyncAnswer;
@@ -27,7 +27,6 @@ import com.zfoo.net.router.answer.SyncAnswer;
 import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
-import com.zfoo.net.router.exception.ErrorRequestException;
 import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
@@ -344,7 +343,7 @@ public class Router implements IRouter {
             // 这个在哪个线程处理取决于：这个上层的PacketReceiverTask被丢到了哪个线程中
             PacketBus.submit(session, packet, attachment);
         } catch (Exception e) {
-            handleException(session, packet, attachment, e);
+            EventBus.syncSubmit(ServerExceptionEvent.valueOf(session, packet, attachment, e));
             logger.error(StringUtils.format("e[uid:{}][sid:{}]未知exception异常", session.getAttribute(AttributeType.UID), session.getSid(), e.getMessage()), e);
         } catch (Throwable t) {
             logger.error(StringUtils.format("e[uid:{}][sid:{}]未知error错误", session.getAttribute(AttributeType.UID), session.getSid(), t.getMessage()), t);
@@ -360,19 +359,6 @@ public class Router implements IRouter {
                 }
             }
         }
-    }
-
-    private void handleException(Session session, IPacket packet, IAttachment attachment, Exception exception) {
-        if (exception instanceof ErrorRequestException) {
-            ErrorRequestException requestException = (ErrorRequestException) exception;
-            int errorCode = requestException.getErrorCode();
-            String msg = requestException.getErrorMsg();
-            var resp = ErrorCode.valueOf(packet, errorCode, msg);
-            NetContext.getRouter().send(session, resp, attachment);
-            return;
-        }
-        var resp = ErrorCode.valueOf(packet, 0);
-        NetContext.getRouter().send(session, resp, attachment);
     }
 
 }

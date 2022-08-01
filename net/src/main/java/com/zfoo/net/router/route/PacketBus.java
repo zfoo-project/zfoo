@@ -29,6 +29,7 @@ import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.registration.IProtocolRegistration;
+import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -125,9 +126,7 @@ public abstract class PacketBus {
             }
 
             try {
-                var protocolIdField = packetClazz.getDeclaredField(ProtocolManager.PROTOCOL_ID);
-                ReflectionUtils.makeAccessible(protocolIdField);
-                var protocolId = (short) protocolIdField.get(null);
+                var protocolId = ProtocolAnalysis.getProtocolIdByClass(packetClazz);
                 var receiverDefinition = new PacketReceiverDefinition(bean, method, packetClazz, attachmentClazz);
                 var enhanceReceiverDefinition = EnhanceUtils.createPacketReceiver(receiverDefinition);
 
