@@ -179,7 +179,7 @@ public abstract class StringUtils {
     }
 
     public static String trim(String str) {
-        if (StringUtils.isBlank(str)) {
+        if (isEmpty(str)) {
             return EMPTY;
         }
         return str.trim();
