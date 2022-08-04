@@ -174,8 +174,7 @@ public class Router implements IRouter {
 
         var channel = session.getChannel();
         if (!channel.isActive() || !channel.isWritable()) {
-            logger.error("send msg error, protocolId=[{}] isActive=[{}] isWritable=[{}]", packet.protocolId(), channel.isActive(), channel.isWritable());
-            return;
+            logger.warn("send msg error, protocolId=[{}] isActive=[{}] isWritable=[{}]", packet.protocolId(), channel.isActive(), channel.isWritable());
         }
         channel.writeAndFlush(packetInfo);
     }
