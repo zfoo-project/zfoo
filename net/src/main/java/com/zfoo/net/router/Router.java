@@ -173,6 +173,10 @@ public class Router implements IRouter {
         var packetInfo = EncodedPacketInfo.valueOf(packet, attachment);
 
         var channel = session.getChannel();
+        if (!channel.isActive() || !channel.isWritable()) {
+            logger.error("send msg error, protocolId=[{}] isActive=[{}] isWritable=[{}]", packet.protocolId(), channel.isActive(), channel.isWritable());
+            return;
+        }
         channel.writeAndFlush(packetInfo);
     }
 
