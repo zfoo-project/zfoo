@@ -46,7 +46,8 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 #### 为什么部署的时候才用main，平时开发的时候从test启动
 
 - 可以很好的隔离部署环境和开发测试环境
-- 部署的时候从main启动，平时开发的时候从test启动
+- 可以加上-Dspring.profiles.active=dev就可以从main启动
+- 部署的时候从main启动（没有控制台日志），平时开发的时候从test启动（有控制台日志）
 - 这样正式环境的配置放在main的resources里，测试环境的配置放在test的resources里，互不干扰
 - 从test下启动的程序的配置文件会覆盖main中的配置文件
 
