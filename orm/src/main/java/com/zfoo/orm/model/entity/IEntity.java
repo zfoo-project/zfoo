@@ -13,6 +13,7 @@
 
 package com.zfoo.orm.model.entity;
 
+import com.zfoo.orm.OrmContext;
 import com.zfoo.protocol.util.StringUtils;
 
 /**
@@ -53,7 +54,7 @@ public interface IEntity<PK extends Comparable<PK>> {
      *
      * @return EntityCaches中取出的值在数据库中是否存在
      */
-    default boolean checkNull() {
+    default boolean empty() {
         PK idValue = id();
         if (idValue == null) {
             return true;
@@ -64,5 +65,40 @@ public interface IEntity<PK extends Comparable<PK>> {
         } else {
             return StringUtils.isEmpty((CharSequence) idValue);
         }
+    }
+
+    /**
+     * 插入数据库时使用
+     */
+    default void insert() {
+        OrmContext.getAccessor().insert(this);
+        invalidate();
+    }
+
+    /**
+     * 从数据库删除时使用
+     */
+    default void delete() {
+        OrmContext.getAccessor().delete(this);
+        invalidate();
+    }
+
+    /**
+     * 保存到数据库时使用
+     */
+    default void save() {
+        OrmContext.getOrmManager().getEntityCaches(this.getClass()).update(queryEntity());
+    }
+
+    private void invalidate() {
+        OrmContext.getOrmManager().getEntityCaches(this.getClass()).invalidate(queryId());
+    }
+
+    private <E extends IEntity> E queryEntity() {
+        return (E) this;
+    }
+
+    private <PK extends Comparable> PK queryId() {
+        return (PK) id();
     }
 }
