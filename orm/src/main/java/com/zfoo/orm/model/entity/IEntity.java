@@ -95,6 +95,10 @@ public interface IEntity<PK extends Comparable<PK>> {
     }
 
     private void invalidate() {
+        if (empty()) {
+            // 未初始化的对象不允许失效
+            return;
+        }
         OrmContext.getOrmManager().getEntityCaches(this.getClass()).invalidate(queryId());
     }
 
