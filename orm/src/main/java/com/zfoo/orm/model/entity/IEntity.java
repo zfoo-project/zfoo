@@ -50,7 +50,7 @@ public interface IEntity<PK extends Comparable<PK>> {
     }
 
     /**
-     * 由于查询不存在时缓存中也会有一份，因此判断为空需要根据实际类型才能决定
+     * 判空：由于查询不存在时缓存中也会有一份，因此判断为空需要根据实际类型才能决定
      *
      * @return EntityCaches中取出的值在数据库中是否存在
      */
@@ -68,7 +68,7 @@ public interface IEntity<PK extends Comparable<PK>> {
     }
 
     /**
-     * 插入数据库时使用
+     * 增：插入数据库时使用
      */
     default void insert() {
         OrmContext.getAccessor().insert(this);
@@ -76,7 +76,7 @@ public interface IEntity<PK extends Comparable<PK>> {
     }
 
     /**
-     * 从数据库删除时使用
+     * 删：从数据库删除时使用
      */
     default void delete() {
         OrmContext.getAccessor().delete(this);
@@ -84,9 +84,13 @@ public interface IEntity<PK extends Comparable<PK>> {
     }
 
     /**
-     * 保存到数据库时使用
+     * 更新：保存到数据库时使用
      */
     default void save() {
+        if (empty()) {
+            // 未初始化的对象不允许保存
+            return;
+        }
         OrmContext.getOrmManager().getEntityCaches(this.getClass()).update(queryEntity());
     }
 
