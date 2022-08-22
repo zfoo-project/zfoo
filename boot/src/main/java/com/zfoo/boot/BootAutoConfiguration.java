@@ -35,7 +35,7 @@ public class BootAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public ObjectMapper getObjectMapper() throws NoSuchFieldException {
-        // 断点进入ObjectMapper，看到的确和JsonUtils用的是同一个对象
+        // 拿到JsonUtils中的ObjectMapper
         Field field = JsonUtils.class.getDeclaredField("MAPPER");
         ReflectionUtils.makeAccessible(field);
         logger.info("Jackson auto config successfully!");

@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author godotg
  * @version 3.0
+ * 注意：OrmConfig的装配在于具体的业务游戏中，业务游戏中不配置OrmConfig这个Bean，那么这里的Orm自动装配也不会生效。
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(OrmConfig.class)
