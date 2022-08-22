@@ -129,7 +129,7 @@ public abstract class AbstractServer implements IServer {
             return;
         }
         try {
-            if (executor.isShutdown() || executor.isTerminated()) {
+            if (!executor.isShutdown() || !executor.isTerminated()) {
                 executor.shutdownGracefully();
             }
         } catch (Exception e) {
