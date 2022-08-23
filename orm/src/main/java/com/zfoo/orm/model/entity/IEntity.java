@@ -13,7 +13,6 @@
 
 package com.zfoo.orm.model.entity;
 
-import com.zfoo.orm.OrmContext;
 import com.zfoo.protocol.util.StringUtils;
 
 /**
@@ -67,46 +66,4 @@ public interface IEntity<PK extends Comparable<PK>> {
         }
     }
 
-    /**
-     * 增：插入数据库时使用
-     */
-    default void insert() {
-        OrmContext.getAccessor().insert(this);
-        invalidate();
-    }
-
-    /**
-     * 删：从数据库删除时使用
-     */
-    default void delete() {
-        OrmContext.getAccessor().delete(this);
-        invalidate();
-    }
-
-    /**
-     * 更新：保存到数据库时使用
-     */
-    default void save() {
-        if (empty()) {
-            // 未初始化的对象不允许保存
-            return;
-        }
-        OrmContext.getOrmManager().getEntityCaches(this.getClass()).update(queryEntity());
-    }
-
-    private void invalidate() {
-        if (empty()) {
-            // 未初始化的对象不允许失效
-            return;
-        }
-        OrmContext.getOrmManager().getEntityCaches(this.getClass()).invalidate(queryId());
-    }
-
-    private <E extends IEntity> E queryEntity() {
-        return (E) this;
-    }
-
-    private <PK extends Comparable> PK queryId() {
-        return (PK) id();
-    }
 }
