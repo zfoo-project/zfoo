@@ -14,6 +14,7 @@
 package com.zfoo.net.core;
 
 import com.zfoo.protocol.util.IOUtils;
+import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -103,9 +104,8 @@ public abstract class AbstractServer implements IServer {
 
     @Override
     public synchronized void shutdown() {
-        shutdownEventLoopGracefully(bossGroup);
-
-        shutdownEventLoopGracefully(workerGroup);
+        ThreadUtils.shutdownEventLoopGracefully("netty-boss", bossGroup);
+        ThreadUtils.shutdownEventLoopGracefully("netty-worker", workerGroup);
 
         if (channelFuture != null) {
             try {
@@ -136,7 +136,7 @@ public abstract class AbstractServer implements IServer {
             logger.error("EventLoop Thread pool [{}] is failed to shutdown! ", executor, e);
             return;
         }
-        logger.info("EventLoop Thread pool [{}] shuts down gracefully.", executor);
+        logger.info("EventLoop Thread pool [{}] shutdown gracefully.", executor);
     }
 
     public synchronized static void shutdownAllServers() {

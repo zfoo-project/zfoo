@@ -13,6 +13,10 @@
 
 package com.zfoo.util;
 
+import io.netty.util.concurrent.EventExecutorGroup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +26,8 @@ import java.util.concurrent.TimeUnit;
  * @version 3.0
  */
 public abstract class ThreadUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(ThreadUtils.class);
 
     private static final int WAIT_TIME = 10;
     private static final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
@@ -46,8 +52,23 @@ public abstract class ThreadUtils {
 
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            logger.error("[{}] is failed to shutdown! ", executor, e);
         }
+    }
+
+    public synchronized static void shutdownEventLoopGracefully(String executorGroupName, EventExecutorGroup executor) {
+        if (executor == null) {
+            return;
+        }
+        try {
+            if (!executor.isTerminated()) {
+                executor.shutdownGracefully();
+            }
+        } catch (Exception e) {
+            logger.error("[{}] is failed to shutdown! ", executorGroupName, e);
+            return;
+        }
+        logger.info("[{}] shutdown gracefully.", executorGroupName);
     }
 
     public static void shutdownForkJoinPool() {

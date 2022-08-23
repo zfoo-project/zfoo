@@ -18,6 +18,7 @@ import com.zfoo.net.handler.BaseRouteHandler;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.IOUtils;
+import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -87,7 +88,7 @@ public abstract class AbstractClient implements IClient {
 
 
     public synchronized static void shutdown() {
-        AbstractServer.shutdownEventLoopGracefully(nioEventLoopGroup);
+        ThreadUtils.shutdownEventLoopGracefully("netty-client", nioEventLoopGroup);
     }
 
 }
