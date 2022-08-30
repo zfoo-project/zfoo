@@ -47,6 +47,7 @@ public class ApplicationTest {
 
         var studentManager = context.getBean(StudentManager.class);
         var studentResources = studentManager.studentResources;
+        var studentCsvResources = studentManager.studentCsvResources;
         // 类名称和Excel名称必须完全一致，Excel的列名称必须对应对象的属性名称
         // 类名称和Excel名称必须完全一致，Excel的列名称必须对应对象的属性名称
         for (StudentResource resource : studentResources.getAll()) {
@@ -63,6 +64,10 @@ public class ApplicationTest {
         // 通过索引找对应的行
         var valuesByIndex = studentResources.getIndex("name", "james0");
         logger.info(JsonUtils.object2String(valuesByIndex));
+
+        // 通过索引找对应的行
+        var csvValuesByIndex = studentCsvResources.getIndex("name", "james0");
+        logger.info(JsonUtils.object2String(csvValuesByIndex));
 
         // Excel的映射内容需要在被Spring管理的bean的方法上加上@ResInjection注解，即可自动注入Excel对应的对象
         var testManager = context.getBean(TestManager.class);

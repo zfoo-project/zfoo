@@ -13,7 +13,7 @@
 
 package com.zfoo.storage.excel;
 
-import com.zfoo.storage.util.ExcelToJsonUtils;
+import com.zfoo.storage.util.ExcelReaderUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -37,7 +37,7 @@ public class ExcelTest {
     public void excelConvertJson() throws Exception{
         String inputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
         String outputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
-        ExcelToJsonUtils.excelConvertJson(inputDir, outputDir);
+        ExcelReaderUtils.excelConvertJson(inputDir, outputDir);
     }
 
     @Test

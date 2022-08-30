@@ -21,7 +21,8 @@ import com.zfoo.storage.model.anno.Id;
 import com.zfoo.storage.model.resource.ResourceData;
 import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.strategy.*;
-import com.zfoo.storage.util.ExcelToJsonUtils;
+import com.zfoo.storage.util.CsvReaderUtils;
+import com.zfoo.storage.util.ExcelReaderUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.context.support.ConversionServiceFactoryBean;
@@ -63,7 +64,9 @@ public class ResourceReader implements IResourceReader {
         if (resourceEnum == ResourceEnum.JSON) {
             resource = JsonUtils.string2Object(StringUtils.bytesToString(IOUtils.toByteArray(inputStream)), ResourceData.class);
         } else if (resourceEnum == ResourceEnum.EXCEL_XLS || resourceEnum == ResourceEnum.EXCEL_XLSX) {
-            resource = ExcelToJsonUtils.readResourceDataFromExcel(inputStream, clazz.getSimpleName());
+            resource = ExcelReaderUtils.readResourceDataFromExcel(inputStream, clazz.getSimpleName());
+        } else if (resourceEnum == ResourceEnum.CSV) {
+            resource = CsvReaderUtils.readResourceDataFromCSV(inputStream, clazz.getSimpleName());
         } else {
             throw new RunException("不支持文件[{}]的配置类型[{}]", clazz.getSimpleName(), suffix);
         }
@@ -76,7 +79,7 @@ public class ResourceReader implements IResourceReader {
         var iterator = resource.getRows().iterator();
         // 从ROW_SERVER这行开始读取数据
         while (iterator.hasNext()) {
-            var columns = iterator.next().getColumns();
+            var columns = iterator.next();
             var instance = ReflectionUtils.newInstance(clazz);
 
             for (var fieldInfo : fieldInfos) {

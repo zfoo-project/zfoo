@@ -1,0 +1,7 @@
+id,name,age,score,courses,users,user
+string,string,int,float,array,array,string
+des,des,des,des,des,des,des
+1000,james0,10,60.8,"[""History"",""Chiness""]","[{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":22},{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":22}]","{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":22}"
+1001,james1,10,70.1,"[""History"",""Chiness""]","[{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":22},{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":23}]","{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":22}"
+1002,james2,10,80.2,"[""History"",""Chiness""]","[{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":22},{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":24}]","{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":22}"
+1003,james3,10,59,"[""History"",""Chiness""]","[{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":22},{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":25}]","{""id"":""1000"",""name"":""SunInsanity"",""sex"":""boy"",""age"":22}"

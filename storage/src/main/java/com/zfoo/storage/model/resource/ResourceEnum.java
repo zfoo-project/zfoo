@@ -33,6 +33,8 @@ public enum ResourceEnum {
 
     JSON("json"),
 
+    CSV("csv"),
+
     ;
 
     private static Map<String, ResourceEnum> typeMap = new HashMap<>();
