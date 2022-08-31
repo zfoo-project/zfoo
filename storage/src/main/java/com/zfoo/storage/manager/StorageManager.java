@@ -36,6 +36,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author godotg
@@ -245,7 +246,8 @@ public class StorageManager implements IStorageManager {
             if (CollectionUtils.isEmpty(resourceList)) {
                 throw new RuntimeException(StringUtils.format("无法找到配置文件[{}]", clazz.getSimpleName()));
             } else if (resourceList.size() > 1) {
-                throw new RuntimeException(StringUtils.format("找到重复的配置文件[{}]", clazz.getSimpleName()));
+                var resourceNames = resourceList.stream().map(it -> it.getFilename()).collect(Collectors.joining(StringUtils.COMMA));
+                throw new RuntimeException(StringUtils.format("资源类[class:{}]找到重复的配置文件[{}]", clazz.getSimpleName(), resourceNames));
             } else {
                 return resourceList.get(0);
             }
