@@ -24,59 +24,26 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author meiwei666
  * @version 4.0
  */
-public class CsvReaderUtils {
+public abstract class CsvReaderUtils {
 
-    /**
-     * 构建配置表消息头
-     * @param iterator
-     * @param fileName
-     * @return
-     */
-    private static List<ResourceHeader> getHeaders(Iterator<CSVRecord> iterator, String fileName) {
-        // 获取配置表的有效列名称，默认第一行就是字段名称
-        var fieldRow = iterator.next();
-        if (fieldRow == null) {
-            throw new RunException("无法获取资源[class:{}]的Excel文件的属性控制列", fileName);
-        }
-        //默认第二行字段类型
-        var typeRow = iterator.next();
-        if (typeRow == null) {
-            throw new RunException("无法获取资源[class:{}]的Excel文件的类型控制列", fileName);
-        }
-        var descRow = iterator.next();
-
-        List<ResourceHeader> headers = new ArrayList<>();
-        for (int i = 0; i < fieldRow.size(); i++) {
-            String fieldName = fieldRow.get(i);
-            if (fieldName == null) {
-                throw new RunException("{}列名不能为空，第{}列没有配置名字", fileName ,i + 1);
-            }
-            String filedType = typeRow.get(i);
-            if (filedType == null) {
-                throw new RunException("{}列类型不能为空，第{}列没有配置类型", fileName ,i + 1);
-            }
-//            String desc = descRecord.get(i);
-            headers.add(ResourceHeader.valueOf(fieldName, filedType, i ));
-        }
-        return headers;
-    }
-
-    public static ResourceData readResourceDataFromCSV(InputStream input, String fileName){
-        CSVParser records = parseCsv(input, fileName);
-        Iterator<CSVRecord> iter = records.iterator();
-        List<ResourceHeader> headers = getHeaders(iter, fileName);
-        List<List<String>> rows = new ArrayList<>();
-        while (iter.hasNext()) {
-            CSVRecord record = iter.next();
-            List<String> data = new ArrayList<>();
-            for (ResourceHeader header : headers) {
-                String value = record.get(header.getIndex());
+    public static ResourceData readResourceDataFromCSV(InputStream input, String fileName) {
+        var records = parseCsv(input, fileName);
+        var iterator = records.iterator();
+        var headers = getHeaders(iterator, fileName);
+        var rows = new ArrayList<List<String>>();
+        while (iterator.hasNext()) {
+            var record = iterator.next();
+            var data = new ArrayList<String>();
+            for (var header : headers) {
+                var value = record.get(header.getIndex());
                 if (StringUtils.isBlank(value)) {
                     value = StringUtils.EMPTY;
                 }
@@ -85,6 +52,39 @@ public class CsvReaderUtils {
             rows.add(data);
         }
         return ResourceData.valueOf(fileName, headers, rows);
+    }
+
+
+    /**
+     * 构建配置表消息头
+     */
+    private static List<ResourceHeader> getHeaders(Iterator<CSVRecord> iterator, String fileName) {
+        // 获取配置表的有效列名称，默认第一行就是字段名称
+        var fieldRow = iterator.next();
+        if (fieldRow == null) {
+            throw new RunException("无法获取资源[class:{}]的csv文件的属性控制列", fileName);
+        }
+        //默认第二行字段类型
+        var typeRow = iterator.next();
+        if (typeRow == null) {
+            throw new RunException("无法获取资源[class:{}]的csv文件的类型控制列", fileName);
+        }
+        // 默认第三行为描述，需要的时候再使用
+        var descRow = iterator.next();
+
+        var headers = new ArrayList<ResourceHeader>();
+        for (var i = 0; i < fieldRow.size(); i++) {
+            var fieldName = fieldRow.get(i);
+            if (fieldName == null) {
+                throw new RunException("{}列名不能为空，第{}列没有配置名字", fileName, i + 1);
+            }
+            var filedType = typeRow.get(i);
+            if (filedType == null) {
+                throw new RunException("{}列类型不能为空，第{}列没有配置类型", fileName, i + 1);
+            }
+            headers.add(ResourceHeader.valueOf(fieldName, filedType, i));
+        }
+        return headers;
     }
 
     private static CSVParser parseCsv(InputStream input, String fileName) {

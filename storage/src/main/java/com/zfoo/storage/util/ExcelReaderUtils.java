@@ -20,7 +20,9 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.model.resource.ResourceData;
 import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.model.resource.ResourceHeader;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
  * @author meiwei666
  * @version 4.0
  */
-public class ExcelReaderUtils {
+public abstract class ExcelReaderUtils {
 
     public static void excelConvertJson(String inputDir, String outputDir) throws IOException {
         var listFiles = FileUtils.getAllReadableFiles(new File(inputDir))
@@ -61,13 +63,7 @@ public class ExcelReaderUtils {
         //设置所有列
         var headers = getHeaders(iterator, fileName);
 
-        // 行数定位到有效数据行，默认是第四行为有效数据行
-//        var iterator = sheet.iterator();
-//        iterator.next();
-//        iterator.next();
-//        iterator.next();
-        // 从ROW_SERVER这行开始读取数据
-        List<List<String>> rows = new ArrayList<>();
+        var rows = new ArrayList<List<String>>();
         while (iterator.hasNext()) {
             var row = iterator.next();
 
@@ -87,19 +83,18 @@ public class ExcelReaderUtils {
         return ResourceData.valueOf(fileName, headers, rows);
     }
 
-    // 只读取代码里写的字段
     private static List<ResourceHeader> getHeaders(Iterator<Row> iterator, String fileName) {
-//        var iterator = sheet.iterator();
         // 获取配置表的有效列名称，默认第一行就是字段名称
         var fieldRow = iterator.next();
         if (fieldRow == null) {
             throw new RunException("无法获取资源[class:{}]的Excel文件的属性控制列", fileName);
         }
-        //默认第二行字段类型
+        // 默认第二行字段类型
         var typeRow = iterator.next();
         if (typeRow == null) {
             throw new RunException("无法获取资源[class:{}]的Excel文件的类型控制列", fileName);
         }
+        // 默认第三行为描述，需要的时候再使用
         var desRow = iterator.next();
         var headerList = new ArrayList<ResourceHeader>();
         var cellFieldMap = new HashMap<String, Integer>();
