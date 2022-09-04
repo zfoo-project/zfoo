@@ -19,7 +19,7 @@
 
 <br/>
 
-English | [简体中文](./README.md)
+简体中文 | [English](./README_EN.md)
 
 -----------
 Why is zfoo protocol ?
