@@ -12,7 +12,7 @@
 #### 为什么不选择基于interface（接口）的形式提供RPC，像dubbo那样的RPC
 
 - 基于interface的不够灵活，不方便
-- 然interface写同步rpc比较方便，不适合异步的写法。现在流行异步调用链的写法，基于interface有点过时了
+- interface写同步rpc比较方便，不适合异步的写法。现在流行异步调用链的写法，基于interface有点过时了
 - 并不是所有编程语言都有interface的，你用了interface的话其它编程语言就没法用了，就无法跨平台了
 - 基于packet的容易扩展，可以轻易跨平台
 
