@@ -19,6 +19,8 @@
 
 <br/>
 
+English | [简体中文](./README.md)
+
 -----------
 Why is zfoo protocol ?
 -----------
@@ -103,7 +105,7 @@ public void atUserInfoAsk(Session session, UserInfoAsk ask) {
 var userInfoAsk = UserInfoAsk.valueOf(userId);
 var answer = NetContext.getCosumer().syncAsk(userInfoAsk, UserInfoAnswer.class, userId).packet();
 
-// 消费者，异步请求远程用户信息，不会柱塞当前的线程，异步请求成功过后依然会在userId指定的线程执行逻辑
+// 消费者，异步请求远程用户信息，不会柱塞当前的线程，异步请求成功过后依然会在当前线程执行逻辑
 NetContext.getCosumer()
                     .asyncAsk(userInfoAsk, UserInfoAnswer.class, userId)
                     .whenComplete(sm -> {
