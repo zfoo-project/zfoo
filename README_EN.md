@@ -191,7 +191,7 @@ public class StudentResource {
 Ⅵ. License
 -----------
 
-zfoo使用 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+zfoo use [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 ```
 Copyright (C) 2020 The zfoo Authors
