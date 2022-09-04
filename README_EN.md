@@ -180,7 +180,7 @@ public class StudentResource {
 }
 ```
 
-Ⅴ. 提交规范👏
+Ⅴ. Commit specification👏
 ----------
 
 - People who like this project are welcome to maintain this project together, and pay attention to the following
