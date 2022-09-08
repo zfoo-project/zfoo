@@ -19,6 +19,7 @@ import com.zfoo.scheduler.SchedulerContext;
 import com.zfoo.scheduler.model.vo.SchedulerDefinition;
 import com.zfoo.scheduler.util.TimeUtils;
 import com.zfoo.util.SafeRunnable;
+import com.zfoo.util.ThreadUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,8 +78,7 @@ public abstract class SchedulerBus {
         private final ThreadGroup group;
 
         public SchedulerThreadFactory(int poolNumber) {
-            var s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+            this.group = ThreadUtils.currentThreadGroup();
             this.poolNumber = poolNumber;
         }
 

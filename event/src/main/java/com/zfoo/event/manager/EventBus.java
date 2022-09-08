@@ -19,6 +19,7 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.SafeRunnable;
+import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.math.RandomUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
@@ -64,8 +65,7 @@ public abstract class EventBus {
         private final ThreadGroup group;
 
         public EventThreadFactory(int poolNumber) {
-            var s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+            this.group = ThreadUtils.currentThreadGroup();
             this.poolNumber = poolNumber;
         }
 

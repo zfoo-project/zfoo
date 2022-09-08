@@ -22,6 +22,7 @@ import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.util.SafeRunnable;
+import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.math.RandomUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
@@ -78,8 +79,7 @@ public final class TaskBus {
         private final ThreadGroup group;
 
         public TaskThreadFactory(int poolNumber) {
-            var s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+            this.group = ThreadUtils.currentThreadGroup();
             this.poolNumber = poolNumber;
         }
 

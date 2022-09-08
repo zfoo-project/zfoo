@@ -40,6 +40,14 @@ public abstract class ThreadUtils {
         }
     }
 
+    /**
+     * 获取当前线程的线程组
+     */
+    public static ThreadGroup currentThreadGroup() {
+        var s = System.getSecurityManager();
+        return (null != s) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+    }
+
     public static void shutdown(ExecutorService executor) {
         try {
             if (!executor.isTerminated()) {

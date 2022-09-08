@@ -88,8 +88,7 @@ public class ZookeeperRegistry implements IRegistry {
 
         // config-p1-t1 = config-pool-1-thread-1
         ConfigThreadFactory() {
-            SecurityManager s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+            this.group = ThreadUtils.currentThreadGroup();
             namePrefix = "config-p" + poolNumber.getAndIncrement() + "-t";
         }
 
