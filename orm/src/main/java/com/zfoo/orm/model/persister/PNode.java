@@ -42,8 +42,6 @@ public class PNode<E extends IEntity<?>> {
         var currentTime = TimeUtils.now();
         this.writeToDbTime = currentTime;
         this.modifiedTime = currentTime;
-
-        this.threadId = Thread.currentThread().getId();
     }
 
     public E getEntity() {

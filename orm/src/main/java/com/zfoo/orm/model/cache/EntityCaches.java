@@ -28,6 +28,7 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.util.TimeUtils;
+import com.zfoo.util.ThreadUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
@@ -143,9 +144,20 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
             cache.put(entity.id(), currentPnode);
         }
 
-        if (currentPnode.getThreadId() != Thread.currentThread().getId()) {
-            logger.error("[{} id:{}]被多线程访问了,先后2次访问线程id分别是[{}][{}]", entity.getClass().getSimpleName(), entity.id(),
-                    currentPnode.getThreadId(), Thread.currentThread().getId());
+        var pnodeThreadId = currentPnode.getThreadId();
+        var currentThreadId = Thread.currentThread().getId();
+        if (pnodeThreadId != currentThreadId) {
+            if (pnodeThreadId == 0) {
+                currentPnode.setThreadId(currentThreadId);
+            } else {
+                var pnodeThread = ThreadUtils.findThread(pnodeThreadId);
+                if (pnodeThread == null) {
+                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[id:{}]，第2次更新的线程[id:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId);
+                } else {
+                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[id:{}][name:{}]，第2次更新的线程[id:{}][name:{}]"
+                            , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, pnodeThread.getName(), currentThreadId, Thread.currentThread().getName());
+                }
+            }
         }
 
         // 加100以防止，立刻加载并且立刻修改数据的情况发生时，服务器取到的时间戳相同
