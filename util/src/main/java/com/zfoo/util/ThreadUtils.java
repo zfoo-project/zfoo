@@ -48,6 +48,25 @@ public abstract class ThreadUtils {
         return (null != s) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
     }
 
+    /**
+     * 通过线程号寻找对应的线程
+     */
+    public static Thread findThread(long threadId) {
+        var group = currentThreadGroup();
+        while (group != null) {
+            var threads = new Thread[group.activeCount() * 2];
+            var count = group.enumerate(threads, true);
+            for (var i = 0; i < count; i++) {
+                if (threadId == threads[i].getId()) {
+                    return threads[i];
+                }
+            }
+            group = group.getParent();
+        }
+        return null;
+    }
+
+
     public static void shutdown(ExecutorService executor) {
         try {
             if (!executor.isTerminated()) {
