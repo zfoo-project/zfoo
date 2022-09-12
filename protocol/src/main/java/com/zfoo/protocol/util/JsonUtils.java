@@ -210,7 +210,7 @@ public abstract class JsonUtils {
                 while (iterator.hasNext()) {
                     var node = iterator.next();
                     var field = node.getKey();
-                    var value = node.getValue().asText();
+                    var value = node.getValue().toString();
                     jsonMap.put(field, value);
                 }
             }
