@@ -14,6 +14,8 @@
 package com.zfoo.net.core.json.server;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.packet.json.JsonHelloRequest;
+import com.zfoo.net.packet.json.JsonHelloResponse;
 import com.zfoo.net.packet.websocket.WebsocketHelloRequest;
 import com.zfoo.net.packet.websocket.WebsocketHelloResponse;
 import com.zfoo.net.router.receiver.PacketReceiver;
@@ -33,11 +35,11 @@ public class JsonWsServerController {
     private static final Logger logger = LoggerFactory.getLogger(JsonWsServerController.class);
 
     @PacketReceiver
-    public void atWebsocketHelloRequest(Session session, WebsocketHelloRequest request) {
-        logger.info("receive [packet:{}] from browser", JsonUtils.object2String(request));
+    public void atJsonHelloRequest(Session session, JsonHelloRequest request) {
+        logger.info("receive [packet:{}] from client", JsonUtils.object2String(request));
 
-        var response = new WebsocketHelloResponse();
-        response.setMessage("Hello, this is the websocket server!");
+        var response = new JsonHelloResponse();
+        response.setMessage("Hello, this is the json server!");
 
         NetContext.getRouter().send(session, response);
     }

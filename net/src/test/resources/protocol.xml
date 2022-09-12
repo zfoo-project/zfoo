@@ -70,6 +70,9 @@
 
         <protocol id="1500" location="com.zfoo.net.packet.jprotobuf.JProtobufHelloRequest"/>
         <protocol id="1501" location="com.zfoo.net.packet.jprotobuf.JProtobufHelloResponse"/>
+
+        <protocol id="1600" location="com.zfoo.net.packet.json.JsonHelloRequest"/>
+        <protocol id="1601" location="com.zfoo.net.packet.json.JsonHelloResponse"/>
     </module>
 
     <module id="4" name="js" minId="2000" maxId="3000">

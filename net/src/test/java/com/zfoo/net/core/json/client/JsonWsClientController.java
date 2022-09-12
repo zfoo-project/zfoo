@@ -13,6 +13,7 @@
 
 package com.zfoo.net.core.json.client;
 
+import com.zfoo.net.packet.json.JsonHelloResponse;
 import com.zfoo.net.packet.websocket.WebsocketHelloResponse;
 import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.session.model.Session;
@@ -31,8 +32,8 @@ public class JsonWsClientController {
     private static final Logger logger = LoggerFactory.getLogger(JsonWsClientController.class);
 
     @PacketReceiver
-    public void atWebsocketHelloResponse(Session session, WebsocketHelloResponse response) {
-        logger.info("websocket client receive [packet:{}] from server", JsonUtils.object2String(response));
+    public void atJsonHelloResponse(Session session, JsonHelloResponse response) {
+        logger.info("json client receive [packet:{}] from server", JsonUtils.object2String(response));
     }
 
 }
