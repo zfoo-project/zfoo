@@ -2,17 +2,18 @@ package main
 
 import (
 	"fmt"
+	"testing"
 	"time"
 )
 
-func main() {
+func TestBubbleSort(t *testing.T) {
 	// 预热
-	test()
+	testBubbleSort()
 	// 正式执行
-	test()
+	testBubbleSort()
 }
 
-func test() {
+func testBubbleSort() {
 	var startTime = time.Now()
 	const NUM int = 100000000
 	for i := 0; i < NUM; i++ {

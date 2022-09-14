@@ -2,17 +2,18 @@ package main
 
 import (
 	"fmt"
+	"testing"
 	"time"
 )
 
-func main() {
+func TestFibonacci(t *testing.T) {
 	// 预热
-	test()
+	testFibonacci()
 	// 正式执行
-	test()
+	testFibonacci()
 }
 
-func test() {
+func testFibonacci() {
 	var startTime = time.Now()
 	for i := 0; i < 10000; i++ {
 		fibonacci(32)
@@ -51,4 +52,4 @@ public class MainTest {
         return fibonacci(i - 2) + fibonacci(i - 1);
     }
 }
- */
+*/
