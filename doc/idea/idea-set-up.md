@@ -141,7 +141,7 @@ Line separator，Unix and MacOs （\n）
  */
 ```
 
-- 版权信息设置：Editor->Copyright->Copyright Profiles
+- 版权信息设置：Editor->Copyright->Copyright Profiles，注意下面的版权信息不要有多余的换行
 
 ```
 Copyright (C) 2020 The zfoo Authors
