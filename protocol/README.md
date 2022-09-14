@@ -75,8 +75,12 @@ cpu： i9900k
 
 ### Ⅵ. 数据类型
 
-- 为了代码的优雅，协议类必须实现com.zfoo.protocol.model.packet.IPacket接口，协议类的的protocolId不能重复，但是可以保证不损失性能的情况下支持不继承IPacket的设计
-- 协议类必须有一个标识为：public static final transient short PROTOCOL_ID的"协议序列号"，这个协议号的值必须和IPacket接口返回的值一样
+- 为了代码的优雅，还有防止不同层混用协议类造成一些潜在的并发问题，zfoo强制要求协议类必须实现IPacket接口
+  
+- 协议类必须标注协议号，有两种方式
+    - 第一种使用静态常量+接口：public static final transient short PROTOCOL_ID的"协议序列号"，这个协议号的值必须和IPacket接口返回的值一样
+    - 第二种使用注解：@Protocol(id = protocolId)
+
 - 协议类必须是简单的javabean，不能继承任何其它的类，但是可以继承接口
 
 - 默认的数据格式支持，无需用户手动注册，[参考类定义](src/test/java/com/zfoo/protocol/packet/ComplexObject.java)
