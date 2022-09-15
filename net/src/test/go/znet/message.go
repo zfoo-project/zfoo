@@ -9,28 +9,30 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
+package znet
 
-package net
+import (
+	"fmt"
+)
 
-import "testing"
+// Message struct
+type Message struct {
+	msgSize  int32
+	msgID    int32
+	data     []byte
+}
 
-func TestCodec(t *testing.T) {
-	// test encode
-	msg1 := NewMessage(1, []byte("message codec test..."))
-
-	data, err := Encode(msg1)
-	if err != nil {
-		t.Fatal(err)
+// NewMessage create a new message
+func NewMessage(msgID int32, data []byte) *Message {
+	msg := &Message{
+		msgSize: int32(len(data)) + 4 + 4,
+		msgID:   msgID,
+		data:    data,
 	}
+	return msg
+}
 
-	t.Log(msg1)
 
-	// test decode
-	// The first four bytes is size for socket read
-	msg2, err := Decode(data[4:])
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	t.Logf("ID=%d, Data=%s", msg2.msgID, string(msg2.data))
+func (msg *Message) String() string {
+	return fmt.Sprintf("Size=%d ID=%d DataLen=%d", msg.msgSize, msg.msgID, len(msg.data))
 }
