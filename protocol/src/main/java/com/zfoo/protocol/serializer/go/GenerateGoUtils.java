@@ -156,7 +156,7 @@ public abstract class GenerateGoUtils {
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
             IFieldRegistration fieldRegistration = fieldRegistrations[i];
-            var fieldName = field.getName();
+            var fieldName = StringUtils.capitalize(field.getName());
             var fieldType = goSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
 
             var propertyFullName = StringUtils.format("{} {}", fieldName, fieldType);
@@ -177,7 +177,7 @@ public abstract class GenerateGoUtils {
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            goSerializer(fieldRegistration.serializer()).writeObject(goBuilder, "message." + field.getName(), 1, field, fieldRegistration);
+            goSerializer(fieldRegistration.serializer()).writeObject(goBuilder, "message." + StringUtils.capitalize(field.getName()), 1, field, fieldRegistration);
         }
         return goBuilder.toString();
     }
@@ -197,7 +197,7 @@ public abstract class GenerateGoUtils {
                 goBuilder.append(TAB).append("}").append(LS);
             }
             var readObject = goSerializer(fieldRegistration.serializer()).readObject(goBuilder, 1, field, fieldRegistration);
-            goBuilder.append(TAB).append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);
+            goBuilder.append(TAB).append(StringUtils.format("packet.{} = {}", StringUtils.capitalize(field.getName()), readObject)).append(LS);
         }
         return goBuilder.toString();
     }

@@ -1,7 +1,7 @@
 package protocol
 
 type UdpHelloRequest struct {
-	message string
+	Message string
 }
 
 func (protocol UdpHelloRequest) protocolId() int16 {
@@ -13,7 +13,7 @@ func (protocol UdpHelloRequest) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*UdpHelloRequest)
-	buffer.WriteString(message.message)
+	buffer.WriteString(message.Message)
 }
 
 func (protocol UdpHelloRequest) read(buffer *ByteBuffer) any {
@@ -22,13 +22,13 @@ func (protocol UdpHelloRequest) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadString()
-    packet.message = result0
+    packet.Message = result0
 	return packet
 }
 
 
 type UdpHelloResponse struct {
-	message string
+	Message string
 }
 
 func (protocol UdpHelloResponse) protocolId() int16 {
@@ -40,7 +40,7 @@ func (protocol UdpHelloResponse) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*UdpHelloResponse)
-	buffer.WriteString(message.message)
+	buffer.WriteString(message.Message)
 }
 
 func (protocol UdpHelloResponse) read(buffer *ByteBuffer) any {
@@ -49,6 +49,6 @@ func (protocol UdpHelloResponse) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadString()
-    packet.message = result0
+    packet.Message = result0
 	return packet
 }

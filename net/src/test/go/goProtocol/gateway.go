@@ -1,7 +1,7 @@
 package protocol
 
 type GatewayToProviderRequest struct {
-	message string
+	Message string
 }
 
 func (protocol GatewayToProviderRequest) protocolId() int16 {
@@ -13,7 +13,7 @@ func (protocol GatewayToProviderRequest) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*GatewayToProviderRequest)
-	buffer.WriteString(message.message)
+	buffer.WriteString(message.Message)
 }
 
 func (protocol GatewayToProviderRequest) read(buffer *ByteBuffer) any {
@@ -22,13 +22,13 @@ func (protocol GatewayToProviderRequest) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadString()
-    packet.message = result0
+    packet.Message = result0
 	return packet
 }
 
 
 type GatewayToProviderResponse struct {
-	message string
+	Message string
 }
 
 func (protocol GatewayToProviderResponse) protocolId() int16 {
@@ -40,7 +40,7 @@ func (protocol GatewayToProviderResponse) write(buffer *ByteBuffer, packet any) 
 		return
 	}
 	var message = packet.(*GatewayToProviderResponse)
-	buffer.WriteString(message.message)
+	buffer.WriteString(message.Message)
 }
 
 func (protocol GatewayToProviderResponse) read(buffer *ByteBuffer) any {
@@ -49,6 +49,6 @@ func (protocol GatewayToProviderResponse) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadString()
-    packet.message = result0
+    packet.Message = result0
 	return packet
 }

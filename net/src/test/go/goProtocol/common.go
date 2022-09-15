@@ -1,9 +1,9 @@
 package protocol
 
 type Message struct {
-	code int
-    message string
-    module int8
+	Code int
+    Message string
+    Module int8
 }
 
 func (protocol Message) protocolId() int16 {
@@ -15,9 +15,9 @@ func (protocol Message) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*Message)
-	buffer.WriteInt(message.code)
-    buffer.WriteString(message.message)
-    buffer.WriteByte(message.module)
+	buffer.WriteInt(message.Code)
+    buffer.WriteString(message.Message)
+    buffer.WriteByte(message.Module)
 }
 
 func (protocol Message) read(buffer *ByteBuffer) any {
@@ -26,19 +26,19 @@ func (protocol Message) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadInt()
-    packet.code = result0
+    packet.Code = result0
     var result1 = buffer.ReadString()
-    packet.message = result1
+    packet.Message = result1
     var result2 = buffer.ReadByte()
-    packet.module = result2
+    packet.Module = result2
 	return packet
 }
 
 
 type Error struct {
-	errorCode int
-    errorMessage string
-    module int
+	ErrorCode int
+    ErrorMessage string
+    Module int
 }
 
 func (protocol Error) protocolId() int16 {
@@ -50,9 +50,9 @@ func (protocol Error) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*Error)
-	buffer.WriteInt(message.errorCode)
-    buffer.WriteString(message.errorMessage)
-    buffer.WriteInt(message.module)
+	buffer.WriteInt(message.ErrorCode)
+    buffer.WriteString(message.ErrorMessage)
+    buffer.WriteInt(message.Module)
 }
 
 func (protocol Error) read(buffer *ByteBuffer) any {
@@ -61,11 +61,11 @@ func (protocol Error) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadInt()
-    packet.errorCode = result0
+    packet.ErrorCode = result0
     var result1 = buffer.ReadString()
-    packet.errorMessage = result1
+    packet.ErrorMessage = result1
     var result2 = buffer.ReadInt()
-    packet.module = result2
+    packet.Module = result2
 	return packet
 }
 
@@ -117,7 +117,7 @@ func (protocol Ping) read(buffer *ByteBuffer) any {
 
 
 type Pong struct {
-	time int64
+	Time int64
 }
 
 func (protocol Pong) protocolId() int16 {
@@ -129,7 +129,7 @@ func (protocol Pong) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*Pong)
-	buffer.WriteLong(message.time)
+	buffer.WriteLong(message.Time)
 }
 
 func (protocol Pong) read(buffer *ByteBuffer) any {
@@ -138,14 +138,14 @@ func (protocol Pong) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadLong()
-    packet.time = result0
+    packet.Time = result0
 	return packet
 }
 
 
 type PairLong struct {
-	key int64
-    value int64
+	Key int64
+    Value int64
 }
 
 func (protocol PairLong) protocolId() int16 {
@@ -157,8 +157,8 @@ func (protocol PairLong) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*PairLong)
-	buffer.WriteLong(message.key)
-    buffer.WriteLong(message.value)
+	buffer.WriteLong(message.Key)
+    buffer.WriteLong(message.Value)
 }
 
 func (protocol PairLong) read(buffer *ByteBuffer) any {
@@ -167,16 +167,16 @@ func (protocol PairLong) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadLong()
-    packet.key = result0
+    packet.Key = result0
     var result1 = buffer.ReadLong()
-    packet.value = result1
+    packet.Value = result1
 	return packet
 }
 
 
 type PairString struct {
-	key string
-    value string
+	Key string
+    Value string
 }
 
 func (protocol PairString) protocolId() int16 {
@@ -188,8 +188,8 @@ func (protocol PairString) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*PairString)
-	buffer.WriteString(message.key)
-    buffer.WriteString(message.value)
+	buffer.WriteString(message.Key)
+    buffer.WriteString(message.Value)
 }
 
 func (protocol PairString) read(buffer *ByteBuffer) any {
@@ -198,16 +198,16 @@ func (protocol PairString) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadString()
-    packet.key = result0
+    packet.Key = result0
     var result1 = buffer.ReadString()
-    packet.value = result1
+    packet.Value = result1
 	return packet
 }
 
 
 type PairLS struct {
-	key int64
-    value string
+	Key int64
+    Value string
 }
 
 func (protocol PairLS) protocolId() int16 {
@@ -219,8 +219,8 @@ func (protocol PairLS) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*PairLS)
-	buffer.WriteLong(message.key)
-    buffer.WriteString(message.value)
+	buffer.WriteLong(message.Key)
+    buffer.WriteString(message.Value)
 }
 
 func (protocol PairLS) read(buffer *ByteBuffer) any {
@@ -229,17 +229,17 @@ func (protocol PairLS) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadLong()
-    packet.key = result0
+    packet.Key = result0
     var result1 = buffer.ReadString()
-    packet.value = result1
+    packet.Value = result1
 	return packet
 }
 
 
 type TripleLong struct {
-	left int64
-    middle int64
-    right int64
+	Left int64
+    Middle int64
+    Right int64
 }
 
 func (protocol TripleLong) protocolId() int16 {
@@ -251,9 +251,9 @@ func (protocol TripleLong) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*TripleLong)
-	buffer.WriteLong(message.left)
-    buffer.WriteLong(message.middle)
-    buffer.WriteLong(message.right)
+	buffer.WriteLong(message.Left)
+    buffer.WriteLong(message.Middle)
+    buffer.WriteLong(message.Right)
 }
 
 func (protocol TripleLong) read(buffer *ByteBuffer) any {
@@ -262,19 +262,19 @@ func (protocol TripleLong) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadLong()
-    packet.left = result0
+    packet.Left = result0
     var result1 = buffer.ReadLong()
-    packet.middle = result1
+    packet.Middle = result1
     var result2 = buffer.ReadLong()
-    packet.right = result2
+    packet.Right = result2
 	return packet
 }
 
 
 type TripleString struct {
-	left string
-    middle string
-    right string
+	Left string
+    Middle string
+    Right string
 }
 
 func (protocol TripleString) protocolId() int16 {
@@ -286,9 +286,9 @@ func (protocol TripleString) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*TripleString)
-	buffer.WriteString(message.left)
-    buffer.WriteString(message.middle)
-    buffer.WriteString(message.right)
+	buffer.WriteString(message.Left)
+    buffer.WriteString(message.Middle)
+    buffer.WriteString(message.Right)
 }
 
 func (protocol TripleString) read(buffer *ByteBuffer) any {
@@ -297,19 +297,19 @@ func (protocol TripleString) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadString()
-    packet.left = result0
+    packet.Left = result0
     var result1 = buffer.ReadString()
-    packet.middle = result1
+    packet.Middle = result1
     var result2 = buffer.ReadString()
-    packet.right = result2
+    packet.Right = result2
 	return packet
 }
 
 
 type TripleLSS struct {
-	left int64
-    middle string
-    right string
+	Left int64
+    Middle string
+    Right string
 }
 
 func (protocol TripleLSS) protocolId() int16 {
@@ -321,9 +321,9 @@ func (protocol TripleLSS) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*TripleLSS)
-	buffer.WriteLong(message.left)
-    buffer.WriteString(message.middle)
-    buffer.WriteString(message.right)
+	buffer.WriteLong(message.Left)
+    buffer.WriteString(message.Middle)
+    buffer.WriteString(message.Right)
 }
 
 func (protocol TripleLSS) read(buffer *ByteBuffer) any {
@@ -332,10 +332,10 @@ func (protocol TripleLSS) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadLong()
-    packet.left = result0
+    packet.Left = result0
     var result1 = buffer.ReadString()
-    packet.middle = result1
+    packet.Middle = result1
     var result2 = buffer.ReadString()
-    packet.right = result2
+    packet.Right = result2
 	return packet
 }

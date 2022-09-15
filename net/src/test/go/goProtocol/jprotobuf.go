@@ -1,7 +1,7 @@
 package protocol
 
 type JProtobufHelloRequest struct {
-	message string
+	Message string
 }
 
 func (protocol JProtobufHelloRequest) protocolId() int16 {
@@ -13,7 +13,7 @@ func (protocol JProtobufHelloRequest) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*JProtobufHelloRequest)
-	buffer.WriteString(message.message)
+	buffer.WriteString(message.Message)
 }
 
 func (protocol JProtobufHelloRequest) read(buffer *ByteBuffer) any {
@@ -22,13 +22,13 @@ func (protocol JProtobufHelloRequest) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadString()
-    packet.message = result0
+    packet.Message = result0
 	return packet
 }
 
 
 type JProtobufHelloResponse struct {
-	message string
+	Message string
 }
 
 func (protocol JProtobufHelloResponse) protocolId() int16 {
@@ -40,7 +40,7 @@ func (protocol JProtobufHelloResponse) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*JProtobufHelloResponse)
-	buffer.WriteString(message.message)
+	buffer.WriteString(message.Message)
 }
 
 func (protocol JProtobufHelloResponse) read(buffer *ByteBuffer) any {
@@ -49,6 +49,6 @@ func (protocol JProtobufHelloResponse) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadString()
-    packet.message = result0
+    packet.Message = result0
 	return packet
 }

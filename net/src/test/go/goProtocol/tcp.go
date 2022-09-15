@@ -1,7 +1,7 @@
 package protocol
 
 type TcpHelloRequest struct {
-	message string
+	Message string
 }
 
 func (protocol TcpHelloRequest) protocolId() int16 {
@@ -13,7 +13,7 @@ func (protocol TcpHelloRequest) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*TcpHelloRequest)
-	buffer.WriteString(message.message)
+	buffer.WriteString(message.Message)
 }
 
 func (protocol TcpHelloRequest) read(buffer *ByteBuffer) any {
@@ -22,13 +22,13 @@ func (protocol TcpHelloRequest) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadString()
-    packet.message = result0
+    packet.Message = result0
 	return packet
 }
 
 
 type TcpHelloResponse struct {
-	message string
+	Message string
 }
 
 func (protocol TcpHelloResponse) protocolId() int16 {
@@ -40,7 +40,7 @@ func (protocol TcpHelloResponse) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*TcpHelloResponse)
-	buffer.WriteString(message.message)
+	buffer.WriteString(message.Message)
 }
 
 func (protocol TcpHelloResponse) read(buffer *ByteBuffer) any {
@@ -49,6 +49,6 @@ func (protocol TcpHelloResponse) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var result0 = buffer.ReadString()
-    packet.message = result0
+    packet.Message = result0
 	return packet
 }
