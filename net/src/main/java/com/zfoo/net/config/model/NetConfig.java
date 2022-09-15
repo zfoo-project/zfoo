@@ -42,6 +42,7 @@ public class NetConfig {
     private boolean luaProtocol;
     private boolean gdscriptProtocol;
     private boolean cppProtocol;
+    private boolean goProtocol;
     private boolean protobufProtocol;
 
     /**
@@ -195,6 +196,14 @@ public class NetConfig {
 
     public void setTypescriptProtocol(boolean typescriptProtocol) {
         this.typescriptProtocol = typescriptProtocol;
+    }
+
+    public boolean isGoProtocol() {
+        return goProtocol;
+    }
+
+    public void setGoProtocol(boolean goProtocol) {
+        this.goProtocol = goProtocol;
     }
 
     @Override

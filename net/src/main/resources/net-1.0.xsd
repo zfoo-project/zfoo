@@ -72,6 +72,7 @@
         <xsd:attribute name="lua-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="gdscript-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="cpp-protocol" type="xsd:string" default="false"/>
+        <xsd:attribute name="go-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="protobuf-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="fold-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="protocol-path" type="xsd:string"/>

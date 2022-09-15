@@ -109,6 +109,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("lua-protocol", "luaProtocol", builder, element, parserContext);
         resolvePlaceholder("gdscript-protocol", "gdscriptProtocol", builder, element, parserContext);
         resolvePlaceholder("cpp-protocol", "cppProtocol", builder, element, parserContext);
+        resolvePlaceholder("go-protocol", "goProtocol", builder, element, parserContext);
         resolvePlaceholder("protobuf-protocol", "protobufProtocol", builder, element, parserContext);
 
         // 文件是否折叠

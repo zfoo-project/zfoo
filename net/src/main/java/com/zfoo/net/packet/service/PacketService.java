@@ -105,6 +105,9 @@ public class PacketService implements IPacketService {
         if (netConfig.isCppProtocol()) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.Cpp);
         }
+        if (netConfig.isGoProtocol()) {
+            generateOperation.getGenerateLanguages().add(CodeLanguage.Go);
+        }
         if (netConfig.isProtobufProtocol()) {
             generateOperation.getGenerateLanguages().add(CodeLanguage.Protobuf);
         }
