@@ -11,26 +11,116 @@
  */
 package znet
 
-import "sync/atomic"
+import (
+	"bytes"
+	"context"
+	"encoding/binary"
+	"io"
+	"net"
+	"sync/atomic"
+)
 
 // Session struct
 type Session struct {
 	sid      uint64
 	uid      uint64
-	conn     *Conn
+
+	rawConn    net.Conn
+	sendCh     chan []byte
+	messageCh  chan any
+	done       chan error
 }
 
 var uuid uint64
 
 // NewSession create a new session
-func NewSession(conn *Conn) *Session {
+func NewSession(conn net.Conn) *Session {
 	var suuid = atomic.AddUint64(&uuid, 1)
 
 	session := &Session{
 		sid:      suuid,
-		uid:      0,// 可以为用户的id
-		conn:     conn,
+		uid:      0, // 可以为用户的id
+
+		rawConn:    conn,
+		sendCh:     make(chan []byte, 100),
+		done:       make(chan error),
+		messageCh:  make(chan any, 100),
 	}
 
 	return session
+}
+
+
+
+// Close close connection
+func (session *Session) Close() {
+	session.rawConn.Close()
+}
+
+// SendMessage send message
+func (session *Session) SendMessage(msg any) error {
+	var buffer = Encode(msg)
+	session.sendCh <- buffer.ToBytes()
+	return nil
+}
+
+// writeCoroutine write coroutine
+func (session *Session) writeCoroutine(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+
+		case pkt := <-session.sendCh:
+
+			if pkt == nil {
+				continue
+			}
+
+			if _, err := session.rawConn.Write(pkt); err != nil {
+				session.done <- err
+			}
+		}
+	}
+}
+
+// readCoroutine read coroutine
+func (session *Session) readCoroutine(ctx context.Context) {
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+
+		default:
+			// 读取长度
+			buf := make([]byte, 4)
+			_, err := io.ReadFull(session.rawConn, buf)
+			if err != nil {
+				session.done <- err
+				continue
+			}
+
+			bufReader := bytes.NewReader(buf)
+
+			var dataSize int32
+			err = binary.Read(bufReader, binary.BigEndian, &dataSize)
+			if err != nil {
+				session.done <- err
+				continue
+			}
+
+			// 读取数据
+			var bytes = make([]byte, dataSize)
+			_, err = io.ReadFull(session.rawConn, bytes)
+			if err != nil {
+				session.done <- err
+				continue
+			}
+
+			// 解码
+			var packet = Decode(bytes)
+			session.messageCh <- packet
+		}
+	}
 }

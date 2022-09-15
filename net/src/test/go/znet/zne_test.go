@@ -19,34 +19,18 @@ import (
 	"time"
 )
 
-func TestService(t *testing.T) {
-	host := "127.0.0.1:9000"
+func TestServer(t *testing.T) {
+	var host = "127.0.0.1:9000"
 
-	server, _ := Server(host)
-	server.RegMessageHandler(HandleMessage)
-	server.RegConnectHandler(HandleConnect)
-	server.RegDisconnectHandler(HandleDisconnect)
+	var server = NewServer(host)
+	server.onMessage = HandleMessage
+	server.onConnect = HandleConnect
+	server.onDisconnect = HandleDisconnect
 
 	server.Start()
-
-	// clientTest()
 }
 
-
-func HandleMessage(s *Session, packet any) {
-	fmt.Println("receive packet")
-	fmt.Println(packet)
-}
-
-func HandleDisconnect(s *Session, err error) {
-	fmt.Println(s.conn.GetName() + " lost.")
-}
-
-func HandleConnect(s *Session) {
-	fmt.Println(s.conn.GetName() + " connected.")
-}
-
-func clientTest() {
+func TestClient(t *testing.T) {
 	host := "127.0.0.1:9000"
 	tcpAddr, _ := net.ResolveTCPAddr("tcp", host)
 
@@ -62,3 +46,21 @@ func clientTest() {
 
 	time.Sleep(time.Millisecond * 5000)
 }
+
+func HandleMessage(session *Session, packet any) {
+	fmt.Println("receive packet")
+	fmt.Println(packet)
+
+	session.SendMessage(packet)
+}
+
+func HandleDisconnect(session *Session, err error) {
+	fmt.Println("disconnect")
+	fmt.Println(session.sid)
+}
+
+func HandleConnect(session *Session) {
+	fmt.Println("connected.")
+	fmt.Println(session.sid)
+}
+
