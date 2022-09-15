@@ -15,24 +15,24 @@ import (
 	"fmt"
 )
 
-// Message struct
-type Message struct {
-	msgSize  int32
-	msgID    int32
-	data     []byte
+// Packet struct
+type Packet struct {
+	length     int32
+	protocolId int16
+	data       []byte
 }
 
 // NewMessage create a new message
-func NewMessage(msgID int32, data []byte) *Message {
-	msg := &Message{
-		msgSize: int32(len(data)) + 4 + 4,
-		msgID:   msgID,
-		data:    data,
+func NewMessage(protocolId int16, data []byte) *Packet {
+	msg := &Packet{
+		length:     int32(len(data)) + 4 + 4,
+		protocolId: protocolId,
+		data:       data,
 	}
 	return msg
 }
 
 
-func (msg *Message) String() string {
-	return fmt.Sprintf("Size=%d ID=%d DataLen=%d", msg.msgSize, msg.msgID, len(msg.data))
+func (msg *Packet) String() string {
+	return fmt.Sprintf("Size=%d ID=%d DataLen=%d", msg.length, msg.protocolId, len(msg.data))
 }

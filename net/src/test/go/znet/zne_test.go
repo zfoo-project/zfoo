@@ -45,8 +45,8 @@ func TestService(t *testing.T) {
 	ss.Serv()
 }
 
-func HandleMessage(s *Session, msg *Message) {
-	fmt.Println("receive msgID:", msg)
+func HandleMessage(s *Session, msg *Packet) {
+	fmt.Println("receive protocolId:", msg)
 	fmt.Println("receive data:", string(msg.data))
 }
 

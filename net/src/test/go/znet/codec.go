@@ -17,15 +17,15 @@ import (
 	"encoding/binary"
 )
 
-// Encode from Message to []byte
-func Encode(msg *Message) ([]byte, error) {
+// Encode from Packet to []byte
+func Encode(msg *Packet) ([]byte, error) {
 	buffer := new(bytes.Buffer)
 
-	err := binary.Write(buffer, binary.LittleEndian, msg.msgSize)
+	err := binary.Write(buffer, binary.LittleEndian, msg.length)
 	if err != nil {
 		return nil, err
 	}
-	err = binary.Write(buffer, binary.LittleEndian, msg.msgID)
+	err = binary.Write(buffer, binary.LittleEndian, msg.protocolId)
 	if err != nil {
 		return nil, err
 	}
@@ -36,29 +36,29 @@ func Encode(msg *Message) ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
-// Decode from []byte to Message
-func Decode(data []byte) (*Message, error) {
+// Decode from []byte to Packet
+func Decode(data []byte) (*Packet, error) {
 	bufReader := bytes.NewReader(data)
 
 	dataSize := len(data)
 	// 读取消息ID
-	var msgID int32
-	err := binary.Read(bufReader, binary.LittleEndian, &msgID)
+	var protocolId int16
+	err := binary.Read(bufReader, binary.LittleEndian, &protocolId)
 	if err != nil {
 		return nil, err
 	}
 
 	// 读取数据
-	dataBufLength := dataSize - 4 - 4
+	dataBufLength := dataSize - 2 - 4
 	dataBuf := make([]byte, dataBufLength)
 	err = binary.Read(bufReader, binary.LittleEndian, &dataBuf)
 	if err != nil {
 		return nil, err
 	}
 
-	message := &Message{}
-	message.msgSize = int32(dataSize)
-	message.msgID = msgID
+	message := &Packet{}
+	message.length = int32(dataSize)
+	message.protocolId = protocolId
 	message.data = dataBuf
 
 	return message, nil

@@ -29,7 +29,7 @@ type Conn struct {
 	done       chan error
 	hbTimer    *time.Timer
 	name       string
-	messageCh  chan *Message
+	messageCh  chan *Packet
 	hbInterval time.Duration
 	hbTimeout  time.Duration
 }
@@ -45,7 +45,7 @@ func NewConn(c net.Conn, hbInterval time.Duration, hbTimeout time.Duration) *Con
 		rawConn:    c,
 		sendCh:     make(chan []byte, 100),
 		done:       make(chan error),
-		messageCh:  make(chan *Message, 100),
+		messageCh:  make(chan *Packet, 100),
 		hbInterval: hbInterval,
 		hbTimeout:  hbTimeout,
 	}
@@ -67,7 +67,7 @@ func (c *Conn) Close() {
 }
 
 // SendMessage send message
-func (c *Conn) SendMessage(msg *Message) error {
+func (c *Conn) SendMessage(msg *Packet) error {
 	pkg, err := Encode(msg)
 	if err != nil {
 		return err
@@ -156,7 +156,7 @@ func (c *Conn) readCoroutine(ctx context.Context) {
 				continue
 			}
 
-			if msg.msgID == MsgHeartbeat {
+			if msg.protocolId == MsgHeartbeat {
 				continue
 			}
 
