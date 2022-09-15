@@ -12,6 +12,7 @@
 package znet
 
 import (
+	protocol "gonet/goProtocol"
 	"fmt"
 	"net"
 	"testing"
@@ -69,6 +70,10 @@ func NewClientConnect() {
 	if err != nil {
 		return
 	}
+
+	var buffer = new(protocol.ByteBuffer)
+	var packet = new(protocol.TcpHelloRequest)
+
 
 	msg := NewMessage(1, []byte("Hello Zero!"))
 	data, err := Encode(msg)

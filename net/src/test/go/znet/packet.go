@@ -25,7 +25,7 @@ type Packet struct {
 // NewMessage create a new message
 func NewMessage(protocolId int16, data []byte) *Packet {
 	msg := &Packet{
-		length:     int32(len(data)) + 4 + 4,
+		length:     int32(len(data)) + 2 + 4,
 		protocolId: protocolId,
 		data:       data,
 	}
