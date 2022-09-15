@@ -1,0 +1,5 @@
+package protocol
+
+func init() {
+	{}
+}

@@ -60,6 +60,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanArray({});", objectStr)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteBooleanArray({})", objectStr)).append(LS);
+                        break;
                     case Cpp:
                     case JavaScript:
                     case TypeScript:
@@ -82,6 +85,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanArray({});", objectStr)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteBooleanArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
                     case JavaScript:
@@ -106,6 +112,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteByteArray({});", objectStr)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteByteArray({})", objectStr)).append(LS);
+                        break;
                     case Cpp:
                     case JavaScript:
                     case TypeScript:
@@ -128,6 +137,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteByteArray({});", objectStr)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteByteArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
                     case JavaScript:
@@ -152,6 +164,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteShortArray({});", objectStr)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteShortArray({})", objectStr)).append(LS);
+                        break;
                     case Cpp:
                     case JavaScript:
                     case TypeScript:
@@ -174,6 +189,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteShortArray({});", objectStr)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteShortArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
                     case JavaScript:
@@ -198,6 +216,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteIntArray({});", objectStr)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteIntArray({})", objectStr)).append(LS);
+                        break;
                     case Cpp:
                     case JavaScript:
                     case TypeScript:
@@ -220,6 +241,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteIntArray({});", objectStr)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteIntArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
                     case JavaScript:
@@ -244,6 +268,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteLongArray({});", objectStr)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteLongArray({})", objectStr)).append(LS);
+                        break;
                     case Cpp:
                     case JavaScript:
                     case TypeScript:
@@ -266,6 +293,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteLongArray({});", objectStr)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteLongArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
                     case JavaScript:
@@ -290,6 +320,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteFloatArray({});", objectStr)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteFloatArray({})", objectStr)).append(LS);
+                        break;
                     case Cpp:
                     case JavaScript:
                     case TypeScript:
@@ -312,6 +345,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteFloatArray({});", objectStr)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteFloatArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
                     case JavaScript:
@@ -336,6 +372,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteDoubleArray({});", objectStr)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteDoubleArray({})", objectStr)).append(LS);
+                        break;
                     case Cpp:
                     case JavaScript:
                     case TypeScript:
@@ -358,6 +397,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteDoubleArray({});", objectStr)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteDoubleArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
                     case JavaScript:
@@ -382,6 +424,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteStringArray({});", objectStr)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteStringArray({})", objectStr)).append(LS);
+                        break;
                     case Cpp:
                     case JavaScript:
                     case TypeScript:
@@ -405,6 +450,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteCharArray({});", objectStr)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteCharArray({})", objectStr)).append(LS);
+                        break;
                     case Cpp:
                     case JavaScript:
                     case TypeScript:
@@ -427,6 +475,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteCharArray({});", objectStr)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("buffer.WriteCharArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
                     case JavaScript:
@@ -460,6 +511,8 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {});", objectStr, protocolId)).append(LS);
                             break;
+                        case Go:
+                        case Protobuf:
                         default:
                             flag = false;
                     }
@@ -494,6 +547,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray();", array)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray()", array)).append(LS);
+                        break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readBooleanArray();", array)).append(LS);
                         break;
@@ -518,6 +574,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray();", array)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray()", array)).append(LS);
                         break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readBooleanArray();", array)).append(LS);
@@ -544,6 +603,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadByteArray();", array)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadByteArray()", array)).append(LS);
+                        break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readByteArray();", array)).append(LS);
                         break;
@@ -568,6 +630,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadByteArray();", array)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadByteArray()", array)).append(LS);
                         break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readByteArray();", array)).append(LS);
@@ -594,6 +659,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadShortArray();", array)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadShortArray()", array)).append(LS);
+                        break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readShortArray();", array)).append(LS);
                         break;
@@ -618,6 +686,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadShortArray();", array)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadShortArray()", array)).append(LS);
                         break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readShortArray();", array)).append(LS);
@@ -644,6 +715,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadIntArray();", array)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadIntArray()", array)).append(LS);
+                        break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readIntArray();", array)).append(LS);
                         break;
@@ -668,6 +742,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadIntArray();", array)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadIntArray()", array)).append(LS);
                         break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readIntArray();", array)).append(LS);
@@ -694,6 +771,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadLongArray();", array)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadLongArray()", array)).append(LS);
+                        break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readLongArray();", array)).append(LS);
                         break;
@@ -718,6 +798,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadLongArray();", array)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadLongArray()", array)).append(LS);
                         break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readLongArray();", array)).append(LS);
@@ -744,6 +827,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadFloatArray();", array)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadFloatArray()", array)).append(LS);
+                        break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readFloatArray();", array)).append(LS);
                         break;
@@ -768,6 +854,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadFloatArray();", array)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadFloatArray()", array)).append(LS);
                         break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readFloatArray();", array)).append(LS);
@@ -794,6 +883,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadDoubleArray();", array)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadDoubleArray()", array)).append(LS);
+                        break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readDoubleArray();", array)).append(LS);
                         break;
@@ -818,6 +910,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadDoubleArray();", array)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadDoubleArray()", array)).append(LS);
                         break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readDoubleArray();", array)).append(LS);
@@ -844,6 +939,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadStringArray();", array)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadStringArray()", array)).append(LS);
+                        break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readStringArray();", array)).append(LS);
                         break;
@@ -869,6 +967,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadCharArray();", array)).append(LS);
                         break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadCharArray()", array)).append(LS);
+                        break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readCharArray();", array)).append(LS);
                         break;
@@ -893,6 +994,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadCharArray();", array)).append(LS);
+                        break;
+                    case Go:
+                        builder.append(StringUtils.format("var {} = buffer.ReadCharArray()", array)).append(LS);
                         break;
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readCharArray();", array)).append(LS);
@@ -926,6 +1030,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readPacketArray({});", array, protocolId)).append(LS);
                             break;
+                        case Go:
+                        case Protobuf:
+                        case Enhance:
                         default:
                             flag = false;
                     }

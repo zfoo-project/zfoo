@@ -28,6 +28,7 @@ import com.zfoo.protocol.registration.field.*;
 import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
+import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
 import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
@@ -218,6 +219,7 @@ public class ProtocolAnalysis {
         GenerateProtocolPath.clear();
         GenerateProtocolFile.clear();
         GenerateCppUtils.clear();
+        GenerateGoUtils.clear();
         GenerateCsUtils.clear();
         GenerateJsUtils.clear();
         GenerateTsUtils.clear();
@@ -468,7 +470,7 @@ public class ProtocolAnalysis {
         } catch (NoSuchMethodException e) {
             protocolMethod = null;
         }
-        
+
         if (protocolMethod != null) {
             // 必须要有一个空的构造器
             Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
@@ -513,7 +515,7 @@ public class ProtocolAnalysis {
         AssertionUtils.isTrue(Modifier.isTransient(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被transient修饰", clazz.getCanonicalName(), PROTOCOL_ID);
         // 命名只能包含字母，数字，下划线
         AssertionUtils.isTrue(clazz.getSimpleName().matches("[a-zA-Z0-9_]*"), "[class:{}]的命名只能包含字母，数字，下划线", clazz.getCanonicalName(), PROTOCOL_ID);
-        
+
         ReflectionUtils.makeAccessible(protocolIdField);
         var protocolId = (short) ReflectionUtils.getField(protocolIdField, null);
         if (annoProtocolId != 0) {

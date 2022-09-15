@@ -65,6 +65,15 @@ func (byteBuffer *ByteBuffer) EnsureCapacity(capacity int) {
 	}
 }
 
+func (byteBuffer *ByteBuffer) Clear() {
+	byteBuffer.writeIndex = 0
+	byteBuffer.readIndex = 0
+}
+
+func (byteBuffer *ByteBuffer) IsReadable() bool {
+	return byteBuffer.writeIndex > byteBuffer.readIndex
+}
+
 // -------------------------------------------------write/read-------------------------------------------------
 
 // 整形转换成字节
@@ -415,4 +424,472 @@ func (byteBuffer *ByteBuffer) WriteChar(value string) {
 
 func (byteBuffer *ByteBuffer) ReadChar() string {
 	return byteBuffer.ReadString()
+}
+
+func (byteBuffer *ByteBuffer) WritePacketFlag(packet any) bool {
+	var flag = packet == nil
+	byteBuffer.WriteBool(!flag)
+	return flag
+}
+
+func (byteBuffer *ByteBuffer) WritePacket(packet any, protocolId int16) {
+	var protocolRegistration = GetProtocol(protocolId)
+	protocolRegistration.write(byteBuffer, packet)
+}
+
+func (byteBuffer *ByteBuffer) ReadPacket(protocolId int16) any {
+	var protocolRegistration = GetProtocol(protocolId)
+	return protocolRegistration.read(byteBuffer)
+}
+
+// -------------------------------------------------IProtocolRegistration-------------------------------------------------
+type IProtocolRegistration interface {
+	protocolId() int16
+
+	write(buffer *ByteBuffer, packet any)
+
+	read(buffer *ByteBuffer) any
+}
+
+// protocol map
+var Protocols = make(map[int16]IProtocolRegistration)
+
+func GetProtocol(protocolId int16) IProtocolRegistration {
+	return Protocols[protocolId]
+}
+
+func Write(buffer *ByteBuffer, packet any) {
+	var protocolId = packet.(IProtocolRegistration).protocolId()
+	buffer.WriteShort(protocolId)
+	var protocolRegistration = GetProtocol(protocolId)
+	protocolRegistration.write(buffer, packet)
+}
+
+func Read(buffer *ByteBuffer) any {
+	var protocolId = buffer.ReadShort()
+	return GetProtocol(protocolId).read(buffer)
+}
+
+// -------------------------------------------------CutDown-------------------------------------------------
+func (byteBuffer *ByteBuffer) WriteBooleanArray(array []bool) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteBool(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadBooleanArray() []bool {
+	var size = byteBuffer.ReadInt()
+	var array = make([]bool, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadBool()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteByteArray(array []int8) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteByte(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadByteArray() []int8 {
+	var size = byteBuffer.ReadInt()
+	var array = make([]int8, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadByte()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteShortArray(array []int16) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteShort(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadShortArray() []int16 {
+	var size = byteBuffer.ReadInt()
+	var array = make([]int16, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadShort()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteIntArray(array []int) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteInt(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadIntArray() []int {
+	var size = byteBuffer.ReadInt()
+	var array = make([]int, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadInt()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteLongArray(array []int64) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteLong(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadLongArray() []int64 {
+	var size = byteBuffer.ReadInt()
+	var array = make([]int64, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadLong()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteFloatArray(array []float32) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteFloat(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadFloatArray() []float32 {
+	var size = byteBuffer.ReadInt()
+	var array = make([]float32, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadFloat()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteDoubleArray(array []float64) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteDouble(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadDoubleArray() []float64 {
+	var size = byteBuffer.ReadInt()
+	var array = make([]float64, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadDouble()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteCharArray(array []string) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteChar(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadCharArray() []string {
+	var size = byteBuffer.ReadInt()
+	var array = make([]string, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadChar()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteStringArray(array []string) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteString(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadStringArray() []string {
+	var size = byteBuffer.ReadInt()
+	var array = make([]string, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadString()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteIntIntMap(m map[int]int) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteInt(key)
+			byteBuffer.WriteInt(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadIntIntMap() map[int]int {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int]int, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadInt()
+			var value = byteBuffer.ReadInt()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteIntLongMap(m map[int]int64) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteInt(key)
+			byteBuffer.WriteLong(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadIntLongMap() map[int]int64 {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int]int64, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadInt()
+			var value = byteBuffer.ReadLong()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteIntStringMap(m map[int]string) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteInt(key)
+			byteBuffer.WriteString(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadIntStringMap() map[int]string {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int]string, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadInt()
+			var value = byteBuffer.ReadString()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteLongIntMap(m map[int64]int) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteLong(key)
+			byteBuffer.WriteInt(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadLongIntMap() map[int64]int {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int64]int, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadLong()
+			var value = byteBuffer.ReadInt()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteLongLongMap(m map[int64]int64) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteLong(key)
+			byteBuffer.WriteLong(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadLongLongMap() map[int64]int64 {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int64]int64, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadLong()
+			var value = byteBuffer.ReadLong()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteLongStringMap(m map[int64]string) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteLong(key)
+			byteBuffer.WriteString(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadLongStringMap() map[int64]string {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int64]string, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadLong()
+			var value = byteBuffer.ReadString()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteStringIntMap(m map[string]int) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteString(key)
+			byteBuffer.WriteInt(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadStringIntMap() map[string]int {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[string]int, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadString()
+			var value = byteBuffer.ReadInt()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteStringLongMap(m map[string]int64) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteString(key)
+			byteBuffer.WriteLong(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadStringLongMap() map[string]int64 {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[string]int64, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadString()
+			var value = byteBuffer.ReadLong()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteStringStringMap(m map[string]string) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteString(key)
+			byteBuffer.WriteString(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadStringStringMap() map[string]string {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[string]string, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadString()
+			var value = byteBuffer.ReadString()
+			m[key] = value
+		}
+	}
+	return m
 }

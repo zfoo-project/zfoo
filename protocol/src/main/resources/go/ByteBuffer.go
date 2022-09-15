@@ -1,154 +1,166 @@
-// TODO: go无法支持嵌套的集合类型，所以现在无法支持这套协议
-// Golang字节保存在内存的低地址中默认的使用的是大端模式，和Java一样
-// 右移操作>>是带符号右移
-package buffer
+package protocol
 
 import (
+	"bytes"
+	"encoding/binary"
+	"fmt"
 	"math"
-	"strconv"
-	"strings"
 )
 
 const initSize int = 128
-const masSize int = 655537
-
-const maxInt int = 2147483647
-const minInt int = -2147483648
+const maxSize int = 655537
 
 var initArray []byte = make([]byte, initSize, initSize)
 
 type ByteBuffer struct {
-	buffer      []byte
-	writeOffset int
-	readOffset  int
+	buffer     []byte
+	writeIndex int
+	readIndex  int
 }
 
 // -------------------------------------------------get/set-------------------------------------------------
 func (byteBuffer *ByteBuffer) WriteOffset() int {
-	return byteBuffer.writeOffset
+	return byteBuffer.writeIndex
 }
 
 func (byteBuffer *ByteBuffer) SetWriteOffset(writeIndex int) {
 	if writeIndex > len(byteBuffer.buffer) {
-		var builder strings.Builder
-		builder.WriteString("writeIndex[")
-		builder.WriteString(strconv.Itoa(writeIndex))
-		builder.WriteString("] out of bounds exception: readerIndex: ")
-		builder.WriteString(strconv.Itoa(byteBuffer.readOffset))
-		builder.WriteString(", writerIndex: ")
-		builder.WriteString(strconv.Itoa(byteBuffer.writeOffset))
-		builder.WriteString("(expected: 0 <= readerIndex <= writerIndex <= capacity:")
-		builder.WriteString(strconv.Itoa(len(byteBuffer.buffer)))
-		builder.WriteString(")")
-		panic(builder.String())
+		var error = fmt.Sprintf("writeIndex:[{%d}] out of bounds exception: readerIndex:[{%d}] , writerIndex:[{%d}] (expected: 0 <= readerIndex <= writerIndex <= capacity:[{%d}])", writeIndex, byteBuffer.readIndex, byteBuffer.writeIndex, len(byteBuffer.buffer))
+		panic(error)
 	}
-	byteBuffer.writeOffset = writeIndex
+	byteBuffer.writeIndex = writeIndex
 }
 
 func (byteBuffer *ByteBuffer) SetReadOffset(readIndex int) {
-	if readIndex > byteBuffer.writeOffset {
-		var builder strings.Builder
-		builder.WriteString("readIndex[")
-		builder.WriteString(strconv.Itoa(readIndex))
-		builder.WriteString("] out of bounds exception: readerIndex: ")
-		builder.WriteString(strconv.Itoa(byteBuffer.readOffset))
-		builder.WriteString(", writerIndex: ")
-		builder.WriteString(strconv.Itoa(byteBuffer.writeOffset))
-		builder.WriteString("(expected: 0 <= readerIndex <= writerIndex <= capacity:")
-		builder.WriteString(strconv.Itoa(len(byteBuffer.buffer)))
-		builder.WriteString(")")
-		panic(builder.String())
+	if readIndex > byteBuffer.writeIndex {
+		var error = fmt.Sprintf("readIndex:[{%d}] out of bounds exception: readerIndex:[{%d}] , writerIndex:[{%d}] (expected: 0 <= readerIndex <= writerIndex <= capacity:[{%d}])", readIndex, byteBuffer.readIndex, byteBuffer.writeIndex, len(byteBuffer.buffer))
+		panic(error)
 	}
-	byteBuffer.readOffset = readIndex
+	byteBuffer.readIndex = readIndex
 }
 
 func (byteBuffer *ByteBuffer) ToBytes() []byte {
-	return byteBuffer.buffer[0:byteBuffer.writeOffset]
+	return byteBuffer.buffer[0:byteBuffer.writeIndex]
 }
 
 func (byteBuffer *ByteBuffer) ToString() string {
-	var builder strings.Builder
-	builder.WriteString("writeOffset:")
-	builder.WriteString(strconv.Itoa(byteBuffer.writeOffset))
-	builder.WriteString(", readOffset:")
-	builder.WriteString(strconv.Itoa(byteBuffer.readOffset))
-	builder.WriteString(", len:")
-	builder.WriteString(strconv.Itoa(len(byteBuffer.buffer)))
-	builder.WriteString(", cap:")
-	builder.WriteString(strconv.Itoa(cap(byteBuffer.buffer)))
-	return builder.String()
+	return fmt.Sprintf("writeIndex:[{%d}], readIndex:[{%d}], len:[{%d}], cap:[{%d}]", byteBuffer.writeIndex, byteBuffer.readIndex, len(byteBuffer.buffer), cap(byteBuffer.buffer))
 }
 
-// -------------------------------------------------write/read-------------------------------------------------
 func (byteBuffer *ByteBuffer) GetCapacity() int {
-	return len(byteBuffer.buffer) - byteBuffer.writeOffset
+	return len(byteBuffer.buffer) - byteBuffer.writeIndex
 }
 
 func (byteBuffer *ByteBuffer) EnsureCapacity(capacity int) {
-	for
-	{
-		if byteBuffer.GetCapacity()-capacity > 0 {
+	for {
+		if byteBuffer.GetCapacity() > capacity {
 			break
 		}
 
 		byteBuffer.buffer = append(byteBuffer.buffer, initArray...)
 
-		if len(byteBuffer.buffer) > masSize {
+		if len(byteBuffer.buffer) > maxSize {
 			panic("Bytebuf max size is [655537], out of memory error")
 		}
 	}
 }
 
+func (byteBuffer *ByteBuffer) Clear() {
+	byteBuffer.writeIndex = 0
+	byteBuffer.readIndex = 0
+}
+
+func (byteBuffer *ByteBuffer) IsReadable() bool {
+	return byteBuffer.writeIndex > byteBuffer.readIndex
+}
+
+// -------------------------------------------------write/read-------------------------------------------------
+
+// 整形转换成字节
+func IntToBytes(n int) []byte {
+	var x = int32(n)
+	bytesBuffer := bytes.NewBuffer([]byte{})
+	binary.Write(bytesBuffer, binary.BigEndian, x)
+	return bytesBuffer.Bytes()
+}
+
+// 字节转换成整形
+func BytesToInt(b []byte) int {
+	bytesBuffer := bytes.NewBuffer(b)
+	var x int32
+	binary.Read(bytesBuffer, binary.BigEndian, &x)
+	return int(x)
+}
+
 func (byteBuffer *ByteBuffer) WriteBool(value bool) {
 	byteBuffer.EnsureCapacity(1)
 	if value {
-		byteBuffer.buffer[byteBuffer.writeOffset] = 1
+		byteBuffer.buffer[byteBuffer.writeIndex] = 1
 	} else {
-		byteBuffer.buffer[byteBuffer.writeOffset] = 0
+		byteBuffer.buffer[byteBuffer.writeIndex] = 0
 	}
-	byteBuffer.writeOffset++
+	byteBuffer.writeIndex++
 }
 
 func (byteBuffer *ByteBuffer) ReadBool() bool {
-	var byteValue = byteBuffer.buffer[byteBuffer.readOffset]
-	byteBuffer.readOffset++
+	var byteValue = byteBuffer.buffer[byteBuffer.readIndex]
+	byteBuffer.readIndex++
 	return byteValue == 1
+}
+
+func (byteBuffer *ByteBuffer) WriteByte(value int8) {
+	byteBuffer.EnsureCapacity(1)
+	byteBuffer.buffer[byteBuffer.writeIndex] = byte(value)
+	byteBuffer.writeIndex++
+}
+
+func (byteBuffer *ByteBuffer) ReadByte() int8 {
+	var byteValue = byteBuffer.buffer[byteBuffer.readIndex]
+	byteBuffer.readIndex++
+	return int8(byteValue)
 }
 
 func (byteBuffer *ByteBuffer) WriteUByte(value byte) {
 	byteBuffer.EnsureCapacity(1)
-	byteBuffer.buffer[byteBuffer.writeOffset] = value
-	byteBuffer.writeOffset++
+	byteBuffer.buffer[byteBuffer.writeIndex] = value
+	byteBuffer.writeIndex++
 }
 
 func (byteBuffer *ByteBuffer) ReadUByte() byte {
-	var byteValue = byteBuffer.buffer[byteBuffer.readOffset]
-	byteBuffer.readOffset++
+	var byteValue = byteBuffer.buffer[byteBuffer.readIndex]
+	byteBuffer.readIndex++
 	return byteValue
 }
 
 func (byteBuffer *ByteBuffer) WriteUBytes(bytes []byte) {
 	var length = len(bytes)
 	byteBuffer.EnsureCapacity(length)
-	copy(byteBuffer.buffer[byteBuffer.writeOffset:], bytes)
-	byteBuffer.writeOffset += length
+	copy(byteBuffer.buffer[byteBuffer.writeIndex:], bytes)
+	byteBuffer.writeIndex += length
 }
 
 func (byteBuffer *ByteBuffer) ReadUBytes(length int) []byte {
-	var readOffset = byteBuffer.readOffset
-	var endOffset = byteBuffer.readOffset + length
+	var readOffset = byteBuffer.readIndex
+	var endOffset = byteBuffer.readIndex + length
 	var bytes = byteBuffer.buffer[readOffset:endOffset]
+	byteBuffer.readIndex += length
 	return bytes
 }
 
 func (byteBuffer *ByteBuffer) WriteShort(value int16) {
 	byteBuffer.EnsureCapacity(2)
-	byteBuffer.WriteUByte(byte(value >> 8))
-	byteBuffer.WriteUByte(byte(value))
+	var bytesBuffer = bytes.NewBuffer([]byte{})
+	binary.Write(bytesBuffer, binary.BigEndian, value)
+	var byteArray = bytesBuffer.Bytes()
+	byteBuffer.WriteUBytes(byteArray)
 }
 
 func (byteBuffer *ByteBuffer) ReadShort() int16 {
-	return (int16(byteBuffer.ReadUByte()) << 8) | int16(byteBuffer.ReadUByte())
+	var byteArray = byteBuffer.ReadUBytes(2)
+	bytesBuffer := bytes.NewBuffer(byteArray)
+	var value int16
+	binary.Read(bytesBuffer, binary.BigEndian, &value)
+	return value
 }
 
 func (byteBuffer *ByteBuffer) WriteRawInt32(intValue int32) {
@@ -163,8 +175,8 @@ func (byteBuffer *ByteBuffer) ReadRawInt32() int32 {
 }
 
 func (byteBuffer *ByteBuffer) WriteInt(intValue int) {
-	if intValue < minInt || intValue > maxInt {
-		panic("intValue must range between minInt:-2147483648 and maxInt:2147483647")
+	if intValue < math.MinInt32 || intValue > math.MaxInt32 {
+		panic("intValue must range between math.MinInt32:-2147483648 and math.MaxInt32:2147483647")
 	}
 	byteBuffer.WriteInt32(int32(intValue))
 }
@@ -175,7 +187,7 @@ func (byteBuffer *ByteBuffer) ReadInt() int {
 
 func (byteBuffer *ByteBuffer) WriteInt32(intValue int32) {
 	var value uint32 = uint32(((intValue << 1) ^ (intValue >> 31)))
-
+	// 右移操作>>是带符号右移
 	if value>>7 == 0 {
 		byteBuffer.WriteUByte(byte(value))
 		return
@@ -355,26 +367,34 @@ func (byteBuffer *ByteBuffer) ReadLong() int64 {
 
 func (byteBuffer *ByteBuffer) WriteFloat(value float32) {
 	byteBuffer.EnsureCapacity(4)
-	var uintValue = math.Float32bits(value)
-	byteBuffer.WriteRawInt32(int32(uintValue))
+	var bytesBuffer = bytes.NewBuffer([]byte{})
+	binary.Write(bytesBuffer, binary.BigEndian, value)
+	var byteArray = bytesBuffer.Bytes()
+	byteBuffer.WriteUBytes(byteArray)
 }
 
 func (byteBuffer *ByteBuffer) ReadFloat() float32 {
-	var int32Value = byteBuffer.ReadRawInt32()
-	return math.Float32frombits(uint32(int32Value))
+	var byteArray = byteBuffer.ReadUBytes(4)
+	bytesBuffer := bytes.NewBuffer(byteArray)
+	var value float32
+	binary.Read(bytesBuffer, binary.BigEndian, &value)
+	return value
 }
 
 func (byteBuffer *ByteBuffer) WriteDouble(value float64) {
-	byteBuffer.EnsureCapacity(4)
-	var uintValue = math.Float64bits(value)
-	byteBuffer.WriteRawInt32(int32(uintValue >> 32))
-	byteBuffer.WriteRawInt32(int32(uintValue))
+	byteBuffer.EnsureCapacity(8)
+	var bytesBuffer = bytes.NewBuffer([]byte{})
+	binary.Write(bytesBuffer, binary.BigEndian, value)
+	var byteArray = bytesBuffer.Bytes()
+	byteBuffer.WriteUBytes(byteArray)
 }
 
 func (byteBuffer *ByteBuffer) ReadDouble() float64 {
-	var highInt32Value = uint64(byteBuffer.ReadRawInt32())
-	var lowInt32Value = uint64(byteBuffer.ReadRawInt32())
-	return math.Float64frombits(highInt32Value<<32 | lowInt32Value)
+	var byteArray = byteBuffer.ReadUBytes(8)
+	bytesBuffer := bytes.NewBuffer(byteArray)
+	var value float64
+	binary.Read(bytesBuffer, binary.BigEndian, &value)
+	return value
 }
 
 func (byteBuffer *ByteBuffer) WriteString(value string) {
@@ -404,4 +424,472 @@ func (byteBuffer *ByteBuffer) WriteChar(value string) {
 
 func (byteBuffer *ByteBuffer) ReadChar() string {
 	return byteBuffer.ReadString()
+}
+
+func (byteBuffer *ByteBuffer) WritePacketFlag(packet any) bool {
+	var flag = packet == nil
+	byteBuffer.WriteBool(!flag)
+	return flag
+}
+
+func (byteBuffer *ByteBuffer) WritePacket(packet any, protocolId int16) {
+	var protocolRegistration = GetProtocol(protocolId)
+	protocolRegistration.write(byteBuffer, packet)
+}
+
+func (byteBuffer *ByteBuffer) ReadPacket(protocolId int16) any {
+	var protocolRegistration = GetProtocol(protocolId)
+	return protocolRegistration.read(byteBuffer)
+}
+
+// -------------------------------------------------IProtocolRegistration-------------------------------------------------
+type IProtocolRegistration interface {
+	protocolId() int16
+
+	write(buffer *ByteBuffer, packet any)
+
+	read(buffer *ByteBuffer) any
+}
+
+// protocol map
+var Protocols = make(map[int16]IProtocolRegistration)
+
+func GetProtocol(protocolId int16) IProtocolRegistration {
+	return Protocols[protocolId]
+}
+
+func Write(buffer *ByteBuffer, packet any) {
+	var protocolId = packet.(IProtocolRegistration).protocolId()
+	buffer.WriteShort(protocolId)
+	var protocolRegistration = GetProtocol(protocolId)
+	protocolRegistration.write(buffer, packet)
+}
+
+func Read(buffer *ByteBuffer) any {
+	var protocolId = buffer.ReadShort()
+	return GetProtocol(protocolId).read(buffer)
+}
+
+// -------------------------------------------------CutDown-------------------------------------------------
+func (byteBuffer *ByteBuffer) WriteBooleanArray(array []bool) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteBool(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadBooleanArray() []bool {
+	var size = byteBuffer.ReadInt()
+	var array = make([]bool, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadBool()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteByteArray(array []int8) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteByte(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadByteArray() []int8 {
+	var size = byteBuffer.ReadInt()
+	var array = make([]int8, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadByte()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteShortArray(array []int16) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteShort(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadShortArray() []int16 {
+	var size = byteBuffer.ReadInt()
+	var array = make([]int16, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadShort()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteIntArray(array []int) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteInt(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadIntArray() []int {
+	var size = byteBuffer.ReadInt()
+	var array = make([]int, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadInt()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteLongArray(array []int64) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteLong(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadLongArray() []int64 {
+	var size = byteBuffer.ReadInt()
+	var array = make([]int64, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadLong()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteFloatArray(array []float32) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteFloat(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadFloatArray() []float32 {
+	var size = byteBuffer.ReadInt()
+	var array = make([]float32, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadFloat()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteDoubleArray(array []float64) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteDouble(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadDoubleArray() []float64 {
+	var size = byteBuffer.ReadInt()
+	var array = make([]float64, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadDouble()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteCharArray(array []string) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteChar(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadCharArray() []string {
+	var size = byteBuffer.ReadInt()
+	var array = make([]string, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadChar()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteStringArray(array []string) {
+	if array == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(array))
+		for _, value := range array {
+			byteBuffer.WriteString(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadStringArray() []string {
+	var size = byteBuffer.ReadInt()
+	var array = make([]string, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			array[i] = byteBuffer.ReadString()
+		}
+	}
+	return array
+}
+
+func (byteBuffer *ByteBuffer) WriteIntIntMap(m map[int]int) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteInt(key)
+			byteBuffer.WriteInt(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadIntIntMap() map[int]int {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int]int, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadInt()
+			var value = byteBuffer.ReadInt()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteIntLongMap(m map[int]int64) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteInt(key)
+			byteBuffer.WriteLong(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadIntLongMap() map[int]int64 {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int]int64, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadInt()
+			var value = byteBuffer.ReadLong()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteIntStringMap(m map[int]string) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteInt(key)
+			byteBuffer.WriteString(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadIntStringMap() map[int]string {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int]string, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadInt()
+			var value = byteBuffer.ReadString()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteLongIntMap(m map[int64]int) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteLong(key)
+			byteBuffer.WriteInt(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadLongIntMap() map[int64]int {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int64]int, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadLong()
+			var value = byteBuffer.ReadInt()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteLongLongMap(m map[int64]int64) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteLong(key)
+			byteBuffer.WriteLong(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadLongLongMap() map[int64]int64 {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int64]int64, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadLong()
+			var value = byteBuffer.ReadLong()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteLongStringMap(m map[int64]string) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteLong(key)
+			byteBuffer.WriteString(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadLongStringMap() map[int64]string {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[int64]string, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadLong()
+			var value = byteBuffer.ReadString()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteStringIntMap(m map[string]int) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteString(key)
+			byteBuffer.WriteInt(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadStringIntMap() map[string]int {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[string]int, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadString()
+			var value = byteBuffer.ReadInt()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteStringLongMap(m map[string]int64) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteString(key)
+			byteBuffer.WriteLong(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadStringLongMap() map[string]int64 {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[string]int64, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadString()
+			var value = byteBuffer.ReadLong()
+			m[key] = value
+		}
+	}
+	return m
+}
+
+func (byteBuffer *ByteBuffer) WriteStringStringMap(m map[string]string) {
+	if m == nil {
+		byteBuffer.WriteInt(0)
+	} else {
+		byteBuffer.WriteInt(len(m))
+		for key, value := range m {
+			byteBuffer.WriteString(key)
+			byteBuffer.WriteString(value)
+		}
+	}
+}
+
+func (byteBuffer *ByteBuffer) ReadStringStringMap() map[string]string {
+	var size = byteBuffer.ReadInt()
+	var m = make(map[string]string, size)
+	if size > 0 {
+		for i := 0; i < size; i++ {
+			var key = byteBuffer.ReadString()
+			var value = byteBuffer.ReadString()
+			m[key] = value
+		}
+	}
+	return m
 }

@@ -20,6 +20,7 @@ import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
+import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
 import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
@@ -115,6 +116,16 @@ public abstract class GenerateProtocolFile {
             }
         }
 
+        // 生成Golang协议
+        if (generateLanguages.contains(CodeLanguage.Go)) {
+            GenerateGoUtils.init(generateOperation);
+            GenerateGoUtils.createProtocolManager(allSortedGenerateProtocols);
+            for (var protocolRegistration : allSortedGenerateProtocols) {
+                GenerateGoUtils.createGoProtocolFile((ProtocolRegistration) protocolRegistration);
+            }
+        }
+
+        // 生成C#协议
         if (generateLanguages.contains(CodeLanguage.CSharp)) {
             GenerateCsUtils.init(generateOperation);
             GenerateCsUtils.createProtocolManager();

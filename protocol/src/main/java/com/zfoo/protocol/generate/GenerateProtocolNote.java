@@ -66,6 +66,7 @@ public abstract class GenerateProtocolNote {
 
         switch (language) {
             case Cpp:
+            case Go:
             case JavaScript:
             case TypeScript:
             case CSharp:
@@ -94,6 +95,7 @@ public abstract class GenerateProtocolNote {
         }
         switch (language) {
             case Cpp:
+            case Go:
             case JavaScript:
             case TypeScript:
             case CSharp:

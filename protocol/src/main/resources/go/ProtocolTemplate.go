@@ -1,0 +1,26 @@
+package protocol
+{}
+type {} struct {
+	{}
+}
+
+func (protocol {}) protocolId() int16 {
+	return {}
+}
+
+func (protocol {}) write(buffer *ByteBuffer, packet any) {
+	if buffer.WritePacketFlag(packet) {
+		return
+	}
+	var message = packet.(*{})
+	{}
+}
+
+func (protocol {}) read(buffer *ByteBuffer) any {
+	var packet = new({})
+	if !buffer.ReadBool() {
+		return packet
+	}
+	{}
+	return packet
+}

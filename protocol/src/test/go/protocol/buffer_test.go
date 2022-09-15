@@ -13,7 +13,9 @@
 package protocol
 
 import (
+	"fmt"
 	"math"
+	"os"
 	"testing"
 )
 
@@ -34,6 +36,7 @@ func TestByteBuffer(t *testing.T) {
 	floatTest(buffer)
 	doubleTest(buffer)
 	stringTest(buffer)
+	packetTest()
 }
 
 func boolTest(buffer *ByteBuffer) {
@@ -117,4 +120,17 @@ func stringTest(buffer *ByteBuffer) {
 	var value = "hello world!"
 	buffer.WriteString(value)
 	assert(buffer.ReadString() == value)
+}
+
+func packetTest() {
+	bytes, _ := os.ReadFile("../../resources/NormalObject.bytes")
+	var buffer = new(ByteBuffer)
+	buffer.WriteUBytes(bytes)
+	var packet = Read(buffer)
+	fmt.Println(packet)
+
+	buffer.Clear()
+	Write(buffer, packet)
+	var newPacket = Read(buffer)
+	fmt.Println(newPacket)
 }

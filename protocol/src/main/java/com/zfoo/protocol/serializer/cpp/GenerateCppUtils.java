@@ -100,7 +100,6 @@ public abstract class GenerateCppUtils {
 
         var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("cpp/ProtocolManagerTemplate.h")));
 
-        // 生成ProtocolManager.gd文件
         var headerBuilder = new StringBuilder();
         protocolList.stream()
                 .filter(it -> Objects.nonNull(it))
