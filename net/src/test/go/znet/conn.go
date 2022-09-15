@@ -26,10 +26,10 @@ type Conn struct {
 	sid        string
 	rawConn    net.Conn
 	sendCh     chan []byte
+	messageCh  chan any
 	done       chan error
 	hbTimer    *time.Timer
 	name       string
-	messageCh  chan *Packet
 	hbInterval time.Duration
 	hbTimeout  time.Duration
 }
@@ -45,7 +45,7 @@ func NewConn(c net.Conn, hbInterval time.Duration, hbTimeout time.Duration) *Con
 		rawConn:    c,
 		sendCh:     make(chan []byte, 100),
 		done:       make(chan error),
-		messageCh:  make(chan *Packet, 100),
+		messageCh:  make(chan any, 100),
 		hbInterval: hbInterval,
 		hbTimeout:  hbTimeout,
 	}
@@ -68,12 +68,8 @@ func (c *Conn) Close() {
 
 // SendMessage send message
 func (c *Conn) SendMessage(msg *Packet) error {
-	pkg, err := Encode(msg)
-	if err != nil {
-		return err
-	}
-
-	c.sendCh <- pkg
+	var buffer = Encode(msg)
+	c.sendCh <- buffer.ToBytes()
 	return nil
 }
 
@@ -135,32 +131,23 @@ func (c *Conn) readCoroutine(ctx context.Context) {
 			bufReader := bytes.NewReader(buf)
 
 			var dataSize int32
-			err = binary.Read(bufReader, binary.LittleEndian, &dataSize)
+			err = binary.Read(bufReader, binary.BigEndian, &dataSize)
 			if err != nil {
 				c.done <- err
 				continue
 			}
 
 			// 读取数据
-			databuf := make([]byte, dataSize)
-			_, err = io.ReadFull(c.rawConn, databuf)
+			var bytes = make([]byte, dataSize)
+			_, err = io.ReadFull(c.rawConn, bytes)
 			if err != nil {
 				c.done <- err
 				continue
 			}
 
 			// 解码
-			msg, err := Decode(databuf)
-			if err != nil {
-				c.done <- err
-				continue
-			}
-
-			if msg.protocolId == MsgHeartbeat {
-				continue
-			}
-
-			c.messageCh <- msg
+			var packet = Decode(bytes)
+			c.messageCh <- packet
 		}
 	}
 }

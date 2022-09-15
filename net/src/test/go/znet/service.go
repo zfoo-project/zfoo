@@ -21,7 +21,7 @@ import (
 
 // SocketService struct
 type SocketService struct {
-	onMessage    func(*Session, *Packet)
+	onMessage    func(*Session, any)
 	onConnect    func(*Session)
 	onDisconnect func(*Session, error)
 	sessions     *sync.Map
@@ -33,30 +33,26 @@ type SocketService struct {
 	stopCh       chan error
 }
 
-// NewSocketService create a new socket service
-func NewSocketService(laddr string) (*SocketService, error) {
+// Server create a new socket service
+func Server(laddr string) *SocketService {
 
-	l, err := net.Listen("tcp", laddr)
+	listen, _ := net.Listen("tcp", laddr)
 
-	if err != nil {
-		return nil, err
-	}
-
-	s := &SocketService{
+	server := &SocketService{
 		sessions:   &sync.Map{},
 		stopCh:     make(chan error),
 		hbInterval: 0 * time.Second,
 		hbTimeout:  0 * time.Second,
 		laddr:      laddr,
 		status:     STInited,
-		listener:   l,
+		listener:   listen,
 	}
 
-	return s, nil
+	return server
 }
 
 // RegMessageHandler register message handler
-func (s *SocketService) RegMessageHandler(handler func(*Session, *Packet)) {
+func (s *SocketService) RegMessageHandler(handler func(*Session, any)) {
 	s.onMessage = handler
 }
 
@@ -70,8 +66,8 @@ func (s *SocketService) RegDisconnectHandler(handler func(*Session, error)) {
 	s.onDisconnect = handler
 }
 
-// Serv Start socket service
-func (s *SocketService) Serv() {
+// Start Start socket service
+func (s *SocketService) Start() {
 
 	s.status = STRunning
 	ctx, cancel := context.WithCancel(context.Background())
@@ -134,9 +130,9 @@ func (s *SocketService) connectHandler(ctx context.Context, c net.Conn) {
 			}
 			return
 
-		case msg := <-conn.messageCh:
+		case packet := <-conn.messageCh:
 			if s.onMessage != nil {
-				s.onMessage(session, msg)
+				s.onMessage(session, packet)
 			}
 		}
 	}

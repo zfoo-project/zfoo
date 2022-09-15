@@ -4,7 +4,7 @@ type GatewayToProviderRequest struct {
 	Message string
 }
 
-func (protocol GatewayToProviderRequest) protocolId() int16 {
+func (protocol GatewayToProviderRequest) ProtocolId() int16 {
 	return 5000
 }
 
@@ -31,7 +31,7 @@ type GatewayToProviderResponse struct {
 	Message string
 }
 
-func (protocol GatewayToProviderResponse) protocolId() int16 {
+func (protocol GatewayToProviderResponse) ProtocolId() int16 {
 	return 5001
 }
 

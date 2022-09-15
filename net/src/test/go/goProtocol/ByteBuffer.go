@@ -163,15 +163,20 @@ func (byteBuffer *ByteBuffer) ReadShort() int16 {
 	return value
 }
 
-func (byteBuffer *ByteBuffer) WriteRawInt32(intValue int32) {
-	byteBuffer.WriteUByte(byte(intValue >> 24))
-	byteBuffer.WriteUByte(byte(intValue >> 16))
-	byteBuffer.WriteUByte(byte(intValue >> 8))
-	byteBuffer.WriteUByte(byte(intValue))
+func (byteBuffer *ByteBuffer) WriteRawInt32(value int32) {
+	byteBuffer.EnsureCapacity(4)
+	var bytesBuffer = bytes.NewBuffer([]byte{})
+	binary.Write(bytesBuffer, binary.BigEndian, value)
+	var byteArray = bytesBuffer.Bytes()
+	byteBuffer.WriteUBytes(byteArray)
 }
 
 func (byteBuffer *ByteBuffer) ReadRawInt32() int32 {
-	return int32(uint32(byteBuffer.ReadUByte())<<24 | uint32(byteBuffer.ReadUByte())<<16 | uint32(byteBuffer.ReadUByte())<<8 | uint32(byteBuffer.ReadUByte()))
+	var byteArray = byteBuffer.ReadUBytes(4)
+	bytesBuffer := bytes.NewBuffer(byteArray)
+	var value int32
+	binary.Read(bytesBuffer, binary.BigEndian, &value)
+	return value
 }
 
 func (byteBuffer *ByteBuffer) WriteInt(intValue int) {
@@ -444,7 +449,7 @@ func (byteBuffer *ByteBuffer) ReadPacket(protocolId int16) any {
 
 // -------------------------------------------------IProtocolRegistration-------------------------------------------------
 type IProtocolRegistration interface {
-	protocolId() int16
+	ProtocolId() int16
 
 	write(buffer *ByteBuffer, packet any)
 
@@ -459,7 +464,7 @@ func GetProtocol(protocolId int16) IProtocolRegistration {
 }
 
 func Write(buffer *ByteBuffer, packet any) {
-	var protocolId = packet.(IProtocolRegistration).protocolId()
+	var protocolId = packet.(IProtocolRegistration).ProtocolId()
 	buffer.WriteShort(protocolId)
 	var protocolRegistration = GetProtocol(protocolId)
 	protocolRegistration.write(buffer, packet)

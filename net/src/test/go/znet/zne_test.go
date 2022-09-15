@@ -12,43 +12,30 @@
 package znet
 
 import (
-	protocol "gonet/goProtocol"
 	"fmt"
+	protocol "gonet/goProtocol"
 	"net"
 	"testing"
 	"time"
 )
 
 func TestService(t *testing.T) {
-	host := "127.0.0.1:18787"
+	host := "127.0.0.1:9000"
 
-	ss, err := NewSocketService(host)
-	if err != nil {
-		return
-	}
+	server, _ := Server(host)
+	server.RegMessageHandler(HandleMessage)
+	server.RegConnectHandler(HandleConnect)
+	server.RegDisconnectHandler(HandleDisconnect)
 
-	// ss.SetHeartBeat(5*time.Second, 30*time.Second)
+	server.Start()
 
-	ss.RegMessageHandler(HandleMessage)
-	ss.RegConnectHandler(HandleConnect)
-	ss.RegDisconnectHandler(HandleDisconnect)
-
-	go NewClientConnect()
-
-	timer := time.NewTimer(time.Second * 1)
-	go func() {
-		<-timer.C
-		ss.Stop("stop service")
-		t.Log("service stoped")
-	}()
-
-	t.Log("service running on " + host)
-	ss.Serv()
+	// clientTest()
 }
 
-func HandleMessage(s *Session, msg *Packet) {
-	fmt.Println("receive protocolId:", msg)
-	fmt.Println("receive data:", string(msg.data))
+
+func HandleMessage(s *Session, packet any) {
+	fmt.Println("receive packet")
+	fmt.Println(packet)
 }
 
 func HandleDisconnect(s *Session, err error) {
@@ -59,26 +46,19 @@ func HandleConnect(s *Session) {
 	fmt.Println(s.conn.GetName() + " connected.")
 }
 
-func NewClientConnect() {
-	host := "127.0.0.1:18787"
-	tcpAddr, err := net.ResolveTCPAddr("tcp", host)
-	if err != nil {
-		return
-	}
+func clientTest() {
+	host := "127.0.0.1:9000"
+	tcpAddr, _ := net.ResolveTCPAddr("tcp", host)
 
-	conn, err := net.DialTCP("tcp", nil, tcpAddr)
-	if err != nil {
-		return
-	}
+	conn, _ := net.DialTCP("tcp", nil, tcpAddr)
 
-	var buffer = new(protocol.ByteBuffer)
 	var packet = new(protocol.TcpHelloRequest)
+	packet.Message = "Hello, This is Golang Client"
 
+	fmt.Println("send message")
 
-	msg := NewMessage(1, []byte("Hello Zero!"))
-	data, err := Encode(msg)
-	if err != nil {
-		return
-	}
-	conn.Write(data)
+	var buffer = Encode(packet)
+	conn.Write(buffer.ToBytes())
+
+	time.Sleep(time.Millisecond * 5000)
 }

@@ -4,7 +4,7 @@ type JProtobufHelloRequest struct {
 	Message string
 }
 
-func (protocol JProtobufHelloRequest) protocolId() int16 {
+func (protocol JProtobufHelloRequest) ProtocolId() int16 {
 	return 1500
 }
 
@@ -31,7 +31,7 @@ type JProtobufHelloResponse struct {
 	Message string
 }
 
-func (protocol JProtobufHelloResponse) protocolId() int16 {
+func (protocol JProtobufHelloResponse) ProtocolId() int16 {
 	return 1501
 }
 

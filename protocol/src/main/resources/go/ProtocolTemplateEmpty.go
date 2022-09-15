@@ -4,7 +4,7 @@ type {} struct {
 	{}
 }
 
-func (protocol {}) protocolId() int16 {
+func (protocol {}) ProtocolId() int16 {
 	return {}
 }
 

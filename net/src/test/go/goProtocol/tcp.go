@@ -4,7 +4,7 @@ type TcpHelloRequest struct {
 	Message string
 }
 
-func (protocol TcpHelloRequest) protocolId() int16 {
+func (protocol TcpHelloRequest) ProtocolId() int16 {
 	return 1300
 }
 
@@ -31,7 +31,7 @@ type TcpHelloResponse struct {
 	Message string
 }
 
-func (protocol TcpHelloResponse) protocolId() int16 {
+func (protocol TcpHelloResponse) ProtocolId() int16 {
 	return 1301
 }
 

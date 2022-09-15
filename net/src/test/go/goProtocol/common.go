@@ -6,7 +6,7 @@ type Message struct {
     Module int8
 }
 
-func (protocol Message) protocolId() int16 {
+func (protocol Message) ProtocolId() int16 {
 	return 100
 }
 
@@ -41,7 +41,7 @@ type Error struct {
     Module int
 }
 
-func (protocol Error) protocolId() int16 {
+func (protocol Error) ProtocolId() int16 {
 	return 101
 }
 
@@ -74,7 +74,7 @@ type Heartbeat struct {
 	
 }
 
-func (protocol Heartbeat) protocolId() int16 {
+func (protocol Heartbeat) ProtocolId() int16 {
 	return 102
 }
 
@@ -97,7 +97,7 @@ type Ping struct {
 	
 }
 
-func (protocol Ping) protocolId() int16 {
+func (protocol Ping) ProtocolId() int16 {
 	return 103
 }
 
@@ -120,7 +120,7 @@ type Pong struct {
 	Time int64
 }
 
-func (protocol Pong) protocolId() int16 {
+func (protocol Pong) ProtocolId() int16 {
 	return 104
 }
 
@@ -148,7 +148,7 @@ type PairLong struct {
     Value int64
 }
 
-func (protocol PairLong) protocolId() int16 {
+func (protocol PairLong) ProtocolId() int16 {
 	return 111
 }
 
@@ -179,7 +179,7 @@ type PairString struct {
     Value string
 }
 
-func (protocol PairString) protocolId() int16 {
+func (protocol PairString) ProtocolId() int16 {
 	return 112
 }
 
@@ -210,7 +210,7 @@ type PairLS struct {
     Value string
 }
 
-func (protocol PairLS) protocolId() int16 {
+func (protocol PairLS) ProtocolId() int16 {
 	return 113
 }
 
@@ -242,7 +242,7 @@ type TripleLong struct {
     Right int64
 }
 
-func (protocol TripleLong) protocolId() int16 {
+func (protocol TripleLong) ProtocolId() int16 {
 	return 114
 }
 
@@ -277,7 +277,7 @@ type TripleString struct {
     Right string
 }
 
-func (protocol TripleString) protocolId() int16 {
+func (protocol TripleString) ProtocolId() int16 {
 	return 115
 }
 
@@ -312,7 +312,7 @@ type TripleLSS struct {
     Right string
 }
 
-func (protocol TripleLSS) protocolId() int16 {
+func (protocol TripleLSS) ProtocolId() int16 {
 	return 116
 }
 

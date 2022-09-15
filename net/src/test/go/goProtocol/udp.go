@@ -4,7 +4,7 @@ type UdpHelloRequest struct {
 	Message string
 }
 
-func (protocol UdpHelloRequest) protocolId() int16 {
+func (protocol UdpHelloRequest) ProtocolId() int16 {
 	return 1200
 }
 
@@ -31,7 +31,7 @@ type UdpHelloResponse struct {
 	Message string
 }
 
-func (protocol UdpHelloResponse) protocolId() int16 {
+func (protocol UdpHelloResponse) ProtocolId() int16 {
 	return 1201
 }
 
