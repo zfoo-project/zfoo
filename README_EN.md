@@ -26,7 +26,7 @@ Why is zfoo protocol ?
 
 - The fastest custom format framework for Java binary serialization, with the fewest serialized bytes, more secure and
   compatible
-- The protocol currently supports C++ C# Java Javascript TypeScript GDScript Lua, which can easily achieve
+- The protocol currently supports C++ C# Go Java Javascript TypeScript GDScript Lua, which can easily achieve
   cross-platform
 - In the single-threaded benchmark test, serialization and deserialization are 50% faster than Protobuf and 100% faster
   than Kryo

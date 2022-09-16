@@ -26,7 +26,7 @@ Why is zfoo protocol ?
 -----------
 
 - Java二进制序列化速度最快的自定义格式框架，并且为序列化字节最少的框架，更加安全，可前后兼容
-- 协议目前原生支持 C++ C# Java Javascript TypeScript GDScript Lua，可以轻易实现跨平台
+- 协议目前原生支持 C++ C# Java Go Javascript TypeScript GDScript Lua，可以轻易实现跨平台
 - 单线程的Benchmark测试中，序列化和反序列化速度比Protobuf快50%，比Kryo快100%
 
 Ⅰ. zfoo简介🚩

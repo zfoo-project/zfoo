@@ -2,7 +2,7 @@
 
 - [zfoo protocol](https://github.com/zfoo-project/zfoo/blob/main/protocol/README.md)
   是目前的Java二进制序列化和反序列化速度最快的框架，并且为序列化字节最少的框架
-- 协议目前原生支持 **C++ Java Javascript C# Lua GDScript**，可以轻易实现跨平台
+- 协议目前原生支持 **C++ Java Javascript C# Go Lua GDScript**，可以轻易实现跨平台
 - 协议可以自定义私有协议格式，让你的协议更加安全，支持增加字段和兼容前后版本协议
 - 兼容protobuf，支持生成protobuf协议文件，提供从pojo到proto的生成方式
 
