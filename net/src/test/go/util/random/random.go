@@ -65,3 +65,5 @@ func getRandSeek() int64 {
 	l.Unlock()
 	return time.Now().UnixNano() + randSeek
 }
+
+
