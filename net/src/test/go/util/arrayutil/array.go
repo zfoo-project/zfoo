@@ -9,9 +9,11 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package sliceutil
+package arrayutil
 
 import (
+	"math"
+	"strconv"
 	"strings"
 )
 
@@ -218,3 +220,158 @@ func DifferenceInterface(slice1, slice2 []interface{}) []interface{} {
 	}
 	return n
 }
+
+
+
+// 合并数组
+func MergeArray(dest []interface{}, src []interface{}) (result []interface{}) {
+	result = make([]interface{}, len(dest)+len(src))
+	copy(result, dest)
+	copy(result[len(dest):], src)
+	return
+}
+
+// 删除数组
+func DeleteArray(src []interface{}, index int) (result []interface{}) {
+	result = append(src[:index], src[(index+1):]...)
+	return
+}
+
+// []string => []int
+func ArrayStr2Int(data []string) []int {
+	var (
+		arr = make([]int, 0, len(data))
+	)
+	if len(data) == 0 {
+		return arr
+	}
+	for i, _ := range data {
+		var num, _ = strconv.Atoi(data[i])
+		arr = append(arr, num)
+	}
+	return arr
+}
+
+// []int => []string
+func ArrayInt2Str(data []int) []string {
+	var (
+		arr = make([]string, 0, len(data))
+	)
+	if len(data) == 0 {
+		return arr
+	}
+	for i, _ := range data {
+		arr = append(arr, strconv.Itoa(data[i]))
+	}
+	return arr
+}
+
+// str[TrimSpace] in string list
+func TrimSpaceStrInArray(str string, data []string) bool {
+	if len(data) > 0 {
+		for _, row := range data {
+			if str == strings.TrimSpace(row) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// str in string list
+func StrInArray(str string, data []string) bool {
+	if len(data) > 0 {
+		for _, row := range data {
+			if str == row {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// str in int list
+func IntInArray(num int, data []int) bool {
+	if len(data) > 0 {
+		for _, row := range data {
+			if num == row {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+
+var defSep = "_"
+
+/**
+笛卡尔组合
+测试用例
+cart := [][]string{
+	{"a1", "a2"},
+	{"b1", "b2"},
+}
+CartCombine(cart)
+ */
+func CartCombine(data [][]string, sep string) []string {
+	var _sep = defSep
+	if sep != "" {
+		_sep = sep
+	}
+	var _r []string
+	lens := func(i int) int { return len(data[i]) }
+	for i := make([]int, len(data)); i[0] < lens(0); next(i, lens) {
+		var r []string
+		for j, k := range i {
+			r = append(r, data[j][k])
+		}
+		_r = append(_r, strings.Join(r, _sep))
+	}
+	return _r
+}
+
+func next(i []int, lens func(i int) int) {
+	for j := len(i) - 1; j >= 0; j-- {
+		i[j]++
+		if j == 0 || i[j] < lens(j) {
+			return
+		}
+		i[j] = 0
+	}
+}
+
+
+const (
+	TOTAL_PAGE_FIELD   = "total_page"
+	PAGE_FIELD         = "page"
+	ROWS_FIELD         = "rows"
+	TOTAL_RECORD_FIELD = "total_record"
+)
+
+/**
+	page 当前页
+	listRow 每页行数
+    total   数据总数
+
+	分页数据填充 返回
+		=> map[string]int
+			["total_page"] => 1,
+			["page"] => 1,
+			["rows"] => 20,
+			["total_record"] => 3,
+*/
+func CommaPaginator(page int, listRow int, total int) map[string]int {
+	totalpages := int(math.Ceil(float64(total) / float64(listRow)))
+	if page <= 0 {
+		page = 1
+	}
+	paginator := make(map[string]int)
+	paginator[TOTAL_PAGE_FIELD] = totalpages
+	paginator[PAGE_FIELD] = page
+	paginator[ROWS_FIELD] = listRow
+	paginator[TOTAL_RECORD_FIELD] = total
+	return paginator
+}
+
+

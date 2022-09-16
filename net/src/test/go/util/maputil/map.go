@@ -11,7 +11,10 @@
  */
 package maputil
 
-import "strings"
+import (
+	"reflect"
+	"strings"
+)
 
 // IsEmpty ...
 func IsEmpty(mp map[string]string) bool {
@@ -79,3 +82,16 @@ func Merge(src, dst map[string]string) map[string]string {
 	}
 	return dst
 }
+
+// 结构体转map
+func Struct2Map(obj interface{}) map[string]interface{} {
+	t := reflect.TypeOf(obj)
+	v := reflect.ValueOf(obj)
+
+	var data = make(map[string]interface{})
+	for i := 0; i < t.NumField(); i++ {
+		data[t.Field(i).Name] = v.Field(i).Interface()
+	}
+	return data
+}
+

@@ -15,8 +15,10 @@ import (
 	"bytes"
 	"net/url"
 	"regexp"
+	"strconv"
 	"strings"
 	"unicode"
+	"unsafe"
 )
 
 // Reverse 反转字符串
@@ -124,4 +126,127 @@ func TrimSpace(s string) string {
 	s = strings.Trim(s, "\n")
 	s = strings.Trim(s, "\t")
 	return s
+}
+
+func CamelCase(s string) string {
+	if s == "" {
+		return ""
+	}
+	t := make([]byte, 0, 32)
+	i := 0
+	if s[0] == '_' {
+		t = append(t, 'X')
+		i++
+	}
+	for ; i < len(s); i++ {
+		c := s[i]
+		if c == '_' && i+1 < len(s) && isASCIIUpper(s[i+1]) {
+			continue
+		}
+		if isASCIIDigit(c) {
+			t = append(t, c)
+			continue
+		}
+
+		if isASCIIUpper(c) {
+			c ^= ' '
+		}
+		t = append(t, c)
+
+		for i+1 < len(s) && isASCIIUpper(s[i+1]) {
+			i++
+			t = append(t, '_')
+			t = append(t, bytes.ToLower([]byte{s[i]})[0])
+		}
+	}
+	return string(t)
+}
+func isASCIIUpper(c byte) bool {
+	return 'A' <= c && c <= 'Z'
+}
+
+func isASCIIDigit(c byte) bool {
+	return '0' <= c && c <= '9'
+}
+
+// 手机号码检测
+func CheckIsMobile(mobileNum string) bool {
+	var regular = "^1[345789]{1}\\d{9}$"
+	reg := regexp.MustCompile(regular)
+	return reg.MatchString(mobileNum)
+}
+
+// 判断是否是18或15位身份证
+func IsIdCard(cardNo string) bool {
+	// 18位身份证 ^(\d{17})([0-9]|X)$
+	if m, _ := regexp.MatchString(`(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)`, cardNo); !m {
+		return false
+	}
+	return true
+}
+
+// 字节转字符串
+func BytesToString(data []byte) string {
+	return *(*string)(unsafe.Pointer(&data))
+}
+
+// 字符串转字节数组
+func StringToBytes(data string) []byte {
+	return *(*[]byte)(unsafe.Pointer(&data))
+}
+
+// 判断字符串是否为中文[精确度需要反复试验]
+func IsContainCN(str string) bool {
+	var hzRegexp = regexp.MustCompile("[\u4e00-\u9fa5]+")
+	return hzRegexp.MatchString(str)
+}
+
+// Emoji表情解码
+func UnicodeEmojiDecode(s string) string {
+	//emoji表情的数据表达式
+	re := regexp.MustCompile("\\[[\\\\u0-9a-zA-Z]+\\]")
+	// 提取emoji数据表达式
+	reg := regexp.MustCompile("\\[\\\\u|]")
+	src := re.FindAllString(s, -1)
+	for i := 0; i < len(src); i++ {
+		e := reg.ReplaceAllString(src[i], "")
+		p, err := strconv.ParseInt(e, 16, 32)
+		if err == nil {
+			s = strings.Replace(s, src[i], string(rune(p)), -1)
+		}
+	}
+	return s
+}
+
+/**
+  身份证手机号填充
+*/
+
+func SignIdcard(idcard string) string {
+	cp := idcard
+	leth := len(cp)
+	return cp[0:4] + " **** **** " + cp[leth-4:]
+}
+
+func SignMobile(mobile string) string {
+	cp := mobile
+	leth := len(cp)
+	return cp[0:3] + " **** " + cp[leth-4:]
+}
+
+
+// Emoji表情转换
+func UnicodeEmojiCode(s string) string {
+	ret := ""
+	rs := []rune(s)
+	for i := 0; i < len(rs); i++ {
+		if len(string(rs[i])) == 4 {
+			u := `[\u` + strconv.FormatInt(int64(rs[i]), 16) + `]`
+			ret += u
+
+		} else {
+			ret += string(rs[i])
+		}
+	}
+	return ret
 }
