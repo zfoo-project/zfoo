@@ -66,7 +66,7 @@ Perfect work development process, complete online solution
 - [FAQ](./doc/FAQ.md)，There are standard demo display and instructions in the test folder of each project directory,
   which can be run directly
 
-- [zfoo video tutorials](./doc/视频教程.md)，In the continuous update, it is recommended to watch the hands-on instructional
+- [zfoo video tutorials](./doc/video-tutorial.md)，In the continuous update, it is recommended to watch the hands-on instructional
   video first.
 
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》，novice friendly,
