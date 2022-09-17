@@ -76,7 +76,7 @@ cpu： i9900k
 ### Ⅵ. 数据类型
 
 - 为了代码的优雅，还有防止不同层混用协议类造成一些潜在的并发问题，zfoo强制要求协议类必须实现IPacket接口
-  
+
 - 协议类必须标注协议号，有两种方式
     - 第一种使用静态常量+接口：public static final transient short PROTOCOL_ID的"协议序列号"，这个协议号的值必须和IPacket接口返回的值一样
     - 第二种使用注解：@Protocol(id = protocolId)
@@ -105,3 +105,17 @@ cpu： i9900k
 - 正式环境为了版本兼容，避免修改字段名称，内部默认使用字段的名称按照字符串的自然顺序来依次读写的（也可以自定义），所以会导致序列化出现异常
 - 正式环境为了版本兼容，避免减少字段，没必要一定要删除一个不需要的字段，所以不考虑支持这种减少字段兼容协议的情况
 - 设计模式六大原则中的开闭原则是对扩展开放，对修改关闭。协议的设计涉及到功能应该也要遵守这个原则，优先增加新的协议而不是修改现有协议
+
+### Ⅷ. 在zfoo中使用Protobuf
+
+- zfoo只提供了jprotobuf那种pojo的方式使用protobuf，但是可以通过pojo对象生成proto文件给客户端使用
+
+- [jprotobuf](https://github.com/jhunters/jprotobuf) 针对Java程序开发一套简易类库，可以直接使用简单的pojo对象无需再去了解proto文件操作与语法
+
+- 通过pojo对象生成proto文件给客户端使用，[生成proto配置](src/test/resources/protobuf.xml)
+
+- 也可以自定义自己的生成方式，
+  [使用代码自定义生成proto](https://github.com/zfoo-project/tank-game-server/tree/main/common/src/main/java/com/zfoo/tank/common/generate)
+
+
+
