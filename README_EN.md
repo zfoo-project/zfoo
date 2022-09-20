@@ -43,7 +43,7 @@ Perfect work development process, complete online solution
 
 - Java projects, spring projects, distributed projects, container projects， **hot update code without
   downtime** [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
-- Excel configuration is automatically mapped and parsed，**Online hot update of Excel
+- Excel json csv configuration is automatically mapped and parsed，**Online hot update of Excel
   configuration** [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
 - Automapping framework for MongoDB [orm](orm/README.md)
 - Event bus [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
