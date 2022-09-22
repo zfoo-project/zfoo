@@ -76,14 +76,6 @@ cpu： i9900k
 
 ### Ⅵ. 数据类型
 
-- 为了代码的优雅，还有防止不同层混用协议类造成一些潜在的并发问题，zfoo强制要求协议类必须实现IPacket接口
-
-- 协议类必须标注协议号，有两种方式
-    - 第一种使用静态常量+接口：public static final transient short PROTOCOL_ID的"协议序列号"，这个协议号的值必须和IPacket接口返回的值一样
-    - 第二种使用注解：@Protocol(id = protocolId)
-
-- 协议类必须是简单的javabean，不能继承任何其它的类，但是可以继承接口
-
 - 默认的数据格式支持，无需用户手动注册，[参考类定义](src/test/java/com/zfoo/protocol/packet/ComplexObject.java)
     - boolean，byte，short，int，long，float，double，char，String
     - Boolean，Byte，Short，Integer，Long，Float，Double，Character，序列化的时候如果null，会给个默认值0（Character默认值为Character.MIN_VALUE）
@@ -101,6 +93,50 @@ cpu： i9900k
     - 循环引用，虽然底层支持循环引用，但是考虑到循环引用带来语义上难以理解，容易出现错误，所以就屏蔽了
 
 ### Ⅶ. 协议规范
+
+- 协议类必须是简单的javabean，不能继承任何其它的类，但是可以继承接口
+
+- 为了防止代码里Object满天飞，还有不同层混用协议类造成一些潜在的并发问题，zfoo强制要求协议类必须实现IPacket接口
+
+```
+现在IPacket的接口只是一个标识接口，继承IPacket的设计主要是为了让代码容易理解一点，改为只继承Object也并没有很大工作量
+```
+
+- 协议号定义为short类型是为了减少包体积和内存大小，一个包可以减少2个byte，每个协议的在应用内存也可以降低6byte（protocols + IProtocolRegistration + protocolIdMap）
+
+```
+改成int只需要全局替换short protocolId()  -> int protocolId() ，代码里大部分都是用的 var 自动推导，只需要花10分钟就能改好，没有什么改动成本
+```
+
+- 协议类必须标注协议号，有两种方式
+    - 第一种使用注解：@Protocol(id = protocolId)
+      ```
+      @Protocol(id = 104)
+      public class SimpleObject implements IPacket {
+      
+          public int c;
+          public boolean g;
+      
+      }
+      ```
+
+    - 第二种使用静态常量+接口：public static final transient short PROTOCOL_ID的"协议序列号"，这个协议号的值必须和IPacket接口返回的值一样
+      ```
+      public class SimpleObject implements IPacket {
+      
+          public static final transient short PROTOCOL_ID = 104;
+      
+          public int c;
+      
+          public boolean g;
+      
+          @Override
+          public short protocolId() {
+              return PROTOCOL_ID;
+          }
+      
+      }
+      ```
 
 - 如果为了版本兼容，增加字段，需要加上Compatible注解，order需要自然增大，这样就可以保证新老协议可以互相兼容
 - 正式环境为了版本兼容，避免修改字段名称，内部默认使用字段的名称按照字符串的自然顺序来依次读写的（也可以自定义），所以会导致序列化出现异常
