@@ -105,7 +105,7 @@ cpu： i9900k
 - 协议号定义为short类型是为了减少包体积和内存大小，一个包可以减少2个byte，每个协议的在应用内存也可以降低6byte（protocols + IProtocolRegistration + protocolIdMap）
 
 ```
-改成int只需要全局替换short protocolId()  -> int protocolId() ，代码里大部分都是用的 var 自动推导，只需要花10分钟就能改好，没有什么改动成本
+一个项目的协议体类很难超过3w，会有工具自动把你的协议号打包的紧凑一点，这样你的协议号就不会超过3w了
 ```
 
 - 协议类必须标注协议号，有两种方式
