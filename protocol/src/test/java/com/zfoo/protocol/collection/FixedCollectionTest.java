@@ -12,13 +12,14 @@
 
 package com.zfoo.protocol.collection;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class ListTest {
+public class FixedCollectionTest {
 
     @Test
     public void testFixedSizeListInt() {
@@ -44,6 +45,23 @@ public class ListTest {
                 // test iterator
             }
         }
+    }
+
+
+    @Test
+    public void testFixedHashInt() {
+        var list = new FixedSizeListInt(3);
+        list.set(0, 1);
+        list.set(1, 2);
+        list.set(2, 4);
+        var set = new FixedHashSetInt(list);
+        for (int i = 0; i < set.size(); i++) {
+            for (var ele : set) {
+                // test iterator
+            }
+        }
+
+        Assert.assertTrue(set.contains(4));
     }
 
 }
