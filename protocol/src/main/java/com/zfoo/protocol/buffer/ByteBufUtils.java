@@ -418,9 +418,9 @@ public abstract class ByteBufUtils {
 
     public static List<IPacket> readPacketList(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeList(length);
+        var list = new FixedSizeList<IPacket>(length);
         for (var i = 0; i < length; i++) {
-            list.set(i, protocolRegistration.read(byteBuf));
+            list.set(i, (IPacket) protocolRegistration.read(byteBuf));
         }
         return list;
     }
@@ -430,12 +430,7 @@ public abstract class ByteBufUtils {
     }
 
     public static Set<IPacket> readPacketSet(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
-        var length = readInt(byteBuf);
-        var set = (Set<IPacket>) CollectionUtils.newFixedSet(length);
-        for (var i = 0; i < length; i++) {
-            set.add((IPacket) protocolRegistration.read(byteBuf));
-        }
-        return set;
+        return new FixedHashSet<IPacket>((FixedSizeList<IPacket>) readPacketList(byteBuf, protocolRegistration));
     }
 
     public static void writeIntIntMap(ByteBuf byteBuf, Map<Integer, Integer> map) {
@@ -765,12 +760,7 @@ public abstract class ByteBufUtils {
     }
 
     public static Set<Boolean> readBooleanSet(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var set = (Set<Boolean>) CollectionUtils.newFixedSet(length);
-        for (var i = 0; i < length; i++) {
-            set.add(readBooleanBox(byteBuf));
-        }
-        return set;
+        return new FixedHashSetBoolean((FixedSizeListBoolean) readBooleanList(byteBuf));
     }
 
     //---------------------------------byte--------------------------------------
@@ -843,12 +833,7 @@ public abstract class ByteBufUtils {
     }
 
     public static Set<Byte> readByteSet(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var set = (Set<Byte>) CollectionUtils.newFixedSet(length);
-        for (var i = 0; i < length; i++) {
-            set.add(readByteBox(byteBuf));
-        }
-        return set;
+        return new FixedHashSetByte((FixedSizeListByte) readByteList(byteBuf));
     }
 
     //---------------------------------short--------------------------------------
@@ -929,12 +914,7 @@ public abstract class ByteBufUtils {
     }
 
     public static Set<Short> readShortSet(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var set = (Set<Short>) CollectionUtils.newFixedSet(length);
-        for (var i = 0; i < length; i++) {
-            set.add(readShortBox(byteBuf));
-        }
-        return set;
+        return new FixedHashSetShort((FixedSizeListShort) readShortList(byteBuf));
     }
 
 
@@ -1008,12 +988,7 @@ public abstract class ByteBufUtils {
     }
 
     public static Set<Integer> readIntSet(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var set = (Set<Integer>) CollectionUtils.newFixedSet(length);
-        for (var i = 0; i < length; i++) {
-            set.add(readIntBox(byteBuf));
-        }
-        return set;
+        return new FixedHashSetInt((FixedSizeListInt) readIntList(byteBuf));
     }
 
 
@@ -1087,12 +1062,7 @@ public abstract class ByteBufUtils {
     }
 
     public static Set<Long> readLongSet(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var set = (Set<Long>) CollectionUtils.newFixedSet(length);
-        for (var i = 0; i < length; i++) {
-            set.add(readLongBox(byteBuf));
-        }
-        return set;
+        return new FixedHashSetLong((FixedSizeListLong) readLongList(byteBuf));
     }
 
     //---------------------------------float--------------------------------------
@@ -1173,12 +1143,7 @@ public abstract class ByteBufUtils {
     }
 
     public static Set<Float> readFloatSet(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var set = (Set<Float>) CollectionUtils.newFixedSet(length);
-        for (var i = 0; i < length; i++) {
-            set.add(readFloatBox(byteBuf));
-        }
-        return set;
+        return new FixedHashSetFloat((FixedSizeListFloat) readFloatList(byteBuf));
     }
 
     //---------------------------------double--------------------------------------
@@ -1259,12 +1224,7 @@ public abstract class ByteBufUtils {
     }
 
     public static Set<Double> readDoubleSet(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var set = (Set<Double>) CollectionUtils.newFixedSet(length);
-        for (var i = 0; i < length; i++) {
-            set.add(readDoubleBox(byteBuf));
-        }
-        return set;
+        return new FixedHashSetDouble((FixedSizeListDouble) readDoubleList(byteBuf));
     }
 
     //---------------------------------string--------------------------------------
