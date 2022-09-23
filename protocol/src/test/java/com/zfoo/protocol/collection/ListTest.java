@@ -21,8 +21,8 @@ import org.junit.Test;
 public class ListTest {
 
     @Test
-    public void testFixedSizeIntList() {
-        var list = new FixedSizeIntList(3);
+    public void testFixedSizeListInt() {
+        var list = new FixedSizeListInt(3);
         list.set(0, 1);
         list.set(1, 2);
         list.set(2, 3);

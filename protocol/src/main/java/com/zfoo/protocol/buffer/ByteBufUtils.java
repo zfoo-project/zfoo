@@ -831,9 +831,9 @@ public abstract class ByteBufUtils {
 
     public static List<Byte> readByteList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = (List<Byte>) CollectionUtils.newFixedList(length);
+        var list = new FixedSizeListByte(length);
         for (var i = 0; i < length; i++) {
-            list.add(readByteBox(byteBuf));
+            list.set(i, readByte(byteBuf));
         }
         return list;
     }
@@ -996,7 +996,7 @@ public abstract class ByteBufUtils {
 
     public static List<Integer> readIntList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeIntList(length);
+        var list = new FixedSizeListInt(length);
         for (var i = 0; i < length; i++) {
             list.set(i, readInt(byteBuf));
         }

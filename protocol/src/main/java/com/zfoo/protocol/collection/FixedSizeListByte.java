@@ -21,14 +21,13 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeIntList implements List<Integer> {
+public class FixedSizeListByte implements List<Byte> {
 
-    private final int[] array;
+    private final byte[] array;
 
-    public FixedSizeIntList(int initialCapacity) {
-        this.array = new int[initialCapacity];
+    public FixedSizeListByte(int initialCapacity) {
+        this.array = new byte[initialCapacity];
     }
-
 
     @Override
     public int size() {
@@ -41,28 +40,28 @@ public class FixedSizeIntList implements List<Integer> {
     }
 
     @Override
-    public boolean contains(Object ele) {
-        return ArrayUtils.toList(array).stream().anyMatch(it -> ele.equals(it));
-    }
-
-    @Override
-    public Integer get(int index) {
+    public Byte get(int index) {
         return array[index];
     }
 
-    public int getRaw(int index) {
+    public byte getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Integer set(int index, Integer ele) {
+    public Byte set(int index, Byte ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, int ele) {
+    public void set(int index, byte ele) {
         array[index] = ele;
+    }
+
+    @Override
+    public boolean contains(Object ele) {
+        return ArrayUtils.toList(array).stream().anyMatch(it -> ele.equals(it));
     }
 
     @Override
@@ -92,42 +91,42 @@ public class FixedSizeIntList implements List<Integer> {
     }
 
     @Override
-    public Iterator<Integer> iterator() {
+    public Iterator<Byte> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Integer> listIterator() {
+    public ListIterator<Byte> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Integer> listIterator(int index) {
+    public ListIterator<Byte> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Integer> subList(int fromIndex, int toIndex) {
+    public List<Byte> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Integer e) {
+    public boolean add(Byte e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Integer element) {
+    public void add(int index, Byte element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Integer> collection) {
+    public boolean addAll(Collection<? extends Byte> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Integer> collection) {
+    public boolean addAll(int index, Collection<? extends Byte> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -137,7 +136,7 @@ public class FixedSizeIntList implements List<Integer> {
     }
 
     @Override
-    public Integer remove(int index) {
+    public Byte remove(int index) {
         throw new UnsupportedOperationException();
     }
 
