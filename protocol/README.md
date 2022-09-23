@@ -100,6 +100,8 @@ cpu： i9900k
 
 ```
 现在IPacket的接口只是一个标识接口，继承IPacket的设计主要是为了让代码容易理解一点，改为只继承Object也并没有很大工作量
+
+继承IPacket的设计还有跨语言层面上的考虑，极大的简化了实现其它语言的序列化和反序列化难度，统一了其它语言的代码实现
 ```
 
 - 协议号定义为short类型是为了减少包体积和内存大小，一个包可以减少2个byte，每个协议的在应用内存也可以降低6byte（protocols + IProtocolRegistration + protocolIdMap）
