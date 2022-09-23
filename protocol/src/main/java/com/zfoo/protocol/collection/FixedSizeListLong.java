@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeStringList implements List<String> {
+public class FixedSizeListLong implements List<Long> {
 
-    private final String[] array;
+    private final long[] array;
 
-    public FixedSizeStringList(int initialCapacity) {
-        this.array = new String[initialCapacity];
+    public FixedSizeListLong(int initialCapacity) {
+        this.array = new long[initialCapacity];
     }
 
     @Override
@@ -40,15 +40,23 @@ public class FixedSizeStringList implements List<String> {
     }
 
     @Override
-    public String get(int index) {
+    public Long get(int index) {
+        return array[index];
+    }
+
+    public long getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public String set(int index, String ele) {
+    public Long set(int index, Long ele) {
         var old = array[index];
         array[index] = ele;
         return old;
+    }
+
+    public void set(int index, long ele) {
+        array[index] = ele;
     }
 
     @Override
@@ -83,42 +91,42 @@ public class FixedSizeStringList implements List<String> {
     }
 
     @Override
-    public Iterator<String> iterator() {
+    public Iterator<Long> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<String> listIterator() {
+    public ListIterator<Long> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<String> listIterator(int index) {
+    public ListIterator<Long> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<String> subList(int fromIndex, int toIndex) {
+    public List<Long> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(String e) {
+    public boolean add(Long e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, String element) {
+    public void add(int index, Long element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends String> collection) {
+    public boolean addAll(Collection<? extends Long> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends String> collection) {
+    public boolean addAll(int index, Collection<? extends Long> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -128,7 +136,7 @@ public class FixedSizeStringList implements List<String> {
     }
 
     @Override
-    public String remove(int index) {
+    public Long remove(int index) {
         throw new UnsupportedOperationException();
     }
 

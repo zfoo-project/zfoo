@@ -18,15 +18,17 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
+ * 初始化就确定了大小的List，不可添加和删除，但是可以set，就像一个数组一样
+ *
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeFloatList implements List<Float> {
+public class FixedSizeList<E> implements List<E> {
 
-    private final float[] array;
+    private final Object[] array;
 
-    public FixedSizeFloatList(int initialCapacity) {
-        this.array = new float[initialCapacity];
+    public FixedSizeList(int initialCapacity) {
+        this.array = new Object[initialCapacity];
     }
 
     @Override
@@ -40,23 +42,15 @@ public class FixedSizeFloatList implements List<Float> {
     }
 
     @Override
-    public Float get(int index) {
-        return array[index];
-    }
-
-    public float getRaw(int index) {
-        return array[index];
+    public E get(int index) {
+        return (E) array[index];
     }
 
     @Override
-    public Float set(int index, Float ele) {
+    public E set(int index, E ele) {
         var old = array[index];
         array[index] = ele;
-        return old;
-    }
-
-    public void set(int index, float ele) {
-        array[index] = ele;
+        return (E) old;
     }
 
     @Override
@@ -91,42 +85,42 @@ public class FixedSizeFloatList implements List<Float> {
     }
 
     @Override
-    public Iterator<Float> iterator() {
-        return ArrayUtils.toList(array).iterator();
+    public Iterator<E> iterator() {
+        return (Iterator<E>) ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Float> listIterator() {
-        return ArrayUtils.toList(array).listIterator();
+    public ListIterator<E> listIterator() {
+        return (ListIterator<E>) ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Float> listIterator(int index) {
-        return ArrayUtils.toList(array).listIterator(index);
+    public ListIterator<E> listIterator(int index) {
+        return (ListIterator<E>) ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Float> subList(int fromIndex, int toIndex) {
-        return ArrayUtils.toList(array).subList(fromIndex, toIndex);
+    public List<E> subList(int fromIndex, int toIndex) {
+        return (List<E>) ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Float e) {
+    public boolean add(E e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Float element) {
+    public void add(int index, E element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Float> collection) {
+    public boolean addAll(Collection<? extends E> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Float> collection) {
+    public boolean addAll(int index, Collection<? extends E> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +130,7 @@ public class FixedSizeFloatList implements List<Float> {
     }
 
     @Override
-    public Float remove(int index) {
+    public E remove(int index) {
         throw new UnsupportedOperationException();
     }
 

@@ -418,9 +418,9 @@ public abstract class ByteBufUtils {
 
     public static List<IPacket> readPacketList(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var list = (List<IPacket>) CollectionUtils.newFixedList(length);
+        var list = new FixedSizeList(length);
         for (var i = 0; i < length; i++) {
-            list.add((IPacket) protocolRegistration.read(byteBuf));
+            list.set(i, protocolRegistration.read(byteBuf));
         }
         return list;
     }
@@ -753,7 +753,7 @@ public abstract class ByteBufUtils {
 
     public static List<Boolean> readBooleanList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeBooleanList(length);
+        var list = new FixedSizeListBoolean(length);
         for (var i = 0; i < length; i++) {
             list.set(i, readBoolean(byteBuf));
         }
@@ -917,7 +917,7 @@ public abstract class ByteBufUtils {
 
     public static List<Short> readShortList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeShortList(length);
+        var list = new FixedSizeListShort(length);
         for (var i = 0; i < length; i++) {
             list.set(i, readShort(byteBuf));
         }
@@ -1075,7 +1075,7 @@ public abstract class ByteBufUtils {
 
     public static List<Long> readLongList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeLongList(length);
+        var list = new FixedSizeListLong(length);
         for (var i = 0; i < length; i++) {
             list.set(i, readLong(byteBuf));
         }
@@ -1161,7 +1161,7 @@ public abstract class ByteBufUtils {
 
     public static List<Float> readFloatList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeFloatList(length);
+        var list = new FixedSizeListFloat(length);
         for (var i = 0; i < length; i++) {
             list.set(i, readFloat(byteBuf));
         }
@@ -1247,7 +1247,7 @@ public abstract class ByteBufUtils {
 
     public static List<Double> readDoubleList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeDoubleList(length);
+        var list = new FixedSizeListDouble(length);
         for (var i = 0; i < length; i++) {
             list.set(i, readDouble(byteBuf));
         }
@@ -1305,7 +1305,7 @@ public abstract class ByteBufUtils {
 
     public static List<String> readStringList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeStringList(length);
+        var list = new FixedSizeList(length);
         for (var i = 0; i < length; i++) {
             list.set(i, readString(byteBuf));
         }

@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeLongList implements List<Long> {
+public class FixedSizeListBoolean implements List<Boolean> {
 
-    private final long[] array;
+    private final boolean[] array;
 
-    public FixedSizeLongList(int initialCapacity) {
-        this.array = new long[initialCapacity];
+    public FixedSizeListBoolean(int initialCapacity) {
+        this.array = new boolean[initialCapacity];
     }
 
     @Override
@@ -40,22 +40,22 @@ public class FixedSizeLongList implements List<Long> {
     }
 
     @Override
-    public Long get(int index) {
+    public Boolean get(int index) {
         return array[index];
     }
 
-    public long getRaw(int index) {
+    public boolean getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Long set(int index, Long ele) {
+    public Boolean set(int index, Boolean ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, long ele) {
+    public void set(int index, boolean ele) {
         array[index] = ele;
     }
 
@@ -91,42 +91,42 @@ public class FixedSizeLongList implements List<Long> {
     }
 
     @Override
-    public Iterator<Long> iterator() {
+    public Iterator<Boolean> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Long> listIterator() {
+    public ListIterator<Boolean> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Long> listIterator(int index) {
+    public ListIterator<Boolean> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Long> subList(int fromIndex, int toIndex) {
+    public List<Boolean> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Long e) {
+    public boolean add(Boolean e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Long element) {
+    public void add(int index, Boolean element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Long> collection) {
+    public boolean addAll(Collection<? extends Boolean> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Long> collection) {
+    public boolean addAll(int index, Collection<? extends Boolean> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +136,7 @@ public class FixedSizeLongList implements List<Long> {
     }
 
     @Override
-    public Long remove(int index) {
+    public Boolean remove(int index) {
         throw new UnsupportedOperationException();
     }
 

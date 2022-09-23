@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeShortList implements List<Short> {
+public class FixedSizeListDouble implements List<Double> {
 
-    private final short[] array;
+    private final double[] array;
 
-    public FixedSizeShortList(int initialCapacity) {
-        this.array = new short[initialCapacity];
+    public FixedSizeListDouble(int initialCapacity) {
+        this.array = new double[initialCapacity];
     }
 
     @Override
@@ -40,22 +40,22 @@ public class FixedSizeShortList implements List<Short> {
     }
 
     @Override
-    public Short get(int index) {
+    public Double get(int index) {
         return array[index];
     }
 
-    public short getRaw(int index) {
+    public double getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Short set(int index, Short ele) {
+    public Double set(int index, Double ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, short ele) {
+    public void set(int index, double ele) {
         array[index] = ele;
     }
 
@@ -91,42 +91,42 @@ public class FixedSizeShortList implements List<Short> {
     }
 
     @Override
-    public Iterator<Short> iterator() {
+    public Iterator<Double> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Short> listIterator() {
+    public ListIterator<Double> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Short> listIterator(int index) {
+    public ListIterator<Double> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Short> subList(int fromIndex, int toIndex) {
+    public List<Double> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Short e) {
+    public boolean add(Double e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Short element) {
+    public void add(int index, Double element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Short> collection) {
+    public boolean addAll(Collection<? extends Double> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Short> collection) {
+    public boolean addAll(int index, Collection<? extends Double> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +136,7 @@ public class FixedSizeShortList implements List<Short> {
     }
 
     @Override
-    public Short remove(int index) {
+    public Double remove(int index) {
         throw new UnsupportedOperationException();
     }
 

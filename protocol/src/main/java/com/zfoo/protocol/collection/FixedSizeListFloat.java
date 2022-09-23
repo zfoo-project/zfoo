@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeDoubleList implements List<Double> {
+public class FixedSizeListFloat implements List<Float> {
 
-    private final double[] array;
+    private final float[] array;
 
-    public FixedSizeDoubleList(int initialCapacity) {
-        this.array = new double[initialCapacity];
+    public FixedSizeListFloat(int initialCapacity) {
+        this.array = new float[initialCapacity];
     }
 
     @Override
@@ -40,22 +40,22 @@ public class FixedSizeDoubleList implements List<Double> {
     }
 
     @Override
-    public Double get(int index) {
+    public Float get(int index) {
         return array[index];
     }
 
-    public double getRaw(int index) {
+    public float getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Double set(int index, Double ele) {
+    public Float set(int index, Float ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, double ele) {
+    public void set(int index, float ele) {
         array[index] = ele;
     }
 
@@ -91,42 +91,42 @@ public class FixedSizeDoubleList implements List<Double> {
     }
 
     @Override
-    public Iterator<Double> iterator() {
+    public Iterator<Float> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Double> listIterator() {
+    public ListIterator<Float> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Double> listIterator(int index) {
+    public ListIterator<Float> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Double> subList(int fromIndex, int toIndex) {
+    public List<Float> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Double e) {
+    public boolean add(Float e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Double element) {
+    public void add(int index, Float element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Double> collection) {
+    public boolean addAll(Collection<? extends Float> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Double> collection) {
+    public boolean addAll(int index, Collection<? extends Float> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +136,7 @@ public class FixedSizeDoubleList implements List<Double> {
     }
 
     @Override
-    public Double remove(int index) {
+    public Float remove(int index) {
         throw new UnsupportedOperationException();
     }
 

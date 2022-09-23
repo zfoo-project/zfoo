@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeBooleanList implements List<Boolean> {
+public class FixedSizeListShort implements List<Short> {
 
-    private final boolean[] array;
+    private final short[] array;
 
-    public FixedSizeBooleanList(int initialCapacity) {
-        this.array = new boolean[initialCapacity];
+    public FixedSizeListShort(int initialCapacity) {
+        this.array = new short[initialCapacity];
     }
 
     @Override
@@ -40,22 +40,22 @@ public class FixedSizeBooleanList implements List<Boolean> {
     }
 
     @Override
-    public Boolean get(int index) {
+    public Short get(int index) {
         return array[index];
     }
 
-    public boolean getRaw(int index) {
+    public short getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Boolean set(int index, Boolean ele) {
+    public Short set(int index, Short ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, boolean ele) {
+    public void set(int index, short ele) {
         array[index] = ele;
     }
 
@@ -91,42 +91,42 @@ public class FixedSizeBooleanList implements List<Boolean> {
     }
 
     @Override
-    public Iterator<Boolean> iterator() {
+    public Iterator<Short> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Boolean> listIterator() {
+    public ListIterator<Short> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Boolean> listIterator(int index) {
+    public ListIterator<Short> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Boolean> subList(int fromIndex, int toIndex) {
+    public List<Short> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Boolean e) {
+    public boolean add(Short e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Boolean element) {
+    public void add(int index, Short element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Boolean> collection) {
+    public boolean addAll(Collection<? extends Short> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Boolean> collection) {
+    public boolean addAll(int index, Collection<? extends Short> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +136,7 @@ public class FixedSizeBooleanList implements List<Boolean> {
     }
 
     @Override
-    public Boolean remove(int index) {
+    public Short remove(int index) {
         throw new UnsupportedOperationException();
     }
 

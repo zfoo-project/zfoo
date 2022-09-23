@@ -34,8 +34,8 @@ public class ListTest {
     }
 
     @Test
-    public void testFixedSizeStringList() {
-        var list = new FixedSizeStringList(3);
+    public void testFixedSizeList() {
+        var list = new FixedSizeList(3);
         list.set(0, "1");
         list.set(1, "2");
         list.set(2, "3");
