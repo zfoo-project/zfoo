@@ -122,7 +122,7 @@ cpu： i9900k
       }
       ```
 
-    - 第二种使用静态常量+接口：public static final transient short PROTOCOL_ID的"协议序列号"，这个协议号的值必须和IPacket接口返回的值一样
+    - 第二种使用静态常量+接口：这个协议号的值必须和IPacket接口返回的值一样，这样的方式可以微弱的提升一点性能
       ```
       public class SimpleObject implements IPacket {
       
