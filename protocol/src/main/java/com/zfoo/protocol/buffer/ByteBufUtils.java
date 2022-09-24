@@ -454,7 +454,7 @@ public abstract class ByteBufUtils {
 
     public static Map<Integer, Integer> readIntIntMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = new IntObjectHashMap<Integer>(length);
+        var map = new IntObjectHashMap<Integer>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             map.put(readInt(byteBuf), readIntBox(byteBuf));
         }
@@ -475,7 +475,7 @@ public abstract class ByteBufUtils {
 
     public static Map<Integer, Long> readIntLongMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = new IntObjectHashMap<Long>(length);
+        var map = new IntObjectHashMap<Long>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             map.put(readInt(byteBuf), readLongBox(byteBuf));
         }
@@ -496,7 +496,7 @@ public abstract class ByteBufUtils {
 
     public static Map<Integer, String> readIntStringMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = new IntObjectHashMap<String>(length);
+        var map = new IntObjectHashMap<String>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             map.put(readInt(byteBuf), readString(byteBuf));
         }
@@ -517,7 +517,7 @@ public abstract class ByteBufUtils {
 
     public static Map<Integer, IPacket> readIntPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var map = new IntObjectHashMap<IPacket>(length);
+        var map = new IntObjectHashMap<IPacket>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             map.put(readInt(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
         }
@@ -538,7 +538,7 @@ public abstract class ByteBufUtils {
 
     public static Map<Long, Integer> readLongIntMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = new LongObjectHashMap<Integer>(length);
+        var map = new LongObjectHashMap<Integer>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             map.put(readLong(byteBuf), readIntBox(byteBuf));
         }
@@ -559,7 +559,7 @@ public abstract class ByteBufUtils {
 
     public static Map<Long, Long> readLongLongMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = new LongObjectHashMap<Long>(length);
+        var map = new LongObjectHashMap<Long>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             map.put(readLong(byteBuf), readLongBox(byteBuf));
         }
@@ -580,7 +580,7 @@ public abstract class ByteBufUtils {
 
     public static Map<Long, String> readLongStringMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = new LongObjectHashMap<String>(length);
+        var map = new LongObjectHashMap<String>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             map.put(readLong(byteBuf), readString(byteBuf));
         }
@@ -601,7 +601,7 @@ public abstract class ByteBufUtils {
 
     public static Map<Long, IPacket> readLongPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var map = new LongObjectHashMap<IPacket>(length);
+        var map = new LongObjectHashMap<IPacket>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             map.put(readLong(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
         }
@@ -846,7 +846,7 @@ public abstract class ByteBufUtils {
 
     public static Set<Byte> readByteSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = new HashByteSet(length);
+        var set = new HashByteSet(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             set.add(readByte(byteBuf));
         }
@@ -932,7 +932,7 @@ public abstract class ByteBufUtils {
 
     public static Set<Short> readShortSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = new HashShortSet(length);
+        var set = new HashShortSet(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             set.add(readShort(byteBuf));
         }
@@ -1011,7 +1011,7 @@ public abstract class ByteBufUtils {
 
     public static Set<Integer> readIntSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = new HashIntSet(length);
+        var set = new HashIntSet(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             set.add(readInt(byteBuf));
         }
@@ -1090,7 +1090,7 @@ public abstract class ByteBufUtils {
 
     public static Set<Long> readLongSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = new HashLongSet(length);
+        var set = new HashLongSet(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             set.add(readLong(byteBuf));
         }

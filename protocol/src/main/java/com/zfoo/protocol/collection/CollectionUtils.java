@@ -88,27 +88,12 @@ public abstract class CollectionUtils {
         return size <= 0 ? Collections.EMPTY_MAP : new HashMap<>(comfortableCapacity(size));
     }
 
-    /**
-     * The largest power of two that can be represented as an {@code int}.
-     */
-    public static final int MAX_POWER_OF_TWO = 1 << (Integer.SIZE - 2);
 
     /**
      * 计算HashMap初始化合适的大小
-     * <p>
-     * from com.google.common.collect.Maps.capacity()
      */
     public static int comfortableCapacity(int expectedSize) {
-        if (expectedSize < 3) {
-            return expectedSize + 1;
-        }
-
-        if (expectedSize < MAX_POWER_OF_TWO) {
-            return (int) ((float) expectedSize / 0.75F + 1.0F);
-        }
-
-        // any large value
-        return Integer.MAX_VALUE;
+        return expectedSize < 8 ? 16 : expectedSize << 1;
     }
 
     // ----------------------------------归并排序----------------------------------
