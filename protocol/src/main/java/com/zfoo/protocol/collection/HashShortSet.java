@@ -87,6 +87,6 @@ public class HashShortSet extends AbstractSet<Short> {
 
     @Override
     public int hashCode() {
-        return map.hashCode();
+        return Objects.hashCode(map);
     }
 }

@@ -87,6 +87,6 @@ public class HashIntSet extends AbstractSet<Integer> {
 
     @Override
     public int hashCode() {
-        return map.hashCode();
+        return Objects.hashCode(map);
     }
 }
