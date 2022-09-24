@@ -16,6 +16,8 @@ package com.zfoo.protocol.collection;
 import com.zfoo.protocol.collection.model.NaturalComparator;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.IOUtils;
+import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
 
@@ -90,10 +92,22 @@ public abstract class CollectionUtils {
 
 
     /**
-     * 计算HashMap初始化合适的大小
+     * 数组初始化长度的安全上限限制，防止反序列化异常导致内存突然升高
      */
-    public static int comfortableCapacity(int expectedSize) {
-        return expectedSize < 8 ? 16 : expectedSize << 1;
+    public static int comfortableLength(int length) {
+        if (length >= IOUtils.BYTES_PER_MB) {
+            throw new ArrayStoreException(StringUtils.format("新建数组的长度[{}]超过设置的安全范围[{}]", length, IOUtils.BYTES_PER_MB));
+        }
+        return length;
+    }
+
+    /**
+     * 计算List和HashMap初始化合适的大小，为了安全必须给初始化的集合一个最大上限，防止反序列化一个不合法的包导致内存突然升高
+     */
+    public static int comfortableCapacity(int capacity) {
+        return capacity < 16
+                ? (capacity < 8 ? 16 : 32)
+                : (capacity < 32 ? 64 : Math.min(capacity << 1, IOUtils.BYTES_PER_MB));
     }
 
     // ----------------------------------归并排序----------------------------------
