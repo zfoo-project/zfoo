@@ -49,19 +49,18 @@ public class FixedCollectionTest {
 
 
     @Test
-    public void testFixedHashInt() {
-        var list = new FixedSizeListInt(3);
-        list.set(0, 1);
-        list.set(1, 2);
-        list.set(2, 4);
-        var set = new FixedHashSetInt(list);
+    public void testHashIntSet() {
+        var set = new HashIntSet(3);
+        set.add(1);
+        set.add(2);
+        set.add(3);
         for (int i = 0; i < set.size(); i++) {
             for (var ele : set) {
                 // test iterator
             }
         }
 
-        Assert.assertTrue(set.contains(4));
+        Assert.assertTrue(set.contains(3));
     }
 
 }

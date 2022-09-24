@@ -844,9 +844,9 @@ public abstract class ByteBufUtils {
 
     public static Set<Byte> readByteSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = (Set<Byte>) CollectionUtils.newFixedSet(length);
+        var set = new HashByteSet(length);
         for (var i = 0; i < length; i++) {
-            set.add(readByteBox(byteBuf));
+            set.add(readByte(byteBuf));
         }
         return set;
     }
@@ -930,9 +930,9 @@ public abstract class ByteBufUtils {
 
     public static Set<Short> readShortSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = (Set<Short>) CollectionUtils.newFixedSet(length);
+        var set = new HashShortSet(length);
         for (var i = 0; i < length; i++) {
-            set.add(readShortBox(byteBuf));
+            set.add(readShort(byteBuf));
         }
         return set;
     }
@@ -1009,9 +1009,9 @@ public abstract class ByteBufUtils {
 
     public static Set<Integer> readIntSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = (Set<Integer>) CollectionUtils.newFixedSet(length);
+        var set = new HashIntSet(length);
         for (var i = 0; i < length; i++) {
-            set.add(readIntBox(byteBuf));
+            set.add(readInt(byteBuf));
         }
         return set;
     }
@@ -1088,9 +1088,9 @@ public abstract class ByteBufUtils {
 
     public static Set<Long> readLongSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = (Set<Long>) CollectionUtils.newFixedSet(length);
+        var set = new HashLongSet(length);
         for (var i = 0; i < length; i++) {
-            set.add(readLongBox(byteBuf));
+            set.add(readLong(byteBuf));
         }
         return set;
     }
