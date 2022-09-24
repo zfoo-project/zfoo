@@ -19,6 +19,8 @@ import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.util.ReferenceCountUtil;
+import io.netty.util.collection.IntObjectHashMap;
+import io.netty.util.collection.LongObjectHashMap;
 
 import java.util.Collection;
 import java.util.List;
@@ -452,9 +454,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Integer, Integer> readIntIntMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = (Map<Integer, Integer>) CollectionUtils.newFixedMap(length);
+        var map = new IntObjectHashMap<Integer>(length);
         for (var i = 0; i < length; i++) {
-            map.put(readIntBox(byteBuf), readIntBox(byteBuf));
+            map.put(readInt(byteBuf), readIntBox(byteBuf));
         }
         return map;
     }
@@ -473,9 +475,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Integer, Long> readIntLongMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = (Map<Integer, Long>) CollectionUtils.newFixedMap(length);
+        var map = new IntObjectHashMap<Long>(length);
         for (var i = 0; i < length; i++) {
-            map.put(readIntBox(byteBuf), readLongBox(byteBuf));
+            map.put(readInt(byteBuf), readLongBox(byteBuf));
         }
         return map;
     }
@@ -494,9 +496,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Integer, String> readIntStringMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = (Map<Integer, String>) CollectionUtils.newFixedMap(length);
+        var map = new IntObjectHashMap<String>(length);
         for (var i = 0; i < length; i++) {
-            map.put(readIntBox(byteBuf), readString(byteBuf));
+            map.put(readInt(byteBuf), readString(byteBuf));
         }
         return map;
     }
@@ -515,9 +517,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Integer, IPacket> readIntPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var map = (Map<Integer, IPacket>) CollectionUtils.newFixedMap(length);
+        var map = new IntObjectHashMap<IPacket>(length);
         for (var i = 0; i < length; i++) {
-            map.put(readIntBox(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
+            map.put(readInt(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
         }
         return map;
     }
@@ -536,9 +538,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Long, Integer> readLongIntMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = (Map<Long, Integer>) CollectionUtils.newFixedMap(length);
+        var map = new LongObjectHashMap<Integer>(length);
         for (var i = 0; i < length; i++) {
-            map.put(readLongBox(byteBuf), readIntBox(byteBuf));
+            map.put(readLong(byteBuf), readIntBox(byteBuf));
         }
         return map;
     }
@@ -557,9 +559,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Long, Long> readLongLongMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = (Map<Long, Long>) CollectionUtils.newFixedMap(length);
+        var map = new LongObjectHashMap<Long>(length);
         for (var i = 0; i < length; i++) {
-            map.put(readLongBox(byteBuf), readLongBox(byteBuf));
+            map.put(readLong(byteBuf), readLongBox(byteBuf));
         }
         return map;
     }
@@ -578,9 +580,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Long, String> readLongStringMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = (Map<Long, String>) CollectionUtils.newFixedMap(length);
+        var map = new LongObjectHashMap<String>(length);
         for (var i = 0; i < length; i++) {
-            map.put(readLongBox(byteBuf), readString(byteBuf));
+            map.put(readLong(byteBuf), readString(byteBuf));
         }
         return map;
     }
@@ -599,9 +601,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Long, IPacket> readLongPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var map = (Map<Long, IPacket>) CollectionUtils.newFixedMap(length);
+        var map = new LongObjectHashMap<IPacket>(length);
         for (var i = 0; i < length; i++) {
-            map.put(readLongBox(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
+            map.put(readLong(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
         }
         return map;
     }
