@@ -16,6 +16,7 @@ import io.netty.util.collection.ShortObjectHashMap;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * @author godotg
@@ -72,4 +73,20 @@ public class HashShortSet extends AbstractSet<Short> {
         map.clear();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        var obj = (HashShortSet) o;
+        return Objects.equals(map, obj.map);
+    }
+
+    @Override
+    public int hashCode() {
+        return map.hashCode();
+    }
 }
