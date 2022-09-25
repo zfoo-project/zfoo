@@ -38,7 +38,7 @@ public class EnhanceFloatSerializer implements IEnhanceSerializer {
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
-        if (field.getType().isPrimitive()) {
+        if (isPrimitiveField(field)) {
             builder.append(StringUtils.format("float {} = {}.readFloat($1);", result, EnhanceUtils.byteBufUtils));
         } else {
             builder.append(StringUtils.format("Float {} = {}.readFloatBox($1);", result, EnhanceUtils.byteBufUtils));
