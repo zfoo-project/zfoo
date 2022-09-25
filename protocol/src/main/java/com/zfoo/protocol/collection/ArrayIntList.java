@@ -152,7 +152,7 @@ public class ArrayIntList implements List<Integer> {
         var appendArray = ArrayUtils.intToArray(new ArrayList<>(collection));
         var appendLength = appendArray.length;
 
-        int moved = size - index;
+        var moved = size - index;
         if (moved > 0) {
             System.arraycopy(array, index, array, index + appendLength, moved);
         }
@@ -275,6 +275,20 @@ public class ArrayIntList implements List<Integer> {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
+    @Override
+    public String toString() {
+        var builder = new StringBuilder();
+        builder.append('[');
+        for (var i = 0; i < size; i++) {
+            builder.append(array[i]);
+            if (i < size - 1) {
+                builder.append(", ");
+            }
+        }
+        builder.append(']');
+        return builder.toString();
+    }
+
     private class FastIterator implements Iterator<Integer> {
         int cursor;       // index of next element to return
         int lastCursor = -1; // index of last element returned; -1 if no such
@@ -344,19 +358,5 @@ public class ArrayIntList implements List<Integer> {
             addPrimitive(cursor++, e);
             lastCursor = -1;
         }
-    }
-
-    @Override
-    public String toString() {
-        var builder = new StringBuilder();
-        builder.append('[');
-        for (var i = 0; i < size; i++) {
-            builder.append(array[i]);
-            if (i < size - 1) {
-                builder.append(", ");
-            }
-        }
-        builder.append(']');
-        return builder.toString();
     }
 }
