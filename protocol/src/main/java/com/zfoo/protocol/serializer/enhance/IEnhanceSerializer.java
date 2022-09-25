@@ -23,6 +23,13 @@ import java.lang.reflect.Field;
  */
 public interface IEnhanceSerializer {
 
+    default boolean isPrimitiveField(Field field) {
+        if (field.getType().isPrimitive()) {
+            return true;
+        }
+        return field.getType().isArray() && field.getType().getComponentType().isPrimitive();
+    }
+
     /**
      * IProtocolRegistration.write(ByteBuf buffer, IPacket packet);
      * $1=buffer

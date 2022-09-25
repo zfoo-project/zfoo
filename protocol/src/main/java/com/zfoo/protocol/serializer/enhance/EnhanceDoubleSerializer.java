@@ -28,7 +28,7 @@ public class EnhanceDoubleSerializer implements IEnhanceSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration) {
-        if (field.getType().isPrimitive()) {
+        if (isPrimitiveField(field)) {
             builder.append(StringUtils.format("{}.writeDouble($1, {});", EnhanceUtils.byteBufUtils, objectStr));
         } else {
             builder.append(StringUtils.format("{}.writeDoubleBox($1, (Double){});", EnhanceUtils.byteBufUtils, objectStr));
@@ -38,8 +38,7 @@ public class EnhanceDoubleSerializer implements IEnhanceSerializer {
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
-
-        if (field.getType().isPrimitive()) {
+        if (isPrimitiveField(field)) {
             builder.append(StringUtils.format("double {} = {}.readDouble($1);", result, EnhanceUtils.byteBufUtils));
         } else {
             builder.append(StringUtils.format("Double {} = {}.readDoubleBox($1);", result, EnhanceUtils.byteBufUtils));
