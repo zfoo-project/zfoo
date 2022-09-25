@@ -99,15 +99,15 @@ public abstract class CollectionUtils {
     }
 
     // 字节码增强的类型转换必须要泛型擦除，erasureList，erasureSet，erasureMap会在字节码增强的代码中调用
-    public static List<Object> erasureList(int size) {
+    public static List<?> erasureList(int size) {
         return newList(size);
     }
 
-    public static Set<Object> erasureSet(int size) {
+    public static Set<?> erasureSet(int size) {
         return newSet(size);
     }
 
-    public static Map<Object, Object> erasureMap(int size) {
+    public static Map<?, ?> erasureMap(int size) {
         return newMap(size);
     }
 
