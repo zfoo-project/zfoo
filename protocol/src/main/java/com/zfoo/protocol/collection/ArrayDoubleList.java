@@ -12,10 +12,7 @@
 
 package com.zfoo.protocol.collection;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * @author godotg
@@ -23,86 +20,254 @@ import java.util.ListIterator;
  */
 public class ArrayDoubleList implements List<Double> {
 
-    private final double[] array;
+    private double[] array;
+    private int size;
 
     public ArrayDoubleList(int initialCapacity) {
         this.array = new double[initialCapacity];
     }
 
+    public ArrayDoubleList(double[] array) {
+        this.array = array;
+        this.size = array.length;
+    }
+
+    public void fromList(List<Double> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            this.size = 0;
+            return;
+        }
+        this.size = list.size();
+        this.array = ArrayUtils.doubleToArray(list);
+    }
+
+    public List<Double> toList() {
+        if (isEmpty()) {
+            return new ArrayList<>();
+        }
+        return ArrayUtils.toList(toArrayPrimitive());
+    }
+
+    public double[] toArrayPrimitive() {
+        return Arrays.copyOf(array, size);
+    }
+
+    private int getCapacity() {
+        return array.length - size;
+    }
+
+    private void ensureCapacity(int capacity) {
+        var remainCapacity = getCapacity();
+        if (capacity > remainCapacity) {
+            array = Arrays.copyOf(array, size + capacity + 16);
+        }
+    }
+
+    private void checkIndexForAdd(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index " + index + " is out of range, size = " + size);
+        }
+    }
+
     @Override
     public int size() {
-        return array.length;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return ArrayUtils.isEmpty(array);
+        return size == 0;
+    }
+
+    @Override
+    public boolean contains(Object ele) {
+        return indexOfPrimitive(ArrayUtils.doubleValue((Double) ele)) >= 0;
     }
 
     @Override
     public Double get(int index) {
-        return array[index];
+        return getPrimitive(index);
     }
 
-    public double getRaw(int index) {
+    public double getPrimitive(int index) {
+        Objects.checkIndex(index, size);
         return array[index];
     }
 
     @Override
     public Double set(int index, Double ele) {
         var old = array[index];
-        array[index] = ele;
+        setPrimitive(index, ArrayUtils.doubleValue(ele));
         return old;
     }
 
-    public void set(int index, double ele) {
+    public void setPrimitive(int index, double ele) {
+        Objects.checkIndex(index, size);
         array[index] = ele;
     }
 
     @Override
-    public boolean contains(Object ele) {
-        return ArrayUtils.toList(array).stream().anyMatch(it -> ele.equals(it));
+    public boolean add(Double ele) {
+        return addPrimitive(ArrayUtils.doubleValue(ele));
+    }
+
+    public boolean addPrimitive(double ele) {
+        ensureCapacity(1);
+        array[size++] = ele;
+        return true;
+    }
+
+    @Override
+    public void add(int index, Double ele) {
+        addPrimitive(index, ArrayUtils.doubleValue(ele));
+    }
+
+    public void addPrimitive(int index, double ele) {
+        checkIndexForAdd(index);
+        ensureCapacity(1);
+        System.arraycopy(array, index, array, index + 1, size - index);
+        array[index] = ele;
+        size++;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends Double> collection) {
+        if (CollectionUtils.isEmpty(collection)) {
+            return false;
+        }
+        ensureCapacity(collection.size());
+        for (var ele : collection) {
+            add(ele);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends Double> collection) {
+        if (CollectionUtils.isEmpty(collection)) {
+            return false;
+        }
+        checkIndexForAdd(index);
+        ensureCapacity(collection.size());
+        var appendArray = ArrayUtils.doubleToArray(new ArrayList<>(collection));
+        var appendLength = appendArray.length;
+
+        var moved = size - index;
+        if (moved > 0) {
+            System.arraycopy(array, index, array, index + appendLength, moved);
+        }
+
+        System.arraycopy(appendArray, 0, array, index, appendLength);
+        size += appendLength;
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        var index = indexOf(o);
+        if (index < 0) {
+            return false;
+        }
+        remove(index);
+        return true;
+    }
+
+    @Override
+    public Double remove(int index) {
+        return removeAt(index);
+    }
+
+    public double removeAt(int index) {
+        Objects.checkIndex(index, size);
+        var oldValue = array[index];
+        var newSize = size - 1;
+        if (newSize > index) {
+            System.arraycopy(array, index + 1, array, index, newSize - index);
+        }
+        size--;
+        return oldValue;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> collection) {
+        if (CollectionUtils.isEmpty(collection)) {
+            return false;
+        }
+        var list = toList();
+        var flag = list.removeAll(collection);
+        fromList(list);
+        return flag;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> collection) {
+        var list = toList();
+        var flag = list.retainAll(collection);
+        fromList(list);
+        return flag;
+    }
+
+    @Override
+    public void clear() {
+        size = 0;
     }
 
     @Override
     public Object[] toArray() {
-        return ArrayUtils.toList(array).toArray();
+        return toList().toArray();
     }
 
     @Override
     public <T> T[] toArray(T[] arrays) {
-        ArrayUtils.toList(array).toArray(arrays);
-        return arrays;
+        return toList().toArray(arrays);
     }
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        return ArrayUtils.toList(array).containsAll(collection);
+        return toList().containsAll(collection);
+    }
+
+    public int indexOfPrimitive(double ele) {
+        for (var i = 0; i < size; i++) {
+            if (array[i] == ele) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int lastIndexOfPrimitive(double ele) {
+        for (var i = size - 1; i >= 0; i--) {
+            if (array[i] == ele) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public int indexOf(Object ele) {
-        return ArrayUtils.toList(array).indexOf(ele);
+        return indexOfPrimitive(ArrayUtils.doubleValue((Double) ele));
     }
 
     @Override
     public int lastIndexOf(Object ele) {
-        return ArrayUtils.toList(array).lastIndexOf(ele);
+        return lastIndexOfPrimitive(ArrayUtils.doubleValue((Double) ele));
     }
 
     @Override
     public Iterator<Double> iterator() {
-        return ArrayUtils.toList(array).iterator();
+        return new FastIterator();
     }
 
     @Override
     public ListIterator<Double> listIterator() {
-        return ArrayUtils.toList(array).listIterator();
+        return new FastListIterator(0);
     }
 
     @Override
     public ListIterator<Double> listIterator(int index) {
-        return ArrayUtils.toList(array).listIterator(index);
+        return new FastListIterator(index);
     }
 
     @Override
@@ -111,47 +276,87 @@ public class ArrayDoubleList implements List<Double> {
     }
 
     @Override
-    public boolean add(Double e) {
-        throw new UnsupportedOperationException();
+    public String toString() {
+        var builder = new StringBuilder();
+        builder.append('[');
+        for (var i = 0; i < size; i++) {
+            builder.append(array[i]);
+            if (i < size - 1) {
+                builder.append(", ");
+            }
+        }
+        builder.append(']');
+        return builder.toString();
     }
 
-    @Override
-    public void add(int index, Double element) {
-        throw new UnsupportedOperationException();
+    private class FastIterator implements Iterator<Double> {
+        int cursor;       // index of next element to return
+        int lastCursor = -1; // index of last element returned; -1 if no such
+
+        public boolean hasNext() {
+            return cursor != size;
+        }
+
+        @Override
+        public Double next() {
+            if (cursor >= size) {
+                throw new NoSuchElementException();
+            }
+            lastCursor = cursor;
+            return array[cursor++];
+        }
+
+        @Override
+        public void remove() {
+            if (lastCursor < 0) {
+                throw new IllegalStateException();
+            }
+            removeAt(lastCursor);
+            cursor = lastCursor;
+            lastCursor = -1;
+        }
     }
 
-    @Override
-    public boolean addAll(Collection<? extends Double> collection) {
-        throw new UnsupportedOperationException();
-    }
+    private class FastListIterator extends FastIterator implements ListIterator<Double> {
+        FastListIterator(int index) {
+            super();
+            cursor = index;
+        }
 
-    @Override
-    public boolean addAll(int index, Collection<? extends Double> collection) {
-        throw new UnsupportedOperationException();
-    }
+        public boolean hasPrevious() {
+            return cursor != 0;
+        }
 
-    @Override
-    public boolean remove(Object o) {
-        throw new UnsupportedOperationException();
-    }
+        public int nextIndex() {
+            return cursor;
+        }
 
-    @Override
-    public Double remove(int index) {
-        throw new UnsupportedOperationException();
-    }
+        public int previousIndex() {
+            return cursor - 1;
+        }
 
-    @Override
-    public boolean removeAll(Collection<?> collection) {
-        throw new UnsupportedOperationException();
-    }
+        @Override
+        public Double previous() {
+            if (cursor <= 0) {
+                throw new NoSuchElementException();
+            }
+            cursor--;
+            lastCursor = cursor;
+            return array[cursor];
+        }
 
-    @Override
-    public boolean retainAll(Collection<?> collection) {
-        throw new UnsupportedOperationException();
-    }
+        @Override
+        public void set(Double e) {
+            if (lastCursor < 0) {
+                throw new IllegalStateException();
+            }
+            setPrimitive(lastCursor, ArrayUtils.doubleValue(e));
+        }
 
-    @Override
-    public void clear() {
-        throw new UnsupportedOperationException();
+        @Override
+        public void add(Double e) {
+            addPrimitive(cursor++, e);
+            lastCursor = -1;
+        }
     }
 }

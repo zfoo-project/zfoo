@@ -417,9 +417,9 @@ public abstract class ByteBufUtils {
 
     public static List<IPacket> readPacketList(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var list = new ArrayList<IPacket>(CollectionUtils.comfortableCapacity(length));
+        var list = new ArrayList<IPacket>(CollectionUtils.comfortableLength(length));
         for (var i = 0; i < length; i++) {
-            list.set(i, (IPacket) protocolRegistration.read(byteBuf));
+            list.add((IPacket) protocolRegistration.read(byteBuf));
         }
         return list;
     }
@@ -751,12 +751,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Boolean> readBooleanList(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var list = new ArrayBooleanList(CollectionUtils.comfortableCapacity(length));
-        for (var i = 0; i < length; i++) {
-            list.set(i, readBoolean(byteBuf));
-        }
-        return list;
+        return new ArrayBooleanList(readBooleanArray(byteBuf));
     }
 
     public static void writeBooleanSet(ByteBuf byteBuf, Set<Boolean> set) {
@@ -829,12 +824,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Byte> readByteList(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var list = new ArrayByteList(CollectionUtils.comfortableCapacity(length));
-        for (var i = 0; i < length; i++) {
-            list.set(i, readByte(byteBuf));
-        }
-        return list;
+        return new ArrayByteList(readByteArray(byteBuf));
     }
 
     public static void writeByteSet(ByteBuf byteBuf, Set<Byte> set) {
@@ -915,12 +905,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Short> readShortList(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var list = new ArrayShortList(CollectionUtils.comfortableCapacity(length));
-        for (var i = 0; i < length; i++) {
-            list.set(i, readShort(byteBuf));
-        }
-        return list;
+        return new ArrayShortList(readShortArray(byteBuf));
     }
 
     public static void writeShortSet(ByteBuf byteBuf, Set<Short> set) {
@@ -994,12 +979,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Integer> readIntList(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var list = new ArrayIntList(CollectionUtils.comfortableCapacity(length));
-        for (var i = 0; i < length; i++) {
-            list.set(i, readInt(byteBuf));
-        }
-        return list;
+        return new ArrayIntList(readIntArray(byteBuf));
     }
 
     public static void writeIntSet(ByteBuf byteBuf, Set<Integer> set) {
@@ -1073,12 +1053,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Long> readLongList(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var list = new ArrayLongList(CollectionUtils.comfortableCapacity(length));
-        for (var i = 0; i < length; i++) {
-            list.set(i, readLong(byteBuf));
-        }
-        return list;
+        return new ArrayLongList(readLongArray(byteBuf));
     }
 
     public static void writeLongSet(ByteBuf byteBuf, Set<Long> set) {
@@ -1159,12 +1134,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Float> readFloatList(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var list = new ArrayFloatList(CollectionUtils.comfortableCapacity(length));
-        for (var i = 0; i < length; i++) {
-            list.set(i, readFloat(byteBuf));
-        }
-        return list;
+        return new ArrayFloatList(readFloatArray(byteBuf));
     }
 
     public static void writeFloatSet(ByteBuf byteBuf, Set<Float> set) {
@@ -1245,12 +1215,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Double> readDoubleList(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var list = new ArrayDoubleList(CollectionUtils.comfortableCapacity(length));
-        for (var i = 0; i < length; i++) {
-            list.set(i, readDouble(byteBuf));
-        }
-        return list;
+        return new ArrayDoubleList(readDoubleArray(byteBuf));
     }
 
     public static void writeDoubleSet(ByteBuf byteBuf, Set<Double> set) {
@@ -1304,9 +1269,9 @@ public abstract class ByteBufUtils {
 
     public static List<String> readStringList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new ArrayList<String>(CollectionUtils.comfortableCapacity(length));
+        var list = new ArrayList<String>(CollectionUtils.comfortableLength(length));
         for (var i = 0; i < length; i++) {
-            list.set(i, readString(byteBuf));
+            list.add(readString(byteBuf));
         }
         return list;
     }
