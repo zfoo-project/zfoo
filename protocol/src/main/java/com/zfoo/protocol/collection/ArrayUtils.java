@@ -38,6 +38,41 @@ public abstract class ArrayUtils {
     public static final Object EMPTY_OBJECT = new Object();
 
     /**
+     * unbox
+     */
+    public static boolean booleanValue(Boolean value) {
+        return value != null && value;
+    }
+
+    public static byte byteValue(Byte value) {
+        return value == null ? 0 : value;
+    }
+
+    public static short shortValue(Short value) {
+        return value == null ? 0 : value;
+    }
+
+    public static int intValue(Integer value) {
+        return value == null ? 0 : value;
+    }
+
+    public static long longValue(Long value) {
+        return value == null ? 0 : value;
+    }
+
+    public static float floatValue(Float value) {
+        return value == null ? 0 : value;
+    }
+
+    public static double doubleValue(Double value) {
+        return value == null ? 0 : value;
+    }
+
+    public static char charValue(Character value) {
+        return value == null ? Character.MIN_VALUE : value;
+    }
+
+    /**
      * length
      */
     public static int length(boolean[] array) {
@@ -264,7 +299,7 @@ public abstract class ArrayUtils {
         var size = list.size();
         var array = new boolean[size];
         for (var i = 0; i < size; i++) {
-            array[i] = list.get(i);
+            array[i] = booleanValue(list.get(i));
         }
         return array;
     }
@@ -276,7 +311,7 @@ public abstract class ArrayUtils {
         var size = list.size();
         var array = new byte[size];
         for (var i = 0; i < size; i++) {
-            array[i] = list.get(i);
+            array[i] = byteValue(list.get(i));
         }
         return array;
     }
@@ -288,7 +323,7 @@ public abstract class ArrayUtils {
         var size = list.size();
         var array = new short[size];
         for (var i = 0; i < size; i++) {
-            array[i] = list.get(i);
+            array[i] = shortValue(list.get(i));
         }
         return array;
     }
@@ -300,7 +335,7 @@ public abstract class ArrayUtils {
         var size = list.size();
         var array = new int[size];
         for (var i = 0; i < size; i++) {
-            array[i] = list.get(i);
+            array[i] = intValue(list.get(i));
         }
         return array;
     }
@@ -313,7 +348,7 @@ public abstract class ArrayUtils {
         var size = list.size();
         var array = new long[size];
         for (var i = 0; i < size; i++) {
-            array[i] = list.get(i);
+            array[i] = longValue(list.get(i));
         }
         return array;
     }
@@ -325,7 +360,7 @@ public abstract class ArrayUtils {
         var size = list.size();
         var array = new float[size];
         for (var i = 0; i < size; i++) {
-            array[i] = list.get(i);
+            array[i] = floatValue(list.get(i));
         }
         return array;
     }
@@ -337,7 +372,7 @@ public abstract class ArrayUtils {
         var size = list.size();
         var array = new double[size];
         for (var i = 0; i < size; i++) {
-            array[i] = list.get(i);
+            array[i] = doubleValue(list.get(i));
         }
         return array;
     }
@@ -349,7 +384,7 @@ public abstract class ArrayUtils {
         var size = list.size();
         var array = new char[size];
         for (var i = 0; i < size; i++) {
-            array[i] = list.get(i);
+            array[i] = charValue(list.get(i));
         }
         return array;
     }
