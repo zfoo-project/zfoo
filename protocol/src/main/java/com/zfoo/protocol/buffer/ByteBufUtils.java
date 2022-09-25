@@ -22,10 +22,7 @@ import io.netty.util.ReferenceCountUtil;
 import io.netty.util.collection.IntObjectHashMap;
 import io.netty.util.collection.LongObjectHashMap;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * “可变长字节码算法”的压缩数据的算法，以达到压缩数据，减少磁盘IO。
@@ -420,7 +417,7 @@ public abstract class ByteBufUtils {
 
     public static List<IPacket> readPacketList(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeList<IPacket>(CollectionUtils.comfortableCapacity(length));
+        var list = new ArrayList<IPacket>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             list.set(i, (IPacket) protocolRegistration.read(byteBuf));
         }
@@ -1307,7 +1304,7 @@ public abstract class ByteBufUtils {
 
     public static List<String> readStringList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeList(CollectionUtils.comfortableCapacity(length));
+        var list = new ArrayList<String>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             list.set(i, readString(byteBuf));
         }
