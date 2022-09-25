@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeListBoolean implements List<Boolean> {
+public class ArrayDoubleList implements List<Double> {
 
-    private final boolean[] array;
+    private final double[] array;
 
-    public FixedSizeListBoolean(int initialCapacity) {
-        this.array = new boolean[initialCapacity];
+    public ArrayDoubleList(int initialCapacity) {
+        this.array = new double[initialCapacity];
     }
 
     @Override
@@ -40,22 +40,22 @@ public class FixedSizeListBoolean implements List<Boolean> {
     }
 
     @Override
-    public Boolean get(int index) {
+    public Double get(int index) {
         return array[index];
     }
 
-    public boolean getRaw(int index) {
+    public double getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Boolean set(int index, Boolean ele) {
+    public Double set(int index, Double ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, boolean ele) {
+    public void set(int index, double ele) {
         array[index] = ele;
     }
 
@@ -91,42 +91,42 @@ public class FixedSizeListBoolean implements List<Boolean> {
     }
 
     @Override
-    public Iterator<Boolean> iterator() {
+    public Iterator<Double> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Boolean> listIterator() {
+    public ListIterator<Double> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Boolean> listIterator(int index) {
+    public ListIterator<Double> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Boolean> subList(int fromIndex, int toIndex) {
+    public List<Double> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Boolean e) {
+    public boolean add(Double e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Boolean element) {
+    public void add(int index, Double element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Boolean> collection) {
+    public boolean addAll(Collection<? extends Double> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Boolean> collection) {
+    public boolean addAll(int index, Collection<? extends Double> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +136,7 @@ public class FixedSizeListBoolean implements List<Boolean> {
     }
 
     @Override
-    public Boolean remove(int index) {
+    public Double remove(int index) {
         throw new UnsupportedOperationException();
     }
 

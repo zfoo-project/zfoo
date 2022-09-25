@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeListShort implements List<Short> {
+public class ArrayByteList implements List<Byte> {
 
-    private final short[] array;
+    private final byte[] array;
 
-    public FixedSizeListShort(int initialCapacity) {
-        this.array = new short[initialCapacity];
+    public ArrayByteList(int initialCapacity) {
+        this.array = new byte[initialCapacity];
     }
 
     @Override
@@ -40,22 +40,22 @@ public class FixedSizeListShort implements List<Short> {
     }
 
     @Override
-    public Short get(int index) {
+    public Byte get(int index) {
         return array[index];
     }
 
-    public short getRaw(int index) {
+    public byte getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Short set(int index, Short ele) {
+    public Byte set(int index, Byte ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, short ele) {
+    public void set(int index, byte ele) {
         array[index] = ele;
     }
 
@@ -91,42 +91,42 @@ public class FixedSizeListShort implements List<Short> {
     }
 
     @Override
-    public Iterator<Short> iterator() {
+    public Iterator<Byte> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Short> listIterator() {
+    public ListIterator<Byte> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Short> listIterator(int index) {
+    public ListIterator<Byte> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Short> subList(int fromIndex, int toIndex) {
+    public List<Byte> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Short e) {
+    public boolean add(Byte e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Short element) {
+    public void add(int index, Byte element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Short> collection) {
+    public boolean addAll(Collection<? extends Byte> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Short> collection) {
+    public boolean addAll(int index, Collection<? extends Byte> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +136,7 @@ public class FixedSizeListShort implements List<Short> {
     }
 
     @Override
-    public Short remove(int index) {
+    public Byte remove(int index) {
         throw new UnsupportedOperationException();
     }
 

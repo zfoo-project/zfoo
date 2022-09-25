@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeListFloat implements List<Float> {
+public class ArrayShortList implements List<Short> {
 
-    private final float[] array;
+    private final short[] array;
 
-    public FixedSizeListFloat(int initialCapacity) {
-        this.array = new float[initialCapacity];
+    public ArrayShortList(int initialCapacity) {
+        this.array = new short[initialCapacity];
     }
 
     @Override
@@ -40,22 +40,22 @@ public class FixedSizeListFloat implements List<Float> {
     }
 
     @Override
-    public Float get(int index) {
+    public Short get(int index) {
         return array[index];
     }
 
-    public float getRaw(int index) {
+    public short getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Float set(int index, Float ele) {
+    public Short set(int index, Short ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, float ele) {
+    public void set(int index, short ele) {
         array[index] = ele;
     }
 
@@ -91,42 +91,42 @@ public class FixedSizeListFloat implements List<Float> {
     }
 
     @Override
-    public Iterator<Float> iterator() {
+    public Iterator<Short> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Float> listIterator() {
+    public ListIterator<Short> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Float> listIterator(int index) {
+    public ListIterator<Short> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Float> subList(int fromIndex, int toIndex) {
+    public List<Short> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Float e) {
+    public boolean add(Short e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Float element) {
+    public void add(int index, Short element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Float> collection) {
+    public boolean addAll(Collection<? extends Short> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Float> collection) {
+    public boolean addAll(int index, Collection<? extends Short> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +136,7 @@ public class FixedSizeListFloat implements List<Float> {
     }
 
     @Override
-    public Float remove(int index) {
+    public Short remove(int index) {
         throw new UnsupportedOperationException();
     }
 

@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeListByte implements List<Byte> {
+public class ArrayBooleanList implements List<Boolean> {
 
-    private final byte[] array;
+    private final boolean[] array;
 
-    public FixedSizeListByte(int initialCapacity) {
-        this.array = new byte[initialCapacity];
+    public ArrayBooleanList(int initialCapacity) {
+        this.array = new boolean[initialCapacity];
     }
 
     @Override
@@ -40,22 +40,22 @@ public class FixedSizeListByte implements List<Byte> {
     }
 
     @Override
-    public Byte get(int index) {
+    public Boolean get(int index) {
         return array[index];
     }
 
-    public byte getRaw(int index) {
+    public boolean getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Byte set(int index, Byte ele) {
+    public Boolean set(int index, Boolean ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, byte ele) {
+    public void set(int index, boolean ele) {
         array[index] = ele;
     }
 
@@ -91,42 +91,42 @@ public class FixedSizeListByte implements List<Byte> {
     }
 
     @Override
-    public Iterator<Byte> iterator() {
+    public Iterator<Boolean> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Byte> listIterator() {
+    public ListIterator<Boolean> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Byte> listIterator(int index) {
+    public ListIterator<Boolean> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Byte> subList(int fromIndex, int toIndex) {
+    public List<Boolean> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Byte e) {
+    public boolean add(Boolean e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Byte element) {
+    public void add(int index, Boolean element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Byte> collection) {
+    public boolean addAll(Collection<? extends Boolean> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Byte> collection) {
+    public boolean addAll(int index, Collection<? extends Boolean> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +136,7 @@ public class FixedSizeListByte implements List<Byte> {
     }
 
     @Override
-    public Byte remove(int index) {
+    public Boolean remove(int index) {
         throw new UnsupportedOperationException();
     }
 

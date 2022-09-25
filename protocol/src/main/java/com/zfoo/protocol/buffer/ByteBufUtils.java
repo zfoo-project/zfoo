@@ -752,7 +752,7 @@ public abstract class ByteBufUtils {
 
     public static List<Boolean> readBooleanList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeListBoolean(CollectionUtils.comfortableCapacity(length));
+        var list = new ArrayBooleanList(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             list.set(i, readBoolean(byteBuf));
         }
@@ -830,7 +830,7 @@ public abstract class ByteBufUtils {
 
     public static List<Byte> readByteList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeListByte(CollectionUtils.comfortableCapacity(length));
+        var list = new ArrayByteList(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             list.set(i, readByte(byteBuf));
         }
@@ -916,7 +916,7 @@ public abstract class ByteBufUtils {
 
     public static List<Short> readShortList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeListShort(CollectionUtils.comfortableCapacity(length));
+        var list = new ArrayShortList(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             list.set(i, readShort(byteBuf));
         }
@@ -1074,7 +1074,7 @@ public abstract class ByteBufUtils {
 
     public static List<Long> readLongList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeListLong(CollectionUtils.comfortableCapacity(length));
+        var list = new ArrayLongList(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             list.set(i, readLong(byteBuf));
         }
@@ -1160,7 +1160,7 @@ public abstract class ByteBufUtils {
 
     public static List<Float> readFloatList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeListFloat(CollectionUtils.comfortableCapacity(length));
+        var list = new ArrayFloatList(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             list.set(i, readFloat(byteBuf));
         }
@@ -1246,7 +1246,7 @@ public abstract class ByteBufUtils {
 
     public static List<Double> readDoubleList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new FixedSizeListDouble(CollectionUtils.comfortableCapacity(length));
+        var list = new ArrayDoubleList(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
             list.set(i, readDouble(byteBuf));
         }

@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeListDouble implements List<Double> {
+public class ArrayLongList implements List<Long> {
 
-    private final double[] array;
+    private final long[] array;
 
-    public FixedSizeListDouble(int initialCapacity) {
-        this.array = new double[initialCapacity];
+    public ArrayLongList(int initialCapacity) {
+        this.array = new long[initialCapacity];
     }
 
     @Override
@@ -40,22 +40,22 @@ public class FixedSizeListDouble implements List<Double> {
     }
 
     @Override
-    public Double get(int index) {
+    public Long get(int index) {
         return array[index];
     }
 
-    public double getRaw(int index) {
+    public long getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Double set(int index, Double ele) {
+    public Long set(int index, Long ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, double ele) {
+    public void set(int index, long ele) {
         array[index] = ele;
     }
 
@@ -91,42 +91,42 @@ public class FixedSizeListDouble implements List<Double> {
     }
 
     @Override
-    public Iterator<Double> iterator() {
+    public Iterator<Long> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Double> listIterator() {
+    public ListIterator<Long> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Double> listIterator(int index) {
+    public ListIterator<Long> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Double> subList(int fromIndex, int toIndex) {
+    public List<Long> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Double e) {
+    public boolean add(Long e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Double element) {
+    public void add(int index, Long element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Double> collection) {
+    public boolean addAll(Collection<? extends Long> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Double> collection) {
+    public boolean addAll(int index, Collection<? extends Long> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +136,7 @@ public class FixedSizeListDouble implements List<Double> {
     }
 
     @Override
-    public Double remove(int index) {
+    public Long remove(int index) {
         throw new UnsupportedOperationException();
     }
 

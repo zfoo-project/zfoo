@@ -21,12 +21,12 @@ import java.util.ListIterator;
  * @author godotg
  * @version 3.0
  */
-public class FixedSizeListLong implements List<Long> {
+public class ArrayFloatList implements List<Float> {
 
-    private final long[] array;
+    private final float[] array;
 
-    public FixedSizeListLong(int initialCapacity) {
-        this.array = new long[initialCapacity];
+    public ArrayFloatList(int initialCapacity) {
+        this.array = new float[initialCapacity];
     }
 
     @Override
@@ -40,22 +40,22 @@ public class FixedSizeListLong implements List<Long> {
     }
 
     @Override
-    public Long get(int index) {
+    public Float get(int index) {
         return array[index];
     }
 
-    public long getRaw(int index) {
+    public float getRaw(int index) {
         return array[index];
     }
 
     @Override
-    public Long set(int index, Long ele) {
+    public Float set(int index, Float ele) {
         var old = array[index];
         array[index] = ele;
         return old;
     }
 
-    public void set(int index, long ele) {
+    public void set(int index, float ele) {
         array[index] = ele;
     }
 
@@ -91,42 +91,42 @@ public class FixedSizeListLong implements List<Long> {
     }
 
     @Override
-    public Iterator<Long> iterator() {
+    public Iterator<Float> iterator() {
         return ArrayUtils.toList(array).iterator();
     }
 
     @Override
-    public ListIterator<Long> listIterator() {
+    public ListIterator<Float> listIterator() {
         return ArrayUtils.toList(array).listIterator();
     }
 
     @Override
-    public ListIterator<Long> listIterator(int index) {
+    public ListIterator<Float> listIterator(int index) {
         return ArrayUtils.toList(array).listIterator(index);
     }
 
     @Override
-    public List<Long> subList(int fromIndex, int toIndex) {
+    public List<Float> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
     @Override
-    public boolean add(Long e) {
+    public boolean add(Float e) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, Long element) {
+    public void add(int index, Float element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Long> collection) {
+    public boolean addAll(Collection<? extends Float> collection) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Long> collection) {
+    public boolean addAll(int index, Collection<? extends Float> collection) {
         throw new UnsupportedOperationException();
     }
 
@@ -136,7 +136,7 @@ public class FixedSizeListLong implements List<Long> {
     }
 
     @Override
-    public Long remove(int index) {
+    public Float remove(int index) {
         throw new UnsupportedOperationException();
     }
 
