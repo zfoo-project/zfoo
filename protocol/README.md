@@ -47,7 +47,7 @@ cpu： i9900k
 
 - 使用Javassist字节码增强动态生成顺序执行的序列化和反序列化函数，顺序化的函数可以轻易的被JIT编译以达到极致的性能
 - 原生集成netty的高性能ByteBuf
-- 没有装箱和拆箱，避免了无效GC
+- 使用primitive type collection，没有装箱和拆箱，避免了无效GC，性能也足够快
 - 天生线程安全并且无锁化；kryo强制要求每条线程都有自己的一个Kryo实例，这是一个比较重的设计，特别是线程比较多的场景
 - 没有反射，没有unsafe操作；对比kryo中使用objenesis导致大量unsafe，而且在Java11中运行会出现警告
 - 扁平化了方法栈的调用深度，数据结构嵌套没有任何性能损失，如List<Set<Map<>>>；对比kryo和protobuf数据结构嵌套会出现性能损失
