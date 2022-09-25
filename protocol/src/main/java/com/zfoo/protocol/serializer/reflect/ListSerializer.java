@@ -14,12 +14,11 @@
 package com.zfoo.protocol.serializer.reflect;
 
 import com.zfoo.protocol.buffer.ByteBufUtils;
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ListField;
 import io.netty.buffer.ByteBuf;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,13 +53,9 @@ public class ListSerializer implements ISerializer {
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        int size = ByteBufUtils.readInt(buffer);
-        if (size <= 0) {
-            return Collections.EMPTY_LIST;
-        }
-        ListField listField = (ListField) fieldRegistration;
-        List<Object> list = new ArrayList<>(size);
-
+        var size = ByteBufUtils.readInt(buffer);
+        var listField = (ListField) fieldRegistration;
+        List<Object> list = CollectionUtils.newList(size);
         for (int i = 0; i < size; i++) {
             Object value = listField.getListElementRegistration().serializer().readObject(buffer, listField.getListElementRegistration());
             list.add(value);

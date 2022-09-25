@@ -19,8 +19,6 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.SetField;
 import io.netty.buffer.ByteBuf;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -55,13 +53,9 @@ public class SetSerializer implements ISerializer {
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        int size = ByteBufUtils.readInt(buffer);
-        if (size <= 0) {
-            return Collections.EMPTY_SET;
-        }
-
-        SetField setField = (SetField) fieldRegistration;
-        Set<Object> set = new HashSet<>(CollectionUtils.comfortableCapacity(size));
+        var size = ByteBufUtils.readInt(buffer);
+        var setField = (SetField) fieldRegistration;
+        Set<Object> set = CollectionUtils.newSet(size);
 
         for (int i = 0; i < size; i++) {
             Object value = setField.getSetElementRegistration().serializer().readObject(buffer, setField.getSetElementRegistration());

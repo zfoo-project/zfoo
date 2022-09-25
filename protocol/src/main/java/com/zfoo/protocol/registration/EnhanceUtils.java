@@ -58,7 +58,6 @@ public abstract class EnhanceUtils {
         // 导入需要的包
         classPool.importPackage(IPacket.class.getCanonicalName());
         classPool.importPackage(ByteBufUtils.class.getCanonicalName());
-        classPool.importPackage(Collections.class.getCanonicalName());
         classPool.importPackage(CollectionUtils.class.getCanonicalName());
         classPool.importPackage(ArrayUtils.class.getCanonicalName());
         classPool.importPackage(Iterator.class.getCanonicalName());

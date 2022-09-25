@@ -74,16 +74,27 @@ public abstract class CollectionUtils {
         return isEmpty(map) ? Collections.emptyIterator() : map.entrySet().iterator();
     }
 
+    public static <T> List<T> emptyList() {
+        return new ArrayList<>();
+    }
 
-    public static List<?> newList(int size) {
+    public static <T> Set<T> emptySet() {
+        return new HashSet<>();
+    }
+
+    public static <K, V> Map<K, V> emptyMap() {
+        return new HashMap<>();
+    }
+
+    public static <T> List<T> newList(int size) {
         return size <= 0 ? new ArrayList<>() : new ArrayList<>(comfortableLength(size));
     }
 
-    public static Set<?> newSet(int size) {
+    public static <T> Set<T> newSet(int size) {
         return size <= 0 ? new HashSet<>() : new HashSet<>(comfortableCapacity(size));
     }
 
-    public static Map<?, ?> newMap(int size) {
+    public static <K, V> Map<K, V> newMap(int size) {
         return size <= 0 ? new HashMap<>() : new HashMap<>(comfortableCapacity(size));
     }
 
@@ -277,7 +288,7 @@ public abstract class CollectionUtils {
      */
     public static <T> List<T> subListLast(List<T> list, int num) {
         if (isEmpty(list)) {
-            return Collections.emptyList();
+            return emptyList();
         }
 
         var startIndex = list.size() - num;

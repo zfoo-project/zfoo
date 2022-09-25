@@ -17,7 +17,6 @@ import com.zfoo.protocol.util.AssertionUtils;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -194,9 +193,6 @@ public abstract class ArrayUtils {
      * toList
      */
     public static List<Boolean> toList(boolean[] array) {
-        if (isEmpty(array)) {
-            return Collections.emptyList();
-        }
         var list = new ArrayList<Boolean>();
         for (var value : array) {
             list.add(value);
@@ -205,9 +201,6 @@ public abstract class ArrayUtils {
     }
 
     public static List<Byte> toList(byte[] array) {
-        if (isEmpty(array)) {
-            return Collections.emptyList();
-        }
         var list = new ArrayList<Byte>();
         for (var value : array) {
             list.add(value);
@@ -216,9 +209,6 @@ public abstract class ArrayUtils {
     }
 
     public static List<Short> toList(short[] array) {
-        if (isEmpty(array)) {
-            return Collections.emptyList();
-        }
         var list = new ArrayList<Short>();
         for (var value : array) {
             list.add(value);
@@ -227,9 +217,6 @@ public abstract class ArrayUtils {
     }
 
     public static List<Integer> toList(int[] array) {
-        if (isEmpty(array)) {
-            return Collections.emptyList();
-        }
         var list = new ArrayList<Integer>();
         for (var j : array) {
             list.add(j);
@@ -238,9 +225,6 @@ public abstract class ArrayUtils {
     }
 
     public static List<Long> toList(long[] array) {
-        if (isEmpty(array)) {
-            return Collections.emptyList();
-        }
         var list = new ArrayList<Long>();
         for (var j : array) {
             list.add(j);
@@ -249,9 +233,6 @@ public abstract class ArrayUtils {
     }
 
     public static List<Float> toList(float[] array) {
-        if (isEmpty(array)) {
-            return Collections.emptyList();
-        }
         var list = new ArrayList<Float>();
         for (var j : array) {
             list.add(j);
@@ -260,9 +241,6 @@ public abstract class ArrayUtils {
     }
 
     public static List<Double> toList(double[] array) {
-        if (isEmpty(array)) {
-            return Collections.emptyList();
-        }
         var list = new ArrayList<Double>();
         for (var j : array) {
             list.add(j);
@@ -271,9 +249,6 @@ public abstract class ArrayUtils {
     }
 
     public static List<Character> toList(char[] array) {
-        if (isEmpty(array)) {
-            return Collections.emptyList();
-        }
         var list = new ArrayList<Character>();
         for (var j : array) {
             list.add(j);
@@ -283,9 +258,9 @@ public abstract class ArrayUtils {
 
     public static <T> List<T> toList(T[] array) {
         if (isEmpty(array)) {
-            return Collections.emptyList();
+            return CollectionUtils.emptyList();
         }
-        return Arrays.asList(array);
+        return new ArrayList<>(Arrays.asList(array));
     }
 
 
