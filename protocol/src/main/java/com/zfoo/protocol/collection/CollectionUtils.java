@@ -75,18 +75,15 @@ public abstract class CollectionUtils {
     }
 
 
-    /**
-     * 固定大小集合，如果初始化容量为0，则后续无法继续增加集合容量
-     */
-    public static List<?> newFixedList(int size) {
-        return size <= 0 ? Collections.EMPTY_LIST : new ArrayList<>(size);
+    public static List<?> newList(int size) {
+        return size <= 0 ? Collections.EMPTY_LIST : new ArrayList<>(comfortableLength(size));
     }
 
-    public static Set<?> newFixedSet(int size) {
+    public static Set<?> newSet(int size) {
         return size <= 0 ? Collections.EMPTY_SET : new HashSet<>(comfortableCapacity(size));
     }
 
-    public static Map<?, ?> newFixedMap(int size) {
+    public static Map<?, ?> newMap(int size) {
         return size <= 0 ? Collections.EMPTY_MAP : new HashMap<>(comfortableCapacity(size));
     }
 

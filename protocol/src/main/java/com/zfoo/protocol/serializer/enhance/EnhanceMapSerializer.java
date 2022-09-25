@@ -80,7 +80,7 @@ public class EnhanceMapSerializer implements IEnhanceSerializer {
 
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {}={}.readInt($1);", size, EnhanceUtils.byteBufUtils));
-        builder.append(StringUtils.format("Map {} = CollectionUtils.newFixedMap({});", map, size));
+        builder.append(StringUtils.format("Map {} = CollectionUtils.newMap({});", map, size));
 
         var i = "i" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("for(int {}=0; {}<{}; {}++){", i, i, size, i));

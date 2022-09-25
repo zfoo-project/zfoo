@@ -430,7 +430,7 @@ public abstract class ByteBufUtils {
 
     public static Set<IPacket> readPacketSet(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var set = (Set<IPacket>) CollectionUtils.newFixedSet(length);
+        var set = (Set<IPacket>) CollectionUtils.newSet(length);
         for (var i = 0; i < length; i++) {
             set.add((IPacket) protocolRegistration.read(byteBuf));
         }
@@ -619,7 +619,7 @@ public abstract class ByteBufUtils {
 
     public static Map<String, Integer> readStringIntMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = (Map<String, Integer>) CollectionUtils.newFixedMap(length);
+        var map = (Map<String, Integer>) CollectionUtils.newMap(length);
         for (var i = 0; i < length; i++) {
             map.put(readString(byteBuf), readIntBox(byteBuf));
         }
@@ -640,7 +640,7 @@ public abstract class ByteBufUtils {
 
     public static Map<String, Long> readStringLongMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = (Map<String, Long>) CollectionUtils.newFixedMap(length);
+        var map = (Map<String, Long>) CollectionUtils.newMap(length);
         for (var i = 0; i < length; i++) {
             map.put(readString(byteBuf), readLongBox(byteBuf));
         }
@@ -661,7 +661,7 @@ public abstract class ByteBufUtils {
 
     public static Map<String, String> readStringStringMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = (Map<String, String>) CollectionUtils.newFixedMap(length);
+        var map = (Map<String, String>) CollectionUtils.newMap(length);
         for (var i = 0; i < length; i++) {
             map.put(readString(byteBuf), readString(byteBuf));
         }
@@ -682,7 +682,7 @@ public abstract class ByteBufUtils {
 
     public static Map<String, IPacket> readStringPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var map = (Map<String, IPacket>) CollectionUtils.newFixedMap(length);
+        var map = (Map<String, IPacket>) CollectionUtils.newMap(length);
         for (var i = 0; i < length; i++) {
             map.put(readString(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
         }
@@ -760,7 +760,7 @@ public abstract class ByteBufUtils {
 
     public static Set<Boolean> readBooleanSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = (Set<Boolean>) CollectionUtils.newFixedSet(length);
+        var set = (Set<Boolean>) CollectionUtils.newSet(length);
         for (var i = 0; i < length; i++) {
             set.add(readBooleanBox(byteBuf));
         }
@@ -1143,7 +1143,7 @@ public abstract class ByteBufUtils {
 
     public static Set<Float> readFloatSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = (Set<Float>) CollectionUtils.newFixedSet(length);
+        var set = (Set<Float>) CollectionUtils.newSet(length);
         for (var i = 0; i < length; i++) {
             set.add(readFloatBox(byteBuf));
         }
@@ -1224,7 +1224,7 @@ public abstract class ByteBufUtils {
 
     public static Set<Double> readDoubleSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = (Set<Double>) CollectionUtils.newFixedSet(length);
+        var set = (Set<Double>) CollectionUtils.newSet(length);
         for (var i = 0; i < length; i++) {
             set.add(readDoubleBox(byteBuf));
         }
@@ -1282,7 +1282,7 @@ public abstract class ByteBufUtils {
 
     public static Set<String> readStringSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var set = (Set<String>) CollectionUtils.newFixedSet(length);
+        var set = (Set<String>) CollectionUtils.newSet(length);
         for (var i = 0; i < length; i++) {
             set.add(readString(byteBuf));
         }

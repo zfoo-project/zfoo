@@ -65,7 +65,7 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
 
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {} = {}.readInt($1);", size, EnhanceUtils.byteBufUtils));
-        builder.append(StringUtils.format("Set {} = CollectionUtils.newFixedSet({});", set, size));
+        builder.append(StringUtils.format("Set {} = CollectionUtils.newSet({});", set, size));
 
         var i = "i" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("for(int {}=0; {}<{}; {}++){", i, i, size, i));
