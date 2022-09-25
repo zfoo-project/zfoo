@@ -76,15 +76,15 @@ public abstract class CollectionUtils {
 
 
     public static List<?> newList(int size) {
-        return size <= 0 ? Collections.EMPTY_LIST : new ArrayList<>(comfortableLength(size));
+        return size <= 0 ? new ArrayList<>() : new ArrayList<>(comfortableLength(size));
     }
 
     public static Set<?> newSet(int size) {
-        return size <= 0 ? Collections.EMPTY_SET : new HashSet<>(comfortableCapacity(size));
+        return size <= 0 ? new HashSet<>() : new HashSet<>(comfortableCapacity(size));
     }
 
     public static Map<?, ?> newMap(int size) {
-        return size <= 0 ? Collections.EMPTY_MAP : new HashMap<>(comfortableCapacity(size));
+        return size <= 0 ? new HashMap<>() : new HashMap<>(comfortableCapacity(size));
     }
 
 
