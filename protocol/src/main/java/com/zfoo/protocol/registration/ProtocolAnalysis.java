@@ -302,7 +302,7 @@ public class ProtocolAnalysis {
         // 是一个基本类型变量
         if (serializer != null) {
             return BaseField.valueOf(serializer);
-        } else if (fieldTypeClazz.getComponentType() != null) {
+        } else if (fieldTypeClazz.isArray()) {
             // 是一个数组
             Class<?> arrayClazz = fieldTypeClazz.getComponentType();
 
@@ -402,7 +402,7 @@ public class ProtocolAnalysis {
             if (serializer != null) {
                 // 基础类型
                 return BaseField.valueOf(serializer);
-            } else if (clazz.getComponentType() != null) {
+            } else if (clazz.isArray()) {
                 // 是一个二维以上数组
                 throw new RunException("不支持多维数组或集合嵌套数组[type:{}]类型，仅支持一维数组", type);
             } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
