@@ -98,6 +98,19 @@ public abstract class CollectionUtils {
         return size <= 0 ? new HashMap<>() : new HashMap<>(comfortableCapacity(size));
     }
 
+    // 字节码增强的类型转换必须要泛型擦除，erasureList，erasureSet，erasureMap会在字节码增强的代码中调用
+    public static List<Object> erasureList(int size) {
+        return newList(size);
+    }
+
+    public static Set<Object> erasureSet(int size) {
+        return newSet(size);
+    }
+
+    public static Map<Object, Object> erasureMap(int size) {
+        return newMap(size);
+    }
+
 
     /**
      * 数组初始化长度的安全上限限制，防止反序列化异常导致内存突然升高
