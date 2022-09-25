@@ -62,11 +62,8 @@ public abstract class EnhanceUtils {
         classPool.importPackage(ArrayUtils.class.getCanonicalName());
         classPool.importPackage(Iterator.class.getCanonicalName());
         classPool.importPackage(List.class.getCanonicalName());
-        classPool.importPackage(ArrayList.class.getCanonicalName());
         classPool.importPackage(Map.class.getCanonicalName());
-        classPool.importPackage(HashMap.class.getCanonicalName());
         classPool.importPackage(Set.class.getCanonicalName());
-        classPool.importPackage(HashSet.class.getCanonicalName());
 
         // 增加类的路径
         for (var clazz : classArray) {
