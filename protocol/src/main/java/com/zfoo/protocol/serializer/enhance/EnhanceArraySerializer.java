@@ -70,7 +70,7 @@ public class EnhanceArraySerializer implements IEnhanceSerializer {
         var length = "length" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int {} = {}.readInt($1);", length, EnhanceUtils.byteBufUtils));
 
-        builder.append(StringUtils.format("{}[] {} = new {}[{}];", arrayName, array, arrayName, length));
+        builder.append(StringUtils.format("{}[] {} = new {}[CollectionUtils.comfortableLength({})];", arrayName, array, arrayName, length));
 
         var i = "i" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("for(int {}=0; {} < {}; {}++){", i, i, length, i));
