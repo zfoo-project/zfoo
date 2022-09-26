@@ -64,7 +64,7 @@ public abstract class ReflectionUtils {
         // Keep backing up the inheritance hierarchy.
         Class<?> targetClass = clazz;
         do {
-            var fields = clazz.getDeclaredFields();
+            var fields = targetClass.getDeclaredFields();
             for (var field : fields) {
                 ReflectionUtils.filterField(field, fieldFilter, fieldCallback);
             }
