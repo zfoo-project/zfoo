@@ -24,17 +24,18 @@ English | [简体中文](./README.md)
 Why is zfoo protocol ?
 -----------
 
+- The protocol currently supports Java C++ C# Go Java Javascript TypeScript GDScript Lua
+- Universal distributed server protocol implementation, there are implementations in other languages, which can easily
+  implement RPC, servers, and microservices on other platforms
 - The fastest custom format framework for Java binary serialization, with the fewest serialized bytes, more secure and
   compatible
-- The protocol currently supports C++ C# Go Java Javascript TypeScript GDScript Lua, which can easily achieve
-  cross-platform
 - In the single-threaded benchmark test, serialization and deserialization are 50% faster than Protobuf and 100% faster
   than Kryo
 
 Ⅰ. Introduction of zfoo🚩
 -----------
 
-- **Extremely fast, asynchronous, Actor design pattern, lock-free design, RPC framework based on Spring**
+- **Extremely fast, asynchronous, Actor design pattern, lock-free design, RPC framework based on Spring MVC**
 - **Fastest serialization and deserialization**，use [zfoo protocol](protocol/README.md) as a network protocol
 - **High scalability**，Single server deployment, microservice deployment, cluster deployment, gateway deployment
 - **Can be used as a game server framework or website server framework.**
@@ -66,8 +67,8 @@ Perfect work development process, complete online solution
 - [FAQ](./doc/FAQ.md)，There are standard demo display and instructions in the test folder of each project directory,
   which can be run directly
 
-- [zfoo video tutorials](./doc/video-tutorial.md)，In the continuous update, it is recommended to watch the hands-on instructional
-  video first.
+- [zfoo video tutorials](./doc/video-tutorial.md)，In the continuous update, it is recommended to watch the hands-on
+  instructional video first.
 
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》，novice friendly,
   difficulty 2 stars
