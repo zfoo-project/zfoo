@@ -1,6 +1,6 @@
 ### protocol
 
-- 使用原生类型的hashmap，IntIntMap，IntLongMap，LongIntHashMap，LongLongHashMap
+- 使用primitive type原生类型的hashmap，IntIntMap，IntLongMap，LongIntHashMap，LongLongHashMap
 
 ### event
 
