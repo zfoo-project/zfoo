@@ -60,6 +60,8 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 - 没有用maven的<dependencyManagement>来管理这个root，是为了让下面的module不依赖于任何parent，复制出来就可以用
 - 本地开发调试也可以直接用idea的add maven project当作一个第三方库使用
 
+![Image text](image/idea/maven-pom.png)
+
 ---
 
 #### 前端h5的后台管理界面使用的技术栈
