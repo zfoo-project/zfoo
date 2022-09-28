@@ -55,10 +55,10 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 
 #### 为什么没有发布到maven仓库
 
-- zfoo是轻量级的项目，容易修改，游戏场景很多都需要自己定制，打算java 21出来才会发布release版本
-- zfoo安装很简单，maven install到本地就可以使用了，或者直接基础源代码在项目里
-- 本地开发可以直接用idea的add maven project当作一个工具库使用
+- 项目非常轻量，容易修改，游戏场景很多都需要自己定制，打算java 21出来才会发布release版本
+- zfoo安装很简单，maven install到本地就可以使用了，或者直接将zfoo源代码集成在在项目里当作一个module使用
 - 没有用maven的<dependencyManagement>来管理这个root，是为了让下面的module不依赖于任何parent，复制出来就可以用
+- 本地开发调试也可以直接用idea的add maven project当作一个第三方库使用
 
 ---
 
