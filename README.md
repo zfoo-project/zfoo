@@ -25,7 +25,7 @@
 Why is zfoo protocol ?
 -----------
 
-- 协议原生支持 Java C++ C# Java Go Javascript TypeScript GDScript Lua
+- 协议原生支持 C++ C# Java Go Javascript TypeScript GDScript Lua
 - 通用的分布式服务器协议实现，有其它语言的实现，可以轻易实现其它平台的的RPC，微服务
 - 二进制序列化速度最快的自定义格式框架，并且为序列化字节最少的框架，更加安全，可前后兼容
 - 单线程的Benchmark测试中，序列化和反序列化速度比Protobuf快50%，比Kryo快100%
