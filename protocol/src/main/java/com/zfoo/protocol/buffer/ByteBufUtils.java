@@ -417,7 +417,7 @@ public abstract class ByteBufUtils {
 
     public static List<IPacket> readPacketList(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var list = new ArrayList<IPacket>(CollectionUtils.comfortableLength(length));
+        List<IPacket> list = CollectionUtils.newList(length);
         for (var i = 0; i < length; i++) {
             list.add((IPacket) protocolRegistration.read(byteBuf));
         }
@@ -1269,7 +1269,7 @@ public abstract class ByteBufUtils {
 
     public static List<String> readStringList(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var list = new ArrayList<String>(CollectionUtils.comfortableLength(length));
+        List<String> list = CollectionUtils.newList(length);
         for (var i = 0; i < length; i++) {
             list.add(readString(byteBuf));
         }
