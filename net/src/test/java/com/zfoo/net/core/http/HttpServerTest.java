@@ -48,7 +48,7 @@ public class HttpServerTest {
             public DecodedPacketInfo apply(FullHttpRequest fullHttpRequest) {
                 var uri = StringUtils.trim(fullHttpRequest.uri());
                 if (uri.equals("/hello")) {
-                    return DecodedPacketInfo.valueOf(HttpHelloRequest.valueOf("aaa"), HttpAttachment.valueOf(fullHttpRequest, null));
+                    return DecodedPacketInfo.valueOf(HttpHelloRequest.valueOf("other param"), HttpAttachment.valueOf(fullHttpRequest, null));
                 } else {
                     throw new RunException("未知的http路径[{}]", uri);
                 }
