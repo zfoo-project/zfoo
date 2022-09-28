@@ -40,8 +40,6 @@ public class HttpServerController {
         var response = new HttpHelloResponse();
         response.setMessage("Hello, this is the http server!");
 
-        attachment.setHttpResponseStatus(HttpResponseStatus.OK);
-
         NetContext.getRouter().send(session, response, attachment);
     }
 

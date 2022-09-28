@@ -21,6 +21,7 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -47,8 +48,9 @@ public class HttpServerTest {
             @Override
             public DecodedPacketInfo apply(FullHttpRequest fullHttpRequest) {
                 var uri = StringUtils.trim(fullHttpRequest.uri());
+                var attachment = HttpAttachment.valueOf(fullHttpRequest, HttpResponseStatus.OK);
                 if (uri.equals("/hello")) {
-                    return DecodedPacketInfo.valueOf(HttpHelloRequest.valueOf("other param"), HttpAttachment.valueOf(fullHttpRequest, null));
+                    return DecodedPacketInfo.valueOf(HttpHelloRequest.valueOf("other param"), attachment);
                 } else {
                     throw new RunException("未知的http路径[{}]", uri);
                 }
