@@ -73,6 +73,9 @@
 
         <protocol id="1600" location="com.zfoo.net.packet.json.JsonHelloRequest"/>
         <protocol id="1601" location="com.zfoo.net.packet.json.JsonHelloResponse"/>
+
+        <protocol id="1700" location="com.zfoo.net.packet.http.HttpHelloRequest"/>
+        <protocol id="1701" location="com.zfoo.net.packet.http.HttpHelloResponse"/>
     </module>
 
     <module id="4" name="js" minId="2000" maxId="3000">
