@@ -27,18 +27,14 @@ import java.util.function.Consumer;
 public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E> {
 
     private final Class<E> entity;
-    private Bson builder;
+    private Bson builder = Filters.empty();
 
     public MongoQueryBuilder(Class<E> entityClazz) {
         entity = entityClazz;
     }
 
     private void wrapBuilder(Bson bson) {
-        if (builder != null) {
-            builder = Filters.and(builder, bson);
-        } else {
-            builder = bson;
-        }
+        builder = Filters.and(builder, bson);
     }
 
     @Override
@@ -109,7 +105,7 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
     public List<E> queryAll() {
         var collection = OrmContext.getOrmManager().getCollection(entity);
         var list = new ArrayList<E>();
-        var result = builder != null ? collection.find(builder) : collection.find();
+        var result = collection.find(builder);
         result.forEach(new Consumer<IEntity<?>>() {
             @Override
             public void accept(IEntity<?> entity) {
@@ -125,7 +121,7 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
 
         var p = Page.valueOf(page, itemsPerPage, collection.countDocuments());
 
-        var result = builder != null ? collection.find(builder) : collection.find();
+        var result = collection.find(builder);
         var list = new ArrayList<E>();
         result.skip(p.skipNum())
                 .limit(p.getItemsPerPage())
@@ -142,10 +138,6 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
     @Override
     public E queryFirst() {
         var collection = OrmContext.getOrmManager().getCollection(entity);
-        var list = builder != null ? collection.find(builder) : collection.find();
-        for (E row : list) {
-            return row;
-        }
-        return null;
+        return collection.find(builder).first();
     }
 }
