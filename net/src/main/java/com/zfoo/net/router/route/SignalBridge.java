@@ -64,7 +64,9 @@ public class SignalBridge {
         var hash = signalId & SIGNAL_MASK;
 
         var attachment = signalAttachmentArray.get(hash);
-        if (attachment != null && attachment.getSignalId() == signalId && signalAttachmentArray.compareAndSet(hash, attachment, null)) {
+        if (attachment != null && attachment.getSignalId() == signalId) {
+            // 使用性能更高的lazySet()，当我们想对一个原子变量进行修改，而且我们知道这个修改不需要立即对其他线程可见。
+            signalAttachmentArray.lazySet(hash, null);
             return attachment;
         }
         return signalAttachmentMap.remove(signalId);

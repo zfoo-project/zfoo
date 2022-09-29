@@ -16,6 +16,7 @@ import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.router.route.SignalBridge;
 import com.zfoo.scheduler.util.TimeUtils;
 import com.zfoo.util.ThreadUtils;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -46,6 +47,7 @@ public class SignalBridgeTest {
 
         arrayTest();
         mapTest();
+        Assert.assertEquals(executorSize * count * totalIndex * 4, atomicInteger.get());
         System.out.println(atomicInteger.get());
     }
 
