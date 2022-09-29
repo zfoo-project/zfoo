@@ -18,6 +18,12 @@
 
 ---
 
+#### 为什么不支持SPI
+
+- 大部分编程语言都没有SPI，所以不考虑支持SPI
+
+---
+
 #### zfoo的RPC实现原理
 
 - zfoo的RPC和dubbo实现的原理一样，主要使用CompletableFuture，利用了唯一id
