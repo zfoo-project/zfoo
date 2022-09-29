@@ -72,15 +72,3 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 - icon使用的material font，mdi 5.3.45，https://pictogrammers.github.io/@mdi/font/5.3.45/
 
 ---
-
-#### TODO：
-
-1. 参看一下akka的actor实现，进一步优化net的线程模型，统一异步回调的argument参数
-
-2. protocol需要支持更多的语言，python，go，C++
-
-3. Router中的ThreadLocal主要就是让上层@PacketReceiver所表示的收包方法少传一个参数IAttachment，这块设计可以优化
-
-```
-提前把这个参数存起来，就不用传到上层去用了，便于优雅的调用，但是也带来了一些不必要的性能损耗
-```
