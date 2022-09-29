@@ -28,7 +28,7 @@ public class SignalAttachment implements IAttachment {
 
     public static final transient short PROTOCOL_ID = 0;
 
-    private static final AtomicInteger ATOMIC_ID = new AtomicInteger(0);
+    public static final AtomicInteger ATOMIC_ID = new AtomicInteger(0);
 
     /**
      * 唯一标识一个packet， 唯一表示一个Attachment，hashcode() and equals() 也通过signalId计算
