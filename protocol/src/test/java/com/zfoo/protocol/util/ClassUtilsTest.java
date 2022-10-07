@@ -13,12 +13,10 @@
 
 package com.zfoo.protocol.util;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Set;
 
 /**
  * @author godotg
@@ -27,29 +25,10 @@ import java.util.Set;
 @Ignore
 public class ClassUtilsTest {
 
-    // ClassUtilTest
-    @Test
-    public void classLocation() {
-        String str = ClassUtils.classLocation(Integer.class);
-        Assert.assertEquals("jrt:/java.base/java/lang/Integer.class", str);
-    }
-
-    @Test
-    public void getAllClasses() throws Exception {
-        System.out.println(StringUtils.MULTIPLE_HYPHENS);
-        System.out.println("某个包下的所有类查找测试：");
-        Set<Class<?>> set = ClassUtils.getAllClasses("com.zfoo");
-        for (Class<?> clazz : set) {
-            System.out.println(clazz.getName());
-        }
-        System.out.println(StringUtils.MULTIPLE_HYPHENS);
-    }
-
     @Test
     public void getClassPath() {
         System.out.println(ClassUtils.getClassAbsPath(ClassUtilsTest.class));
     }
-
 
     @Test
     public void getClassFromClassPath() throws IOException {
