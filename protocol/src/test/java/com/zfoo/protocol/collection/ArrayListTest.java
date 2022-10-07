@@ -239,6 +239,12 @@ public class ArrayListTest {
             Assert.assertEquals(iterator.next(), list.get(index++));
         }
 
+        iterator = list.iterator();
+        while (iterator.hasNext()) {
+            Assert.assertEquals(iterator.next(), list.get(0));
+            iterator.remove();
+        }
+
         index = 0;
         var listIterator = list.listIterator();
         while (listIterator.hasNext()) {
