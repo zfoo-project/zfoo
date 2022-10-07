@@ -34,8 +34,6 @@ public abstract class ArrayUtils {
     public static final double[] EMPTY_DOUBLE_ARRAY = new double[0];
     public static final char[] EMPTY_CHAR_ARRAY = new char[0];
 
-    public static final Object EMPTY_OBJECT = new Object();
-
     /**
      * unbox
      */

@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class HashSetByte extends AbstractSet<Byte> {
 
-    private final ByteObjectHashMap<Object> map;
+    private final ByteObjectHashMap<Boolean> map;
 
     public HashSetByte() {
         map = new ByteObjectHashMap<>();
@@ -56,16 +56,16 @@ public class HashSetByte extends AbstractSet<Byte> {
 
     @Override
     public boolean add(Byte e) {
-        return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
+        return map.put(e, Boolean.TRUE) == null;
     }
 
     public boolean add(byte e) {
-        return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
+        return map.put(e, Boolean.TRUE) == null;
     }
 
     @Override
     public boolean remove(Object o) {
-        return map.remove(o) == ArrayUtils.EMPTY_OBJECT;
+        return map.remove(o) != null;
     }
 
     @Override

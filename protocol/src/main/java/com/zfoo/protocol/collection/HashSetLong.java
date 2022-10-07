@@ -56,16 +56,16 @@ public class HashSetLong extends AbstractSet<Long> {
 
     @Override
     public boolean add(Long e) {
-        return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
+        return map.put(e, Boolean.TRUE) == null;
     }
 
     public boolean add(long e) {
-        return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
+        return map.put(e, Boolean.TRUE) == null;
     }
 
     @Override
     public boolean remove(Object o) {
-        return map.remove(o) == ArrayUtils.EMPTY_OBJECT;
+        return map.remove(o) != null;
     }
 
     @Override

@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class HashSetInt extends AbstractSet<Integer> {
 
-    private final IntObjectHashMap<Object> map;
+    private final IntObjectHashMap<Boolean> map;
 
     public HashSetInt() {
         map = new IntObjectHashMap<>();
@@ -56,16 +56,16 @@ public class HashSetInt extends AbstractSet<Integer> {
 
     @Override
     public boolean add(Integer e) {
-        return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
+        return map.put(e, Boolean.TRUE) == null;
     }
 
     public boolean add(int e) {
-        return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
+        return map.put(e, Boolean.TRUE) == null;
     }
 
     @Override
     public boolean remove(Object o) {
-        return map.remove(o) == ArrayUtils.EMPTY_OBJECT;
+        return map.remove(o) != null;
     }
 
     @Override

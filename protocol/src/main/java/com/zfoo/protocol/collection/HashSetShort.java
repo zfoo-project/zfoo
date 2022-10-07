@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class HashSetShort extends AbstractSet<Short> {
 
-    private final ShortObjectHashMap<Object> map;
+    private final ShortObjectHashMap<Boolean> map;
 
     public HashSetShort() {
         map = new ShortObjectHashMap<>();
@@ -56,16 +56,16 @@ public class HashSetShort extends AbstractSet<Short> {
 
     @Override
     public boolean add(Short e) {
-        return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
+        return map.put(e, Boolean.TRUE) == null;
     }
 
     public boolean add(short e) {
-        return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
+        return map.put(e, Boolean.TRUE) == null;
     }
 
     @Override
     public boolean remove(Object o) {
-        return map.remove(o) == ArrayUtils.EMPTY_OBJECT;
+        return map.remove(o) != null;
     }
 
     @Override
