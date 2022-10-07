@@ -451,9 +451,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Integer, Integer> readIntIntMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = new IntObjectHashMap<Integer>(CollectionUtils.comfortableCapacity(length));
+        var map = new HashMapIntInt(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
-            map.put(readInt(byteBuf), readIntBox(byteBuf));
+            map.putPrimitive(readInt(byteBuf), readInt(byteBuf));
         }
         return map;
     }
@@ -472,9 +472,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Integer, Long> readIntLongMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = new IntObjectHashMap<Long>(CollectionUtils.comfortableCapacity(length));
+        var map = new HashMapIntLong(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
-            map.put(readInt(byteBuf), readLongBox(byteBuf));
+            map.putPrimitive(readInt(byteBuf), readLong(byteBuf));
         }
         return map;
     }
@@ -535,9 +535,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Long, Integer> readLongIntMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = new LongObjectHashMap<Integer>(CollectionUtils.comfortableCapacity(length));
+        var map = new HashMapLongInt(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
-            map.put(readLong(byteBuf), readIntBox(byteBuf));
+            map.putPrimitive(readLong(byteBuf), readInt(byteBuf));
         }
         return map;
     }
@@ -556,9 +556,9 @@ public abstract class ByteBufUtils {
 
     public static Map<Long, Long> readLongLongMap(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var map = new LongObjectHashMap<Long>(CollectionUtils.comfortableCapacity(length));
+        var map = new HashMapLongLong(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
-            map.put(readLong(byteBuf), readLongBox(byteBuf));
+            map.putPrimitive(readLong(byteBuf), readLong(byteBuf));
         }
         return map;
     }
