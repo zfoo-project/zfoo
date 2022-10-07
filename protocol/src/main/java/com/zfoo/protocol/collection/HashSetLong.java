@@ -12,7 +12,7 @@
 
 package com.zfoo.protocol.collection;
 
-import io.netty.util.collection.IntObjectHashMap;
+import io.netty.util.collection.LongObjectHashMap;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -22,20 +22,20 @@ import java.util.Objects;
  * @author godotg
  * @version 3.0
  */
-public class HashIntSet extends AbstractSet<Integer> {
+public class HashSetLong extends AbstractSet<Long> {
 
-    private final IntObjectHashMap<Object> map;
+    private final LongObjectHashMap<Object> map;
 
-    public HashIntSet() {
-        map = new IntObjectHashMap<>();
+    public HashSetLong() {
+        map = new LongObjectHashMap<>();
     }
 
-    public HashIntSet(int initialCapacity) {
-        map = new IntObjectHashMap<>(initialCapacity);
+    public HashSetLong(int initialCapacity) {
+        map = new LongObjectHashMap<>(initialCapacity);
     }
 
     @Override
-    public Iterator<Integer> iterator() {
+    public Iterator<Long> iterator() {
         return map.keySet().iterator();
     }
 
@@ -55,11 +55,11 @@ public class HashIntSet extends AbstractSet<Integer> {
     }
 
     @Override
-    public boolean add(Integer e) {
+    public boolean add(Long e) {
         return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
     }
 
-    public boolean add(int e) {
+    public boolean add(long e) {
         return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
     }
 
@@ -81,7 +81,7 @@ public class HashIntSet extends AbstractSet<Integer> {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        var obj = (HashIntSet) o;
+        var obj = (HashSetLong) o;
         return Objects.equals(map, obj.map);
     }
 

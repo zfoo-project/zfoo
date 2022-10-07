@@ -12,7 +12,7 @@
 
 package com.zfoo.protocol.collection;
 
-import io.netty.util.collection.ShortObjectHashMap;
+import io.netty.util.collection.ByteObjectHashMap;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -22,20 +22,20 @@ import java.util.Objects;
  * @author godotg
  * @version 3.0
  */
-public class HashShortSet extends AbstractSet<Short> {
+public class HashSetByte extends AbstractSet<Byte> {
 
-    private final ShortObjectHashMap<Object> map;
+    private final ByteObjectHashMap<Object> map;
 
-    public HashShortSet() {
-        map = new ShortObjectHashMap<>();
+    public HashSetByte() {
+        map = new ByteObjectHashMap<>();
     }
 
-    public HashShortSet(int initialCapacity) {
-        map = new ShortObjectHashMap<>(initialCapacity);
+    public HashSetByte(int initialCapacity) {
+        map = new ByteObjectHashMap<>(initialCapacity);
     }
 
     @Override
-    public Iterator<Short> iterator() {
+    public Iterator<Byte> iterator() {
         return map.keySet().iterator();
     }
 
@@ -55,11 +55,11 @@ public class HashShortSet extends AbstractSet<Short> {
     }
 
     @Override
-    public boolean add(Short e) {
+    public boolean add(Byte e) {
         return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
     }
 
-    public boolean add(short e) {
+    public boolean add(byte e) {
         return map.put(e, ArrayUtils.EMPTY_OBJECT) == null;
     }
 
@@ -81,7 +81,7 @@ public class HashShortSet extends AbstractSet<Short> {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        var obj = (HashShortSet) o;
+        var obj = (HashSetByte) o;
         return Objects.equals(map, obj.map);
     }
 
