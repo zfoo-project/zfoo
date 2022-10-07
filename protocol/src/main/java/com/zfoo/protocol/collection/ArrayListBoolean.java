@@ -18,37 +18,37 @@ import java.util.*;
  * @author godotg
  * @version 3.0
  */
-public class ArrayDoubleList implements List<Double> {
+public class ArrayListBoolean implements List<Boolean> {
 
-    private double[] array;
+    private boolean[] array;
     private int size;
 
-    public ArrayDoubleList(int initialCapacity) {
-        this.array = new double[initialCapacity];
+    public ArrayListBoolean(int initialCapacity) {
+        this.array = new boolean[initialCapacity];
     }
 
-    public ArrayDoubleList(double[] array) {
+    public ArrayListBoolean(boolean[] array) {
         this.array = array;
         this.size = array.length;
     }
 
-    public void fromList(List<Double> list) {
+    public void fromList(List<Boolean> list) {
         if (CollectionUtils.isEmpty(list)) {
             this.size = 0;
             return;
         }
         this.size = list.size();
-        this.array = ArrayUtils.doubleToArray(list);
+        this.array = ArrayUtils.booleanToArray(list);
     }
 
-    public List<Double> toList() {
+    public List<Boolean> toList() {
         if (isEmpty()) {
             return new ArrayList<>();
         }
         return ArrayUtils.toList(toArrayPrimitive());
     }
 
-    public double[] toArrayPrimitive() {
+    public boolean[] toArrayPrimitive() {
         return Arrays.copyOf(array, size);
     }
 
@@ -81,48 +81,48 @@ public class ArrayDoubleList implements List<Double> {
 
     @Override
     public boolean contains(Object ele) {
-        return indexOfPrimitive(ArrayUtils.doubleValue((Double) ele)) >= 0;
+        return indexOfPrimitive(ArrayUtils.booleanValue((Boolean) ele)) >= 0;
     }
 
     @Override
-    public Double get(int index) {
+    public Boolean get(int index) {
         return getPrimitive(index);
     }
 
-    public double getPrimitive(int index) {
+    public boolean getPrimitive(int index) {
         Objects.checkIndex(index, size);
         return array[index];
     }
 
     @Override
-    public Double set(int index, Double ele) {
+    public Boolean set(int index, Boolean ele) {
         var old = array[index];
-        setPrimitive(index, ArrayUtils.doubleValue(ele));
+        setPrimitive(index, ArrayUtils.booleanValue(ele));
         return old;
     }
 
-    public void setPrimitive(int index, double ele) {
+    public void setPrimitive(int index, boolean ele) {
         Objects.checkIndex(index, size);
         array[index] = ele;
     }
 
     @Override
-    public boolean add(Double ele) {
-        return addPrimitive(ArrayUtils.doubleValue(ele));
+    public boolean add(Boolean ele) {
+        return addPrimitive(ArrayUtils.booleanValue(ele));
     }
 
-    public boolean addPrimitive(double ele) {
+    public boolean addPrimitive(boolean ele) {
         ensureCapacity(1);
         array[size++] = ele;
         return true;
     }
 
     @Override
-    public void add(int index, Double ele) {
-        addPrimitive(index, ArrayUtils.doubleValue(ele));
+    public void add(int index, Boolean ele) {
+        addPrimitive(index, ArrayUtils.booleanValue(ele));
     }
 
-    public void addPrimitive(int index, double ele) {
+    public void addPrimitive(int index, boolean ele) {
         checkIndexForAdd(index);
         ensureCapacity(1);
         System.arraycopy(array, index, array, index + 1, size - index);
@@ -131,7 +131,7 @@ public class ArrayDoubleList implements List<Double> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends Double> collection) {
+    public boolean addAll(Collection<? extends Boolean> collection) {
         if (CollectionUtils.isEmpty(collection)) {
             return false;
         }
@@ -143,13 +143,13 @@ public class ArrayDoubleList implements List<Double> {
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Double> collection) {
+    public boolean addAll(int index, Collection<? extends Boolean> collection) {
         if (CollectionUtils.isEmpty(collection)) {
             return false;
         }
         checkIndexForAdd(index);
         ensureCapacity(collection.size());
-        var appendArray = ArrayUtils.doubleToArray(new ArrayList<>(collection));
+        var appendArray = ArrayUtils.booleanToArray(new ArrayList<>(collection));
         var appendLength = appendArray.length;
 
         var moved = size - index;
@@ -173,11 +173,11 @@ public class ArrayDoubleList implements List<Double> {
     }
 
     @Override
-    public Double remove(int index) {
+    public Boolean remove(int index) {
         return removeAt(index);
     }
 
-    public double removeAt(int index) {
+    public boolean removeAt(int index) {
         Objects.checkIndex(index, size);
         var oldValue = array[index];
         var newSize = size - 1;
@@ -227,7 +227,7 @@ public class ArrayDoubleList implements List<Double> {
         return toList().containsAll(collection);
     }
 
-    public int indexOfPrimitive(double ele) {
+    public int indexOfPrimitive(boolean ele) {
         for (var i = 0; i < size; i++) {
             if (array[i] == ele) {
                 return i;
@@ -236,7 +236,7 @@ public class ArrayDoubleList implements List<Double> {
         return -1;
     }
 
-    public int lastIndexOfPrimitive(double ele) {
+    public int lastIndexOfPrimitive(boolean ele) {
         for (var i = size - 1; i >= 0; i--) {
             if (array[i] == ele) {
                 return i;
@@ -247,31 +247,31 @@ public class ArrayDoubleList implements List<Double> {
 
     @Override
     public int indexOf(Object ele) {
-        return indexOfPrimitive(ArrayUtils.doubleValue((Double) ele));
+        return indexOfPrimitive(ArrayUtils.booleanValue((Boolean) ele));
     }
 
     @Override
     public int lastIndexOf(Object ele) {
-        return lastIndexOfPrimitive(ArrayUtils.doubleValue((Double) ele));
+        return lastIndexOfPrimitive(ArrayUtils.booleanValue((Boolean) ele));
     }
 
     @Override
-    public Iterator<Double> iterator() {
+    public Iterator<Boolean> iterator() {
         return new FastIterator();
     }
 
     @Override
-    public ListIterator<Double> listIterator() {
+    public ListIterator<Boolean> listIterator() {
         return new FastListIterator(0);
     }
 
     @Override
-    public ListIterator<Double> listIterator(int index) {
+    public ListIterator<Boolean> listIterator(int index) {
         return new FastListIterator(index);
     }
 
     @Override
-    public List<Double> subList(int fromIndex, int toIndex) {
+    public List<Boolean> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
@@ -289,7 +289,7 @@ public class ArrayDoubleList implements List<Double> {
         return builder.toString();
     }
 
-    private class FastIterator implements Iterator<Double> {
+    private class FastIterator implements Iterator<Boolean> {
         int cursor;       // index of next element to return
         int lastCursor = -1; // index of last element returned; -1 if no such
 
@@ -298,7 +298,7 @@ public class ArrayDoubleList implements List<Double> {
         }
 
         @Override
-        public Double next() {
+        public Boolean next() {
             if (cursor >= size) {
                 throw new NoSuchElementException();
             }
@@ -317,7 +317,7 @@ public class ArrayDoubleList implements List<Double> {
         }
     }
 
-    private class FastListIterator extends FastIterator implements ListIterator<Double> {
+    private class FastListIterator extends FastIterator implements ListIterator<Boolean> {
         FastListIterator(int index) {
             super();
             cursor = index;
@@ -336,7 +336,7 @@ public class ArrayDoubleList implements List<Double> {
         }
 
         @Override
-        public Double previous() {
+        public Boolean previous() {
             if (cursor <= 0) {
                 throw new NoSuchElementException();
             }
@@ -346,15 +346,15 @@ public class ArrayDoubleList implements List<Double> {
         }
 
         @Override
-        public void set(Double e) {
+        public void set(Boolean e) {
             if (lastCursor < 0) {
                 throw new IllegalStateException();
             }
-            setPrimitive(lastCursor, ArrayUtils.doubleValue(e));
+            setPrimitive(lastCursor, ArrayUtils.booleanValue(e));
         }
 
         @Override
-        public void add(Double e) {
+        public void add(Boolean e) {
             addPrimitive(cursor++, e);
             lastCursor = -1;
         }

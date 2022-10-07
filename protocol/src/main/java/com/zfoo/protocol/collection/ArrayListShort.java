@@ -18,37 +18,37 @@ import java.util.*;
  * @author godotg
  * @version 3.0
  */
-public class ArrayBooleanList implements List<Boolean> {
+public class ArrayListShort implements List<Short> {
 
-    private boolean[] array;
+    private short[] array;
     private int size;
 
-    public ArrayBooleanList(int initialCapacity) {
-        this.array = new boolean[initialCapacity];
+    public ArrayListShort(int initialCapacity) {
+        this.array = new short[initialCapacity];
     }
 
-    public ArrayBooleanList(boolean[] array) {
+    public ArrayListShort(short[] array) {
         this.array = array;
         this.size = array.length;
     }
 
-    public void fromList(List<Boolean> list) {
+    public void fromList(List<Short> list) {
         if (CollectionUtils.isEmpty(list)) {
             this.size = 0;
             return;
         }
         this.size = list.size();
-        this.array = ArrayUtils.booleanToArray(list);
+        this.array = ArrayUtils.shortToArray(list);
     }
 
-    public List<Boolean> toList() {
+    public List<Short> toList() {
         if (isEmpty()) {
             return new ArrayList<>();
         }
         return ArrayUtils.toList(toArrayPrimitive());
     }
 
-    public boolean[] toArrayPrimitive() {
+    public short[] toArrayPrimitive() {
         return Arrays.copyOf(array, size);
     }
 
@@ -81,48 +81,48 @@ public class ArrayBooleanList implements List<Boolean> {
 
     @Override
     public boolean contains(Object ele) {
-        return indexOfPrimitive(ArrayUtils.booleanValue((Boolean) ele)) >= 0;
+        return indexOfPrimitive(ArrayUtils.shortValue((Short) ele)) >= 0;
     }
 
     @Override
-    public Boolean get(int index) {
+    public Short get(int index) {
         return getPrimitive(index);
     }
 
-    public boolean getPrimitive(int index) {
+    public short getPrimitive(int index) {
         Objects.checkIndex(index, size);
         return array[index];
     }
 
     @Override
-    public Boolean set(int index, Boolean ele) {
+    public Short set(int index, Short ele) {
         var old = array[index];
-        setPrimitive(index, ArrayUtils.booleanValue(ele));
+        setPrimitive(index, ArrayUtils.shortValue(ele));
         return old;
     }
 
-    public void setPrimitive(int index, boolean ele) {
+    public void setPrimitive(int index, short ele) {
         Objects.checkIndex(index, size);
         array[index] = ele;
     }
 
     @Override
-    public boolean add(Boolean ele) {
-        return addPrimitive(ArrayUtils.booleanValue(ele));
+    public boolean add(Short ele) {
+        return addPrimitive(ArrayUtils.shortValue(ele));
     }
 
-    public boolean addPrimitive(boolean ele) {
+    public boolean addPrimitive(short ele) {
         ensureCapacity(1);
         array[size++] = ele;
         return true;
     }
 
     @Override
-    public void add(int index, Boolean ele) {
-        addPrimitive(index, ArrayUtils.booleanValue(ele));
+    public void add(int index, Short ele) {
+        addPrimitive(index, ArrayUtils.shortValue(ele));
     }
 
-    public void addPrimitive(int index, boolean ele) {
+    public void addPrimitive(int index, short ele) {
         checkIndexForAdd(index);
         ensureCapacity(1);
         System.arraycopy(array, index, array, index + 1, size - index);
@@ -131,7 +131,7 @@ public class ArrayBooleanList implements List<Boolean> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends Boolean> collection) {
+    public boolean addAll(Collection<? extends Short> collection) {
         if (CollectionUtils.isEmpty(collection)) {
             return false;
         }
@@ -143,13 +143,13 @@ public class ArrayBooleanList implements List<Boolean> {
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Boolean> collection) {
+    public boolean addAll(int index, Collection<? extends Short> collection) {
         if (CollectionUtils.isEmpty(collection)) {
             return false;
         }
         checkIndexForAdd(index);
         ensureCapacity(collection.size());
-        var appendArray = ArrayUtils.booleanToArray(new ArrayList<>(collection));
+        var appendArray = ArrayUtils.shortToArray(new ArrayList<>(collection));
         var appendLength = appendArray.length;
 
         var moved = size - index;
@@ -173,11 +173,11 @@ public class ArrayBooleanList implements List<Boolean> {
     }
 
     @Override
-    public Boolean remove(int index) {
+    public Short remove(int index) {
         return removeAt(index);
     }
 
-    public boolean removeAt(int index) {
+    public short removeAt(int index) {
         Objects.checkIndex(index, size);
         var oldValue = array[index];
         var newSize = size - 1;
@@ -227,7 +227,7 @@ public class ArrayBooleanList implements List<Boolean> {
         return toList().containsAll(collection);
     }
 
-    public int indexOfPrimitive(boolean ele) {
+    public int indexOfPrimitive(short ele) {
         for (var i = 0; i < size; i++) {
             if (array[i] == ele) {
                 return i;
@@ -236,7 +236,7 @@ public class ArrayBooleanList implements List<Boolean> {
         return -1;
     }
 
-    public int lastIndexOfPrimitive(boolean ele) {
+    public int lastIndexOfPrimitive(short ele) {
         for (var i = size - 1; i >= 0; i--) {
             if (array[i] == ele) {
                 return i;
@@ -247,31 +247,31 @@ public class ArrayBooleanList implements List<Boolean> {
 
     @Override
     public int indexOf(Object ele) {
-        return indexOfPrimitive(ArrayUtils.booleanValue((Boolean) ele));
+        return indexOfPrimitive(ArrayUtils.shortValue((Short) ele));
     }
 
     @Override
     public int lastIndexOf(Object ele) {
-        return lastIndexOfPrimitive(ArrayUtils.booleanValue((Boolean) ele));
+        return lastIndexOfPrimitive(ArrayUtils.shortValue((Short) ele));
     }
 
     @Override
-    public Iterator<Boolean> iterator() {
+    public Iterator<Short> iterator() {
         return new FastIterator();
     }
 
     @Override
-    public ListIterator<Boolean> listIterator() {
+    public ListIterator<Short> listIterator() {
         return new FastListIterator(0);
     }
 
     @Override
-    public ListIterator<Boolean> listIterator(int index) {
+    public ListIterator<Short> listIterator(int index) {
         return new FastListIterator(index);
     }
 
     @Override
-    public List<Boolean> subList(int fromIndex, int toIndex) {
+    public List<Short> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
@@ -289,7 +289,7 @@ public class ArrayBooleanList implements List<Boolean> {
         return builder.toString();
     }
 
-    private class FastIterator implements Iterator<Boolean> {
+    private class FastIterator implements Iterator<Short> {
         int cursor;       // index of next element to return
         int lastCursor = -1; // index of last element returned; -1 if no such
 
@@ -298,7 +298,7 @@ public class ArrayBooleanList implements List<Boolean> {
         }
 
         @Override
-        public Boolean next() {
+        public Short next() {
             if (cursor >= size) {
                 throw new NoSuchElementException();
             }
@@ -317,7 +317,7 @@ public class ArrayBooleanList implements List<Boolean> {
         }
     }
 
-    private class FastListIterator extends FastIterator implements ListIterator<Boolean> {
+    private class FastListIterator extends FastIterator implements ListIterator<Short> {
         FastListIterator(int index) {
             super();
             cursor = index;
@@ -336,7 +336,7 @@ public class ArrayBooleanList implements List<Boolean> {
         }
 
         @Override
-        public Boolean previous() {
+        public Short previous() {
             if (cursor <= 0) {
                 throw new NoSuchElementException();
             }
@@ -346,15 +346,15 @@ public class ArrayBooleanList implements List<Boolean> {
         }
 
         @Override
-        public void set(Boolean e) {
+        public void set(Short e) {
             if (lastCursor < 0) {
                 throw new IllegalStateException();
             }
-            setPrimitive(lastCursor, ArrayUtils.booleanValue(e));
+            setPrimitive(lastCursor, ArrayUtils.shortValue(e));
         }
 
         @Override
-        public void add(Boolean e) {
+        public void add(Short e) {
             addPrimitive(cursor++, e);
             lastCursor = -1;
         }

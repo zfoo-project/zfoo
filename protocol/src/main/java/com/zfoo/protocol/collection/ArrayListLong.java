@@ -18,37 +18,37 @@ import java.util.*;
  * @author godotg
  * @version 3.0
  */
-public class ArrayByteList implements List<Byte> {
+public class ArrayListLong implements List<Long> {
 
-    private byte[] array;
+    private long[] array;
     private int size;
 
-    public ArrayByteList(int initialCapacity) {
-        this.array = new byte[initialCapacity];
+    public ArrayListLong(int initialCapacity) {
+        this.array = new long[initialCapacity];
     }
 
-    public ArrayByteList(byte[] array) {
+    public ArrayListLong(long[] array) {
         this.array = array;
         this.size = array.length;
     }
 
-    public void fromList(List<Byte> list) {
+    public void fromList(List<Long> list) {
         if (CollectionUtils.isEmpty(list)) {
             this.size = 0;
             return;
         }
         this.size = list.size();
-        this.array = ArrayUtils.byteToArray(list);
+        this.array = ArrayUtils.longToArray(list);
     }
 
-    public List<Byte> toList() {
+    public List<Long> toList() {
         if (isEmpty()) {
             return new ArrayList<>();
         }
         return ArrayUtils.toList(toArrayPrimitive());
     }
 
-    public byte[] toArrayPrimitive() {
+    public long[] toArrayPrimitive() {
         return Arrays.copyOf(array, size);
     }
 
@@ -81,48 +81,48 @@ public class ArrayByteList implements List<Byte> {
 
     @Override
     public boolean contains(Object ele) {
-        return indexOfPrimitive(ArrayUtils.byteValue((Byte) ele)) >= 0;
+        return indexOfPrimitive(ArrayUtils.longValue((Long) ele)) >= 0;
     }
 
     @Override
-    public Byte get(int index) {
+    public Long get(int index) {
         return getPrimitive(index);
     }
 
-    public byte getPrimitive(int index) {
+    public long getPrimitive(int index) {
         Objects.checkIndex(index, size);
         return array[index];
     }
 
     @Override
-    public Byte set(int index, Byte ele) {
+    public Long set(int index, Long ele) {
         var old = array[index];
-        setPrimitive(index, ArrayUtils.byteValue(ele));
+        setPrimitive(index, ArrayUtils.longValue(ele));
         return old;
     }
 
-    public void setPrimitive(int index, byte ele) {
+    public void setPrimitive(int index, long ele) {
         Objects.checkIndex(index, size);
         array[index] = ele;
     }
 
     @Override
-    public boolean add(Byte ele) {
-        return addPrimitive(ArrayUtils.byteValue(ele));
+    public boolean add(Long ele) {
+        return addPrimitive(ArrayUtils.longValue(ele));
     }
 
-    public boolean addPrimitive(byte ele) {
+    public boolean addPrimitive(long ele) {
         ensureCapacity(1);
         array[size++] = ele;
         return true;
     }
 
     @Override
-    public void add(int index, Byte ele) {
-        addPrimitive(index, ArrayUtils.byteValue(ele));
+    public void add(int index, Long ele) {
+        addPrimitive(index, ArrayUtils.longValue(ele));
     }
 
-    public void addPrimitive(int index, byte ele) {
+    public void addPrimitive(int index, long ele) {
         checkIndexForAdd(index);
         ensureCapacity(1);
         System.arraycopy(array, index, array, index + 1, size - index);
@@ -131,7 +131,7 @@ public class ArrayByteList implements List<Byte> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends Byte> collection) {
+    public boolean addAll(Collection<? extends Long> collection) {
         if (CollectionUtils.isEmpty(collection)) {
             return false;
         }
@@ -143,13 +143,13 @@ public class ArrayByteList implements List<Byte> {
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Byte> collection) {
+    public boolean addAll(int index, Collection<? extends Long> collection) {
         if (CollectionUtils.isEmpty(collection)) {
             return false;
         }
         checkIndexForAdd(index);
         ensureCapacity(collection.size());
-        var appendArray = ArrayUtils.byteToArray(new ArrayList<>(collection));
+        var appendArray = ArrayUtils.longToArray(new ArrayList<>(collection));
         var appendLength = appendArray.length;
 
         var moved = size - index;
@@ -173,11 +173,11 @@ public class ArrayByteList implements List<Byte> {
     }
 
     @Override
-    public Byte remove(int index) {
+    public Long remove(int index) {
         return removeAt(index);
     }
 
-    public byte removeAt(int index) {
+    public long removeAt(int index) {
         Objects.checkIndex(index, size);
         var oldValue = array[index];
         var newSize = size - 1;
@@ -227,7 +227,7 @@ public class ArrayByteList implements List<Byte> {
         return toList().containsAll(collection);
     }
 
-    public int indexOfPrimitive(byte ele) {
+    public int indexOfPrimitive(long ele) {
         for (var i = 0; i < size; i++) {
             if (array[i] == ele) {
                 return i;
@@ -236,7 +236,7 @@ public class ArrayByteList implements List<Byte> {
         return -1;
     }
 
-    public int lastIndexOfPrimitive(byte ele) {
+    public int lastIndexOfPrimitive(long ele) {
         for (var i = size - 1; i >= 0; i--) {
             if (array[i] == ele) {
                 return i;
@@ -247,31 +247,31 @@ public class ArrayByteList implements List<Byte> {
 
     @Override
     public int indexOf(Object ele) {
-        return indexOfPrimitive(ArrayUtils.byteValue((Byte) ele));
+        return indexOfPrimitive(ArrayUtils.longValue((Long) ele));
     }
 
     @Override
     public int lastIndexOf(Object ele) {
-        return lastIndexOfPrimitive(ArrayUtils.byteValue((Byte) ele));
+        return lastIndexOfPrimitive(ArrayUtils.longValue((Long) ele));
     }
 
     @Override
-    public Iterator<Byte> iterator() {
+    public Iterator<Long> iterator() {
         return new FastIterator();
     }
 
     @Override
-    public ListIterator<Byte> listIterator() {
+    public ListIterator<Long> listIterator() {
         return new FastListIterator(0);
     }
 
     @Override
-    public ListIterator<Byte> listIterator(int index) {
+    public ListIterator<Long> listIterator(int index) {
         return new FastListIterator(index);
     }
 
     @Override
-    public List<Byte> subList(int fromIndex, int toIndex) {
+    public List<Long> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
@@ -289,7 +289,7 @@ public class ArrayByteList implements List<Byte> {
         return builder.toString();
     }
 
-    private class FastIterator implements Iterator<Byte> {
+    private class FastIterator implements Iterator<Long> {
         int cursor;       // index of next element to return
         int lastCursor = -1; // index of last element returned; -1 if no such
 
@@ -298,7 +298,7 @@ public class ArrayByteList implements List<Byte> {
         }
 
         @Override
-        public Byte next() {
+        public Long next() {
             if (cursor >= size) {
                 throw new NoSuchElementException();
             }
@@ -317,7 +317,7 @@ public class ArrayByteList implements List<Byte> {
         }
     }
 
-    private class FastListIterator extends FastIterator implements ListIterator<Byte> {
+    private class FastListIterator extends FastIterator implements ListIterator<Long> {
         FastListIterator(int index) {
             super();
             cursor = index;
@@ -336,7 +336,7 @@ public class ArrayByteList implements List<Byte> {
         }
 
         @Override
-        public Byte previous() {
+        public Long previous() {
             if (cursor <= 0) {
                 throw new NoSuchElementException();
             }
@@ -346,15 +346,15 @@ public class ArrayByteList implements List<Byte> {
         }
 
         @Override
-        public void set(Byte e) {
+        public void set(Long e) {
             if (lastCursor < 0) {
                 throw new IllegalStateException();
             }
-            setPrimitive(lastCursor, ArrayUtils.byteValue(e));
+            setPrimitive(lastCursor, ArrayUtils.longValue(e));
         }
 
         @Override
-        public void add(Byte e) {
+        public void add(Long e) {
             addPrimitive(cursor++, e);
             lastCursor = -1;
         }

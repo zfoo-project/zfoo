@@ -18,16 +18,16 @@ import java.util.*;
  * @author godotg
  * @version 3.0
  */
-public class ArrayFloatList implements List<Float> {
+public class ArrayListFloat implements List<Float> {
 
     private float[] array;
     private int size;
 
-    public ArrayFloatList(int initialCapacity) {
+    public ArrayListFloat(int initialCapacity) {
         this.array = new float[initialCapacity];
     }
 
-    public ArrayFloatList(float[] array) {
+    public ArrayListFloat(float[] array) {
         this.array = array;
         this.size = array.length;
     }

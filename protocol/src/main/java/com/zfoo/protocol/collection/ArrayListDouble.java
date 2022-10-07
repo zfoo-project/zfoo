@@ -18,37 +18,37 @@ import java.util.*;
  * @author godotg
  * @version 3.0
  */
-public class ArrayShortList implements List<Short> {
+public class ArrayListDouble implements List<Double> {
 
-    private short[] array;
+    private double[] array;
     private int size;
 
-    public ArrayShortList(int initialCapacity) {
-        this.array = new short[initialCapacity];
+    public ArrayListDouble(int initialCapacity) {
+        this.array = new double[initialCapacity];
     }
 
-    public ArrayShortList(short[] array) {
+    public ArrayListDouble(double[] array) {
         this.array = array;
         this.size = array.length;
     }
 
-    public void fromList(List<Short> list) {
+    public void fromList(List<Double> list) {
         if (CollectionUtils.isEmpty(list)) {
             this.size = 0;
             return;
         }
         this.size = list.size();
-        this.array = ArrayUtils.shortToArray(list);
+        this.array = ArrayUtils.doubleToArray(list);
     }
 
-    public List<Short> toList() {
+    public List<Double> toList() {
         if (isEmpty()) {
             return new ArrayList<>();
         }
         return ArrayUtils.toList(toArrayPrimitive());
     }
 
-    public short[] toArrayPrimitive() {
+    public double[] toArrayPrimitive() {
         return Arrays.copyOf(array, size);
     }
 
@@ -81,48 +81,48 @@ public class ArrayShortList implements List<Short> {
 
     @Override
     public boolean contains(Object ele) {
-        return indexOfPrimitive(ArrayUtils.shortValue((Short) ele)) >= 0;
+        return indexOfPrimitive(ArrayUtils.doubleValue((Double) ele)) >= 0;
     }
 
     @Override
-    public Short get(int index) {
+    public Double get(int index) {
         return getPrimitive(index);
     }
 
-    public short getPrimitive(int index) {
+    public double getPrimitive(int index) {
         Objects.checkIndex(index, size);
         return array[index];
     }
 
     @Override
-    public Short set(int index, Short ele) {
+    public Double set(int index, Double ele) {
         var old = array[index];
-        setPrimitive(index, ArrayUtils.shortValue(ele));
+        setPrimitive(index, ArrayUtils.doubleValue(ele));
         return old;
     }
 
-    public void setPrimitive(int index, short ele) {
+    public void setPrimitive(int index, double ele) {
         Objects.checkIndex(index, size);
         array[index] = ele;
     }
 
     @Override
-    public boolean add(Short ele) {
-        return addPrimitive(ArrayUtils.shortValue(ele));
+    public boolean add(Double ele) {
+        return addPrimitive(ArrayUtils.doubleValue(ele));
     }
 
-    public boolean addPrimitive(short ele) {
+    public boolean addPrimitive(double ele) {
         ensureCapacity(1);
         array[size++] = ele;
         return true;
     }
 
     @Override
-    public void add(int index, Short ele) {
-        addPrimitive(index, ArrayUtils.shortValue(ele));
+    public void add(int index, Double ele) {
+        addPrimitive(index, ArrayUtils.doubleValue(ele));
     }
 
-    public void addPrimitive(int index, short ele) {
+    public void addPrimitive(int index, double ele) {
         checkIndexForAdd(index);
         ensureCapacity(1);
         System.arraycopy(array, index, array, index + 1, size - index);
@@ -131,7 +131,7 @@ public class ArrayShortList implements List<Short> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends Short> collection) {
+    public boolean addAll(Collection<? extends Double> collection) {
         if (CollectionUtils.isEmpty(collection)) {
             return false;
         }
@@ -143,13 +143,13 @@ public class ArrayShortList implements List<Short> {
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Short> collection) {
+    public boolean addAll(int index, Collection<? extends Double> collection) {
         if (CollectionUtils.isEmpty(collection)) {
             return false;
         }
         checkIndexForAdd(index);
         ensureCapacity(collection.size());
-        var appendArray = ArrayUtils.shortToArray(new ArrayList<>(collection));
+        var appendArray = ArrayUtils.doubleToArray(new ArrayList<>(collection));
         var appendLength = appendArray.length;
 
         var moved = size - index;
@@ -173,11 +173,11 @@ public class ArrayShortList implements List<Short> {
     }
 
     @Override
-    public Short remove(int index) {
+    public Double remove(int index) {
         return removeAt(index);
     }
 
-    public short removeAt(int index) {
+    public double removeAt(int index) {
         Objects.checkIndex(index, size);
         var oldValue = array[index];
         var newSize = size - 1;
@@ -227,7 +227,7 @@ public class ArrayShortList implements List<Short> {
         return toList().containsAll(collection);
     }
 
-    public int indexOfPrimitive(short ele) {
+    public int indexOfPrimitive(double ele) {
         for (var i = 0; i < size; i++) {
             if (array[i] == ele) {
                 return i;
@@ -236,7 +236,7 @@ public class ArrayShortList implements List<Short> {
         return -1;
     }
 
-    public int lastIndexOfPrimitive(short ele) {
+    public int lastIndexOfPrimitive(double ele) {
         for (var i = size - 1; i >= 0; i--) {
             if (array[i] == ele) {
                 return i;
@@ -247,31 +247,31 @@ public class ArrayShortList implements List<Short> {
 
     @Override
     public int indexOf(Object ele) {
-        return indexOfPrimitive(ArrayUtils.shortValue((Short) ele));
+        return indexOfPrimitive(ArrayUtils.doubleValue((Double) ele));
     }
 
     @Override
     public int lastIndexOf(Object ele) {
-        return lastIndexOfPrimitive(ArrayUtils.shortValue((Short) ele));
+        return lastIndexOfPrimitive(ArrayUtils.doubleValue((Double) ele));
     }
 
     @Override
-    public Iterator<Short> iterator() {
+    public Iterator<Double> iterator() {
         return new FastIterator();
     }
 
     @Override
-    public ListIterator<Short> listIterator() {
+    public ListIterator<Double> listIterator() {
         return new FastListIterator(0);
     }
 
     @Override
-    public ListIterator<Short> listIterator(int index) {
+    public ListIterator<Double> listIterator(int index) {
         return new FastListIterator(index);
     }
 
     @Override
-    public List<Short> subList(int fromIndex, int toIndex) {
+    public List<Double> subList(int fromIndex, int toIndex) {
         return ArrayUtils.toList(array).subList(fromIndex, toIndex);
     }
 
@@ -289,7 +289,7 @@ public class ArrayShortList implements List<Short> {
         return builder.toString();
     }
 
-    private class FastIterator implements Iterator<Short> {
+    private class FastIterator implements Iterator<Double> {
         int cursor;       // index of next element to return
         int lastCursor = -1; // index of last element returned; -1 if no such
 
@@ -298,7 +298,7 @@ public class ArrayShortList implements List<Short> {
         }
 
         @Override
-        public Short next() {
+        public Double next() {
             if (cursor >= size) {
                 throw new NoSuchElementException();
             }
@@ -317,7 +317,7 @@ public class ArrayShortList implements List<Short> {
         }
     }
 
-    private class FastListIterator extends FastIterator implements ListIterator<Short> {
+    private class FastListIterator extends FastIterator implements ListIterator<Double> {
         FastListIterator(int index) {
             super();
             cursor = index;
@@ -336,7 +336,7 @@ public class ArrayShortList implements List<Short> {
         }
 
         @Override
-        public Short previous() {
+        public Double previous() {
             if (cursor <= 0) {
                 throw new NoSuchElementException();
             }
@@ -346,15 +346,15 @@ public class ArrayShortList implements List<Short> {
         }
 
         @Override
-        public void set(Short e) {
+        public void set(Double e) {
             if (lastCursor < 0) {
                 throw new IllegalStateException();
             }
-            setPrimitive(lastCursor, ArrayUtils.shortValue(e));
+            setPrimitive(lastCursor, ArrayUtils.doubleValue(e));
         }
 
         @Override
-        public void add(Short e) {
+        public void add(Double e) {
             addPrimitive(cursor++, e);
             lastCursor = -1;
         }

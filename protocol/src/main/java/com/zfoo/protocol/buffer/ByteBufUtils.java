@@ -751,7 +751,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Boolean> readBooleanList(ByteBuf byteBuf) {
-        return new ArrayBooleanList(readBooleanArray(byteBuf));
+        return new ArrayListBoolean(readBooleanArray(byteBuf));
     }
 
     public static void writeBooleanSet(ByteBuf byteBuf, Set<Boolean> set) {
@@ -824,7 +824,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Byte> readByteList(ByteBuf byteBuf) {
-        return new ArrayByteList(readByteArray(byteBuf));
+        return new ArrayListByte(readByteArray(byteBuf));
     }
 
     public static void writeByteSet(ByteBuf byteBuf, Set<Byte> set) {
@@ -905,7 +905,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Short> readShortList(ByteBuf byteBuf) {
-        return new ArrayShortList(readShortArray(byteBuf));
+        return new ArrayListShort(readShortArray(byteBuf));
     }
 
     public static void writeShortSet(ByteBuf byteBuf, Set<Short> set) {
@@ -979,7 +979,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Integer> readIntList(ByteBuf byteBuf) {
-        return new ArrayIntList(readIntArray(byteBuf));
+        return new ArrayListInt(readIntArray(byteBuf));
     }
 
     public static void writeIntSet(ByteBuf byteBuf, Set<Integer> set) {
@@ -1053,7 +1053,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Long> readLongList(ByteBuf byteBuf) {
-        return new ArrayLongList(readLongArray(byteBuf));
+        return new ArrayListLong(readLongArray(byteBuf));
     }
 
     public static void writeLongSet(ByteBuf byteBuf, Set<Long> set) {
@@ -1134,7 +1134,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Float> readFloatList(ByteBuf byteBuf) {
-        return new ArrayFloatList(readFloatArray(byteBuf));
+        return new ArrayListFloat(readFloatArray(byteBuf));
     }
 
     public static void writeFloatSet(ByteBuf byteBuf, Set<Float> set) {
@@ -1215,7 +1215,7 @@ public abstract class ByteBufUtils {
     }
 
     public static List<Double> readDoubleList(ByteBuf byteBuf) {
-        return new ArrayDoubleList(readDoubleArray(byteBuf));
+        return new ArrayListDouble(readDoubleArray(byteBuf));
     }
 
     public static void writeDoubleSet(ByteBuf byteBuf, Set<Double> set) {

@@ -18,16 +18,16 @@ import java.util.*;
  * @author godotg
  * @version 3.0
  */
-public class ArrayIntList implements List<Integer> {
+public class ArrayListInt implements List<Integer> {
 
     private int[] array;
     private int size;
 
-    public ArrayIntList(int initialCapacity) {
+    public ArrayListInt(int initialCapacity) {
         this.array = new int[initialCapacity];
     }
 
-    public ArrayIntList(int[] array) {
+    public ArrayListInt(int[] array) {
         this.array = array;
         this.size = array.length;
     }

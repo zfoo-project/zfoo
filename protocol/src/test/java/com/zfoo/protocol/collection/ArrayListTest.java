@@ -26,7 +26,7 @@ public class ArrayListTest {
 
     @Test
     public void testAdd() {
-        var list = new ArrayIntList(1);
+        var list = new ArrayListInt(1);
         Assert.assertTrue(list.isEmpty());
         Assert.assertEquals(list.size(), 0);
         int[] array = new int[100];
@@ -49,9 +49,9 @@ public class ArrayListTest {
         var array1 = new int[]{0, 1, 2};
         var array2 = new int[]{3, 4, 5};
         var array3 = new int[]{6, 7, 8};
-        var list1 = new ArrayIntList(array1);
-        var list2 = new ArrayIntList(array2);
-        var list3 = new ArrayIntList(array3);
+        var list1 = new ArrayListInt(array1);
+        var list2 = new ArrayListInt(array2);
+        var list3 = new ArrayListInt(array3);
         list2.addAll(0, list1);
         Assert.assertArrayEquals(list2.toArrayPrimitive(), new int[]{0, 1, 2, 3, 4, 5});
         try {
@@ -67,7 +67,7 @@ public class ArrayListTest {
 
     @Test
     public void testRemove() {
-        var list = new ArrayIntList(1);
+        var list = new ArrayListInt(1);
         for (var i = 1; i <= 5; i++) {
             list.add(i);
         }
@@ -102,9 +102,9 @@ public class ArrayListTest {
         var array1 = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 6, 7, 8};
         var array2 = new int[]{3, 4, 5};
         var array3 = new int[]{6, 7, 8};
-        var list1 = new ArrayIntList(array1);
-        var list2 = new ArrayIntList(array2);
-        var list3 = new ArrayIntList(array3);
+        var list1 = new ArrayListInt(array1);
+        var list2 = new ArrayListInt(array2);
+        var list3 = new ArrayListInt(array3);
         list1.removeAll(list3);
         Assert.assertArrayEquals(list1.toArrayPrimitive(), new int[]{0, 1, 2, 3, 4, 5});
 
@@ -116,7 +116,7 @@ public class ArrayListTest {
 
     @Test
     public void testInsert() {
-        var list = new ArrayIntList(1);
+        var list = new ArrayListInt(1);
         for (var i = 1; i <= 3; i++) {
             list.add(i);
         }
@@ -143,7 +143,7 @@ public class ArrayListTest {
 
     @Test
     public void testSet() {
-        var list = new ArrayIntList(1);
+        var list = new ArrayListInt(1);
         for (var i = 1; i <= 3; i++) {
             list.add(i);
         }
@@ -167,7 +167,7 @@ public class ArrayListTest {
 
     @Test
     public void testAddRemoveLast() {
-        var list = new ArrayIntList(1);
+        var list = new ArrayListInt(1);
         for (var i = 1; i <= 3; i++) {
             list.add(i);
         }
@@ -196,7 +196,7 @@ public class ArrayListTest {
     @Test
     public void testIndexOf() {
         var srcArray = new int[]{1, 2, 3, 2, 1, 2, 3, 2, 1};
-        var list = new ArrayIntList(0);
+        var list = new ArrayListInt(0);
         list.addAll(ArrayUtils.toList(srcArray));
         Assert.assertArrayEquals(list.toArrayPrimitive(), srcArray);
         Assert.assertEquals(list.indexOf(1), 0);
@@ -211,7 +211,7 @@ public class ArrayListTest {
 
     @Test
     public void testIterator() {
-        var list = new ArrayIntList(0);
+        var list = new ArrayListInt(0);
         for (var i = 0; i < 42; i++) {
             Assert.assertTrue(list.add(i));
         }
