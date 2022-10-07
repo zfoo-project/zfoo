@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class HashSetLong extends AbstractSet<Long> {
 
-    private final LongObjectHashMap<Object> map;
+    private final LongObjectHashMap<Boolean> map;
 
     public HashSetLong() {
         map = new LongObjectHashMap<>();
