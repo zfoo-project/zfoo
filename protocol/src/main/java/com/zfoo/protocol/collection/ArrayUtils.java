@@ -41,28 +41,28 @@ public abstract class ArrayUtils {
         return value != null && value;
     }
 
-    public static byte byteValue(Byte value) {
-        return value == null ? 0 : value;
+    public static byte byteValue(Number value) {
+        return value == null ? 0 : value.byteValue();
     }
 
-    public static short shortValue(Short value) {
-        return value == null ? 0 : value;
+    public static short shortValue(Number value) {
+        return value == null ? 0 : value.shortValue();
     }
 
-    public static int intValue(Integer value) {
-        return value == null ? 0 : value;
+    public static int intValue(Number value) {
+        return value == null ? 0 : value.intValue();
     }
 
-    public static long longValue(Long value) {
-        return value == null ? 0 : value;
+    public static long longValue(Number value) {
+        return value == null ? 0 : value.longValue();
     }
 
-    public static float floatValue(Float value) {
-        return value == null ? 0 : value;
+    public static float floatValue(Number value) {
+        return value == null ? 0 : value.floatValue();
     }
 
-    public static double doubleValue(Double value) {
-        return value == null ? 0 : value;
+    public static double doubleValue(Number value) {
+        return value == null ? 0 : value.doubleValue();
     }
 
     public static char charValue(Character value) {

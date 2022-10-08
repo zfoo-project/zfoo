@@ -86,10 +86,10 @@ public class HashMapLongLong implements Map<Long, Long> {
 
     @Override
     public boolean containsValue(Object value) {
-        return containsValuePrimitive(ArrayUtils.intValue((Integer) value));
+        return containsValuePrimitive(ArrayUtils.longValue((Long) value));
     }
 
-    public boolean containsValuePrimitive(int value) {
+    public boolean containsValuePrimitive(long value) {
         for (var i = 0; i < statuses.length; i++) {
             if (statuses[i] == FILLED && values[i] == value) {
                 return true;
@@ -271,8 +271,8 @@ public class HashMapLongLong implements Map<Long, Long> {
 
         @Override
         public Long setValue(Long value) {
-            var prevValue = ArrayUtils.longValue(values[entryIndex]);
-            values[entryIndex] = value;
+            var prevValue = values[entryIndex];
+            values[entryIndex] = ArrayUtils.longValue(value);
             return prevValue;
         }
     }

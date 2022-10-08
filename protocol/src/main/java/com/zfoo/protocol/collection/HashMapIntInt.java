@@ -289,8 +289,8 @@ public class HashMapIntInt implements Map<Integer, Integer> {
 
         @Override
         public Integer setValue(Integer value) {
-            var prevValue = ArrayUtils.intValue(values[entryIndex]);
-            values[entryIndex] = value;
+            var prevValue = values[entryIndex];
+            values[entryIndex] = ArrayUtils.intValue(value);
             return prevValue;
         }
     }

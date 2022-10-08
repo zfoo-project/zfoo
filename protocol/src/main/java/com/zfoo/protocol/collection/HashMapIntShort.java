@@ -25,21 +25,21 @@ import static com.zfoo.protocol.collection.HashMapIntInt.*;
  * @author godotg
  * @version 3.0
  */
-public class HashMapLongInt implements Map<Long, Integer> {
+public class HashMapIntShort implements Map<Integer, Short> {
 
-    private long[] keys;
-    private int[] values;
+    private int[] keys;
+    private short[] values;
     private byte[] statuses;
     private int size;
     private int maxSize;
     private int mask;
 
 
-    public HashMapLongInt() {
+    public HashMapIntShort() {
         this(IntObjectHashMap.DEFAULT_CAPACITY);
     }
 
-    public HashMapLongInt(int initialCapacity) {
+    public HashMapIntShort(int initialCapacity) {
         var capacity = MathUtil.safeFindNextPositivePowerOfTwo(initialCapacity);
         initCapacity(capacity);
     }
@@ -47,8 +47,8 @@ public class HashMapLongInt implements Map<Long, Integer> {
     private void initCapacity(int capacity) {
         mask = capacity - 1;
 
-        keys = new long[capacity];
-        values = new int[capacity];
+        keys = new int[capacity];
+        values = new short[capacity];
         statuses = new byte[capacity];
 
         maxSize = calcMaxSize(capacity);
@@ -86,10 +86,10 @@ public class HashMapLongInt implements Map<Long, Integer> {
 
     @Override
     public boolean containsValue(Object value) {
-        return containsValuePrimitive(ArrayUtils.intValue((Integer) value));
+        return containsValuePrimitive(ArrayUtils.shortValue((Short) value));
     }
 
-    public boolean containsValuePrimitive(int value) {
+    public boolean containsValuePrimitive(short value) {
         for (var i = 0; i < statuses.length; i++) {
             if (statuses[i] == FILLED && values[i] == value) {
                 return true;
@@ -99,17 +99,17 @@ public class HashMapLongInt implements Map<Long, Integer> {
     }
 
     @Override
-    public Integer get(Object key) {
-        var index = indexOf(ArrayUtils.longValue((Long) key));
+    public Short get(Object key) {
+        var index = indexOf(ArrayUtils.intValue((Integer) key));
         return index == -1 ? null : values[index];
     }
 
     @Override
-    public Integer put(Long key, Integer value) {
-        return putPrimitive(ArrayUtils.longValue(key), ArrayUtils.intValue(value));
+    public Short put(Integer key, Short value) {
+        return putPrimitive(ArrayUtils.intValue(key), ArrayUtils.shortValue(value));
     }
 
-    public Integer putPrimitive(long key, int value) {
+    public Short putPrimitive(int key, short value) {
         var startIndex = hashIndex(key);
         var index = startIndex;
 
@@ -146,11 +146,11 @@ public class HashMapLongInt implements Map<Long, Integer> {
     }
 
     @Override
-    public Integer remove(Object key) {
-        return removePrimitive(ArrayUtils.longValue((Long) key));
+    public Short remove(Object key) {
+        return removePrimitive(ArrayUtils.intValue((Integer) key));
     }
 
-    public Integer removePrimitive(long key) {
+    public Short removePrimitive(int key) {
         var index = indexOf(key);
         if (index == -1) {
             return null;
@@ -161,13 +161,13 @@ public class HashMapLongInt implements Map<Long, Integer> {
     }
 
     private void removeAt(int index) {
-        set(index, 0, 0, REMOVED);
+        set(index, 0, (short) 0, REMOVED);
         size--;
     }
 
     @Override
-    public void putAll(Map<? extends Long, ? extends Integer> m) {
-        for (Entry<? extends Long, ? extends Integer> entry : m.entrySet()) {
+    public void putAll(Map<? extends Integer, ? extends Short> m) {
+        for (Entry<? extends Integer, ? extends Short> entry : m.entrySet()) {
             put(entry.getKey(), entry.getValue());
         }
     }
@@ -175,31 +175,31 @@ public class HashMapLongInt implements Map<Long, Integer> {
     @Override
     public void clear() {
         Arrays.fill(keys, 0);
-        Arrays.fill(values, 0);
+        Arrays.fill(values, (short) 0);
         Arrays.fill(statuses, FREE);
         size = 0;
     }
 
     @Override
-    public Set<Long> keySet() {
+    public Set<Integer> keySet() {
         return new KeySet();
     }
 
     @Override
-    public Collection<Integer> values() {
+    public Collection<Short> values() {
         return new ValueSet();
     }
 
     @Override
-    public Set<Entry<Long, Integer>> entrySet() {
+    public Set<Entry<Integer, Short>> entrySet() {
         return new EntrySet();
     }
 
-    private int hashIndex(long key) {
-        return ((int) (key ^ (key >>> 32))) & mask;
+    private int hashIndex(int key) {
+        return key & mask;
     }
 
-    private void set(int index, long key, int value, byte status) {
+    private void set(int index, int key, short value, byte status) {
         keys[index] = key;
         values[index] = value;
         statuses[index] = status;
@@ -231,7 +231,7 @@ public class HashMapLongInt implements Map<Long, Integer> {
         }
     }
 
-    private int indexOf(long key) {
+    private int indexOf(int key) {
         int startIndex = hashIndex(key);
         int index = startIndex;
 
@@ -252,7 +252,7 @@ public class HashMapLongInt implements Map<Long, Integer> {
         }
     }
 
-    private class PrimitiveEntry implements Entry<Long, Integer> {
+    private class PrimitiveEntry implements Entry<Integer, Short> {
         int entryIndex;
 
         PrimitiveEntry(int entryIndex) {
@@ -260,24 +260,25 @@ public class HashMapLongInt implements Map<Long, Integer> {
         }
 
         @Override
-        public Long getKey() {
+        public Integer getKey() {
             return keys[entryIndex];
         }
 
         @Override
-        public Integer getValue() {
+        public Short getValue() {
             return values[entryIndex];
         }
 
         @Override
-        public Integer setValue(Integer value) {
+        public Short setValue(Short value) {
             var prevValue = values[entryIndex];
-            values[entryIndex] = ArrayUtils.intValue(value);
+            values[entryIndex] = ArrayUtils.shortValue(value);
             return prevValue;
         }
+
     }
 
-    private class FastIterator implements Iterator<Entry<Long, Integer>> {
+    private class FastIterator implements Iterator<Entry<Integer, Short>> {
         int lastCursor = -1;
         int cursor = -1;
 
@@ -295,7 +296,7 @@ public class HashMapLongInt implements Map<Long, Integer> {
         }
 
         @Override
-        public Entry<Long, Integer> next() {
+        public Entry<Integer, Short> next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
@@ -317,36 +318,7 @@ public class HashMapLongInt implements Map<Long, Integer> {
         }
     }
 
-    private final class KeySet extends AbstractSet<Long> {
-        FastIterator fastIterator = new FastIterator();
-
-        @Override
-        public Iterator<Long> iterator() {
-            return new Iterator<Long>() {
-                @Override
-                public boolean hasNext() {
-                    return fastIterator.hasNext();
-                }
-
-                @Override
-                public Long next() {
-                    return fastIterator.next().getKey();
-                }
-
-                @Override
-                public void remove() {
-                    fastIterator.remove();
-                }
-            };
-        }
-
-        @Override
-        public int size() {
-            return HashMapLongInt.this.size();
-        }
-    }
-
-    private final class ValueSet extends AbstractSet<Integer> {
+    private final class KeySet extends AbstractSet<Integer> {
         FastIterator fastIterator = new FastIterator();
 
         @Override
@@ -359,6 +331,35 @@ public class HashMapLongInt implements Map<Long, Integer> {
 
                 @Override
                 public Integer next() {
+                    return fastIterator.next().getKey();
+                }
+
+                @Override
+                public void remove() {
+                    fastIterator.remove();
+                }
+            };
+        }
+
+        @Override
+        public int size() {
+            return HashMapIntShort.this.size();
+        }
+    }
+
+    private final class ValueSet extends AbstractSet<Short> {
+        FastIterator fastIterator = new FastIterator();
+
+        @Override
+        public Iterator<Short> iterator() {
+            return new Iterator<Short>() {
+                @Override
+                public boolean hasNext() {
+                    return fastIterator.hasNext();
+                }
+
+                @Override
+                public Short next() {
                     return fastIterator.next().getValue();
                 }
 
@@ -371,19 +372,19 @@ public class HashMapLongInt implements Map<Long, Integer> {
 
         @Override
         public int size() {
-            return HashMapLongInt.this.size();
+            return HashMapIntShort.this.size();
         }
     }
 
-    private final class EntrySet extends AbstractSet<Entry<Long, Integer>> {
+    private final class EntrySet extends AbstractSet<Entry<Integer, Short>> {
         @Override
-        public Iterator<Entry<Long, Integer>> iterator() {
+        public Iterator<Entry<Integer, Short>> iterator() {
             return new FastIterator();
         }
 
         @Override
         public int size() {
-            return HashMapLongInt.this.size();
+            return HashMapIntShort.this.size();
         }
     }
 
