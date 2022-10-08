@@ -26,7 +26,15 @@ import java.util.concurrent.locks.ReentrantLock;
 public class CopyOnWriteHashMapLongObject<V> implements Map<Long, V> {
 
     private final ReentrantLock lock = new ReentrantLock();
-    private volatile LongObjectHashMap<V> map = new LongObjectHashMap<>();
+    private volatile LongObjectHashMap<V> map;
+
+    public CopyOnWriteHashMapLongObject() {
+        map = new LongObjectHashMap<>();
+    }
+
+    public CopyOnWriteHashMapLongObject(int initialCapacity) {
+        map = new LongObjectHashMap<>(initialCapacity);
+    }
 
     private LongObjectHashMap<V> newCopyMap() {
         var newMap = new LongObjectHashMap<V>();

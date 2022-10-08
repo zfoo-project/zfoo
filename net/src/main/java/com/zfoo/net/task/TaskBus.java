@@ -43,7 +43,7 @@ public final class TaskBus {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskBus.class);
 
-    // 线程池的大小
+    // 线程池的大小，也可以通过provider thread配置指定
     public static final int EXECUTOR_SIZE;
 
     private static final ITaskDispatch taskDispatch;
@@ -53,8 +53,6 @@ public final class TaskBus {
      * 使用不同的线程池，让线程池之间实现隔离，互不影响
      */
     private static final ExecutorService[] executors;
-
-    private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>();
 
     static {
         var localConfig = NetContext.getConfigManager().getLocalConfig();
@@ -73,6 +71,8 @@ public final class TaskBus {
             executors[i] = executor;
         }
     }
+
+    private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>(EXECUTOR_SIZE);
 
     public static class TaskThreadFactory implements ThreadFactory {
         private final int poolNumber;
