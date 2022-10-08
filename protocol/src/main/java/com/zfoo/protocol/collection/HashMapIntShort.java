@@ -104,6 +104,14 @@ public class HashMapIntShort implements Map<Integer, Short> {
         return index == -1 ? null : values[index];
     }
 
+    public short getPrimitive(int key) {
+        var index = indexOf(key);
+        if (index == -1) {
+            throw new NoSuchElementException();
+        }
+        return values[index];
+    }
+
     @Override
     public Short put(Integer key, Short value) {
         return putPrimitive(ArrayUtils.intValue(key), ArrayUtils.shortValue(value));

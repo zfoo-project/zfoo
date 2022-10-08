@@ -93,9 +93,6 @@ public class ProtocolAnalysis {
 
     /**
      * 真正的注册协议，将协议id和协议信息关联起来
-     *
-     * @param protocolClassSet
-     * @param generateOperation
      */
     public static synchronized void analyze(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
         AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
@@ -112,7 +109,7 @@ public class ProtocolAnalysis {
             }
 
             // 通过指定类注册的协议，全部使用字节码增强
-            var enhanceList = Arrays.stream(protocols).filter(it -> Objects.nonNull(it)).collect(Collectors.toList());
+            var enhanceList = Arrays.stream(protocols).filter(Objects::nonNull).collect(Collectors.toList());
             enhance(generateOperation, enhanceList);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -172,9 +169,28 @@ public class ProtocolAnalysis {
     }
 
     private static void enhance(GenerateOperation generateOperation, List<IProtocolRegistration> enhanceList) throws IOException, ClassNotFoundException, NotFoundException, CannotCompileException, NoSuchFieldException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+        initProtocolIdMap();
         enhanceProtocolBefore(generateOperation);
         enhanceProtocolRegistration(enhanceList);
         enhanceProtocolAfter(generateOperation);
+    }
+
+    private static void initProtocolIdMap() {
+        for (var protocol : protocols) {
+            if (protocol == null) {
+                continue;
+            }
+            var clazz = protocol.protocolConstructor().getDeclaringClass();
+            var protocolId = protocol.protocolId();
+            protocolIdMap.put(clazz, protocolId);
+            protocolIdPrimitiveMap.putPrimitive(clazz.hashCode(), protocolId);
+        }
+        var distinctHashcode = protocolIdMap.keySet().stream().map(Object::hashCode).distinct().count();
+        if (distinctHashcode == protocolIdMap.size()) {
+            protocolIdMap = null;
+        } else {
+            protocolIdPrimitiveMap = null;
+        }
     }
 
     private static void enhanceProtocolBefore(GenerateOperation generateOperation) throws IOException, ClassNotFoundException {
@@ -263,7 +279,7 @@ public class ProtocolAnalysis {
         var compatibleFields = compatibleFieldMap.entrySet()
                 .stream()
                 .sorted((a, b) -> a.getKey() - b.getKey())
-                .map(it -> it.getValue())
+                .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
         notCompatibleFields.addAll(compatibleFields);
         return notCompatibleFields;
@@ -483,8 +499,6 @@ public class ProtocolAnalysis {
         if (previous != null) {
             throw new RunException("[{}][{}]协议号[protocolId:{}]重复", clazz.getCanonicalName(), previous.getCanonicalName(), protocolId);
         }
-        //存储class和protocolId的映射
-        protocolIdMap.put(clazz, protocolId);
     }
 
     public static short getProtocolIdByClass(Class<?> clazz) {
@@ -535,14 +549,14 @@ public class ProtocolAnalysis {
         // 模块id不能重复
         var moduleIdSet = new HashSet<Byte>();
         Arrays.stream(modules)
-                .filter(it -> Objects.nonNull(it))
+                .filter(Objects::nonNull)
                 .peek(it -> AssertionUtils.isTrue(!moduleIdSet.contains(it.getId()), "模块[{}]存在重复的id，模块的id不能重复", it))
                 .forEach(it -> moduleIdSet.add(it.getId()));
 
         // 模块名称不能重复
         var moduleNameSet = new HashSet<String>();
         Arrays.stream(modules)
-                .filter(it -> Objects.nonNull(it))
+                .filter(Objects::nonNull)
                 .peek(it -> AssertionUtils.isTrue(!moduleNameSet.contains(it.getName()), "模块[{}]存在重复的name，模块名称不能重复", it))
                 .forEach(it -> moduleNameSet.add(it.getName()));
     }

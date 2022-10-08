@@ -13,6 +13,7 @@
 package com.zfoo.protocol;
 
 import com.zfoo.protocol.buffer.ByteBufUtils;
+import com.zfoo.protocol.collection.HashMapIntShort;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
@@ -44,10 +45,10 @@ public class ProtocolManager {
     public static final ProtocolModule[] modules = new ProtocolModule[MAX_MODULE_NUM];
 
     /**
-     * key:协议class
-     * value:protocolId
+     * key:协议class，value:protocolId，如果所有协议Class返回的hashcode都不相同（大概率事件），则使用高性能的HashMapIntShort
      */
-    public static final Map<Class<?>, Short> protocolIdMap = new HashMap<>();
+    public static Map<Class<?>, Short> protocolIdMap = new HashMap<>();
+    public static HashMapIntShort protocolIdPrimitiveMap = new HashMapIntShort();
 
     static {
         // 初始化默认协议模块
@@ -79,9 +80,6 @@ public class ProtocolManager {
 
     /**
      * 根据模块id查找模块
-     *
-     * @param moduleId
-     * @return
      */
     public static ProtocolModule moduleByModuleId(byte moduleId) {
         var module = modules[moduleId];
@@ -91,13 +89,10 @@ public class ProtocolManager {
 
     /**
      * 根据模块名字查找模块
-     *
-     * @param name
-     * @return
      */
     public static ProtocolModule moduleByModuleName(String name) {
         var moduleOptional = Arrays.stream(modules)
-                .filter(it -> Objects.nonNull(it))
+                .filter(Objects::nonNull)
                 .filter(it -> it.getName().equals(name))
                 .findFirst();
         if (moduleOptional.isEmpty()) {
@@ -107,10 +102,9 @@ public class ProtocolManager {
     }
 
     public static short protocolId(Class<?> clazz) {
-        var protocolId = protocolIdMap.get(clazz);
-        return protocolId;
+        return protocolIdMap == null ? protocolIdPrimitiveMap.getPrimitive(clazz.hashCode()) : protocolIdMap.get(clazz);
     }
-    
+
     public static void initProtocol(Set<Class<?>> protocolClassSet) {
         ProtocolAnalysis.analyze(protocolClassSet, GenerateOperation.NO_OPERATION);
     }
