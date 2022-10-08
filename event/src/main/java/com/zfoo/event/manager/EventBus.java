@@ -16,6 +16,7 @@ package com.zfoo.event.manager;
 import com.zfoo.event.model.event.IEvent;
 import com.zfoo.event.model.vo.IEventReceiver;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.SafeRunnable;
@@ -47,7 +48,7 @@ public abstract class EventBus {
 
     private static final ExecutorService[] executors = new ExecutorService[EXECUTORS_SIZE];
 
-    private static final Map<Long, ExecutorService> threadMap = new ConcurrentHashMap<>();
+    private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>();
 
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
 
@@ -151,7 +152,7 @@ public abstract class EventBus {
     }
 
     public static Executor threadExecutor(long currentThreadId) {
-        return threadMap.get(currentThreadId);
+        return threadMap.getPrimitive(currentThreadId);
     }
 }
 

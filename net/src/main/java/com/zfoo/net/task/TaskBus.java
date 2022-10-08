@@ -18,6 +18,7 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.task.dispatcher.AbstractTaskDispatch;
 import com.zfoo.net.task.dispatcher.ITaskDispatch;
 import com.zfoo.net.task.model.PacketReceiverTask;
+import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
@@ -53,7 +54,7 @@ public final class TaskBus {
      */
     private static final ExecutorService[] executors;
 
-    private static final Map<Long, ExecutorService> threadMap = new ConcurrentHashMap<>();
+    private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>();
 
     static {
         var localConfig = NetContext.getConfigManager().getLocalConfig();
@@ -131,7 +132,7 @@ public final class TaskBus {
     // 在task，event，scheduler线程执行的异步请求，请求成功过后依然在相同的线程执行回调任务
     public static Executor currentThreadExecutor() {
         var threadId = Thread.currentThread().getId();
-        var taskExecutor = threadMap.get(threadId);
+        var taskExecutor = threadMap.getPrimitive(threadId);
         if (taskExecutor != null) {
             return taskExecutor;
         }
