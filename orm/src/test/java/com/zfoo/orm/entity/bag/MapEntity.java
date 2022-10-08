@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-@EntityCache(cacheStrategy = "thousand", persister = @Persister("time30s"))
+@EntityCache(persister = @Persister("time30s"))
 public class MapEntity implements IEntity<Long> {
     @Id
     private long id;

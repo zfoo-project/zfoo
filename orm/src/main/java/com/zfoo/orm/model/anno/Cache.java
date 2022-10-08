@@ -22,10 +22,8 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface EntityCache {
+public @interface Cache {
 
-    Cache cache() default @Cache;
-
-    Persister persister() default @Persister;
+    String value() default "default";
 
 }

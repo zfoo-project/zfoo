@@ -305,9 +305,10 @@ public class OrmManager implements IOrmManager {
         var cacheStrategies = ormConfig.getCaches();
         var persisterStrategies = ormConfig.getPersisters();
 
-        var cache = clazz.getAnnotation(EntityCache.class);
-        var cacheStrategyOptional = cacheStrategies.stream().filter(it -> it.getStrategy().equals(cache.cacheStrategy())).findFirst();
-        AssertionUtils.isTrue(cacheStrategyOptional.isPresent(), "实体类Entity[{}]没有找到缓存策略[{}]", clazz.getSimpleName(), cache.cacheStrategy());
+        var entityCache = clazz.getAnnotation(EntityCache.class);
+        var cache = entityCache.cache();
+        var cacheStrategyOptional = cacheStrategies.stream().filter(it -> it.getStrategy().equals(cache.value())).findFirst();
+        AssertionUtils.isTrue(cacheStrategyOptional.isPresent(), "实体类Entity[{}]没有找到缓存策略[{}]", clazz.getSimpleName(), cache.value());
 
         var cacheStrategy = cacheStrategyOptional.get();
         var cacheSize = cacheStrategy.getSize();
@@ -316,9 +317,9 @@ public class OrmManager implements IOrmManager {
         var idField = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class)[0];
         ReflectionUtils.makeAccessible(idField);
 
-        var persister = cache.persister();
+        var persister = entityCache.persister();
         var persisterStrategyOptional = persisterStrategies.stream().filter(it -> it.getStrategy().equals(persister.value())).findFirst();
-        AssertionUtils.isTrue(persisterStrategyOptional.isPresent(), "实体类Entity[{}]没有找到持久化策略[{}]", clazz.getSimpleName(), persister);
+        AssertionUtils.isTrue(persisterStrategyOptional.isPresent(), "实体类Entity[{}]没有找到持久化策略[{}]", clazz.getSimpleName(), persister.value());
 
         var persisterStrategy = persisterStrategyOptional.get();
         var indexDefMap = new HashMap<String, IndexDef>();
