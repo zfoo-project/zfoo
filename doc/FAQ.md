@@ -78,3 +78,12 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 - icon使用的material font，mdi 5.3.45，https://pictogrammers.github.io/@mdi/font/5.3.45/
 
 ---
+
+
+#### orm为什么不选择Spring的官方驱动SpringData mongodb
+
+- SpringData mongodb 里面会生成一个class字段，比较占内存，而且你移动class类的时候体验不友好，不知道现在版本改了没有
+- mongodb的官方驱动轻量，mongodb的官方驱动基本上什么功能都有，SpringData mongodb这个封装太重了
+- zfoo的orm接近0封装，简单的封装可以极大提高上层的自由度
+
+---
