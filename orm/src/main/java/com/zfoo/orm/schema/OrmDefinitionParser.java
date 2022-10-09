@@ -15,12 +15,12 @@ package com.zfoo.orm.schema;
 
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.manager.OrmManager;
-import com.zfoo.orm.model.accessor.MongodbAccessor;
+import com.zfoo.orm.accessor.MongodbAccessor;
 import com.zfoo.orm.model.config.CacheStrategy;
 import com.zfoo.orm.model.config.HostConfig;
 import com.zfoo.orm.model.config.OrmConfig;
 import com.zfoo.orm.model.config.PersisterStrategy;
-import com.zfoo.orm.model.query.MongodbQuery;
+import com.zfoo.orm.query.MongodbQuery;
 import com.zfoo.protocol.util.DomUtils;
 import com.zfoo.protocol.util.StringUtils;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;

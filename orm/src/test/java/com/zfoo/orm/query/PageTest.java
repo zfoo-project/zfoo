@@ -13,7 +13,6 @@
 
 package com.zfoo.orm.query;
 
-import com.zfoo.orm.model.query.Page;
 import org.junit.Assert;
 import org.junit.Test;
 

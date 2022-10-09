@@ -11,19 +11,25 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.model.query;
+package com.zfoo.orm.cache.persister;
 
-import com.zfoo.orm.model.entity.IEntity;
+import com.zfoo.orm.cache.EntityCaches;
+import com.zfoo.orm.model.vo.EntityDef;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class MongodbQuery implements IQuery {
+public abstract class AbstractOrmPersister implements IOrmPersister {
 
-    @Override
-    public <E extends IEntity<?>> IQueryBuilder<E> builder(Class<E> entityClazz) {
-        return new MongoQueryBuilder<E>(entityClazz);
+    protected EntityDef entityDef;
+
+    protected EntityCaches<?, ?> entityCaches;
+
+
+    public AbstractOrmPersister(EntityDef entityDef, EntityCaches<?, ?> entityCaches) {
+        this.entityDef = entityDef;
+        this.entityCaches = entityCaches;
     }
 
 }

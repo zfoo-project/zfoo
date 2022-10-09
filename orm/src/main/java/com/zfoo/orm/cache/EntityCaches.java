@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.model.cache;
+package com.zfoo.orm.cache;
 
 import com.github.benmanes.caffeine.cache.*;
 import com.mongodb.WriteConcern;
@@ -20,9 +19,9 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.model.entity.IEntity;
-import com.zfoo.orm.model.persister.IOrmPersister;
-import com.zfoo.orm.model.persister.PNode;
-import com.zfoo.orm.model.query.Page;
+import com.zfoo.orm.cache.persister.IOrmPersister;
+import com.zfoo.orm.cache.persister.PNode;
+import com.zfoo.orm.query.Page;
 import com.zfoo.orm.model.vo.EntityDef;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.AssertionUtils;

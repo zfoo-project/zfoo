@@ -11,18 +11,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.model.query;
-
-import com.zfoo.orm.model.entity.IEntity;
+package com.zfoo.orm.cache.persister;
 
 /**
- * 对数据库进行（查找）的相关方法
- *
  * @author godotg
  * @version 3.0
  */
-public interface IQuery {
+public interface IOrmPersister {
 
-    <E extends IEntity<?>> IQueryBuilder<E> builder(Class<E> entityClazz);
+    void start();
 
 }

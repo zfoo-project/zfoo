@@ -16,7 +16,6 @@ package com.zfoo.orm.cache;
 import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.entity.UserEntity;
-import com.zfoo.orm.model.cache.IEntityCaches;
 import com.zfoo.util.ThreadUtils;
 import org.bson.Document;
 import org.junit.Ignore;

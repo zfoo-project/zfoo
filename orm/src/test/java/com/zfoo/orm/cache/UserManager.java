@@ -15,7 +15,6 @@ package com.zfoo.orm.cache;
 
 import com.zfoo.orm.entity.UserEntity;
 import com.zfoo.orm.model.anno.EntityCachesInjection;
-import com.zfoo.orm.model.cache.IEntityCaches;
 import org.springframework.stereotype.Component;
 
 /**

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.model.query;
+package com.zfoo.orm.query;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.StringUtils;
