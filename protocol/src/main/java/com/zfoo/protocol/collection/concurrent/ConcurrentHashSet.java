@@ -23,15 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ConcurrentHashSet<E> extends AbstractSet<E> {
 
-    private final Map<E, Boolean> map;
-
-    public ConcurrentHashSet() {
-        this.map = new ConcurrentHashMap<>();
-    }
-
-    public ConcurrentHashSet(int initialCapacity) {
-        this.map = new ConcurrentHashMap<>(initialCapacity);
-    }
+    private final Map<E, Boolean> map= new ConcurrentHashMap<>();
 
     @Override
     public Iterator<E> iterator() {
