@@ -11,31 +11,25 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.query;
+package com.zfoo.orm.cache.persister;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.zfoo.orm.cache.EntityCaches;
+import com.zfoo.orm.model.vo.EntityDef;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class PageTest {
+public abstract class AbstractOrmPersister implements IOrmPersister {
 
-    @Test
-    public void pageTest() {
-        var list = new ArrayList<Integer>();
-        for (var i = 1; i <= 105; i++) {
-            list.add(i);
-        }
+    protected EntityDef entityDef;
 
-        var page = Page.valueOf(11, 10, list.size());
-        var result = page.currentPageList(list).toArray();
+    protected EntityCaches<?, ?> entityCaches;
 
-        Assert.assertArrayEquals(List.of(101, 102, 103, 104, 105).toArray(), result);
+
+    public AbstractOrmPersister(EntityDef entityDef, EntityCaches<?, ?> entityCaches) {
+        this.entityDef = entityDef;
+        this.entityCaches = entityCaches;
     }
 
 }

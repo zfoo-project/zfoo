@@ -26,13 +26,14 @@ import java.util.concurrent.CountDownLatch;
 @Ignore
 public class ConcurrentTest {
 
+    private static final int EXECUTOR_SIZE = Runtime.getRuntime().availableProcessors();
+
     @Test
     public void test() throws InterruptedException {
         var map = new CopyOnWriteHashMapLongObject<Integer>();
         var num = 1_0000;
-        var executorSize = Runtime.getRuntime().availableProcessors();
-        var countDownLatch = new CountDownLatch(executorSize);
-        for (var i = 0; i < executorSize; i++) {
+        var countDownLatch = new CountDownLatch(EXECUTOR_SIZE);
+        for (var i = 0; i < EXECUTOR_SIZE; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -46,8 +47,8 @@ public class ConcurrentTest {
         countDownLatch.await();
         Assert.assertEquals(map.size(), num);
 
-        var countDownLatch2 = new CountDownLatch(executorSize);
-        for (var i = 0; i < executorSize; i++) {
+        var countDownLatch2 = new CountDownLatch(EXECUTOR_SIZE);
+        for (var i = 0; i < EXECUTOR_SIZE; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
