@@ -10,9 +10,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.lpmap;
+package com.zfoo.protocol.collection.lpmap;
 
-import com.zfoo.orm.lpmap.model.MyPacket;
+import com.zfoo.protocol.collection.lpmap.model.MyPacket;
 import com.zfoo.protocol.ProtocolManager;
 import org.junit.Assert;
 import org.junit.Ignore;

@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.lpmap;
+package com.zfoo.protocol.collection.lpmap;
 
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;

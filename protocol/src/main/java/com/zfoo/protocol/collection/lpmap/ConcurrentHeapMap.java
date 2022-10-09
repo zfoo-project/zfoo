@@ -10,50 +10,63 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.lpmap;
+package com.zfoo.protocol.collection.lpmap;
 
 import com.zfoo.protocol.IPacket;
-import io.netty.util.collection.LongObjectHashMap;
 
+import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class HeapMap<V extends IPacket> implements LpMap<V> {
+public class ConcurrentHeapMap<V extends IPacket> implements LpMap<V> {
 
-    protected LongObjectHashMap<V> map;
+    private final ConcurrentNavigableMap<Long, V> map = new ConcurrentSkipListMap<>();
 
-    protected long maxIndex = 0;
-
-    public HeapMap() {
-        this(128);
-    }
-
-    public HeapMap(int initialCapacity) {
-        map = new LongObjectHashMap<>(initialCapacity);
-    }
+    private final AtomicLong maxIndexAtomic = new AtomicLong(0);
 
 
     @Override
     public V put(long key, V value) {
         checkKey(key);
 
-        if (key > maxIndex) {
-            maxIndex = key;
+        while (true) {
+            var maxIndex = maxIndexAtomic.get();
+
+            if (key <= maxIndex) {
+                break;
+            }
+
+            maxIndexAtomic.compareAndSet(maxIndex, key);
         }
 
         return map.put(key, value);
     }
 
     @Override
+    public V putIfAbsent(long key, V packet) {
+        var previousValue = map.putIfAbsent(key, packet);
+        if (previousValue == null) {
+            while (true) {
+                var maxIndex = maxIndexAtomic.get();
+
+                if (key <= maxIndex) {
+                    break;
+                }
+
+                maxIndexAtomic.compareAndSet(maxIndex, key);
+            }
+        }
+        return previousValue;
+    }
+
+    @Override
     public V delete(long key) {
         checkKey(key);
-        if (key > maxIndex) {
-            return null;
-        }
-
         return map.remove(key);
     }
 
@@ -65,19 +78,18 @@ public class HeapMap<V extends IPacket> implements LpMap<V> {
 
     @Override
     public long getMaxIndex() {
-        return maxIndex;
+        return maxIndexAtomic.get();
     }
 
     @Override
     public long getIncrementIndex() {
-        maxIndex++;
-        return maxIndex;
+        return maxIndexAtomic.incrementAndGet();
     }
 
     @Override
     public void clear() {
-        maxIndex = 0;
         map.clear();
+        maxIndexAtomic.set(0);
     }
 
     @Override
