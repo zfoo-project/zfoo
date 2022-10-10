@@ -23,7 +23,6 @@
         <zfoo.protocol.version>3.0</zfoo.protocol.version>
         <zfoo.util.version>3.0</zfoo.util.version>
 
-
         <!-- 核心spring框架 -->
         <spring.version>5.3.4</spring.version>
         <spring.boot.version>2.4.3</spring.boot.version>
@@ -103,9 +102,15 @@
 
         <project.build.sourceEncoding>${file.encoding}</project.build.sourceEncoding>
         <maven.compiler.encoding>${file.encoding}</maven.compiler.encoding>
+
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+        </dependency>
         <!-- 依赖的util类库 -->
         <dependency>
             <groupId>com.zfoo</groupId>
