@@ -1,7 +1,5 @@
 package com.zfoo.monitor.model;
 
-import lombok.Builder;
-
 import java.lang.management.MemoryUsage;
 
 /**
@@ -40,14 +38,31 @@ public class JvmMemoryVo {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
 
     public double getMax() {
         return max;
+    }
+
+    public void setMax(double max) {
+        this.max = max;
     }
 
     public double getUsed() {
         return used;
     }
 
-
+    public void setUsed(double used) {
+        this.used = used;
+    }
 }
