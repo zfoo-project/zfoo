@@ -13,6 +13,7 @@
 
 package com.zfoo.monitor;
 
+import com.zfoo.monitor.util.JvmUtils;
 import com.zfoo.monitor.util.OSUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.util.ThreadUtils;
@@ -116,6 +117,15 @@ public class ApplicationTest {
         System.out.println(monitor);
         monitor = OSUtils.maxMonitor();
         System.out.println(monitor);
+    }
+
+
+
+    @Test
+    public void JvmTest(){
+        JvmUtils.getJvmInfo().forEach(a->{
+            System.out.println(a.toString());
+        });
     }
 
 }
