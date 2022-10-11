@@ -37,4 +37,11 @@ public interface IPacket {
         return ProtocolManager.protocolId(this.getClass());
     }
 
+    /**
+     * 协议是否需要验证session中的uid只对网关服有效
+     * @return true 需要验证
+     */
+    default boolean verificationUid() {
+        return true;
+    }
 }
