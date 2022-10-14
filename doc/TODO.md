@@ -1,16 +1,11 @@
 ### protocol
 
-- 使用primitive type原生类型的hashmap，IntIntMap，IntLongMap，LongIntHashMap，LongLongHashMap
+- 考虑支持protobuf，放弃使用jprotobuf（可以省略很多不必要的注解，代码更加简洁），用约定大于配置的方式，还可以原生的和pojo对象结合起来
 
-### event
-
-- 使用更加简单的ConcurrentMap优化threadMap，JDK自带的ConcurrentHashMap速度慢
 
 ### orm
 
 - 使用更高性能的Cache2k替换Caffeine
-- 重新规划包，现在的分包太集中
-
 
 ### other
 
