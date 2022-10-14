@@ -26,4 +26,8 @@ public @interface Index {
     boolean ascending();
 
     boolean unique();
+
+    boolean ttl() default false;;
+
+    long expireAfterSeconds() default 0L;
 }
