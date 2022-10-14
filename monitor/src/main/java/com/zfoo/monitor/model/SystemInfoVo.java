@@ -26,20 +26,14 @@ public class SystemInfoVo {
          */
         private String versionDetail;
 
-        /**
-         * 内存使用率
-         */
-        private Double memPer;
+
 
         /**
          * core的个数(即核数)
          */
         private String cpuCoreNum;
 
-        /**
-         * cpu使用率
-         */
-        private Double cpuPer;
+
 
         /**
          * CPU型号信息
@@ -50,10 +44,7 @@ public class SystemInfoVo {
 
 
 
-        /**
-         * 创建时间
-         */
-        private Date createTime;
+
 
     public String getHostname() {
         return hostname;
@@ -79,13 +70,7 @@ public class SystemInfoVo {
         this.versionDetail = versionDetail;
     }
 
-    public Double getMemPer() {
-        return memPer;
-    }
 
-    public void setMemPer(Double memPer) {
-        this.memPer = memPer;
-    }
 
     public String getCpuCoreNum() {
         return cpuCoreNum;
@@ -95,13 +80,7 @@ public class SystemInfoVo {
         this.cpuCoreNum = cpuCoreNum;
     }
 
-    public Double getCpuPer() {
-        return cpuPer;
-    }
 
-    public void setCpuPer(Double cpuPer) {
-        this.cpuPer = cpuPer;
-    }
 
     public String getCpuXh() {
         return cpuXh;
@@ -113,11 +92,5 @@ public class SystemInfoVo {
 
 
 
-    public Date getCreateTime() {
-        return createTime;
-    }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }
