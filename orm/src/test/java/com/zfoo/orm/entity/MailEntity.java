@@ -16,16 +16,17 @@ package com.zfoo.orm.entity;
 import com.zfoo.orm.model.anno.EntityCache;
 import com.zfoo.orm.model.anno.Id;
 import com.zfoo.orm.model.anno.Index;
-import com.zfoo.orm.model.anno.Persister;
 import com.zfoo.orm.model.entity.IEntity;
+
+import java.util.Date;
 
 
 /**
  * @author godotg
  * @version 3.0
  */
-@EntityCache(persister = @Persister("time30s"))
-public class MailEnt implements IEntity<String> {
+@EntityCache
+public class MailEntity implements IEntity<String> {
 
     @Id
     private String id;
@@ -35,13 +36,16 @@ public class MailEnt implements IEntity<String> {
 
     private String content;
 
-    public MailEnt() {
-    }
+    @Index(ascending = true, unique = false, ttl = true, expireAfterSeconds = 10)
+    private Date createDate;
 
-    public MailEnt(String id, String userName, String content) {
-        this.id = id;
-        this.userName = userName;
-        this.content = content;
+    public static MailEntity valueOf(String id, String userName, String content, Date createDate) {
+        var entity = new MailEntity();
+        entity.id = id;
+        entity.userName = userName;
+        entity.content = content;
+        entity.createDate = createDate;
+        return entity;
     }
 
     @Override
@@ -73,4 +77,11 @@ public class MailEnt implements IEntity<String> {
         this.content = content;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 }
