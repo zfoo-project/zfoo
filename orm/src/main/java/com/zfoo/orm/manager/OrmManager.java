@@ -54,6 +54,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -143,6 +144,11 @@ public class OrmManager implements IOrmManager {
                     if (!hasIndex) {
                         var indexOptions = new IndexOptions();
                         indexOptions.unique(index.isUnique());
+
+                        if(index.isTtl()){
+                            indexOptions.expireAfter(index.getExpireAfterSeconds(), TimeUnit.SECONDS) ;
+                        }
+
                         if (index.isAscending()) {
                             collection.createIndex(Indexes.ascending(fieldName), indexOptions);
                         } else {
@@ -326,7 +332,16 @@ public class OrmManager implements IOrmManager {
         var fields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Index.class);
         for (var field : fields) {
             var indexAnnotation = field.getAnnotation(Index.class);
-            IndexDef indexDef = new IndexDef(field, indexAnnotation.ascending(), indexAnnotation.unique());
+
+            if(indexAnnotation.ttl()) {
+                if (!field.getGenericType().toString().equals(
+                        "class java.util.Date")){
+                    throw new IllegalArgumentException(StringUtils.format("[{}]不是Date类型", field.getName()));
+                }
+
+            }
+
+            IndexDef indexDef = new IndexDef(field, indexAnnotation.ascending(), indexAnnotation.unique(),indexAnnotation.ttl(),indexAnnotation.expireAfterSeconds());
             indexDefMap.put(field.getName(), indexDef);
         }
 
