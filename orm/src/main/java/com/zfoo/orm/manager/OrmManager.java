@@ -338,7 +338,14 @@ public class OrmManager implements IOrmManager {
                         "class java.util.Date")){
                     throw new IllegalArgumentException(StringUtils.format("[{}]不是Date类型", field.getName()));
                 }
-
+                if (!field.getGenericType().toString().equals(
+                        "java.util.List<java.util.Date>")){
+                    throw new IllegalArgumentException(StringUtils.format("[{}]不是List<Date>类型", field.getName()));
+                }
+                if (!field.getGenericType().toString().equals(
+                        "class [Ljava.util.Date;")){
+                    throw new IllegalArgumentException(StringUtils.format("[{}]不是Date[]类型", field.getName()));
+                }
             }
 
             IndexDef indexDef = new IndexDef(field, indexAnnotation.ascending(), indexAnnotation.unique(),indexAnnotation.ttl(),indexAnnotation.expireAfterSeconds());
