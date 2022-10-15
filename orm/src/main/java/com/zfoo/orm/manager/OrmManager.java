@@ -20,9 +20,9 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.model.anno.*;
 import com.zfoo.orm.cache.EntityCaches;
 import com.zfoo.orm.cache.IEntityCaches;
+import com.zfoo.orm.model.anno.*;
 import com.zfoo.orm.model.config.OrmConfig;
 import com.zfoo.orm.model.entity.IEntity;
 import com.zfoo.orm.model.vo.EntityDef;
@@ -145,8 +145,8 @@ public class OrmManager implements IOrmManager {
                         var indexOptions = new IndexOptions();
                         indexOptions.unique(index.isUnique());
 
-                        if(index.isTtl()){
-                            indexOptions.expireAfter(index.getExpireAfterSeconds(), TimeUnit.SECONDS) ;
+                        if (index.getTtlExpireAfterSeconds() > 0) {
+                            indexOptions.expireAfter(index.getTtlExpireAfterSeconds(), TimeUnit.SECONDS);
                         }
 
                         if (index.isAscending()) {
@@ -333,22 +333,14 @@ public class OrmManager implements IOrmManager {
         for (var field : fields) {
             var indexAnnotation = field.getAnnotation(Index.class);
 
-            if(indexAnnotation.ttl()) {
-                if (!field.getGenericType().toString().equals(
-                        "class java.util.Date")){
-                    throw new IllegalArgumentException(StringUtils.format("[{}]不是Date类型", field.getName()));
-                }
-                if (!field.getGenericType().toString().equals(
-                        "java.util.List<java.util.Date>")){
-                    throw new IllegalArgumentException(StringUtils.format("[{}]不是List<Date>类型", field.getName()));
-                }
-                if (!field.getGenericType().toString().equals(
-                        "class [Ljava.util.Date;")){
-                    throw new IllegalArgumentException(StringUtils.format("[{}]不是Date[]类型", field.getName()));
+            if (indexAnnotation.ttlExpireAfterSeconds() > 0) {
+                var fieldType = field.getGenericType();
+                if (!(fieldType == Date.class || fieldType == Date[].class || field.getGenericType().toString().equals("java.util.List<java.util.Date>"))) {
+                    throw new IllegalArgumentException(StringUtils.format("MongoDB规定TTL类型[{}]必须是Date，Date[]，List<Date>的其中一种类型", field.getName()));
                 }
             }
 
-            IndexDef indexDef = new IndexDef(field, indexAnnotation.ascending(), indexAnnotation.unique(),indexAnnotation.ttl(),indexAnnotation.expireAfterSeconds());
+            IndexDef indexDef = new IndexDef(field, indexAnnotation.ascending(), indexAnnotation.unique(), indexAnnotation.ttlExpireAfterSeconds());
             indexDefMap.put(field.getName(), indexDef);
         }
 
