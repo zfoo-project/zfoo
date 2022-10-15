@@ -22,7 +22,6 @@ import com.zfoo.util.security.IdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import oshi.SystemInfo;
-import oshi.hardware.CentralProcessor;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.hardware.NetworkIF;
 import oshi.software.os.OperatingSystem;
@@ -304,19 +303,10 @@ public abstract class OSUtils {
         return StringUtils.EMPTY;
     }
 
-    public static SystemInfoVo os()  {
-        CentralProcessor processor = hardware.getProcessor();
-        SystemInfoVo  systemInfo = new SystemInfoVo();
-        systemInfo.setHostname(NetUtils.getLocalhostStr());
-        systemInfo.setCpuCoreNum(processor.getLogicalProcessorCount() + "");
-        String cpuInfo = processor.toString();
-        if (cpuInfo.indexOf("\n") > 0) {
-            cpuInfo = cpuInfo.substring(0, cpuInfo.indexOf("\n"));
-        }
-        systemInfo.setCpuXh(cpuInfo);
-        systemInfo.setVersion(os.toString());
-        systemInfo.setVersionDetail(os.toString());
-
-        return systemInfo;
+    public static SystemInfoVO os() {
+        var processor = hardware.getProcessor();
+        var cpuLogicCore = processor.getLogicalProcessorCount();
+        var cpuName = processor.getProcessorIdentifier().getName();
+        return SystemInfoVO.valueOf(NetUtils.getLocalhostStr(), os.toString(), os.toString(), cpuLogicCore, cpuName);
     }
 }

@@ -120,12 +120,17 @@ public class ApplicationTest {
     }
 
 
-
     @Test
-    public void JvmTest(){
-        JvmUtils.getJvmInfo().forEach(a->{
+    public void JvmTest() {
+        JvmUtils.getJvmInfo().forEach(a -> {
             System.out.println(a.toString());
         });
+    }
+
+    @Test
+    public void osTest() {
+        var os = OSUtils.os();
+        System.out.println(JsonUtils.object2StringPrettyPrinter(os));
     }
 
 }
