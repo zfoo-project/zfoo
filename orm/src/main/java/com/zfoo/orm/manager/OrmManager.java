@@ -335,8 +335,8 @@ public class OrmManager implements IOrmManager {
 
             if (indexAnnotation.ttlExpireAfterSeconds() > 0) {
                 var fieldType = field.getGenericType();
-                if (!(fieldType == Date.class || fieldType == Date[].class || field.getGenericType().toString().equals("java.util.List<java.util.Date>"))) {
-                    throw new IllegalArgumentException(StringUtils.format("MongoDB规定TTL类型[{}]必须是Date，Date[]，List<Date>的其中一种类型", field.getName()));
+                if (!(fieldType == Date.class || field.getGenericType().toString().equals("java.util.List<java.util.Date>"))) {
+                    throw new IllegalArgumentException(StringUtils.format("MongoDB规定TTL类型[{}]必须是Date，List<Date>的其中一种类型", field.getName()));
                 }
             }
 
