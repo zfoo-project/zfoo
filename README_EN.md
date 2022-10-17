@@ -134,7 +134,7 @@ HotSwapUtils.hotswapClass(bytes);
 
 ```
 // You don't need to write sql and any configuration yourself, define a table in the database directly through annotation definitions
-@EntityCache(cacheStrategy = "tenThousand", persister = @Persister("time30s"))
+@EntityCache
 public class UserEntity implements IEntity<Long> {
     @Id
     private long id;

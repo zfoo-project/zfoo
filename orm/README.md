@@ -56,14 +56,14 @@ var collection = OrmContext.getOrmManager().getCollection(UserEntity.class)
 
     <!-- 缓存策略 -->
     <orm:caches>
-        <orm:cache strategy="hundred" size="100" expire-millisecond="600000"/>
+        <orm:cache strategy="default" size="6000" expire-millisecond="600000"/>
         <orm:cache strategy="thousand" size="1000" expire-millisecond="600000"/>
         <orm:cache strategy="threeThousand" size="3000" expire-millisecond="600000"/>
     </orm:caches>
 
     <!-- 持久化策略 -->
     <orm:persisters>
-        <orm:persister strategy="cronDefault" type="cron" config="0,30 * * * * ?"/>
+        <orm:persister strategy="default" type="time" config="600000"/>
         <orm:persister strategy="cron30s" type="cron" config="0/30 * * * * ?"/>
         <orm:persister strategy="time30s" type="time" config="30000"/>
     </orm:persisters>
@@ -76,7 +76,7 @@ address表示数据库的地址，支持分片的配置
 - 通过注解引入映射
 
 ```
-@EntityCaches(cacheStrategy = "tenThousand", persister = @Persister("time30s"))
+@EntityCaches(cacheStrategy = @Cache("tenThousand"), persister = @Persister("time30s"))
 public class UserEntity implements IEntity<Long> {
 }
 

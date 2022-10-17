@@ -126,7 +126,7 @@ HotSwapUtils.hotswapClass(bytes);
 
 ```
 // 无需自己写sql和任何配置，直接通过注解定义在数据库中定义一张表
-@EntityCache(cacheStrategy = "tenThousand", persister = @Persister("time30s"))
+@EntityCache
 public class UserEntity implements IEntity<Long> {
     @Id
     private long id;

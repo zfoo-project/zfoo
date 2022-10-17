@@ -35,7 +35,7 @@
 
         <!-- 持久化策略 -->
         <orm:persisters>
-            <orm:persister strategy="default" type="cron" config="0,30 * * * * ?"/>
+            <orm:persister strategy="default" type="time" config="600000"/>
             <orm:persister strategy="cron30s" type="cron" config="0/30 * * * * ?"/>
             <orm:persister strategy="time30s" type="time" config="30000"/>
         </orm:persisters>
