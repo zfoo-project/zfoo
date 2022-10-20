@@ -26,7 +26,7 @@
 
 
         <!-- 核心spring框架 -->
-        <spring.version>5.3.4</spring.version>
+        <spring.version>5.3.17</spring.version>
         <spring.boot.version>2.4.3</spring.boot.version>
 
 
