@@ -13,6 +13,8 @@
 
 package com.zfoo.net.packet.common;
 
+import com.baidu.bjf.remoting.protobuf.annotation.Ignore;
+import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import org.slf4j.helpers.FormattingTuple;
@@ -22,8 +24,9 @@ import org.slf4j.helpers.MessageFormatter;
  * @author jaysunxiao
  * @version 3.0
  */
+@ProtobufClass
 public class Error implements IPacket {
-
+    @Ignore
     public static final transient short PROTOCOL_ID = 101;
 
     private int module;
