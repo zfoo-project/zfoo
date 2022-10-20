@@ -13,6 +13,8 @@
 
 package com.zfoo.net.packet.common;
 
+import com.baidu.bjf.remoting.protobuf.annotation.Ignore;
+import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 
@@ -22,8 +24,9 @@ import com.zfoo.protocol.ProtocolManager;
  * @author jaysunxiao
  * @version 3.0
  */
+@ProtobufClass
 public class Message implements IPacket {
-
+    @Ignore
     public static final transient short PROTOCOL_ID = 100;
 
     public static final Message SUCCESS = valueSuccess(null);
