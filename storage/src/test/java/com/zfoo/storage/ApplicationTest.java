@@ -13,6 +13,7 @@
 
 package com.zfoo.storage;
 
+import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.resource.StudentResource;
@@ -74,7 +75,7 @@ public class ApplicationTest {
         var testResources = testManager.testResources;
         for (com.zfoo.storage.resource.TestResource resource : testResources.getAll()) {
             Map<Integer, String> map = resource.getType9();
-            System.err.println(map.get(1));
+            AssertionUtils.notNull(map.get(1));
             logger.info(JsonUtils.object2String(resource));
         }
         // 通过id找到对应的行
