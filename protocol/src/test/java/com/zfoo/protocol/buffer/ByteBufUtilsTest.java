@@ -14,7 +14,7 @@
 package com.zfoo.protocol.buffer;
 
 import com.zfoo.protocol.ProtocolManager;
-import com.zfoo.protocol.buffer.model.BigDataPacket;
+import com.zfoo.protocol.buffer.model.BigPacket;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -171,17 +171,17 @@ public class ByteBufUtilsTest {
     @Ignore
     @Test
     public void bigDataTest() {
-        ProtocolManager.initProtocol(Set.of(BigDataPacket.class));
+        ProtocolManager.initProtocol(Set.of(BigPacket.class));
 
-        var bigDataPact = new BigDataPacket();
-        Arrays.fill(bigDataPact.a, 99);
+        var bigPact = new BigPacket();
+        Arrays.fill(bigPact.a, 99);
 
         var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 100_0000);
 
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < 10_0000; i++) {
             buffer.clear();
-            ProtocolManager.write(buffer, bigDataPact);
+            ProtocolManager.write(buffer, bigPact);
             var newPacket = ProtocolManager.read(buffer);
         }
 

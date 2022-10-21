@@ -20,7 +20,7 @@ import com.zfoo.protocol.registration.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 1000)
-public class BigDataPacket implements IPacket {
+public class BigPacket implements IPacket {
 
     public int[] a = new int[10_0000];
 
