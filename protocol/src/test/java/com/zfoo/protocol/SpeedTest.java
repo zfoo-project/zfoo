@@ -15,8 +15,8 @@ package com.zfoo.protocol;
 
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.unsafe.UnsafeInput;
-import com.esotericsoftware.kryo.unsafe.UnsafeOutput;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.CodedOutputStream;
@@ -27,7 +27,6 @@ import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
-import io.netty.buffer.UnpooledUnsafeHeapByteBuf;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -100,7 +99,7 @@ public class SpeedTest {
         System.setProperty("io.netty.buffer.checkAccessible", "false");
         System.setProperty("io.netty.buffer.checkBounds", "false");
 
-        ByteBuf buffer = new UnpooledUnsafeHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
+        ByteBuf buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
 
         // 序列化和反序列化简单对象
         long startTime = System.currentTimeMillis();
@@ -142,8 +141,8 @@ public class SpeedTest {
         try {
             var kryo = kryos.get();
 
-            var output = new UnsafeOutput(1024 * 8);
-            var input = new UnsafeInput(output.getBuffer());
+            var output = new Output(1024 * 8);
+            var input = new Input(output.getBuffer());
 
             // 序列化和反序列化简单对象
             long startTime = System.currentTimeMillis();
