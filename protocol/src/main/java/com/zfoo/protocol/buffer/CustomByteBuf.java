@@ -74,7 +74,11 @@ public abstract class CustomByteBuf {
         var length = ByteBufUtils.readInt(byteBuf);
         var byteBuffer = ByteBuffer.allocate(length * 4);
         byteBuf.readBytes(byteBuffer);
+        byteBuffer.rewind();
         var intBuffer = byteBuffer.asIntBuffer();
-        return intBuffer.array();
+        int[] ints = new int[length];
+        intBuffer.get(ints);
+        return ints;
     }
+
 }
