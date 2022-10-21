@@ -13,6 +13,9 @@
 
 package com.zfoo.protocol.buffer;
 
+import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.buffer.model.BigDataPacket;
+import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
@@ -20,6 +23,9 @@ import io.netty.buffer.UnpooledHeapByteBuf;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Set;
 
 /**
  * @author godotg
@@ -160,6 +166,26 @@ public class ByteBufUtilsTest {
             ByteBufUtils.writeLong(byteBuf, value);
             Assert.assertEquals(ByteBufUtils.readLong(byteBuf), value);
         }
+    }
+
+    @Ignore
+    @Test
+    public void bigDataTest() {
+        ProtocolManager.initProtocol(Set.of(BigDataPacket.class));
+
+        var bigDataPact = new BigDataPacket();
+        Arrays.fill(bigDataPact.a, 99);
+
+        var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 100_0000);
+
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < 10_0000; i++) {
+            buffer.clear();
+            ProtocolManager.write(buffer, bigDataPact);
+            var newPacket = ProtocolManager.read(buffer);
+        }
+
+        System.out.println(StringUtils.format("[zfoo][size:{}] [time:{}]", buffer.writerIndex(), System.currentTimeMillis() - startTime));
     }
 
 }

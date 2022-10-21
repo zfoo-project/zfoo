@@ -22,12 +22,15 @@ import io.netty.util.ReferenceCountUtil;
 import io.netty.util.collection.IntObjectHashMap;
 import io.netty.util.collection.LongObjectHashMap;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * “可变长字节码算法”的压缩数据的算法，以达到压缩数据，减少磁盘IO。
+ * zfoo的自定义私有协议格式，可以非常方便的对大部分数据定制序列化和反序列化实现，可以对大部分数据结构定制高性能实现方式
  * <p>
- * google的ProtocolBuffer和Facebook的thrift底层的通信协议都是由这个算法实现
+ * “可变长字节码算法”的压缩数据的算法，压缩数据和减少磁盘IO。google的ProtocolBuf和Facebook的thrift底层的通信协议都是由这个算法实现
  *
  * @author godotg
  * @version 3.0
