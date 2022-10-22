@@ -162,10 +162,12 @@ public class StorageManager implements IStorageManager {
 
     @Override
     public void initAfter() {
-        allStorageUsableMap.entrySet().stream()
-                .filter(it -> !it.getValue())
-                .map(it -> it.getKey())
-                .forEach(it -> storageMap.remove(it));
+        if (storageConfig.isRecycle()) {
+            allStorageUsableMap.entrySet().stream()
+                    .filter(it -> !it.getValue())
+                    .map(it -> it.getKey())
+                    .forEach(it -> storageMap.remove(it));
+        }
     }
 
     @Override
@@ -175,7 +177,7 @@ public class StorageManager implements IStorageManager {
             throw new RunException("没有定义[{}]的Storage，无法获取", clazz.getCanonicalName());
         }
         if (!usable) {
-            throw new RunException("Storage没有使用[{}]，为了节省内存提前释放了它；只有使用ResInjection注解的Storage才能被动态获取", clazz.getCanonicalName());
+            throw new RunException("Storage没有使用[{}]，为了节省内存提前释放了它；只有使用ResInjection注解的Storage才能被动态获取或者关闭配置recycle属性", clazz.getCanonicalName());
         }
         return storageMap.get(clazz);
     }

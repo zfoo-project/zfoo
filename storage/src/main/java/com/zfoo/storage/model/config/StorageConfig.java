@@ -28,6 +28,9 @@ public class StorageConfig {
     // 类的属性是否可写，如果为false则类的属性必须为private并且不能有set方法
     private boolean writeable;
 
+    // 未被使用的Storage是否回收，默认开启节省资源
+    private boolean recycle;
+
     public String getId() {
         return id;
     }
@@ -58,5 +61,13 @@ public class StorageConfig {
 
     public void setWriteable(boolean writeable) {
         this.writeable = writeable;
+    }
+
+    public boolean isRecycle() {
+        return recycle;
+    }
+
+    public void setRecycle(boolean recycle) {
+        this.recycle = recycle;
     }
 }
