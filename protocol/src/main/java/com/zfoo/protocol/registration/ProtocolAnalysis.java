@@ -160,13 +160,13 @@ public class ProtocolAnalysis {
                 for (var protocolDefinition : moduleDefinition.getProtocols()) {
                     var location = protocolDefinition.getLocation();
                     var clazz = Class.forName(location);
-                    var id = getProtocolIdAndCheckClass(clazz);
+                    var protocolId = ProtocolManager.protocolId(clazz);
                     var registration = parseProtocolRegistration(clazz, module);
                     if (protocolDefinition.isEnhance()) {
                         enhanceList.add(registration);
                     }
                     // 注册协议
-                    protocols[id] = registration;
+                    protocols[protocolId] = registration;
                 }
             }
             enhance(generateOperation, enhanceList);
@@ -281,7 +281,7 @@ public class ProtocolAnalysis {
     }
 
     private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) {
-        var protocolId = getProtocolIdAndCheckClass(clazz);
+        var protocolId = ProtocolManager.protocolId(clazz);
         // 对象需要被序列化的属性
         var fields = customFieldOrder(clazz);
 
@@ -382,10 +382,13 @@ public class ProtocolAnalysis {
             return MapField.valueOf(keyRegistration, valueRegistration, type);
         } else {
             // 是一个协议引用变量
-            var referenceProtocolId = getProtocolIdAndCheckClass(field.getType());
-            checkSubProtocol(clazz, referenceProtocolId, field.getType());
-            subProtocolIdMap.computeIfAbsent(getProtocolIdAndCheckClass(clazz), it -> new HashSet<>()).add(referenceProtocolId);
-            return ObjectProtocolField.valueOf(referenceProtocolId);
+            if (!protocolIdMap.containsKey(field.getType())) {
+                throw new RunException("协议[{}]的子协议[{}]没有注册", clazz.getCanonicalName(), field.getType().getCanonicalName());
+            }
+            var protocolId = ProtocolManager.protocolId(clazz);
+            var subProtocolId = ProtocolManager.protocolId(field.getType());
+            subProtocolIdMap.computeIfAbsent(protocolId, it -> new HashSet<>()).add(subProtocolId);
+            return ObjectProtocolField.valueOf(subProtocolId);
         }
     }
 
@@ -420,10 +423,13 @@ public class ProtocolAnalysis {
                 throw new RunException("不支持数组和集合联合使用[type:{}]类型", type);
             } else {
                 // 是一个协议引用变量
-                var referenceProtocolId = getProtocolIdAndCheckClass(clazz);
-                checkSubProtocol(currentProtocolClass, referenceProtocolId, clazz);
-                subProtocolIdMap.computeIfAbsent(getProtocolIdAndCheckClass(currentProtocolClass), it -> new HashSet<>()).add(referenceProtocolId);
-                return ObjectProtocolField.valueOf(referenceProtocolId);
+                if (!protocolIdMap.containsKey(clazz)) {
+                    throw new RunException("协议[{}]的子协议[{}]没有注册", currentProtocolClass.getCanonicalName(), clazz.getCanonicalName());
+                }
+                var protocolId = ProtocolManager.protocolId(currentProtocolClass);
+                var subProtocolId = ProtocolManager.protocolId(clazz);
+                subProtocolIdMap.computeIfAbsent(protocolId, it -> new HashSet<>()).add(subProtocolId);
+                return ObjectProtocolField.valueOf(subProtocolId);
             }
         }
         throw new RunException("[type:{}]类型不正确", type);
@@ -521,13 +527,6 @@ public class ProtocolAnalysis {
         }
 
         return protocolId;
-    }
-
-    private static void checkSubProtocol(Class<?> clazz, short id, Class<?> subClass) {
-        var registerProtocolClass = protocolClassMap.get(id);
-        if (registerProtocolClass == null || !registerProtocolClass.equals(subClass)) {
-            throw new RunException("协议[{}]的子协议[{}][{}]没有注册", clazz.getCanonicalName(), id, subClass.getCanonicalName());
-        }
     }
 
     private static void checkAllModules() {

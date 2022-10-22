@@ -28,7 +28,6 @@ import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.RunException;
-import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -120,8 +119,7 @@ public abstract class PacketBus {
             }
 
             try {
-                var protocolId = ProtocolAnalysis.getProtocolIdAndCheckClass(packetClazz);
-
+                var protocolId = ProtocolManager.protocolId(packetClazz);
                 // 将receiver注册到IProtocolRegistration
                 var protocolRegistration = ProtocolManager.getProtocol(protocolId);
                 AssertionUtils.notNull(protocolRegistration, "协议类[class:{}][protocolId:{}]没有注册", packetClazz.getSimpleName(), protocolId);
