@@ -25,6 +25,9 @@ public class StorageConfig {
 
     private String resourceLocation;
 
+    // 类的属性是否可写，如果为false则类的属性必须为private并且不能有set方法
+    private boolean writeable;
+
     public String getId() {
         return id;
     }
@@ -47,5 +50,13 @@ public class StorageConfig {
 
     public void setResourceLocation(String resourceLocation) {
         this.resourceLocation = resourceLocation;
+    }
+
+    public boolean isWriteable() {
+        return writeable;
+    }
+
+    public void setWriteable(boolean writeable) {
+        this.writeable = writeable;
     }
 }

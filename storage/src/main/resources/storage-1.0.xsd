@@ -38,6 +38,7 @@
     <!-- package声明类型 -->
     <xsd:complexType name="scan">
         <xsd:attribute name="package" type="xsd:string" use="required"/>
+        <xsd:attribute name="writeable" type="xsd:boolean" default="false"/>
     </xsd:complexType>
 
 

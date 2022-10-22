@@ -13,6 +13,7 @@
 
 package com.zfoo.storage.manager;
 
+import com.zfoo.storage.model.config.StorageConfig;
 import com.zfoo.storage.model.vo.Storage;
 import org.springframework.lang.Nullable;
 
@@ -48,4 +49,5 @@ public interface IStorageManager {
 
     void updateStorage(Class<?> clazz, Storage<?, ?> storage);
 
+    StorageConfig storageConfig();
 }

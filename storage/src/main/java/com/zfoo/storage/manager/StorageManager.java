@@ -196,6 +196,11 @@ public class StorageManager implements IStorageManager {
         storageMap.put(clazz, storage);
     }
 
+    @Override
+    public StorageConfig storageConfig() {
+        return getStorageConfig();
+    }
+
     private Set<String> scanResourceAnno(String scanLocation) {
         var resourcePatternResolver = new PathMatchingResourcePatternResolver();
         var metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);

@@ -68,10 +68,10 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
 
         resolvePlaceholder("id", "id", builder, element, parserContext);
         resolvePlaceholder("package", "scanPackage", builder, scanElement, parserContext);
+        resolvePlaceholder("writeable", "writeable", builder, scanElement, parserContext);
         resolvePlaceholder("location", "resourceLocation", builder, resourceElement, parserContext);
 
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
-        
     }
 
     private void registerBeanDefinition(ParserContext parserContext) {
