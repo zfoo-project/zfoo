@@ -14,14 +14,11 @@ package com.zfoo.boot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.lang.reflect.Field;
 
 /**
  * @author godotg
@@ -34,12 +31,9 @@ public class BootAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ObjectMapper getObjectMapper() throws NoSuchFieldException {
-        // 拿到JsonUtils中的ObjectMapper
-        Field field = JsonUtils.class.getDeclaredField("MAPPER");
-        ReflectionUtils.makeAccessible(field);
+    public ObjectMapper getObjectMapper() {
         logger.info("Jackson auto config successfully!");
-        return (ObjectMapper) ReflectionUtils.getField(field, null);
+        return JsonUtils.MAPPER;
     }
 
 }
