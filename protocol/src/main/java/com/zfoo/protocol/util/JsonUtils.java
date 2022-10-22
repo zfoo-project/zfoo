@@ -35,13 +35,13 @@ public abstract class JsonUtils {
     /**
      * 适用于任何场景下的json转换，只要在各个类方法中不调用configure方法，则MAPPER都是线程安全的
      */
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    public static final ObjectMapper MAPPER = new ObjectMapper();
 
 
     /**
      * 涡轮增压的jackson，会使用字节码增强技术
      */
-    private static final ObjectMapper MAPPER_TURBO = new ObjectMapper();
+    public static final ObjectMapper MAPPER_TURBO = new ObjectMapper();
 
     static {
         //序列化
