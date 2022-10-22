@@ -124,7 +124,7 @@ public abstract class GenerateProtobufUtils {
         for (var protos : xmlProtobuf.getProtos()) {
             for (var protocol : protos.getProtocols()) {
                 var protocolClass = Class.forName(protocol.getLocation());
-                var protocolId = ProtocolAnalysis.getProtocolIdByClass(protocolClass);
+                var protocolId = ProtocolAnalysis.getProtocolIdAndCheckClass(protocolClass);
                 var protocolRegistration = ProtocolManager.getProtocol(protocolId);
 
                 if (allGenerateProtocols.contains(protocolRegistration)) {
@@ -191,7 +191,7 @@ public abstract class GenerateProtobufUtils {
 
             for (var protocol : protos.getProtocols()) {
                 var protocolClass = Class.forName(protocol.getLocation());
-                var protocolId = ProtocolAnalysis.getProtocolIdByClass(protocolClass);
+                var protocolId = ProtocolAnalysis.getProtocolIdAndCheckClass(protocolClass);
                 var protocolRegistration = ProtocolManager.getProtocol(protocolId);
 
                 builder.append("// id = ").append(protocolId).append(LS);
