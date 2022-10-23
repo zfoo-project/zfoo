@@ -202,7 +202,7 @@ public class OrmManager implements IOrmManager {
                         IEntityCaches<?, ?> entityCaches = entityCachesMap.get(entityClazz);
 
                         if (entityCaches == null) {
-                            throw new RuntimeException(StringUtils.format("实体缓存对象[entityCaches:{}]不存在", entityClazz));
+                            throw new RunException("实体缓存对象不存在，请检查配置[entity-package:{}]和[entityCaches:{}]的位置是否正确", ormConfig.getEntityPackage(), entityClazz);
                         }
 
                         ReflectionUtils.makeAccessible(field);
