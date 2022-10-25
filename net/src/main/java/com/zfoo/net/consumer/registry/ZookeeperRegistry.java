@@ -131,7 +131,7 @@ public class ZookeeperRegistry implements IRegistry {
     public void start() {
         var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
         if (Objects.isNull(registryConfig)) {
-            logger.info("没有配置zk服务注册中心，如果是单机启动请忽略这条日志");
+            logger.info("Stand alone startup");
             return;
         }
 
@@ -151,7 +151,7 @@ public class ZookeeperRegistry implements IRegistry {
 
         // 这句意思是：提供了注册中心的配置(zk)，但是却没有服务提供者
         if (Objects.isNull(providerConfig)) {
-            logger.info("服务提供者没有配置，不会在zk中注册服务，如果是单机启动请忽略这条日志");
+            logger.info("Distributed startup with no providers");
             return;
         }
 
