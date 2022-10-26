@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.util;
 
+import com.zfoo.protocol.packet.ComplexObject;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -33,6 +34,14 @@ public class ClassUtilsTest {
     @Test
     public void getClassFromClassPath() throws IOException {
         System.out.println(new String(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("csTest/CsProtocolTest.cs"))));
+    }
+
+    @Test
+    public void relevantClassTest() throws IOException {
+        var set = ClassUtils.relevantClass(ComplexObject.class);
+        for (var clazz : set) {
+            System.out.println(clazz);
+        }
     }
 
 }
