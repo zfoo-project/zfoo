@@ -13,11 +13,13 @@
 package com.zfoo.boot;
 
 import com.zfoo.boot.resource.StudentResource;
+import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.generate.GenerateOperation;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.model.config.StorageConfig;
 import com.zfoo.storage.model.vo.Storage;
-import com.zfoo.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -48,6 +50,7 @@ public class StorageTest {
         config.setScanPackage("com.zfoo.boot");
         config.setResourceLocation("classpath:/excel");
         config.setWriteable(true);
+        config.setRecycle(false);
         return config;
     }
 
@@ -56,12 +59,17 @@ public class StorageTest {
         var springBoot = new SpringApplicationBuilder();
         springBoot.sources(StorageTest.class).web(WebApplicationType.NONE).run();
 
+        var protocols = StorageContext.getStorageManager().storageMap().keySet();
+
+        var operation = new GenerateOperation();
+        operation.getGenerateLanguages().add(CodeLanguage.GdScript);
+        ProtocolManager.initProtocolAuto(protocols, operation);
+
         var storage = (Storage<Integer, StudentResource>) StorageContext.getStorageManager().getStorage(StudentResource.class);
         for (StudentResource resource : storage.getAll()) {
             logger.info(JsonUtils.object2String(resource));
         }
 
-        ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
 }

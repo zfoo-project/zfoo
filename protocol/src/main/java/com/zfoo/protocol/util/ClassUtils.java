@@ -95,10 +95,6 @@ public abstract class ClassUtils {
                 .collect(Collectors.toList());
 
         for (var field : filedList) {
-            // entity必须包含属性的get和set方法
-            ReflectionUtils.fieldToGetMethod(clazz, field);
-            ReflectionUtils.fieldToSetMethod(clazz, field);
-
             // 是一个基本类型变量
             var fieldType = field.getType();
             if (isBaseType(fieldType)) {
