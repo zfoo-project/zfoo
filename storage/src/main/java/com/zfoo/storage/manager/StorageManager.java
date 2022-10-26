@@ -60,11 +60,6 @@ public class StorageManager implements IStorageManager {
      */
     private final Map<Class<?>, Storage<?, ?>> storageMap = new HashMap<>();
 
-    /**
-     * 全部的Storage定义，key为对应的excel配置表，value为当前配置表是否在当前项目中使用
-     */
-    private final Map<Class<?>, Boolean> allStorageUsableMap = new HashMap<>();
-
     public StorageConfig getStorageConfig() {
         return storageConfig;
     }
@@ -105,7 +100,6 @@ public class StorageManager implements IStorageManager {
                 Storage<?, ?> storage = new Storage<>();
                 storage.init(resource.getInputStream(), definition.getClazz(), fileExtName);
                 storageMap.putIfAbsent(clazz, storage);
-                allStorageUsableMap.put(clazz, false);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -155,7 +149,7 @@ public class StorageManager implements IStorageManager {
 
                         ReflectionUtils.makeAccessible(field);
                         ReflectionUtils.setField(field, bean, storage);
-                        allStorageUsableMap.put(resourceClazz, true);
+                        storage.setRecycle(false);
                     });
         }
     }
@@ -163,35 +157,33 @@ public class StorageManager implements IStorageManager {
     @Override
     public void initAfter() {
         if (storageConfig.isRecycle()) {
-            allStorageUsableMap.entrySet().stream()
-                    .filter(it -> !it.getValue())
-                    .map(it -> it.getKey())
-                    .forEach(it -> storageMap.remove(it));
+            storageMap.entrySet().stream()
+                    .filter(it -> it.getValue().isRecycle())
+                    .map(it -> it.getValue())
+                    .forEach(it -> it.recycleStorage());
+        } else {
+            storageMap.entrySet().stream()
+                    .map(it -> it.getValue())
+                    .forEach(it -> it.setRecycle(false));
         }
     }
 
     @Override
     public Storage<?, ?> getStorage(Class<?> clazz) {
-        var usable = allStorageUsableMap.get(clazz);
-        if (usable == null) {
+        var storage = storageMap.get(clazz);
+        if (storage == null) {
             throw new RunException("没有定义[{}]的Storage，无法获取", clazz.getCanonicalName());
         }
-        if (!usable) {
+        if (storage.isRecycle()) {
             throw new RunException("Storage没有使用[{}]，为了节省内存提前释放了它；只有使用ResInjection注解的Storage才能被动态获取或者关闭配置recycle属性", clazz.getCanonicalName());
         }
-        return storageMap.get(clazz);
-    }
-
-    @Override
-    public Map<Class<?>, Boolean> allStorageUsableMap() {
-        return allStorageUsableMap;
+        return storage;
     }
 
     @Override
     public Map<Class<?>, Storage<?, ?>> storageMap() {
         return storageMap;
     }
-
 
     @Override
     public void updateStorage(Class<?> clazz, Storage<?, ?> storage) {

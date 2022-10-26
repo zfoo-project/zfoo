@@ -43,8 +43,6 @@ public interface IStorageManager {
     @Nullable
     Storage<?, ?> getStorage(Class<?> clazz);
 
-    Map<Class<?>, Boolean> allStorageUsableMap();
-
     Map<Class<?>, Storage<?, ?>> storageMap();
 
     void updateStorage(Class<?> clazz, Storage<?, ?> storage);

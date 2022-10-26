@@ -32,17 +32,17 @@ public class Storage<K, V> {
 
     private Class<V> clazz;
 
-    private final Map<K, V> dataMap = new HashMap<>();
+    // 当前配置表是否在当前项目中使用，没有被使用的会清楚data数据，以达到节省内存的目的
+    private boolean recycle = true;
+
+    private Map<K, V> dataMap = new HashMap<>();
     // 非唯一索引
-    private final Map<String, Map<Object, List<V>>> indexMap = new HashMap<>();
+    private Map<String, Map<Object, List<V>>> indexMap = new HashMap<>();
     // 唯一索引
-    private final Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>();
+    private Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>();
 
     private IdDef idDef;
     private Map<String, IndexDef> indexDefMap;
-
-    public Storage() {
-    }
 
     public void init(InputStream inputStream, Class<?> resourceClazz, String suffix) {
         try {
@@ -65,6 +65,23 @@ public class Storage<K, V> {
         } finally {
             IOUtils.closeIO(inputStream);
         }
+    }
+
+    public void recycleStorage() {
+        recycle = true;
+        dataMap = null;
+        indexMap = null;
+        uniqueIndexMap = null;
+        idDef = null;
+        indexDefMap = null;
+    }
+
+    public boolean isRecycle() {
+        return recycle;
+    }
+
+    public void setRecycle(boolean recycle) {
+        this.recycle = recycle;
     }
 
     public Collection<V> getAll() {
