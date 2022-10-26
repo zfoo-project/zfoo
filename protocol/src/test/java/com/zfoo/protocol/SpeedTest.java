@@ -320,7 +320,7 @@ public class SpeedTest {
 //        op.getGenerateLanguages().add(CodeLanguage.Protobuf);
 
         // zfoo协议注册(其实就是：将Set里面的协议号和对应的类注册好，这样子就可以根据协议号知道是反序列化为哪个类)
-        ProtocolManager.initProtocol(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, ObjectA.class, ObjectB.class), op);
+        ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class), op);
 
         for (int i = 0; i < executors.length; i++) {
             executors[i] = Executors.newSingleThreadExecutor();

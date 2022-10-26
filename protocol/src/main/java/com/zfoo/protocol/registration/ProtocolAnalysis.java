@@ -35,6 +35,7 @@ import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.xml.XmlProtocols;
@@ -118,6 +119,50 @@ public class ProtocolAnalysis {
         }
     }
 
+    public static synchronized void analyzeAuto(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
+        AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
+        try {
+            // 获取所有协议类
+            var relevantClassSet = new HashSet<>(protocolClassSet);
+            for (var clazz : protocolClassSet) {
+                relevantClassSet.addAll(ClassUtils.relevantClass(clazz));
+            }
+
+            var relevantClassList = relevantClassSet.stream()
+                    .sorted((a, b) -> a.getCanonicalName().compareTo(b.getCanonicalName()))
+                    .collect(Collectors.toList());
+
+            // 检查协议类是否合法
+            var noProtocolIds = new ArrayList<Class<?>>();
+            for (var protocolClass : relevantClassList) {
+                var protocolId = getProtocolIdAndCheckClass(protocolClass);
+                if (protocolId >= 0) {
+                    initProtocolClass(protocolId, protocolClass);
+                } else {
+                    noProtocolIds.add(protocolClass);
+                }
+            }
+            var countProtocolId = (short) 0;
+            for (var protocolClass : noProtocolIds) {
+                while (protocolClassMap.containsKey(countProtocolId)) {
+                    countProtocolId++;
+                }
+                initProtocolClass(countProtocolId, protocolClass);
+            }
+
+            // 协议id和协议信息对应起来
+            for (var protocolClass : relevantClassSet) {
+                var registration = parseProtocolRegistration(protocolClass, ProtocolModule.DEFAULT_PROTOCOL_MODULE);
+                protocols[registration.protocolId()] = registration;
+            }
+
+            // 通过指定类注册的协议，全部使用字节码增强
+            var enhanceList = Arrays.stream(protocols).filter(Objects::nonNull).collect(Collectors.toList());
+            enhance(generateOperation, enhanceList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static synchronized void analyze(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
         AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());

@@ -123,4 +123,11 @@ public class ProtocolManager {
         ProtocolAnalysis.analyze(xmlProtocols, generateOperation);
     }
 
+    /**
+     * 子协议会自动注册协议号protocolId，如果子协议没有指定protocolId则自动生成protocolId
+     */
+    public static void initProtocolAuto(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
+        ProtocolAnalysis.analyzeAuto(protocolClassSet, generateOperation);
+    }
+
 }
