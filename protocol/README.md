@@ -140,6 +140,17 @@ cpu： i9900k
       }
       ```
 
+    - 第三种使用：通过ProtocolManager.initProtocolAuto()去注册协议就可以不写协议号
+      ```
+      public class SimpleObject implements IPacket {
+      
+          public int c;
+      
+          public boolean g;
+      
+      }
+      ```
+
 - 如果为了版本兼容，增加字段，需要加上Compatible注解，order需要自然增大，这样就可以保证新老协议可以互相兼容
 - 正式环境为了版本兼容，避免修改字段名称，内部默认使用字段的名称按照字符串的自然顺序来依次读写的（也可以自定义），所以会导致序列化出现异常
 - 正式环境为了版本兼容，避免减少字段，没必要一定要删除一个不需要的字段，所以不考虑支持这种减少字段兼容协议的情况
