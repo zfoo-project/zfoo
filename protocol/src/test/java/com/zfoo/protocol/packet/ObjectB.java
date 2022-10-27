@@ -23,7 +23,14 @@ import java.util.Objects;
  */
 public class ObjectB implements IPacket {
 
+    public static final transient short PROTOCOL_ID = 103;
+
     private boolean flag;
+
+    @Override
+    public short protocolId() {
+        return PROTOCOL_ID;
+    }
 
     public boolean isFlag() {
         return flag;

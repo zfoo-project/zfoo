@@ -24,11 +24,18 @@ import java.util.Objects;
  */
 public class ObjectA implements IPacket {
 
+    public static final transient short PROTOCOL_ID = 102;
+
     private int a;
 
     private Map<Integer, String> m;
 
     private ObjectB objectB;
+
+    @Override
+    public short protocolId() {
+        return PROTOCOL_ID;
+    }
 
     public int getA() {
         return a;
