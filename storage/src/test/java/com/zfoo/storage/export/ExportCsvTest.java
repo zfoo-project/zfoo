@@ -12,9 +12,14 @@
 
 package com.zfoo.storage.export;
 
+import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.storage.interpreter.CsvReader;
 import com.zfoo.storage.util.ExportUtils;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author godotg
@@ -24,10 +29,18 @@ import org.junit.Test;
 public class ExportCsvTest {
 
     @Test
-    public void test() throws Exception {
+    public void exportTest() throws Exception {
         var inputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
         var outputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
-        ExportUtils.excel2Json(inputDir, outputDir);
+        ExportUtils.excel2csv(inputDir, outputDir);
+
+    }
+
+    @Test
+    public void csvReadTest() throws IOException {
+        var file = new File("C:\\Users\\workspace\\Desktop\\test\\StudentResource.csv");
+        var list = CsvReader.readResourceDataFromCSV(FileUtils.openInputStream(file), file.getName());
+        System.out.println(list);
     }
 
 }

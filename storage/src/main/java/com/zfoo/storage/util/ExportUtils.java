@@ -36,27 +36,47 @@ import java.util.stream.Collectors;
  */
 public abstract class ExportUtils {
 
-    public static void excel2Json(String inputDir, String outputDir) throws IOException {
+    public static void excel2json(String inputDir, String outputDir) throws IOException {
         var excelFiles = scanExcelFiles(inputDir);
         for (var excel : excelFiles) {
             var excelSimpleName = FileUtils.fileSimpleName(excel.getName());
-            var jsonFileName = StringUtils.format("{}.json", excelSimpleName);
             var resourceData = ExcelReader.readResourceDataFromExcel(FileUtils.openInputStream(excel), excel.getName());
 
-            var outputFilePath = FileUtils.joinPath(outputDir, jsonFileName);
+            var outputFilePath = FileUtils.joinPath(outputDir, StringUtils.format("{}.json", excelSimpleName));
             FileUtils.deleteFile(new File(outputFilePath));
             FileUtils.writeStringToFile(new File(outputFilePath), JsonUtils.object2String(resourceData), true);
         }
     }
 
-    public static void excel2Csv(String inputDir, String outputDir) throws IOException {
+    public static void excel2csv(String inputDir, String outputDir) throws IOException {
         var excelFiles = scanExcelFiles(inputDir);
         for (var excel : excelFiles) {
             var excelSimpleName = FileUtils.fileSimpleName(excel.getName());
-            var csvFileName = StringUtils.format("{}.csv", excelSimpleName);
-            var resourceData = CsvReader.readResourceDataFromCSV(FileUtils.openInputStream(excel), excel.getName());
+            var resourceData = ExcelReader.readResourceDataFromExcel(FileUtils.openInputStream(excel), excel.getName());
+            var headers = resourceData.getHeaders();
+            var rows = resourceData.getRows();
+            var builder = new StringBuilder();
+            builder.append(headers.stream().map(it -> wrapCsvData(it.getName())).collect(Collectors.joining(StringUtils.COMMA))).append(FileUtils.LS);
+            builder.append(headers.stream().map(it -> wrapCsvData(it.getType())).collect(Collectors.joining(StringUtils.COMMA))).append(FileUtils.LS);
+            for (var row : rows) {
+                builder.append(row.stream().map(it -> wrapCsvData(it)).collect(Collectors.joining(StringUtils.COMMA))).append(FileUtils.LS);
+            }
+            var outputFilePath = FileUtils.joinPath(outputDir, StringUtils.format("{}.csv", excelSimpleName));
+            FileUtils.deleteFile(new File(outputFilePath));
+            FileUtils.writeStringToFile(new File(outputFilePath), builder.toString(), true);
+        }
+    }
 
-            var outputFilePath = FileUtils.joinPath(outputDir, csvFileName);
+    public static void csv2json(String inputDir, String outputDir) throws IOException {
+        var csvFiles = FileUtils.getAllReadableFiles(new File(inputDir))
+                .stream()
+                .filter(it -> ResourceEnum.getResourceEnumByType(FileUtils.fileExtName(it.getName())) == ResourceEnum.CSV)
+                .collect(Collectors.toList());
+        for (var csv : csvFiles) {
+            var excelSimpleName = FileUtils.fileSimpleName(csv.getName());
+            var resourceData = CsvReader.readResourceDataFromCSV(FileUtils.openInputStream(csv), csv.getName());
+
+            var outputFilePath = FileUtils.joinPath(outputDir, StringUtils.format("{}.json", excelSimpleName));
             FileUtils.deleteFile(new File(outputFilePath));
             FileUtils.writeStringToFile(new File(outputFilePath), JsonUtils.object2String(resourceData), true);
         }
@@ -110,4 +130,53 @@ public abstract class ExportUtils {
         return instance;
     }
 
+    private static String wrapCsvData(String value) {
+        char textDelimiter = '"';
+        char fieldSeparator = ',';
+
+        if (StringUtils.isEmpty(value)) {
+            return StringUtils.EMPTY;
+        }
+
+
+        char[] valueChars = value.toCharArray();
+        boolean needsTextDelimiter = false;
+        boolean containsTextDelimiter = false;
+
+        for (char c : valueChars) {
+            if (c == textDelimiter) {
+                // 字段值中存在包装符
+                containsTextDelimiter = needsTextDelimiter = true;
+                break;
+            } else if (c == fieldSeparator || c == '\n' || c == '\r') {
+                // 包含分隔符或换行符需要包装符包装
+                needsTextDelimiter = true;
+            }
+        }
+
+        // 包装符开始
+        var builder = new StringBuilder();
+        if (needsTextDelimiter) {
+            builder.append(textDelimiter);
+        }
+
+        // 正文
+        if (containsTextDelimiter) {
+            for (char c : valueChars) {
+                // 转义文本包装符
+                if (c == textDelimiter) {
+                    builder.append(textDelimiter);
+                }
+                builder.append(c);
+            }
+        } else {
+            builder.append(valueChars);
+        }
+
+        // 包装符结尾
+        if (needsTextDelimiter) {
+            builder.append(textDelimiter);
+        }
+        return builder.toString();
+    }
 }

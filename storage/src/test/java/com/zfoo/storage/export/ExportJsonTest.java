@@ -27,7 +27,7 @@ public class ExportJsonTest {
     public void test() throws Exception {
         var inputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
         var outputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
-        ExportUtils.excel2Json(inputDir, outputDir);
+        ExportUtils.excel2json(inputDir, outputDir);
     }
 
 }
