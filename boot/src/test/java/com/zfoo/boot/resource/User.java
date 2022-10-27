@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -14,25 +13,16 @@
 package com.zfoo.boot.resource;
 
 import com.zfoo.protocol.IPacket;
-import com.zfoo.storage.model.anno.Id;
-import com.zfoo.storage.model.anno.Resource;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
-@Resource
-public class StudentResource implements IPacket {
+public class User implements IPacket {
 
-    @Id
-    public int id;
-
+    public String id;
     public String name;
+    public String sex;
     public int age;
-    public float score;
-    public String[] courses;
-    public User[] users;
-    public User user;
 
 }
-
