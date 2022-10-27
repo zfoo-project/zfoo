@@ -88,6 +88,10 @@ public class Storage<K, V> {
         return Collections.unmodifiableCollection(dataMap.values());
     }
 
+    public Map<K, V> getData() {
+        return Collections.unmodifiableMap(dataMap);
+    }
+
     public boolean contain(K key) {
         return dataMap.containsKey(key);
     }
