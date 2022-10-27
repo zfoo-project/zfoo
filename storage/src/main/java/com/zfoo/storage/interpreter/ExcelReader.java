@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,48 +10,26 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.util;
+package com.zfoo.storage.interpreter;
 
 import com.zfoo.protocol.exception.RunException;
-import com.zfoo.protocol.util.FileUtils;
-import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.model.resource.ResourceData;
-import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.model.resource.ResourceHeader;
+import com.zfoo.storage.util.CellUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author meiwei666
  * @version 4.0
  */
-public abstract class ExcelReaderUtils {
-
-    public static void excelConvertJson(String inputDir, String outputDir) throws IOException {
-        var listFiles = FileUtils.getAllReadableFiles(new File(inputDir))
-                .stream()
-                .filter(it -> ResourceEnum.isExcel(FileUtils.fileExtName(it.getName())))
-                .collect(Collectors.toList());
-
-        for (var file : listFiles) {
-            var fileSimpleName = FileUtils.fileSimpleName(file.getName());
-            var jsonFileName = StringUtils.format("{}.json", fileSimpleName);
-            var inputStream = FileUtils.openInputStream(file);
-            var resourceData = readResourceDataFromExcel(inputStream, file.getName());
-
-            var outputFilePath = FileUtils.joinPath(outputDir, jsonFileName);
-            FileUtils.deleteFile(new File(outputFilePath));
-            FileUtils.writeStringToFile(new File(outputFilePath), JsonUtils.object2String(resourceData), true);
-        }
-    }
+public abstract class ExcelReader {
 
     public static ResourceData readResourceDataFromExcel(InputStream inputStream, String fileName) {
         // 只读取代码里写的字段

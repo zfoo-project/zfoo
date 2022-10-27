@@ -18,7 +18,7 @@ import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.StorageContext;
+import com.zfoo.storage.interpreter.ResourceInterpreter;
 import org.springframework.lang.Nullable;
 
 import java.io.InputStream;
@@ -47,11 +47,10 @@ public class Storage<K, V> {
     public void init(InputStream inputStream, Class<?> resourceClazz, String suffix) {
         try {
             this.clazz = (Class<V>) resourceClazz;
-            var reader = StorageContext.getResourceReader();
             idDef = IdDef.valueOf(resourceClazz);
             indexDefMap = IndexDef.createResourceIndexes(resourceClazz);
 
-            var list = reader.read(inputStream, resourceClazz, suffix);
+            var list = ResourceInterpreter.read(inputStream, resourceClazz, suffix);
 
             dataMap.clear();
             indexMap.clear();
@@ -90,6 +89,10 @@ public class Storage<K, V> {
 
     public Map<K, V> getData() {
         return Collections.unmodifiableMap(dataMap);
+    }
+
+    public IdDef getIdDef() {
+        return idDef;
     }
 
     public boolean contain(K key) {

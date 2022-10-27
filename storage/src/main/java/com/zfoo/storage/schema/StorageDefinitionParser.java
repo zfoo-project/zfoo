@@ -16,7 +16,6 @@ package com.zfoo.storage.schema;
 import com.zfoo.protocol.util.DomUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.StorageContext;
-import com.zfoo.storage.interpreter.ResourceReader;
 import com.zfoo.storage.manager.StorageManager;
 import com.zfoo.storage.model.config.StorageConfig;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -40,7 +39,7 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
         // 解析StorageConfig的配置
         parseStorageConfig(element, parserContext);
 
-        // 注册StorageContext，ExcelResourceReader
+        // 注册StorageContext
         registerBeanDefinition(parserContext);
 
         // 注册StorageManager
@@ -84,12 +83,6 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
 
         // 注册StorageContext
         clazz = StorageContext.class;
-        name = StringUtils.uncapitalize(clazz.getName());
-        builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
-        registry.registerBeanDefinition(name, builder.getBeanDefinition());
-
-        // 注册ResourceReader
-        clazz = ResourceReader.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         registry.registerBeanDefinition(name, builder.getBeanDefinition());

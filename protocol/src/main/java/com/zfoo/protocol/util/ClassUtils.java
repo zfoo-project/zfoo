@@ -18,11 +18,12 @@ import com.zfoo.protocol.exception.RunException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author godotg
@@ -89,10 +90,7 @@ public abstract class ClassUtils {
         // 必须要有一个空的构造器
         ReflectionUtils.publicEmptyConstructor(clazz);
 
-        var filedList = Arrays.stream(clazz.getDeclaredFields())
-                .filter(it -> !Modifier.isTransient(it.getModifiers()))
-                .filter(it -> !Modifier.isStatic(it.getModifiers()))
-                .collect(Collectors.toList());
+        var filedList = ReflectionUtils.notStaticAndTransientFields(clazz);
 
         for (var field : filedList) {
             // 是一个基本类型变量

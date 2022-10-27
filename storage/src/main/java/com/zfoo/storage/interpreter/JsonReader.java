@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -13,21 +12,26 @@
 
 package com.zfoo.storage.interpreter;
 
+import com.zfoo.protocol.util.IOUtils;
+import com.zfoo.protocol.util.JsonUtils;
+import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.storage.model.resource.ResourceData;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 /**
- * 解释器模式设计的文本解析器
- * <p>
- * interpreter  [in'ter·pret·er || ɪn'tɜrprɪtə(r) /-'tɜːp-]
- * n.  直译程序, 翻译员, 解释者
- *
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
-public interface IResourceReader {
+public abstract class JsonReader {
 
-    <T> List<T> read(InputStream inputStream, Class<T> clazz, String suffix) throws IOException;
+    public static ResourceData readResourceDataFromCSV(InputStream input) {
+        try {
+            return JsonUtils.string2Object(StringUtils.bytesToString(IOUtils.toByteArray(input)), ResourceData.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

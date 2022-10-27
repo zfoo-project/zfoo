@@ -13,26 +13,18 @@
 package com.zfoo.storage.interpreter;
 
 import com.zfoo.protocol.exception.RunException;
-import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.model.anno.Id;
 import com.zfoo.storage.model.resource.ResourceData;
 import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.strategy.*;
-import com.zfoo.storage.util.CsvReaderUtils;
-import com.zfoo.storage.util.ExcelReaderUtils;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.TypeDescriptor;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,7 +32,7 @@ import java.util.stream.Collectors;
  * @author godotg
  * @version 4.0
  */
-public class ResourceReader implements IResourceReader {
+public class ResourceInterpreter {
 
     private static final TypeDescriptor TYPE_DESCRIPTOR = TypeDescriptor.valueOf(String.class);
 
@@ -58,16 +50,15 @@ public class ResourceReader implements IResourceReader {
         conversionServiceFactoryBean.afterPropertiesSet();
     }
 
-    @Override
-    public <T> List<T> read(InputStream inputStream, Class<T> clazz, String suffix) throws IOException {
+    public static <T> List<T> read(InputStream inputStream, Class<T> clazz, String suffix) throws IOException {
         ResourceData resource = null;
         var resourceEnum = ResourceEnum.getResourceEnumByType(suffix);
         if (resourceEnum == ResourceEnum.JSON) {
-            resource = JsonUtils.string2Object(StringUtils.bytesToString(IOUtils.toByteArray(inputStream)), ResourceData.class);
+            resource = JsonReader.readResourceDataFromCSV(inputStream);
         } else if (resourceEnum == ResourceEnum.EXCEL_XLS || resourceEnum == ResourceEnum.EXCEL_XLSX) {
-            resource = ExcelReaderUtils.readResourceDataFromExcel(inputStream, clazz.getSimpleName());
+            resource = ExcelReader.readResourceDataFromExcel(inputStream, clazz.getSimpleName());
         } else if (resourceEnum == ResourceEnum.CSV) {
-            resource = CsvReaderUtils.readResourceDataFromCSV(inputStream, clazz.getSimpleName());
+            resource = CsvReader.readResourceDataFromCSV(inputStream, clazz.getSimpleName());
         } else {
             throw new RunException("不支持文件[{}]的配置类型[{}]", clazz.getSimpleName(), suffix);
         }
@@ -94,7 +85,7 @@ public class ResourceReader implements IResourceReader {
         return result;
     }
 
-    private void inject(Object instance, Field field, String content) {
+    private static void inject(Object instance, Field field, String content) {
         try {
             var targetType = new TypeDescriptor(field);
             var value = conversionServiceFactoryBean.getObject().convert(content, TYPE_DESCRIPTOR, targetType);
@@ -106,12 +97,8 @@ public class ResourceReader implements IResourceReader {
     }
 
     // 只读取代码里写的字段
-    private Collection<FieldInfo> getFieldInfos(Map<String, Integer> fieldMap, Class<?> clazz) {
-        var fieldList = Arrays.stream(clazz.getDeclaredFields())
-                .filter(it -> !Modifier.isTransient(it.getModifiers()))
-                .filter(it -> !Modifier.isStatic(it.getModifiers()))
-                .collect(Collectors.toList());
-
+    private static Collection<FieldInfo> getFieldInfos(Map<String, Integer> fieldMap, Class<?> clazz) {
+        var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
         for (var field : fieldList) {
             if (!fieldMap.containsKey(field.getName())) {
                 throw new RunException("资源类[class:{}]的声明属性[filed:{}]无法获取，请检查配置表的格式", clazz, field.getName());
@@ -123,33 +110,8 @@ public class ResourceReader implements IResourceReader {
                     throw new RunException("资源类[class:{}]的主键[Id:{}]必须放在Excel配置表的第一列，请检查配置表的格式", clazz, field.getName());
                 }
             }
-
-            if (!StorageContext.getStorageManager().storageConfig().isWriteable()) {
-                if (Modifier.isPublic(field.getModifiers())) {
-                    throw new RunException("因为静态资源类是不能被修改的，资源类[class:{}]的属性[filed:{}]不能被public修饰，用private修饰或者开启配置writeable属性", clazz, field.getName());
-                }
-
-                var setMethodName = StringUtils.EMPTY;
-                try {
-                    setMethodName = ReflectionUtils.fieldToSetMethod(clazz, field);
-                } catch (Exception e) {
-                    // 没有setMethod是正确的
-                }
-                if (StringUtils.isNotBlank(setMethodName)) {
-                    throw new RunException("因为静态资源类是不能被修改的，资源类[class:{}]的属性[filed:{}]不能含有set方法[{}]，删除set方法或者开启配置writeable属性", clazz, field.getName(), setMethodName);
-                }
-            }
         }
-
         return fieldList.stream().map(it -> new FieldInfo(fieldMap.get(it.getName()), it)).collect(Collectors.toList());
-    }
-
-    private Workbook createWorkbook(InputStream input, String name) {
-        try {
-            return WorkbookFactory.create(input);
-        } catch (IOException e) {
-            throw new RunException("静态资源[{}]异常，无法读取文件", name);
-        }
     }
 
     private static class FieldInfo {
@@ -162,7 +124,7 @@ public class ResourceReader implements IResourceReader {
         }
     }
 
-    public Map<String, Integer> getFieldMap(ResourceData resource, Class<?> clazz) {
+    public static Map<String, Integer> getFieldMap(ResourceData resource, Class<?> clazz) {
         var header = resource.getHeaders();
         if (header == null) {
             throw new RunException("无法获取资源[class:{}]的Excel文件的属性控制列", clazz.getSimpleName());

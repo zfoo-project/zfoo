@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.util;
+package com.zfoo.storage.interpreter;
 
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.StringUtils;
@@ -32,7 +31,7 @@ import java.util.List;
  * @author meiwei666
  * @version 4.0
  */
-public abstract class CsvReaderUtils {
+public abstract class CsvReader {
 
     public static ResourceData readResourceDataFromCSV(InputStream input, String fileName) {
         var records = parseCsv(input, fileName);

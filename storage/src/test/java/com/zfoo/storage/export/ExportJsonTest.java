@@ -10,19 +10,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.boot.resource;
+package com.zfoo.storage.export;
 
-import com.zfoo.protocol.IPacket;
+import com.zfoo.storage.util.ExportUtils;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class User implements IPacket {
+@Ignore
+public class ExportJsonTest {
 
-    public String id;
-    public String name;
-    public String sex;
-    public int age;
+    @Test
+    public void test() throws Exception {
+        var inputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
+        var outputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
+        ExportUtils.excel2Json(inputDir, outputDir);
+    }
 
 }

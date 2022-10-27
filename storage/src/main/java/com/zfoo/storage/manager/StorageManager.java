@@ -33,6 +33,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -90,6 +91,29 @@ public class StorageManager implements IStorageManager {
                 throw new RuntimeException(StringUtils.format("类的资源定义[{}]已经存在[{}]", resourceClazz, resourceDef));
             }
             resourceDefinitionMap.put(resourceClazz, resourceDef);
+        }
+
+        // 检查class字段是否合法
+        if (!storageConfig.isWriteable()) {
+            for (var definition : resourceDefinitionMap.values()) {
+                var clazz = definition.getClazz();
+                var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
+                for (var field : fieldList) {
+                    if (Modifier.isPublic(field.getModifiers())) {
+                        throw new RunException("因为静态资源类是不能被修改的，资源类[class:{}]的属性[filed:{}]不能被public修饰，用private修饰或者开启配置writeable属性", clazz, field.getName());
+                    }
+
+                    var setMethodName = StringUtils.EMPTY;
+                    try {
+                        setMethodName = ReflectionUtils.fieldToSetMethod(clazz, field);
+                    } catch (Exception e) {
+                        // 没有setMethod是正确的
+                    }
+                    if (StringUtils.isNotBlank(setMethodName)) {
+                        throw new RunException("因为静态资源类是不能被修改的，资源类[class:{}]的属性[filed:{}]不能含有set方法[{}]，删除set方法或者开启配置writeable属性", clazz, field.getName(), setMethodName);
+                    }
+                }
+            }
         }
 
         try {

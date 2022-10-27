@@ -467,10 +467,7 @@ public class OrmManager implements IOrmManager {
             throw new RunException("在Orm中只能使用Orm的Index注解，不能使用Storage的Index注解，为了避免不必要的误解和增强项目的健壮性，禁止这样使用");
         }
 
-        var filedList = Arrays.stream(clazz.getDeclaredFields())
-                .filter(it -> !Modifier.isTransient(it.getModifiers()))
-                .filter(it -> !Modifier.isStatic(it.getModifiers()))
-                .collect(Collectors.toList());
+        var filedList = ReflectionUtils.notStaticAndTransientFields(clazz);
 
         for (var field : filedList) {
             // entity必须包含属性的get和set方法

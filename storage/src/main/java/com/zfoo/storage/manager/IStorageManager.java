@@ -15,7 +15,6 @@ package com.zfoo.storage.manager;
 
 import com.zfoo.storage.model.config.StorageConfig;
 import com.zfoo.storage.model.vo.Storage;
-import org.springframework.lang.Nullable;
 
 import java.util.Map;
 
@@ -40,7 +39,6 @@ public interface IStorageManager {
      */
     void initAfter();
 
-    @Nullable
     Storage<?, ?> getStorage(Class<?> clazz);
 
     Map<Class<?>, Storage<?, ?>> storageMap();

@@ -16,15 +16,19 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.exception.UnknownException;
 
+import java.beans.Transient;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 /**
@@ -319,6 +323,14 @@ public abstract class ReflectionUtils {
         }
     }
 
+    // 获取class中的普通field属性字段
+    public static List<Field> notStaticAndTransientFields(Class<?> clazz) {
+        return Arrays.stream(clazz.getDeclaredFields())
+                .filter(it -> !Modifier.isStatic(it.getModifiers()))
+                .filter(it -> !Modifier.isTransient(it.getModifiers()))
+                .filter(it -> !it.isAnnotationPresent(Transient.class))
+                .collect(Collectors.toList());
+    }
 
     public static String fieldToGetMethod(Class<?> clazz, Field field) {
         var fieldName = field.getName();

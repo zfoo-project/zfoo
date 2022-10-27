@@ -14,7 +14,6 @@
 package com.zfoo.storage;
 
 import com.zfoo.scheduler.model.StopWatch;
-import com.zfoo.storage.interpreter.IResourceReader;
 import com.zfoo.storage.manager.IStorageManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +36,6 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
 
     private ApplicationContext applicationContext;
 
-    private IResourceReader resourceReader;
-
     private IStorageManager storageManager;
 
     public static StorageContext getStorageContext() {
@@ -47,14 +44,6 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
 
     public static ApplicationContext getApplicationContext() {
         return instance.applicationContext;
-    }
-
-    public static StorageContext getInstance() {
-        return instance;
-    }
-
-    public static IResourceReader getResourceReader() {
-        return instance.resourceReader;
     }
 
     public static IStorageManager getStorageManager() {
@@ -69,7 +58,6 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
             // 初始化上下文
             StorageContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
-            instance.resourceReader = applicationContext.getBean(IResourceReader.class);
             instance.storageManager = applicationContext.getBean(IStorageManager.class);
 
             // 初始化，并读取配置表
