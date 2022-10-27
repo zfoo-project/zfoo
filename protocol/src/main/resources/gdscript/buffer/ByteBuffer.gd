@@ -4,8 +4,8 @@ const EMPTY: String = ""
 
 var buffer = StreamPeerBuffer.new()
 
-var writeOffset: int = 0 setget setWriteOffset, getWriteOffset
-var readOffset: int = 0 setget setReadOffset, getReadOffset
+var writeOffset: int = 0
+var readOffset: int = 0
 
 func _init():
 	buffer.big_endian = true
@@ -35,22 +35,20 @@ func isReadable() -> bool:
 	return writeOffset > readOffset
 
 # -------------------------------------------------write/read-------------------------------------------------
-func writePoolByteArray(value: PoolByteArray):
-	var length = value.size()
+func writePackedByteArray(value: PackedByteArray):
+	var length: int = value.size()
 	buffer.put_partial_data(value)
 	writeOffset += length
 	
 func writeBool(value: bool) -> void:
-	var byte = 0
-	if (value):
-		byte = 1
+	var byte: int = 1 if value else 0
 	buffer.seek(writeOffset)
 	buffer.put_8(byte)
 	writeOffset += 1
 
 func readBool() -> bool:
 	buffer.seek(readOffset)
-	var byte = buffer.get_8()
+	var byte: int = buffer.get_8()
 	readOffset += 1
 	return byte == 1
 
@@ -61,7 +59,7 @@ func writeByte(value: int) -> void:
 
 func readByte() -> int:
 	buffer.seek(readOffset)
-	var value = buffer.get_8()
+	var value: int = buffer.get_8()
 	readOffset += 1
 	return value
 
@@ -83,7 +81,7 @@ func readInt() -> int:
 	return readLong()
 
 func writeLong(longValue: int) -> void:
-	var value = (longValue << 1) ^ (longValue >> 63)
+	var value: int = (longValue << 1) ^ (longValue >> 63)
 
 	if (value >> 7 == 0):
 		writeByte(value)
@@ -219,20 +217,20 @@ func writeString(value: String) -> void:
 
 	buffer.seek(writeOffset)
 
-	var strBytes = value.to_utf8()
-	var length = strBytes.size()
+	var strBytes: PackedByteArray = value.to_utf8_buffer()
+	var length: int = strBytes.size()
 	writeInt(length)
 	buffer.put_partial_data(strBytes)
 	writeOffset += length
 
 func readString() -> String:
-	var length = readInt()
+	var length: int = readInt()
 	if (length <= 0):
 		return EMPTY
 
 	buffer.seek(readOffset)
-	var value = buffer.get_utf8_string(length)
-	var strBytes = value.to_utf8()
+	var value: String = buffer.get_utf8_string(length)
+	var strBytes: PackedByteArray = value.to_utf8_buffer()
 	readOffset += length
 	return value
 
@@ -269,8 +267,8 @@ func writeBooleanArray(array):
 		for element in array:
 			writeBool(element)
 			
-func readBooleanArray():
-	var array = []
+func readBooleanArray() -> Array[bool]:
+	var array: Array[bool] = []
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -285,8 +283,8 @@ func writeByteArray(array):
 		for element in array:
 			writeByte(element)
 			
-func readByteArray():
-	var array = []
+func readByteArray() -> Array[int]:
+	var array: Array[int] = []
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -302,7 +300,7 @@ func writeShortArray(array):
 			writeShort(element)
 			
 func readShortArray():
-	var array = []
+	var array: Array[int] = []
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -318,7 +316,7 @@ func writeIntArray(array):
 			writeInt(element)
 			
 func readIntArray():
-	var array = []
+	var array: Array[int] = []
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -334,7 +332,7 @@ func writeLongArray(array):
 			writeLong(element)
 			
 func readLongArray():
-	var array = []
+	var array: Array[int] = []
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -350,7 +348,7 @@ func writeFloatArray(array):
 			writeFloat(element)
 			
 func readFloatArray():
-	var array = []
+	var array: Array[float] = []
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -366,7 +364,7 @@ func writeDoubleArray(array):
 			writeDouble(element)
 			
 func readDoubleArray():
-	var array = []
+	var array: Array[float] = []
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -382,7 +380,7 @@ func writeCharArray(array):
 			writeChar(element)
 			
 func readCharArray():
-	var array = []
+	var array: Array[String] = []
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -398,7 +396,7 @@ func writeStringArray(array):
 			writeString(element)
 			
 func readStringArray():
-	var array = []
+	var array: Array[String] = []
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):

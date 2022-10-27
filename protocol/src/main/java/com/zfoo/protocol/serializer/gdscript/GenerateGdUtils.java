@@ -29,6 +29,7 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,15 +90,16 @@ public abstract class GenerateGdUtils {
         var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("gdscript/ProtocolManagerTemplate.gd")));
         // 生成ProtocolManager.gd文件
         var importBuilder = new StringBuilder();
-        var initBuilder = new StringBuilder();
+        var initList = new ArrayList<String>();
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
             var name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
             var path = GenerateProtocolPath.getProtocolPath(protocolId);
             importBuilder.append(StringUtils.format("const {} = preload(\"res://gdProtocol/{}/{}.gd\")", name, path, name)).append(LS);
-            initBuilder.append(TAB_ASCII).append(StringUtils.format("protocols[{}] = {}", protocolId, name)).append(LS);
+            initList.add(StringUtils.format("{}{}: {}", TAB_ASCII, protocolId, name));
         }
-        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), StringUtils.EMPTY_JSON, initBuilder.toString().trim());
+        var initProtocols = StringUtils.joinWith(StringUtils.COMMA + LS, initList.toArray());
+        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), initProtocols);
         FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.gd")), protocolManagerTemplate, true);
     }
 

@@ -1,6 +1,8 @@
 {}
 
-const protocols = {}
+const protocols: Dictionary = {
+{}
+}
 
 static func getProtocol(protocolId: int):
 	return protocols[protocolId]
@@ -20,6 +22,3 @@ static func read(buffer):
     var protocol = protocols[protocolId]
     var packet = protocol.read(buffer);
     return packet;
-
-static func initProtocol():
-	{}
