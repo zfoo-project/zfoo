@@ -16,6 +16,7 @@ package com.zfoo.protocol.serializer.gdscript;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
+import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -27,6 +28,12 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  * @version 3.0
  */
 public class GdObjectProtocolSerializer implements IGdSerializer {
+
+    @Override
+    public String fieldType(Field field, IFieldRegistration fieldRegistration) {
+        ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
+        return EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
+    }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {

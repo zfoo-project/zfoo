@@ -29,6 +29,11 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class GdBooleanSerializer implements IGdSerializer {
 
     @Override
+    public String fieldType(Field field, IFieldRegistration fieldRegistration) {
+        return "bool";
+    }
+
+    @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateGdUtils.addTab(builder, deep);
         builder.append(StringUtils.format("buffer.writeBool({})", objectStr)).append(LS);

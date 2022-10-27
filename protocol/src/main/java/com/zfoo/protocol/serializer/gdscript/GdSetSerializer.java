@@ -31,6 +31,14 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class GdSetSerializer implements IGdSerializer {
 
     @Override
+    public String fieldType(Field field, IFieldRegistration fieldRegistration) {
+        var listField = (SetField) fieldRegistration;
+        var registration = listField.getSetElementRegistration();
+        var type = GenerateGdUtils.gdSerializer(registration.serializer()).fieldType(field, registration);
+        return GdArraySerializer.arrayType(type);
+    }
+
+    @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateGdUtils.addTab(builder, deep);
         if (CutDownSetSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.GdScript)) {

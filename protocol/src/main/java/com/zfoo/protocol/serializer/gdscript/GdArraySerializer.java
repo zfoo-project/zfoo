@@ -31,6 +31,22 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  */
 public class GdArraySerializer implements IGdSerializer {
 
+    public static String arrayType(String type) {
+        if (type.startsWith("Array") || type.startsWith("Dictionary")) {
+            return "Array";
+        } else {
+            return StringUtils.format("Array[{}]", type);
+        }
+    }
+
+    @Override
+    public String fieldType(Field field, IFieldRegistration fieldRegistration) {
+        var arrayField = (ArrayField) fieldRegistration;
+        var registration = arrayField.getArrayElementRegistration();
+        var type = GenerateGdUtils.gdSerializer(registration.serializer()).fieldType(field, registration);
+        return arrayType(type);
+    }
+
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateGdUtils.addTab(builder, deep);

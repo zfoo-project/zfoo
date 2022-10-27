@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.serializer.gdscript;
 
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 
 import java.lang.reflect.Field;
@@ -22,6 +23,8 @@ import java.lang.reflect.Field;
  * @version 3.0
  */
 public interface IGdSerializer {
+
+    String fieldType(Field field, IFieldRegistration fieldRegistration);
 
     void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration);
 

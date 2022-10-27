@@ -31,6 +31,11 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class GdMapSerializer implements IGdSerializer {
 
     @Override
+    public String fieldType(Field field, IFieldRegistration fieldRegistration) {
+        return "Dictionary";
+    }
+
+    @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateGdUtils.addTab(builder, deep);
         if (CutDownMapSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.GdScript)) {

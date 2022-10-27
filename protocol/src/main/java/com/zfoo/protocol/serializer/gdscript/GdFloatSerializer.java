@@ -29,6 +29,11 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class GdFloatSerializer implements IGdSerializer {
 
     @Override
+    public String fieldType(Field field, IFieldRegistration fieldRegistration) {
+        return "float";
+    }
+
+    @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateGdUtils.addTab(builder, deep);
         builder.append(StringUtils.format("buffer.writeFloat({})", objectStr)).append(LS);

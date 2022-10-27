@@ -33,9 +33,7 @@ public class GoObjectProtocolSerializer implements IGoSerializer {
     @Override
     public String fieldType(Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
-        var type = StringUtils.format("{}", protocolSimpleName);
-        return type;
+        return EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
     }
 
     @Override
