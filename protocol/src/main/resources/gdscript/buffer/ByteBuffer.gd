@@ -1,4 +1,4 @@
-const ProtocolManager = preload("res://gdProtocol/ProtocolManager.gd")
+const ProtocolManager = preload("res://{}/ProtocolManager.gd")
 
 const EMPTY: String = ""
 

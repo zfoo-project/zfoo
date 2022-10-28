@@ -92,6 +92,7 @@ public class ExportBinaryTest {
         protocols.add(ResourceData.class);
         protocols.addAll(storageManager.storageMap().keySet());
         var operation = new GenerateOperation();
+        operation.setProtocolPath("D:\\github\\godot-bird\\test\\storage\\protocol");
         operation.getGenerateLanguages().add(CodeLanguage.GdScript);
         ProtocolManager.initProtocolAuto(protocols, operation);
 

@@ -14,6 +14,7 @@
 package com.zfoo.protocol.generate;
 
 import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.util.StringUtils;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class GenerateOperation {
     /**
      * 生成协议的路径，默认为当前运行项目的路径
      */
-    private String protocolPath;
+    private String protocolPath = StringUtils.EMPTY;
 
     /**
      * 保留参数

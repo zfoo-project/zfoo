@@ -48,7 +48,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
  */
 public abstract class GenerateGdUtils {
 
-    private static String protocolOutputRootPath = "gdProtocol/";
+    private static String protocolOutputRootPath = "gdProtocol";
     private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, IGdSerializer> gdSerializerMap;
@@ -58,10 +58,16 @@ public abstract class GenerateGdUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+        // 如果没有配置路径，则使用默认路径
+        if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
+            protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+        } else {
+            protocolOutputPath = generateOperation.getProtocolPath();
+        }
 
         FileUtils.deleteFile(new File(protocolOutputPath));
-        FileUtils.createDirectory(protocolOutputPath);
+        var protocolOutputPathFile = FileUtils.createDirectory(protocolOutputPath);
+        protocolOutputRootPath = protocolOutputPathFile.getName();
 
         gdSerializerMap = new HashMap<>();
         gdSerializerMap.put(BooleanSerializer.INSTANCE, new GdBooleanSerializer());
@@ -87,12 +93,9 @@ public abstract class GenerateGdUtils {
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
-        var list = List.of("gdscript/buffer/ByteBuffer.gd");
-        for (var fileName : list) {
-            var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "gdscript/")));
-            FileUtils.writeInputStreamToFile(createFile, fileInputStream);
-        }
+        var byteBufferFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ByteBuffer.gd"));
+        var byteBufferTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("gdscript/buffer/ByteBuffer.gd")));
+        FileUtils.writeStringToFile(byteBufferFile, StringUtils.format(byteBufferTemplate, protocolOutputRootPath), false);
 
         var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("gdscript/ProtocolManagerTemplate.gd")));
         // 生成ProtocolManager.gd文件
@@ -102,7 +105,11 @@ public abstract class GenerateGdUtils {
             var protocolId = protocol.protocolId();
             var name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
             var path = GenerateProtocolPath.getProtocolPath(protocolId);
-            importBuilder.append(StringUtils.format("const {} = preload(\"res://gdProtocol/{}/{}.gd\")", name, path, name)).append(LS);
+            if (StringUtils.isBlank(path)) {
+                importBuilder.append(StringUtils.format("const {} = preload(\"res://{}/{}.gd\")", name, protocolOutputRootPath, name)).append(LS);
+            } else {
+                importBuilder.append(StringUtils.format("const {} = preload(\"res://{}/{}/{}.gd\")", name, protocolOutputRootPath, path, name)).append(LS);
+            }
             initList.add(StringUtils.format("{}{}: {}", TAB_ASCII, protocolId, name));
         }
         var initProtocols = StringUtils.joinWith(StringUtils.COMMA + LS, initList.toArray());

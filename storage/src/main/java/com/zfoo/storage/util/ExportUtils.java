@@ -68,10 +68,7 @@ public abstract class ExportUtils {
     }
 
     public static void csv2json(String inputDir, String outputDir) throws IOException {
-        var csvFiles = FileUtils.getAllReadableFiles(new File(inputDir))
-                .stream()
-                .filter(it -> ResourceEnum.getResourceEnumByType(FileUtils.fileExtName(it.getName())) == ResourceEnum.CSV)
-                .collect(Collectors.toList());
+        var csvFiles = scanCsvFiles(inputDir);
         for (var csv : csvFiles) {
             var excelSimpleName = FileUtils.fileSimpleName(csv.getName());
             var resourceData = CsvReader.readResourceDataFromCSV(FileUtils.openInputStream(csv), csv.getName());
@@ -82,10 +79,17 @@ public abstract class ExportUtils {
         }
     }
 
-    private static List<File> scanExcelFiles(String inputDir) {
+    public static List<File> scanExcelFiles(String inputDir) {
         return FileUtils.getAllReadableFiles(new File(inputDir))
                 .stream()
                 .filter(it -> ResourceEnum.isExcel(FileUtils.fileExtName(it.getName())))
+                .collect(Collectors.toList());
+    }
+
+    public static List<File> scanCsvFiles(String inputDir) {
+        return FileUtils.getAllReadableFiles(new File(inputDir))
+                .stream()
+                .filter(it -> ResourceEnum.getResourceEnumByType(FileUtils.fileExtName(it.getName())) == ResourceEnum.CSV)
                 .collect(Collectors.toList());
     }
 

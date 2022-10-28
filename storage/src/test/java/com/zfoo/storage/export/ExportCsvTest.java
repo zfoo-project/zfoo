@@ -13,6 +13,7 @@
 package com.zfoo.storage.export;
 
 import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.interpreter.CsvReader;
 import com.zfoo.storage.util.ExportUtils;
 import org.junit.Ignore;
@@ -34,6 +35,10 @@ public class ExportCsvTest {
         var outputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
         ExportUtils.excel2csv(inputDir, outputDir);
 
+        // godot4.x导入csv，莫名奇妙生成了一些translation文件，批量修改一下文件的名称
+        var csvFiles = ExportUtils.scanCsvFiles(outputDir);
+        csvFiles.stream().forEach(it -> it.renameTo(new File(StringUtils.format("{}.txt", it.getAbsolutePath()))));
+        csvFiles.stream().forEach(it -> FileUtils.deleteFile(it));
     }
 
     @Test
