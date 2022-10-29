@@ -24,10 +24,7 @@ import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.reflect.*;
-import com.zfoo.protocol.util.ClassUtils;
-import com.zfoo.protocol.util.FileUtils;
-import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -150,12 +147,11 @@ public abstract class GenerateGoUtils {
         var protocolId = registration.protocolId();
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
-
         var goBuilder = new StringBuilder();
-        // 协议的属性生成
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            IFieldRegistration fieldRegistration = fieldRegistrations[i];
+        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
+        for (int i = 0; i < sequencedFields.size(); i++) {
+            var field = sequencedFields.get(i);
+            IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = StringUtils.capitalize(field.getName());
             var fieldType = goSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
 

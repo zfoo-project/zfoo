@@ -22,13 +22,11 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.anno.Compatible;
+import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
-import com.zfoo.protocol.util.ClassUtils;
-import com.zfoo.protocol.util.FileUtils;
-import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -158,11 +156,11 @@ public abstract class GenerateTsUtils {
         var protocolId = registration.protocolId();
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
-
         var fieldDefinitionBuilder = new StringBuilder();
-        for (var i = 0; i < fields.length; i++) {
-            var field = fields[i];
-            var fieldRegistration = fieldRegistrations[i];
+        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
+        for (int i = 0; i < sequencedFields.size(); i++) {
+            var field = sequencedFields.get(i);
+            IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
             // 生成注释
             var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.TypeScript);

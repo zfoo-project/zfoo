@@ -20,6 +20,10 @@ import com.zfoo.protocol.util.StringUtils;
  */
 public class UnknownException extends RuntimeException {
 
+    public UnknownException() {
+        super();
+    }
+
     public UnknownException(Throwable cause) {
         super(cause);
     }

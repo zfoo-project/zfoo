@@ -20,12 +20,10 @@ import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.anno.Compatible;
+import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.reflect.*;
-import com.zfoo.protocol.util.ClassUtils;
-import com.zfoo.protocol.util.FileUtils;
-import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -128,11 +126,14 @@ public abstract class GenerateCsUtils {
     }
 
     private static String fieldDefinition(ProtocolRegistration registration) {
-        var protocolId = registration.protocolId();
+        var protocolId = registration.getId();
         var fields = registration.getFields();
+        var fieldRegistrations = registration.getFieldRegistrations();
         var csBuilder = new StringBuilder();
-        // 协议的属性生成
-        for (var field : fields) {
+        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
+        for (int i = 0; i < sequencedFields.size(); i++) {
+            var field = sequencedFields.get(i);
+            IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
             var propertyType = toCsClassName(field.getGenericType().getTypeName());
             var propertyFullName = StringUtils.format("public {} {};", propertyType, fieldName);

@@ -13,6 +13,7 @@
 package com.zfoo.protocol.generate;
 
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.exception.UnknownException;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
@@ -27,6 +28,7 @@ import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
@@ -179,6 +181,16 @@ public abstract class GenerateProtocolFile {
 
         // 预留参数，以后可能会用，比如给Lua修改一个后缀名称
         var protocolParam = generateOperation.getProtocolParam();
+    }
+
+
+    public static int indexOf(Field[] fields, Field field) {
+        for (int index = 0; index < fields.length; index++) {
+            if (fields[index].equals(field)) {
+                return index;
+            }
+        }
+        throw new UnknownException();
     }
 
 }
