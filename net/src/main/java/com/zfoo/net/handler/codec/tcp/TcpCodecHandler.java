@@ -18,6 +18,7 @@ import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.packet.model.EncodedPacketInfo;
 import com.zfoo.net.packet.service.PacketService;
 import com.zfoo.net.util.SessionUtils;
+import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -48,8 +49,8 @@ public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
         in.markReaderIndex();
         var length = in.readInt();
 
-        // 如果长度非法，则抛出异常断开连接
-        if (length < 0) {
+        // 如果长度非法，则抛出异常断开连接，按照自己的使用场景指定合适的长度，防止客户端发送超大包占用带宽
+        if (length < 0 || length > IOUtils.BYTES_PER_MB) {
             throw new IllegalArgumentException(StringUtils.format("[session:{}]的包头长度[length:{}]非法"
                     , SessionUtils.sessionInfo(ctx), length));
         }
