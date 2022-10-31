@@ -51,8 +51,7 @@ public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
 
         // 如果长度非法，则抛出异常断开连接，按照自己的使用场景指定合适的长度，防止客户端发送超大包占用带宽
         if (length < 0 || length > IOUtils.BYTES_PER_MB) {
-            throw new IllegalArgumentException(StringUtils.format("[session:{}]的包头长度[length:{}]非法"
-                    , SessionUtils.sessionInfo(ctx), length));
+            throw new IllegalArgumentException(StringUtils.format("illegal packet [length:{}]", length));
         }
 
         // ByteBuf里的数据太小
@@ -68,10 +67,10 @@ public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
             DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
             out.add(packetInfo);
         } catch (Exception e) {
-            logger.error("[session:{}]解码exception异常", SessionUtils.sessionInfo(ctx), e);
+            logger.error("decode exception {}", SessionUtils.sessionSimpleInfo(ctx), e);
             throw e;
         } catch (Throwable t) {
-            logger.error("[session:{}]解码throwable错误", SessionUtils.sessionInfo(ctx), t);
+            logger.error("decode throwable {}", SessionUtils.sessionSimpleInfo(ctx), t);
             throw t;
         } finally {
             ReferenceCountUtil.release(tmpByteBuf);
@@ -83,10 +82,10 @@ public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
         try {
             NetContext.getPacketService().write(out, packetInfo.getPacket(), packetInfo.getAttachment());
         } catch (Exception e) {
-            logger.error("[session:{}][{}]编码exception异常", SessionUtils.sessionInfo(ctx), packetInfo.getPacket().getClass().getSimpleName(), e);
+            logger.error("[{}] encode exception {}", SessionUtils.sessionSimpleInfo(ctx), packetInfo.getPacket().getClass().getSimpleName(), e);
             throw e;
         } catch (Throwable t) {
-            logger.error("[session:{}][{}]编码throwable错误", SessionUtils.sessionInfo(ctx), packetInfo.getPacket().getClass().getSimpleName(), t);
+            logger.error("[{}] encode throwable {}", SessionUtils.sessionSimpleInfo(ctx), packetInfo.getPacket().getClass().getSimpleName(), t);
             throw t;
         }
     }

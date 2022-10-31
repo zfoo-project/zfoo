@@ -35,7 +35,7 @@ public class ClientRouteHandler extends BaseRouteHandler {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        logger.info("client channel [{}] is active", SessionUtils.sessionInfo(ctx));
+        logger.info("client channel is active {}", SessionUtils.sessionInfo(ctx));
     }
 
     @Override
@@ -57,12 +57,12 @@ public class ClientRouteHandler extends BaseRouteHandler {
             NetContext.getConfigManager().getRegistry().checkConsumer();
         }
 
-        logger.warn("[channel:{}] is inactive", SessionUtils.sessionInfo(ctx));
+        logger.warn("client channel is inactive {}", SessionUtils.sessionSimpleInfo(ctx));
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        logger.error("[session{}]未知异常", SessionUtils.sessionInfo(ctx), cause);
+        logger.error("client session exception caught {}", SessionUtils.sessionSimpleInfo(ctx), cause);
     }
 
 }

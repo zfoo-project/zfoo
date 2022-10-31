@@ -20,9 +20,6 @@ package com.zfoo.net.session.model;
 public enum AttributeType {
 
 
-    CHANNEL_REMOTE_ADDRESS,
-
-
     /**
      * 一般是客户端session
      */
@@ -39,7 +36,5 @@ public enum AttributeType {
      * 网关ip
      */
     GATEWAY_HOST_AND_PORT,
-
-    ;
 
 }

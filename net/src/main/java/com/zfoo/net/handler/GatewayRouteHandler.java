@@ -74,8 +74,8 @@ public class GatewayRouteHandler extends ServerRouteHandler {
 
         // 过滤非法包
         if (packetFilter != null && packetFilter.apply(session, packet)) {
-            throw new IllegalArgumentException(StringUtils.format("[session:{}]发送了一个非法包[{}]"
-                    , SessionUtils.sessionInfo(ctx), JsonUtils.object2String(packet)));
+            throw new IllegalArgumentException(StringUtils.format(" session:{}发送了一个非法包[{}]"
+                    , SessionUtils.sessionSimpleInfo(ctx), JsonUtils.object2String(packet)));
         }
 
         var signalAttachment = (SignalAttachment) decodedPacketInfo.getAttachment();
