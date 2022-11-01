@@ -175,21 +175,21 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeLongLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
                         case GdScript:
-                            builder.append(StringUtils.format("buffer.writeLongLongMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeLongLongMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
-                            builder.append(StringUtils.format("buffer:writeLongLongMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer:writeLongLongMap({})", objectStr)).append(LS);
                             return true;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WriteLongLongMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WriteLongLongMap({});", objectStr)).append(LS);
                             return true;
                         case Go:
-                            builder.append(StringUtils.format("buffer.WriteLongLongMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WriteLongLongMap({})", objectStr)).append(LS);
                             return true;
                         case Cpp:
                         case JavaScript:
                         case TypeScript:
-                            builder.append(StringUtils.format("buffer.writeLongLongMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeLongLongMap({});", objectStr)).append(LS);
                             return true;
                     }
                 } else if (valueSerializer == StringSerializer.INSTANCE) {
