@@ -14,7 +14,7 @@ func _init():
 func setWriteOffset(writeIndex: int) -> void:
 	if (writeIndex > buffer.get_size()):
 		var template = "writeIndex[{}] out of bounds exception: readerIndex: {}, writerIndex: {} (expected: 0 <= readerIndex <= writerIndex <= capacity: {})"
-		printerr(template.format([writeIndex, readOffset, writeOffset, buffer.size()], "{}"))
+		printerr(template.format([writeIndex, readOffset, writeOffset, buffer.get_size()], "{}"))
 		return
 	writeOffset = writeIndex
 
@@ -39,7 +39,10 @@ func writePackedByteArray(value: PackedByteArray):
 	var length: int = value.size()
 	buffer.put_partial_data(value)
 	writeOffset += length
-	
+
+func toPackedByteArray() -> PackedByteArray:
+	return buffer.data_array.slice(0, writeOffset)
+
 func writeBool(value: bool) -> void:
 	var byte: int = 1 if value else 0
 	buffer.seek(writeOffset)
@@ -72,6 +75,17 @@ func readShort() -> int:
 	buffer.seek(readOffset)
 	var value = buffer.get_16()
 	readOffset += 2
+	return value
+
+func writeRawInt(value) -> void:
+	buffer.seek(writeOffset)
+	buffer.put_32(value)
+	writeOffset += 4
+
+func readRawInt() -> int:
+	buffer.seek(readOffset)
+	var value = buffer.get_32()
+	readOffset += 4
 	return value
 
 func writeInt(value) -> void:
