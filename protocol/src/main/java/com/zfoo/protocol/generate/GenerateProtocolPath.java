@@ -15,7 +15,10 @@ package com.zfoo.protocol.generate;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.collection.tree.GeneralTree;
 import com.zfoo.protocol.collection.tree.TreeNode;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.registration.IProtocolRegistration;
+import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -39,6 +42,34 @@ public abstract class GenerateProtocolPath {
         protocolPathMap = null;
     }
 
+    public static String protocolAbsolutePath(short protocolId, CodeLanguage language) {
+        var path = getProtocolPath(protocolId);
+        var name = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
+        if (StringUtils.isBlank(path)) {
+            path = name;
+        } else {
+            path = StringUtils.format("{}/{}", path, name);
+        }
+
+        switch (language) {
+            case Cpp:
+            case Go:
+            case JavaScript:
+            case TypeScript:
+            case CSharp:
+            case Protobuf:
+                break;
+            case Lua:
+                break;
+            case GdScript:
+                break;
+            case Enhance:
+            default:
+                throw new RunException("无法识别的枚举类型[{}]", language);
+        }
+        return path;
+    }
+
     /**
      * 获取协议生成的路径
      */
@@ -55,7 +86,7 @@ public abstract class GenerateProtocolPath {
 
     public static String getRelativePath(short protocolId, short relativeProtocolId) {
         // 不是折叠协议的话，protocolPathMap一定是空，这里返回“”，上层会解析为同一个文件下
-        if(CollectionUtils.isEmpty(protocolPathMap)){
+        if (CollectionUtils.isEmpty(protocolPathMap)) {
             return StringUtils.EMPTY;
         }
         var protocolPath = protocolPathMap.get(protocolId);
