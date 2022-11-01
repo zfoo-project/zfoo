@@ -58,12 +58,10 @@ public abstract class GenerateProtocolPath {
             case TypeScript:
             case CSharp:
             case Protobuf:
-                break;
             case Lua:
-                break;
             case GdScript:
-                break;
             case Enhance:
+                break;
             default:
                 throw new RunException("无法识别的枚举类型[{}]", language);
         }

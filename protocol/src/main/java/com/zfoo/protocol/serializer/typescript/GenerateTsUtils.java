@@ -95,13 +95,8 @@ public abstract class GenerateTsUtils {
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
             var protocolClassName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
-
             var path = GenerateProtocolPath.getProtocolPath(protocolId);
-            if (StringUtils.isBlank(path)) {
-                importBuilder.append(StringUtils.format("import {} from './{}';", protocolClassName, protocolClassName)).append(LS);
-            } else {
-                importBuilder.append(StringUtils.format("import {} from './{}/{}';", protocolClassName, path, protocolClassName)).append(LS);
-            }
+            importBuilder.append(StringUtils.format("import {} from './{}';", protocolClassName, path)).append(LS);
             initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, protocolClassName)).append(LS);
         }
 

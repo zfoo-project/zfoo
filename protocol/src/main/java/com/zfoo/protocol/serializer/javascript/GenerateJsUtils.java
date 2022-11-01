@@ -98,13 +98,8 @@ public abstract class GenerateJsUtils {
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
             var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
-            var path = GenerateProtocolPath.getProtocolPath(protocol.protocolId());
-            if (StringUtils.isBlank(path)) {
-                importBuilder.append(StringUtils.format("import {} from './{}.js';", protocolName, protocolName)).append(LS);
-            } else {
-                importBuilder.append(StringUtils.format("import {} from './{}/{}.js';", protocolName, path, protocolName)).append(LS);
-            }
-
+            var path = GenerateProtocolPath.protocolAbsolutePath(protocol.protocolId(), CodeLanguage.JavaScript);
+            importBuilder.append(StringUtils.format("import {} from './{}.js';", protocolName, path)).append(LS);
             initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, protocolName)).append(LS);
         }
 

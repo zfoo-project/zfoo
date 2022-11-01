@@ -32,8 +32,10 @@ import com.zfoo.protocol.util.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
@@ -98,20 +100,12 @@ public abstract class GenerateCppUtils {
         var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("cpp/ProtocolManagerTemplate.h")));
 
         var headerBuilder = new StringBuilder();
-        protocolList.stream()
-                .filter(it -> Objects.nonNull(it))
-                .forEach(it -> {
-                    var name = it.protocolConstructor().getDeclaringClass().getSimpleName();
-                    var path = StringUtils.format("#include \"{}/{}/{}.h\"", protocolOutputRootPath, GenerateProtocolPath.getProtocolPath(it.protocolId()), name);
-                    path = path.replaceAll("//", StringUtils.SLASH);
-                    headerBuilder.append(path).append(LS);
-                });
-
         var initProtocolBuilder = new StringBuilder();
-        protocolList.stream()
-                .filter(it -> Objects.nonNull(it))
-                .forEach(it -> initProtocolBuilder.append(TAB).append(TAB).append(StringUtils.format("protocols[{}] = new {}Registration();", it.protocolId(), it.protocolConstructor().getDeclaringClass().getSimpleName())).append(LS));
-
+        for (var protocol : protocolList) {
+            var protocolId = protocol.protocolId();
+            headerBuilder.append(StringUtils.format("#include \"{}/{}.h\"", protocolOutputRootPath, GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.Cpp))).append(LS);
+            initProtocolBuilder.append(TAB).append(TAB).append(StringUtils.format("protocols[{}] = new {}Registration();", protocolId, protocol.protocolConstructor().getDeclaringClass().getSimpleName())).append(LS);
+        }
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, headerBuilder.toString(), initProtocolBuilder.toString().trim());
         FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.h")), protocolManagerTemplate, true);
     }
