@@ -41,6 +41,7 @@ public class ResourceInterpreter {
     static {
         var converters = new HashSet<>();
         converters.add(new JsonToArrayConverter());
+        converters.add(new JsonToListConverter());
         converters.add(new JsonToMapConverter());
         converters.add(new JsonToObjectConverter());
         converters.add(new StringToClassConverter());
