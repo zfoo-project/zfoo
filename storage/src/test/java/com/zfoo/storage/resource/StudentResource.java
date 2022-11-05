@@ -17,6 +17,8 @@ import com.zfoo.storage.model.anno.Id;
 import com.zfoo.storage.model.anno.Index;
 import com.zfoo.storage.model.anno.Resource;
 
+import java.util.List;
+
 /**
  * @author godotg
  * @version 4.0
@@ -37,6 +39,7 @@ public class StudentResource {
     private float score;
     private String[] courses;
     private User[] users;
+    private List<User> userList;
     private User user;
 
     /**
@@ -66,6 +69,10 @@ public class StudentResource {
 
     public User[] getUsers() {
         return users;
+    }
+
+    public List<User> getUserList() {
+        return userList;
     }
 
     public User getUser() {
