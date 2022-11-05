@@ -16,6 +16,7 @@ package com.zfoo.storage.manager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.exception.RunException;
+import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -95,8 +96,9 @@ public class StorageManager implements IStorageManager {
 
         // 检查class字段是否合法
         if (!storageConfig.isWriteable()) {
-            for (var definition : resourceDefinitionMap.values()) {
-                var clazz = definition.getClazz();
+            var allRelevantClass = new HashSet<Class<?>>();
+            resourceDefinitionMap.values().forEach(it -> allRelevantClass.addAll(ClassUtils.relevantClass(it.getClazz())));
+            for (var clazz : allRelevantClass) {
                 var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
                 for (var field : fieldList) {
                     if (Modifier.isPublic(field.getModifiers())) {
