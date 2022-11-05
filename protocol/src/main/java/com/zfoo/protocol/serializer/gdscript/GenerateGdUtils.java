@@ -124,7 +124,7 @@ public abstract class GenerateGdUtils {
         var readObject = readObject(registration);
 
         var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("gdscript/ProtocolTemplate.gd")));
-        protocolTemplate = StringUtils.format(protocolTemplate, includeSubProtocol, classNote, fieldDefinition.trim(), protocolId, writeObject.trim(), readObject.trim());
+        protocolTemplate = StringUtils.format(protocolTemplate, protocolClazzName, protocolId, includeSubProtocol, classNote, fieldDefinition.trim(), writeObject.trim(), readObject.trim());
 
         var outputPath = StringUtils.format("{}/{}/{}.gd", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);

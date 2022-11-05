@@ -1,8 +1,8 @@
-{}
-{}
-{}
-
+class_name {}
 const PROTOCOL_ID = {}
+{}
+{}
+{}
 
 static func write(buffer, packet):
 	if (buffer.writePacketFlag(packet)):
