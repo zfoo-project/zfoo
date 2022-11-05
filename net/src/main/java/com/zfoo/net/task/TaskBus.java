@@ -99,7 +99,7 @@ public final class TaskBus {
     }
 
     /**
-     * Actor模型，最主要的就是线程模型，Actor模型保证了某个Actor所代表的任务永远不会同时在两条线程同时处理任务，这就就避免了并发。
+     * Actor模型，最主要的就是线程模型，Actor模型保证了某个Actor所代表的任务永远不会同时在两条线程同时处理任务，这就避免了并发。
      * 无论是Java，Kotlin，Scala都没有真正的协程，所以最终做到Actor模型的只能是细致的控制线程。
      * <p>
      * zfoo中通过对线程池的细粒度控制，从而实现了Actor模型。
