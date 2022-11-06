@@ -75,6 +75,10 @@ Perfect work development process, complete online solution
     - Quick star, tank game entry [tank.zfoo.net](http://tank.zfoo.net)
     - Quick star, tank background management [tank-admin.zfoo.net](http://tank-admin.zfoo.net)
 
+- [godot-bird](https://github.com/zfoo-project/godot-bird) bird and bird，powered by godot
+
+- [cocos-fivechess](https://github.com/zfoo-project/fivechess) five chess，use cocos as client
+  
 - [zapp](https://github.com/zfoo-project/zapp) Image sharing chat website, standard https enterprise-level website,
   difficulty 5 stars
 

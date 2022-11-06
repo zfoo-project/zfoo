@@ -68,6 +68,10 @@ Why is zfoo protocol ?
   - 快速体验，tank游戏入口 [tank.zfoo.net](http://tank.zfoo.net)
   - 快速体验，tank后台管理 [tank-admin.zfoo.net](http://tank-admin.zfoo.net)
 
+- [godot-bird](https://github.com/zfoo-project/godot-bird) 鸟了个鸟，客户端使用godot开发，服务器依然使用的tank-game-server
+
+- [cocos-fivechess](https://github.com/zfoo-project/fivechess) 五子棋，客户端使用cocos开发
+
 - [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，标准的https企业级网站，难度5星
 
 Ⅳ. 安装和使用⭐
