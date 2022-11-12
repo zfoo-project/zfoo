@@ -32,6 +32,16 @@ git config --global https.proxy https://127.0.0.1:10809
 git config --global core.autocrlf input
 ```
 
+- google translate设置
+```
+direct -> domain:zfoo.net
+
+新增proxy
+proxy -> 
+ranslate.googleapis.com, 
+ranslate.google.com
+```
+
 ## 3. nodejs安装
 
 - 直接默认安装
