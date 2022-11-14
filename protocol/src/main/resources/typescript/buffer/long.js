@@ -1,5 +1,5 @@
 /* eslint-disable */
-// from https://github.com/dcodeIO/long.js/blob/master/src/long.js
+// from https://github.com/dcodeIO/long.js
 module.exports = Long;
 
 /**
