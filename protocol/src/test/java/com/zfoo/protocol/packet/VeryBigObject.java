@@ -44,7 +44,7 @@ public class VeryBigObject implements IPacket {
             return;
         }
 
-        ByteBuf buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 100_0000);
+        ByteBuf buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 10_0000);
 
         // 序列化和反序列化极端大的对象
         long startTime = System.currentTimeMillis();
@@ -60,7 +60,7 @@ public class VeryBigObject implements IPacket {
         try {
             var kryo = kryos.get();
 
-            var output = new Output(100_0000);
+            var output = new Output(10_0000);
             var input = new Input(output.getBuffer());
 
             // 序列化和反序列化极端大的对象
