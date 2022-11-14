@@ -13,7 +13,16 @@
 
 package com.zfoo.protocol.packet;
 
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.util.StringUtils;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.UnpooledHeapByteBuf;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -23,8 +32,52 @@ import static com.zfoo.protocol.SpeedTest.*;
 
 /**
  * 主要来测试极端大的对象序列化和反序列化情况，极端大的对象指的是字段多，对象大，方法大
+ *
+ * zfoo依然能够稳定运行，protobuf直接协议体文件爆炸无法编译卡死，kryo运行直接报错
  */
 public class VeryBigObject implements IPacket {
+
+    @Ignore
+    @Test
+    public void veryBigObjectTest() {
+        if (benchmark <= 0 || benchmark >= 10_0000_0000) {
+            return;
+        }
+
+        ByteBuf buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 100_0000);
+
+        // 序列化和反序列化极端大的对象
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < benchmark; i++) {
+            buffer.clear();
+            ProtocolManager.write(buffer, VeryBigObject.veryBigObject);
+            var packet = ProtocolManager.read(buffer);
+        }
+
+        System.out.println(StringUtils.format("[zfoo]     [超大对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+
+
+        try {
+            var kryo = kryos.get();
+
+            var output = new Output(100_0000);
+            var input = new Input(output.getBuffer());
+
+            // 序列化和反序列化极端大的对象
+            startTime = System.currentTimeMillis();
+            for (int i = 0; i < benchmark; i++) {
+                input.reset();
+                output.reset();
+                kryo.writeObject(output, VeryBigObject.veryBigObject);
+                var mess = kryo.readObject(input, ComplexObject.class);
+            }
+            System.out.println(StringUtils.format("[kryo]     [超大对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        veryBigObjectTest();
+    }
 
     public byte a1;
     public Byte aa1;

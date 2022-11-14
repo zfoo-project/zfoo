@@ -99,7 +99,7 @@ public class SpeedTest {
         System.setProperty("io.netty.buffer.checkAccessible", "false");
         System.setProperty("io.netty.buffer.checkBounds", "false");
 
-        ByteBuf buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 10_0000);
+        ByteBuf buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
 
         // 序列化和反序列化简单对象
         long startTime = System.currentTimeMillis();
@@ -133,17 +133,6 @@ public class SpeedTest {
         }
 
         System.out.println(StringUtils.format("[zfoo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
-
-        // 序列化和反序列化极端大的对象
-        startTime = System.currentTimeMillis();
-        for (int i = 0; i < benchmark; i++) {
-            buffer.clear();
-            ProtocolManager.write(buffer, VeryBigObject.veryBigObject);
-            var packet = ProtocolManager.read(buffer);
-        }
-
-        System.out.println(StringUtils.format("[zfoo]     [超大对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
-
     }
 
     @Ignore
@@ -152,7 +141,7 @@ public class SpeedTest {
         try {
             var kryo = kryos.get();
 
-            var output = new Output(10_0000);
+            var output = new Output(1024 * 8);
             var input = new Input(output.getBuffer());
 
             // 序列化和反序列化简单对象
@@ -186,16 +175,6 @@ public class SpeedTest {
                 var mess = kryo.readObject(input, ComplexObject.class);
             }
             System.out.println(StringUtils.format("[kryo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
-
-            // 序列化和反序列化极端大的对象
-            startTime = System.currentTimeMillis();
-            for (int i = 0; i < benchmark; i++) {
-                input.reset();
-                output.reset();
-                kryo.writeObject(output, VeryBigObject.veryBigObject);
-                var mess = kryo.readObject(input, ComplexObject.class);
-            }
-            System.out.println(StringUtils.format("[kryo]     [超大对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.err.println("JDK17 运行kryo会报错，等kryo修复bug");
