@@ -1,21 +1,6 @@
 <p align="center">
 	<a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg"></a>
 </p>
-<p align="center">
-	👉 <strong>为性能而生的Java服务器框架</strong>👈
-</p>
-
-<p align="center">
-	<a target="_blank" href="https://spring.io">
-		<img src="https://img.shields.io/badge/spring-5.3.4-yellowgreen" />
-	</a>
-    <a target="_blank" href="https://openjdk.java.net/projects/jdk/">
-		<img src="https://img.shields.io/badge/JDK-11+-green.svg" />
-	</a>
-	<a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0">
-		<img src="https://img.shields.io/badge/license-Apache--2.0-blue" />
-	</a>
-</p>
 
 <br/>
 
@@ -164,7 +149,7 @@ public void cronSchedulerPerSecond() {
 }
 ````
 
-#### 8. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel和Java类自动映射框架，只需要定义一个和Excel对应的类，直接解析Excel
+#### 8. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel类自动映射框架，只需要定义一个和Excel对应的类，直接解析Excel
 
 ```
 @Resource
@@ -181,7 +166,7 @@ public class StudentResource {
 ----------
 
 - 欢迎喜欢这个项目的人来一起维护这个项目，提交代码的时候注意下面规范
-- Java项目格式化代码的方式采用IntelliJ Idea默认的格式化
+- 项目格式化代码的方式采用IntelliJ Idea默认的格式化
 - [代码提交的说明(commit message)](https://github.com/pvdlg/conventional-changelog-metahub#commit-types) 按照下面给出的些常用格式
 
 ```

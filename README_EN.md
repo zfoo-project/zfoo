@@ -1,21 +1,6 @@
 <p align="center">
 	<a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg"></a>
 </p>
-<p align="center">
-	👉 <strong>Java server framework for extremely high performance</strong>👈
-</p>
-
-<p align="center">
-	<a target="_blank" href="https://spring.io">
-		<img src="https://img.shields.io/badge/spring-5.3.4-yellowgreen" />
-	</a>
-    <a target="_blank" href="https://openjdk.java.net/projects/jdk/">
-		<img src="https://img.shields.io/badge/JDK-11+-green.svg" />
-	</a>
-	<a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0">
-		<img src="https://img.shields.io/badge/license-Apache--2.0-blue" />
-	</a>
-</p>
 
 <br/>
 
@@ -172,7 +157,7 @@ public void cronSchedulerPerSecond() {
 }
 ````
 
-#### 8. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel and Java class automatic mapping framework, you only need to define a class corresponding to Excel, and directly parse Excel
+#### 8. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel to class automatic mapping framework, you only need to define a class corresponding to Excel, and directly parse Excel
 
 ```
 @Resource
