@@ -32,8 +32,6 @@ import static com.zfoo.protocol.SpeedTest.*;
 
 /**
  * 主要来测试极端大的对象序列化和反序列化情况，极端大的对象指的是字段多，对象大，方法大
- *
- * zfoo依然能够稳定运行，protobuf直接协议体文件爆炸无法编译卡死，kryo运行直接报错
  */
 public class VeryBigObject implements IPacket {
 
@@ -69,7 +67,7 @@ public class VeryBigObject implements IPacket {
                 input.reset();
                 output.reset();
                 kryo.writeObject(output, VeryBigObject.veryBigObject);
-                var mess = kryo.readObject(input, ComplexObject.class);
+                var mess = kryo.readObject(input, VeryBigObject.class);
             }
             System.out.println(StringUtils.format("[kryo]     [超大对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
         } catch (Exception e) {
