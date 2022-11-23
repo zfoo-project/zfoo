@@ -179,6 +179,10 @@ function start() {
     mkdir -p "${logPath}/log"
     cd ${logPath}
 
+    local currentPath
+    currentPath=$(pwd)
+    echo "pwd当前的运行路径：${currentPath}"
+
     if [ ! -f "${jarPath}" ]; then
         echo "文件不存在：启动的jar包不存在，请检查jar的路径格式是否是绝对路径"
         echo "usage: sh deploy.sh start jarAbsPath logPath"
