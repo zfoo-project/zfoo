@@ -15,7 +15,7 @@
 # sh deploy.sh stop gateway
 # sh deploy.sh update /usr/local/zapp/gateway/zapp-gateway-1.0.jar
 # sh deploy.sh stopUpdateStart /usr/local/zapp/gateway/zapp-gateway-1.0.jar /usr/local/zapp/gateway
-# start启动服务器，/usr/local/zapp/gateway/zapp-gateway-1.0.jar是jar包的绝对路径，/usr/local/zapp/gateway是日志的输出路径
+# start启动服务器，/usr/local/zapp/gateway/zapp-gateway-1.0.jar是jar包的绝对路径，/usr/local/zapp/gateway是日志的输出的绝对路径
 # stop关闭服务器，会使用jps | grep gateway，抓取需要关闭的java进程
 # update更新jar包，默认会使用根路径/zapp-gateway-1.0.jar下的jar包去更新/usr/local/zapp/gateway/zapp-gateway-1.0.jar路径的jar包
 # stopUpdateStart，按顺序执行命令stop，update，start
@@ -165,19 +165,25 @@ function start() {
     local logPath=${2}
 
     if [ -z "${jarPath}" ]; then
-        echo "启动的路径不能为空"
+        echo "参数错误：启动的jar包名称不能为空"
         echo "usage: sh deploy.sh start jarPath logPath"
         exit 1
     fi
 
     if [ -z "${logPath}" ]; then
-        echo "启动的jar包名称不能为空"
+        echo "参数错误：启动的日志路径不能为空"
         echo "usage: sh deploy.sh start jarPath logPath"
         exit 1
     fi
 
     mkdir -p "${logPath}/log"
     cd ${logPath}
+
+    if [ ! -f "${jarPath}" ]; then
+        echo "文件不存在：启动的jar包不存在，请检查jar的路径格式是否是绝对路径"
+        echo "usage: sh deploy.sh start jarAbsPath logPath"
+        exit 1
+    fi
 
     # -XX:+AlwaysPreTouch，并置零内存页面，可能令得启动时慢上一点，但后面访问时会更流畅，比如页面会连续分配
     # 输出到文件  >> output.log 2>&1 &
