@@ -210,7 +210,7 @@ function start() {
     waitInfoLog
 
     if [ -z "${3}" ]; then
-        tailf log/info.log
+        tail -f log/info.log
     else
         sleep 4
         local jarName=${jarPath##*/}
