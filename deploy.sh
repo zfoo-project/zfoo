@@ -1,30 +1,43 @@
 #!/bin/bash
 
-# 服务器部署脚本
-# doc:
-# 1.在Idea中下载安装阿里云Alibaba Cloud插件
-# 2.使用Ecs的AccessKeyId和AccessSecurity登录，服务器信息里有具体密码
-# 3.在upload选项中选择需要上传的jar包，location默认为根路径/，
-# command中输入脚本运行命令：sh /deploy.sh stopUpdateStart /usr/local/zapp/user/zapp-user-1.0.jar /usr/local/zapp/user notPrint
+# 服务器部署脚本，这个脚本封装了常用部署操作，不是一定要使用的
+
 # 注：
-# /deploy.sh脚本包括了，启动服务器，优雅停止java服务器，更新文件，重新启动服务器的脚本，对应四个命令：start|stop|update|stopUpdateStart。
+# /deploy.sh脚本包括了，启动服务器，优雅停止服务器，更新程序文件，重新启动服务器，对应四个命令：start|stop|update|stopUpdateStart。
 # 其中stopUpdateStart会按照顺序执行，stop，update，start命令。
 
-# usage:
-# sh deploy.sh start /usr/local/zapp/gateway/zapp-gateway-1.0.jar /usr/local/zapp/gateway
-# sh deploy.sh stop gateway
-# sh deploy.sh update /usr/local/zapp/gateway/zapp-gateway-1.0.jar
-# sh deploy.sh stopUpdateStart /usr/local/zapp/gateway/zapp-gateway-1.0.jar /usr/local/zapp/gateway
-# start启动服务器，/usr/local/zapp/gateway/zapp-gateway-1.0.jar是jar包的绝对路径，/usr/local/zapp/gateway是日志的输出的绝对路径
-# stop关闭服务器，会使用jps | grep gateway，抓取需要关闭的java进程
-# update更新jar包，默认会使用根路径/zapp-gateway-1.0.jar下的jar包去更新/usr/local/zapp/gateway/zapp-gateway-1.0.jar路径的jar包
-# stopUpdateStart，按顺序执行命令stop，update，start
+# doc:
+
+# usage 1:
+# sh deploy.sh start /usr/local/tank/single-boot/single-boot-1.0.jar /usr/local/tank/single-boot
+# start启动服务器，绝对路径很重要，[/usr/local/tank/single-boot/single-boot-1.0.jar]是jar包的绝对路径，[/usr/local/tank/single-boot]是日志的输出的绝对路径
+
+
+# usage 2:
+# sh deploy.sh stop single
+# stop关闭服务器，会使用jps | grep single，抓取需要关闭的java进程，所以不需要输入single-boot的全名
+# 如果你有两个名称为[single-boot1.jar]，[single-boot2]的启动程序，则会把这两个都关闭
+
+
+# usage 3:
+# sh deploy.sh update /usr/local/tank/single-boot/single-boot-1.0.jar
+# update更新jar包，默认会使用根路径[/single-boot-1.0.jar]下的jar包去更新[/usr/local/tank/single-boot/single-boot-1.0.jar]的jar包
+# 此种方式jar必须放在 / 根目录(最上层的目录，不是root目录，不要弄错了)，非常重要，因为默认使用根路径的jar取更新你指定位置的jar
+
+
+# usage 4:
+# sh deploy.sh stopUpdateStart /usr/local/tank/single-boot/single-boot-1.0.jar /usr/local/tank/single-boot
+# stopUpdateStart，按顺序执行命令stop，update，start，三合一的命令，因为有个update，所以必须把你的jar放在根目录（非常重要）
+# stop的是[single-boot-1.0.jar]，会分割字符串[/usr/local/tank/single-boot/single-boot-1.0.jar]获取到最后的分号后的名称
+# update的是[/usr/local/tank/single-boot/single-boot-1.0.jar]，所以必须把jar放在 / 根目录(最上层的目录，不是root目录，不要弄错了)，非常重要
+# start同[usage 1]
+
 
 # 相关参数命令
 # java -XX:+PrintFlagsInitial，查看jvm全部参数的默认值
 #
-# @author jaysunxiao
-# @version 1.0
+# @author godotg
+# @version 3.0
 
 
 if [ $# -lt 1 ]; then
