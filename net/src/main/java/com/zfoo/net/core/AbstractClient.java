@@ -75,7 +75,7 @@ public abstract class AbstractClient implements IClient {
                 var channel = channelFuture.channel();
                 var session = BaseRouteHandler.initChannel(channel);
                 NetContext.getSessionManager().addClientSession(session);
-                logger.info("TcpClient started at [{}]", channel.localAddress());
+                logger.info("{} started at [{}]", this.getClass().getSimpleName(), channel.localAddress());
                 return session;
             }
         } else if (channelFuture.cause() != null) {
