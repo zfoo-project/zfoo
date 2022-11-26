@@ -112,6 +112,13 @@ function waitInfoLog() {
         else
             return
         fi
+
+        if [ -z "${infoLog}" ]; then
+            echo "如果长时间无响应，解决方法4：在Idea中运行main函数，加上-Dspring.profiles.active=pro参数，在Idea中能够运行也一定能在服务器运行"
+            sleep 1
+        else
+            return
+        fi
     done
 }
 
