@@ -15,7 +15,7 @@
 
 # usage 2:
 # sh deploy.sh stop single
-# stop关闭服务器，会使用jps | grep single，抓取需要关闭的java进程，所以不需要输入single-boot的全名
+# stop关闭服务器，会使用jps | grep single，抓取需要关闭的java进程，所以不需要输入single-boot的全名（不是绝对路径）
 # 如果你有两个名称为[single-boot1.jar]，[single-boot2]的启动程序，则会把这两个都关闭
 
 
