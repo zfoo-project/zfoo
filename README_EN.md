@@ -63,7 +63,7 @@ Perfect work development process, complete online solution
 - [godot-bird](https://github.com/zfoo-project/godot-bird) bird and bird，powered by godot
 
 - [cocos-fivechess](https://github.com/zfoo-project/fivechess) five chess，use cocos as client
-  
+
 - [zapp](https://github.com/zfoo-project/zapp) Image sharing chat website, standard https enterprise-level website,
   difficulty 5 stars
 
@@ -183,15 +183,5 @@ public class StudentResource {
 
 zfoo use [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-```
-Copyright (C) 2020 The zfoo Authors
+![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
-in compliance with the License. You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
-on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License.
-```

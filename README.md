@@ -45,13 +45,13 @@ Why is zfoo protocol ?
 
 - 有问题，先看 [FAQ](./doc/FAQ.md) 能否解决你的问题
 - 依然有问题，参考每个工程目录的test文件夹下的标准demo展示和注释说明，可以直接运行
-  - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
+    - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
 
 - 新手起步困难的话，直接看手把手的[zfoo 框架视频教程](./doc/video-tutorial.md)，新手友好，先从简单的基础使用开始，然后再深入到底层核心代码运行
 
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of Tanks）》，新手友好，难度2星
-  - 快速体验，tank游戏入口 [tank.zfoo.net](http://tank.zfoo.net)
-  - 快速体验，tank后台管理 [tank-admin.zfoo.net](http://tank-admin.zfoo.net)
+    - 快速体验，tank游戏入口 [tank.zfoo.net](http://tank.zfoo.net)
+    - 快速体验，tank后台管理 [tank-admin.zfoo.net](http://tank-admin.zfoo.net)
 
 - [godot-bird](https://github.com/zfoo-project/godot-bird) 鸟了个鸟，客户端使用godot开发，服务器依然使用的tank-game-server
 
@@ -184,15 +184,4 @@ doc[module]: 增加了什么文档
 
 zfoo使用 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-```
-Copyright (C) 2020 The zfoo Authors
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
-in compliance with the License. You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
-on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License.
-```
+![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
