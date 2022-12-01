@@ -89,6 +89,7 @@ public abstract class EventBus {
             return thread;
         }
     }
+
     /**
      * 处理事件
      */
@@ -96,10 +97,9 @@ public abstract class EventBus {
         syncSubmit(event);
         asyncSubmit(event);
     }
+
     /**
      * 同步抛出一个事件，会在当前线程中运行(只有同步观察者会处理事件)
-     *
-     * @param event 需要抛出的事件
      */
     public static void syncSubmit(IEvent event) {
         var list = receiverMapSync.get(event.getClass());
@@ -112,8 +112,6 @@ public abstract class EventBus {
 
     /**
      * 异步抛出一个事件，事件不在同一个线程中处理(只有异步观察者会处理事件)
-     *
-     * @param event 需要抛出的事件
      */
     public static void asyncSubmit(IEvent event) {
         var list = receiverMapAsync.get(event.getClass());
@@ -130,9 +128,6 @@ public abstract class EventBus {
 
     /**
      * 用指定线程执行
-     *
-     * @param hashcode
-     * @return
      */
     public static void execute(int hashcode, Runnable runnable) {
         executors[Math.abs(hashcode % EXECUTORS_SIZE)].execute(SafeRunnable.valueOf(runnable));
@@ -159,12 +154,10 @@ public abstract class EventBus {
     /**
      * 注册事件及其对应同异步观察者
      */
-    public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver,boolean asyncFlag) {
-        if(asyncFlag==true) {
+    public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver, boolean asyncFlag) {
+        if (asyncFlag) {
             receiverMapAsync.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
-        }
-        else
-        {
+        } else {
             receiverMapSync.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
         }
     }

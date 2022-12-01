@@ -84,11 +84,9 @@ public class EventRegisterProcessor implements BeanPostProcessor {
                 var enhanceReceiverDefinition = EnhanceUtils.createEventReceiver(receiverDefinition);
 
                 //异步执行标志，false表示同步执行，true表示异步执行
-                boolean asyncFlag=false;
-                if(method.isAnnotationPresent(AsyncExecute.class))
-                    asyncFlag=true;
+                var asyncFlag = method.isAnnotationPresent(AsyncExecute.class);
                 // key:class类型 value:观察者 注册Event的receiverMap中
-                EventBus.registerEventReceiver(eventClazz, enhanceReceiverDefinition,asyncFlag);
+                EventBus.registerEventReceiver(eventClazz, enhanceReceiverDefinition, asyncFlag);
             }
         } catch (Throwable t) {
             throw new RuntimeException(t);

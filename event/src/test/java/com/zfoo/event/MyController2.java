@@ -30,6 +30,8 @@ public class MyController2 {
 
     /**
      * 同一个事件可以被重复注册和接受
+     *
+     * 异步事件会被不会立刻执行，注意日志打印的线程号
      */
     @AsyncExecute
     @EventReceiver
