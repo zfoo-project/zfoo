@@ -48,7 +48,7 @@ public class ServerRouteHandler extends BaseRouteHandler {
             return;
         }
         NetContext.getSessionManager().removeServerSession(session);
-        EventBus.asyncSubmit(ServerSessionInactiveEvent.valueOf(session));
+        EventBus.submit(ServerSessionInactiveEvent.valueOf(session));
         logger.warn("server channel is inactive {}", SessionUtils.sessionSimpleInfo(ctx));
     }
 }

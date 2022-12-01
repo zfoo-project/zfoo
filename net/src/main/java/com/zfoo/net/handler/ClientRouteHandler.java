@@ -50,7 +50,7 @@ public class ClientRouteHandler extends BaseRouteHandler {
 
         var consumeAttribute = session.getAttribute(AttributeType.CONSUMER);
         NetContext.getSessionManager().removeClientSession(session);
-        EventBus.asyncSubmit(ClientSessionInactiveEvent.valueOf(session));
+        EventBus.submit(ClientSessionInactiveEvent.valueOf(session));
 
         // 如果是消费者inactive，还需要触发客户端消费者检查事件，以便重新连接
         if (consumeAttribute != null) {

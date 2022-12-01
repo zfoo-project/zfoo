@@ -135,7 +135,7 @@ public class Router implements IRouter {
                                     return;
                                 }
                                 gatewaySession.putAttribute(AttributeType.UID, uid);
-                                EventBus.asyncSubmit(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
+                                EventBus.submit(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
 
                                 NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession, null));
                                 return;
@@ -346,7 +346,7 @@ public class Router implements IRouter {
             // 这个在哪个线程处理取决于：这个上层的PacketReceiverTask被丢到了哪个线程中
             PacketBus.submit(session, packet, attachment);
         } catch (Exception e) {
-            EventBus.syncSubmit(ServerExceptionEvent.valueOf(session, packet, attachment, e));
+            EventBus.submit(ServerExceptionEvent.valueOf(session, packet, attachment, e));
             logger.error(StringUtils.format("e[uid:{}][sid:{}]未知exception异常", session.getAttribute(AttributeType.UID), session.getSid(), e.getMessage()), e);
         } catch (Throwable t) {
             logger.error(StringUtils.format("e[uid:{}][sid:{}]未知error错误", session.getAttribute(AttributeType.UID), session.getSid(), t.getMessage()), t);

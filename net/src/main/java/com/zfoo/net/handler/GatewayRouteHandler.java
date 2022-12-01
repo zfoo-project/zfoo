@@ -130,7 +130,7 @@ public class GatewayRouteHandler extends ServerRouteHandler {
         var uid = (Long) session.getAttribute(AttributeType.UID);
 
         // 连接到网关的客户端断开了连接
-        EventBus.asyncSubmit(GatewaySessionInactiveEvent.valueOf(sid, uid == null ? 0 : uid.longValue()));
+        EventBus.submit(GatewaySessionInactiveEvent.valueOf(sid, uid == null ? 0 : uid.longValue()));
 
         super.channelInactive(ctx);
     }
