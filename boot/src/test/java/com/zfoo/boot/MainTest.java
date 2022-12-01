@@ -25,6 +25,7 @@ public class MainTest {
     public void testTemplate() {
         System.out.println(StringUtils.MULTIPLE_HYPHENS);
         System.out.println("XX测试：");
+        System.out.println("新加测试");
         System.out.println("**********");
         System.out.println(StringUtils.MULTIPLE_HYPHENS);
     }

@@ -29,7 +29,7 @@ public class MyController1 {
 
     @EventReceiver
     public void onMyNoticeEvent(MyNoticeEvent event) {
-        logger.info("方法1收到事件：" + event.getMessage());
+        logger.info("方法1同步执行事件：" + event.getMessage());
     }
 
 }

@@ -49,8 +49,14 @@ public abstract class EventBus {
     private static final ExecutorService[] executors = new ExecutorService[EXECUTORS_SIZE];
 
     private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>(EXECUTORS_SIZE);
-
-    private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
+    /**
+     * 同步事件映射
+     */
+    private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMapSync = new HashMap<>();
+    /**
+     * 异步事件映射
+     */
+    private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMapAsync = new HashMap<>();
 
     static {
         for (int i = 0; i < executors.length; i++) {
@@ -83,14 +89,20 @@ public abstract class EventBus {
             return thread;
         }
     }
-
     /**
-     * 同步抛出一个事件，会在当前线程中运行
+     * 处理事件
+     */
+    public static void submit(IEvent event) {
+        syncSubmit(event);
+        asyncSubmit(event);
+    }
+    /**
+     * 同步抛出一个事件，会在当前线程中运行(只有同步观察者会处理事件)
      *
      * @param event 需要抛出的事件
      */
     public static void syncSubmit(IEvent event) {
-        var list = receiverMap.get(event.getClass());
+        var list = receiverMapSync.get(event.getClass());
         if (CollectionUtils.isEmpty(list)) {
             return;
         }
@@ -99,12 +111,12 @@ public abstract class EventBus {
 
 
     /**
-     * 异步抛出一个事件，事件不在同一个线程中处理
+     * 异步抛出一个事件，事件不在同一个线程中处理(只有异步观察者会处理事件)
      *
      * @param event 需要抛出的事件
      */
     public static void asyncSubmit(IEvent event) {
-        var list = receiverMap.get(event.getClass());
+        var list = receiverMapAsync.get(event.getClass());
         if (CollectionUtils.isEmpty(list)) {
             return;
         }
@@ -145,10 +157,16 @@ public abstract class EventBus {
     }
 
     /**
-     * 注册事件及其对应观察者
+     * 注册事件及其对应同异步观察者
      */
-    public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver) {
-        receiverMap.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
+    public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver,boolean asyncFlag) {
+        if(asyncFlag==true) {
+            receiverMapAsync.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
+        }
+        else
+        {
+            receiverMapSync.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
+        }
     }
 
     public static Executor threadExecutor(long currentThreadId) {
