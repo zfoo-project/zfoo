@@ -146,8 +146,7 @@ Line separator，Unix and MacOs （\n）
 
 ```
 /**
- * @author jaysunxiao
- * @version 3.0
+ * @author godotg
  */
 ```
 
