@@ -10,8 +10,7 @@
 
     <packaging>jar</packaging>
 
-    <properties>
-        <!-- 本项目的其它module版本号 -->
+     <properties>
         <zfoo.boot.version>3.0</zfoo.boot.version>
         <zfoo.event.version>3.0</zfoo.event.version>
         <zfoo.hotswap.version>3.0</zfoo.hotswap.version>
@@ -23,48 +22,45 @@
         <zfoo.protocol.version>3.0</zfoo.protocol.version>
         <zfoo.util.version>3.0</zfoo.util.version>
 
-        <!-- 核心spring框架，优先使用spring boot的日志版本 -->
+        <!-- spring and spring boot -->
         <spring.version>5.3.19</spring.version>
         <spring.boot.version>2.6.7</spring.boot.version>
         <junit.version>4.12</junit.version>
 
-        <!-- 字节码增强 -->
+        <!-- bytecode enhancement(字节码增强) -->
         <javassist.version>3.29.2-GA</javassist.version>
         <bytebuddy.version>1.12.18</bytebuddy.version>
-        <!-- json和xml解析包，优先使用spring boot的版本 -->
+        <!-- json and xml, use the version of spring boot first -->
         <jackson.version>2.13.2</jackson.version>
-        <!-- 网络通讯框架 -->
+        <!-- network framework -->
         <netty.version>4.1.84.Final</netty.version>
         <jprotobuf.version>2.4.17</jprotobuf.version>
         <kryo.version>5.3.0</kryo.version>
 
-        <!-- 分布式zookeeper核心依赖包 -->
+        <!-- zookeeper -->
         <curator.version>5.3.0</curator.version>
 
-        <!-- 硬件检测 -->
+        <!-- hardware detection(硬件检测) -->
         <oshi.version>6.0.0</oshi.version>
 
-        <!-- 数据库和缓存 -->
+        <!-- database and cache -->
         <mongodb-driver-sync.version>4.7.2</mongodb-driver-sync.version>
         <caffeine.version>2.8.8</caffeine.version>
-        <!-- 消息队列中间件 -->
-        <rocketmq.version>4.5.2</rocketmq.version>
 
-        <!-- office文档解析包 -->
+        <!-- Office document parsing(office文档解析包) -->
         <poi.version>5.2.3</poi.version>
         <csv.version>1.9.0</csv.version>
 
-        <!-- 工具包 -->
+        <!-- Toolkit(工具包) -->
         <jctools.version>4.0.1</jctools.version>
 
-        <!-- elastic search 中间件 -->
+        <!-- elastic search -->
         <elastic.search.version>8.4.3</elastic.search.version>
 
-        <!-- java版本和文件编码 -->
         <java.version>11</java.version>
         <file.encoding>UTF-8</file.encoding>
 
-        <!-- maven核心插件 -->
+        <!-- maven core plugin(maven核心插件) -->
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
@@ -103,21 +99,18 @@
             <version>${mongodb-driver-sync.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <version>${caffeine.version}</version>
         </dependency>
 
-        <!-- 动态生成二进制字节码的javassist类库 -->
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
             <version>${javassist.version}</version>
         </dependency>
 
-        <!-- 依赖的Spring模块类库 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -130,7 +123,7 @@
             <version>${spring.boot.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- 依赖的测试库 -->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -144,15 +137,12 @@
         <testSourceDirectory>src/test/java</testSourceDirectory>
 
         <plugins>
-
-            <!-- 清理插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>${maven-clean-plugin.version}</version>
             </plugin>
 
-            <!-- 编译插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -164,8 +154,6 @@
                 </configuration>
             </plugin>
 
-
-            <!-- resource资源管理插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -191,8 +179,6 @@
                 </executions>
             </plugin>
 
-
-            <!-- 测试插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -209,7 +195,6 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>${maven-jar-plugin.version}</version>
             </plugin>
-
         </plugins>
     </build>
 

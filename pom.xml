@@ -21,8 +21,6 @@
     </organization>
 
 
-    <!-- 没有用<dependencyManagement>来管理这个root，是为了让下面的module不依赖于任何parent，复制出来就可以用 -->
-    <!-- 聚合，把下面的几个module一起打包，packaging必须为pom -->
     <modules>
         <module>boot</module>
         <module>event</module>
@@ -37,7 +35,6 @@
     </modules>
 
     <properties>
-        <!-- 本项目的其它module版本号 -->
         <zfoo.boot.version>3.0</zfoo.boot.version>
         <zfoo.event.version>3.0</zfoo.event.version>
         <zfoo.hotswap.version>3.0</zfoo.hotswap.version>
@@ -49,48 +46,45 @@
         <zfoo.protocol.version>3.0</zfoo.protocol.version>
         <zfoo.util.version>3.0</zfoo.util.version>
 
-        <!-- 核心spring框架，优先使用spring boot的日志版本 -->
+        <!-- spring and spring boot -->
         <spring.version>5.3.19</spring.version>
         <spring.boot.version>2.6.7</spring.boot.version>
         <junit.version>4.12</junit.version>
 
-        <!-- 字节码增强 -->
+        <!-- bytecode enhancement(字节码增强) -->
         <javassist.version>3.29.2-GA</javassist.version>
         <bytebuddy.version>1.12.18</bytebuddy.version>
-        <!-- json和xml解析包，优先使用spring boot的版本 -->
+        <!-- json and xml, use the version of spring boot first -->
         <jackson.version>2.13.2</jackson.version>
-        <!-- 网络通讯框架 -->
+        <!-- network framework -->
         <netty.version>4.1.84.Final</netty.version>
         <jprotobuf.version>2.4.17</jprotobuf.version>
         <kryo.version>5.3.0</kryo.version>
 
-        <!-- 分布式zookeeper核心依赖包 -->
+        <!-- zookeeper -->
         <curator.version>5.3.0</curator.version>
 
-        <!-- 硬件检测 -->
+        <!-- hardware detection(硬件检测) -->
         <oshi.version>6.0.0</oshi.version>
 
-        <!-- 数据库和缓存 -->
+        <!-- database and cache -->
         <mongodb-driver-sync.version>4.7.2</mongodb-driver-sync.version>
         <caffeine.version>2.8.8</caffeine.version>
-        <!-- 消息队列中间件 -->
-        <rocketmq.version>4.5.2</rocketmq.version>
 
-        <!-- office文档解析包 -->
+        <!-- Office document parsing(office文档解析包) -->
         <poi.version>5.2.3</poi.version>
         <csv.version>1.9.0</csv.version>
 
-        <!-- 工具包 -->
+        <!-- Toolkit(工具包) -->
         <jctools.version>4.0.1</jctools.version>
 
-        <!-- elastic search 中间件 -->
+        <!-- elastic search -->
         <elastic.search.version>8.4.3</elastic.search.version>
 
-        <!-- java版本和文件编码 -->
         <java.version>11</java.version>
         <file.encoding>UTF-8</file.encoding>
 
-        <!-- maven核心插件 -->
+        <!-- maven core plugin(maven核心插件) -->
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
@@ -104,113 +98,11 @@
     </properties>
 
     <build>
-        <!--<finalName>${project.artifactId}</finalName>-->
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <testSourceDirectory>src/test/java</testSourceDirectory>
-
-        <!--使代码路径的非java文件也可以打入jar包，特别注意：maven-resources-plugin这个插件和这个标签的功能类似-->
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.*</include>
-                </includes>
-            </resource>
-        </resources>
-
-        <plugins>
-
-            <!-- 清理插件 -->
-            <plugin>
+        <plugins>            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>${maven-clean-plugin.version}</version>
             </plugin>
-
-            <!-- 为了使项目结构更为清晰，Maven区别对待Java代码文件和资源文件，maven-compiler-plugin用来编译Java代码，maven-resources-plugin则用来处理资源文件。-->
-
-            <!-- 编译插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${file.encoding}</encoding>
-                </configuration>
-            </plugin>
-
-
-            <!-- resource资源管理插件 -->
-
-            <!-- 默认的主资源文件目录是src/main/resources，很多用户会需要添加额外的资源文件目录，这个时候就可以通过配置maven-resources-plugin来实现。
-            资源文件过滤也是Maven的一大特性，你可以在资源文件中使用${propertyName}形式的Maven属性，然后配置maven-resources-plugin开启对资源文件的过滤，
-            之后就可以针对不同环境通过命令行或者Profile传入属性的值，以实现更为灵活的构建。-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>${maven-resources-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <!-- package阶段就执行resources插件的copy-resources目标 -->
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <encoding>${file.encoding}</encoding>
-                            <!-- 指定resources插件处理资源文件到哪个目录下 -->
-                            <outputDirectory>${project.build.directory}/resource</outputDirectory>
-                            <!-- 也可以用下面这样的方式（指定相对url的方式指定outputDirectory） <outputDirectory>target/classes</outputDirectory> -->
-                            <resources>
-                                <resource>
-                                    <!-- 指定resources插件处理哪个目录下的资源文件 -->
-                                    <directory>src/main/resources/</directory>
-                                    <!-- 指定不需要处理的资源 <excludes> <exclude>WEB-INF/*.*</exclude> </excludes> -->
-                                    <!-- 是否对待处理的资源开启过滤模式 (resources插件的copy-resources目标也有资源过滤的功能，这里配置的
-                                    这个功能的效果跟<build><resources><resource>下配置的资源过滤是一样的，只不过可能执行的阶段不一样，
-                                    这里执行的阶段是插件指定的validate阶段，<build><resources><resource>下的配置将是在resources插件的resources目标执行时起作用（在process-resources阶段）) -->
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-
-            <!-- 测试插件 -->
-            <!-- forkMode 可设置值有 “never”， “once”， “always” 和 “pertest”。
-            once：在一个进程中进行所有测试。once为默认设置，在Hudson上持续回归时建议使用默认设置。
-            pretest： 每一个测试创建一个新进程，为每个测试创建新的JVM是单独测试的最彻底方式，但也是最慢的，不适合hudson上持续回归。
-            always：在一个进程中并行的运行脚本，Junit4.7以上版本才可以使用，surefire的版本要在2.6以上提供这个功能
-            threadCount：执行时，指定可分配的线程数量。 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <forkMode>once</forkMode>
-                    <threadCount>10</threadCount>
-                    <argLine>-Dfile.encoding=${file.encoding}</argLine><!--argLine传入JVM选项-->
-                    <!--<skipTests>true</skipTests>-->
-                </configuration>
-            </plugin>
-
-
-            <!--mvn versions:display-plugin-updates，查看最新的插件包-->
-            <!--mvn versions:display-dependency-updates，查看最新的依赖包-->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>${versions-maven-plugin.version}</version>
-                <configuration>
-                    <generateBackupPoms>false</generateBackupPoms>
-                </configuration>
-            </plugin>
-
 
         </plugins>
     </build>
