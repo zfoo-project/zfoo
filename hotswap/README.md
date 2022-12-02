@@ -1,18 +1,20 @@
-### Ⅰ. 简介
+### Ⅰ. Introduction
 
-- [hotswap](https://github.com/zfoo-project/zfoo/blob/main/hotswap/README.md) 热更新代码，不需要停止服务器，不需要额外的任何配置，一行代码开启热更新
+- [hotswap](https://github.com/zfoo-project/zfoo/blob/main/hotswap/README.md) Hot update code, no need to stop the
+  server, no additional configuration, one line of code to enable hot update
 
-### Ⅱ. 单机热更新
+### Ⅱ. Stand-alone hot update
 
-- 直接传入需要热更新的class文件
+- directly pass in the class file that needs hot update
     ```
-    // 传入需要更新的class文件
+    // pass in the class file that needs to be updated
     HotSwapUtils.hotswapClass(bytes);
     ```
 
-### Ⅲ. 分布式热更新
+### Ⅲ. Distributed Hot Update
 
-- 将需要热更新的class文件上传到zookeeper注册中心中，其它服务器监听需要更新的class文件，监听到了就去热更新代码
+- upload the class files that need to be updated to the zookeeper registration center, and other servers monitor the
+  class files that need to be updated, and update the code when they are monitored
 
 - [tank](https://github.com/zfoo-project/tank-game-server/blob/main/common/src/main/java/com/zfoo/tank/common/util/HotUtils.java)
-  分布式热更新代码实现
+  Distributed hot update code implementation
