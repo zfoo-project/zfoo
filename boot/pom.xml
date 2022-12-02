@@ -10,7 +10,7 @@
 
     <packaging>jar</packaging>
 
-     <properties>
+    <properties>
         <zfoo.boot.version>3.0</zfoo.boot.version>
         <zfoo.event.version>3.0</zfoo.event.version>
         <zfoo.hotswap.version>3.0</zfoo.hotswap.version>

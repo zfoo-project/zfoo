@@ -98,12 +98,12 @@
     </properties>
 
     <build>
-        <plugins>            <plugin>
+        <plugins>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>${maven-clean-plugin.version}</version>
             </plugin>
-
         </plugins>
     </build>
 
