@@ -23,9 +23,9 @@ Why is zfoo protocol ?
 
 Perfect work development process, complete online solution
 
-- Java projects, spring projects, distributed projects, container projects， **hot update code without
+- Spring projects, distributed projects, container projects， **hot update code without
   downtime** [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
-- Excel json csv configuration is automatically mapped and parsed，**Online hot update of Excel
+- Excel json csv configuration is automatically mapped and parsed，**Online hotswap
   configuration** [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
 - Automapping framework for MongoDB [orm](orm/README.md)
 - Event bus [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
@@ -48,9 +48,6 @@ Perfect work development process, complete online solution
 - [FAQ](./doc/FAQ.md)，There are standard demo display and instructions in the test folder of each project directory,
   which can be run directly
 
-- [zfoo video tutorials](./doc/video-tutorial.md)，In the continuous update, it is recommended to watch the hands-on
-  instructional video first.
-
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》，novice friendly,
   difficulty 2 stars
     - Quick star, tank game entry [tank.zfoo.net](http://tank.zfoo.net)
@@ -60,8 +57,6 @@ Perfect work development process, complete online solution
 
 - [cocos-fivechess](https://github.com/zfoo-project/fivechess) five chess，use cocos as client
 
-- [zapp](https://github.com/zfoo-project/zapp) Image sharing chat website, standard https enterprise-level website,
-  difficulty 5 stars
 
 Ⅳ. Install and use⭐
 ------------
