@@ -1,3 +1,5 @@
+English | [简体中文](./README_CN.md)
+
 ### Ⅰ. Introduction
 
 - [hotswap](https://github.com/zfoo-project/zfoo/blob/main/hotswap/README.md) Hot update code, no need to stop the

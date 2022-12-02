@@ -1,48 +1,57 @@
-### Ⅰ. 简介
+English | [简体中文](./README_CN.md)
 
-- [monitor](https://github.com/zfoo-project/zfoo/blob/main/storage/README.md) 轻量级cpu，内存，硬盘，网络监控
+### Ⅰ. Introduction
 
-### Ⅱ. 使用
+- [monitor](https://github.com/zfoo-project/zfoo/blob/main/storage/README.md) Lightweight cpu, memory, hard disk,
+  network monitoring
 
-- uptime，仿Linux的uptime指令，可以用来监控cpu的负载
+### Ⅱ. Use
+
+- uptime, imitating the uptime command of Linux, can be used to monitor the load of cpu
   ```
   UptimeVO uptime = OSUtils.uptime();
   ```
 
-- df，仿Linux的df指令，可以用来监控硬盘容量
+- df, imitating the Linux df command, can be used to monitor the hard disk capacity
   ```
   List<DiskFileSystemVO> df = OSUtils.df();
   ```
 
 
-- free，仿Linux的free指令，可以用来监控内存占用
+- free, imitating Linux's free command, can be used to monitor memory usage
   ```
   MemoryVO free = OSUtils.free();
   ```
 
 
-- sar，仿Linux的sar指令，可以用来监控网络IO
+- sar, the sar command imitating Linux, can be used to monitor network IO
   ```
   List<SarVO> sar = OSUtils.sar();
   ```
 
-### Ⅲ. 传统的服务器监控
+### Ⅲ. Traditional Server Monitoring
 
-- 传统的单机服务器监控，主要看cpu，内存，硬盘，网络
+- Traditional stand-alone server monitoring mainly depends on cpu, memory, hard disk, network
   ![Image text](../doc/image/monitor/monitor01.png)
 
-- 分布式服务器监控，主要是监控多台服务器，和单机监控差别不大，唯一不同就是服务器变多了
+- Distributed server monitoring is mainly to monitor multiple servers, which is not much different from stand-alone
+  monitoring.
   ```
-  自己写一个分布式服务器监控非常简单，只需要每隔一秒钟或者一分钟去采集到当前服务器的主要数据，上传到数据库或者其他服务器上就行了。
-  通过这些被采集到的数据，去分析性能，去做监控警报，做折线图或者其他可视化图表。
-  monitor通过静态类封装可以轻易采集到，然后实现自己的分布式监控程序，而且可以完全内嵌在Java程序中，不需要额外的部署
+  It is very simple to write a distributed server monitoring by yourself. 
+  You only need to collect the main data of the current server every second or minute, and upload it to the database or other servers.
+  Use these collected data to analyze performance, make monitoring alarms, make line charts or other visual charts.
+  Monitor can be easily collected through static class encapsulation, and then realize its own distributed monitoring program, 
+  and can be completely embedded in Java programs without additional deployment
   ```
 
-### Ⅲ. 现在的服务器监控
+### Ⅲ. Modern Server Monitoring
 
-- 现在服务器是容器的时代，服务器监控也从对服务器的监控转变为对容器的监控
-- 容器监控几乎是容器自带的一个集成功能了，甚至云厂商还会免费提供监控程序和监控服务
+- Now that the server is the era of containers, server monitoring has also changed from server monitoring to container
+  monitoring
+- Container monitoring is almost an integrated function of the container itself, and even cloud vendors will provide
+  monitoring programs and monitoring services for free
 
-### Ⅳ. 我们能做的服务器监控
+### Ⅳ. Server Monitoring We Can Do
 
-- 自己定制的监控才是符合自己项目的监控，比如自己实现一个监控rpc接口被调用次数的这种监控
+- Self-customized monitoring is the monitoring that fits your own project, such as implementing a monitoring that
+  monitors the number of times the rpc interface is called by yourself

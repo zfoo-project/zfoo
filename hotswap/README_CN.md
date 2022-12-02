@@ -1,3 +1,5 @@
+简体中文 | [English](./README.md)
+
 ### Ⅰ. 简介
 
 - [hotswap](https://github.com/zfoo-project/zfoo/blob/main/hotswap/README.md) 热更新代码，不需要停止服务器，不需要额外的任何配置，一行代码开启热更新
