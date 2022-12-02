@@ -1,5 +1,5 @@
 English | [简体中文](./README_CN.md)
-<a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg" style="zoom:50%"></a>
+<a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg" width="30%"></a>
 
 -----------
 Why is zfoo protocol ?
