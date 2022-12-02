@@ -1,4 +1,5 @@
-简体中文 | [English](./README.md) ![Image text](../doc/image/logo.jpg)
+简体中文 | [English](./README.md)
+<a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg" width="30%"></a>
 
 -----------
 Why is zfoo protocol ?
