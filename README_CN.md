@@ -162,7 +162,7 @@ public class StudentResource {
 
 - 欢迎喜欢这个项目的人来一起维护这个项目，提交代码的时候注意下面规范
 - 项目格式化代码的方式采用IntelliJ Idea默认的格式化
-- 优先使用英文提交注释和文档，走出去拒绝内卷，在idea中安装Translation插件轻松翻译
+- 优先使用英文提交注释和文档，拒绝内卷从走出去开始，在idea中安装Translation插件轻松翻译
 - [代码提交的说明(commit message)](https://github.com/pvdlg/conventional-changelog-metahub#commit-types) 按照下面给出的些常用格式
 
 ```
