@@ -13,8 +13,8 @@
 package com.zfoo.boot;
 
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.manager.OrmManager;
 import com.zfoo.orm.accessor.MongodbAccessor;
+import com.zfoo.orm.manager.OrmManager;
 import com.zfoo.orm.model.config.OrmConfig;
 import com.zfoo.orm.query.MongodbQuery;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -30,7 +30,8 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnBean(OrmConfig.class)
 public class OrmAutoConfiguration {
 
-    // OrmConfig的装配在于具体的业务游戏中，业务游戏中不配置OrmConfig这个Bean，那么这里的Orm自动装配也不会生效。
+    // OrmConfig in the specific business
+    // If the OrmConfig bean is not configured in the business, then the Orm automatic assembly here will not take effect.
     @Bean
     @ConditionalOnBean(OrmConfig.class)
     public OrmManager ormManager(OrmConfig ormConfig) {
