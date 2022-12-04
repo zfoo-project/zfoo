@@ -31,8 +31,6 @@ import java.util.concurrent.ExecutorService;
 /**
  * @author godotg
  * @version 3.0
- * <p>
- * 在EventRegisterProcessor 中完成扫描
  */
 public class EventContext implements ApplicationListener<ApplicationContextEvent>, Ordered {
 

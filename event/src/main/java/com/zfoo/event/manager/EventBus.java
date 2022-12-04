@@ -30,7 +30,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -42,7 +45,8 @@ public abstract class EventBus {
     private static final Logger logger = LoggerFactory.getLogger(EventBus.class);
 
     /**
-     * 线程池的大小. event的线程池比较大
+     * EN: The size of the thread pool. Event's thread pool is often used to do time-consuming operations, so set it a little bigger
+     * CN: 线程池的大小. event的线程池经常用来做一些耗时的操作，所以要设置大一点
      */
     public static final int EXECUTORS_SIZE = Runtime.getRuntime().availableProcessors() * 2;
 
@@ -50,11 +54,11 @@ public abstract class EventBus {
 
     private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>(EXECUTORS_SIZE);
     /**
-     * 同步事件映射
+     * Synchronous event mapping, synchronize observers
      */
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMapSync = new HashMap<>();
     /**
-     * 异步事件映射
+     * Asynchronous event mapping, asynchronous observer
      */
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMapAsync = new HashMap<>();
 
@@ -91,7 +95,7 @@ public abstract class EventBus {
     }
 
     /**
-     * 处理事件
+     * Publish the event
      */
     public static void submit(IEvent event) {
         syncSubmit(event);
@@ -99,7 +103,8 @@ public abstract class EventBus {
     }
 
     /**
-     * 同步抛出一个事件，会在当前线程中运行(只有同步观察者会处理事件)
+     * EN: Synchronously publish an event that runs in the current thread (only receiverMapSync process the event)
+     * CN: 同步抛出一个事件，会在当前线程中运行(只有同步观察者会处理事件)
      */
     public static void syncSubmit(IEvent event) {
         var list = receiverMapSync.get(event.getClass());
@@ -111,7 +116,8 @@ public abstract class EventBus {
 
 
     /**
-     * 异步抛出一个事件，事件不在同一个线程中处理(只有异步观察者会处理事件)
+     * EN: Asynchronously publish an event, and the event is not processed in the current thread (only receiverMapAsync process the event)
+     * CN: 异步抛出一个事件，事件不在同一个线程中处理(只有异步观察者会处理事件)
      */
     public static void asyncSubmit(IEvent event) {
         var list = receiverMapAsync.get(event.getClass());
@@ -127,32 +133,29 @@ public abstract class EventBus {
     }
 
     /**
-     * 用指定线程执行
+     * Use the event thread specified by the hashcode to execute the task
      */
     public static void execute(int hashcode, Runnable runnable) {
         executors[Math.abs(hashcode % EXECUTORS_SIZE)].execute(SafeRunnable.valueOf(runnable));
     }
 
     /**
-     * 执行方法调用
-     *
-     * @param event        事件
-     * @param receiverList 所有的观察者
+     * The observer executes the method call
      */
     private static void doSubmit(IEvent event, List<IEventReceiver> receiverList) {
         for (var receiver : receiverList) {
             try {
                 receiver.invoke(event);
             } catch (Exception e) {
-                logger.error("eventBus未知exception异常", e);
+                logger.error("eventBus unknown exception", e);
             } catch (Throwable t) {
-                logger.error("eventBus未知error异常", t);
+                logger.error("eventBus unknown error", t);
             }
         }
     }
 
     /**
-     * 注册事件及其对应同异步观察者
+     * Register the event and its counterpart observer
      */
     public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver, boolean asyncFlag) {
         if (asyncFlag) {

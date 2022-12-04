@@ -16,7 +16,7 @@ package com.zfoo.event.model.anno;
 import java.lang.annotation.*;
 
 /**
- * 接收事件的注解
+ * Receive annotations for events (observers).
  *
  * @author godotg
  * @version 3.0

@@ -27,9 +27,9 @@ public class SafeRunnable implements Runnable {
         try {
             runnable.run();
         } catch (Exception e) {
-            logger.error("未知exception异常", e);
+            logger.error("unknown exception", e);
         } catch (Throwable t) {
-            logger.error("未知throwable异常", t);
+            logger.error("unknown error", t);
         }
     }
 
