@@ -43,7 +43,7 @@ public abstract class HotSwapUtils {
         try {
             clazz = Class.forName(clazzName);
         } catch (ClassNotFoundException e) {
-            logger.error("无法在当前项目找到类[{}]，所以忽略本次热更新", clazzName);
+            logger.error("The class:[{}] could not be found in the current project and ignore this hot update", clazzName);
             return;
         }
 
@@ -72,11 +72,11 @@ public abstract class HotSwapUtils {
             clazz = Class.forName(readClassName(bytes));
             byteArrayInputStream = new ByteArrayInputStream(bytes);
             ctClass = ClassPool.getDefault().makeClass(byteArrayInputStream);
-            // Javassist热更新
+            // Javassist hot update
             HotSwapAgent.redefine(clazz, ctClass);
-            logger.info("Javassist热更新[{}]成功", clazz);
+            logger.info("Javassist hot update [{}] succeeded", clazz);
         } catch (Throwable t) {
-            logger.info("无法使用Javassist热更新，开始使用替补方案Byte Buddy做热更新", t);
+            logger.info("Unable to use the Javassist hot update, start using ByteBuddy as hotswap", t);
             hotswapClassByByteBuddy(clazz, bytes);
         } finally {
             IOUtils.closeIO(byteArrayInputStream);
@@ -89,12 +89,12 @@ public abstract class HotSwapUtils {
 
     private static void hotswapClassByByteBuddy(Class<?> clazz, byte[] bytes) {
         try {
-            // Byte Buddy热更新
+            // Byte Buddy hot update
             var instrumentation = ByteBuddyAgent.install();
             instrumentation.redefineClasses(new ClassDefinition(clazz, bytes));
-            logger.info("Byte Buddy热更新[{}]成功", clazz);
+            logger.info("ByteBuddy hot update [{}] succeeded", clazz);
         } catch (Throwable t) {
-            logger.error("Byte Buddy热更新未知异常，热更新[{}]失败", clazz);
+            logger.error("ByteBuddy hot update [{}] failed", clazz);
         }
     }
 
