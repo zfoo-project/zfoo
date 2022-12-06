@@ -131,8 +131,7 @@ public void onMyNoticeEvent(MyNoticeEvent event) {
 }
 
 // 抛出一个事件
-EventBus.syncSubmit(MyNoticeEvent.valueOf("同步事件"));
-EventBus.asyncSubmit(MyNoticeEvent.valueOf("异步事件"));
+EventBus.submit(MyNoticeEvent.valueOf("我的事件"));
 ```
 
 #### 7. [scheduler](scheduler/README.md) 基于cron表达式的定时任务调度框架

@@ -26,18 +26,15 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 @Ignore
 public class ApplicationTest {
 
-    // 事件总线教程，核心思想是设计模式中的观察者模式
+    // Event Bus tutorial, the core idea is the observer pattern.(核心思想是设计模式中的观察者模式)
     @Test
     public void startEventTest() {
-        // 加载配置文件，配置文件中必须引入event
+        // load the configuration file which must import event.(加载配置文件，配置文件中必须引入event)
         var context = new ClassPathXmlApplicationContext("application.xml");
 
-        // 事件的接受需要在被Spring管理的bean的方法上加上@EventReceiver注解，即可自动注册事件的监听
-        // 参考MyController1中的标准注册方法
+        // see receiver method of MyController1 and MyController2
+        EventBus.submit(MyNoticeEvent.valueOf("我的事件"));
 
-        EventBus.submit(MyNoticeEvent.valueOf("处理事件"));
-
-        // 睡眠3秒，等待异步事件执行完
         ThreadUtils.sleep(3000);
     }
 

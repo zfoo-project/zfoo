@@ -135,8 +135,7 @@ public void onMyNoticeEvent(MyNoticeEvent event) {
 }
 
 // fire an event
-EventBus.syncSubmit(MyNoticeEvent.valueOf("同步事件"));
-EventBus.asyncSubmit(MyNoticeEvent.valueOf("异步事件"));
+EventBus.submit(MyNoticeEvent.valueOf("My event"));
 ```
 
 #### 7. [scheduler](scheduler/README.md) scheduling Framework Based on Cron Expression
