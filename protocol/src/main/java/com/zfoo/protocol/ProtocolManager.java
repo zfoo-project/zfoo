@@ -36,36 +36,39 @@ public class ProtocolManager {
     public static final byte MAX_MODULE_NUM = Byte.MAX_VALUE;
 
     /**
-     * 索引：协议号protocolId
+     * The protocol corresponding to the protocolId.(协议号protocolId对应的协议，数组下标是协议号protocolId)
      */
     public static final IProtocolRegistration[] protocols = new IProtocolRegistration[MAX_PROTOCOL_NUM];
     /**
-     * 索引：模块号
+     * The modules of the protocol.(协议的模块)
      */
     public static final ProtocolModule[] modules = new ProtocolModule[MAX_MODULE_NUM];
 
     /**
-     * key:协议class，value:protocolId，如果所有协议Class返回的hashcode都不相同（大概率事件），则使用高性能的HashMapIntShort
+     * key:packet class，value:protocolId.(如果所有协议Class返回的hashcode都不相同（大概率事件），则使用高性能的HashMapIntShort)
      */
     public static Map<Class<?>, Short> protocolIdMap = new HashMap<>();
     public static HashMapIntShort protocolIdPrimitiveMap = new HashMapIntShort();
 
     static {
-        // 初始化默认协议模块
+        // default protocol module
         modules[0] = ProtocolModule.DEFAULT_PROTOCOL_MODULE;
     }
 
     /**
-     * 将packet序列化到buffer中
+     * serialize the packet into the buffer
      */
     public static void write(ByteBuf buffer, IPacket packet) {
         var protocolId = packet.protocolId();
-        // 写入协议号
+        // write the protocolId
         ByteBufUtils.writeShort(buffer, protocolId);
-        // 写入包体
+        // write the package
         protocols[protocolId].write(buffer, packet);
     }
 
+    /**
+     * deserialization a packet from the buffer
+     */
     public static IPacket read(ByteBuf buffer) {
         return (IPacket) protocols[ByteBufUtils.readShort(buffer)].read(buffer);
     }
@@ -79,7 +82,7 @@ public class ProtocolManager {
     }
 
     /**
-     * 根据模块id查找模块
+     * Find the module based on the module ID
      */
     public static ProtocolModule moduleByModuleId(byte moduleId) {
         var module = modules[moduleId];
@@ -88,7 +91,7 @@ public class ProtocolManager {
     }
 
     /**
-     * 根据模块名字查找模块
+     * Find modules by module name
      */
     public static ProtocolModule moduleByModuleName(String name) {
         var moduleOptional = Arrays.stream(modules)
@@ -110,10 +113,10 @@ public class ProtocolManager {
     }
 
     /**
-     * 注册协议：将协议id和对应的协议信息关联起来
+     * Register protocol
      *
-     * @param protocolClassSet  需要初始化的协议列表
-     * @param generateOperation 协议配置：需要生成哪些语言的协议文件 是否折叠等信息
+     * @param protocolClassSet  A list of protocols that need to be initialized
+     * @param generateOperation Protocol configuration(需要生成哪些语言的协议文件 是否折叠等信息)
      */
     public static void initProtocol(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
         ProtocolAnalysis.analyze(protocolClassSet, generateOperation);
@@ -124,7 +127,8 @@ public class ProtocolManager {
     }
 
     /**
-     * 子协议会自动注册协议号protocolId，如果子协议没有指定protocolId则自动生成protocolId
+     * EN:Register protocol and automatically generates a protocol ID if the subprotocol does not specify a protocol ID
+     * CN:子协议会自动注册协议号protocolId，如果子协议没有指定protocolId则自动生成protocolId
      */
     public static void initProtocolAuto(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
         ProtocolAnalysis.analyzeAuto(protocolClassSet, generateOperation);
