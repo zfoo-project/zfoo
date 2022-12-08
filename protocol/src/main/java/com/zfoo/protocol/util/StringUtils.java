@@ -484,4 +484,13 @@ public abstract class StringUtils {
     public static boolean isStopChar(char ch) {
         return Character.isWhitespace(ch) || STOP_WORD.contains(ch);
     }
+    public static boolean prefixMatch(String str,String matchStr){
+        if(matchStr.length()>str.length())
+            return false;
+        for(int i=0;i<matchStr.length();i++){
+            if(str.charAt(i)!=matchStr.charAt(i))
+                return false;
+        }
+        return true;
+    }
 }

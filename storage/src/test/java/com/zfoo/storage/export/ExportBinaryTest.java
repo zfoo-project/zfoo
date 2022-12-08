@@ -21,7 +21,6 @@ import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.storage.manager.StorageManager;
 import com.zfoo.storage.model.anno.Id;
-import com.zfoo.storage.model.anno.Resource;
 import com.zfoo.storage.model.config.StorageConfig;
 import com.zfoo.storage.model.vo.Storage;
 import com.zfoo.storage.util.ExportUtils;
@@ -53,7 +52,7 @@ public class ExportBinaryTest {
 
     }
 
-    @Resource
+
     public static class StudentResource implements IPacket {
 
         @Id
@@ -78,8 +77,8 @@ public class ExportBinaryTest {
     @Test
     public void test() throws Exception {
         var config = new StorageConfig();
-        config.setScanPackage("com.zfoo.storage.export");
-        config.setResourceLocation("classpath:/excel");
+        config.setScanPackage(new String[]{"com.zfoo.storage.export"});
+
         config.setWriteable(true);
         config.setRecycle(false);
         var storageManager = new StorageManager();

@@ -3,55 +3,46 @@
   "headers": [
     {
       "name": "Id",
-      "type": "int",
       "index": 0
     },
     {
       "name": "Type0",
-      "type": "long",
-      "index": 0
+      "index": 1
     },
     {
       "name": "Type1",
-      "type": "string",
-      "index" : 0
+      "index" : 2
     },
     {
       "name": "Type2",
-      "type": "list\u003cstring\u003e",
-      "index" : 0
+      "index" : 3
     },
     {
       "name": "Type3",
-      "type": "list\u003cint\u003e",
-      "index" : 0
+      "index" : 4
     },
     {
       "name": "Type4",
-      "type": "list\u003clong\u003e",
-      "index" : 0
+      "index" : 5
     },
     {
       "name": "Type5",
-      "type": "array\u003cattr,id,name\u003e",
-      "index" : 0
+      "index" : 6
     },
     {
       "name": "Type8",
-      "type": "map\u003cint,int\u003e",
-      "index" : 0
+      "index" : 7
     },
     {
       "name": "Type9",
-      "type": "map\u003cint,string\u003e",
-      "index" : 0
+      "index" : 8
     },
     {
       "name": "Type10",
-      "type": "map\u003cstring,string\u003e",
-      "index" : 0
+      "index" : 9
     }
   ],
+
   "rows": [
     [
       "1",

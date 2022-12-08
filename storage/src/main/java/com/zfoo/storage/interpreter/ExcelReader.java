@@ -64,15 +64,8 @@ public abstract class ExcelReader {
         // 获取配置表的有效列名称，默认第一行就是字段名称
         var fieldRow = iterator.next();
         if (fieldRow == null) {
-            throw new RunException("无法获取资源[class:{}]的Excel文件的属性控制列", fileName);
+            throw new RunException("无法获取[{}]文件的属性控制列", fileName);
         }
-        // 默认第二行字段类型
-        var typeRow = iterator.next();
-        if (typeRow == null) {
-            throw new RunException("无法获取资源[class:{}]的Excel文件的类型控制列", fileName);
-        }
-        // 默认第三行为描述，需要的时候再使用
-        var desRow = iterator.next();
         var headerList = new ArrayList<ResourceHeader>();
         var cellFieldMap = new HashMap<String, Integer>();
         for (var i = 0; i < fieldRow.getLastCellNum(); i++) {
@@ -80,23 +73,15 @@ public abstract class ExcelReader {
             if (Objects.isNull(fieldCell)) {
                 continue;
             }
-            var typeCell = typeRow.getCell(i);
-            if (Objects.isNull(typeCell)) {
-                continue;
-            }
             var fieldName = CellUtils.getCellStringValue(fieldCell);
             if (StringUtils.isEmpty(fieldName)) {
                 continue;
             }
-            var typeName = CellUtils.getCellStringValue(typeCell);
-            if (StringUtils.isEmpty(typeName)) {
-                continue;
-            }
             var previousValue = cellFieldMap.put(fieldName, i);
             if (Objects.nonNull(previousValue)) {
-                throw new RunException("资源[class:{}]的Excel文件出现重复的属性控制列[field:{}]", fileName, fieldName);
+                throw new RunException("[{}]文件出现重复的属性控制列[field:{}]", fileName, fieldName);
             }
-            headerList.add(ResourceHeader.valueOf(fieldName, typeName, i));
+            headerList.add(ResourceHeader.valueOf(fieldName, i));
         }
         return headerList;
     }

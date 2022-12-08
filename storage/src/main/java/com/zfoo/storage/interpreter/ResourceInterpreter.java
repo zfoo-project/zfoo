@@ -15,12 +15,16 @@ package com.zfoo.storage.interpreter;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.storage.model.anno.ExcelColumn;
 import com.zfoo.storage.model.anno.Id;
 import com.zfoo.storage.model.resource.ResourceData;
 import com.zfoo.storage.model.resource.ResourceEnum;
+import com.zfoo.storage.model.resource.ResourceHeader;
+import com.zfoo.storage.model.vo.ResourceDef;
 import com.zfoo.storage.strategy.*;
 import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.TypeDescriptor;
+import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,25 +55,27 @@ public class ResourceInterpreter {
         conversionServiceFactoryBean.afterPropertiesSet();
     }
 
-    public static <T> List<T> read(InputStream inputStream, Class<T> clazz, String suffix) throws IOException {
-        ResourceData resource = null;
+    public static <T> List<T> read(InputStream inputStream, ResourceDef resourceDef, String suffix) throws IOException {
+        ResourceData resourceData = null;
+        var resource=resourceDef.getResource();
+        var fileName=resource.getFilename();
+        var clazz=(Class<T>)resourceDef.getClazz();
         var resourceEnum = ResourceEnum.getResourceEnumByType(suffix);
         if (resourceEnum == ResourceEnum.JSON) {
-            resource = JsonReader.readResourceDataFromCSV(inputStream);
+            resourceData = JsonReader.readResourceDataFromCSV(inputStream);
         } else if (resourceEnum == ResourceEnum.EXCEL_XLS || resourceEnum == ResourceEnum.EXCEL_XLSX) {
-            resource = ExcelReader.readResourceDataFromExcel(inputStream, clazz.getSimpleName());
+            resourceData = ExcelReader.readResourceDataFromExcel(inputStream, fileName);
         } else if (resourceEnum == ResourceEnum.CSV) {
-            resource = CsvReader.readResourceDataFromCSV(inputStream, clazz.getSimpleName());
+            resourceData = CsvReader.readResourceDataFromCSV(inputStream, fileName);
         } else {
-            throw new RunException("不支持文件[{}]的配置类型[{}]", clazz.getSimpleName(), suffix);
+            throw new RunException("不支持文件[{}]的配置类型[{}]", fileName, suffix);
         }
 
         var result = new ArrayList<T>();
         //获取所有字段
-        var cellFieldMap = getFieldMap(resource, clazz);
-        var fieldInfos = getFieldInfos(cellFieldMap, clazz);
+        var fieldInfos = getFieldInfos(resourceData, clazz,fileName);
 
-        var iterator = resource.getRows().iterator();
+        var iterator = resourceData.getRows().iterator();
         // 从ROW_SERVER这行开始读取数据
         while (iterator.hasNext()) {
             var columns = iterator.next();
@@ -78,7 +84,7 @@ public class ResourceInterpreter {
             for (var fieldInfo : fieldInfos) {
                 var content = columns.get(fieldInfo.index);
                 if (StringUtils.isNotEmpty(content) || fieldInfo.field.getType() == String.class) {
-                    inject(instance, fieldInfo.field, content);
+                    inject(instance, fieldInfo.field, content,fileName);
                 }
             }
             result.add(instance);
@@ -86,35 +92,58 @@ public class ResourceInterpreter {
         return result;
     }
 
-    private static void inject(Object instance, Field field, String content) {
+    private static void inject(Object instance, Field field, String content,String fileName) {
         try {
             var targetType = new TypeDescriptor(field);
             var value = conversionServiceFactoryBean.getObject().convert(content, TYPE_DESCRIPTOR, targetType);
             ReflectionUtils.makeAccessible(field);
             ReflectionUtils.setField(field, instance, value);
         } catch (Exception e) {
-            throw new RunException(e, "无法将Excel资源[class:{}]中的[content:{}]转换为属性[field:{}]", instance.getClass().getSimpleName(), content, field.getName());
+            throw new RunException(e, "无法将文件[{}]中的[content:{}]转换为属性[field:{}]", fileName, content, field.getName());
         }
     }
-
-    // 只读取代码里写的字段
-    private static Collection<FieldInfo> getFieldInfos(Map<String, Integer> fieldMap, Class<?> clazz) {
+    private static List<FieldInfo> getFieldInfos(ResourceData resourceData, Class<?> clazz, String fileName){
         var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
-        for (var field : fieldList) {
-            if (!fieldMap.containsKey(field.getName())) {
-                throw new RunException("资源类[class:{}]的声明属性[filed:{}]无法获取，请检查配置表的格式", clazz, field.getName());
+        var resourceHeaders=resourceData.getHeaders();
+        if (resourceHeaders == null) {
+            throw new RunException("无法获取[{}]文件的属性控制列", fileName);
+        }
+        List<FieldInfo> fieldInfos=new ArrayList<>();
+        for(var field :fieldList) {
+            if(field.isAnnotationPresent(ExcelColumn.class)) {
+                var excelColumnAnnotation=field.getAnnotation(ExcelColumn.class);
+                var value=excelColumnAnnotation.value();
+                var index=excelColumnAnnotation.index();
+                if(index!=-1){
+                    if(index<0||index>=resourceHeaders.size()){
+                        throw new RunException("不存在第[{}]列",index);
+                    }
+                    fieldInfos.add(new FieldInfo(index,field));
+                }
+                if("".equals(value)==false){
+                    boolean findFlag=false;
+                    for(ResourceHeader resourceHeader:resourceHeaders){
+                        if(resourceHeader.getName().equals(value)==true){
+                            fieldInfos.add(new FieldInfo(resourceHeader.getIndex(),field));
+                            findFlag=true;
+                            break;
+                        }
+                    }
+                    if(findFlag==false){
+                        throw new RunException("[{}]文件中不存在[{}]字段",fileName,value);
+                    }
+                }
             }
-
-            if (field.isAnnotationPresent(Id.class)) {
-                var cellIndex = fieldMap.get(field.getName());
-                if (cellIndex != 0) {
-                    throw new RunException("资源类[class:{}]的主键[Id:{}]必须放在Excel配置表的第一列，请检查配置表的格式", clazz, field.getName());
+            else{
+                for(ResourceHeader resourceHeader:resourceHeaders){
+                    if(resourceHeader.getName().equals(field.getName())){
+                        fieldInfos.add(new FieldInfo(resourceHeader.getIndex(),field));
+                    }
                 }
             }
         }
-        return fieldList.stream().map(it -> new FieldInfo(fieldMap.get(it.getName()), it)).collect(Collectors.toList());
+        return fieldInfos;
     }
-
     private static class FieldInfo {
         public final int index;
         public final Field field;
@@ -124,30 +153,4 @@ public class ResourceInterpreter {
             this.field = field;
         }
     }
-
-    public static Map<String, Integer> getFieldMap(ResourceData resource, Class<?> clazz) {
-        var header = resource.getHeaders();
-        if (header == null) {
-            throw new RunException("无法获取资源[class:{}]的Excel文件的属性控制列", clazz.getSimpleName());
-        }
-
-        var cellFieldMap = new HashMap<String, Integer>();
-        for (var i = 0; i < header.size(); i++) {
-            var cell = header.get(i);
-            if (Objects.isNull(cell)) {
-                continue;
-            }
-
-            var name = cell.getName();
-            if (StringUtils.isEmpty(name)) {
-                continue;
-            }
-            var previousValue = cellFieldMap.put(name, i);
-            if (Objects.nonNull(previousValue)) {
-                throw new RunException("资源[class:{}]的Excel文件出现重复的属性控制列[field:{}]", clazz.getSimpleName(), name);
-            }
-        }
-        return cellFieldMap;
-    }
-
 }

@@ -12,6 +12,8 @@
 
 package com.zfoo.storage.export;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zfoo.storage.util.ExportUtils;
 import org.junit.Ignore;
 import org.junit.Test;

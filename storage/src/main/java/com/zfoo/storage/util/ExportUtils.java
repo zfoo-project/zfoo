@@ -57,7 +57,6 @@ public abstract class ExportUtils {
             var rows = resourceData.getRows();
             var builder = new StringBuilder();
             builder.append(headers.stream().map(it -> wrapCsvData(it.getName())).collect(Collectors.joining(StringUtils.COMMA))).append(FileUtils.LS);
-            builder.append(headers.stream().map(it -> wrapCsvData(it.getType())).collect(Collectors.joining(StringUtils.COMMA))).append(FileUtils.LS);
             for (var row : rows) {
                 builder.append(row.stream().map(it -> wrapCsvData(it)).collect(Collectors.joining(StringUtils.COMMA))).append(FileUtils.LS);
             }

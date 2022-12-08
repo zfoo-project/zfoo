@@ -14,6 +14,7 @@
 package com.zfoo.event.schema;
 
 import com.zfoo.event.EventContext;
+import com.zfoo.event.manager.TestClass;
 import com.zfoo.protocol.util.StringUtils;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -45,6 +46,13 @@ public class EventDefinitionParser implements BeanDefinitionParser {
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
 
+        clazz= TestClass.class;
+        name = StringUtils.uncapitalize(clazz.getName());
+        builder=BeanDefinitionBuilder.rootBeanDefinition(clazz);
+        builder.addPropertyValue("t",false);
+//        String[] strings=new String[]{"dfd","ere"};
+        builder.addPropertyValue("strings","edf;fds;fgd");
+        parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
         return builder.getBeanDefinition();
     }
 

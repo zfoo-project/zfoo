@@ -21,6 +21,8 @@ import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.StorageContext;
+import com.zfoo.storage.model.anno.ClassPathResource;
+import com.zfoo.storage.model.anno.FilePathResource;
 import com.zfoo.storage.model.anno.Id;
 import com.zfoo.storage.model.anno.ResInjection;
 import com.zfoo.storage.model.config.StorageConfig;
@@ -124,7 +126,7 @@ public class StorageManager implements IStorageManager {
                 var resource = definition.getResource();
                 var fileExtName = FileUtils.fileExtName(resource.getFilename());
                 Storage<?, ?> storage = new Storage<>();
-                storage.init(resource.getInputStream(), definition.getClazz(), fileExtName);
+                storage.init(resource.getInputStream(), definition, fileExtName);
                 storageMap.putIfAbsent(clazz, storage);
             }
         } catch (Exception e) {
@@ -221,22 +223,27 @@ public class StorageManager implements IStorageManager {
         return getStorageConfig();
     }
 
-    private Set<String> scanResourceAnno(String scanLocation) {
+    private Set<String> scanResourceAnno(String[] scanLocations) {
         var resourcePatternResolver = new PathMatchingResourcePatternResolver();
         var metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
         try {
-            var packageSearchPath = ResourceUtils.CLASSPATH_URL_PREFIX + scanLocation.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + SUFFIX_PATTERN;
-            var resources = resourcePatternResolver.getResources(packageSearchPath);
             var result = new HashSet<String>();
-            var name = com.zfoo.storage.model.anno.Resource.class.getName();
-            for (var resource : resources) {
-                if (resource.isReadable()) {
-                    var metadataReader = metadataReaderFactory.getMetadataReader(resource);
-                    var annoMeta = metadataReader.getAnnotationMetadata();
-                    if (annoMeta.hasAnnotation(name)) {
-                        ClassMetadata clazzMeta = metadataReader.getClassMetadata();
-                        result.add(clazzMeta.getClassName());
+            for(var scanLocation:scanLocations) {
+                var packageSearchPath = ResourceUtils.CLASSPATH_URL_PREFIX + scanLocation.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + SUFFIX_PATTERN;
+                var resources = resourcePatternResolver.getResources(packageSearchPath);
+
+                var classPathResourceName = com.zfoo.storage.model.anno.ClassPathResource.class.getName();
+                var filePathResourceName = com.zfoo.storage.model.anno.FilePathResource.class.getName();
+
+                for (var resource : resources) {
+                    if (resource.isReadable()) {
+                        var metadataReader = metadataReaderFactory.getMetadataReader(resource);
+                        var annoMeta = metadataReader.getAnnotationMetadata();
+                        if (annoMeta.hasAnnotation(classPathResourceName) || annoMeta.hasAnnotation(filePathResourceName)) {
+                            ClassMetadata clazzMeta = metadataReader.getClassMetadata();
+                            result.add(clazzMeta.getClassName());
+                        }
                     }
                 }
             }
@@ -252,22 +259,54 @@ public class StorageManager implements IStorageManager {
 
         try {
             var resourceList = new ArrayList<Resource>();
-
-            var packageSearchPath = StringUtils.format("{}/**/{}.*", storageConfig.getResourceLocation(), clazz.getSimpleName());
-            packageSearchPath = packageSearchPath.replaceAll("//", "/");
-            try {
-                resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
-            } catch (Exception e) {
-                // do nothing
+            var packageSearchPath="";
+            if(clazz.isAnnotationPresent(ClassPathResource.class)){
+                var str=clazz.getAnnotation(ClassPathResource.class).value();
+                if("".equals(str)==false){
+                    if(StringUtils.prefixMatch(str,"classpath:")||StringUtils.prefixMatch(str,"classpath*:")){
+                        packageSearchPath=str;
+                    }
+                    else if(clazz.getAnnotation(ClassPathResource.class).isAllJar()==true){
+                        packageSearchPath=StringUtils.format("classpath*:{}",str);
+                    }
+                    else{
+                        packageSearchPath=StringUtils.format("classpath:{}",str);
+                    }
+                    packageSearchPath = packageSearchPath.replaceAll("//", "/");
+                    resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
+                }
+                else{
+                    for(String resourceLocation:storageConfig.getResourceLocations()){
+                        if(StringUtils.prefixMatch(resourceLocation,"classpath:")||StringUtils.prefixMatch(resourceLocation,"classpath*")){
+                            packageSearchPath = StringUtils.format("{}/**/{}.*",resourceLocation, clazz.getSimpleName());
+                            packageSearchPath = packageSearchPath.replaceAll("//", "/");
+                            resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
+                        }
+                    }
+                }
             }
-
-            // 通配符无法匹配根目录，所以如果找不到，再从根目录查找一遍
-            if (CollectionUtils.isEmpty(resourceList)) {
-                packageSearchPath = StringUtils.format("{}/{}.*", storageConfig.getResourceLocation(), clazz.getSimpleName());
-                packageSearchPath = packageSearchPath.replaceAll("//", "/");
-                resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
+            if(clazz.isAnnotationPresent(FilePathResource.class)){
+                var str=clazz.getAnnotation(FilePathResource.class).value();
+                if("".equals(str)==false){
+                    if(StringUtils.prefixMatch(str,"file:")==true){
+                        packageSearchPath=str;
+                    }
+                    else{
+                        packageSearchPath=StringUtils.format("file:{}",clazz.getAnnotation(FilePathResource.class).value());
+                    }
+                    packageSearchPath = packageSearchPath.replaceAll("//", "/");
+                    resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
+                }
+                else{
+                    for(String resourceLocation:storageConfig.getResourceLocations()){
+                        if(StringUtils.prefixMatch(resourceLocation,"file:")){
+                            packageSearchPath = StringUtils.format("{}/**/{}.*",resourceLocation, clazz.getSimpleName());
+                            packageSearchPath = packageSearchPath.replaceAll("//", "/");
+                            resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
+                        }
+                    }
+                }
             }
-
             if (CollectionUtils.isEmpty(resourceList)) {
                 throw new RuntimeException(StringUtils.format("无法找到配置文件[{}]", clazz.getSimpleName()));
             } else if (resourceList.size() > 1) {

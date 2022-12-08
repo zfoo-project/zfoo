@@ -31,9 +31,9 @@ public class PathMatchTest {
     @Test
     public void resourceTest() throws IOException {
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        Resource[] resources = resolver.getResources("classpath*:com/zfoo/**/*.class");
+        Resource[] resources = resolver.getResources("file:excel/**/StudentCsvResource.*");
         for (Resource res : resources) {
-            System.out.println(res.getDescription());
+            System.out.println(res.getInputStream());
         }
     }
 

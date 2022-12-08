@@ -14,10 +14,24 @@
 package com.zfoo.event;
 
 import com.zfoo.event.manager.EventBus;
+import com.zfoo.event.manager.TestClass;
+import com.zfoo.event.schema.EventRegisterProcessor;
 import com.zfoo.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.ListableBeanFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.xml.AbstractBeanDefinitionParser;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.AttributeAccessor;
+import org.springframework.core.AttributeAccessorSupport;
 
 /**
  * @author godotg
@@ -31,7 +45,8 @@ public class ApplicationTest {
     public void startEventTest() {
         // 加载配置文件，配置文件中必须引入event
         var context = new ClassPathXmlApplicationContext("application.xml");
-
+        var t=context.getBean(TestClass.class);
+        System.out.println(t.isT());
         // 事件的接受需要在被Spring管理的bean的方法上加上@EventReceiver注解，即可自动注册事件的监听
         // 参考MyController1中的标准注册方法
 
@@ -43,6 +58,7 @@ public class ApplicationTest {
 
         // 睡眠3秒，等待异步事件执行完
         ThreadUtils.sleep(3000);
+        context.close();
     }
 
 }

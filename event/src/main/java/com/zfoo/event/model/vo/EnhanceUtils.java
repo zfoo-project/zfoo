@@ -19,6 +19,7 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.security.IdUtils;
 import javassist.*;
 
+import java.io.FileOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -75,6 +76,18 @@ public abstract class EnhanceUtils {
         String invokeMethodBody = "{this.bean." + method.getName() + "((" + clazz.getCanonicalName() + ")$1);}";// 强制类型转换，转换为具体的Event类型的类型
         invokeMethod.setBody(invokeMethodBody);
         enhanceClazz.addMethod(invokeMethod);
+//        try {
+//            byte[] byteArray = enhanceClazz.toBytecode();
+//            FileOutputStream output = new FileOutputStream("Test.class");
+//            output.write(byteArray);
+//            output.close();
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+
+
 
         // 释放缓存
         enhanceClazz.detach();

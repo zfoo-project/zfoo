@@ -44,13 +44,13 @@ public class Storage<K, V> {
     private IdDef idDef;
     private Map<String, IndexDef> indexDefMap;
 
-    public void init(InputStream inputStream, Class<?> resourceClazz, String suffix) {
+    public void init(InputStream inputStream, ResourceDef resourceDef, String suffix) {
         try {
-            this.clazz = (Class<V>) resourceClazz;
-            idDef = IdDef.valueOf(resourceClazz);
-            indexDefMap = IndexDef.createResourceIndexes(resourceClazz);
+            this.clazz = (Class<V>) resourceDef.getClazz();
+            idDef = IdDef.valueOf(this.clazz);
+            indexDefMap = IndexDef.createResourceIndexes(this.clazz);
 
-            var list = ResourceInterpreter.read(inputStream, resourceClazz, suffix);
+            var list = ResourceInterpreter.read(inputStream, resourceDef, suffix);
 
             dataMap.clear();
             indexMap.clear();

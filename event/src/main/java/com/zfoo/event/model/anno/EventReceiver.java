@@ -13,6 +13,9 @@
 
 package com.zfoo.event.model.anno;
 
+import com.zfoo.event.model.event.IEvent;
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.*;
 
 /**
@@ -26,4 +29,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface EventReceiver {
+
 }

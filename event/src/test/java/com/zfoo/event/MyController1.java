@@ -14,8 +14,10 @@
 package com.zfoo.event;
 
 import com.zfoo.event.model.anno.EventReceiver;
+import com.zfoo.event.model.event.IEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,10 +28,9 @@ import org.springframework.stereotype.Component;
 public class MyController1 {
 
     private static final Logger logger = LoggerFactory.getLogger(MyController1.class);
-
     @EventReceiver
     public void onMyNoticeEvent(MyNoticeEvent event) {
-        logger.info("方法1收到事件：" + event.getMessage());
+        logger.info("方法1收到事件：" );
     }
 
 }

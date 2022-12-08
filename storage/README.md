@@ -9,7 +9,7 @@
 
 ### Ⅱ. 自动映射
 
-- Excel的第一行对应Java类属性，第二行和第三行不会起到注释的作用，其中第一列必须是Id属性
+- Excel的第一行对应Java类属性，其中第一列必须是Id属性
 
 ![Image text](../doc/image/storage/storage01.png)
 
