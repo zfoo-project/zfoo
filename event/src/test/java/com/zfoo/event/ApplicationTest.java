@@ -51,11 +51,11 @@ public class ApplicationTest {
         // 参考MyController1中的标准注册方法
 
         // 抛出同步事件，事件会被当前线程立刻执行，注意日志打印的线程号
-        EventBus.syncSubmit(MyNoticeEvent.valueOf("同步事件"));
-
-        // 抛出异步事件，事件会被不会立刻执行，注意日志打印的线程号
-        EventBus.asyncSubmit(MyNoticeEvent.valueOf("异步事件"));
-
+//        EventBus.syncSubmit(MyNoticeEvent.valueOf("同步事件"));
+//
+//        // 抛出异步事件，事件会被不会立刻执行，注意日志打印的线程号
+//        EventBus.asyncSubmit(MyNoticeEvent.valueOf("异步事件"));
+        EventBus.submit(MyNoticeEvent.valueOf("处理事件"));
         // 睡眠3秒，等待异步事件执行完
         ThreadUtils.sleep(3000);
         context.close();
