@@ -159,7 +159,7 @@ your protocol number a little more compactly, so that your protocol number will 
       ```
       public class SimpleObject implements IPacket {
       
-          public static final transient short PROTOCOL_ID = 104;
+          public static final short PROTOCOL_ID = 104;
       
           public int c;
       

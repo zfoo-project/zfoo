@@ -131,7 +131,7 @@ cpu： i9900k
       ```
       public class SimpleObject implements IPacket {
       
-          public static final transient short PROTOCOL_ID = 104;
+          public static final short PROTOCOL_ID = 104;
       
           public int c;
       
