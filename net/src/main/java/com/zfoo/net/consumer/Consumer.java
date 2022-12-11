@@ -26,14 +26,13 @@ import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
 import com.zfoo.net.router.route.SignalBridge;
+import com.zfoo.net.task.TaskBus;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.math.HashUtils;
-import com.zfoo.util.math.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +46,7 @@ import java.util.concurrent.TimeoutException;
  * <p>
  * 在clientSession中选择一个可用的session，最终还是调用的IRouter中的方法
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class Consumer implements IConsumer {
@@ -78,8 +77,8 @@ public class Consumer implements IConsumer {
         try {
             var loadBalancer = loadBalancer(ProtocolManager.moduleByProtocolId(packet.protocolId()));
             var session = loadBalancer.loadBalancer(packet, argument);
-            var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
-            NetContext.getRouter().send(session, packet, NoAnswerAttachment.valueOf(executorConsistentHash));
+            var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
+            NetContext.getRouter().send(session, packet, NoAnswerAttachment.valueOf(taskExecutorHash));
         } catch (Throwable t) {
             logger.error("consumer发送未知异常", t);
         }
@@ -93,8 +92,8 @@ public class Consumer implements IConsumer {
 
         // 下面的代码逻辑同Router的syncAsk，如果修改的话，记得一起修改
         var clientSignalAttachment = new SignalAttachment();
-        var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
-        clientSignalAttachment.setExecutorConsistentHash(executorConsistentHash);
+        var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
+        clientSignalAttachment.setTaskExecutorHash(taskExecutorHash);
 
         try {
             SignalBridge.addSignalAttachment(clientSignalAttachment);

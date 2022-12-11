@@ -40,8 +40,6 @@ import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.math.HashUtils;
-import com.zfoo.util.math.RandomUtils;
 import io.netty.util.concurrent.FastThreadLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,8 +94,7 @@ public class Router implements IRouter {
                             // 这里会让之前的CompletableFuture得到结果，从而像asyncAsk之类的回调到结果
                             removedAttachment.getResponseFuture().complete(packet);
                         } else {
-                            logger.error("client receives packet:[{}] and attachment:[{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception."
-                                    , JsonUtils.object2String(packet), JsonUtils.object2String(attachment));
+                            logger.error("client receives packet:[{}] and attachment:[{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment));
                         }
 
                         // 注意：这个return，这样子，asyncAsk的结果就返回了。
@@ -137,9 +134,7 @@ public class Router implements IRouter {
                             }
                             send(gatewaySession, packet, signalAttachmentInGatewayAttachment);
                         } else {
-                            logger.error("gateway receives packet:[{}] and attachment:[{}] from server" +
-                                            ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway."
-                                    , JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
+                            logger.error("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
                         }
                         return;
                     }
@@ -196,8 +191,8 @@ public class Router implements IRouter {
     @Override
     public <T extends IPacket> SyncAnswer<T> syncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument) throws Exception {
         var clientSignalAttachment = new SignalAttachment();
-        var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
-        clientSignalAttachment.setExecutorConsistentHash(executorConsistentHash);
+        var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
+        clientSignalAttachment.setTaskExecutorHash(taskExecutorHash);
 
         try {
             SignalBridge.addSignalAttachment(clientSignalAttachment);
@@ -211,14 +206,12 @@ public class Router implements IRouter {
                 throw new ErrorResponseException((Error) responsePacket);
             }
             if (answerClass != null && answerClass != responsePacket.getClass()) {
-                throw new UnexpectedProtocolException(StringUtils.format("client expect protocol:[{}], but found protocol:[{}]"
-                        , answerClass, responsePacket.getClass().getName()));
+                throw new UnexpectedProtocolException(StringUtils.format("client expect protocol:[{}], but found protocol:[{}]", answerClass, responsePacket.getClass().getName()));
             }
 
             return new SyncAnswer<>((T) responsePacket, clientSignalAttachment);
         } catch (TimeoutException e) {
-            throw new NetTimeOutException(StringUtils.format("syncAsk timeout exception, ask:[{}], attachment:[{}]"
-                    , JsonUtils.object2String(packet), JsonUtils.object2String(clientSignalAttachment)));
+            throw new NetTimeOutException(StringUtils.format("syncAsk timeout exception, ask:[{}], attachment:[{}]", JsonUtils.object2String(packet), JsonUtils.object2String(clientSignalAttachment)));
         } finally {
             SignalBridge.removeSignalAttachment(clientSignalAttachment);
         }
@@ -233,11 +226,9 @@ public class Router implements IRouter {
     @Override
     public <T extends IPacket> AsyncAnswer<T> asyncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument) {
         var clientSignalAttachment = new SignalAttachment();
-        // 因此第3个参数传null，会得到一个随机的值，在得到结果回调时，是随机的线程
-        // 这个值用于返回时，在CompletableFuture中选择哪个线程执行，也就是回到哪个线程
-        var executorConsistentHash = (argument == null) ? RandomUtils.randomInt() : HashUtils.fnvHash(argument);
+        var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
 
-        clientSignalAttachment.setExecutorConsistentHash(executorConsistentHash);
+        clientSignalAttachment.setTaskExecutorHash(taskExecutorHash);
 
         // 服务器在同步或异步的消息处理中，又调用了同步或异步的方法，这时候threadReceiverAttachment不为空
         var serverSignalAttachment = serverReceiveSignalAttachmentThreadLocal.get();
@@ -248,8 +239,7 @@ public class Router implements IRouter {
 
             clientSignalAttachment.getResponseFuture()
                     // 因此超时的情况，返回的是null
-                    .completeOnTimeout(null, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
-                    .thenApply(answer -> {
+                    .completeOnTimeout(null, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS).thenApply(answer -> {
                         if (answer == null) {
                             throw new NetTimeOutException(StringUtils.format("async ask [{}] timeout exception", packet.getClass().getSimpleName()));
                         }
@@ -262,8 +252,7 @@ public class Router implements IRouter {
                             throw new UnexpectedProtocolException("client expect protocol:[{}], but found protocol:[{}]", answerClass, answer.getClass().getName());
                         }
                         return answer;
-                    })
-                    .whenCompleteAsync((answer, throwable) -> {
+                    }).whenCompleteAsync((answer, throwable) -> {
                         // 注意：进入这个方法的时机是：在上面的receive方法中，由于是asyncAsk的消息，attachment不为空，会调用CompletableFuture的complete方法
                         try {
                             SignalBridge.removeSignalAttachment(clientSignalAttachment);

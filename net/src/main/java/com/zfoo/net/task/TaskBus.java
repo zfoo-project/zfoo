@@ -97,17 +97,17 @@ public final class TaskBus {
      * <p>
      * zfoo中通过对线程池的细粒度控制，从而实现了Actor模型。
      * 为了简单，可以把Actor可以理解为一个用户或者一个玩家。
-     * 因为同一个用户或者玩家的uid是固定的，通过uid去计算一致性hash（executorConsistentHash）永远会得到一致的结果，
-     * 从而保证同一个用户或者玩家的请求总能通过executorConsistentHash被路由到同一台服务器的同一个线程去执行，从而避免了并发，实现了无锁化。
+     * 因为同一个用户或者玩家的uid是固定的，通过uid去计算一致性hash（taskExecutorHash）永远会得到一致的结果，
+     * 从而保证同一个用户或者玩家的请求总能通过taskExecutorHash被路由到同一台服务器的同一个线程去执行，从而避免了并发，实现了无锁化。
      * <p>
-     * zfoo所代表的Actor模型，是更加精简的Actor模型，让上层调用无感知，在zfoo中可以简单的理解 actor = executorConsistentHash。
+     * zfoo所代表的Actor模型，是更加精简的Actor模型，让上层调用无感知，在zfoo中可以简单的理解 actor = taskExecutorHash。
      * <p>
      * 在zfoo这套线程模型中，保证了服务器所接收到的Packet（最终被包装成PacketReceiverTask任务），永远只会在同一条线程处理，
-     * TaskBus通过AbstractTaskDispatch去派发PacketReceiverTask任务，具体在哪个线程处理通过IAttachment的executorConsistentHash计算。
+     * TaskBus通过AbstractTaskDispatch去派发PacketReceiverTask任务，具体在哪个线程处理通过IAttachment的taskExecutorHash计算。
      * <p>
-     * IAttachment的不同，executorConsistentHash也不同：
-     * GatewayAttachment：默认是executorConsistentHash等于用户活玩家的uid，也可以通过IGatewayLoadBalancer接口指定
-     * SignalAttachment：executorConsistentHash通过IRouter和IConsumer的argument参数指定
+     * IAttachment的不同，taskExecutorHash也不同：
+     * GatewayAttachment：默认是taskExecutorHash等于用户活玩家的uid，也可以通过IGatewayLoadBalancer接口指定
+     * SignalAttachment：taskExecutorHash通过IRouter和IConsumer的argument参数指定
      */
     public static void dispatch(PacketReceiverTask task) {
         var attachment = task.getAttachment();
@@ -121,16 +121,24 @@ public final class TaskBus {
                 execute((int) uid, task);
             }
         } else {
-            execute(attachment.executorConsistentHash(), task);
+            execute(attachment.taskExecutorHash(), task);
         }
     }
 
-    public static int executorIndex(int executorConsistentHash) {
-        return Math.abs(executorConsistentHash % EXECUTOR_SIZE);
+    public static int calTaskExecutorHash(int taskExecutorHash) {
+        return Math.abs(taskExecutorHash) % EXECUTOR_SIZE;
     }
 
-    public static void execute(int executorConsistentHash, Runnable runnable) {
-        executors[executorIndex(executorConsistentHash)].execute(SafeRunnable.valueOf(runnable));
+    public static int calTaskExecutorHash(Object argument) {
+        return calTaskExecutorHash((argument == null) ? RandomUtils.randomInt() : argument.hashCode());
+    }
+
+    public static void execute(int taskExecutorHash, Runnable runnable) {
+        executors[calTaskExecutorHash(taskExecutorHash)].execute(SafeRunnable.valueOf(runnable));
+    }
+
+    public static void execute(Object argument, Runnable runnable) {
+        execute(calTaskExecutorHash(argument), runnable);
     }
 
     // 在task，event，scheduler线程执行的异步请求，请求成功过后依然在相同的线程执行回调任务
@@ -151,7 +159,7 @@ public final class TaskBus {
             return schedulerExecutor;
         }
 
-        return executors[executorIndex(RandomUtils.randomInt())];
+        return executors[calTaskExecutorHash(RandomUtils.randomInt())];
     }
 
 }

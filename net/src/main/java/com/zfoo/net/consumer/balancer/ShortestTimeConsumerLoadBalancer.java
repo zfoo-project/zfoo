@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 最少时间调用负载均衡器，优先选择调用时间最短的session
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ShortestTimeConsumerLoadBalancer extends AbstractConsumerLoadBalancer {

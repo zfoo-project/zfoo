@@ -87,7 +87,7 @@ public class GatewayRouteHandler extends ServerRouteHandler {
         // 例子：以聊天服务来说，玩家知道自己在哪个群组groupId中，那往这个群发送消息时，会在Packet中带上这个groupId做为一致性hash就可以了。
         if (packet instanceof IGatewayLoadBalancer) {
             var loadBalancerConsistentHashObject = ((IGatewayLoadBalancer) packet).loadBalancerConsistentHashObject();
-            gatewayAttachment.useExecutorConsistentHash(loadBalancerConsistentHashObject);
+            gatewayAttachment.wrapTaskExecutorHash(loadBalancerConsistentHashObject);
             forwardingPacket(packet, gatewayAttachment, loadBalancerConsistentHashObject);
             return;
         } else {

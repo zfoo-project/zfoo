@@ -20,13 +20,13 @@ package com.zfoo.net.router.attachment;
  */
 public class NoAnswerAttachment implements IAttachment {
 
-    public static final transient short PROTOCOL_ID = 4;
+    public static final short PROTOCOL_ID = 4;
 
-    private int executorConsistentHash;
+    private int taskExecutorHash;
 
-    public static NoAnswerAttachment valueOf(int executorConsistentHash) {
+    public static NoAnswerAttachment valueOf(int taskExecutorHash) {
         var attachment = new NoAnswerAttachment();
-        attachment.executorConsistentHash = executorConsistentHash;
+        attachment.taskExecutorHash = taskExecutorHash;
         return attachment;
     }
 
@@ -36,8 +36,8 @@ public class NoAnswerAttachment implements IAttachment {
     }
 
     @Override
-    public int executorConsistentHash() {
-        return executorConsistentHash;
+    public int taskExecutorHash() {
+        return taskExecutorHash;
     }
 
     @Override
@@ -45,12 +45,11 @@ public class NoAnswerAttachment implements IAttachment {
         return PROTOCOL_ID;
     }
 
-
-    public int getExecutorConsistentHash() {
-        return executorConsistentHash;
+    public int getTaskExecutorHash() {
+        return taskExecutorHash;
     }
 
-    public void setExecutorConsistentHash(int executorConsistentHash) {
-        this.executorConsistentHash = executorConsistentHash;
+    public void setTaskExecutorHash(int taskExecutorHash) {
+        this.taskExecutorHash = taskExecutorHash;
     }
 }

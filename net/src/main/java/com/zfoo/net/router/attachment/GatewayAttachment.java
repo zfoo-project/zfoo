@@ -14,7 +14,6 @@ package com.zfoo.net.router.attachment;
 
 import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.session.model.Session;
-import com.zfoo.util.math.HashUtils;
 import org.springframework.lang.Nullable;
 
 /**
@@ -23,7 +22,7 @@ import org.springframework.lang.Nullable;
  */
 public class GatewayAttachment implements IAttachment {
 
-    public static final transient short PROTOCOL_ID = 1;
+    public static final short PROTOCOL_ID = 1;
 
     /**
      * session id
@@ -38,12 +37,8 @@ public class GatewayAttachment implements IAttachment {
      */
     private long uid;
 
-    /**
-     * EN:Whether to use a consistent hash ID as a consistent hash ID
-     * CN:是否使用consistentHashId作为一致性hashId
-     */
-    private boolean useExecutorConsistentHash;
-    private int executorConsistentHash;
+    private boolean useTaskExecutorHashParam;
+    private int taskExecutorHashParam;
 
     /**
      * true for the client, false for the server
@@ -81,12 +76,8 @@ public class GatewayAttachment implements IAttachment {
     }
 
     @Override
-    public int executorConsistentHash() {
-        if (useExecutorConsistentHash) {
-            return executorConsistentHash;
-        } else {
-            return HashUtils.fnvHash(uid);
-        }
+    public int taskExecutorHash() {
+        return useTaskExecutorHashParam ? taskExecutorHashParam : (int) uid;
     }
 
     @Override
@@ -94,9 +85,9 @@ public class GatewayAttachment implements IAttachment {
         return PROTOCOL_ID;
     }
 
-    public void useExecutorConsistentHash(Object argument) {
-        this.useExecutorConsistentHash = true;
-        this.executorConsistentHash = HashUtils.fnvHash(argument);
+    public void wrapTaskExecutorHash(Object argument) {
+        this.useTaskExecutorHashParam = true;
+        this.taskExecutorHashParam = argument.hashCode();
     }
 
     public long getSid() {
@@ -115,20 +106,20 @@ public class GatewayAttachment implements IAttachment {
         this.uid = uid;
     }
 
-    public boolean isUseExecutorConsistentHash() {
-        return useExecutorConsistentHash;
+    public boolean isUseTaskExecutorHashParam() {
+        return useTaskExecutorHashParam;
     }
 
-    public void setUseExecutorConsistentHash(boolean useExecutorConsistentHash) {
-        this.useExecutorConsistentHash = useExecutorConsistentHash;
+    public void setUseTaskExecutorHashParam(boolean useTaskExecutorHashParam) {
+        this.useTaskExecutorHashParam = useTaskExecutorHashParam;
     }
 
-    public int getExecutorConsistentHash() {
-        return executorConsistentHash;
+    public int getTaskExecutorHashParam() {
+        return taskExecutorHashParam;
     }
 
-    public void setExecutorConsistentHash(int executorConsistentHash) {
-        this.executorConsistentHash = executorConsistentHash;
+    public void setTaskExecutorHashParam(int taskExecutorHashParam) {
+        this.taskExecutorHashParam = taskExecutorHashParam;
     }
 
     public boolean isClient() {

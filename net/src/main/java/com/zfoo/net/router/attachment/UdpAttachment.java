@@ -20,7 +20,7 @@ import com.zfoo.util.math.RandomUtils;
  */
 public class UdpAttachment implements IAttachment {
 
-    public static final transient short PROTOCOL_ID = 2;
+    public static final short PROTOCOL_ID = 2;
 
     private String host;
     private int port;
@@ -38,7 +38,7 @@ public class UdpAttachment implements IAttachment {
     }
 
     @Override
-    public int executorConsistentHash() {
+    public int taskExecutorHash() {
         return RandomUtils.randomInt();
     }
 

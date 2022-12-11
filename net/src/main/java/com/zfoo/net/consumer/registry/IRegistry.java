@@ -22,7 +22,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IRegistry {

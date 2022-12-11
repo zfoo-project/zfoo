@@ -19,7 +19,6 @@ import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -29,7 +28,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalancer {

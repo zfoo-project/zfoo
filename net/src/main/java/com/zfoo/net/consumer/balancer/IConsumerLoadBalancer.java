@@ -19,7 +19,7 @@ import com.zfoo.protocol.IPacket;
 import org.springframework.lang.Nullable;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IConsumerLoadBalancer {

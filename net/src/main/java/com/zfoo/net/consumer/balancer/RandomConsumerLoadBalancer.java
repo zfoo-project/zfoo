@@ -22,7 +22,7 @@ import com.zfoo.util.math.RandomUtils;
 /**
  * 随机负载均衡器，任选服务提供者的其中之一
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class RandomConsumerLoadBalancer extends AbstractConsumerLoadBalancer {

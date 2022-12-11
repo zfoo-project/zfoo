@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SignalAttachment implements IAttachment {
 
-    public static final transient short PROTOCOL_ID = 0;
+    public static final short PROTOCOL_ID = 0;
 
     public static final AtomicInteger ATOMIC_ID = new AtomicInteger(0);
 
@@ -35,10 +35,10 @@ public class SignalAttachment implements IAttachment {
     private int signalId = ATOMIC_ID.incrementAndGet();
 
     /**
-     * EN:The parameter used to calculate the consistency hash in Task Bus
-     * CN:用来在TaskBus中计算一致性hash的参数
+     * EN:The parameter used to calculate the hash in TaskBus to determine which thread the task is executed on
+     * CN:用来在TaskBus中计算hash的参数，用来决定任务在哪一条线程执行
      */
-    private int executorConsistentHash = -1;
+    private int taskExecutorHash = -1;
 
     /**
      * true for the client, false for the server
@@ -66,8 +66,8 @@ public class SignalAttachment implements IAttachment {
     }
 
     @Override
-    public int executorConsistentHash() {
-        return executorConsistentHash;
+    public int taskExecutorHash() {
+        return taskExecutorHash;
     }
 
     public long getTimestamp() {
@@ -109,12 +109,12 @@ public class SignalAttachment implements IAttachment {
         this.signalId = signalId;
     }
 
-    public int getExecutorConsistentHash() {
-        return executorConsistentHash;
+    public int getTaskExecutorHash() {
+        return taskExecutorHash;
     }
 
-    public void setExecutorConsistentHash(int executorConsistentHash) {
-        this.executorConsistentHash = executorConsistentHash;
+    public void setTaskExecutorHash(int taskExecutorHash) {
+        this.taskExecutorHash = taskExecutorHash;
     }
 
     public boolean isClient() {

@@ -25,9 +25,7 @@ public interface IAttachment extends IPacket {
     /**
      * EN:Used to determine which thread the message is processed on
      * CN:用来确定这条消息在哪一个线程处理
-     *
-     * @return 一致性hashId
      */
-    int executorConsistentHash();
+    int taskExecutorHash();
 
 }

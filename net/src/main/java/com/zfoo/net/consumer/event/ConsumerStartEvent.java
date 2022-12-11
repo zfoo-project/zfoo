@@ -18,7 +18,7 @@ import com.zfoo.net.consumer.registry.RegisterVO;
 import com.zfoo.net.session.model.Session;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ConsumerStartEvent implements IEvent {
