@@ -126,6 +126,7 @@ public final class TaskBus {
     }
 
     public static int calTaskExecutorHash(int taskExecutorHash) {
+        // Other hash algorithms can be customized to make the distribution more uniform
         return Math.abs(taskExecutorHash) % EXECUTOR_SIZE;
     }
 
