@@ -21,30 +21,31 @@ import com.zfoo.protocol.util.ReflectionUtils;
 import java.lang.reflect.Method;
 
 /**
- * 动态代理被PacketReceiver注解标注的方法，为了避免反射最终会用javassist字节码增强的方法去代理PacketReceiverDefinition
+ * EN:Dynamic proxy methods annotated by PacketReceiver annotations, to avoid reflection, will eventually use javassist bytecode enhanced methods to proxy this class
+ * CN:动态代理被PacketReceiver注解标注的方法，为了避免反射最终会用javassist字节码增强的方法去代理PacketReceiverDefinition
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class PacketReceiverDefinition implements IPacketReceiver {
 
     /**
-     * 一个controller的bean
+     * A controller bean
      */
     private Object bean;
 
     /**
-     * 被PacketReceiver注解标注的方法，接受的方法public void atTcpHelloRequest(Session session, TcpHelloRequest request)
+     * Methods annotated by PacketReceiver annotations, eg: public void atTcpHelloRequest(Session session, TcpHelloRequest request)
      */
     private Method method;
 
     /**
-     * 接收的包的Class类，如TcpHelloRequest
+     * The protocol class that receives the package, eg: TcpHelloRequest
      */
     private Class<?> packetClazz;
 
     /**
-     * 接收的包的附加包的Class类，如GatewayAttachment
+     * attachment class, eg: GatewayAttachment
      */
     private Class<?> attachmentClazz;
 

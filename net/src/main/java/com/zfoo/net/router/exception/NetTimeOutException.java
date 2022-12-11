@@ -14,7 +14,7 @@
 package com.zfoo.net.router.exception;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class NetTimeOutException extends RuntimeException {

@@ -15,7 +15,7 @@ package com.zfoo.net.router.attachment;
 import com.zfoo.util.math.RandomUtils;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class UdpAttachment implements IAttachment {

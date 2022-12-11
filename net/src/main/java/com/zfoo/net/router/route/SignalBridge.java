@@ -22,9 +22,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
- * 同步或异步的调用控制器，同步和异步调用的信号沟通桥梁
+ * EN:Synchronous or asynchronous call controller, synchronous and asynchronous call signal communication bridge
+ * CN:同步或异步的调用控制器，同步和异步调用的信号沟通桥梁
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SignalBridge {
@@ -35,20 +36,16 @@ public class SignalBridge {
     private static final int SIGNAL_MASK = 0B00000000_00000000_01111111_11111111;
 
     /**
-     * 用来保存同步或异步请求的SignalAttachment附加包，signalId和SIGNAL_MASK取与的结果hash作为数组索引，使用AtomicReferenceArray只是为了提升性能
-     */
-    private static final AtomicReferenceArray<SignalAttachment> signalAttachmentArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
-
-    /**
-     * 用来保存同步或异步请求的SignalAttachment附加包，key：signalId
+     * key：signalId
      */
     private static final Map<Integer, SignalAttachment> signalAttachmentMap = new ConcurrentHashMap<>(1000);
+    private static final AtomicReferenceArray<SignalAttachment> signalAttachmentArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
 
     public static void addSignalAttachment(SignalAttachment signalAttachment) {
         var signalId = signalAttachment.getSignalId();
         var hash = signalId & SIGNAL_MASK;
 
-        // 使用AtomicReferenceArray只是为了提升性能，仅使用ConcurrentHashMap依然可以运行
+        // Using an Atomic Reference Array is just to improve performance, and only using a ConcurrentHashMap will still work
         if (signalAttachmentArray.compareAndSet(hash, null, signalAttachment)) {
             return;
         }

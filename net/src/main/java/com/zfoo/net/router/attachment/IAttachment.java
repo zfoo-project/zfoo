@@ -15,7 +15,7 @@ package com.zfoo.net.router.attachment;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IAttachment extends IPacket {
@@ -23,7 +23,8 @@ public interface IAttachment extends IPacket {
     AttachmentType packetType();
 
     /**
-     * 用来确定这条消息在哪一个线程处理
+     * EN:Used to determine which thread the message is processed on
+     * CN:用来确定这条消息在哪一个线程处理
      *
      * @return 一致性hashId
      */

@@ -18,7 +18,7 @@ import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IPacketReceiver {

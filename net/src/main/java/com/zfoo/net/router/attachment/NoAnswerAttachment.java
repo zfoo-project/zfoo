@@ -13,18 +13,15 @@
 package com.zfoo.net.router.attachment;
 
 /**
- * 附加包对业务层透明，禁止在业务层使用
+ * not used attachment
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class NoAnswerAttachment implements IAttachment {
 
     public static final transient short PROTOCOL_ID = 4;
 
-    /**
-     * 用来在TaskBus中计算一致性hash的参数
-     */
     private int executorConsistentHash;
 
     public static NoAnswerAttachment valueOf(int executorConsistentHash) {

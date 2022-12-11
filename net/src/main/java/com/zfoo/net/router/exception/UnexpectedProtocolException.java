@@ -16,7 +16,7 @@ package com.zfoo.net.router.exception;
 import com.zfoo.protocol.exception.RunException;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class UnexpectedProtocolException extends RunException {

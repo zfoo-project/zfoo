@@ -18,9 +18,7 @@ import com.zfoo.util.math.HashUtils;
 import org.springframework.lang.Nullable;
 
 /**
- * 附加包对业务层透明，禁止在业务层使用
- *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class GatewayAttachment implements IAttachment {
@@ -28,32 +26,34 @@ public class GatewayAttachment implements IAttachment {
     public static final transient short PROTOCOL_ID = 1;
 
     /**
-     * session的id，一般是客户端连接网关的那个sid
+     * session id
      */
     private long sid;
 
     /**
-     * 用戶Id，从网关转发到后面的消息必须要附带用户的Id信息，要不然无法知道是哪个用户发过来的，0代表没有用户id
+     * EN:User ID, the message forwarded from the gateway to the back must be accompanied by the user's ID information,
+     * otherwise it is impossible to know which user sent it, 0 means no user ID
+     * <p>
+     * CN:用戶Id，从网关转发到后面的消息必须要附带用户的Id信息，要不然无法知道是哪个用户发过来的，0代表没有用户id
      */
     private long uid;
 
     /**
-     * 是否使用consistentHashId作为一致性hashId
+     * EN:Whether to use a consistent hash ID as a consistent hash ID
+     * CN:是否使用consistentHashId作为一致性hashId
      */
     private boolean useExecutorConsistentHash;
-    /**
-     * 用来在TaskBus中计算一致性hash的参数
-     */
     private int executorConsistentHash;
 
     /**
-     * true为客户端，false为服务端
+     * true for the client, false for the server
      */
     private boolean client;
 
 
     /**
-     * 客户端发到网关的可能是一个带有同步或者异步的附加包，网关转发的时候需要把这个附加包给带上
+     * EN:The client may send an packet with synchronous or asynchronous to the gateway, and the gateway needs to bring this attachment when forwarding
+     * CN:客户端发到网关的可能是一个带有同步或者异步的附加包，网关转发的时候需要把这个附加包给带上
      */
     private SignalAttachment signalAttachment;
 

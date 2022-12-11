@@ -20,18 +20,18 @@ import com.zfoo.net.session.model.Session;
 import com.zfoo.protocol.IPacket;
 import org.springframework.lang.Nullable;
 
-
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IRouter {
 
+    /**
+     * EN:send() and receive() are the entry points for sending and receiving messages, which can be called directly
+     * CN:send()和receive()是消息的发送和接收的入口，可以直接调用
+     */
     void send(Session session, IPacket packet);
 
-    /**
-     * send()和receive()是消息的发送和接收的入口，可以直接调用，是最轻量级发送和接收方式
-     */
     void send(Session session, IPacket packet, @Nullable IAttachment attachment);
 
     void receive(Session session, IPacket packet, @Nullable IAttachment attachment);

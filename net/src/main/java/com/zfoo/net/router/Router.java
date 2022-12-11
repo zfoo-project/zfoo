@@ -51,9 +51,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * 消息派发
+ * Message distribution
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class Router implements IRouter {
@@ -69,13 +69,8 @@ public class Router implements IRouter {
      */
     private final FastThreadLocal<SignalAttachment> serverReceiveSignalAttachmentThreadLocal = new FastThreadLocal<>();
 
-
     /**
      * 在服务端收到数据后，会调用这个方法. 这个方法在BaseRouteHandler.java的channelRead中被调用
-     *
-     * @param session
-     * @param packet
-     * @param attachment
      */
     @Override
     public void receive(Session session, IPacket packet, @Nullable IAttachment attachment) {
@@ -234,13 +229,6 @@ public class Router implements IRouter {
      * 注意：
      * 1.这个里面其实还是调用send发送的消息
      * 2.这个argument的参数，只用于provider处哪个线程执行，其实就是hashId，如：工会业务，则传入guildId，回调回来后，一定会在发起者线程。
-     *
-     * @param session
-     * @param packet
-     * @param answerClass
-     * @param argument
-     * @param <T>
-     * @return
      */
     @Override
     public <T extends IPacket> AsyncAnswer<T> asyncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument) {
@@ -344,7 +332,7 @@ public class Router implements IRouter {
 
             // 调用PacketReceiver,进行真正的业务处理,这个submit只是根据packet找到protocolId，然后进行反射调用
             // 这个在哪个线程处理取决于：这个上层的PacketReceiverTask被丢到了哪个线程中
-            PacketBus.submit(session, packet, attachment);
+            PacketBus.route(session, packet, attachment);
         } catch (Exception e) {
             EventBus.submit(ServerExceptionEvent.valueOf(session, packet, attachment, e));
             logger.error(StringUtils.format("e[uid:{}][sid:{}]未知exception异常", session.getAttribute(AttributeType.UID), session.getSid(), e.getMessage()), e);

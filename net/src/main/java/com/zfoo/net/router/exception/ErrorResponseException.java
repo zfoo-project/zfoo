@@ -16,7 +16,7 @@ package com.zfoo.net.router.exception;
 import com.zfoo.net.packet.common.Error;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ErrorResponseException extends RuntimeException {

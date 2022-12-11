@@ -20,13 +20,11 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.security.IdUtils;
 import javassist.*;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class EnhanceUtils {
@@ -51,32 +49,27 @@ public abstract class EnhanceUtils {
 
     public static IPacketReceiver createPacketReceiver(PacketReceiverDefinition definition) throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         var classPool = ClassPool.getDefault();
+        var bean = definition.getBean();
+        var method = definition.getMethod();
+        var packetClazz = definition.getPacketClazz();
+        var attachmentClazz = definition.getAttachmentClazz();
 
-        Object bean = definition.getBean();
-        Method method = definition.getMethod();
-        Class<?> packetClazz = definition.getPacketClazz();
-        Class<?> attachmentClazz = definition.getAttachmentClazz();
-
-        // 定义类名称
-        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + "Dispatcher" + IdUtils.getLocalIntId());
+        var enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + "Dispatcher" + IdUtils.getLocalIntId());
         enhanceClazz.addInterface(classPool.get(IPacketReceiver.class.getCanonicalName()));
 
-        // 定义类中的一个成员
-        CtField field = new CtField(classPool.get(bean.getClass().getCanonicalName()), "bean", enhanceClazz);
+        var field = new CtField(classPool.get(bean.getClass().getCanonicalName()), "bean", enhanceClazz);
         field.setModifiers(Modifier.PRIVATE);
         enhanceClazz.addField(field);
 
-        // 定义类的构造器
-        CtConstructor constructor = new CtConstructor(classPool.get(new String[]{bean.getClass().getCanonicalName()}), enhanceClazz);
+        var constructor = new CtConstructor(classPool.get(new String[]{bean.getClass().getCanonicalName()}), enhanceClazz);
         constructor.setBody("{this.bean=$1;}");
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
-        // 定义类实现的接口方法
-        CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "invoke", classPool.get(new String[]{Session.class.getCanonicalName(), IPacket.class.getCanonicalName(), IAttachment.class.getCanonicalName()}), enhanceClazz);
+        var invokeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "invoke", classPool.get(new String[]{Session.class.getCanonicalName(), IPacket.class.getCanonicalName(), IAttachment.class.getCanonicalName()}), enhanceClazz);
         invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         if (attachmentClazz == null) {
-            // 强制类型转换
+            // Cast type(强制类型转换)
             String invokeMethodBody = StringUtils.format("{this.bean.{}($1, ({})$2);}", method.getName(), packetClazz.getCanonicalName());
             invokeMethod.setBody(invokeMethodBody);
         } else {
@@ -85,12 +78,11 @@ public abstract class EnhanceUtils {
         }
         enhanceClazz.addMethod(invokeMethod);
 
-        // 释放缓存
         enhanceClazz.detach();
 
-        Class<?> resultClazz = enhanceClazz.toClass(IPacketReceiver.class);
-        Constructor<?> resultConstructor = resultClazz.getConstructor(bean.getClass());
-        IPacketReceiver receiver = (IPacketReceiver) resultConstructor.newInstance(bean);
+        var resultClazz = enhanceClazz.toClass(IPacketReceiver.class);
+        var resultConstructor = resultClazz.getConstructor(bean.getClass());
+        var receiver = (IPacketReceiver) resultConstructor.newInstance(bean);
         return receiver;
     }
 }

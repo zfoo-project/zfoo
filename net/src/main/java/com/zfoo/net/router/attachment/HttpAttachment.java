@@ -17,7 +17,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class HttpAttachment implements IAttachment {
