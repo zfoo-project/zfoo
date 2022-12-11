@@ -15,9 +15,7 @@ package com.zfoo.net.task;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
-import com.zfoo.net.task.dispatcher.AbstractTaskDispatch;
-import com.zfoo.net.task.dispatcher.ITaskDispatch;
-import com.zfoo.net.task.model.PacketReceiverTask;
+import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -29,8 +27,10 @@ import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -46,9 +46,6 @@ public final class TaskBus {
     // 线程池的大小，也可以通过provider thread配置指定
     public static final int EXECUTOR_SIZE;
 
-    private static final ITaskDispatch taskDispatch;
-
-
     /**
      * 使用不同的线程池，让线程池之间实现隔离，互不影响
      */
@@ -58,11 +55,7 @@ public final class TaskBus {
         var localConfig = NetContext.getConfigManager().getLocalConfig();
         var providerConfig = localConfig.getProvider();
 
-        taskDispatch = AbstractTaskDispatch.valueOf(providerConfig == null ? "consistent-hash" : providerConfig.getTaskDispatch());
-
-        EXECUTOR_SIZE = (providerConfig == null || StringUtils.isBlank(providerConfig.getThread()))
-                ? (Runtime.getRuntime().availableProcessors() + 1)
-                : Integer.parseInt(providerConfig.getThread());
+        EXECUTOR_SIZE = (providerConfig == null || StringUtils.isBlank(providerConfig.getThread())) ? (Runtime.getRuntime().availableProcessors() + 1) : Integer.parseInt(providerConfig.getThread());
 
         executors = new ExecutorService[EXECUTOR_SIZE];
         for (int i = 0; i < executors.length; i++) {
@@ -116,9 +109,20 @@ public final class TaskBus {
      * GatewayAttachment：默认是executorConsistentHash等于用户活玩家的uid，也可以通过IGatewayLoadBalancer接口指定
      * SignalAttachment：executorConsistentHash通过IRouter和IConsumer的argument参数指定
      */
-    public static void submit(PacketReceiverTask task) {
-        // 里面会看到是：其中一致性hash是根据附加包记录的hashId进行选择哪个线程进行业务处理
-        taskDispatch.getExecutor(executors, task).execute(task);
+    public static void dispatch(PacketReceiverTask task) {
+        var attachment = task.getAttachment();
+
+        if (attachment == null) {
+            var session = task.getSession();
+            var uid = session.getAttribute(AttributeType.UID);
+            if (uid == null) {
+                execute((int) session.getSid(), task);
+            } else {
+                execute((int) uid, task);
+            }
+        } else {
+            execute(attachment.executorConsistentHash(), task);
+        }
     }
 
     public static int executorIndex(int executorConsistentHash) {

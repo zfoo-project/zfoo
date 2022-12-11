@@ -32,7 +32,7 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class NetDefinitionParser implements BeanDefinitionParser {
@@ -179,7 +179,6 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         var clazz = ProviderConfig.class;
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
-        resolvePlaceholder("task-dispatch", "taskDispatch", builder, element, parserContext);
         resolvePlaceholder("thread", "thread", builder, element, parserContext);
         resolvePlaceholder("address", "address", builder, element, parserContext);
 

@@ -25,7 +25,7 @@
         </net:registry>
 
         <!--1.这里声明自己是服务提供者 2.提供接口是providerTest模块下的接口 3.提供者的名字是myProvider1-->
-        <net:providers task-dispatch="consistent-hash">
+        <net:providers>
             <net:provider protocol-module="providerTest" provider="myProvider1"/>
             <net:provider protocol-module="providerTest" provider="myProvider2"/>
         </net:providers>

@@ -34,8 +34,8 @@ import com.zfoo.net.router.route.PacketBus;
 import com.zfoo.net.router.route.SignalBridge;
 import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.net.session.model.Session;
+import com.zfoo.net.task.PacketReceiverTask;
 import com.zfoo.net.task.TaskBus;
-import com.zfoo.net.task.model.PacketReceiverTask;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.JsonUtils;
@@ -151,7 +151,7 @@ public class Router implements IRouter {
 
         // 正常发送消息的接收,把客户端的业务请求包装下到路由策略指定的线程进行业务处理
         // 注意：像客户端以asyncAsk发送请求，在服务器处理完后返回结果，在请求方也是进入这个receive方法，但是attachment不为空，会提前return掉不会走到这
-        TaskBus.submit(new PacketReceiverTask(session, packet, attachment));
+        TaskBus.dispatch(new PacketReceiverTask(session, packet, attachment));
     }
 
     @Override
