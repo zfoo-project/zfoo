@@ -38,7 +38,7 @@ public class TransactionTest {
         var context = new ClassPathXmlApplicationContext("application.xml");
 
         /* Step 1: Start a client session. */
-        var clientSession = OrmContext.getOrmManager().getClientSession();
+        var clientSession = OrmContext.getOrmManager().mongoClient().startSession();
 
         /* Step 2: Optional. Define options to use for the transaction. */
 

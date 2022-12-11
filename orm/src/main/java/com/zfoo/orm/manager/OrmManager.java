@@ -16,7 +16,10 @@ package com.zfoo.orm.manager;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-import com.mongodb.client.*;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.zfoo.orm.OrmContext;
@@ -221,6 +224,11 @@ public class OrmManager implements IOrmManager {
     }
 
     @Override
+    public MongoClient mongoClient() {
+        return mongoClient;
+    }
+
+    @Override
     public <E extends IEntity<?>> IEntityCaches<?, E> getEntityCaches(Class<E> clazz) {
         var usable = allEntityCachesUsableMap.get(clazz);
         if (usable == null) {
@@ -235,11 +243,6 @@ public class OrmManager implements IOrmManager {
     @Override
     public Collection<IEntityCaches<?, ?>> getAllEntityCaches() {
         return Collections.unmodifiableCollection(entityCachesMap.values());
-    }
-
-    @Override
-    public ClientSession getClientSession() {
-        return mongoClient.startSession();
     }
 
     @Override
