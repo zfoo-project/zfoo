@@ -42,9 +42,6 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
             case "consistent-hash":
                 balancer = ConsistentHashConsumerLoadBalancer.getInstance();
                 break;
-            case "shortest-time":
-                balancer = ShortestTimeConsumerLoadBalancer.getInstance();
-                break;
             default:
                 throw new RuntimeException(StringUtils.format("无法识别负载均衡器[{}]", loadBalancer));
         }

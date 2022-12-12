@@ -18,7 +18,7 @@ import com.zfoo.net.session.model.Session;
 import java.util.Map;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface ISessionManager {

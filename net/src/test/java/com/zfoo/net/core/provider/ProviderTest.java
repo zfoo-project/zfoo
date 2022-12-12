@@ -40,7 +40,7 @@ public class ProviderTest {
      * RPC教程：
      * 1.首先必须保证启动zookeeper
      * 2.启动服务提供者，startProvider0，startProvider1，startProvider2
-     * 3.启动服务消费者，startSyncRandomConsumer，startAsyncRandomConsumer，startConsistentSessionConsumer，startShortestTimeConsumer
+     * 3.启动服务消费者，startSyncRandomConsumer，startAsyncRandomConsumer，startConsistentSessionConsumer
      * 4.每个消费者都是通过不同的策略消费，注意区别
      */
     @Test
@@ -120,28 +120,6 @@ public class ProviderTest {
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(3000);
             NetContext.getConsumer().asyncAsk(ask, ProviderMessAnswer.class, 100).whenComplete(answer -> {
-                logger.info("消费者请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
-            });
-        }
-
-        ThreadUtils.sleep(Long.MAX_VALUE);
-    }
-
-    /**
-     * 最短时间的消费方式
-     */
-    @Test
-    public void startShortestTimeConsumer() {
-        var context = new ClassPathXmlApplicationContext("provider/consumer_shortest_time_config.xml");
-        SessionUtils.printSessionInfo();
-
-        var ask = new ProviderMessAsk();
-        ask.setMessage("Hello, this is the consumer!");
-        var atomicInteger = new AtomicInteger(0);
-
-        for (int i = 0; i < 1000; i++) {
-            ThreadUtils.sleep(3000);
-            NetContext.getConsumer().asyncAsk(ask, ProviderMessAnswer.class, null).whenComplete(answer -> {
                 logger.info("消费者请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
             });
         }

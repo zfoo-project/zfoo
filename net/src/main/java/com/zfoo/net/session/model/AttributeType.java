@@ -14,7 +14,7 @@
 package com.zfoo.net.session.model;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public enum AttributeType {
@@ -24,8 +24,6 @@ public enum AttributeType {
      * 一般是客户端session
      */
     CONSUMER,
-
-    RESPONSE_TIME,
 
     /**
      * session的uid

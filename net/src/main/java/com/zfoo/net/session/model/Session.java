@@ -13,6 +13,7 @@
 
 package com.zfoo.net.session.model;
 
+import com.zfoo.net.consumer.registry.RegisterVO;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.Channel;
 
@@ -23,7 +24,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class Session implements Closeable {
@@ -40,6 +41,10 @@ public class Session implements Closeable {
     /**
      * Session附带的属性参数
      */
+    private RegisterVO consumerAttribute = null;
+
+    private long uid = Long.MIN_VALUE;
+
     private Map<AttributeType, Object> attributes = new EnumMap<>(AttributeType.class);
 
 
