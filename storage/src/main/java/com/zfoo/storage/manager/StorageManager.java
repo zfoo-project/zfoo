@@ -260,11 +260,14 @@ public class StorageManager implements IStorageManager {
                 packageSearchPath = packageSearchPath.replaceAll("//", "/");
                 try {
                     for(var resource :resourcePatternResolver.getResources(packageSearchPath)){
-                        if(StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.CSV.getType())
-                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.EXCEL_XLS.getType())
-                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.EXCEL_XLSX.getType())
-                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.JSON.getType()))
+                        var resourceFilename=resource.getFilename();
+                        if(resourceFilename.endsWith(ResourceEnum.CSV.getType())
+                                || resourceFilename.endsWith(ResourceEnum.EXCEL_XLS.getType())
+                                || resourceFilename.endsWith(ResourceEnum.EXCEL_XLSX.getType())
+                                || resourceFilename.endsWith(ResourceEnum.JSON.getType())){
                             resourceDefSet.add(new ResourceDef(clazz,resource));
+                        }
+
                     }
                 } catch (Exception e) {
                     // do nothing
@@ -275,11 +278,13 @@ public class StorageManager implements IStorageManager {
                     packageSearchPath = StringUtils.format("{}/{}.*", resourceLocation, clazz.getSimpleName());
                     packageSearchPath = packageSearchPath.replaceAll("//", "/");
                     for(var resource :resourcePatternResolver.getResources(packageSearchPath)){
-                        if(StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.CSV.getType())
-                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.EXCEL_XLS.getType())
-                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.EXCEL_XLSX.getType())
-                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.JSON.getType()))
+                        var resourceFilename=resource.getFilename();
+                        if(resourceFilename.endsWith(ResourceEnum.CSV.getType())
+                                || resourceFilename.endsWith(ResourceEnum.EXCEL_XLS.getType())
+                                || resourceFilename.endsWith(ResourceEnum.EXCEL_XLSX.getType())
+                                || resourceFilename.endsWith(ResourceEnum.JSON.getType())){
                             resourceDefSet.add(new ResourceDef(clazz,resource));
+                        }
                     }
                 }
             }
@@ -290,10 +295,11 @@ public class StorageManager implements IStorageManager {
                 var resourceNames=new String[resourceDefSet.size()];
                 var index=0;
                 for(var resourceDef:resourceDefSet){
-                    resourceNames[index++]=resourceDef.getResource().getFile().getAbsolutePath();
+                    resourceNames[index++]=StringUtils.format("[{}]{}",index,resourceDef.getResource().getFile().getAbsolutePath());
                 }
-
-                throw new RuntimeException(StringUtils.format("资源类[class:{}]找到重复的配置文件{}", clazz.getSimpleName(),StringUtils.stringArrayToString(resourceNames)));
+                StringJoiner stringJoiner=new StringJoiner(",","[","]");
+                Arrays.stream(resourceNames).forEach(stringJoiner::add);
+                throw new RuntimeException(StringUtils.format("资源类[class:{}]找到重复的配置文件{}", clazz.getSimpleName(),stringJoiner.toString()));
             } else {
                 return ((ResourceDef)(resourceDefSet.toArray()[0])).getResource();
             }
