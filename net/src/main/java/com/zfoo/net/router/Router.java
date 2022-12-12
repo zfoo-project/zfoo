@@ -15,10 +15,10 @@ package com.zfoo.net.router;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
+import com.zfoo.net.core.event.ServerExceptionEvent;
 import com.zfoo.net.core.gateway.model.AuthUidToGatewayCheck;
 import com.zfoo.net.core.gateway.model.AuthUidToGatewayConfirm;
 import com.zfoo.net.core.gateway.model.AuthUidToGatewayEvent;
-import com.zfoo.net.core.tcp.model.ServerExceptionEvent;
 import com.zfoo.net.packet.common.Error;
 import com.zfoo.net.packet.common.Heartbeat;
 import com.zfoo.net.packet.model.EncodedPacketInfo;

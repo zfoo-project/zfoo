@@ -15,7 +15,7 @@ package com.zfoo.net.handler;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
-import com.zfoo.net.core.tcp.model.ClientSessionInactiveEvent;
+import com.zfoo.net.core.event.ClientSessionInactiveEvent;
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;

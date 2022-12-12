@@ -13,7 +13,7 @@
 
 package com.zfoo.net;
 
-import com.zfoo.net.config.manager.IConfigManager;
+import com.zfoo.net.config.IConfigManager;
 import com.zfoo.net.consumer.IConsumer;
 import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.core.AbstractServer;

@@ -114,7 +114,7 @@ public final class TaskBus {
         if (attachment == null) {
             var session = task.getSession();
             var uid = session.getUid();
-            if (uid < 0) {
+            if (uid <= 0) {
                 execute((int) session.getSid(), task);
             } else {
                 execute(uid, task);

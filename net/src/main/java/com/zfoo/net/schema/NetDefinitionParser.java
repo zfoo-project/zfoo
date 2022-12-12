@@ -14,7 +14,7 @@
 package com.zfoo.net.schema;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.config.manager.ConfigManager;
+import com.zfoo.net.config.ConfigManager;
 import com.zfoo.net.config.model.*;
 import com.zfoo.net.consumer.Consumer;
 import com.zfoo.net.packet.service.PacketService;

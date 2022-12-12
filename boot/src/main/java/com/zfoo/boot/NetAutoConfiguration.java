@@ -13,7 +13,7 @@
 package com.zfoo.boot;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.config.manager.ConfigManager;
+import com.zfoo.net.config.ConfigManager;
 import com.zfoo.net.config.model.NetConfig;
 import com.zfoo.net.consumer.Consumer;
 import com.zfoo.net.packet.service.PacketService;

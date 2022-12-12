@@ -73,7 +73,7 @@ org.springframework.context.event.internalEventListenerProcessor
 org.springframework.context.event.internalEventListenerFactory
 com.zfoo.net.config.model.NetConfig
 com.zfoo.net.NetContext
-com.zfoo.net.config.manager.ConfigManager
+com.zfoo.net.config.ConfigManager
 com.zfoo.net.packet.service.PacketService
 com.zfoo.net.router.Router
 com.zfoo.net.consumer.Consumer

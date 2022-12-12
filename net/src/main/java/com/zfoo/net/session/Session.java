@@ -33,10 +33,10 @@ public class Session implements Closeable {
     private long sid;
 
     /**
-     * EN:The default user ID is an ID greater than 0, or less than 0 if there is no login
-     * CN:默认用户的id都是大于0的id，如果没有登录则小于0
+     * EN:The default user ID is an ID greater than 0, or equal 0 if there is no login
+     * CN:默认用户的id都是大于0的id，如果没有登录则等于0
      */
-    private long uid = -1;
+    private long uid = 0;
 
     private Channel channel;
 
