@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,28 +10,33 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.session.model;
+package com.zfoo.net.session;
+
+import java.util.Map;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public enum AttributeType {
+public interface ISessionManager {
+
+    void addServerSession(Session session);
+
+    void removeServerSession(Session session);
+
+    Session getServerSession(Long id);
+
+    Map<Long, Session> getServerSessionMap();
 
 
-    /**
-     * 一般是客户端session
-     */
-    CONSUMER,
+    void addClientSession(Session session);
 
-    /**
-     * session的uid
-     */
-    UID,
+    void removeClientSession(Session session);
 
-    /**
-     * 网关ip
-     */
-    GATEWAY_HOST_AND_PORT,
+    Session getClientSession(Long id);
+
+    Map<Long, Session> getClientSessionMap();
+
+    int getClientSessionChangeId();
 
 }

@@ -13,7 +13,7 @@
 
 package com.zfoo.net.consumer.balancer;
 
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.exception.RunException;
@@ -42,7 +42,7 @@ public class RandomConsumerLoadBalancer extends AbstractConsumerLoadBalancer {
         var sessions = getSessionsByModule(module);
 
         if (sessions.isEmpty()) {
-            throw new RunException("一致性hash负载均衡[protocolId:{}]参数[argument:{}],没有服务提供者提供服务[module:{}]", packet.protocolId(), argument, module);
+            throw new RunException("RandomConsumerLoadBalancer [protocolId:{}][argument:{}], no service provides the [module:{}]", packet.protocolId(), argument, module);
         }
 
         return RandomUtils.randomEle(sessions);

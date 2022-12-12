@@ -13,8 +13,7 @@
 
 package com.zfoo.net.util;
 
-import com.zfoo.net.session.model.AttributeType;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -65,7 +64,7 @@ public abstract class SessionUtils {
             // to avoid: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer
             // 有些情况当建立连接过后迅速关闭，这个时候取remoteAddress会有异常
         }
-        return StringUtils.format(CHANNEL_INFO_TEMPLATE, remoteAddress, session.getSid(), session.getAttribute(AttributeType.UID));
+        return StringUtils.format(CHANNEL_INFO_TEMPLATE, remoteAddress, session.getSid(), session.getUid());
     }
 
     public static String sessionSimpleInfo(ChannelHandlerContext ctx) {
@@ -80,7 +79,7 @@ public abstract class SessionUtils {
         if (session == null) {
             return CHANNEL_SIMPLE_INFO_TEMPLATE;
         }
-        return StringUtils.format(CHANNEL_SIMPLE_INFO_TEMPLATE, session.getSid(), session.getAttribute(AttributeType.UID));
+        return StringUtils.format(CHANNEL_SIMPLE_INFO_TEMPLATE, session.getSid(), session.getUid());
     }
 
 }

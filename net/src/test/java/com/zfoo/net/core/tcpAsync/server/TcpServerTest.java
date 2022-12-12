@@ -77,5 +77,5 @@ com.zfoo.net.config.manager.ConfigManager
 com.zfoo.net.packet.service.PacketService
 com.zfoo.net.router.Router
 com.zfoo.net.consumer.Consumer
-com.zfoo.net.session.manager.SessionManager
+com.zfoo.net.session.SessionManager
  */

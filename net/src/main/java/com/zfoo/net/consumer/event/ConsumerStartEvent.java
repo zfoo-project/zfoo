@@ -15,7 +15,7 @@ package com.zfoo.net.consumer.event;
 
 import com.zfoo.event.model.event.IEvent;
 import com.zfoo.net.consumer.registry.RegisterVO;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 
 /**
  * @author godotg

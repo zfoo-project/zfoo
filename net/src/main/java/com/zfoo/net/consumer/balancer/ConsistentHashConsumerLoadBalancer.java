@@ -14,8 +14,7 @@
 package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.session.model.AttributeType;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
@@ -84,7 +83,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
             consistentHash = updateModuleToConsistentHash(module);
         }
         if (consistentHash == null) {
-            throw new RunException("一致性hash负载均衡[protocolId:{}]参数[argument:{}],没有服务提供者提供服务[module:{}]", packet.protocolId(), argument, module);
+            throw new RunException("ConsistentHashLoadBalancer [protocolId:{}][argument:{}], no service provides the [module:{}]", packet.protocolId(), argument, module);
         }
         var sid = consistentHash.getRealNode(argument).getValue();
         return NetContext.getSessionManager().getClientSession(sid);
@@ -96,7 +95,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
     private ConsistentHash<String, Long> updateModuleToConsistentHash(ProtocolModule module) {
         var sessionStringList = getSessionsByModule(module)
                 .stream()
-                .map(session -> new Pair<>(session.getAttribute(AttributeType.CONSUMER).toString(), session.getSid()))
+                .map(session -> new Pair<>(session.getConsumerAttribute().toString(), session.getSid()))
                 .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
                 .collect(Collectors.toList());
 

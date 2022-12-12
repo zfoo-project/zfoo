@@ -23,7 +23,7 @@ import com.zfoo.net.router.receiver.EnhanceUtils;
 import com.zfoo.net.router.receiver.IPacketReceiver;
 import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.router.receiver.PacketReceiverDefinition;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;

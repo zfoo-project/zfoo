@@ -15,7 +15,7 @@ package com.zfoo.net.handler;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.model.DecodedPacketInfo;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.Channel;
@@ -43,7 +43,7 @@ public class BaseRouteHandler extends ChannelInboundHandlerAdapter {
         var setSuccessful = sessionAttr.compareAndSet(null, session);
         if (!setSuccessful) {
             channel.close();
-            throw new RuntimeException(StringUtils.format("无法设置[channel:{}]的session", channel));
+            throw new RuntimeException(StringUtils.format("The properties of the session[channel:{}] cannot be set", channel));
         }
         return session;
     }

@@ -16,7 +16,7 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.tcp.AsyncMessAnswer;
 import com.zfoo.net.packet.tcp.AsyncMessAsk;
 import com.zfoo.net.router.receiver.PacketReceiver;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -25,8 +25,7 @@ import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
-import com.zfoo.net.session.model.AttributeType;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.JsonUtils;
@@ -92,8 +91,8 @@ public class GatewayRouteHandler extends ServerRouteHandler {
             return;
         } else {
             // 使用用户的uid做一致性hash
-            var uid = (Long) session.getAttribute(AttributeType.UID);
-            if (uid != null) {
+            var uid = session.getUid();
+            if (uid < 0) {
                 forwardingPacket(packet, gatewayAttachment, uid);
                 return;
             }
@@ -113,9 +112,9 @@ public class GatewayRouteHandler extends ServerRouteHandler {
             var consumerSession = ConsistentHashConsumerLoadBalancer.getInstance().loadBalancer(packet, argument);
             NetContext.getRouter().send(consumerSession, packet, attachment);
         } catch (Exception e) {
-            logger.error("网关发生异常", e);
+            logger.error("An exception occurred at the gateway", e);
         } catch (Throwable t) {
-            logger.error("网关发生错误", t);
+            logger.error("An error occurred at the gateway", t);
         }
     }
 
@@ -127,10 +126,10 @@ public class GatewayRouteHandler extends ServerRouteHandler {
         }
 
         var sid = session.getSid();
-        var uid = (Long) session.getAttribute(AttributeType.UID);
+        var uid = session.getUid();
 
         // 连接到网关的客户端断开了连接
-        EventBus.submit(GatewaySessionInactiveEvent.valueOf(sid, uid == null ? 0 : uid.longValue()));
+        EventBus.submit(GatewaySessionInactiveEvent.valueOf(sid, uid));
 
         super.channelInactive(ctx);
     }

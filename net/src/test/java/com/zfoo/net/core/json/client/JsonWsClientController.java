@@ -14,9 +14,8 @@
 package com.zfoo.net.core.json.client;
 
 import com.zfoo.net.packet.json.JsonHelloResponse;
-import com.zfoo.net.packet.websocket.WebsocketHelloResponse;
 import com.zfoo.net.router.receiver.PacketReceiver;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

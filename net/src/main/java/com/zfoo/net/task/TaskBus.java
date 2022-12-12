@@ -15,7 +15,6 @@ package com.zfoo.net.task;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
-import com.zfoo.net.session.model.AttributeType;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -114,11 +113,11 @@ public final class TaskBus {
 
         if (attachment == null) {
             var session = task.getSession();
-            var uid = (Long) session.getAttribute(AttributeType.UID);
-            if (uid == null) {
+            var uid = session.getUid();
+            if (uid < 0) {
                 execute((int) session.getSid(), task);
             } else {
-                execute(uid.intValue(), task);
+                execute(uid, task);
             }
         } else {
             execute(attachment.taskExecutorHash(), task);

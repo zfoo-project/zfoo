@@ -15,7 +15,7 @@ package com.zfoo.net.core;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.handler.BaseRouteHandler;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.ThreadUtils;
@@ -81,7 +81,7 @@ public abstract class AbstractClient implements IClient {
         } else if (channelFuture.cause() != null) {
             logger.error(ExceptionUtils.getMessage(channelFuture.cause()));
         } else {
-            logger.error("启动客户端[client:{}]未知错误", this);
+            logger.error("[{}] started failed", this.getClass().getSimpleName());
         }
         return null;
     }

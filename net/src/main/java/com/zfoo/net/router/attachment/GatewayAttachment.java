@@ -12,8 +12,7 @@
 
 package com.zfoo.net.router.attachment;
 
-import com.zfoo.net.session.model.AttributeType;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import org.springframework.lang.Nullable;
 
 /**
@@ -59,8 +58,7 @@ public class GatewayAttachment implements IAttachment {
     public GatewayAttachment(Session session, @Nullable SignalAttachment signalAttachment) {
         this.client = true;
         this.sid = session.getSid();
-        var uid = session.getAttribute(AttributeType.UID);
-        this.uid = uid == null ? 0 : (long) uid;
+        this.uid = session.getUid();
         this.signalAttachment = signalAttachment;
     }
 

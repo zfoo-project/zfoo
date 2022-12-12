@@ -14,7 +14,7 @@
 package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.router.attachment.SignalAttachment;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.IPacket;
 import org.springframework.lang.Nullable;
 

@@ -18,7 +18,7 @@ import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.handler.BaseRouteHandler;
 import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.handler.codec.udp.UdpCodecHandler;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.bootstrap.Bootstrap;
@@ -63,7 +63,7 @@ public class UdpClient extends AbstractClient {
             } else if (channelFuture.cause() != null) {
                 logger.error(ExceptionUtils.getMessage(channelFuture.cause()));
             } else {
-                logger.error("启动客户端[client:{}]未知错误", this);
+                logger.error("[{}] started failed", this.getClass().getSimpleName());
             }
         } catch (Exception e) {
             logger.error(ExceptionUtils.getMessage(e));

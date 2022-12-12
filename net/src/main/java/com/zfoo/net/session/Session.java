@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,16 +10,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.session.model;
+package com.zfoo.net.session;
 
 import com.zfoo.net.consumer.registry.RegisterVO;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.Channel;
 
 import java.io.Closeable;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -32,25 +28,26 @@ public class Session implements Closeable {
     private static final AtomicLong ATOMIC_LONG = new AtomicLong(0);
 
     /**
-     * session的id
+     * The globally unique ID of the session
      */
     private long sid;
+
+    /**
+     * EN:The default user ID is an ID greater than 0, or less than 0 if there is no login
+     * CN:默认用户的id都是大于0的id，如果没有登录则小于0
+     */
+    private long uid = -1;
 
     private Channel channel;
 
     /**
-     * Session附带的属性参数
+     * Session附带的属性参数，消费者的属性
      */
     private RegisterVO consumerAttribute = null;
 
-    private long uid = Long.MIN_VALUE;
-
-    private Map<AttributeType, Object> attributes = new EnumMap<>(AttributeType.class);
-
-
     public Session(Channel channel) {
         if (channel == null) {
-            throw new IllegalArgumentException("channel不能为空");
+            throw new IllegalArgumentException("channel cannot be empty");
         }
         this.sid = ATOMIC_LONG.getAndIncrement();
         this.channel = channel;
@@ -59,7 +56,7 @@ public class Session implements Closeable {
 
     @Override
     public String toString() {
-        return StringUtils.format("[sid:{}] [channel:{}] [attributes:{}]", sid, channel, attributes);
+        return StringUtils.format("[sid:{}] [uid:{}] [channel:{}]", sid, uid, channel);
     }
 
     @Override
@@ -76,7 +73,7 @@ public class Session implements Closeable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(sid);
+        return (int) sid;
     }
 
     @Override
@@ -92,21 +89,23 @@ public class Session implements Closeable {
         this.sid = sid;
     }
 
-    public synchronized void putAttribute(AttributeType key, Object value) {
-        attributes.put(key, value);
-    }
-
-    public synchronized void removeAttribute(AttributeType key) {
-        attributes.remove(key);
-    }
-
-
-    public <T> T getAttribute(AttributeType key) {
-        return (T) attributes.get(key);
-    }
-
     public Channel getChannel() {
         return channel;
     }
 
+    public long getUid() {
+        return uid;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public RegisterVO getConsumerAttribute() {
+        return consumerAttribute;
+    }
+
+    public void setConsumerAttribute(RegisterVO consumerAttribute) {
+        this.consumerAttribute = consumerAttribute;
+    }
 }

@@ -15,8 +15,7 @@ package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.consumer.registry.RegisterVO;
-import com.zfoo.net.session.model.AttributeType;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.registration.ProtocolModule;
@@ -43,7 +42,7 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
                 balancer = ConsistentHashConsumerLoadBalancer.getInstance();
                 break;
             default:
-                throw new RuntimeException(StringUtils.format("无法识别负载均衡器[{}]", loadBalancer));
+                throw new RuntimeException(StringUtils.format("Load balancer is not recognized[{}]", loadBalancer));
         }
         return balancer;
     }
@@ -53,31 +52,24 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
     }
 
     public List<Session> getSessionsByModule(ProtocolModule module) {
-        var clientSessionMap = NetContext.getSessionManager().getClientSessionMap();
-        var sessions = clientSessionMap.values().stream()
-                .filter(it -> {
-                    var attribute = it.getAttribute(AttributeType.CONSUMER);
-                    if (Objects.nonNull(attribute)) {
-                        var registerVO = (RegisterVO) attribute;
-                        return Objects.nonNull(registerVO.getProviderConfig()) && registerVO.getProviderConfig().getProviders().stream().anyMatch(provider -> provider.getProtocolModule().equals(module));
-                    } else {
-                        return false;
-                    }
-                })
+        return NetContext.getSessionManager().getClientSessionMap()
+                .values()
+                .stream()
+                .filter(it -> it.getConsumerAttribute() != null && it.getConsumerAttribute().getProviderConfig() != null)
+                .filter(it -> it.getConsumerAttribute().getProviderConfig().getProviders().stream().anyMatch(provider -> provider.getProtocolModule().equals(module)))
                 .collect(Collectors.toList());
-        return sessions;
     }
 
     public List<Session> sessionsByModule(ProtocolModule module) {
         var clientSessionMap = NetContext.getSessionManager().getClientSessionMap();
         var sessions = new ArrayList<Session>();
-        for(var clientSession : clientSessionMap.values()) {
-            var attribute = clientSession.getAttribute(AttributeType.CONSUMER);
-            if (attribute == null) {
+        for (var clientSession : clientSessionMap.values()) {
+            var consumerAttribute = clientSession.getConsumerAttribute();
+            if (consumerAttribute == null) {
                 continue;
             }
 
-            var registerVO = (RegisterVO) attribute;
+            var registerVO = (RegisterVO) consumerAttribute;
             var providerConfig = registerVO.getProviderConfig();
             if (providerConfig == null) {
                 continue;
@@ -92,13 +84,12 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
 
 
     public boolean sessionHasModule(Session session, IPacket packet) {
-
-        var attribute = session.getAttribute(AttributeType.CONSUMER);
-        if (Objects.isNull(attribute)) {
+        var consumerAttribute = session.getConsumerAttribute();
+        if (Objects.isNull(consumerAttribute)) {
             return false;
         }
 
-        var registerVO = (RegisterVO) attribute;
+        var registerVO = (RegisterVO) consumerAttribute;
         if (Objects.isNull(registerVO.getProviderConfig())) {
             return false;
         }

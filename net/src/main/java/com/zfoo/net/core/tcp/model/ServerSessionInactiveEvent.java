@@ -14,7 +14,7 @@
 package com.zfoo.net.core.tcp.model;
 
 import com.zfoo.event.model.event.IEvent;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 
 /**
  * @author jaysunxiao

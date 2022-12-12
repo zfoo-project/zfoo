@@ -16,7 +16,7 @@ package com.zfoo.net.core.csharp;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.csharp.CM_CSharpRequest;
 import com.zfoo.net.router.receiver.PacketReceiver;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import org.springframework.stereotype.Component;
 

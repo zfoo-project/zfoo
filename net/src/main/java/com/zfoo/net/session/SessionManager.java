@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,9 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.session.manager;
+package com.zfoo.net.session;
 
-import com.zfoo.net.session.model.Session;
 import com.zfoo.net.util.SessionUtils;
 import com.zfoo.util.security.IdUtils;
 import org.slf4j.Logger;
@@ -51,7 +49,7 @@ public class SessionManager implements ISessionManager {
     @Override
     public void addServerSession(Session session) {
         if (serverSessionMap.containsKey(session.getSid())) {
-            logger.error("server收到重复的[session:{}]", SessionUtils.sessionInfo(session));
+            logger.error("Server received duplicate [session:{}]", SessionUtils.sessionInfo(session));
             return;
         }
         serverSessionMap.put(session.getSid(), session);
@@ -60,7 +58,7 @@ public class SessionManager implements ISessionManager {
     @Override
     public void removeServerSession(Session session) {
         if (!serverSessionMap.containsKey(session.getSid())) {
-            logger.error("SessionManager中的serverSession没有包含[session:{}]，所以无法移除", SessionUtils.sessionInfo(session));
+            logger.error("[session:{}] does not exist", SessionUtils.sessionInfo(session));
             return;
         }
         serverSessionMap.remove(session.getSid());
@@ -80,7 +78,7 @@ public class SessionManager implements ISessionManager {
     @Override
     public void addClientSession(Session session) {
         if (clientSessionMap.containsKey(session.getSid())) {
-            logger.error("client收到重复的[session:{}]", SessionUtils.sessionInfo(session));
+            logger.error("client received duplicate [session:{}]", SessionUtils.sessionInfo(session));
             return;
         }
         clientSessionMap.put(session.getSid(), session);
@@ -90,7 +88,7 @@ public class SessionManager implements ISessionManager {
     @Override
     public void removeClientSession(Session session) {
         if (!clientSessionMap.containsKey(session.getSid())) {
-            logger.error("SessionManager中的clientSession没有包含[session:{}]，所以无法移除", SessionUtils.sessionInfo(session));
+            logger.error("[session:{}] does not exist", SessionUtils.sessionInfo(session));
             return;
         }
         clientSessionMap.remove(session.getSid());

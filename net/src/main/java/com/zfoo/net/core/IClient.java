@@ -13,7 +13,7 @@
 
 package com.zfoo.net.core;
 
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 
 /**
  * @author jaysunxiao

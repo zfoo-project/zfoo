@@ -32,8 +32,7 @@ import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
 import com.zfoo.net.router.route.PacketBus;
 import com.zfoo.net.router.route.SignalBridge;
-import com.zfoo.net.session.model.AttributeType;
-import com.zfoo.net.session.model.Session;
+import com.zfoo.net.session.Session;
 import com.zfoo.net.task.PacketReceiverTask;
 import com.zfoo.net.task.TaskBus;
 import com.zfoo.protocol.IPacket;
@@ -126,7 +125,7 @@ public class Router implements IRouter {
                                     logger.error("错误的网关授权信息，uid必须大于0");
                                     return;
                                 }
-                                gatewaySession.putAttribute(AttributeType.UID, uid);
+                                session.setUid(uid);
                                 EventBus.submit(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
 
                                 NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession, null));
@@ -324,9 +323,9 @@ public class Router implements IRouter {
             PacketBus.route(session, packet, attachment);
         } catch (Exception e) {
             EventBus.submit(ServerExceptionEvent.valueOf(session, packet, attachment, e));
-            logger.error(StringUtils.format("e[uid:{}][sid:{}]未知exception异常", session.getAttribute(AttributeType.UID), session.getSid(), e.getMessage()), e);
+            logger.error(StringUtils.format("e[uid:{}][sid:{}] unknown exception", session.getUid(), session.getSid(), e.getMessage()), e);
         } catch (Throwable t) {
-            logger.error(StringUtils.format("e[uid:{}][sid:{}]未知error错误", session.getAttribute(AttributeType.UID), session.getSid(), t.getMessage()), t);
+            logger.error(StringUtils.format("e[uid:{}][sid:{}] unknown error", session.getUid(), session.getSid(), t.getMessage()), t);
         } finally {
             // 如果有服务器在处理同步或者异步消息的时候由于错误没有返回给客户端消息，则可能会残留serverAttachment，所以先移除
             if (attachment != null) {
