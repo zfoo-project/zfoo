@@ -485,38 +485,5 @@ public abstract class StringUtils {
         return Character.isWhitespace(ch) || STOP_WORD.contains(ch);
     }
 
-    /**
-     *
-     * @param str 待匹配字符串
-     * @param matchStr 匹配的后缀
-     * @return 是否成功匹配后缀
-     */
-    public static boolean suffixMatch(final String str,final String matchStr){
-        if(matchStr.length()>str.length())
-            return false;
-        for(int i=0;i<matchStr.length();i++){
-            if(str.charAt(str.length()-1-i)!=matchStr.charAt(matchStr.length()-1-i))
-                return false;
-        }
-        return true;
-    }
 
-    /**
-     *把String数组展开成一个大的字符串
-     * @param strings
-     * @return
-     */
-    public static String stringArrayToString(final String[] strings){
-        StringBuilder stringBuilder=new StringBuilder();
-        stringBuilder.append('[');
-        for(var i=0;i<strings.length;i++){
-            if(i!=0){
-                stringBuilder.append(',');
-            }
-            stringBuilder.append(StringUtils.format("[{}]",i+1));
-            stringBuilder.append(strings[i]);
-        }
-        stringBuilder.append(']');
-        return stringBuilder.toString();
-    }
 }
