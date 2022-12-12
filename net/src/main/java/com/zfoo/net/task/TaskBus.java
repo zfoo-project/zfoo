@@ -114,11 +114,11 @@ public final class TaskBus {
 
         if (attachment == null) {
             var session = task.getSession();
-            var uid = session.getAttribute(AttributeType.UID);
+            var uid = (Long) session.getAttribute(AttributeType.UID);
             if (uid == null) {
                 execute((int) session.getSid(), task);
             } else {
-                execute((int) uid, task);
+                execute(uid.intValue(), task);
             }
         } else {
             execute(attachment.taskExecutorHash(), task);
@@ -131,7 +131,15 @@ public final class TaskBus {
     }
 
     public static int calTaskExecutorHash(Object argument) {
-        return calTaskExecutorHash((argument == null) ? RandomUtils.randomInt() : argument.hashCode());
+        var hash = 0;
+        if (argument == null) {
+            hash = RandomUtils.randomInt();
+        } else if (argument instanceof Number) {
+            hash = ((Number) argument).intValue();
+        } else {
+            hash = argument.hashCode();
+        }
+        return calTaskExecutorHash(hash);
     }
 
     public static void execute(int taskExecutorHash, Runnable runnable) {
