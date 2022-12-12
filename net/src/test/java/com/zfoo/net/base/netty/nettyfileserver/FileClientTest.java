@@ -17,7 +17,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2017 05.31 10:22
  */

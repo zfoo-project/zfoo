@@ -20,7 +20,7 @@ import org.junit.Test;
 /**
  * 对象读写序列化通信
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2017 05.23 16:51
  */

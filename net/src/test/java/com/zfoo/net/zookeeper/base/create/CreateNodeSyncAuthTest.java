@@ -32,7 +32,7 @@ public class CreateNodeSyncAuthTest {
 
     @Test
     public void generateDigestTest() throws NoSuchAlgorithmException {
-        String digest = DigestAuthenticationProvider.generateDigest("jaysunxiao:123456");
+        String digest = DigestAuthenticationProvider.generateDigest("godotg:123456");
         System.out.println(digest);
     }
 
@@ -64,7 +64,7 @@ public class CreateNodeSyncAuthTest {
                 // ACL access control list
                 ACL aclIp = new ACL(Perms.READ, new Id("ip", "192.168.1.105"));
 
-                ACL aclDigest = new ACL(Perms.READ | Perms.WRITE, new Id("digest", DigestAuthenticationProvider.generateDigest("jaysunxiao:123456")));// 用户名+密码
+                ACL aclDigest = new ACL(Perms.READ | Perms.WRITE, new Id("digest", DigestAuthenticationProvider.generateDigest("godotg:123456")));// 用户名+密码
 
                 ArrayList<ACL> acls = new ArrayList<>();
                 acls.add(aclDigest);
@@ -85,7 +85,7 @@ public class CreateNodeSyncAuthTest {
 
             try {
                 // 下面两句设置ACL的哪些author可以访问
-                zookeeper.addAuthInfo("digest", "jaysunxiao:123456".getBytes());
+                zookeeper.addAuthInfo("digest", "godotg:123456".getBytes());
                 zookeeper.getData("/node_test", false, stat);
                 somethingDone = true;
             } catch (Exception e) {

@@ -19,7 +19,7 @@ import org.junit.Test;
 /**
  * 定长通信
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2017 05.22 18:23
  */

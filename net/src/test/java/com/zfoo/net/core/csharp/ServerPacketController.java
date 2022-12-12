@@ -21,7 +21,7 @@ import com.zfoo.protocol.util.JsonUtils;
 import org.springframework.stereotype.Component;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Component

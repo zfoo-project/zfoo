@@ -16,7 +16,7 @@ package com.zfoo.net.packet;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SM_Object implements IPacket {

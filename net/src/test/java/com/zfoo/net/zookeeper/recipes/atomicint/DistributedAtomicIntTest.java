@@ -13,7 +13,7 @@ import org.junit.Test;
 /**
  * 使用Curator实现分布式计数器
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2018-08-03 16:09
  */

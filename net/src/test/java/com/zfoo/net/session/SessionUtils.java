@@ -20,7 +20,7 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.util.ThreadUtils;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class SessionUtils {

@@ -3,7 +3,7 @@ package com.zfoo.net.base.netty.subscribe;
 import java.io.Serializable;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2017 05.23 16:52
  */

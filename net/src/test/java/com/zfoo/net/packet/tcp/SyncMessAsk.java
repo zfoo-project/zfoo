@@ -15,7 +15,7 @@ package com.zfoo.net.packet.tcp;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class SyncMessAsk implements IPacket {

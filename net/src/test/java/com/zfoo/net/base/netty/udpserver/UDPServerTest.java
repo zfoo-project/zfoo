@@ -13,7 +13,7 @@ import org.junit.Test;
 /**
  * UDP通信
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2017 05.27 17:24
  */

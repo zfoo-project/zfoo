@@ -18,7 +18,7 @@ import com.zfoo.protocol.IPacket;
 import java.util.Arrays;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class CM_Array implements IPacket {

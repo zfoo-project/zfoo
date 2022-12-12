@@ -34,7 +34,7 @@ public class CreateNodeAuthTest {
         curator.start();
 
         ACL aclIp = new ACL(Perms.READ, new Id("ip", "192.168.1.105"));
-        ACL aclDigest = new ACL(Perms.READ | Perms.WRITE, new Id("digest", DigestAuthenticationProvider.generateDigest("jaysunxiao:123456")));
+        ACL aclDigest = new ACL(Perms.READ | Perms.WRITE, new Id("digest", DigestAuthenticationProvider.generateDigest("godotg:123456")));
         ArrayList<ACL> acls = new ArrayList<>();
         acls.add(aclDigest);
         acls.add(aclIp);
@@ -60,7 +60,7 @@ public class CreateNodeAuthTest {
                 .builder()
                 .connectString("localhost:2181")
                 .sessionTimeoutMs(5000)
-                .authorization("digest", "jaysunxiao:123456".getBytes()) // 授权访问
+                .authorization("digest", "godotg:123456".getBytes()) // 授权访问
                 .connectionTimeoutMs(5000)
                 .retryPolicy(retryPolicy)
                 .build();

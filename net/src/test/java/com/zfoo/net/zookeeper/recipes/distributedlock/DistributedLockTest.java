@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * 使用Curator实现分布式锁功能
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2018-08-03 15:47
  */

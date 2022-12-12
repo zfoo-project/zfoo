@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 这是客户端连接网关，网关转发到服务提供者的测试用例
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @Ignore

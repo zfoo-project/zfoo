@@ -21,7 +21,7 @@ import org.junit.Test;
 /**
  * 通过netty的通信，和java原生的RandomAccessFile来实现小文件的传输
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2017 05.31 09:49
  */

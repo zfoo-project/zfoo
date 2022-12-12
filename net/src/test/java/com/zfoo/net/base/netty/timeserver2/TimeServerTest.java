@@ -17,7 +17,7 @@ import org.junit.Test;
 /**
  * 通过换行符解决半包读写的问题
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2017 05.22 18:23
  */

@@ -15,7 +15,7 @@ import org.junit.Test;
 /**
  * 没有考虑到半包读写的服务器
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 1.0
  * @since 2017 05.22 18:23
  */

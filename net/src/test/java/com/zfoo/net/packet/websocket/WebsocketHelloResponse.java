@@ -15,7 +15,7 @@ package com.zfoo.net.packet.websocket;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class WebsocketHelloResponse implements IPacket {
