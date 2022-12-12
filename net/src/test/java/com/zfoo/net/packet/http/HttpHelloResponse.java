@@ -20,7 +20,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class HttpHelloResponse implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1701;
+    public static final short PROTOCOL_ID = 1701;
 
     private String message;
 

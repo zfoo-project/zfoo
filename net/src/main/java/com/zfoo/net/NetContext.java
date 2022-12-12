@@ -17,7 +17,7 @@ import com.zfoo.net.config.IConfigManager;
 import com.zfoo.net.consumer.IConsumer;
 import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.core.AbstractServer;
-import com.zfoo.net.packet.service.IPacketService;
+import com.zfoo.net.packet.IPacketService;
 import com.zfoo.net.router.IRouter;
 import com.zfoo.net.session.ISessionManager;
 import com.zfoo.net.session.Session;
@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class NetContext implements ApplicationListener<ApplicationContextEvent>, Ordered {

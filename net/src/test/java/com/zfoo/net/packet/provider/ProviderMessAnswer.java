@@ -21,7 +21,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class ProviderMessAnswer implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 4001;
+    public static final short PROTOCOL_ID = 4001;
 
     private String message;
 

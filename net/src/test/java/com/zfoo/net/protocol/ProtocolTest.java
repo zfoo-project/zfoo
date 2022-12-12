@@ -15,9 +15,6 @@ package com.zfoo.net.protocol;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.*;
-import com.zfoo.net.packet.model.DecodedPacketInfo;
-import com.zfoo.net.packet.service.IPacketService;
-import com.zfoo.net.packet.service.PacketService;
 import com.zfoo.net.router.attachment.SignalAttachment;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

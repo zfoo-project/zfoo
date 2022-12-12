@@ -14,9 +14,9 @@
 package com.zfoo.net.handler.codec.websocket;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.packet.model.DecodedPacketInfo;
-import com.zfoo.net.packet.model.EncodedPacketInfo;
-import com.zfoo.net.packet.service.PacketService;
+import com.zfoo.net.packet.DecodedPacketInfo;
+import com.zfoo.net.packet.EncodedPacketInfo;
+import com.zfoo.net.packet.PacketService;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -35,7 +35,7 @@ import java.util.List;
  * header(4byte) + protocolId(2byte) + packet
  * header = body(bytes.length) + protocolId.length(2byte)
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame, EncodedPacketInfo> {

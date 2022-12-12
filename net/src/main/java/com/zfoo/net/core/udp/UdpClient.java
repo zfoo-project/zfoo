@@ -30,7 +30,7 @@ import io.netty.channel.epoll.EpollDatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class UdpClient extends AbstractClient {

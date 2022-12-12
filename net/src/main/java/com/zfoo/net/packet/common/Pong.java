@@ -19,14 +19,14 @@ import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @ProtobufClass
 public class Pong implements IPacket {
 
     @Ignore
-    public static final transient short PROTOCOL_ID = 104;
+    public static final short PROTOCOL_ID = 104;
 
     /**
      * 服务器当前的时间戳

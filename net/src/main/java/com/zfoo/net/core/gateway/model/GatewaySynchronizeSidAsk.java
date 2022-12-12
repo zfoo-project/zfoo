@@ -20,12 +20,12 @@ import java.util.Map;
 /**
  * 同步网关的session信息到push
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class GatewaySynchronizeSidAsk implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 24;
+    public static final short PROTOCOL_ID = 24;
 
     private String gatewayHostAndPort;
 

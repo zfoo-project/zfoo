@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.Objects;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ConfigManager implements IConfigManager {

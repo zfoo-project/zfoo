@@ -13,8 +13,8 @@
 
 package com.zfoo.net.core.http;
 
+import com.zfoo.net.packet.DecodedPacketInfo;
 import com.zfoo.net.packet.http.HttpHelloRequest;
-import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.router.attachment.HttpAttachment;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.StringUtils;

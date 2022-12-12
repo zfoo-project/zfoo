@@ -18,14 +18,14 @@ import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @ProtobufClass
 public class Heartbeat implements IPacket {
 
     @Ignore
-    public static final transient short PROTOCOL_ID = 102;
+    public static final short PROTOCOL_ID = 102;
 
     @Override
     public short protocolId() {

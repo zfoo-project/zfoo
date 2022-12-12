@@ -13,8 +13,8 @@
 
 package com.zfoo.net.handler.codec.json;
 
-import com.zfoo.net.packet.model.DecodedPacketInfo;
-import com.zfoo.net.packet.model.EncodedPacketInfo;
+import com.zfoo.net.packet.DecodedPacketInfo;
+import com.zfoo.net.packet.EncodedPacketInfo;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;

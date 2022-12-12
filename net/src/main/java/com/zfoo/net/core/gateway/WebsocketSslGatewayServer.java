@@ -39,7 +39,7 @@ import java.io.InputStream;
 import java.util.function.BiFunction;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class WebsocketSslGatewayServer extends AbstractServer {

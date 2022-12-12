@@ -28,7 +28,7 @@ import org.springframework.lang.Nullable;
 import java.util.function.BiFunction;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class GatewayServer extends AbstractServer {

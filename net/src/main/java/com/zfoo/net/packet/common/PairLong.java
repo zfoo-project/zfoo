@@ -20,12 +20,12 @@ import com.zfoo.protocol.IPacket;
 import java.util.Comparator;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class PairLong implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 111;
+    public static final short PROTOCOL_ID = 111;
 
     public static transient final Comparator<PairLong> NATURAL_VALUE_COMPARATOR = (a, b) -> Long.compare(a.getValue(), b.getValue());
 

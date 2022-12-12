@@ -21,7 +21,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class SM_Object implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1115;
+    public static final short PROTOCOL_ID = 1115;
 
 
     @Override

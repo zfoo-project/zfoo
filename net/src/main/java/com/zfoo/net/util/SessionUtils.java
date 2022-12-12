@@ -21,7 +21,7 @@ import io.netty.channel.ChannelHandlerContext;
 import static com.zfoo.net.handler.BaseRouteHandler.SESSION_KEY;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public abstract class SessionUtils {

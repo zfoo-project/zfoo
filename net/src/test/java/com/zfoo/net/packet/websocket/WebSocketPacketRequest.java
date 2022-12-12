@@ -25,7 +25,7 @@ import java.util.Set;
  */
 public class WebSocketPacketRequest implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 2070;
+    public static final short PROTOCOL_ID = 2070;
 
     private byte a;
     private Byte aa;

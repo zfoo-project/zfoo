@@ -20,12 +20,12 @@ import com.zfoo.protocol.IPacket;
 /**
  * Long + String
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class PairLS implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 113;
+    public static final short PROTOCOL_ID = 113;
 
     @JsonSerialize(using = ToStringSerializer.class)
     private long key;

@@ -21,7 +21,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class CSharpObjectB implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1167;
+    public static final short PROTOCOL_ID = 1167;
 
     public boolean flag;
 

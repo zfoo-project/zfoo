@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
 <!-- native为内部消息，common是公共消息每个模块都能使用，js是web通信用的协议会生成js协议文件 -->
-<protocols author="jaysunxiao">
+<protocols author="godotg">
 
     <module id="1" name="native" minId="0" maxId="100">
         <protocol location="com.zfoo.net.router.attachment.SignalAttachment"/>

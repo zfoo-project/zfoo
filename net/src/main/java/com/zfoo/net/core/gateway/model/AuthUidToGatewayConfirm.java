@@ -18,12 +18,12 @@ import com.zfoo.protocol.IPacket;
 /**
  * 网关登录成功过后，将uid授权给网关的返回
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class AuthUidToGatewayConfirm implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 21;
+    public static final short PROTOCOL_ID = 21;
 
     private long uid;
 

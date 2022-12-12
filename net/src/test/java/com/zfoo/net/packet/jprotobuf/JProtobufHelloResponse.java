@@ -21,7 +21,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class JProtobufHelloResponse implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1501;
+    public static final short PROTOCOL_ID = 1501;
 
     @Protobuf(order = 1)
     private String message;

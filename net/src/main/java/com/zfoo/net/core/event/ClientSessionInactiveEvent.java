@@ -16,7 +16,7 @@ import com.zfoo.event.model.event.IEvent;
 import com.zfoo.net.session.Session;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class ClientSessionInactiveEvent implements IEvent {

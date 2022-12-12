@@ -20,7 +20,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class UdpHelloRequest implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1200;
+    public static final short PROTOCOL_ID = 1200;
 
     private String message;
 

@@ -17,7 +17,7 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.config.ConfigManager;
 import com.zfoo.net.config.model.*;
 import com.zfoo.net.consumer.Consumer;
-import com.zfoo.net.packet.service.PacketService;
+import com.zfoo.net.packet.PacketService;
 import com.zfoo.net.router.Router;
 import com.zfoo.net.session.SessionManager;
 import com.zfoo.protocol.util.DomUtils;

@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 public class SM_Int implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1111;
+    public static final short PROTOCOL_ID = 1111;
 
     private Boolean flag;
 

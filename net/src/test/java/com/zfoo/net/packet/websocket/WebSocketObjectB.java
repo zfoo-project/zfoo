@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 public class WebSocketObjectB implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 2072;
+    public static final short PROTOCOL_ID = 2072;
 
     private boolean flag;
 

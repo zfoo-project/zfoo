@@ -18,12 +18,12 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class TripleLong implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 114;
+    public static final short PROTOCOL_ID = 114;
 
     @JsonSerialize(using = ToStringSerializer.class)
     private long left;

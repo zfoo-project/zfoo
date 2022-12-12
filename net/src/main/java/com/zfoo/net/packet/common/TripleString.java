@@ -16,12 +16,12 @@ package com.zfoo.net.packet.common;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class TripleString implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 115;
+    public static final short PROTOCOL_ID = 115;
 
     private String left;
     private String middle;

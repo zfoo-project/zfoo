@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 public class CM_Object implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1114;
+    public static final short PROTOCOL_ID = 1114;
 
     private int a;
 

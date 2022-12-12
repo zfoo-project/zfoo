@@ -14,7 +14,7 @@
 package com.zfoo.net.router.route;
 
 import com.zfoo.event.model.event.IEvent;
-import com.zfoo.net.packet.service.PacketService;
+import com.zfoo.net.packet.PacketService;
 import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.attachment.HttpAttachment;
 import com.zfoo.net.router.attachment.IAttachment;

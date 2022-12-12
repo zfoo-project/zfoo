@@ -20,7 +20,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class SyncMessAsk implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1150;
+    public static final short PROTOCOL_ID = 1150;
 
     private String message;
 

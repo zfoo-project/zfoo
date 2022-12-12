@@ -21,7 +21,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class GatewayToProviderRequest implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 5000;
+    public static final short PROTOCOL_ID = 5000;
 
     private String message;
 

@@ -13,8 +13,8 @@
 
 package com.zfoo.net.handler.idle;
 
+import com.zfoo.net.packet.EncodedPacketInfo;
 import com.zfoo.net.packet.common.Heartbeat;
-import com.zfoo.net.packet.model.EncodedPacketInfo;
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandler;
@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @ChannelHandler.Sharable

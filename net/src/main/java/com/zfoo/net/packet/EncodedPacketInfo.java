@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.packet.model;
+package com.zfoo.net.packet;
 
 import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.protocol.IPacket;
@@ -20,7 +19,7 @@ import org.springframework.lang.Nullable;
 /**
  * 被解码后的Packet的信息
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class EncodedPacketInfo {

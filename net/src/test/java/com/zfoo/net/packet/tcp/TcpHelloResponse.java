@@ -20,7 +20,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class TcpHelloResponse implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1301;
+    public static final short PROTOCOL_ID = 1301;
 
     private String message;
 

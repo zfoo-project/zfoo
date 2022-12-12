@@ -24,7 +24,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class TcpClient extends AbstractClient {

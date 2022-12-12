@@ -20,7 +20,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class JsonHelloRequest implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1600;
+    public static final short PROTOCOL_ID = 1600;
 
     private String message;
 

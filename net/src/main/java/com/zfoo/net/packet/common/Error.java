@@ -21,13 +21,13 @@ import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @ProtobufClass
 public class Error implements IPacket {
     @Ignore
-    public static final transient short PROTOCOL_ID = 101;
+    public static final short PROTOCOL_ID = 101;
 
     private int module;
 

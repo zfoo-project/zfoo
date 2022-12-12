@@ -16,12 +16,12 @@ package com.zfoo.net.core.gateway.model;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class GatewaySessionInactiveAsk implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 23;
+    public static final short PROTOCOL_ID = 23;
 
     private String gatewayHostAndPort;
 

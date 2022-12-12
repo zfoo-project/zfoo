@@ -18,10 +18,10 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.consumer.balancer.ConsistentHashConsumerLoadBalancer;
 import com.zfoo.net.core.gateway.IGatewayLoadBalancer;
 import com.zfoo.net.core.gateway.model.GatewaySessionInactiveEvent;
+import com.zfoo.net.packet.DecodedPacketInfo;
 import com.zfoo.net.packet.common.Heartbeat;
 import com.zfoo.net.packet.common.Ping;
 import com.zfoo.net.packet.common.Pong;
-import com.zfoo.net.packet.model.DecodedPacketInfo;
 import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import java.util.function.BiFunction;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @ChannelHandler.Sharable

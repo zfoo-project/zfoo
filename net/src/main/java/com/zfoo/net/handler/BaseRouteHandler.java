@@ -14,7 +14,7 @@
 package com.zfoo.net.handler;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.packet.model.DecodedPacketInfo;
+import com.zfoo.net.packet.DecodedPacketInfo;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @ChannelHandler.Sharable

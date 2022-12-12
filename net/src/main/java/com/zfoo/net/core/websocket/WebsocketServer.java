@@ -26,7 +26,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class WebsocketServer extends AbstractServer {

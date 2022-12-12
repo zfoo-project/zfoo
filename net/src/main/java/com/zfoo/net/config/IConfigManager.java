@@ -16,7 +16,7 @@ import com.zfoo.net.config.model.NetConfig;
 import com.zfoo.net.consumer.registry.IRegistry;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IConfigManager {

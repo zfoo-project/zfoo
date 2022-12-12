@@ -20,7 +20,7 @@ import com.zfoo.protocol.IPacket;
  */
 public class WebsocketHelloRequest implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1400;
+    public static final short PROTOCOL_ID = 1400;
 
     private String message;
 

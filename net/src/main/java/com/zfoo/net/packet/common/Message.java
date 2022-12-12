@@ -21,13 +21,13 @@ import com.zfoo.protocol.ProtocolManager;
 /**
  * 通用的返回，既可以用在远程调用，又可以嵌套在其它协议里
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @ProtobufClass
 public class Message implements IPacket {
     @Ignore
-    public static final transient short PROTOCOL_ID = 100;
+    public static final short PROTOCOL_ID = 100;
 
     public static final Message SUCCESS = valueSuccess(null);
     public static final Message FAIL = valueFail(null);

@@ -20,12 +20,12 @@ import com.zfoo.protocol.IPacket;
 /**
  * Long + String + String
  *
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class TripleLSS implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 116;
+    public static final short PROTOCOL_ID = 116;
 
     @JsonSerialize(using = ToStringSerializer.class)
     private long left;

@@ -16,12 +16,12 @@ package com.zfoo.net.packet.common;
 import com.zfoo.protocol.IPacket;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class PairString implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 112;
+    public static final short PROTOCOL_ID = 112;
 
     private String key;
 

@@ -25,7 +25,7 @@ import java.util.Objects;
  */
 public class CM_List implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 1118;
+    public static final short PROTOCOL_ID = 1118;
 
     private List<Integer> list;
 

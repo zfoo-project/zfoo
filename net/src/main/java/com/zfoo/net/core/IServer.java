@@ -14,7 +14,7 @@
 package com.zfoo.net.core;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public interface IServer {

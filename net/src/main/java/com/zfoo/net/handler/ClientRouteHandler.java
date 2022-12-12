@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 @ChannelHandler.Sharable

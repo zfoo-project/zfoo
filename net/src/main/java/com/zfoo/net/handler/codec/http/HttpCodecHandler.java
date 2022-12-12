@@ -12,9 +12,9 @@
 
 package com.zfoo.net.handler.codec.http;
 
+import com.zfoo.net.packet.DecodedPacketInfo;
+import com.zfoo.net.packet.EncodedPacketInfo;
 import com.zfoo.net.packet.common.Message;
-import com.zfoo.net.packet.model.DecodedPacketInfo;
-import com.zfoo.net.packet.model.EncodedPacketInfo;
 import com.zfoo.net.router.attachment.HttpAttachment;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.JsonUtils;
@@ -30,7 +30,7 @@ import java.util.function.Function;
 
 
 /**
- * @author jaysunxiao
+ * @author godotg
  * @version 3.0
  */
 public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, EncodedPacketInfo> {
