@@ -24,6 +24,7 @@ import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.model.anno.Id;
 import com.zfoo.storage.model.anno.ResInjection;
 import com.zfoo.storage.model.config.StorageConfig;
+import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.model.vo.ResourceDef;
 import com.zfoo.storage.model.vo.Storage;
 import org.springframework.core.io.Resource;
@@ -75,7 +76,7 @@ public class StorageManager implements IStorageManager {
         var resourceDefinitionMap = new HashMap<Class<?>, ResourceDef>();
 
         // 扫描Excel的class类文件
-        var clazzNameSet = scanResourceAnno(storageConfig.getScanPackage());
+        var clazzNameSet = scanResourceAnno(storageConfig.getScanPackages());
 
         // 通过class类文件扫描excel文件地址
         for (var clazzName : clazzNameSet) {
@@ -221,22 +222,24 @@ public class StorageManager implements IStorageManager {
         return getStorageConfig();
     }
 
-    private Set<String> scanResourceAnno(String scanLocation) {
+    private Set<String> scanResourceAnno(String[] scanPackages) {
         var resourcePatternResolver = new PathMatchingResourcePatternResolver();
         var metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
         try {
-            var packageSearchPath = ResourceUtils.CLASSPATH_URL_PREFIX + scanLocation.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + SUFFIX_PATTERN;
-            var resources = resourcePatternResolver.getResources(packageSearchPath);
             var result = new HashSet<String>();
-            var name = com.zfoo.storage.model.anno.Resource.class.getName();
-            for (var resource : resources) {
-                if (resource.isReadable()) {
-                    var metadataReader = metadataReaderFactory.getMetadataReader(resource);
-                    var annoMeta = metadataReader.getAnnotationMetadata();
-                    if (annoMeta.hasAnnotation(name)) {
-                        ClassMetadata clazzMeta = metadataReader.getClassMetadata();
-                        result.add(clazzMeta.getClassName());
+            for(var scanPackage:scanPackages) {
+                var packageSearchPath = ResourceUtils.CLASSPATH_URL_PREFIX + scanPackage.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + SUFFIX_PATTERN;
+                var resources = resourcePatternResolver.getResources(packageSearchPath);
+                var resourceName = com.zfoo.storage.model.anno.Resource.class.getName();
+                for (var resource : resources) {
+                    if (resource.isReadable()) {
+                        var metadataReader = metadataReaderFactory.getMetadataReader(resource);
+                        var annoMeta = metadataReader.getAnnotationMetadata();
+                        if (annoMeta.hasAnnotation(resourceName)) {
+                            ClassMetadata clazzMeta = metadataReader.getClassMetadata();
+                            result.add(clazzMeta.getClassName());
+                        }
                     }
                 }
             }
@@ -251,30 +254,48 @@ public class StorageManager implements IStorageManager {
         var metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
         try {
-            var resourceList = new ArrayList<Resource>();
-
-            var packageSearchPath = StringUtils.format("{}/**/{}.*", storageConfig.getResourceLocation(), clazz.getSimpleName());
-            packageSearchPath = packageSearchPath.replaceAll("//", "/");
-            try {
-                resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
-            } catch (Exception e) {
-                // do nothing
-            }
-
-            // 通配符无法匹配根目录，所以如果找不到，再从根目录查找一遍
-            if (CollectionUtils.isEmpty(resourceList)) {
-                packageSearchPath = StringUtils.format("{}/{}.*", storageConfig.getResourceLocation(), clazz.getSimpleName());
+            var resourceDefSet = new HashSet<ResourceDef>();
+            for(var resourceLocation: storageConfig.getResourceLocations()) {
+                var packageSearchPath = StringUtils.format("{}/**/{}.*", resourceLocation, clazz.getSimpleName());
                 packageSearchPath = packageSearchPath.replaceAll("//", "/");
-                resourceList.addAll(Arrays.asList(resourcePatternResolver.getResources(packageSearchPath)));
+                try {
+                    for(var resource :resourcePatternResolver.getResources(packageSearchPath)){
+                        if(StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.CSV.getType())
+                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.EXCEL_XLS.getType())
+                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.EXCEL_XLSX.getType())
+                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.JSON.getType()))
+                            resourceDefSet.add(new ResourceDef(clazz,resource));
+                    }
+                } catch (Exception e) {
+                    // do nothing
+                }
+
+                // 通配符无法匹配根目录，所以如果找不到，再从根目录查找一遍
+                if (resourceDefSet.isEmpty()) {
+                    packageSearchPath = StringUtils.format("{}/{}.*", resourceLocation, clazz.getSimpleName());
+                    packageSearchPath = packageSearchPath.replaceAll("//", "/");
+                    for(var resource :resourcePatternResolver.getResources(packageSearchPath)){
+                        if(StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.CSV.getType())
+                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.EXCEL_XLS.getType())
+                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.EXCEL_XLSX.getType())
+                                ||StringUtils.suffixMatch(resource.getFilename(), ResourceEnum.JSON.getType()))
+                            resourceDefSet.add(new ResourceDef(clazz,resource));
+                    }
+                }
             }
 
-            if (CollectionUtils.isEmpty(resourceList)) {
-                throw new RuntimeException(StringUtils.format("无法找到配置文件[{}]", clazz.getSimpleName()));
-            } else if (resourceList.size() > 1) {
-                var resourceNames = resourceList.stream().map(it -> it.getFilename()).collect(Collectors.joining(StringUtils.COMMA));
-                throw new RuntimeException(StringUtils.format("资源类[class:{}]找到重复的配置文件[{}]", clazz.getSimpleName(), resourceNames));
+            if (CollectionUtils.isEmpty(resourceDefSet)) {
+                throw new RuntimeException(StringUtils.format("资源类[class:{}]无法找到配置文件", clazz.getSimpleName()));
+            } else if (resourceDefSet.size() > 1) {
+                var resourceNames=new String[resourceDefSet.size()];
+                var index=0;
+                for(var resourceDef:resourceDefSet){
+                    resourceNames[index++]=resourceDef.getResource().getFile().getAbsolutePath();
+                }
+
+                throw new RuntimeException(StringUtils.format("资源类[class:{}]找到重复的配置文件{}", clazz.getSimpleName(),StringUtils.stringArrayToString(resourceNames)));
             } else {
-                return resourceList.get(0);
+                return ((ResourceDef)(resourceDefSet.toArray()[0])).getResource();
             }
 
         } catch (IOException e) {

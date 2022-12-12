@@ -21,9 +21,9 @@ public class StorageConfig {
 
     private String id;
 
-    private String scanPackage;
+    private String[] scanPackages;
 
-    private String resourceLocation;
+    private String[] resourceLocations;
 
     // 类的属性是否可写，如果为false则类的属性必须为private并且不能有set方法
     private boolean writeable;
@@ -39,20 +39,20 @@ public class StorageConfig {
         this.id = id;
     }
 
-    public String getScanPackage() {
-        return scanPackage;
+    public String[] getScanPackages() {
+        return scanPackages;
     }
 
-    public void setScanPackage(String scanPackage) {
-        this.scanPackage = scanPackage;
+    public void setScanPackages(String[] scanPackages) {
+        this.scanPackages = scanPackages;
     }
 
-    public String getResourceLocation() {
-        return resourceLocation;
+    public String[] getResourceLocations() {
+        return resourceLocations;
     }
 
-    public void setResourceLocation(String resourceLocation) {
-        this.resourceLocation = resourceLocation;
+    public void setResourceLocations(String[] resourceLocations) {
+        this.resourceLocations = resourceLocations;
     }
 
     public boolean isWriteable() {
