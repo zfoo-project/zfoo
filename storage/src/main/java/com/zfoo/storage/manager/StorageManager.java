@@ -258,20 +258,22 @@ public class StorageManager implements IStorageManager {
             var resourceSet = new HashSet<Resource>();
             var resourceLocations = StringUtils.tokenize(storageConfig.getResourceLocation(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
             for (var resourceLocation : resourceLocations) {
+                var resources = new ArrayList<Resource>();
                 var packageSearchPath = StringUtils.format("{}/**/{}.*", resourceLocation, clazz.getSimpleName());
                 packageSearchPath = packageSearchPath.replaceAll("//", "/");
                 try {
-                    Arrays.stream(resourcePatternResolver.getResources(packageSearchPath)).filter(it -> ResourceEnum.containsResourceEnum(FileUtils.fileExtName(it.getFilename()))).forEach(it -> resourceSet.add(it));
+                    Arrays.stream(resourcePatternResolver.getResources(packageSearchPath)).filter(it -> ResourceEnum.containsResourceEnum(FileUtils.fileExtName(it.getFilename()))).forEach(it -> resources.add(it));
                 } catch (Exception e) {
                     // do nothing
                 }
 
                 // 通配符无法匹配根目录，所以如果找不到，再从根目录查找一遍
-                if (resourceSet.isEmpty()) {
+                if (resources.isEmpty()) {
                     packageSearchPath = StringUtils.format("{}/{}.*", resourceLocation, clazz.getSimpleName());
                     packageSearchPath = packageSearchPath.replaceAll("//", "/");
-                    Arrays.stream(resourcePatternResolver.getResources(packageSearchPath)).filter(it -> ResourceEnum.containsResourceEnum(FileUtils.fileExtName(it.getFilename()))).forEach(it -> resourceSet.add(it));
+                    Arrays.stream(resourcePatternResolver.getResources(packageSearchPath)).filter(it -> ResourceEnum.containsResourceEnum(FileUtils.fileExtName(it.getFilename()))).forEach(it -> resources.add(it));
                 }
+                resourceSet.addAll(resources);
             }
 
             if (CollectionUtils.isEmpty(resourceSet)) {
