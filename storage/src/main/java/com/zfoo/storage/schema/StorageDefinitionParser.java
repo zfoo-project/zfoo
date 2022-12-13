@@ -66,10 +66,10 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
         }
 
         resolvePlaceholder("id", "id", builder, element, parserContext);
-        resolvePlaceholder("package", "scanPackages", builder, scanElement, parserContext);
+        resolvePlaceholder("package", "scanPackage", builder, scanElement, parserContext);
         resolvePlaceholder("writeable", "writeable", builder, scanElement, parserContext);
         resolvePlaceholder("recycle", "recycle", builder, scanElement, parserContext);
-        resolvePlaceholder("location", "resourceLocations", builder, resourceElement, parserContext);
+        resolvePlaceholder("location", "resourceLocation", builder, resourceElement, parserContext);
 
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
@@ -90,8 +90,6 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
 
     private void resolvePlaceholder(String attributeName, String fieldName, BeanDefinitionBuilder builder, Element element, ParserContext parserContext) {
         var attributeValue = element.getAttribute(attributeName);
-        attributeValue=attributeValue.replaceAll(";",",");
-        attributeValue=attributeValue.replaceAll(" ",",");
         var environment = parserContext.getReaderContext().getEnvironment();
         var placeholder = environment.resolvePlaceholders(attributeValue);
         builder.addPropertyValue(fieldName, placeholder);

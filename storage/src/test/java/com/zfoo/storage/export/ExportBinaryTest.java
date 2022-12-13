@@ -78,8 +78,8 @@ public class ExportBinaryTest {
     @Test
     public void test() throws Exception {
         var config = new StorageConfig();
-        config.setScanPackages(new String[]{"com.zfoo.storage.export"});
-        config.setResourceLocations(new String[]{"classpath:/excel"});
+        config.setScanPackage("com.zfoo.storage.export");
+        config.setResourceLocation("classpath:/excel");
         config.setWriteable(true);
         config.setRecycle(false);
         var storageManager = new StorageManager();

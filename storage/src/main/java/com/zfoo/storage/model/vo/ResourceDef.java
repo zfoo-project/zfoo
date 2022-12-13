@@ -15,9 +15,6 @@ package com.zfoo.storage.model.vo;
 
 import org.springframework.core.io.Resource;
 
-import java.io.IOException;
-import java.util.Objects;
-
 /**
  * @author godotg
  * @version 4.0
@@ -41,28 +38,4 @@ public class ResourceDef {
         return resource;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ResourceDef that = (ResourceDef) o;
-        boolean equal= false;
-        try {
-            equal = this.resource.getFile().getAbsolutePath().equals(that.resource.getFile().getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return equal;
-    }
-
-    @Override
-    public int hashCode() {
-        int hashCode=0;
-        try {
-            hashCode=this.resource.getFile().getAbsolutePath().hashCode();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return hashCode;
-    }
 }
