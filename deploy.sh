@@ -35,18 +35,22 @@
 # In this way, the jar must be placed in the root directory (the topmost directory, not the root directory, don't make a mistake),
 # it is very important, because the jar of the root path is used by default to update the jar at the location you specify
 
-# update更新jar包，默认会使用根路径[/single-boot-1.0.jar]下的jar包去更新[/usr/local/tank/single-boot/single-boot-1.0.jar]的jar包
+# CN:update更新jar包，默认会使用根路径[/single-boot-1.0.jar]下的jar包去更新[/usr/local/tank/single-boot/single-boot-1.0.jar]的jar包
 # 此种方式jar必须放在 / 根目录(最上层的目录，不是root目录，不要弄错了)，非常重要，因为默认使用根路径的jar取更新你指定位置的jar
 
 #######################################################################################################################
 # usage 4:
 # sh deploy.sh stopUpdateStart /usr/local/tank/single-boot/single-boot-1.0.jar /usr/local/tank/single-boot
-# stopUpdateStart，按顺序执行命令stop，update，start，三合一的命令，因为有个update，所以必须把你的jar放在根目录（非常重要）
+
+# EN:stop Update Start, execute the commands stop, update, start, three-in-one commands in order,
+# because there is an update, so you must put your jar in the root directory
+
+# CN:stopUpdateStart，按顺序执行命令stop，update，start，三合一的命令，因为有个update，所以必须把你的jar放在根目录（非常重要）
 # stop的是[single-boot-1.0.jar]，会分割字符串[/usr/local/tank/single-boot/single-boot-1.0.jar]获取到最后的分号后的名称
 # update的是[/usr/local/tank/single-boot/single-boot-1.0.jar]，所以必须把jar放在 / 根目录(最上层的目录，不是root目录，不要弄错了)，非常重要
 # start同[usage 1]
 
-
+#######################################################################################################################
 # @author godotg
 # @version 3.0
 
