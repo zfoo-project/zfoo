@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * @author godotg
  * @version 3.0
  */
-public abstract class AbstractClient implements IClient {
+public abstract class AbstractClient<C extends Channel> extends ChannelInitializer<C> implements IClient {
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractClient.class);
 
@@ -53,20 +53,18 @@ public abstract class AbstractClient implements IClient {
         this.port = host.getPort();
     }
 
-    public abstract ChannelInitializer<? extends Channel> channelChannelInitializer();
-
     @Override
     public synchronized Session start() {
-        return doStart(channelChannelInitializer());
+        return doStart();
     }
 
-    private synchronized Session doStart(ChannelInitializer<? extends Channel> channelChannelInitializer) {
+    private synchronized Session doStart() {
         this.bootstrap = new Bootstrap();
         this.bootstrap.group(nioEventLoopGroup)
                 .channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_MB))
-                .handler(channelChannelInitializer());
+                .handler(this);
         var channelFuture = bootstrap.connect(hostAddress, port);
         channelFuture.syncUninterruptibly();
 

@@ -22,7 +22,6 @@ import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
@@ -31,6 +30,7 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,52 +42,46 @@ import java.util.function.BiFunction;
  * @author godotg
  * @version 3.0
  */
-public class WebsocketSslGatewayServer extends AbstractServer {
+public class WebsocketSslGatewayServer extends AbstractServer<SocketChannel> {
 
     private static final Logger logger = LoggerFactory.getLogger(WebsocketSslGatewayServer.class);
 
     private SslContext sslContext;
 
-    private BiFunction<Session, IPacket, Boolean> packetFilter;
+    private final GatewayRouteHandler gatewayRouteHandler;
 
-    public WebsocketSslGatewayServer(HostAndPort host, InputStream pem, InputStream key, BiFunction<Session, IPacket, Boolean> packetFilter) {
+    public WebsocketSslGatewayServer(HostAndPort host,
+                                     InputStream pem,
+                                     InputStream key,
+                                     BiFunction<Session, IPacket, Boolean> packetFilter) {
+        this(host, pem, key, packetFilter, null);
+    }
+
+    public WebsocketSslGatewayServer(HostAndPort host,
+                                     InputStream pem,
+                                     InputStream key,
+                                     BiFunction<Session, IPacket, Boolean> packetFilter,
+                                     GatewayRouteHandler gatewayRouteHandler) {
         super(host);
         try {
             this.sslContext = SslContextBuilder.forServer(pem, key).build();
         } catch (SSLException e) {
             logger.error(ExceptionUtils.getMessage(e));
         }
-        this.packetFilter = packetFilter;
+        this.gatewayRouteHandler = MoreObjects.firstNonNull(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
     }
 
     @Override
-    public ChannelInitializer<SocketChannel> channelChannelInitializer() {
-        return new ChannelHandlerInitializer(sslContext, packetFilter);
-    }
+    protected void initChannel(SocketChannel channel) {
+        channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
+        channel.pipeline().addLast(new ServerIdleHandler());
 
-
-    private static class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
-
-        private SslContext sslContext;
-        private BiFunction<Session, IPacket, Boolean> packetFilter;
-
-        public ChannelHandlerInitializer(SslContext sslContext, BiFunction<Session, IPacket, Boolean> packetFilter) {
-            this.sslContext = sslContext;
-            this.packetFilter = packetFilter;
-        }
-
-        @Override
-        protected void initChannel(SocketChannel channel) {
-            channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
-            channel.pipeline().addLast(new ServerIdleHandler());
-
-            channel.pipeline().addLast(sslContext.newHandler(channel.alloc()));
-            channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
-            channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
-            channel.pipeline().addLast(new WebSocketServerProtocolHandler("/"));
-            channel.pipeline().addLast(new ChunkedWriteHandler());
-            channel.pipeline().addLast(new WebSocketCodecHandler());
-            channel.pipeline().addLast(new GatewayRouteHandler(packetFilter));
-        }
+        channel.pipeline().addLast(sslContext.newHandler(channel.alloc()));
+        channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
+        channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
+        channel.pipeline().addLast(new WebSocketServerProtocolHandler("/"));
+        channel.pipeline().addLast(new ChunkedWriteHandler());
+        channel.pipeline().addLast(new WebSocketCodecHandler());
+        channel.pipeline().addLast(gatewayRouteHandler);
     }
 }

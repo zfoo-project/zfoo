@@ -26,16 +26,27 @@ import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+import java.util.function.Consumer;
+
 /**
  * @author godotg
  * @version 3.0
  */
 @ChannelHandler.Sharable
-public class BaseRouteHandler extends ChannelInboundHandlerAdapter {
+public abstract class BaseRouteHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseRouteHandler.class);
 
     public static final AttributeKey<Session> SESSION_KEY = AttributeKey.valueOf("session");
+
+    protected final Consumer<Session> sessionActiveConsumer;
+    protected final Consumer<Session> sessionInactiveConsumer;
+
+    protected BaseRouteHandler(Consumer<Session> sessionActiveConsumer, Consumer<Session> sessionInactiveConsumer) {
+        this.sessionActiveConsumer = Objects.requireNonNull(sessionActiveConsumer);
+        this.sessionInactiveConsumer = Objects.requireNonNull(sessionInactiveConsumer);
+    }
 
     public static Session initChannel(Channel channel) {
         var sessionAttr = channel.attr(SESSION_KEY);
@@ -46,6 +57,22 @@ public class BaseRouteHandler extends ChannelInboundHandlerAdapter {
             throw new RuntimeException(StringUtils.format("The properties of the session[channel:{}] cannot be set", channel));
         }
         return session;
+    }
+
+    protected void onSessionActive(Session session) {
+        try {
+            this.sessionActiveConsumer.accept(session);
+        } catch (Throwable ignored) {
+
+        }
+    }
+
+    protected void onSessionInavtive(Session session) {
+        try {
+            this.sessionInactiveConsumer.accept(session);
+        } catch (Throwable ignored) {
+
+        }
     }
 
     @Override

@@ -23,20 +23,29 @@ import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollDatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import org.apache.curator.shaded.com.google.common.base.MoreObjects;
+
+import java.util.function.Consumer;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class UdpClient extends AbstractClient {
+public class UdpClient extends AbstractClient<Channel> {
+
+    private final ClientRouteHandler clientRouteHandler;
 
     public UdpClient(HostAndPort host) {
+        this(host, null);
+    }
+
+    public UdpClient(HostAndPort host, ClientRouteHandler clientRouteHandler) {
         super(host);
+        this.clientRouteHandler = MoreObjects.firstNonNull(clientRouteHandler, new ClientRouteHandler());
     }
 
     @Override
@@ -46,7 +55,7 @@ public class UdpClient extends AbstractClient {
             this.bootstrap.group(nioEventLoopGroup)
                     .channel(Epoll.isAvailable() ? EpollDatagramChannel.class : NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
-                    .handler(new ChannelHandlerInitializer());
+                    .handler(this);
 
             // bind(0)随机选择一个端口
             var channelFuture = bootstrap.bind(0).sync();
@@ -72,18 +81,8 @@ public class UdpClient extends AbstractClient {
     }
 
     @Override
-    public ChannelInitializer<Channel> channelChannelInitializer() {
-        return new ChannelHandlerInitializer();
+    protected void initChannel(Channel channel) {
+        channel.pipeline().addLast(new UdpCodecHandler());
+        channel.pipeline().addLast(clientRouteHandler);
     }
-
-
-    private static class ChannelHandlerInitializer extends ChannelInitializer<Channel> {
-        @Override
-        protected void initChannel(Channel channel) {
-            channel.pipeline().addLast(new UdpCodecHandler());
-            channel.pipeline().addLast(new ClientRouteHandler());
-        }
-    }
-
-
 }
