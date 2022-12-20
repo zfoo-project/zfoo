@@ -25,9 +25,11 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
-import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
+
+import java.util.Objects;
 
 /**
  * @author godotg
@@ -43,9 +45,9 @@ public class UdpServer extends AbstractServer<Channel> {
         this(host, null);
     }
 
-    public UdpServer(HostAndPort host, ServerRouteHandler serverRouteHandler) {
+    public UdpServer(HostAndPort host, @Nullable ServerRouteHandler serverRouteHandler) {
         super(host);
-        this.serverRouteHandler = MoreObjects.firstNonNull(serverRouteHandler, new ServerRouteHandler());
+        this.serverRouteHandler = Objects.requireNonNullElse(serverRouteHandler, new ServerRouteHandler());
     }
 
     @Override

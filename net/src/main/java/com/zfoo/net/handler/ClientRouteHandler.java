@@ -17,15 +17,11 @@ import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.event.ClientSessionActiveEvent;
 import com.zfoo.net.core.event.ClientSessionInactiveEvent;
-import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.function.Consumer;
 
 /**
  * @author godotg
@@ -36,20 +32,13 @@ public class ClientRouteHandler extends BaseRouteHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientRouteHandler.class);
 
-    public ClientRouteHandler() {
-        this(null, null);
-    }
-
-    public ClientRouteHandler(Consumer<Session> sessionActiveConsumer, Consumer<Session> sessionInactiveConsumer) {
-        super(MoreObjects.firstNonNull(sessionActiveConsumer,
-                        (session) -> EventBus.submit(ClientSessionActiveEvent.valueOf(session)))
-                , MoreObjects.firstNonNull(sessionInactiveConsumer,
-                        (session) -> EventBus.submit(ClientSessionInactiveEvent.valueOf(session))));
-    }
-
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
+        // 客户端的session初始化在启动的时候已经做了，这边直接获取session
+        var session = SessionUtils.getSession(ctx);
+        onSessionActive(session);
+        EventBus.submit(ClientSessionActiveEvent.valueOf(session));
         logger.info("client channel is active {}", SessionUtils.sessionInfo(ctx));
     }
 
@@ -64,7 +53,8 @@ public class ClientRouteHandler extends BaseRouteHandler {
         }
 
         NetContext.getSessionManager().removeClientSession(session);
-        onSessionInavtive(session);
+        onSessionInactive(session);
+        EventBus.submit(ClientSessionInactiveEvent.valueOf(session));
 
         // 如果是消费者inactive，还需要触发客户端消费者检查事件，以便重新连接
         if (session.getConsumerAttribute() != null) {

@@ -27,9 +27,9 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
-import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 import org.springframework.lang.Nullable;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
@@ -44,11 +44,9 @@ public class WebsocketGatewayServer extends AbstractServer<SocketChannel> {
         this(host, packetFilter, null);
     }
 
-    public WebsocketGatewayServer(HostAndPort host,
-                                  @Nullable BiFunction<Session, IPacket, Boolean> packetFilter,
-                                  GatewayRouteHandler gatewayRouteHandler) {
+    public WebsocketGatewayServer(HostAndPort host, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter, @Nullable GatewayRouteHandler gatewayRouteHandler) {
         super(host);
-        this.gatewayRouteHandler = MoreObjects.firstNonNull(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
+        this.gatewayRouteHandler = Objects.requireNonNullElse(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
     }
 
 

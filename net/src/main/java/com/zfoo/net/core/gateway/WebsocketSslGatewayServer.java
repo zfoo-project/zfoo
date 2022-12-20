@@ -30,12 +30,13 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
-import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 
 import javax.net.ssl.SSLException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
@@ -50,25 +51,18 @@ public class WebsocketSslGatewayServer extends AbstractServer<SocketChannel> {
 
     private final GatewayRouteHandler gatewayRouteHandler;
 
-    public WebsocketSslGatewayServer(HostAndPort host,
-                                     InputStream pem,
-                                     InputStream key,
-                                     BiFunction<Session, IPacket, Boolean> packetFilter) {
+    public WebsocketSslGatewayServer(HostAndPort host, InputStream pem, InputStream key, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter) {
         this(host, pem, key, packetFilter, null);
     }
 
-    public WebsocketSslGatewayServer(HostAndPort host,
-                                     InputStream pem,
-                                     InputStream key,
-                                     BiFunction<Session, IPacket, Boolean> packetFilter,
-                                     GatewayRouteHandler gatewayRouteHandler) {
+    public WebsocketSslGatewayServer(HostAndPort host, InputStream pem, InputStream key, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter, @Nullable GatewayRouteHandler gatewayRouteHandler) {
         super(host);
         try {
             this.sslContext = SslContextBuilder.forServer(pem, key).build();
         } catch (SSLException e) {
             logger.error(ExceptionUtils.getMessage(e));
         }
-        this.gatewayRouteHandler = MoreObjects.firstNonNull(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
+        this.gatewayRouteHandler = Objects.requireNonNullElse(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
     }
 
     @Override

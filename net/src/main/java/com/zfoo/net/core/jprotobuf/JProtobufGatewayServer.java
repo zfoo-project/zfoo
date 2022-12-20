@@ -22,9 +22,9 @@ import com.zfoo.protocol.IPacket;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
-import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 import org.springframework.lang.Nullable;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
@@ -40,11 +40,9 @@ public class JProtobufGatewayServer extends AbstractServer<SocketChannel> {
     }
 
 
-    public JProtobufGatewayServer(HostAndPort host,
-                                  @Nullable BiFunction<Session, IPacket, Boolean> packetFilter,
-                                  GatewayRouteHandler gatewayRouteHandler) {
+    public JProtobufGatewayServer(HostAndPort host, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter, @Nullable GatewayRouteHandler gatewayRouteHandler) {
         super(host);
-        this.gatewayRouteHandler = MoreObjects.firstNonNull(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
+        this.gatewayRouteHandler = Objects.requireNonNullElse(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
     }
 
     @Override

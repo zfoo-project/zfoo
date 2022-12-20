@@ -18,11 +18,11 @@ import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.handler.codec.jprotobuf.JProtobufTcpCodecHandler;
 import com.zfoo.net.handler.idle.ClientIdleHandler;
 import com.zfoo.util.net.HostAndPort;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
-import org.apache.curator.shaded.com.google.common.base.MoreObjects;
+import org.springframework.lang.Nullable;
+
+import java.util.Objects;
 
 /**
  * @author godotg
@@ -36,9 +36,9 @@ public class JProtobufTcpClient extends AbstractClient<SocketChannel> {
         this(host, null);
     }
 
-    public JProtobufTcpClient(HostAndPort host, ClientRouteHandler clientRouteHandler) {
+    public JProtobufTcpClient(HostAndPort host, @Nullable ClientRouteHandler clientRouteHandler) {
         super(host);
-        this.clientRouteHandler = MoreObjects.firstNonNull(clientRouteHandler, new ClientRouteHandler());
+        this.clientRouteHandler = Objects.requireNonNullElse(clientRouteHandler, new ClientRouteHandler());
     }
 
     @Override

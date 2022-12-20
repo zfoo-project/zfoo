@@ -26,7 +26,6 @@ import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -40,13 +39,9 @@ public abstract class BaseRouteHandler extends ChannelInboundHandlerAdapter {
 
     public static final AttributeKey<Session> SESSION_KEY = AttributeKey.valueOf("session");
 
-    protected final Consumer<Session> sessionActiveConsumer;
-    protected final Consumer<Session> sessionInactiveConsumer;
+    public Consumer<Session> sessionActiveConsumer;
+    public Consumer<Session> sessionInactiveConsumer;
 
-    protected BaseRouteHandler(Consumer<Session> sessionActiveConsumer, Consumer<Session> sessionInactiveConsumer) {
-        this.sessionActiveConsumer = Objects.requireNonNull(sessionActiveConsumer);
-        this.sessionInactiveConsumer = Objects.requireNonNull(sessionInactiveConsumer);
-    }
 
     public static Session initChannel(Channel channel) {
         var sessionAttr = channel.attr(SESSION_KEY);
@@ -60,18 +55,14 @@ public abstract class BaseRouteHandler extends ChannelInboundHandlerAdapter {
     }
 
     protected void onSessionActive(Session session) {
-        try {
-            this.sessionActiveConsumer.accept(session);
-        } catch (Throwable ignored) {
-
+        if (sessionActiveConsumer != null) {
+            sessionActiveConsumer.accept(session);
         }
     }
 
-    protected void onSessionInavtive(Session session) {
-        try {
-            this.sessionInactiveConsumer.accept(session);
-        } catch (Throwable ignored) {
-
+    protected void onSessionInactive(Session session) {
+        if (sessionInactiveConsumer != null) {
+            sessionInactiveConsumer.accept(session);
         }
     }
 

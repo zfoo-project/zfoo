@@ -17,15 +17,11 @@ import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.event.ServerSessionActiveEvent;
 import com.zfoo.net.core.event.ServerSessionInactiveEvent;
-import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.function.Consumer;
 
 /**
  * @author godotg
@@ -36,17 +32,6 @@ public class ServerRouteHandler extends BaseRouteHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerRouteHandler.class);
 
-    public ServerRouteHandler() {
-        this(null, null);
-    }
-
-    public ServerRouteHandler(Consumer<Session> sessionActiveConsumer, Consumer<Session> sessionInactiveConsumer) {
-        super(MoreObjects.firstNonNull(sessionActiveConsumer,
-                        (session) -> EventBus.submit(ServerSessionActiveEvent.valueOf(session)))
-                , MoreObjects.firstNonNull(sessionInactiveConsumer,
-                        (session) -> EventBus.submit(ServerSessionInactiveEvent.valueOf(session))));
-    }
-
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
@@ -54,6 +39,7 @@ public class ServerRouteHandler extends BaseRouteHandler {
         NetContext.getSessionManager().addServerSession(session);
         logger.info("server channel is active {}", SessionUtils.sessionInfo(ctx));
         onSessionActive(session);
+        EventBus.submit(ServerSessionActiveEvent.valueOf(session));
     }
 
     @Override
@@ -66,6 +52,7 @@ public class ServerRouteHandler extends BaseRouteHandler {
         }
         NetContext.getSessionManager().removeServerSession(session);
         logger.warn("server channel is inactive {}", SessionUtils.sessionSimpleInfo(ctx));
-        onSessionInavtive(session);
+        onSessionInactive(session);
+        EventBus.submit(ServerSessionInactiveEvent.valueOf(session));
     }
 }

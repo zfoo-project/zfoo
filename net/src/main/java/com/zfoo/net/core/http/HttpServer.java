@@ -24,8 +24,9 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import org.apache.curator.shaded.com.google.common.base.MoreObjects;
+import org.springframework.lang.Nullable;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -46,12 +47,10 @@ public class HttpServer extends AbstractServer<SocketChannel> {
     }
 
 
-    public HttpServer(HostAndPort host,
-                      Function<FullHttpRequest, DecodedPacketInfo> uriResolver,
-                      ServerRouteHandler serverRouteHandler) {
+    public HttpServer(HostAndPort host, Function<FullHttpRequest, DecodedPacketInfo> uriResolver, @Nullable ServerRouteHandler serverRouteHandler) {
         super(host);
         this.uriResolver = uriResolver;
-        this.serverRouteHandler = MoreObjects.firstNonNull(serverRouteHandler, new ServerRouteHandler());
+        this.serverRouteHandler = Objects.requireNonNullElse(serverRouteHandler, new ServerRouteHandler());
     }
 
     @Override

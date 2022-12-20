@@ -24,7 +24,9 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolConfig;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import org.apache.curator.shaded.com.google.common.base.MoreObjects;
+import org.springframework.lang.Nullable;
+
+import java.util.Objects;
 
 /**
  * @author godotg
@@ -39,11 +41,10 @@ public class JsonWebsocketClient extends AbstractClient<SocketChannel> {
         this(host, webSocketClientProtocolConfig, null);
     }
 
-    public JsonWebsocketClient(HostAndPort host, WebSocketClientProtocolConfig webSocketClientProtocolConfig,
-                               ClientRouteHandler clientRouteHandler) {
+    public JsonWebsocketClient(HostAndPort host, WebSocketClientProtocolConfig webSocketClientProtocolConfig, @Nullable ClientRouteHandler clientRouteHandler) {
         super(host);
         this.webSocketClientProtocolConfig = webSocketClientProtocolConfig;
-        this.clientRouteHandler = MoreObjects.firstNonNull(clientRouteHandler, new ClientRouteHandler());
+        this.clientRouteHandler = Objects.requireNonNullElse(clientRouteHandler, new ClientRouteHandler());
     }
 
 

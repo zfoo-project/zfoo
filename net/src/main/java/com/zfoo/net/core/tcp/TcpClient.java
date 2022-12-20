@@ -20,7 +20,9 @@ import com.zfoo.net.handler.idle.ClientIdleHandler;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
-import org.apache.curator.shaded.com.google.common.base.MoreObjects;
+import org.springframework.lang.Nullable;
+
+import java.util.Objects;
 
 /**
  * @author godotg
@@ -34,9 +36,9 @@ public class TcpClient extends AbstractClient<SocketChannel> {
         this(host, null);
     }
 
-    public TcpClient(HostAndPort host, ClientRouteHandler clientRouteHandler) {
+    public TcpClient(HostAndPort host, @Nullable ClientRouteHandler clientRouteHandler) {
         super(host);
-        this.clientRouteHandler = MoreObjects.firstNonNull(clientRouteHandler, new ClientRouteHandler());
+        this.clientRouteHandler = Objects.requireNonNullElse(clientRouteHandler, new ClientRouteHandler());
     }
 
     @Override

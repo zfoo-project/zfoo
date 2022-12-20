@@ -37,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 /**
  * @author godotg
@@ -51,15 +50,9 @@ public class GatewayRouteHandler extends ServerRouteHandler {
     private final BiFunction<Session, IPacket, Boolean> packetFilter;
 
     public GatewayRouteHandler(BiFunction<Session, IPacket, Boolean> packetFilter) {
-        this(packetFilter, null, null);
-    }
-
-    public GatewayRouteHandler(BiFunction<Session, IPacket, Boolean> packetFilter,
-                               Consumer<Session> sessionActiveConsumer,
-                               Consumer<Session> sessionInactiveConsumer) {
-        super(sessionActiveConsumer, sessionInactiveConsumer);
         this.packetFilter = packetFilter;
     }
+
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
