@@ -18,44 +18,43 @@ import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolConfig;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import org.apache.curator.shaded.com.google.common.base.MoreObjects;
+
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class WebsocketClient extends AbstractClient {
+public class WebsocketClient extends AbstractClient<SocketChannel> {
 
-    private WebSocketClientProtocolConfig webSocketClientProtocolConfig;
+    private final WebSocketClientProtocolConfig webSocketClientProtocolConfig;
+
+    private final ClientRouteHandler clientRouteHandler;
 
     public WebsocketClient(HostAndPort host, WebSocketClientProtocolConfig webSocketClientProtocolConfig) {
+        this(host, webSocketClientProtocolConfig, null);
+    }
+
+    public WebsocketClient(HostAndPort host, WebSocketClientProtocolConfig webSocketClientProtocolConfig,
+                           ClientRouteHandler clientRouteHandler) {
         super(host);
         this.webSocketClientProtocolConfig = webSocketClientProtocolConfig;
+        this.clientRouteHandler = MoreObjects.firstNonNull(clientRouteHandler, new ClientRouteHandler());
     }
 
     @Override
-    public ChannelInitializer<? extends Channel> channelChannelInitializer() {
-        return new ChannelHandlerInitializer();
+    public void initChannel(SocketChannel channel) {
+        channel.pipeline().addLast(new HttpClientCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
+        channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
+        channel.pipeline().addLast(new WebSocketClientProtocolHandler(webSocketClientProtocolConfig));
+        channel.pipeline().addLast(new ChunkedWriteHandler());
+        channel.pipeline().addLast(new WebSocketCodecHandler());
+        channel.pipeline().addLast(clientRouteHandler);
     }
-
-
-    public class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
-        @Override
-        public void initChannel(SocketChannel channel) {
-            channel.pipeline().addLast(new HttpClientCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
-            channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
-            channel.pipeline().addLast(new WebSocketClientProtocolHandler(webSocketClientProtocolConfig));
-            channel.pipeline().addLast(new ChunkedWriteHandler());
-            channel.pipeline().addLast(new WebSocketCodecHandler());
-            channel.pipeline().addLast(new ClientRouteHandler());
-        }
-    }
-
 }

@@ -15,12 +15,17 @@ package com.zfoo.net.handler;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
+import com.zfoo.net.core.event.ClientSessionActiveEvent;
 import com.zfoo.net.core.event.ClientSessionInactiveEvent;
+import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.function.Consumer;
 
 /**
  * @author godotg
@@ -30,6 +35,17 @@ import org.slf4j.LoggerFactory;
 public class ClientRouteHandler extends BaseRouteHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientRouteHandler.class);
+
+    public ClientRouteHandler() {
+        this(null, null);
+    }
+
+    public ClientRouteHandler(Consumer<Session> sessionActiveConsumer, Consumer<Session> sessionInactiveConsumer) {
+        super(MoreObjects.firstNonNull(sessionActiveConsumer,
+                        (session) -> EventBus.submit(ClientSessionActiveEvent.valueOf(session)))
+                , MoreObjects.firstNonNull(sessionInactiveConsumer,
+                        (session) -> EventBus.submit(ClientSessionInactiveEvent.valueOf(session))));
+    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -48,7 +64,7 @@ public class ClientRouteHandler extends BaseRouteHandler {
         }
 
         NetContext.getSessionManager().removeClientSession(session);
-        EventBus.submit(ClientSessionInactiveEvent.valueOf(session));
+        onSessionInavtive(session);
 
         // 如果是消费者inactive，还需要触发客户端消费者检查事件，以便重新连接
         if (session.getConsumerAttribute() != null) {

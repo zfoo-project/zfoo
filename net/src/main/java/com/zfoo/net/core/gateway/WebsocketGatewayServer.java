@@ -21,13 +21,13 @@ import com.zfoo.net.session.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 import org.springframework.lang.Nullable;
 
 import java.util.function.BiFunction;
@@ -36,40 +36,32 @@ import java.util.function.BiFunction;
  * @author godotg
  * @version 3.0
  */
-public class WebsocketGatewayServer extends AbstractServer {
+public class WebsocketGatewayServer extends AbstractServer<SocketChannel> {
 
-    private BiFunction<Session, IPacket, Boolean> packetFilter;
+    private final GatewayRouteHandler gatewayRouteHandler;
 
     public WebsocketGatewayServer(HostAndPort host, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter) {
-        super(host);
-        this.packetFilter = packetFilter;
+        this(host, packetFilter, null);
     }
+
+    public WebsocketGatewayServer(HostAndPort host,
+                                  @Nullable BiFunction<Session, IPacket, Boolean> packetFilter,
+                                  GatewayRouteHandler gatewayRouteHandler) {
+        super(host);
+        this.gatewayRouteHandler = MoreObjects.firstNonNull(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
+    }
+
 
     @Override
-    public ChannelInitializer<SocketChannel> channelChannelInitializer() {
-        return new ChannelHandlerInitializer(packetFilter);
-    }
+    protected void initChannel(SocketChannel channel) {
+        channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
+        channel.pipeline().addLast(new ServerIdleHandler());
 
-
-    private static class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
-
-        private BiFunction<Session, IPacket, Boolean> packetFilter;
-
-        public ChannelHandlerInitializer(BiFunction<Session, IPacket, Boolean> packetFilter) {
-            this.packetFilter = packetFilter;
-        }
-
-        @Override
-        protected void initChannel(SocketChannel channel) {
-            channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
-            channel.pipeline().addLast(new ServerIdleHandler());
-
-            channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
-            channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
-            channel.pipeline().addLast(new WebSocketServerProtocolHandler("/websocket"));
-            channel.pipeline().addLast(new ChunkedWriteHandler());
-            channel.pipeline().addLast(new WebSocketCodecHandler());
-            channel.pipeline().addLast(new GatewayRouteHandler(packetFilter));
-        }
+        channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
+        channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
+        channel.pipeline().addLast(new WebSocketServerProtocolHandler("/websocket"));
+        channel.pipeline().addLast(new ChunkedWriteHandler());
+        channel.pipeline().addLast(new WebSocketCodecHandler());
+        channel.pipeline().addLast(gatewayRouteHandler);
     }
 }

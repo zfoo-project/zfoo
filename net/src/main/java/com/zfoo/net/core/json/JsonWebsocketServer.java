@@ -16,49 +16,45 @@ package com.zfoo.net.core.json;
 import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.handler.ServerRouteHandler;
 import com.zfoo.net.handler.codec.json.JsonWebSocketCodecHandler;
-import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class JsonWebsocketServer extends AbstractServer {
+public class JsonWebsocketServer extends AbstractServer<SocketChannel> {
+
+    private final ServerRouteHandler serverRouteHandler;
 
     public JsonWebsocketServer(HostAndPort host) {
+        this(host, null);
+    }
+
+    public JsonWebsocketServer(HostAndPort host, ServerRouteHandler serverRouteHandler) {
         super(host);
+        this.serverRouteHandler = MoreObjects.firstNonNull(serverRouteHandler, new ServerRouteHandler());
     }
 
     @Override
-    public ChannelInitializer<SocketChannel> channelChannelInitializer() {
-        return new ChannelHandlerInitializer();
+    public void initChannel(SocketChannel channel) {
+        // 编解码 http 请求
+        channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
+        // 聚合解码 HttpRequest/HttpContent/LastHttpContent 到 FullHttpRequest
+        // 保证接收的 Http 请求的完整性
+        channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
+        // 处理其他的 WebSocketFrame
+        channel.pipeline().addLast(new WebSocketServerProtocolHandler("/websocket"));
+        // 写文件内容，支持异步发送大的码流，一般用于发送文件流
+        channel.pipeline().addLast(new ChunkedWriteHandler());
+        // 编解码WebSocketFrame二进制协议
+        channel.pipeline().addLast(new JsonWebSocketCodecHandler());
+        channel.pipeline().addLast(serverRouteHandler);
     }
-
-
-    public static class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
-
-        @Override
-        public void initChannel(SocketChannel channel) {
-            // 编解码 http 请求
-            channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
-            // 聚合解码 HttpRequest/HttpContent/LastHttpContent 到 FullHttpRequest
-            // 保证接收的 Http 请求的完整性
-            channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
-            // 处理其他的 WebSocketFrame
-            channel.pipeline().addLast(new WebSocketServerProtocolHandler("/websocket"));
-            // 写文件内容，支持异步发送大的码流，一般用于发送文件流
-            channel.pipeline().addLast(new ChunkedWriteHandler());
-            // 编解码WebSocketFrame二进制协议
-            channel.pipeline().addLast(new JsonWebSocketCodecHandler());
-            channel.pipeline().addLast(new ServerRouteHandler());
-        }
-    }
-
 }

@@ -22,32 +22,30 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class JProtobufTcpClient extends AbstractClient {
+public class JProtobufTcpClient extends AbstractClient<SocketChannel> {
+
+    private final ClientRouteHandler clientRouteHandler;
 
     public JProtobufTcpClient(HostAndPort host) {
+        this(host, null);
+    }
+
+    public JProtobufTcpClient(HostAndPort host, ClientRouteHandler clientRouteHandler) {
         super(host);
+        this.clientRouteHandler = MoreObjects.firstNonNull(clientRouteHandler, new ClientRouteHandler());
     }
 
     @Override
-    public ChannelInitializer<? extends Channel> channelChannelInitializer() {
-        return new ChannelHandlerInitializer();
+    protected void initChannel(SocketChannel channel) {
+        channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
+        channel.pipeline().addLast(new ClientIdleHandler());
+        channel.pipeline().addLast(new JProtobufTcpCodecHandler());
+        channel.pipeline().addLast(clientRouteHandler);
     }
-
-
-    private static class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
-        @Override
-        protected void initChannel(SocketChannel channel) {
-            channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
-            channel.pipeline().addLast(new ClientIdleHandler());
-            channel.pipeline().addLast(new JProtobufTcpCodecHandler());
-            channel.pipeline().addLast(new ClientRouteHandler());
-        }
-    }
-
-
 }

@@ -18,38 +18,35 @@ import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.handler.codec.tcp.TcpCodecHandler;
 import com.zfoo.net.handler.idle.ClientIdleHandler;
 import com.zfoo.util.net.HostAndPort;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.apache.curator.shaded.com.google.common.base.MoreObjects;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class TcpClient extends AbstractClient {
+public class TcpClient extends AbstractClient<SocketChannel> {
+
+    private final ClientRouteHandler clientRouteHandler;
 
     public TcpClient(HostAndPort host) {
+        this(host, null);
+    }
+
+    public TcpClient(HostAndPort host, ClientRouteHandler clientRouteHandler) {
         super(host);
+        this.clientRouteHandler = MoreObjects.firstNonNull(clientRouteHandler, new ClientRouteHandler());
     }
 
     @Override
-    public ChannelInitializer<? extends Channel> channelChannelInitializer() {
-        return new ChannelHandlerInitializer();
+    protected void initChannel(SocketChannel channel) {
+        // 可以看出来，这个客户端检测到空闲的时间是60s，相对短一点，这样子就可以发送心跳。
+        // 服务器端则是180s，相对长一点，一旦检测到空闲，则把客户端踢掉。
+        channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
+        channel.pipeline().addLast(new ClientIdleHandler());
+        channel.pipeline().addLast(new TcpCodecHandler());
+        channel.pipeline().addLast(clientRouteHandler);
     }
-
-
-    private static class ChannelHandlerInitializer extends ChannelInitializer<SocketChannel> {
-        @Override
-        protected void initChannel(SocketChannel channel) {
-            // 可以看出来，这个客户端检测到空闲的时间是60s，相对短一点，这样子就可以发送心跳。
-            // 服务器端则是180s，相对长一点，一旦检测到空闲，则把客户端踢掉。
-            channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
-            channel.pipeline().addLast(new ClientIdleHandler());
-            channel.pipeline().addLast(new TcpCodecHandler());
-            channel.pipeline().addLast(new ClientRouteHandler());
-        }
-    }
-
 
 }
