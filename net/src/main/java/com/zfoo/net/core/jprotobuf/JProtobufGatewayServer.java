@@ -24,7 +24,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.lang.Nullable;
 
-import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
@@ -33,16 +32,11 @@ import java.util.function.BiFunction;
  */
 public class JProtobufGatewayServer extends AbstractServer<SocketChannel> {
 
-    private final GatewayRouteHandler gatewayRouteHandler;
+    private final BiFunction<Session, IPacket, Boolean> packetFilter;
 
     public JProtobufGatewayServer(HostAndPort host, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter) {
-        this(host, packetFilter, null);
-    }
-
-
-    public JProtobufGatewayServer(HostAndPort host, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter, @Nullable GatewayRouteHandler gatewayRouteHandler) {
         super(host);
-        this.gatewayRouteHandler = Objects.requireNonNullElse(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
+        this.packetFilter = packetFilter;
     }
 
     @Override
@@ -50,7 +44,7 @@ public class JProtobufGatewayServer extends AbstractServer<SocketChannel> {
         channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
         channel.pipeline().addLast(new ServerIdleHandler());
         channel.pipeline().addLast(new JProtobufTcpCodecHandler());
-        channel.pipeline().addLast(gatewayRouteHandler);
+        channel.pipeline().addLast(new GatewayRouteHandler(packetFilter));
     }
 
 }

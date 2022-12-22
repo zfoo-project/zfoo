@@ -27,27 +27,16 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.lang.Nullable;
-
-import java.util.Objects;
 
 /**
  * @author godotg
  * @version 3.0
  */
 public class UdpServer extends AbstractServer<Channel> {
-
     private static final Logger logger = LoggerFactory.getLogger(UdpServer.class);
 
-    private final ServerRouteHandler serverRouteHandler;
-
     public UdpServer(HostAndPort host) {
-        this(host, null);
-    }
-
-    public UdpServer(HostAndPort host, @Nullable ServerRouteHandler serverRouteHandler) {
         super(host);
-        this.serverRouteHandler = Objects.requireNonNullElse(serverRouteHandler, new ServerRouteHandler());
     }
 
     @Override
@@ -78,6 +67,6 @@ public class UdpServer extends AbstractServer<Channel> {
     @Override
     protected void initChannel(Channel channel) {
         channel.pipeline().addLast(new UdpCodecHandler());
-        channel.pipeline().addLast(serverRouteHandler);
+        channel.pipeline().addLast(new ServerRouteHandler());
     }
 }

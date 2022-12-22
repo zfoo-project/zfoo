@@ -24,9 +24,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import org.springframework.lang.Nullable;
 
-import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -38,19 +36,11 @@ public class HttpServer extends AbstractServer<SocketChannel> {
     /**
      * http的地址解析器
      */
-    private final Function<FullHttpRequest, DecodedPacketInfo> uriResolver;
-
-    private final ServerRouteHandler serverRouteHandler;
+    private Function<FullHttpRequest, DecodedPacketInfo> uriResolver;
 
     public HttpServer(HostAndPort host, Function<FullHttpRequest, DecodedPacketInfo> uriResolver) {
-        this(host, uriResolver, null);
-    }
-
-
-    public HttpServer(HostAndPort host, Function<FullHttpRequest, DecodedPacketInfo> uriResolver, @Nullable ServerRouteHandler serverRouteHandler) {
         super(host);
         this.uriResolver = uriResolver;
-        this.serverRouteHandler = Objects.requireNonNullElse(serverRouteHandler, new ServerRouteHandler());
     }
 
     @Override
@@ -59,6 +49,6 @@ public class HttpServer extends AbstractServer<SocketChannel> {
         channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
         channel.pipeline().addLast(new ChunkedWriteHandler());
         channel.pipeline().addLast(new HttpCodecHandler(uriResolver));
-        channel.pipeline().addLast(serverRouteHandler);
+        channel.pipeline().addLast(new ServerRouteHandler());
     }
 }

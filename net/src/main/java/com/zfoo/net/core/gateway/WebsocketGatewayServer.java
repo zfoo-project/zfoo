@@ -29,7 +29,6 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.lang.Nullable;
 
-import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
@@ -38,17 +37,12 @@ import java.util.function.BiFunction;
  */
 public class WebsocketGatewayServer extends AbstractServer<SocketChannel> {
 
-    private final GatewayRouteHandler gatewayRouteHandler;
+    private BiFunction<Session, IPacket, Boolean> packetFilter;
 
     public WebsocketGatewayServer(HostAndPort host, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter) {
-        this(host, packetFilter, null);
-    }
-
-    public WebsocketGatewayServer(HostAndPort host, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter, @Nullable GatewayRouteHandler gatewayRouteHandler) {
         super(host);
-        this.gatewayRouteHandler = Objects.requireNonNullElse(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
+        this.packetFilter = packetFilter;
     }
-
 
     @Override
     protected void initChannel(SocketChannel channel) {
@@ -60,6 +54,6 @@ public class WebsocketGatewayServer extends AbstractServer<SocketChannel> {
         channel.pipeline().addLast(new WebSocketServerProtocolHandler("/websocket"));
         channel.pipeline().addLast(new ChunkedWriteHandler());
         channel.pipeline().addLast(new WebSocketCodecHandler());
-        channel.pipeline().addLast(gatewayRouteHandler);
+        channel.pipeline().addLast(new GatewayRouteHandler(packetFilter));
     }
 }

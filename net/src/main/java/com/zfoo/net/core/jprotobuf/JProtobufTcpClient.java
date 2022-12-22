@@ -20,9 +20,6 @@ import com.zfoo.net.handler.idle.ClientIdleHandler;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
-import org.springframework.lang.Nullable;
-
-import java.util.Objects;
 
 /**
  * @author godotg
@@ -30,15 +27,8 @@ import java.util.Objects;
  */
 public class JProtobufTcpClient extends AbstractClient<SocketChannel> {
 
-    private final ClientRouteHandler clientRouteHandler;
-
     public JProtobufTcpClient(HostAndPort host) {
-        this(host, null);
-    }
-
-    public JProtobufTcpClient(HostAndPort host, @Nullable ClientRouteHandler clientRouteHandler) {
         super(host);
-        this.clientRouteHandler = Objects.requireNonNullElse(clientRouteHandler, new ClientRouteHandler());
     }
 
     @Override
@@ -46,6 +36,6 @@ public class JProtobufTcpClient extends AbstractClient<SocketChannel> {
         channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
         channel.pipeline().addLast(new ClientIdleHandler());
         channel.pipeline().addLast(new JProtobufTcpCodecHandler());
-        channel.pipeline().addLast(clientRouteHandler);
+        channel.pipeline().addLast(new ClientRouteHandler());
     }
 }

@@ -27,9 +27,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollDatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import org.springframework.lang.Nullable;
-
-import java.util.Objects;
 
 /**
  * @author godotg
@@ -37,15 +34,8 @@ import java.util.Objects;
  */
 public class UdpClient extends AbstractClient<Channel> {
 
-    private final ClientRouteHandler clientRouteHandler;
-
     public UdpClient(HostAndPort host) {
-        this(host, null);
-    }
-
-    public UdpClient(HostAndPort host, @Nullable ClientRouteHandler clientRouteHandler) {
         super(host);
-        this.clientRouteHandler = Objects.requireNonNullElse(clientRouteHandler, new ClientRouteHandler());
     }
 
     @Override
@@ -83,6 +73,6 @@ public class UdpClient extends AbstractClient<Channel> {
     @Override
     protected void initChannel(Channel channel) {
         channel.pipeline().addLast(new UdpCodecHandler());
-        channel.pipeline().addLast(clientRouteHandler);
+        channel.pipeline().addLast(new ClientRouteHandler());
     }
 }

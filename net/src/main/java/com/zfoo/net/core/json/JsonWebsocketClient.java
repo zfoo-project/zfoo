@@ -24,9 +24,6 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolConfig;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import org.springframework.lang.Nullable;
-
-import java.util.Objects;
 
 /**
  * @author godotg
@@ -35,18 +32,11 @@ import java.util.Objects;
 public class JsonWebsocketClient extends AbstractClient<SocketChannel> {
 
     private WebSocketClientProtocolConfig webSocketClientProtocolConfig;
-    private final ClientRouteHandler clientRouteHandler;
 
     public JsonWebsocketClient(HostAndPort host, WebSocketClientProtocolConfig webSocketClientProtocolConfig) {
-        this(host, webSocketClientProtocolConfig, null);
-    }
-
-    public JsonWebsocketClient(HostAndPort host, WebSocketClientProtocolConfig webSocketClientProtocolConfig, @Nullable ClientRouteHandler clientRouteHandler) {
         super(host);
         this.webSocketClientProtocolConfig = webSocketClientProtocolConfig;
-        this.clientRouteHandler = Objects.requireNonNullElse(clientRouteHandler, new ClientRouteHandler());
     }
-
 
     @Override
     public void initChannel(SocketChannel channel) {
@@ -55,7 +45,7 @@ public class JsonWebsocketClient extends AbstractClient<SocketChannel> {
         channel.pipeline().addLast(new WebSocketClientProtocolHandler(webSocketClientProtocolConfig));
         channel.pipeline().addLast(new ChunkedWriteHandler());
         channel.pipeline().addLast(new JsonWebSocketCodecHandler());
-        channel.pipeline().addLast(clientRouteHandler);
+        channel.pipeline().addLast(new ClientRouteHandler());
     }
 
 }

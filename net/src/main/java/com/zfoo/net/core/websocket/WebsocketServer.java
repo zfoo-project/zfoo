@@ -23,9 +23,6 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import org.springframework.lang.Nullable;
-
-import java.util.Objects;
 
 /**
  * @author godotg
@@ -33,16 +30,8 @@ import java.util.Objects;
  */
 public class WebsocketServer extends AbstractServer<SocketChannel> {
 
-    private final ServerRouteHandler serverRouteHandler;
-
     public WebsocketServer(HostAndPort host) {
-        this(host, null);
-    }
-
-    public WebsocketServer(HostAndPort host, @Nullable ServerRouteHandler serverRouteHandler) {
         super(host);
-        this.serverRouteHandler = Objects.requireNonNullElse(serverRouteHandler, new ServerRouteHandler());
-
     }
 
     @Override
@@ -58,7 +47,7 @@ public class WebsocketServer extends AbstractServer<SocketChannel> {
         channel.pipeline().addLast(new ChunkedWriteHandler());
         // 编解码WebSocketFrame二进制协议
         channel.pipeline().addLast(new WebSocketCodecHandler());
-        channel.pipeline().addLast(serverRouteHandler);
+        channel.pipeline().addLast(new ServerRouteHandler());
     }
 
 }

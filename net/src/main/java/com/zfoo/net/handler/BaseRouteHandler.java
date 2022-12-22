@@ -26,8 +26,6 @@ import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.function.Consumer;
-
 /**
  * @author godotg
  * @version 3.0
@@ -38,9 +36,6 @@ public abstract class BaseRouteHandler extends ChannelInboundHandlerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(BaseRouteHandler.class);
 
     public static final AttributeKey<Session> SESSION_KEY = AttributeKey.valueOf("session");
-
-    public Consumer<Session> sessionActiveConsumer;
-    public Consumer<Session> sessionInactiveConsumer;
 
 
     public static Session initChannel(Channel channel) {
@@ -54,17 +49,6 @@ public abstract class BaseRouteHandler extends ChannelInboundHandlerAdapter {
         return session;
     }
 
-    protected void onSessionActive(Session session) {
-        if (sessionActiveConsumer != null) {
-            sessionActiveConsumer.accept(session);
-        }
-    }
-
-    protected void onSessionInactive(Session session) {
-        if (sessionInactiveConsumer != null) {
-            sessionInactiveConsumer.accept(session);
-        }
-    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {

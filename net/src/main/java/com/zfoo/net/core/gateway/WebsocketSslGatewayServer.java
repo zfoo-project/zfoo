@@ -36,7 +36,6 @@ import org.springframework.lang.Nullable;
 
 import javax.net.ssl.SSLException;
 import java.io.InputStream;
-import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
@@ -49,20 +48,16 @@ public class WebsocketSslGatewayServer extends AbstractServer<SocketChannel> {
 
     private SslContext sslContext;
 
-    private final GatewayRouteHandler gatewayRouteHandler;
+    private BiFunction<Session, IPacket, Boolean> packetFilter;
 
     public WebsocketSslGatewayServer(HostAndPort host, InputStream pem, InputStream key, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter) {
-        this(host, pem, key, packetFilter, null);
-    }
-
-    public WebsocketSslGatewayServer(HostAndPort host, InputStream pem, InputStream key, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter, @Nullable GatewayRouteHandler gatewayRouteHandler) {
         super(host);
         try {
             this.sslContext = SslContextBuilder.forServer(pem, key).build();
         } catch (SSLException e) {
             logger.error(ExceptionUtils.getMessage(e));
         }
-        this.gatewayRouteHandler = Objects.requireNonNullElse(gatewayRouteHandler, new GatewayRouteHandler(packetFilter));
+        this.packetFilter = packetFilter;
     }
 
     @Override
@@ -76,6 +71,6 @@ public class WebsocketSslGatewayServer extends AbstractServer<SocketChannel> {
         channel.pipeline().addLast(new WebSocketServerProtocolHandler("/"));
         channel.pipeline().addLast(new ChunkedWriteHandler());
         channel.pipeline().addLast(new WebSocketCodecHandler());
-        channel.pipeline().addLast(gatewayRouteHandler);
+        channel.pipeline().addLast(new GatewayRouteHandler(packetFilter));
     }
 }

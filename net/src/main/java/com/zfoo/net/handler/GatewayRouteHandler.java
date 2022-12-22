@@ -35,7 +35,9 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
@@ -47,10 +49,12 @@ public class GatewayRouteHandler extends ServerRouteHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GatewayRouteHandler.class);
 
+    public static final BiFunction<Session, IPacket, Boolean> DEFAULT_PACKER_FILTER = (session, packet) -> Boolean.FALSE;
+
     private final BiFunction<Session, IPacket, Boolean> packetFilter;
 
-    public GatewayRouteHandler(BiFunction<Session, IPacket, Boolean> packetFilter) {
-        this.packetFilter = packetFilter;
+    public GatewayRouteHandler(@Nullable BiFunction<Session, IPacket, Boolean> packetFilter) {
+        this.packetFilter = Objects.requireNonNullElse(packetFilter, DEFAULT_PACKER_FILTER);
     }
 
 
@@ -73,9 +77,8 @@ public class GatewayRouteHandler extends ServerRouteHandler {
         }
 
         // 过滤非法包
-        if (packetFilter != null && packetFilter.apply(session, packet)) {
-            throw new IllegalArgumentException(StringUtils.format(" session:{}发送了一个非法包[{}]"
-                    , SessionUtils.sessionSimpleInfo(ctx), JsonUtils.object2String(packet)));
+        if (packetFilter.apply(session, packet)) {
+            throw new IllegalArgumentException(StringUtils.format(" session:{}发送了一个非法包[{}]", SessionUtils.sessionSimpleInfo(ctx), JsonUtils.object2String(packet)));
         }
 
         var signalAttachment = (SignalAttachment) decodedPacketInfo.getAttachment();
