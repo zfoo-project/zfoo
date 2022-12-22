@@ -93,7 +93,7 @@ public class ZookeeperRegistry implements IRegistry {
 
         @Override
         public Thread newThread(Runnable runnable) {
-            Thread t = new FastThreadLocalThread(group, runnable, namePrefix + threadNumber.getAndIncrement(), 0);
+            Thread t = new FastThreadLocalThread(group, runnable, namePrefix + threadNumber.getAndIncrement());
             t.setDaemon(false);
             t.setPriority(Thread.NORM_PRIORITY);
             t.setUncaughtExceptionHandler((thread, e) -> logger.error(thread.toString(), e));

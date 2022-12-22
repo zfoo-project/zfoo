@@ -83,7 +83,7 @@ public abstract class EventBus {
         @Override
         public Thread newThread(Runnable runnable) {
             var threadName = StringUtils.format("event-p{}-t{}", poolNumber + 1, threadNumber.getAndIncrement());
-            var thread = new FastThreadLocalThread(group, runnable, threadName, 0);
+            var thread = new FastThreadLocalThread(group, runnable, threadName);
             thread.setDaemon(false);
             thread.setPriority(Thread.NORM_PRIORITY);
             thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
