@@ -24,7 +24,6 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
-import io.netty.util.concurrent.EventExecutorGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,21 +119,6 @@ public abstract class AbstractServer<C extends Channel> extends ChannelInitializ
                 logger.warn(e.getMessage(), e);
             }
         }
-    }
-
-    public synchronized static void shutdownEventLoopGracefully(EventExecutorGroup executor) {
-        if (executor == null) {
-            return;
-        }
-        try {
-            if (!executor.isTerminated()) {
-                executor.shutdownGracefully();
-            }
-        } catch (Exception e) {
-            logger.error("EventLoop Thread pool [{}] is failed to shutdown! ", executor, e);
-            return;
-        }
-        logger.info("EventLoop Thread pool [{}] shutdown gracefully.", executor);
     }
 
     public synchronized static void shutdownAllServers() {
