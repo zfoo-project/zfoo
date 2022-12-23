@@ -24,7 +24,7 @@ public interface ISessionManager {
 
     void removeServerSession(Session session);
 
-    Session getServerSession(Long id);
+    Session getServerSession(long id);
 
     Map<Long, Session> getServerSessionMap();
 
@@ -33,7 +33,7 @@ public interface ISessionManager {
 
     void removeClientSession(Session session);
 
-    Session getClientSession(Long id);
+    Session getClientSession(long id);
 
     Map<Long, Session> getClientSessionMap();
 

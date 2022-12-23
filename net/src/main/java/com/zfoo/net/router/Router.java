@@ -318,7 +318,7 @@ public class Router implements IRouter {
                 }
             }
 
-            // 调用PacketReceiver,进行真正的业务处理,这个submit只是根据packet找到protocolId，然后进行反射调用
+            // 调用PacketReceiver,进行真正的业务处理,这个submit只是根据packet找到protocolId，然后调用对应的消息处理方法
             // 这个在哪个线程处理取决于：这个上层的PacketReceiverTask被丢到了哪个线程中
             PacketBus.route(session, packet, attachment);
         } catch (Exception e) {
