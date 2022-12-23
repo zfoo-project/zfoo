@@ -57,7 +57,6 @@ public class UdpServer extends AbstractServer<Channel> {
         // 异步
         channelFuture = bootstrap.bind(hostAddress, port);
         channelFuture.syncUninterruptibly();
-        channel = channelFuture.channel();
 
         allServers.add(this);
 

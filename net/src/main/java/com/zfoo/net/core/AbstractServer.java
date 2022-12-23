@@ -52,8 +52,6 @@ public abstract class AbstractServer<C extends Channel> extends ChannelInitializ
 
     protected ChannelFuture channelFuture;
 
-    protected Channel channel;
-
     public AbstractServer(HostAndPort host) {
         this.hostAddress = host.getHost();
         this.port = host.getPort();
@@ -91,7 +89,6 @@ public abstract class AbstractServer<C extends Channel> extends ChannelInitializ
         // 异步
         channelFuture = bootstrap.bind(hostAddress, port);
         channelFuture.syncUninterruptibly();
-        channel = channelFuture.channel();
 
         allServers.add(this);
 
@@ -107,14 +104,6 @@ public abstract class AbstractServer<C extends Channel> extends ChannelInitializ
         if (channelFuture != null) {
             try {
                 channelFuture.channel().close().syncUninterruptibly();
-            } catch (Exception e) {
-                logger.warn(e.getMessage(), e);
-            }
-        }
-
-        if (channel != null) {
-            try {
-                channel.close();
             } catch (Exception e) {
                 logger.warn(e.getMessage(), e);
             }

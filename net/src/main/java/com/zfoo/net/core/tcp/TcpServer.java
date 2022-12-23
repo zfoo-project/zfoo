@@ -32,7 +32,7 @@ public class TcpServer extends AbstractServer<SocketChannel> {
     }
 
     @Override
-    protected void initChannel(SocketChannel socketChannel) throws Exception {
+    protected void initChannel(SocketChannel channel) throws Exception {
         channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
         channel.pipeline().addLast(new ServerIdleHandler());
         channel.pipeline().addLast(new TcpCodecHandler());
