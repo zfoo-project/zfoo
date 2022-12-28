@@ -64,12 +64,12 @@ public abstract class ExcelReader {
         // 获取配置表的有效列名称，默认第一行就是字段名称
         var fieldRow = iterator.next();
         if (fieldRow == null) {
-            throw new RunException("无法获取资源[class:{}]的Excel文件的属性控制列", fileName);
+            throw new RunException("Failed to get attribute control column from excel file of resource [class:{}]", fileName);
         }
         // 默认第二行字段类型
         var typeRow = iterator.next();
         if (typeRow == null) {
-            throw new RunException("无法获取资源[class:{}]的Excel文件的类型控制列", fileName);
+            throw new RunException("Failed to get type control column from excel file of resource [class:{}]", fileName);
         }
         // 默认第三行为描述，需要的时候再使用
         var desRow = iterator.next();
@@ -94,7 +94,7 @@ public abstract class ExcelReader {
             }
             var previousValue = cellFieldMap.put(fieldName, i);
             if (Objects.nonNull(previousValue)) {
-                throw new RunException("资源[class:{}]的Excel文件出现重复的属性控制列[field:{}]", fileName, fieldName);
+                throw new RunException("There are duplicate attribute control columns [field:{}] in the Excel file of the resource [class:{}]",  fieldName,fileName);
             }
             headerList.add(ResourceHeader.valueOf(fieldName, typeName, i));
         }
@@ -105,7 +105,7 @@ public abstract class ExcelReader {
         try {
             return WorkbookFactory.create(input);
         } catch (IOException e) {
-            throw new RunException("静态资源[{}]异常，无法读取文件", fileName);
+            throw new RunException("Static resource [{}] is abnormal, and the file cannot be read", fileName);
         }
     }
 

@@ -61,12 +61,12 @@ public abstract class CsvReader {
         // 获取配置表的有效列名称，默认第一行就是字段名称
         var fieldRow = iterator.next();
         if (fieldRow == null) {
-            throw new RunException("无法获取资源[class:{}]的csv文件的属性控制列", fileName);
+            throw new RunException("Failed to get attribute control column from csv file of resource [class:{}]", fileName);
         }
         //默认第二行字段类型
         var typeRow = iterator.next();
         if (typeRow == null) {
-            throw new RunException("无法获取资源[class:{}]的csv文件的类型控制列", fileName);
+            throw new RunException("Failed to get type control column from csv file of resource [class:{}]", fileName);
         }
         // 默认第三行为描述，需要的时候再使用
         var descRow = iterator.next();
@@ -75,11 +75,11 @@ public abstract class CsvReader {
         for (var i = 0; i < fieldRow.size(); i++) {
             var fieldName = fieldRow.get(i);
             if (fieldName == null) {
-                throw new RunException("{}列名不能为空，第{}列没有配置名字", fileName, i + 1);
+                throw new RunException("The column name of {} cannot be empty, and column {} has no configured name", fileName, i + 1);
             }
             var filedType = typeRow.get(i);
             if (filedType == null) {
-                throw new RunException("{}列类型不能为空，第{}列没有配置类型", fileName, i + 1);
+                throw new RunException("The column type of {} cannot be empty, and column {} has no configured type", fileName, i + 1);
             }
             headers.add(ResourceHeader.valueOf(fieldName, filedType, i));
         }
@@ -90,7 +90,7 @@ public abstract class CsvReader {
         try {
             return CSVFormat.EXCEL.parse(new InputStreamReader(input));
         } catch (IOException e) {
-            throw new RunException("静态资源[{}]异常，无法读取文件", fileName);
+            throw new RunException("Static resource [{}] is abnormal, and the file cannot be read", fileName);
         }
     }
 }
