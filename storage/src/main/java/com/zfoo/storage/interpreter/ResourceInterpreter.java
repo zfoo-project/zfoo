@@ -61,7 +61,7 @@ public class ResourceInterpreter {
         } else if (resourceEnum == ResourceEnum.CSV) {
             resource = CsvReader.readResourceDataFromCSV(inputStream, clazz.getSimpleName());
         } else {
-            throw new RunException("不支持文件[{}]的配置类型[{}]", clazz.getSimpleName(), suffix);
+            throw new RunException("Configuration type [{}] of file [{}] is not supported", suffix, clazz.getSimpleName());
         }
 
         var result = new ArrayList<T>();
@@ -93,7 +93,7 @@ public class ResourceInterpreter {
             ReflectionUtils.makeAccessible(field);
             ReflectionUtils.setField(field, instance, value);
         } catch (Exception e) {
-            throw new RunException(e, "无法将Excel资源[class:{}]中的[content:{}]转换为属性[field:{}]", instance.getClass().getSimpleName(), content, field.getName());
+            throw new RunException(e, "Unable to convert [content:{}] to property [field:{}] in Excel resource [class:{}]", content, field.getName(), instance.getClass().getSimpleName());
         }
     }
 
@@ -102,13 +102,13 @@ public class ResourceInterpreter {
         var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
         for (var field : fieldList) {
             if (!fieldMap.containsKey(field.getName())) {
-                throw new RunException("资源类[class:{}]的声明属性[filed:{}]无法获取，请检查配置表的格式", clazz, field.getName());
+                throw new RunException("The declaration attribute [filed:{}] of the resource class [class:{}] cannot be obtained, please check the format of the configuration table", field.getName(), clazz);
             }
 
             if (field.isAnnotationPresent(Id.class)) {
                 var cellIndex = fieldMap.get(field.getName());
                 if (cellIndex != 0) {
-                    throw new RunException("资源类[class:{}]的主键[Id:{}]必须放在Excel配置表的第一列，请检查配置表的格式", clazz, field.getName());
+                    throw new RunException("The primary key [Id:{}] of the resource class [class:{}] must be placed in the first column of the Excel configuration table, please check the format of the configuration table", field.getName(), clazz);
                 }
             }
         }
@@ -128,7 +128,7 @@ public class ResourceInterpreter {
     public static Map<String, Integer> getFieldMap(ResourceData resource, Class<?> clazz) {
         var header = resource.getHeaders();
         if (header == null) {
-            throw new RunException("无法获取资源[class:{}]的Excel文件的属性控制列", clazz.getSimpleName());
+            throw new RunException("Failed to get attribute control column from excel file of resource [class:{}]", clazz.getSimpleName());
         }
 
         var cellFieldMap = new HashMap<String, Integer>();
@@ -144,7 +144,7 @@ public class ResourceInterpreter {
             }
             var previousValue = cellFieldMap.put(name, i);
             if (Objects.nonNull(previousValue)) {
-                throw new RunException("资源[class:{}]的Excel文件出现重复的属性控制列[field:{}]", clazz.getSimpleName(), name);
+                throw new RunException("There are duplicate attribute control columns [field:{}] in the Excel file of the resource [class:{}]", name, clazz.getSimpleName());
             }
         }
         return cellFieldMap;

@@ -90,7 +90,7 @@ public class StorageManager implements IStorageManager {
                 throw new RuntimeException(StringUtils.format("Unable to get resource [class:{}]", clazzName));
             }
 
-            var resourceFile = scanResourceFile(resourceClazz);
+            var resourceFile = getResourceFile(resourceClazz);
             ResourceDef resourceDef = new ResourceDef(resourceClazz, resourceFile);
             if (resourceDefinitionMap.containsKey(resourceClazz)) {
                 // 类的资源定义已经存在
@@ -288,6 +288,30 @@ public class StorageManager implements IStorageManager {
 
         } catch (IOException e) {
             throw new RuntimeException(ExceptionUtils.getMessage(e));
+        }
+    }
+    private Resource getResourceFileByPath(Class<?> clazz){
+        var resourcePatternResolver = new PathMatchingResourcePatternResolver();
+        var metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
+        var path=clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value();
+        if(path.equals("")){
+            path=clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).path();
+        }
+        var resource= resourcePatternResolver.getResource(path);
+        try {
+            var input=resource.getInputStream();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return resource;
+    }
+    private Resource getResourceFile(Class<?> clazz){
+        if(clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value().equals("")&&
+                clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).path().equals("")){
+            return scanResourceFile(clazz);
+        }
+        else{
+            return getResourceFileByPath(clazz);
         }
     }
 }

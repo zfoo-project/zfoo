@@ -49,7 +49,7 @@ public class ApplicationTest {
         var studentManager = context.getBean(StudentManager.class);
         var studentResources = studentManager.studentResources;
         var studentCsvResources = studentManager.studentCsvResources;
-        // 类名称和Excel名称必须完全一致，Excel的列名称必须对应对象的属性名称
+        // @Resource注解没指定路径，类名称和Excel名称必须完全一致，Excel的列名称必须对应对象的属性名称
         for (StudentResource resource : studentResources.getAll()) {
             logger.info(JsonUtils.object2String(resource));
         }
