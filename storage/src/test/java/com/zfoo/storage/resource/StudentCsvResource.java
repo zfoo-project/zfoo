@@ -21,7 +21,7 @@ import com.zfoo.storage.model.anno.Resource;
  * @author godotg
  * @version 4.0
  */
-@Resource(path="classpath:/excel/StudentCsvResource.csv")
+@Resource(alias="StudentCsvResource")
 public class StudentCsvResource {
 
     @Id

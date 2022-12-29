@@ -19,8 +19,8 @@ import java.lang.annotation.*;
 
 /**
  * 资源注解
- * 可以指定对应的资源路径，如果是类路径一classpath开头，如果是其它目录则以file开头
- * 如果不指定路径，则默认通过扫描路径获取与类名相同的文件资源
+ * 可以指定对应的资源文件名（只指定文件名，不需要文件后缀）
+ * 如果不指定资源文件名，则默认通过扫描路径获取与类名相同的文件资源
  * @author godotg
  * @version 4.0
  */
@@ -28,10 +28,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface Resource {
-    @AliasFor("path")
+    @AliasFor("alias")
     String value() default "";
 
 
     @AliasFor("value")
-    String path() default "";
+    String alias() default "";
 }
