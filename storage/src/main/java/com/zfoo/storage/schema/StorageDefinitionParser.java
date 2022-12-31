@@ -58,11 +58,11 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
 
         var scanElement = DomUtils.getFirstChildElementByTagName(element, "scan");
         if (scanElement == null) {
-            throw new RuntimeException("XML文件缺少[scan]元素定义");
+            throw new RuntimeException("The XML file is missing a [scan] element definition");
         }
         var resourceElement = DomUtils.getFirstChildElementByTagName(element, "resource");
         if (resourceElement == null) {
-            throw new RuntimeException("XML文件缺少[resource]元素定义");
+            throw new RuntimeException("The XML file is missing a [resource] element definition");
         }
 
         resolvePlaceholder("id", "id", builder, element, parserContext);

@@ -101,13 +101,13 @@ public class Storage<K, V> {
 
     public V get(K id) {
         V result = dataMap.get(id);
-        AssertionUtils.notNull(result, "静态资源[resource:{}]中表示为[id:{}]的静态资源不存在", clazz.getSimpleName(), id);
+        AssertionUtils.notNull(result, "The static resource represented as [id:{}] in the static resource [resource:{}] does not exist", id, clazz.getSimpleName());
         return result;
     }
 
     public List<V> getIndex(String indexName, Object key) {
         var indexValues = indexMap.get(indexName);
-        AssertionUtils.notNull(indexValues, "静态资源[resource:{}]不存在为[indexName:{}]的索引", clazz.getSimpleName(), indexName);
+        AssertionUtils.notNull(indexValues, "The index of [indexName:{}] does not exist in the static resource [resource:{}]", indexName, clazz.getSimpleName());
         var values = indexValues.get(key);
         if (CollectionUtils.isEmpty(values)) {
             return Collections.emptyList();
@@ -118,7 +118,7 @@ public class Storage<K, V> {
     @Nullable
     public V getUniqueIndex(String uniqueIndexName, Object key) {
         var indexValueMap = uniqueIndexMap.get(uniqueIndexName);
-        AssertionUtils.notNull(indexValueMap, "静态资源[resource:{}]不存在为[uniqueIndexName:{}]的唯一索引", clazz.getSimpleName(), uniqueIndexName);
+        AssertionUtils.notNull(indexValueMap, "There is no a unique index for [uniqueIndexName:{}] in the static resource [resource:{}]", uniqueIndexName, clazz.getSimpleName());
         var value = indexValueMap.get(key);
         return value;
     }
@@ -128,11 +128,11 @@ public class Storage<K, V> {
         var key = (K) ReflectionUtils.getField(idDef.getField(), value);
 
         if (key == null) {
-            throw new RuntimeException("静态资源存在id未配置的项");
+            throw new RuntimeException("There is an item with an unconfigured id in the static resource");
         }
 
         if (dataMap.containsKey(key)) {
-            throw new RuntimeException(StringUtils.format("静态资源[resource:{}]的[id:{}]重复", clazz.getSimpleName(), key));
+            throw new RuntimeException(StringUtils.format("Duplicate [id:{}] of static resource [resource:{}]", key, clazz.getSimpleName()));
         }
 
         // 添加资源
@@ -146,7 +146,7 @@ public class Storage<K, V> {
             if (def.isUnique()) {// 唯一索引
                 var index = uniqueIndexMap.computeIfAbsent(indexKey, k -> new HashMap<>());
                 if (index.put(indexValue, value) != null) {
-                    throw new RuntimeException(StringUtils.format("静态资源[class:{}]的唯一索引重复[index:{}][value:{}]", clazz.getName(), indexKey, indexValue));
+                    throw new RuntimeException(StringUtils.format("Duplicate unique index [index:{}][value:{}] of static resource [class:{}]", indexKey, indexValue, clazz.getName()));
                 }
             } else {// 不是唯一索引
                 var index = indexMap.computeIfAbsent(indexKey, k -> new HashMap<>());

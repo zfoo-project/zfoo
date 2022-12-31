@@ -104,7 +104,7 @@ public abstract class ExportUtils {
         for (var field : filedList) {
             var fieldType = field.getType();
             if (!fieldType.equals(Map.class)) {
-                throw new RunException("[class:{}]类型声明不正确，导出的storage必须为Map接口类型", clazz.getCanonicalName());
+                throw new RunException("[class:{}] type declaration is incorrect, the exported storage must be a Map interface type", clazz.getCanonicalName());
             }
 
             var type = field.getGenericType();
@@ -121,13 +121,13 @@ public abstract class ExportUtils {
                 } else if (idFieldType.equals(short.class) && keyType.equals(Short.class)) {
                 } else if (idFieldType.equals(byte.class) && keyType.equals(Byte.class)) {
                 } else {
-                    throw new RunException("[class:{}]中的[field:{}]类型声明不正确，类型需要改为[Map<{}, {}>]", clazz.getSimpleName(), field.getName(), idFieldType, valueClass.getSimpleName());
+                    throw new RunException("The [field:{}] type declaration in [class:{}] is incorrect, the type needs to be changed to [Map<{}, {}>]", field.getName(), clazz.getSimpleName(), idFieldType, valueClass.getSimpleName());
                 }
             } else if (!keyType.equals(idFieldType)) {
-                throw new RunException("[class:{}]中的[field:{}]类型声明不正确，类型需要改为[Map<{}, {}>]", clazz.getSimpleName(), field.getName(), idFieldType, valueClass.getSimpleName());
+                throw new RunException("The [field:{}] type declaration in [class:{}] is incorrect, the type needs to be changed to [Map<{}, {}>]", field.getName(), clazz.getSimpleName(), idFieldType, valueClass.getSimpleName());
             }
             if (!wrapClass.add(valueClass)) {
-                throw new RunException("[class:{}]中含有重复的类型[{}]", clazz.getCanonicalName(), valueType);
+                throw new RunException("[class:{}] contains duplicate type [{}]", clazz.getCanonicalName(), valueType);
             }
             ReflectionUtils.setField(field, instance, storage.getData());
         }

@@ -42,7 +42,7 @@ public enum ResourceEnum {
     static {
         for (var resourceEnum : ResourceEnum.values()) {
             var previousValue = typeMap.putIfAbsent(resourceEnum.type, resourceEnum);
-            AssertionUtils.isNull(previousValue, "ResourceEnum中不应该含有重复type的枚举类[{}]和[{}]", resourceEnum, previousValue);
+            AssertionUtils.isNull(previousValue, "ResourceEnum should not contain enumeration classes [{}] and [{}] of repeated type", resourceEnum, previousValue);
         }
     }
 

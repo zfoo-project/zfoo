@@ -28,7 +28,11 @@ public abstract class JsonReader {
 
     public static ResourceData readResourceDataFromCSV(InputStream input) {
         try {
-            return JsonUtils.string2Object(StringUtils.bytesToString(IOUtils.toByteArray(input)), ResourceData.class);
+            var resourceData= JsonUtils.string2Object(StringUtils.bytesToString(IOUtils.toByteArray(input)), ResourceData.class);
+            for(int i=0;i<resourceData.getHeaders().size();i++) {
+                resourceData.getHeaders().get(i).setIndex(i);
+            }
+            return resourceData;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -30,13 +30,13 @@ public class IdDef {
     public static IdDef valueOf(Class<?> clazz) {
         var fields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
         if (fields.length <= 0) {
-            throw new RunException("class[{}]没有被Id注解标识的主键（如果确实已经被Id注解标注，注意不要使用ORM的Id注解）", clazz.getName());
+            throw new RunException("There is no a primary key identified by the Id annotation in class[{}](if it has indeed been annotated by the Id annotation, be careful not to use the ORM Id annotation)", clazz.getName());
         }
         if (fields.length > 1) {
-            throw new RunException("类[{}]的主键Id注解重复", clazz.getName());
+            throw new RunException("The primary key Id annotation of class [{}] is duplicated", clazz.getName());
         }
         if (fields[0] == null) {
-            throw new RunException("不合法的Id资源映射对象：" + clazz.getName());
+            throw new RunException("Illegal Id resource mapping object:" + clazz.getName());
         }
         var idField = fields[0];
         ReflectionUtils.makeAccessible(idField);

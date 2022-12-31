@@ -15,6 +15,7 @@ package com.zfoo.storage.interpreter;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.storage.model.anno.ExcelFieldName;
 import com.zfoo.storage.model.anno.Id;
 import com.zfoo.storage.model.resource.ResourceData;
 import com.zfoo.storage.model.resource.ResourceEnum;
@@ -101,10 +102,6 @@ public class ResourceInterpreter {
     private static Collection<FieldInfo> getFieldInfos(Map<String, Integer> fieldMap, Class<?> clazz) {
         var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
         for (var field : fieldList) {
-            if (!fieldMap.containsKey(field.getName())) {
-                throw new RunException("The declaration attribute [filed:{}] of the resource class [class:{}] cannot be obtained, please check the format of the configuration table", field.getName(), clazz);
-            }
-
             if (field.isAnnotationPresent(Id.class)) {
                 var cellIndex = fieldMap.get(field.getName());
                 if (cellIndex != 0) {
@@ -112,7 +109,26 @@ public class ResourceInterpreter {
                 }
             }
         }
-        return fieldList.stream().map(it -> new FieldInfo(fieldMap.get(it.getName()), it)).collect(Collectors.toList());
+        return fieldList.stream().filter(it1->
+            fieldMap.keySet().stream().anyMatch(it->{
+                var ans=false;
+                if(it1.isAnnotationPresent(ExcelFieldName.class)){
+                    ans|=it.equals(it1.getAnnotation(ExcelFieldName.class).value());
+                }
+                ans|=it.equals(it1.getName());
+                return ans;
+            })).map(it1->{
+                String excelFieldName;
+                List<String> list=null;
+            if(it1.isAnnotationPresent(ExcelFieldName.class)){
+                list=fieldMap.keySet().stream().filter(it->it.equals(it1.getAnnotation(ExcelFieldName.class).value())).collect(Collectors.toList());
+            }
+            if(list==null||list.size()==0){
+                list=fieldMap.keySet().stream().filter(it->it.equals(it1.getName())).collect(Collectors.toList());
+            }
+            excelFieldName=list.get(0);
+            return new FieldInfo(fieldMap.get(excelFieldName), it1);
+        }).collect(Collectors.toList());
     }
 
     private static class FieldInfo {
@@ -142,7 +158,7 @@ public class ResourceInterpreter {
             if (StringUtils.isEmpty(name)) {
                 continue;
             }
-            var previousValue = cellFieldMap.put(name, i);
+            var previousValue = cellFieldMap.put(name, cell.getIndex());
             if (Objects.nonNull(previousValue)) {
                 throw new RunException("There are duplicate attribute control columns [field:{}] in the Excel file of the resource [class:{}]", name, clazz.getSimpleName());
             }
