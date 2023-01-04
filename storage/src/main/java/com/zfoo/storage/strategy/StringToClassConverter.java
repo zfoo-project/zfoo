@@ -33,7 +33,7 @@ public class StringToClassConverter implements Converter<String, Class<?>> {
         try {
             return Class.forName(source, true, ClassUtils.getDefaultClassLoader());
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException(StringUtils.format("无法将字符串[{}]转换为Class对象", source));
+            throw new IllegalArgumentException(StringUtils.format("Unable to convert string [{}] to Class object", source));
         }
 
     }

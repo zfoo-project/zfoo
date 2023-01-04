@@ -48,7 +48,7 @@ public class IndexDef {
 
         var ormIndexes = ReflectionUtils.getFieldsByAnnoNameInPOJOClass(clazz, "com.zfoo.orm.model.anno.Index");
         if (ArrayUtils.isNotEmpty(ormIndexes)) {
-            throw new RunException("在Storage中只能使用Storage的Index注解，不能使用Orm的Index注解，为了避免不必要的误解和增强项目的健壮性，禁止这样使用");
+            throw new RunException("Only the Index annotation of Storage can be used, and the Index annotation of Orm cannot be used in Storage. In order to avoid unnecessary misunderstanding and enhance the robustness of the project, such use is prohibited");
         }
 
         for (var field : fields) {
@@ -60,7 +60,7 @@ public class IndexDef {
         for (var index : indexes) {
             var indexName = index.field.getName();
             if (result.put(indexName, index) != null) {
-                throw new RuntimeException(StringUtils.format("资源类[{}]索引名称重复,索引名[}|]", clazz.getName(), indexName));
+                throw new RuntimeException(StringUtils.format("The  index name[{}] of resource class [{}] is duplicated.", indexName, clazz.getName()));
             }
         }
 
