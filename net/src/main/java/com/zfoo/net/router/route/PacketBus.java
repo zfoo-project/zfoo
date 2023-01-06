@@ -53,7 +53,8 @@ public abstract class PacketBus {
     public static void route(Session session, IPacket packet, IAttachment attachment) {
         var packetReceiver = (IPacketReceiver) ProtocolManager.getProtocol(packet.protocolId()).receiver();
         if (packetReceiver == null) {
-            throw new RuntimeException(StringUtils.format("no any packetReceiverDefinition found for this [packet:{}]", packet.getClass().getName()));
+            var name = packet.getClass().getSimpleName();
+            throw new RuntimeException(StringUtils.format("no any packetReceiver:[at{}] found for this packet:[{}] or no GatewayAttachment sent back if this server is gateway", name, name));
         }
         packetReceiver.invoke(session, packet, attachment);
     }

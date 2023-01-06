@@ -32,16 +32,17 @@ public class Session implements Closeable {
      */
     private long sid;
 
-    /**
-     * EN:The default user ID is an ID greater than 0, or equal 0 if there is no login
-     * CN:默认用户的id都是大于0的id，如果没有登录则等于0
-     */
-    private long uid = 0;
-
     private Channel channel;
 
     /**
-     * Session附带的属性参数，消费者的属性
+     * EN:The default user ID is an ID greater than 0, or equal 0 if there is no login, user extra parameters
+     * CN:默认用户的id都是大于0的id，如果没有登录则等于0，用户额外参数
+     */
+    private long uid = 0;
+
+    /**
+     * EN:Session extra parameters
+     * CN:Session附带的属性参数，消费者的属性
      */
     private RegisterVO consumerAttribute = null;
 
