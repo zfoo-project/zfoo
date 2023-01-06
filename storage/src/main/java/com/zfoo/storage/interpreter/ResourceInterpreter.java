@@ -94,7 +94,7 @@ public class ResourceInterpreter {
             ReflectionUtils.makeAccessible(field);
             ReflectionUtils.setField(field, instance, value);
         } catch (Exception e) {
-            throw new RunException(e, "Unable to convert [content:{}] to property [field:{}] in Excel resource [class:{}]", content, field.getName(), instance.getClass().getSimpleName());
+            throw new RunException("Unable to convert [content:{}] to property [field:{}] in Excel resource [class:{}]", content, field.getName(), instance.getClass().getSimpleName(), e);
         }
     }
 
@@ -109,24 +109,23 @@ public class ResourceInterpreter {
                 }
             }
         }
-        return fieldList.stream().filter(it1->
-            fieldMap.keySet().stream().anyMatch(it->{
-                var ans=false;
-                if(it1.isAnnotationPresent(ExcelFieldName.class)){
-                    ans|=it.equals(it1.getAnnotation(ExcelFieldName.class).value());
-                }
-                ans|=it.equals(it1.getName());
-                return ans;
-            })).map(it1->{
-                String excelFieldName;
-                List<String> list=null;
-            if(it1.isAnnotationPresent(ExcelFieldName.class)){
-                list=fieldMap.keySet().stream().filter(it->it.equals(it1.getAnnotation(ExcelFieldName.class).value())).collect(Collectors.toList());
+        return fieldList.stream().filter(it1 -> fieldMap.keySet().stream().anyMatch(it -> {
+            var ans = false;
+            if (it1.isAnnotationPresent(ExcelFieldName.class)) {
+                ans |= it.equals(it1.getAnnotation(ExcelFieldName.class).value());
             }
-            if(list==null||list.size()==0){
-                list=fieldMap.keySet().stream().filter(it->it.equals(it1.getName())).collect(Collectors.toList());
+            ans |= it.equals(it1.getName());
+            return ans;
+        })).map(it1 -> {
+            String excelFieldName;
+            List<String> list = null;
+            if (it1.isAnnotationPresent(ExcelFieldName.class)) {
+                list = fieldMap.keySet().stream().filter(it -> it.equals(it1.getAnnotation(ExcelFieldName.class).value())).collect(Collectors.toList());
             }
-            excelFieldName=list.get(0);
+            if (list == null || list.size() == 0) {
+                list = fieldMap.keySet().stream().filter(it -> it.equals(it1.getName())).collect(Collectors.toList());
+            }
+            excelFieldName = list.get(0);
             return new FieldInfo(fieldMap.get(excelFieldName), it1);
         }).collect(Collectors.toList());
     }

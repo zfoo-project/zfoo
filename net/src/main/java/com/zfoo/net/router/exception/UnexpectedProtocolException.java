@@ -21,23 +21,8 @@ import com.zfoo.protocol.exception.RunException;
  */
 public class UnexpectedProtocolException extends RunException {
 
-    public UnexpectedProtocolException(Throwable cause) {
-        super(cause);
-    }
-
-    public UnexpectedProtocolException(String message) {
-        super(message);
-    }
-
     public UnexpectedProtocolException(String template, Object... args) {
         super(template, args);
     }
 
-    public UnexpectedProtocolException(Throwable cause, String message) {
-        super(cause, message);
-    }
-
-    public UnexpectedProtocolException(Throwable cause, String template, Object... args) {
-        super(cause, template, args);
-    }
 }

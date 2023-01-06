@@ -32,7 +32,6 @@ import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.protocol.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,8 +108,7 @@ public class Consumer implements IConsumer {
                 throw new ErrorResponseException((Error) responsePacket);
             }
             if (answerClass != null && answerClass != responsePacket.getClass()) {
-                throw new UnexpectedProtocolException(StringUtils.format("client expect protocol:[{}], but found protocol:[{}]"
-                        , answerClass, responsePacket.getClass().getName()));
+                throw new UnexpectedProtocolException("client expect protocol:[{}], but found protocol:[{}]", answerClass, responsePacket.getClass().getName());
             }
             var syncAnswer = new SyncAnswer<>((T) responsePacket, clientSignalAttachment);
 
@@ -118,8 +116,7 @@ public class Consumer implements IConsumer {
             loadBalancer.afterLoadBalancer(session, packet, clientSignalAttachment);
             return syncAnswer;
         } catch (TimeoutException e) {
-            throw new NetTimeOutException(StringUtils.format("syncAsk timeout exception, ask:[{}], attachment:[{}]"
-                    , JsonUtils.object2String(packet), JsonUtils.object2String(clientSignalAttachment)));
+            throw new NetTimeOutException("syncAsk timeout exception, ask:[{}], attachment:[{}]", JsonUtils.object2String(packet), JsonUtils.object2String(clientSignalAttachment));
         } finally {
             SignalBridge.removeSignalAttachment(clientSignalAttachment);
         }

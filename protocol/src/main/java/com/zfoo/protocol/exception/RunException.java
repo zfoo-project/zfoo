@@ -28,16 +28,48 @@ public class RunException extends RuntimeException {
         super(message);
     }
 
-    public RunException(String template, Object... args) {
-        super(StringUtils.format(template, args));
-    }
-
-    public RunException(Throwable cause, String message) {
+    public RunException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public RunException(Throwable cause, String template, Object... args) {
-        super(StringUtils.format(template, args), cause);
+    public RunException(String template, Object arg1, Throwable cause) {
+        super(StringUtils.format(template, arg1), cause);
+    }
+
+    public RunException(String template, Object arg1, Object arg2, Throwable cause) {
+        super(StringUtils.format(template, arg1, arg2), cause);
+    }
+
+    public RunException(String template, Object arg1, Object arg2, Object arg3, Throwable cause) {
+        super(StringUtils.format(template, arg1, arg2, arg3), cause);
+    }
+
+    public RunException(String template, Object arg1, Object arg2, Object arg3, Object arg4, Throwable cause) {
+        super(StringUtils.format(template, arg1, arg2, arg3, arg4), cause);
+    }
+
+    public RunException(String template, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Throwable cause) {
+        super(StringUtils.format(template, arg1, arg2, arg3, arg4, arg5), cause);
+    }
+
+    public RunException(String template, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6, Throwable cause) {
+        super(StringUtils.format(template, arg1, arg2, arg3, arg4, arg5, arg6), cause);
+    }
+
+    public RunException(String template, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6, Object arg7, Throwable cause) {
+        super(StringUtils.format(template, arg1, arg2, arg3, arg4, arg5, arg6, arg7), cause);
+    }
+
+    public RunException(String template, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6, Object arg7, Object arg8, Throwable cause) {
+        super(StringUtils.format(template, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8), cause);
+    }
+
+    public RunException(String template, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6, Object arg7, Object arg8, Object arg9, Throwable cause) {
+        super(StringUtils.format(template, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9), cause);
+    }
+
+    public RunException(String template, Object... args) {
+        super(StringUtils.format(template, args));
     }
 
 }

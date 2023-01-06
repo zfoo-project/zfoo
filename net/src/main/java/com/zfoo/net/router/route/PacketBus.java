@@ -123,7 +123,7 @@ public abstract class PacketBus {
                 ReflectionUtils.makeAccessible(receiverField);
                 ReflectionUtils.setField(receiverField, protocolRegistration, enhanceReceiverDefinition);
             } catch (Throwable t) {
-                throw new RunException(t, "Registration protocol [class:{}] unknown exception", packetClazz.getSimpleName());
+                throw new RunException("Registration protocol [class:{}] unknown exception", packetClazz.getSimpleName(), t);
             }
         }
     }

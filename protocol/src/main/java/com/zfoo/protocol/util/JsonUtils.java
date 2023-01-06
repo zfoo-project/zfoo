@@ -70,7 +70,7 @@ public abstract class JsonUtils {
         try {
             return MAPPER.readValue(json, clazz);
         } catch (Exception e) {
-            throw new RunException(e, "将json字符串[json:{}]转换为对象[class:{}]时异常", json, clazz);
+            throw new RunException("将json字符串[json:{}]转换为对象[class:{}]时异常", json, clazz, e);
         }
     }
 
@@ -79,7 +79,7 @@ public abstract class JsonUtils {
         try {
             return MAPPER.writeValueAsString(object);
         } catch (Exception e) {
-            throw new RunException(e, "将对象[object:{}]转换为json字符串时异常", object);
+            throw new RunException("将对象[object:{}]转换为json字符串时异常", object, e);
         }
     }
 
@@ -88,7 +88,7 @@ public abstract class JsonUtils {
         try {
             return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (Exception e) {
-            throw new RunException(e, "将对象[object:{}]转换为json字符串时异常", object);
+            throw new RunException("将对象[object:{}]转换为json字符串时异常", object, e);
         }
     }
 
@@ -99,7 +99,7 @@ public abstract class JsonUtils {
         try {
             return MAPPER_TURBO.readValue(json, clazz);
         } catch (Exception e) {
-            throw new RunException(e, "将json字符串[json:{}]转换为对象[class:{}]时异常", json, clazz);
+            throw new RunException("将json字符串[json:{}]转换为对象[class:{}]时异常", json, clazz, e);
         }
     }
 
@@ -110,7 +110,7 @@ public abstract class JsonUtils {
         try {
             return MAPPER_TURBO.writeValueAsString(object);
         } catch (Exception e) {
-            throw new RunException(e, "将对象[object:{}]转换为json字符串时异常", object);
+            throw new RunException("将对象[object:{}]转换为json字符串时异常", object, e);
         }
     }
 
@@ -119,7 +119,7 @@ public abstract class JsonUtils {
         try {
             return MAPPER.readValue(json, collectionType);
         } catch (Exception e) {
-            throw new RunException(e, "将json字符串[json:{}]转换为List[{}]异常", json, clazz);
+            throw new RunException("将json字符串[json:{}]转换为List[{}]异常", json, clazz, e);
         }
     }
 
@@ -129,7 +129,7 @@ public abstract class JsonUtils {
         try {
             return MAPPER.readValue(json, collectionType);
         } catch (Exception e) {
-            throw new RunException(e, "将json字符串[json:{}]转换为Set[{}]异常", json, clazz);
+            throw new RunException("将json字符串[json:{}]转换为Set[{}]异常", json, clazz, e);
         }
     }
 
@@ -138,7 +138,7 @@ public abstract class JsonUtils {
             var ct = MAPPER.getTypeFactory().constructCollectionType(collectionType, elementType);
             return MAPPER.readValue(json, ct);
         } catch (IOException e) {
-            throw new RunException(e, "将json字符串[json:{}]转换为Collection[{}]异常", json, collectionType);
+            throw new RunException("将json字符串[json:{}]转换为Collection[{}]异常", json, collectionType, e);
         }
     }
 
@@ -147,7 +147,7 @@ public abstract class JsonUtils {
         try {
             return MAPPER.readValue(json, mapType);
         } catch (Exception e) {
-            throw new RunException(e, "将json字符串[json:{}]转换为Map[[key:{}], [value:{}]]异常", json, kClazz, vClazz);
+            throw new RunException("将json字符串[json:{}]转换为Map[[key:{}], [value:{}]]异常", json, kClazz, vClazz, e);
         }
     }
 
@@ -156,7 +156,7 @@ public abstract class JsonUtils {
         try {
             return MAPPER.readValue(json, arrayType);
         } catch (Exception e) {
-            throw new RunException(e, "将json字符串[{}]转换为数组[array:{}]异常", json, clazz);
+            throw new RunException("将json字符串[{}]转换为数组[array:{}]异常", json, clazz, e);
         }
     }
 
@@ -190,7 +190,7 @@ public abstract class JsonUtils {
                 }
             }
         } catch (IOException e) {
-            throw new RunException(e, "将json字符串[json:{}]转换为jsonTree[nodeName:{}]异常", json, nodeName);
+            throw new RunException("将json字符串[json:{}]转换为jsonTree[nodeName:{}]异常", json, nodeName, e);
         }
         return null;
     }
@@ -216,7 +216,7 @@ public abstract class JsonUtils {
             }
             return jsonMap;
         } catch (IOException e) {
-            throw new RunException(e, "将json字符串[json:{}]转换为jsonMap异常", json);
+            throw new RunException("将json字符串[json:{}]转换为jsonMap异常", json, e);
         }
     }
 }

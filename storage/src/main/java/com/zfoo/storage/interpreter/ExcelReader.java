@@ -23,9 +23,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author meiwei666
@@ -107,7 +105,7 @@ public abstract class ExcelReader {
         try {
             return WorkbookFactory.create(input);
         } catch (IOException e) {
-            throw new RunException(e, "Static resource [{}] is abnormal, and the file cannot be read", fileName);
+            throw new RunException("Static resource [{}] is abnormal, and the file cannot be read", fileName, e);
         }
     }
 }
