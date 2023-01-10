@@ -109,25 +109,29 @@ public class ResourceInterpreter {
                 }
             }
         }
-        return fieldList.stream().filter(it1 -> fieldMap.keySet().stream().anyMatch(it -> {
-            var ans = false;
-            if (it1.isAnnotationPresent(ExcelFieldName.class)) {
-                ans |= it.equals(it1.getAnnotation(ExcelFieldName.class).value());
+        Collection<FieldInfo> fieldInfos=new ArrayList<>();
+        for(var field : fieldList){
+            var ans=false;
+            for(var fieldMapKey:fieldMap.keySet()){
+                if(field.isAnnotationPresent(ExcelFieldName.class)){
+                    ans|=fieldMapKey.equals(field.getAnnotation(ExcelFieldName.class).value());
+                }
+                ans|=fieldMapKey.equals(field.getName());
             }
-            ans |= it.equals(it1.getName());
-            return ans;
-        })).map(it1 -> {
+            if(ans==false)
+                continue;
             String excelFieldName;
-            List<String> list = null;
-            if (it1.isAnnotationPresent(ExcelFieldName.class)) {
-                list = fieldMap.keySet().stream().filter(it -> it.equals(it1.getAnnotation(ExcelFieldName.class).value())).collect(Collectors.toList());
+            List<String> list=null;
+            if(field.isAnnotationPresent(ExcelFieldName.class)){
+                list=fieldMap.keySet().stream().filter(it->it.equals(field.getAnnotation(ExcelFieldName.class).value())).collect(Collectors.toList());
             }
-            if (list == null || list.size() == 0) {
-                list = fieldMap.keySet().stream().filter(it -> it.equals(it1.getName())).collect(Collectors.toList());
+            if(list==null||list.size()==0){
+                list=fieldMap.keySet().stream().filter(it->it.equals(field.getName())).collect(Collectors.toList());
             }
-            excelFieldName = list.get(0);
-            return new FieldInfo(fieldMap.get(excelFieldName), it1);
-        }).collect(Collectors.toList());
+            excelFieldName=list.get(0);
+            fieldInfos.add(new FieldInfo(fieldMap.get(excelFieldName), field));
+        }
+        return fieldInfos;
     }
 
     private static class FieldInfo {
