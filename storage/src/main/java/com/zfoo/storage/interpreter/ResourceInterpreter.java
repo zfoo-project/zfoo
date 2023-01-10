@@ -99,7 +99,7 @@ public class ResourceInterpreter {
     }
 
     // 优先使用ExcelFieldName注解表示的值当作列名
-    private static String getFieldName(Field field) {
+    private static String getExcelFieldName(Field field) {
         return field.isAnnotationPresent(ExcelFieldName.class) ? field.getAnnotation(ExcelFieldName.class).value() : field.getName();
     }
 
@@ -108,19 +108,19 @@ public class ResourceInterpreter {
         var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
         // 检测field的合法性，field必须可以在excel中找到对应的列，有找不到的列在启动时候就发现
         for (var field : fieldList) {
-            var fieldName = getFieldName(field);
+            var fieldName = getExcelFieldName(field);
             if (!cellFieldMap.containsKey(fieldName)) {
-                throw new RunException("The declaration attribute [filed:{}] of the resource class [class:{}] cannot be obtained, please check the format of the configuration table", field.getName(), clazz);
+                throw new RunException("The declaration attribute [filed:{}] of the resource class [class:{}] cannot be obtained, please check the format of the configuration table", fieldName, clazz);
             }
 
             if (field.isAnnotationPresent(Id.class)) {
                 var cellIndex = cellFieldMap.get(fieldName);
                 if (cellIndex != 0) {
-                    throw new RunException("The primary key [Id:{}] of the resource class [class:{}] must be placed in the first column of the Excel configuration table, please check the format of the configuration table", field.getName(), clazz);
+                    throw new RunException("The primary key [Id:{}] of the resource class [class:{}] must be placed in the first column of the Excel configuration table, please check the format of the configuration table", fieldName, clazz);
                 }
             }
         }
-        return fieldList.stream().map(it -> new FieldInfo(cellFieldMap.get(getFieldName(it)), it)).collect(Collectors.toList());
+        return fieldList.stream().map(it -> new FieldInfo(cellFieldMap.get(getExcelFieldName(it)), it)).collect(Collectors.toList());
     }
 
     private static class FieldInfo {
