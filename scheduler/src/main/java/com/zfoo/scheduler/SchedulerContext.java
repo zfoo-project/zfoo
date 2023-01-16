@@ -101,14 +101,10 @@ public class SchedulerContext implements ApplicationListener<ApplicationContextE
             var bean = applicationContext.getBean(beanName);
             var clazz = bean.getClass();
 
-            var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(bean.getClass(), Scheduler.class);
+            var methods = ReflectionUtils.getMethodsByAnnotation(clazz, Scheduler.class);
 
             if (ArrayUtils.isEmpty(methods)) {
                 continue;
-            }
-
-            if (!ReflectionUtils.isPojoClass(clazz)) {
-                logger.warn("调度注册类[{}]不是POJO类，父类的调度不会被扫描到", clazz);
             }
 
             try {

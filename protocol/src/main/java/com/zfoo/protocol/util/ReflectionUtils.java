@@ -164,9 +164,9 @@ public abstract class ReflectionUtils {
      * @param annotation 指定注解的Class
      * @return 数组，可能长度为0
      */
-    public static Method[] getMethodsByAnnoInPOJOClass(Class<?> clazz, Class<? extends Annotation> annotation) {
+    public static Method[] getMethodsByAnnotation(Class<?> clazz, Class<? extends Annotation> annotation) {
         var list = new ArrayList<Method>();
-        var methods = clazz.getDeclaredMethods();
+        var methods = getAllMethods(clazz);
         for (var method : methods) {
             if (method.isAnnotationPresent(annotation)) {
                 list.add(method);
@@ -175,16 +175,6 @@ public abstract class ReflectionUtils {
         return ArrayUtils.listToArray(list, Method.class);
     }
 
-    public static Method[] getMethodsByNameInPOJOClass(Class<?> clazz, String methodName) {
-        var list = new ArrayList<Method>();
-        var methods = clazz.getDeclaredMethods();
-        for (var method : methods) {
-            if (method.getName().equalsIgnoreCase(methodName)) {
-                list.add(method);
-            }
-        }
-        return ArrayUtils.listToArray(list, Method.class);
-    }
 
     /**
      * Attempt to get all Methods on the supplied class.

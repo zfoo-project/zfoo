@@ -43,13 +43,9 @@ public class EventRegisterProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         var clazz = bean.getClass();
-        var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, EventReceiver.class);
+        var methods = ReflectionUtils.getMethodsByAnnotation(clazz, EventReceiver.class);
         if (ArrayUtils.isEmpty(methods)) {
             return bean;
-        }
-
-        if (!ReflectionUtils.isPojoClass(clazz)) {
-            logger.warn("事件注册类[{}]不是POJO类，父类的事件接收不会被扫描到", clazz);
         }
 
         try {

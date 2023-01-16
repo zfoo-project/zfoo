@@ -421,7 +421,7 @@ public class OrmManager implements IOrmManager {
 
         ReflectionUtils.makeAccessible(idField);
         ReflectionUtils.setField(idField, entityInstance, idFiledValue);
-        var idMethodOptional = Arrays.stream(ReflectionUtils.getMethodsByNameInPOJOClass(clazz, "id"))
+        var idMethodOptional = Arrays.stream(ReflectionUtils.getAllMethods(clazz)).filter(it -> it.getName().equalsIgnoreCase("id"))
                 .filter(it -> it.getParameterCount() <= 0)
                 .findFirst();
         AssertionUtils.isTrue(idMethodOptional.isPresent(), "实体类Entity[{}]必须重写id()方法", clazz.getSimpleName());
