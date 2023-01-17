@@ -32,6 +32,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import java.io.FileNotFoundException;
@@ -142,11 +143,8 @@ public class StorageManager implements IStorageManager {
     @Override
     public void inject() {
         var applicationContext = StorageContext.getApplicationContext();
-        var beanNames = applicationContext.getBeanDefinitionNames();
-
-        for (var beanName : beanNames) {
-            var bean = applicationContext.getBean(beanName);
-
+        var componentBeans =  applicationContext.getBeansWithAnnotation(Component.class);
+        for (var bean : componentBeans.values()) {
             ReflectionUtils.filterFieldsInClass(bean.getClass(), field -> field.isAnnotationPresent(ResInjection.class), field -> {
                 Type type = field.getGenericType();
 

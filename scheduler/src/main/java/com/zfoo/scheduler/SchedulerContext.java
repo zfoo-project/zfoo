@@ -28,6 +28,7 @@ import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -96,15 +97,16 @@ public class SchedulerContext implements ApplicationListener<ApplicationContextE
     }
 
     public void inject() {
-        var beanNames = applicationContext.getBeanDefinitionNames();
-        for (var beanName : beanNames) {
-            var bean = applicationContext.getBean(beanName);
+        var componentBeans =  applicationContext.getBeansWithAnnotation(Component.class);
+        for (var bean : componentBeans.values()) {
             var clazz = bean.getClass();
-
-            var methods = ReflectionUtils.getMethodsByAnnotation(clazz, Scheduler.class);
-
+            var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(bean.getClass(), Scheduler.class);
             if (ArrayUtils.isEmpty(methods)) {
                 continue;
+            }
+
+            if (!ReflectionUtils.isPojoClass(clazz)) {
+                logger.warn("The message registration class [{}] is not a POJO class, and the parent class will not be scanned", clazz);
             }
 
             try {

@@ -43,9 +43,13 @@ public class EventRegisterProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         var clazz = bean.getClass();
-        var methods = ReflectionUtils.getMethodsByAnnotation(clazz, EventReceiver.class);
+        var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, EventReceiver.class);
         if (ArrayUtils.isEmpty(methods)) {
             return bean;
+        }
+
+        if (!ReflectionUtils.isPojoClass(clazz)) {
+            logger.warn("The message registration class [{}] is not a POJO class, and the parent class will not be scanned", clazz);
         }
 
         try {

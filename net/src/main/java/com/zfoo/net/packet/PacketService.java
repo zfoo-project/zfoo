@@ -28,6 +28,7 @@ import com.zfoo.protocol.xml.XmlProtocols;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
@@ -124,9 +125,8 @@ public class PacketService implements IPacketService {
         }
 
         // 注册协议接收器
-        var beanNames = applicationContext.getBeanDefinitionNames();
-        for (var beanName : beanNames) {
-            var bean = applicationContext.getBean(beanName);
+        var componentBeans =  applicationContext.getBeansWithAnnotation(Component.class);
+        for (var bean : componentBeans.values()) {
             PacketBus.registerPacketReceiverDefinition(bean);
         }
     }

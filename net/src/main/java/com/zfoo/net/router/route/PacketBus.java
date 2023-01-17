@@ -63,9 +63,13 @@ public abstract class PacketBus {
     public static void registerPacketReceiverDefinition(Object bean) {
         var clazz = bean.getClass();
 
-        var methods = ReflectionUtils.getMethodsByAnnotation(clazz, PacketReceiver.class);
+        var methods = ReflectionUtils.getMethodsByAnnoInPOJOClass(clazz, PacketReceiver.class);
         if (ArrayUtils.isEmpty(methods)) {
             return;
+        }
+
+        if (!ReflectionUtils.isPojoClass(clazz)) {
+            logger.warn("The message registration class [{}] is not a POJO class, and the parent class will not be scanned", clazz);
         }
 
         for (var method : methods) {

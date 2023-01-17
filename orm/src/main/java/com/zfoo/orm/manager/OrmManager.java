@@ -50,6 +50,7 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -186,11 +187,8 @@ public class OrmManager implements IOrmManager {
     @Override
     public void inject() {
         var applicationContext = OrmContext.getApplicationContext();
-        var beanNames = applicationContext.getBeanDefinitionNames();
-
-        for (var beanName : beanNames) {
-            var bean = applicationContext.getBean(beanName);
-
+        var componentBeans =  applicationContext.getBeansWithAnnotation(Component.class);
+        for (var bean : componentBeans.values()) {
             ReflectionUtils.filterFieldsInClass(bean.getClass()
                     , field -> field.isAnnotationPresent(EntityCachesInjection.class)
                     , field -> {
