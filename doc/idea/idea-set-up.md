@@ -62,9 +62,15 @@ ranslate.google.com
 
 ## 4. mongodb
 
+### mongo 4.0
 1. 直接安装MongoDB，用custom自定义安装目录，一般用默认的安装目录即可，不要勾选mongoDB compass
 2. 将C:\Program Files\MongoDB\Server\4.2\bin配置到环境变量中，便于全局使用
 3. mongo -version # 查看安装的版本
+
+### mongo 6.0
+1. 直接安装MongoDB，用custom自定义安装目录，一般用默认的安装目录即可，不要勾选mongoDB compass
+2. 直接安装MongoSh，将安装目录定位到MongoDB的bin目录
+
 
 ## 5. idea，mongodb，postman
 
