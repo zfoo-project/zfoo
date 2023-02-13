@@ -613,16 +613,66 @@ public class ProtocolAnalysis {
         }
 
 
-        // 检查循环协议
+        //拓扑排序检查循环协议
+        if(subProtocolIdMap.isEmpty()){
+            return;
+        }
+        //先判断自循环引用
         for (var protocolEntry : subProtocolIdMap.entrySet()) {
             var protocolId = protocolEntry.getKey();
             var subProtocolSet = protocolEntry.getValue();
             if (subProtocolSet.contains(protocolId)) {
                 var protocolClass = protocols[protocolId].protocolConstructor().getDeclaringClass();
-                throw new RunException("[class:{}]在第一层包含循环引用协议[class:{}]", protocolClass.getSimpleName(), protocolClass.getSimpleName());
+                throw new RunException("[class:{}]中存在自循环引用", protocolClass.getSimpleName());
             }
-
-            getAllSubProtocolIds(protocolId);
+        }
+        //入度
+        var inDegree=new HashMap<Short,Integer>();
+        //初始化入度
+        for(var protocolEntry : subProtocolIdMap.entrySet())
+        {
+            var protocolId=protocolEntry.getKey();
+            inDegree.put(protocolId,inDegree.getOrDefault(protocolId,0));
+            var subProtocolSet = protocolEntry.getValue();
+            for(var subProtocolId:subProtocolSet)
+            {
+                inDegree.put(subProtocolId,inDegree.getOrDefault(subProtocolId,0)+1);
+            }
+        }
+        var queue=new LinkedList<Short>();
+        for(var protocolEntry:inDegree.entrySet())
+        {
+            var protocolInDegree=protocolEntry.getValue();
+            if(protocolInDegree==0)
+            {
+                queue.offer(protocolEntry.getKey());
+            }
+        }
+        while(!queue.isEmpty())
+        {
+            var protocolId=queue.poll();
+            if(subProtocolIdMap.containsKey(protocolId)){
+                for(var subProtocolId:subProtocolIdMap.get(protocolId))
+                {
+                    inDegree.put(subProtocolId,inDegree.get(subProtocolId)-1);
+                    if(inDegree.get(subProtocolId)==0)
+                    {
+                        queue.offer(subProtocolId);
+                    }
+                }
+            }
+        }
+        var circularReferenceProtocols=new ArrayList<String>();
+        //入度不为0的表示存在循环引用的协议
+        for(var protocolEntry:inDegree.entrySet())
+        {
+            if(protocolEntry.getValue()>0){
+                circularReferenceProtocols.add(protocols[protocolEntry.getKey()].protocolConstructor().getDeclaringClass().getSimpleName());
+            }
+        }
+        //抛出所有存在循环引用的协议类名
+        if(circularReferenceProtocols.size()>0){
+            throw new RunException("[class:{}]中存在循环引用",StringUtils.joinWith(",",circularReferenceProtocols.toArray()));
         }
     }
 
