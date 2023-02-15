@@ -14,7 +14,6 @@
 package com.zfoo.event.schema;
 
 import com.zfoo.event.manager.EventBus;
-import com.zfoo.event.model.anno.AsyncExecute;
 import com.zfoo.event.model.anno.EventReceiver;
 import com.zfoo.event.model.event.IEvent;
 import com.zfoo.event.model.vo.EnhanceUtils;
@@ -84,7 +83,7 @@ public class EventRegisterProcessor implements BeanPostProcessor {
                 var enhanceReceiverDefinition = EnhanceUtils.createEventReceiver(receiverDefinition);
 
                 //异步执行标志，false表示同步执行，true表示异步执行
-                var asyncFlag = method.isAnnotationPresent(AsyncExecute.class);
+                var asyncFlag = method.getDeclaredAnnotation(EventReceiver.class).async();
                 // key:class类型 value:观察者 注册Event的receiverMap中
                 EventBus.registerEventReceiver(eventClazz, enhanceReceiverDefinition, asyncFlag);
             }
