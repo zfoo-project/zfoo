@@ -13,7 +13,6 @@
 
 package com.zfoo.event;
 
-import com.zfoo.event.model.anno.AsyncExecute;
 import com.zfoo.event.model.anno.EventReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +32,7 @@ public class MyController2 {
      *
      * 异步事件会被不会立刻执行，注意日志打印的线程号
      */
-    @AsyncExecute
-    @EventReceiver
+    @EventReceiver(async = true)
     public void onMyNoticeEvent(MyNoticeEvent event) {
         logger.info("方法2异步执行事件：" + event.getMessage());
     }
