@@ -21,7 +21,7 @@ import com.zfoo.scheduler.util.TimeUtils;
  * @author godotg
  * @version 3.0
  */
-public class UptimeVO implements Comparable<UptimeVO> {
+public class Uptime implements Comparable<Uptime> {
 
     private double oneMinute;
 
@@ -33,14 +33,14 @@ public class UptimeVO implements Comparable<UptimeVO> {
 
     private long timestamp;
 
-    public static UptimeVO valueOf(double oneMinute, double fiveMinute, double fiftyMinute, double usage, long timestamp) {
-        var vo = new UptimeVO();
-        vo.oneMinute = oneMinute;
-        vo.fiveMinute = fiveMinute;
-        vo.fiftyMinute = fiftyMinute;
-        vo.usage = usage;
-        vo.timestamp = timestamp;
-        return vo;
+    public static Uptime valueOf(double oneMinute, double fiveMinute, double fiftyMinute, double usage, long timestamp) {
+        var uptime = new Uptime();
+        uptime.oneMinute = oneMinute;
+        uptime.fiveMinute = fiveMinute;
+        uptime.fiftyMinute = fiftyMinute;
+        uptime.usage = usage;
+        uptime.timestamp = timestamp;
+        return uptime;
     }
 
     public String pressure() {
@@ -74,7 +74,7 @@ public class UptimeVO implements Comparable<UptimeVO> {
     }
 
     @Override
-    public int compareTo(UptimeVO target) {
+    public int compareTo(Uptime target) {
         if (target == null) {
             return 1;
         }
@@ -86,39 +86,19 @@ public class UptimeVO implements Comparable<UptimeVO> {
         return oneMinute;
     }
 
-    public void setOneMinute(double oneMinute) {
-        this.oneMinute = oneMinute;
-    }
-
     public double getFiveMinute() {
         return fiveMinute;
-    }
-
-    public void setFiveMinute(double fiveMinute) {
-        this.fiveMinute = fiveMinute;
     }
 
     public double getFiftyMinute() {
         return fiftyMinute;
     }
 
-    public void setFiftyMinute(double fiftyMinute) {
-        this.fiftyMinute = fiftyMinute;
-    }
-
     public double getUsage() {
         return usage;
     }
 
-    public void setUsage(double usage) {
-        this.usage = usage;
-    }
-
     public long getTimestamp() {
         return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 }

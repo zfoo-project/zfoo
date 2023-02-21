@@ -22,7 +22,7 @@ import com.zfoo.scheduler.util.TimeUtils;
  * @author godotg
  * @version 3.0
  */
-public class MemoryVO implements Comparable<MemoryVO> {
+public class Memory implements Comparable<Memory> {
 
     private long total;
 
@@ -30,45 +30,47 @@ public class MemoryVO implements Comparable<MemoryVO> {
 
     private long timestamp;
 
-    public static MemoryVO valueOf(long total, long available, long timestamp) {
-        var vo = new MemoryVO();
-        vo.total = total;
-        vo.available = available;
-        vo.timestamp = timestamp;
-        return vo;
+    public static Memory valueOf(long total, long available, long timestamp) {
+        var memory = new Memory();
+        memory.total = total;
+        memory.available = available;
+        memory.timestamp = timestamp;
+        return memory;
     }
 
     public String pressure() {
         var usage = 1D * (total - available) / total;
         if (usage >= 0.8) {
-            var tempVO = this.toGB();
+            var temp = this.toGB();
             return StringUtils.format("free - 内存占用过高[total:{}GB][available:{}GB][usage:{}][{}]"
-                    , tempVO.getTotal(), tempVO.getAvailable(), OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
+                    , temp.getTotal(), temp.getAvailable(), OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
         }
         return StringUtils.EMPTY;
     }
 
+    public double usage() {
+        return ((double) (total - available)) / total;
+    }
+
     @Override
-    public int compareTo(MemoryVO target) {
+    public int compareTo(Memory target) {
         if (target == null) {
             return 1;
         }
 
-        var a = 1D * (this.total - this.available) / this.total;
-        var b = 1D * (target.getTotal() - target.getAvailable()) / target.getTotal();
-        return Double.compare(a, b);
+        return Double.compare(usage(), target.usage());
     }
 
-    public MemoryVO toMB() {
+    public Memory toMB() {
         var total = this.total / IOUtils.BYTES_PER_MB;
         var available = this.available / IOUtils.BYTES_PER_MB;
-        return MemoryVO.valueOf(total, available, timestamp);
+        return Memory.valueOf(total, available, timestamp);
     }
 
-    public MemoryVO toGB() {
-        var total = (long) Math.ceil(1D * this.total / IOUtils.BYTES_PER_GB);
-        var available = (long) Math.ceil(1D * this.available / IOUtils.BYTES_PER_GB);
-        return MemoryVO.valueOf(total, available, timestamp);
+    public Memory toGB() {
+        var total = (long) Math.ceil(this.total / (double) IOUtils.BYTES_PER_GB);
+        var available = (long) Math.ceil(this.available / (double) IOUtils.BYTES_PER_GB);
+        return Memory.valueOf(total, available, timestamp);
     }
 
     public long getTotal() {

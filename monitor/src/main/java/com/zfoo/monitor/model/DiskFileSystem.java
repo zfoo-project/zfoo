@@ -22,7 +22,7 @@ import com.zfoo.scheduler.util.TimeUtils;
  * @author godotg
  * @version 3.0
  */
-public class DiskFileSystemVO implements Comparable<DiskFileSystemVO> {
+public class DiskFileSystem implements Comparable<DiskFileSystem> {
 
     private String name;
 
@@ -32,49 +32,48 @@ public class DiskFileSystemVO implements Comparable<DiskFileSystemVO> {
 
     private long timestamp;
 
-    public static DiskFileSystemVO valueOf(String name, long size, long available, long timestamp) {
-        var vo = new DiskFileSystemVO();
-        vo.name = name;
-        vo.size = size;
-        vo.available = available;
-        vo.timestamp = timestamp;
-        return vo;
+    public static DiskFileSystem valueOf(String name, long size, long available, long timestamp) {
+        var dfs = new DiskFileSystem();
+        dfs.name = name;
+        dfs.size = size;
+        dfs.available = available;
+        dfs.timestamp = timestamp;
+        return dfs;
     }
 
     public String pressure() {
-        var usage = 1D * (size - available) / size;
+        var usage = usage();
         if (usage >= 0.8) {
-            var tempVO = this.toGB();
+            var temp = this.toGB();
             return StringUtils.format("df - 磁盘[name:{}]空间过高[size:{}GB][available:{}GB][usage:{}][{}]"
-                    , name, tempVO.getSize(), tempVO.getAvailable(), OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
+                    , name, temp.getSize(), temp.getAvailable(), OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
         }
         return StringUtils.EMPTY;
     }
 
+    public double usage() {
+        return ((double) (size - available)) / size;
+    }
+
     @Override
-    public int compareTo(DiskFileSystemVO target) {
+    public int compareTo(DiskFileSystem target) {
         if (target == null) {
             return 1;
         }
-        if (!this.name.equals(target.getName())) {
-            return 0;
-        }
 
-        var a = 1D * (this.size - this.available) / this.size;
-        var b = 1D * (target.getSize() - target.getAvailable()) / target.getSize();
-        return Double.compare(a, b);
+        return Double.compare(usage(), target.usage());
     }
 
-    public DiskFileSystemVO toMB() {
+    public DiskFileSystem toMB() {
         var size = this.size / IOUtils.BYTES_PER_MB;
         var available = this.available / IOUtils.BYTES_PER_MB;
-        return DiskFileSystemVO.valueOf(this.name, size, available, timestamp);
+        return DiskFileSystem.valueOf(this.name, size, available, timestamp);
     }
 
-    public DiskFileSystemVO toGB() {
-        var size = (long) Math.ceil(1D * this.size / IOUtils.BYTES_PER_GB);
-        var available = (long) Math.ceil(1D * this.available / IOUtils.BYTES_PER_GB);
-        return DiskFileSystemVO.valueOf(this.name, size, available, timestamp);
+    public DiskFileSystem toGB() {
+        var size = (long) Math.ceil(this.size / (double) IOUtils.BYTES_PER_GB);
+        var available = (long) Math.ceil(this.available / (double) IOUtils.BYTES_PER_GB);
+        return DiskFileSystem.valueOf(this.name, size, available, timestamp);
     }
 
     public String getName() {

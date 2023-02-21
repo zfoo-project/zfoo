@@ -20,7 +20,7 @@ import com.zfoo.scheduler.util.TimeUtils;
  * @author godotg
  * @version 3.0
  */
-public class SarVO implements Comparable<SarVO> {
+public class Sar implements Comparable<Sar> {
 
     private String name;
 
@@ -42,20 +42,20 @@ public class SarVO implements Comparable<SarVO> {
 
     private long timestamp;
 
-    public static SarVO valueOf(String name, long rxpck, long txpck, long rxBytes, long txBytes
+    public static Sar valueOf(String name, long rxpck, long txpck, long rxBytes, long txBytes
             , long inErrors, long outErrors, long inDrops, long collisions, long timestamp) {
-        var vo = new SarVO();
-        vo.name = name;
-        vo.rxpck = rxpck;
-        vo.txpck = txpck;
-        vo.rxBytes = rxBytes;
-        vo.txBytes = txBytes;
-        vo.inErrors = inErrors;
-        vo.outErrors = outErrors;
-        vo.inDrops = inDrops;
-        vo.collisions = collisions;
-        vo.timestamp = timestamp;
-        return vo;
+        var sar = new Sar();
+        sar.name = name;
+        sar.rxpck = rxpck;
+        sar.txpck = txpck;
+        sar.rxBytes = rxBytes;
+        sar.txBytes = txBytes;
+        sar.inErrors = inErrors;
+        sar.outErrors = outErrors;
+        sar.inDrops = inDrops;
+        sar.collisions = collisions;
+        sar.timestamp = timestamp;
+        return sar;
     }
 
     public String pressure() {
@@ -71,12 +71,9 @@ public class SarVO implements Comparable<SarVO> {
     }
 
     @Override
-    public int compareTo(SarVO target) {
+    public int compareTo(Sar target) {
         if (target == null) {
             return 1;
-        }
-        if (!this.name.equals(target.getName())) {
-            return 0;
         }
 
         var a = this.rxpck + this.txpck;
@@ -102,71 +99,35 @@ public class SarVO implements Comparable<SarVO> {
         return rxpck;
     }
 
-    public void setRxpck(long rxpck) {
-        this.rxpck = rxpck;
-    }
-
     public long getTxpck() {
         return txpck;
-    }
-
-    public void setTxpck(long txpck) {
-        this.txpck = txpck;
     }
 
     public long getRxBytes() {
         return rxBytes;
     }
 
-    public void setRxBytes(long rxBytes) {
-        this.rxBytes = rxBytes;
-    }
-
     public long getTxBytes() {
         return txBytes;
-    }
-
-    public void setTxBytes(long txBytes) {
-        this.txBytes = txBytes;
     }
 
     public long getInErrors() {
         return inErrors;
     }
 
-    public void setInErrors(long inErrors) {
-        this.inErrors = inErrors;
-    }
-
     public long getOutErrors() {
         return outErrors;
-    }
-
-    public void setOutErrors(long outErrors) {
-        this.outErrors = outErrors;
     }
 
     public long getInDrops() {
         return inDrops;
     }
 
-    public void setInDrops(long inDrops) {
-        this.inDrops = inDrops;
-    }
-
     public long getCollisions() {
         return collisions;
     }
 
-    public void setCollisions(long collisions) {
-        this.collisions = collisions;
-    }
-
     public long getTimestamp() {
         return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 }

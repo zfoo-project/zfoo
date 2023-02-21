@@ -21,7 +21,7 @@ import com.zfoo.util.net.NetUtils;
 import com.zfoo.util.security.IdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import oshi.SystemInfo;
+import oshi.hardware.HWDiskStore;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.hardware.NetworkIF;
 import oshi.software.os.OperatingSystem;
@@ -53,7 +53,7 @@ public abstract class OSUtils {
     /**
      * 系统信息
      */
-    private static final SystemInfo systemInfo = new SystemInfo();
+    private static final oshi.SystemInfo systemInfo = new oshi.SystemInfo();
 
     /**
      * 硬件信息
@@ -64,6 +64,11 @@ public abstract class OSUtils {
      * 操作系统信息
      */
     private static final OperatingSystem os = systemInfo.getOperatingSystem();
+
+    /**
+     * 磁盘io
+     */
+    private static final List<HWDiskStore> hwDiskStores = hardware.getDiskStores();
 
     /**
      * 网络信息
@@ -90,11 +95,9 @@ public abstract class OSUtils {
         // 最大小数位数
         percentFormat.setMaximumFractionDigits(2);
         // 最大整数位数
-        percentFormat.setMaximumIntegerDigits(2);
+        percentFormat.setMaximumIntegerDigits(3);
         // 最小小数位数
         percentFormat.setMinimumFractionDigits(2);
-        // 最小整数位数
-        percentFormat.setMinimumIntegerDigits(2);
         // 自动转换成百分比显示
         return percentFormat.format(num);
     }
@@ -102,7 +105,7 @@ public abstract class OSUtils {
     /**
      * 对应于Linux中的uptime命令，windows中无法统计，所以在windows返回的结果默认是-1
      */
-    public static UptimeVO uptime() {
+    public static Uptime uptime() {
         var processor = hardware.getProcessor();
         var loads = processor.getSystemLoadAverage(3);
         var oneMinute = loads[0];
@@ -113,25 +116,25 @@ public abstract class OSUtils {
         var usage = processor.getSystemCpuLoadBetweenTicks(ticks);
 
         ticks = cpuTicks;
-        return UptimeVO.valueOf(oneMinute, fiveMinute, fiftyMinute, usage, TimeUtils.now());
+        return Uptime.valueOf(oneMinute, fiveMinute, fiftyMinute, usage, TimeUtils.now());
     }
 
     /**
      * 对应于Linux中的df -h命令，兼容windows
      */
-    public static List<DiskFileSystemVO> df() {
+    public static List<DiskFileSystem> df() {
         var fileSystems = os.getFileSystem().getFileStores();
 
-        var nameDfMap = new HashMap<String, List<DiskFileSystemVO>>();
+        var nameDfMap = new HashMap<String, List<DiskFileSystem>>();
         for (var fs : fileSystems) {
             var name = fs.getName();
             var size = fs.getTotalSpace();
             var available = fs.getFreeSpace();
             var list = nameDfMap.computeIfAbsent(name, (it) -> new ArrayList<>());
-            list.add(DiskFileSystemVO.valueOf(name, size, available, TimeUtils.now()));
+            list.add(DiskFileSystem.valueOf(name, size, available, TimeUtils.now()));
         }
 
-        var dfs = new ArrayList<DiskFileSystemVO>();
+        var dfs = new ArrayList<DiskFileSystem>();
         for (var dfList : nameDfMap.values()) {
             if (dfList.size() == 1) {
                 dfs.add(dfList.get(0));
@@ -152,19 +155,49 @@ public abstract class OSUtils {
     /**
      * 对应于Linux中的free命令，兼容windows
      */
-    public static MemoryVO free() {
+    public static Memory free() {
         var memory = hardware.getMemory();
         var total = memory.getTotal();
         var available = memory.getAvailable();
-        return MemoryVO.valueOf(total, available, TimeUtils.now());
+        return Memory.valueOf(total, available, TimeUtils.now());
     }
 
+
+    public static List<DiskStorage> iostat() {
+        var diskStorages = new ArrayList<DiskStorage>();
+
+        for (var ds : hwDiskStores) {
+            var name = ds.getName();
+            var oldTimestamp = ds.getTimeStamp();
+            var oldReads = ds.getReads();
+            var oldReadBytes = ds.getReadBytes();
+            var oldWrites = ds.getWrites();
+            var oldWriteBytes = ds.getWriteBytes();
+
+            if (!ds.updateAttributes()) {
+                throw new RuntimeException(StringUtils.format("iostat update exception [ds:{}]", ds));
+            }
+
+            var timestamp = ds.getTimeStamp();
+            var timeInterval = (timestamp - oldTimestamp) / 1000D;
+
+            var reads = (long) Math.ceil(((ds.getReads() - oldReads) / timeInterval));
+            var readKBs = (long) Math.ceil(((ds.getReadBytes() - oldReadBytes) / timeInterval / IOUtils.BYTES_PER_KB));
+            var writes = (long) Math.ceil(((ds.getWrites() - oldWrites) / timeInterval));
+            var writeKBs = (long) Math.ceil(((ds.getWriteBytes() - oldWriteBytes) / timeInterval / IOUtils.BYTES_PER_KB));
+
+            var diskStorage = DiskStorage.valueOf(name, reads, readKBs, writes, writeKBs);
+            diskStorages.add(diskStorage);
+        }
+
+        return diskStorages;
+    }
 
     /**
      * 对应于Linux中的sar -n DEV 1命令，兼容windows
      */
-    public static List<SarVO> sar() {
-        var nameSarMap = new HashMap<String, List<SarVO>>();
+    public static List<Sar> sar() {
+        var nameSarMap = new HashMap<String, List<Sar>>();
         for (var networkIF : networkIFs) {
             var name = networkIF.getDisplayName() + StringUtils.SPACE + networkIF.getName();
             var oldTimestamp = networkIF.getTimeStamp();
@@ -177,7 +210,10 @@ public abstract class OSUtils {
             var oldInDrops = networkIF.getInDrops();
             var oldCollisions = networkIF.getCollisions();
 
-            networkIF.updateAttributes();
+            if (!networkIF.updateAttributes()) {
+                throw new RuntimeException(StringUtils.format("sar update exception [networkIF:{}]", networkIF));
+            }
+
             var timestamp = networkIF.getTimeStamp();
             var timeInterval = (timestamp - oldTimestamp) / 1000D;
             var rxpck = (long) Math.ceil(((networkIF.getPacketsRecv() - oldPacketsRecv) / timeInterval));
@@ -190,10 +226,10 @@ public abstract class OSUtils {
             var collisions = networkIF.getCollisions() - oldCollisions;
 
             var list = nameSarMap.computeIfAbsent(name, (it) -> new ArrayList<>());
-            list.add(SarVO.valueOf(name, rxpck, txpck, rxBytes, txBytes, inErrors, outErrors, inDrops, collisions, timestamp));
+            list.add(Sar.valueOf(name, rxpck, txpck, rxBytes, txBytes, inErrors, outErrors, inDrops, collisions, timestamp));
         }
 
-        var sars = new ArrayList<SarVO>();
+        var sars = new ArrayList<Sar>();
         for (var sarList : nameSarMap.values()) {
             if (sarList.size() == 1) {
                 sars.add(sarList.get(0));
@@ -211,10 +247,10 @@ public abstract class OSUtils {
         return sars;
     }
 
-    private static UptimeVO maxUptime;
-    private static Map<String, DiskFileSystemVO> maxDfMap;
-    private static MemoryVO maxFree;
-    private static Map<String, SarVO> maxSarMap;
+    private static Uptime maxUptime;
+    private static Map<String, DiskFileSystem> maxDfMap;
+    private static Memory maxFree;
+    private static Map<String, Sar> maxSarMap;
 
     static {
         initMonitor();
@@ -227,15 +263,15 @@ public abstract class OSUtils {
         maxSarMap = new ConcurrentHashMap<>(sar().stream().collect(Collectors.toMap(key -> key.getName(), value -> value)));
     }
 
-    public static MonitorVO maxMonitor() {
+    public static Monitor maxMonitor() {
         var uuid = IdUtils.getUUID();
-        var monitor = MonitorVO.valueOf(uuid, maxUptime, new ArrayList<>(maxDfMap.values()), maxFree, new ArrayList<>(maxSarMap.values()));
+        var monitor = Monitor.valueOf(uuid, maxUptime, new ArrayList<>(maxDfMap.values()), maxFree, new ArrayList<>(maxSarMap.values()));
 
         initMonitor();
         return monitor;
     }
 
-    public static MonitorVO monitor() {
+    public static Monitor monitor() {
         var uuid = IdUtils.getUUID();
         var uptime = uptime();
         var df = df();
@@ -264,7 +300,7 @@ public abstract class OSUtils {
             }
         }
 
-        return MonitorVO.valueOf(uuid, uptime, df, free, sar);
+        return Monitor.valueOf(uuid, uptime, df, free, sar);
     }
 
     public static String execCommand(String command) {
@@ -303,10 +339,10 @@ public abstract class OSUtils {
         return StringUtils.EMPTY;
     }
 
-    public static SystemInfoVO os() {
+    public static SystemInfo os() {
         var processor = hardware.getProcessor();
         var cpuLogicCore = processor.getLogicalProcessorCount();
         var cpuName = processor.getProcessorIdentifier().getName();
-        return SystemInfoVO.valueOf(NetUtils.getLocalhostStr(), os.toString(), os.toString(), cpuLogicCore, cpuName);
+        return SystemInfo.valueOf(NetUtils.getLocalhostStr(), os.toString(), os.toString(), cpuLogicCore, cpuName);
     }
 }

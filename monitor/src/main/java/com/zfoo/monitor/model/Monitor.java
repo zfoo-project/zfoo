@@ -27,26 +27,26 @@ import java.util.List;
  * @author godotg
  * @version 3.0
  */
-public class MonitorVO {
+public class Monitor {
 
     private String uuid;
 
-    private UptimeVO uptime;
+    private Uptime uptime;
 
-    private List<DiskFileSystemVO> df;
+    private List<DiskFileSystem> df;
 
-    private MemoryVO free;
+    private Memory free;
 
-    private List<SarVO> sar;
+    private List<Sar> sar;
 
-    public static MonitorVO valueOf(String uuid, UptimeVO uptime, List<DiskFileSystemVO> df, MemoryVO free, List<SarVO> sar) {
-        var vo = new MonitorVO();
-        vo.uuid = uuid;
-        vo.uptime = uptime;
-        vo.df = df;
-        vo.free = free;
-        vo.sar = sar;
-        return vo;
+    public static Monitor valueOf(String uuid, Uptime uptime, List<DiskFileSystem> df, Memory free, List<Sar> sar) {
+        var monitor = new Monitor();
+        monitor.uuid = uuid;
+        monitor.uptime = uptime;
+        monitor.df = df;
+        monitor.free = free;
+        monitor.sar = sar;
+        return monitor;
     }
 
     public List<String> toPressures() {
@@ -145,39 +145,19 @@ public class MonitorVO {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public UptimeVO getUptime() {
+    public Uptime getUptime() {
         return uptime;
     }
 
-    public void setUptime(UptimeVO uptime) {
-        this.uptime = uptime;
-    }
-
-    public List<DiskFileSystemVO> getDf() {
+    public List<DiskFileSystem> getDf() {
         return df;
     }
 
-    public void setDf(List<DiskFileSystemVO> df) {
-        this.df = df;
-    }
-
-    public MemoryVO getFree() {
+    public Memory getFree() {
         return free;
     }
 
-    public void setFree(MemoryVO free) {
-        this.free = free;
-    }
-
-    public List<SarVO> getSar() {
+    public List<Sar> getSar() {
         return sar;
-    }
-
-    public void setSar(List<SarVO> sar) {
-        this.sar = sar;
     }
 }

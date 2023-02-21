@@ -13,7 +13,7 @@ English | [简体中文](./README_CN.md)
 - There are already quite a few JetBrains plugins that can do it in the way to generate POJOs, and you can search for
   Proto in the plugin of Idea
 
-### Ⅱ. 快速使用
+### Ⅱ. Quick use
 
 - Environmental requirements **JDK 11+**
 

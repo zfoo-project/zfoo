@@ -1,6 +1,6 @@
 package com.zfoo.monitor.model;
 
-public class SystemInfoVO {
+public class SystemInfo {
 
     /**
      * host名称
@@ -27,14 +27,14 @@ public class SystemInfoVO {
      */
     private String cpuName;
 
-    public static SystemInfoVO valueOf(String hostname, String version, String versionDetail, int cpuLogicCore, String cpuName) {
-        var vo = new SystemInfoVO();
-        vo.hostname = hostname;
-        vo.version = version;
-        vo.versionDetail = versionDetail;
-        vo.cpuLogicCore = cpuLogicCore;
-        vo.cpuName = cpuName;
-        return vo;
+    public static SystemInfo valueOf(String hostname, String version, String versionDetail, int cpuLogicCore, String cpuName) {
+        var systemInfo = new SystemInfo();
+        systemInfo.hostname = hostname;
+        systemInfo.version = version;
+        systemInfo.versionDetail = versionDetail;
+        systemInfo.cpuLogicCore = cpuLogicCore;
+        systemInfo.cpuName = cpuName;
+        return systemInfo;
     }
 
     public String getHostname() {

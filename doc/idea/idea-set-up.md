@@ -194,11 +194,18 @@ replace，设置为alt+f
 
 ### 4.2 服务器插件安装
 
+- translate插件
+```
+快捷键设置
+Show Translation Dialog，设置为ctrl + shift + x
+Translate，设置为ctrl + x
+```
+
 - Cyan Light Theme主题插件，个人习惯
 - zoolytic，zookeeper客户端管理插件，推荐下载
-- vue.js，vue语法识别，推荐下载
-- jclasslib，字节码查看工具，推荐下载
 - Maven Helper，maven依赖查看工具，推荐下载
+- jclasslib，字节码查看工具，推荐下载
+- vue，vue语法识别，推荐下载
 
 - Alibaba Java Coding Guidelines
 - Alibaba Cloud tool

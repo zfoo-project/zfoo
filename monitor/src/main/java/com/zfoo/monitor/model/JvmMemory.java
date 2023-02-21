@@ -1,5 +1,7 @@
 package com.zfoo.monitor.model;
 
+import com.zfoo.protocol.util.IOUtils;
+
 import java.lang.management.MemoryUsage;
 
 /**
@@ -7,31 +9,18 @@ import java.lang.management.MemoryUsage;
  * @date 2022/10/10 下午6:44
  */
 
-public class JvmMemoryVo {
+public class JvmMemory {
     private String name;
     private double total;
     private double max;
     private double used;
 
-    @Override
-    public String toString() {
-        return "JvmMemoryVo{" +
-                "name='" + name + '\'' +
-                ", total=" + total +
-                ", max=" + max +
-                ", used=" + used +
-                '}';
-    }
+    public JvmMemory(String name, MemoryUsage usage) {
+        this.name = name;
+        this.total = usage.getCommitted() / (double) IOUtils.BYTES_PER_MB;
+        this.max = usage.getMax() / (double) IOUtils.BYTES_PER_MB;
+        this.used = usage.getUsed() / (double) IOUtils.BYTES_PER_MB;
 
-    public JvmMemoryVo(String name, MemoryUsage usage) {
-        this.name=name;
-        this.total=bitTomb(usage.getCommitted());
-        this.max=bitTomb(usage.getMax());
-        this.used=bitTomb(usage.getUsed());
-
-    }
-    private static double bitTomb(long val){
-        return (double) (val/1024/1024);
     }
 
     public String getName() {
@@ -64,5 +53,15 @@ public class JvmMemoryVo {
 
     public void setUsed(double used) {
         this.used = used;
+    }
+
+    @Override
+    public String toString() {
+        return "JvmMemory{" +
+                "name='" + name + '\'' +
+                ", total=" + total +
+                ", max=" + max +
+                ", used=" + used +
+                '}';
     }
 }
