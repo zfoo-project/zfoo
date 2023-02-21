@@ -31,8 +31,6 @@ import java.util.TimeZone;
  */
 public abstract class TimeUtils {
 
-    private static long timestamp = System.currentTimeMillis();
-
     // 一秒钟对应的纳秒数
     public static final long NANO_PER_SECOND = 1_000_000_000;
     // 一秒钟对应的毫秒数
@@ -85,6 +83,8 @@ public abstract class TimeUtils {
         SchedulerBus.refreshMinTriggerTimestamp();
     }
 
+    private static volatile long timestamp = System.currentTimeMillis();
+
     /**
      * 获取精确的时间戳
      */
@@ -94,7 +94,7 @@ public abstract class TimeUtils {
     }
 
     /**
-     * 获取最多只有一秒延迟的粗略时间戳，适用于对时间精度要求不高的场景，最多只有一秒误差
+     * 获取最多只有20ms延迟的粗略时间戳，适用于对时间精度要求不高的场景，最多只有20ms误差
      * <p>
      * 比System.currentTimeMillis()的性能高10倍
      */
