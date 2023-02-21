@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option java_package = "com.zfoo.protocol.field.packet";
+option java_outer_classname = "FieldProtobufObject";
+
+message IntObject{
+  int32 a=1;
+  int32 b=2;
+  int32 c=3;
+  int32 d=4;
+  int32 e=5;
+  int32 f=6;
+  int32 g=7;
+  int32 h=8;
+  int32 i=9;
+  int32 j=10;
+}
+
+message FloatObject{
+  float a=1;
+  float b=2;
+  float c=3;
+  float d=4;
+  float e=5;
+  float f=6;
+  float g=7;
+  float h=8;
+  float i=9;
+  float j=10;
+}
