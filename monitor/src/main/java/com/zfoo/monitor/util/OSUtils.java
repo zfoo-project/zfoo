@@ -13,7 +13,7 @@
 
 package com.zfoo.monitor.util;
 
-import com.zfoo.monitor.model.*;
+import com.zfoo.monitor.*;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.util.TimeUtils;

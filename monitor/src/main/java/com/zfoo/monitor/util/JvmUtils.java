@@ -1,6 +1,6 @@
 package com.zfoo.monitor.util;
 
-import com.zfoo.monitor.model.JvmMemory;
+import com.zfoo.monitor.JvmMemory;
 
 import java.lang.management.*;
 import java.util.ArrayList;
