@@ -68,8 +68,6 @@ public abstract class SchedulerBus {
                 logger.error("scheduler triggers an error.", e);
             }
         }, 0, TimeUtils.MILLIS_PER_SECOND, TimeUnit.MILLISECONDS);
-
-        executor.scheduleAtFixedRate(TimeUtils::currentTimeMillis, 0, 20, TimeUnit.MILLISECONDS);
     }
 
     public static class SchedulerThreadFactory implements ThreadFactory {
