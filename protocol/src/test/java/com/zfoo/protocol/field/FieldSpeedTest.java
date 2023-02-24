@@ -15,6 +15,8 @@ import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,6 +29,7 @@ import java.util.Set;
  * 测试各种不同特征的数据类型的序列化和反序列化时间
  * 细致比较性能
  */
+@Ignore
 public class FieldSpeedTest {
     public static int benchmark = 100000;
     public static IntObject intObject=new IntObject();
@@ -251,7 +254,9 @@ public class FieldSpeedTest {
     public static final float floatHValue=(float)1000.123;
     public static final float floatIValue=(float)100000.123;
     public static final float floatJValue=(float)10000000.123;
-    static {
+
+    @BeforeClass
+    public static void prepare() {
         intObject.setA(intAValue);
         intObject.setB(intBValue);
         intObject.setC(intCValue);
@@ -263,7 +268,7 @@ public class FieldSpeedTest {
         intObject.setI(intIValue);
         intObject.setJ(intJValue);
         protobufIntObject= FieldProtobufObject.IntObject.newBuilder().setA(intAValue).setB(intBValue).setC(intCValue).setD(intDValue)
-        .setE(intEValue).setF(intFValue).setG(intGValue).setH(intHValue).setI(intIValue).setJ(intJValue).build();
+                .setE(intEValue).setF(intFValue).setG(intGValue).setH(intHValue).setI(intIValue).setJ(intJValue).build();
 
         integerObject.setA(intAValue);
         integerObject.setB(intBValue);
@@ -288,13 +293,14 @@ public class FieldSpeedTest {
         floatObject.setJ(floatJValue);
         protobufFloatObject=FieldProtobufObject.FloatObject.newBuilder().setA(floatAValue).setB(floatBValue).setC(floatCValue)
                 .setD(floatDValue).setE(floatEValue).setF(floatFValue).setG(floatGValue).setH(floatHValue).setI(floatIValue).setJ(floatJValue).build();
-    }
-    static {
+
+        // zfoo -----------------------------------------------------------------------
         System.setProperty("io.netty.buffer.checkAccessible", "false");
         System.setProperty("io.netty.buffer.checkBounds", "false");
         var op = GenerateOperation.NO_OPERATION;
         ProtocolManager.initProtocolAuto(Set.of(IntObject.class,IntegerObject.class,FloatObject.class), op);
     }
+
     public static final ThreadLocal<Kryo> kryos = new ThreadLocal<>() {
         @Override
         protected Kryo initialValue() {
