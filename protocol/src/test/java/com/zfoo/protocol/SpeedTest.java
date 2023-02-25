@@ -206,7 +206,7 @@ public class SpeedTest {
                 protobufNormalObject.writeTo(codedOutputStream);
                 length = codedOutputStream.getTotalBytesWritten();
                 var codeInput = CodedInputStream.newInstance(buffer, 0, length);
-                var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(codeInput);
+                var mess = ProtobufObject.ProtobufNormalObject.parseFrom(codeInput);
             }
             System.out.println(StringUtils.format("[protobuf] [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
 
@@ -217,7 +217,7 @@ public class SpeedTest {
                 protobufComplexObject.writeTo(codedOutputStream);
                 length = codedOutputStream.getTotalBytesWritten();
                 var codeInput = CodedInputStream.newInstance(buffer, 0, length);
-                var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(codeInput);
+                var mess = ProtobufObject.ProtobufComplexObject.parseFrom(codeInput);
             }
             System.out.println(StringUtils.format("[protobuf] [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
         } catch (Exception e) {
