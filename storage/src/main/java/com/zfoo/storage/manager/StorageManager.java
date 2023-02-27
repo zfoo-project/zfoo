@@ -143,7 +143,7 @@ public class StorageManager implements IStorageManager {
     @Override
     public void inject() {
         var applicationContext = StorageContext.getApplicationContext();
-        var componentBeans =  applicationContext.getBeansWithAnnotation(Component.class);
+        var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
             ReflectionUtils.filterFieldsInClass(bean.getClass(), field -> field.isAnnotationPresent(ResInjection.class), field -> {
                 Type type = field.getGenericType();
@@ -251,15 +251,14 @@ public class StorageManager implements IStorageManager {
         var resourcePatternResolver = new PathMatchingResourcePatternResolver();
         var metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
         String fileName;
-        if(clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value().equals("")
-                &&clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).alias().equals("")){
-            fileName=clazz.getSimpleName();
-        }
-        else{
-            if(clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value().equals(""))
-                fileName=clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).alias();
+        if (clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value().equals("")
+                && clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).alias().equals("")) {
+            fileName = clazz.getSimpleName();
+        } else {
+            if (clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value().equals(""))
+                fileName = clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).alias();
             else
-                fileName=clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value();
+                fileName = clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value();
         }
         try {
             // 一个class类只能匹配一个资源文件，如果匹配多个则会有歧义
