@@ -4,96 +4,96 @@ option java_package = "com.zfoo.protocol.field.packet";
 option java_outer_classname = "FieldProtobufObject";
 
 message IntObject{
-  int32 a=1;
-  int32 b=2;
-  int32 c=3;
-  int32 d=4;
-  int32 e=5;
-  int32 f=6;
-  int32 g=7;
-  int32 h=8;
-  int32 i=9;
-  int32 j=10;
+  int32 a = 1;
+  int32 b = 2;
+  int32 c = 3;
+  int32 d = 4;
+  int32 e = 5;
+  int32 f = 6;
+  int32 g = 7;
+  int32 h = 8;
+  int32 i = 9;
+  int32 j = 10;
 }
 
 message FloatObject{
-  float a=1;
-  float b=2;
-  float c=3;
-  float d=4;
-  float e=5;
-  float f=6;
-  float g=7;
-  float h=8;
-  float i=9;
-  float j=10;
+  float a = 1;
+  float b = 2;
+  float c = 3;
+  float d = 4;
+  float e = 5;
+  float f = 6;
+  float g = 7;
+  float h = 8;
+  float i = 9;
+  float j = 10;
 }
 
 message BytesObject{
-  bytes a=1;
-  bytes b=2;
-  bytes c=3;
-  bytes d=4;
-  bytes e=5;
-  bytes f=6;
-  bytes g=7;
-  bytes h=8;
-  bytes i=9;
-  bytes j=10;
+  bytes a = 1;
+  bytes b = 2;
+  bytes c = 3;
+  bytes d = 4;
+  bytes e = 5;
+  bytes f = 6;
+  bytes g = 7;
+  bytes h = 8;
+  bytes i = 9;
+  bytes j = 10;
 }
 
 message StringObject{
-  string a=1;
-  string b=2;
-  string c=3;
-  string d=4;
-  string e=5;
-  string f=6;
-  string g=7;
-  string h=8;
-  string i=9;
-  string j=10;
+  string a = 1;
+  string b = 2;
+  string c = 3;
+  string d = 4;
+  string e = 5;
+  string f = 6;
+  string g = 7;
+  string h = 8;
+  string i = 9;
+  string j = 10;
 }
 
 message ListIntegerObject{
-  repeated int32 a=1;
-  repeated int32 b=2;
-  repeated int32 c=3;
-  repeated int32 d=4;
-  repeated int32 e=5;
-  repeated int32 f=6;
-  repeated int32 g=7;
-  repeated int32 h=8;
-  repeated int32 i=9;
-  repeated int32 j=10;
+  repeated int32 a = 1;
+  repeated int32 b = 2;
+  repeated int32 c = 3;
+  repeated int32 d = 4;
+  repeated int32 e = 5;
+  repeated int32 f = 6;
+  repeated int32 g = 7;
+  repeated int32 h = 8;
+  repeated int32 i = 9;
+  repeated int32 j = 10;
 }
 
 message MapObject{
-  map<int32, string> a=1;
-  map<int32, string> b=2;
-  map<int32, string> c=3;
-  map<int32, string> d=4;
-  map<int32, string> e=5;
-  map<int32, string> f=6;
-  map<int32, string> g=7;
-  map<int32, string> h=8;
-  map<int32, string> i=9;
-  map<int32, string> j=10;
+  map<int32, string> a = 1;
+  map<int32, string> b = 2;
+  map<int32, string> c = 3;
+  map<int32, string> d = 4;
+  map<int32, string> e = 5;
+  map<int32, string> f = 6;
+  map<int32, string> g = 7;
+  map<int32, string> h = 8;
+  map<int32, string> i = 9;
+  map<int32, string> j = 10;
 }
 
 message InnerObject{
-  int32 x=1;
+  int32 x = 1;
 }
 
 message InnerObjectObject{
-  InnerObject a=1;
-  InnerObject b=2;
-  InnerObject c=3;
-  InnerObject d=4;
-  InnerObject e=5;
-  InnerObject f=6;
-  InnerObject g=7;
-  InnerObject h=8;
-  InnerObject i=9;
-  InnerObject j=10;
+  InnerObject a = 1;
+  InnerObject b = 2;
+  InnerObject c = 3;
+  InnerObject d = 4;
+  InnerObject e = 5;
+  InnerObject f = 6;
+  InnerObject g = 7;
+  InnerObject h = 8;
+  InnerObject i = 9;
+  InnerObject j = 10;
 }
