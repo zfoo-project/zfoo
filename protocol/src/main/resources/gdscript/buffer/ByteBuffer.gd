@@ -428,12 +428,20 @@ func writePacketArray(array, protocolId):
 			protocolRegistration.write(self, element)
 			
 func readPacketArray(protocolId):
-	var array = []
+	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
+	var array = Array([], typeof(protocolRegistration), StringName("RefCounted"), protocolRegistration)
 	var size = readInt()
 	if (size > 0):
-		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
 		for index in range(size):
 			array.append(protocolRegistration.read(self))
+	#var a = array.get_typed_class_name()
+	#var b = array.get_typed_script()
+	#var c = array.get_typed_builtin()
+
+	#var typeArray: Array[ObjectA] = []
+	#var aa = typeArray.get_typed_class_name()
+	#var bb = typeArray.get_typed_script()
+	#var cc = typeArray.get_typed_builtin()
 	return array
 
 func writeIntIntMap(map):

@@ -3,7 +3,7 @@ const PROTOCOL_ID = {}
 {}
 {}
 
-func get_class() -> String:
+func toString() -> String:
 	return "{}"
 
 static func write(buffer, packet):
