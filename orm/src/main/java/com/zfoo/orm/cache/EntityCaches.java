@@ -151,9 +151,9 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
             } else {
                 var pnodeThread = ThreadUtils.findThread(pnodeThreadId);
                 if (pnodeThread == null) {
-                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[id:{}]，第2次更新的线程[id:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId);
+                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[threadId:{}]，第2次更新的线程[threadId:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId);
                 } else {
-                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[id:{}][name:{}]，第2次更新的线程[id:{}][name:{}]"
+                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[threadId:{}][threadName:{}]，第2次更新的线程[threadId:{}][threadName:{}]"
                             , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, pnodeThread.getName(), currentThreadId, Thread.currentThread().getName());
                 }
             }
