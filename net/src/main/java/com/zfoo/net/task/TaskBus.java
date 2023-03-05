@@ -33,7 +33,9 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Task线程池一半是用来接收客户都安的请求做一些cpu密集型任务，尽量避免做一些阻塞操作，IO密集型任务可以放在Event线程池去做
+ * EN: The Task thread pool is generally used to process customer requests, do some CPU-intensive tasks, and try to avoid some blocking operations;
+ * IO-intensive tasks can be executed in the Event thread pool
+ * CN: Task线程池一般是用来处理客户的请求，做一些cpu密集型任务，尽量避免做一些阻塞操作；IO密集型任务可以放在Event线程池去做
  *
  * @author godotg
  * @version 3.0
@@ -42,11 +44,13 @@ public final class TaskBus {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskBus.class);
 
-    // 线程池的大小，也可以通过provider thread配置指定
+    // EN: The size of the thread pool can also be specified through the provider thread configuration
+    // CN: 线程池的大小，也可以通过provider thread配置指定
     public static final int EXECUTOR_SIZE;
 
     /**
-     * 使用不同的线程池，让线程池之间实现隔离，互不影响
+     * EN: Use different thread pools to achieve isolation between thread pools without affecting each other
+     * CN: 使用不同的线程池，让线程池之间实现隔离，互不影响
      */
     private static final ExecutorService[] executors;
 
