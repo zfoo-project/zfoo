@@ -117,7 +117,7 @@ public final class TaskBus {
             if (uid <= 0) {
                 execute((int) session.getSid(), task);
             } else {
-                execute(uid, task);
+                execute((int) uid, task);
             }
         } else {
             execute(attachment.taskExecutorHash(), task);
