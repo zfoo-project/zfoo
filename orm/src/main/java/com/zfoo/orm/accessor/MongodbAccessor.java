@@ -92,7 +92,7 @@ public class MongodbAccessor implements IAccessor {
 
             var result = collection.bulkWrite(batchList, new BulkWriteOptions().ordered(false));
             if (result.getModifiedCount() != entities.size()) {
-                logger.error("在数据库[{}]的批量更新操作中需要更新的数量[{}]和最终更新的数量[{}]不相同"
+                logger.warn("在数据库[{}]的批量更新操作中需要更新的数量[{}]和最终更新的数量[{}]不相同（大部分原因都是因为需要更新的文档和数据库的文档相同）"
                         , entityClazz.getSimpleName(), entities.size(), result.getModifiedCount());
             }
         } catch (Throwable t) {

@@ -20,6 +20,7 @@ import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.storage.manager.StorageManager;
+import com.zfoo.storage.model.anno.ExcelFieldName;
 import com.zfoo.storage.model.anno.Id;
 import com.zfoo.storage.model.anno.Resource;
 import com.zfoo.storage.model.config.StorageConfig;
@@ -60,6 +61,7 @@ public class ExportBinaryTest {
         public int id;
 
         public String name;
+        @ExcelFieldName("年龄")
         public int age;
         public float score;
         public String[] courses;
