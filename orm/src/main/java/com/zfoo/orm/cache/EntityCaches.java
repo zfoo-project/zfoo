@@ -151,9 +151,9 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
             } else {
                 var pnodeThread = ThreadUtils.findThread(pnodeThreadId);
                 if (pnodeThread == null) {
-                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[id:{}]，第2次更新的线程[id:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId);
+                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[threadId:{}]，第2次更新的线程[threadId:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId);
                 } else {
-                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[id:{}][name:{}]，第2次更新的线程[id:{}][name:{}]"
+                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[threadId:{}][threadName:{}]，第2次更新的线程[threadId:{}][threadName:{}]"
                             , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, pnodeThread.getName(), currentThreadId, Thread.currentThread().getName());
                 }
             }
@@ -229,7 +229,7 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
                         continue;
                     }
 
-                    logger.error("在数据库[{}]的批量更新操作中需要更新的数量[{}]和最终更新的数量[{}]不相同，开始执行容错操作"
+                    logger.warn("在数据库[{}]的批量更新操作中需要更新的数量[{}]和最终更新的数量[{}]不相同，开始执行容错操作（大部分原因都是因为需要更新的文档和数据库的文档相同）"
                             , entityDef.getClazz().getSimpleName(), currentUpdateList.size(), result.getModifiedCount());
                     persistAllAndCompare(currentUpdateList);
                 } catch (Throwable t) {

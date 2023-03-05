@@ -120,11 +120,13 @@ public abstract class GenerateGdUtils {
         var includeSubProtocol = includeSubProtocol(registration);
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.GdScript);
         var fieldDefinition = fieldDefinition(registration);
+        var toStringMethod = toStringMethod(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
         var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("gdscript/ProtocolTemplate.gd")));
-        protocolTemplate = StringUtils.format(protocolTemplate, protocolId, includeSubProtocol, classNote, fieldDefinition.trim(), protocolClazzName, writeObject.trim(), readObject.trim());
+        protocolTemplate = StringUtils.format(protocolTemplate, protocolId, protocolClazzName, includeSubProtocol, classNote, fieldDefinition.trim(),
+                StringUtils.EMPTY_JSON, toStringMethod, writeObject.trim(), readObject.trim());
 
         var outputPath = StringUtils.format("{}/{}/{}.gd", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
@@ -165,6 +167,23 @@ public abstract class GenerateGdUtils {
             var fieldType = gdSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
             // 生成类型的注释
             gdBuilder.append(StringUtils.format("var {}: {}", fieldName, fieldType)).append(LS);
+        }
+        return gdBuilder.toString();
+    }
+
+    private static String toStringMethod(ProtocolRegistration registration) {
+        var fields = registration.getFields();
+        var fieldRegistrations = registration.getFieldRegistrations();
+        var gdBuilder = new StringBuilder();
+        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
+        for (int i = 0; i < sequencedFields.size(); i++) {
+            var field = sequencedFields.get(i);
+            IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
+            var fieldName = field.getName();
+            gdBuilder.append(TAB_ASCII).append(StringUtils.format("map[\"{}\"] = {}", fieldName, fieldName));
+            if (i != sequencedFields.size() - 1) {
+                gdBuilder.append(LS);
+            }
         }
         return gdBuilder.toString();
     }

@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.monitor.model;
+package com.zfoo.monitor;
 
 import com.zfoo.monitor.util.OSUtils;
 import com.zfoo.protocol.util.IOUtils;
@@ -22,38 +21,41 @@ import com.zfoo.scheduler.util.TimeUtils;
  * @author godotg
  * @version 3.0
  */
-public class Memory implements Comparable<Memory> {
+public class DiskFileSystem implements Comparable<DiskFileSystem> {
 
-    private long total;
+    private String name;
+
+    private long size;
 
     private long available;
 
     private long timestamp;
 
-    public static Memory valueOf(long total, long available, long timestamp) {
-        var memory = new Memory();
-        memory.total = total;
-        memory.available = available;
-        memory.timestamp = timestamp;
-        return memory;
+    public static DiskFileSystem valueOf(String name, long size, long available, long timestamp) {
+        var dfs = new DiskFileSystem();
+        dfs.name = name;
+        dfs.size = size;
+        dfs.available = available;
+        dfs.timestamp = timestamp;
+        return dfs;
     }
 
     public String pressure() {
-        var usage = 1D * (total - available) / total;
+        var usage = usage();
         if (usage >= 0.8) {
             var temp = this.toGB();
-            return StringUtils.format("free - 内存占用过高[total:{}GB][available:{}GB][usage:{}][{}]"
-                    , temp.getTotal(), temp.getAvailable(), OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
+            return StringUtils.format("df - 磁盘[name:{}]空间过高[size:{}GB][available:{}GB][usage:{}][{}]"
+                    , name, temp.getSize(), temp.getAvailable(), OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
         }
         return StringUtils.EMPTY;
     }
 
     public double usage() {
-        return ((double) (total - available)) / total;
+        return ((double) (size - available)) / size;
     }
 
     @Override
-    public int compareTo(Memory target) {
+    public int compareTo(DiskFileSystem target) {
         if (target == null) {
             return 1;
         }
@@ -61,24 +63,32 @@ public class Memory implements Comparable<Memory> {
         return Double.compare(usage(), target.usage());
     }
 
-    public Memory toMB() {
-        var total = this.total / IOUtils.BYTES_PER_MB;
+    public DiskFileSystem toMB() {
+        var size = this.size / IOUtils.BYTES_PER_MB;
         var available = this.available / IOUtils.BYTES_PER_MB;
-        return Memory.valueOf(total, available, timestamp);
+        return DiskFileSystem.valueOf(this.name, size, available, timestamp);
     }
 
-    public Memory toGB() {
-        var total = (long) Math.ceil(this.total / (double) IOUtils.BYTES_PER_GB);
+    public DiskFileSystem toGB() {
+        var size = (long) Math.ceil(this.size / (double) IOUtils.BYTES_PER_GB);
         var available = (long) Math.ceil(this.available / (double) IOUtils.BYTES_PER_GB);
-        return Memory.valueOf(total, available, timestamp);
+        return DiskFileSystem.valueOf(this.name, size, available, timestamp);
     }
 
-    public long getTotal() {
-        return total;
+    public String getName() {
+        return name;
     }
 
-    public void setTotal(long total) {
-        this.total = total;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 
     public long getAvailable() {
