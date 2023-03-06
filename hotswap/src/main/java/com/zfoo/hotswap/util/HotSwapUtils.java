@@ -69,7 +69,6 @@ public abstract class HotSwapUtils {
         ByteArrayInputStream byteArrayInputStream = null;
         CtClass ctClass = null;
         try {
-            clazz = Class.forName(readClassName(bytes));
             byteArrayInputStream = new ByteArrayInputStream(bytes);
             ctClass = ClassPool.getDefault().makeClass(byteArrayInputStream);
             // Javassist hot update
