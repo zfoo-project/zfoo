@@ -50,7 +50,10 @@ public class Session implements Closeable {
         if (channel == null) {
             throw new IllegalArgumentException("channel cannot be empty");
         }
-        this.sid = ATOMIC_LONG.getAndIncrement();
+	    this.sid = ATOMIC_LONG.incrementAndGet();
+	    if (this.sid <= 0) {
+		    throw new IllegalArgumentException("sid cannot be 0");
+	    }
         this.channel = channel;
     }
 
