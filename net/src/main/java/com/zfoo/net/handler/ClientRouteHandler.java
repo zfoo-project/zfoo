@@ -37,7 +37,7 @@ public class ClientRouteHandler extends BaseRouteHandler {
         super.channelActive(ctx);
         // 客户端的session初始化在启动的时候已经做了，这边直接获取session
         var session = SessionUtils.getSession(ctx);
-        EventBus.submit(ClientSessionActiveEvent.valueOf(session));
+        EventBus.post(ClientSessionActiveEvent.valueOf(session));
         logger.info("client channel is active {}", SessionUtils.sessionInfo(ctx));
     }
 
@@ -52,7 +52,7 @@ public class ClientRouteHandler extends BaseRouteHandler {
         }
 
         NetContext.getSessionManager().removeClientSession(session);
-        EventBus.submit(ClientSessionInactiveEvent.valueOf(session));
+        EventBus.post(ClientSessionInactiveEvent.valueOf(session));
 
         // 如果是消费者inactive，还需要触发客户端消费者检查事件，以便重新连接
         if (session.getConsumerAttribute() != null) {

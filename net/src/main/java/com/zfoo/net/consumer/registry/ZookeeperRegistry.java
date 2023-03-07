@@ -490,7 +490,7 @@ public class ZookeeperRegistry implements IRegistry {
             } else {
                 // 连接上了服务提供者
                 session.setConsumerAttribute(providerCache);
-                EventBus.submit(ConsumerStartEvent.valueOf(providerCache, session));
+                EventBus.post(ConsumerStartEvent.valueOf(providerCache, session));
 
                 try {
                     var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();

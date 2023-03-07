@@ -38,7 +38,7 @@ public class ServerRouteHandler extends BaseRouteHandler {
         var session = initChannel(ctx.channel());
         NetContext.getSessionManager().addServerSession(session);
         logger.info("server channel is active {}", SessionUtils.sessionInfo(ctx));
-        EventBus.submit(ServerSessionActiveEvent.valueOf(session));
+        EventBus.post(ServerSessionActiveEvent.valueOf(session));
     }
 
     @Override
@@ -51,6 +51,6 @@ public class ServerRouteHandler extends BaseRouteHandler {
         }
         NetContext.getSessionManager().removeServerSession(session);
         logger.warn("server channel is inactive {}", SessionUtils.sessionSimpleInfo(ctx));
-        EventBus.submit(ServerSessionInactiveEvent.valueOf(session));
+        EventBus.post(ServerSessionInactiveEvent.valueOf(session));
     }
 }

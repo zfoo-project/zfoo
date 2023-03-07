@@ -97,7 +97,7 @@ public abstract class EventBus {
     /**
      * Publish the event
      */
-    public static void submit(IEvent event) {
+    public static void post(IEvent event) {
         doSubmit(event, receiverMapSync.get(event.getClass()));
         doSubmit(event, receiverMapAsync.get(event.getClass()));
     }

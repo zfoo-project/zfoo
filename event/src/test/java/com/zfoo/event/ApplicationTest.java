@@ -33,7 +33,7 @@ public class ApplicationTest {
         var context = new ClassPathXmlApplicationContext("application.xml");
 
         // see receiver method of MyController1 and MyController2
-        EventBus.submit(MyNoticeEvent.valueOf("我的事件"));
+        EventBus.post(MyNoticeEvent.valueOf("我的事件"));
 
         ThreadUtils.sleep(3000);
     }
