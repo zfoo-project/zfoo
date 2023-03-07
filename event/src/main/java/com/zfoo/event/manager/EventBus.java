@@ -98,8 +98,37 @@ public abstract class EventBus {
      * Publish the event
      */
     public static void post(IEvent event) {
-        doSubmit(event, receiverMapSync.get(event.getClass()));
-        doSubmit(event, receiverMapAsync.get(event.getClass()));
+        if (event == null) {
+            return;
+        }
+        var clazz = event.getClass();
+        var listSync = receiverMapSync.get(clazz);
+        if (CollectionUtils.isNotEmpty(listSync)) {
+            for (var receiver : listSync) {
+                try {
+                    receiver.invoke(event);
+                } catch (Exception e) {
+                    logger.error("eventBus sync event [{}] unknown exception", clazz.getSimpleName(), e);
+                } catch (Throwable t) {
+                    logger.error("eventBus sync event [{}] unknown error", clazz.getSimpleName(), t);
+                }
+            }
+        }
+
+        var listAsync = receiverMapAsync.get(clazz);
+        if (CollectionUtils.isNotEmpty(listAsync)) {
+            for (var receiver : listAsync) {
+                executors[Math.abs(event.threadId() % EXECUTORS_SIZE)].execute(() -> {
+                    try {
+                        receiver.invoke(event);
+                    } catch (Exception e) {
+                        logger.error("eventBus async event [{}] unknown exception", clazz.getSimpleName(), e);
+                    } catch (Throwable t) {
+                        logger.error("eventBus async event [{}] unknown error", clazz.getSimpleName(), t);
+                    }
+                });
+            }
+        }
     }
 
 
@@ -112,24 +141,6 @@ public abstract class EventBus {
      */
     public static void execute(int hashcode, Runnable runnable) {
         executors[Math.abs(hashcode % EXECUTORS_SIZE)].execute(SafeRunnable.valueOf(runnable));
-    }
-
-    /**
-     * The observer executes the method call
-     */
-    private static void doSubmit(IEvent event, List<IEventReceiver> receiverList) {
-        if (CollectionUtils.isEmpty(receiverList)) {
-            return;
-        }
-        for (var receiver : receiverList) {
-            try {
-                receiver.invoke(event);
-            } catch (Exception e) {
-                logger.error("eventBus unknown exception", e);
-            } catch (Throwable t) {
-                logger.error("eventBus unknown error", t);
-            }
-        }
     }
 
     /**
