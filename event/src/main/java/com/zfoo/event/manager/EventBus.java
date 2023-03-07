@@ -26,8 +26,8 @@ import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -148,9 +148,9 @@ public abstract class EventBus {
      */
     public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver, boolean asyncFlag) {
         if (asyncFlag) {
-            receiverMapAsync.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
+            receiverMapAsync.computeIfAbsent(eventType, it -> new ArrayList<>(1)).add(receiver);
         } else {
-            receiverMapSync.computeIfAbsent(eventType, it -> new LinkedList<>()).add(receiver);
+            receiverMapSync.computeIfAbsent(eventType, it -> new ArrayList<>(1)).add(receiver);
         }
     }
 
