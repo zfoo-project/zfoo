@@ -98,35 +98,10 @@ public abstract class EventBus {
      * Publish the event
      */
     public static void submit(IEvent event) {
-        syncSubmit(event);
-        asyncSubmit(event);
+        doSubmit(event, receiverMapSync.get(event.getClass()));
+        doSubmit(event, receiverMapAsync.get(event.getClass()));
     }
 
-    /**
-     * EN: Synchronously publish an event that runs in the current thread (only receiverMapSync process the event)
-     * CN: 同步抛出一个事件，会在当前线程中运行(只有同步观察者会处理事件)
-     */
-    public static void syncSubmit(IEvent event) {
-        var list = receiverMapSync.get(event.getClass());
-        if (CollectionUtils.isEmpty(list)) {
-            return;
-        }
-        doSubmit(event, list);
-    }
-
-
-    /**
-     * EN: Asynchronously publish an event, and the event is not processed in the current thread (only receiverMapAsync process the event)
-     * CN: 异步抛出一个事件，事件不在同一个线程中处理(只有异步观察者会处理事件)
-     */
-    public static void asyncSubmit(IEvent event) {
-        var list = receiverMapAsync.get(event.getClass());
-        if (CollectionUtils.isEmpty(list)) {
-            return;
-        }
-
-        executors[Math.abs(event.threadId() % EXECUTORS_SIZE)].execute(() -> doSubmit(event, list));
-    }
 
     public static void asyncExecute(Runnable runnable) {
         execute(RandomUtils.randomInt(), runnable);
@@ -143,6 +118,9 @@ public abstract class EventBus {
      * The observer executes the method call
      */
     private static void doSubmit(IEvent event, List<IEventReceiver> receiverList) {
+        if (CollectionUtils.isEmpty(receiverList)) {
+            return;
+        }
         for (var receiver : receiverList) {
             try {
                 receiver.invoke(event);
