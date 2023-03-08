@@ -37,7 +37,7 @@ public interface IEvent {
      *
      * @return 线程池的执行的一个参数
      */
-    default int threadId() {
+    default int executorHash() {
         return RandomUtils.randomInt();
     }
 

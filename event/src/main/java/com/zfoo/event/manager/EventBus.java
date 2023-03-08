@@ -118,7 +118,7 @@ public abstract class EventBus {
         var listAsync = receiverMapAsync.get(clazz);
         if (CollectionUtils.isNotEmpty(listAsync)) {
             for (var receiver : listAsync) {
-                executors[Math.abs(event.threadId() % EXECUTORS_SIZE)].execute(() -> {
+                execute(event.executorHash(), () -> {
                     try {
                         receiver.invoke(event);
                     } catch (Exception e) {
@@ -139,8 +139,8 @@ public abstract class EventBus {
     /**
      * Use the event thread specified by the hashcode to execute the task
      */
-    public static void execute(int hashcode, Runnable runnable) {
-        executors[Math.abs(hashcode % EXECUTORS_SIZE)].execute(SafeRunnable.valueOf(runnable));
+    public static void execute(int executorHash, Runnable runnable) {
+        executors[Math.abs(executorHash % EXECUTORS_SIZE)].execute(SafeRunnable.valueOf(runnable));
     }
 
     /**
