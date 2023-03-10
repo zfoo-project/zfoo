@@ -13,6 +13,7 @@
 
 package com.zfoo.event.model.vo;
 
+import com.zfoo.event.model.anno.Bus;
 import com.zfoo.event.model.event.IEvent;
 import com.zfoo.event.schema.NamespaceHandler;
 import com.zfoo.protocol.util.StringUtils;
@@ -69,12 +70,19 @@ public abstract class EnhanceUtils {
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
-        // 定义类实现的接口方法
+        // 定义类实现的接口方法invoker
         CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "invoke", classPool.get(new String[]{IEvent.class.getCanonicalName()}), enhanceClazz);
         invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String invokeMethodBody = "{this.bean." + method.getName() + "((" + clazz.getCanonicalName() + ")$1);}";// 强制类型转换，转换为具体的Event类型的类型
+        String invokeMethodBody = StringUtils.format("{ this.bean.{}(({})$1); }", method.getName(), clazz.getCanonicalName()); // 强制类型转换，转换为具体的Event类型的类型
         invokeMethod.setBody(invokeMethodBody);
         enhanceClazz.addMethod(invokeMethod);
+
+        // 定义类实现的接口方法bus
+        CtMethod busMethod = new CtMethod(classPool.get(Bus.class.getCanonicalName()), "bus", null, enhanceClazz);
+        busMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
+        String busMethodBody = StringUtils.format("{ return {}.{}; }", Bus.class.getCanonicalName(), definition.getBus());
+        busMethod.setBody(busMethodBody);
+        enhanceClazz.addMethod(busMethod);
 
         // 释放缓存
         enhanceClazz.detach();

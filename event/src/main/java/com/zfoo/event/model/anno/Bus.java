@@ -10,18 +10,20 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-
-package com.zfoo.event.model.vo;
-
-import com.zfoo.event.model.anno.Bus;
-import com.zfoo.event.model.event.IEvent;
+package com.zfoo.event.model.anno;
 
 /**
+ * event bus thread type
+ *
  * @author godotg
  * @version 3.0
  */
-public interface IEventReceiver {
-    Bus bus();
+public enum Bus {
 
-    void invoke(IEvent event);
+    CurrentThread,
+
+    AsyncThread,
+
+    VirtualThread;
+
 }

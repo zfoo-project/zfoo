@@ -13,6 +13,7 @@
 
 package com.zfoo.event.model.vo;
 
+import com.zfoo.event.model.anno.Bus;
 import com.zfoo.event.model.event.IEvent;
 import com.zfoo.protocol.util.ReflectionUtils;
 
@@ -35,11 +36,20 @@ public class EventReceiverDefinition implements IEventReceiver {
     // 接收的参数Class
     private Class<? extends IEvent> eventClazz;
 
-    public EventReceiverDefinition(Object bean, Method method, Class<? extends IEvent> eventClazz) {
+    // 事件接收方式
+    private Bus bus;
+
+    public EventReceiverDefinition(Object bean, Method method, Class<? extends IEvent> eventClazz, Bus bus) {
         this.bean = bean;
         this.method = method;
         this.eventClazz = eventClazz;
         ReflectionUtils.makeAccessible(this.method);
+        this.bus = bus;
+    }
+
+    @Override
+    public Bus bus() {
+        return bus;
     }
 
     @Override
@@ -51,23 +61,15 @@ public class EventReceiverDefinition implements IEventReceiver {
         return bean;
     }
 
-    public void setBean(Object bean) {
-        this.bean = bean;
-    }
-
     public Method getMethod() {
         return method;
-    }
-
-    public void setMethod(Method method) {
-        this.method = method;
     }
 
     public Class<? extends IEvent> getEventClazz() {
         return eventClazz;
     }
 
-    public void setEventClazz(Class<? extends IEvent> eventClazz) {
-        this.eventClazz = eventClazz;
+    public Bus getBus() {
+        return bus;
     }
 }

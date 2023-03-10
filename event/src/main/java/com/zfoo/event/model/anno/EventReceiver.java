@@ -10,7 +10,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-
 package com.zfoo.event.model.anno;
 
 import java.lang.annotation.*;
@@ -21,10 +20,9 @@ import java.lang.annotation.*;
  * @author godotg
  * @version 3.0
  */
-
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface EventReceiver {
-    boolean async() default false;
+    Bus value() default Bus.CurrentThread;
 }

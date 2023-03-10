@@ -10,7 +10,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-
 package com.zfoo.event.manager;
 
 import com.zfoo.event.model.event.IEvent;
@@ -54,13 +53,9 @@ public abstract class EventBus {
 
     private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>(EXECUTORS_SIZE);
     /**
-     * Synchronous event mapping, synchronize observers
+     * event mapping
      */
-    private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMapSync = new HashMap<>();
-    /**
-     * Asynchronous event mapping, asynchronous observer
-     */
-    private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMapAsync = new HashMap<>();
+    private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
 
     static {
         for (int i = 0; i < executors.length; i++) {
@@ -102,32 +97,31 @@ public abstract class EventBus {
             return;
         }
         var clazz = event.getClass();
-        var listSync = receiverMapSync.get(clazz);
-        if (CollectionUtils.isNotEmpty(listSync)) {
-            for (var receiver : listSync) {
-                try {
-                    receiver.invoke(event);
-                } catch (Exception e) {
-                    logger.error("eventBus sync event [{}] unknown exception", clazz.getSimpleName(), e);
-                } catch (Throwable t) {
-                    logger.error("eventBus sync event [{}] unknown error", clazz.getSimpleName(), t);
-                }
+        var receivers = receiverMap.get(clazz);
+        if (CollectionUtils.isEmpty(receivers)) {
+            return;
+        }
+        for (var receiver : receivers) {
+            switch (receiver.bus()) {
+                case CurrentThread:
+                    doReceiver(receiver, event);
+                    break;
+                case AsyncThread:
+                    execute(event.executorHash(), () -> doReceiver(receiver, event));
+                    break;
+                case VirtualThread:
+                    break;
             }
         }
+    }
 
-        var listAsync = receiverMapAsync.get(clazz);
-        if (CollectionUtils.isNotEmpty(listAsync)) {
-            for (var receiver : listAsync) {
-                execute(event.executorHash(), () -> {
-                    try {
-                        receiver.invoke(event);
-                    } catch (Exception e) {
-                        logger.error("eventBus async event [{}] unknown exception", clazz.getSimpleName(), e);
-                    } catch (Throwable t) {
-                        logger.error("eventBus async event [{}] unknown error", clazz.getSimpleName(), t);
-                    }
-                });
-            }
+    private static void doReceiver(IEventReceiver receiver, IEvent event) {
+        try {
+            receiver.invoke(event);
+        } catch (Exception e) {
+            logger.error("eventBus {} [{}] unknown exception", receiver.bus(), event.getClass().getSimpleName(), e);
+        } catch (Throwable t) {
+            logger.error("eventBus {} [{}] unknown error", receiver.bus(), event.getClass().getSimpleName(), t);
         }
     }
 
@@ -146,12 +140,8 @@ public abstract class EventBus {
     /**
      * Register the event and its counterpart observer
      */
-    public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver, boolean asyncFlag) {
-        if (asyncFlag) {
-            receiverMapAsync.computeIfAbsent(eventType, it -> new ArrayList<>(1)).add(receiver);
-        } else {
-            receiverMapSync.computeIfAbsent(eventType, it -> new ArrayList<>(1)).add(receiver);
-        }
+    public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver) {
+        receiverMap.computeIfAbsent(eventType, it -> new ArrayList<>(1)).add(receiver);
     }
 
     public static Executor threadExecutor(long currentThreadId) {
