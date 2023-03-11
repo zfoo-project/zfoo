@@ -39,12 +39,12 @@ public class EventReceiverDefinition implements IEventReceiver {
     // 事件接收方式
     private Bus bus;
 
-    public EventReceiverDefinition(Object bean, Method method, Class<? extends IEvent> eventClazz, Bus bus) {
+    public EventReceiverDefinition(Object bean, Method method, Bus bus, Class<? extends IEvent> eventClazz) {
         this.bean = bean;
         this.method = method;
+        this.bus = bus;
         this.eventClazz = eventClazz;
         ReflectionUtils.makeAccessible(this.method);
-        this.bus = bus;
     }
 
     @Override
