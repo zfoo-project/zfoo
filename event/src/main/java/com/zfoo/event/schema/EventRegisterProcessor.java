@@ -80,7 +80,7 @@ public class EventRegisterProcessor implements BeanPostProcessor {
                 }
 
                 var bus = method.getDeclaredAnnotation(EventReceiver.class).value();
-                var receiverDefinition = new EventReceiverDefinition(bean, method, eventClazz, bus);
+                var receiverDefinition = new EventReceiverDefinition(bean, method, bus, eventClazz);
                 var enhanceReceiverDefinition = EnhanceUtils.createEventReceiver(receiverDefinition);
 
                 // key:class类型 value:观察者 注册Event的receiverMap中

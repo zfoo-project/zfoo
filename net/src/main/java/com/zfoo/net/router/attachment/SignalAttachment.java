@@ -48,7 +48,7 @@ public class SignalAttachment implements IAttachment {
     /**
      * The time the client sent it
      */
-    private transient long timestamp = TimeUtils.now();
+    private long timestamp = TimeUtils.now();
 
     /**
      * EN:The method of callback when the client receives a reply from the server
