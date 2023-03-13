@@ -1,3 +1,32 @@
+#### 为什么部署的时候才用main，平时开发的时候从test启动
+
+- 可以很好的隔离部署环境和开发测试环境
+- 可以加上-Dspring.profiles.active=dev就可以从main启动
+- 部署的时候从main启动（没有控制台日志），平时开发的时候从test启动（有控制台日志）
+- 这样正式环境的配置放在main的resources里，测试环境的配置放在test的resources里，互不干扰
+- 从test下启动的程序的配置文件会覆盖main中的配置文件
+
+---
+
+#### logback为什么在main和test都有一份日志配置，为什么弄了两份日志配置
+
+- 隔离生产环境配置和测试环境的日志配置
+- test的配置会覆盖main中的配置
+- main中没有控制台日志，test中只有控制台日志，控制台日志会加锁在生产环境会导致性能问题
+
+---
+
+#### 为什么没有发布到maven仓库
+
+- 项目非常轻量，容易修改，游戏场景很多都需要自己定制，打算java 21出来才会发布release版本
+- zfoo安装很简单，maven install到本地就可以使用了，或者直接将zfoo源代码集成在在项目里当作一个module使用
+- 没有用maven的<dependencyManagement>来管理这个root，是为了让下面的module不依赖于任何parent，复制出来就可以用
+- 本地开发调试也可以直接用idea的add maven project当作一个第三方库使用
+
+![Image text](image/idea/maven-pom.png)
+
+---
+
 #### 为什么选择 Java 11 而不是 Java 8
 
 - var可以减少非常多的代码，使代码更加简介
@@ -57,27 +86,6 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 
 ---
 
-#### 为什么部署的时候才用main，平时开发的时候从test启动
-
-- 可以很好的隔离部署环境和开发测试环境
-- 可以加上-Dspring.profiles.active=dev就可以从main启动
-- 部署的时候从main启动（没有控制台日志），平时开发的时候从test启动（有控制台日志）
-- 这样正式环境的配置放在main的resources里，测试环境的配置放在test的resources里，互不干扰
-- 从test下启动的程序的配置文件会覆盖main中的配置文件
-
----
-
-#### 为什么没有发布到maven仓库
-
-- 项目非常轻量，容易修改，游戏场景很多都需要自己定制，打算java 21出来才会发布release版本
-- zfoo安装很简单，maven install到本地就可以使用了，或者直接将zfoo源代码集成在在项目里当作一个module使用
-- 没有用maven的<dependencyManagement>来管理这个root，是为了让下面的module不依赖于任何parent，复制出来就可以用
-- 本地开发调试也可以直接用idea的add maven project当作一个第三方库使用
-
-![Image text](image/idea/maven-pom.png)
-
----
-
 #### 前端h5的后台管理界面使用的技术栈
 
 - 基础框架使用的，vue 2.6，https://cn.vuejs.org/
@@ -87,7 +95,6 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 
 ---
 
-
 #### orm为什么不选择Spring的官方驱动SpringData mongodb
 
 - SpringData mongodb 里面会生成一个class字段，比较占内存，而且你移动class类的时候体验不友好，不知道现在版本改了没有
@@ -96,10 +103,3 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 
 ---
 
-#### logback为什么在main和test都有一份日志配置，为什么弄了两份日志配置
-
-- 隔离生产环境配置和测试环境的日志配置
-- test的配置会覆盖main中的配置
-- main中没有控制台日志，test中只有控制台日志，控制台日志会加锁在生产环境会导致性能问题
-
----
