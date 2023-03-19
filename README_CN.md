@@ -59,7 +59,7 @@ Why is zfoo protocol ?
 
 #### 1. 环境要求和安装
 
-**JDK 11+**，可以在 **OpenJDK** 和 **Oracle JDK** 无缝切换，下载完本项目，maven install到本地仓库即可使用
+**JDK 11 或者 JDK 17**，可以在 **OpenJDK** 和 **Oracle JDK** 无缝切换，下载完本项目，maven install到本地仓库即可使用
 
 ```
 如果你没有安装JDK 11+，快速的安装方法是在Idea的右上角Project Structure，Platform Settings，SDKs中直接下载
