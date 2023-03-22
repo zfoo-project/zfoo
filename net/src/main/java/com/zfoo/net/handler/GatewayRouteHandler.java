@@ -96,7 +96,7 @@ public class GatewayRouteHandler extends ServerRouteHandler {
         } else {
             // 使用用户的uid做一致性hash
             var uid = session.getUid();
-            if (uid <= 0) {
+            if (uid > 0) {
                 forwardingPacket(packet, gatewayAttachment, uid);
                 return;
             }
