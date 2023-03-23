@@ -125,7 +125,7 @@ public class Router implements IRouter {
                                     logger.error("错误的网关授权信息，uid必须大于0");
                                     return;
                                 }
-                                session.setUid(uid);
+                                gatewaySession.setUid(uid);
                                 EventBus.post(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
 
                                 NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession, null));
