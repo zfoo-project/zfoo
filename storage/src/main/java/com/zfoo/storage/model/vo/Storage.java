@@ -30,40 +30,69 @@ import java.util.*;
  */
 public class Storage<K, V> {
 
-    private Class<V> clazz;
-
-    // 当前配置表是否在当前项目中使用，没有被使用的会清楚data数据，以达到节省内存的目的
-    private boolean recycle = true;
-
     private Map<K, V> dataMap = new HashMap<>();
     // 非唯一索引
-    private Map<String, Map<Object, List<V>>> indexMap = new HashMap<>();
+    protected Map<String, Map<Object, List<V>>> indexMap = new HashMap<>();
     // 唯一索引
-    private Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>();
+    protected Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>();
 
-    private IdDef idDef;
-    private Map<String, IndexDef> indexDefMap;
+    protected Class<?> clazz;
+    protected IdDef idDef;
+    protected Map<String, IndexDef> indexDefMap;
+    // 当前配置表是否在当前项目中使用，没有被使用的会清楚data数据，以达到节省内存的目的
+    protected boolean recycle = true;
 
-    public void init(InputStream inputStream, Class<?> resourceClazz, String suffix) {
+
+    public static Storage<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
         try {
-            this.clazz = (Class<V>) resourceClazz;
-            idDef = IdDef.valueOf(resourceClazz);
-            indexDefMap = IndexDef.createResourceIndexes(resourceClazz);
-
+            Storage<?, ?> storage = new Storage<>();
+            storage.clazz = resourceClazz;
+            var idDef = IdDef.valueOf(resourceClazz);
+            storage.idDef = idDef;
+            storage.indexDefMap = IndexDef.createResourceIndexes(resourceClazz);
             var list = ResourceInterpreter.read(inputStream, resourceClazz, suffix);
-
-            dataMap.clear();
-            indexMap.clear();
-            uniqueIndexMap.clear();
-
             for (var object : list) {
-                put((V) object);
+                storage.put(object);
+            }
+            var idType = idDef.getField().getType();
+            if (idType == int.class || idType == Integer.class) {
+                return new StorageInt<>(storage);
+            } else if (idType == long.class || idType == Long.class) {
+                return new StorageLong<>(storage);
+            } else {
+                return storage;
             }
         } catch (Throwable e) {
             throw new RuntimeException(e.getMessage(), e);
         } finally {
             IOUtils.closeIO(inputStream);
         }
+    }
+
+    public boolean contain(K key) {
+        return dataMap.containsKey(key);
+    }
+
+    public boolean contain(int key) {
+        return contain((K) Integer.valueOf(key));
+    }
+
+    public boolean contain(long key) {
+        return contain((K) Long.valueOf(key));
+    }
+
+    public V get(K id) {
+        V result = dataMap.get(id);
+        AssertionUtils.notNull(result, "The static resource represented as [id:{}] in the static resource [resource:{}] does not exist", id, clazz.getSimpleName());
+        return result;
+    }
+
+    public V get(int id) {
+        return get((K) Integer.valueOf(id));
+    }
+
+    public V get(long id) {
+        return get((K) Long.valueOf(id));
     }
 
     public void recycleStorage() {
@@ -84,7 +113,7 @@ public class Storage<K, V> {
     }
 
     public Collection<V> getAll() {
-        return Collections.unmodifiableCollection(dataMap.values());
+        return dataMap.values();
     }
 
     public Map<K, V> getData() {
@@ -93,16 +122,6 @@ public class Storage<K, V> {
 
     public IdDef getIdDef() {
         return idDef;
-    }
-
-    public boolean contain(K key) {
-        return dataMap.containsKey(key);
-    }
-
-    public V get(K id) {
-        V result = dataMap.get(id);
-        AssertionUtils.notNull(result, "The static resource represented as [id:{}] in the static resource [resource:{}] does not exist", id, clazz.getSimpleName());
-        return result;
     }
 
     public List<V> getIndex(String indexName, Object key) {
@@ -123,8 +142,11 @@ public class Storage<K, V> {
         return value;
     }
 
+    public int size() {
+        return dataMap.size();
+    }
 
-    private V put(V value) {
+    private V put(Object value) {
         var key = (K) ReflectionUtils.getField(idDef.getField(), value);
 
         if (key == null) {
@@ -136,7 +158,7 @@ public class Storage<K, V> {
         }
 
         // 添加资源
-        var result = dataMap.put(key, value);
+        var result = dataMap.put(key, (V) value);
 
         // 添加索引
         for (var def : indexDefMap.values()) {
@@ -145,20 +167,16 @@ public class Storage<K, V> {
             var indexValue = ReflectionUtils.getField(def.getField(), value);
             if (def.isUnique()) {// 唯一索引
                 var index = uniqueIndexMap.computeIfAbsent(indexKey, k -> new HashMap<>());
-                if (index.put(indexValue, value) != null) {
+                if (index.put(indexValue, (V) value) != null) {
                     throw new RuntimeException(StringUtils.format("Duplicate unique index [index:{}][value:{}] of static resource [class:{}]", indexKey, indexValue, clazz.getName()));
                 }
             } else {// 不是唯一索引
                 var index = indexMap.computeIfAbsent(indexKey, k -> new HashMap<>());
                 var list = index.computeIfAbsent(indexValue, k -> new ArrayList<V>());
-                list.add(value);
+                list.add((V) value);
             }
         }
         return result;
-    }
-
-    public int size() {
-        return dataMap.size();
     }
 
 }
