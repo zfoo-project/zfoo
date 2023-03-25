@@ -13,11 +13,12 @@
 package com.zfoo.protocol.collection.concurrent;
 
 import io.netty.util.collection.LongObjectHashMap;
+import io.netty.util.collection.LongObjectMap;
 
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 
 /**
@@ -169,15 +170,14 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
         }
     }
 
-    @Override
-    public void forEach(BiConsumer<? super Long, ? super V> action) {
+    public void forEachPrimitive(Consumer<LongObjectMap.PrimitiveEntry<V>> consumer) {
         for (var i = 0; i < buckets; i++) {
             var readLock = locks[i].readLock();
             var map = maps.get(i);
             readLock.lock();
             try {
                 for (var entry : map.entries()) {
-                    action.accept(entry.key(), entry.value());
+                    consumer.accept(entry);
                 }
             } finally {
                 readLock.unlock();
