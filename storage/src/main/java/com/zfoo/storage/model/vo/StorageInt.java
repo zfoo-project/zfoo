@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class StorageInt<K, V> extends Storage<K, V> {
 
-    private IntObjectHashMap<V> dataMap = new IntObjectHashMap<V>();
+    private IntObjectHashMap<V> dataMap;
 
     public StorageInt(Storage<K, V> storage) {
         this.dataMap = new IntObjectHashMap<V>(storage.size());
