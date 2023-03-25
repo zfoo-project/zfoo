@@ -14,10 +14,10 @@ package com.zfoo.net.session;
 
 import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.collection.concurrent.ConcurrentHashMapLongObject;
-import com.zfoo.util.security.IdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -27,6 +27,8 @@ import java.util.function.Consumer;
 public class SessionManager implements ISessionManager {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionManager.class);
+
+    private static final AtomicInteger CLIENT_ATOMIC = new AtomicInteger(0);
 
     /**
      * 作为服务器，被别的客户端连接的Session
@@ -42,7 +44,7 @@ public class SessionManager implements ISessionManager {
      */
     private final ConcurrentHashMapLongObject<Session> clientSessionMap = new ConcurrentHashMapLongObject<>(8);
 
-    private volatile int clientSessionChangeId = IdUtils.getLocalIntId();
+    private volatile int clientSessionChangeId = CLIENT_ATOMIC.incrementAndGet();
 
 
     @Override
@@ -87,7 +89,7 @@ public class SessionManager implements ISessionManager {
             return;
         }
         clientSessionMap.put(session.getSid(), session);
-        clientSessionChangeId = IdUtils.getLocalIntId();
+        clientSessionChangeId = CLIENT_ATOMIC.incrementAndGet();
     }
 
     @Override
@@ -99,7 +101,7 @@ public class SessionManager implements ISessionManager {
         try (session) {
             clientSessionMap.remove(session.getSid());
         }
-        clientSessionChangeId = IdUtils.getLocalIntId();
+        clientSessionChangeId = CLIENT_ATOMIC.incrementAndGet();
     }
 
     @Override
