@@ -19,7 +19,7 @@ import java.lang.annotation.*;
  * 静态数据的注入
  *
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 
 @Documented

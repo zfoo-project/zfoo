@@ -25,7 +25,7 @@ import java.util.Set;
  * 转换一个String到一个POJO对象，且这个对象不能继承如何接口
  *
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 public class JsonToObjectConverter implements ConditionalGenericConverter {
 

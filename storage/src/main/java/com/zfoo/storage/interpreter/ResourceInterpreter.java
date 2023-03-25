@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 public class ResourceInterpreter {
 

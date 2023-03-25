@@ -23,7 +23,7 @@ import java.util.Set;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 public class JsonToArrayConverter implements ConditionalGenericConverter {
 

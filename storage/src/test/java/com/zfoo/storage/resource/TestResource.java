@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 @Resource
 public class TestResource {

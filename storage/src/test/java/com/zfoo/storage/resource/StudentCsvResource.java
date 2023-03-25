@@ -19,7 +19,7 @@ import com.zfoo.storage.model.anno.Resource;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 @Resource(alias="StudentCsvResource")
 public class StudentCsvResource {

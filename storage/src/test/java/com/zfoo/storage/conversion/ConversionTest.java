@@ -30,7 +30,7 @@ import java.util.Set;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 public class ConversionTest {
     private static final ConversionServiceFactoryBean csfb = new ConversionServiceFactoryBean();

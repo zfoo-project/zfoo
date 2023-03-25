@@ -17,7 +17,7 @@ import org.springframework.core.io.Resource;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 public class ResourceDef {
 

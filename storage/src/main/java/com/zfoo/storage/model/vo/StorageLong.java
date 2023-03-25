@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 public class StorageLong<K, V> extends Storage<K, V> {
 

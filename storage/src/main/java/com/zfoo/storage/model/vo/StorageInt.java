@@ -20,7 +20,7 @@ import java.util.*;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 public class StorageInt<K, V> extends Storage<K, V> {
 

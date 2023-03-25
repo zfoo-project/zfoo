@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  * 如果不指定资源文件名，则默认通过扫描路径获取与类名相同的文件资源
  *
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

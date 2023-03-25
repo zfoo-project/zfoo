@@ -21,7 +21,7 @@ import java.lang.reflect.Field;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 public class IdDef {
 

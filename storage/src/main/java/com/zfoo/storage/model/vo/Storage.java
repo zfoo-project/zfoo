@@ -26,7 +26,7 @@ import java.util.*;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 public class Storage<K, V> {
 

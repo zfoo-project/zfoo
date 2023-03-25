@@ -26,7 +26,7 @@ import org.w3c.dom.Element;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 public class StorageDefinitionParser implements BeanDefinitionParser {
 

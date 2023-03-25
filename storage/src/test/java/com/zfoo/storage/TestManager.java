@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author godotg
- * @version 4.0
+ * @version 3.0
  */
 @Component
 public class TestManager {

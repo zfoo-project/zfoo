@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * @author meiwei666
- * @version 4.0
+ * @version 3.0
  */
 public abstract class CsvReader {
 
