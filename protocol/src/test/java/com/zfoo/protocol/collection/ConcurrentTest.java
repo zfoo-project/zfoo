@@ -76,6 +76,7 @@ public class ConcurrentTest {
                     for (int j = 0; j < num; j++) {
                         map.put(j, j);
                     }
+                    map.forEachPrimitive(it -> it.value());
                     countDownLatch.countDown();
                 }
             }).start();
@@ -91,6 +92,7 @@ public class ConcurrentTest {
                     for (int j = 0; j < num; j++) {
                         map.remove((long) j);
                     }
+                    map.forEachPrimitive(it -> it.value());
                     countDownLatch2.countDown();
                 }
             }).start();

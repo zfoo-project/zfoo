@@ -33,14 +33,14 @@ public class SessionManager implements ISessionManager {
      * 如：自己作为网关，那肯定有一大堆客户端连接，他们连接上来后，就会保存下来这些信息。
      * 因此：要全局消息广播，其实要用这个Map
      */
-    private final ConcurrentHashMapLongObject<Session> serverSessionMap = new ConcurrentHashMapLongObject<>(128);
+    private final ConcurrentHashMapLongObject<Session> serverSessionMap = new ConcurrentHashMapLongObject<>(64);
 
 
     /**
      * 作为客户端，连接别的服务器上后，保存下来的Session
      * 如：自己配置了Consumer，说明自己作为消费者将要消费远程接口，就会创建一个TcpClient去连接Provider，那么连接上后，就会保存下来到这个Map中
      */
-    private final ConcurrentHashMapLongObject<Session> clientSessionMap = new ConcurrentHashMapLongObject<>();
+    private final ConcurrentHashMapLongObject<Session> clientSessionMap = new ConcurrentHashMapLongObject<>(8);
 
     private volatile int clientSessionChangeId = IdUtils.getLocalIntId();
 
