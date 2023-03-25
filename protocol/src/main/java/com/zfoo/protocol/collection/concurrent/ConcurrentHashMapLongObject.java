@@ -17,6 +17,7 @@ import io.netty.util.collection.LongObjectHashMap;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.BiConsumer;
 
 
 /**
@@ -164,6 +165,22 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
                 map.clear();
             } finally {
                 writeLock.unlock();
+            }
+        }
+    }
+
+    @Override
+    public void forEach(BiConsumer<? super Long, ? super V> action) {
+        for (var i = 0; i < buckets; i++) {
+            var readLock = locks[i].readLock();
+            var map = maps.get(i);
+            readLock.lock();
+            try {
+                for (var entry : map.entries()) {
+                    action.accept(entry.key(), entry.value());
+                }
+            } finally {
+                readLock.unlock();
             }
         }
     }
