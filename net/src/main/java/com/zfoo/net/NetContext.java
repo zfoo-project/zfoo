@@ -134,8 +134,8 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
         configManager.getRegistry().shutdown();
 
         // 先关闭所有session
-        IOUtils.closeIO(ArrayUtils.listToArray(new ArrayList<>(sessionManager.getClientSessionMap().values()), Session.class));
-        IOUtils.closeIO(ArrayUtils.listToArray(new ArrayList<>(sessionManager.getServerSessionMap().values()), Session.class));
+        sessionManager.forEachClientSession(it -> IOUtils.closeIO(it));
+        sessionManager.forEachServerSession(it -> IOUtils.closeIO(it));
 
         // 关闭客户端和服务器
         AbstractClient.shutdown();

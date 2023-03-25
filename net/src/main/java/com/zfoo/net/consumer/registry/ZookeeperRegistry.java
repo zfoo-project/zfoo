@@ -18,6 +18,7 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.consumer.event.ConsumerStartEvent;
 import com.zfoo.net.core.tcp.TcpClient;
 import com.zfoo.net.core.tcp.TcpServer;
+import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.concurrent.ConcurrentArrayList;
@@ -49,10 +50,7 @@ import org.apache.zookeeper.server.auth.DigestAuthenticationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -452,17 +450,22 @@ public class ZookeeperRegistry implements IRegistry {
             return;
         }
 
-        logger.info("start using providerHashConsumerSet:{} to check [consumer:{}]", providerHashConsumerSet, NetContext.getSessionManager().getClientSessionMap().size());
+        logger.info("start using providerHashConsumerSet:{} to check [consumer:{}]", providerHashConsumerSet, NetContext.getSessionManager().clientSessionSize());
 
         var recheckFlag = false;
 
         for (var providerCache : providerHashConsumerSet) {
             // 先排除已经启动的consumer
             // getClientSessionMap
-            var consumerClientList = NetContext.getSessionManager().getClientSessionMap().values()
-                    .stream()
-                    .filter(it -> it.getConsumerAttribute() != null && it.getConsumerAttribute().equals(providerCache))
-                    .collect(Collectors.toList());
+            var consumerClientList = new ArrayList<Session>();
+            NetContext.getSessionManager().forEachClientSession(new Consumer<Session>() {
+                        @Override
+                        public void accept(Session session) {
+                            if (session.getConsumerAttribute() != null && session.getConsumerAttribute().equals(providerCache)) {
+                                consumerClientList.add(session);
+                            }
+                        }
+                    });
 
             if (consumerClientList.size() == 1) {
                 var consumer = consumerClientList.get(0);

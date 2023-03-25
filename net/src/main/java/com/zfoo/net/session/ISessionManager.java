@@ -12,7 +12,7 @@
 
 package com.zfoo.net.session;
 
-import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author godotg
@@ -26,8 +26,9 @@ public interface ISessionManager {
 
     Session getServerSession(long id);
 
-    Map<Long, Session> getServerSessionMap();
+    int serverSessionSize();
 
+    void forEachServerSession(Consumer<Session> consumer);
 
     void addClientSession(Session session);
 
@@ -35,7 +36,9 @@ public interface ISessionManager {
 
     Session getClientSession(long id);
 
-    Map<Long, Session> getClientSessionMap();
+    void forEachClientSession(Consumer<Session> consumer);
+
+    int clientSessionSize();
 
     int getClientSessionChangeId();
 

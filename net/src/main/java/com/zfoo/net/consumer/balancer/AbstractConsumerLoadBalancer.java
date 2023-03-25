@@ -24,6 +24,7 @@ import com.zfoo.protocol.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -52,36 +53,21 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
     }
 
     public List<Session> getSessionsByModule(ProtocolModule module) {
-        return NetContext.getSessionManager().getClientSessionMap()
-                .values()
-                .stream()
-                .filter(it -> it.getConsumerAttribute() != null && it.getConsumerAttribute().getProviderConfig() != null)
-                .filter(it -> it.getConsumerAttribute().getProviderConfig().getProviders().stream().anyMatch(provider -> provider.getProtocolModule().equals(module)))
-                .collect(Collectors.toList());
+        var list = new ArrayList<Session>();
+        NetContext.getSessionManager().forEachClientSession(new Consumer<Session>() {
+            @Override
+            public void accept(Session session) {
+                if (session.getConsumerAttribute() == null || session.getConsumerAttribute().getProviderConfig() == null) {
+                    return;
+                }
+                var providerConfig = session.getConsumerAttribute().getProviderConfig();
+                if (providerConfig.getProviders().stream().anyMatch(it -> it.getProtocolModule().equals(module))) {
+                    list.add(session);
+                }
+            }
+        });
+        return list;
     }
-
-    public List<Session> sessionsByModule(ProtocolModule module) {
-        var clientSessionMap = NetContext.getSessionManager().getClientSessionMap();
-        var sessions = new ArrayList<Session>();
-        for (var clientSession : clientSessionMap.values()) {
-            var consumerAttribute = clientSession.getConsumerAttribute();
-            if (consumerAttribute == null) {
-                continue;
-            }
-
-            var registerVO = (RegisterVO) consumerAttribute;
-            var providerConfig = registerVO.getProviderConfig();
-            if (providerConfig == null) {
-                continue;
-            }
-
-            if (providerConfig.getProviders().stream().anyMatch(it -> it.getProtocolModule().getId() == module.getId())) {
-                sessions.add(clientSession);
-            }
-        }
-        return sessions;
-    }
-
 
     public boolean sessionHasModule(Session session, IPacket packet) {
         var consumerAttribute = session.getConsumerAttribute();
