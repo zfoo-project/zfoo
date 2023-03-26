@@ -63,7 +63,7 @@ public class TreeMapTest {
             Assert.assertFalse(map.returnedNull());
             Assert.assertEquals(map.getLastKey(), n - 1);
             Assert.assertFalse(map.returnedNull());
-            Assert.assertEquals(map.getLastEntry(), PairIntLong.valueOf(n - 1, (long) (3 * (n - 1))));
+            Assert.assertEquals(map.getLastEntry(), PairIntLong.valueOf(n - 1,  (3 * (n - 1))));
             Assert.assertFalse(map.returnedNull());
             for (int i = -2; i <= n + 1; i++) {
                 int lowerKey = map.lowerKey(i);
@@ -96,7 +96,7 @@ public class TreeMapTest {
                 }
                 PairIntLong lowerEntry = map.lowerEntry(i);
                 if (i > 0) {
-                    Assert.assertEquals(lowerEntry, PairIntLong.valueOf(lowerKey, (long) (3 * lowerKey)));
+                    Assert.assertEquals(lowerEntry, PairIntLong.valueOf(lowerKey,  (3 * lowerKey)));
                     Assert.assertFalse(map.returnedNull());
                 } else {
                     Assert.assertNull(lowerEntry);
@@ -104,7 +104,7 @@ public class TreeMapTest {
                 }
                 PairIntLong higherEntry = map.higherEntry(i);
                 if (i < n - 1) {
-                    Assert.assertEquals(higherEntry, PairIntLong.valueOf(higherKey, (long) (3 * higherKey)));
+                    Assert.assertEquals(higherEntry, PairIntLong.valueOf(higherKey,  (3 * higherKey)));
                     Assert.assertFalse(map.returnedNull());
                 } else {
                     Assert.assertNull(higherEntry);
@@ -112,7 +112,7 @@ public class TreeMapTest {
                 }
                 PairIntLong floorEntry = map.floorEntry(i);
                 if (i >= 0) {
-                    Assert.assertEquals(floorEntry, PairIntLong.valueOf(floorKey, (long) (3 * floorKey)));
+                    Assert.assertEquals(floorEntry, PairIntLong.valueOf(floorKey,  (3 * floorKey)));
                     Assert.assertFalse(map.returnedNull());
                 } else {
                     Assert.assertNull(floorEntry);
@@ -120,7 +120,7 @@ public class TreeMapTest {
                 }
                 PairIntLong ceilingEntry = map.ceilingEntry(i);
                 if (i < n) {
-                    Assert.assertEquals(ceilingEntry, PairIntLong.valueOf(ceilingKey, (long) (3 * ceilingKey)));
+                    Assert.assertEquals(ceilingEntry, PairIntLong.valueOf(ceilingKey,  (3 * ceilingKey)));
                     Assert.assertFalse(map.returnedNull());
                 } else {
                     Assert.assertNull(ceilingEntry);
@@ -262,7 +262,7 @@ public class TreeMapTest {
                 Assert.assertTrue(map.returnedNull());
                 Assert.assertNull(ezResultEntry);
             } else {
-                Assert.assertEquals(ezResultEntry, PairIntLong.valueOf(javaEntry.getKey(), (long) javaEntry.getValue()));
+                Assert.assertEquals(ezResultEntry, PairIntLong.valueOf(javaEntry.getKey(),  javaEntry.getValue()));
             }
         }
         {
@@ -278,7 +278,7 @@ public class TreeMapTest {
                 Assert.assertTrue(map.returnedNull());
                 Assert.assertNull(ezResultEntry);
             } else {
-                Assert.assertEquals(ezResultEntry, PairIntLong.valueOf(javaEntry.getKey(), (long) javaEntry.getValue()));
+                Assert.assertEquals(ezResultEntry, PairIntLong.valueOf(javaEntry.getKey(),  javaEntry.getValue()));
             }
         }
         {
@@ -294,7 +294,7 @@ public class TreeMapTest {
                 Assert.assertTrue(map.returnedNull());
                 Assert.assertNull(ezResultEntry);
             } else {
-                Assert.assertEquals(ezResultEntry, PairIntLong.valueOf(javaEntry.getKey(), (long) javaEntry.getValue()));
+                Assert.assertEquals(ezResultEntry, PairIntLong.valueOf(javaEntry.getKey(),  javaEntry.getValue()));
             }
         }
         {
@@ -310,7 +310,7 @@ public class TreeMapTest {
                 Assert.assertTrue(map.returnedNull());
                 Assert.assertNull(ezResultEntry);
             } else {
-                Assert.assertEquals(ezResultEntry, PairIntLong.valueOf(javaEntry.getKey(), (long) javaEntry.getValue()));
+                Assert.assertEquals(ezResultEntry, PairIntLong.valueOf(javaEntry.getKey(),  javaEntry.getValue()));
             }
         }
     }
@@ -333,7 +333,7 @@ public class TreeMapTest {
                 } else {
                     long actualOldValue = map.put(key, newValue);
                     Assert.assertFalse(map.returnedNull());
-                    Assert.assertEquals(actualOldValue, (long) oldValue);
+                    Assert.assertEquals(actualOldValue,  oldValue.longValue());
                 }
             } else if (prob < 0.6) {
                 int key = rnd.nextInt(50);
@@ -344,7 +344,7 @@ public class TreeMapTest {
                 } else {
                     long actualOldValue = map.remove(key);
                     Assert.assertFalse(map.returnedNull());
-                    Assert.assertEquals(actualOldValue, (long) oldValue);
+                    Assert.assertEquals(actualOldValue,  oldValue.longValue());
                 }
             } else {
                 int key = rnd.nextInt(20);

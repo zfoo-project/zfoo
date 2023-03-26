@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.zfoo.protocol.IPacket;
 
-import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * @author godotg
@@ -43,6 +43,19 @@ public class PairIntLong implements IPacket {
     @Override
     public short protocolId() {
         return PROTOCOL_ID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PairIntLong that = (PairIntLong) o;
+        return key == that.key && value == that.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, value);
     }
 
     public int getKey() {
