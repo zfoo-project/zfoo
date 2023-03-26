@@ -18,6 +18,8 @@ import com.zfoo.net.packet.common.PairIntLong;
 import java.util.Arrays;
 
 /**
+ * 性能更高，但是可能会浪费一定的内存
+ *
  * @author godotg
  * @version 3.0
  */

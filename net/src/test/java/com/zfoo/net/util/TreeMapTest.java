@@ -403,15 +403,16 @@ public class TreeMapTest {
 
     @Test
     public void testCelling() {
-        var max = 10000;
+        var start = 10000;
+        var end = 20000;
         TreeMapIntLong treeMap = new TreeMapIntLong(200);
-        for (int i = 0; i < max; i++) {
+        for (int i = start; i < end; i++) {
             if (i % 2 == 0) {
                 treeMap.put(i, i);
             }
         }
-        for (int i = 0; i < max; i++) {
-            if (i % 2 != 0 && i != (max - 1)) {
+        for (int i = start; i < end; i++) {
+            if (i % 2 != 0 && i != (end - 1)) {
                 Assert.assertEquals(treeMap.ceilingEntry(i).getValue(), i + 1);
             }
             if (i % 2 != 0) {
