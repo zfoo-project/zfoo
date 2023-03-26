@@ -15,10 +15,7 @@ package com.zfoo.util.math;
 
 import com.zfoo.protocol.model.Pair;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * 带虚拟节点的一致性Hash算法，参考：http://www.zsythink.net/archives/1182
@@ -30,7 +27,7 @@ import java.util.TreeMap;
 public class ConsistentHash<K, V> {
 
     // 真实结点列表,考虑到服务器上线、下线的场景，即添加、删除的场景会比较频繁，这里使用LinkedList会更好
-    private List<Pair<K, V>> realNodes = new LinkedList<>();
+    private List<Pair<K, V>> realNodes = new ArrayList<>();
 
     // 虚拟节点，key表示虚拟节点的hash值，value表示虚拟节点的名称
     private TreeMap<Integer, Pair<K, V>> virtualNodeTreeMap = new TreeMap<>();
