@@ -26,6 +26,7 @@
         <protocol id="103" location="com.zfoo.net.packet.common.Ping"/>
         <protocol id="104" location="com.zfoo.net.packet.common.Pong"/>
 
+        <protocol id="110" location="com.zfoo.net.packet.common.PairIntLong"/>
         <protocol id="111" location="com.zfoo.net.packet.common.PairLong"/>
         <protocol id="112" location="com.zfoo.net.packet.common.PairString"/>
         <protocol id="113" location="com.zfoo.net.packet.common.PairLS"/>
