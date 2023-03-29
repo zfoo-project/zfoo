@@ -26,6 +26,10 @@ public class SignalAttachment implements IAttachment {
 
     public static final short PROTOCOL_ID = 0;
 
+    /**
+     * EN:Negative signalId are allowed
+     * CN:允许负数的signalId
+     */
     public static final AtomicInteger ATOMIC_ID = new AtomicInteger(0);
 
     /**

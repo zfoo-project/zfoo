@@ -28,9 +28,9 @@ public class Session implements Closeable {
     private static final AtomicLong ATOMIC_LONG = new AtomicLong(0);
 
     /**
-     * The globally unique ID of the session
+     * The globally unique ID of the session and the negative sid are allowed
      */
-    private long sid;
+    private long sid = ATOMIC_LONG.incrementAndGet();
 
     private Channel channel;
 
@@ -52,10 +52,6 @@ public class Session implements Closeable {
         if (channel == null) {
             throw new IllegalArgumentException("channel cannot be empty");
         }
-	    this.sid = ATOMIC_LONG.incrementAndGet();
-	    if (this.sid <= 0) {
-		    throw new IllegalArgumentException("sid cannot be 0");
-	    }
         this.channel = channel;
     }
 
@@ -89,10 +85,6 @@ public class Session implements Closeable {
 
     public long getSid() {
         return sid;
-    }
-
-    public void setSid(long sid) {
-        this.sid = sid;
     }
 
     public Channel getChannel() {
