@@ -330,7 +330,7 @@ public abstract class ReflectionUtils {
         var methodName = "get" + StringUtils.capitalize(fieldName);
 
         try {
-            clazz.getDeclaredMethod(methodName, null);
+            clazz.getDeclaredMethod(methodName);
             return methodName;
         } catch (NoSuchMethodException e) {
             // java的get方法对boolean值有可能对应get或者is，所以尝试获取两种不同的get方法，当两种都获取不到才抛异常
@@ -340,14 +340,14 @@ public abstract class ReflectionUtils {
         // 如果属性名以大写字母开头，属性名直接用作 getter/setter 方法中 get/set 的后部分。例如属性名为Name，对应的方法是getName/setName。
         methodName = "get" + fieldName;
         try {
-            clazz.getDeclaredMethod(methodName, null);
+            clazz.getDeclaredMethod(methodName);
             return methodName;
         } catch (NoSuchMethodException e) {
         }
 
         methodName = "is" + StringUtils.capitalize(fieldName);
         try {
-            clazz.getDeclaredMethod(methodName, null);
+            clazz.getDeclaredMethod(methodName);
             return methodName;
         } catch (NoSuchMethodException e) {
             throw new RunException("field:[{}] has no getMethod or isMethod in class:[{}]", field.getName(), clazz.getCanonicalName());
