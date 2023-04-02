@@ -27,6 +27,8 @@ import com.zfoo.storage.model.config.StorageConfig;
 import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.model.vo.ResourceDef;
 import com.zfoo.storage.model.vo.Storage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -49,6 +51,8 @@ import java.util.stream.Collectors;
  * @version 3.0
  */
 public class StorageManager implements IStorageManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(StorageContext.class);
 
     // ANT通配符有三种, ? :匹配任何单字符; * :匹配0或者任意数量的字符; ** :匹配0或者更多的目录
     // 1. /project/*.a	匹配项目根路径下所有在project路径下的.a文件
@@ -199,7 +203,7 @@ public class StorageManager implements IStorageManager {
         }
         if (storage.isRecycle()) {
             // Storage没有使用，为了节省内存提前释放了它；只有使用ResInjection注解的Storage才能被动态获取或者关闭配置recycle属性
-            throw new RunException("Storage [{}] is not used, it was freed to save memory; use @ResInjection or turn off recycle configuration", clazz.getCanonicalName());
+            logger.warn("Storage [{}] is not used, it was freed to save memory; use @ResInjection or turn off recycle configuration", clazz.getCanonicalName());
         }
         return storage;
     }
