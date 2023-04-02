@@ -68,8 +68,8 @@ public class SessionManager implements ISessionManager {
     }
 
     @Override
-    public Session getServerSession(long id) {
-        return serverSessionMap.get(id);
+    public Session getServerSession(long sid) {
+        return serverSessionMap.get(sid);
     }
 
     @Override
@@ -105,8 +105,8 @@ public class SessionManager implements ISessionManager {
     }
 
     @Override
-    public Session getClientSession(long id) {
-        return clientSessionMap.get(id);
+    public Session getClientSession(long sid) {
+        return clientSessionMap.get(sid);
     }
 
     @Override
