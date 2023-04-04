@@ -44,9 +44,6 @@ import java.util.List;
  */
 public class JProtobufTcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
 
-    private static final Logger logger = LoggerFactory.getLogger(JProtobufTcpCodecHandler.class);
-
-
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws IOException {
         // 不够读一个int
@@ -67,33 +64,14 @@ public class JProtobufTcpCodecHandler extends ByteToMessageCodec<EncodedPacketIn
             return;
         }
 
-        ByteBuf tmpByteBuf = null;
-        try {
-            tmpByteBuf = in.readRetainedSlice(length);
-            DecodedPacketInfo packetInfo = read(tmpByteBuf);
-            out.add(packetInfo);
-        } catch (Exception e) {
-            logger.error("decode exception {}", SessionUtils.sessionSimpleInfo(ctx), e);
-            throw e;
-        } catch (Throwable t) {
-            logger.error("decode throwable {}", SessionUtils.sessionSimpleInfo(ctx), t);
-            throw t;
-        } finally {
-            ReferenceCountUtil.release(tmpByteBuf);
-        }
+        var sliceByteBuf = in.readSlice(length);
+        var packetInfo = read(sliceByteBuf);
+        out.add(packetInfo);
     }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, EncodedPacketInfo packetInfo, ByteBuf out) throws IOException {
-        try {
-            write(out, packetInfo.getPacket(), packetInfo.getAttachment());
-        } catch (Exception e) {
-            logger.error("[{}] encode exception {}", SessionUtils.sessionSimpleInfo(ctx), packetInfo.getPacket().getClass().getSimpleName(), e);
-            throw e;
-        } catch (Throwable t) {
-            logger.error("[{}] encode throwable {}", SessionUtils.sessionSimpleInfo(ctx), packetInfo.getPacket().getClass().getSimpleName(), t);
-            throw t;
-        }
+        write(out, packetInfo.getPacket(), packetInfo.getAttachment());
     }
 
     public static DecodedPacketInfo read(ByteBuf buffer) throws IOException {
@@ -110,11 +88,6 @@ public class JProtobufTcpCodecHandler extends ByteToMessageCodec<EncodedPacketIn
     }
 
     public void write(ByteBuf buffer, IPacket packet, IAttachment attachment) throws IOException {
-        if (packet == null) {
-            logger.error("packet is null and can not be sent.");
-            return;
-        }
-
         // 写入protobuf协议
         var protobufCodec = (Codec<IPacket>) ProtobufProxy.create(packet.getClass());
         byte[] bytes = protobufCodec.encode(packet);

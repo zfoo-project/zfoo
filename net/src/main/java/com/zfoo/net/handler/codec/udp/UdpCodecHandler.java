@@ -37,8 +37,6 @@ import java.util.List;
  */
 public class UdpCodecHandler extends MessageToMessageCodec<DatagramPacket, EncodedPacketInfo> {
 
-    private static final Logger logger = LoggerFactory.getLogger(UdpCodecHandler.class);
-
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, DatagramPacket datagramPacket, List<Object> list) {
         ByteBuf in = datagramPacket.content();
@@ -62,38 +60,19 @@ public class UdpCodecHandler extends MessageToMessageCodec<DatagramPacket, Encod
             return;
         }
 
-        ByteBuf tmpByteBuf = null;
-        try {
-            tmpByteBuf = in.readRetainedSlice(length);
-            DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
-            var sender = datagramPacket.sender();
-            packetInfo.setAttachment(UdpAttachment.valueOf(sender.getHostString(), sender.getPort()));
-            list.add(packetInfo);
-        } catch (Exception e) {
-            logger.error("exception异常", e);
-            throw e;
-        } catch (Throwable t) {
-            logger.error("throwable错误", t);
-            throw t;
-        } finally {
-            ReferenceCountUtil.release(tmpByteBuf);
-        }
+        var sliceByteBuf = in.readSlice(length);
+        var packetInfo = NetContext.getPacketService().read(sliceByteBuf);
+        var sender = datagramPacket.sender();
+        packetInfo.setAttachment(UdpAttachment.valueOf(sender.getHostString(), sender.getPort()));
+        list.add(packetInfo);
     }
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
-        try {
-            var byteBuf = channelHandlerContext.alloc().ioBuffer();
-            var udpAttachment = (UdpAttachment) out.getAttachment();
+        var byteBuf = channelHandlerContext.alloc().ioBuffer();
+        var udpAttachment = (UdpAttachment) out.getAttachment();
 
-            NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getAttachment());
-            list.add(new DatagramPacket(byteBuf, new InetSocketAddress(udpAttachment.getHost(), udpAttachment.getPort())));
-        } catch (Exception e) {
-            logger.error("[{}]编码exception异常", JsonUtils.object2String(out), e);
-            throw e;
-        } catch (Throwable t) {
-            logger.error("[{}]编码throwable错误", JsonUtils.object2String(out), t);
-            throw t;
-        }
+        NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getAttachment());
+        list.add(new DatagramPacket(byteBuf, new InetSocketAddress(udpAttachment.getHost(), udpAttachment.getPort())));
     }
 }
