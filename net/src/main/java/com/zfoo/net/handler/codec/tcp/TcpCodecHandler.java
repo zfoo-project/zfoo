@@ -38,8 +38,6 @@ import java.util.List;
  */
 public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
 
-    private static final Logger logger = LoggerFactory.getLogger(TcpCodecHandler.class);
-
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         // 不够读一个int
@@ -60,34 +58,15 @@ public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
             return;
         }
 
-        ByteBuf tmpByteBuf = null;
-        try {
-            // readRetainedSlice和byte[]数组相比，readRetainedSlice减少了垃圾回收
-            tmpByteBuf = in.readRetainedSlice(length);
-            DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
-            out.add(packetInfo);
-        } catch (Exception e) {
-            logger.error("decode exception {}", SessionUtils.sessionSimpleInfo(ctx), e);
-            throw e;
-        } catch (Throwable t) {
-            logger.error("decode throwable {}", SessionUtils.sessionSimpleInfo(ctx), t);
-            throw t;
-        } finally {
-            ReferenceCountUtil.release(tmpByteBuf);
-        }
+        // readSlice和byte[]数组相比，readSlice减少了垃圾回收
+        var sliceByteBuf = in.readSlice(length);
+        var packetInfo = NetContext.getPacketService().read(sliceByteBuf);
+        out.add(packetInfo);
     }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, EncodedPacketInfo packetInfo, ByteBuf out) {
-        try {
-            NetContext.getPacketService().write(out, packetInfo.getPacket(), packetInfo.getAttachment());
-        } catch (Exception e) {
-            logger.error("[{}] encode exception {}", SessionUtils.sessionSimpleInfo(ctx), packetInfo.getPacket().getClass().getSimpleName(), e);
-            throw e;
-        } catch (Throwable t) {
-            logger.error("[{}] encode throwable {}", SessionUtils.sessionSimpleInfo(ctx), packetInfo.getPacket().getClass().getSimpleName(), t);
-            throw t;
-        }
+        NetContext.getPacketService().write(out, packetInfo.getPacket(), packetInfo.getAttachment());
     }
 
 }

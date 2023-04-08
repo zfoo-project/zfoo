@@ -40,8 +40,6 @@ import java.util.List;
  */
 public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame, EncodedPacketInfo> {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketCodecHandler.class);
-
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, WebSocketFrame webSocketFrame, List<Object> list) {
         ByteBuf in = webSocketFrame.content();
@@ -65,36 +63,17 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
             return;
         }
 
-        ByteBuf tmpByteBuf = null;
-        try {
-            tmpByteBuf = in.readRetainedSlice(length);
-            DecodedPacketInfo packetInfo = NetContext.getPacketService().read(tmpByteBuf);
-            list.add(packetInfo);
-        } catch (Exception e) {
-            logger.error("exception异常", e);
-            throw e;
-        } catch (Throwable t) {
-            logger.error("throwable错误", t);
-            throw t;
-        } finally {
-            ReferenceCountUtil.release(tmpByteBuf);
-        }
+        var sliceByteBuf = in.readSlice(length);
+        var packetInfo = NetContext.getPacketService().read(sliceByteBuf);
+        list.add(packetInfo);
     }
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
-        try {
-            var byteBuf = channelHandlerContext.alloc().ioBuffer();
+        var byteBuf = channelHandlerContext.alloc().ioBuffer();
 
-            NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getAttachment());
-            list.add(new BinaryWebSocketFrame(byteBuf));
-        } catch (Exception e) {
-            logger.error("[{}]编码exception异常", JsonUtils.object2String(out), e);
-            throw e;
-        } catch (Throwable t) {
-            logger.error("[{}]编码throwable错误", JsonUtils.object2String(out), t);
-            throw t;
-        }
+        NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getAttachment());
+        list.add(new BinaryWebSocketFrame(byteBuf));
     }
 
 
