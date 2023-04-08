@@ -128,7 +128,7 @@ public class ZookeeperRegistry implements IRegistry {
     public void start() {
         var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
         if (Objects.isNull(registryConfig)) {
-            logger.info("Stand alone startup");
+            logger.info("Stand alone startup of singleton");
             return;
         }
 
