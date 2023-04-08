@@ -36,6 +36,7 @@ import java.util.Map;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
+import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
 
 /**
  * @author godotg
@@ -43,7 +44,8 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateTsUtils {
 
-    private static String protocolOutputRootPath = "tsProtocol/";
+    private static String protocolOutputRootPath = "tsProtocol";
+    private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, ITsSerializer> tsSerializerMap;
 
@@ -52,10 +54,16 @@ public abstract class GenerateTsUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+        // 如果没有配置路径，则使用默认路径
+        if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
+            protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+        } else {
+            protocolOutputPath = generateOperation.getProtocolPath();
+        }
 
-        FileUtils.deleteFile(new File(protocolOutputRootPath));
-        FileUtils.createDirectory(protocolOutputRootPath);
+        FileUtils.deleteFile(new File(protocolOutputPath));
+        var protocolOutputPathFile = FileUtils.createDirectory(protocolOutputPath);
+        protocolOutputRootPath = protocolOutputPathFile.getName();
 
         tsSerializerMap = new HashMap<>();
         tsSerializerMap.put(BooleanSerializer.INSTANCE, new TsBooleanSerializer());
@@ -83,7 +91,7 @@ public abstract class GenerateTsUtils {
         var list = List.of("typescript/buffer/ByteBuffer.ts", "typescript/buffer/long.js", "typescript/buffer/longbits.js");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "typescript/")));
+            var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "typescript/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
@@ -94,14 +102,15 @@ public abstract class GenerateTsUtils {
         var initProtocolBuilder = new StringBuilder();
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
-            var protocolClassName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
-            var path = GenerateProtocolPath.getProtocolPath(protocolId);
-            importBuilder.append(StringUtils.format("import {} from './{}';", protocolClassName, path)).append(LS);
-            initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, protocolClassName)).append(LS);
+            var name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
+            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.GdScript);
+            importBuilder.append(StringUtils.format("import {} from './{}';", name, path)).append(LS);
+            initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, name)).append(LS);
+
         }
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), initProtocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.ts")), protocolManagerTemplate, true);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.ts")), protocolManagerTemplate, true);
     }
 
     public static void createTsProtocolFile(ProtocolRegistration registration) throws IOException {
@@ -121,10 +130,9 @@ public abstract class GenerateTsUtils {
         var readObject = readObject(registration);
 
         protocolTemplate = StringUtils.format(protocolTemplate, importSubProtocol, classNote, protocolClazzName, fieldDefinition.trim()
-                , protocolId, protocolClazzName, writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
-        var protocolOutputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputRootPath
-                , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
+                , protocolId, protocolClazzName, protocolClazzName, writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}/{}.ts", protocolOutputPath
+                , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName)), protocolTemplate, true);
     }
 
     private static String importSubProtocol(ProtocolRegistration registration) {

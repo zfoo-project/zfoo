@@ -9,7 +9,7 @@ class ProtocolManager {
     static getProtocol(protocolId: number): any {
         const protocol = protocols.get(protocolId);
         if (protocol === null) {
-            throw new Error('[protocolId:' + protocolId + ']协议不存在');
+            throw '[protocolId:' + protocolId + ']协议不存在';
         }
         return protocol;
     }
