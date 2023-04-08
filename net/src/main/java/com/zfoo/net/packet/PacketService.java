@@ -28,8 +28,8 @@ import com.zfoo.protocol.xml.XmlProtocols;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
 import java.util.function.Predicate;
@@ -115,7 +115,7 @@ public class PacketService implements IPacketService {
         GenerateProtocolFile.generateProtocolFilter = netGenerateProtocolFilter;
 
         // 解析protocol.xml文件，并将协议生成ProtocolRegistration
-        var resource = applicationContext.getResource(ResourceUtils.CLASSPATH_URL_PREFIX + protocolLocation);
+        var resource = applicationContext.getResource(ResourcePatternResolver.CLASSPATH_URL_PREFIX + protocolLocation);
         try {
             var xmlProtocols = DomUtils.inputStream2Object(resource.getInputStream(), XmlProtocols.class);
             ProtocolManager.initProtocol(xmlProtocols, generateOperation);

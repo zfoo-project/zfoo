@@ -32,10 +32,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -230,7 +230,7 @@ public class StorageManager implements IStorageManager {
         try {
             var result = new HashSet<String>();
             for (var scanPackage : scanPackages) {
-                var packageSearchPath = ResourceUtils.CLASSPATH_URL_PREFIX + scanPackage.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + SUFFIX_PATTERN;
+                var packageSearchPath = ResourcePatternResolver.CLASSPATH_URL_PREFIX + scanPackage.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + SUFFIX_PATTERN;
                 var resources = resourcePatternResolver.getResources(packageSearchPath);
                 var resourceName = com.zfoo.storage.model.anno.Resource.class.getName();
                 for (var resource : resources) {
