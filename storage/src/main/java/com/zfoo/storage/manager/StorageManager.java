@@ -230,7 +230,7 @@ public class StorageManager implements IStorageManager {
         try {
             var result = new HashSet<String>();
             for (var scanPackage : scanPackages) {
-                var packageSearchPath = ResourcePatternResolver.CLASSPATH_URL_PREFIX + scanPackage.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + SUFFIX_PATTERN;
+                var packageSearchPath = "classpath*:" + scanPackage.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + SUFFIX_PATTERN;
                 var resources = resourcePatternResolver.getResources(packageSearchPath);
                 var resourceName = com.zfoo.storage.model.anno.Resource.class.getName();
                 for (var resource : resources) {
