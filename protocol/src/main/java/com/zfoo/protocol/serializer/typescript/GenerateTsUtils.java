@@ -88,7 +88,7 @@ public abstract class GenerateTsUtils {
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
-        var list = List.of("typescript/buffer/ByteBuffer.ts", "typescript/buffer/long.js", "typescript/buffer/longbits.js");
+        var list = List.of("typescript/buffer/ByteBuffer.ts", "typescript/buffer/Long.ts", "typescript/buffer/Longbits.ts");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
             var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "typescript/")));

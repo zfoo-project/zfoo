@@ -1,6 +1,6 @@
 import ProtocolManager from "../ProtocolManager";
 
-const Longbits = require('./longbits.js');
+import {writeInt64, readInt64} from "./Longbits";
 
 const empty_str = '';
 const initSize = 128;
@@ -13,8 +13,8 @@ const maxInt = 2147483647;
 const minInt = -2147483648;
 
 // UTF-8编码与解码
-const encoder = new TextEncoder('utf-8');
-const decoder = new TextDecoder('utf-8');
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
 // nodejs的测试环境需要用以下方式特殊处理
 // const util = require('util');
@@ -238,7 +238,7 @@ class ByteBuffer {
         }
         this.ensureCapacity(9);
 
-        Longbits.writeInt64(this, value);
+        writeInt64(this, value);
     }
 
     readLong(): number {
@@ -280,7 +280,7 @@ class ByteBuffer {
                 }
             }
         }
-        return Longbits.readInt64(new Uint8Array(buffer.slice(0, count))).toString();
+        return readInt64(new Uint8Array(buffer.slice(0, count))).toNumber();
     }
 
     writeFloat(value: number): void {
@@ -378,7 +378,7 @@ class ByteBuffer {
     };
 
     readBooleanArray(): any {
-        const array = [];
+        const array: boolean[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -400,7 +400,7 @@ class ByteBuffer {
     };
 
     readByteArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -422,7 +422,7 @@ class ByteBuffer {
     };
 
     readShortArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -444,7 +444,7 @@ class ByteBuffer {
     };
 
     readIntArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -466,7 +466,7 @@ class ByteBuffer {
     };
 
     readLongArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -488,7 +488,7 @@ class ByteBuffer {
     };
 
     readFloatArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -510,7 +510,7 @@ class ByteBuffer {
     };
 
     readDoubleArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -532,7 +532,7 @@ class ByteBuffer {
     };
 
     readStringArray(): any {
-        const array = [];
+        const array: string[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -554,7 +554,7 @@ class ByteBuffer {
     };
 
     readCharArray(): any {
-        const array = [];
+        const array: string[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -577,7 +577,7 @@ class ByteBuffer {
     };
 
     readPacketArray(protocolId: number): any {
-        const array = [];
+        const array: any[] = [];
         const length = this.readInt();
         if (length > 0) {
             const protocolRegistration = ProtocolManager.getProtocol(protocolId);
