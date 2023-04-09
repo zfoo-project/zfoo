@@ -13,6 +13,7 @@
 
 package com.zfoo.net.handler.codec.json;
 
+import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.protocol.IPacket;
 
 /**
@@ -23,12 +24,18 @@ public class JsonPacket {
 
     private short protocolId;
 
-    private IPacket packet;
+    private short attachmentId;
 
-    public static JsonPacket valueOf(short protocolId, IPacket packet) {
+    private IPacket packet;
+    private IAttachment attachment;
+
+
+    public static JsonPacket valueOf(short protocolId, IPacket packet, short attachmentId, IAttachment attachment) {
         var jsonPacket = new JsonPacket();
         jsonPacket.protocolId = protocolId;
+        jsonPacket.attachmentId = attachmentId;
         jsonPacket.packet = packet;
+        jsonPacket.attachment = attachment;
         return jsonPacket;
     }
 
@@ -46,5 +53,21 @@ public class JsonPacket {
 
     public void setPacket(IPacket packet) {
         this.packet = packet;
+    }
+
+    public short getAttachmentId() {
+        return attachmentId;
+    }
+
+    public void setAttachmentId(short attachmentId) {
+        this.attachmentId = attachmentId;
+    }
+
+    public IAttachment getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(IAttachment attachment) {
+        this.attachment = attachment;
     }
 }

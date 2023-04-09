@@ -12,6 +12,7 @@
 
 package com.zfoo.net.router.attachment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.scheduler.util.TimeUtils;
 
@@ -58,6 +59,7 @@ public class SignalAttachment implements IAttachment {
      * EN:The method of callback when the client receives a reply from the server
      * CN:客户端收到服务器回复的时候回调的方法
      */
+    @JsonIgnore
     private transient CompletableFuture<IPacket> responseFuture = new CompletableFuture<>();
 
     public SignalAttachment() {
