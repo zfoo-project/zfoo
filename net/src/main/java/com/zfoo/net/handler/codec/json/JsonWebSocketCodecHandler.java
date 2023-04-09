@@ -42,12 +42,16 @@ public class JsonWebSocketCodecHandler extends MessageToMessageCodec<WebSocketFr
         var jsonMap = JsonUtils.getJsonMap(jsonStr);
         var protocolId = Short.parseShort(jsonMap.get("protocolId"));
         var packetStr = jsonMap.get("packet");
-        var attachmentId = Short.parseShort(jsonMap.get("attachmentId"));
+        var attachmentStr = jsonMap.get("attachmentId");
         IAttachment attachment = null;
-        if (attachmentId >= 0) {
-            var attachmentClass = ProtocolManager.getProtocol(attachmentId).protocolConstructor().getDeclaringClass();
-            attachment = (IAttachment) JsonUtils.string2Object(jsonMap.get("attachment"), attachmentClass);
+        if (!StringUtils.isEmpty(attachmentStr)) {
+            var attachmentId = Short.parseShort(attachmentStr);
+            if (attachmentId >= 0) {
+                var attachmentClass = ProtocolManager.getProtocol(attachmentId).protocolConstructor().getDeclaringClass();
+                attachment = (IAttachment) JsonUtils.string2Object(jsonMap.get("attachment"), attachmentClass);
+            }
         }
+
         var protocolClass = ProtocolManager.getProtocol(protocolId).protocolConstructor().getDeclaringClass();
         var packet = JsonUtils.string2Object(packetStr, protocolClass);
         list.add(DecodedPacketInfo.valueOf((IPacket) packet, attachment));
