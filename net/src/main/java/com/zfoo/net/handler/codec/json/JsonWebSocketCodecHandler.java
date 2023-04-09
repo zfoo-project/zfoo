@@ -58,8 +58,9 @@ public class JsonWebSocketCodecHandler extends MessageToMessageCodec<WebSocketFr
         var byteBuf = channelHandlerContext.alloc().ioBuffer();
 
         var packet = out.getPacket();
-        var attachmentId = out.getAttachment() == null ? -1 : out.getAttachment().protocolId();
-        var jsonPacket = JsonPacket.valueOf(packet.protocolId(), packet, attachmentId, out.getAttachment());
+        var attachment = out.getAttachment();
+        var attachmentId = attachment == null ? -1 : attachment.protocolId();
+        var jsonPacket = JsonPacket.valueOf(packet.protocolId(), packet, attachmentId, attachment);
         var bytes = StringUtils.bytes(JsonUtils.object2String(jsonPacket));
         byteBuf.writeBytes(bytes);
 
