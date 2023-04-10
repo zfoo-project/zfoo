@@ -412,13 +412,13 @@ public class ProtocolAnalysis {
             Type type = field.getGenericType();
 
             if (!(type instanceof ParameterizedType)) {
-                throw new RunException("[class:{}]中数组类型声明不正确，[field:{}]不是泛型类", clazz.getCanonicalName(), field.getName());
+                throw new RunException("[class:{}]中Map类型声明不正确，[field:{}]不是泛型类", clazz.getCanonicalName(), field.getName());
             }
 
             Type[] types = ((ParameterizedType) type).getActualTypeArguments();
 
             if (types.length != 2) {
-                throw new RunException("[class:{}]中数组类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
+                throw new RunException("[class:{}]中Map类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
             }
 
             IFieldRegistration keyRegistration = typeToRegistration(clazz, types[0]);
