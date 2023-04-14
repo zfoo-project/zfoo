@@ -26,26 +26,28 @@ public enum AttachmentType {
      */
     SIGNAL_PACKET((byte) 0, SignalAttachment.class),
 
+    SIGNAL_ONLY_PACKET((byte) 1, SignalOnlyAttachment.class),
+
     /**
      * gateway attachment
      */
-    GATEWAY_PACKET((byte) 1, GatewayAttachment.class),
+    GATEWAY_PACKET((byte) 2, GatewayAttachment.class),
 
     /**
      * udp attachment
      */
-    UDP_PACKET((byte) 2, UdpAttachment.class),
+    UDP_PACKET((byte) 3, UdpAttachment.class),
 
 
     /**
      * http attachment
      */
-    HTTP_PACKET((byte) 3, HttpAttachment.class),
+    HTTP_PACKET((byte) 4, HttpAttachment.class),
 
     /**
      * not used attachment
      */
-    NO_ANSWER_PACKET((byte) 4, NoAnswerAttachment.class),
+    NO_ANSWER_PACKET((byte) 5, NoAnswerAttachment.class),
 
 
     ;

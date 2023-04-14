@@ -71,7 +71,10 @@ public class SignalAttachment implements IAttachment {
         return AttachmentType.SIGNAL_PACKET;
     }
 
-    @Override
+    /**
+     * EN:Used to determine which thread the message is processed on
+     * CN:用来确定这条消息在哪一个线程处理
+     */
     public int taskExecutorHash() {
         return taskExecutorHash;
     }

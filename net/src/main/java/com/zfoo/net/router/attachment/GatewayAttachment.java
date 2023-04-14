@@ -21,7 +21,7 @@ import org.springframework.lang.Nullable;
  */
 public class GatewayAttachment implements IAttachment {
 
-    public static final short PROTOCOL_ID = 1;
+    public static final short PROTOCOL_ID = 2;
 
     /**
      * session id
@@ -73,7 +73,10 @@ public class GatewayAttachment implements IAttachment {
         return AttachmentType.GATEWAY_PACKET;
     }
 
-    @Override
+    /**
+     * EN:Used to determine which thread the message is processed on
+     * CN:用来确定这条消息在哪一个线程处理
+     */
     public int taskExecutorHash() {
         return useTaskExecutorHashParam ? taskExecutorHashParam : (int) uid;
     }

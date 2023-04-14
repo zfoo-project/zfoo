@@ -22,10 +22,4 @@ public interface IAttachment extends IPacket {
 
     AttachmentType packetType();
 
-    /**
-     * EN:Used to determine which thread the message is processed on
-     * CN:用来确定这条消息在哪一个线程处理
-     */
-    int taskExecutorHash();
-
 }

@@ -20,7 +20,7 @@ package com.zfoo.net.router.attachment;
  */
 public class NoAnswerAttachment implements IAttachment {
 
-    public static final short PROTOCOL_ID = 4;
+    public static final short PROTOCOL_ID = 5;
 
     private int taskExecutorHash;
 
@@ -33,11 +33,6 @@ public class NoAnswerAttachment implements IAttachment {
     @Override
     public AttachmentType packetType() {
         return AttachmentType.NO_ANSWER_PACKET;
-    }
-
-    @Override
-    public int taskExecutorHash() {
-        return taskExecutorHash;
     }
 
     @Override

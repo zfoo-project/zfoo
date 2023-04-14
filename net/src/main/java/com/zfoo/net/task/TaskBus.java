@@ -15,6 +15,11 @@ package com.zfoo.net.task;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
+import com.zfoo.net.router.attachment.GatewayAttachment;
+import com.zfoo.net.router.attachment.HttpAttachment;
+import com.zfoo.net.router.attachment.IAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -114,17 +119,39 @@ public final class TaskBus {
      */
     public static void dispatch(PacketReceiverTask task) {
         var attachment = task.getAttachment();
-
         if (attachment == null) {
-            var session = task.getSession();
-            var uid = session.getUid();
-            if (uid > 0) {
-                execute((int) uid, task);
-            } else {
-                execute((int) session.getSid(), task);
-            }
+            dispatchBySession(task.getSession(), task);
         } else {
-            execute(attachment.taskExecutorHash(), task);
+            dispatchByAttachment(attachment, task);
+        }
+    }
+
+    private static void dispatchBySession(Session session, PacketReceiverTask task) {
+        var uid = session.getUid();
+        if (uid > 0) {
+            execute((int) uid, task);
+        } else {
+            execute((int) session.getSid(), task);
+        }
+    }
+
+    private static void dispatchByAttachment(IAttachment attachment, PacketReceiverTask task) {
+        switch (attachment.packetType()) {
+            case SIGNAL_PACKET:
+                execute(((SignalAttachment) attachment).taskExecutorHash(), task);
+                break;
+            case GATEWAY_PACKET:
+                execute(((GatewayAttachment) attachment).taskExecutorHash(), task);
+                break;
+            case HTTP_PACKET:
+                execute(((HttpAttachment) attachment).taskExecutorHash(), task);
+                break;
+            case SIGNAL_ONLY_PACKET:
+            case NO_ANSWER_PACKET:
+            case UDP_PACKET:
+                dispatchBySession(task.getSession(), task);
+                break;
+            default:
         }
     }
 
