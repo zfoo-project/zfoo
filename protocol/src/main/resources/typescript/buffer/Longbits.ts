@@ -50,12 +50,12 @@ class Longbits {
   /**
    * Constructs new long bits from the specified number.
    */
-  static from(value) {
+  static from(value: any) {
     if (typeof value === 'number') {
-      return Longbits.fromNumber(value);
+      return Longbits.fromNumber(value as number);
     }
     if (typeof value === 'string' || value instanceof String) {
-      value = Long.fromString(value);
+      value = Long.fromString(value as string);
     }
     return value.low || value.high ? new Longbits(value.low >>> 0, value.high >>> 0) : zero;
   }
@@ -63,7 +63,7 @@ class Longbits {
   /**
    * Constructs new long bits from the specified number.
    */
-  static fromNumber(value): Longbits {
+  static fromNumber(value: number): Longbits {
     if (value === 0) {
       return zero;
     }

@@ -691,11 +691,8 @@ export class Long {
     if ((numBits &= 63) === 0) {
       return this;
     } else if (numBits < 32) {
-      return Long.fromBits(
-        this.low << numBits,
-        (this.high << numBits) | (this.low >>> (32 - numBits)),
-        this.unsigned
-      );
+      const lowNum: number = this.low << numBits;
+      return Long.fromBits(lowNum, (this.high << numBits) | (this.low >>> (32 - numBits)), this.unsigned);
     } else {
       return Long.fromBits(0, this.low << (numBits - 32), this.unsigned);
     }
