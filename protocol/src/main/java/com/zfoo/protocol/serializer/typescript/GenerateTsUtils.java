@@ -137,7 +137,7 @@ public abstract class GenerateTsUtils {
 
     private static String importSubProtocol(ProtocolRegistration registration) {
         var protocolId = registration.getId();
-        var subProtocols = ProtocolAnalysis.getAllSubProtocolIds(protocolId);
+        var subProtocols = ProtocolAnalysis.getFirstSubProtocolIds(protocolId);
 
         if (CollectionUtils.isEmpty(subProtocols)) {
             return StringUtils.EMPTY;

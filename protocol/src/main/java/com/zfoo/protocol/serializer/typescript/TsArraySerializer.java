@@ -33,8 +33,8 @@ public class TsArraySerializer implements ITsSerializer {
 
     @Override
     public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        var type = StringUtils.format(": Array<{}> | null", GenerateTsUtils.toTsClassName(field.getType().getComponentType().getSimpleName()));
-        return new Triple<>(type, field.getName(), "null");
+        var type = StringUtils.format(": Array<{}>", GenerateTsUtils.toTsClassName(field.getType().getComponentType().getSimpleName()));
+        return new Triple<>(type, field.getName(), "[]");
     }
 
     @Override

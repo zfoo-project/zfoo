@@ -484,6 +484,13 @@ public class ProtocolAnalysis {
     /**
      * 此方法仅在生成协议的时候调用，一旦运行，不能调用
      */
+    public static Set<Short> getFirstSubProtocolIds(short protocolId) {
+        return subProtocolIdMap.get(protocolId);
+    }
+
+    /**
+     * 此方法仅在生成协议的时候调用，一旦运行，不能调用
+     */
     public static Set<Short> getAllSubProtocolIds(short protocolId) {
         AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，初始化完成过后不能调用getAllSubProtocolIds", ProtocolAnalysis.class.getSimpleName());
 

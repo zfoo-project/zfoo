@@ -33,8 +33,8 @@ public class TsListSerializer implements ITsSerializer {
 
     @Override
     public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        var type = StringUtils.format(": {} | null", GenerateTsUtils.toTsClassName(field.getGenericType().toString()));
-        return new Triple<>(type, field.getName(), "null");
+        var type = StringUtils.format(": {}", GenerateTsUtils.toTsClassName(field.getGenericType().toString()));
+        return new Triple<>(type, field.getName(), "[]");
     }
 
     @Override
