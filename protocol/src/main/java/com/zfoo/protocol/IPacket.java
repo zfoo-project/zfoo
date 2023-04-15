@@ -16,10 +16,10 @@ package com.zfoo.protocol;
 /**
  * 所有协议类都必须实现这个接口，协议类必须是简单的javabean，不能继承任何其它的类，但是可以继承接口
  * <p>
- * 为了防止代码里Object满天飞，避免协议层和po层混用对象造成一些潜在的并发问题，zfoo强制要求协议类必须实现IPacket接口
- * <p>
  * 现在IPacket的接口只是一个标识接口，继承IPacket的设计主要是为了让代码更优雅，容易理解一点，改为只继承Object也并没有很大工作量
  * 继承IPacket的设计还有跨语言层面上的考虑，极大的简化了实现其它语言的序列化和反序列化难度，统一了其它语言的代码实现
+ * <p>
+ * 为了防止代码里Object满天飞，避免协议层和po层混用对象造成一些潜在的并发问题，zfoo强制要求协议类必须实现IPacket接口
  *
  * @author godotg
  * @version 3.0
@@ -37,11 +37,4 @@ public interface IPacket {
         return ProtocolManager.protocolId(this.getClass());
     }
 
-    /**
-     * 协议是否需要验证session中的uid只对网关服有效
-     * @return true 需要验证
-     */
-    default boolean verificationUid() {
-        return true;
-    }
 }
