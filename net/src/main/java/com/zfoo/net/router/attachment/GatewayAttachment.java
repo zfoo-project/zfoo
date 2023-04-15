@@ -13,7 +13,6 @@
 package com.zfoo.net.router.attachment;
 
 import com.zfoo.net.session.Session;
-import org.springframework.lang.Nullable;
 
 /**
  * @author godotg
@@ -50,16 +49,16 @@ public class GatewayAttachment implements IAttachment {
      * CN:客户端发到网关的可能是一个带有同步或者异步的附加包，网关转发的时候需要把这个附加包给带上
      */
     private SignalAttachment signalAttachment;
+    private SignalOnlyAttachment signalOnlyAttachment;
 
 
     public GatewayAttachment() {
     }
 
-    public GatewayAttachment(Session session, @Nullable SignalAttachment signalAttachment) {
+    public GatewayAttachment(Session session) {
         this.client = true;
         this.sid = session.getSid();
         this.uid = session.getUid();
-        this.signalAttachment = signalAttachment;
     }
 
     public GatewayAttachment(long sid, long uid) {
@@ -89,6 +88,31 @@ public class GatewayAttachment implements IAttachment {
     public void wrapTaskExecutorHash(Object argument) {
         this.useTaskExecutorHashParam = true;
         this.taskExecutorHashParam = argument.hashCode();
+    }
+
+    public void wrapAttachment(IAttachment attachment) {
+        if (attachment == null) {
+            return;
+        }
+        switch (attachment.packetType()) {
+            case SIGNAL_ONLY_PACKET:
+                signalOnlyAttachment = (SignalOnlyAttachment) attachment;
+                break;
+            case SIGNAL_PACKET:
+                signalAttachment = (SignalAttachment) attachment;
+                break;
+            default:
+        }
+    }
+
+    public IAttachment attachment() {
+        if (signalAttachment != null) {
+            return signalAttachment;
+        }
+        if (signalOnlyAttachment != null) {
+            return signalOnlyAttachment;
+        }
+        return null;
     }
 
     public long getSid() {
@@ -138,5 +162,13 @@ public class GatewayAttachment implements IAttachment {
 
     public void setSignalAttachment(SignalAttachment signalAttachment) {
         this.signalAttachment = signalAttachment;
+    }
+
+    public SignalOnlyAttachment getSignalOnlyAttachment() {
+        return signalOnlyAttachment;
+    }
+
+    public void setSignalOnlyAttachment(SignalOnlyAttachment signalOnlyAttachment) {
+        this.signalOnlyAttachment = signalOnlyAttachment;
     }
 }

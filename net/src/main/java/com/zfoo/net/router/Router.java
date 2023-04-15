@@ -125,10 +125,10 @@ public class Router implements IRouter {
                                 gatewaySession.setUid(uid);
                                 EventBus.post(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
 
-                                NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession, null));
+                                NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession));
                                 return;
                             }
-                            send(gatewaySession, packet, signalAttachmentInGatewayAttachment);
+                            send(gatewaySession, packet, gatewayAttachment.attachment());
                         } else {
                             logger.error("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
                         }
