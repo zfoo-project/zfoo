@@ -70,4 +70,8 @@ public class SingleCache<V> {
         return cache;
     }
 
+    public void set(V value) {
+        cache = value;
+    }
+
 }
