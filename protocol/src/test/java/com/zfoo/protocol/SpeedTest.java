@@ -56,19 +56,20 @@ public class SpeedTest {
     @Ignore
     @Test
     public void singleThreadBenchmarks() {
-        if (benchmark <= 0 || benchmark >= 10_0000_0000) {
-            return;
+        while (true) {
+            if (benchmark > 160_0000) {
+                return;
+            }
+            System.out.println(StringUtils.MULTIPLE_HYPHENS);
+            System.out.println(StringUtils.format("[单线程性能测试-->[benchmark:{}]]", benchmark));
+
+            zfooTest();
+            protobufTest();
+            kryoTest();
+
+            // 递归执行，多跑几遍
+            benchmark = benchmark * 2;
         }
-        System.out.println(StringUtils.MULTIPLE_HYPHENS);
-        System.out.println(StringUtils.format("[单线程性能测试-->[benchmark:{}]]", benchmark));
-
-        zfooTest();
-        protobufTest();
-        kryoTest();
-
-        // 递归执行，多跑几遍
-        benchmark = benchmark * 2;
-        singleThreadBenchmarks();
     }
 
     /**
@@ -77,18 +78,20 @@ public class SpeedTest {
     @Ignore
     @Test
     public void multipleThreadBenchmarks() throws InterruptedException {
-        if (benchmark <= 0 || benchmark >= 10_0000_0000) {
-            return;
+        while (true) {
+            if (benchmark > 160_0000) {
+                return;
+            }
+            System.out.println(StringUtils.MULTIPLE_HYPHENS);
+            System.out.println(StringUtils.format("[多线程性能测试-->[benchmark:{}]]", benchmark));
+
+            zfooMultipleThreadTest();
+            protobufMultipleThreadTest();
+            kryoMultipleThreadTest();
+
+            benchmark = benchmark * 2;
+            multipleThreadBenchmarks();
         }
-        System.out.println(StringUtils.MULTIPLE_HYPHENS);
-        System.out.println(StringUtils.format("[多线程性能测试-->[benchmark:{}]]", benchmark));
-
-        zfooMultipleThreadTest();
-        protobufMultipleThreadTest();
-        kryoMultipleThreadTest();
-
-        benchmark = benchmark * 2;
-        multipleThreadBenchmarks();
     }
 
     @Ignore
