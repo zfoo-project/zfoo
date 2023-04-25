@@ -13,7 +13,6 @@
 
 package com.zfoo.net.router.route;
 
-import com.zfoo.event.model.event.IEvent;
 import com.zfoo.net.packet.PacketService;
 import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.attachment.HttpAttachment;
@@ -83,7 +82,7 @@ public abstract class PacketBus {
 
             AssertionUtils.isTrue(paramClazzs.length != 3 || IAttachment.class.isAssignableFrom(paramClazzs[2]), "[class:{}] [method:{}],the third parameter must be IAttachment type parameter Exception.", bean.getClass().getName(), method.getName());
 
-            var packetClazz = (Class<? extends IEvent>) paramClazzs[1];
+            var packetClazz = paramClazzs[1];
             var attachmentClazz = paramClazzs.length == 3 ? paramClazzs[2] : null;
             var packetName = packetClazz.getCanonicalName();
             var methodName = method.getName();
