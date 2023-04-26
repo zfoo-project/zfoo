@@ -37,11 +37,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
     private short id;
     private byte module;
     private Constructor<?> constructor;
-
-    private Object receiver;
-
     private Field[] fields;
-
 
     /**
      * 所有的协议里的发送顺序都是按字段名称排序
@@ -65,11 +61,6 @@ public class ProtocolRegistration implements IProtocolRegistration {
     @Override
     public Constructor<?> protocolConstructor() {
         return constructor;
-    }
-
-    @Override
-    public Object receiver() {
-        return receiver;
     }
 
 

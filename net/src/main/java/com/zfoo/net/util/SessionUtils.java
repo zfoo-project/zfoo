@@ -30,6 +30,7 @@ public abstract class SessionUtils {
 
     private static final String CHANNEL_SIMPLE_INFO_TEMPLATE = "[sid:{}][uid:{}]";
 
+    private static final String CHANNEL_TEMPLATE = "[channel:{}]";
 
     public static boolean isActive(Session session) {
         return session != null && session.getChannel().isActive();
@@ -47,7 +48,7 @@ public abstract class SessionUtils {
     public static String sessionInfo(ChannelHandlerContext ctx) {
         var session = SessionUtils.getSession(ctx);
         if (session == null) {
-            return StringUtils.format(CHANNEL_INFO_TEMPLATE, ctx.channel());
+            return StringUtils.format(CHANNEL_TEMPLATE, ctx.channel());
         }
         return sessionInfo(session);
     }
@@ -70,7 +71,7 @@ public abstract class SessionUtils {
     public static String sessionSimpleInfo(ChannelHandlerContext ctx) {
         var session = SessionUtils.getSession(ctx);
         if (session == null) {
-            return StringUtils.format(CHANNEL_SIMPLE_INFO_TEMPLATE, ctx.channel());
+            return StringUtils.format(CHANNEL_TEMPLATE, ctx.channel());
         }
         return sessionSimpleInfo(session);
     }

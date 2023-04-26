@@ -30,6 +30,7 @@ import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import io.netty.util.collection.ShortObjectHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,16 +47,18 @@ public abstract class PacketBus {
 
     private static final Logger logger = LoggerFactory.getLogger(PacketBus.class);
 
+    private static final ShortObjectHashMap<IPacketReceiver> receiverMap = new ShortObjectHashMap<>();
+
     /**
      * The routing of the message
      */
     public static void route(Session session, IPacket packet, IAttachment attachment) {
-        var packetReceiver = (IPacketReceiver) ProtocolManager.getProtocol(packet.protocolId()).receiver();
-        if (packetReceiver == null) {
+        var receiver = receiverMap.get(packet.protocolId());
+        if (receiver == null) {
             var name = packet.getClass().getSimpleName();
             throw new RuntimeException(StringUtils.format("no any packetReceiver:[at{}] found for this packet:[{}] or no GatewayAttachment sent back if this server is gateway", name, name));
         }
-        packetReceiver.invoke(session, packet, attachment);
+        receiver.invoke(session, packet, attachment);
     }
 
 
@@ -112,15 +115,11 @@ public abstract class PacketBus {
             }
 
             try {
-                var protocolRegistration = ProtocolManager.getProtocol(protocolId);
-                AssertionUtils.isNull(protocolRegistration.receiver(), "duplicate protocol registration, @PacketReceiver [class:{}] is repeatedly received [at{}]", packetClazz.getSimpleName(), packetClazz.getSimpleName());
+                AssertionUtils.isNull(receiverMap.get(protocolId), "duplicate protocol registration, @PacketReceiver [class:{}] is repeatedly received [at{}]", packetClazz.getSimpleName(), packetClazz.getSimpleName());
 
                 var receiverDefinition = new PacketReceiverDefinition(bean, method, packetClazz, attachmentClazz);
                 var enhanceReceiverDefinition = EnhanceUtils.createPacketReceiver(receiverDefinition);
-
-                var receiverField = ReflectionUtils.getFieldByNameInPOJOClass(protocolRegistration.getClass(), "receiver");
-                ReflectionUtils.makeAccessible(receiverField);
-                ReflectionUtils.setField(receiverField, protocolRegistration, enhanceReceiverDefinition);
+                receiverMap.put(protocolId, enhanceReceiverDefinition);
             } catch (Throwable t) {
                 throw new RunException("Registration protocol [class:{}] unknown exception", packetClazz.getSimpleName(), t);
             }
