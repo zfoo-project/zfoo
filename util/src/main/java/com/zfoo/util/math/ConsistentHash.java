@@ -15,7 +15,10 @@ package com.zfoo.util.math;
 
 import com.zfoo.protocol.model.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.TreeMap;
 
 /**
  * 带虚拟节点的一致性Hash算法，参考：http://www.zsythink.net/archives/1182
@@ -69,5 +72,7 @@ public class ConsistentHash<K, V> {
         return entry.getValue();
     }
 
-
+    public TreeMap<Integer, Pair<K, V>> getVirtualNodeTreeMap() {
+        return virtualNodeTreeMap;
+    }
 }
