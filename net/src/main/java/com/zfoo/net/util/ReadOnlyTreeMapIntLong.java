@@ -59,6 +59,11 @@ public class ReadOnlyTreeMapIntLong {
         return values[index];
     }
 
+    /**
+     * 在一个从小到大的升序数组中，使用二分查找算法搜索给定的key
+     * @param key 需要搜索的值
+     * @return 返回搜索到值的数组下标索引，如果没有查找到返回-1
+     */
     public int indexOf(int key) {
         var low = 0;
         var high = keys.length - 1;
@@ -75,6 +80,12 @@ public class ReadOnlyTreeMapIntLong {
         return -1;
     }
 
+    /**
+     * Gets the index of entry corresponding to the specified key;
+     * if no such entry exists, returns the index of entry for the least key greater than the specified key;
+     * if no such entry exists, returns 0.
+     * if no such entry exists, returns -1.
+     */
     public int indexOfCeilingKey(int key) {
         if (ArrayUtils.isEmpty(keys)) {
             return -1;
