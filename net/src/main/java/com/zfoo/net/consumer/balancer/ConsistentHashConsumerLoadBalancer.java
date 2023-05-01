@@ -80,18 +80,18 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
         }
 
         var module = ProtocolManager.moduleByProtocolId(packet.protocolId());
-        var treeMap = consistentHashMap.get(module.getId());
-        if (treeMap == null) {
-            treeMap = updateModuleToConsistentHash(module);
+        var fastTreeMap = consistentHashMap.get(module.getId());
+        if (fastTreeMap == null) {
+            fastTreeMap = updateModuleToConsistentHash(module);
         }
-        if (treeMap == null) {
+        if (fastTreeMap == null) {
             throw new RunException("ConsistentHashLoadBalancer [protocolId:{}][argument:{}], no service provides the [module:{}]", packet.protocolId(), argument, module);
         }
-        var index = treeMap.indexOfNearestCeilingKey(argument.hashCode());
-        if (index < 0) {
+        var nearestIndex = fastTreeMap.indexOfNearestCeilingKey(argument.hashCode());
+        if (nearestIndex < 0) {
             throw new RunException("no service provides the [module:{}]", packet.protocolId(), argument, module);
         }
-        var sid = treeMap.getByIndex(index);
+        var sid = fastTreeMap.getByIndex(nearestIndex);
         var session = NetContext.getSessionManager().getClientSession(sid);
         if (session == null) {
             throw new RunException("unknown no service provides the [module:{}]", packet.protocolId(), argument, module);
@@ -117,6 +117,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
         for (var entry : virtualNodeTreeMap.entrySet()) {
             virtualTreeMap.put(entry.getKey(), entry.getValue().getValue());
         }
+        // 使用更高性能的tree map
         var fastTreeMap = new FastTreeMapIntLong(virtualTreeMap);
         consistentHashMap.set(module.getId(), fastTreeMap);
         return fastTreeMap;
