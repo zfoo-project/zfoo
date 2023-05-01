@@ -29,9 +29,6 @@ public class Message implements IPacket {
     @Ignore
     public static final short PROTOCOL_ID = 100;
 
-    public static final Message SUCCESS = valueSuccess(null);
-    public static final Message FAIL = valueFail(null);
-
     private byte module;
 
     /**
@@ -61,7 +58,7 @@ public class Message implements IPacket {
         return Message.valueOf(packet, code, null);
     }
 
-    public static Message valueFail(String message) {
+    public static Message valueError(String message) {
         var mess = new Message();
         mess.code = 0;
         mess.message = message;
@@ -71,6 +68,20 @@ public class Message implements IPacket {
     public static Message valueSuccess(String message) {
         var mess = new Message();
         mess.code = 1;
+        mess.message = message;
+        return mess;
+    }
+
+    public static Message valueInfo(String message) {
+        var mess = new Message();
+        mess.code = 2;
+        mess.message = message;
+        return mess;
+    }
+
+    public static Message valueWarning(String message) {
+        var mess = new Message();
+        mess.code = 3;
         mess.message = message;
         return mess;
     }
