@@ -21,12 +21,12 @@ import java.util.TreeMap;
 /**
  * @author godotg
  */
-public class ReadOnlyTreeMapIntLong {
+public class FastTreeMapIntLong {
 
     private int[] keys;
     private long[] values;
 
-    public ReadOnlyTreeMapIntLong(TreeMap<Integer, Long> treeMap) {
+    public FastTreeMapIntLong(TreeMap<Integer, Long> treeMap) {
         var size = treeMap.size();
         keys = new int[size];
         values = new long[size];
@@ -86,7 +86,7 @@ public class ReadOnlyTreeMapIntLong {
      * if no such entry exists, returns 0.
      * if no such entry exists, returns -1.
      */
-    public int indexOfCeilingKey(int key) {
+    public int indexOfNearestCeilingKey(int key) {
         if (ArrayUtils.isEmpty(keys)) {
             return -1;
         }
@@ -128,7 +128,7 @@ public class ReadOnlyTreeMapIntLong {
     }
 
     public long getValueByCeilingKey(int key) {
-        var index = indexOfCeilingKey(key);
+        var index = indexOfNearestCeilingKey(key);
         if (index < 0) {
             throw new NoSuchElementException();
         }

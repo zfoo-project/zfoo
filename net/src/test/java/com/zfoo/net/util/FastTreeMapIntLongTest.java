@@ -20,7 +20,7 @@ import java.util.TreeMap;
 /**
  * @author godotg
  */
-public class ReadOnlyTreeMapIntLongTest {
+public class FastTreeMapIntLongTest {
 
     @Test
     public void test() {
@@ -29,7 +29,7 @@ public class ReadOnlyTreeMapIntLongTest {
             treeMap.put(i, (long) i);
         }
 
-        var fastTreeMap = new ReadOnlyTreeMapIntLong(treeMap);
+        var fastTreeMap = new FastTreeMapIntLong(treeMap);
         Assert.assertEquals(fastTreeMap.get(0), 0);
         Assert.assertEquals(fastTreeMap.get(8), 8);
         Assert.assertEquals(fastTreeMap.get(98), 98);
@@ -44,9 +44,9 @@ public class ReadOnlyTreeMapIntLongTest {
         Assert.assertEquals(fastTreeMap.getValueByCeilingKey(45), 46);
         Assert.assertEquals(fastTreeMap.getValueByCeilingKey(97), 98);
         Assert.assertEquals(fastTreeMap.getValueByCeilingKey(100), 0);
-        Assert.assertEquals(fastTreeMap.indexOfCeilingKey(-1), 0);
-        Assert.assertEquals(fastTreeMap.indexOfCeilingKey(0), 0);
-        Assert.assertEquals(fastTreeMap.indexOfCeilingKey(1), 1);
+        Assert.assertEquals(fastTreeMap.indexOfNearestCeilingKey(-1), 0);
+        Assert.assertEquals(fastTreeMap.indexOfNearestCeilingKey(0), 0);
+        Assert.assertEquals(fastTreeMap.indexOfNearestCeilingKey(1), 1);
     }
 
 }

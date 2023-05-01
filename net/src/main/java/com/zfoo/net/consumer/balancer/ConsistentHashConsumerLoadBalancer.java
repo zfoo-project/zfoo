@@ -15,7 +15,7 @@ package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.session.Session;
-import com.zfoo.net.util.ReadOnlyTreeMapIntLong;
+import com.zfoo.net.util.FastTreeMapIntLong;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
@@ -42,7 +42,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
     public static final ConsistentHashConsumerLoadBalancer INSTANCE = new ConsistentHashConsumerLoadBalancer();
 
     private volatile int lastClientSessionChangeId = 0;
-    private static final AtomicReferenceArray<ReadOnlyTreeMapIntLong> consistentHashMap = new AtomicReferenceArray<>(ProtocolManager.MAX_MODULE_NUM);
+    private static final AtomicReferenceArray<FastTreeMapIntLong> consistentHashMap = new AtomicReferenceArray<>(ProtocolManager.MAX_MODULE_NUM);
     private static final int VIRTUAL_NODE_NUMS = 200;
 
     private ConsistentHashConsumerLoadBalancer() {
@@ -87,7 +87,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
         if (treeMap == null) {
             throw new RunException("ConsistentHashLoadBalancer [protocolId:{}][argument:{}], no service provides the [module:{}]", packet.protocolId(), argument, module);
         }
-        var index = treeMap.indexOfCeilingKey(argument.hashCode());
+        var index = treeMap.indexOfNearestCeilingKey(argument.hashCode());
         if (index < 0) {
             throw new RunException("no service provides the [module:{}]", packet.protocolId(), argument, module);
         }
@@ -101,7 +101,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
 
 
     @Nullable
-    private ReadOnlyTreeMapIntLong updateModuleToConsistentHash(ProtocolModule module) {
+    private FastTreeMapIntLong updateModuleToConsistentHash(ProtocolModule module) {
         var sessionStringList = getSessionsByModule(module).stream()
                 .map(session -> new Pair<>(session.getConsumerAttribute().toString(), session.getSid()))
                 .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
@@ -117,9 +117,9 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
         for (var entry : virtualNodeTreeMap.entrySet()) {
             virtualTreeMap.put(entry.getKey(), entry.getValue().getValue());
         }
-        var treeMap = new ReadOnlyTreeMapIntLong(virtualTreeMap);
-        consistentHashMap.set(module.getId(), treeMap);
-        return treeMap;
+        var fastTreeMap = new FastTreeMapIntLong(virtualTreeMap);
+        consistentHashMap.set(module.getId(), fastTreeMap);
+        return fastTreeMap;
     }
 
 }
