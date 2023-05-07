@@ -21,6 +21,7 @@ import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.net.*;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -100,6 +101,18 @@ public class NetUtils {
 
     public static boolean isValidAddress(String address) {
         return IPV4.matcher(address).matches() || IPV6.matcher(address).matches();
+    }
+
+    // 同时支持ipv4和ipv6
+    public static long ipToLong(String ip) {
+        try {
+            var inetAddress = InetAddress.getByName(ip);
+            var ipAddress = inetAddress.getAddress();
+            var ipBigInt = new BigInteger(1, ipAddress);
+            return ipBigInt.longValue();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
