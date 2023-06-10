@@ -13,6 +13,7 @@
 
 package com.zfoo.util.net;
 
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -21,7 +22,6 @@ import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigInteger;
 import java.net.*;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -105,14 +105,39 @@ public class NetUtils {
 
     // 同时支持ipv4和ipv6
     public static long ipToLong(String ip) {
-        try {
-            var inetAddress = InetAddress.getByName(ip);
-            var ipAddress = inetAddress.getAddress();
-            var ipBigInt = new BigInteger(1, ipAddress);
-            return ipBigInt.longValue();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        var splits = ip.split(StringUtils.PERIOD_REGEX);
+        var longs = new long[splits.length];
+        for (var i = 0; i < splits.length; i++) {
+            var b = Long.parseLong(splits[i]);
+            longs[i] = b;
         }
+        var longList = ArrayUtils.toList(longs);
+        Collections.reverse(longList);
+        longs = ArrayUtils.longToArray(longList);
+
+        var value = 0L;
+        for (var i = 0; i < longs.length; i++) {
+            var b = longs[i];
+            var shift = i * 8;
+            value = value | (b << shift);
+        }
+        return value;
+    }
+
+    public static String longToIp(long ipLong) {
+        var longs = new long[8];
+        for (var i = 0; i < longs.length; i++) {
+            var shift = i * 8;
+            var mask = 0xFFL << shift;
+            longs[i] = (ipLong & mask) >> shift;
+        }
+        var longList = ArrayUtils.toList(longs);
+        Collections.reverse(longList);
+        var ip = StringUtils.joinWith(".", longList.toArray());
+        if (ip.startsWith("0.0.0.0.")) {
+            return StringUtils.substringAfterLast(ip, "0.0.0.0.");
+        }
+        return ip;
     }
 
     /**
