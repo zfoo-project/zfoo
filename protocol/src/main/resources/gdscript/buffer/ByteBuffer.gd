@@ -469,7 +469,7 @@ func writeIntLongMap(map):
 	else:
 		writeInt(map.size())
 		for key in map:
-			writeInt(map)
+			writeInt(key)
 			writeLong(map[key])
 			
 func readIntLongMap():
