@@ -40,6 +40,14 @@ public abstract class ClassUtils {
         return getDefaultClassLoader().getResource(filePath).openStream();
     }
 
+    public static String getFileFromClassPathToString(String filePath) {
+        try {
+            return StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath(filePath)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 获取编译过后的类文件(*.class)的绝对路径
      *
