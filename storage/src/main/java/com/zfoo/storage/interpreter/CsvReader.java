@@ -90,7 +90,7 @@ public abstract class CsvReader {
         try {
             return CSVFormat.EXCEL.parse(new InputStreamReader(input));
         } catch (IOException e) {
-            throw new RunException("Static resource [{}] is abnormal, and the file cannot be read", fileName);
+            throw new RunException("Static csv resource [{}] is abnormal, and the file cannot be read", fileName);
         }
     }
 }

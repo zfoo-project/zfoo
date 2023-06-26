@@ -105,7 +105,7 @@ public abstract class ExcelReader {
         try {
             return WorkbookFactory.create(input);
         } catch (IOException e) {
-            throw new RunException("Static resource [{}] is abnormal, and the file cannot be read", fileName, e);
+            throw new RunException("Static excel resource [{}] is abnormal, and the file cannot be read", fileName, e);
         }
     }
 }
