@@ -86,6 +86,14 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 
 ---
 
+#### orm为什么不选择Spring的官方驱动SpringData mongodb
+
+- SpringData mongodb 里面会生成一个class字段，比较占内存，而且你移动class类的时候体验不友好，不知道现在版本改了没有
+- mongodb的官方驱动轻量，mongodb的官方驱动基本上什么功能都有，SpringData mongodb这个封装太重了
+- zfoo的orm接近0封装，简单的封装可以极大提高上层的自由度
+
+---
+
 #### 前端h5的后台管理界面使用的技术栈
 
 - 基础框架使用的，vue 2.6，https://cn.vuejs.org/
@@ -95,11 +103,10 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 
 ---
 
-#### orm为什么不选择Spring的官方驱动SpringData mongodb
+#### 手摸手的视频教程可以帮助新手起步
 
-- SpringData mongodb 里面会生成一个class字段，比较占内存，而且你移动class类的时候体验不友好，不知道现在版本改了没有
-- mongodb的官方驱动轻量，mongodb的官方驱动基本上什么功能都有，SpringData mongodb这个封装太重了
-- zfoo的orm接近0封装，简单的封装可以极大提高上层的自由度
+- 新手起步困难的话，直接看手把手的[zfoo 框架视频教程](./doc/video-tutorial.md)，新手友好，先从简单的基础使用开始，然后再深入到底层核心代码运行
 
 ---
+
 

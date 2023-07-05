@@ -48,10 +48,7 @@ Perfect work development process, complete online solution
 - [FAQ](./doc/FAQ.md)，There are standard demo display and instructions in the test folder of each project directory,
   which can be run directly
 
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》，novice friendly,
-  difficulty 2 stars
-    - Quick star, tank game entry [tank.zfoo.net](http://tank.zfoo.net)
-    - Quick star, tank background management [tank-admin.zfoo.net](http://tank-admin.zfoo.net)
+- [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》，novice friendly, difficulty 2 stars
 
 - [godot-bird](https://github.com/zfoo-project/godot-bird) bird and bird，powered by godot
 
