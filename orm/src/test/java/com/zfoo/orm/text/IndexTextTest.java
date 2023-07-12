@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.accessor;
+package com.zfoo.orm.text;
 
 import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
