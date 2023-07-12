@@ -61,8 +61,8 @@ mongotop        # 读写监控工具
 - 把MongoDB下载到/usr/local目录下，在/usr/local下新建文件夹MongoDB
 
 ```
-tar -zxvf mongodb-linux-x86_64-enterprise-rhel70-4.2.0.tgz -C /usr/local
-rename /usr/local/mongodb-linux-x86_64-enterprise-rhel70-4.2.0 mongodb /usr/local/mongodb-linux-x86_64-enterprise-rhel70-4.2.0
+tar -zxvf mongodb-linux-x86_64-ubuntu2204-6.0.6.tgz -C /usr/local
+mv mongodb-linux-x86_64-ubuntu2204-6.0.6 mongodb
 vim /usr/local/mongodb/mongodb.config # 创建自定义配置文件，解压的mongodb安装包没有默认的配置文件
 ```
 
@@ -85,7 +85,7 @@ storage:
 # 生产环境需要设置ip：bind_ip=127.0.0.1,本机ip
 net:
   bindIp: 0.0.0.0
-  port: 22400
+  port: 27017
   maxIncomingConnections: 900
 processManagement:
   fork: true
@@ -138,7 +138,21 @@ mongod: error while loading shared libraries: libnetsnmpmibs.so.31: cannot open 
 如果启动看到上面这个错误，则是缺少net-snmp安装包，yum install net-snmp
 ```
 
-- mongo -port 22400 # 使用mongo客户端链接MongoDB
+- mongosh -port 22400 # 使用mongo客户端链接MongoDB
+```
+dpkg -i mongodb-mongosh_1.10.1_amd64.deb
+mongodb客户端命令行和服务器分开了，需要安装mongosh工具
+```
+
+- vim /etc/security/limits.conf 数据库需要大的文件句柄，保存并退出编辑器，重新启动机器使配置生效
+```
+* soft nofile 65536
+* hard nofile 65536
+root soft nofile 65536
+root hard nofile 65536
+
+# * 表示所有用户 
+```
 
 ### 2.关闭MongoDB服务
 
@@ -159,7 +173,7 @@ db.shutdownServer()
 - 方式三：如果MongoDB注册为service，可以使用服务的命令关闭
 
 ```
-systemctl stop mongodb
+systemctl stop mongod
 ```
 
 - 修复未正常关闭MongoDB，导致无法启动
@@ -172,8 +186,8 @@ systemctl stop mongodb
 
 ### 3.将MongoDB设置为开机自动启动
 
-- vim /usr/lib/systemd/system/mongodb.service，创建启动脚本，systemctl是最新的启动命令，避免用service
-- chmod 754 /usr/lib/systemd/system/mongodb.service，赋予启动脚本可执行的权限
+- vim /etc/systemd/system/mongod.service，创建启动脚本，systemctl是最新的启动命令，避免用service
+- chmod 754 /etc/systemd/system/mongod.service，赋予启动脚本可执行的权限
 
 ```bash
 [Unit]
@@ -185,6 +199,7 @@ After=network.target
 [Service]
 #定义Service的运行类型，一般是forking(后台运行) 
 Type=forking
+LimitNOFILE=65536
 
 ExecStart=/usr/local/mongodb/bin/mongod --config /usr/local/mongodb/mongodb.config
 ExecReload=
@@ -196,9 +211,9 @@ WantedBy=multi-user.target
 ```
 
 - systemctl daemon-reload，重新加载服务
-- systemctl enable mongodb，会有一行反馈
-- systemctl status mongodb，注意看 -> enabled; vendor preset: disabled)
-- systemctl start mongodb
+- systemctl enable mongod，会有一行反馈
+- systemctl status mongod，注意看 -> enabled; vendor preset: disabled)
+- systemctl start mongod
 
 ### 4.安全和访问控制
 
@@ -236,7 +251,7 @@ db.revokeRolesFromUser( "test", [{ role: "readWrite", db: "reporting" }])   # �
 ```
 
 - 添加完成后，在配置文件中取消注释，#authorization
-- 再重启mongod服务：systemctl restart mongodb
+- 再重启mongod服务：systemctl restart mongod
 
 - 用户登录
 
