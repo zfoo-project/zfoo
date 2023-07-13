@@ -173,7 +173,7 @@ db.shutdownServer()
 - 方式三：如果MongoDB注册为service，可以使用服务的命令关闭
 
 ```
-systemctl stop mongod
+systemctl stop mongodb
 ```
 
 - 修复未正常关闭MongoDB，导致无法启动
@@ -186,8 +186,8 @@ systemctl stop mongod
 
 ### 3.将MongoDB设置为开机自动启动
 
-- vim /etc/systemd/system/mongod.service，创建启动脚本，systemctl是最新的启动命令，避免用service
-- chmod 754 /etc/systemd/system/mongod.service，赋予启动脚本可执行的权限
+- vim /etc/systemd/system/mongodb.service，创建启动脚本，systemctl是最新的启动命令，避免用service
+- chmod 754 /etc/systemd/system/mongodb.service，赋予启动脚本可执行的权限
 
 ```bash
 [Unit]
@@ -211,9 +211,9 @@ WantedBy=multi-user.target
 ```
 
 - systemctl daemon-reload，重新加载服务
-- systemctl enable mongod，会有一行反馈
-- systemctl status mongod，注意看 -> enabled; vendor preset: disabled)
-- systemctl start mongod
+- systemctl enable mongodb，会有一行反馈
+- systemctl status mongodb，注意看 -> enabled; vendor preset: disabled)
+- systemctl start mongodb
 
 ### 4.安全和访问控制
 
@@ -251,7 +251,7 @@ db.revokeRolesFromUser( "test", [{ role: "readWrite", db: "reporting" }])   # �
 ```
 
 - 添加完成后，在配置文件中取消注释，#authorization
-- 再重启mongod服务：systemctl restart mongod
+- 再重启mongod服务：systemctl restart mongodb
 
 - 用户登录
 
