@@ -23,6 +23,7 @@ import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
+import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
@@ -166,7 +167,16 @@ public abstract class GenerateGdUtils {
             }
             var fieldType = gdSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
             // 生成类型的注释
-            gdBuilder.append(StringUtils.format("var {}: {}", fieldName, fieldType)).append(LS);
+            gdBuilder.append(StringUtils.format("var {}: {}", fieldName, fieldType));
+            if (fieldRegistration instanceof MapField) {
+                var mapField = (MapField) fieldRegistration;
+                var mapKeyRegistration = mapField.getMapKeyRegistration();
+                var keyType = gdSerializer(mapKeyRegistration.serializer()).fieldType(field, mapKeyRegistration);
+                var mapValueRegistration = mapField.getMapValueRegistration();
+                var valueType = gdSerializer(mapValueRegistration.serializer()).fieldType(field, mapValueRegistration);
+                gdBuilder.append(StringUtils.format(" # Dictionary<{}, {}>", keyType, valueType));
+            }
+            gdBuilder.append(LS);
         }
         return gdBuilder.toString();
     }
