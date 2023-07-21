@@ -14,10 +14,7 @@
 package com.zfoo.net.router.route;
 
 import com.zfoo.net.packet.PacketService;
-import com.zfoo.net.router.attachment.GatewayAttachment;
-import com.zfoo.net.router.attachment.HttpAttachment;
-import com.zfoo.net.router.attachment.IAttachment;
-import com.zfoo.net.router.attachment.UdpAttachment;
+import com.zfoo.net.router.attachment.*;
 import com.zfoo.net.router.receiver.EnhanceUtils;
 import com.zfoo.net.router.receiver.IPacketReceiver;
 import com.zfoo.net.router.receiver.PacketReceiver;
@@ -101,7 +98,8 @@ public abstract class PacketBus {
             // If the request class name ends with Ask, then attachment cannot be a Gateway Attachment
             if (attachmentClazz != null) {
                 if (packetName.endsWith(PacketService.NET_REQUEST_SUFFIX)) {
-                    AssertionUtils.isTrue(attachmentClazz.equals(GatewayAttachment.class) || attachmentClazz.equals(UdpAttachment.class) || attachmentClazz.equals(HttpAttachment.class), "[class:{}] [method:{}] [packet:{}] must use [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayAttachment.class.getCanonicalName());
+                    AssertionUtils.isTrue(!attachmentClazz.equals(SignalAttachment.class), "[class:{}] [method:{}] [packet:{}] must use [attachment:{}]!"
+                            , bean.getClass().getName(), methodName, packetName, GatewayAttachment.class.getCanonicalName());
                 } else if (packetName.endsWith(PacketService.NET_ASK_SUFFIX)) {
                     AssertionUtils.isTrue(!attachmentClazz.equals(GatewayAttachment.class), "[class:{}] [method:{}] [packet:{}] can not match with [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayAttachment.class.getCanonicalName());
                 }
