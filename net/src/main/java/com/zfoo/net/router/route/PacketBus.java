@@ -94,8 +94,9 @@ public abstract class PacketBus {
             var expectedMethodName = StringUtils.format("at{}", packetClazz.getSimpleName());
             AssertionUtils.isTrue(methodName.equals(expectedMethodName), "[class:{}] [method:{}] [packet:{}] expects '{}' as method name!", bean.getClass().getName(), methodName, packetName, expectedMethodName);
 
-            // If the request class name ends with Request, then the attachment should be a Gateway Attachment
-            // If the request class name ends with Ask, then attachment cannot be a Gateway Attachment
+            // These rules are not necessary, but can reduce us from making low-level mistakes
+            // If the request class name ends with Request which is for outer net client, then the attachment can not be a SignalAttachment
+            // If the request class name ends with Ask which is for intranet client, then attachment can not be a GatewayAttachment
             if (attachmentClazz != null) {
                 if (packetName.endsWith(PacketService.NET_REQUEST_SUFFIX)) {
                     AssertionUtils.isTrue(!attachmentClazz.equals(SignalAttachment.class), "[class:{}] [method:{}] [packet:{}] must use [attachment:{}]!"
