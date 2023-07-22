@@ -647,15 +647,15 @@ db.setProfilingLevel(1)
 - mongodump导出数据库中全部的内容，使用-q参数增加查询条件，注意-q参数值的标点符号，否则会报错 too many positional arguments
 
 ```
-mongodump --port 22400 -u "root" -p "123456" --authenticationDatabase "admin" -d test -o /home
-mongodump --port 22400 -u "root" -p "123456" --authenticationDatabase "admin" -d test -c user -q "{name:'joe'}" -o /home
+mongodump --uri mongodb://localhost:27017/robot --username=root --password=123456 --authenticationDatabase=admin -d test -o /home
+mongodump --uri mongodb://localhost:27017/robot -u "root" -p "123456" --authenticationDatabase=admin -d test -c user -q "{name:'joe'}" -o /home
 ```
 
 - mongorestore使用的数据文件就是mongodump备份的数据文件
 
 ```
 # 使用/home路径下的BSON和JSON文件恢复数据库test，--drop参数表示如果已经存在test数据库则删除原数据库，去掉--drop则与原数据库合并
-mongorestore --port 22400 -u "root" -p "123456" --authenticationDatabase "admin" -d test /home/test --drop
+mongorestore --uri mongodb://localhost:27017/robot -u "root" -p "123456" --authenticationDatabase=admin /home/test --drop
 ```
 
 ### 2).表的备份和恢复
@@ -663,26 +663,25 @@ mongorestore --port 22400 -u "root" -p "123456" --authenticationDatabase "admin"
 - 导出json格式的备份文件，从test数据库中student集合到/home/test.json文件中
 
 ```
-mongoexport --port 22400 -u "root" -p "123456" --authenticationDatabase "admin" -d test -c student -o /home/test.json
-mongoexport --port 22400 -u "root" -p "123456" --authenticationDatabase "admin" -d test -c student -q "{name: 'joe'}" -o /home/test.json
+mongoexport --uri mongodb://localhost:27017/test -u "root" -p "123456" --authenticationDatabase=admin --collection=student --type=json -o /home/student.json
 ```
 
 - 导出csv格式的备份文件
 
 ```
 # -f参数用于指定只导致id和name以及age字段，因为csv是表格类型的，所以对于内嵌文档太深的数据导出效果不是很好，所以一般来说会指定某些字段导出。
-mongoexport --port 22400 -u "root" -p "123456" --authenticationDatabase "admin" -d test -c student --csv -f _id,name,age -o /home/test.csv
+mongoexport --uri mongodb://localhost:27017/test -u "root" -p "123456" --authenticationDatabase=admin --collection=student --type=csv -fields="_id,name,age" -o /home/student.csv
 ```
 
 - json格式导入，使用备份文件/home/test.json导入数据到test数据库的student集合中
 
 ```
 # --upsert表示更新现有数据，如果不使用—upsert则导入时已经存在的文档会报_id重复，数据不再插入。也可以使用--drop删除原数据。
-mongoimport --port 22400 -u "root" -p "123456" --authenticationDatabase "admin" -d test -c student /home/test.json --upsert
+mongoimport --uri mongodb://localhost:27017/test -u "root" -p "123456" -authenticationDatabase=admin --collection=student --type=json /home/test.json --upsert
 ```
 
 - csv格式导入，--headerline指明不导入第一行,csv格式的文件第一行为列名
 
 ```
-mongoimport --port 22400 -u "root" -p "123456" --authenticationDatabase "admin" -d test -c student --type csv --headerline --file /home/test.csv
+mongoimport --uri mongodb://localhost:27017/test -u "root" -p "123456" -authenticationDatabase=admin --collection=student --type=csv --headerline --file /home/test.csv
 ```
