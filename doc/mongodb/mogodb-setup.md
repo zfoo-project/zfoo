@@ -38,21 +38,10 @@ mongostat       # 状态监控工具
 mongotop        # 读写监控工具   
 ```
 
-### 2. studio 3t安装（MongoDB可视化工具），收费
+### 2. Navicat for MongoDB
 
-- 可视化工具直接默认安装即可
-- 3t的补丁
+- 客户端自行下载
 
-```
-每次开机重启脚本重置试用时间，即可重新获得使用权Studio 3T，重置studio 3t的试用时间解决无法使用的问题，并非永久破解。
-1. 将批处理文件studio3t.bat剪贴或复制到如下路径：
-	C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
-2. 双击重置时间
-```
-
-### 3. MongoDB Compass
-
-- 官方工具，免费，推荐使用
 
 ## Linux
 

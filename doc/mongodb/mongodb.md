@@ -660,6 +660,11 @@ mongorestore --uri mongodb://localhost:27017/robot -u "root" -p "123456" --authe
 
 ### 2).表的备份和恢复
 
+- 官网下载 MongoDB Database Tools Download
+  - windows下直接拷贝bin可执行文件到MongoDB的安装目录下的bin
+  - Linux下直接拷贝bin下的文件到MongoDB的安装目录下的bin，并且修改可执行权限
+
+
 - 导出json格式的备份文件，从test数据库中student集合到/home/test.json文件中
 
 ```
