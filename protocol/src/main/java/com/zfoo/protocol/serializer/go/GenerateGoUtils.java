@@ -200,7 +200,7 @@ public abstract class GenerateGoUtils {
 
     public static String toGoClassName(String typeName) {
         typeName = typeName.replaceAll("java.util.|java.lang.", StringUtils.EMPTY);
-        typeName = typeName.replaceAll("com\\.[a-zA-Z0-9_.]*\\.", StringUtils.EMPTY);
+        typeName = typeName.replaceAll("[a-zA-Z0-9_.]*\\.", StringUtils.EMPTY);
 
         // CSharp不适用基础类型的泛型，会影响性能
         switch (typeName) {
