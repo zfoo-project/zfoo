@@ -265,7 +265,7 @@ function start() {
 
     # -XX:+AlwaysPreTouch，并置零内存页面，可能令得启动时慢上一点，但后面访问时会更流畅，比如页面会连续分配
     # 输出到文件  >> output.log 2>&1 &
-    nohup java -Dspring.profiles.active=pro -XX:InitialHeapSize=1g -XX:MaxHeapSize=1g -XX:AutoBoxCacheMax=20000 -XX:+UseStringDeduplication -XX:+HeapDumpOnOutOfMemoryError -Djdk.attach.allowAttachSelf=true -Dfile.encoding=UTF-8 -jar ${jarPath} >/dev/null 2>&1 &
+    nohup java -Dspring.profiles.active=pro -XX:InitialHeapSize=1g -XX:MaxHeapSize=1g -XX:AutoBoxCacheMax=20000 -XX:+UseStringDeduplication -XX:+HeapDumpOnOutOfMemoryError -Djdk.attach.allowAttachSelf=true -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8 -jar ${jarPath} >/dev/null 2>&1 &
 
     # If there is no info log, keep waiting
     waitInfoLog
