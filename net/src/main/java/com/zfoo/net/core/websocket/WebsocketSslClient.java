@@ -17,6 +17,7 @@ import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
+import com.zfoo.net.handler.idle.ClientIdleHandler;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.socket.SocketChannel;
@@ -31,6 +32,7 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
@@ -58,7 +60,9 @@ public class WebsocketSslClient extends AbstractClient<SocketChannel> {
     protected void initChannel(SocketChannel channel) throws URISyntaxException, NoSuchAlgorithmException {
         SSLEngine sslEngine = SSLContext.getDefault().createSSLEngine();
         sslEngine.setUseClientMode(true);
-        channel.pipeline().addLast( new SslHandler(sslEngine));
+        channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
+        channel.pipeline().addLast(new ClientIdleHandler());
+        channel.pipeline().addLast(new SslHandler(sslEngine));
         channel.pipeline().addLast(new HttpClientCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
         channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
         channel.pipeline().addLast(new WebSocketClientProtocolHandler(webSocketClientProtocolConfig));
