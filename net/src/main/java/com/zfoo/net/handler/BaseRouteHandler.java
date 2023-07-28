@@ -62,11 +62,8 @@ public abstract class BaseRouteHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        try {
-            logger.error("session exception caught {}", SessionUtils.sessionSimpleInfo(ctx), cause);
-        } finally {
-            ctx.close();
-        }
+        logger.error("{} session force close for exception", SessionUtils.sessionSimpleInfo(ctx), cause);
+        ctx.close();
     }
 
 }
