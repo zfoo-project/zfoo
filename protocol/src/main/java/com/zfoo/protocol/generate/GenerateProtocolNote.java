@@ -64,25 +64,7 @@ public abstract class GenerateProtocolNote {
             return StringUtils.EMPTY;
         }
 
-        switch (language) {
-            case Cpp:
-            case Go:
-            case JavaScript:
-            case TypeScript:
-            case CSharp:
-            case Protobuf:
-                classNote = StringUtils.format("// {}", classNote);
-                break;
-            case Lua:
-                classNote = StringUtils.format("-- {}", classNote);
-                break;
-            case GdScript:
-                classNote = StringUtils.format("# {}", classNote);
-                break;
-            case Enhance:
-            default:
-                throw new RunException("无法识别的枚举类型[{}]", language);
-        }
+        classNote = formatNote(language, classNote);
         return classNote;
     }
 
@@ -93,6 +75,11 @@ public abstract class GenerateProtocolNote {
         if (StringUtils.isBlank(fieldNote)) {
             return StringUtils.EMPTY;
         }
+        fieldNote = formatNote(language, fieldNote);
+        return fieldNote;
+    }
+
+    private static String formatNote(CodeLanguage language, String fieldNote) {
         switch (language) {
             case Cpp:
             case Go:
@@ -100,13 +87,13 @@ public abstract class GenerateProtocolNote {
             case TypeScript:
             case CSharp:
             case Protobuf:
-                fieldNote = StringUtils.format("// {}", fieldNote);
+                fieldNote = StringUtils.format("// {}", fieldNote).replace("\n", "\n// ");
                 break;
             case Lua:
-                fieldNote = StringUtils.format("-- {}", fieldNote);
+                fieldNote = StringUtils.format("-- {}", fieldNote).replace("\n", "\n-- ");
                 break;
             case GdScript:
-                fieldNote = StringUtils.format("# {}", fieldNote);
+                fieldNote = StringUtils.format("# {}", fieldNote).replace("\n", "\n# ");
                 break;
             case Enhance:
             default:
