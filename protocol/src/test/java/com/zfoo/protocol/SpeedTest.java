@@ -24,6 +24,11 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.*;
 import com.zfoo.protocol.util.StringUtils;
+import io.fury.Fury;
+import io.fury.Language;
+import io.fury.ThreadLocalFury;
+import io.fury.ThreadSafeFury;
+import io.fury.memory.MemoryBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
@@ -64,6 +69,7 @@ public class SpeedTest {
             System.out.println(StringUtils.format("[单线程性能测试-->[benchmark:{}]]", benchmark));
 
             zfooTest();
+            furyTest();
             protobufTest();
             kryoTest();
 
@@ -86,6 +92,7 @@ public class SpeedTest {
             System.out.println(StringUtils.format("[多线程性能测试-->[benchmark:{}]]", benchmark));
 
             zfooMultipleThreadTest();
+            furyMultipleThreadTest();
             protobufMultipleThreadTest();
             kryoMultipleThreadTest();
 
@@ -136,6 +143,43 @@ public class SpeedTest {
         }
 
         System.out.println(StringUtils.format("[zfoo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+    }
+
+    @Ignore
+    @Test
+    public void furyTest() {
+        var buffer = MemoryBuffer.newHeapBuffer(1_0000);
+        // 序列化和反序列化简单对象
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < benchmark; i++) {
+            buffer.writerIndex(0);
+            buffer.readerIndex(0);
+            fury.serialize(buffer, simpleObject);
+            var obj = fury.deserialize(buffer);
+        }
+
+        System.out.println(StringUtils.format("[fury]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+
+        // 序列化和反序列化常规对象
+        startTime = System.currentTimeMillis();
+        for (int i = 0; i < benchmark; i++) {
+            buffer.writerIndex(0);
+            buffer.readerIndex(0);
+            fury.serialize(buffer, normalObject);
+            var obj = fury.deserialize(buffer);
+        }
+
+        System.out.println(StringUtils.format("[fury]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+
+        // 序列化和反序列化复杂对象
+        startTime = System.currentTimeMillis();
+        for (int i = 0; i < benchmark; i++) {
+            buffer.writerIndex(0);
+            buffer.readerIndex(0);
+            fury.serialize(buffer, complexObject);
+            var obj = fury.deserialize(buffer);
+        }
+        System.out.println(StringUtils.format("[fury]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
     }
 
     @Ignore
@@ -243,6 +287,19 @@ public class SpeedTest {
 
     @Ignore
     @Test
+    public void furyMultipleThreadTest() throws InterruptedException {
+        var countdown = new CountDownLatch(threadNum);
+        for (var i = 0; i < threadNum; i++) {
+            executors[i].execute(() -> {
+                furyTest();
+                countdown.countDown();
+            });
+        }
+        countdown.await();
+    }
+
+    @Ignore
+    @Test
     public void kryoMultipleThreadTest() throws InterruptedException {
         var countdown = new CountDownLatch(threadNum);
         for (var i = 0; i < threadNum; i++) {
@@ -267,7 +324,7 @@ public class SpeedTest {
         countdown.await();
     }
 
-    public static final int threadNum = Runtime.getRuntime().availableProcessors() - 1;
+    public static final int threadNum = Runtime.getRuntime().availableProcessors() / 2;
     public static final ExecutorService[] executors = new ExecutorService[threadNum];
 
     // kryo协议注册
@@ -329,6 +386,22 @@ public class SpeedTest {
         for (int i = 0; i < executors.length; i++) {
             executors[i] = Executors.newSingleThreadExecutor();
         }
+    }
+
+    private static ThreadSafeFury fury;
+
+    static {
+        fury = new ThreadLocalFury(classLoader -> {
+            Fury f = Fury.builder().withLanguage(Language.JAVA)
+                    .build();
+            f.register(ComplexObject.class);
+            f.register(NormalObject.class);
+            f.register(SimpleObject.class);
+            f.register(VeryBigObject.class);
+            f.register(ObjectA.class);
+            f.register(ObjectB.class);
+            return f;
+        });
     }
 
     // -------------------------------------------以下为测试用例---------------------------------------------------------------
