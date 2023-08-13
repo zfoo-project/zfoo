@@ -61,7 +61,7 @@ public class SingleCache<V> {
             try {
                 if (now > refreshTime) {
                     refreshTime = now + refreshDuration;
-                    EventBus.asyncExecute(() -> cache = supplier.get());
+                    cache = supplier.get();
                 }
             } finally {
                 lock.unlock();
