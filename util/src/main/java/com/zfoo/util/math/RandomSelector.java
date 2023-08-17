@@ -16,6 +16,7 @@ package com.zfoo.util.math;
 import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -67,4 +68,7 @@ public class RandomSelector<T> {
         return resultList;
     }
 
+    public Collection<T> getAll() {
+        return elementMap.values();
+    }
 }
