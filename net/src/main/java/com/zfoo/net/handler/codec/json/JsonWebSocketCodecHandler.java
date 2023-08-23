@@ -44,7 +44,7 @@ public class JsonWebSocketCodecHandler extends MessageToMessageCodec<WebSocketFr
         var packetStr = jsonMap.get("packet");
         var attachmentStr = jsonMap.get("attachmentId");
         IAttachment attachment = null;
-        if (!StringUtils.isEmpty(attachmentStr)) {
+        if (StringUtils.isNotEmpty(attachmentStr)) {
             var attachmentId = Short.parseShort(attachmentStr);
             if (attachmentId >= 0) {
                 var attachmentClass = ProtocolManager.getProtocol(attachmentId).protocolConstructor().getDeclaringClass();
