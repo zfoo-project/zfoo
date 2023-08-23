@@ -37,8 +37,8 @@ public class ServerIdleHandler extends ChannelDuplexHandler {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.ALL_IDLE) {
                 logger.warn("channel is time out for close {}", SessionUtils.sessionSimpleInfo(ctx));
+                ctx.close();
             }
-            ctx.close();
         }
     }
 }
