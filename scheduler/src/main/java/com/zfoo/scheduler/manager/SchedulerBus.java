@@ -166,24 +166,24 @@ public abstract class SchedulerBus {
     /**
      * 不断执行的周期循环任务
      */
-    public static ScheduledFuture<?> scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
+    public static void scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
         if (SchedulerContext.isStop()) {
-            return null;
+            return;
         }
 
-        return executor.scheduleAtFixedRate(SafeRunnable.valueOf(runnable), 0, period, unit);
+        executor.scheduleAtFixedRate(SafeRunnable.valueOf(runnable), 0, period, unit);
     }
 
 
     /**
      * 固定延迟执行的任务
      */
-    public static ScheduledFuture<?> schedule(Runnable runnable, long delay, TimeUnit unit) {
+    public static void schedule(Runnable runnable, long delay, TimeUnit unit) {
         if (SchedulerContext.isStop()) {
-            return null;
+            return;
         }
 
-       return executor.schedule(SafeRunnable.valueOf(runnable), delay, unit);
+        executor.schedule(SafeRunnable.valueOf(runnable), delay, unit);
     }
 
     /**
@@ -194,7 +194,7 @@ public abstract class SchedulerBus {
             return;
         }
 
-        schedulerDefList.add(SchedulerDefinition.valueOf(cron, runnable));
+        registerScheduler(SchedulerDefinition.valueOf(cron, runnable));
     }
 
     public static Executor threadExecutor(long currentThreadId) {
