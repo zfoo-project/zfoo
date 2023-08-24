@@ -43,26 +43,11 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, WebSocketFrame webSocketFrame, List<Object> list) {
         ByteBuf in = webSocketFrame.content();
-
-        // 不够读一个int
-        if (in.readableBytes() <= PacketService.PACKET_HEAD_LENGTH) {
-            return;
-        }
-
-        in.markReaderIndex();
         var length = in.readInt();
-
         // 如果长度非法，则抛出异常断开连接，按照自己的使用场景指定合适的长度，防止客户端发送超大包占用带宽
         if (length < 0 || length > IOUtils.BYTES_PER_MB) {
             throw new IllegalArgumentException(StringUtils.format("illegal packet [length:{}]", length));
         }
-
-        // ByteBuf里的数据太小
-        if (in.readableBytes() < length) {
-            in.resetReaderIndex();
-            return;
-        }
-
         var sliceByteBuf = in.readSlice(length);
         var packetInfo = NetContext.getPacketService().read(sliceByteBuf);
         list.add(packetInfo);
@@ -71,7 +56,6 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
         var byteBuf = channelHandlerContext.alloc().ioBuffer();
-
         NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getAttachment());
         list.add(new BinaryWebSocketFrame(byteBuf));
     }
