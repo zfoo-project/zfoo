@@ -16,7 +16,7 @@ package com.zfoo.protocol.xml;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-@JsonPropertyOrder({"id", "location"})
+@JsonPropertyOrder({"id", "location", "enhance"})
 public class XmlProtocolDefinition {
 
     @JacksonXmlProperty(isAttribute = true, localName = "id")
@@ -25,12 +25,20 @@ public class XmlProtocolDefinition {
     @JacksonXmlProperty(isAttribute = true, localName = "location")
     private String location;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "enhance")
+    private boolean enhance = true;
+
+
     public short getId() {
         return id;
     }
 
     public String getLocation() {
         return location;
+    }
+
+    public boolean isEnhance() {
+        return enhance;
     }
 
 }

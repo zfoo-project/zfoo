@@ -213,7 +213,7 @@ public class ProtocolAnalysis {
                     var clazz = Class.forName(location);
                     var protocolId = ProtocolManager.protocolId(clazz);
                     var registration = parseProtocolRegistration(clazz, module);
-                    if (!clazz.isAnnotationPresent(NotEnhance.class)) {
+                    if (protocolDefinition.isEnhance()) {
                         enhanceList.add(registration);
                     }
                     // 注册协议
