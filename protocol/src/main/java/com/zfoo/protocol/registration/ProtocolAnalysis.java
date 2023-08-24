@@ -23,6 +23,7 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.anno.Compatible;
+import com.zfoo.protocol.registration.anno.NotEnhance;
 import com.zfoo.protocol.registration.anno.Protocol;
 import com.zfoo.protocol.registration.field.*;
 import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
@@ -41,6 +42,7 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.xml.XmlProtocols;
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
+import org.reflections.Reflections;
 
 import java.io.IOException;
 import java.lang.reflect.*;
@@ -165,6 +167,10 @@ public class ProtocolAnalysis {
     }
 
     public static synchronized void analyze(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
+        if (xmlProtocols.isPackages()) {
+            analyzePackage(xmlProtocols, generateOperation);
+            return;
+        }
         AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
         try {
             var enhanceList = new ArrayList<IProtocolRegistration>();
@@ -207,7 +213,7 @@ public class ProtocolAnalysis {
                     var clazz = Class.forName(location);
                     var protocolId = ProtocolManager.protocolId(clazz);
                     var registration = parseProtocolRegistration(clazz, module);
-                    if (protocolDefinition.isEnhance()) {
+                    if (!clazz.isAnnotationPresent(NotEnhance.class)) {
                         enhanceList.add(registration);
                     }
                     // 注册协议
@@ -218,6 +224,60 @@ public class ProtocolAnalysis {
         } catch (Exception e) {
             throw new UnknownException(e);
         }
+    }
+
+    public static void analyzePackage(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
+        AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
+        try {
+            var packageList = new HashSet<String>();
+            for (var moduleDefinition : xmlProtocols.getModules()) {
+                var module = new ProtocolModule(moduleDefinition.getId(), moduleDefinition.getName());
+
+                AssertionUtils.isTrue(module.getId() > 0, "[module:{}] [id:{}] 模块必须大于等于1", module.getName(), module.getId());
+                AssertionUtils.isNull(modules[module.getId()], "duplicate [module:{}] [id:{}] Exception!", module.getName(), module.getId());
+                AssertionUtils.notNull(moduleDefinition.getProtocols(), "[module:{}] does not have any protocols", module.getName());
+                modules[module.getId()] = module;
+
+                for (var protocolDefinition : moduleDefinition.getProtocols()) {
+                    packageList.add(protocolDefinition.getLocation());
+                }
+            }
+
+            // 获取所有IPack子类
+            var packetClazzList = scanClassList(packageList);
+            for (Class<?> clazz : packetClazzList) {
+                var protocolId = getProtocolIdAndCheckClass(clazz);
+                initProtocolClass(protocolId, clazz);
+            }
+
+            var enhanceList = new ArrayList<IProtocolRegistration>();
+            for (var moduleDefinition : xmlProtocols.getModules()) {
+                var module = modules[moduleDefinition.getId()];
+                for (Class<?> clazz : packetClazzList) {
+                    var protocolId = ProtocolManager.protocolId(clazz);
+                    if (protocolId < moduleDefinition.getMinId() || protocolId >= moduleDefinition.getMaxId()) {
+                        continue;
+                    }
+                    var registration = parseProtocolRegistration(clazz, module);
+                    if (!clazz.isAnnotationPresent(NotEnhance.class)) {
+                        enhanceList.add(registration);
+                    }
+                    // 注册协议
+                    protocols[protocolId] = registration;
+                }
+            }
+            enhance(generateOperation, enhanceList);
+        } catch (Exception e) {
+            throw new UnknownException(e);
+        }
+    }
+
+    public static Set<Class<? extends IPacket>> scanClassList(Set<String> packageList) {
+        //获取该路径下所有类
+        Reflections reflections = new Reflections(packageList);
+        //获取继承了IPacket的所有类
+        Set<Class<? extends IPacket>> classSet = reflections.getSubTypesOf(IPacket.class);
+        return classSet.stream().filter(k -> !k.isInterface()).collect(Collectors.toSet());
     }
 
     private static void enhance(GenerateOperation generateOperation, List<IProtocolRegistration> enhanceList) throws IOException, ClassNotFoundException, NotFoundException, CannotCompileException, NoSuchFieldException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {

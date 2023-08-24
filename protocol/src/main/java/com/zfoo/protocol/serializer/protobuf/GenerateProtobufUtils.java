@@ -14,8 +14,10 @@
 package com.zfoo.protocol.serializer.protobuf;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
+import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
@@ -32,10 +34,7 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
@@ -49,11 +48,12 @@ public abstract class GenerateProtobufUtils {
 
     private static String protocolOutputRootPath = "protos/";
     private static String protocolManagerName = "protocols";
+    public static final String NET_COMMON_MODULE = "common";
 
-    private static XmlProtobuf xmlProtobuf = null;
+    private static String protocolParam = null;
 
     public static String syntax() {
-        return StringUtils.format("syntax = {}{}{};", StringUtils.QUOTATION_MARK, xmlProtobuf.getSyntax(), StringUtils.QUOTATION_MARK);
+        return StringUtils.format("syntax = {}{}{};", StringUtils.QUOTATION_MARK, "proto3", StringUtils.QUOTATION_MARK);
     }
 
     public static String option(String optionKey, String optionValue) {
@@ -65,6 +65,9 @@ public abstract class GenerateProtobufUtils {
     }
 
     public static Map<String, String> parseParam(String param) {
+        if (StringUtils.isEmpty(param)) {
+            return Map.of();
+        }
         var params = param.trim().split(StringUtils.SEMICOLON_REGEX);
 
         if (ArrayUtils.isEmpty(params)) {
@@ -83,63 +86,22 @@ public abstract class GenerateProtobufUtils {
         protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
 
         var protocolParam = generateOperation.getProtocolParam();
-        if (StringUtils.isEmpty(protocolParam)) {
-            throw new RunException("生成protobuf协议的protocolParam参数不能为空");
-        }
 
-        var map = parseParam(protocolParam);
-
-        var protobufXmlPath = map.get("protobuf");
+        GenerateProtobufUtils.protocolParam = protocolParam;
 
         FileUtils.deleteFile(new File(protocolOutputRootPath));
         FileUtils.createDirectory(protocolOutputRootPath);
 
-        var inputStream = ClassUtils.getFileFromClassPath(protobufXmlPath);
-        var xmlProtobufObj = DomUtils.inputStream2Object(inputStream, XmlProtobuf.class);
-
-        if (!xmlProtobufObj.getSyntax().equals("proto3")) {
-            throw new RunException("生成protobuf协议只支持proto3");
-        }
-
-        var protoSet = new HashSet<String>();
-
-        for (var protos : xmlProtobufObj.getProtos()) {
-            if (protos.getName().equals(protocolManagerName)) {
-                throw new RunException("protobuf的协议文件名称不能用保留名称[{}]", protocolManagerName);
-            }
-
-            if (protoSet.contains(protos.getName())) {
-                throw new RunException("protobuf的协议文件名称重复定义[{}]", protos.getName());
-            }
-
-            protoSet.add(protos.getName());
-        }
-
-        xmlProtobuf = xmlProtobufObj;
     }
 
-    public static void createProtocolManager() throws ClassNotFoundException {
-        var allGenerateProtocols = new HashSet<IProtocolRegistration>();
-        for (var protos : xmlProtobuf.getProtos()) {
-            for (var protocol : protos.getProtocols()) {
-                var protocolClass = Class.forName(protocol.getLocation());
-                var protocolId = ProtocolManager.protocolId(protocolClass);
-                var protocolRegistration = ProtocolManager.getProtocol(protocolId);
-
-                if (allGenerateProtocols.contains(protocolRegistration)) {
-                    throw new RunException("protobuf的xml协议文件中重复定义了协议[{}]", protocolClass.getSimpleName());
-                }
-
-                allGenerateProtocols.add(protocolRegistration);
-            }
-        }
-
+    public static void createProtocolManager(List<IProtocolRegistration> allGenerateProtocols) {
         var builder = new StringBuilder();
         builder.append(syntax());
         builder.append(LS).append(LS);
 
-        if (StringUtils.isNotEmpty(xmlProtobuf.getOption())) {
-            var optionMap = parseParam(xmlProtobuf.getOption());
+        var protocolParam = GenerateProtobufUtils.protocolParam;
+        var optionMap = parseParam(protocolParam);
+        if (CollectionUtils.isNotEmpty(optionMap)) {
             for (var option : optionMap.entrySet()) {
                 builder.append(option(option.getKey(), option.getValue())).append(LS);
             }
@@ -162,36 +124,37 @@ public abstract class GenerateProtobufUtils {
         FileUtils.writeStringToFile(new File(protocolOutputPath), builder.toString(), true);
     }
 
-    public static void createProtocols() throws ClassNotFoundException {
-        for (var protos : xmlProtobuf.getProtos()) {
-
+    public static void createProtocols(List<IProtocolRegistration> allGenerateProtocols) {
+        var packageMap = new HashMap<String, List<IProtocolRegistration>>();
+        for (var protocolRegistration : allGenerateProtocols) {
+            var clazz = protocolRegistration.protocolConstructor().getDeclaringClass();
+            String packageName = clazz.getPackageName();
+            var packagList = packageMap.computeIfAbsent(packageName, k -> new ArrayList<>());
+            packagList.add(protocolRegistration);
+        }
+        for (var protos : packageMap.entrySet()) {
             var builder = new StringBuilder();
             builder.append(syntax());
             builder.append(LS).append(LS);
 
-            if (StringUtils.isNotEmpty(protos.getImportProto())) {
-                var params = protos.getImportProto().trim().split(StringUtils.SEMICOLON_REGEX);
-                for (var importProto : params) {
-                    if (StringUtils.isBlank(importProto)) {
-                        continue;
-                    }
-                    builder.append(importProto(importProto.trim())).append(LS);
-                }
-                builder.append(LS);
-            }
-
-            if (StringUtils.isNotEmpty(protos.getOption())) {
-                var optionMap = parseParam(protos.getOption());
+            var protocolParam = GenerateProtobufUtils.protocolParam;
+            var optionMap = parseParam(protocolParam);
+            if (CollectionUtils.isNotEmpty(optionMap)) {
                 for (var option : optionMap.entrySet()) {
                     builder.append(option(option.getKey(), option.getValue())).append(LS);
                 }
                 builder.append(LS);
             }
+            builder.append(importProto(NET_COMMON_MODULE)).append(LS);
+            builder.append(LS);
 
-            for (var protocol : protos.getProtocols()) {
-                var protocolClass = Class.forName(protocol.getLocation());
-                var protocolId = ProtocolManager.protocolId(protocolClass);
-                var protocolRegistration = ProtocolManager.getProtocol(protocolId);
+            for (var protocolRegistration : protos.getValue()) {
+                var protocolClass = protocolRegistration.protocolConstructor().getDeclaringClass();
+                var protocolId = protocolRegistration.protocolId();
+
+                if (!isProtobufProtocol((ProtocolRegistration) protocolRegistration)) {
+                    continue;
+                }
 
                 builder.append("// id = ").append(protocolId).append(LS);
 
@@ -205,9 +168,29 @@ public abstract class GenerateProtobufUtils {
                 builder.append("}").append(LS).append(LS);
             }
 
-            var protocolOutputPath = StringUtils.format("{}/{}.proto", protocolOutputRootPath, protos.getName());
+            String protoName = StringUtils.substringAfterLast(protos.getKey(), StringUtils.PERIOD);
+            var protocolOutputPath = StringUtils.format("{}/{}.proto", protocolOutputRootPath, protoName);
             FileUtils.writeStringToFile(new File(protocolOutputPath), builder.toString(), true);
         }
+    }
+
+    /**
+     * 判断是否是protobuf协议
+     * @param registration
+     * @return
+     */
+    private static boolean isProtobufProtocol(ProtocolRegistration registration) {
+        var protocolClass = registration.protocolConstructor().getDeclaringClass();
+        if (protocolClass.isAnnotationPresent(ProtobufClass.class)) {
+            return true;
+        }
+        var fields = registration.getFields();
+        for (var field : fields) {
+            if (!field.isAnnotationPresent(Protobuf.class)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -317,7 +300,7 @@ public abstract class GenerateProtobufUtils {
     public static void clear() {
         protocolOutputRootPath = null;
         protocolManagerName = null;
-        xmlProtobuf = null;
+        protocolParam = null;
     }
 
 }

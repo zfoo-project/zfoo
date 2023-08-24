@@ -175,8 +175,8 @@ public abstract class GenerateProtocolFile {
         // 生成Protobuf协议
         if (generateLanguages.contains(CodeLanguage.Protobuf)) {
             GenerateProtobufUtils.init(generateOperation);
-            GenerateProtobufUtils.createProtocolManager();
-            GenerateProtobufUtils.createProtocols();
+            GenerateProtobufUtils.createProtocolManager(allSortedGenerateProtocols);
+            GenerateProtobufUtils.createProtocols(allSortedGenerateProtocols);
         }
 
         // 预留参数，以后可能会用，比如给Lua修改一个后缀名称
