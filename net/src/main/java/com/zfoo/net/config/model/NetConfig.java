@@ -34,16 +34,9 @@ public class NetConfig {
     private String protocolParam;
 
     /**
-     * 是否生成对应语言的协议
+     * 生成协议列表
      */
-    private boolean javascriptProtocol;
-    private boolean typescriptProtocol;
-    private boolean csharpProtocol;
-    private boolean luaProtocol;
-    private boolean gdscriptProtocol;
-    private boolean cppProtocol;
-    private boolean goProtocol;
-    private boolean protobufProtocol;
+    private String protocolList;
 
     /**
      * 注册中心
@@ -110,30 +103,6 @@ public class NetConfig {
         this.protocolParam = protocolParam;
     }
 
-    public boolean isJavascriptProtocol() {
-        return javascriptProtocol;
-    }
-
-    public void setJavascriptProtocol(boolean javascriptProtocol) {
-        this.javascriptProtocol = javascriptProtocol;
-    }
-
-    public boolean isCsharpProtocol() {
-        return csharpProtocol;
-    }
-
-    public void setCsharpProtocol(boolean csharpProtocol) {
-        this.csharpProtocol = csharpProtocol;
-    }
-
-    public boolean isLuaProtocol() {
-        return luaProtocol;
-    }
-
-    public void setLuaProtocol(boolean luaProtocol) {
-        this.luaProtocol = luaProtocol;
-    }
-
     public RegistryConfig getRegistry() {
         return registry;
     }
@@ -166,44 +135,12 @@ public class NetConfig {
         this.consumer = consumer;
     }
 
-    public boolean isGdscriptProtocol() {
-        return gdscriptProtocol;
+    public String getProtocolList() {
+        return protocolList;
     }
 
-    public void setGdscriptProtocol(boolean gdscriptProtocol) {
-        this.gdscriptProtocol = gdscriptProtocol;
-    }
-
-    public boolean isProtobufProtocol() {
-        return protobufProtocol;
-    }
-
-    public void setProtobufProtocol(boolean protobufProtocol) {
-        this.protobufProtocol = protobufProtocol;
-    }
-
-    public boolean isCppProtocol() {
-        return cppProtocol;
-    }
-
-    public void setCppProtocol(boolean cppProtocol) {
-        this.cppProtocol = cppProtocol;
-    }
-
-    public boolean isTypescriptProtocol() {
-        return typescriptProtocol;
-    }
-
-    public void setTypescriptProtocol(boolean typescriptProtocol) {
-        this.typescriptProtocol = typescriptProtocol;
-    }
-
-    public boolean isGoProtocol() {
-        return goProtocol;
-    }
-
-    public void setGoProtocol(boolean goProtocol) {
-        this.goProtocol = goProtocol;
+    public void setProtocolList(String protocolList) {
+        this.protocolList = protocolList;
     }
 
     @Override

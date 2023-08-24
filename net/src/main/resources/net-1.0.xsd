@@ -65,15 +65,8 @@
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:string" use="required"/>
         <xsd:attribute name="protocol-location" type="xsd:string" use="required"/>
-        <xsd:attribute name="javascript-protocol" type="xsd:string" default="false"/>
-        <xsd:attribute name="typescript-protocol" type="xsd:string" default="false"/>
-        <xsd:attribute name="csharp-protocol" type="xsd:string" default="false"/>
-        <xsd:attribute name="lua-protocol" type="xsd:string" default="false"/>
-        <xsd:attribute name="gdscript-protocol" type="xsd:string" default="false"/>
-        <xsd:attribute name="cpp-protocol" type="xsd:string" default="false"/>
-        <xsd:attribute name="go-protocol" type="xsd:string" default="false"/>
-        <xsd:attribute name="protobuf-protocol" type="xsd:string" default="false"/>
         <xsd:attribute name="fold-protocol" type="xsd:string" default="false"/>
+        <xsd:attribute name="protocol-list" type="xsd:string" default="0"/>
         <xsd:attribute name="protocol-path" type="xsd:string"/>
         <xsd:attribute name="protocol-param" type="xsd:string"/>
     </xsd:complexType>

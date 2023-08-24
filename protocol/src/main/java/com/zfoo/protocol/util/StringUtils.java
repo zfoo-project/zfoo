@@ -79,6 +79,8 @@ public abstract class StringUtils {
 
     public static final String EMPTY_JSON = "{}";
 
+    public static final String SEMICOLON_COMMA = ";|,"; //分号或者逗号
+
     public static final String MULTIPLE_HYPHENS = "-----------------------------------------------------------------------";
 
 
@@ -482,5 +484,22 @@ public abstract class StringUtils {
         return Character.isWhitespace(ch) || STOP_WORD.contains(ch);
     }
 
+    /**
+     * 判断是否是数字
+     * @param str
+     * @return
+     */
+    public static boolean isNumeric(String str) {
+        if(str == null) {
+            return false;
+        }
+        int sz = str.length();
+        for(int i = 0; i < sz; i++) {
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

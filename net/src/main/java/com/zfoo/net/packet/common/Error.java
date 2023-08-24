@@ -14,6 +14,7 @@
 package com.zfoo.net.packet.common;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Ignore;
+import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
 import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
@@ -29,10 +30,11 @@ public class Error implements IPacket {
     @Ignore
     public static final short PROTOCOL_ID = 101;
 
+    @Protobuf(order = 1)
     private int module;
-
+    @Protobuf(order = 2)
     private int errorCode;
-
+    @Protobuf(order = 3)
     private String errorMessage;
 
     @Override

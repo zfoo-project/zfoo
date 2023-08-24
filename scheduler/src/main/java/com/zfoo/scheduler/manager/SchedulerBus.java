@@ -36,6 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class SchedulerBus {
 
+
     private static final Logger logger = LoggerFactory.getLogger(SchedulerBus.class);
 
     private static final List<SchedulerDefinition> schedulerDefList = new CopyOnWriteArrayList<>();
@@ -165,24 +166,24 @@ public abstract class SchedulerBus {
     /**
      * 不断执行的周期循环任务
      */
-    public static void scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
+    public static ScheduledFuture<?> scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
         if (SchedulerContext.isStop()) {
-            return;
+            return null;
         }
 
-        executor.scheduleAtFixedRate(SafeRunnable.valueOf(runnable), 0, period, unit);
+        return executor.scheduleAtFixedRate(SafeRunnable.valueOf(runnable), 0, period, unit);
     }
 
 
     /**
      * 固定延迟执行的任务
      */
-    public static void schedule(Runnable runnable, long delay, TimeUnit unit) {
+    public static ScheduledFuture<?> schedule(Runnable runnable, long delay, TimeUnit unit) {
         if (SchedulerContext.isStop()) {
-            return;
+            return null;
         }
 
-        executor.schedule(SafeRunnable.valueOf(runnable), delay, unit);
+       return executor.schedule(SafeRunnable.valueOf(runnable), delay, unit);
     }
 
     /**

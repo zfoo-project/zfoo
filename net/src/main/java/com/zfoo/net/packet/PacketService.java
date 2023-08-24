@@ -18,20 +18,25 @@ import com.zfoo.net.router.route.PacketBus;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.DomUtils;
+import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.xml.XmlProtocols;
 import io.netty.buffer.ByteBuf;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 /**
@@ -53,6 +58,7 @@ public class PacketService implements IPacketService {
      * 2. 服务器内部请求约定以Ask结尾，服务器内部的响应约定以Answer结尾
      * 3. 服务器主动通知客户端以Notice结尾
      * 4. 公共的协议放在common模块
+     * 5. 内部协议范围不允许使用
      */
     public static final String NET_REQUEST_SUFFIX = "Request";
     public static final String NET_RESPONSE_SUFFIX = "Response";
@@ -64,12 +70,15 @@ public class PacketService implements IPacketService {
 
 
     public static final String NET_COMMON_MODULE = "common";
+    /** 内网协议最大id */
+    public static final short MAN_NATIVE_PROTOCOL_ID = 100;
 
     private final Predicate<IProtocolRegistration> netGenerateProtocolFilter = registration
             -> ProtocolManager.moduleByModuleId(registration.module()).getName().matches(NET_COMMON_MODULE)
             || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_REQUEST_SUFFIX)
             || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_RESPONSE_SUFFIX)
-            || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_NOTICE_SUFFIX);
+            || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_NOTICE_SUFFIX)
+            || registration.protocolId() > MAN_NATIVE_PROTOCOL_ID;
 
     public PacketService() {
 
@@ -86,31 +95,16 @@ public class PacketService implements IPacketService {
         generateOperation.setFoldProtocol(netConfig.isFoldProtocol());
         generateOperation.setProtocolPath(netConfig.getProtocolPath());
         generateOperation.setProtocolParam(netConfig.getProtocolParam());
-        if (netConfig.isJavascriptProtocol()) {
-            generateOperation.getGenerateLanguages().add(CodeLanguage.JavaScript);
-        }
-        if (netConfig.isTypescriptProtocol()) {
-            generateOperation.getGenerateLanguages().add(CodeLanguage.TypeScript);
-        }
-        if (netConfig.isCsharpProtocol()) {
-            generateOperation.getGenerateLanguages().add(CodeLanguage.CSharp);
-        }
-        if (netConfig.isLuaProtocol()) {
-            generateOperation.getGenerateLanguages().add(CodeLanguage.Lua);
-        }
-        if (netConfig.isGdscriptProtocol()) {
-            generateOperation.getGenerateLanguages().add(CodeLanguage.GdScript);
-        }
-        if (netConfig.isCppProtocol()) {
-            generateOperation.getGenerateLanguages().add(CodeLanguage.Cpp);
-        }
-        if (netConfig.isGoProtocol()) {
-            generateOperation.getGenerateLanguages().add(CodeLanguage.Go);
-        }
-        if (netConfig.isProtobufProtocol()) {
-            generateOperation.getGenerateLanguages().add(CodeLanguage.Protobuf);
-        }
+        var protocolArr = StringUtils.tokenize(netConfig.getProtocolList(), StringUtils.SEMICOLON_COMMA);
 
+        for (var protocolCode : protocolArr) {
+            protocolCode = protocolCode.replaceAll(StringUtils.SPACE_REGEX, "");
+            var codeLanguage = getProtocolList(protocolCode);
+            if (CollectionUtils.isEmpty(codeLanguage)) {
+                continue;
+            }
+            generateOperation.getGenerateLanguages().addAll(codeLanguage);
+        }
         // 设置生成协议的过滤器
         GenerateProtocolFile.generateProtocolFilter = netGenerateProtocolFilter;
 
@@ -129,6 +123,28 @@ public class PacketService implements IPacketService {
         for (var bean : componentBeans.values()) {
             PacketBus.registerPacketReceiverDefinition(bean);
         }
+    }
+
+    /**
+     * 获取要生成协议列表
+     * @param protocolCode
+     * @return
+     */
+    private Set<CodeLanguage> getProtocolList(String protocolCode) {
+        var languageSet = new HashSet<CodeLanguage>();
+        boolean isNumeric = StringUtils.isNumeric(protocolCode);
+        for (var codeLanguage : CodeLanguage.values()) {
+            if (isNumeric) {
+                var protocolBit = Integer.valueOf(protocolCode);
+                if ((protocolBit & codeLanguage.id) != 0) {
+                    languageSet.add(codeLanguage);
+                }
+            } else if (codeLanguage.name().equalsIgnoreCase(protocolCode)) {
+                languageSet.add(codeLanguage);
+                break;
+            }
+        }
+        return languageSet;
     }
 
     @Override

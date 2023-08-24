@@ -14,5 +14,5 @@ public @interface Protocol {
     short id() default 0;
 
     String note() default "";
-
 }
+
