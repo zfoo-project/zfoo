@@ -105,7 +105,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         // 文件是否折叠
         resolvePlaceholder("fold-protocol", "foldProtocol", builder, element, parserContext);
         // 生成各种语言的协议列表
-        resolvePlaceholder("protocol-list", "protocolList", builder, element, parserContext);
+        resolvePlaceholder("code-languages", "codeLanguages", builder, element, parserContext);
 
         resolvePlaceholder("protocol-path", "protocolPath", builder, element, parserContext);
 

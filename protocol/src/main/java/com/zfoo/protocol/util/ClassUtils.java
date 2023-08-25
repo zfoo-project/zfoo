@@ -20,16 +20,284 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.net.*;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * @author godotg
  * @version 3.0
  */
 public abstract class ClassUtils {
+
+    public final static String CLASS_FILE_EXT = ".class";
+
+    public final static String FILE_PROTOCOL = "file";
+
+    public final static String FILE_URL_PREFIX = "file:";
+
+    public final static String JAR_PROTOCOL = "jar";
+
+    public final static String JAR_URL_SEPARATOR = "!/";
+
+    /**
+     * 扫描指定包下的class文件
+     *
+     * @param packageName 包名称（xxx.xxx）
+     * @return 返回指定包下的class全称集合
+     * @throws IOException 假如扫描失败，则抛出该异常
+     */
+    public static Set<String> getAllClasses(String packageName) throws IOException {
+        Set<String> classSet = new HashSet<>();
+        String packagePath = packageName.replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH);
+        Enumeration<URL> resourceUrls = getDefaultClassLoader().getResources(packagePath);
+        while (resourceUrls.hasMoreElements()) {
+            URL packageUrl = resourceUrls.nextElement();
+            // 如果是以文件的形式保存在服务器上
+            if (isFileProtocol(packageUrl)) {
+                // file类型的扫描
+                File file = getFile(packageUrl);
+                // 以文件的方式扫描整个包下的文件 并添加到集合中
+                findClassesInPackageByFile(packageName, file, classSet);
+            } else if (isJarProtocol(packageUrl)) {
+                findClassesInJarFile(packageName, packageUrl, classSet);
+            }
+        }
+        return classSet;
+    }
+
+    /**
+     * 扫描jar文件中的class
+     *
+     * @param packageName
+     *            包名称
+     * @param packageUrl
+     *            jar的url
+     * @param classSet
+     *            class全路径集合
+     * @throws IOException 假如解析出现io异常时，则抛出该异常
+     */
+    private static void findClassesInJarFile(String packageName, URL packageUrl,
+                                             Set<String> classSet) throws IOException {
+        URLConnection con = packageUrl.openConnection();
+        JarFile jarFile = null;
+        String jarFileUrl = "";
+        boolean closeJarFile = true;
+
+        if (con instanceof JarURLConnection) {
+            JarURLConnection jarCon = (JarURLConnection) con;
+            useCachesIfNecessary(jarCon);
+            jarFile = jarCon.getJarFile();
+            jarFileUrl = jarCon.getJarFileURL().toExternalForm();
+            closeJarFile = !jarCon.getUseCaches();
+        } else {
+            //不是JarURLConnection->需要依赖于URL文件解析。
+            //我们假设URL的格式为“jar:path!/entry”，只要遵循条目格式，协议就是任意的。
+            //我们还将处理带和不带前导“file:”前缀的路径。
+            String urlFile = packageUrl.getFile();
+            try {
+                int separatorIndex = urlFile.indexOf(JAR_URL_SEPARATOR);
+                if (separatorIndex != -1) {
+                    jarFileUrl = urlFile.substring(0, separatorIndex);
+                    jarFile = getJarFile(jarFileUrl);
+                } else {
+                    jarFile = new JarFile(urlFile);
+                    jarFileUrl = urlFile;
+                }
+                closeJarFile = true;
+            } catch (Exception ex) {
+                throw new RunException(ex);
+            }
+        }
+
+        if (jarFile == null) {
+            return;
+        }
+        try {
+            classSet.addAll(findByJarFile(packageName, jarFile));
+        } finally {
+            if (closeJarFile) {
+                jarFile.close();
+            }
+        }
+    }
+
+    /**
+     * 获取指定jar文件中所有class名称（包名+类名称）格式为xx.xx.yy
+     *
+     * @param jarFile jar文件
+     * @return class名称集合， 假如参数为null，返回大小为0的集合
+     */
+    public Set<String> findByJarFile(JarFile jarFile) {
+        return findByJarFile(StringUtils.EMPTY, jarFile);
+    }
+
+    /**
+     * 获取指定jar文件中所有class名称（包名+类名称） xx.xx.yy
+     *
+     * @param packageName 包名前缀xx.xx
+     * @param jarFile jar文件
+     * @return class名称集合， 假如参数为null，返回大小为0的集合
+     */
+    public static Set<String> findByJarFile(String packageName, JarFile jarFile) {
+        Set<String> classSet = new HashSet<>();
+        if (jarFile == null) {
+            return classSet;
+        }
+        String packageBasePath = packageName.replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH);
+        if (!"".equals(packageBasePath) && !packageBasePath.endsWith("/")) {
+            // 根条目路径必须以斜杠结束，以允许正确的匹配。匹配sunjre在这里不返回斜杠，但是beajrockit返回。
+            packageBasePath = packageBasePath + StringUtils.SLASH;
+        }
+        for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
+            JarEntry entry = entries.nextElement();
+            String entryPath = entry.getName();
+            if (entryPath.startsWith(packageBasePath)) {
+                int index = entryPath.indexOf(CLASS_FILE_EXT);
+                String relativePath = entryPath.substring(0, index);
+                String className = relativePath.replaceAll(StringUtils.SLASH, StringUtils.PERIOD);
+                classSet.add(className);
+            }
+        }
+        return classSet;
+    }
+
+    /**
+     * 将给定的jar文件URL解析为JarFile对象
+     *
+     * @param jarFileUrl
+     */
+    private static JarFile getJarFile(String jarFileUrl) throws IOException {
+        if (jarFileUrl.startsWith(FILE_URL_PREFIX)) {
+            try {
+                return new JarFile(toURI(jarFileUrl).getSchemeSpecificPart());
+            } catch (Exception ex) {
+                return new JarFile(jarFileUrl.substring(FILE_URL_PREFIX.length()));
+            }
+        } else {
+            return new JarFile(jarFileUrl);
+        }
+    }
+
+    /**
+     * 以文件的方式扫描整个包下的文件 并添加到集合中
+     *
+     * @param packageName
+     *            包名称
+     * @param dirOrFile
+     *            查找包对应的文件或文件夹
+     * @param classSet
+     *            class全路径集合
+     */
+    private static void findClassesInPackageByFile(String packageName, File dirOrFile,
+                                                   Set<String> classSet) {
+        // 如果不存在或者 也不是目录就直接返回
+        if (!dirOrFile.exists()) {
+            return;
+        }
+        if (!dirOrFile.isDirectory()) {
+            return;
+        }
+        // 如果存在 就获取包下的所有文件 包括目录
+        File[] dirFiles = dirOrFile.listFiles();
+        if (dirFiles == null) {
+            return;
+        }
+
+        // 循环所有文件
+        for (File file : dirFiles) {
+            String name = file.getName();
+            // 如果是目录 则继续扫描
+            if (file.isDirectory()) {
+                findClassesInPackageByFile(packageName + "." + name, file, classSet);
+            } else {
+                String filename = file.getName();
+                // 如果是java类文件 去掉后面的.class 只留下类名
+                String className = filename.substring(0, filename.length() - CLASS_FILE_EXT.length());
+                className = packageName + "." + className;
+                //去掉前缀“.”
+                if (className.startsWith(".")) {
+                    className = className.substring(1);
+                }
+                classSet.add(className);
+            }
+        }
+    }
+
+    public static File getFile(URL url) {
+        if (!FILE_PROTOCOL.equals(url.getProtocol())) {
+            throw new IllegalArgumentException("给定的URL无法解析为绝对文件路径: " + url);
+        }
+        try {
+            return new File(toURI(url).getSchemeSpecificPart());
+        } catch (Exception ex) {
+            return new File(url.getFile());
+        }
+    }
+
+    /**
+     * 用给定的URL创建URI
+     * 用“%20”编码替换URI的空格。
+     * @param url 要转换为URI实例的URL
+     * @return URI对象
+     * @see java.net.URL#toURI()
+     */
+    public static URI toURI(URL url) {
+        return toURI(url.toString());
+    }
+
+    /**
+     * 用给定的字符串创建URI
+     * 用“%20”编码替换URI的空格。
+     * @param location 要转换为URI实例的字符串
+     * @return URI对象
+     */
+    public static URI toURI(String location) {
+        try {
+            return new URI(location.replace(" ", "%20"));
+        } catch (URISyntaxException e) {
+            throw new RunException("uri配置错误");
+        }
+    }
+
+    /**
+     * 判断给定的URL是不是file协议
+     *
+     * @param url url
+     * @return 假如是file协议，返回true，否则返回false
+     */
+    public static boolean isFileProtocol(URL url){
+        if (url == null) {
+            return false;
+        }
+        return FILE_PROTOCOL.equals(url.getProtocol());
+    }
+
+    /**
+     * 判断给定的URL是不是Jar协议
+     *
+     * @param url url
+     * @return 假如是Jar协议，返回true，否则返回false
+     */
+    public static boolean isJarProtocol(URL url){
+        if (url == null) {
+            return false;
+        }
+        String protocol = url.getProtocol();
+        return JAR_PROTOCOL.equals(protocol);
+    }
+
+    /**
+     * 在给定的连接上设置“useCaches”标志，对于基于JNLP的资源，设置false，其他资源该标志保留原样
+     *
+     * @param urlConnection urlConnection
+     */
+    public static void useCachesIfNecessary(URLConnection urlConnection){
+        if (urlConnection != null) {
+            urlConnection.setUseCaches(urlConnection.getClass().getSimpleName().startsWith("JNLP"));
+        }
+    }
 
     /**
      * 从类路径中读取文件

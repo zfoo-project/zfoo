@@ -16,6 +16,7 @@ import com.zfoo.protocol.collection.ArrayUtils;
 
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -485,21 +486,14 @@ public abstract class StringUtils {
     }
 
     /**
-     * 判断是否是数字
+     * 判断是否是正数
      * @param str
      * @return
      */
     public static boolean isNumeric(String str) {
-        if(str == null) {
-            return false;
-        }
-        int sz = str.length();
-        for(int i = 0; i < sz; i++) {
-            if (!Character.isDigit(str.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        return isNum.matches();
     }
 
 }

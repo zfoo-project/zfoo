@@ -36,7 +36,6 @@
         <netty.version>4.1.84.Final</netty.version>
         <jprotobuf.version>2.4.17</jprotobuf.version>
         <kryo.version>5.3.0</kryo.version>
-        <reflections.version>0.10.2</reflections.version>
 
         <!-- zookeeper -->
         <curator.version>5.3.0</curator.version>

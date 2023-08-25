@@ -36,7 +36,7 @@ public class NetConfig {
     /**
      * 生成协议列表
      */
-    private String protocolList;
+    private String codeLanguages;
 
     /**
      * 注册中心
@@ -135,12 +135,12 @@ public class NetConfig {
         this.consumer = consumer;
     }
 
-    public String getProtocolList() {
-        return protocolList;
+    public String getCodeLanguages() {
+        return codeLanguages;
     }
 
-    public void setProtocolList(String protocolList) {
-        this.protocolList = protocolList;
+    public void setCodeLanguages(String codeLanguages) {
+        this.codeLanguages = codeLanguages;
     }
 
     @Override

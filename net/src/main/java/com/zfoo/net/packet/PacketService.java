@@ -31,6 +31,7 @@ import io.netty.buffer.ByteBuf;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
@@ -95,15 +96,14 @@ public class PacketService implements IPacketService {
         generateOperation.setFoldProtocol(netConfig.isFoldProtocol());
         generateOperation.setProtocolPath(netConfig.getProtocolPath());
         generateOperation.setProtocolParam(netConfig.getProtocolParam());
-        var protocolArr = StringUtils.tokenize(netConfig.getProtocolList(), StringUtils.SEMICOLON_COMMA);
+        var codeLanguageArr = StringUtils.tokenize(netConfig.getCodeLanguages(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
 
-        for (var protocolCode : protocolArr) {
-            protocolCode = protocolCode.replaceAll(StringUtils.SPACE_REGEX, "");
-            var codeLanguage = getProtocolList(protocolCode);
-            if (CollectionUtils.isEmpty(codeLanguage)) {
+        for (var codeLanguage : codeLanguageArr) {
+            var codeLanguageSet = getProtocolList(codeLanguage);
+            if (CollectionUtils.isEmpty(codeLanguageSet)) {
                 continue;
             }
-            generateOperation.getGenerateLanguages().addAll(codeLanguage);
+            generateOperation.getGenerateLanguages().addAll(codeLanguageSet);
         }
         // 设置生成协议的过滤器
         GenerateProtocolFile.generateProtocolFilter = netGenerateProtocolFilter;
@@ -127,20 +127,20 @@ public class PacketService implements IPacketService {
 
     /**
      * 获取要生成协议列表
-     * @param protocolCode
+     * @param codeLanguage
      * @return
      */
-    private Set<CodeLanguage> getProtocolList(String protocolCode) {
+    private Set<CodeLanguage> getProtocolList(String codeLanguage) {
         var languageSet = new HashSet<CodeLanguage>();
-        boolean isNumeric = StringUtils.isNumeric(protocolCode);
-        for (var codeLanguage : CodeLanguage.values()) {
+        boolean isNumeric = StringUtils.isNumeric(codeLanguage);
+        for (var language : CodeLanguage.values()) {
             if (isNumeric) {
-                var protocolBit = Integer.valueOf(protocolCode);
-                if ((protocolBit & codeLanguage.id) != 0) {
-                    languageSet.add(codeLanguage);
+                var code = Integer.valueOf(codeLanguage);
+                if ((code & language.id) != 0) {
+                    languageSet.add(language);
                 }
-            } else if (codeLanguage.name().equalsIgnoreCase(protocolCode)) {
-                languageSet.add(codeLanguage);
+            } else if (language.name().equalsIgnoreCase(codeLanguage)) {
+                languageSet.add(language);
                 break;
             }
         }
