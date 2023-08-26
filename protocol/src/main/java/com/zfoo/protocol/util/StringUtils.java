@@ -16,7 +16,6 @@ import com.zfoo.protocol.collection.ArrayUtils;
 
 import java.nio.charset.Charset;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -80,7 +79,6 @@ public abstract class StringUtils {
 
     public static final String EMPTY_JSON = "{}";
 
-    public static final String SEMICOLON_COMMA = ";|,"; //分号或者逗号
 
     public static final String MULTIPLE_HYPHENS = "-----------------------------------------------------------------------";
 
@@ -483,17 +481,6 @@ public abstract class StringUtils {
      */
     public static boolean isStopChar(char ch) {
         return Character.isWhitespace(ch) || STOP_WORD.contains(ch);
-    }
-
-    /**
-     * 判断是否是正数
-     * @param str
-     * @return
-     */
-    public static boolean isNumeric(String str) {
-        Pattern pattern = Pattern.compile("[0-9]*");
-        Matcher isNum = pattern.matcher(str);
-        return isNum.matches();
     }
 
 }

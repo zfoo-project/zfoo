@@ -27,8 +27,8 @@ import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.DomUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.xml.XmlProtocols;
+import com.zfoo.util.math.NumberUtils;
 import io.netty.buffer.ByteBuf;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -71,7 +71,9 @@ public class PacketService implements IPacketService {
 
 
     public static final String NET_COMMON_MODULE = "common";
-    /** 内网协议最大id */
+    /**
+     * 内网协议最大id
+     */
     public static final short MAN_NATIVE_PROTOCOL_ID = 100;
 
     private final Predicate<IProtocolRegistration> netGenerateProtocolFilter = registration
@@ -127,12 +129,10 @@ public class PacketService implements IPacketService {
 
     /**
      * 获取要生成协议列表
-     * @param codeLanguage
-     * @return
      */
     private Set<CodeLanguage> getProtocolList(String codeLanguage) {
         var languageSet = new HashSet<CodeLanguage>();
-        boolean isNumeric = StringUtils.isNumeric(codeLanguage);
+        var isNumeric = NumberUtils.isNumeric(codeLanguage);
         for (var language : CodeLanguage.values()) {
             if (isNumeric) {
                 var code = Integer.valueOf(codeLanguage);
