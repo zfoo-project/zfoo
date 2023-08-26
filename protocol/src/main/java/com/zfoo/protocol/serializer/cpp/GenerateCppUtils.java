@@ -97,7 +97,7 @@ public abstract class GenerateCppUtils {
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
-        var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("cpp/ProtocolManagerTemplate.h")));
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolManagerTemplate.h");
 
         var headerBuilder = new StringBuilder();
         var initProtocolBuilder = new StringBuilder();
@@ -120,7 +120,7 @@ public abstract class GenerateCppUtils {
         var registrationConstructor = registration.getConstructor();
 
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
-        var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("cpp/ProtocolTemplate.h")));
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolTemplate.h");
 
         // protocol object
         var defineProtocolName = protocolClazzName.toUpperCase();

@@ -88,7 +88,7 @@ public abstract class GeneratePyUtils {
         }
 
         // 生成ProtocolManager.js文件
-        var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("javascript/ProtocolManagerTemplate.js")));
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolManagerTemplate.js");
 
         var importBuilder = new StringBuilder();
         var initProtocolBuilder = new StringBuilder();

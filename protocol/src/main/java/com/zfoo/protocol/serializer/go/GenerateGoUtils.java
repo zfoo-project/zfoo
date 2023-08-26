@@ -96,7 +96,7 @@ public abstract class GenerateGoUtils {
                 .filter(it -> Objects.nonNull(it))
                 .forEach(it -> initProtocolBuilder.append(TAB).append(StringUtils.format("Protocols[{}] = new({})", it.protocolId(), it.protocolConstructor().getDeclaringClass().getSimpleName())).append(LS));
 
-        var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("go/ProtocolManagerTemplate.go")));
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("go/ProtocolManagerTemplate.go");
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, initProtocolBuilder.toString().trim());
         FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.go")), protocolManagerTemplate, true);
     }
@@ -109,8 +109,8 @@ public abstract class GenerateGoUtils {
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
 
         var protocolTemplate = ArrayUtils.isEmpty(registration.getFields())
-                ? StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("go/ProtocolTemplateEmpty.go")))
-                : StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("go/ProtocolTemplate.go")));
+                ? ClassUtils.getFileFromClassPathToString("go/ProtocolTemplateEmpty.go")
+                : ClassUtils.getFileFromClassPathToString("go/ProtocolTemplate.go");
 
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Go);
         var fieldDefinition = fieldDefinition(registration);

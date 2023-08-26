@@ -91,10 +91,10 @@ public abstract class GenerateGdUtils {
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
         var byteBufferFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ByteBuffer.gd"));
-        var byteBufferTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("gdscript/buffer/ByteBuffer.gd")));
+        var byteBufferTemplate = ClassUtils.getFileFromClassPathToString("gdscript/buffer/ByteBuffer.gd");
         FileUtils.writeStringToFile(byteBufferFile, StringUtils.format(byteBufferTemplate, protocolOutputRootPath), false);
 
-        var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("gdscript/ProtocolManagerTemplate.gd")));
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("gdscript/ProtocolManagerTemplate.gd");
         // 生成ProtocolManager.gd文件
         var importBuilder = new StringBuilder();
         var initList = new ArrayList<String>();
@@ -125,7 +125,7 @@ public abstract class GenerateGdUtils {
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
-        var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("gdscript/ProtocolTemplate.gd")));
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("gdscript/ProtocolTemplate.gd");
         protocolTemplate = StringUtils.format(protocolTemplate, protocolId, protocolClazzName, includeSubProtocol, classNote, fieldDefinition.trim(),
                 StringUtils.EMPTY_JSON, toStringMethod, writeObject.trim(), readObject.trim());
 
