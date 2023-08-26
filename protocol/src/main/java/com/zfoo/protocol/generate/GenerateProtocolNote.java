@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 生成协议的时候，协议的文档注释和字段注释会使用这个类
+ * EN: When generating the protocol, the document comments and field comments of the protocol will use this class
+ * CN: 生成协议的时候，协议的文档注释和字段注释会使用这个类
  *
  * @author godotg
  * @version 3.0
@@ -38,14 +39,14 @@ public abstract class GenerateProtocolNote {
     // 临时变量，启动完成就会销毁，协议的文档，外层map的key为协议类；pair的key为总的注释，value为属性字段的注释，value表示的map的key为属性名称
     // 比如在Test中的ComplexObject生成的pari是如下格式
     /**
-     * key docTitle:
+     * key is docTitle note:
      * // 复杂的对象
      * // 包括了各种复杂的结构，数组，List，Set，Map
      * //
      * // @author godotg
      * // @version 1.0
      * <p>
-     * value aa:
+     * value is field note:
      * // byte的包装类型
      * // 优先使用基础类型，包装类型会有装箱拆箱
      */
@@ -92,18 +93,19 @@ public abstract class GenerateProtocolNote {
             case Lua:
                 fieldNote = StringUtils.format("-- {}", fieldNote).replace("\n", "\n-- ");
                 break;
+            case Python:
             case GdScript:
                 fieldNote = StringUtils.format("# {}", fieldNote).replace("\n", "\n# ");
                 break;
             case Enhance:
             default:
-                throw new RunException("无法识别的枚举类型[{}]", language);
+                throw new RunException("unrecognized enum type [{}]", language);
         }
         return fieldNote;
     }
 
     public static void initProtocolNote(List<IProtocolRegistration> protocolRegistrations) {
-        AssertionUtils.notNull(protocolNoteMap, "[{}]已经初始完成，初始化完成过后不能调用initProtocolDocument", GenerateProtocolNote.class.getSimpleName());
+        AssertionUtils.notNull(protocolNoteMap, "[{}] duplicate initialization", GenerateProtocolNote.class.getSimpleName());
 
         for (var protocolRegistration : protocolRegistrations) {
             var protocolClazz = protocolRegistration.protocolConstructor().getDeclaringClass();

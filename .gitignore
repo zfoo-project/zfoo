@@ -37,6 +37,7 @@ test.md
 # 忽略生成的协议文件
 **/jsProtocol/
 **/gdProtocol/
+**/pyProtocol/
 **/CsProtocol/
 **/LuaProtocol/
 **/cppProtocol/

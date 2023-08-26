@@ -23,6 +23,7 @@ import com.google.protobuf.CodedOutputStream;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.*;
+import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.StringUtils;
 import io.fury.Fury;
 import io.fury.Language;
@@ -375,6 +376,7 @@ public class SpeedTest {
 //        op.getGenerateLanguages().add(CodeLanguage.Lua);
 //        op.getGenerateLanguages().add(CodeLanguage.CSharp);
 //        op.getGenerateLanguages().add(CodeLanguage.GdScript);
+        op.getGenerateLanguages().add(CodeLanguage.Python);
 
         // 需要protocol协议的字段里面都加上JProtobuf注解才能用
 //        op.setProtocolParam("protobuf=protobuf.xml");

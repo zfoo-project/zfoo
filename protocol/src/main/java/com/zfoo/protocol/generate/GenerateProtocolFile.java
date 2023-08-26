@@ -25,6 +25,7 @@ import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
 import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
+import com.zfoo.protocol.serializer.python.GeneratePyUtils;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 
 import java.io.IOException;
@@ -62,11 +63,8 @@ public abstract class GenerateProtocolFile {
     }
 
     /**
-     * 生成各种语言的协议文件
-     *
-     * @param generateOperation
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * EN: Generate protocol files to various languages
+     * CN: 生成各种语言的协议文件
      */
     public static void generate(GenerateOperation generateOperation) throws IOException, ClassNotFoundException {
         var protocols = ProtocolManager.protocols;
@@ -169,6 +167,15 @@ public abstract class GenerateProtocolFile {
             GenerateGdUtils.createProtocolManager(allSortedGenerateProtocols);
             for (var protocolRegistration : allSortedGenerateProtocols) {
                 GenerateGdUtils.createGdProtocolFile((ProtocolRegistration) protocolRegistration);
+            }
+        }
+
+        // 生成Python协议
+        if (generateLanguages.contains(CodeLanguage.Python)) {
+            GeneratePyUtils.init(generateOperation);
+            GeneratePyUtils.createProtocolManager(allSortedGenerateProtocols);
+            for (var protocolRegistration : allSortedGenerateProtocols) {
+                GeneratePyUtils.createPyProtocolFile((ProtocolRegistration) protocolRegistration);
             }
         }
 
