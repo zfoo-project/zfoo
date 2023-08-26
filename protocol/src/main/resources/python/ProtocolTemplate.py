@@ -1,5 +1,5 @@
 {}
-class {}():
+class {}:
 
     {}
 
@@ -8,11 +8,16 @@ class {}():
 
     @classmethod
     def write(cls, buffer, packet):
-        if (buffer.writePacketFlag(packet)):
+        if buffer.writePacketFlag(packet):
             return
         {}
+        pass
 
     @classmethod
     def read(cls, buffer):
+        if not buffer.readBool():
+            return None
+        packet = {}()
         {}
-        pass
+        return packet
+

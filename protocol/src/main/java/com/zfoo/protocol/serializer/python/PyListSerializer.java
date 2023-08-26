@@ -38,13 +38,13 @@ public class PyListSerializer implements IPySerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GeneratePyUtils.addTab(builder, deep);
-        if (CutDownListSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.GdScript)) {
+        if (CutDownListSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Python)) {
             return;
         }
 
         ListField listField = (ListField) fieldRegistration;
 
-        builder.append(StringUtils.format("if ({} == null):", objectStr)).append(LS);
+        builder.append(StringUtils.format("if {} is None:", objectStr)).append(LS);
         GeneratePyUtils.addTab(builder, deep + 1);
         builder.append("buffer.writeInt(0)").append(LS);
         GeneratePyUtils.addTab(builder, deep);
@@ -63,7 +63,7 @@ public class PyListSerializer implements IPySerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         GeneratePyUtils.addTab(builder, deep);
-        var cutDown = CutDownListSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.GdScript);
+        var cutDown = CutDownListSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Python);
         if (cutDown != null) {
             return cutDown;
         }
@@ -80,7 +80,7 @@ public class PyListSerializer implements IPySerializer {
         builder.append(StringUtils.format("{} = buffer.readInt()", size)).append(LS);
 
         GeneratePyUtils.addTab(builder, deep);
-        builder.append(StringUtils.format("if ({} > 0):", size)).append(LS);
+        builder.append(StringUtils.format("if {} > 0:", size)).append(LS);
         GeneratePyUtils.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} in range({}):", i, size)).append(LS);
         String readObject = GeneratePyUtils.pySerializer(listField.getListElementRegistration().serializer())

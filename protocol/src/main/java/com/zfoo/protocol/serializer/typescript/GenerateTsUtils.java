@@ -103,7 +103,7 @@ public abstract class GenerateTsUtils {
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
             var name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
-            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.GdScript);
+            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.TypeScript);
             importBuilder.append(StringUtils.format("import {} from './{}';", name, path)).append(LS);
             initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, name)).append(LS);
 

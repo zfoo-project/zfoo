@@ -64,6 +64,12 @@ class ByteBuffer():
         self.readOffset += 1
         return value
 
+    def writeBytes(self, value):
+        length = len(value)
+        self.ensureCapacity(length)
+        self.buffer[self.writeOffset:length] = value[:]
+        self.writeOffset += length
+
     def writeUByte(self, value):
         self.ensureCapacity(1)
         struct.pack_into('>B', self.buffer, self.writeOffset, value)

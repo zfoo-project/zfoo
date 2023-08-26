@@ -29,7 +29,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class PyStringSerializer implements IPySerializer {
     @Override
     public String fieldDefaultValue(Field field, IFieldRegistration fieldRegistration) {
-        return StringUtils.EMPTY;
+        return "\"\"";
     }
 
     @Override

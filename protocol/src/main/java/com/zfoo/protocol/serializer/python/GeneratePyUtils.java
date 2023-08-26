@@ -24,7 +24,10 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
 import com.zfoo.protocol.serializer.reflect.*;
-import com.zfoo.protocol.util.*;
+import com.zfoo.protocol.util.ClassUtils;
+import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
+import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +37,6 @@ import java.util.Map;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
-import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
 
 /**
  * @author godotg
@@ -80,28 +82,27 @@ public abstract class GeneratePyUtils {
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
-        var list = List.of("python/byte_buffer.py");
+        var list = List.of("python/ByteBuffer.py");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
             var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "python/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
-        // 生成ProtocolManager.js文件
-        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolManagerTemplate.js");
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("python/ProtocolManagerTemplate.py");
 
         var importBuilder = new StringBuilder();
         var initProtocolBuilder = new StringBuilder();
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
             var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
-            var path = GenerateProtocolPath.protocolAbsolutePath(protocol.protocolId(), CodeLanguage.JavaScript);
-            importBuilder.append(StringUtils.format("import {} from './{}.js';", protocolName, path)).append(LS);
-            initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, protocolName)).append(LS);
+            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.Python);
+            importBuilder.append(StringUtils.format("from {} import {}", path, protocolName)).append(LS);
+            initProtocolBuilder.append(StringUtils.format("protocols[{}] = {}.{}", protocolId, protocolName, protocolName)).append(LS);
         }
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), StringUtils.EMPTY_JSON, initProtocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.js")), protocolManagerTemplate, true);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.py")), protocolManagerTemplate, true);
     }
 
     public static void createPyProtocolFile(ProtocolRegistration registration) {
@@ -119,7 +120,7 @@ public abstract class GeneratePyUtils {
         var readObject = readObject(registration);
 
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName
-                , fieldDefinition.trim(), protocolId, writeObject.trim(), readObject.trim(), protocolClazzName);
+                , fieldDefinition.trim(), protocolId, writeObject.trim(), protocolClazzName, readObject.trim());
         var protocolOutputPath = StringUtils.format("{}/{}/{}.py", protocolOutputRootPath
                 , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
@@ -144,7 +145,7 @@ public abstract class GeneratePyUtils {
             var fieldDefaultValue = pySerializer(fieldRegistration.serializer()).fieldDefaultValue(field, fieldRegistration);
             // 生成类型的注释
             pyBuilder.append(StringUtils.format("{}{} = {}", TAB, fieldName, fieldDefaultValue));
-            pyBuilder.append(StringUtils.format(" # {}", GenerateCsUtils.toCsClassName(field.getGenericType().getTypeName())));
+            pyBuilder.append(StringUtils.format("  # {}", GenerateCsUtils.toCsClassName(field.getGenericType().getTypeName())));
             pyBuilder.append(LS);
         }
         return pyBuilder.toString();
@@ -170,9 +171,9 @@ public abstract class GeneratePyUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                pyBuilder.append(TAB+ TAB).append("if !buffer.isReadable():").append(LS);
-                pyBuilder.append(TAB + TAB+ TAB).append("return packet").append(LS);
-                pyBuilder.append(TAB+ TAB).append("pass").append(LS);
+                pyBuilder.append(TAB + TAB).append("if not buffer.isReadable():").append(LS);
+                pyBuilder.append(TAB + TAB + TAB).append("return packet").append(LS);
+                pyBuilder.append(TAB + TAB).append("pass").append(LS);
             }
             var readObject = pySerializer(fieldRegistration.serializer()).readObject(pyBuilder, 2, field, fieldRegistration);
             pyBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);
@@ -181,7 +182,7 @@ public abstract class GeneratePyUtils {
     }
 
     public static StringBuilder addTab(StringBuilder builder, int deep) {
-        builder.append(TAB_ASCII.repeat(Math.max(0, deep)));
+        builder.append(TAB.repeat(Math.max(0, deep)));
         return builder;
     }
 }

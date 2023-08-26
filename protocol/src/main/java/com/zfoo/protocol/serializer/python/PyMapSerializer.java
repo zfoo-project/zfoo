@@ -38,12 +38,12 @@ public class PyMapSerializer implements IPySerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GeneratePyUtils.addTab(builder, deep);
-        if (CutDownMapSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.GdScript)) {
+        if (CutDownMapSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Python)) {
             return;
         }
 
         MapField mapField = (MapField) fieldRegistration;
-        builder.append(StringUtils.format("if ({} == null):", objectStr)).append(LS);
+        builder.append(StringUtils.format("if {} is None:", objectStr)).append(LS);
         GeneratePyUtils.addTab(builder, deep + 1);
         builder.append("buffer.writeInt(0)").append(LS);
 
@@ -69,7 +69,7 @@ public class PyMapSerializer implements IPySerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         GeneratePyUtils.addTab(builder, deep);
-        var cutDown = CutDownMapSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.GdScript);
+        var cutDown = CutDownMapSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Python);
         if (cutDown != null) {
             return cutDown;
         }
@@ -84,7 +84,7 @@ public class PyMapSerializer implements IPySerializer {
         builder.append(StringUtils.format("{} = buffer.readInt()", size)).append(LS);
 
         GeneratePyUtils.addTab(builder, deep);
-        builder.append(StringUtils.format("if ({} > 0):", size)).append(LS);
+        builder.append(StringUtils.format("if {} > 0:", size)).append(LS);
 
         String i = "index" + GenerateProtocolFile.index.getAndIncrement();
         GeneratePyUtils.addTab(builder, deep + 1);
