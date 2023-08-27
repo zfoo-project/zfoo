@@ -277,7 +277,7 @@ func writeBooleanArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
-		writeInt(array.size());
+		writeInt(array.size())
 		for element in array:
 			writeBool(element)
 			
@@ -293,7 +293,7 @@ func writeByteArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
-		writeInt(array.size());
+		writeInt(array.size())
 		for element in array:
 			writeByte(element)
 			
@@ -309,7 +309,7 @@ func writeShortArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
-		writeInt(array.size());
+		writeInt(array.size())
 		for element in array:
 			writeShort(element)
 			
@@ -325,7 +325,7 @@ func writeIntArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
-		writeInt(array.size());
+		writeInt(array.size())
 		for element in array:
 			writeInt(element)
 			
@@ -341,7 +341,7 @@ func writeLongArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
-		writeInt(array.size());
+		writeInt(array.size())
 		for element in array:
 			writeLong(element)
 			
@@ -357,7 +357,7 @@ func writeFloatArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
-		writeInt(array.size());
+		writeInt(array.size())
 		for element in array:
 			writeFloat(element)
 			
@@ -373,7 +373,7 @@ func writeDoubleArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
-		writeInt(array.size());
+		writeInt(array.size())
 		for element in array:
 			writeDouble(element)
 			
@@ -389,7 +389,7 @@ func writeCharArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
-		writeInt(array.size());
+		writeInt(array.size())
 		for element in array:
 			writeChar(element)
 			
@@ -405,7 +405,7 @@ func writeStringArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
-		writeInt(array.size());
+		writeInt(array.size())
 		for element in array:
 			writeString(element)
 			
@@ -423,7 +423,7 @@ func writePacketArray(array, protocolId):
 		writeInt(0)
 	else:
 		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-		writeInt(array.size());
+		writeInt(array.size())
 		for element in array:
 			protocolRegistration.write(self, element)
 			

@@ -51,7 +51,7 @@ public class PyArraySerializer implements IPySerializer {
 
         builder.append("else:").append(LS);
         GeneratePyUtils.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("buffer.writeInt({}.size())", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeInt(len({}))", objectStr)).append(LS);
 
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
         GeneratePyUtils.addTab(builder, deep + 1);

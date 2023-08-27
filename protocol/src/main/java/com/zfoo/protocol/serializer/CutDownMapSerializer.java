@@ -58,6 +58,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeIntIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeIntIntMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -81,6 +82,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeIntLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeIntLongMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -104,6 +106,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeIntStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeIntStringMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -127,6 +130,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeIntPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                         case Lua:
@@ -152,6 +156,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeLongIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeLongIntMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -175,6 +180,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeLongLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeLongLongMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -198,6 +204,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeLongStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeLongStringMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -221,6 +228,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeLongPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                         case Lua:
@@ -246,6 +254,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeStringIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeStringIntMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -269,6 +278,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeStringLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeStringLongMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -292,6 +302,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeStringStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeStringStringMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -315,6 +326,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("{}.writeStringPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
                             return true;
                         case GdScript:
+                        case Python:
                             builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
                         case Lua:
@@ -358,6 +370,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readIntIntMap()", map)).append(LS);
                             return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readIntIntMap()", map)).append(LS);
+                            return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readIntIntMap()", map)).append(LS);
                             return map;
@@ -383,6 +398,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readIntLongMap()", map)).append(LS);
                             return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readIntLongMap()", map)).append(LS);
+                            return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readIntLongMap()", map)).append(LS);
                             return map;
@@ -407,6 +425,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readIntStringMap()", map)).append(LS);
+                            return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readIntStringMap()", map)).append(LS);
                             return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readIntStringMap()", map)).append(LS);
@@ -434,6 +455,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readIntPacketMap({})", map, protocolId)).append(LS);
                             return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readIntPacketMap({})", map, protocolId)).append(LS);
+                            return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readIntPacketMap({})", map, protocolId)).append(LS);
                             return map;
@@ -460,6 +484,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readLongIntMap()", map)).append(LS);
                             return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readLongIntMap()", map)).append(LS);
+                            return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readLongIntMap()", map)).append(LS);
                             return map;
@@ -484,6 +511,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readLongLongMap()", map)).append(LS);
+                            return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readLongLongMap()", map)).append(LS);
                             return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readLongLongMap()", map)).append(LS);
@@ -510,6 +540,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readLongStringMap()", map)).append(LS);
                             return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readLongStringMap()", map)).append(LS);
+                            return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readLongStringMap()", map)).append(LS);
                             return map;
@@ -535,6 +568,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readLongPacketMap({})", map, protocolId)).append(LS);
+                            return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readLongPacketMap({})", map, protocolId)).append(LS);
                             return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readLongPacketMap({})", map, protocolId)).append(LS);
@@ -563,6 +599,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readStringIntMap()", map)).append(LS);
                             return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readStringIntMap()", map)).append(LS);
+                            return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readStringIntMap()", map)).append(LS);
                             return map;
@@ -587,6 +626,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readStringLongMap()", map)).append(LS);
+                            return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readStringLongMap()", map)).append(LS);
                             return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readStringLongMap()", map)).append(LS);
@@ -613,6 +655,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readStringStringMap()", map)).append(LS);
                             return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readStringStringMap()", map)).append(LS);
+                            return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readStringStringMap()", map)).append(LS);
                             return map;
@@ -638,6 +683,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readStringPacketMap({})", map, protocolId)).append(LS);
+                            return map;
+                        case Python:
+                            builder.append(StringUtils.format("{} = buffer.readStringPacketMap({})", map, protocolId)).append(LS);
                             return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readStringPacketMap({})", map, protocolId)).append(LS);

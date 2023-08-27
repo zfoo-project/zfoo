@@ -51,7 +51,7 @@ public class PyMapSerializer implements IPySerializer {
         builder.append("else:").append(LS);
 
         GeneratePyUtils.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("buffer.writeInt({}.size())", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeInt(len({}))", objectStr)).append(LS);
 
         String key = "key" + GenerateProtocolFile.index.getAndIncrement();
         String value = "value" + GenerateProtocolFile.index.getAndIncrement();

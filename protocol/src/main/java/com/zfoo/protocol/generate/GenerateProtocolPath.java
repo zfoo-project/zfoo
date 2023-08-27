@@ -72,7 +72,7 @@ public abstract class GenerateProtocolPath {
                 if (StringUtils.isBlank(getProtocolPath(protocolId))) {
                     path = StringUtils.PERIOD;
                 } else {
-                    path = StringUtils.format("{}.{}", path, name);
+                    path = StringUtils.substringBeforeLast(path, StringUtils.SLASH);
                     path = path.replaceAll(StringUtils.SLASH , StringUtils.PERIOD);
                 }
                 break;
