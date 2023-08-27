@@ -5,7 +5,7 @@
 Why is zfoo protocol ?
 -----------
 
-- 协议原生支持 C++ C# Java Go Javascript TypeScript GDScript Lua
+- 协议原生支持 C++ C# Java Go Javascript TypeScript Lua GDScript Python
 - 通用的分布式服务器协议实现，有其它语言的实现，可以轻易实现其它平台的的RPC，微服务
 - 二进制序列化速度最快的自定义格式框架，并且为序列化字节最少的框架，更加安全，可前后兼容
 - 单线程的Benchmark测试中，序列化和反序列化速度比Protobuf快50%，比Kryo快100%
@@ -58,7 +58,7 @@ Why is zfoo protocol ?
 **JDK 11 或者 JDK 17**，可以在 **OpenJDK** 和 **Oracle JDK** 无缝切换，下载完本项目，maven install到本地仓库即可使用
 
 ```
-如果你没有安装JDK 11+，快速的安装方法是在Idea的右上角Project Structure，Platform Settings，SDKs中直接下载
+如果你没有安装JDK，快速的安装方法是在Idea的右上角Project Structure，Platform Settings，SDKs中直接下载
 ```
 
 #### 2. [protocol](protocol/README.md) 目前性能最好的Java序列化和反序列化库
