@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
 <!-- native为内部消息，common是公共消息每个模块都能使用，js是web通信用的协议会生成js协议文件 -->
-<protocols author="godotg">
+<protocols>
 
-    <module id="1" name="native" minId="0" maxId="100">
+    <module id="1" name="native">
         <protocol location="com.zfoo.net.router.attachment.SignalAttachment"/>
         <protocol location="com.zfoo.net.router.attachment.SignalOnlyAttachment"/>
         <protocol location="com.zfoo.net.router.attachment.GatewayAttachment"/>
@@ -20,7 +20,7 @@
     </module>
 
     <!-- 在xml文件中写协议号是为了统一规划协议号，更加直观；不写协议号也没有影响 -->
-    <module id="2" name="common" minId="100" maxId="1000">
+    <module id="2" name="common">
         <protocol id="100" location="com.zfoo.net.packet.common.Message"/>
         <protocol id="101" location="com.zfoo.net.packet.common.Error"/>
         <protocol id="102" location="com.zfoo.net.packet.common.Heartbeat"/>
@@ -37,7 +37,7 @@
 
     </module>
 
-    <module id="3" name="test" minId="1000" maxId="2000">
+    <module id="3" name="test">
         <protocol id="1110" location="com.zfoo.net.packet.CM_Int" enhance="false"/>
         <protocol id="1111" location="com.zfoo.net.packet.SM_Int" enhance="false"/>
         <protocol id="1112" location="com.zfoo.net.packet.CM_Float" enhance="false"/>
@@ -80,13 +80,13 @@
         <protocol id="1701" location="com.zfoo.net.packet.http.HttpHelloResponse"/>
     </module>
 
-    <module id="4" name="js" minId="2000" maxId="3000">
+    <module id="4" name="js">
         <protocol id="2070" location="com.zfoo.net.packet.websocket.WebSocketPacketRequest" enhance="false"/>
         <protocol id="2071" location="com.zfoo.net.packet.websocket.WebSocketObjectA" enhance="false"/>
         <protocol id="2072" location="com.zfoo.net.packet.websocket.WebSocketObjectB" enhance="false"/>
     </module>
 
-    <module id="5" name="providerTest" minId="3000" maxId="8000">
+    <module id="5" name="providerTest">
         <protocol id="4000" location="com.zfoo.net.packet.provider.ProviderMessAsk" enhance="false"/>
         <protocol id="4001" location="com.zfoo.net.packet.provider.ProviderMessAnswer" enhance="false"/>
 

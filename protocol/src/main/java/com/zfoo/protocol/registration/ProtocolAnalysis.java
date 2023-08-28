@@ -206,9 +206,8 @@ public class ProtocolAnalysis {
             for (Class<?> clazz : packetClazzList) {
                 var protocolId = ProtocolManager.protocolId(clazz);
                 var registration = parseProtocolRegistration(clazz, module);
-                if (!clazz.isAnnotationPresent(NotEnhance.class)) {
-                    enhanceList.add(registration);
-                } else if (protocolDefinitionMap.getOrDefault(clazz.getName(), true)) {
+                boolean isEnhance = protocolDefinitionMap.getOrDefault(clazz.getName(), true);
+                if (isEnhance && !clazz.isAnnotationPresent(NotEnhance.class)) {
                     enhanceList.add(registration);
                 }
                 // 注册协议
