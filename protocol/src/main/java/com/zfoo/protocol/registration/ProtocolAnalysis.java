@@ -39,6 +39,7 @@ import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.xml.XmlModuleDefinition;
 import com.zfoo.protocol.xml.XmlProtocols;
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
@@ -74,6 +75,8 @@ public class ProtocolAnalysis {
 
     //临时变量，存储xml配置协议id，启动完成销毁
     private static Map<String, Short> protocolNameMap = new HashMap<>(MAX_PROTOCOL_NUM);
+    //临时变量，每个模块定义的协议
+    private static Map<Byte, Set<Class<?>>> moduleDefinitionClassMap = new HashMap<>(128);
 
     static {
         // 初始化基础类型序列化器
@@ -164,6 +167,7 @@ public class ProtocolAnalysis {
         AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
 
         var protocolDefinitionMap = new HashMap<String, Boolean>();
+        var classModuleDefinitionMap = new HashMap<Class<?>, Byte>();
         for (var moduleDefinition : xmlProtocols.getModules()) {
             var module = new ProtocolModule(moduleDefinition.getId(), moduleDefinition.getName());
             AssertionUtils.isTrue(module.getId() > 0, "[module:{}] [id:{}] 模块必须大于等于1", module.getName(), module.getId());
@@ -173,101 +177,91 @@ public class ProtocolAnalysis {
             if (CollectionUtils.isEmpty(moduleDefinition.getProtocols())) {
                 continue;
             }
+            //模块定义所有协议
+            Set<Class<?>> clazzSet = moduleDefinitionClassMap.computeIfAbsent(module.getId(), k -> new HashSet<>());
             for (var protocolDefinition : moduleDefinition.getProtocols()) {
                 protocolDefinitionMap.put(protocolDefinition.getLocation(), protocolDefinition.isEnhance());
                 protocolNameMap.put(protocolDefinition.getLocation(), protocolDefinition.getId());
+                var packetClazzList = scanClassList(protocolDefinition.getLocation());
+                clazzSet.addAll(packetClazzList);
+                for (Class<?> clazz : packetClazzList) {
+                    var previous = classModuleDefinitionMap.put(clazz, module.getId());
+                    if (previous != null && previous != module.getId()) {
+                        throw new RunException("[class:{}]定义到了两个不同的[module:[{}][{}]]", clazz.getName(), previous, module.getId());
+                    } else if (previous != null && previous == module.getId()) {
+                        //相同模块配置重复协议忽略
+                        continue;
+                    }
+                    var protocolId = getProtocolIdAndCheckClass(clazz);
+                    initProtocolClass(protocolId, clazz);
+                }
             }
-
-        }
-
-        // 获取所有IPack子类
-        var packetClazzList = new HashSet<Class<?>>();
-        if (xmlProtocols.isPackages()) {
-            packetClazzList.addAll(scanPackageList(protocolDefinitionMap.keySet()));
-        } else {
-            packetClazzList.addAll(scanClassList(protocolDefinitionMap.keySet()));
-        }
-
-        for (Class<?> clazz : packetClazzList) {
-            var protocolId = getProtocolIdAndCheckClass(clazz);
-            initProtocolClass(protocolId, clazz);
         }
 
         var enhanceList = new ArrayList<IProtocolRegistration>();
         for (var moduleDefinition : xmlProtocols.getModules()) {
             var module = modules[moduleDefinition.getId()];
+            var packetClazzList = getModuleDefinitionClass(moduleDefinition);
             for (Class<?> clazz : packetClazzList) {
                 var protocolId = ProtocolManager.protocolId(clazz);
-                if (protocolId < moduleDefinition.getMinId() || protocolId >= moduleDefinition.getMaxId()) {
-                    continue;
-                }
-                var registration = parseProtocolRegistration(clazz, module);
-                if (xmlProtocols.isPackages() && !clazz.isAnnotationPresent(NotEnhance.class)) {
-                    enhanceList.add(registration);
-                } else if (!xmlProtocols.isPackages() && protocolDefinitionMap.getOrDefault(clazz.getName(), true)) {
-                    enhanceList.add(registration);
-                }
-                // 注册协议
-                protocols[protocolId] = registration;
-            }
-        }
-        enhance(generateOperation, enhanceList);
-    }
-
-    public static void analyzePackage(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
-        AssertionUtils.notNull(subProtocolIdMap, "[{}]已经初始完成，请不要重复初始化", ProtocolManager.class.getSimpleName());
-        var packageList = new HashSet<String>();
-        for (var moduleDefinition : xmlProtocols.getModules()) {
-            var module = new ProtocolModule(moduleDefinition.getId(), moduleDefinition.getName());
-
-            AssertionUtils.isTrue(module.getId() > 0, "[module:{}] [id:{}] 模块必须大于等于1", module.getName(), module.getId());
-            AssertionUtils.isNull(modules[module.getId()], "duplicate [module:{}] [id:{}] Exception!", module.getName(), module.getId());
-            AssertionUtils.notNull(moduleDefinition.getProtocols(), "[module:{}] does not have any protocols", module.getName());
-            modules[module.getId()] = module;
-
-            for (var protocolDefinition : moduleDefinition.getProtocols()) {
-                packageList.add(protocolDefinition.getLocation());
-            }
-        }
-
-        // 获取所有IPack子类
-        var packetClazzList = scanClassList(packageList);
-        for (Class<?> clazz : packetClazzList) {
-            var protocolId = getProtocolIdAndCheckClass(clazz);
-            initProtocolClass(protocolId, clazz);
-        }
-
-        var enhanceList = new ArrayList<IProtocolRegistration>();
-        for (var moduleDefinition : xmlProtocols.getModules()) {
-            var module = modules[moduleDefinition.getId()];
-            for (Class<?> clazz : packetClazzList) {
-                var protocolId = ProtocolManager.protocolId(clazz);
-                if (protocolId < moduleDefinition.getMinId() || protocolId >= moduleDefinition.getMaxId()) {
-                    continue;
-                }
                 var registration = parseProtocolRegistration(clazz, module);
                 if (!clazz.isAnnotationPresent(NotEnhance.class)) {
                     enhanceList.add(registration);
+                } else if (protocolDefinitionMap.getOrDefault(clazz.getName(), true)) {
+                    enhanceList.add(registration);
                 }
                 // 注册协议
                 protocols[protocolId] = registration;
             }
         }
+
         enhance(generateOperation, enhanceList);
     }
 
-    public static Set<Class<?>> scanPackageList(Set<String> packageList) {
+    private static Set<Class<?>> getModuleDefinitionClass(XmlModuleDefinition moduleDefinition) {
+        var classSet = new HashSet<Class<?>>();
+        for (short id = moduleDefinition.getMinId(); id < moduleDefinition.getMaxId(); id++) {
+            var clazz = protocolClassMap.get(id);
+            if (Objects.isNull(clazz)) {
+                continue;
+            }
+            classSet.add(clazz);
+        }
+        if (CollectionUtils.isNotEmpty(classSet)) {
+            return classSet;
+        }
+
+        var moduleClassSet = moduleDefinitionClassMap.get(moduleDefinition.getId());
+        if (CollectionUtils.isEmpty(moduleClassSet)) {
+            return classSet;
+        }
+        return moduleClassSet;
+    }
+
+    public static Set<Class<?>> scanPackageList(String packageName) {
         //获取该路径下所有类
         var clazzSet = new HashSet<String>();
-        for (var packageName : packageList) {
-            try {
-                var clazzList = ClassUtils.getAllClasses(packageName);
-                clazzSet.addAll(clazzList);
-            } catch (Exception e) {
-                throw new RunException("[{}]包扫描类异常", packageName, e);
-            }
+        try {
+            var clazzList = ClassUtils.getAllClasses(packageName);
+            clazzSet.addAll(clazzList);
+        } catch (Exception e) {
+            throw new RunException("[{}]包扫描类异常", packageName, e);
         }
         return scanClassList(clazzSet);
+    }
+
+    public static Set<Class<?>> scanClassList(String className) {
+        var clazzSet = new HashSet<Class<?>>();
+        try {
+            Class<?> clazz = Class.forName(className);
+            if (!IPacket.class.isAssignableFrom(clazz) || clazz.isInterface()) {
+                return clazzSet;
+            }
+            clazzSet.add(clazz);
+        } catch (Exception e) {
+            clazzSet.addAll(scanPackageList(className));
+        }
+        return clazzSet;
     }
 
     public static Set<Class<?>> scanClassList(Set<String> classList) {
@@ -280,7 +274,7 @@ public class ProtocolAnalysis {
                 }
                 clazzSet.add(clazz);
             } catch (Exception e) {
-                throw new RunException("[class:{}]类不存在", className);
+                clazzSet.addAll(scanPackageList(className));
             }
         }
         return clazzSet;
@@ -335,6 +329,7 @@ public class ProtocolAnalysis {
         protocolReserved = null;
         baseSerializerMap = null;
         protocolNameMap = null;
+        moduleDefinitionClassMap = null;
 
         EnhanceUtils.clear();
 

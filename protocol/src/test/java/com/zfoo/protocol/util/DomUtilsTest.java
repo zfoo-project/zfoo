@@ -46,13 +46,11 @@ public class DomUtilsTest {
     @Test
     public void testXmlWithHead() {
         var protos = DomUtils.string2Object(XML_WITH_HEAD, XmlProtocols.class);
-        Assert.assertEquals("godotg", protos.getAuthor());
     }
 
     @Test
     public void testXmlOfStandardText() {
         var protos = DomUtils.string2Object(XML_OF_STANDARD_TEXT, XmlProtocols.class);
-        Assert.assertEquals("godotg", protos.getAuthor());
     }
 
 }

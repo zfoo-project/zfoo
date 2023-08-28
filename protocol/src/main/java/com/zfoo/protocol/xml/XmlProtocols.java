@@ -20,27 +20,13 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import java.util.List;
 
-@JsonPropertyOrder({"author", "packages", "modules"})
+@JsonPropertyOrder({"modules"})
 @JacksonXmlRootElement(localName = "protocols")
 public class XmlProtocols {
-
-    @JacksonXmlProperty(isAttribute = true, localName = "author")
-    private String author;
-
-    @JacksonXmlProperty(isAttribute = true, localName = "packages")
-    private boolean packages;
 
     @JacksonXmlProperty(localName = "module")
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<XmlModuleDefinition> modules;
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public boolean isPackages() {
-        return packages;
-    }
 
     public List<XmlModuleDefinition> getModules() {
         return modules;
