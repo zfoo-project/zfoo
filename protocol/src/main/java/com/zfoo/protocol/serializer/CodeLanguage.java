@@ -23,22 +23,23 @@ public enum CodeLanguage {
      */
     Enhance(1),
 
-    Cpp(2),
+    Cpp(1 << 1),
 
-    Go(4),
+    Go(1 << 2),
 
-    JavaScript(8),
+    JavaScript(1 << 3),
 
-    TypeScript(16),
+    TypeScript(1 << 4),
 
-    Lua(32),
+    Lua(1 << 5),
 
-    CSharp(64),
+    CSharp(1 << 6),
 
-    GdScript(128),
+    GdScript(1 << 7),
 
-    Protobuf(256)
-    ;
+    Python(1 << 8),
+
+    Protobuf(1 << 12);
 
     public final int id;
 

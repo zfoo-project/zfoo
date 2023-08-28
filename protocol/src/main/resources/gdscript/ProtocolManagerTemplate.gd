@@ -18,7 +18,7 @@ static func write(buffer, packet):
 	protocol.write(buffer, packet)
 
 static func read(buffer):
-	var protocolId = buffer.readShort();
+	var protocolId = buffer.readShort()
 	var protocol = protocols[protocolId]
-	var packet = protocol.read(buffer);
-	return packet;
+	var packet = protocol.read(buffer)
+	return packet

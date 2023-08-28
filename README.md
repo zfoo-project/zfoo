@@ -5,7 +5,7 @@ English | [简体中文](./README_CN.md)
 Why is zfoo protocol ?
 -----------
 
-- The protocol currently supports C++ C# Go Java Javascript TypeScript GDScript Lua
+- The protocol currently supports C++ C# Go Java Javascript TypeScript Lua GDScript Python
 - Universal distributed server protocol implementation, there are implementations in other languages, which can easily
   implement RPC, servers, and microservices on other platforms
 - The fastest custom format framework for Java binary serialization, with the fewest serialized bytes, more secure and
@@ -63,7 +63,7 @@ Perfect work development process, complete online solution
 **JDK 11 or 17**，**OpenJDK** or **Oracle JDK** ，maven install to local repository
 
 ```
-If you do not have JDK 11+ installed, the quick installation method is to download directly 
+If you do not have JDK installed, the quick installation method is to download directly 
 from Project Structure, Platform Settings, SDKs in the upper right corner of Idea
 ```
 

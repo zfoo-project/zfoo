@@ -106,7 +106,7 @@ public abstract class GenerateCsUtils {
         var registrationConstructor = registration.getConstructor();
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
 
-        var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("csharp/ProtocolTemplate.cs")));
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolTemplate.cs");
 
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.CSharp);
         var fieldDefinition = fieldDefinition(registration);

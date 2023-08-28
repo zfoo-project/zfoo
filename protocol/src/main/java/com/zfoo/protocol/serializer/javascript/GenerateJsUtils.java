@@ -91,7 +91,7 @@ public abstract class GenerateJsUtils {
         }
 
         // 生成ProtocolManager.js文件
-        var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("javascript/ProtocolManagerTemplate.js")));
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolManagerTemplate.js");
 
         var importBuilder = new StringBuilder();
         var initProtocolBuilder = new StringBuilder();
@@ -115,7 +115,7 @@ public abstract class GenerateJsUtils {
         var registrationConstructor = registration.getConstructor();
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
 
-        var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("javascript/ProtocolTemplate.js")));
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolTemplate.js");
 
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.JavaScript);
         var valueOfMethod = valueOfMethod(registration);

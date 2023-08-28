@@ -33,6 +33,7 @@ import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
 import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
+import com.zfoo.protocol.serializer.python.GeneratePyUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 import com.zfoo.protocol.util.AssertionUtils;
@@ -347,6 +348,7 @@ public class ProtocolAnalysis {
         GenerateTsUtils.clear();
         GenerateLuaUtils.clear();
         GenerateGdUtils.clear();
+        GeneratePyUtils.clear();
         GenerateProtobufUtils.clear();
     }
 

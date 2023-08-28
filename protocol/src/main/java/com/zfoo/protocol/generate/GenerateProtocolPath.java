@@ -53,13 +53,29 @@ public abstract class GenerateProtocolPath {
 
         switch (language) {
             case Cpp:
+                break;
             case Go:
+                break;
             case JavaScript:
+                break;
             case TypeScript:
+                break;
             case CSharp:
+                break;
             case Protobuf:
+                break;
             case Lua:
+                break;
             case GdScript:
+                break;
+            case Python:
+                if (StringUtils.isBlank(getProtocolPath(protocolId))) {
+                    path = StringUtils.PERIOD;
+                } else {
+                    path = StringUtils.substringBeforeLast(path, StringUtils.SLASH);
+                    path = path.replaceAll(StringUtils.SLASH , StringUtils.PERIOD);
+                }
+                break;
             case Enhance:
                 break;
             default:

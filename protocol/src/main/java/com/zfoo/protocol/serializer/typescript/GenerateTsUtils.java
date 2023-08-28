@@ -96,14 +96,14 @@ public abstract class GenerateTsUtils {
         }
 
         // 生成ProtocolManager.ts文件
-        var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("typescript/ProtocolManagerTemplate.ts")));
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolManagerTemplate.ts");
 
         var importBuilder = new StringBuilder();
         var initProtocolBuilder = new StringBuilder();
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
             var name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
-            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.GdScript);
+            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.TypeScript);
             importBuilder.append(StringUtils.format("import {} from './{}';", name, path)).append(LS);
             initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, name)).append(LS);
 
@@ -121,7 +121,7 @@ public abstract class GenerateTsUtils {
         var registrationConstructor = registration.getConstructor();
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
 
-        var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("typescript/ProtocolTemplate.ts")));
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolTemplate.ts");
 
         var importSubProtocol = importSubProtocol(registration);
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.TypeScript);

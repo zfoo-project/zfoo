@@ -35,7 +35,6 @@
         <!-- network framework -->
         <netty.version>4.1.84.Final</netty.version>
         <jprotobuf.version>2.4.17</jprotobuf.version>
-        <kryo.version>5.3.0</kryo.version>
 
         <!-- zookeeper -->
         <curator.version>5.3.0</curator.version>
@@ -50,12 +49,6 @@
         <!-- Office document parsing(office文档解析包) -->
         <poi.version>5.2.3</poi.version>
         <csv.version>1.9.0</csv.version>
-
-        <!-- Toolkit(工具包) -->
-        <jctools.version>4.0.1</jctools.version>
-
-        <!-- elastic search -->
-        <elastic.search.version>8.4.3</elastic.search.version>
 
         <java.version>11</java.version>
         <file.encoding>UTF-8</file.encoding>

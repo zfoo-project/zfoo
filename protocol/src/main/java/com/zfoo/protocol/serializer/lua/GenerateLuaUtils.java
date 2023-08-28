@@ -90,7 +90,7 @@ public abstract class GenerateLuaUtils {
         }
 
         // 生成Protocol.lua文件
-        var protocolManagerTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("lua/ProtocolManagerTemplate.lua")));
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolManagerTemplate.lua");
         var fieldBuilder = new StringBuilder();
         var protocolBuilder = new StringBuilder();
         for (var protocol : protocolList) {
@@ -117,7 +117,7 @@ public abstract class GenerateLuaUtils {
         var protocolId = registration.protocolId();
         var registrationConstructor = registration.getConstructor();
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
-        var protocolTemplate = StringUtils.bytesToString(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("lua/ProtocolTemplate.lua")));
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolTemplate.lua");
 
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Lua);
         var valueOfMethod = valueOfMethod(registration);
