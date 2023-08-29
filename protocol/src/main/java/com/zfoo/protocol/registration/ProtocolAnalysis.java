@@ -202,7 +202,7 @@ public class ProtocolAnalysis {
         var enhanceList = new ArrayList<IProtocolRegistration>();
         for (var moduleDefinition : xmlProtocols.getModules()) {
             var module = modules[moduleDefinition.getId()];
-            var packetClazzList = getModuleDefinitionClass(moduleDefinition);
+            var packetClazzList = moduleDefinitionClassMap.get(moduleDefinition.getId());;
             if (CollectionUtils.isEmpty(packetClazzList)) {
                 continue;
             }
@@ -219,11 +219,6 @@ public class ProtocolAnalysis {
         }
 
         enhance(generateOperation, enhanceList);
-    }
-
-    private static Set<Class<?>> getModuleDefinitionClass(XmlModuleDefinition moduleDefinition) {
-
-        return moduleDefinitionClassMap.get(moduleDefinition.getId());
     }
 
     public static Set<Class<?>> scanPackageList(String packageName) {
