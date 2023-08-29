@@ -203,6 +203,9 @@ public class ProtocolAnalysis {
         for (var moduleDefinition : xmlProtocols.getModules()) {
             var module = modules[moduleDefinition.getId()];
             var packetClazzList = getModuleDefinitionClass(moduleDefinition);
+            if (CollectionUtils.isEmpty(packetClazzList)) {
+                continue;
+            }
             for (Class<?> clazz : packetClazzList) {
                 var protocolId = ProtocolManager.protocolId(clazz);
                 var registration = parseProtocolRegistration(clazz, module);
@@ -219,23 +222,8 @@ public class ProtocolAnalysis {
     }
 
     private static Set<Class<?>> getModuleDefinitionClass(XmlModuleDefinition moduleDefinition) {
-        var classSet = new HashSet<Class<?>>();
-        for (short id = moduleDefinition.getMinId(); id < moduleDefinition.getMaxId(); id++) {
-            var clazz = protocolClassMap.get(id);
-            if (Objects.isNull(clazz)) {
-                continue;
-            }
-            classSet.add(clazz);
-        }
-        if (CollectionUtils.isNotEmpty(classSet)) {
-            return classSet;
-        }
 
-        var moduleClassSet = moduleDefinitionClassMap.get(moduleDefinition.getId());
-        if (CollectionUtils.isEmpty(moduleClassSet)) {
-            return classSet;
-        }
-        return moduleClassSet;
+        return moduleDefinitionClassMap.get(moduleDefinition.getId());
     }
 
     public static Set<Class<?>> scanPackageList(String packageName) {

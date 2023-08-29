@@ -23,7 +23,7 @@ import java.util.List;
  * @author godotg
  * @version 3.0
  */
-@JsonPropertyOrder({"id", "name", "minId", "maxId"})
+@JsonPropertyOrder({"id", "name"})
 public class XmlModuleDefinition {
 
     @JacksonXmlProperty(isAttribute = true, localName = "id")
@@ -31,12 +31,6 @@ public class XmlModuleDefinition {
 
     @JacksonXmlProperty(isAttribute = true, localName = "name")
     private String name;
-
-    @JacksonXmlProperty(isAttribute = true, localName = "minId")
-    private short minId;
-
-    @JacksonXmlProperty(isAttribute = true, localName = "maxId")
-    private short maxId;
 
     @JacksonXmlProperty(localName = "protocol")
     @JacksonXmlElementWrapper(useWrapping = false)
@@ -48,14 +42,6 @@ public class XmlModuleDefinition {
 
     public String getName() {
         return name;
-    }
-
-    public short getMinId() {
-        return minId;
-    }
-
-    public short getMaxId() {
-        return maxId;
     }
 
     public List<XmlProtocolDefinition> getProtocols() {
