@@ -155,6 +155,9 @@ public abstract class ClassUtils {
             String entryPath = entry.getName();
             if (entryPath.startsWith(packageBasePath)) {
                 int index = entryPath.indexOf(CLASS_FILE_EXT);
+                if (index == -1) {
+                    continue;
+                }
                 String relativePath = entryPath.substring(0, index);
                 String className = relativePath.replaceAll(StringUtils.SLASH, StringUtils.PERIOD);
                 classSet.add(className);
