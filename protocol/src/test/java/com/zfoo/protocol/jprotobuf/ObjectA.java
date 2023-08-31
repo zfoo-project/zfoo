@@ -15,6 +15,7 @@ package com.zfoo.protocol.jprotobuf;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.registration.anno.Protocol;
 
 import java.util.Map;
 
@@ -25,9 +26,9 @@ import java.util.Map;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 102)
 public class ObjectA implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 102;
 
     // int类型，在protobuf中叫int32
     @Protobuf(order = 1)
@@ -43,10 +44,5 @@ public class ObjectA implements IPacket {
      */
     @Protobuf(order = 3)
     public ObjectB objectB;
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
 }
