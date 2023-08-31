@@ -80,8 +80,7 @@ public class PacketService implements IPacketService {
             -> ProtocolManager.moduleByModuleId(registration.module()).getName().matches(NET_COMMON_MODULE)
             || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_REQUEST_SUFFIX)
             || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_RESPONSE_SUFFIX)
-            || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_NOTICE_SUFFIX)
-            || registration.protocolId() > MAN_NATIVE_PROTOCOL_ID;
+            || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_NOTICE_SUFFIX);
 
     public PacketService() {
 
