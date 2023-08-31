@@ -181,8 +181,4 @@ public abstract class GeneratePyUtils {
         return pyBuilder.toString();
     }
 
-    public static StringBuilder addTab(StringBuilder builder, int deep) {
-        builder.append(TAB.repeat(Math.max(0, deep)));
-        return builder;
-    }
 }

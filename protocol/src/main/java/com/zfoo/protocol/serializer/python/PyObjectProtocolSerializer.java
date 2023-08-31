@@ -36,7 +36,7 @@ public class PyObjectProtocolSerializer implements IPySerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("buffer.writePacket({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
     }
 
@@ -44,7 +44,7 @@ public class PyObjectProtocolSerializer implements IPySerializer {
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("{} = buffer.readPacket({})", result, objectProtocolField.getProtocolId())).append(LS);
         return result;
     }

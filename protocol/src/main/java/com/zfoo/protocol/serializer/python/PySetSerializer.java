@@ -37,7 +37,7 @@ public class PySetSerializer implements IPySerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         if (CutDownSetSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Python)) {
             return;
         }
@@ -45,16 +45,16 @@ public class PySetSerializer implements IPySerializer {
         SetField setField = (SetField) fieldRegistration;
 
         builder.append(StringUtils.format("if {} is None:", objectStr)).append(LS);
-        GeneratePyUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("buffer.writeInt(0)").append(LS);
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
 
         builder.append("else:").append(LS);
-        GeneratePyUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.writeInt(len({}))", objectStr)).append(LS);
 
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
-        GeneratePyUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} in {}:", element, objectStr)).append(LS);
         GeneratePyUtils.pySerializer(setField.getSetElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
@@ -62,7 +62,7 @@ public class PySetSerializer implements IPySerializer {
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         var cutDown = CutDownSetSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Python);
         if (cutDown != null) {
             return cutDown;
@@ -76,16 +76,16 @@ public class PySetSerializer implements IPySerializer {
         String i = "index" + GenerateProtocolFile.index.getAndIncrement();
         String size = "size" + GenerateProtocolFile.index.getAndIncrement();
 
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("{} = buffer.readInt()", size)).append(LS);
 
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if {} > 0:", size)).append(LS);
-        GeneratePyUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} in range({}):", i, size)).append(LS);
         String readObject = GeneratePyUtils.pySerializer(setField.getSetElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
-        GeneratePyUtils.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.append({})", result, readObject)).append(LS);
         return result;
     }

@@ -37,28 +37,28 @@ public class PyMapSerializer implements IPySerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         if (CutDownMapSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Python)) {
             return;
         }
 
         MapField mapField = (MapField) fieldRegistration;
         builder.append(StringUtils.format("if {} is None:", objectStr)).append(LS);
-        GeneratePyUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("buffer.writeInt(0)").append(LS);
 
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("else:").append(LS);
 
-        GeneratePyUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.writeInt(len({}))", objectStr)).append(LS);
 
         String key = "key" + GenerateProtocolFile.index.getAndIncrement();
         String value = "value" + GenerateProtocolFile.index.getAndIncrement();
 
-        GeneratePyUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} in {}:", key, objectStr)).append(LS);
-        GeneratePyUtils.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{} = {}[{}]", value, objectStr, key)).append(LS);
         GeneratePyUtils.pySerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
@@ -68,7 +68,7 @@ public class PyMapSerializer implements IPySerializer {
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         var cutDown = CutDownMapSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Python);
         if (cutDown != null) {
             return cutDown;
@@ -79,15 +79,15 @@ public class PyMapSerializer implements IPySerializer {
 
         builder.append(StringUtils.format("{} = {}", result)).append(LS);
 
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         String size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("{} = buffer.readInt()", size)).append(LS);
 
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if {} > 0:", size)).append(LS);
 
         String i = "index" + GenerateProtocolFile.index.getAndIncrement();
-        GeneratePyUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} in range({}):", i, size)).append(LS);
 
         String keyObject = GeneratePyUtils.pySerializer(mapField.getMapKeyRegistration().serializer())
@@ -96,7 +96,7 @@ public class PyMapSerializer implements IPySerializer {
 
         String valueObject = GeneratePyUtils.pySerializer(mapField.getMapValueRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
-        GeneratePyUtils.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTab(builder, deep + 2);
 
         builder.append(StringUtils.format("{}[{}] = {}", result, keyObject, valueObject)).append(LS);
         return result;

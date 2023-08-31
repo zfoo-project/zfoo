@@ -227,8 +227,4 @@ public abstract class GenerateGdUtils {
         return gdBuilder.toString();
     }
 
-    public static StringBuilder addTab(StringBuilder builder, int deep) {
-        builder.append(TAB_ASCII.repeat(Math.max(0, deep)));
-        return builder;
-    }
 }

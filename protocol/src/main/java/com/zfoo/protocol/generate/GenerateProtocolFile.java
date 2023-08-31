@@ -38,6 +38,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.util.StringUtils.TAB;
+import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
 
 /**
  * @author godotg
@@ -54,6 +55,11 @@ public abstract class GenerateProtocolFile {
 
     public static StringBuilder addTab(StringBuilder builder, int deep) {
         builder.append(TAB.repeat(Math.max(0, deep)));
+        return builder;
+    }
+
+    public static StringBuilder addTabAscii(StringBuilder builder, int deep) {
+        builder.append(TAB_ASCII.repeat(Math.max(0, deep)));
         return builder;
     }
 

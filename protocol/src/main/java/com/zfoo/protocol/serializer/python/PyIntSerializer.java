@@ -34,7 +34,7 @@ public class PyIntSerializer implements IPySerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("buffer.writeInt({})", objectStr)).append(LS);
     }
 
@@ -42,7 +42,7 @@ public class PyIntSerializer implements IPySerializer {
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        GeneratePyUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("{} = buffer.readInt()", result)).append(LS);
         return result;
     }

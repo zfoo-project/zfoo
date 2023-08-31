@@ -49,7 +49,7 @@ public class GdArraySerializer implements IGdSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GenerateGdUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTabAscii(builder, deep);
         if (CutDownArraySerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.GdScript)) {
             return;
         }
@@ -57,16 +57,16 @@ public class GdArraySerializer implements IGdSerializer {
         ArrayField arrayField = (ArrayField) fieldRegistration;
 
         builder.append(StringUtils.format("if ({} == null):", objectStr)).append(LS);
-        GenerateGdUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append("buffer.writeInt(0)").append(LS);
-        GenerateGdUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTabAscii(builder, deep);
 
         builder.append("else:").append(LS);
-        GenerateGdUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("buffer.writeInt({}.size())", objectStr)).append(LS);
 
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
-        GenerateGdUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("for {} in {}:", element, objectStr)).append(LS);
         GenerateGdUtils.gdSerializer(arrayField.getArrayElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
@@ -74,7 +74,7 @@ public class GdArraySerializer implements IGdSerializer {
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GenerateGdUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTabAscii(builder, deep);
         var cutDown = CutDownArraySerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.GdScript);
         if (cutDown != null) {
             return cutDown;
@@ -88,16 +88,16 @@ public class GdArraySerializer implements IGdSerializer {
         String i = "index" + GenerateProtocolFile.index.getAndIncrement();
         String size = "size" + GenerateProtocolFile.index.getAndIncrement();
 
-        GenerateGdUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTabAscii(builder, deep);
         builder.append(StringUtils.format("var {} = buffer.readInt()", size)).append(LS);
 
-        GenerateGdUtils.addTab(builder, deep);
+        GenerateProtocolFile.addTabAscii(builder, deep);
         builder.append(StringUtils.format("if ({} > 0):", size)).append(LS);
-        GenerateGdUtils.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("for {} in range({}):", i, size)).append(LS);
         String readObject = GenerateGdUtils.gdSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
-        GenerateGdUtils.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTabAscii(builder, deep + 2);
         builder.append(StringUtils.format("{}.append({})", result, readObject)).append(LS);
         return result;
     }
