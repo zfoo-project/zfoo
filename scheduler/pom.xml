@@ -50,7 +50,7 @@
         <poi.version>5.2.3</poi.version>
         <csv.version>1.9.0</csv.version>
 
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <file.encoding>UTF-8</file.encoding>
 
         <!-- maven core plugin(maven核心插件) -->
