@@ -2,14 +2,8 @@
 
 <configuration scan="false" debug="false">
 
-    <contextName>com.zfoo.monitor</contextName>
+    <property name="PATTERN_CONSOLE" value="%d{yyyy-MM-dd HH:mm:ss} [%highlight(%5level)] [%thread] %logger.%M\(%F:%line\) - %msg%n"/>
 
-    <property name="LOG_HOME" value="log/net"/>
-    <property name="PATTERN_FILE"
-              value="%d{yyyy-MM-dd HH:mm:ss} [%5level] [%thread] %logger.%M\\(%F:%line\\) - %msg%n"/>
-    <property name="PATTERN_CONSOLE"
-              value="%d{yyyy-MM-dd HH:mm:ss} [%highlight(%5level)] [%thread] %logger.%M\\(%F:%line\\) - %msg%n"/>
-    <!-- 负责写日志,控制台日志，会打印所有的包的所有级别日志 -->
     <appender name="zfoo_console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${PATTERN_CONSOLE}</pattern>
@@ -17,28 +11,8 @@
         </encoder>
     </appender>
 
-
-    <!-- 根logger -->
     <root level="info">
         <appender-ref ref="zfoo_console"/>
     </root>
 
-    <!--
-    - 1.name：包名或类名，用来指定受此logger约束的某一个包或者具体的某一个类
-    - 2.未设置打印级别，所以继承他的上级<root>的日志级别“DEBUG”
-    - 3.未设置additivity，默认为true，将此logger的打印信息向上级传递；
-    - 4.未设置appender，此logger本身不打印任何信息，级别为“DEBUG”及大于“DEBUG”的日志信息传递给root，
-    -  root接到下级传递的信息，交给已经配置好的名为“STDOUT”的appender处理，“STDOUT”appender将信息打印到控制台；
-    -->
-    <logger name="ch.qos.logback" level="info"/>
-
-    <!--*******************************************Spring********************************************************-->
-    <!--logger中的name是指代码的包名或类名，路径要写全，可以配置不同包中的日志输出到不同的文件中。level是日志输出级别 -->
-    <!--过滤掉spring的一些无用的DEBUG信息-->
-    <logger name="org.springframework" level="info"/>
-    <!-- additivity="false"表示不继承父logger的配置和父类没有关系-->
-    <logger name="org.springframework.core" level="info"/>
-
-    <!--*******************************************Netty*********************************************************-->
-    <logger name="io.netty" level="info"/>
 </configuration>
