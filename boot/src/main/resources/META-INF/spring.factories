@@ -1,7 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.zfoo.boot.BootAutoConfiguration,\
-com.zfoo.boot.EventAutoConfiguration,\
-com.zfoo.boot.SchedulerAutoConfiguration,\
-com.zfoo.boot.StorageAutoConfiguration,\
-com.zfoo.boot.OrmAutoConfiguration,\
-com.zfoo.boot.NetAutoConfiguration
