@@ -21,6 +21,7 @@ import com.zfoo.event.model.vo.EventReceiverDefinition;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.util.GraalVmUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -81,10 +82,12 @@ public class EventRegisterProcessor implements BeanPostProcessor {
 
                 var bus = method.getDeclaredAnnotation(EventReceiver.class).value();
                 var receiverDefinition = new EventReceiverDefinition(bean, method, bus, eventClazz);
-                var enhanceReceiverDefinition = EnhanceUtils.createEventReceiver(receiverDefinition);
-
-                // key:class类型 value:观察者 注册Event的receiverMap中
-                EventBus.registerEventReceiver(eventClazz, enhanceReceiverDefinition);
+                if (GraalVmUtils.isGraalVM()) {
+                    EventBus.registerEventReceiver(eventClazz, receiverDefinition);
+                } else {
+                    // key:class类型 value:观察者 注册Event的receiverMap中
+                    EventBus.registerEventReceiver(eventClazz, EnhanceUtils.createEventReceiver(receiverDefinition));
+                }
             }
         } catch (Throwable t) {
             throw new RuntimeException(t);
