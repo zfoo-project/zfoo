@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,17 +10,23 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.event.model.vo;
+package com.zfoo.event.model;
 
-import com.zfoo.event.model.anno.Bus;
-import com.zfoo.event.model.event.IEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.ApplicationContextEvent;
 
 /**
+ * 应用启动事件，这个使用spring自带的事件机制，自研的event事件仅用在业务逻辑
+ * <p>
+ * 启动顺序为：AppStartBeforeEvent -> AppStartEvent -> AppStartAfterEvent
+ *
  * @author godotg
  * @version 3.0
  */
-public interface IEventReceiver {
-    Bus bus();
+public class AppStartAfterEvent extends ApplicationContextEvent {
 
-    void invoke(IEvent event);
+    public AppStartAfterEvent(ApplicationContext context) {
+        super(context);
+    }
+
 }

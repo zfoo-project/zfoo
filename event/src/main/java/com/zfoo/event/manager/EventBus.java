@@ -12,13 +12,13 @@
  */
 package com.zfoo.event.manager;
 
-import com.zfoo.event.model.event.IEvent;
-import com.zfoo.event.model.vo.IEventReceiver;
+import com.zfoo.event.enhance.IEventReceiver;
+import com.zfoo.event.model.IEvent;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.RandomUtils;
+import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;

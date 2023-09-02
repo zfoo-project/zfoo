@@ -13,7 +13,7 @@
 
 package com.zfoo.event;
 
-import com.zfoo.event.model.event.IEvent;
+import com.zfoo.event.model.IEvent;
 
 /**
  * @author godotg

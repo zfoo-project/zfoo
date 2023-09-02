@@ -12,7 +12,7 @@
 
 package com.zfoo.net.core.event;
 
-import com.zfoo.event.model.event.IEvent;
+import com.zfoo.event.model.IEvent;
 import com.zfoo.net.session.Session;
 
 /**
