@@ -14,7 +14,6 @@
 package com.zfoo.net.router.answer;
 
 import com.zfoo.protocol.IPacket;
-import com.zfoo.util.SafeRunnable;
 
 import java.util.function.Consumer;
 
@@ -36,6 +35,6 @@ public interface IAsyncAnswer<T extends IPacket> {
      * EN:If the asynchronous request does not return successfully, the method is called
      * CN:如果异步请求没有成功返回，那么就会回调该方法
      */
-    IAsyncAnswer<T> notComplete(SafeRunnable notCompleteCallback);
+    IAsyncAnswer<T> notComplete(Runnable notCompleteCallback);
 
 }

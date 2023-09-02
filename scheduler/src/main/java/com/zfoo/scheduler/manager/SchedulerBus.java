@@ -18,7 +18,6 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.SchedulerContext;
 import com.zfoo.scheduler.model.vo.SchedulerDefinition;
 import com.zfoo.scheduler.util.TimeUtils;
-import com.zfoo.util.SafeRunnable;
 import com.zfoo.util.ThreadUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
@@ -168,7 +167,7 @@ public abstract class SchedulerBus {
      */
     public static ScheduledFuture<?> scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
 
-        return executor.scheduleAtFixedRate(SafeRunnable.valueOf(runnable), 0, period, unit);
+        return executor.scheduleAtFixedRate(ThreadUtils.safeRunnable(runnable), 0, period, unit);
     }
 
 
@@ -177,7 +176,7 @@ public abstract class SchedulerBus {
      */
     public static ScheduledFuture<?> schedule(Runnable runnable, long delay, TimeUnit unit) {
 
-       return executor.schedule(SafeRunnable.valueOf(runnable), delay, unit);
+       return executor.schedule(ThreadUtils.safeRunnable(runnable), delay, unit);
     }
 
     /**

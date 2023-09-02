@@ -111,5 +111,19 @@ public abstract class ThreadUtils {
         }).start();
     }
 
+    public static Runnable safeRunnable(Runnable runnable) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    runnable.run();
+                } catch (Exception e) {
+                    logger.error("unknown exception", e);
+                } catch (Throwable t) {
+                    logger.error("unknown error", t);
+                }
+            }
+        };
+    }
 
 }

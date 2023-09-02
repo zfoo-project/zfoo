@@ -24,8 +24,8 @@ import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
-import com.zfoo.util.SafeRunnable;
 import com.zfoo.protocol.util.RandomUtils;
+import com.zfoo.util.ThreadUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -172,7 +172,7 @@ public final class TaskBus {
     }
 
     public static void execute(int taskExecutorHash, Runnable runnable) {
-        executors[calTaskExecutorHash(taskExecutorHash)].execute(SafeRunnable.valueOf(runnable));
+        executors[calTaskExecutorHash(taskExecutorHash)].execute(ThreadUtils.safeRunnable(runnable));
     }
 
     public static void execute(Object argument, Runnable runnable) {
