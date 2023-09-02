@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.model.vo;
+package com.zfoo.storage.manager;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.AssertionUtils;
@@ -19,6 +18,8 @@ import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.interpreter.ResourceInterpreter;
+import com.zfoo.storage.model.IdDef;
+import com.zfoo.storage.model.IndexDef;
 import org.springframework.lang.Nullable;
 
 import java.io.InputStream;
@@ -28,7 +29,7 @@ import java.util.*;
  * @author godotg
  * @version 3.0
  */
-public class StorageObject<K, V> {
+public class ObjectStorage<K, V> implements IStorage<K, V> {
 
     private Map<K, V> dataMap = new HashMap<>();
     // 非唯一索引
@@ -43,9 +44,9 @@ public class StorageObject<K, V> {
     protected boolean recycle = true;
 
 
-    public static StorageObject<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
+    public static ObjectStorage<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
         try {
-            StorageObject<?, ?> storageObject = new StorageObject<>();
+            ObjectStorage<?, ?> storageObject = new ObjectStorage<>();
             storageObject.clazz = resourceClazz;
             var idDef = IdDef.valueOf(resourceClazz);
             storageObject.idDef = idDef;
@@ -56,9 +57,9 @@ public class StorageObject<K, V> {
             }
             var idType = idDef.getField().getType();
             if (idType == int.class || idType == Integer.class) {
-                return new StorageObjectInt<>(storageObject);
+                return new PrimitiveIntStorage<>(storageObject);
             } else if (idType == long.class || idType == Long.class) {
-                return new StorageObjectLong<>(storageObject);
+                return new PrimitiveLongStorage<>(storageObject);
             } else {
                 return storageObject;
             }
@@ -69,32 +70,39 @@ public class StorageObject<K, V> {
         }
     }
 
+    @Override
     public boolean contain(K key) {
         return dataMap.containsKey(key);
     }
 
+    @Override
     public boolean contain(int key) {
         return contain((K) Integer.valueOf(key));
     }
 
+    @Override
     public boolean contain(long key) {
         return contain((K) Long.valueOf(key));
     }
 
+    @Override
     public V get(K id) {
         V result = dataMap.get(id);
         AssertionUtils.notNull(result, "The static resource represented as [id:{}] in the static resource [resource:{}] does not exist", id, clazz.getSimpleName());
         return result;
     }
 
+    @Override
     public V get(int id) {
         return get((K) Integer.valueOf(id));
     }
 
+    @Override
     public V get(long id) {
         return get((K) Long.valueOf(id));
     }
 
+    @Override
     public void recycleStorage() {
         recycle = true;
         dataMap = null;
@@ -104,26 +112,32 @@ public class StorageObject<K, V> {
         indexDefMap = null;
     }
 
+    @Override
     public boolean isRecycle() {
         return recycle;
     }
 
+    @Override
     public void setRecycle(boolean recycle) {
         this.recycle = recycle;
     }
 
+    @Override
     public Collection<V> getAll() {
         return dataMap.values();
     }
 
+    @Override
     public Map<K, V> getData() {
         return Collections.unmodifiableMap(dataMap);
     }
 
+    @Override
     public IdDef getIdDef() {
         return idDef;
     }
 
+    @Override
     public List<V> getIndex(String indexName, Object key) {
         var indexValues = indexMap.get(indexName);
         AssertionUtils.notNull(indexValues, "The index of [indexName:{}] does not exist in the static resource [resource:{}]", indexName, clazz.getSimpleName());
@@ -135,6 +149,7 @@ public class StorageObject<K, V> {
     }
 
     @Nullable
+    @Override
     public V getUniqueIndex(String uniqueIndexName, Object key) {
         var indexValueMap = uniqueIndexMap.get(uniqueIndexName);
         AssertionUtils.notNull(indexValueMap, "There is no a unique index for [uniqueIndexName:{}] in the static resource [resource:{}]", uniqueIndexName, clazz.getSimpleName());
@@ -142,11 +157,12 @@ public class StorageObject<K, V> {
         return value;
     }
 
+    @Override
     public int size() {
         return dataMap.size();
     }
 
-    private V put(Object value) {
+    public V put(Object value) {
         var key = (K) ReflectionUtils.getField(idDef.getField(), value);
 
         if (key == null) {

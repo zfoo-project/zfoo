@@ -14,8 +14,8 @@ package com.zfoo.storage.interpreter;
 
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.model.resource.ResourceData;
-import com.zfoo.storage.model.resource.ResourceHeader;
+import com.zfoo.storage.interpreter.data.StorageData;
+import com.zfoo.storage.interpreter.data.StorageHeader;
 import com.zfoo.storage.util.CellUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -31,7 +31,7 @@ import java.util.*;
  */
 public abstract class ExcelReader {
 
-    public static ResourceData readResourceDataFromExcel(InputStream inputStream, String resourceClassName) {
+    public static StorageData readResourceDataFromExcel(InputStream inputStream, String resourceClassName) {
         // 只读取代码里写的字段
         var wb = createWorkbook(inputStream, resourceClassName);
         // 默认取到第一个sheet页
@@ -57,10 +57,10 @@ public abstract class ExcelReader {
             }
             rows.add(columns);
         }
-        return ResourceData.valueOf(resourceClassName, headers, rows);
+        return StorageData.valueOf(resourceClassName, headers, rows);
     }
 
-    private static List<ResourceHeader> getHeaders(Iterator<Row> iterator, String resourceClassName) {
+    private static List<StorageHeader> getHeaders(Iterator<Row> iterator, String resourceClassName) {
         // 获取配置表的有效列名称，默认第一行就是字段名称
         var fieldRow = iterator.next();
         if (fieldRow == null) {
@@ -73,7 +73,7 @@ public abstract class ExcelReader {
         }
         // 默认第三行为描述，需要的时候再使用
         var desRow = iterator.next();
-        var headerList = new ArrayList<ResourceHeader>();
+        var headerList = new ArrayList<StorageHeader>();
         var cellFieldMap = new HashMap<String, Integer>();
         for (var i = 0; i < fieldRow.getLastCellNum(); i++) {
             var fieldCell = fieldRow.getCell(i);
@@ -96,7 +96,7 @@ public abstract class ExcelReader {
             if (Objects.nonNull(previousValue)) {
                 throw new RunException("There are duplicate attribute control columns [field:{}] in the Excel file of the resource [class:{}]", excelFieldName,resourceClassName);
             }
-            headerList.add(ResourceHeader.valueOf(excelFieldName, typeName, i));
+            headerList.add(StorageHeader.valueOf(excelFieldName, typeName, i));
         }
         return headerList;
     }

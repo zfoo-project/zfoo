@@ -14,8 +14,8 @@ package com.zfoo.storage.interpreter;
 
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.model.resource.ResourceData;
-import com.zfoo.storage.model.resource.ResourceHeader;
+import com.zfoo.storage.interpreter.data.StorageData;
+import com.zfoo.storage.interpreter.data.StorageHeader;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -33,7 +33,7 @@ import java.util.List;
  */
 public abstract class CsvReader {
 
-    public static ResourceData readResourceDataFromCSV(InputStream input, String fileName) {
+    public static StorageData readResourceDataFromCSV(InputStream input, String fileName) {
         var records = parseCsv(input, fileName);
         var iterator = records.iterator();
         var headers = getHeaders(iterator, fileName);
@@ -50,14 +50,14 @@ public abstract class CsvReader {
             }
             rows.add(data);
         }
-        return ResourceData.valueOf(fileName, headers, rows);
+        return StorageData.valueOf(fileName, headers, rows);
     }
 
 
     /**
      * 构建配置表消息头
      */
-    private static List<ResourceHeader> getHeaders(Iterator<CSVRecord> iterator, String fileName) {
+    private static List<StorageHeader> getHeaders(Iterator<CSVRecord> iterator, String fileName) {
         // 获取配置表的有效列名称，默认第一行就是字段名称
         var fieldRow = iterator.next();
         if (fieldRow == null) {
@@ -71,7 +71,7 @@ public abstract class CsvReader {
         // 默认第三行为描述，需要的时候再使用
         var descRow = iterator.next();
 
-        var headers = new ArrayList<ResourceHeader>();
+        var headers = new ArrayList<StorageHeader>();
         for (var i = 0; i < fieldRow.size(); i++) {
             var fieldName = fieldRow.get(i);
             if (fieldName == null) {
@@ -81,7 +81,7 @@ public abstract class CsvReader {
             if (filedType == null) {
                 throw new RunException("The column type of {} cannot be empty, and column {} has no configured type", fileName, i + 1);
             }
-            headers.add(ResourceHeader.valueOf(fieldName, filedType, i));
+            headers.add(StorageHeader.valueOf(fieldName, filedType, i));
         }
         return headers;
     }

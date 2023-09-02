@@ -16,10 +16,10 @@ import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.anno.GraalvmNativeStorage;
+import com.zfoo.storage.config.StorageConfig;
+import com.zfoo.storage.interpreter.data.StorageData;
+import com.zfoo.storage.interpreter.data.StorageEnum;
 import com.zfoo.storage.manager.StorageManager;
-import com.zfoo.storage.model.config.StorageConfig;
-import com.zfoo.storage.model.resource.ResourceData;
-import com.zfoo.storage.model.resource.ResourceEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.BindingReflectionHintsRegistrar;
@@ -70,7 +70,7 @@ public class StorageAutoConfiguration {
             logger.info("storage graalvm aot runtime hints register");
 
             var classes = new HashSet<Class<?>>();
-            classes.add(ResourceData.class);
+            classes.add(StorageData.class);
             classes.add(StorageConfig.class);
 
             try {
@@ -94,7 +94,7 @@ public class StorageAutoConfiguration {
                 logger.info("storage graalvm aot hints register serialization [{}]", clazz);
             }
 
-            for (var resource : ResourceEnum.values()) {
+            for (var resource : StorageEnum.values()) {
                 var include = StringUtils.format("*.{}", resource.getType());
                 hints.resources().registerPattern(include);
                 logger.info("storage graalvm aot hints register resources [{}]", include);

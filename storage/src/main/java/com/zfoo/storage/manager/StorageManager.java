@@ -22,10 +22,9 @@ import com.zfoo.storage.anno.GraalvmNativeStorage;
 import com.zfoo.storage.anno.Id;
 import com.zfoo.storage.anno.Storage;
 import com.zfoo.storage.anno.StorageInjection;
-import com.zfoo.storage.model.config.StorageConfig;
-import com.zfoo.storage.model.resource.ResourceEnum;
-import com.zfoo.storage.model.vo.ResourceDef;
-import com.zfoo.storage.model.vo.StorageObject;
+import com.zfoo.storage.config.StorageConfig;
+import com.zfoo.storage.interpreter.data.StorageEnum;
+import com.zfoo.storage.model.StorageDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -67,7 +66,7 @@ public class StorageManager implements IStorageManager {
     /**
      * 在当前项目被依赖注入，被使用的Storage
      */
-    private final Map<Class<?>, StorageObject<?, ?>> storageMap = new HashMap<>();
+    private final Map<Class<?>, IStorage<?, ?>> storageMap = new HashMap<>();
 
     public StorageConfig getStorageConfig() {
         return storageConfig;
@@ -79,7 +78,7 @@ public class StorageManager implements IStorageManager {
 
     @Override
     public void initBefore() {
-        var resourceDefinitionMap = new HashMap<Class<?>, ResourceDef>();
+        var resourceDefinitionMap = new HashMap<Class<?>, StorageDefinition>();
 
         // 获取需要被映射的Excel的class类文件
         var clazzSet = resourceClass();
@@ -87,12 +86,12 @@ public class StorageManager implements IStorageManager {
         // 通过class类文件扫描excel文件地址
         for (var resourceClazz : clazzSet) {
             var resourceFile = resource(resourceClazz);
-            ResourceDef resourceDef = new ResourceDef(resourceClazz, resourceFile);
+            StorageDefinition storageDefinition = new StorageDefinition(resourceClazz, resourceFile);
             if (resourceDefinitionMap.containsKey(resourceClazz)) {
                 // 类的资源定义已经存在
-                throw new RuntimeException(StringUtils.format("The resource definition of the class [{}] already exists [{}]", resourceClazz, resourceDef));
+                throw new RuntimeException(StringUtils.format("The resource definition of the class [{}] already exists [{}]", resourceClazz, storageDefinition));
             }
-            resourceDefinitionMap.put(resourceClazz, resourceDef);
+            resourceDefinitionMap.put(resourceClazz, storageDefinition);
         }
 
         // 检查class字段是否合法
@@ -126,7 +125,7 @@ public class StorageManager implements IStorageManager {
                 var clazz = definition.getClazz();
                 var resource = definition.getResource();
                 var fileExtName = FileUtils.fileExtName(resource.getFilename());
-                StorageObject<?, ?> storageObject = StorageObject.parse(resource.getInputStream(), clazz, fileExtName);
+                ObjectStorage<?, ?> storageObject = ObjectStorage.parse(resource.getInputStream(), clazz, fileExtName);
                 storageMap.putIfAbsent(clazz, storageObject);
             }
         } catch (Exception e) {
@@ -155,7 +154,7 @@ public class StorageManager implements IStorageManager {
 
                 Class<?> resourceClazz = (Class<?>) types[1];
 
-                StorageObject<?, ?> storageObject = storageMap.get(resourceClazz);
+                IStorage<?, ?> storageObject = storageMap.get(resourceClazz);
 
                 if (storageObject == null) {
                     throw new RuntimeException(StringUtils.format("Static class [resource:{}] does not exist", resourceClazz.getSimpleName()));
@@ -188,7 +187,7 @@ public class StorageManager implements IStorageManager {
     }
 
     @Override
-    public StorageObject<?, ?> getStorage(Class<?> clazz) {
+    public IStorage<?, ?> getStorage(Class<?> clazz) {
         var storage = storageMap.get(clazz);
         if (storage == null) {
             throw new RunException("There is no [{}] defined Storage and unable to get it", clazz.getCanonicalName());
@@ -201,12 +200,12 @@ public class StorageManager implements IStorageManager {
     }
 
     @Override
-    public Map<Class<?>, StorageObject<?, ?>> storageMap() {
+    public Map<Class<?>, IStorage<?, ?>> storageMap() {
         return storageMap;
     }
 
     @Override
-    public void updateStorage(Class<?> clazz, StorageObject<?, ?> storageObject) {
+    public void updateStorage(Class<?> clazz, ObjectStorage<?, ?> storageObject) {
         storageMap.put(clazz, storageObject);
     }
 
@@ -280,7 +279,7 @@ public class StorageManager implements IStorageManager {
                 var packageSearchPath = StringUtils.format("{}/**/{}.*", resourceLocation, fileName);
                 packageSearchPath = packageSearchPath.replaceAll("//", "/");
                 try {
-                    Arrays.stream(resourcePatternResolver.getResources(packageSearchPath)).filter(it -> ResourceEnum.containsResourceEnum(FileUtils.fileExtName(it.getFilename()))).forEach(it -> resources.add(it));
+                    Arrays.stream(resourcePatternResolver.getResources(packageSearchPath)).filter(it -> StorageEnum.containsResourceEnum(FileUtils.fileExtName(it.getFilename()))).forEach(it -> resources.add(it));
                 } catch (Exception e) {
                     // do nothing
                 }
@@ -289,7 +288,7 @@ public class StorageManager implements IStorageManager {
                 if (resources.isEmpty()) {
                     packageSearchPath = StringUtils.format("{}/{}.*", resourceLocation, fileName);
                     packageSearchPath = packageSearchPath.replaceAll("//", "/");
-                    Arrays.stream(resourcePatternResolver.getResources(packageSearchPath)).filter(it -> ResourceEnum.containsResourceEnum(FileUtils.fileExtName(it.getFilename()))).forEach(it -> resources.add(it));
+                    Arrays.stream(resourcePatternResolver.getResources(packageSearchPath)).filter(it -> StorageEnum.containsResourceEnum(FileUtils.fileExtName(it.getFilename()))).forEach(it -> resources.add(it));
                 }
                 resourceSet.addAll(resources);
             }

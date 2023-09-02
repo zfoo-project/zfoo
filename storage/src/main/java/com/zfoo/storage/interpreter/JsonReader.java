@@ -15,7 +15,7 @@ package com.zfoo.storage.interpreter;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.model.resource.ResourceData;
+import com.zfoo.storage.interpreter.data.StorageData;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,9 +26,9 @@ import java.io.InputStream;
  */
 public abstract class JsonReader {
 
-    public static ResourceData readResourceDataFromJson(InputStream input) {
+    public static StorageData readResourceDataFromJson(InputStream input) {
         try {
-            var resourceData= JsonUtils.string2Object(StringUtils.bytesToString(IOUtils.toByteArray(input)), ResourceData.class);
+            var resourceData= JsonUtils.string2Object(StringUtils.bytesToString(IOUtils.toByteArray(input)), StorageData.class);
             for(int i=0;i<resourceData.getHeaders().size();i++) {
                 resourceData.getHeaders().get(i).setIndex(i);
             }

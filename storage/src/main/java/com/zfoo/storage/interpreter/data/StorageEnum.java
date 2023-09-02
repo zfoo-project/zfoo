@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -10,7 +9,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package com.zfoo.storage.model.resource;
+package com.zfoo.storage.interpreter.data;
 
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -25,7 +24,7 @@ import java.util.Map;
  * @author godotg
  * @version 3.0
  */
-public enum ResourceEnum {
+public enum StorageEnum {
 
     EXCEL_XLS("xls"),
 
@@ -37,10 +36,10 @@ public enum ResourceEnum {
 
     ;
 
-    private static Map<String, ResourceEnum> typeMap = new HashMap<>();
+    private static Map<String, StorageEnum> typeMap = new HashMap<>();
 
     static {
-        for (var resourceEnum : ResourceEnum.values()) {
+        for (var resourceEnum : StorageEnum.values()) {
             var previousValue = typeMap.putIfAbsent(resourceEnum.type, resourceEnum);
             AssertionUtils.isNull(previousValue, "ResourceEnum should not contain enumeration classes [{}] and [{}] of repeated type", resourceEnum, previousValue);
         }
@@ -48,12 +47,12 @@ public enum ResourceEnum {
 
     private String type;
 
-    ResourceEnum(String type) {
+    StorageEnum(String type) {
         this.type = type;
     }
 
     @Nullable
-    public static ResourceEnum getResourceEnumByType(String type) {
+    public static StorageEnum getResourceEnumByType(String type) {
         return typeMap.get(type);
     }
 
@@ -63,7 +62,7 @@ public enum ResourceEnum {
 
     public static boolean isExcel(String type) {
         var resourceEnum = getResourceEnumByType(type);
-        return resourceEnum == ResourceEnum.EXCEL_XLS || resourceEnum == ResourceEnum.EXCEL_XLSX;
+        return resourceEnum == StorageEnum.EXCEL_XLS || resourceEnum == StorageEnum.EXCEL_XLSX;
     }
 
     public static String typesToString() {

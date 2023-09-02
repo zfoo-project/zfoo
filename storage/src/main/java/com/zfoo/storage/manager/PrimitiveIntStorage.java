@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.model.vo;
+package com.zfoo.storage.manager;
 
 import com.zfoo.protocol.util.AssertionUtils;
 import io.netty.util.collection.IntObjectHashMap;
@@ -24,11 +23,11 @@ import java.util.Map;
  * @author godotg
  * @version 3.0
  */
-public class StorageObjectInt<K, V> extends StorageObject<K, V> {
+public class PrimitiveIntStorage<K, V> extends ObjectStorage<K, V> {
 
     private IntObjectHashMap<V> dataMap;
 
-    public StorageObjectInt(StorageObject<K, V> storageObject) {
+    public PrimitiveIntStorage(ObjectStorage<K, V> storageObject) {
         this.dataMap = new IntObjectHashMap<V>(storageObject.size());
         this.dataMap.putAll((Map<? extends Integer, ? extends V>) storageObject.getData());
         super.indexMap = storageObject.indexMap;

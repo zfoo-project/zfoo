@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -13,36 +12,50 @@
 
 package com.zfoo.storage.manager;
 
-import com.zfoo.storage.config.StorageConfig;
+import com.zfoo.storage.model.IdDef;
+import org.springframework.lang.Nullable;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author godotg
- * @version 3.0
  */
-public interface IStorageManager {
+public interface IStorage<K, V> {
 
-    /**
-     * 配置表初始化之前，先读取所有的excel
-     */
-    void initBefore();
+    boolean contain(K key);
 
-    /**
-     * 注入
-     */
-    void inject();
+    boolean contain(int key);
 
-    /**
-     * 程序加载过后，移除没有用到的配置表
-     */
-    void initAfter();
+    boolean contain(long key);
 
-    IStorage<?, ?> getStorage(Class<?> clazz);
+    V get(K id);
 
-    Map<Class<?>, IStorage<?, ?>> storageMap();
+    V get(int id);
 
-    void updateStorage(Class<?> clazz, ObjectStorage<?, ?> storageObject);
+    V get(long id);
 
-    StorageConfig storageConfig();
+    void recycleStorage();
+
+    boolean isRecycle();
+
+    void setRecycle(boolean recycle);
+
+    Collection<V> getAll();
+
+    Map<K, V> getData();
+
+    IdDef getIdDef();
+
+    List<V> getIndex(String indexName, Object key);
+
+    @Nullable
+    V getUniqueIndex(String uniqueIndexName, Object key);
+
+    int size();
+
+    V put(Object value);
+
+
 }

@@ -14,7 +14,7 @@
 package com.zfoo.storage;
 
 import com.zfoo.storage.anno.StorageInjection;
-import com.zfoo.storage.model.vo.StorageObject;
+import com.zfoo.storage.manager.ObjectStorage;
 import com.zfoo.storage.resource.StudentCsvResource;
 import com.zfoo.storage.resource.StudentResource;
 import org.springframework.stereotype.Component;
@@ -27,8 +27,8 @@ import org.springframework.stereotype.Component;
 public class StudentManager {
 
     @StorageInjection
-    public StorageObject<Integer, StudentResource> studentResources;
+    public ObjectStorage<Integer, StudentResource> studentResources;
     @StorageInjection
-    public StorageObject<Integer, StudentCsvResource> studentCsvResources;
+    public ObjectStorage<Integer, StudentCsvResource> studentCsvResources;
 
 }

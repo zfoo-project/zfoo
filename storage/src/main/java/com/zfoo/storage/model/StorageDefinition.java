@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.model.vo;
+package com.zfoo.storage.model;
 
 import org.springframework.core.io.Resource;
 
@@ -19,12 +18,12 @@ import org.springframework.core.io.Resource;
  * @author godotg
  * @version 3.0
  */
-public class ResourceDef {
+public class StorageDefinition {
 
     private final Class<?> clazz;
     private final Resource resource;
 
-    public ResourceDef(Class<?> clazz, Resource resource) {
+    public StorageDefinition(Class<?> clazz, Resource resource) {
         this.clazz = clazz;
         this.resource = resource;
     }

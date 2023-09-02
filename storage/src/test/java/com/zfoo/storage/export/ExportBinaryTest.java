@@ -22,9 +22,9 @@ import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.storage.anno.AliasFieldName;
 import com.zfoo.storage.anno.Id;
 import com.zfoo.storage.anno.Storage;
+import com.zfoo.storage.config.StorageConfig;
+import com.zfoo.storage.manager.ObjectStorage;
 import com.zfoo.storage.manager.StorageManager;
-import com.zfoo.storage.model.config.StorageConfig;
-import com.zfoo.storage.model.vo.StorageObject;
 import com.zfoo.storage.util.ExportUtils;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
@@ -105,7 +105,7 @@ public class ExportBinaryTest {
         var bytes = ByteBufUtils.readAllBytes(buffer);
         FileUtils.writeInputStreamToFile(new File("D:/github/godot-bird/binary_data.cfg"), new ByteArrayInputStream(bytes));
 
-        var storage = (StorageObject<Integer, StudentResource>) storageManager.getStorage(StudentResource.class);
+        var storage = (ObjectStorage<Integer, StudentResource>) storageManager.getStorage(StudentResource.class);
         for (StudentResource resource : storage.getAll()) {
             System.out.println(JsonUtils.object2String(resource));
         }
