@@ -1,7 +1,5 @@
 package com.zfoo.hotswap.model;
 
-import com.zfoo.util.security.MD5Utils;
-
 /**
  * @author godotg
  * @version 3.0
@@ -12,14 +10,12 @@ public class ClassFileDef {
     private String className;
     private byte[] data;
     private long lastModifyTime;
-    private String md5;
 
     public ClassFileDef(String className, String path, long lastModifyTime, byte[] data) {
         this.className = className;
         this.path = path;
         this.lastModifyTime = lastModifyTime;
         this.data = data;
-        this.md5 = MD5Utils.bytesToMD5(data);
     }
 
     public String getPath() {
@@ -54,11 +50,4 @@ public class ClassFileDef {
         this.lastModifyTime = lastModifyTime;
     }
 
-    public String getMd5() {
-        return md5;
-    }
-
-    public void setMd5(String md5) {
-        this.md5 = md5;
-    }
 }

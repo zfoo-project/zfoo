@@ -31,7 +31,6 @@
         <module>storage</module>
         <module>orm</module>
         <module>protocol</module>
-        <module>util</module>
     </modules>
 
     <properties>

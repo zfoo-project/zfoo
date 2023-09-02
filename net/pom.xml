@@ -58,11 +58,6 @@
     <dependencies>
         <dependency>
             <groupId>com.zfoo</groupId>
-            <artifactId>util</artifactId>
-            <version>${zfoo.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.zfoo</groupId>
             <artifactId>event</artifactId>
             <version>${zfoo.version}</version>
         </dependency>

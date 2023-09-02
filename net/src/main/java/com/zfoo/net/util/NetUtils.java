@@ -16,7 +16,6 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.EnumUtils;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
@@ -290,7 +289,11 @@ public class NetUtils {
     public static Set<NetworkInterface> getAllNetworkInterface() {
         try {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-            return EnumUtils.enumerationToSet(networkInterfaces);
+            var set = new HashSet<NetworkInterface>();
+            while (networkInterfaces.hasMoreElements()) {
+                set.add(networkInterfaces.nextElement());
+            }
+            return set;
         } catch (SocketException e) {
             return Collections.emptySet();
         }

@@ -58,7 +58,7 @@
     <dependencies>
         <dependency>
             <groupId>com.zfoo</groupId>
-            <artifactId>util</artifactId>
+            <artifactId>protocol</artifactId>
             <version>${zfoo.version}</version>
         </dependency>
 
