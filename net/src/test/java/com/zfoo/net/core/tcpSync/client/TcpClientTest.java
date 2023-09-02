@@ -14,12 +14,12 @@
 package com.zfoo.net.core.tcpSync.client;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.core.tcp.TcpClient;
 import com.zfoo.net.packet.tcp.SyncMessAnswer;
 import com.zfoo.net.packet.tcp.SyncMessAsk;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ThreadUtils;
-import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;

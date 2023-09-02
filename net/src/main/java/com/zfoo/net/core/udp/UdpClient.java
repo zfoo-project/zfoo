@@ -15,12 +15,12 @@ package com.zfoo.net.core.udp;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.AbstractClient;
+import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.handler.BaseRouteHandler;
 import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.handler.codec.udp.UdpCodecHandler;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.exception.ExceptionUtils;
-import com.zfoo.util.net.HostAndPort;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;

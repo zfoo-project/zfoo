@@ -14,10 +14,10 @@
 package com.zfoo.monitor.util;
 
 import com.zfoo.monitor.*;
+import com.zfoo.net.util.NetUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.util.TimeUtils;
-import com.zfoo.util.net.NetUtils;
 import com.zfoo.util.security.IdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

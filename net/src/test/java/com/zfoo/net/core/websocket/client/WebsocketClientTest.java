@@ -14,10 +14,10 @@
 package com.zfoo.net.core.websocket.client;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.core.websocket.WebsocketClient;
 import com.zfoo.net.packet.websocket.WebsocketHelloRequest;
 import com.zfoo.protocol.util.ThreadUtils;
-import com.zfoo.util.net.HostAndPort;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolConfig;
 import org.junit.Ignore;
 import org.junit.Test;

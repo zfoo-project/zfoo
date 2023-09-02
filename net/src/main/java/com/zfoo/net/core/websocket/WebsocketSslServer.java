@@ -14,12 +14,11 @@
 package com.zfoo.net.core.websocket;
 
 import com.zfoo.net.core.AbstractServer;
-import com.zfoo.net.handler.GatewayRouteHandler;
+import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.handler.ServerRouteHandler;
 import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
 import com.zfoo.net.handler.idle.ServerIdleHandler;
 import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;

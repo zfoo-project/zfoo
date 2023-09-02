@@ -13,9 +13,9 @@
 
 package com.zfoo.net.config.model;
 
+import com.zfoo.net.core.HostAndPort;
+import com.zfoo.net.util.NetUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.net.HostAndPort;
-import com.zfoo.util.net.NetUtils;
 
 import java.util.List;
 import java.util.Objects;

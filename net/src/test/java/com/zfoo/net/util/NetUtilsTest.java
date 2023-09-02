@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,9 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.util;
+package com.zfoo.net.util;
 
-import com.zfoo.util.net.NetUtils;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

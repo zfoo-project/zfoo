@@ -14,10 +14,10 @@
 package com.zfoo.net.core.jprotobuf;
 
 import com.zfoo.net.core.AbstractServer;
+import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.handler.ServerRouteHandler;
 import com.zfoo.net.handler.codec.jprotobuf.JProtobufTcpCodecHandler;
 import com.zfoo.net.handler.idle.ServerIdleHandler;
-import com.zfoo.util.net.HostAndPort;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 

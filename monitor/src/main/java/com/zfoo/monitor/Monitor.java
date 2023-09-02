@@ -13,11 +13,11 @@
 package com.zfoo.monitor;
 
 import com.zfoo.monitor.util.OSUtils;
+import com.zfoo.net.util.NetUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.util.TimeUtils;
-import com.zfoo.util.net.NetUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -35,8 +35,6 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.*;
-import com.zfoo.protocol.util.RandomUtils;
-import com.zfoo.util.net.HostAndPort;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -107,9 +105,14 @@ public class OrmManager implements IOrmManager {
         // 设置数据库地址
         var hostConfig = ormConfig.getHost();
         if (CollectionUtils.isNotEmpty(hostConfig.getAddress())) {
-            var hostList = HostAndPort.toHostAndPortList(hostConfig.getAddress().values())
+            var hostList = hostConfig.getAddress().values()
                     .stream()
-                    .map(it -> new ServerAddress(it.getHost(), it.getPort()))
+                    .map(it -> it.split(StringUtils.COMMA_REGEX))
+                    .flatMap(it -> Arrays.stream(it))
+                    .map(it -> StringUtils.trim(it))
+                    .filter(it -> StringUtils.isNotBlank(it))
+                    .map(it -> it.split(StringUtils.COLON_REGEX))
+                    .map(it -> new ServerAddress(it[0], Integer.parseInt(it[1])))
                     .collect(Collectors.toList());
             mongoBuilder.applyToClusterSettings(builder -> builder.hosts(hostList));
         }
