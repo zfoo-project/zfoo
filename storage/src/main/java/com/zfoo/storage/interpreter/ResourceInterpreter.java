@@ -15,8 +15,8 @@ package com.zfoo.storage.interpreter;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.model.anno.ExcelFieldName;
-import com.zfoo.storage.model.anno.Id;
+import com.zfoo.storage.anno.AliasFieldName;
+import com.zfoo.storage.anno.Id;
 import com.zfoo.storage.model.resource.ResourceData;
 import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.strategy.*;
@@ -100,7 +100,7 @@ public class ResourceInterpreter {
 
     // 优先使用ExcelFieldName注解表示的值当作列名
     private static String getExcelFieldName(Field field) {
-        return field.isAnnotationPresent(ExcelFieldName.class) ? field.getAnnotation(ExcelFieldName.class).value() : field.getName();
+        return field.isAnnotationPresent(AliasFieldName.class) ? field.getAnnotation(AliasFieldName.class).value() : field.getName();
     }
 
     // 只读取代码里写的字段

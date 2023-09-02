@@ -15,7 +15,7 @@ package com.zfoo.storage.model.vo;
 
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.storage.model.anno.Id;
+import com.zfoo.storage.anno.Id;
 
 import java.lang.reflect.Field;
 

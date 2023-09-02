@@ -28,7 +28,7 @@ import java.util.*;
  * @author godotg
  * @version 3.0
  */
-public class Storage<K, V> {
+public class StorageObject<K, V> {
 
     private Map<K, V> dataMap = new HashMap<>();
     // 非唯一索引
@@ -43,24 +43,24 @@ public class Storage<K, V> {
     protected boolean recycle = true;
 
 
-    public static Storage<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
+    public static StorageObject<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
         try {
-            Storage<?, ?> storage = new Storage<>();
-            storage.clazz = resourceClazz;
+            StorageObject<?, ?> storageObject = new StorageObject<>();
+            storageObject.clazz = resourceClazz;
             var idDef = IdDef.valueOf(resourceClazz);
-            storage.idDef = idDef;
-            storage.indexDefMap = IndexDef.createResourceIndexes(resourceClazz);
+            storageObject.idDef = idDef;
+            storageObject.indexDefMap = IndexDef.createResourceIndexes(resourceClazz);
             var list = ResourceInterpreter.read(inputStream, resourceClazz, suffix);
             for (var object : list) {
-                storage.put(object);
+                storageObject.put(object);
             }
             var idType = idDef.getField().getType();
             if (idType == int.class || idType == Integer.class) {
-                return new StorageInt<>(storage);
+                return new StorageObjectInt<>(storageObject);
             } else if (idType == long.class || idType == Long.class) {
-                return new StorageLong<>(storage);
+                return new StorageObjectLong<>(storageObject);
             } else {
-                return storage;
+                return storageObject;
             }
         } catch (Throwable e) {
             throw new RuntimeException(e.getMessage(), e);

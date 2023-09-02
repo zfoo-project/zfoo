@@ -59,15 +59,6 @@ public class ConversionTest {
     }
 
     @Test
-    public void string2Class() {
-        ConversionService conversionService = csfb.getObject();
-        // String to Class
-        Class<?> clazz = (Class<?>) conversionService.convert("com.zfoo.storage.model.vo.Storage", TypeDescriptor.valueOf(String.class), TypeDescriptor.valueOf(Class.class));
-
-        Assert.assertEquals("com.zfoo.storage.model.vo.Storage", clazz.getName());
-    }
-
-    @Test
     public void string2Map() {
         ConversionService conversionService = csfb.getObject();
         //Json to Map

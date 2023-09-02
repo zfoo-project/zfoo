@@ -14,60 +14,62 @@
 package com.zfoo.storage.model.vo;
 
 import com.zfoo.protocol.util.AssertionUtils;
-import io.netty.util.collection.IntObjectHashMap;
+import io.netty.util.collection.LongObjectHashMap;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class StorageInt<K, V> extends Storage<K, V> {
+public class StorageObjectLong<K, V> extends StorageObject<K, V> {
 
-    private IntObjectHashMap<V> dataMap;
+    private LongObjectHashMap<V> dataMap;
 
-    public StorageInt(Storage<K, V> storage) {
-        this.dataMap = new IntObjectHashMap<V>(storage.size());
-        this.dataMap.putAll((Map<? extends Integer, ? extends V>) storage.getData());
-        super.indexMap = storage.indexMap;
-        super.uniqueIndexMap = storage.uniqueIndexMap;
-        super.clazz = storage.clazz;
-        super.idDef = storage.idDef;
-        super.indexDefMap = storage.indexDefMap;
-        super.recycle = storage.recycle;
-        storage.recycleStorage();
+    public StorageObjectLong(StorageObject<K, V> storageObject) {
+        this.dataMap = new LongObjectHashMap<V>(storageObject.size());
+        this.dataMap.putAll((Map<? extends Long, ? extends V>) storageObject.getData());
+        super.indexMap = storageObject.indexMap;
+        super.uniqueIndexMap = storageObject.uniqueIndexMap;
+        super.clazz = storageObject.clazz;
+        super.idDef = storageObject.idDef;
+        super.indexDefMap = storageObject.indexDefMap;
+        super.recycle = storageObject.recycle;
+        storageObject.recycleStorage();
     }
 
     @Override
     public boolean contain(K key) {
-        return contain((int) key);
+        return contain((long) key);
     }
 
     @Override
     public boolean contain(int key) {
-        return dataMap.containsKey(key);
+        return contain((long) key);
     }
 
     @Override
     public boolean contain(long key) {
-        return contain((int) key);
+        return dataMap.containsKey(key);
     }
 
     @Override
     public V get(K id) {
-        return get((int) id);
+        return get((long) id);
     }
 
     @Override
     public V get(int id) {
-        V result = dataMap.get(id);
-        AssertionUtils.notNull(result, "The static resource represented as [id:{}] in the static resource [resource:{}] does not exist", id, clazz.getSimpleName());
-        return result;
+        return get((long) id);
     }
 
     @Override
     public V get(long id) {
-        return get((int) id);
+        V result = dataMap.get(id);
+        AssertionUtils.notNull(result, "The static resource represented as [id:{}] in the static resource [resource:{}] does not exist", id, clazz.getSimpleName());
+        return result;
     }
 
     @Override

@@ -17,7 +17,7 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.model.anno.Index;
+import com.zfoo.storage.anno.Index;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -15,8 +15,8 @@ package com.zfoo.boot;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.StorageContext;
+import com.zfoo.storage.anno.GraalvmNativeStorage;
 import com.zfoo.storage.manager.StorageManager;
-import com.zfoo.storage.model.anno.GraalvmNativeResource;
 import com.zfoo.storage.model.config.StorageConfig;
 import com.zfoo.storage.model.resource.ResourceData;
 import com.zfoo.storage.model.resource.ResourceEnum;
@@ -77,7 +77,7 @@ public class StorageAutoConfiguration {
                 for (var className : ClassUtils.getAllClasses("")) {
                     try {
                         var clazz = Class.forName(className);
-                        if (!clazz.isAnnotationPresent(GraalvmNativeResource.class)) {
+                        if (!clazz.isAnnotationPresent(GraalvmNativeStorage.class)) {
                             continue;
                         }
                         classes.add(clazz);

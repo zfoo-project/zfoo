@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,29 +10,26 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.model.anno;
+package com.zfoo.storage.anno;
 
 import org.springframework.aot.hint.annotation.Reflective;
-import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 
 /**
- * graalvm build must use this annotation to specify path, because native build cannot scan classes and files
+ * EN: the name of the index uses the name of the field attribute, implemented with HaspMap
+ * CN: 索引的名称使用字段属性的名称，用HaspMap实现
  *
  * @author godotg
  * @version 3.0
  */
+
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
+@Target({ElementType.FIELD})
 @Reflective
-@Component
-public @interface GraalvmNativeResource {
+public @interface Index {
 
-    /**
-     * graalvm build must specify resource path
-     */
-    String value();
+    boolean unique() default false;
 
 }

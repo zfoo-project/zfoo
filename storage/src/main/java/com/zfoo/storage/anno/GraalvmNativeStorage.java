@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,28 +10,29 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.model.anno;
+package com.zfoo.storage.anno;
 
 import org.springframework.aot.hint.annotation.Reflective;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 
 /**
- * EN: Injection of static data
- * CN: 静态数据的注入
+ * graalvm build must use this annotation to specify path, because native build cannot scan classes and files
  *
  * @author godotg
  * @version 3.0
  */
-
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
+@Target({ElementType.TYPE})
 @Reflective
-public @interface ResInjection {
+@Component
+public @interface GraalvmNativeStorage {
 
-    String value() default "";
-
-    boolean unique() default false;
+    /**
+     * graalvm build must specify resource path
+     */
+    String value();
 
 }

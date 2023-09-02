@@ -20,7 +20,7 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.interpreter.CsvReader;
 import com.zfoo.storage.interpreter.ExcelReader;
 import com.zfoo.storage.model.resource.ResourceEnum;
-import com.zfoo.storage.model.vo.Storage;
+import com.zfoo.storage.model.vo.StorageObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,7 +94,7 @@ public abstract class ExportUtils {
     }
 
     // 将class里的map自动赋值storage
-    public static <T> T autoWrapData(Class<T> clazz, Map<Class<?>, Storage<?, ?>> storageMap) {
+    public static <T> T autoWrapData(Class<T> clazz, Map<Class<?>, StorageObject<?, ?>> storageMap) {
         var instance = ReflectionUtils.newInstance(clazz);
 
         var filedList = ReflectionUtils.notStaticAndTransientFields(clazz);

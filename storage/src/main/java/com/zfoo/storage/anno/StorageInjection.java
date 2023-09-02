@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,29 +10,28 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.model.anno;
+package com.zfoo.storage.anno;
 
 import org.springframework.aot.hint.annotation.Reflective;
 
 import java.lang.annotation.*;
 
 /**
- *
- * EN: You can specify the corresponding resource file name (only the file name is specified, no file suffix is required)
- * CN: 可以指定对应的资源文件名（只指定文件名，不需要文件后缀），如果不指定资源文件名，则默认通过扫描路径获取与类名相同的文件资源
+ * EN: Injection of static data
+ * CN: 静态数据的注入
  *
  * @author godotg
  * @version 3.0
  */
+
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
+@Target({ElementType.FIELD})
 @Reflective
-public @interface Resource {
-    String alias() default "";
+public @interface StorageInjection {
 
-    /**
-     * graalvm build must specified path
-     */
-    String nativeClassPath() default "";
+    String value() default "";
+
+    boolean unique() default false;
+
 }

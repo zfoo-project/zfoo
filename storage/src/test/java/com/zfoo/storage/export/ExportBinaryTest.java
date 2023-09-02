@@ -19,12 +19,12 @@ import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.JsonUtils;
+import com.zfoo.storage.anno.AliasFieldName;
+import com.zfoo.storage.anno.Id;
+import com.zfoo.storage.anno.Storage;
 import com.zfoo.storage.manager.StorageManager;
-import com.zfoo.storage.model.anno.ExcelFieldName;
-import com.zfoo.storage.model.anno.Id;
-import com.zfoo.storage.model.anno.Resource;
 import com.zfoo.storage.model.config.StorageConfig;
-import com.zfoo.storage.model.vo.Storage;
+import com.zfoo.storage.model.vo.StorageObject;
 import com.zfoo.storage.util.ExportUtils;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
@@ -54,14 +54,14 @@ public class ExportBinaryTest {
 
     }
 
-    @Resource
+    @Storage
     public static class StudentResource implements IPacket {
 
         @Id
         public int id;
 
         public String name;
-        @ExcelFieldName("年龄")
+        @AliasFieldName("年龄")
         public int age;
         public float score;
         public String[] courses;
@@ -105,7 +105,7 @@ public class ExportBinaryTest {
         var bytes = ByteBufUtils.readAllBytes(buffer);
         FileUtils.writeInputStreamToFile(new File("D:/github/godot-bird/binary_data.cfg"), new ByteArrayInputStream(bytes));
 
-        var storage = (Storage<Integer, StudentResource>) storageManager.getStorage(StudentResource.class);
+        var storage = (StorageObject<Integer, StudentResource>) storageManager.getStorage(StudentResource.class);
         for (StudentResource resource : storage.getAll()) {
             System.out.println(JsonUtils.object2String(resource));
         }
