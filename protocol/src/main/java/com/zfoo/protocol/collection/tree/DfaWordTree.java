@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.util.math.dfa;
+package com.zfoo.protocol.collection.tree;
 
 
 import com.zfoo.protocol.collection.CollectionUtils;
@@ -32,7 +31,7 @@ import java.util.*;
  * <br>       巾
  * 其中每个节点都是一个WordTree对象，查找时从上向下查找。<br>
  */
-public class WordTree extends HashMap<Character, WordTree> {
+public class DfaWordTree extends HashMap<Character, DfaWordTree> {
 
 
     /**
@@ -44,7 +43,7 @@ public class WordTree extends HashMap<Character, WordTree> {
     /**
      * 默认构造
      */
-    public WordTree() {
+    public DfaWordTree() {
     }
 
 
@@ -66,9 +65,9 @@ public class WordTree extends HashMap<Character, WordTree> {
      * @param word 单词
      */
     public void addWord(String word) {
-        WordTree parent = null;
-        WordTree current = this;
-        WordTree child;
+        DfaWordTree parent = null;
+        DfaWordTree current = this;
+        DfaWordTree child;
         char currentChar = 0;
         int length = word.length();
         for (var i = 0; i < length; i++) {
@@ -78,7 +77,7 @@ public class WordTree extends HashMap<Character, WordTree> {
                 child = current.get(currentChar);
                 if (child == null) {
                     // 无子类，新建一个子节点后存放下一个字符
-                    child = new WordTree();
+                    child = new DfaWordTree();
                     current.put(currentChar, child);
                 }
                 parent = current;
@@ -147,7 +146,7 @@ public class WordTree extends HashMap<Character, WordTree> {
         }
 
         var findWords = new ArrayList<String>();
-        WordTree current = this;
+        DfaWordTree current = this;
         int length = text.length();
         // 存放查找到的字符缓存。完整出现一个词时加到findedWords中，否则清空
         StringBuilder wordBuffer;
