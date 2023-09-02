@@ -21,7 +21,7 @@ import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.anno.GraalvmNativeStorage;
 import com.zfoo.storage.anno.Id;
 import com.zfoo.storage.anno.Storage;
-import com.zfoo.storage.anno.StorageInjection;
+import com.zfoo.storage.anno.StorageAutowired;
 import com.zfoo.storage.config.StorageConfig;
 import com.zfoo.storage.interpreter.data.StorageEnum;
 import com.zfoo.storage.model.StorageDefinition;
@@ -139,7 +139,7 @@ public class StorageManager implements IStorageManager {
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
             var clazz = bean.getClass();
-            ReflectionUtils.filterFieldsInClass(clazz, field -> field.isAnnotationPresent(StorageInjection.class), field -> {
+            ReflectionUtils.filterFieldsInClass(clazz, field -> field.isAnnotationPresent(StorageAutowired.class), field -> {
                 Type type = field.getGenericType();
 
                 if (!(type instanceof ParameterizedType)) {

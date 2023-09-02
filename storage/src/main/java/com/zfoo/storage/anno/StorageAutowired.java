@@ -28,7 +28,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 @Reflective
-public @interface StorageInjection {
+public @interface StorageAutowired {
 
     String value() default "";
 
