@@ -22,7 +22,7 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolModule;
-import com.zfoo.util.math.ConsistentHash;
+import com.zfoo.net.util.ConsistentHash;
 import org.springframework.lang.Nullable;
 
 import java.util.TreeMap;

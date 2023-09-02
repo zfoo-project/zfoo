@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.util.math;
+package com.zfoo.net.util;
 
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.JsonUtils;
