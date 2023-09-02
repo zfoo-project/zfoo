@@ -18,7 +18,8 @@ import org.springframework.aot.hint.annotation.Reflective;
 import java.lang.annotation.*;
 
 /**
- * 静态数据的注入
+ * EN: Injection of static data
+ * CN: 静态数据的注入
  *
  * @author godotg
  * @version 3.0

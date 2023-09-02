@@ -13,10 +13,13 @@
 
 package com.zfoo.storage.model.anno;
 
+import org.springframework.aot.hint.annotation.Reflective;
+
 import java.lang.annotation.*;
 
 /**
- * 索引，索引的名称使用字段属性的名称，用HaspMap实现
+ * EN: the name of the index uses the name of the field attribute, implemented with HaspMap
+ * CN: 索引的名称使用字段属性的名称，用HaspMap实现
  *
  * @author godotg
  * @version 3.0
@@ -25,6 +28,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
+@Reflective
 public @interface Index {
 
     boolean unique() default false;

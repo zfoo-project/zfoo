@@ -13,21 +13,27 @@
 
 package com.zfoo.storage.model.anno;
 
-
 import org.springframework.aot.hint.annotation.Reflective;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 
 /**
- * primary key
+ * graalvm build must use this annotation to specify path, because native build cannot scan classes and files
  *
  * @author godotg
  * @version 3.0
  */
-
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
+@Target({ElementType.TYPE})
 @Reflective
-public @interface Id {
+@Component
+public @interface GraalvmNativeResource {
+
+    /**
+     * graalvm build must specify resource path
+     */
+    String value();
+
 }

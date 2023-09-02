@@ -22,17 +22,19 @@ import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.model.anno.Id;
+import com.zfoo.storage.model.anno.GraalvmNativeResource;
 import com.zfoo.storage.model.anno.ResInjection;
 import com.zfoo.storage.model.config.StorageConfig;
 import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.model.vo.ResourceDef;
 import com.zfoo.storage.model.vo.Storage;
+import com.zfoo.util.GraalVmUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.stereotype.Component;
@@ -82,20 +84,12 @@ public class StorageManager implements IStorageManager {
     public void initBefore() {
         var resourceDefinitionMap = new HashMap<Class<?>, ResourceDef>();
 
-        // 扫描Excel的class类文件
-        var clazzNameSet = scanResourceAnno(StringUtils.tokenize(storageConfig.getScanPackage(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
+        // 获取需要被映射的Excel的class类文件
+        var clazzSet = resourceClass();
 
         // 通过class类文件扫描excel文件地址
-        for (var clazzName : clazzNameSet) {
-            Class<?> resourceClazz;
-            try {
-                resourceClazz = Class.forName(clazzName);
-            } catch (ClassNotFoundException e) {
-                // 无法获取资源类
-                throw new RuntimeException(StringUtils.format("Unable to get resource [class:{}]", clazzName));
-            }
-
-            var resourceFile = scanResourceFile(resourceClazz);
+        for (var resourceClazz : clazzSet) {
+            var resourceFile = resource(resourceClazz);
             ResourceDef resourceDef = new ResourceDef(resourceClazz, resourceFile);
             if (resourceDefinitionMap.containsKey(resourceClazz)) {
                 // 类的资源定义已经存在
@@ -148,7 +142,8 @@ public class StorageManager implements IStorageManager {
         var applicationContext = StorageContext.getApplicationContext();
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
-            ReflectionUtils.filterFieldsInClass(bean.getClass(), field -> field.isAnnotationPresent(ResInjection.class), field -> {
+            var clazz = bean.getClass();
+            ReflectionUtils.filterFieldsInClass(clazz, field -> field.isAnnotationPresent(ResInjection.class), field -> {
                 Type type = field.getGenericType();
 
                 if (!(type instanceof ParameterizedType)) {
@@ -223,12 +218,23 @@ public class StorageManager implements IStorageManager {
         return getStorageConfig();
     }
 
-    private Set<String> scanResourceAnno(String[] scanPackages) {
-        var resourcePatternResolver = new PathMatchingResourcePatternResolver();
-        var metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
+    private Set<Class<?>> resourceClass() {
+        // graalvm环境 PathMatchingResourcePatternResolver/CachingMetadataReaderFactory 无法使用，所以直接在spring容器中获取
+        if (GraalVmUtils.isGraalVM()) {
+            var applicationContext = StorageContext.getApplicationContext();
+            var nativeResources = applicationContext.getBeansWithAnnotation(GraalvmNativeResource.class);
+            return nativeResources.values().stream().map(it -> it.getClass()).collect(Collectors.toSet());
+        } else {
+            return scanResourceAnno();
+        }
+    }
 
+    private Set<Class<?>> scanResourceAnno() {
+        var scanPackages = StringUtils.tokenize(storageConfig.getScanPackage(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
+        var result = new HashSet<Class<?>>();
         try {
-            var result = new HashSet<String>();
+            var resourcePatternResolver = new PathMatchingResourcePatternResolver();
+            var metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
             for (var scanPackage : scanPackages) {
                 var packageSearchPath = "classpath*:" + scanPackage.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + SUFFIX_PATTERN;
                 var resources = resourcePatternResolver.getResources(packageSearchPath);
@@ -239,14 +245,25 @@ public class StorageManager implements IStorageManager {
                         var annoMeta = metadataReader.getAnnotationMetadata();
                         if (annoMeta.hasAnnotation(resourceName)) {
                             ClassMetadata clazzMeta = metadataReader.getClassMetadata();
-                            result.add(clazzMeta.getClassName());
+                            Class<?> resourceClazz = Class.forName(clazzMeta.getClassName());
+                            result.add(resourceClazz);
                         }
                     }
                 }
             }
             return result;
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Unable to read resource information", e);
+        }
+    }
+
+    private Resource resource(Class<?> clazz) {
+        if (GraalVmUtils.isGraalVM()) {
+            var resourceLoader = new DefaultResourceLoader();
+            var resource = resourceLoader.getResource(clazz.getAnnotation(GraalvmNativeResource.class).value());
+            return resource;
+        } else {
+            return scanResourceFile(clazz);
         }
     }
 
