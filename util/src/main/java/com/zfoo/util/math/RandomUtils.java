@@ -13,6 +13,7 @@
 
 package com.zfoo.util.math;
 
+import com.zfoo.protocol.util.NumberUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.math.BigDecimal;

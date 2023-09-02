@@ -13,7 +13,6 @@
 package com.zfoo.protocol.collection;
 
 
-import com.zfoo.protocol.collection.model.NaturalComparator;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.IOUtils;
@@ -131,11 +130,11 @@ public abstract class CollectionUtils {
      * @return a new sorted List, containing the elements of Collection a and b
      */
     public static <T extends Comparable<? super T>> List<T> collate(List<? extends T> aList, List<? extends T> bList) {
-        return collate(aList, bList, NaturalComparator.getInstance(), true);
+        return collate(aList, bList, Comparator.naturalOrder(), true);
     }
 
     public static <T extends Comparable<? super T>> List<T> collate(List<? extends T> aList, List<? extends T> bList, boolean includeDuplicates) {
-        return collate(aList, bList, NaturalComparator.getInstance(), includeDuplicates);
+        return collate(aList, bList, Comparator.naturalOrder(), includeDuplicates);
     }
 
     public static <T> List<T> collate(List<T> aList, List<T> bList, Comparator<T> comparator) {
