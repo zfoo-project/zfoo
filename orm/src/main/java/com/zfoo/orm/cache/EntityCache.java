@@ -44,9 +44,9 @@ import java.util.stream.Collectors;
  * @author godotg
  * @version 3.0
  */
-public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> implements IEntityCaches<PK, E> {
+public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> implements IEntityCache<PK, E> {
 
-    private static final Logger logger = LoggerFactory.getLogger(EntityCaches.class);
+    private static final Logger logger = LoggerFactory.getLogger(EntityCache.class);
 
     private static final int BATCH_SIZE = 512;
 
@@ -54,7 +54,7 @@ public class EntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> impl
 
     private final LoadingCache<PK, PNode<E>> cache;
 
-    public EntityCaches(EntityDef entityDef) {
+    public EntityCache(EntityDef entityDef) {
         this.entityDef = entityDef;
 
         this.cache = Caffeine.newBuilder()

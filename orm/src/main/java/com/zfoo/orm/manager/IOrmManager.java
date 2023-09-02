@@ -15,7 +15,7 @@ package com.zfoo.orm.manager;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
-import com.zfoo.orm.cache.IEntityCaches;
+import com.zfoo.orm.cache.IEntityCache;
 import com.zfoo.orm.model.IEntity;
 import org.bson.Document;
 
@@ -39,9 +39,9 @@ public interface IOrmManager {
      */
     MongoClient mongoClient();
 
-    <E extends IEntity<?>> IEntityCaches<?, E> getEntityCaches(Class<E> clazz);
+    <E extends IEntity<?>> IEntityCache<?, E> getEntityCaches(Class<E> clazz);
 
-    Collection<IEntityCaches<?, ?>> getAllEntityCaches();
+    Collection<IEntityCache<?, ?>> getAllEntityCaches();
 
     /**
      * 基于对象的orm操作

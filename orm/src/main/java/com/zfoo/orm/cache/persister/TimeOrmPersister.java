@@ -15,7 +15,7 @@ package com.zfoo.orm.cache.persister;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.cache.EntityCaches;
+import com.zfoo.orm.cache.EntityCache;
 import com.zfoo.orm.model.EntityDef;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
@@ -33,7 +33,7 @@ public class TimeOrmPersister extends AbstractOrmPersister {
      */
     private final long rate;
 
-    public TimeOrmPersister(EntityDef entityDef, EntityCaches<?, ?> entityCaches) {
+    public TimeOrmPersister(EntityDef entityDef, EntityCache<?, ?> entityCaches) {
         super(entityDef, entityCaches);
         this.rate = Long.parseLong(entityDef.getPersisterStrategy().getConfig());
         if (this.rate <= 0) {

@@ -13,7 +13,7 @@
 
 package com.zfoo.orm.cache.persister;
 
-import com.zfoo.orm.cache.EntityCaches;
+import com.zfoo.orm.cache.EntityCache;
 import com.zfoo.orm.model.EntityDef;
 
 /**
@@ -24,10 +24,10 @@ public abstract class AbstractOrmPersister implements IOrmPersister {
 
     protected EntityDef entityDef;
 
-    protected EntityCaches<?, ?> entityCaches;
+    protected EntityCache<?, ?> entityCaches;
 
 
-    public AbstractOrmPersister(EntityDef entityDef, EntityCaches<?, ?> entityCaches) {
+    public AbstractOrmPersister(EntityDef entityDef, EntityCache<?, ?> entityCaches) {
         this.entityDef = entityDef;
         this.entityCaches = entityCaches;
     }

@@ -21,7 +21,7 @@ import java.util.function.BiConsumer;
  * @author godotg
  * @version 3.0
  */
-public interface IEntityCaches<PK extends Comparable<PK>, E extends IEntity<PK>> {
+public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> {
 
     /**
      * 从数据库中加载数据到缓存，如果数据库不存在则返回一个id为空的默认值，并且将这个默认值加入缓存

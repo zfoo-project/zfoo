@@ -15,7 +15,7 @@ package com.zfoo.orm.cache.persister;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.cache.EntityCaches;
+import com.zfoo.orm.cache.EntityCache;
 import com.zfoo.orm.model.EntityDef;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
@@ -45,7 +45,7 @@ public class CronOrmPersister extends AbstractOrmPersister {
     private final CronExpression cronExpression;
 
 
-    public CronOrmPersister(EntityDef entityDef, EntityCaches<?, ?> entityCaches) {
+    public CronOrmPersister(EntityDef entityDef, EntityCache<?, ?> entityCaches) {
         super(entityDef, entityCaches);
         this.cronExpression = CronExpression.parse(entityDef.getPersisterStrategy().getConfig());
     }

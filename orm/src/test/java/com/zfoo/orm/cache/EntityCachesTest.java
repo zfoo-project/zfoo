@@ -36,7 +36,7 @@ public class EntityCachesTest {
         var context = new ClassPathXmlApplicationContext("application.xml");
 
         // 动态去拿到UserEntity的EntityCaches
-        var userEntityCaches = (IEntityCaches<Long, UserEntity>) OrmContext.getOrmManager().getEntityCaches(UserEntity.class);
+        var userEntityCaches = (IEntityCache<Long, UserEntity>) OrmContext.getOrmManager().getEntityCaches(UserEntity.class);
 
         for (var i = 1; i <= 10; i++) {
             var entity = userEntityCaches.load((long) i);

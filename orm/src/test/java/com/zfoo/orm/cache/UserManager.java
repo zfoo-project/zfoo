@@ -25,6 +25,6 @@ import org.springframework.stereotype.Component;
 public class UserManager {
 
     @EntityCacheAutowired
-    public IEntityCaches<Long, UserEntity> userEntityCaches;
+    public IEntityCache<Long, UserEntity> userEntityCaches;
 
 }

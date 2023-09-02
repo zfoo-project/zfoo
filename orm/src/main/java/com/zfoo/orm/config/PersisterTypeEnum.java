@@ -12,7 +12,7 @@
 
 package com.zfoo.orm.config;
 
-import com.zfoo.orm.cache.EntityCaches;
+import com.zfoo.orm.cache.EntityCache;
 import com.zfoo.orm.cache.persister.CronOrmPersister;
 import com.zfoo.orm.cache.persister.IOrmPersister;
 import com.zfoo.orm.cache.persister.TimeOrmPersister;
@@ -27,19 +27,19 @@ public enum PersisterTypeEnum {
 
     QUEUE {
         @Override
-        public IOrmPersister createPersister(EntityDef entityDef, EntityCaches<?, ?> entityCaches) {
+        public IOrmPersister createPersister(EntityDef entityDef, EntityCache<?, ?> entityCaches) {
             return null;
         }
     },
     CRON {
         @Override
-        public IOrmPersister createPersister(EntityDef entityDef, EntityCaches<?, ?> entityCaches) {
+        public IOrmPersister createPersister(EntityDef entityDef, EntityCache<?, ?> entityCaches) {
             return new CronOrmPersister(entityDef, entityCaches);
         }
     },
     TIME {
         @Override
-        public IOrmPersister createPersister(EntityDef entityDef, EntityCaches<?, ?> entityCaches) {
+        public IOrmPersister createPersister(EntityDef entityDef, EntityCache<?, ?> entityCaches) {
             return new TimeOrmPersister(entityDef, entityCaches);
         }
     };
@@ -54,6 +54,6 @@ public enum PersisterTypeEnum {
         throw new IllegalArgumentException(StringUtils.format("无效的持久化类型[persisterType:{}]", persisterType));
     }
 
-    public abstract IOrmPersister createPersister(EntityDef entityDef, EntityCaches<?, ?> entityCaches);
+    public abstract IOrmPersister createPersister(EntityDef entityDef, EntityCache<?, ?> entityCaches);
 
 }
