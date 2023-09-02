@@ -21,7 +21,7 @@ import com.zfoo.event.model.vo.EventReceiverDefinition;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.GraalVmUtils;
+import com.zfoo.protocol.util.GraalVmUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;

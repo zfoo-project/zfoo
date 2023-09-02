@@ -28,7 +28,7 @@ import com.zfoo.storage.model.config.StorageConfig;
 import com.zfoo.storage.model.resource.ResourceEnum;
 import com.zfoo.storage.model.vo.ResourceDef;
 import com.zfoo.storage.model.vo.Storage;
-import com.zfoo.util.GraalVmUtils;
+import com.zfoo.protocol.util.GraalVmUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;

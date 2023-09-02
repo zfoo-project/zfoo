@@ -15,7 +15,7 @@ package com.zfoo.scheduler.model.vo;
 
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.scheduler.util.TimeUtils;
-import com.zfoo.util.GraalVmUtils;
+import com.zfoo.protocol.util.GraalVmUtils;
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
 import org.springframework.scheduling.support.CronExpression;
