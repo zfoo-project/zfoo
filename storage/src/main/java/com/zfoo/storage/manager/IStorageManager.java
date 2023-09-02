@@ -14,6 +14,7 @@
 package com.zfoo.storage.manager;
 
 import com.zfoo.storage.config.StorageConfig;
+import com.zfoo.storage.model.IStorage;
 
 import java.util.Map;
 

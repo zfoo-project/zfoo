@@ -10,9 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.manager;
+package com.zfoo.storage.model;
 
-import com.zfoo.storage.model.IdDef;
 import org.springframework.lang.Nullable;
 
 import java.util.Collection;

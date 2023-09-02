@@ -24,6 +24,7 @@ import com.zfoo.storage.anno.Storage;
 import com.zfoo.storage.anno.StorageAutowired;
 import com.zfoo.storage.config.StorageConfig;
 import com.zfoo.storage.interpreter.data.StorageEnum;
+import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.model.StorageDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

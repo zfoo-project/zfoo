@@ -14,7 +14,7 @@
 package com.zfoo.storage;
 
 import com.zfoo.storage.anno.StorageAutowired;
-import com.zfoo.storage.manager.IStorage;
+import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.resource.TestResource;
 import org.springframework.stereotype.Component;
 

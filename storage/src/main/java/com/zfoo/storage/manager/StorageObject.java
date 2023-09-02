@@ -18,6 +18,7 @@ import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.interpreter.ResourceInterpreter;
+import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.model.IdDef;
 import com.zfoo.storage.model.IndexDef;
 import org.springframework.lang.Nullable;

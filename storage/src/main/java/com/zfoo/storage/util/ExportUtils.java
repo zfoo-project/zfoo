@@ -20,7 +20,7 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.interpreter.CsvReader;
 import com.zfoo.storage.interpreter.ExcelReader;
 import com.zfoo.storage.interpreter.data.StorageEnum;
-import com.zfoo.storage.manager.IStorage;
+import com.zfoo.storage.model.IStorage;
 
 import java.io.File;
 import java.io.IOException;
