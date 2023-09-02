@@ -56,7 +56,7 @@ public class ResourceInterpreter {
         ResourceData resource = null;
         var resourceEnum = ResourceEnum.getResourceEnumByType(suffix);
         if (resourceEnum == ResourceEnum.JSON) {
-            resource = JsonReader.readResourceDataFromCSV(inputStream);
+            resource = JsonReader.readResourceDataFromJson(inputStream);
         } else if (resourceEnum == ResourceEnum.EXCEL_XLS || resourceEnum == ResourceEnum.EXCEL_XLSX) {
             resource = ExcelReader.readResourceDataFromExcel(inputStream, clazz.getSimpleName());
         } else if (resourceEnum == ResourceEnum.CSV) {

@@ -26,7 +26,7 @@ import java.io.InputStream;
  */
 public abstract class JsonReader {
 
-    public static ResourceData readResourceDataFromCSV(InputStream input) {
+    public static ResourceData readResourceDataFromJson(InputStream input) {
         try {
             var resourceData= JsonUtils.string2Object(StringUtils.bytesToString(IOUtils.toByteArray(input)), ResourceData.class);
             for(int i=0;i<resourceData.getHeaders().size();i++) {
