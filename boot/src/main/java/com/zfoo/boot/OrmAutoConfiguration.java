@@ -86,6 +86,10 @@ public class OrmAutoConfiguration {
             classes.add(OrmConfig.class);
 
             try {
+                // SSLMSA
+                classes.add(Class.forName("com.github.benmanes.caffeine.cache.SSLMSA"));
+                classes.add(Class.forName("com.github.benmanes.caffeine.cache.PSAMS"));
+
                 for (var className : ClassUtils.getAllClasses("")) {
                     try {
                         var clazz = Class.forName(className);
