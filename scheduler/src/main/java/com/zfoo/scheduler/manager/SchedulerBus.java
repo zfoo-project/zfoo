@@ -15,10 +15,10 @@ package com.zfoo.scheduler.manager;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.scheduler.SchedulerContext;
-import com.zfoo.scheduler.model.vo.SchedulerDefinition;
-import com.zfoo.scheduler.util.TimeUtils;
 import com.zfoo.protocol.util.ThreadUtils;
+import com.zfoo.scheduler.SchedulerContext;
+import com.zfoo.scheduler.enhance.SchedulerDefinition;
+import com.zfoo.scheduler.util.TimeUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -10,9 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.scheduler.model;
-
-import com.zfoo.scheduler.util.TimeUtils;
+package com.zfoo.scheduler.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

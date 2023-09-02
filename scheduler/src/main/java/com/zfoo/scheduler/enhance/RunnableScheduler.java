@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,24 +10,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.scheduler.model.anno;
-
-import org.springframework.aot.hint.annotation.Reflective;
-
-import java.lang.annotation.*;
+package com.zfoo.scheduler.enhance;
 
 /**
- * time task scheduling based on cron expression
- *
  * @author godotg
  * @version 3.0
  */
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
-@Reflective
-public @interface Scheduler {
+public class RunnableScheduler implements IScheduler {
 
-    String cron();
+    private Runnable runnable;
 
+    public static RunnableScheduler valueOf(Runnable runnable) {
+        var scheduler = new RunnableScheduler();
+        scheduler.runnable = runnable;
+        return scheduler;
+    }
+
+    @Override
+    public void invoke() {
+        runnable.run();
+    }
 }

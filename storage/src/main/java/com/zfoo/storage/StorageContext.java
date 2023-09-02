@@ -13,7 +13,7 @@
 
 package com.zfoo.storage;
 
-import com.zfoo.scheduler.model.StopWatch;
+import com.zfoo.scheduler.util.StopWatch;
 import com.zfoo.storage.manager.IStorageManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
