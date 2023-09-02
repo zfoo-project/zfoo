@@ -15,7 +15,7 @@ package com.zfoo.orm.query;
 
 import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.model.entity.IEntity;
+import com.zfoo.orm.model.IEntity;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.StringUtils;
 import org.bson.conversions.Bson;

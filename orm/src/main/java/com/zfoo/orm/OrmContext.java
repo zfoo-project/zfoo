@@ -17,7 +17,7 @@ import com.mongodb.client.MongoClient;
 import com.zfoo.orm.accessor.IAccessor;
 import com.zfoo.orm.manager.IOrmManager;
 import com.zfoo.orm.manager.OrmManager;
-import com.zfoo.orm.model.entity.IEntity;
+import com.zfoo.orm.model.IEntity;
 import com.zfoo.orm.query.IQuery;
 import com.zfoo.orm.query.IQueryBuilder;
 import com.zfoo.protocol.util.ReflectionUtils;

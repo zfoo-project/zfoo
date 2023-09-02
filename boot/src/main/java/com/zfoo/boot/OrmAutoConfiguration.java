@@ -14,9 +14,9 @@ package com.zfoo.boot;
 
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.accessor.MongodbAccessor;
+import com.zfoo.orm.anno.GraalvmNativeEntityCache;
+import com.zfoo.orm.config.OrmConfig;
 import com.zfoo.orm.manager.OrmManager;
-import com.zfoo.orm.model.anno.GraalvmNativeEntityCache;
-import com.zfoo.orm.model.config.OrmConfig;
 import com.zfoo.orm.query.MongodbQuery;
 import com.zfoo.protocol.util.ClassUtils;
 import org.slf4j.Logger;

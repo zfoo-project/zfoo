@@ -13,7 +13,7 @@
 
 package com.zfoo.orm.query;
 
-import com.zfoo.orm.model.entity.IEntity;
+import com.zfoo.orm.model.IEntity;
 import com.zfoo.protocol.model.Pair;
 
 import java.util.List;

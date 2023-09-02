@@ -13,7 +13,7 @@
 
 package com.zfoo.orm.cache.persister;
 
-import com.zfoo.orm.model.entity.IEntity;
+import com.zfoo.orm.model.IEntity;
 import com.zfoo.scheduler.util.TimeUtils;
 
 /**

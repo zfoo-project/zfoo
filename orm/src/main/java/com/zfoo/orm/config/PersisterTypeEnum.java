@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,13 +10,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.model.config;
+package com.zfoo.orm.config;
 
 import com.zfoo.orm.cache.EntityCaches;
 import com.zfoo.orm.cache.persister.CronOrmPersister;
 import com.zfoo.orm.cache.persister.IOrmPersister;
 import com.zfoo.orm.cache.persister.TimeOrmPersister;
-import com.zfoo.orm.model.vo.EntityDef;
+import com.zfoo.orm.model.EntityDef;
 import com.zfoo.protocol.util.StringUtils;
 
 /**

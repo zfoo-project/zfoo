@@ -13,7 +13,7 @@
 
 package com.zfoo.orm.accessor;
 
-import com.zfoo.orm.model.entity.IEntity;
+import com.zfoo.orm.model.IEntity;
 import org.springframework.lang.Nullable;
 
 import java.util.List;

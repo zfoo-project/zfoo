@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.model.anno;
+package com.zfoo.orm.anno;
 
 import org.springframework.aot.hint.annotation.Reflective;
 
@@ -25,5 +24,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 @Reflective
-public @interface EntityCachesInjection {
+public @interface Index {
+    boolean ascending();
+
+    boolean unique();
+
+    // 默认小于0不开启TTL文档超时索引
+    long ttlExpireAfterSeconds() default -1L;
 }

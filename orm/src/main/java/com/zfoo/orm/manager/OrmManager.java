@@ -23,14 +23,14 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.zfoo.orm.OrmContext;
+import com.zfoo.orm.anno.*;
 import com.zfoo.orm.cache.EntityCaches;
 import com.zfoo.orm.cache.IEntityCaches;
-import com.zfoo.orm.model.anno.*;
-import com.zfoo.orm.model.config.OrmConfig;
-import com.zfoo.orm.model.entity.IEntity;
-import com.zfoo.orm.model.vo.EntityDef;
-import com.zfoo.orm.model.vo.IndexDef;
-import com.zfoo.orm.model.vo.IndexTextDef;
+import com.zfoo.orm.config.OrmConfig;
+import com.zfoo.orm.model.EntityDef;
+import com.zfoo.orm.model.IEntity;
+import com.zfoo.orm.model.IndexDef;
+import com.zfoo.orm.model.IndexTextDef;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
@@ -189,7 +189,7 @@ public class OrmManager implements IOrmManager {
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
             ReflectionUtils.filterFieldsInClass(bean.getClass()
-                    , field -> field.isAnnotationPresent(EntityCachesInjection.class)
+                    , field -> field.isAnnotationPresent(EntityCacheAutowired.class)
                     , field -> {
                         Type type = field.getGenericType();
 

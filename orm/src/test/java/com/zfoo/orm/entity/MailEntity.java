@@ -13,10 +13,10 @@
 
 package com.zfoo.orm.entity;
 
-import com.zfoo.orm.model.anno.EntityCache;
-import com.zfoo.orm.model.anno.Id;
-import com.zfoo.orm.model.anno.Index;
-import com.zfoo.orm.model.entity.IEntity;
+import com.zfoo.orm.anno.EntityCache;
+import com.zfoo.orm.anno.Id;
+import com.zfoo.orm.anno.Index;
+import com.zfoo.orm.model.IEntity;
 
 import java.util.Date;
 

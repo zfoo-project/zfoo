@@ -14,7 +14,7 @@
 package com.zfoo.orm.cache.persister;
 
 import com.zfoo.orm.cache.EntityCaches;
-import com.zfoo.orm.model.vo.EntityDef;
+import com.zfoo.orm.model.EntityDef;
 
 /**
  * @author godotg

@@ -16,7 +16,7 @@ package com.zfoo.orm.manager;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.zfoo.orm.cache.IEntityCaches;
-import com.zfoo.orm.model.entity.IEntity;
+import com.zfoo.orm.model.IEntity;
 import org.bson.Document;
 
 import java.util.Collection;

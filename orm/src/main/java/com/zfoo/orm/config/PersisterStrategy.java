@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,26 +10,29 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.model.config;
+package com.zfoo.orm.config;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public class CacheStrategy {
+public class PersisterStrategy {
 
     private String strategy;
-    private int size;
-    private long expireMillisecond;
 
-    public CacheStrategy() {
+    private PersisterTypeEnum type;
+
+    private String config;
+
+    public PersisterStrategy() {
     }
 
-    public CacheStrategy(String strategy, int size, long expireMillisecond) {
+    public PersisterStrategy(String strategy, String type, String config) {
         this.strategy = strategy;
-        this.size = size;
-        this.expireMillisecond = expireMillisecond;
+        this.config = config;
+        this.type = PersisterTypeEnum.getPersisterType(type);
     }
+
 
     public String getStrategy() {
         return strategy;
@@ -40,19 +42,19 @@ public class CacheStrategy {
         this.strategy = strategy;
     }
 
-    public int getSize() {
-        return size;
+    public PersisterTypeEnum getType() {
+        return type;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setType(PersisterTypeEnum type) {
+        this.type = type;
     }
 
-    public long getExpireMillisecond() {
-        return expireMillisecond;
+    public String getConfig() {
+        return config;
     }
 
-    public void setExpireMillisecond(long expireMillisecond) {
-        this.expireMillisecond = expireMillisecond;
+    public void setConfig(String config) {
+        this.config = config;
     }
 }

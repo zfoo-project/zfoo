@@ -16,7 +16,7 @@ package com.zfoo.orm.cache.persister;
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.cache.EntityCaches;
-import com.zfoo.orm.model.vo.EntityDef;
+import com.zfoo.orm.model.EntityDef;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
 

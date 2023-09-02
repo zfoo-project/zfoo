@@ -13,10 +13,10 @@
 
 package com.zfoo.orm.entity.bag;
 
-import com.zfoo.orm.model.anno.EntityCache;
-import com.zfoo.orm.model.anno.Id;
-import com.zfoo.orm.model.anno.Persister;
-import com.zfoo.orm.model.entity.IEntity;
+import com.zfoo.orm.anno.EntityCache;
+import com.zfoo.orm.anno.Id;
+import com.zfoo.orm.anno.Persister;
+import com.zfoo.orm.model.IEntity;
 
 import java.util.HashMap;
 import java.util.Map;

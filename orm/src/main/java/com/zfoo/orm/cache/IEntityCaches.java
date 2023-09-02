@@ -12,7 +12,7 @@
 
 package com.zfoo.orm.cache;
 
-import com.zfoo.orm.model.entity.IEntity;
+import com.zfoo.orm.model.IEntity;
 
 import java.util.List;
 import java.util.function.BiConsumer;
