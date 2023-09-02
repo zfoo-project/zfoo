@@ -17,7 +17,7 @@ import com.zfoo.net.core.tcp.TcpClient;
 import com.zfoo.net.packet.tcp.AsyncMessAnswer;
 import com.zfoo.net.packet.tcp.AsyncMessAsk;
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
 import org.junit.Test;

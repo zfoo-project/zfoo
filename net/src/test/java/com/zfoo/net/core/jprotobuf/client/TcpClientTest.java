@@ -16,7 +16,7 @@ package com.zfoo.net.core.jprotobuf.client;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.jprotobuf.JProtobufTcpClient;
 import com.zfoo.net.packet.jprotobuf.JProtobufHelloRequest;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
 import org.junit.Test;

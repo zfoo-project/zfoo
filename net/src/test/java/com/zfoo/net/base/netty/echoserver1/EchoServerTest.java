@@ -1,7 +1,7 @@
 package com.zfoo.net.base.netty.echoserver1;
 
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

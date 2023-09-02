@@ -18,7 +18,7 @@ import com.zfoo.net.packet.provider.ProviderMessAnswer;
 import com.zfoo.net.packet.provider.ProviderMessAsk;
 import com.zfoo.net.session.SessionUtils;
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;

@@ -1,7 +1,7 @@
 package com.zfoo.net.base.aio.server;
 
 
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 

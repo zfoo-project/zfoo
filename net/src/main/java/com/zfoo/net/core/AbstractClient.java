@@ -18,7 +18,7 @@ import com.zfoo.net.handler.BaseRouteHandler;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;

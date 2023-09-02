@@ -16,7 +16,7 @@ package com.zfoo.event;
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

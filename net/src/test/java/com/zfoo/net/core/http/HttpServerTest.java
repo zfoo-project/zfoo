@@ -18,7 +18,7 @@ import com.zfoo.net.packet.http.HttpHelloRequest;
 import com.zfoo.net.router.attachment.HttpAttachment;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;

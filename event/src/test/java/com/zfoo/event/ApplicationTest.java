@@ -14,7 +14,7 @@
 package com.zfoo.event;
 
 import com.zfoo.event.manager.EventBus;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

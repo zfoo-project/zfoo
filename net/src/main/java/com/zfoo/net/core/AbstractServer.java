@@ -14,7 +14,7 @@
 package com.zfoo.net.core;
 
 import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;

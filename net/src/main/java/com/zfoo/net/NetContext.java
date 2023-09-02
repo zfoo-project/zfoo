@@ -20,15 +20,13 @@ import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.packet.IPacketService;
 import com.zfoo.net.router.IRouter;
 import com.zfoo.net.session.ISessionManager;
-import com.zfoo.net.session.Session;
 import com.zfoo.net.task.TaskBus;
-import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.scheduler.SchedulerContext;
 import com.zfoo.scheduler.model.StopWatch;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -39,7 +37,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
 /**

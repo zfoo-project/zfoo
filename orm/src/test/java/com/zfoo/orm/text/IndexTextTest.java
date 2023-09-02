@@ -16,7 +16,7 @@ package com.zfoo.orm.text;
 import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.entity.UserEntity;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

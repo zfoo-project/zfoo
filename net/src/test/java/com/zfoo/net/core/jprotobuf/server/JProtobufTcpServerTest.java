@@ -14,7 +14,7 @@
 package com.zfoo.net.core.jprotobuf.server;
 
 import com.zfoo.net.core.jprotobuf.JProtobufTcpServer;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
 import org.junit.Test;

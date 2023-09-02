@@ -16,7 +16,7 @@ package com.zfoo.net.session;
 import com.zfoo.net.NetContext;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 
 import java.util.function.Consumer;
 

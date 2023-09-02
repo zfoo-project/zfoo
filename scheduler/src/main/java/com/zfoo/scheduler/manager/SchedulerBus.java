@@ -18,7 +18,7 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.SchedulerContext;
 import com.zfoo.scheduler.model.vo.SchedulerDefinition;
 import com.zfoo.scheduler.util.TimeUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

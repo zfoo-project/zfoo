@@ -19,7 +19,7 @@ import com.zfoo.net.packet.gateway.GatewayToProviderRequest;
 import com.zfoo.net.packet.gateway.GatewayToProviderResponse;
 import com.zfoo.net.session.SessionUtils;
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.junit.Ignore;
 import org.junit.Test;

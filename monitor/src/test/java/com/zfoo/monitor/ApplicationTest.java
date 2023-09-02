@@ -16,7 +16,7 @@ package com.zfoo.monitor;
 import com.zfoo.monitor.util.JvmUtils;
 import com.zfoo.monitor.util.OSUtils;
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

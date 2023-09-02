@@ -1,6 +1,6 @@
 package com.zfoo.net.base.http;
 
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 

@@ -15,7 +15,7 @@ package com.zfoo.net.router.answer;
 
 import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.protocol.IPacket;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -19,7 +19,7 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.scheduler.model.anno.Scheduler;
 import com.zfoo.scheduler.model.vo.SchedulerDefinition;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

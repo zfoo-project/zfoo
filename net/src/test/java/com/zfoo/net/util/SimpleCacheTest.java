@@ -14,7 +14,7 @@
 package com.zfoo.net.util;
 
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 

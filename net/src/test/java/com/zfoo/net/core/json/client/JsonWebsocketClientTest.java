@@ -16,7 +16,7 @@ package com.zfoo.net.core.json.client;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.json.JsonWebsocketClient;
 import com.zfoo.net.packet.json.JsonHelloRequest;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolConfig;
 import org.junit.Ignore;

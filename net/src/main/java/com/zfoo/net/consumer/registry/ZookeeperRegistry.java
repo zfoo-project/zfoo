@@ -29,7 +29,7 @@ import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
-import com.zfoo.util.ThreadUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.util.net.HostAndPort;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.apache.curator.framework.CuratorFramework;
