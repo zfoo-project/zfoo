@@ -13,7 +13,7 @@
 
 package com.zfoo.storage.model.anno;
 
-import org.springframework.core.annotation.AliasFor;
+import org.springframework.aot.hint.annotation.Reflective;
 
 import java.lang.annotation.*;
 
@@ -28,11 +28,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
+@Reflective
 public @interface Resource {
-    @AliasFor("alias")
-    String value() default "";
-
-
-    @AliasFor("value")
     String alias() default "";
 }

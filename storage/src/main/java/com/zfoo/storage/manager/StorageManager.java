@@ -253,16 +253,10 @@ public class StorageManager implements IStorageManager {
     private Resource scanResourceFile(Class<?> clazz) {
         var resourcePatternResolver = new PathMatchingResourcePatternResolver();
         var metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
-        String fileName;
-        if (clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value().equals("")
-                && clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).alias().equals("")) {
-            fileName = clazz.getSimpleName();
-        } else {
-            if (clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value().equals(""))
-                fileName = clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).alias();
-            else
-                fileName = clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).value();
-        }
+
+        var annoAlias = clazz.getAnnotation(com.zfoo.storage.model.anno.Resource.class).alias();
+        var fileName = StringUtils.isEmpty(annoAlias) ? clazz.getSimpleName() : annoAlias;
+
         try {
             // 一个class类只能匹配一个资源文件，如果匹配多个则会有歧义
             var resourceSet = new HashSet<Resource>();
