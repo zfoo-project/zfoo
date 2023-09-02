@@ -25,7 +25,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @version 3.0
  */
 @Ignore
-public class MongoIdUtilsTest {
+public class MongoUuidUtilsTest {
 
     @Test
     public void startApplication0() {

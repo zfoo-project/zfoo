@@ -17,8 +17,8 @@ import com.zfoo.monitor.*;
 import com.zfoo.net.util.NetUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.UuidUtils;
 import com.zfoo.scheduler.util.TimeUtils;
-import com.zfoo.util.security.IdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import oshi.hardware.HWDiskStore;
@@ -264,7 +264,7 @@ public abstract class OSUtils {
     }
 
     public static Monitor maxMonitor() {
-        var uuid = IdUtils.getUUID();
+        var uuid = UuidUtils.getUUID();
         var monitor = Monitor.valueOf(uuid, maxUptime, new ArrayList<>(maxDfMap.values()), maxFree, new ArrayList<>(maxSarMap.values()));
 
         initMonitor();
@@ -272,7 +272,7 @@ public abstract class OSUtils {
     }
 
     public static Monitor monitor() {
-        var uuid = IdUtils.getUUID();
+        var uuid = UuidUtils.getUUID();
         var uptime = uptime();
         var df = df();
         var free = free();

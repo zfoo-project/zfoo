@@ -14,8 +14,8 @@
 package com.zfoo.scheduler.model.vo;
 
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.UuidUtils;
 import com.zfoo.scheduler.schema.NamespaceHandler;
-import com.zfoo.util.security.IdUtils;
 import javassist.*;
 
 import java.lang.reflect.Constructor;
@@ -52,7 +52,7 @@ public abstract class EnhanceUtils {
         Method method = reflectScheduler.getMethod();
 
         // 定义类名称
-        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + StringUtils.capitalize(NamespaceHandler.SCHEDULER) + IdUtils.getLocalIntId());
+        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + StringUtils.capitalize(NamespaceHandler.SCHEDULER) + UuidUtils.getLocalIntId());
         enhanceClazz.addInterface(classPool.get(IScheduler.class.getCanonicalName()));
 
         // 定义类中的一个成员

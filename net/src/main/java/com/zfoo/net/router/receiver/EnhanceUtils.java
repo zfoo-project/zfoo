@@ -17,7 +17,7 @@ import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.security.IdUtils;
+import com.zfoo.protocol.util.UuidUtils;
 import javassist.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -54,7 +54,7 @@ public abstract class EnhanceUtils {
         var packetClazz = definition.getPacketClazz();
         var attachmentClazz = definition.getAttachmentClazz();
 
-        var enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + "Dispatcher" + IdUtils.getLocalIntId());
+        var enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + "Dispatcher" + UuidUtils.getLocalIntId());
         enhanceClazz.addInterface(classPool.get(IPacketReceiver.class.getCanonicalName()));
 
         var field = new CtField(classPool.get(bean.getClass().getCanonicalName()), "bean", enhanceClazz);

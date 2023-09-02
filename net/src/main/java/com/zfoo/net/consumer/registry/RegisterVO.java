@@ -21,7 +21,7 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.security.IdUtils;
+import com.zfoo.protocol.util.UuidUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
@@ -39,7 +39,7 @@ public class RegisterVO {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterVO.class);
 
-    private static final String uuid = IdUtils.getUUID();
+    private static final String uuid = UuidUtils.getUUID();
 
     private String id;
 

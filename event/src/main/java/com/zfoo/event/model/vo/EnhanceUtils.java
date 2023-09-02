@@ -17,7 +17,7 @@ import com.zfoo.event.model.anno.Bus;
 import com.zfoo.event.model.event.IEvent;
 import com.zfoo.event.schema.NamespaceHandler;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.util.security.IdUtils;
+import com.zfoo.protocol.util.UuidUtils;
 import javassist.*;
 
 import java.lang.reflect.Constructor;
@@ -56,7 +56,7 @@ public abstract class EnhanceUtils {
         Class<?> clazz = definition.getEventClazz();
 
         // 定义类名称
-        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + StringUtils.capitalize(NamespaceHandler.EVENT) + IdUtils.getLocalIntId());
+        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + StringUtils.capitalize(NamespaceHandler.EVENT) + UuidUtils.getLocalIntId());
         enhanceClazz.addInterface(classPool.get(IEventReceiver.class.getCanonicalName()));
 
         // 定义类中的一个成员
