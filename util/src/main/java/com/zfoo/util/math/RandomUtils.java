@@ -15,7 +15,6 @@ package com.zfoo.util.math;
 
 import com.zfoo.protocol.util.StringUtils;
 
-import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.NoSuchAlgorithmException;
@@ -406,16 +405,6 @@ public abstract class RandomUtils {
      */
     public static char randomChar(String baseString) {
         return baseString.charAt(getRandom().nextInt(baseString.length()));
-    }
-
-    /**
-     * 生成随机颜色
-     *
-     * @return 随机颜色
-     */
-    public static Color randomColor() {
-        final Random random = getRandom();
-        return new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
     }
 
 }
