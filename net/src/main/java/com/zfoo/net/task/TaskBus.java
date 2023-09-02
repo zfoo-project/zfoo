@@ -81,7 +81,7 @@ public final class TaskBus {
         private final ThreadGroup group;
 
         public TaskThreadFactory(int poolNumber) {
-            this.group = ThreadUtils.currentThreadGroup();
+            this.group = Thread.currentThread().getThreadGroup();
             this.poolNumber = poolNumber;
         }
 

@@ -41,18 +41,10 @@ public abstract class ThreadUtils {
     }
 
     /**
-     * 获取当前线程的线程组
-     */
-    public static ThreadGroup currentThreadGroup() {
-        var s = System.getSecurityManager();
-        return (null != s) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
-    }
-
-    /**
      * 通过线程号寻找对应的线程
      */
     public static Thread findThread(long threadId) {
-        var group = currentThreadGroup();
+        var group = Thread.currentThread().getThreadGroup();
         while (group != null) {
             var threads = new Thread[group.activeCount() * 2];
             var count = group.enumerate(threads, true);

@@ -71,7 +71,7 @@ public abstract class EventBus {
         private final ThreadGroup group;
 
         public EventThreadFactory(int poolNumber) {
-            this.group = ThreadUtils.currentThreadGroup();
+            this.group = Thread.currentThread().getThreadGroup();
             this.poolNumber = poolNumber;
         }
 

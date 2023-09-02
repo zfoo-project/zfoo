@@ -78,7 +78,7 @@ public abstract class SchedulerBus {
         private final ThreadGroup group;
 
         public SchedulerThreadFactory(int poolNumber) {
-            this.group = ThreadUtils.currentThreadGroup();
+            this.group = Thread.currentThread().getThreadGroup();
             this.poolNumber = poolNumber;
         }
 
