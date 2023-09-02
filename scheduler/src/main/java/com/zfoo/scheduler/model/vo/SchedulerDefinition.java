@@ -15,6 +15,7 @@ package com.zfoo.scheduler.model.vo;
 
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.scheduler.util.TimeUtils;
+import com.zfoo.util.GraalVmUtils;
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
 import org.springframework.scheduling.support.CronExpression;
@@ -23,6 +24,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
+ * EN: Trigger timestamp, as long as the current timestamp is greater than this trigger event stamp, it is considered triggerable
+ * CN: 触发时间戳，只要当前时间戳大于这个触发事件戳都视为可以触发
  * @author godotg
  * @version 3.0
  */
@@ -32,17 +35,18 @@ public class SchedulerDefinition {
 
     private IScheduler scheduler;
 
-    /**
-     * 触发时间戳，只要当前时间戳大于这个触发事件戳都视为可以触发
-     */
     private long triggerTimestamp;
 
     public static SchedulerDefinition valueOf(String cron, Object bean, Method method) throws NoSuchMethodException, IllegalAccessException, InstantiationException, CannotCompileException, NotFoundException, InvocationTargetException {
         var schedulerDef = new SchedulerDefinition();
         var cronExpression = CronExpression.parse(cron);
         schedulerDef.cronExpression = cronExpression;
-        // 字节码增强，避免反射
-        schedulerDef.scheduler = EnhanceUtils.createScheduler(ReflectScheduler.valueOf(bean, method));
+        if (GraalVmUtils.isGraalVM()) {
+            schedulerDef.scheduler = ReflectScheduler.valueOf(bean, method);
+        } else {
+            // bytecode enhancements to avoid reflection
+            schedulerDef.scheduler = EnhanceUtils.createScheduler(ReflectScheduler.valueOf(bean, method));
+        }
         schedulerDef.triggerTimestamp = TimeUtils.nextTimestampByCronExpression(cronExpression, TimeUtils.currentTimeMillis());
         ReflectionUtils.makeAccessible(method);
         return schedulerDef;

@@ -13,15 +13,20 @@
 
 package com.zfoo.scheduler.model.anno;
 
+import org.springframework.aot.hint.annotation.Reflective;
+
 import java.lang.annotation.*;
 
 /**
+ * time task scheduling based on cron expression
+ *
  * @author godotg
  * @version 3.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
+@Reflective
 public @interface Scheduler {
 
     String cron();
