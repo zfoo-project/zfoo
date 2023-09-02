@@ -13,7 +13,7 @@
 
 package com.zfoo.event.model.event;
 
-import com.zfoo.util.math.RandomUtils;
+import com.zfoo.protocol.util.RandomUtils;
 
 /**
  * @author godotg

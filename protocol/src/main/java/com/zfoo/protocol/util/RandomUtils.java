@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,10 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.util.math;
-
-import com.zfoo.protocol.util.NumberUtils;
-import com.zfoo.protocol.util.StringUtils;
+package com.zfoo.protocol.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -408,4 +404,56 @@ public abstract class RandomUtils {
         return baseString.charAt(getRandom().nextInt(baseString.length()));
     }
 
+    /**
+     * @author godotg
+     * @version 3.0
+     */
+    public static class RandomSelector<T> {
+
+        private int cursor = 0;
+
+        private final TreeMap<Integer, T> elementMap = new TreeMap<>();
+
+        public void addElement(T value, int weight) {
+            if (value == null || weight <= 0) {
+                return;
+            }
+
+            cursor += weight;
+            elementMap.put(cursor, value);
+        }
+
+        public void clear() {
+            elementMap.clear();
+            cursor = 0;
+        }
+
+        public int size() {
+            return elementMap.size();
+        }
+
+        public T select() {
+            if (cursor <= 0) {
+                throw new IllegalStateException("all weights are 0");
+            }
+            if (elementMap.isEmpty()) {
+                throw new IllegalStateException("selected element is empty, please insert some elements");
+            }
+
+            var randomInt = randomInt(cursor) + 1;
+            return elementMap.ceilingEntry(randomInt).getValue();
+        }
+
+        public List<T> select(int count) {
+            List<T> resultList = new ArrayList<>();
+            for (int i = 0; i < count; i++) {
+                resultList.add(select());
+            }
+            return resultList;
+        }
+
+        public Collection<T> getAll() {
+            return elementMap.values();
+        }
+    }
 }

@@ -17,7 +17,7 @@ import com.zfoo.net.session.Session;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.exception.RunException;
-import com.zfoo.util.math.RandomUtils;
+import com.zfoo.protocol.util.RandomUtils;
 
 /**
  * 随机负载均衡器，任选服务提供者的其中之一

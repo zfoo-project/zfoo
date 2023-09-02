@@ -12,8 +12,6 @@
 
 package com.zfoo.net.router.attachment;
 
-import com.zfoo.util.math.RandomUtils;
-
 /**
  * @author godotg
  * @version 3.0

@@ -35,7 +35,7 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.*;
-import com.zfoo.util.math.RandomUtils;
+import com.zfoo.protocol.util.RandomUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
