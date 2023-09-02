@@ -12,6 +12,8 @@
  */
 package com.zfoo.event.model.anno;
 
+import org.springframework.aot.hint.annotation.Reflective;
+
 import java.lang.annotation.*;
 
 /**
@@ -23,6 +25,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
+@Reflective
 public @interface EventReceiver {
     Bus value() default Bus.CurrentThread;
 }
