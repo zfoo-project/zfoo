@@ -14,6 +14,7 @@
 package com.zfoo.orm.model.anno;
 
 import org.springframework.aot.hint.annotation.Reflective;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 
@@ -25,10 +26,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Reflective
-public @interface EntityCache {
-
-    Cache cache() default @Cache;
-
-    Persister persister() default @Persister;
+@Component
+public @interface GraalvmNativeEntityCache {
 
 }

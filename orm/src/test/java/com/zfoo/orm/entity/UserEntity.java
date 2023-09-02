@@ -13,15 +13,19 @@
 
 package com.zfoo.orm.entity;
 
-import com.zfoo.orm.model.anno.*;
+import com.zfoo.orm.model.anno.EntityCache;
+import com.zfoo.orm.model.anno.Id;
+import com.zfoo.orm.model.anno.Index;
+import com.zfoo.orm.model.anno.IndexText;
 import com.zfoo.orm.model.entity.IEntity;
 
 import java.util.List;
 
 
 /**
+ * @EntityCache(persister = @Persister("time30s"))
  * @author godotg
- * @version 3.0@EntityCache(persister = @Persister("time30s"))
+ * @version 3.0
  */
 @EntityCache
 public class UserEntity implements IEntity<Long> {

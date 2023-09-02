@@ -13,6 +13,8 @@
 
 package com.zfoo.orm.model.anno;
 
+import org.springframework.aot.hint.annotation.Reflective;
+
 import java.lang.annotation.*;
 
 /**
@@ -22,6 +24,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
+@Reflective
 public @interface Persister {
 
     String value() default "default";

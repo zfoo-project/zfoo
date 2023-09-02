@@ -34,10 +34,7 @@ import com.zfoo.orm.model.vo.IndexTextDef;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
-import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.*;
 import com.zfoo.util.math.RandomUtils;
 import com.zfoo.util.net.HostAndPort;
 import org.bson.Document;
@@ -52,7 +49,6 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -92,7 +88,7 @@ public class OrmManager implements IOrmManager {
 
     @Override
     public void initBefore() {
-        var entityDefMap = scanEntityClass();
+        var entityDefMap = entityClass();
 
         for (var entityDef : entityDefMap.values()) {
             var entityCaches = new EntityCaches(entityDef);
@@ -187,7 +183,7 @@ public class OrmManager implements IOrmManager {
     @Override
     public void inject() {
         var applicationContext = OrmContext.getApplicationContext();
-        var componentBeans =  applicationContext.getBeansWithAnnotation(Component.class);
+        var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
             ReflectionUtils.filterFieldsInClass(bean.getClass()
                     , field -> field.isAnnotationPresent(EntityCachesInjection.class)
@@ -259,25 +255,32 @@ public class OrmManager implements IOrmManager {
         return mongodbDatabase.getCollection(collection);
     }
 
-    private Map<Class<? extends IEntity<?>>, EntityDef> scanEntityClass() {
-        var cacheDefMap = new HashMap<Class<? extends IEntity<?>>, EntityDef>();
+    private Map<Class<? extends IEntity<?>>, EntityDef> entityClass() {
+        var classSet = new HashSet<>();
+        // in graalvm environment, PathMatchingResourcePatternResolver/CachingMetadataReaderFactory unable to use, so get it directly in the spring container
+        if (GraalVmUtils.isGraalVM()) {
+            var applicationContext = OrmContext.getApplicationContext();
+            var classes = applicationContext.getBeansWithAnnotation(GraalvmNativeEntityCache.class)
+                    .values()
+                    .stream()
+                    .map(it -> it.getClass())
+                    .collect(Collectors.toList());
+            classSet.addAll(classes);
+        } else {
+            var classes = scanEntityCacheAnno();
+            classSet.addAll(classes);
+        }
 
-        var locationSet = scanEntityCacheAnno(ormConfig.getEntityPackage());
-        for (var location : locationSet) {
-            Class<? extends IEntity<?>> entityClazz;
-            try {
-                entityClazz = (Class<? extends IEntity<?>>) Class.forName(location);
-            } catch (ClassNotFoundException e) {
-                throw new RunException("无法获取实体类[{}]", location);
-            }
-            var cacheDef = parserEntityDef(entityClazz);
-            var previousCacheDef = cacheDefMap.putIfAbsent(entityClazz, cacheDef);
-            AssertionUtils.isNull(previousCacheDef, "缓存实体不能包含重复的[class:{}]", entityClazz.getSimpleName());
+        var cacheDefMap = new HashMap<Class<? extends IEntity<?>>, EntityDef>();
+        for (var clazz : classSet) {
+            var cacheDef = parserEntityDef((Class<? extends IEntity<?>>) clazz);
+            cacheDefMap.putIfAbsent((Class<? extends IEntity<?>>) clazz, cacheDef);
         }
         return cacheDefMap;
     }
 
-    private Set<String> scanEntityCacheAnno(String scanLocation) {
+    private Set<Class<?>> scanEntityCacheAnno() {
+        var scanLocation = ormConfig.getEntityPackage();
         var prefixPattern = "classpath*:";
         var suffixPattern = "**/*.class";
 
@@ -287,7 +290,7 @@ public class OrmManager implements IOrmManager {
         try {
             String packageSearchPath = prefixPattern + scanLocation.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + suffixPattern;
             Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
-            Set<String> result = new HashSet<>();
+            var result = new HashSet<Class<?>>();
             String name = EntityCache.class.getName();
             for (Resource resource : resources) {
                 if (resource.isReadable()) {
@@ -295,19 +298,21 @@ public class OrmManager implements IOrmManager {
                     AnnotationMetadata annoMeta = metadataReader.getAnnotationMetadata();
                     if (annoMeta.hasAnnotation(name)) {
                         ClassMetadata clazzMeta = metadataReader.getClassMetadata();
-                        result.add(clazzMeta.getClassName());
+                        result.add(Class.forName(clazzMeta.getClassName()));
                     }
                 }
             }
             return result;
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("无法读取实体信息:" + e);
         }
     }
 
 
     public EntityDef parserEntityDef(Class<? extends IEntity<?>> clazz) {
-        analyze(clazz);
+        if (!GraalVmUtils.isGraalVM()) {
+            analyze(clazz);
+        }
 
         var cacheStrategies = ormConfig.getCaches();
         var persisterStrategies = ormConfig.getPersisters();
