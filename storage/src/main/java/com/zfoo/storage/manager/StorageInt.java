@@ -23,11 +23,11 @@ import java.util.Map;
  * @author godotg
  * @version 3.0
  */
-public class PrimitiveIntStorage<K, V> extends ObjectStorage<K, V> {
+public class StorageInt<K, V> extends StorageObject<K, V> {
 
     private IntObjectHashMap<V> dataMap;
 
-    public PrimitiveIntStorage(ObjectStorage<K, V> storageObject) {
+    public StorageInt(StorageObject<K, V> storageObject) {
         this.dataMap = new IntObjectHashMap<V>(storageObject.size());
         this.dataMap.putAll((Map<? extends Integer, ? extends V>) storageObject.getData());
         super.indexMap = storageObject.indexMap;

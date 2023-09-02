@@ -125,7 +125,7 @@ public class StorageManager implements IStorageManager {
                 var clazz = definition.getClazz();
                 var resource = definition.getResource();
                 var fileExtName = FileUtils.fileExtName(resource.getFilename());
-                ObjectStorage<?, ?> storageObject = ObjectStorage.parse(resource.getInputStream(), clazz, fileExtName);
+                StorageObject<?, ?> storageObject = StorageObject.parse(resource.getInputStream(), clazz, fileExtName);
                 storageMap.putIfAbsent(clazz, storageObject);
             }
         } catch (Exception e) {
@@ -205,7 +205,7 @@ public class StorageManager implements IStorageManager {
     }
 
     @Override
-    public void updateStorage(Class<?> clazz, ObjectStorage<?, ?> storageObject) {
+    public void updateStorage(Class<?> clazz, IStorage<?, ?> storageObject) {
         storageMap.put(clazz, storageObject);
     }
 

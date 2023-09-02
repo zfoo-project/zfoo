@@ -29,7 +29,7 @@ import java.util.*;
  * @author godotg
  * @version 3.0
  */
-public class ObjectStorage<K, V> implements IStorage<K, V> {
+public class StorageObject<K, V> implements IStorage<K, V> {
 
     private Map<K, V> dataMap = new HashMap<>();
     // 非唯一索引
@@ -44,9 +44,9 @@ public class ObjectStorage<K, V> implements IStorage<K, V> {
     protected boolean recycle = true;
 
 
-    public static ObjectStorage<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
+    public static StorageObject<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
         try {
-            ObjectStorage<?, ?> storageObject = new ObjectStorage<>();
+            StorageObject<?, ?> storageObject = new StorageObject<>();
             storageObject.clazz = resourceClazz;
             var idDef = IdDef.valueOf(resourceClazz);
             storageObject.idDef = idDef;
@@ -57,9 +57,9 @@ public class ObjectStorage<K, V> implements IStorage<K, V> {
             }
             var idType = idDef.getField().getType();
             if (idType == int.class || idType == Integer.class) {
-                return new PrimitiveIntStorage<>(storageObject);
+                return new StorageInt<>(storageObject);
             } else if (idType == long.class || idType == Long.class) {
-                return new PrimitiveLongStorage<>(storageObject);
+                return new StorageLong<>(storageObject);
             } else {
                 return storageObject;
             }

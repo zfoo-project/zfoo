@@ -42,7 +42,7 @@ public interface IStorageManager {
 
     Map<Class<?>, IStorage<?, ?>> storageMap();
 
-    void updateStorage(Class<?> clazz, ObjectStorage<?, ?> storageObject);
+    void updateStorage(Class<?> clazz, IStorage<?, ?> storageObject);
 
     StorageConfig storageConfig();
 }

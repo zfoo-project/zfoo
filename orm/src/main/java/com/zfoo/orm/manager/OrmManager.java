@@ -471,7 +471,7 @@ public class OrmManager implements IOrmManager {
         ReflectionUtils.publicEmptyConstructor(clazz);
 
         // 不能使用Storage的Index注解
-        var storageIndexes = ReflectionUtils.getFieldsByAnnoNameInPOJOClass(clazz, "com.zfoo.storage.model.anno.Index");
+        var storageIndexes = ReflectionUtils.getFieldsByAnnoNameInPOJOClass(clazz, "com.zfoo.storage.anno.Index");
         if (ArrayUtils.isNotEmpty(storageIndexes)) {
             throw new RunException("在Orm中只能使用Orm的Index注解，不能使用Storage的Index注解，为了避免不必要的误解和增强项目的健壮性，禁止这样使用");
         }
