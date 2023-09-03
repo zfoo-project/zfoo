@@ -113,6 +113,10 @@ public class ProtocolManager {
         return protocolIdMap == null ? protocolIdPrimitiveMap.getPrimitive(clazz.hashCode()) : protocolIdMap.get(clazz);
     }
 
+    public static boolean isProtocolClass(Class<?> clazz) {
+        return protocolIdMap == null ? protocolIdPrimitiveMap.containsKey(clazz.hashCode()) : protocolIdMap.containsKey(clazz);
+    }
+
     public static void initProtocol(Set<Class<?>> protocolClassSet) {
         ProtocolAnalysis.analyze(protocolClassSet, GenerateOperation.NO_OPERATION);
     }

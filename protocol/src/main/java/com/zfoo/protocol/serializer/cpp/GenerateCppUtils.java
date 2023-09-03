@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.serializer.cpp;
 
+import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
@@ -249,7 +250,7 @@ public abstract class GenerateCppUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             var serializer = cppSerializer(fieldRegistration.serializer());
-            if (Object.class.isAssignableFrom(field.getType())) {
+            if (ProtocolManager.isProtocolClass(field.getType())) {
                 serializer.writeObject(cppBuilder, "&message->" + field.getName(), 3, field, fieldRegistration);
             } else {
                 serializer.writeObject(cppBuilder, "message->" + field.getName(), 3, field, fieldRegistration);
@@ -274,7 +275,7 @@ public abstract class GenerateCppUtils {
 
             var readObject = cppSerializer(fieldRegistration.serializer()).readObject(cppBuilder, 3, field, fieldRegistration);
             cppBuilder.append(TAB + TAB + TAB);
-            if (Object.class.isAssignableFrom(field.getType())) {
+            if (ProtocolManager.isProtocolClass(field.getType())) {
                 cppBuilder.append(StringUtils.format("packet->{} = *{};", field.getName(), readObject));
             } else {
                 cppBuilder.append(StringUtils.format("packet->{} = {};", field.getName(), readObject));
@@ -284,7 +285,6 @@ public abstract class GenerateCppUtils {
         }
         return cppBuilder.toString();
     }
-
 
     public static String toCppClassName(String typeName) {
         typeName = typeName.replaceAll("java.util.|java.lang.", StringUtils.EMPTY);
