@@ -219,11 +219,12 @@ public abstract class EnhanceUtils {
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
-            // 协议向后兼容
+            // protocol backwards compatibility，协议向后兼容
             if (field.isAnnotationPresent(Compatible.class)) {
                 builder.append("if(!$1.isReadable()){ return packet; }");
             }
+
+            var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
 
             if (Modifier.isPublic(field.getModifiers())) {
                 builder.append(StringUtils.format("packet.{}={};", field.getName(), readObject));
