@@ -30,8 +30,6 @@ import java.util.*;
  */
 public class ProtocolManager {
 
-    public static final String PROTOCOL_ID = "PROTOCOL_ID";
-    public static final String PROTOCOL_METHOD = "protocolId";
     public static final short MAX_PROTOCOL_NUM = Short.MAX_VALUE;
     public static final byte MAX_MODULE_NUM = Byte.MAX_VALUE;
 

@@ -106,7 +106,7 @@ public class ProtocolAnalysis {
         // 检查协议类是否合法
         for (var protocolClass : protocolClassSet) {
             var protocolId = getProtocolIdAndCheckClass(protocolClass);
-            AssertionUtils.isTrue(protocolId >= 0, "[class:{}]必须使用注解@Protocol注解标注或者使用[{}]字段", protocolClass.getCanonicalName(), PROTOCOL_ID);
+            AssertionUtils.isTrue(protocolId >= 0, "[class:{}]必须使用注解@Protocol注解标注", protocolClass.getCanonicalName());
             initProtocolClass(protocolId, protocolClass);
         }
 
@@ -587,16 +587,6 @@ public class ProtocolAnalysis {
         // 不能是泛型类
         AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
 
-        Field protocolIdField = null;
-        try {
-            protocolIdField = clazz.getDeclaredField(PROTOCOL_ID);
-        } catch (NoSuchFieldException e) {
-        }
-        Method protocolMethod = null;
-        try {
-            protocolMethod = clazz.getDeclaredMethod(PROTOCOL_METHOD);
-        } catch (NoSuchMethodException e) {
-        }
 
         // 必须要有一个空的构造器
         Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
@@ -605,24 +595,8 @@ public class ProtocolAnalysis {
         short protocolId = -1;
         if (protocolAnnotation != null) {
             protocolId = protocolAnnotation.id();
-            AssertionUtils.isTrue(protocolIdField == null && protocolMethod == null, "[class:{}]已经使用了注解标注协议号，不能再使用protocolId()方法和[{}]字段", clazz.getCanonicalName(), PROTOCOL_ID);
-        } else if (protocolIdField != null || protocolMethod != null) { // 字段标注的协议号
-            AssertionUtils.isTrue(protocolIdField != null, "[class:{}]协议序列号[{}]不存在", clazz.getCanonicalName(), PROTOCOL_ID);
-            AssertionUtils.isTrue(Modifier.isPublic(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被public修饰", clazz.getCanonicalName(), PROTOCOL_ID);
-            AssertionUtils.isTrue(Modifier.isStatic(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被static修饰", clazz.getCanonicalName(), PROTOCOL_ID);
-            AssertionUtils.isTrue(Modifier.isFinal(protocolIdField.getModifiers()), "[class:{}]协议序列号[{}]没有被final修饰", clazz.getCanonicalName(), PROTOCOL_ID);
-            AssertionUtils.isTrue(clazz.getSimpleName().matches("[a-zA-Z0-9_]*"), "[class:{}]的命名只能包含字母，数字，下划线", clazz.getCanonicalName(), PROTOCOL_ID);
-
-            ReflectionUtils.makeAccessible(protocolIdField);
-            protocolId = (short) ReflectionUtils.getField(protocolIdField, null);
-            // 验证protocol()方法的返回是否和PROTOCOL_ID相等
-            if (protocolMethod != null) {
-                var packet = (IPacket) ReflectionUtils.newInstance(constructor);
-                var methodReturnId = (short) ReflectionUtils.invokeMethod(packet, protocolMethod);
-                AssertionUtils.isTrue(methodReturnId == protocolId, "[class:{}]的protocolId方法返回的值[{}]和协议号返回值[{}]不相等", clazz.getCanonicalName(), methodReturnId, protocolId);
-            }
         } else {
-            // 可能通过xml的方式注册协议，xml注册协议不需要注解和PROTOCOL_ID协议字段号
+            // 可能通过xml的方式注册协议，xml注册协议不需要注解
             Short id = protocolNameMap.get(clazz.getName());
             if (id != null) {
                 protocolId = id;
