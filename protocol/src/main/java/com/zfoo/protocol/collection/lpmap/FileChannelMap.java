@@ -12,7 +12,6 @@
 
 package com.zfoo.protocol.collection.lpmap;
 
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.registration.IProtocolRegistration;
@@ -37,7 +36,7 @@ import java.util.function.BiConsumer;
  * @author godotg
  * @version 3.0
  */
-public class FileChannelMap<V extends IPacket> implements LpMap<V>, Closeable {
+public class FileChannelMap<V> implements LpMap<V>, Closeable {
 
     private final File dbFile;
     protected RandomAccessFile dbFileRandomAccess;

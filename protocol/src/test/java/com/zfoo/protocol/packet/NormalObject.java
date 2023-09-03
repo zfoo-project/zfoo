@@ -13,7 +13,7 @@
 
 package com.zfoo.protocol.packet;
 
-import com.zfoo.protocol.IPacket;
+
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.Set;
  * @version 3.0
  */
 @Protocol(id = 101)
-public class NormalObject implements IPacket {
+public class NormalObject {
 
     private byte a;
     private byte[] aaa;

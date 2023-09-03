@@ -1,10 +1,10 @@
 package com.zfoo.protocol.field.packet;
 
-import com.zfoo.protocol.IPacket;
+
 
 import java.util.Arrays;
 
-public class BytesObject implements IPacket {
+public class BytesObject {
     private byte[] a;
 
     private byte[] b;

@@ -31,7 +31,7 @@ public interface IEnhanceSerializer {
     }
 
     /**
-     * IProtocolRegistration.write(ByteBuf buffer, IPacket packet);
+     * IProtocolRegistration.write(ByteBuf buffer, Object packet);
      * $1=buffer
      * $2=packet
      */

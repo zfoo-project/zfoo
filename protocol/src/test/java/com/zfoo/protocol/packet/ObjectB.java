@@ -13,7 +13,7 @@
 
 package com.zfoo.protocol.packet;
 
-import com.zfoo.protocol.IPacket;
+
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Objects;
@@ -23,7 +23,7 @@ import java.util.Objects;
  * @version 3.0
  */
 @Protocol(id = 103)
-public class ObjectB implements IPacket {
+public class ObjectB {
 
     private boolean flag;
 

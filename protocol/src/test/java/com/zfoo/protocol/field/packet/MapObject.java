@@ -1,11 +1,11 @@
 package com.zfoo.protocol.field.packet;
 
-import com.zfoo.protocol.IPacket;
+
 
 import java.util.Map;
 import java.util.Objects;
 
-public class MapObject implements IPacket {
+public class MapObject {
     private Map<Integer, String> a;
 
     private Map<Integer, String> b;

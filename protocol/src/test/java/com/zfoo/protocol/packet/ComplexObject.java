@@ -13,7 +13,7 @@
 
 package com.zfoo.protocol.packet;
 
-import com.zfoo.protocol.IPacket;
+
 import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.anno.Note;
 import com.zfoo.protocol.anno.Protocol;
@@ -21,7 +21,7 @@ import com.zfoo.protocol.anno.Protocol;
 import java.util.*;
 
 @Protocol(id = 100, note = "复杂的对象，包括了各种复杂的结构，数组，List，Set，Map")
-public class ComplexObject implements IPacket {
+public class ComplexObject {
 
 
     @Note("byte类型，最简单的整形")

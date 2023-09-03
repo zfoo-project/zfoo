@@ -13,7 +13,7 @@
 
 package com.zfoo.protocol.buffer.model;
 
-import com.zfoo.protocol.IPacket;
+
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Objects;
  * @version 3.0
  */
 @Protocol(id = 2)
-public class MyObjectA implements IPacket {
+public class MyObjectA {
 
     public int a;
 

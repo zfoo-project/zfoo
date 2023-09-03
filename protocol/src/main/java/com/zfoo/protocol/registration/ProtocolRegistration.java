@@ -13,7 +13,6 @@
 
 package com.zfoo.protocol.registration;
 
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
@@ -29,7 +28,6 @@ import java.lang.reflect.Field;
  * @version 3.0
  */
 public class ProtocolRegistration implements IProtocolRegistration {
-
 
     private short id;
     private byte module;
@@ -62,7 +60,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
 
 
     @Override
-    public void write(ByteBuf buffer, IPacket packet) {
+    public void write(ByteBuf buffer, Object packet) {
         if (packet == null) {
             ByteBufUtils.writeBoolean(buffer, false);
             return;

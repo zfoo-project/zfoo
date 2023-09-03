@@ -41,6 +41,15 @@ public abstract class ClassUtils {
 
     public final static String JAR_URL_SEPARATOR = "!/";
 
+
+    public static Class<?> forName(String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 扫描指定包下的class文件
      *

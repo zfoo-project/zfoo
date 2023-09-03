@@ -1,10 +1,10 @@
 package com.zfoo.protocol.field.packet;
 
-import com.zfoo.protocol.IPacket;
+
 
 import java.util.Objects;
 
-public class InnerObject implements IPacket {
+public class InnerObject {
     private int x;
 
     public int getX() {

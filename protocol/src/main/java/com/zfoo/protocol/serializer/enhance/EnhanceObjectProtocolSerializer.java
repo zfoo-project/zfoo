@@ -33,7 +33,7 @@ public class EnhanceObjectProtocolSerializer implements IEnhanceSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration) {
         var objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        builder.append(StringUtils.format("{}.write($1, (IPacket){});", EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId()), objectStr));
+        builder.append(StringUtils.format("{}.write($1,{});", EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(objectProtocolField.getProtocolId()), objectStr));
     }
 
     @Override

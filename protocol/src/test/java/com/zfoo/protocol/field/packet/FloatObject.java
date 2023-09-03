@@ -1,10 +1,10 @@
 package com.zfoo.protocol.field.packet;
 
-import com.zfoo.protocol.IPacket;
+
 
 import java.util.Objects;
 
-public class FloatObject implements IPacket {
+public class FloatObject {
     private float a;
 
     private float b;

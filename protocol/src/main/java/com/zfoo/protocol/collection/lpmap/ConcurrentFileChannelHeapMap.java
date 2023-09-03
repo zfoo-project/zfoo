@@ -12,7 +12,6 @@
 
 package com.zfoo.protocol.collection.lpmap;
 
-import com.zfoo.protocol.IPacket;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -23,7 +22,7 @@ import java.util.function.BiConsumer;
  * @author godotg
  * @version 3.0
  */
-public class ConcurrentFileChannelHeapMap<V extends IPacket> implements LpMap<V>, Closeable {
+public class ConcurrentFileChannelHeapMap<V> implements LpMap<V>, Closeable {
 
     private final ReentrantLock fileChannelLock = new ReentrantLock();
 

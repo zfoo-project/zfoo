@@ -12,7 +12,6 @@
 
 package com.zfoo.protocol.registration;
 
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.anno.Protocol;
@@ -181,7 +180,7 @@ public class ProtocolAnalysis {
             for (var protocolDefinition : moduleDefinition.getProtocols()) {
                 protocolDefinitionMap.put(protocolDefinition.getLocation(), protocolDefinition.isEnhance());
                 protocolNameMap.put(protocolDefinition.getLocation(), protocolDefinition.getId());
-                var packetClazzList = scanClassList(protocolDefinition.getLocation());
+                var packetClazzList = Set.of(ClassUtils.forName(protocolDefinition.getLocation()));
                 clazzSet.addAll(packetClazzList);
                 for (Class<?> clazz : packetClazzList) {
                     var previous = classModuleDefinitionMap.put(clazz, module.getId());
@@ -200,7 +199,8 @@ public class ProtocolAnalysis {
         var enhanceList = new ArrayList<IProtocolRegistration>();
         for (var moduleDefinition : xmlProtocols.getModules()) {
             var module = modules[moduleDefinition.getId()];
-            var packetClazzList = moduleDefinitionClassMap.get(moduleDefinition.getId());;
+            var packetClazzList = moduleDefinitionClassMap.get(moduleDefinition.getId());
+            ;
             if (CollectionUtils.isEmpty(packetClazzList)) {
                 continue;
             }
@@ -228,37 +228,7 @@ public class ProtocolAnalysis {
         } catch (Exception e) {
             throw new RunException("[{}]包扫描类异常", packageName, e);
         }
-        return scanClassList(clazzSet);
-    }
-
-    public static Set<Class<?>> scanClassList(String className) {
-        var clazzSet = new HashSet<Class<?>>();
-        try {
-            Class<?> clazz = Class.forName(className);
-            if (!IPacket.class.isAssignableFrom(clazz) || clazz.isInterface()) {
-                return clazzSet;
-            }
-            clazzSet.add(clazz);
-        } catch (Exception e) {
-            clazzSet.addAll(scanPackageList(className));
-        }
-        return clazzSet;
-    }
-
-    public static Set<Class<?>> scanClassList(Set<String> classList) {
-        var clazzSet = new HashSet<Class<?>>();
-        for (var className : classList) {
-            try {
-                Class<?> clazz = Class.forName(className);
-                if (!IPacket.class.isAssignableFrom(clazz) || clazz.isInterface()) {
-                    continue;
-                }
-                clazzSet.add(clazz);
-            } catch (Exception e) {
-                clazzSet.addAll(scanPackageList(className));
-            }
-        }
-        return clazzSet;
+        return clazzSet.stream().map(it -> ClassUtils.forName(it)).collect(Collectors.toSet());
     }
 
     private static void enhance(GenerateOperation generateOperation, List<IProtocolRegistration> enhanceList) {
@@ -582,11 +552,8 @@ public class ProtocolAnalysis {
     public static short getProtocolIdAndCheckClass(Class<?> clazz) {
         // 是否为一个简单的javabean
         ReflectionUtils.assertIsPojoClass(clazz);
-        // 是否实现了IPacket接口
-        AssertionUtils.isTrue(IPacket.class.isAssignableFrom(clazz), "[class:{}]没有实现接口[IPacket:{}]", clazz.getCanonicalName(), IPacket.class.getCanonicalName());
         // 不能是泛型类
         AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
-
 
         // 必须要有一个空的构造器
         Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
@@ -647,7 +614,7 @@ public class ProtocolAnalysis {
 
 
         //拓扑排序检查循环协议
-        if(subProtocolIdMap.isEmpty()){
+        if (subProtocolIdMap.isEmpty()) {
             return;
         }
         //先判断自循环引用
@@ -660,52 +627,44 @@ public class ProtocolAnalysis {
             }
         }
         //入度
-        var inDegree=new HashMap<Short,Integer>();
+        var inDegree = new HashMap<Short, Integer>();
         //初始化入度
-        for(var protocolEntry : subProtocolIdMap.entrySet())
-        {
-            var protocolId=protocolEntry.getKey();
-            inDegree.put(protocolId,inDegree.getOrDefault(protocolId,0));
+        for (var protocolEntry : subProtocolIdMap.entrySet()) {
+            var protocolId = protocolEntry.getKey();
+            inDegree.put(protocolId, inDegree.getOrDefault(protocolId, 0));
             var subProtocolSet = protocolEntry.getValue();
-            for(var subProtocolId:subProtocolSet)
-            {
-                inDegree.put(subProtocolId,inDegree.getOrDefault(subProtocolId,0)+1);
+            for (var subProtocolId : subProtocolSet) {
+                inDegree.put(subProtocolId, inDegree.getOrDefault(subProtocolId, 0) + 1);
             }
         }
-        var queue=new LinkedList<Short>();
-        for(var protocolEntry:inDegree.entrySet())
-        {
-            var protocolInDegree=protocolEntry.getValue();
-            if(protocolInDegree==0)
-            {
+        var queue = new LinkedList<Short>();
+        for (var protocolEntry : inDegree.entrySet()) {
+            var protocolInDegree = protocolEntry.getValue();
+            if (protocolInDegree == 0) {
                 queue.offer(protocolEntry.getKey());
             }
         }
-        while(!queue.isEmpty())
-        {
-            var protocolId=queue.poll();
-            if(subProtocolIdMap.containsKey(protocolId)){
-                for(var subProtocolId:subProtocolIdMap.get(protocolId))
-                {
-                    inDegree.put(subProtocolId,inDegree.get(subProtocolId)-1);
-                    if(inDegree.get(subProtocolId)==0)
-                    {
+        while (!queue.isEmpty()) {
+            var protocolId = queue.poll();
+            if (subProtocolIdMap.containsKey(protocolId)) {
+                for (var subProtocolId : subProtocolIdMap.get(protocolId)) {
+                    inDegree.put(subProtocolId, inDegree.get(subProtocolId) - 1);
+                    if (inDegree.get(subProtocolId) == 0) {
                         queue.offer(subProtocolId);
                     }
                 }
             }
         }
-        var circularReferenceProtocols=new ArrayList<String>();
+        var circularReferenceProtocols = new ArrayList<String>();
         //入度不为0的表示存在循环引用的协议
-        for(var protocolEntry:inDegree.entrySet())
-        {
-            if(protocolEntry.getValue()>0){
+        for (var protocolEntry : inDegree.entrySet()) {
+            if (protocolEntry.getValue() > 0) {
                 circularReferenceProtocols.add(protocols[protocolEntry.getKey()].protocolConstructor().getDeclaringClass().getSimpleName());
             }
         }
         //抛出所有存在循环引用的协议类名
-        if(circularReferenceProtocols.size()>0){
-            throw new RunException("[class:{}]中存在循环引用",StringUtils.joinWith(",",circularReferenceProtocols.toArray()));
+        if (circularReferenceProtocols.size() > 0) {
+            throw new RunException("[class:{}]中存在循环引用", StringUtils.joinWith(",", circularReferenceProtocols.toArray()));
         }
     }
 

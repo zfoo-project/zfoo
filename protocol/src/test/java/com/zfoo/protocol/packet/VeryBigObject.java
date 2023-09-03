@@ -15,7 +15,6 @@ package com.zfoo.protocol.packet;
 
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
@@ -33,7 +32,7 @@ import static com.zfoo.protocol.SpeedTest.*;
 /**
  * 主要来测试极端大的对象序列化和反序列化情况，极端大的对象指的是字段多，对象大，方法大
  */
-public class VeryBigObject implements IPacket {
+public class VeryBigObject {
 
     @Ignore
     @Test

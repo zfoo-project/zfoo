@@ -13,7 +13,6 @@
 
 package com.zfoo.protocol.registration;
 
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.ArrayUtils;
@@ -51,12 +50,11 @@ public abstract class EnhanceUtils {
     public static String byteBufUtilsWriteInt0 = byteBufUtils + ".writeInt($1, 0);";
 
     static {
-        var classArray = new Class<?>[]{IPacket.class, IProtocolRegistration.class, IFieldRegistration.class, ByteBuf.class};
+        var classArray = new Class<?>[]{IProtocolRegistration.class, IFieldRegistration.class, ByteBuf.class};
 
         var classPool = ClassPool.getDefault();
 
         // 导入需要的包
-        classPool.importPackage(IPacket.class.getCanonicalName());
         classPool.importPackage(ByteBufUtils.class.getCanonicalName());
         classPool.importPackage(CollectionUtils.class.getCanonicalName());
         classPool.importPackage(ArrayUtils.class.getCanonicalName());
@@ -159,7 +157,7 @@ public abstract class EnhanceUtils {
         moduleMethod.setBody("{return " + registration.module() + ";}");
         enhanceClazz.addMethod(moduleMethod);
 
-        CtMethod writeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "write", classPool.get(new String[]{ByteBuf.class.getCanonicalName(), IPacket.class.getCanonicalName()}), enhanceClazz);
+        CtMethod writeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "write", classPool.get(new String[]{ByteBuf.class.getCanonicalName(), Object.class.getCanonicalName()}), enhanceClazz);
         writeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         writeMethod.setBody(writeMethodBody(registration));
         enhanceClazz.addMethod(writeMethod);

@@ -1,10 +1,10 @@
 package com.zfoo.protocol.field.packet;
 
-import com.zfoo.protocol.IPacket;
+
 
 import java.util.Objects;
 
-public class IntegerObject implements IPacket {
+public class IntegerObject {
     private Integer a;
 
     private Integer b;

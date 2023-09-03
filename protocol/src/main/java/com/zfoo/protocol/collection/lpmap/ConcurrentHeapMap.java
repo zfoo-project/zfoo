@@ -12,8 +12,6 @@
 
 package com.zfoo.protocol.collection.lpmap;
 
-import com.zfoo.protocol.IPacket;
-
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -23,7 +21,7 @@ import java.util.function.BiConsumer;
  * @author godotg
  * @version 3.0
  */
-public class ConcurrentHeapMap<V extends IPacket> implements LpMap<V> {
+public class ConcurrentHeapMap<V> implements LpMap<V> {
 
     private final ConcurrentNavigableMap<Long, V> map = new ConcurrentSkipListMap<>();
 

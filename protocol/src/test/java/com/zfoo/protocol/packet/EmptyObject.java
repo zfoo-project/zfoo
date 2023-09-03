@@ -12,10 +12,10 @@
 
 package com.zfoo.protocol.packet;
 
-import com.zfoo.protocol.IPacket;
+
 
 /**
  * @author godotg
  */
-public class EmptyObject implements IPacket {
+public class EmptyObject {
 }

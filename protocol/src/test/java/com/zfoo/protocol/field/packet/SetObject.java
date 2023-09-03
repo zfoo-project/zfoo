@@ -1,11 +1,11 @@
 package com.zfoo.protocol.field.packet;
 
-import com.zfoo.protocol.IPacket;
+
 
 import java.util.Objects;
 import java.util.Set;
 
-public class SetObject implements IPacket {
+public class SetObject {
     private Set<Integer> a;
 
     private Set<Integer> b;

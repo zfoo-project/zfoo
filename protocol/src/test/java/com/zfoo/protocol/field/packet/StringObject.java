@@ -1,10 +1,10 @@
 package com.zfoo.protocol.field.packet;
 
-import com.zfoo.protocol.IPacket;
+
 
 import java.util.Objects;
 
-public class StringObject implements IPacket {
+public class StringObject {
     private String a;
 
     private String b;

@@ -1,11 +1,11 @@
 package com.zfoo.protocol.field.packet;
 
-import com.zfoo.protocol.IPacket;
+
 
 import java.util.List;
 import java.util.Objects;
 
-public class ListIntegerObject implements IPacket {
+public class ListIntegerObject {
     private List<Integer> a;
 
     private List<Integer> b;

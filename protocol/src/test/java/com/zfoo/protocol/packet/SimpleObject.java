@@ -13,7 +13,7 @@
 
 package com.zfoo.protocol.packet;
 
-import com.zfoo.protocol.IPacket;
+
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -21,7 +21,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 104)
-public class SimpleObject implements IPacket {
+public class SimpleObject {
 
     private int c;
 

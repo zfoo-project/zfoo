@@ -12,7 +12,6 @@
 
 package com.zfoo.protocol.buffer;
 
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.collection.*;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.util.StringUtils;
@@ -397,13 +396,13 @@ public abstract class ByteBufUtils {
 
     //-----------------------------------------------------------------------
     //---------------------------------以下方法会被字节码生成的代码调用--------------------------------------
-    public static boolean writePacketFlag(ByteBuf byteBuf, IPacket packet) {
+    public static boolean writePacketFlag(ByteBuf byteBuf, Object packet) {
         boolean flag = packet == null;
         byteBuf.writeBoolean(!flag);
         return flag;
     }
 
-    public static void writePacketCollection(ByteBuf byteBuf, Collection<? extends IPacket> collection, IProtocolRegistration protocolRegistration) {
+    public static void writePacketCollection(ByteBuf byteBuf, Collection<?> collection, IProtocolRegistration protocolRegistration) {
         if (collection == null) {
             byteBuf.writeByte(0);
             return;
@@ -414,28 +413,28 @@ public abstract class ByteBufUtils {
         }
     }
 
-    public static void writePacketList(ByteBuf byteBuf, List<? extends IPacket> list, IProtocolRegistration protocolRegistration) {
+    public static void writePacketList(ByteBuf byteBuf, List<?> list, IProtocolRegistration protocolRegistration) {
         writePacketCollection(byteBuf, list, protocolRegistration);
     }
 
-    public static List<IPacket> readPacketList(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
+    public static List<?> readPacketList(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        List<IPacket> list = CollectionUtils.newList(length);
+        List<Object> list = CollectionUtils.newList(length);
         for (var i = 0; i < length; i++) {
-            list.add((IPacket) protocolRegistration.read(byteBuf));
+            list.add(protocolRegistration.read(byteBuf));
         }
         return list;
     }
 
-    public static void writePacketSet(ByteBuf byteBuf, Set<? extends IPacket> list, IProtocolRegistration protocolRegistration) {
-        writePacketCollection(byteBuf, list, protocolRegistration);
+    public static void writePacketSet(ByteBuf byteBuf, Set<?> set, IProtocolRegistration protocolRegistration) {
+        writePacketCollection(byteBuf, set, protocolRegistration);
     }
 
-    public static Set<IPacket> readPacketSet(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
+    public static Set<?> readPacketSet(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        Set<IPacket> set = CollectionUtils.newSet(length);
+        Set<Object> set = CollectionUtils.newSet(length);
         for (var i = 0; i < length; i++) {
-            set.add((IPacket) protocolRegistration.read(byteBuf));
+            set.add(protocolRegistration.read(byteBuf));
         }
         return set;
     }
@@ -503,7 +502,7 @@ public abstract class ByteBufUtils {
         return map;
     }
 
-    public static void writeIntPacketMap(ByteBuf byteBuf, Map<Integer, ? extends IPacket> map, IProtocolRegistration protocolRegistration) {
+    public static void writeIntPacketMap(ByteBuf byteBuf, Map<Integer, ?> map, IProtocolRegistration protocolRegistration) {
         if (map == null) {
             byteBuf.writeByte(0);
             return;
@@ -515,11 +514,11 @@ public abstract class ByteBufUtils {
         }
     }
 
-    public static Map<Integer, IPacket> readIntPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
+    public static Map<Integer, ?> readIntPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var map = new IntObjectHashMap<IPacket>(CollectionUtils.comfortableCapacity(length));
+        var map = new IntObjectHashMap<>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
-            map.put(readInt(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
+            map.put(readInt(byteBuf), protocolRegistration.read(byteBuf));
         }
         return map;
     }
@@ -587,7 +586,7 @@ public abstract class ByteBufUtils {
         return map;
     }
 
-    public static void writeLongPacketMap(ByteBuf byteBuf, Map<Long, ? extends IPacket> map, IProtocolRegistration protocolRegistration) {
+    public static void writeLongPacketMap(ByteBuf byteBuf, Map<Long, ?> map, IProtocolRegistration protocolRegistration) {
         if (map == null) {
             byteBuf.writeByte(0);
             return;
@@ -599,11 +598,11 @@ public abstract class ByteBufUtils {
         }
     }
 
-    public static Map<Long, IPacket> readLongPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
+    public static Map<Long, ?> readLongPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        var map = new LongObjectHashMap<IPacket>(CollectionUtils.comfortableCapacity(length));
+        var map = new LongObjectHashMap<>(CollectionUtils.comfortableCapacity(length));
         for (var i = 0; i < length; i++) {
-            map.put(readLong(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
+            map.put(readLong(byteBuf), protocolRegistration.read(byteBuf));
         }
         return map;
     }
@@ -671,7 +670,7 @@ public abstract class ByteBufUtils {
         return map;
     }
 
-    public static void writeStringPacketMap(ByteBuf byteBuf, Map<String, ? extends IPacket> map, IProtocolRegistration protocolRegistration) {
+    public static void writeStringPacketMap(ByteBuf byteBuf, Map<String, ?> map, IProtocolRegistration protocolRegistration) {
         if (map == null) {
             byteBuf.writeByte(0);
             return;
@@ -683,11 +682,11 @@ public abstract class ByteBufUtils {
         }
     }
 
-    public static Map<String, IPacket> readStringPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
+    public static Map<String, ?> readStringPacketMap(ByteBuf byteBuf, IProtocolRegistration protocolRegistration) {
         var length = readInt(byteBuf);
-        Map<String, IPacket> map = CollectionUtils.newMap(length);
+        Map<String, Object> map = CollectionUtils.newMap(length);
         for (var i = 0; i < length; i++) {
-            map.put(readString(byteBuf), (IPacket) protocolRegistration.read(byteBuf));
+            map.put(readString(byteBuf), protocolRegistration.read(byteBuf));
         }
         return map;
     }
@@ -1334,7 +1333,7 @@ public abstract class ByteBufUtils {
         return chars;
     }
 
-    public static <T extends IPacket> void writePacketArray(ByteBuf byteBuf, T[] array, IProtocolRegistration protocolRegistration) {
+    public static <T> void writePacketArray(ByteBuf byteBuf, T[] array, IProtocolRegistration protocolRegistration) {
         if (array == null) {
             byteBuf.writeByte(0);
             return;

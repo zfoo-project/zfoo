@@ -14,7 +14,6 @@
 package com.zfoo.protocol.jprotobuf;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -22,7 +21,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 103)
-public class ObjectB implements IPacket {
+public class ObjectB {
 
     @Protobuf(order = 1)
     public boolean flag;

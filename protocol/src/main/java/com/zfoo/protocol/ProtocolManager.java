@@ -56,7 +56,7 @@ public class ProtocolManager {
     /**
      * serialize the packet into the buffer
      */
-    public static void write(ByteBuf buffer, IPacket packet) {
+    public static void write(ByteBuf buffer, Object packet) {
         var protocolId = protocolId(packet.getClass());
         // write the protocolId
         ByteBufUtils.writeShort(buffer, protocolId);
@@ -67,8 +67,8 @@ public class ProtocolManager {
     /**
      * deserialization a packet from the buffer
      */
-    public static IPacket read(ByteBuf buffer) {
-        return (IPacket) protocols[ByteBufUtils.readShort(buffer)].read(buffer);
+    public static Object read(ByteBuf buffer) {
+        return protocols[ByteBufUtils.readShort(buffer)].read(buffer);
     }
 
     public static IProtocolRegistration getProtocol(short protocolId) {

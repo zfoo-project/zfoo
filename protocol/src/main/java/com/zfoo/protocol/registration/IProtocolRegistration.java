@@ -13,7 +13,6 @@
 
 package com.zfoo.protocol.registration;
 
-import com.zfoo.protocol.IPacket;
 import io.netty.buffer.ByteBuf;
 
 import java.lang.reflect.Constructor;
@@ -33,7 +32,7 @@ public interface IProtocolRegistration {
     /**
      * 序列化
      */
-    void write(ByteBuf buffer, IPacket packet);
+    void write(ByteBuf buffer, Object packet);
 
     /**
      * 反序列化

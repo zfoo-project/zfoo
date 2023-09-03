@@ -12,7 +12,7 @@
 
 package com.zfoo.protocol.collection.lpmap.model;
 
-import com.zfoo.protocol.IPacket;
+
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Objects;
@@ -22,7 +22,7 @@ import java.util.Objects;
  * @version 3.0
  */
 @Protocol(id = 1)
-public class MyPacket implements IPacket {
+public class MyPacket {
 
     private int a;
 

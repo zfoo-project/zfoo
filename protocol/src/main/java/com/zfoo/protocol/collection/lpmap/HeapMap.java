@@ -12,7 +12,6 @@
 
 package com.zfoo.protocol.collection.lpmap;
 
-import com.zfoo.protocol.IPacket;
 import io.netty.util.collection.LongObjectHashMap;
 
 import java.util.function.BiConsumer;
@@ -21,7 +20,7 @@ import java.util.function.BiConsumer;
  * @author godotg
  * @version 3.0
  */
-public class HeapMap<V extends IPacket> implements LpMap<V> {
+public class HeapMap<V> implements LpMap<V> {
 
     protected LongObjectHashMap<V> map;
 

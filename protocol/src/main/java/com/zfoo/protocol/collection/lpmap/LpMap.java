@@ -12,7 +12,6 @@
 
 package com.zfoo.protocol.collection.lpmap;
 
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.exception.RunException;
 
 import java.util.function.BiConsumer;
@@ -24,7 +23,7 @@ import java.util.function.BiConsumer;
  * @author godotg
  * @version 3.0
  */
-public interface LpMap<V extends IPacket> {
+public interface LpMap<V> {
 
     /**
      * @param packet the previous value associated with key, or null if there was no mapping for key.
