@@ -13,7 +13,7 @@
 package com.zfoo.protocol.buffer.model;
 
 import com.zfoo.protocol.IPacket;
-import com.zfoo.protocol.registration.anno.Protocol;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg

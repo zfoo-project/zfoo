@@ -14,11 +14,11 @@
 package com.zfoo.protocol.registration;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.enhance.*;
 import com.zfoo.protocol.serializer.reflect.*;

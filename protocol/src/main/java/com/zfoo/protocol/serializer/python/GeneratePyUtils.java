@@ -13,13 +13,13 @@
 
 package com.zfoo.protocol.serializer.python;
 
+import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;

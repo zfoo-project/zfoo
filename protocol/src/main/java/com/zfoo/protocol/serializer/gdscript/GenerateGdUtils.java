@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.serializer.gdscript;
 
+import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
@@ -21,13 +22,15 @@ import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
-import com.zfoo.protocol.util.*;
+import com.zfoo.protocol.util.ClassUtils;
+import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
+import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;

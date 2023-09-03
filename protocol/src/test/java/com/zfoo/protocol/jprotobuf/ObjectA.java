@@ -15,7 +15,7 @@ package com.zfoo.protocol.jprotobuf;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
 import com.zfoo.protocol.IPacket;
-import com.zfoo.protocol.registration.anno.Protocol;
+import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Map;
 

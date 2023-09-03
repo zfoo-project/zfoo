@@ -14,9 +14,9 @@
 package com.zfoo.protocol.packet;
 
 import com.zfoo.protocol.IPacket;
-import com.zfoo.protocol.registration.anno.Compatible;
-import com.zfoo.protocol.registration.anno.Note;
-import com.zfoo.protocol.registration.anno.Protocol;
+import com.zfoo.protocol.anno.Compatible;
+import com.zfoo.protocol.anno.Note;
+import com.zfoo.protocol.anno.Protocol;
 
 import java.util.*;
 

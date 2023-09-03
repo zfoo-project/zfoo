@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.serializer.go;
 
+import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
@@ -20,15 +21,16 @@ import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.registration.anno.Compatible;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.reflect.*;
-import com.zfoo.protocol.util.*;
+import com.zfoo.protocol.util.ClassUtils;
+import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
+import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
