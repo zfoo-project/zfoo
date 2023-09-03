@@ -20,7 +20,8 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /**
- * 创建协议文件的操作类
+ * EN: Action class for creating protocol files
+ * CN: 创建协议文件的操作类
  *
  * @author godotg
  * @version 3.0
@@ -28,27 +29,33 @@ import java.util.Set;
 public class GenerateOperation {
 
     /**
-     * 不创建任何协议文件
+     * EN: No protocol file is created
+     * CN: 不创建任何协议文件
      */
     public static final GenerateOperation NO_OPERATION = new GenerateOperation();
 
     /**
-     * 折叠协议，生成协议文件会和Java源文件保持相同的目录结构，默认不折叠
+     * EN: Fold the protocol. The generated protocol file will maintain the same directory structure as the Java source file.
+     * It will not be folded by default.
+     * <p>
+     * CN: 折叠协议，生成协议文件会和Java源文件保持相同的目录结构，默认不折叠
      */
     private boolean foldProtocol;
 
     /**
-     * 生成协议的路径，默认为当前运行项目的路径
+     * EN: The path to generate the protocol, the default is the path of the currently running project
+     * CN: 生成协议的路径，默认为当前运行项目的路径
      */
     private String protocolPath = StringUtils.EMPTY;
 
     /**
-     * 保留参数
+     * Reserved parameters，保留参数
      */
     private String protocolParam;
 
     /**
-     * 需要生成的协议文件(c#、js、ts...等需要生成协议的语言都列出来)
+     * EN: The protocol files that need to be generated (c#, js, ts... and other languages that need to generate the protocol are listed)
+     * CN: 需要生成的协议文件(c#、js、ts...等需要生成协议的语言都列出来)
      */
     private final Set<CodeLanguage> generateLanguages = EnumSet.noneOf(CodeLanguage.class);
 

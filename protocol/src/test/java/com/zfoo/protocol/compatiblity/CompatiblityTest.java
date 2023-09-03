@@ -35,9 +35,9 @@ public class CompatiblityTest {
 
     /**
      * EN: The order of the bytecode-enhanced Map traversal order will be different, so the order of the serialized content will change.
-     * You can see that the different ones are not consecutive.
+     * You can see that the different bytes are not consecutive.
      * <p>
-     * CN: 字节码增强的Map遍历顺序会出现不一样，所以序列化的内容顺序会改变，可以看到不相同的直接并不是连续的
+     * CN: 字节码增强的Map遍历顺序会出现不一样，所以序列化的内容顺序会改变，可以看到不相同的字节并不是连续的
      */
     @Ignore
     @Test
