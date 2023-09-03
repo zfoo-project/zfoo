@@ -15,7 +15,6 @@ package com.zfoo.protocol.registration;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.anno.Compatible;
-import com.zfoo.protocol.anno.NotEnhance;
 import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
@@ -208,8 +207,8 @@ public class ProtocolAnalysis {
             for (Class<?> clazz : packetClazzList) {
                 var protocolId = ProtocolManager.protocolId(clazz);
                 var registration = parseProtocolRegistration(clazz, module);
-                boolean isEnhance = protocolDefinitionMap.getOrDefault(clazz.getName(), true);
-                if (isEnhance && !clazz.isAnnotationPresent(NotEnhance.class)) {
+                // 优先使用Protocol注解指定的enhance决定是否要增强协议
+                if (clazz.isAnnotationPresent(Protocol.class) && clazz.getAnnotation(Protocol.class).enhance()) {
                     enhanceList.add(registration);
                 }
                 // 注册协议

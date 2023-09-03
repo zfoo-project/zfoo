@@ -25,6 +25,8 @@ public @interface Protocol {
 
     short id() default 0;
 
+    boolean enhance() default true;
+
     String note() default "";
 }
 
