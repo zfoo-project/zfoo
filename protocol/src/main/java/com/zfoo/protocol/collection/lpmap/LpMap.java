@@ -17,7 +17,7 @@ import com.zfoo.protocol.exception.RunException;
 import java.util.function.BiConsumer;
 
 /**
- * 类型固定的map，key为long，value为IPacket
+ * 类型固定的map，key为long，value为Object
  * 其中long必须大于等于0，value可以为null
  *
  * @author godotg

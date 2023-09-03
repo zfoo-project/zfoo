@@ -12,25 +12,17 @@
 
 package com.zfoo.boot;
 
+import com.zfoo.boot.graalvm.GraalvmOrmHints;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.accessor.MongodbAccessor;
-import com.zfoo.orm.anno.GraalvmNativeEntityCache;
 import com.zfoo.orm.config.OrmConfig;
 import com.zfoo.orm.manager.OrmManager;
 import com.zfoo.orm.query.MongodbQuery;
-import com.zfoo.protocol.util.ClassUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.aot.hint.BindingReflectionHintsRegistrar;
-import org.springframework.aot.hint.RuntimeHints;
-import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportRuntimeHints;
-
-import java.util.HashSet;
 
 /**
  * @author godotg
@@ -38,10 +30,8 @@ import java.util.HashSet;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(OrmConfig.class)
-@ImportRuntimeHints(OrmAutoConfiguration.GraalvmOrmHints.class)
+@ImportRuntimeHints(GraalvmOrmHints.class)
 public class OrmAutoConfiguration {
-
-    private static final Logger logger = LoggerFactory.getLogger(OrmAutoConfiguration.class);
 
     // OrmConfig in the specific business
     // If the OrmConfig bean is not configured in the business, then the Orm automatic assembly here will not take effect.
@@ -72,43 +62,4 @@ public class OrmAutoConfiguration {
         return new OrmContext();
     }
 
-
-    // Register runtime hints for the token library
-    public static class GraalvmOrmHints implements RuntimeHintsRegistrar {
-
-        private final BindingReflectionHintsRegistrar bindingRegistrar = new BindingReflectionHintsRegistrar();
-
-        @Override
-        public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-            logger.info("orm graalvm aot runtime hints register");
-
-            var classes = new HashSet<Class<?>>();
-            classes.add(OrmConfig.class);
-
-            try {
-                // SSLMSA
-                classes.add(Class.forName("com.github.benmanes.caffeine.cache.SSLMSA"));
-                classes.add(Class.forName("com.github.benmanes.caffeine.cache.PSAMS"));
-
-                for (var className : ClassUtils.getAllClasses("")) {
-                    try {
-                        var clazz = Class.forName(className);
-                        if (!clazz.isAnnotationPresent(GraalvmNativeEntityCache.class)) {
-                            continue;
-                        }
-                        classes.add(clazz);
-                        classes.addAll(ClassUtils.relevantClass(clazz));
-                    } catch (Throwable t) {
-                    }
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            for (var clazz : classes) {
-                this.bindingRegistrar.registerReflectionHints(hints.reflection(), clazz);
-                logger.info("orm graalvm aot hints register serialization [{}]", clazz);
-            }
-        }
-    }
 }

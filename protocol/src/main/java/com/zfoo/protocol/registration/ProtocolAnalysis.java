@@ -34,10 +34,7 @@ import com.zfoo.protocol.serializer.protobuf.GenerateProtobufUtils;
 import com.zfoo.protocol.serializer.python.GeneratePyUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
-import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.ClassUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.*;
 import com.zfoo.protocol.xml.XmlProtocols;
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
@@ -250,6 +247,9 @@ public class ProtocolAnalysis {
     }
 
     private static void enhanceProtocolRegistration(List<IProtocolRegistration> enhanceList) throws NoSuchMethodException, IllegalAccessException, InstantiationException, CannotCompileException, NotFoundException, InvocationTargetException, NoSuchFieldException {
+        if (GraalVmUtils.isGraalVM()) {
+            return;
+        }
         // 字节码增强
         for (var registration : enhanceList) {
             protocols[registration.protocolId()] = EnhanceUtils.createProtocolRegistration((ProtocolRegistration) registration);

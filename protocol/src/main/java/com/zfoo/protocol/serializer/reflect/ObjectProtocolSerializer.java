@@ -31,7 +31,6 @@ public class ObjectProtocolSerializer implements ISerializer {
 
     /**
      * @param buffer ByteBuf
-     * @param object 必须继承IPacket接口
      */
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
