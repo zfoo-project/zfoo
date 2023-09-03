@@ -14,6 +14,7 @@
 package com.zfoo.net.core.gateway.model;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Map;
 
@@ -23,9 +24,8 @@ import java.util.Map;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 24)
 public class GatewaySynchronizeSidAsk implements IPacket {
-
-    public static final short PROTOCOL_ID = 24;
 
     private String gatewayHostAndPort;
 
@@ -36,15 +36,6 @@ public class GatewaySynchronizeSidAsk implements IPacket {
         ask.gatewayHostAndPort = gatewayHostAndPort;
         ask.sidMap = sidMap;
         return ask;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
-
-    public static short gatewaySynchronizeProtocolId() {
-        return PROTOCOL_ID;
     }
 
     public Map<Long, Long> getSidMap() {

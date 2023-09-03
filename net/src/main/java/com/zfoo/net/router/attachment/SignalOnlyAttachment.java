@@ -12,15 +12,16 @@
 
 package com.zfoo.net.router.attachment;
 
+import com.zfoo.protocol.anno.Protocol;
+
 /**
  * 主要用来支持godot，unity，ts这种异步语法的使用，做为async/await语法的支撑
  *
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 1)
 public class SignalOnlyAttachment implements IAttachment {
-
-    public static final short PROTOCOL_ID = 1;
 
     private int signalId;
 
@@ -29,11 +30,6 @@ public class SignalOnlyAttachment implements IAttachment {
     @Override
     public AttachmentType packetType() {
         return AttachmentType.SIGNAL_ONLY_PACKET;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     @Override

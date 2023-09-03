@@ -25,9 +25,9 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.DomUtils;
+import com.zfoo.protocol.util.NumberUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.xml.XmlProtocols;
-import com.zfoo.protocol.util.NumberUtils;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,10 +71,6 @@ public class PacketService implements IPacketService {
 
 
     public static final String NET_COMMON_MODULE = "common";
-    /**
-     * 内网协议最大id
-     */
-    public static final short MAN_NATIVE_PROTOCOL_ID = 100;
 
     private final Predicate<IProtocolRegistration> netGenerateProtocolFilter = registration
             -> ProtocolManager.moduleByModuleId(registration.module()).getName().matches(NET_COMMON_MODULE)

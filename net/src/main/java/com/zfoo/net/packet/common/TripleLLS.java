@@ -16,14 +16,14 @@ package com.zfoo.net.packet.common;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 117)
 public class TripleLLS implements IPacket {
-
-    public static final short PROTOCOL_ID = 117;
 
     @JsonSerialize(using = ToStringSerializer.class)
     private long left;
@@ -37,11 +37,6 @@ public class TripleLLS implements IPacket {
         triple.middle = middle;
         triple.right = right;
         return triple;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public long getLeft() {

@@ -601,10 +601,10 @@ public class ProtocolAnalysis {
         // 必须要有一个空的构造器
         Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
 
-        var protocolClass = clazz.getDeclaredAnnotation(Protocol.class);
+        var protocolAnnotation = clazz.getDeclaredAnnotation(Protocol.class);
         short protocolId = -1;
-        if (protocolClass != null && protocolClass.id() != 0) {// 注解标注的协议号
-            protocolId = protocolClass.id();
+        if (protocolAnnotation != null) {
+            protocolId = protocolAnnotation.id();
             AssertionUtils.isTrue(protocolIdField == null && protocolMethod == null, "[class:{}]已经使用了注解标注协议号，不能再使用protocolId()方法和[{}]字段", clazz.getCanonicalName(), PROTOCOL_ID);
         } else if (protocolIdField != null || protocolMethod != null) { // 字段标注的协议号
             AssertionUtils.isTrue(protocolIdField != null, "[class:{}]协议序列号[{}]不存在", clazz.getCanonicalName(), PROTOCOL_ID);

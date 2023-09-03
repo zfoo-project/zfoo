@@ -13,14 +13,14 @@
 package com.zfoo.net.router.attachment;
 
 import com.zfoo.net.session.Session;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 2)
 public class GatewayAttachment implements IAttachment {
-
-    public static final short PROTOCOL_ID = 2;
 
     /**
      * session id
@@ -78,11 +78,6 @@ public class GatewayAttachment implements IAttachment {
      */
     public int taskExecutorHash() {
         return useTaskExecutorHashParam ? taskExecutorHashParam : (int) uid;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public void wrapTaskExecutorHash(Object argument) {

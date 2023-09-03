@@ -16,6 +16,7 @@ package com.zfoo.net.packet.common;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * Long + String
@@ -23,9 +24,8 @@ import com.zfoo.protocol.IPacket;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 113)
 public class PairLS implements IPacket {
-
-    public static final short PROTOCOL_ID = 113;
 
     @JsonSerialize(using = ToStringSerializer.class)
     private long key;
@@ -37,11 +37,6 @@ public class PairLS implements IPacket {
         pair.key = key;
         pair.value = value;
         return pair;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public long getKey() {

@@ -154,26 +154,8 @@ your protocol number a little more compactly, so that your protocol number will 
       }
       ```
 
-    - The second uses static constants + interfaces: the value of this protocol number must be the same as the value
-      returned by the IPacket interface, which can slightly improve performance
-      ```
-      public class SimpleObject implements IPacket {
-      
-          public static final short PROTOCOL_ID = 104;
-      
-          public int c;
-      
-          public boolean g;
-      
-          @Override
-          public short protocolId() {
-              return PROTOCOL_ID;
-          }
-      
-      }
-      ```
 
-    - The third use: Register the agreement through Protocol Manager.initProtocolAuto() without writing the protocol
+    - The second use: Register the agreement through Protocol Manager.initProtocolAuto() without writing the protocol
       number
       ```
       public class SimpleObject implements IPacket {

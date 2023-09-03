@@ -16,6 +16,7 @@ package com.zfoo.net.packet.common;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * Long + String + String
@@ -23,9 +24,8 @@ import com.zfoo.protocol.IPacket;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 116)
 public class TripleLSS implements IPacket {
-
-    public static final short PROTOCOL_ID = 116;
 
     @JsonSerialize(using = ToStringSerializer.class)
     private long left;
@@ -38,11 +38,6 @@ public class TripleLSS implements IPacket {
         triple.middle = middle;
         triple.right = right;
         return triple;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public long getLeft() {

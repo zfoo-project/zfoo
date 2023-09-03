@@ -14,14 +14,14 @@ package com.zfoo.net.packet.jprotobuf;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 1500)
 public class JProtobufHelloRequest implements IPacket {
-
-    public static final short PROTOCOL_ID = 1500;
 
     @Protobuf(order = 1)
     private String message;
@@ -30,11 +30,6 @@ public class JProtobufHelloRequest implements IPacket {
         var request = new JProtobufHelloRequest();
         request.message = message;
         return request;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public String getMessage() {

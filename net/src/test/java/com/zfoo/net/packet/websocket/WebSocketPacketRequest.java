@@ -14,6 +14,7 @@
 package com.zfoo.net.packet.websocket;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 import java.util.List;
 import java.util.Map;
@@ -23,9 +24,8 @@ import java.util.Set;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 2070)
 public class WebSocketPacketRequest implements IPacket {
-
-    public static final short PROTOCOL_ID = 2070;
 
     private byte a;
     private Byte aa;
@@ -81,11 +81,6 @@ public class WebSocketPacketRequest implements IPacket {
     private Set<Set<WebSocketObjectA>> sss;
     private Set<String> ssss;
     private Set<Map<Integer, String>> sssss;
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
     public byte getA() {
         return a;

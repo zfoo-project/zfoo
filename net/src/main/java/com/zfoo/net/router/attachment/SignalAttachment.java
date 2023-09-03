@@ -14,6 +14,7 @@ package com.zfoo.net.router.attachment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.scheduler.util.TimeUtils;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,9 +24,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 0)
 public class SignalAttachment implements IAttachment {
-
-    public static final short PROTOCOL_ID = 0;
 
     /**
      * EN:Negative signalId are allowed
@@ -85,11 +85,6 @@ public class SignalAttachment implements IAttachment {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
 

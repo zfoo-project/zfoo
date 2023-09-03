@@ -13,22 +13,17 @@
 package com.zfoo.net.packet.websocket;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 1400)
 public class WebsocketHelloRequest implements IPacket {
-
-    public static final short PROTOCOL_ID = 1400;
 
     private String message;
 
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
     public String getMessage() {
         return message;

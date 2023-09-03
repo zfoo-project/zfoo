@@ -13,26 +13,20 @@
 package com.zfoo.net.packet.tcp;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 1300)
 public class TcpHelloRequest implements IPacket {
-
-    public static final short PROTOCOL_ID = 1300;
-
     private String message;
 
     public static TcpHelloRequest valueOf(String message) {
         var request = new TcpHelloRequest();
         request.message = message;
         return request;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public String getMessage() {

@@ -13,22 +13,16 @@
 package com.zfoo.net.packet.tcp;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 1153)
 public class AsyncMessAnswer implements IPacket {
 
-    public static final short PROTOCOL_ID = 1153;
-
     private String message;
-
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
 
     public String getMessage() {

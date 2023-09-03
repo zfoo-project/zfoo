@@ -12,6 +12,7 @@
 
 package com.zfoo.net.router.attachment;
 
+import com.zfoo.protocol.anno.Protocol;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 
@@ -19,9 +20,8 @@ import io.netty.handler.codec.http.HttpResponseStatus;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 4)
 public class HttpAttachment implements IAttachment {
-
-    public static final short PROTOCOL_ID = 4;
 
     private long uid;
 
@@ -51,11 +51,6 @@ public class HttpAttachment implements IAttachment {
      */
     public int taskExecutorHash() {
         return useTaskExecutorHashParam ? taskExecutorHashParam : (int) uid;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public void wrapTaskExecutorHash(Object argument) {

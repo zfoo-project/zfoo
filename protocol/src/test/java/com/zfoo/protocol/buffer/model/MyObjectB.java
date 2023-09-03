@@ -14,6 +14,7 @@
 package com.zfoo.protocol.buffer.model;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Objects;
 
@@ -21,16 +22,10 @@ import java.util.Objects;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 3)
 public class MyObjectB implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 3;
-
     public boolean a;
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
     @Override
     public boolean equals(Object o) {

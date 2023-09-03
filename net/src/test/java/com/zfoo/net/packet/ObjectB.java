@@ -14,6 +14,7 @@
 package com.zfoo.net.packet;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Objects;
 
@@ -21,16 +22,10 @@ import java.util.Objects;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 1117)
 public class ObjectB implements IPacket {
 
-    public static final short PROTOCOL_ID = 1117;
-
     private boolean flag;
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
     public boolean isFlag() {
         return flag;

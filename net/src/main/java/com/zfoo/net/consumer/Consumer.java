@@ -104,7 +104,7 @@ public class Consumer implements IConsumer {
 
             IPacket responsePacket = clientSignalAttachment.getResponseFuture().get(Router.DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
 
-            if (responsePacket.protocolId() == Error.errorProtocolId()) {
+            if (responsePacket.getClass() == Error.class) {
                 throw new ErrorResponseException((Error) responsePacket);
             }
             if (answerClass != null && answerClass != responsePacket.getClass()) {

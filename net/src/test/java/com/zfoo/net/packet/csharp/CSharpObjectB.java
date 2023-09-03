@@ -14,19 +14,15 @@
 package com.zfoo.net.packet.csharp;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 1167)
 public class CSharpObjectB implements IPacket {
-
-    public static final short PROTOCOL_ID = 1167;
 
     public boolean flag;
 
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 }

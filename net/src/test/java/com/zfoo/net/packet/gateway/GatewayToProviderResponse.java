@@ -14,21 +14,17 @@
 package com.zfoo.net.packet.gateway;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 5001)
 public class GatewayToProviderResponse implements IPacket {
-
-    public static final short PROTOCOL_ID = 5001;
 
     private String message;
 
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
     public String getMessage() {
         return message;

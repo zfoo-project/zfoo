@@ -126,25 +126,7 @@ cpu： i9900k
       }
       ```
 
-    - 第二种使用静态常量+接口：这个协议号的值必须和IPacket接口返回的值一样，这样的方式可以微弱的提升一点性能
-      ```
-      public class SimpleObject implements IPacket {
-      
-          public static final short PROTOCOL_ID = 104;
-      
-          public int c;
-      
-          public boolean g;
-      
-          @Override
-          public short protocolId() {
-              return PROTOCOL_ID;
-          }
-      
-      }
-      ```
-
-    - 第三种使用：通过ProtocolManager.initProtocolAuto()去注册协议就可以不写协议号
+    - 第二种使用：通过ProtocolManager.initProtocolAuto()去注册协议就可以不写协议号
       ```
       public class SimpleObject implements IPacket {
       

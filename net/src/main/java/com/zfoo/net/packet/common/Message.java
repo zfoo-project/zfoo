@@ -13,10 +13,10 @@
 
 package com.zfoo.net.packet.common;
 
-import com.baidu.bjf.remoting.protobuf.annotation.Ignore;
 import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * 通用的返回，既可以用在远程调用，又可以嵌套在其它协议里
@@ -25,9 +25,8 @@ import com.zfoo.protocol.ProtocolManager;
  * @version 3.0
  */
 @ProtobufClass
+@Protocol(id = 100)
 public class Message implements IPacket {
-    @Ignore
-    public static final short PROTOCOL_ID = 100;
 
     private byte module;
 
@@ -84,11 +83,6 @@ public class Message implements IPacket {
         mess.code = 3;
         mess.message = message;
         return mess;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public byte getModule() {

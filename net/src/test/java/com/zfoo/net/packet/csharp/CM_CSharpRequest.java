@@ -14,6 +14,7 @@
 package com.zfoo.net.packet.csharp;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 import java.util.List;
 import java.util.Map;
@@ -23,9 +24,8 @@ import java.util.Set;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 1165)
 public class CM_CSharpRequest implements IPacket {
-
-    public static final short PROTOCOL_ID = 1165;
 
     // 注释1
     public byte a;
@@ -99,10 +99,5 @@ public class CM_CSharpRequest implements IPacket {
      * 附加注释
      */
     public Set<Map<Integer, String>> sssss;
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
 }

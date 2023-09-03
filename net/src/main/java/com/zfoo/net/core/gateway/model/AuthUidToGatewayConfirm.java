@@ -14,6 +14,7 @@
 package com.zfoo.net.core.gateway.model;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * 网关登录成功过后，将uid授权给网关的返回
@@ -21,9 +22,8 @@ import com.zfoo.protocol.IPacket;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 21)
 public class AuthUidToGatewayConfirm implements IPacket {
-
-    public static final short PROTOCOL_ID = 21;
 
     private long uid;
 
@@ -31,11 +31,6 @@ public class AuthUidToGatewayConfirm implements IPacket {
         var authUidToGateway = new AuthUidToGatewayConfirm();
         authUidToGateway.uid = uid;
         return authUidToGateway;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public long getUid() {

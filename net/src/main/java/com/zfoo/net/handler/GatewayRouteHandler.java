@@ -24,7 +24,6 @@ import com.zfoo.net.packet.common.Ping;
 import com.zfoo.net.packet.common.Pong;
 import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.attachment.IAttachment;
-import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.IPacket;
@@ -68,10 +67,10 @@ public class GatewayRouteHandler extends ServerRouteHandler {
 
         var decodedPacketInfo = (DecodedPacketInfo) msg;
         var packet = decodedPacketInfo.getPacket();
-        if (packet.protocolId() == Heartbeat.PROTOCOL_ID) {
+        if (packet.getClass() == Heartbeat.class) {
             return;
         }
-        if (packet.protocolId() == Ping.PROTOCOL_ID) {
+        if (packet.getClass() == Ping.class) {
             NetContext.getRouter().send(session, Pong.valueOf(TimeUtils.now()), null);
             return;
         }

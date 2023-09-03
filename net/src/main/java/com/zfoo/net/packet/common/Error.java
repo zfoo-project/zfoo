@@ -13,11 +13,11 @@
 
 package com.zfoo.net.packet.common;
 
-import com.baidu.bjf.remoting.protobuf.annotation.Ignore;
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
 import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.anno.Protocol;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 
@@ -26,9 +26,8 @@ import org.slf4j.helpers.MessageFormatter;
  * @version 3.0
  */
 @ProtobufClass
+@Protocol(id = 101)
 public class Error implements IPacket {
-    @Ignore
-    public static final short PROTOCOL_ID = 101;
 
     @Protobuf(order = 1)
     private int module;
@@ -36,15 +35,6 @@ public class Error implements IPacket {
     private int errorCode;
     @Protobuf(order = 3)
     private String errorMessage;
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
-
-    public static short errorProtocolId() {
-        return PROTOCOL_ID;
-    }
 
     @Override
     public String toString() {

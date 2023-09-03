@@ -14,21 +14,14 @@
 package com.zfoo.net.packet;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 1113)
 public class SM_Float implements IPacket {
-
-    public static final short PROTOCOL_ID = 1113;
-
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
-
 
 }
 

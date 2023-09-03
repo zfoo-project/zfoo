@@ -13,6 +13,7 @@
 package com.zfoo.protocol.collection.lpmap.model;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Objects;
 
@@ -20,9 +21,8 @@ import java.util.Objects;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 1)
 public class MyPacket implements IPacket {
-
-    public static final transient short PROTOCOL_ID = 1;
 
     private int a;
 
@@ -33,11 +33,6 @@ public class MyPacket implements IPacket {
         packet.a = a;
         packet.b = b;
         return packet;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     @Override

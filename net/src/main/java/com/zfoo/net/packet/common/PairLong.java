@@ -16,18 +16,14 @@ package com.zfoo.net.packet.common;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.zfoo.protocol.IPacket;
-
-import java.util.Comparator;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 111)
 public class PairLong implements IPacket {
-
-    public static final short PROTOCOL_ID = 111;
-
-    public static transient final Comparator<PairLong> NATURAL_VALUE_COMPARATOR = (a, b) -> Long.compare(a.getValue(), b.getValue());
 
     @JsonSerialize(using = ToStringSerializer.class)
     private long key;
@@ -40,11 +36,6 @@ public class PairLong implements IPacket {
         pair.key = key;
         pair.value = value;
         return pair;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public long getKey() {

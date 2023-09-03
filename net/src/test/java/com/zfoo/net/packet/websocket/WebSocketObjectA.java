@@ -14,6 +14,7 @@
 package com.zfoo.net.packet.websocket;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Objects;
 
@@ -21,9 +22,8 @@ import java.util.Objects;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 2071)
 public class WebSocketObjectA implements IPacket {
-
-    public static final short PROTOCOL_ID = 2071;
 
     private int a;
 
@@ -45,11 +45,6 @@ public class WebSocketObjectA implements IPacket {
         this.objectB = objectB;
     }
 
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
     @Override
     public boolean equals(Object o) {

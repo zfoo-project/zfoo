@@ -14,14 +14,14 @@
 package com.zfoo.net.core.gateway.model;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 22)
 public class AuthUidAsk implements IPacket {
-
-    public static final short PROTOCOL_ID = 22;
 
     private String gatewayHostAndPort;
 
@@ -34,11 +34,6 @@ public class AuthUidAsk implements IPacket {
         ask.sid = sid;
         ask.uid = uid;
         return ask;
-    }
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
     }
 
     public String getGatewayHostAndPort() {
