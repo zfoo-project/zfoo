@@ -47,7 +47,7 @@ public class Message implements IPacket {
 
     public static Message valueOf(IPacket packet, int code, String message) {
         var mess = new Message();
-        mess.module = ProtocolManager.moduleByProtocolId(packet.protocolId()).getId();
+        mess.module = ProtocolManager.moduleByProtocolId(ProtocolManager.protocolId(packet.getClass())).getId();
         mess.code = code;
         mess.message = message;
         return mess;

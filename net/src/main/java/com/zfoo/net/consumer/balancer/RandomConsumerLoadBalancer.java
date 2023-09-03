@@ -38,11 +38,11 @@ public class RandomConsumerLoadBalancer extends AbstractConsumerLoadBalancer {
 
     @Override
     public Session loadBalancer(IPacket packet, Object argument) {
-        var module = ProtocolManager.moduleByProtocolId(packet.protocolId());
+        var module = ProtocolManager.moduleByProtocolId(ProtocolManager.protocolId(packet.getClass()));
         var sessions = getSessionsByModule(module);
 
         if (sessions.isEmpty()) {
-            throw new RunException("RandomConsumerLoadBalancer [protocolId:{}][argument:{}], no service provides the [module:{}]", packet.protocolId(), argument, module);
+            throw new RunException("RandomConsumerLoadBalancer [protocol:{}][argument:{}], no service provides the [module:{}]", packet.getClass(), argument, module);
         }
 
         return RandomUtils.randomEle(sessions);

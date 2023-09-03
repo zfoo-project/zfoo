@@ -19,7 +19,6 @@ import com.zfoo.net.packet.DecodedPacketInfo;
 import com.zfoo.net.packet.EncodedPacketInfo;
 import com.zfoo.net.packet.PacketService;
 import com.zfoo.net.router.attachment.IAttachment;
-import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
@@ -28,9 +27,6 @@ import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
-import io.netty.util.ReferenceCountUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -94,7 +90,7 @@ public class JProtobufTcpCodecHandler extends ByteToMessageCodec<EncodedPacketIn
         // header(4byte) + protocolId(2byte)
         buffer.writeInt(bytes.length + 2);
 
-        var protocolId = packet.protocolId();
+        var protocolId = ProtocolManager.protocolId(packet.getClass());
         // 写入协议号
         ByteBufUtils.writeShort(buffer, protocolId);
 

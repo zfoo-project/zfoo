@@ -57,7 +57,7 @@ public class ProtocolManager {
      * serialize the packet into the buffer
      */
     public static void write(ByteBuf buffer, IPacket packet) {
-        var protocolId = packet.protocolId();
+        var protocolId = protocolId(packet.getClass());
         // write the protocolId
         ByteBufUtils.writeShort(buffer, protocolId);
         // write the package

@@ -74,7 +74,7 @@ public class Consumer implements IConsumer {
     @Override
     public void send(IPacket packet, Object argument) {
         try {
-            var loadBalancer = loadBalancer(ProtocolManager.moduleByProtocolId(packet.protocolId()));
+            var loadBalancer = loadBalancer(ProtocolManager.moduleByProtocolId(ProtocolManager.protocolId(packet.getClass())));
             var session = loadBalancer.loadBalancer(packet, argument);
             var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
             NetContext.getRouter().send(session, packet, NoAnswerAttachment.valueOf(taskExecutorHash));
@@ -85,7 +85,7 @@ public class Consumer implements IConsumer {
 
     @Override
     public <T extends IPacket> SyncAnswer<T> syncAsk(IPacket packet, Class<T> answerClass, Object argument) throws Exception {
-        var loadBalancer = loadBalancer(ProtocolManager.moduleByProtocolId(packet.protocolId()));
+        var loadBalancer = loadBalancer(ProtocolManager.moduleByProtocolId(ProtocolManager.protocolId(packet.getClass())));
         var session = loadBalancer.loadBalancer(packet, argument);
 
 
@@ -124,7 +124,7 @@ public class Consumer implements IConsumer {
 
     @Override
     public <T extends IPacket> AsyncAnswer<T> asyncAsk(IPacket packet, Class<T> answerClass, Object argument) {
-        var loadBalancer = loadBalancer(ProtocolManager.moduleByProtocolId(packet.protocolId()));
+        var loadBalancer = loadBalancer(ProtocolManager.moduleByProtocolId(ProtocolManager.protocolId(packet.getClass())));
         var session = loadBalancer.loadBalancer(packet, argument);
         var asyncAnswer = NetContext.getRouter().asyncAsk(session, packet, answerClass, argument);
 

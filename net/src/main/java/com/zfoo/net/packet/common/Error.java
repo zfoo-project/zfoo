@@ -53,7 +53,7 @@ public class Error implements IPacket {
 
     public static Error valueOf(IPacket packet, int errorCode, String errorMessage) {
         Error response = new Error();
-        response.module = ProtocolManager.getProtocol(packet.protocolId()).module();
+        response.module = ProtocolManager.getProtocol(ProtocolManager.protocolId(packet.getClass())).module();
         response.errorCode = errorCode;
         response.errorMessage = errorMessage;
         return response;

@@ -14,7 +14,9 @@
 package com.zfoo.net.router.route;
 
 import com.zfoo.net.packet.PacketService;
-import com.zfoo.net.router.attachment.*;
+import com.zfoo.net.router.attachment.GatewayAttachment;
+import com.zfoo.net.router.attachment.IAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.receiver.EnhanceUtils;
 import com.zfoo.net.router.receiver.IPacketReceiver;
 import com.zfoo.net.router.receiver.PacketReceiver;
@@ -50,7 +52,7 @@ public abstract class PacketBus {
      * The routing of the message
      */
     public static void route(Session session, IPacket packet, IAttachment attachment) {
-        var receiver = receiverMap.get(packet.protocolId());
+        var receiver = receiverMap.get(ProtocolManager.protocolId(packet.getClass()));
         if (receiver == null) {
             var name = packet.getClass().getSimpleName();
             throw new RuntimeException(StringUtils.format("no any packetReceiver:[at{}] found for this packet:[{}] or no GatewayAttachment sent back if this server is gateway", name, name));

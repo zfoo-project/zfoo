@@ -15,6 +15,7 @@ package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.session.Session;
+import com.zfoo.net.util.ConsistentHash;
 import com.zfoo.net.util.FastTreeMapIntLong;
 import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
@@ -22,7 +23,6 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolModule;
-import com.zfoo.net.util.ConsistentHash;
 import org.springframework.lang.Nullable;
 
 import java.util.TreeMap;
@@ -79,22 +79,22 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
             lastClientSessionChangeId = currentClientSessionChangeId;
         }
 
-        var module = ProtocolManager.moduleByProtocolId(packet.protocolId());
+        var module = ProtocolManager.moduleByProtocolId(ProtocolManager.protocolId(packet.getClass()));
         var fastTreeMap = consistentHashMap.get(module.getId());
         if (fastTreeMap == null) {
             fastTreeMap = updateModuleToConsistentHash(module);
         }
         if (fastTreeMap == null) {
-            throw new RunException("ConsistentHashLoadBalancer [protocolId:{}][argument:{}], no service provides the [module:{}]", packet.protocolId(), argument, module);
+            throw new RunException("ConsistentHashLoadBalancer [protocol:{}][argument:{}], no service provides the [module:{}]", packet.getClass(), argument, module);
         }
         var nearestIndex = fastTreeMap.indexOfNearestCeilingKey(argument.hashCode());
         if (nearestIndex < 0) {
-            throw new RunException("no service provides the [module:{}]", packet.protocolId(), argument, module);
+            throw new RunException("no service provides the [module:{}]", module);
         }
         var sid = fastTreeMap.getByIndex(nearestIndex);
         var session = NetContext.getSessionManager().getClientSession(sid);
         if (session == null) {
-            throw new RunException("unknown no service provides the [module:{}]", packet.protocolId(), argument, module);
+            throw new RunException("unknown no service provides the [module:{}]", module);
         }
         return session;
     }
