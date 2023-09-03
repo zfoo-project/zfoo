@@ -176,3 +176,40 @@ doc[module]: 增加了什么文档
 zfoo使用 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 ![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
+
+## 升级日志
+
+- protocol
+
+```
+不需要再继承IPacket
+```
+
+
+- event
+
+```
+com.zfoo.event.model.anno.EventReceiver  ->  com.zfoo.event.anno.EventReceiver
+```
+
+- orm complete refactoring
+```
+Storage -> IStorage
+@Resource -> @Storage
+@ResInjection -> @StorageAutowired
+```
+
+- storage complete refactoring
+
+- utils
+
+```
+com.zfoo.util.NetUtils ->  com.zfoo.net.util.NetUtils
+com.zfoo.util.ThreadUtils ->  com.zfoo.protocol.util.ThreadUtils
+com.zfoo.util.math.NumberUtils ->  com.zfoo.protocol.util.NumberUtils
+com.zfoo.util.math.RandomUtils ->  com.zfoo.protocol.util.RandomUtils
+com.zfoo.util.security.IdUtils ->  com.zfoo.protocol.util.UuidUtils
+com.zfoo.util.security.security.*  ->  com.zfoo.net.util.security.*
+```
+
+- SafeRunnable删除了，请使用ThreadUtils.safeRunnable
