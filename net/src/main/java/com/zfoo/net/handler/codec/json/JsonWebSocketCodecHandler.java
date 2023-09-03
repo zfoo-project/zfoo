@@ -15,8 +15,8 @@ package com.zfoo.net.handler.codec.json;
 
 import com.zfoo.net.packet.DecodedPacketInfo;
 import com.zfoo.net.packet.EncodedPacketInfo;
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.router.attachment.IAttachment;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.util.JsonUtils;

@@ -14,9 +14,9 @@
 package com.zfoo.net.consumer;
 
 import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.registration.ProtocolModule;
 import org.springframework.lang.Nullable;
 

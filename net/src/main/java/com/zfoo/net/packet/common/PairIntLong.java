@@ -15,7 +15,7 @@ package com.zfoo.net.packet.common;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.zfoo.protocol.IPacket;
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Objects;

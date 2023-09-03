@@ -13,7 +13,7 @@
 
 package com.zfoo.net.packet.csharp;
 
-import com.zfoo.protocol.IPacket;
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**

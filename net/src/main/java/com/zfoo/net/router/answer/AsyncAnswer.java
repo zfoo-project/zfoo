@@ -13,8 +13,8 @@
 
 package com.zfoo.net.router.answer;
 
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.router.attachment.SignalAttachment;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.ThreadUtils;
 
 import java.util.ArrayList;

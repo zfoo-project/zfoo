@@ -13,9 +13,9 @@
 
 package com.zfoo.net.router.receiver;
 
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.Session;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.ReflectionUtils;
 
 import java.lang.reflect.Method;

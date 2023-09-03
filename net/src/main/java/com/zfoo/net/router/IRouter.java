@@ -13,11 +13,11 @@
 
 package com.zfoo.net.router;
 
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
 import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.Session;
-import com.zfoo.protocol.IPacket;
 import org.springframework.lang.Nullable;
 
 /**

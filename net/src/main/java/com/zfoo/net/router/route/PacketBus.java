@@ -13,6 +13,7 @@
 
 package com.zfoo.net.router.route;
 
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.packet.PacketService;
 import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.attachment.IAttachment;
@@ -22,7 +23,6 @@ import com.zfoo.net.router.receiver.IPacketReceiver;
 import com.zfoo.net.router.receiver.PacketReceiver;
 import com.zfoo.net.router.receiver.PacketReceiverDefinition;
 import com.zfoo.net.session.Session;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.RunException;

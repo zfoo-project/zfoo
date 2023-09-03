@@ -15,7 +15,6 @@ package com.zfoo.net.packet;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.route.PacketBus;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.CollectionUtils;

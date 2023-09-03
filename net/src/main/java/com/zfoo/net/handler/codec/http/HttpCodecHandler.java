@@ -14,9 +14,9 @@ package com.zfoo.net.handler.codec.http;
 
 import com.zfoo.net.packet.DecodedPacketInfo;
 import com.zfoo.net.packet.EncodedPacketInfo;
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.packet.common.Message;
 import com.zfoo.net.router.attachment.HttpAttachment;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.ChannelHandlerContext;

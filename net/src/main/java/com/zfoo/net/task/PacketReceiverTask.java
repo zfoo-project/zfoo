@@ -13,9 +13,9 @@
 package com.zfoo.net.task;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.Session;
-import com.zfoo.protocol.IPacket;
 
 /**
  * @author godotg

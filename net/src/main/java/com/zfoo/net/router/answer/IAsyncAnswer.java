@@ -13,7 +13,7 @@
 
 package com.zfoo.net.router.answer;
 
-import com.zfoo.protocol.IPacket;
+import com.zfoo.net.packet.IPacket;
 
 import java.util.function.Consumer;
 

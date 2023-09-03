@@ -13,8 +13,8 @@
 
 package com.zfoo.net.consumer.balancer;
 
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.session.Session;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.RandomUtils;

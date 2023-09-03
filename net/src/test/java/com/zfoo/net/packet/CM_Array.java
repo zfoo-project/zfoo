@@ -13,7 +13,6 @@
 
 package com.zfoo.net.packet;
 
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Arrays;

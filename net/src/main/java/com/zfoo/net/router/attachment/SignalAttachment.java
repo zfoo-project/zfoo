@@ -13,7 +13,7 @@
 package com.zfoo.net.router.attachment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.zfoo.protocol.IPacket;
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.scheduler.util.TimeUtils;
 

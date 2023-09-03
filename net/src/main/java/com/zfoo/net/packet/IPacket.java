@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol;
+package com.zfoo.net.packet;
+
+import com.zfoo.protocol.ProtocolManager;
 
 /**
  * 所有协议类都必须实现这个接口，协议类必须是简单的javabean，不能继承任何其它的类，但是可以继承接口

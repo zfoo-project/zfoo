@@ -200,7 +200,6 @@ public class ProtocolAnalysis {
         for (var moduleDefinition : xmlProtocols.getModules()) {
             var module = modules[moduleDefinition.getId()];
             var packetClazzList = moduleDefinitionClassMap.get(moduleDefinition.getId());
-            ;
             if (CollectionUtils.isEmpty(packetClazzList)) {
                 continue;
             }

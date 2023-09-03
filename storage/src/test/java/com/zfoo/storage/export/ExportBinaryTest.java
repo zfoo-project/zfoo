@@ -12,7 +12,6 @@
 
 package com.zfoo.storage.export;
 
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
@@ -45,7 +44,7 @@ import java.util.Map;
 @Ignore
 public class ExportBinaryTest {
 
-    public static class User implements IPacket {
+    public static class User {
 
         public String id;
         public String name;
@@ -55,7 +54,7 @@ public class ExportBinaryTest {
     }
 
     @Storage
-    public static class StudentResource implements IPacket {
+    public static class StudentResource {
 
         @Id
         public int id;
@@ -71,7 +70,7 @@ public class ExportBinaryTest {
     }
 
 
-    public static class ResourceData implements IPacket {
+    public static class ResourceData {
 
         public Map<Integer, StudentResource> studentResources;
 

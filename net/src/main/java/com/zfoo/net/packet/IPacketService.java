@@ -13,7 +13,6 @@
 package com.zfoo.net.packet;
 
 import com.zfoo.net.router.attachment.IAttachment;
-import com.zfoo.protocol.IPacket;
 import io.netty.buffer.ByteBuf;
 import org.springframework.lang.Nullable;
 

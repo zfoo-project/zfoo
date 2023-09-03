@@ -15,8 +15,8 @@ package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.consumer.registry.RegisterVO;
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.session.Session;
-import com.zfoo.protocol.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.StringUtils;
