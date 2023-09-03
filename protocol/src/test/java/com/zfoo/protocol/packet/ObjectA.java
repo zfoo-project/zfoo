@@ -14,6 +14,7 @@
 package com.zfoo.protocol.packet;
 
 import com.zfoo.protocol.IPacket;
+import com.zfoo.protocol.registration.anno.Protocol;
 
 import java.util.Map;
 import java.util.Objects;
@@ -22,20 +23,14 @@ import java.util.Objects;
  * @author godotg
  * @version 3.0
  */
+@Protocol(id = 102)
 public class ObjectA implements IPacket {
-
-    public static final transient short PROTOCOL_ID = 102;
 
     private int a;
 
     private Map<Integer, String> m;
 
     private ObjectB objectB;
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
     public int getA() {
         return a;

@@ -45,6 +45,7 @@ import java.util.concurrent.Executors;
  * @author godotg
  * @version 3.0
  */
+@Ignore
 public class SpeedTest {
 
     public static int benchmark = 10_0000;
@@ -59,7 +60,6 @@ public class SpeedTest {
      * 常规对象，zfoo包体大小430，kryo包体大小483，protobuf包体大小793
      * 复杂对象，zfoo包体大小2216，kryo包体大小2528，protobuf包体大小5091
      */
-    @Ignore
     @Test
     public void singleThreadBenchmarks() {
         while (true) {
@@ -82,7 +82,6 @@ public class SpeedTest {
     /**
      * 多线程性能测试
      */
-    @Ignore
     @Test
     public void multipleThreadBenchmarks() throws InterruptedException {
         while (true) {
@@ -102,7 +101,6 @@ public class SpeedTest {
         }
     }
 
-    @Ignore
     @Test
     public void zfooTest() {
         // netty的ByteBuf做了更多的安全检测，java自带的ByteBuffer并没有做安全检测，为了公平，把不需要的检测去掉
@@ -146,7 +144,6 @@ public class SpeedTest {
         System.out.println(StringUtils.format("[zfoo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
     }
 
-    @Ignore
     @Test
     public void furyTest() {
         var buffer = MemoryBuffer.newHeapBuffer(1_0000);
@@ -183,7 +180,6 @@ public class SpeedTest {
         System.out.println(StringUtils.format("[fury]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
     }
 
-    @Ignore
     @Test
     public void kryoTest() {
         try {
@@ -229,7 +225,6 @@ public class SpeedTest {
         }
     }
 
-    @Ignore
     @Test
     public void protobufTest() {
         try {
@@ -273,7 +268,6 @@ public class SpeedTest {
         }
     }
 
-    @Ignore
     @Test
     public void zfooMultipleThreadTest() throws InterruptedException {
         var countdown = new CountDownLatch(threadNum);
@@ -286,7 +280,6 @@ public class SpeedTest {
         countdown.await();
     }
 
-    @Ignore
     @Test
     public void furyMultipleThreadTest() throws InterruptedException {
         var countdown = new CountDownLatch(threadNum);
@@ -299,7 +292,6 @@ public class SpeedTest {
         countdown.await();
     }
 
-    @Ignore
     @Test
     public void kryoMultipleThreadTest() throws InterruptedException {
         var countdown = new CountDownLatch(threadNum);
@@ -312,7 +304,6 @@ public class SpeedTest {
         countdown.await();
     }
 
-    @Ignore
     @Test
     public void protobufMultipleThreadTest() throws InterruptedException {
         var countdown = new CountDownLatch(threadNum);
@@ -383,7 +374,7 @@ public class SpeedTest {
 //        op.getGenerateLanguages().add(CodeLanguage.Protobuf);
 
         // zfoo协议注册(其实就是：将Set里面的协议号和对应的类注册好，这样子就可以根据协议号知道是反序列化为哪个类)
-        ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, VeryBigObject.class), op);
+        ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), op);
 
         for (int i = 0; i < executors.length; i++) {
             executors[i] = Executors.newSingleThreadExecutor();
@@ -686,24 +677,4 @@ public class SpeedTest {
     }
 
 
-    /**
-     * 简单和复杂对象的序列化和反序列化测试，这个其实是基于ProtoManager.initProtocol初始化协议后执行的
-     */
-    @Test
-    public void cmEnhanceMessTest() {
-        var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
-        // 简单对象序列化和反序列化测试
-        // 序列化：把normalObject序列化一下写到buffer中
-        ProtocolManager.write(buffer, normalObject);
-        // 反序列化：从buffer中反序列化为协议包
-        var packet = ProtocolManager.read(buffer);
-
-        buffer.clear();
-
-        // 复杂对象序列化和反序列化测试
-        ProtocolManager.write(buffer, complexObject);
-        packet = ProtocolManager.read(buffer);
-
-        buffer.clear();
-    }
 }

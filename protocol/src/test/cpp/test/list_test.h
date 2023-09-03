@@ -1,6 +1,7 @@
 #ifndef ZFOO_LIST_TEST_H
 #define ZFOO_LIST_TEST_H
 
+#include <cstdint>
 #include "list.h"
 
 namespace list_test {

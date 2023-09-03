@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
- *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -14,38 +13,9 @@
 package com.zfoo.protocol.packet;
 
 import com.zfoo.protocol.IPacket;
-import com.zfoo.protocol.registration.anno.Protocol;
-
-import java.util.Objects;
 
 /**
  * @author godotg
- * @version 3.0
  */
-@Protocol(id = 103)
-public class ObjectB implements IPacket {
-
-    private boolean flag;
-
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ObjectB objectB = (ObjectB) o;
-        return flag == objectB.flag;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(flag);
-    }
+public class EmptyObject implements IPacket {
 }
-

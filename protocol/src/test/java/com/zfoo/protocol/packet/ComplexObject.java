@@ -20,10 +20,9 @@ import com.zfoo.protocol.registration.anno.Protocol;
 
 import java.util.*;
 
-@Protocol(note = "复杂的对象，包括了各种复杂的结构，数组，List，Set，Map")
+@Protocol(id = 100, note = "复杂的对象，包括了各种复杂的结构，数组，List，Set，Map")
 public class ComplexObject implements IPacket {
 
-    public static final transient short PROTOCOL_ID = 100;
 
     @Note("byte类型，最简单的整形")
     private byte a;
@@ -98,11 +97,6 @@ public class ComplexObject implements IPacket {
     private int myCompatible;
     @Compatible(order = 2)
     private ObjectA myObject;
-
-    @Override
-    public short protocolId() {
-        return PROTOCOL_ID;
-    }
 
     public byte getA() {
         return a;
