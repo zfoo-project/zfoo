@@ -7,17 +7,12 @@
 
 namespace zfoo {
 
-    // 复杂的对象
-    // 包括了各种复杂的结构，数组，List，Set，Map
-    //
-    // @author godotg
-    // @version 3.0
-    class ComplexObject : public IPacket {
+    // 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
+    class ComplexObject : public IProtocol {
     public:
         // byte类型，最简单的整形
         int8_t a;
-        // byte的包装类型
-        // 优先使用基础类型，包装类型会有装箱拆箱
+        // byte的包装类型，优先使用基础类型，包装类型会有装箱拆箱
         int8_t aa;
         // 数组类型
         vector<int8_t> aaa;
@@ -255,7 +250,7 @@ namespace zfoo {
             return 100;
         }
 
-        void write(ByteBuffer &buffer, IPacket *packet) override {
+        void write(ByteBuffer &buffer, IProtocol *packet) override {
             if (buffer.writePacketFlag(packet)) {
                 return;
             }
@@ -317,7 +312,7 @@ namespace zfoo {
             buffer.writeIntPacketMap(message->mm, 102);
             buffer.writeInt(message->mmm.size());
             for (auto&[keyElement4, valueElement5] : message->mmm) {
-                buffer.writePacket((IPacket *) &keyElement4, 102);
+                buffer.writePacket((IProtocol *) &keyElement4, 102);
                 buffer.writeIntList(valueElement5);
             }
             buffer.writeInt(message->mmmm.size());
@@ -366,7 +361,7 @@ namespace zfoo {
             buffer.writePacket(&message->myObject, 102);
         }
 
-        IPacket *read(ByteBuffer &buffer) override {
+        IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new ComplexObject();
             if (!buffer.readBool()) {
                 return packet;

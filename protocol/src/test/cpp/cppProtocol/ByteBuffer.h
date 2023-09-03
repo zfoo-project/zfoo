@@ -35,11 +35,11 @@ namespace zfoo {
 
     class ByteBuffer;
 
-    class IPacket {
+    class IProtocol {
     public:
         virtual int16_t protocolId() = 0;
 
-        virtual ~IPacket() {
+        virtual ~IProtocol() {
         }
     };
 
@@ -47,9 +47,9 @@ namespace zfoo {
     public:
         virtual int16_t protocolId() = 0;
 
-        virtual void write(ByteBuffer &buffer, IPacket *packet) = 0;
+        virtual void write(ByteBuffer &buffer, IProtocol *packet) = 0;
 
-        virtual IPacket *read(ByteBuffer &buffer) = 0;
+        virtual IProtocol *read(ByteBuffer &buffer) = 0;
     };
 
     IProtocolRegistration *getProtocol(int16_t protocolId);
@@ -395,21 +395,21 @@ namespace zfoo {
             return readString()[0];
         }
 
-        inline bool writePacketFlag(const IPacket *packet) {
+        inline bool writePacketFlag(const IProtocol *packet) {
             bool flag = packet == nullptr;
             writeBool(!flag);
             return flag;
         }
 
-        inline void writePacket(IPacket *packet, const int16_t &protocolId) {
+        inline void writePacket(IProtocol *packet, const int16_t &protocolId) {
             IProtocolRegistration *protocolRegistration = getProtocol(protocolId);
             protocolRegistration->write(*this, packet);
         }
 
-        inline unique_ptr<IPacket> readPacket(const int16_t &protocolId) {
+        inline unique_ptr<IProtocol> readPacket(const int16_t &protocolId) {
             IProtocolRegistration *protocolRegistration = getProtocol(protocolId);
             auto packet = protocolRegistration->read(*this);
-            return unique_ptr<IPacket>(packet);
+            return unique_ptr<IProtocol>(packet);
         }
 
 
@@ -1069,7 +1069,7 @@ namespace zfoo {
             writeInt(map.size());
             for (const auto&[key, value] : map) {
                 writeInt(key);
-                writePacket((IPacket *) &value, protocolId);
+                writePacket((IProtocol *) &value, protocolId);
             }
         }
 
@@ -1164,7 +1164,7 @@ namespace zfoo {
             writeInt(map.size());
             for (const auto&[key, value] : map) {
                 writeLong(key);
-                writePacket((IPacket *) &value, protocolId);
+                writePacket((IProtocol *) &value, protocolId);
             }
         }
 
@@ -1259,7 +1259,7 @@ namespace zfoo {
             writeInt(map.size());
             for (const auto&[key, value] : map) {
                 writeString(key);
-                writePacket((IPacket *) &value, protocolId);
+                writePacket((IProtocol *) &value, protocolId);
             }
         }
 
@@ -1287,7 +1287,7 @@ namespace zfoo {
             int32_t length = array.size();
             writeInt(length);
             for (auto value : array) {
-                writePacket((IPacket *) &value, protocolId);
+                writePacket((IProtocol *) &value, protocolId);
             }
         }
 
@@ -1312,7 +1312,7 @@ namespace zfoo {
             int32_t length = list.size();
             writeInt(length);
             for (auto value : list) {
-                writePacket((IPacket *) &value, protocolId);
+                writePacket((IProtocol *) &value, protocolId);
             }
         }
 
@@ -1337,7 +1337,7 @@ namespace zfoo {
             int32_t length = set.size();
             writeInt(length);
             for (auto value : set) {
-                writePacket((IPacket *) &value, protocolId);
+                writePacket((IProtocol *) &value, protocolId);
             }
         }
 

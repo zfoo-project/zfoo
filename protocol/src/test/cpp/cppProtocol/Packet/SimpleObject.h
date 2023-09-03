@@ -5,9 +5,8 @@
 
 namespace zfoo {
 
-    // @author godotg
-    // @version 3.0
-    class SimpleObject : public IPacket {
+    
+    class SimpleObject : public IProtocol {
     public:
         int32_t c;
         bool g;
@@ -41,7 +40,7 @@ namespace zfoo {
             return 104;
         }
 
-        void write(ByteBuffer &buffer, IPacket *packet) override {
+        void write(ByteBuffer &buffer, IProtocol *packet) override {
             if (buffer.writePacketFlag(packet)) {
                 return;
             }
@@ -50,7 +49,7 @@ namespace zfoo {
             buffer.writeBool(message->g);
         }
 
-        IPacket *read(ByteBuffer &buffer) override {
+        IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new SimpleObject();
             if (!buffer.readBool()) {
                 return packet;

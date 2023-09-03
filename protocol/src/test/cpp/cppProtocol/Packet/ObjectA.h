@@ -6,9 +6,8 @@
 
 namespace zfoo {
 
-    // @author godotg
-    // @version 3.0
-    class ObjectA : public IPacket {
+    
+    class ObjectA : public IProtocol {
     public:
         int32_t a;
         map<int32_t, string> m;
@@ -46,7 +45,7 @@ namespace zfoo {
             return 102;
         }
 
-        void write(ByteBuffer &buffer, IPacket *packet) override {
+        void write(ByteBuffer &buffer, IProtocol *packet) override {
             if (buffer.writePacketFlag(packet)) {
                 return;
             }
@@ -56,7 +55,7 @@ namespace zfoo {
             buffer.writePacket(&message->objectB, 103);
         }
 
-        IPacket *read(ByteBuffer &buffer) override {
+        IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new ObjectA();
             if (!buffer.readBool()) {
                 return packet;

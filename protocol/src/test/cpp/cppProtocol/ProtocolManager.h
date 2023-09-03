@@ -2,6 +2,8 @@
 #define ZFOO_PROTOCOLMANAGER_H
 
 #include "ByteBuffer.h"
+#include "cppProtocol/packet/EmptyObject.h"
+#include "cppProtocol/packet/VeryBigObject.h"
 #include "cppProtocol/packet/ComplexObject.h"
 #include "cppProtocol/packet/NormalObject.h"
 #include "cppProtocol/packet/ObjectA.h"
@@ -14,6 +16,8 @@ namespace zfoo {
     const IProtocolRegistration *protocols[MAX_PROTOCOL_NUM];
 
     void initProtocol() {
+        protocols[0] = new EmptyObjectRegistration();
+        protocols[1] = new VeryBigObjectRegistration();
         protocols[100] = new ComplexObjectRegistration();
         protocols[101] = new NormalObjectRegistration();
         protocols[102] = new ObjectARegistration();
@@ -25,7 +29,7 @@ namespace zfoo {
         return const_cast<IProtocolRegistration *>(protocols[protocolId]);
     }
 
-    void write(ByteBuffer &buffer, IPacket *packet) {
+    void write(ByteBuffer &buffer, IProtocol *packet) {
         auto protocolId = packet->protocolId();
         // 写入协议号
         buffer.writeShort(protocolId);
@@ -33,7 +37,7 @@ namespace zfoo {
         getProtocol(protocolId)->write(buffer, packet);
     }
 
-    IPacket *read(ByteBuffer &buffer) {
+    IProtocol *read(ByteBuffer &buffer) {
         auto protocolId = buffer.readShort();
         return getProtocol(protocolId)->read(buffer);
     }

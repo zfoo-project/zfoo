@@ -16,7 +16,7 @@ namespace zfoo {
         return const_cast<IProtocolRegistration *>(protocols[protocolId]);
     }
 
-    void write(ByteBuffer &buffer, IPacket *packet) {
+    void write(ByteBuffer &buffer, IProtocol *packet) {
         auto protocolId = packet->protocolId();
         // 写入协议号
         buffer.writeShort(protocolId);
@@ -24,7 +24,7 @@ namespace zfoo {
         getProtocol(protocolId)->write(buffer, packet);
     }
 
-    IPacket *read(ByteBuffer &buffer) {
+    IProtocol *read(ByteBuffer &buffer) {
         auto protocolId = buffer.readShort();
         return getProtocol(protocolId)->read(buffer);
     }

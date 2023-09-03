@@ -5,9 +5,8 @@
 
 namespace zfoo {
 
-    // @author godotg
-    // @version 3.0
-    class ObjectB : public IPacket {
+    
+    class ObjectB : public IProtocol {
     public:
         bool flag;
 
@@ -37,7 +36,7 @@ namespace zfoo {
             return 103;
         }
 
-        void write(ByteBuffer &buffer, IPacket *packet) override {
+        void write(ByteBuffer &buffer, IProtocol *packet) override {
             if (buffer.writePacketFlag(packet)) {
                 return;
             }
@@ -45,7 +44,7 @@ namespace zfoo {
             buffer.writeBool(message->flag);
         }
 
-        IPacket *read(ByteBuffer &buffer) override {
+        IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new ObjectB();
             if (!buffer.readBool()) {
                 return packet;

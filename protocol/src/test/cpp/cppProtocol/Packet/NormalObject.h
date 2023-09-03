@@ -7,9 +7,8 @@
 
 namespace zfoo {
 
-    // @author godotg
-    // @version 3.0
-    class NormalObject : public IPacket {
+    
+    class NormalObject : public IProtocol {
     public:
         int8_t a;
         vector<int8_t> aaa;
@@ -107,7 +106,7 @@ namespace zfoo {
             return 101;
         }
 
-        void write(ByteBuffer &buffer, IPacket *packet) override {
+        void write(ByteBuffer &buffer, IProtocol *packet) override {
             if (buffer.writePacketFlag(packet)) {
                 return;
             }
@@ -132,7 +131,7 @@ namespace zfoo {
             buffer.writeStringSet(message->ssss);
         }
 
-        IPacket *read(ByteBuffer &buffer) override {
+        IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new NormalObject();
             if (!buffer.readBool()) {
                 return packet;

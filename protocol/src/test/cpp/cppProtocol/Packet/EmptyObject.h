@@ -1,54 +1,54 @@
-#ifndef ZFOO_{}_H
-#define ZFOO_{}_H
+#ifndef ZFOO_EMPTYOBJECT_H
+#define ZFOO_EMPTYOBJECT_H
 
-#include "{}/ByteBuffer.h"
-{}
+#include "cppProtocol/ByteBuffer.h"
+
 namespace zfoo {
 
-    {}
-    class {} : public IProtocol {
+    
+    class EmptyObject : public IProtocol {
     public:
-        {}
+        
 
-        ~{}() override = default;
+        ~EmptyObject() override = default;
 
-        static {} valueOf({}) {
-            auto packet = {}();
-            {}
+        static EmptyObject valueOf() {
+            auto packet = EmptyObject();
+            
             return packet;
         }
 
         int16_t protocolId() override {
-            return {};
+            return 0;
         }
 
-        bool operator<(const {} &_) const {
-            {}
+        bool operator<(const EmptyObject &_) const {
+            
             return false;
         }
     };
 
 
-    class {}Registration : public IProtocolRegistration {
+    class EmptyObjectRegistration : public IProtocolRegistration {
     public:
         int16_t protocolId() override {
-            return {};
+            return 0;
         }
 
         void write(ByteBuffer &buffer, IProtocol *packet) override {
             if (buffer.writePacketFlag(packet)) {
                 return;
             }
-            auto *message = ({} *) packet;
-            {}
+            auto *message = (EmptyObject *) packet;
+            
         }
 
         IProtocol *read(ByteBuffer &buffer) override {
-            auto *packet = new {}();
+            auto *packet = new EmptyObject();
             if (!buffer.readBool()) {
                 return packet;
             }
-            {}
+            
             return packet;
         }
     };
