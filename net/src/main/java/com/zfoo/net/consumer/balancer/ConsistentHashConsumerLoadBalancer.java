@@ -79,7 +79,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
             lastClientSessionChangeId = currentClientSessionChangeId;
         }
 
-        var module = ProtocolManager.moduleByProtocolId(ProtocolManager.protocolId(packet.getClass()));
+        var module = ProtocolManager.moduleByProtocol(packet.getClass());
         var fastTreeMap = consistentHashMap.get(module.getId());
         if (fastTreeMap == null) {
             fastTreeMap = updateModuleToConsistentHash(module);

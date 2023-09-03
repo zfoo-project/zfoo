@@ -75,8 +75,15 @@ public class ProtocolManager {
         return protocols[protocolId];
     }
 
+    public static IProtocolRegistration getProtocol(Class<?> protocolClass) {
+        return getProtocol(protocolId(protocolClass));
+    }
+
     public static ProtocolModule moduleByProtocolId(short id) {
         return modules[protocols[id].module()];
+    }
+    public static ProtocolModule moduleByProtocol(Class<?> clazz) {
+        return moduleByProtocolId(protocolId(clazz));
     }
 
     /**

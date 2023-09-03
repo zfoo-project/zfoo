@@ -38,7 +38,7 @@ public class RandomConsumerLoadBalancer extends AbstractConsumerLoadBalancer {
 
     @Override
     public Session loadBalancer(IPacket packet, Object argument) {
-        var module = ProtocolManager.moduleByProtocolId(ProtocolManager.protocolId(packet.getClass()));
+        var module = ProtocolManager.moduleByProtocol(packet.getClass());
         var sessions = getSessionsByModule(module);
 
         if (sessions.isEmpty()) {
