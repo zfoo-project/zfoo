@@ -19,7 +19,6 @@ import com.zfoo.storage.interpreter.data.StorageData;
 import com.zfoo.storage.interpreter.data.StorageEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aot.hint.BindingReflectionHintsRegistrar;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
@@ -33,8 +32,6 @@ import java.util.HashSet;
 public class GraalvmStorageHints implements RuntimeHintsRegistrar {
 
     private static final Logger logger = LoggerFactory.getLogger(GraalvmStorageHints.class);
-
-    private final BindingReflectionHintsRegistrar bindingRegistrar = new BindingReflectionHintsRegistrar();
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {

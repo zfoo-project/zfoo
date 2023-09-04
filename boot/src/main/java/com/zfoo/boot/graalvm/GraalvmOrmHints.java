@@ -15,7 +15,6 @@ package com.zfoo.boot.graalvm;
 import com.zfoo.orm.anno.GraalvmNativeEntityCache;
 import com.zfoo.orm.config.OrmConfig;
 import com.zfoo.protocol.util.ClassUtils;
-import com.zfoo.storage.anno.GraalvmNativeStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.BindingReflectionHintsRegistrar;
@@ -23,8 +22,6 @@ import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 /**
  * Register runtime hints for the token library
