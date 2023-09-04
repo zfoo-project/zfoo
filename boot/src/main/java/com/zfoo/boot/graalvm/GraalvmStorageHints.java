@@ -12,7 +12,6 @@
 
 package com.zfoo.boot.graalvm;
 
-import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.anno.GraalvmNativeStorage;
 import com.zfoo.storage.config.StorageConfig;
@@ -25,7 +24,6 @@ import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
 import java.util.HashSet;
-import java.util.function.Predicate;
 
 /**
  * Register runtime hints for the token library
@@ -49,7 +47,7 @@ public class GraalvmStorageHints implements RuntimeHintsRegistrar {
         var filterClasses = HintUtils.filterAllClass(clazz -> clazz.isAnnotationPresent(GraalvmNativeStorage.class));
         classes.addAll(filterClasses);
 
-        HintUtils.registerRelevantClass(hints, classes);
+        HintUtils.registerRelevantClasses(hints, classes);
 
         for (var resource : StorageEnum.values()) {
             var include = StringUtils.format("*.{}", resource.getType());

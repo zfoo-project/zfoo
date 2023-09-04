@@ -19,9 +19,9 @@ import org.springframework.aot.hint.RuntimeHints;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static org.springframework.aot.hint.MemberCategory.*;
 
@@ -60,14 +60,18 @@ public abstract class HintUtils {
         }
     }
 
-    public static void registerRelevantClass(RuntimeHints hints, Set<Class<?>> classes) {
+    public static void registerRelevantClasses(RuntimeHints hints, Set<Class<?>> classes) {
         var relevantClasses = classes.stream()
                 .map(it -> ClassUtils.relevantClass(it))
                 .flatMap(it -> it.stream())
                 .distinct()
                 .toList();
 
-        for (var clazz : relevantClasses) {
+        registerClasses(hints, relevantClasses);
+    }
+
+    public static void registerClasses(RuntimeHints hints, List<Class<?>> classes) {
+        for (var clazz : classes) {
             hints.reflection().registerType(clazz, DECLARED_FIELDS, INVOKE_PUBLIC_CONSTRUCTORS, INVOKE_PUBLIC_METHODS);
             logger.info("zfoo for graalvm aot hints register [{}]", clazz);
         }

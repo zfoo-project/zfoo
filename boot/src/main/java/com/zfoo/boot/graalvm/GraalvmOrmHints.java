@@ -15,13 +15,16 @@ package com.zfoo.boot.graalvm;
 import com.zfoo.orm.anno.GraalvmNativeEntityCache;
 import com.zfoo.orm.config.OrmConfig;
 import com.zfoo.protocol.util.ClassUtils;
+import com.zfoo.storage.anno.GraalvmNativeStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.BindingReflectionHintsRegistrar;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Register runtime hints for the token library
@@ -38,28 +41,14 @@ public class GraalvmOrmHints implements RuntimeHintsRegistrar {
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
         logger.info("orm graalvm aot runtime hints register");
 
-        var classes = new HashSet<Class<?>>();
+        var classes = new ArrayList<Class<?>>();
         classes.add(OrmConfig.class);
+        // SSLMSA
+        classes.add(ClassUtils.forName("com.github.benmanes.caffeine.cache.SSLMSA"));
+        classes.add(ClassUtils.forName("com.github.benmanes.caffeine.cache.PSAMS"));
 
-        try {
-            // SSLMSA
-            classes.add(Class.forName("com.github.benmanes.caffeine.cache.SSLMSA"));
-            classes.add(Class.forName("com.github.benmanes.caffeine.cache.PSAMS"));
-
-            for (var className : ClassUtils.getAllClasses("")) {
-                try {
-                    var clazz = Class.forName(className);
-                    if (!clazz.isAnnotationPresent(GraalvmNativeEntityCache.class)) {
-                        continue;
-                    }
-                    classes.add(clazz);
-                    classes.addAll(ClassUtils.relevantClass(clazz));
-                } catch (Throwable t) {
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        var filterClasses = HintUtils.filterAllClass(clazz -> clazz.isAnnotationPresent(GraalvmNativeEntityCache.class));
+        classes.addAll(filterClasses);
 
         for (var clazz : classes) {
             this.bindingRegistrar.registerReflectionHints(hints.reflection(), clazz);
