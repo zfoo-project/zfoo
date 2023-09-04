@@ -25,6 +25,7 @@ import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
 import java.util.HashSet;
+import java.util.function.Predicate;
 
 /**
  * Register runtime hints for the token library
@@ -45,26 +46,10 @@ public class GraalvmStorageHints implements RuntimeHintsRegistrar {
         classes.add(StorageData.class);
         classes.add(StorageConfig.class);
 
-        try {
-            for (var className : ClassUtils.getAllClasses("")) {
-                try {
-                    var clazz = Class.forName(className);
-                    if (!clazz.isAnnotationPresent(GraalvmNativeStorage.class)) {
-                        continue;
-                    }
-                    classes.add(clazz);
-                    classes.addAll(ClassUtils.relevantClass(clazz));
-                } catch (Throwable t) {
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        var filterClasses = HintUtils.filterAllClass(clazz -> clazz.isAnnotationPresent(GraalvmNativeStorage.class));
+        classes.addAll(filterClasses);
 
-        for (var clazz : classes) {
-            this.bindingRegistrar.registerReflectionHints(hints.reflection(), clazz);
-            logger.info("storage graalvm aot hints register serialization [{}]", clazz);
-        }
+        HintUtils.registerRelevantClass(hints, classes);
 
         for (var resource : StorageEnum.values()) {
             var include = StringUtils.format("*.{}", resource.getType());
