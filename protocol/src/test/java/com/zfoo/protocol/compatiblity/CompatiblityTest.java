@@ -17,6 +17,7 @@ import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.IOUtils;
+import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
 import org.junit.Ignore;
@@ -55,13 +56,19 @@ public class CompatiblityTest {
 
         buffer.resetReaderIndex();
         newBuffer.resetReaderIndex();
+
+        var equal = 0;
+        var notEqual = 0;
         for (int i = 0; i < buffer.writerIndex(); i++) {
             var a = buffer.readByte();
             var b = newBuffer.readByte();
-            if (a != b) {
-                System.out.println("协议兼容错误" + i);
+            if (a == b) {
+                equal++;
+            } else {
+                notEqual++;
             }
         }
+        System.out.println(StringUtils.format("equal [{}], not equal [{}]", equal, notEqual));
     }
 
 
