@@ -2,6 +2,19 @@ English | [简体中文](./README_CN.md)
 <a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg" width="30%"></a>
 
 -----------
+Attention:
+-----------
+
+- The main branch is a development version for Java 21 and GraalVM. The stable version is [zfoo-java-11-17](https://github.com/zfoo-project/zfoo/tree/zfoo-java-11-17)
+- Upgrade process
+  - reimport not found classes
+  - no need to inherit IPacket anymore
+  - SafeRunnable has been deleted, please use ThreadUtils.safeRunnable()
+  - rename interfaces and annotations，Storage -> IStorage，@Resource -> @Storage，@ResInjection -> @StorageAutowired
+  - rename interfaces and annotations，@EntityCachesInjection -> @EntityCacheAutowired，@EntityCaches -> @EntityCache
+
+
+-----------
 Why is zfoo protocol ?
 -----------
 
