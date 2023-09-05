@@ -13,6 +13,8 @@
 
 package com.zfoo.net.anno;
 
+import org.springframework.aot.hint.annotation.Reflective;
+
 import java.lang.annotation.*;
 
 /**
@@ -22,5 +24,6 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
+@Reflective
 public @interface PacketReceiver {
 }

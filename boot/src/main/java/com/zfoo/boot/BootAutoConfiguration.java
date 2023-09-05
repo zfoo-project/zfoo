@@ -13,18 +13,22 @@
 package com.zfoo.boot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zfoo.boot.graalvm.GraalvmProtocolHints;
+import com.zfoo.boot.graalvm.GraalvmStorageHints;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportRuntimeHints;
 
 /**
  * @author godotg
  * @version 3.0
  */
 @Configuration(proxyBeanMethods = false)
+@ImportRuntimeHints(GraalvmProtocolHints.class)
 public class BootAutoConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(BootAutoConfiguration.class);

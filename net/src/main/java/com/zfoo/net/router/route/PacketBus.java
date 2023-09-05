@@ -27,6 +27,7 @@ import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.GraalVmUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.util.collection.ShortObjectHashMap;
@@ -119,8 +120,12 @@ public abstract class PacketBus {
                 AssertionUtils.isNull(receiverMap.get(protocolId), "duplicate protocol registration, @PacketReceiver [class:{}] is repeatedly received [at{}]", packetClazz.getSimpleName(), packetClazz.getSimpleName());
 
                 var receiverDefinition = new PacketReceiverDefinition(bean, method, packetClazz, attachmentClazz);
-                var enhanceReceiverDefinition = EnhanceUtils.createPacketReceiver(receiverDefinition);
-                receiverMap.put(protocolId, enhanceReceiverDefinition);
+                if (GraalVmUtils.isGraalVM()) {
+                    receiverMap.put(protocolId, receiverDefinition);
+                } else {
+                    var enhanceReceiverDefinition = EnhanceUtils.createPacketReceiver(receiverDefinition);
+                    receiverMap.put(protocolId, enhanceReceiverDefinition);
+                }
             } catch (Throwable t) {
                 throw new RunException("Registration protocol [class:{}] unknown exception", packetClazz.getSimpleName(), t);
             }

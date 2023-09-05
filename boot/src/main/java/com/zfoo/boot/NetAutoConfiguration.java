@@ -12,6 +12,7 @@
 
 package com.zfoo.boot;
 
+import com.zfoo.boot.graalvm.GraalvmNetHints;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.config.ConfigManager;
 import com.zfoo.net.config.model.NetConfig;
@@ -23,6 +24,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportRuntimeHints;
 
 /**
  * @author godotg
@@ -30,6 +32,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(NetConfig.class)
+@ImportRuntimeHints(GraalvmNetHints.class)
 public class NetAutoConfiguration {
 
     @Bean
