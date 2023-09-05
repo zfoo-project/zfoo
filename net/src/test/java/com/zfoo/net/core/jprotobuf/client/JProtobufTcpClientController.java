@@ -13,7 +13,7 @@
 package com.zfoo.net.core.jprotobuf.client;
 
 import com.zfoo.net.packet.jprotobuf.JProtobufHelloResponse;
-import com.zfoo.net.router.receiver.PacketReceiver;
+import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;

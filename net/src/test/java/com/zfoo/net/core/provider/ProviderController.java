@@ -15,7 +15,7 @@ package com.zfoo.net.core.provider;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.provider.ProviderMessAnswer;
 import com.zfoo.net.packet.provider.ProviderMessAsk;
-import com.zfoo.net.router.receiver.PacketReceiver;
+import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;

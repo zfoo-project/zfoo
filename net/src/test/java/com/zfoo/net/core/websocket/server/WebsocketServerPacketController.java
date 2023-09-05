@@ -15,7 +15,7 @@ package com.zfoo.net.core.websocket.server;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.websocket.WebsocketHelloRequest;
 import com.zfoo.net.packet.websocket.WebsocketHelloResponse;
-import com.zfoo.net.router.receiver.PacketReceiver;
+import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;

@@ -20,7 +20,7 @@ import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.receiver.EnhanceUtils;
 import com.zfoo.net.router.receiver.IPacketReceiver;
-import com.zfoo.net.router.receiver.PacketReceiver;
+import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.router.receiver.PacketReceiverDefinition;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.ProtocolManager;

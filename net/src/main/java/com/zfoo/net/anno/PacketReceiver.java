@@ -11,7 +11,7 @@
  *
  */
 
-package com.zfoo.net.router.receiver;
+package com.zfoo.net.anno;
 
 import java.lang.annotation.*;
 

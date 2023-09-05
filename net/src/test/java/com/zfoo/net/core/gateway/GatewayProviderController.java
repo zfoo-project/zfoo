@@ -16,7 +16,7 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.gateway.GatewayToProviderRequest;
 import com.zfoo.net.packet.gateway.GatewayToProviderResponse;
 import com.zfoo.net.router.attachment.GatewayAttachment;
-import com.zfoo.net.router.receiver.PacketReceiver;
+import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
