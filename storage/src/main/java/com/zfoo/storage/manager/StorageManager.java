@@ -83,6 +83,10 @@ public class StorageManager implements IStorageManager {
 
         // 获取需要被映射的Excel的class类文件
         var clazzSet = resourceClass();
+        if (CollectionUtils.isEmpty(clazzSet)) {
+            logger.warn("no any storages found, please check your config. If is in graalvm environment, make sure your storage be annotated with @GraalvmNativeStorage and can be scanned by spring @Component.");
+            return;
+        }
 
         // 通过class类文件扫描excel文件地址
         for (var resourceClazz : clazzSet) {
@@ -126,8 +130,8 @@ public class StorageManager implements IStorageManager {
                 var clazz = definition.getClazz();
                 var resource = definition.getResource();
                 var fileExtName = FileUtils.fileExtName(resource.getFilename());
-                StorageObject<?, ?> storageObject = StorageObject.parse(resource.getInputStream(), clazz, fileExtName);
-                storageMap.putIfAbsent(clazz, storageObject);
+                var storage = StorageObject.parse(resource.getInputStream(), clazz, fileExtName);
+                storageMap.putIfAbsent(clazz, storage);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -155,9 +159,9 @@ public class StorageManager implements IStorageManager {
 
                 Class<?> resourceClazz = (Class<?>) types[1];
 
-                IStorage<?, ?> storageObject = storageMap.get(resourceClazz);
+                IStorage<?, ?> storage = storageMap.get(resourceClazz);
 
-                if (storageObject == null) {
+                if (storage == null) {
                     throw new RuntimeException(StringUtils.format("Static class [resource:{}] does not exist", resourceClazz.getSimpleName()));
                 }
 
@@ -172,8 +176,8 @@ public class StorageManager implements IStorageManager {
                 }
 
                 ReflectionUtils.makeAccessible(field);
-                ReflectionUtils.setField(field, bean, storageObject);
-                storageObject.setRecycle(false);
+                ReflectionUtils.setField(field, bean, storage);
+                storage.setRecycle(false);
             });
         }
     }
@@ -206,8 +210,8 @@ public class StorageManager implements IStorageManager {
     }
 
     @Override
-    public void updateStorage(Class<?> clazz, IStorage<?, ?> storageObject) {
-        storageMap.put(clazz, storageObject);
+    public void updateStorage(Class<?> clazz, IStorage<?, ?> storage) {
+        storageMap.put(clazz, storage);
     }
 
     @Override

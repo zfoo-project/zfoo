@@ -27,16 +27,16 @@ public class StorageInt<K, V> extends StorageObject<K, V> {
 
     private IntObjectHashMap<V> dataMap;
 
-    public StorageInt(StorageObject<K, V> storageObject) {
-        this.dataMap = new IntObjectHashMap<V>(storageObject.size());
-        this.dataMap.putAll((Map<? extends Integer, ? extends V>) storageObject.getData());
-        super.indexMap = storageObject.indexMap;
-        super.uniqueIndexMap = storageObject.uniqueIndexMap;
-        super.clazz = storageObject.clazz;
-        super.idDef = storageObject.idDef;
-        super.indexDefMap = storageObject.indexDefMap;
-        super.recycle = storageObject.recycle;
-        storageObject.recycleStorage();
+    public StorageInt(StorageObject<K, V> storage) {
+        this.dataMap = new IntObjectHashMap<V>(storage.size());
+        this.dataMap.putAll((Map<? extends Integer, ? extends V>) storage.getData());
+        super.indexMap = storage.indexMap;
+        super.uniqueIndexMap = storage.uniqueIndexMap;
+        super.clazz = storage.clazz;
+        super.idDef = storage.idDef;
+        super.indexDefMap = storage.indexDefMap;
+        super.recycle = storage.recycle;
+        storage.recycleStorage();
     }
 
     @Override

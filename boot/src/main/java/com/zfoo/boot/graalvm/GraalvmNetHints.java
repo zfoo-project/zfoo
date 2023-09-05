@@ -14,10 +14,13 @@ package com.zfoo.boot.graalvm;
 
 import com.zfoo.net.config.model.NetConfig;
 import com.zfoo.net.core.gateway.model.*;
+import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.packet.common.*;
 import com.zfoo.net.packet.common.Error;
 import com.zfoo.net.router.attachment.*;
-import com.zfoo.storage.anno.GraalvmNativeStorage;
+import com.zfoo.protocol.util.ClassUtils;
+import com.zfoo.protocol.util.DomUtils;
+import com.zfoo.protocol.xml.XmlProtocols;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.RuntimeHints;
@@ -68,8 +71,25 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
         classes.add(TripleString.class);
         classes.add(TripleLSS.class);
 
-        var filterClasses = HintUtils.filterAllClass(clazz -> clazz.isAnnotationPresent(GraalvmNativeStorage.class));
+        // IPacket
+        var filterClasses = HintUtils.filterAllClass(clazz -> IPacket.class.isAssignableFrom(clazz));
         classes.addAll(filterClasses);
+
+        // protocol.xml
+        try{
+            var protocolXml = ClassUtils.getFileFromClassPathToString("protocol.xml");
+            logger.info("found protocol.xml and register hint by this xml");
+            var xmlProtocols = DomUtils.string2Object(protocolXml, XmlProtocols.class);
+            for (var moduleDefinition : xmlProtocols.getModules()) {
+                for (var protocolDefinition : moduleDefinition.getProtocols()) {
+                    var clazz = ClassUtils.forName(protocolDefinition.getLocation());
+                    classes.add(clazz);
+                }
+            }
+        } catch (Exception e) {
+            // do nothing
+            e.printStackTrace();
+        }
 
         HintUtils.registerRelevantClasses(hints, classes);
 

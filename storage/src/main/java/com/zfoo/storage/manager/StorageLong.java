@@ -27,16 +27,16 @@ public class StorageLong<K, V> extends StorageObject<K, V> {
 
     private LongObjectHashMap<V> dataMap;
 
-    public StorageLong(StorageObject<K, V> storageObject) {
-        this.dataMap = new LongObjectHashMap<V>(storageObject.size());
-        this.dataMap.putAll((Map<? extends Long, ? extends V>) storageObject.getData());
-        super.indexMap = storageObject.indexMap;
-        super.uniqueIndexMap = storageObject.uniqueIndexMap;
-        super.clazz = storageObject.clazz;
-        super.idDef = storageObject.idDef;
-        super.indexDefMap = storageObject.indexDefMap;
-        super.recycle = storageObject.recycle;
-        storageObject.recycleStorage();
+    public StorageLong(StorageObject<K, V> storage) {
+        this.dataMap = new LongObjectHashMap<V>(storage.size());
+        this.dataMap.putAll((Map<? extends Long, ? extends V>) storage.getData());
+        super.indexMap = storage.indexMap;
+        super.uniqueIndexMap = storage.uniqueIndexMap;
+        super.clazz = storage.clazz;
+        super.idDef = storage.idDef;
+        super.indexDefMap = storage.indexDefMap;
+        super.recycle = storage.recycle;
+        storage.recycleStorage();
     }
 
     @Override
