@@ -20,11 +20,14 @@ import com.zfoo.net.packet.common.Error;
 import com.zfoo.net.router.attachment.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.DomUtils;
+import com.zfoo.protocol.util.IOUtils;
+import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.xml.XmlProtocols;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.util.HashSet;
 
@@ -76,19 +79,26 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
         classes.addAll(filterClasses);
 
         // protocol.xml
-        try{
-            var protocolXml = ClassUtils.getFileFromClassPathToString("protocol.xml");
-            logger.info("found protocol.xml and register hint by this xml");
-            var xmlProtocols = DomUtils.string2Object(protocolXml, XmlProtocols.class);
-            for (var moduleDefinition : xmlProtocols.getModules()) {
-                for (var protocolDefinition : moduleDefinition.getProtocols()) {
-                    var clazz = ClassUtils.forName(protocolDefinition.getLocation());
-                    classes.add(clazz);
+        try {
+            var resourcePatternResolver = new PathMatchingResourcePatternResolver();
+            var protocolResources = resourcePatternResolver.getResources("classpath:/**/protocol*.xml");
+            for (var protocolResource : protocolResources) {
+                try {
+                    var protocolXml = StringUtils.bytesToString(IOUtils.toByteArray(protocolResource.getInputStream()));
+                    logger.info("found [{}] and register hint by this xml", protocolResource.getURL());
+                    var xmlProtocols = DomUtils.string2Object(protocolXml, XmlProtocols.class);
+                    for (var moduleDefinition : xmlProtocols.getModules()) {
+                        for (var protocolDefinition : moduleDefinition.getProtocols()) {
+                            var clazz = ClassUtils.forName(protocolDefinition.getLocation());
+                            classes.add(clazz);
+                        }
+                    }
+                } catch (Exception e) {
+                    // do nothing
                 }
             }
         } catch (Exception e) {
             // do nothing
-            e.printStackTrace();
         }
 
         HintUtils.registerRelevantClasses(hints, classes);
