@@ -26,6 +26,8 @@ import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import java.util.HashSet;
 import java.util.List;
 
+import static org.springframework.aot.hint.MemberCategory.*;
+
 /**
  * Register runtime hints for the token library
  *
@@ -50,7 +52,10 @@ public class GraalvmProtocolHints implements RuntimeHintsRegistrar {
         HintUtils.registerRelevantClasses(hints, classes);
 
         // netty
-        HintUtils.registerClasses(hints, List.of(AbstractByteBufAllocator.class, AbstractReferenceCountedByteBuf.class));
+        var nettyClassList = List.of(AbstractByteBufAllocator.class, AbstractReferenceCountedByteBuf.class);
+        for(var clazz : nettyClassList) {
+            hints.reflection().registerType(clazz, DECLARED_FIELDS, INVOKE_PUBLIC_CONSTRUCTORS, INVOKE_DECLARED_METHODS);
+        }
 
         var include = "*.protocol";
         hints.resources().registerPattern(include);
