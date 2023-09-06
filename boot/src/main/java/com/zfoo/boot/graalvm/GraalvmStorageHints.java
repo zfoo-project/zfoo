@@ -22,7 +22,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Register runtime hints for the token library
@@ -41,7 +43,7 @@ public class GraalvmStorageHints implements RuntimeHintsRegistrar {
         classes.add(StorageData.class);
         classes.add(StorageConfig.class);
 
-        var filterClasses = HintUtils.filterAllClass(clazz -> clazz.isAnnotationPresent(GraalvmNativeStorage.class));
+        var filterClasses = HintUtils.filterAllClass(List.of(GraalvmNativeStorage.class), Collections.emptyList());
         classes.addAll(filterClasses);
 
         HintUtils.registerRelevantClasses(hints, classes);

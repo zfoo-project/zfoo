@@ -30,8 +30,10 @@ import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Register runtime hints for the token library
@@ -77,7 +79,9 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
         classes.add(TripleLSS.class);
 
         // IPacket
-        var filterClasses = HintUtils.filterAllClass(clazz -> IPacket.class.isAssignableFrom(clazz));
+        var filterClasses = HintUtils.filterAllClass(Collections.emptyList(), List.of(IPacket.class));
+        // filter IAttachment
+        filterClasses = filterClasses.stream().filter(it -> !it.equals(IAttachment.class)).collect(Collectors.toSet());
         classes.addAll(filterClasses);
 
         // protocol.xml
@@ -85,7 +89,7 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
             var resourcePatternResolver = new PathMatchingResourcePatternResolver();
             var protocolResources = new HashSet<Resource>();
             protocolResources.addAll(List.of(resourcePatternResolver.getResources("classpath*:/**/*protocol*.xml")));
-            protocolResources.addAll(List.of(resourcePatternResolver.getResources("classpath*:/*protocol*.xml")));
+            protocolResources.addAll(List.of(resourcePatternResolver.getResources("classpath*:*protocol*.xml")));
             for (var protocolResource : protocolResources) {
                 try {
                     var protocolXml = StringUtils.bytesToString(IOUtils.toByteArray(protocolResource.getInputStream()));

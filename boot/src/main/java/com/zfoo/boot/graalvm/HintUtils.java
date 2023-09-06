@@ -12,10 +12,15 @@
 
 package com.zfoo.boot.graalvm;
 
+import com.zfoo.protocol.collection.ArrayUtils;
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.RuntimeHints;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -32,32 +37,61 @@ public abstract class HintUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(HintUtils.class);
 
-    /**
-     * 与set有关的所有内部类包括泛型
-     */
-    public static Set<Class<?>> filterAllClass(Predicate<Class<?>> predicate) {
+
+    public static Set<Class<?>> filterAllClass(List<Class<?>> annotations, List<Class<?>> interfaces) {
+        var classes = new HashSet<Class<?>>();
+        var annotationNames = annotations.stream().map(it -> it.getName()).toList();
+        var interfaceNames = interfaces.stream().map(it -> it.getName()).toList();
+
+
+        var resourcePatternResolver = new PathMatchingResourcePatternResolver();
+        var metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
+        var resources = new HashSet<Resource>();
         try {
-            var classes = new HashSet<Class<?>>();
-            for (var className : ClassUtils.getAllClasses("")) {
-                Class<?> clazz = null;
-                try {
-                    clazz = Class.forName(className);
-                } catch (Throwable t) {
-                    // do nothing
-                }
-
-                if (clazz == null) {
-                    continue;
-                }
-
-                if (predicate.test(clazz)) {
-                    classes.add(clazz);
-                }
-            }
-            return classes;
+            resources.addAll(List.of(resourcePatternResolver.getResources("classpath*:/**/*.class")));
+            resources.addAll(List.of(resourcePatternResolver.getResources("classpath*:*.class")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        for (var resource : resources) {
+            if (!resource.isReadable()) {
+                continue;
+            }
+            Class<?> clazz = null;
+            try {
+                var metadataReader = metadataReaderFactory.getMetadataReader(resource);
+                var clazzMeta = metadataReader.getClassMetadata();
+
+                // check annotation
+                var annoMeta = metadataReader.getAnnotationMetadata();
+                if (annotationNames.stream().anyMatch(it -> annoMeta.hasAnnotation(it))) {
+                    clazz = ClassUtils.forName(clazzMeta.getClassName());
+                    classes.add(clazz);
+                    continue;
+                }
+
+                // check interface
+                if (CollectionUtils.isEmpty(interfaces)) {
+                    continue;
+                }
+                var metaInterfaces = metadataReader.getClassMetadata().getInterfaceNames();
+                if (ArrayUtils.isEmpty(metaInterfaces)) {
+                    continue;
+                }
+                for(var metaInterface : metaInterfaces) {
+                    if (interfaceNames.stream().anyMatch(it -> it.equals(metaInterface))) {
+                        clazz = ClassUtils.forName(clazzMeta.getClassName());
+                        classes.add(clazz);
+                        break;
+                    }
+                }
+            } catch (Throwable t) {
+                // do nothing
+            }
+        }
+
+        return classes;
     }
 
     public static void registerRelevantClasses(RuntimeHints hints, Set<Class<?>> classes) {

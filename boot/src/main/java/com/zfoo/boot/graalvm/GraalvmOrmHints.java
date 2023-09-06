@@ -22,6 +22,8 @@ import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Register runtime hints for the token library
@@ -44,7 +46,7 @@ public class GraalvmOrmHints implements RuntimeHintsRegistrar {
         classes.add(ClassUtils.forName("com.github.benmanes.caffeine.cache.SSLMSA"));
         classes.add(ClassUtils.forName("com.github.benmanes.caffeine.cache.PSAMS"));
 
-        var filterClasses = HintUtils.filterAllClass(clazz -> clazz.isAnnotationPresent(GraalvmNativeEntityCache.class));
+        var filterClasses = HintUtils.filterAllClass(List.of(GraalvmNativeEntityCache.class), Collections.emptyList());
         classes.addAll(filterClasses);
 
         for (var clazz : classes) {

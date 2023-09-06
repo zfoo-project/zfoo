@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class GraalvmProtocolHints implements RuntimeHintsRegistrar {
         classes.add(XmlModuleDefinition.class);
         classes.add(XmlProtocolDefinition.class);
 
-        var filterClasses = HintUtils.filterAllClass(clazz -> clazz.isAnnotationPresent(Protocol.class));
+        var filterClasses = HintUtils.filterAllClass(List.of(Protocol.class), Collections.emptyList());
         classes.addAll(filterClasses);
 
         HintUtils.registerRelevantClasses(hints, classes);
