@@ -73,7 +73,7 @@ public abstract class HintUtils {
     public static void registerClasses(RuntimeHints hints, List<Class<?>> classes) {
         for (var clazz : classes) {
             hints.reflection().registerType(clazz, DECLARED_FIELDS, INVOKE_PUBLIC_CONSTRUCTORS, INVOKE_PUBLIC_METHODS);
-            logger.info("zfoo for graalvm aot hints register [{}]", clazz);
+            logger.info("zfoo graalvm for spring aot hint register [{}]", clazz);
         }
     }
 

@@ -36,7 +36,7 @@ public class GraalvmOrmHints implements RuntimeHintsRegistrar {
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        logger.info("orm graalvm aot runtime hints register");
+        logger.info("Hint of orm for spring aot runtime register in graalvm");
 
         var classes = new ArrayList<Class<?>>();
         classes.add(OrmConfig.class);

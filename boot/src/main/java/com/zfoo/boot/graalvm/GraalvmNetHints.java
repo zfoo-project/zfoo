@@ -44,7 +44,7 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        logger.info("net graalvm aot runtime hints register");
+        logger.info("Hint of net for spring aot runtime register in graalvm");
 
         var classes = new HashSet<Class<?>>();
         classes.add(NetConfig.class);
@@ -89,7 +89,7 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
             for (var protocolResource : protocolResources) {
                 try {
                     var protocolXml = StringUtils.bytesToString(IOUtils.toByteArray(protocolResource.getInputStream()));
-                    logger.info("found [{}] and register hint by this xml", protocolResource.getURL());
+                    logger.info("Net found [{}] and register hint by this xml", protocolResource.getURL());
                     var xmlProtocols = DomUtils.string2Object(protocolXml, XmlProtocols.class);
                     for (var moduleDefinition : xmlProtocols.getModules()) {
                         for (var protocolDefinition : moduleDefinition.getProtocols()) {
@@ -109,6 +109,6 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
 
         var include = "*.xml";
         hints.resources().registerPattern(include);
-        logger.info("net graalvm aot hints register resources [{}]", include);
+        logger.info("Net graalvm aot hints register resources [{}]", include);
     }
 }

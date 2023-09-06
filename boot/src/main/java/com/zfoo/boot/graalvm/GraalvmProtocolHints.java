@@ -34,7 +34,7 @@ public class GraalvmProtocolHints implements RuntimeHintsRegistrar {
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        logger.info("protocol graalvm aot runtime hints register");
+        logger.info("Hint of protocol for spring aot runtime register in graalvm");
 
         var classes = new HashSet<Class<?>>();
         classes.add(XmlProtocols.class);

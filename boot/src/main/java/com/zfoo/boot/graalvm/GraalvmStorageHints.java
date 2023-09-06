@@ -35,7 +35,7 @@ public class GraalvmStorageHints implements RuntimeHintsRegistrar {
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        logger.info("storage graalvm aot runtime hints register");
+        logger.info("Hint of storage for spring aot runtime register in graalvm");
 
         var classes = new HashSet<Class<?>>();
         classes.add(StorageData.class);
@@ -49,7 +49,7 @@ public class GraalvmStorageHints implements RuntimeHintsRegistrar {
         for (var resource : StorageEnum.values()) {
             var include = StringUtils.format("*.{}", resource.getType());
             hints.resources().registerPattern(include);
-            logger.info("storage graalvm aot hints register resources [{}]", include);
+            logger.info("Storage graalvm aot hints register resources [{}]", include);
         }
     }
 }
