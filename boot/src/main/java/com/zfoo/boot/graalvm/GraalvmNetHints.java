@@ -27,9 +27,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Register runtime hints for the token library
@@ -81,7 +83,9 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
         // protocol.xml
         try {
             var resourcePatternResolver = new PathMatchingResourcePatternResolver();
-            var protocolResources = resourcePatternResolver.getResources("classpath:/**/protocol*.xml");
+            var protocolResources = new HashSet<Resource>();
+            protocolResources.addAll(List.of(resourcePatternResolver.getResources("classpath*:/**/*protocol*.xml")));
+            protocolResources.addAll(List.of(resourcePatternResolver.getResources("classpath*:/*protocol*.xml")));
             for (var protocolResource : protocolResources) {
                 try {
                     var protocolXml = StringUtils.bytesToString(IOUtils.toByteArray(protocolResource.getInputStream()));
