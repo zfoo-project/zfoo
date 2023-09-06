@@ -317,7 +317,9 @@ public abstract class ClassUtils {
      * @param filePath 一般指resources中的文件，也可以在jar中
      */
     public static InputStream getFileFromClassPath(String filePath) throws IOException {
-        return getDefaultClassLoader().getResource(filePath).openStream();
+        var classLoader = getDefaultClassLoader();
+        var resource = classLoader.getResource(filePath);
+        return resource.openStream();
     }
 
     public static String getFileFromClassPathToString(String filePath) {

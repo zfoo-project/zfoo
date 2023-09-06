@@ -16,12 +16,15 @@ import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.protocol.xml.XmlModuleDefinition;
 import com.zfoo.protocol.xml.XmlProtocolDefinition;
 import com.zfoo.protocol.xml.XmlProtocols;
+import io.netty.buffer.AbstractByteBufAllocator;
+import io.netty.buffer.AbstractReferenceCountedByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Register runtime hints for the token library
@@ -45,5 +48,12 @@ public class GraalvmProtocolHints implements RuntimeHintsRegistrar {
         classes.addAll(filterClasses);
 
         HintUtils.registerRelevantClasses(hints, classes);
+
+        // netty
+        HintUtils.registerClasses(hints, List.of(AbstractByteBufAllocator.class, AbstractReferenceCountedByteBuf.class));
+
+        var include = "*.protocol";
+        hints.resources().registerPattern(include);
+        logger.info("Protocol graalvm aot hints register resources [{}]", include);
     }
 }
