@@ -40,7 +40,7 @@ public abstract class GraalVmUtils {
             try {
                 // graalvm environment must not include YHOy5hWaRXNxJuSg.CZgueirdE9x6sOUl file
                 graalvmInputStream = ClassUtils.getFileFromClassPath("YHOy5hWaRXNxJuSg.CZgueirdE9x6sOUl");
-            } catch (IOException e) {
+            } catch (Throwable t) {
             }
             GRAALVM = graalvmInputStream == null;
             IOUtils.closeIO(graalvmInputStream);
