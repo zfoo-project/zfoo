@@ -13,6 +13,8 @@
 package com.zfoo.protocol.util;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -29,7 +31,20 @@ public abstract class GraalVmUtils {
                 , System.getProperty("java.vendor.url", "")
                 , System.getProperty("org.graalvm.nativeimage.imagecode", "")
         );
-        GRAALVM = properties.stream().map(it -> it.toLowerCase()).anyMatch(it -> it.contains("graalvm"));
+        var graalvm = properties.stream().map(it -> it.toLowerCase()).anyMatch(it -> it.contains("graalvm"));
+        if (!graalvm) {
+            // If the graalvm keyword is not included, it must not be a Graal VM environment.
+            GRAALVM = false;
+        } else {
+            InputStream graalvmInputStream = null;
+            try {
+                // graalvm environment must not include YHOy5hWaRXNxJuSg.CZgueirdE9x6sOUl file
+                graalvmInputStream = ClassUtils.getFileFromClassPath("YHOy5hWaRXNxJuSg.CZgueirdE9x6sOUl");
+            } catch (IOException e) {
+            }
+            GRAALVM = graalvmInputStream == null;
+            IOUtils.closeIO(graalvmInputStream);
+        }
     }
 
     public static boolean isGraalVM() {
