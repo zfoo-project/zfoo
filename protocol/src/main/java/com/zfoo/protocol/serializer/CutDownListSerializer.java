@@ -265,7 +265,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                 }
                 break;
             default:
-                // List<IPacket>
+                // List<IProtocol>
                 if (listField.getListElementRegistration() instanceof ObjectProtocolField) {
                     var protocolId = ((ObjectProtocolField) listField.getListElementRegistration()).getProtocolId();
                     switch (language) {

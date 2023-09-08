@@ -14,6 +14,7 @@ package com.zfoo.net.packet;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.router.attachment.IAttachment;
+import com.zfoo.net.router.attachment.SignalOnlyAttachment;
 import com.zfoo.net.router.route.PacketBus;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
@@ -73,6 +74,7 @@ public class PacketService implements IPacketService {
 
     private final Predicate<IProtocolRegistration> netGenerateProtocolFilter = registration
             -> ProtocolManager.moduleByModuleId(registration.module()).getName().matches(NET_COMMON_MODULE)
+            || registration.protocolConstructor().getDeclaringClass() == SignalOnlyAttachment.class
             || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_REQUEST_SUFFIX)
             || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_RESPONSE_SUFFIX)
             || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_NOTICE_SUFFIX);

@@ -87,7 +87,7 @@ public abstract class GenerateCsUtils {
     public static void createProtocolManager() throws IOException {
         var list = List.of("csharp/ProtocolManager.cs"
                 , "csharp/IProtocolRegistration.cs"
-                , "csharp/IPacket.cs"
+                , "csharp/IProtocol.cs"
                 , "csharp/Buffer/ByteBuffer.cs"
                 , "csharp/Buffer/LittleEndianByteBuffer.cs"
                 , "csharp/Buffer/BigEndianByteBuffer.cs");

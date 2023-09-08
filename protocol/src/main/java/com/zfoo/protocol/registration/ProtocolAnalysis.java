@@ -60,7 +60,7 @@ public class ProtocolAnalysis {
 
     // 临时变量，启动完成就会销毁，协议名称保留字符，即协议的名称不能用以下名称命名
     private static Set<String> protocolReserved = Set.of("Buffer", "ByteBuf", "ByteBuffer", "LittleEndianByteBuffer", "NormalByteBuffer"
-            , "IPacket", "IProtocolRegistration", "ProtocolManager", "IFieldRegistration"
+            , "IProtocol", "IProtocolRegistration", "ProtocolManager", "IFieldRegistration"
             , "ByteBufUtils", "ArrayUtils", "CollectionUtils"
             , "Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double", "String", "Character", "Object"
             , "Collections", "Iterator", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet");

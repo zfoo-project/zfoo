@@ -4,9 +4,9 @@
     {
         short ProtocolId();
 
-        void Write(ByteBuffer buffer, IPacket packet);
+        void Write(ByteBuffer buffer, IProtocol packet);
         
-        IPacket Read(ByteBuffer buffer);
+        IProtocol Read(ByteBuffer buffer);
 
     }
 }

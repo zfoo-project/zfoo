@@ -279,7 +279,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                 }
                 break;
             default:
-                // Set<IPacket>
+                // Set<IProtocol>
                 if (setField.getSetElementRegistration() instanceof ObjectProtocolField) {
                     var protocolId = ((ObjectProtocolField) setField.getSetElementRegistration()).getProtocolId();
                     switch (language) {

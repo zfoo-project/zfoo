@@ -5,7 +5,7 @@ using CsProtocol.Buffer;
 namespace CsProtocol
 {
     {}
-    public class {} : IPacket
+    public class {} : IProtocol
     {
         {}
 
@@ -31,7 +31,7 @@ namespace CsProtocol
             return {};
         }
 
-        public void Write(ByteBuffer buffer, IPacket packet)
+        public void Write(ByteBuffer buffer, IProtocol packet)
         {
             if (buffer.WritePacketFlag(packet))
             {
@@ -41,7 +41,7 @@ namespace CsProtocol
             {}
         }
 
-        public IPacket Read(ByteBuffer buffer)
+        public IProtocol Read(ByteBuffer buffer)
         {
             if (!buffer.ReadBool())
             {
