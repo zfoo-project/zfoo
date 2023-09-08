@@ -177,7 +177,7 @@ public class ProtocolAnalysis {
             for (var protocolDefinition : moduleDefinition.getProtocols()) {
                 protocolDefinitionMap.put(protocolDefinition.getLocation(), protocolDefinition.isEnhance());
                 protocolNameMap.put(protocolDefinition.getLocation(), protocolDefinition.getId());
-                var packetClazzList = Set.of(ClassUtils.forName(protocolDefinition.getLocation()));
+                var packetClazzList = scanPackageList(protocolDefinition.getLocation());
                 clazzSet.addAll(packetClazzList);
                 for (Class<?> clazz : packetClazzList) {
                     var previous = classModuleDefinitionMap.put(clazz, module.getId());
@@ -215,16 +215,34 @@ public class ProtocolAnalysis {
         enhance(generateOperation, enhanceList);
     }
 
-    public static Set<Class<?>> scanPackageList(String packageName) {
-        //获取该路径下所有类
-        var clazzSet = new HashSet<String>();
+    public static Set<Class<?>> scanPackageList(String location) {
+        // Use the class path first to obtain the class name, and search the directory if it cannot be obtained
+        // 优先使用类路径获取类名，获取不到才去搜索目录
         try {
-            var clazzList = ClassUtils.getAllClasses(packageName);
-            clazzSet.addAll(clazzList);
+            var clazz = ClassUtils.forName(location);
+            return Set.of(clazz);
         } catch (Exception e) {
-            throw new RunException("[{}]包扫描类异常", packageName, e);
         }
-        return clazzSet.stream().map(it -> ClassUtils.forName(it)).collect(Collectors.toSet());
+
+        // 获取该路径下所有类
+        var clazzNameSet = new HashSet<String>();
+        try {
+            var clazzList = ClassUtils.getAllClasses(location);
+            clazzNameSet.addAll(clazzList);
+        } catch (Exception e) {
+            throw new RunException("[{}] scanning exception", location, e);
+        }
+        var classes = clazzNameSet.stream()
+                .map(it -> ClassUtils.forName(it))
+                .filter(it -> it.isAnnotationPresent(Protocol.class))
+                .filter(it -> !it.isInterface())
+                .filter(it -> !it.isEnum())
+                .distinct()
+                .toList();
+        if (CollectionUtils.isEmpty(classes)) {
+            throw new RunException("can not scan any protocol class in [{}]", location);
+        }
+        return new HashSet<>(classes);
     }
 
     private static void enhance(GenerateOperation generateOperation, List<IProtocolRegistration> enhanceList) {
