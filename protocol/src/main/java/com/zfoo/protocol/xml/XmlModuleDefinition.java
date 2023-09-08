@@ -24,8 +24,8 @@ import java.util.List;
  * @author godotg
  * @version 3.0
  */
-@JsonPropertyOrder({"id", "name"})
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonPropertyOrder({"id", "name"})
 public class XmlModuleDefinition {
 
     @JacksonXmlProperty(isAttribute = true, localName = "id")
