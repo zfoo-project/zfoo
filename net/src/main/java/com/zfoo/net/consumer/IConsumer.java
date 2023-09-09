@@ -14,7 +14,6 @@
 package com.zfoo.net.consumer;
 
 import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
 import com.zfoo.protocol.registration.ProtocolModule;
@@ -38,10 +37,10 @@ public interface IConsumer {
      * @param packet   需要发送的包
      * @param argument 计算负载均衡的参数，比如用户的id
      */
-    void send(IPacket packet, @Nullable Object argument);
+    void send(Object packet, @Nullable Object argument);
 
-    <T extends IPacket> SyncAnswer<T> syncAsk(IPacket packet, Class<T> answerClass, @Nullable Object argument) throws Exception;
+    <T> SyncAnswer<T> syncAsk(Object packet, Class<T> answerClass, @Nullable Object argument) throws Exception;
 
-    <T extends IPacket> AsyncAnswer<T> asyncAsk(IPacket packet, Class<T> answerClass, @Nullable Object argument);
+    <T> AsyncAnswer<T> asyncAsk(Object packet, Class<T> answerClass, @Nullable Object argument);
 
 }

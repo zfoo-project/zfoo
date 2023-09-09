@@ -47,10 +47,6 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
         return balancer;
     }
 
-    public List<Session> getSessionsByPacket(IPacket packet) {
-        return getSessionsByModule(ProtocolManager.moduleByProtocol(packet.getClass()));
-    }
-
     public List<Session> getSessionsByModule(ProtocolModule module) {
         var list = new ArrayList<Session>();
         NetContext.getSessionManager().forEachClientSession(new Consumer<Session>() {

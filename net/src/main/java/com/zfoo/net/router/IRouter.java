@@ -13,10 +13,8 @@
 
 package com.zfoo.net.router;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
-import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.Session;
 import org.springframework.lang.Nullable;
 
@@ -30,13 +28,13 @@ public interface IRouter {
      * EN:send() and receive() are the entry points for sending and receiving messages, which can be called directly
      * CN:send()和receive()是消息的发送和接收的入口，可以直接调用
      */
-    void send(Session session, IPacket packet);
+    void send(Session session, Object packet);
 
-    void send(Session session, IPacket packet, @Nullable IAttachment attachment);
+    void send(Session session, Object packet, @Nullable Object attachment);
 
-    void receive(Session session, IPacket packet, @Nullable IAttachment attachment);
+    void receive(Session session, Object packet, @Nullable Object attachment);
 
-    void atReceiver(Session session, IPacket packet, @Nullable IAttachment attachment);
+    void atReceiver(Session session, Object packet, @Nullable Object attachment);
 
     /**
      * attention：syncAsk和asyncAsk只能客户端调用
@@ -56,8 +54,8 @@ public interface IRouter {
      * @return 服务器返回的消息Response
      * @throws Exception 如果超时或者其它异常
      */
-    <T extends IPacket> SyncAnswer<T> syncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument) throws Exception;
+    <T> SyncAnswer<T> syncAsk(Session session, Object packet, @Nullable Class<T> answerClass, @Nullable Object argument) throws Exception;
 
-    <T extends IPacket> AsyncAnswer<T> asyncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument);
+    <T> AsyncAnswer<T> asyncAsk(Session session, Object packet, @Nullable Class<T> answerClass, @Nullable Object argument);
 
 }

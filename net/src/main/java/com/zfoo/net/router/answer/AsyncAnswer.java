@@ -13,7 +13,6 @@
 
 package com.zfoo.net.router.answer;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.protocol.util.ThreadUtils;
 
@@ -25,7 +24,7 @@ import java.util.function.Consumer;
  * @author godotg
  * @version 3.0
  */
-public class AsyncAnswer<T extends IPacket> implements IAsyncAnswer<T> {
+public class AsyncAnswer<T> implements IAsyncAnswer<T> {
 
     private T futurePacket;
 

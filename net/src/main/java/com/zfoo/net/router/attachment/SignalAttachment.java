@@ -13,7 +13,6 @@
 package com.zfoo.net.router.attachment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.scheduler.util.TimeUtils;
 
@@ -60,7 +59,7 @@ public class SignalAttachment implements IAttachment {
      * CN:客户端收到服务器回复的时候回调的方法
      */
     @JsonIgnore
-    private transient CompletableFuture<IPacket> responseFuture = new CompletableFuture<>();
+    private transient CompletableFuture<Object> responseFuture = new CompletableFuture<>();
 
     public SignalAttachment() {
     }
@@ -130,11 +129,11 @@ public class SignalAttachment implements IAttachment {
     }
 
 
-    public CompletableFuture<IPacket> getResponseFuture() {
+    public CompletableFuture<Object> getResponseFuture() {
         return responseFuture;
     }
 
-    public void setResponseFuture(CompletableFuture<IPacket> responseFuture) {
+    public void setResponseFuture(CompletableFuture<Object> responseFuture) {
         this.responseFuture = responseFuture;
     }
 }

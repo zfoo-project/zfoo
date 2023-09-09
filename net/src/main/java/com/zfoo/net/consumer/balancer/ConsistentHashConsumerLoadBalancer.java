@@ -14,7 +14,6 @@
 package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.util.ConsistentHash;
 import com.zfoo.net.util.FastTreeMapIntLong;
@@ -60,7 +59,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
      * @return 调用的session
      */
     @Override
-    public Session loadBalancer(IPacket packet, Object argument) {
+    public Session loadBalancer(Object packet, Object argument) {
         if (argument == null) {
             return RandomConsumerLoadBalancer.getInstance().loadBalancer(packet, argument);
         }

@@ -20,13 +20,11 @@ import com.zfoo.net.core.gateway.model.AuthUidToGatewayCheck;
 import com.zfoo.net.core.gateway.model.AuthUidToGatewayConfirm;
 import com.zfoo.net.core.gateway.model.AuthUidToGatewayEvent;
 import com.zfoo.net.packet.EncodedPacketInfo;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.packet.common.Error;
 import com.zfoo.net.packet.common.Heartbeat;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
 import com.zfoo.net.router.attachment.GatewayAttachment;
-import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
@@ -64,13 +62,13 @@ public class Router implements IRouter {
      * atReceiver会设置attachment，但是在方法调用完成会取消，不需要过多关注。
      * asyncAsk会再次设置attachment，需要重点关注。
      */
-    private final FastThreadLocal<IAttachment> serverReceiverAttachmentThreadLocal = new FastThreadLocal<>();
+    private final FastThreadLocal<Object> serverReceiverAttachmentThreadLocal = new FastThreadLocal<>();
 
     /**
      * 在服务端收到数据后，会调用这个方法. 这个方法在BaseRouteHandler.java的channelRead中被调用
      */
     @Override
-    public void receive(Session session, IPacket packet, @Nullable IAttachment attachment) {
+    public void receive(Session session, Object packet, @Nullable Object attachment) {
         if (packet.getClass() == Heartbeat.class) {
             logger.info("heartbeat");
             return;
@@ -78,65 +76,60 @@ public class Router implements IRouter {
 
         // 发送者（客户端）同步和异步消息的接收，发送者通过signalId判断重复
         if (attachment != null) {
-            switch (attachment.packetType()) {
-                case SIGNAL_PACKET:
-                    var signalAttachment = (SignalAttachment) attachment;
+            if (attachment.getClass() == SignalAttachment.class) {
+                var signalAttachment = (SignalAttachment) attachment;
 
-                    if (signalAttachment.isClient()) {
-                        // 服务器收到signalAttachment，不做任何处理
-                        signalAttachment.setClient(false);
+                if (signalAttachment.isClient()) {
+                    // 服务器收到signalAttachment，不做任何处理
+                    signalAttachment.setClient(false);
+                } else {
+                    // 客户端收到服务器应答，客户端发送的时候isClient为true，服务器收到的时候将其设置为false
+                    var removedAttachment = (SignalAttachment) SignalBridge.removeSignalAttachment(signalAttachment);
+                    if (removedAttachment != null) {
+                        // 这里会让之前的CompletableFuture得到结果，从而像asyncAsk之类的回调到结果
+                        removedAttachment.getResponseFuture().complete(packet);
                     } else {
-                        // 客户端收到服务器应答，客户端发送的时候isClient为true，服务器收到的时候将其设置为false
-                        var removedAttachment = (SignalAttachment) SignalBridge.removeSignalAttachment(signalAttachment);
-                        if (removedAttachment != null) {
-                            // 这里会让之前的CompletableFuture得到结果，从而像asyncAsk之类的回调到结果
-                            removedAttachment.getResponseFuture().complete(packet);
-                        } else {
-                            logger.error("client receives packet:[{}] and attachment:[{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment));
-                        }
-                        // 注意：这个return，这样子，asyncAsk的结果就返回了。
-                        return;
+                        logger.error("client receives packet:[{}] and attachment:[{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment));
                     }
-                    break;
-                case GATEWAY_PACKET:
-                    var gatewayAttachment = (GatewayAttachment) attachment;
+                    // 注意：这个return，这样子，asyncAsk的结果就返回了。
+                    return;
+                }
+            } else if (attachment.getClass() == GatewayAttachment.class) {
+                var gatewayAttachment = (GatewayAttachment) attachment;
 
-                    // 如：在网关监听到GatewaySessionInactiveEvent后，这时告诉home时，这个client参数设置的true
-                    // 注意：此时并没有return，这样子网关的消息才能发给home，在home进行处理LogoutRequest消息的处理
-                    if (gatewayAttachment.isClient()) {
-                        gatewayAttachment.setClient(false);
-                    } else {
-                        // 这里是：别的服务提供者提供授权给网关，比如：在玩家登录后，home服查到了玩家uid，然后发给Gateway服
-                        var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
-                        if (gatewaySession != null) {
-                            var signalAttachmentInGatewayAttachment = gatewayAttachment.getSignalAttachment();
-                            if (signalAttachmentInGatewayAttachment != null) {
-                                signalAttachmentInGatewayAttachment.setClient(false);
-                            }
+                // 如：在网关监听到GatewaySessionInactiveEvent后，这时告诉home时，这个client参数设置的true
+                // 注意：此时并没有return，这样子网关的消息才能发给home，在home进行处理LogoutRequest消息的处理
+                if (gatewayAttachment.isClient()) {
+                    gatewayAttachment.setClient(false);
+                } else {
+                    // 这里是：别的服务提供者提供授权给网关，比如：在玩家登录后，home服查到了玩家uid，然后发给Gateway服
+                    var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
+                    if (gatewaySession != null) {
+                        var signalAttachmentInGatewayAttachment = gatewayAttachment.getSignalAttachment();
+                        if (signalAttachmentInGatewayAttachment != null) {
+                            signalAttachmentInGatewayAttachment.setClient(false);
+                        }
 
-                            // 网关授权，授权完成直接返回
-                            // 注意：这个 AuthUidToGatewayCheck 是在home的LoginController中处理完登录后，把消息发给网关进行授权
-                            if (AuthUidToGatewayCheck.class == packet.getClass()) {
-                                var uid = ((AuthUidToGatewayCheck) packet).getUid();
-                                if (uid <= 0) {
-                                    logger.error("错误的网关授权信息，uid必须大于0");
-                                    return;
-                                }
-                                gatewaySession.setUid(uid);
-                                EventBus.post(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
-
-                                NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession));
+                        // 网关授权，授权完成直接返回
+                        // 注意：这个 AuthUidToGatewayCheck 是在home的LoginController中处理完登录后，把消息发给网关进行授权
+                        if (AuthUidToGatewayCheck.class == packet.getClass()) {
+                            var uid = ((AuthUidToGatewayCheck) packet).getUid();
+                            if (uid <= 0) {
+                                logger.error("错误的网关授权信息，uid必须大于0");
                                 return;
                             }
-                            send(gatewaySession, packet, gatewayAttachment.attachment());
-                        } else {
-                            logger.error("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
+                            gatewaySession.setUid(uid);
+                            EventBus.post(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
+
+                            NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession));
+                            return;
                         }
-                        return;
+                        send(gatewaySession, packet, gatewayAttachment.attachment());
+                    } else {
+                        logger.error("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
                     }
-                    break;
-                default:
-                    break;
+                    return;
+                }
             }
         }
 
@@ -146,7 +139,7 @@ public class Router implements IRouter {
     }
 
     @Override
-    public void send(Session session, IPacket packet, IAttachment attachment) {
+    public void send(Session session, Object packet, Object attachment) {
         if (session == null) {
             logger.error("session is null and can not be sent.");
             return;
@@ -167,7 +160,7 @@ public class Router implements IRouter {
     }
 
     @Override
-    public void send(Session session, IPacket packet) {
+    public void send(Session session, Object packet) {
         // 服务器异步返回的消息的发送会有signalAttachment，验证返回的消息是否满足
         var serverSignalAttachment = serverReceiverAttachmentThreadLocal.get();
         send(session, packet, serverSignalAttachment);
@@ -175,7 +168,7 @@ public class Router implements IRouter {
 
 
     @Override
-    public <T extends IPacket> SyncAnswer<T> syncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument) throws Exception {
+    public <T> SyncAnswer<T> syncAsk(Session session, Object packet, @Nullable Class<T> answerClass, @Nullable Object argument) throws Exception {
         var clientSignalAttachment = new SignalAttachment();
         var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
         clientSignalAttachment.setTaskExecutorHash(taskExecutorHash);
@@ -186,7 +179,7 @@ public class Router implements IRouter {
             // 里面调用的依然是：send方法发送消息
             send(session, packet, clientSignalAttachment);
 
-            IPacket responsePacket = clientSignalAttachment.getResponseFuture().get(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
+            Object responsePacket = clientSignalAttachment.getResponseFuture().get(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
 
             if (responsePacket.getClass() == Error.class) {
                 throw new ErrorResponseException((Error) responsePacket);
@@ -210,7 +203,7 @@ public class Router implements IRouter {
      * 2.这个argument的参数，只用于provider处哪个线程执行，其实就是hashId，如：工会业务，则传入guildId，回调回来后，一定会在发起者线程。
      */
     @Override
-    public <T extends IPacket> AsyncAnswer<T> asyncAsk(Session session, IPacket packet, @Nullable Class<T> answerClass, @Nullable Object argument) {
+    public <T> AsyncAnswer<T> asyncAsk(Session session, Object packet, @Nullable Class<T> answerClass, @Nullable Object argument) {
         var clientSignalAttachment = new SignalAttachment();
         var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
 
@@ -292,7 +285,7 @@ public class Router implements IRouter {
      * 接收者同时只能处理一个session的一个包，同一个发送者发送过来的包排队处理
      */
     @Override
-    public void atReceiver(Session session, IPacket packet, IAttachment attachment) {
+    public void atReceiver(Session session, Object packet, Object attachment) {
         try {
             // 接收者（服务器）同步和异步消息的接收
             if (attachment != null) {

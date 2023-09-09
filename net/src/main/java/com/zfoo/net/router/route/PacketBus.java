@@ -13,6 +13,7 @@
 
 package com.zfoo.net.router.route;
 
+import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.packet.PacketService;
 import com.zfoo.net.router.attachment.GatewayAttachment;
@@ -20,7 +21,6 @@ import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.receiver.EnhanceUtils;
 import com.zfoo.net.router.receiver.IPacketReceiver;
-import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.router.receiver.PacketReceiverDefinition;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.ProtocolManager;
@@ -52,7 +52,7 @@ public abstract class PacketBus {
     /**
      * The routing of the message
      */
-    public static void route(Session session, IPacket packet, IAttachment attachment) {
+    public static void route(Session session, Object packet, Object attachment) {
         var receiver = receiverMap.get(ProtocolManager.protocolId(packet.getClass()));
         if (receiver == null) {
             var name = packet.getClass().getSimpleName();

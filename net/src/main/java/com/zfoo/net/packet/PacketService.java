@@ -156,7 +156,7 @@ public class PacketService implements IPacketService {
     }
 
     @Override
-    public void write(ByteBuf buffer, IPacket packet, IAttachment attachment) {
+    public void write(ByteBuf buffer, Object packet, Object attachment) {
 
         if (packet == null) {
             logger.error("packet is null and can not be sent.");

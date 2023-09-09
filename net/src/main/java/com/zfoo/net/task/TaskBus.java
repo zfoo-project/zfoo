@@ -17,15 +17,14 @@ import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.attachment.HttpAttachment;
-import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.protocol.util.RandomUtils;
+import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
+import com.zfoo.scheduler.manager.SchedulerBus;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,23 +133,16 @@ public final class TaskBus {
         }
     }
 
-    private static void dispatchByAttachment(IAttachment attachment, PacketReceiverTask task) {
-        switch (attachment.packetType()) {
-            case SIGNAL_PACKET:
-                execute(((SignalAttachment) attachment).taskExecutorHash(), task);
-                break;
-            case GATEWAY_PACKET:
-                execute(((GatewayAttachment) attachment).taskExecutorHash(), task);
-                break;
-            case HTTP_PACKET:
-                execute(((HttpAttachment) attachment).taskExecutorHash(), task);
-                break;
-            case SIGNAL_ONLY_PACKET:
-            case NO_ANSWER_PACKET:
-            case UDP_PACKET:
-                dispatchBySession(task.getSession(), task);
-                break;
-            default:
+    private static void dispatchByAttachment(Object attachment, PacketReceiverTask task) {
+        var attachmentClass = attachment.getClass();
+        if (attachmentClass == SignalAttachment.class) {
+            execute(((SignalAttachment) attachment).taskExecutorHash(), task);
+        } else if (attachmentClass == GatewayAttachment.class) {
+            execute(((GatewayAttachment) attachment).taskExecutorHash(), task);
+        } else if (attachmentClass == HttpAttachment.class) {
+            execute(((HttpAttachment) attachment).taskExecutorHash(), task);
+        } else {
+            dispatchBySession(task.getSession(), task);
         }
     }
 

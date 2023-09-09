@@ -13,14 +13,13 @@
 
 package com.zfoo.net.router.answer;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.router.attachment.SignalAttachment;
 
 /**
  * @author godotg
  * @version 3.0
  */
-public interface ISyncAnswer<T extends IPacket> {
+public interface ISyncAnswer<T> {
 
     /**
      * The return packet for the synchronization request
