@@ -13,39 +13,53 @@
 package com.zfoo.protocol.collection.lpmap;
 
 import com.zfoo.protocol.collection.lpmap.model.MyPacket;
+import com.zfoo.protocol.ProtocolManager;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.Set;
 
 /**
  * @author godotg
  * @version 3.0
  */
 @Ignore
-public class HeapMapTest {
+public class FileHeapMapTesting {
 
     @Test
     public void test() {
-        var map = new HeapMap<MyPacket>();
-        var myPacket = new MyPacket();
+        ProtocolManager.initProtocol(Set.of(MyPacket.class));
 
-        var packet = map.put(0, myPacket);
+        var map = new FileHeapMap<MyPacket>("db", MyPacket.class);
+        var myPacket = new MyPacket();
+        myPacket.setA(9999);
+
+        var packet = map.put(1, myPacket);
         Assert.assertNull(packet);
 
-        packet = map.put(3, myPacket);
+        packet = map.put(2, myPacket);
         Assert.assertNull(packet);
 
         packet = map.delete(4);
         Assert.assertNull(packet);
 
-        packet = map.delete(3);
+        packet = map.delete(2);
         Assert.assertEquals(packet, myPacket);
+
+        map.put(1, myPacket);
+        map.put(2, myPacket);
+        map.put(3, myPacket);
+        map.put(4, myPacket);
+        map.put(5, myPacket);
+        map.save();
     }
 
     @Test
     public void benchmarkTest() {
-        var map = new HeapMap<MyPacket>();
+        ProtocolManager.initProtocol(Set.of(MyPacket.class));
 
+        var map = new FileHeapMap<MyPacket>("db", MyPacket.class);
         var count = 1000_0000;
         for (var i = 0; i < count; i++) {
             var myPacket = MyPacket.valueOf(i, String.valueOf(i));
@@ -57,6 +71,20 @@ public class HeapMapTest {
             var packet = map.get(i);
             Assert.assertEquals(myPacket, packet);
         }
+        map.save();
     }
 
+    @Test
+    public void loadTest() {
+        ProtocolManager.initProtocol(Set.of(MyPacket.class));
+
+        var map = new FileHeapMap<MyPacket>("db", MyPacket.class);
+        var count = 1000_0000;
+
+        for (var i = 0; i < count; i++) {
+            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
+            var packet = map.get(i);
+            Assert.assertEquals(myPacket, packet);
+        }
+    }
 }

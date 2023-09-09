@@ -25,7 +25,7 @@ import java.util.List;
  * @version 3.0
  */
 @Ignore
-public class FileUtilTest {
+public class FileUtilTesting {
 
     @Test
     public void absPathTest() {

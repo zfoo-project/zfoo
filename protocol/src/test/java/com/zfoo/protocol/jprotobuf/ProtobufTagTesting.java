@@ -26,7 +26,7 @@ import java.io.IOException;
  * @version 3.0
  */
 @Ignore
-public class ProtobufTagTest {
+public class ProtobufTagTesting {
 
     @Test
     public void test() throws IOException {

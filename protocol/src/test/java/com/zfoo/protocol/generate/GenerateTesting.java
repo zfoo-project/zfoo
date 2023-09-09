@@ -24,7 +24,7 @@ import java.util.Set;
  * @author godotg
  */
 @Ignore
-public class GenerateTest {
+public class GenerateTesting {
 
     @Test
     public void generateAllProtocols() {

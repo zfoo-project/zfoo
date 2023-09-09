@@ -12,8 +12,8 @@
 
 package com.zfoo.protocol.collection.lpmap;
 
-import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.lpmap.model.MyPacket;
+import com.zfoo.protocol.ProtocolManager;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,15 +28,32 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @version 3.0
  */
 @Ignore
-public class ConcurrentFileChannelMapTest {
+public class ConcurrentHeapMapTesting {
 
     private static final int EXECUTOR_SIZE = Runtime.getRuntime().availableProcessors();
+
+    @Test
+    public void putIfAbsentTest() {
+        ProtocolManager.initProtocol(Set.of(MyPacket.class));
+        var myPacket = new MyPacket();
+        myPacket.setA(1);
+
+        var map = new ConcurrentHeapMap<MyPacket>();
+
+        var previous1 = map.put(1, myPacket);
+        var previous2 = map.put(2, myPacket);
+        var previous3 = map.put(2, new MyPacket());
+
+        Assert.assertNull(previous1);
+        Assert.assertNull(previous2);
+        Assert.assertEquals(previous3, myPacket);
+    }
 
     @Test
     public void benchmarkTest() throws IOException, InterruptedException {
         ProtocolManager.initProtocol(Set.of(MyPacket.class));
 
-        var map = new ConcurrentFileChannelMap<MyPacket>("db", MyPacket.class);
+        var map = new ConcurrentHeapMap<MyPacket>();
         var atomicInt = new AtomicInteger(0);
         var count = 1000_0000;
 
@@ -59,14 +76,6 @@ public class ConcurrentFileChannelMapTest {
         for (var i = 0; i < count; i++) {
             var myPacket = MyPacket.valueOf(i, String.valueOf(i));
             var packet = map.get(i);
-            Assert.assertEquals(myPacket, packet);
-        }
-
-        map.close();
-        var newMap = new ConcurrentFileChannelMap<MyPacket>("db", MyPacket.class);
-        for (var i = 0; i < count; i++) {
-            var myPacket = MyPacket.valueOf(i, String.valueOf(i));
-            var packet = newMap.get(i);
             Assert.assertEquals(myPacket, packet);
         }
     }

@@ -45,7 +45,7 @@ import java.util.concurrent.Executors;
  * @version 3.0
  */
 @Ignore
-public class SpeedTest {
+public class BenchmarkTesting {
 
     public static int benchmark = 10_0000;
 

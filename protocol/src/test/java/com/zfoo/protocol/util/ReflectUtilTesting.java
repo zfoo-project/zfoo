@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 
 
 @Ignore
-public class ReflectUtilTest {
+public class ReflectUtilTesting {
 
     @Test
     public void testGetFieldsByAnnotation() {

@@ -26,7 +26,7 @@ import java.util.Set;
  * @version 3.0
  */
 @Ignore
-public class FileChannelMapTest {
+public class FileChannelMapTesting {
 
     @Test
     public void test() {

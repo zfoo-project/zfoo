@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.zfoo.protocol.SpeedTest.*;
+import static com.zfoo.protocol.BenchmarkTesting.*;
 
 /**
  * 主要来测试极端大的对象序列化和反序列化情况，极端大的对象指的是字段多，对象大，方法大

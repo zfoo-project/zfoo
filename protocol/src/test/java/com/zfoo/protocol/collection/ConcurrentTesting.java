@@ -25,7 +25,7 @@ import java.util.concurrent.CountDownLatch;
  * @version 3.0
  */
 @Ignore
-public class ConcurrentTest {
+public class ConcurrentTesting {
 
     private static final int EXECUTOR_SIZE = Runtime.getRuntime().availableProcessors();
 

@@ -26,7 +26,7 @@ import java.util.*;
  * 细致比较性能
  */
 @Ignore
-public class FieldSpeedTest {
+public class FieldSpeedTesting {
     public static int benchmark = 100000;
     public static IntObject intObject = new IntObject();
     public static IntegerObject integerObject = new IntegerObject();

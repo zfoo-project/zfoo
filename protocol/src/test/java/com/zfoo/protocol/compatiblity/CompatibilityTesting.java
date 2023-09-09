@@ -26,13 +26,14 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Set;
 
-import static com.zfoo.protocol.SpeedTest.complexObject;
-import static com.zfoo.protocol.SpeedTest.normalObject;
+import static com.zfoo.protocol.BenchmarkTesting.complexObject;
+import static com.zfoo.protocol.BenchmarkTesting.normalObject;
 
 /**
  * @author godotg
  */
-public class CompatiblityTest {
+@Ignore
+public class CompatibilityTesting {
 
     /**
      * EN: The order of the bytecode-enhanced Map traversal order will be different, so the order of the serialized content will change.
@@ -40,7 +41,6 @@ public class CompatiblityTest {
      * <p>
      * CN: 字节码增强的Map遍历顺序会出现不一样，所以序列化的内容顺序会改变，可以看到不相同的字节并不是连续的
      */
-    @Ignore
     @Test
     public void compatiblityTest() throws IOException {
         ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), GenerateOperation.NO_OPERATION);

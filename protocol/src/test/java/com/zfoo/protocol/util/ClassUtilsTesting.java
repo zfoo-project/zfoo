@@ -24,11 +24,11 @@ import java.io.IOException;
  * @version 3.0
  */
 @Ignore
-public class ClassUtilsTest {
+public class ClassUtilsTesting {
 
     @Test
     public void getClassPath() {
-        System.out.println(ClassUtils.getClassAbsPath(ClassUtilsTest.class));
+        System.out.println(ClassUtils.getClassAbsPath(ClassUtilsTesting.class));
     }
 
     @Test
