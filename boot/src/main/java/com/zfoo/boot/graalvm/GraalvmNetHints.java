@@ -77,7 +77,6 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
         classes.add(TripleString.class);
         classes.add(TripleLSS.class);
 
-        // IPacket
         var filterClasses = HintUtils.filterAllClass(Collections.emptyList(), List.of(IPacket.class));
         classes.addAll(filterClasses);
 
