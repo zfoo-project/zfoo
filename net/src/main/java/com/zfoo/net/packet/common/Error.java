@@ -15,7 +15,6 @@ package com.zfoo.net.packet.common;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
 import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.anno.Protocol;
 import org.slf4j.helpers.FormattingTuple;
@@ -51,7 +50,7 @@ public class Error {
         return response;
     }
 
-    public static Error valueOf(IPacket packet, int errorCode, String errorMessage) {
+    public static Error valueOf(Object packet, int errorCode, String errorMessage) {
         Error response = new Error();
         response.module = ProtocolManager.getProtocol(packet.getClass()).module();
         response.errorCode = errorCode;
@@ -59,11 +58,11 @@ public class Error {
         return response;
     }
 
-    public static Error valueOf(IPacket packet, int errorCode) {
+    public static Error valueOf(Object packet, int errorCode) {
         return valueOf(packet, errorCode, null);
     }
 
-    public static Error valueOf(IPacket packet, String errorMessage) {
+    public static Error valueOf(Object packet, String errorMessage) {
         return valueOf(packet, 0, errorMessage);
     }
 

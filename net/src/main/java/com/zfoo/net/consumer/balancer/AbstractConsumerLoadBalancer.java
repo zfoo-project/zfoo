@@ -15,7 +15,6 @@ package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.consumer.registry.RegisterVO;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.registration.ProtocolModule;
@@ -64,7 +63,7 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
         return list;
     }
 
-    public boolean sessionHasModule(Session session, IPacket packet) {
+    public boolean sessionHasModule(Session session, Object packet) {
         var consumerAttribute = session.getConsumerAttribute();
         if (Objects.isNull(consumerAttribute)) {
             return false;

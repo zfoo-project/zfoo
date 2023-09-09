@@ -17,7 +17,6 @@ import com.baidu.bjf.remoting.protobuf.Codec;
 import com.baidu.bjf.remoting.protobuf.ProtobufProxy;
 import com.zfoo.net.packet.DecodedPacketInfo;
 import com.zfoo.net.packet.EncodedPacketInfo;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.packet.PacketService;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
@@ -79,7 +78,7 @@ public class JProtobufTcpCodecHandler extends ByteToMessageCodec<EncodedPacketIn
         var bytes = ByteBufUtils.readAllBytes(buffer);
         var packet = protobufCodec.decode(bytes);
 
-        return DecodedPacketInfo.valueOf((IPacket) packet, null);
+        return DecodedPacketInfo.valueOf(packet, null);
     }
 
     public void write(ByteBuf buffer, Object packet, Object attachment) throws IOException {

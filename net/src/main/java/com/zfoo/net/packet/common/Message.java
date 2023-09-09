@@ -14,7 +14,6 @@
 package com.zfoo.net.packet.common;
 
 import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.anno.Protocol;
 
@@ -45,7 +44,7 @@ public class Message {
         return code == 0;
     }
 
-    public static Message valueOf(IPacket packet, int code, String message) {
+    public static Message valueOf(Object packet, int code, String message) {
         var mess = new Message();
         mess.module = ProtocolManager.moduleByProtocol(packet.getClass()).getId();
         mess.code = code;
@@ -53,7 +52,7 @@ public class Message {
         return mess;
     }
 
-    public static Message valueOf(IPacket packet, int code) {
+    public static Message valueOf(Object packet, int code) {
         return Message.valueOf(packet, code, null);
     }
 
