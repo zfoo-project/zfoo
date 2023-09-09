@@ -122,17 +122,6 @@ For complex objects, ZFOO package size 2216, KRYO package size 2528, and Protobu
 
 - The protocol class must be a simple javabean, not inheriting from any other class, but can inherit an interface
 
-- In order to prevent objects in the code and avoid some potential concurrency problems caused by the mixing of objects
-  in the protocol layer and the po layer, zfoo mandates that protocol classes must implement the IPacket interface
-
-```
-Now the interface of IPacket is just an identification interface, inheriting the design of IPacket is mainly to make 
-the code more elegant and easier to understand, and it is not a lot of work to inherit only Object
-
-The design of inheriting IPacket also has cross-language considerations, which greatly simplifies the difficulty 
-of serialization and deserialization in other languages and unifies the code implementation of other languages
-```
-
 - The protocol number is defined as a short type to reduce the packet size and memory size, a packet can be reduced by 2
   bytes, and the application memory of each protocol can also be reduced by 6 byte(protocols + IProtocolRegistration +
   protocolIdMap)
@@ -146,7 +135,7 @@ your protocol number a little more compactly, so that your protocol number will 
     - The first uses annotations: @Protocol(id = protocolId)
       ```
       @Protocol(id = 104)
-      public class SimpleObject implements IPacket {
+      public class SimpleObject {
       
           public int c;
           public boolean g;
@@ -158,7 +147,7 @@ your protocol number a little more compactly, so that your protocol number will 
     - The second use: Register the agreement through Protocol Manager.initProtocolAuto() without writing the protocol
       number
       ```
-      public class SimpleObject implements IPacket {
+      public class SimpleObject {
       
           public int c;
       
