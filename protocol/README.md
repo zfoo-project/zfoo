@@ -34,9 +34,9 @@ var packet = ProtocolManager.read(buffer);
 ### Ⅲ. Performance testing
 
 - Single-threaded environment, 50% faster than Protobuf and 100% faster than Kryo without any JVM parameter
-  tuning,[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
+  tuning,[参见性能测试](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
 - Thread safety, the performance of zfoo and Protobuf is not affected in any way, kryo will lose some performance
-  because of thread insecurity,[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
+  because of thread insecurity,[参见性能测试](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
 
 
 - Test the environment

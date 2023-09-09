@@ -28,9 +28,9 @@ var packet = ProtocolManager.read(buffer);
 
 ### Ⅲ. 性能测试
 
-- 单线程环境，在没有任何JVM参数调优的情况下速度比Protobuf快50%，比Kryo快100%，[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
+- 单线程环境，在没有任何JVM参数调优的情况下速度比Protobuf快50%，比Kryo快100%，[参见性能测试](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
 
-- 线程安全，zfoo和Protobuf的性能不受任何影响，kryo因为线程不安全性能会有所损失，[参见性能测试](src/test/java/com/zfoo/protocol/SpeedTest.java)
+- 线程安全，zfoo和Protobuf的性能不受任何影响，kryo因为线程不安全性能会有所损失，[参见性能测试](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
 
 
 - 测试环境
