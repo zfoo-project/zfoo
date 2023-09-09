@@ -30,7 +30,7 @@ import java.util.Iterator;
  * @version 3.0
  */
 @Ignore
-public class ExcelTest {
+public class ExcelTesting {
 
     @Test
     public void createExcelTest() throws IOException {

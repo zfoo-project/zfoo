@@ -3,7 +3,6 @@ package com.zfoo.hotswap;
 import com.zfoo.hotswap.util.HotSwapUtils;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.IOUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.io.IOException;
 /**
  * @author godotg
  */
-@Ignore
 public class ApplicationTest {
 
     // 热更新教程，需要添加JVM参数，-Djdk.attach.allowAttachSelf=true，如果不加这个参数将使用Byte Buddy热更新替代Javassist热更新

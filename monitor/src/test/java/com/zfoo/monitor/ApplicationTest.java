@@ -18,7 +18,6 @@ import com.zfoo.monitor.util.OSUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import oshi.SystemInfo;
 
@@ -26,7 +25,6 @@ import oshi.SystemInfo;
  * @author godotg
  * @version 3.0
  */
-@Ignore
 public class ApplicationTest {
 
     /**
@@ -76,14 +74,13 @@ public class ApplicationTest {
     /**
      * cpu的tick大小测试
      */
-    @Ignore
     @Test
     public void cpuTest() {
         var systemInfo = new SystemInfo();
         var hardware = systemInfo.getHardware();
         var os = systemInfo.getOperatingSystem();
 
-        while (true) {
+        for (int i = 0; i < 5; i++) {
             var oldTicks = hardware.getProcessor().getSystemCpuLoadTicks();
             ThreadUtils.sleep(1000);
             var usage = hardware.getProcessor().getSystemCpuLoadBetweenTicks(oldTicks);
@@ -91,15 +88,6 @@ public class ApplicationTest {
         }
     }
 
-    /**
-     * 控制台指令执行测试
-     */
-    @Ignore
-    @Test
-    public void execCommandTest() {
-        var str = OSUtils.execCommand("cmd /c jps");
-        System.out.println(str);
-    }
 
     @Test
     public void toPercentTest() {

@@ -14,7 +14,6 @@
 package com.zfoo.scheduler;
 
 import com.zfoo.protocol.util.ThreadUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -26,7 +25,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @version 3.0
  */
 
-@Ignore
 public class ApplicationTest {
 
     @Test
@@ -34,7 +32,7 @@ public class ApplicationTest {
         // 加载配置文件，配置文件中必须引入scheduler
         var context = new ClassPathXmlApplicationContext("application.xml");
 
-        ThreadUtils.sleep(Long.MAX_VALUE);
+        ThreadUtils.sleep(10000);
     }
 
 }

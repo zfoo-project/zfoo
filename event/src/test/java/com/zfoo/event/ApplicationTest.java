@@ -15,7 +15,6 @@ package com.zfoo.event;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.protocol.util.ThreadUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -23,7 +22,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author godotg
  * @version 3.0
  */
-@Ignore
 public class ApplicationTest {
 
     // Event Bus tutorial, the core idea is the observer pattern.(核心思想是设计模式中的观察者模式)
@@ -35,7 +33,7 @@ public class ApplicationTest {
         // see receiver method of MyController1 and MyController2
         EventBus.post(MyNoticeEvent.valueOf("我的事件"));
 
-        ThreadUtils.sleep(3000);
+        ThreadUtils.sleep(1000);
     }
 
 }

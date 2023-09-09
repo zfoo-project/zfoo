@@ -42,7 +42,7 @@ import java.util.Map;
 
 
 @Ignore
-public class ExportBinaryTest {
+public class ExportBinaryTesting {
 
     public static class User {
 

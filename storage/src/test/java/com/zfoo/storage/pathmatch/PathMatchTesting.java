@@ -26,12 +26,12 @@ import java.io.IOException;
  * @version 3.0
  */
 @Ignore
-public class PathMatchTest {
+public class PathMatchTesting {
 
     @Test
     public void resourceTest() throws IOException {
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        Resource[] resources = resolver.getResources("classpath*:com/zfoo/**/*.class");
+        Resource[] resources = resolver.getResources("classpath*:com/zfoo/storage/**/*.class");
         for (Resource res : resources) {
             System.out.println(res.getDescription());
         }

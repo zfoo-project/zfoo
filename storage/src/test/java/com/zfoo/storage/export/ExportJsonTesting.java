@@ -21,7 +21,7 @@ import org.junit.Test;
  * @version 3.0
  */
 @Ignore
-public class ExportJsonTest {
+public class ExportJsonTesting {
 
     @Test
     public void test() throws Exception {

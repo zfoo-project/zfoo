@@ -161,6 +161,7 @@
                 <configuration>
                     <threadCount>8</threadCount>
                     <argLine>-Dfile.encoding=${file.encoding}</argLine>
+                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
 

@@ -197,9 +197,6 @@
                 <configuration>
                     <threadCount>8</threadCount>
                     <argLine>-Dfile.encoding=${file.encoding}</argLine>
-                    <includes>
-                        <include>*/*Test.java</include>
-                    </includes>
                 </configuration>
             </plugin>
 

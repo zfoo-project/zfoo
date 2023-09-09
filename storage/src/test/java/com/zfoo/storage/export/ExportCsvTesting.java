@@ -27,7 +27,7 @@ import java.io.IOException;
  * @version 3.0
  */
 @Ignore
-public class ExportCsvTest {
+public class ExportCsvTesting {
 
     @Test
     public void exportTest() throws Exception {
