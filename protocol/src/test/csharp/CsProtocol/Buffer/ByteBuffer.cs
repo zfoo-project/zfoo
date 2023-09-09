@@ -563,7 +563,7 @@ namespace CsProtocol.Buffer
             return Encoding.UTF8.GetString(value, 0, value.Length);
         }
 
-        public bool WritePacketFlag(IPacket packet)
+        public bool WritePacketFlag(IProtocol packet)
         {
             bool flag = packet == null;
             WriteBool(!flag);
@@ -871,7 +871,7 @@ namespace CsProtocol.Buffer
                 int length = array.Length;
                 for (int index = 0; index < length; index++)
                 {
-                    protocolRegistration.Write(this, (IPacket) array[index]);
+                    protocolRegistration.Write(this, (IProtocol) array[index]);
                 }
             }
         }
@@ -1193,7 +1193,7 @@ namespace CsProtocol.Buffer
                 int length = list.Count;
                 for (int index = 0; index < length; index++)
                 {
-                    protocolRegistration.Write(this, (IPacket) list[index]);
+                    protocolRegistration.Write(this, (IProtocol) list[index]);
                 }
             }
         }
@@ -1474,7 +1474,7 @@ namespace CsProtocol.Buffer
                 WriteInt(set.Count);
                 foreach (var element in set)
                 {
-                    protocolRegistration.Write(this, (IPacket) element);
+                    protocolRegistration.Write(this, (IProtocol) element);
                 }
             }
         }
@@ -1611,7 +1611,7 @@ namespace CsProtocol.Buffer
                 foreach (var element in map)
                 {
                     WriteInt(element.Key);
-                    protocolRegistration.Write(this, (IPacket) element.Value);
+                    protocolRegistration.Write(this, (IProtocol) element.Value);
                 }
             }
         }
@@ -1750,7 +1750,7 @@ namespace CsProtocol.Buffer
                 foreach (var element in map)
                 {
                     WriteLong(element.Key);
-                    protocolRegistration.Write(this, (IPacket) element.Value);
+                    protocolRegistration.Write(this, (IProtocol) element.Value);
                 }
             }
         }
@@ -1889,7 +1889,7 @@ namespace CsProtocol.Buffer
                 foreach (var element in map)
                 {
                     WriteString(element.Key);
-                    protocolRegistration.Write(this, (IPacket) element.Value);
+                    protocolRegistration.Write(this, (IProtocol) element.Value);
                 }
             }
         }
@@ -1915,7 +1915,7 @@ namespace CsProtocol.Buffer
         public void WritePacket<T>(T packet, short protocolId)
         {
             IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-            protocolRegistration.Write(this, (IPacket) packet);
+            protocolRegistration.Write(this, (IProtocol) packet);
         }
 
         public T ReadPacket<T>(short protocolId)

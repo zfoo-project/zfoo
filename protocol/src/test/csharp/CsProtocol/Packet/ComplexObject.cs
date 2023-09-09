@@ -4,17 +4,12 @@ using CsProtocol.Buffer;
 
 namespace CsProtocol
 {
-    // 复杂的对象
-    // 包括了各种复杂的结构，数组，List，Set，Map
-    //
-    // @author godotg
-    // @version 3.0
-    public class ComplexObject : IPacket
+    // 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
+    public class ComplexObject : IProtocol
     {
         // byte类型，最简单的整形
         public byte a;
-        // byte的包装类型
-        // 优先使用基础类型，包装类型会有装箱拆箱
+        // byte的包装类型，优先使用基础类型，包装类型会有装箱拆箱
         public byte aa;
         // 数组类型
         public byte[] aaa;
@@ -144,7 +139,7 @@ namespace CsProtocol
             return 100;
         }
 
-        public void Write(ByteBuffer buffer, IPacket packet)
+        public void Write(ByteBuffer buffer, IProtocol packet)
         {
             if (buffer.WritePacketFlag(packet))
             {
@@ -407,7 +402,7 @@ namespace CsProtocol
             buffer.WritePacket(message.myObject, 102);
         }
 
-        public IPacket Read(ByteBuffer buffer)
+        public IProtocol Read(ByteBuffer buffer)
         {
             if (!buffer.ReadBool())
             {

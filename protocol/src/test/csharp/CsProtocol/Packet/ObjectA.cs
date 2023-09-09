@@ -4,9 +4,8 @@ using CsProtocol.Buffer;
 
 namespace CsProtocol
 {
-    // @author godotg
-    // @version 3.0
-    public class ObjectA : IPacket
+    
+    public class ObjectA : IProtocol
     {
         public int a;
         public Dictionary<int, string> m;
@@ -36,7 +35,7 @@ namespace CsProtocol
             return 102;
         }
 
-        public void Write(ByteBuffer buffer, IPacket packet)
+        public void Write(ByteBuffer buffer, IProtocol packet)
         {
             if (buffer.WritePacketFlag(packet))
             {
@@ -48,7 +47,7 @@ namespace CsProtocol
             buffer.WritePacket(message.objectB, 103);
         }
 
-        public IPacket Read(ByteBuffer buffer)
+        public IProtocol Read(ByteBuffer buffer)
         {
             if (!buffer.ReadBool())
             {

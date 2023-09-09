@@ -1,6 +1,6 @@
 ﻿namespace CsProtocol.Buffer
 {
-    public interface IPacket
+    public interface IProtocol
     {
         short ProtocolId();
     }

@@ -50,7 +50,7 @@ namespace CsProtocol
             return protocol;
         }
 
-        public static void Write(ByteBuffer buffer, IPacket packet)
+        public static void Write(ByteBuffer buffer, IProtocol packet)
         {
             var protocolId = packet.ProtocolId();
             // 写入协议号
@@ -60,7 +60,7 @@ namespace CsProtocol
             GetProtocol(protocolId).Write(buffer, packet);
         }
 
-        public static IPacket Read(ByteBuffer buffer)
+        public static IProtocol Read(ByteBuffer buffer)
         {
             var protocolId = buffer.ReadShort();
             return GetProtocol(protocolId).Read(buffer);

@@ -5,30 +5,30 @@ using CsProtocol.Buffer;
 namespace CsProtocol
 {
     
-    public class ObjectB : IProtocol
+    public class EmptyObject : IProtocol
     {
-        public bool flag;
+        
 
-        public static ObjectB ValueOf(bool flag)
+        public static EmptyObject ValueOf()
         {
-            var packet = new ObjectB();
-            packet.flag = flag;
+            var packet = new EmptyObject();
+            
             return packet;
         }
 
 
         public short ProtocolId()
         {
-            return 103;
+            return 0;
         }
     }
 
 
-    public class ObjectBRegistration : IProtocolRegistration
+    public class EmptyObjectRegistration : IProtocolRegistration
     {
         public short ProtocolId()
         {
-            return 103;
+            return 0;
         }
 
         public void Write(ByteBuffer buffer, IProtocol packet)
@@ -37,8 +37,8 @@ namespace CsProtocol
             {
                 return;
             }
-            ObjectB message = (ObjectB) packet;
-            buffer.WriteBool(message.flag);
+            EmptyObject message = (EmptyObject) packet;
+            
         }
 
         public IProtocol Read(ByteBuffer buffer)
@@ -47,9 +47,8 @@ namespace CsProtocol
             {
                 return null;
             }
-            ObjectB packet = new ObjectB();
-            bool result0 = buffer.ReadBool();
-            packet.flag = result0;
+            EmptyObject packet = new EmptyObject();
+            
             return packet;
         }
     }
