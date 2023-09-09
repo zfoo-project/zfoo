@@ -16,7 +16,6 @@ package com.zfoo.net.handler.codec.json;
 import com.zfoo.net.packet.DecodedPacketInfo;
 import com.zfoo.net.packet.EncodedPacketInfo;
 import com.zfoo.net.packet.IPacket;
-import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.util.JsonUtils;
@@ -43,12 +42,12 @@ public class JsonWebSocketCodecHandler extends MessageToMessageCodec<WebSocketFr
         var protocolId = Short.parseShort(jsonMap.get("protocolId"));
         var packetStr = jsonMap.get("packet");
         var attachmentStr = jsonMap.get("attachmentId");
-        IAttachment attachment = null;
+        Object attachment = null;
         if (StringUtils.isNotEmpty(attachmentStr)) {
             var attachmentId = Short.parseShort(attachmentStr);
             if (attachmentId >= 0) {
                 var attachmentClass = ProtocolManager.getProtocol(attachmentId).protocolConstructor().getDeclaringClass();
-                attachment = (IAttachment) JsonUtils.string2Object(jsonMap.get("attachment"), attachmentClass);
+                attachment = JsonUtils.string2Object(jsonMap.get("attachment"), attachmentClass);
             }
         }
 

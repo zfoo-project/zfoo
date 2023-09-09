@@ -24,7 +24,7 @@ import java.util.Objects;
  * @version 3.0
  */
 @Protocol(id = 1118, enhance = false)
-public class CM_List implements IPacket {
+public class CM_List {
 
     private List<Integer> list;
 

@@ -13,7 +13,6 @@
 
 package com.zfoo.net.packet.csharp;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.Set;
  * @version 3.0
  */
 @Protocol(id = 1165)
-public class CM_CSharpRequest implements IPacket {
+public class CM_CSharpRequest {
 
     // 注释1
     public byte a;

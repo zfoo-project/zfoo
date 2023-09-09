@@ -22,7 +22,7 @@ import java.util.Objects;
  * @version 3.0
  */
 @Protocol(id = 1114)
-public class CM_Object implements IPacket {
+public class CM_Object {
 
     private int a;
 

@@ -20,7 +20,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 1115)
-public class SM_Object implements IPacket {
+public class SM_Object {
 
 }
 

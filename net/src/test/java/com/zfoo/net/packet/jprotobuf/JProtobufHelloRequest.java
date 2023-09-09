@@ -13,7 +13,6 @@
 package com.zfoo.net.packet.jprotobuf;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -21,7 +20,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 1500)
-public class JProtobufHelloRequest implements IPacket {
+public class JProtobufHelloRequest {
 
     @Protobuf(order = 1)
     private String message;

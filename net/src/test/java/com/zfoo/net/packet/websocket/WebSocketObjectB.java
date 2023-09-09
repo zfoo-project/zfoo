@@ -13,7 +13,6 @@
 
 package com.zfoo.net.packet.websocket;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Objects;
@@ -23,7 +22,7 @@ import java.util.Objects;
  * @version 3.0
  */
 @Protocol(id = 2072)
-public class WebSocketObjectB implements IPacket {
+public class WebSocketObjectB {
 
     private boolean flag;
 

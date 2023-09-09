@@ -13,7 +13,6 @@
 
 package com.zfoo.net.packet.csharp;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -21,7 +20,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 1166)
-public class CSharpObjectA implements IPacket {
+public class CSharpObjectA {
 
     public int value;
     public CSharpObjectB objectB;

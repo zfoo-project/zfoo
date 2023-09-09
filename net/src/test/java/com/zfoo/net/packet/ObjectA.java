@@ -22,7 +22,7 @@ import java.util.Objects;
  * @version 3.0
  */
 @Protocol(id = 1116)
-public class ObjectA implements IPacket {
+public class ObjectA {
 
     private int a;
 

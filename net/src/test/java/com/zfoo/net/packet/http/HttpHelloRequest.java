@@ -12,7 +12,6 @@
 
 package com.zfoo.net.packet.http;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -20,7 +19,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 1700)
-public class HttpHelloRequest implements IPacket {
+public class HttpHelloRequest {
 
     private String message;
 

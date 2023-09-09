@@ -21,16 +21,11 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 1)
-public class SignalOnlyAttachment implements IAttachment {
+public class SignalOnlyAttachment {
 
     private int signalId;
 
     private long timestamp;
-
-    @Override
-    public AttachmentType packetType() {
-        return AttachmentType.SIGNAL_ONLY_PACKET;
-    }
 
     @Override
     public boolean equals(Object o) {

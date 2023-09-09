@@ -12,7 +12,6 @@
 
 package com.zfoo.net.packet;
 
-import com.zfoo.net.router.attachment.IAttachment;
 
 /**
  * @author godotg
@@ -23,15 +22,15 @@ public class DecodedPacketInfo {
     /**
      * 解码后的包
      */
-    private IPacket packet;
+    private Object packet;
 
     /**
      * 解码后的包的附加包
      */
-    private IAttachment attachment;
+    private Object attachment;
 
 
-    public static DecodedPacketInfo valueOf(IPacket packet, IAttachment attachment) {
+    public static DecodedPacketInfo valueOf(Object packet, Object attachment) {
         DecodedPacketInfo packetInfo = new DecodedPacketInfo();
         packetInfo.packet = packet;
         packetInfo.attachment = attachment;
@@ -39,20 +38,19 @@ public class DecodedPacketInfo {
     }
 
 
-    public IPacket getPacket() {
+    public Object getPacket() {
         return packet;
     }
 
-    public void setPacket(IPacket packet) {
+    public void setPacket(Object packet) {
         this.packet = packet;
     }
 
-    public IAttachment getAttachment() {
+    public Object getAttachment() {
         return attachment;
     }
 
-    public void setAttachment(IAttachment attachment) {
+    public void setAttachment(Object attachment) {
         this.attachment = attachment;
     }
-
 }

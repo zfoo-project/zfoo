@@ -13,7 +13,6 @@
 package com.zfoo.net.packet;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.attachment.SignalOnlyAttachment;
 import com.zfoo.net.router.route.PacketBus;
 import com.zfoo.protocol.ProtocolManager;
@@ -151,8 +150,8 @@ public class PacketService implements IPacketService {
         var packet = ProtocolManager.read(buffer);
         // 解析包的附加包
         var hasAttachment = ByteBufUtils.tryReadBoolean(buffer);
-        var attachment = hasAttachment ? ((IAttachment) ProtocolManager.read(buffer)) : null;
-        return DecodedPacketInfo.valueOf((IPacket) packet, attachment);
+        var attachment = hasAttachment ? (ProtocolManager.read(buffer)) : null;
+        return DecodedPacketInfo.valueOf(packet, attachment);
     }
 
     @Override

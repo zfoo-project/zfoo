@@ -21,7 +21,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
  * @version 3.0
  */
 @Protocol(id = 4)
-public class HttpAttachment implements IAttachment {
+public class HttpAttachment {
 
     private long uid;
 
@@ -40,10 +40,6 @@ public class HttpAttachment implements IAttachment {
         return attachment;
     }
 
-    @Override
-    public AttachmentType packetType() {
-        return AttachmentType.HTTP_PACKET;
-    }
 
     /**
      * EN:Used to determine which thread the message is processed on

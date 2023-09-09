@@ -14,7 +14,6 @@ package com.zfoo.net.handler.codec.http;
 
 import com.zfoo.net.packet.DecodedPacketInfo;
 import com.zfoo.net.packet.EncodedPacketInfo;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.packet.common.Message;
 import com.zfoo.net.router.attachment.HttpAttachment;
 import com.zfoo.protocol.util.JsonUtils;
@@ -48,7 +47,7 @@ public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, Enc
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
-        var packet = (IPacket) out.getPacket();
+        var packet = out.getPacket();
         var attachment = (HttpAttachment) out.getAttachment();
 
         var protocolVersion = attachment.getFullHttpRequest().protocolVersion();

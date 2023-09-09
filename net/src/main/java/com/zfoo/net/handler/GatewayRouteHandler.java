@@ -19,12 +19,10 @@ import com.zfoo.net.consumer.balancer.ConsistentHashConsumerLoadBalancer;
 import com.zfoo.net.core.gateway.IGatewayLoadBalancer;
 import com.zfoo.net.core.gateway.model.GatewaySessionInactiveEvent;
 import com.zfoo.net.packet.DecodedPacketInfo;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.packet.common.Heartbeat;
 import com.zfoo.net.packet.common.Ping;
 import com.zfoo.net.packet.common.Pong;
 import com.zfoo.net.router.attachment.GatewayAttachment;
-import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.util.JsonUtils;
@@ -48,11 +46,11 @@ public class GatewayRouteHandler extends ServerRouteHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GatewayRouteHandler.class);
 
-    public static final BiFunction<Session, IPacket, Boolean> DEFAULT_PACKER_FILTER = (session, packet) -> Boolean.FALSE;
+    public static final BiFunction<Session, Object, Boolean> DEFAULT_PACKER_FILTER = (session, packet) -> Boolean.FALSE;
 
-    private final BiFunction<Session, IPacket, Boolean> packetFilter;
+    private final BiFunction<Session, Object, Boolean> packetFilter;
 
-    public GatewayRouteHandler(@Nullable BiFunction<Session, IPacket, Boolean> packetFilter) {
+    public GatewayRouteHandler(@Nullable BiFunction<Session, Object, Boolean> packetFilter) {
         this.packetFilter = Objects.requireNonNullElse(packetFilter, DEFAULT_PACKER_FILTER);
     }
 
@@ -110,7 +108,7 @@ public class GatewayRouteHandler extends ServerRouteHandler {
     /**
      * 转发网关收到的包到Provider
      */
-    private void forwardingPacket(IPacket packet, IAttachment attachment, Object argument) {
+    private void forwardingPacket(Object packet, Object attachment, Object argument) {
         try {
             var consumerSession = ConsistentHashConsumerLoadBalancer.getInstance().loadBalancer(packet, argument);
             NetContext.getRouter().send(consumerSession, packet, attachment);

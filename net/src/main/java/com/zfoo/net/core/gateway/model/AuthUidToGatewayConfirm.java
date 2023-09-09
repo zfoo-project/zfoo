@@ -13,7 +13,6 @@
 
 package com.zfoo.net.core.gateway.model;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -23,7 +22,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 21)
-public class AuthUidToGatewayConfirm implements IPacket {
+public class AuthUidToGatewayConfirm {
 
     private long uid;
 

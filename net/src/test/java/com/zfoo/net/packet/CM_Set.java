@@ -25,7 +25,7 @@ import java.util.Set;
  * @version 3.0
  */
 @Protocol(id = 1121, enhance = false)
-public class CM_Set implements IPacket {
+public class CM_Set {
 
     private Set<Integer> a;
     private Set<ObjectA> b;

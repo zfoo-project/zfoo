@@ -15,7 +15,6 @@ package com.zfoo.net.packet.common;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -25,7 +24,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 116)
-public class TripleLSS implements IPacket {
+public class TripleLSS {
 
     @JsonSerialize(using = ToStringSerializer.class)
     private long left;

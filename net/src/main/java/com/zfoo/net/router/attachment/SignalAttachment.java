@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @version 3.0
  */
 @Protocol(id = 0)
-public class SignalAttachment implements IAttachment {
+public class SignalAttachment {
 
     /**
      * EN:Negative signalId are allowed
@@ -64,8 +64,6 @@ public class SignalAttachment implements IAttachment {
     public SignalAttachment() {
     }
 
-
-    @Override
     public AttachmentType packetType() {
         return AttachmentType.SIGNAL_PACKET;
     }

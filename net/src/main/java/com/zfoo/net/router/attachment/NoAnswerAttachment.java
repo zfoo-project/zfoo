@@ -21,18 +21,13 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 5)
-public class NoAnswerAttachment implements IAttachment {
+public class NoAnswerAttachment {
     private int taskExecutorHash;
 
     public static NoAnswerAttachment valueOf(int taskExecutorHash) {
         var attachment = new NoAnswerAttachment();
         attachment.taskExecutorHash = taskExecutorHash;
         return attachment;
-    }
-
-    @Override
-    public AttachmentType packetType() {
-        return AttachmentType.NO_ANSWER_PACKET;
     }
 
     public int getTaskExecutorHash() {

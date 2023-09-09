@@ -15,7 +15,6 @@ package com.zfoo.net.packet.common;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -25,7 +24,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 113)
-public class PairLS implements IPacket {
+public class PairLS {
 
     @JsonSerialize(using = ToStringSerializer.class)
     private long key;

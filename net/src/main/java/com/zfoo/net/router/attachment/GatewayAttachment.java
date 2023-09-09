@@ -20,7 +20,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 2)
-public class GatewayAttachment implements IAttachment {
+public class GatewayAttachment {
 
     /**
      * session id
@@ -67,11 +67,6 @@ public class GatewayAttachment implements IAttachment {
     }
 
 
-    @Override
-    public AttachmentType packetType() {
-        return AttachmentType.GATEWAY_PACKET;
-    }
-
     /**
      * EN:Used to determine which thread the message is processed on
      * CN:用来确定这条消息在哪一个线程处理
@@ -85,22 +80,19 @@ public class GatewayAttachment implements IAttachment {
         this.taskExecutorHashParam = argument.hashCode();
     }
 
-    public void wrapAttachment(IAttachment attachment) {
+    public void wrapAttachment(Object attachment) {
         if (attachment == null) {
             return;
         }
-        switch (attachment.packetType()) {
-            case SIGNAL_ONLY_PACKET:
-                signalOnlyAttachment = (SignalOnlyAttachment) attachment;
-                break;
-            case SIGNAL_PACKET:
-                signalAttachment = (SignalAttachment) attachment;
-                break;
-            default:
+        var attachmentClass = attachment.getClass();
+        if (attachmentClass == SignalOnlyAttachment.class) {
+            signalOnlyAttachment = (SignalOnlyAttachment) attachment;
+        } else if (attachmentClass == SignalAttachment.class) {
+            signalAttachment = (SignalAttachment) attachment;
         }
     }
 
-    public IAttachment attachment() {
+    public Object attachment() {
         if (signalAttachment != null) {
             return signalAttachment;
         }

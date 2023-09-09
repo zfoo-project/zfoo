@@ -13,8 +13,6 @@
 
 package com.zfoo.net.router.receiver;
 
-import com.zfoo.net.packet.IPacket;
-import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.UuidUtils;
@@ -31,8 +29,6 @@ public abstract class EnhanceUtils {
 
     static {
         var classArray = new Class<?>[]{
-                IPacket.class,
-                IAttachment.class,
                 IPacketReceiver.class,
                 Session.class
         };
@@ -54,7 +50,7 @@ public abstract class EnhanceUtils {
         var packetClazz = definition.getPacketClazz();
         var attachmentClazz = definition.getAttachmentClazz();
 
-        var enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + "Dispatcher" + UuidUtils.getLocalIntId());
+        var enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + "Route" + UuidUtils.getLocalIntId());
         enhanceClazz.addInterface(classPool.get(IPacketReceiver.class.getCanonicalName()));
 
         var field = new CtField(classPool.get(bean.getClass().getCanonicalName()), "bean", enhanceClazz);
@@ -66,7 +62,7 @@ public abstract class EnhanceUtils {
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
-        var invokeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "invoke", classPool.get(new String[]{Session.class.getCanonicalName(), IPacket.class.getCanonicalName(), IAttachment.class.getCanonicalName()}), enhanceClazz);
+        var invokeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "invoke", classPool.get(new String[]{Session.class.getCanonicalName(), Object.class.getCanonicalName(), Object.class.getCanonicalName()}), enhanceClazz);
         invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         if (attachmentClazz == null) {
             // Cast type(强制类型转换)

@@ -14,7 +14,6 @@
 package com.zfoo.net.packet.common;
 
 import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -23,6 +22,6 @@ import com.zfoo.protocol.anno.Protocol;
  */
 @ProtobufClass
 @Protocol(id = 102)
-public class Heartbeat implements IPacket {
+public class Heartbeat {
 
 }

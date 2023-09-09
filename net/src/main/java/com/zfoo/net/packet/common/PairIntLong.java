@@ -15,7 +15,6 @@ package com.zfoo.net.packet.common;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Objects;
@@ -25,7 +24,7 @@ import java.util.Objects;
  * @version 3.0
  */
 @Protocol(id = 110)
-public class PairIntLong implements IPacket {
+public class PairIntLong {
 
     @JsonSerialize(using = ToStringSerializer.class)
     private int key;

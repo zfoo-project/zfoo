@@ -13,7 +13,6 @@
 
 package com.zfoo.net.packet.common;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -21,7 +20,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 115)
-public class TripleString implements IPacket {
+public class TripleString {
 
     private String left;
     private String middle;

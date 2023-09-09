@@ -15,7 +15,6 @@ package com.zfoo.net.packet.common;
 
 import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
 import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -24,7 +23,7 @@ import com.zfoo.protocol.anno.Protocol;
  */
 @ProtobufClass
 @Protocol(id = 104)
-public class Pong implements IPacket {
+public class Pong {
 
     /**
      * 服务器当前的时间戳

@@ -26,7 +26,7 @@ import com.zfoo.protocol.anno.Protocol;
  */
 @ProtobufClass
 @Protocol(id = 100)
-public class Message implements IPacket {
+public class Message {
 
     private byte module;
 

@@ -27,7 +27,7 @@ import org.slf4j.helpers.MessageFormatter;
  */
 @ProtobufClass
 @Protocol(id = 101)
-public class Error implements IPacket {
+public class Error {
 
     @Protobuf(order = 1)
     private int module;

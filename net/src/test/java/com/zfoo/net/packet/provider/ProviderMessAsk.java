@@ -13,7 +13,6 @@
 
 package com.zfoo.net.packet.provider;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -21,7 +20,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 4000)
-public class ProviderMessAsk implements IPacket {
+public class ProviderMessAsk {
 
     private String message;
 

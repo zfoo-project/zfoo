@@ -24,58 +24,51 @@ public enum AttachmentType {
     /**
      * synchronous or asynchronous attachment
      */
-    SIGNAL_PACKET((byte) 0, SignalAttachment.class),
+    SIGNAL_PACKET(SignalAttachment.class),
 
-    SIGNAL_ONLY_PACKET((byte) 1, SignalOnlyAttachment.class),
+    SIGNAL_ONLY_PACKET(SignalOnlyAttachment.class),
 
     /**
      * gateway attachment
      */
-    GATEWAY_PACKET((byte) 2, GatewayAttachment.class),
+    GATEWAY_PACKET(GatewayAttachment.class),
 
     /**
      * udp attachment
      */
-    UDP_PACKET((byte) 3, UdpAttachment.class),
+    UDP_PACKET(UdpAttachment.class),
 
 
     /**
      * http attachment
      */
-    HTTP_PACKET((byte) 4, HttpAttachment.class),
+    HTTP_PACKET(HttpAttachment.class),
 
     /**
      * not used attachment
      */
-    NO_ANSWER_PACKET((byte) 5, NoAnswerAttachment.class),
+    NO_ANSWER_PACKET(NoAnswerAttachment.class),
 
 
     ;
 
 
-    public static final Map<Byte, AttachmentType> map = new HashMap<>(values().length);
+    public static final Map<Class<?>, AttachmentType> map = new HashMap<>();
 
     static {
         for (var packetType : AttachmentType.values()) {
-            map.put(packetType.packetType, packetType);
+            map.put(packetType.clazz, packetType);
         }
     }
 
-    private final byte packetType;
+    private final Class<?> clazz;
 
-    public byte getPacketType() {
-        return packetType;
-    }
-
-    private final Class<? extends IAttachment> clazz;
-
-    AttachmentType(byte packetType, Class<? extends IAttachment> clazz) {
-        this.packetType = packetType;
+    AttachmentType(Class<?> clazz) {
         this.clazz = clazz;
     }
 
-    public static AttachmentType getPacketType(byte packetType) {
-        return map.getOrDefault(packetType, AttachmentType.NO_ANSWER_PACKET);
+    public static boolean isAttachmentClass(Class<?> attachmentClass) {
+        return map.containsKey(attachmentClass);
     }
 
 }

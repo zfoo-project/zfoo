@@ -18,7 +18,6 @@ import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.handler.GatewayRouteHandler;
 import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
 import com.zfoo.net.handler.idle.ServerIdleHandler;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.IOUtils;
 import io.netty.channel.socket.SocketChannel;
@@ -43,9 +42,9 @@ public class WebsocketSslGatewayServer extends AbstractServer<SocketChannel> {
 
     private SslContext sslContext;
 
-    private BiFunction<Session, IPacket, Boolean> packetFilter;
+    private BiFunction<Session, Object, Boolean> packetFilter;
 
-    public WebsocketSslGatewayServer(HostAndPort host, InputStream pem, InputStream key, @Nullable BiFunction<Session, IPacket, Boolean> packetFilter) {
+    public WebsocketSslGatewayServer(HostAndPort host, InputStream pem, InputStream key, @Nullable BiFunction<Session, Object, Boolean> packetFilter) {
         super(host);
         try {
             this.sslContext = SslContextBuilder.forServer(pem, key).build();

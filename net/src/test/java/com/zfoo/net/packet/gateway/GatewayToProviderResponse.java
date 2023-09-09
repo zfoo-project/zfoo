@@ -13,7 +13,6 @@
 
 package com.zfoo.net.packet.gateway;
 
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -21,7 +20,7 @@ import com.zfoo.protocol.anno.Protocol;
  * @version 3.0
  */
 @Protocol(id = 5001)
-public class GatewayToProviderResponse implements IPacket {
+public class GatewayToProviderResponse {
 
     private String message;
 

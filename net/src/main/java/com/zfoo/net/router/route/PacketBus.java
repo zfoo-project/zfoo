@@ -14,10 +14,9 @@
 package com.zfoo.net.router.route;
 
 import com.zfoo.net.anno.PacketReceiver;
-import com.zfoo.net.packet.IPacket;
 import com.zfoo.net.packet.PacketService;
+import com.zfoo.net.router.attachment.AttachmentType;
 import com.zfoo.net.router.attachment.GatewayAttachment;
-import com.zfoo.net.router.attachment.IAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.receiver.EnhanceUtils;
 import com.zfoo.net.router.receiver.IPacketReceiver;
@@ -81,9 +80,7 @@ public abstract class PacketBus {
 
             AssertionUtils.isTrue(Session.class.isAssignableFrom(paramClazzs[0]), "[class:{}] [method:{}],the first parameter must be Session type parameter Exception.", bean.getClass().getName(), method.getName());
 
-            AssertionUtils.isTrue(IPacket.class.isAssignableFrom(paramClazzs[1]), "[class:{}] [method:{}],the second parameter must be IPacket type parameter Exception.", bean.getClass().getName(), method.getName());
-
-            AssertionUtils.isTrue(paramClazzs.length != 3 || IAttachment.class.isAssignableFrom(paramClazzs[2]), "[class:{}] [method:{}],the third parameter must be IAttachment type parameter Exception.", bean.getClass().getName(), method.getName());
+            AssertionUtils.isTrue(paramClazzs.length != 3 || AttachmentType.isAttachmentClass(paramClazzs[2]), "[class:{}] [method:{}],the third parameter must be Attachment type parameter Exception.", bean.getClass().getName(), method.getName());
 
             var packetClazz = paramClazzs[1];
             var attachmentClazz = paramClazzs.length == 3 ? paramClazzs[2] : null;
