@@ -72,14 +72,6 @@
             <version>${zfoo.version}</version>
         </dependency>
 
-        <!--fix-->
-        <!-- Warning:java: 未知的枚举常量 javax.annotation.meta.When.MAYBE 原因: 找不到-->
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-        </dependency>
-
         <!-- 依赖的通信类库 -->
         <!--        <dependency>-->
         <!--            <groupId>io.netty</groupId>-->

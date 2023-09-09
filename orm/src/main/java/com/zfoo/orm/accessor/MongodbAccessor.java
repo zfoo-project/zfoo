@@ -40,6 +40,7 @@ public class MongodbAccessor implements IAccessor {
 
     @Override
     public <E extends IEntity<?>> boolean insert(E entity) {
+        @SuppressWarnings("unchecked")
         var entityClazz = (Class<E>) entity.getClass();
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
         var result = collection.insertOne(entity);
@@ -51,6 +52,7 @@ public class MongodbAccessor implements IAccessor {
         if (CollectionUtils.isEmpty(entities)) {
             return;
         }
+        @SuppressWarnings("unchecked")
         var entityClazz = (Class<E>) entities.get(0).getClass();
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
         collection.insertMany(entities);
@@ -59,6 +61,7 @@ public class MongodbAccessor implements IAccessor {
     @Override
     public <E extends IEntity<?>> boolean update(E entity) {
         try {
+            @SuppressWarnings("unchecked")
             var entityClazz = (Class<E>) entity.getClass();
             var collection = OrmContext.getOrmManager().getCollection(entityClazz);
 
@@ -83,6 +86,7 @@ public class MongodbAccessor implements IAccessor {
         }
 
         try {
+            @SuppressWarnings("unchecked")
             var entityClazz = (Class<E>) entities.get(0).getClass();
             var collection = OrmContext.getOrmManager().getCollection(entityClazz);
 
@@ -102,6 +106,7 @@ public class MongodbAccessor implements IAccessor {
 
     @Override
     public <E extends IEntity<?>> boolean delete(E entity) {
+        @SuppressWarnings("unchecked")
         var entityClazz = (Class<E>) entity.getClass();
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
         var result = collection.deleteOne(eq("_id", entity.id()));
@@ -120,6 +125,7 @@ public class MongodbAccessor implements IAccessor {
         if (CollectionUtils.isEmpty(entities)) {
             return;
         }
+        @SuppressWarnings("unchecked")
         var entityClazz = (Class<E>) entities.get(0).getClass();
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
         var ids = entities.stream().map(it -> (it).id()).collect(Collectors.toList());

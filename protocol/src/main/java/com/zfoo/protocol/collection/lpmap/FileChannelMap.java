@@ -123,7 +123,9 @@ public class FileChannelMap<V> implements LpMap<V>, Closeable {
 
             dbBuffer.writeBytes(dbFileChannel, packetPosition, (int) packetSize);
             var packet = protocolRegistration.read(dbBuffer);
-            return (V) packet;
+            @SuppressWarnings("unchecked")
+            var p = (V) packet;
+            return p;
         } catch (Exception e) {
             return null;
         }

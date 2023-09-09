@@ -78,12 +78,16 @@ public class StorageObject<K, V> implements IStorage<K, V> {
 
     @Override
     public boolean contain(int key) {
-        return contain((K) Integer.valueOf(key));
+        @SuppressWarnings("unchecked")
+        var k = (K) Integer.valueOf(key);
+        return contain(k);
     }
 
     @Override
     public boolean contain(long key) {
-        return contain((K) Long.valueOf(key));
+        @SuppressWarnings("unchecked")
+        var k = (K) Long.valueOf(key);
+        return contain(k);
     }
 
     @Override
@@ -95,12 +99,16 @@ public class StorageObject<K, V> implements IStorage<K, V> {
 
     @Override
     public V get(int id) {
-        return get((K) Integer.valueOf(id));
+        @SuppressWarnings("unchecked")
+        var key = (K) Integer.valueOf(id);
+        return get(key);
     }
 
     @Override
     public V get(long id) {
-        return get((K) Long.valueOf(id));
+        @SuppressWarnings("unchecked")
+        var key = (K) Long.valueOf(id);
+        return get(key);
     }
 
     @Override
@@ -164,6 +172,7 @@ public class StorageObject<K, V> implements IStorage<K, V> {
     }
 
     public V put(Object value) {
+        @SuppressWarnings("unchecked")
         var key = (K) ReflectionUtils.getField(idDef.getField(), value);
 
         if (key == null) {
@@ -175,22 +184,24 @@ public class StorageObject<K, V> implements IStorage<K, V> {
         }
 
         // 添加资源
-        var result = dataMap.put(key, (V) value);
+        @SuppressWarnings("unchecked")
+        var v = (V) value;
+        var result = dataMap.put(key, v);
 
         // 添加索引
         for (var def : indexDefMap.values()) {
             // 使用field的名称作为索引的名称
             var indexKey = def.getField().getName();
-            var indexValue = ReflectionUtils.getField(def.getField(), value);
+            var indexValue = ReflectionUtils.getField(def.getField(), v);
             if (def.isUnique()) {// 唯一索引
                 var index = uniqueIndexMap.computeIfAbsent(indexKey, k -> new HashMap<>());
-                if (index.put(indexValue, (V) value) != null) {
+                if (index.put(indexValue, v) != null) {
                     throw new RuntimeException(StringUtils.format("Duplicate unique index [index:{}][value:{}] of static resource [class:{}]", indexKey, indexValue, clazz.getName()));
                 }
             } else {// 不是唯一索引
                 var index = indexMap.computeIfAbsent(indexKey, k -> new HashMap<>());
                 var list = index.computeIfAbsent(indexValue, k -> new ArrayList<V>());
-                list.add((V) value);
+                list.add(v);
             }
         }
         return result;

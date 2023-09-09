@@ -103,7 +103,7 @@ public class ExportBinaryTesting {
         ProtocolManager.write(buffer, resourceData);
         var bytes = ByteBufUtils.readAllBytes(buffer);
         FileUtils.writeInputStreamToFile(new File("D:/github/godot-bird/binary_data.cfg"), new ByteArrayInputStream(bytes));
-
+        @SuppressWarnings("unchecked")
         var storage = (StorageObject<Integer, StudentResource>) storageManager.getStorage(StudentResource.class);
         for (StudentResource resource : storage.getAll()) {
             System.out.println(JsonUtils.object2String(resource));

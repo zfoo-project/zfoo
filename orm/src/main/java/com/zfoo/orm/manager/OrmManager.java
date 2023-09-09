@@ -89,6 +89,7 @@ public class OrmManager implements IOrmManager {
         var entityDefMap = entityClass();
 
         for (var entityDef : entityDefMap.values()) {
+            @SuppressWarnings("rawtypes")
             var entityCaches = new EntityCache(entityDef);
             entityCachesMap.put(entityDef.getClazz(), entityCaches);
             allEntityCachesUsableMap.put(entityDef.getClazz(), false);
@@ -198,7 +199,8 @@ public class OrmManager implements IOrmManager {
                         }
 
                         Type[] types = ((ParameterizedType) type).getActualTypeArguments();
-                        Class<? extends IEntity<?>> entityClazz = (Class<? extends IEntity<?>>) types[1];
+                        @SuppressWarnings("unchecked")
+                        var entityClazz = (Class<? extends IEntity<?>>) types[1];
                         IEntityCache<?, ?> entityCaches = entityCachesMap.get(entityClazz);
 
                         if (entityCaches == null) {
@@ -234,7 +236,9 @@ public class OrmManager implements IOrmManager {
         if (!usable) {
             throw new RunException("Orm没有使用[]的EntityCaches，为了节省内存提前释放了它；只有使用EntityCachesInjection注解的Entity才能被动态获取", clazz.getCanonicalName());
         }
-        return (IEntityCache<?, E>) entityCachesMap.get(clazz);
+        @SuppressWarnings("unchecked")
+        var entityCache = (IEntityCache<?, E>) entityCachesMap.get(clazz);
+        return entityCache;
     }
 
     @Override
@@ -276,8 +280,10 @@ public class OrmManager implements IOrmManager {
 
         var cacheDefMap = new HashMap<Class<? extends IEntity<?>>, EntityDef>();
         for (var clazz : classSet) {
-            var cacheDef = parserEntityDef((Class<? extends IEntity<?>>) clazz);
-            cacheDefMap.putIfAbsent((Class<? extends IEntity<?>>) clazz, cacheDef);
+            @SuppressWarnings("unchecked")
+            var entityClass = (Class<? extends IEntity<?>>) clazz;
+            var cacheDef = parserEntityDef(entityClass);
+            cacheDefMap.putIfAbsent(entityClass, cacheDef);
         }
         return cacheDefMap;
     }

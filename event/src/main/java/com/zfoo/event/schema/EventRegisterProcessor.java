@@ -61,7 +61,7 @@ public class EventRegisterProcessor implements BeanPostProcessor {
                 if (!IEvent.class.isAssignableFrom(paramClazzs[0])) {
                     throw new IllegalArgumentException(StringUtils.format("[class:{}] [method:{}] must have one [IEvent] type parameter!", bean.getClass().getName(), method.getName()));
                 }
-
+                @SuppressWarnings("unchecked")
                 var eventClazz = (Class<? extends IEvent>) paramClazzs[0];
                 var eventName = eventClazz.getCanonicalName();
                 var methodName = method.getName();

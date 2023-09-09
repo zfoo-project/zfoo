@@ -13,7 +13,6 @@
 package com.zfoo.protocol.util;
 
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.model.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -47,19 +46,6 @@ public class CollectionUtilsTest {
         b = new ArrayList<>();
         c = CollectionUtils.collate(a, b);
         Assert.assertArrayEquals(c.toArray(), a.toArray());
-    }
-
-    @Test
-    public void listJoinListTest() {
-        var a = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
-        var b = List.of(11, 22, 33, 44, 55);
-        var c = List.of(1, 2, 3, 4, 5, 6);
-
-        var d = CollectionUtils.listJoinList(true, new Pair<>(2, a), new Pair<>(2, b), new Pair<>(2, c));
-        Assert.assertArrayEquals(d.toArray(), List.of(1, 2, 11, 22, 3, 4, 5, 6, 33, 44, 7, 8, 55, 9).toArray());
-
-        var e = CollectionUtils.listJoinList(false, new Pair<>(2, a), new Pair<>(2, b), new Pair<>(2, c));
-        Assert.assertArrayEquals(e.toArray(), List.of(1, 2, 11, 22, 1, 2, 3, 4, 33, 44, 3, 4, 5, 6, 55, 5, 6, 7, 8, 9).toArray());
     }
 
     @Test

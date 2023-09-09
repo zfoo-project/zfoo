@@ -109,7 +109,9 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
         result.forEach(new Consumer<IEntity<?>>() {
             @Override
             public void accept(IEntity<?> entity) {
-                list.add((E) entity);
+                @SuppressWarnings("unchecked")
+                var e = (E) entity;
+                list.add(e);
             }
         });
         return list;
@@ -128,7 +130,9 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
                 .forEach(new Consumer<IEntity<?>>() {
                     @Override
                     public void accept(IEntity<?> entity) {
-                        list.add((E) entity);
+                        @SuppressWarnings("unchecked")
+                        var e = (E) entity;
+                        list.add(e);
                     }
                 });
 

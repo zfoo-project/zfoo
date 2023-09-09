@@ -148,22 +148,6 @@ public class SingleMongoTest {
         collection.find().forEach(doc -> System.out.println(doc.toJson()));
     }
 
-    @Test
-    public void mapReduceTest() {
-        String mapFunction = "" +
-                "function() { " +
-                "emit(this.name, { count: 1 });" +
-                "}";
-        String reduceFunction = "" +
-                "function(key, values) {" +
-                "var reduced = { name:key, count:0 };" +
-                "values.forEach(function(value){ reduced.count += value.count; }); " +
-                "return reduced;" +
-                "}";
-        MongoCollection<Document> collection = mongodb.getCollection("student");
-        var iterable = collection.mapReduce(mapFunction, reduceFunction);
-        iterable.forEach((Consumer<? super Document>) document -> System.out.println(document));
-    }
 
 
     // ******************************************************************************************************

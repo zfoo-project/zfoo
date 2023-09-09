@@ -368,7 +368,9 @@ public abstract class ArrayUtils {
 
         var length = list.size();
         var objectArray = Array.newInstance(clazz, length);
-        return (T[]) copy(list.toArray(), objectArray, length);
+        @SuppressWarnings("unchecked")
+        var copy = (T[]) copy(list.toArray(), objectArray, length);
+        return copy;
     }
 
 
@@ -452,7 +454,9 @@ public abstract class ArrayUtils {
         AssertionUtils.notNull(clazz);
         var length = source.length;
         var target = Array.newInstance(clazz, length);
-        return (T[]) copy(source, target, length);
+        @SuppressWarnings("unchecked")
+        var copy = (T[]) copy(source, target, length);
+        return copy;
     }
 
     private static Object copy(Object source, Object target, int length) {

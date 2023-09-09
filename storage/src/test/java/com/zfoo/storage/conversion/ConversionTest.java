@@ -63,11 +63,9 @@ public class ConversionTest {
         ConversionService conversionService = csfb.getObject();
         //Json to Map
         String str = "{\"1\":1,\"2\":2,\"3\":3}";
-
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-
         // 注意：第3个参数不能写成TypeDescriptor.valueOf(map.getClass())  而是要明确指定Map的key和value的类型
-        map = (Map<Integer, Integer>) conversionService.convert(str, TypeDescriptor.valueOf(String.class), TypeDescriptor.map(map.getClass(), TypeDescriptor.valueOf(String.class), TypeDescriptor.valueOf(Integer.class)));
+        @SuppressWarnings("unchecked")
+        var map = (Map<Integer, Integer>) conversionService.convert(str, TypeDescriptor.valueOf(String.class), TypeDescriptor.map(HashMap.class, TypeDescriptor.valueOf(String.class), TypeDescriptor.valueOf(Integer.class)));
 
         Assert.assertEquals(3, map.size());
     }

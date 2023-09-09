@@ -234,52 +234,6 @@ public abstract class CollectionUtils {
     }
 
 
-    /**
-     * list合并
-     *
-     * @param exclusive 元素是否是独占的，也就是说是否可以重复
-     * @param pairs     需要被合并的pairs集合，第一个参数是步数，第二个参数是集合
-     * @return 返回合并后的list
-     */
-    public static <T> List<T> listJoinList(boolean exclusive, Pair<Integer, List<T>>... pairs) {
-        return listJoinList(exclusive, List.of(pairs));
-    }
-
-    public static <T> List<T> listJoinList(boolean exclusive, List<Pair<Integer, List<T>>> pairs) {
-        var iteratorList = new ArrayList<List<T>>();
-        var iteratorMap = new HashMap<List<T>, Iterator<T>>();
-        var stepMap = new HashMap<List<T>, Integer>();
-        for (var pair : pairs) {
-            var step = pair.getKey();
-            var list = pair.getValue();
-            AssertionUtils.ge1(step);
-            if (isNotEmpty(list)) {
-                var iterator = list.iterator();
-                iteratorList.add(list);
-                iteratorMap.put(list, iterator);
-                stepMap.put(list, step);
-            }
-        }
-
-        var result = new ArrayList<T>();
-
-        while (iteratorMap.values().stream().anyMatch(it -> it.hasNext())) {
-            for (var list : iteratorList) {
-                var iterator = iteratorMap.get(list);
-                var step = stepMap.get(list);
-                for (var i = 0; i < step && iterator.hasNext(); i++) {
-                    var element = iterator.next();
-                    if (exclusive && result.contains(element)) {
-                        i--;
-                        continue;
-                    }
-                    result.add(element);
-                }
-            }
-        }
-
-        return result;
-    }
 
     /**
      * 获取集合的最后几个元素
