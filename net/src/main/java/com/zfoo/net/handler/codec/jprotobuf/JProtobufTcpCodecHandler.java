@@ -83,6 +83,7 @@ public class JProtobufTcpCodecHandler extends ByteToMessageCodec<EncodedPacketIn
 
     public void write(ByteBuf buffer, Object packet, Object attachment) throws IOException {
         // 写入protobuf协议
+        @SuppressWarnings("unchecked")
         var protobufCodec = (Codec<Object>) ProtobufProxy.create(packet.getClass());
         byte[] bytes = protobufCodec.encode(packet);
         // header(4byte) + protocolId(2byte)

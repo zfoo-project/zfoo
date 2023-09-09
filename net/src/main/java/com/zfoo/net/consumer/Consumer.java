@@ -109,6 +109,7 @@ public class Consumer implements IConsumer {
             if (answerClass != null && answerClass != responsePacket.getClass()) {
                 throw new UnexpectedProtocolException("client expect protocol:[{}], but found protocol:[{}]", answerClass, responsePacket.getClass().getName());
             }
+            @SuppressWarnings("unchecked")
             var syncAnswer = new SyncAnswer<>((T) responsePacket, clientSignalAttachment);
 
             // load balancer之后调用

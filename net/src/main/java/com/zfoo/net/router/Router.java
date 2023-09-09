@@ -188,7 +188,9 @@ public class Router implements IRouter {
                 throw new UnexpectedProtocolException("client expect protocol:[{}], but found protocol:[{}]", answerClass, responsePacket.getClass().getName());
             }
 
-            return new SyncAnswer<>((T) responsePacket, clientSignalAttachment);
+            @SuppressWarnings("unchecked")
+            var syncAnswer = new SyncAnswer<>((T) responsePacket, clientSignalAttachment);
+            return syncAnswer;
         } catch (TimeoutException e) {
             throw new NetTimeOutException("syncAsk timeout exception, ask:[{}], attachment:[{}]", JsonUtils.object2String(packet), JsonUtils.object2String(clientSignalAttachment));
         } finally {
@@ -253,7 +255,9 @@ public class Router implements IRouter {
                             }
 
                             // 异步返回，回调业务逻辑
-                            asyncAnswer.setFuturePacket((T) answer);
+                            @SuppressWarnings("unchecked")
+                            var answerPacket = (T) answer;
+                            asyncAnswer.setFuturePacket(answerPacket);
                             asyncAnswer.consume();
                         } catch (Throwable throwable1) {
                             logger.error("Asynchronous callback method [ask:{}][answer:{}] error", packet.getClass().getSimpleName(), answer.getClass().getSimpleName(), throwable1);
