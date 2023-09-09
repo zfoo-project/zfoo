@@ -376,34 +376,7 @@ public class OrmManager implements IOrmManager {
         AssertionUtils.notNull(clazz.getAnnotation(com.zfoo.orm.anno.EntityCache.class), "实体类Entity[{}]必须被注解[{}]标注", clazz.getCanonicalName(), com.zfoo.orm.anno.EntityCache.class.getName());
 
         // 校验entity格式
-        var entitySubClassMap = new HashMap<Class<?>, Set<Class<?>>>();
         checkEntity(clazz);
-        // 对象循环引用检测
-        for (var entry : entitySubClassMap.entrySet()) {
-            var subClass = entry.getKey();
-            var subClassSet = entry.getValue();
-            if (subClassSet.contains(subClass)) {
-                throw new RunException("ORM[class:{}]在第一层包含循环引用对象[class:{}]", clazz.getSimpleName(), subClass.getSimpleName());
-            }
-
-            var queue = new LinkedList<>(subClassSet);
-            var allSubClassSet = new HashSet<>(queue);
-            while (!queue.isEmpty()) {
-                var firstSubClass = queue.poll();
-                if (entitySubClassMap.containsKey(firstSubClass)) {
-                    for (var elementClass : entitySubClassMap.get(firstSubClass)) {
-                        if (subClass.equals(elementClass)) {
-                            throw new RunException("ORM[class:{}]在下层对象[class:{}]包含循环引用对象[class:{}]", clazz.getSimpleName(), elementClass.getSimpleName(), elementClass.getSimpleName());
-                        }
-
-                        if (!allSubClassSet.contains(elementClass)) {
-                            allSubClassSet.add(elementClass);
-                            queue.offer(elementClass);
-                        }
-                    }
-                }
-            }
-        }
 
         // 校验id字段和id()方法的格式
         var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
