@@ -90,10 +90,12 @@ public class Router implements IRouter {
             if (signalAttachment.getClient() == SignalAttachment.SIGNAL_OUTSIDE_CLIENT) {
                 // 服务器收到外部客户端的SIGNAL_OUTSIDE_CLIENT，不做任何处理
                 TaskBus.dispatchBySession(task);
-            } else if (signalAttachment.getClient() == SignalAttachment.SIGNAL_NATIVE_CLIENT) {
-                // 服务器收到signalAttachment，不做任何处理
+            } else if (signalAttachment.getClient() == SignalAttachment.SIGNAL_NATIVE_ARGUMENT_CLIENT) {
                 signalAttachment.setClient(SignalAttachment.SIGNAL_SERVER);
                 TaskBus.dispatchByTaskExecutorHash(signalAttachment.getTaskExecutorHash(), task);
+            } else if (signalAttachment.getClient() == SignalAttachment.SIGNAL_NATIVE_NO_ARGUMENT_CLIENT) {
+                signalAttachment.setClient(SignalAttachment.SIGNAL_SERVER);
+                TaskBus.dispatchBySession(task);
             } else {
                 // 客户端收到服务器应答，客户端发送的时候client为SIGNAL_NATIVE_CLIENT，服务器收到的时候将其设置为SIGNAL_SERVER
                 var removedAttachment = (SignalAttachment) SignalBridge.removeSignalAttachment(signalAttachment);
@@ -183,8 +185,12 @@ public class Router implements IRouter {
     @Override
     public <T> SyncAnswer<T> syncAsk(Session session, Object packet, @Nullable Class<T> answerClass, @Nullable Object argument) throws Exception {
         var clientSignalAttachment = new SignalAttachment();
-        var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
-        clientSignalAttachment.setTaskExecutorHash(taskExecutorHash);
+        if (argument == null) {
+            clientSignalAttachment.setClient(SignalAttachment.SIGNAL_NATIVE_NO_ARGUMENT_CLIENT);
+        } else {
+            clientSignalAttachment.setClient(SignalAttachment.SIGNAL_NATIVE_ARGUMENT_CLIENT);
+            clientSignalAttachment.setTaskExecutorHash(TaskBus.calTaskExecutorHash(argument));
+        }
 
         try {
             SignalBridge.addSignalAttachment(clientSignalAttachment);
@@ -220,9 +226,13 @@ public class Router implements IRouter {
     @Override
     public <T> AsyncAnswer<T> asyncAsk(Session session, Object packet, @Nullable Class<T> answerClass, @Nullable Object argument) {
         var clientSignalAttachment = new SignalAttachment();
-        var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
 
-        clientSignalAttachment.setTaskExecutorHash(taskExecutorHash);
+        if (argument == null) {
+            clientSignalAttachment.setClient(SignalAttachment.SIGNAL_NATIVE_NO_ARGUMENT_CLIENT);
+        } else {
+            clientSignalAttachment.setClient(SignalAttachment.SIGNAL_NATIVE_ARGUMENT_CLIENT);
+            clientSignalAttachment.setTaskExecutorHash(TaskBus.calTaskExecutorHash(argument));
+        }
 
         // 服务器在同步或异步的消息处理中，又调用了同步或异步的方法，这时候threadReceiverAttachment不为空
         var serverSignalAttachment = serverReceiverAttachmentThreadLocal.get();

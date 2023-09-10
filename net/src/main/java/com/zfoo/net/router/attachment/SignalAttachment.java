@@ -37,8 +37,9 @@ public class SignalAttachment {
      * 0 for the server, 1 for the sync or async native client, 2 for the outside client such as browser, mobile
      */
     public static final byte SIGNAL_SERVER = 0;
-    public static final byte SIGNAL_NATIVE_CLIENT = 1;
-    public static final byte SIGNAL_OUTSIDE_CLIENT = 2;
+    public static final byte SIGNAL_NATIVE_ARGUMENT_CLIENT = 1;
+    public static final byte SIGNAL_NATIVE_NO_ARGUMENT_CLIENT = 2;
+    public static final byte SIGNAL_OUTSIDE_CLIENT = 12;
 
     /**
      * EN:Unique identification of a packet, unique representation of an attachment, hashcode() and equals() equals signalId value
@@ -55,7 +56,7 @@ public class SignalAttachment {
     /**
      * 0 for the server, 1 for the sync or async native client, 2 for the outside client such as browser, mobile
      */
-    private byte client = SIGNAL_NATIVE_CLIENT;
+    private byte client = SIGNAL_NATIVE_ARGUMENT_CLIENT;
 
     /**
      * The timestamp the client sent it
