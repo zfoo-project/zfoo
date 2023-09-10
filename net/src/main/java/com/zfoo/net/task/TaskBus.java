@@ -15,9 +15,6 @@ package com.zfoo.net.task;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
-import com.zfoo.net.router.attachment.GatewayAttachment;
-import com.zfoo.net.router.attachment.HttpAttachment;
-import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.RandomUtils;
@@ -128,7 +125,7 @@ public final class TaskBus {
         execute(taskExecutorHash, task);
     }
 
-    public static int calTaskExecutorHash(int taskExecutorHash) {
+    private static int calTaskExecutorIndex(int taskExecutorHash) {
         // Other hash algorithms can be customized to make the distribution more uniform
         return Math.abs(taskExecutorHash) % EXECUTOR_SIZE;
     }
@@ -142,11 +139,11 @@ public final class TaskBus {
         } else {
             hash = argument.hashCode();
         }
-        return calTaskExecutorHash(hash);
+        return hash;
     }
 
     public static void execute(int taskExecutorHash, Runnable runnable) {
-        executors[calTaskExecutorHash(taskExecutorHash)].execute(ThreadUtils.safeRunnable(runnable));
+        executors[calTaskExecutorIndex(taskExecutorHash)].execute(ThreadUtils.safeRunnable(runnable));
     }
 
     public static void execute(Object argument, Runnable runnable) {
@@ -171,7 +168,7 @@ public final class TaskBus {
             return schedulerExecutor;
         }
 
-        return executors[calTaskExecutorHash(RandomUtils.randomInt())];
+        return executors[calTaskExecutorIndex(RandomUtils.randomInt())];
     }
 
 }

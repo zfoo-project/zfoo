@@ -16,13 +16,18 @@ package com.zfoo.net.core.tcp.client;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.core.tcp.TcpClient;
+import com.zfoo.net.packet.json.JsonHelloResponse;
 import com.zfoo.net.packet.tcp.TcpHelloRequest;
+import com.zfoo.net.packet.tcp.TcpHelloResponse;
+import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.function.Consumer;
 
 /**
  * @author godotg
@@ -34,15 +39,26 @@ public class TcpClientTest {
     private static final Logger logger = LoggerFactory.getLogger(TcpClientTest.class);
 
     @Test
-    public void startClient() {
+    public void startClient() throws Exception {
         var context = new ClassPathXmlApplicationContext("config.xml");
 
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
         var session = client.start();
 
+        var request = TcpHelloRequest.valueOf("Hello, this is the tcp client!");
         for (int i = 0; i < 1000; i++) {
-            ThreadUtils.sleep(2000);
-            NetContext.getRouter().send(session, TcpHelloRequest.valueOf("Hello, this is the tcp client!"));
+            ThreadUtils.sleep(1000);
+            NetContext.getRouter().send(session, request);
+            ThreadUtils.sleep(1000);
+            var response = NetContext.getRouter().syncAsk(session, request, TcpHelloResponse.class, null).packet();
+            logger.info("sync client receive [packet:{}] from server", JsonUtils.object2String(response));
+            NetContext.getRouter().asyncAsk(session, request, TcpHelloResponse.class, null)
+                    .whenComplete(new Consumer<TcpHelloResponse>() {
+                        @Override
+                        public void accept(TcpHelloResponse jsonHelloResponse) {
+                            logger.info("async client receive [packet:{}] from server", JsonUtils.object2String(jsonHelloResponse));
+                        }
+                    });
         }
 
         ThreadUtils.sleep(Long.MAX_VALUE);
