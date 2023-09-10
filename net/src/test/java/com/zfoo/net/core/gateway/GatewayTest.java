@@ -29,6 +29,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 /**
  * 这是客户端连接网关，网关转发到服务提供者的测试用例
@@ -88,7 +89,7 @@ public class GatewayTest {
      * 这里是客户端，客户端先请求数据到到网关(毕竟自己连接的就是网关)
      */
     @Test
-    public void clientTest() {
+    public void clientSyncTest() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_client_config.xml");
         SessionUtils.printSessionInfo();
 
@@ -122,4 +123,40 @@ public class GatewayTest {
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
+    @Test
+    public void clientAsyncTest() {
+        var context = new ClassPathXmlApplicationContext("gateway/gateway_client_config.xml");
+        SessionUtils.printSessionInfo();
+
+        // 这里的地址是网关的地址
+        var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
+        var session = client.start();
+
+        var executorSize = Runtime.getRuntime().availableProcessors() * 2;
+        var executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+        var request = new GatewayToProviderRequest();
+        request.setMessage("Hello, this is the client!");
+        var atomicInteger = new AtomicInteger(0);
+
+        for (int i = 0; i < executorSize; i++) {
+            var thread = new Thread(() -> {
+                for (int j = 0; j < 1000; j++) {
+                    try {
+                        // 注意：这里的第2个请求参数是 xxxRequest，不是xxxAsk。  因为这里是网关要将数据转发给Provider的，因此当然不能是xxxAsk这种请求。
+                        // 第3个参数argument是null，这样子随机一个服务提供者进行消息处理
+                        NetContext.getRouter().asyncAsk(session, request, GatewayToProviderResponse.class, null)
+                                .whenComplete(response -> {
+                                    logger.info("客户端请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));
+                                });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            executor.execute(thread);
+        }
+
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
 }

@@ -13,6 +13,7 @@
 package com.zfoo.net.router.attachment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.scheduler.util.TimeUtils;
 
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @version 3.0
  */
 @Protocol(id = 0)
+@JsonIgnoreProperties("responseFuture")
 public class SignalAttachment {
 
     /**
