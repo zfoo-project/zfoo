@@ -66,8 +66,8 @@ public class ConcurrentTesting {
         Assert.assertTrue(map.isEmpty());
     }
 
-    public static final int num = 100_0000;
-    public static final int maxCount = 10;
+    public static final int num = 1_0000;
+    public static final int maxCount = 10000;
 
     @Test
     public void concurrentPrimitiveTest() throws InterruptedException {
@@ -156,8 +156,7 @@ public class ConcurrentTesting {
                         for (int j = 0; j < num; j++) {
                             map.put((long) j, j);
                         }
-                        map.forEach((key, value) -> {
-                        });
+                        map.forEach((key, value) -> value++);
                         countDownLatch.countDown();
                     }
                 }).start();
@@ -174,8 +173,7 @@ public class ConcurrentTesting {
                             var value = (int) map.get((long) j);
                             Assert.assertEquals(value, j);
                         }
-                        map.forEach((key, value) -> {
-                        });
+                        map.forEach((key, value) -> value++);
                         countDownLatch2.countDown();
                     }
                 }).start();
@@ -190,8 +188,7 @@ public class ConcurrentTesting {
                         for (int j = 0; j < num; j++) {
                             map.put((long) j, j);
                         }
-                        map.forEach((key, value) -> {
-                        });
+                        map.forEach((key, value) -> value++);
                         countDownLatch3.countDown();
                     }
                 }).start();
@@ -206,8 +203,7 @@ public class ConcurrentTesting {
                         for (int j = 0; j < num; j++) {
                             map.remove((long) j);
                         }
-                        map.forEach((key, value) -> {
-                        });
+                        map.forEach((key, value) -> value++);
                         countDownLatch4.countDown();
                     }
                 }).start();
