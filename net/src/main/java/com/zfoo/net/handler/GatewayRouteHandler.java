@@ -82,7 +82,11 @@ public class GatewayRouteHandler extends ServerRouteHandler {
 
         // 把客户端信息包装为一个GatewayAttachment,因此通过这个网关附加包可以得到玩家的uid、sid之类的信息
         var gatewayAttachment = new GatewayAttachment(session);
-        gatewayAttachment.setSignalAttachment((SignalAttachment) decodedPacketInfo.getAttachment());
+        var signalAttachment = (SignalAttachment) decodedPacketInfo.getAttachment();
+        if (signalAttachment != null) {
+            signalAttachment.setClient(SignalAttachment.SIGNAL_SERVER);
+            gatewayAttachment.setSignalAttachment(signalAttachment);
+        }
 
         // 网关优先使用IGatewayLoadBalancer作为一致性hash的计算参数，然后才会使用客户端的session做参数
         // 例子：以聊天服务来说，玩家知道自己在哪个群组groupId中，那往这个群发送消息时，会在Packet中带上这个groupId做为一致性hash就可以了。

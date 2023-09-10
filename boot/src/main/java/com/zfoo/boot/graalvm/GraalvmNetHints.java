@@ -52,7 +52,6 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
 
         // atachment
         classes.add(SignalAttachment.class);
-        classes.add(SignalOnlyAttachment.class);
         classes.add(GatewayAttachment.class);
         classes.add(UdpAttachment.class);
         classes.add(HttpAttachment.class);

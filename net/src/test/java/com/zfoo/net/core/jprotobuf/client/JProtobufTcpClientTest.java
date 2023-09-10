@@ -29,9 +29,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @version 3.0
  */
 @Ignore
-public class TcpClientTest {
+public class JProtobufTcpClientTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(TcpClientTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(JProtobufTcpClientTest.class);
 
     @Test
     public void startClient() throws Exception {
