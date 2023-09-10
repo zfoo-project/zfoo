@@ -114,7 +114,7 @@ public class Router implements IRouter {
             // 注意：此时并没有return，这样子网关的消息才能发给home，在home进行处理LogoutRequest消息的处理
             if (gatewayAttachment.isClient()) {
                 gatewayAttachment.setClient(false);
-                TaskBus.dispatchByTaskExecutorHash(gatewayAttachment.getTaskExecutorHash(), task);
+                TaskBus.dispatchByTaskExecutorHash(gatewayAttachment.taskExecutorHash(), task);
             } else {
                 // 这里是：别的服务提供者提供授权给网关，比如：在玩家登录后，home服查到了玩家uid，然后发给Gateway服
                 var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
