@@ -100,7 +100,8 @@ public class Router implements IRouter {
                 // 客户端收到服务器应答，客户端发送的时候client为SIGNAL_NATIVE_CLIENT，服务器收到的时候将其设置为SIGNAL_SERVER
                 var removedAttachment = (SignalAttachment) SignalBridge.removeSignalAttachment(signalAttachment);
                 if (removedAttachment == null) {
-                    logger.error("client receives packet:[{}] and attachment:[{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment));
+                    logger.error("client receives packet:[{}] [{}] and attachment:[{}] [{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception."
+                            , packet.getClass().getSimpleName(), JsonUtils.object2String(packet), attachment.getClass(), JsonUtils.object2String(attachment));
                     return;
                 }
                 // 这里会让之前的CompletableFuture得到结果，从而像asyncAsk之类的回调到结果
