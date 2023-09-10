@@ -26,8 +26,6 @@ public enum AttachmentType {
      */
     SIGNAL_PACKET(SignalAttachment.class),
 
-    SIGNAL_ONLY_PACKET(SignalOnlyAttachment.class),
-
     /**
      * gateway attachment
      */

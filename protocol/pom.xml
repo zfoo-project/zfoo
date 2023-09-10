@@ -72,6 +72,7 @@
             </exclusions>
         </dependency>
 
+        <!-- 需要保持和spring-boot-starter-json里的jackson同样的版本-->
         <!-- json，bytecode generation to replace use of Reflection for field access and method calls(Jackson涡轮增压，字节码增强解析json) -->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>

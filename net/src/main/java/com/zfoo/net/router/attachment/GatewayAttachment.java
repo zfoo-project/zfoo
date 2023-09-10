@@ -49,7 +49,6 @@ public class GatewayAttachment {
      * CN:客户端发到网关的可能是一个带有同步或者异步的附加包，网关转发的时候需要把这个附加包给带上
      */
     private SignalAttachment signalAttachment;
-    private SignalOnlyAttachment signalOnlyAttachment;
 
 
     public GatewayAttachment() {
@@ -78,28 +77,6 @@ public class GatewayAttachment {
     public void wrapTaskExecutorHash(Object argument) {
         this.useTaskExecutorHashParam = true;
         this.taskExecutorHashParam = argument.hashCode();
-    }
-
-    public void wrapAttachment(Object attachment) {
-        if (attachment == null) {
-            return;
-        }
-        var attachmentClass = attachment.getClass();
-        if (attachmentClass == SignalOnlyAttachment.class) {
-            signalOnlyAttachment = (SignalOnlyAttachment) attachment;
-        } else if (attachmentClass == SignalAttachment.class) {
-            signalAttachment = (SignalAttachment) attachment;
-        }
-    }
-
-    public Object attachment() {
-        if (signalAttachment != null) {
-            return signalAttachment;
-        }
-        if (signalOnlyAttachment != null) {
-            return signalOnlyAttachment;
-        }
-        return null;
     }
 
     public long getSid() {

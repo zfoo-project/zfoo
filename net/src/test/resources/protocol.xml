@@ -5,7 +5,6 @@
 
     <module id="1" name="native">
         <protocol location="com.zfoo.net.router.attachment.SignalAttachment"/>
-        <protocol location="com.zfoo.net.router.attachment.SignalOnlyAttachment"/>
         <protocol location="com.zfoo.net.router.attachment.GatewayAttachment"/>
         <protocol location="com.zfoo.net.router.attachment.UdpAttachment"/>
         <protocol location="com.zfoo.net.router.attachment.HttpAttachment"/>

@@ -74,67 +74,69 @@ public class Router implements IRouter {
             return;
         }
 
-        // 发送者（客户端）同步和异步消息的接收，发送者通过signalId判断重复
-        if (attachment != null) {
-            if (attachment.getClass() == SignalAttachment.class) {
-                var signalAttachment = (SignalAttachment) attachment;
-
-                if (signalAttachment.isClient()) {
-                    // 服务器收到signalAttachment，不做任何处理
-                    signalAttachment.setClient(false);
-                } else {
-                    // 客户端收到服务器应答，客户端发送的时候isClient为true，服务器收到的时候将其设置为false
-                    var removedAttachment = (SignalAttachment) SignalBridge.removeSignalAttachment(signalAttachment);
-                    if (removedAttachment != null) {
-                        // 这里会让之前的CompletableFuture得到结果，从而像asyncAsk之类的回调到结果
-                        removedAttachment.getResponseFuture().complete(packet);
-                    } else {
-                        logger.error("client receives packet:[{}] and attachment:[{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment));
-                    }
-                    // 注意：这个return，这样子，asyncAsk的结果就返回了。
-                    return;
-                }
-            } else if (attachment.getClass() == GatewayAttachment.class) {
-                var gatewayAttachment = (GatewayAttachment) attachment;
-
-                // 如：在网关监听到GatewaySessionInactiveEvent后，这时告诉home时，这个client参数设置的true
-                // 注意：此时并没有return，这样子网关的消息才能发给home，在home进行处理LogoutRequest消息的处理
-                if (gatewayAttachment.isClient()) {
-                    gatewayAttachment.setClient(false);
-                } else {
-                    // 这里是：别的服务提供者提供授权给网关，比如：在玩家登录后，home服查到了玩家uid，然后发给Gateway服
-                    var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
-                    if (gatewaySession != null) {
-                        var signalAttachmentInGatewayAttachment = gatewayAttachment.getSignalAttachment();
-                        if (signalAttachmentInGatewayAttachment != null) {
-                            signalAttachmentInGatewayAttachment.setClient(false);
-                        }
-
-                        // 网关授权，授权完成直接返回
-                        // 注意：这个 AuthUidToGatewayCheck 是在home的LoginController中处理完登录后，把消息发给网关进行授权
-                        if (AuthUidToGatewayCheck.class == packet.getClass()) {
-                            var uid = ((AuthUidToGatewayCheck) packet).getUid();
-                            if (uid <= 0) {
-                                logger.error("错误的网关授权信息，uid必须大于0");
-                                return;
-                            }
-                            gatewaySession.setUid(uid);
-                            EventBus.post(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
-
-                            NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession));
-                            return;
-                        }
-                        send(gatewaySession, packet, gatewayAttachment.attachment());
-                    } else {
-                        logger.error("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
-                    }
-                    return;
-                }
-            }
+        if (attachment == null) {
+            // 正常发送消息的接收,把客户端的业务请求包装下到路由策略指定的线程进行业务处理
+            // 注意：像客户端以asyncAsk发送请求，在服务器处理完后返回结果，在请求方也是进入这个receive方法，但是attachment不为空，会提前return掉不会走到这
+            TaskBus.dispatch(new PacketReceiverTask(session, packet, null));
+            return;
         }
 
-        // 正常发送消息的接收,把客户端的业务请求包装下到路由策略指定的线程进行业务处理
-        // 注意：像客户端以asyncAsk发送请求，在服务器处理完后返回结果，在请求方也是进入这个receive方法，但是attachment不为空，会提前return掉不会走到这
+        // 发送者（客户端）同步和异步消息的接收，发送者通过signalId判断重复
+        if (attachment.getClass() == SignalAttachment.class) {
+            var signalAttachment = (SignalAttachment) attachment;
+
+            if (signalAttachment.isClient()) {
+                // 服务器收到signalAttachment，不做任何处理
+                signalAttachment.setClient(false);
+                TaskBus.dispatch(new PacketReceiverTask(session, packet, attachment));
+            } else {
+                // 客户端收到服务器应答，客户端发送的时候isClient为true，服务器收到的时候将其设置为false
+                var removedAttachment = (SignalAttachment) SignalBridge.removeSignalAttachment(signalAttachment);
+                if (removedAttachment == null) {
+                    logger.error("client receives packet:[{}] and attachment:[{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment));
+                    return;
+                }
+                // 这里会让之前的CompletableFuture得到结果，从而像asyncAsk之类的回调到结果
+                removedAttachment.getResponseFuture().complete(packet);
+            }
+            return;
+        }
+
+        if (attachment.getClass() == GatewayAttachment.class) {
+            var gatewayAttachment = (GatewayAttachment) attachment;
+
+            // 如：在网关监听到GatewaySessionInactiveEvent后，这时告诉home时，这个client参数设置的true
+            // 注意：此时并没有return，这样子网关的消息才能发给home，在home进行处理LogoutRequest消息的处理
+            if (gatewayAttachment.isClient()) {
+                gatewayAttachment.setClient(false);
+                TaskBus.dispatch(new PacketReceiverTask(session, packet, attachment));
+            } else {
+                // 这里是：别的服务提供者提供授权给网关，比如：在玩家登录后，home服查到了玩家uid，然后发给Gateway服
+                var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
+                if (gatewaySession == null) {
+                    logger.warn("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
+                    return;
+                }
+
+                // 网关授权，授权完成直接返回
+                // 注意：这个 AuthUidToGatewayCheck 是在home的LoginController中处理完登录后，把消息发给网关进行授权
+                if (AuthUidToGatewayCheck.class == packet.getClass()) {
+                    var uid = ((AuthUidToGatewayCheck) packet).getUid();
+                    if (uid <= 0) {
+                        logger.error("错误的网关授权信息，uid必须大于0");
+                        return;
+                    }
+                    gatewaySession.setUid(uid);
+                    EventBus.post(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
+
+                    NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession));
+                    return;
+                }
+                send(gatewaySession, packet, gatewayAttachment.getSignalAttachment());
+            }
+            return;
+        }
+
         TaskBus.dispatch(new PacketReceiverTask(session, packet, attachment));
     }
 
