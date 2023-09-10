@@ -13,7 +13,7 @@
 package com.zfoo.net.packet;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.router.attachment.SignalOnlyAttachment;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.route.PacketBus;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
@@ -71,12 +71,16 @@ public class PacketService implements IPacketService {
 
     public static final String NET_COMMON_MODULE = "common";
 
-    private final Predicate<IProtocolRegistration> netGenerateProtocolFilter = registration
-            -> ProtocolManager.moduleByModuleId(registration.module()).getName().matches(NET_COMMON_MODULE)
-            || registration.protocolConstructor().getDeclaringClass() == SignalOnlyAttachment.class
-            || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_REQUEST_SUFFIX)
-            || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_RESPONSE_SUFFIX)
-            || registration.protocolConstructor().getDeclaringClass().getSimpleName().endsWith(NET_NOTICE_SUFFIX);
+    private final Predicate<IProtocolRegistration> netGenerateProtocolFilter = it -> {
+        var clazz = it.protocolConstructor().getDeclaringClass();
+        var className = clazz.getSimpleName();
+        var module = ProtocolManager.moduleByModuleId(it.module());
+        return clazz == SignalAttachment.class
+                || className.endsWith(NET_REQUEST_SUFFIX)
+                || className.endsWith(NET_RESPONSE_SUFFIX)
+                || className.endsWith(NET_NOTICE_SUFFIX)
+                || module.getName().matches(NET_COMMON_MODULE);
+    };
 
     public PacketService() {
 

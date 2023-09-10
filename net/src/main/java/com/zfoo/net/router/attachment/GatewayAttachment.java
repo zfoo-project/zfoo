@@ -128,11 +128,4 @@ public class GatewayAttachment {
         this.signalAttachment = signalAttachment;
     }
 
-    public SignalOnlyAttachment getSignalOnlyAttachment() {
-        return signalOnlyAttachment;
-    }
-
-    public void setSignalOnlyAttachment(SignalOnlyAttachment signalOnlyAttachment) {
-        this.signalOnlyAttachment = signalOnlyAttachment;
-    }
 }
