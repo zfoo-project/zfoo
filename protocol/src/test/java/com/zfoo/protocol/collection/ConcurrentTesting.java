@@ -18,7 +18,9 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.BiConsumer;
 
 /**
  * @author godotg
@@ -65,9 +67,11 @@ public class ConcurrentTesting {
     }
 
     @Test
-    public void concurrentTest() throws InterruptedException {
+    public void concurrentPrimitiveTest() throws InterruptedException {
         var map = new ConcurrentHashMapLongObject<Integer>();
-        var num = 100_0000;
+        var num = 1_000_0000;
+        var startTime = System.currentTimeMillis();
+
         var countDownLatch = new CountDownLatch(EXECUTOR_SIZE);
         for (var i = 0; i < EXECUTOR_SIZE; i++) {
             new Thread(new Runnable() {
@@ -99,5 +103,110 @@ public class ConcurrentTesting {
         }
         countDownLatch2.await();
         Assert.assertTrue(map.isEmpty());
+
+        var countDownLatch3 = new CountDownLatch(EXECUTOR_SIZE);
+        for (var i = 0; i < EXECUTOR_SIZE; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int j = 0; j < num; j++) {
+                        map.put(j, j);
+                    }
+                    map.forEachPrimitive(it -> it.value());
+                    countDownLatch3.countDown();
+                }
+            }).start();
+        }
+        countDownLatch3.await();
+        Assert.assertEquals(map.size(), num);
+
+        var countDownLatch4 = new CountDownLatch(EXECUTOR_SIZE);
+        for (var i = 0; i < EXECUTOR_SIZE; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int j = 0; j < num; j++) {
+                        map.remove((long) j);
+                    }
+                    map.forEachPrimitive(it -> it.value());
+                    countDownLatch4.countDown();
+                }
+            }).start();
+        }
+        countDownLatch4.await();
+        Assert.assertTrue(map.isEmpty());
+        System.out.println(System.currentTimeMillis() - startTime);
+    }
+
+    @Test
+    public void concurrentTest() throws InterruptedException {
+        var map = new ConcurrentHashMap<Long, Integer>();
+        var num = 1_000_0000;
+        var startTime = System.currentTimeMillis();
+
+        var countDownLatch = new CountDownLatch(EXECUTOR_SIZE);
+        for (var i = 0; i < EXECUTOR_SIZE; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int j = 0; j < num; j++) {
+                        map.put((long) j, j);
+                    }
+                    map.forEach((key, value) -> {});
+                    countDownLatch.countDown();
+                }
+            }).start();
+        }
+        countDownLatch.await();
+        Assert.assertEquals(map.size(), num);
+
+        var countDownLatch2 = new CountDownLatch(EXECUTOR_SIZE);
+        for (var i = 0; i < EXECUTOR_SIZE; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int j = 0; j < num; j++) {
+                        map.remove((long) j);
+                    }
+                    map.forEach((key, value) -> {});
+                    countDownLatch2.countDown();
+                }
+            }).start();
+        }
+        countDownLatch2.await();
+        Assert.assertTrue(map.isEmpty());
+
+        var countDownLatch3 = new CountDownLatch(EXECUTOR_SIZE);
+        for (var i = 0; i < EXECUTOR_SIZE; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int j = 0; j < num; j++) {
+                        map.put((long) j, j);
+                    }
+                    map.forEach((key, value) -> {});
+                    countDownLatch3.countDown();
+                }
+            }).start();
+        }
+        countDownLatch3.await();
+        Assert.assertEquals(map.size(), num);
+
+        var countDownLatch4 = new CountDownLatch(EXECUTOR_SIZE);
+        for (var i = 0; i < EXECUTOR_SIZE; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int j = 0; j < num; j++) {
+                        map.remove((long) j);
+                    }
+                    map.forEach((key, value) -> {});
+                    countDownLatch4.countDown();
+                }
+            }).start();
+        }
+        countDownLatch4.await();
+        Assert.assertTrue(map.isEmpty());
+        System.out.println(System.currentTimeMillis() - startTime);
     }
 }
