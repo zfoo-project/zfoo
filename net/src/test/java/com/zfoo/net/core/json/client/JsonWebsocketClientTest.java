@@ -57,9 +57,9 @@ public class JsonWebsocketClientTest {
             ThreadUtils.sleep(1000);
             NetContext.getRouter().send(session, request);
             ThreadUtils.sleep(1000);
-            var response = NetContext.getRouter().syncAsk(session, request, JsonHelloResponse.class, session.getSid()).packet();
+            var response = NetContext.getRouter().syncAsk(session, request, JsonHelloResponse.class, null).packet();
             logger.info("sync json client receive [packet:{}] from server", JsonUtils.object2String(response));
-            NetContext.getRouter().asyncAsk(session, request, JsonHelloResponse.class, session.getSid())
+            NetContext.getRouter().asyncAsk(session, request, JsonHelloResponse.class, null)
                     .whenComplete(new Consumer<JsonHelloResponse>() {
                         @Override
                         public void accept(JsonHelloResponse jsonHelloResponse) {
