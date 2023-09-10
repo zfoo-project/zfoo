@@ -25,6 +25,7 @@ import com.zfoo.net.packet.common.Heartbeat;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
 import com.zfoo.net.router.attachment.GatewayAttachment;
+import com.zfoo.net.router.attachment.HttpAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
@@ -74,10 +75,11 @@ public class Router implements IRouter {
             return;
         }
 
+        var task = new PacketReceiverTask(session, packet, attachment);
         if (attachment == null) {
             // 正常发送消息的接收,把客户端的业务请求包装下到路由策略指定的线程进行业务处理
             // 注意：像客户端以asyncAsk发送请求，在服务器处理完后返回结果，在请求方也是进入这个receive方法，但是attachment不为空，会提前return掉不会走到这
-            TaskBus.dispatch(new PacketReceiverTask(session, packet, null));
+            TaskBus.dispatchBySession(task);
             return;
         }
 
@@ -85,12 +87,15 @@ public class Router implements IRouter {
         if (attachment.getClass() == SignalAttachment.class) {
             var signalAttachment = (SignalAttachment) attachment;
 
-            if (signalAttachment.isClient()) {
+            if (signalAttachment.getClient() == SignalAttachment.SIGNAL_OUTSIDE_CLIENT) {
+                // 服务器收到外部客户端的SIGNAL_OUTSIDE_CLIENT，不做任何处理
+                TaskBus.dispatchBySession(task);
+            } else if (signalAttachment.getClient() == SignalAttachment.SIGNAL_NATIVE_CLIENT) {
                 // 服务器收到signalAttachment，不做任何处理
-                signalAttachment.setClient(false);
-                TaskBus.dispatch(new PacketReceiverTask(session, packet, attachment));
+                signalAttachment.setClient(SignalAttachment.SIGNAL_SERVER);
+                TaskBus.dispatchByTaskExecutorHash(signalAttachment.getTaskExecutorHash(), task);
             } else {
-                // 客户端收到服务器应答，客户端发送的时候isClient为true，服务器收到的时候将其设置为false
+                // 客户端收到服务器应答，客户端发送的时候client为SIGNAL_NATIVE_CLIENT，服务器收到的时候将其设置为SIGNAL_SERVER
                 var removedAttachment = (SignalAttachment) SignalBridge.removeSignalAttachment(signalAttachment);
                 if (removedAttachment == null) {
                     logger.error("client receives packet:[{}] and attachment:[{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment));
@@ -109,7 +114,7 @@ public class Router implements IRouter {
             // 注意：此时并没有return，这样子网关的消息才能发给home，在home进行处理LogoutRequest消息的处理
             if (gatewayAttachment.isClient()) {
                 gatewayAttachment.setClient(false);
-                TaskBus.dispatch(new PacketReceiverTask(session, packet, attachment));
+                TaskBus.dispatchByTaskExecutorHash(gatewayAttachment.getTaskExecutorHash(), task);
             } else {
                 // 这里是：别的服务提供者提供授权给网关，比如：在玩家登录后，home服查到了玩家uid，然后发给Gateway服
                 var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
@@ -137,7 +142,13 @@ public class Router implements IRouter {
             return;
         }
 
-        TaskBus.dispatch(new PacketReceiverTask(session, packet, attachment));
+        if (attachment.getClass() == HttpAttachment.class) {
+            var httpAttachment = (HttpAttachment) attachment;
+            TaskBus.dispatchByTaskExecutorHash(httpAttachment.getTaskExecutorHash(), task);
+            return;
+        }
+
+        TaskBus.dispatchBySession(task);
     }
 
     @Override

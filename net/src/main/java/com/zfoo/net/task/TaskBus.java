@@ -18,7 +18,6 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.attachment.HttpAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
-import com.zfoo.net.session.Session;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.RandomUtils;
@@ -115,16 +114,8 @@ public final class TaskBus {
      * GatewayAttachment：默认是taskExecutorHash等于用户活玩家的uid，也可以通过IGatewayLoadBalancer接口指定
      * SignalAttachment：taskExecutorHash通过IRouter和IConsumer的argument参数指定
      */
-    public static void dispatch(PacketReceiverTask task) {
-        var attachment = task.getAttachment();
-        if (attachment == null) {
-            dispatchBySession(task.getSession(), task);
-        } else {
-            dispatchByAttachment(attachment, task);
-        }
-    }
-
-    private static void dispatchBySession(Session session, PacketReceiverTask task) {
+    public static void dispatchBySession(PacketReceiverTask task) {
+        var session = task.getSession();
         var uid = session.getUid();
         if (uid > 0) {
             execute((int) uid, task);
@@ -133,17 +124,8 @@ public final class TaskBus {
         }
     }
 
-    private static void dispatchByAttachment(Object attachment, PacketReceiverTask task) {
-        var attachmentClass = attachment.getClass();
-        if (attachmentClass == SignalAttachment.class) {
-            execute(((SignalAttachment) attachment).taskExecutorHash(), task);
-        } else if (attachmentClass == GatewayAttachment.class) {
-            execute(((GatewayAttachment) attachment).taskExecutorHash(), task);
-        } else if (attachmentClass == HttpAttachment.class) {
-            execute(((HttpAttachment) attachment).taskExecutorHash(), task);
-        } else {
-            dispatchBySession(task.getSession(), task);
-        }
+    public static void dispatchByTaskExecutorHash(int taskExecutorHash, PacketReceiverTask task) {
+        execute(taskExecutorHash, task);
     }
 
     public static int calTaskExecutorHash(int taskExecutorHash) {

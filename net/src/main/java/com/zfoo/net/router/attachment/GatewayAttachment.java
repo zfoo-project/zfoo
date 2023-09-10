@@ -35,8 +35,11 @@ public class GatewayAttachment {
      */
     private long uid;
 
-    private boolean useTaskExecutorHashParam;
-    private int taskExecutorHashParam;
+    /**
+     * EN:Used to determine which thread the message is processed on
+     * CN:用来确定这条消息在哪一个线程处理
+     */
+    private int taskExecutorHash;
 
     /**
      * true for the client, false for the server
@@ -71,13 +74,9 @@ public class GatewayAttachment {
      * CN:用来确定这条消息在哪一个线程处理
      */
     public int taskExecutorHash() {
-        return useTaskExecutorHashParam ? taskExecutorHashParam : (int) uid;
+        return taskExecutorHash == 0 ? (int) uid : taskExecutorHash;
     }
 
-    public void wrapTaskExecutorHash(Object argument) {
-        this.useTaskExecutorHashParam = true;
-        this.taskExecutorHashParam = argument.hashCode();
-    }
 
     public long getSid() {
         return sid;
@@ -95,20 +94,12 @@ public class GatewayAttachment {
         this.uid = uid;
     }
 
-    public boolean isUseTaskExecutorHashParam() {
-        return useTaskExecutorHashParam;
+    public int getTaskExecutorHash() {
+        return taskExecutorHash;
     }
 
-    public void setUseTaskExecutorHashParam(boolean useTaskExecutorHashParam) {
-        this.useTaskExecutorHashParam = useTaskExecutorHashParam;
-    }
-
-    public int getTaskExecutorHashParam() {
-        return taskExecutorHashParam;
-    }
-
-    public void setTaskExecutorHashParam(int taskExecutorHashParam) {
-        this.taskExecutorHashParam = taskExecutorHashParam;
+    public void setTaskExecutorHash(int taskExecutorHash) {
+        this.taskExecutorHash = taskExecutorHash;
     }
 
     public boolean isClient() {

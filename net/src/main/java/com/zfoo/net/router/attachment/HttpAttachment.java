@@ -25,9 +25,7 @@ public class HttpAttachment {
 
     private long uid;
 
-    private boolean useTaskExecutorHashParam;
-
-    private int taskExecutorHashParam;
+    private int taskExecutorHash;
 
     private transient FullHttpRequest fullHttpRequest;
 
@@ -46,12 +44,7 @@ public class HttpAttachment {
      * CN:用来确定这条消息在哪一个线程处理
      */
     public int taskExecutorHash() {
-        return useTaskExecutorHashParam ? taskExecutorHashParam : (int) uid;
-    }
-
-    public void wrapTaskExecutorHash(Object argument) {
-        this.useTaskExecutorHashParam = true;
-        this.taskExecutorHashParam = argument.hashCode();
+        return taskExecutorHash == 0 ? (int) uid : taskExecutorHash;
     }
 
     public long getUid() {
@@ -62,20 +55,12 @@ public class HttpAttachment {
         this.uid = uid;
     }
 
-    public boolean isUseTaskExecutorHashParam() {
-        return useTaskExecutorHashParam;
+    public int getTaskExecutorHash() {
+        return taskExecutorHash;
     }
 
-    public void setUseTaskExecutorHashParam(boolean useTaskExecutorHashParam) {
-        this.useTaskExecutorHashParam = useTaskExecutorHashParam;
-    }
-
-    public int getTaskExecutorHashParam() {
-        return taskExecutorHashParam;
-    }
-
-    public void setTaskExecutorHashParam(int taskExecutorHashParam) {
-        this.taskExecutorHashParam = taskExecutorHashParam;
+    public void setTaskExecutorHash(int taskExecutorHash) {
+        this.taskExecutorHash = taskExecutorHash;
     }
 
     public FullHttpRequest getFullHttpRequest() {

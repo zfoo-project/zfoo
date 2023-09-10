@@ -31,6 +31,12 @@ public class SignalAttachment {
      * CN:允许负数的signalId
      */
     public static final AtomicInteger ATOMIC_ID = new AtomicInteger(0);
+    /**
+     * 0 for the server, 1 for the sync or async native client, 2 for the outside client such as browser, mobile
+     */
+    public static final byte SIGNAL_SERVER = 0;
+    public static final byte SIGNAL_NATIVE_CLIENT = 1;
+    public static final byte SIGNAL_OUTSIDE_CLIENT = 2;
 
     /**
      * EN:Unique identification of a packet, unique representation of an attachment, hashcode() and equals() equals signalId value
@@ -45,12 +51,12 @@ public class SignalAttachment {
     private int taskExecutorHash = -1;
 
     /**
-     * true for the client, false for the server
+     * 0 for the server, 1 for the sync or async native client, 2 for the outside client such as browser, mobile
      */
-    private boolean client = true;
+    private byte client = SIGNAL_NATIVE_CLIENT;
 
     /**
-     * The time the client sent it
+     * The timestamp the client sent it
      */
     private long timestamp = TimeUtils.now();
 
@@ -62,18 +68,6 @@ public class SignalAttachment {
     private transient CompletableFuture<Object> responseFuture = new CompletableFuture<>();
 
     public SignalAttachment() {
-    }
-
-    public AttachmentType packetType() {
-        return AttachmentType.SIGNAL_PACKET;
-    }
-
-    /**
-     * EN:Used to determine which thread the message is processed on
-     * CN:用来确定这条消息在哪一个线程处理
-     */
-    public int taskExecutorHash() {
-        return taskExecutorHash;
     }
 
     public long getTimestamp() {
@@ -118,14 +112,13 @@ public class SignalAttachment {
         this.taskExecutorHash = taskExecutorHash;
     }
 
-    public boolean isClient() {
+    public byte getClient() {
         return client;
     }
 
-    public void setClient(boolean client) {
+    public void setClient(byte client) {
         this.client = client;
     }
-
 
     public CompletableFuture<Object> getResponseFuture() {
         return responseFuture;
