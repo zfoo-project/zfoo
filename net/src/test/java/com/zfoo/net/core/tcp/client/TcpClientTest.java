@@ -49,9 +49,13 @@ public class TcpClientTest {
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(1000);
             NetContext.getRouter().send(session, request);
+
+
             ThreadUtils.sleep(1000);
             var response = NetContext.getRouter().syncAsk(session, request, TcpHelloResponse.class, null).packet();
             logger.info("sync client receive [packet:{}] from server", JsonUtils.object2String(response));
+
+
             NetContext.getRouter().asyncAsk(session, request, TcpHelloResponse.class, null)
                     .whenComplete(new Consumer<TcpHelloResponse>() {
                         @Override

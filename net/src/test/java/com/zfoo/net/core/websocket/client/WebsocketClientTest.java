@@ -17,11 +17,17 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.core.websocket.WebsocketClient;
 import com.zfoo.net.packet.websocket.WebsocketHelloRequest;
+import com.zfoo.net.packet.websocket.WebsocketHelloResponse;
+import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolConfig;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.function.Consumer;
 
 /**
  * @author godotg
@@ -30,8 +36,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 @Ignore
 public class WebsocketClientTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketClientTest.class);
+
     @Test
-    public void startClient() {
+    public void startClient() throws Exception {
         var context = new ClassPathXmlApplicationContext("config.xml");
 
         var webSocketClientProtocolConfig = WebSocketClientProtocolConfig.newBuilder()
@@ -45,8 +53,22 @@ public class WebsocketClientTest {
         request.setMessage("Hello, this is the websocket client!");
 
         for (int i = 0; i < 1000; i++) {
-            ThreadUtils.sleep(2000);
+            ThreadUtils.sleep(1000);
             NetContext.getRouter().send(session, request);
+
+
+            ThreadUtils.sleep(1000);
+            var response = NetContext.getRouter().syncAsk(session, request, WebsocketHelloResponse.class, null).packet();
+            logger.info("sync client receive [packet:{}] from server", JsonUtils.object2String(response));
+
+
+            NetContext.getRouter().asyncAsk(session, request, WebsocketHelloResponse.class, null)
+                    .whenComplete(new Consumer<WebsocketHelloResponse>() {
+                        @Override
+                        public void accept(WebsocketHelloResponse jsonHelloResponse) {
+                            logger.info("async client receive [packet:{}] from server", JsonUtils.object2String(jsonHelloResponse));
+                        }
+                    });
         }
 
         ThreadUtils.sleep(Long.MAX_VALUE);
