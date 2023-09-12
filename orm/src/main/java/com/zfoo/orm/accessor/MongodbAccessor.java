@@ -30,7 +30,6 @@ import static com.mongodb.client.model.Filters.in;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class MongodbAccessor implements IAccessor {
 

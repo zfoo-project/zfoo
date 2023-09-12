@@ -21,7 +21,6 @@ import java.util.Map;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class StorageLong<K, V> extends StorageObject<K, V> {
 

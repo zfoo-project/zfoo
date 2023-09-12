@@ -28,7 +28,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * 必须要用复制集群才能使用事务
  *
  * @author godotg
- * @version 3.0
  */
 @Ignore
 public class TransactionTest {

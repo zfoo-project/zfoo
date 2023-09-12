@@ -22,7 +22,6 @@ import java.util.Map;
  * 支持读取配置文件的类型后缀
  *
  * @author godotg
- * @version 3.0
  */
 public enum StorageEnum {
 

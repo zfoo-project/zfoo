@@ -20,7 +20,6 @@ import java.lang.annotation.*;
  * Mongodb不支持中文分词
  *
  * @author godotg
- * @version 3.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

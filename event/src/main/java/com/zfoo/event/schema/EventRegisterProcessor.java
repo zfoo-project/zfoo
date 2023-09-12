@@ -34,7 +34,6 @@ import java.lang.reflect.Modifier;
  * 断点发现 在AbstractAutowireCapableBeanFactory或调用getBeanPostProcessors，这样子每一个Bean创建后都会走postProcessAfterInitialization这个方法
  *
  * @author godotg
- * @version 3.0
  */
 public class EventRegisterProcessor implements BeanPostProcessor {
 

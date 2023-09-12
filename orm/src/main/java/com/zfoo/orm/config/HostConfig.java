@@ -16,7 +16,6 @@ import java.util.Map;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class HostConfig {
 

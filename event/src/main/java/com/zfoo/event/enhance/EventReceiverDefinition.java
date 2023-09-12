@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
  * 动态代理被EventReceiver注解标注的方法，为了避免反射最终会用javassist字节码增强的方法去代理EventReceiverDefinition
  *
  * @author godotg
- * @version 3.0
  */
 public class EventReceiverDefinition implements IEventReceiver {
 

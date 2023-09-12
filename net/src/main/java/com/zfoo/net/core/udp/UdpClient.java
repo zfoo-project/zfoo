@@ -30,7 +30,6 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class UdpClient extends AbstractClient<Channel> {
 

@@ -5,7 +5,6 @@ import com.zfoo.hotswap.service.HotSwapServiceMBean;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class HotSwapContext {
 

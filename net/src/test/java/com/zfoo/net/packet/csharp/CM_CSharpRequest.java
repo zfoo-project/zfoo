@@ -21,7 +21,6 @@ import java.util.Set;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 1165)
 public class CM_CSharpRequest {

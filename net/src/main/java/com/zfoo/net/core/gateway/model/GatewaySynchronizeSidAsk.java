@@ -21,7 +21,6 @@ import java.util.Map;
  * 同步网关的session信息到push
  *
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 24)
 public class GatewaySynchronizeSidAsk {

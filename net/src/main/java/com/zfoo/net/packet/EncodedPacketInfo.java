@@ -18,7 +18,6 @@ import org.springframework.lang.Nullable;
  * 被解码后的Packet的信息
  *
  * @author godotg
- * @version 3.0
  */
 public class EncodedPacketInfo {
 

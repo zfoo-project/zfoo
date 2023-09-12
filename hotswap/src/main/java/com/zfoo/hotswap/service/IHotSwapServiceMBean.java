@@ -4,7 +4,6 @@ import javax.management.MXBean;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @MXBean
 public interface IHotSwapServiceMBean {

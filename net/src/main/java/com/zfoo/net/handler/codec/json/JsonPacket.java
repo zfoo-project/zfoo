@@ -15,7 +15,6 @@ package com.zfoo.net.handler.codec.json;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class JsonPacket {
 

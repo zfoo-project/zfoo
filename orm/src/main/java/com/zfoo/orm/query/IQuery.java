@@ -19,7 +19,6 @@ import com.zfoo.orm.model.IEntity;
  * 对数据库进行（查找）的相关方法
  *
  * @author godotg
- * @version 3.0
  */
 public interface IQuery {
 

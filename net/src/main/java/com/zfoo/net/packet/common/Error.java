@@ -22,7 +22,6 @@ import org.slf4j.helpers.MessageFormatter;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @ProtobufClass
 @Protocol(id = 101)

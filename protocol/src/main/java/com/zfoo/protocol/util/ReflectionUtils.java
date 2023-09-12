@@ -34,7 +34,6 @@ import java.util.function.Predicate;
  * 反射工具类
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class ReflectionUtils {
 

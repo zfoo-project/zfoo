@@ -26,7 +26,6 @@ import java.lang.reflect.Field;
  * 对应于ObjectProtocolSerializer
  *
  * @author godotg
- * @version 3.0
  */
 public class EnhanceObjectProtocolSerializer implements IEnhanceSerializer {
 

@@ -17,7 +17,6 @@ import com.zfoo.net.session.Session;
 
 /**
  * @author meiw
- * @version 3.0
  */
 public class ServerExceptionEvent implements IEvent {
 

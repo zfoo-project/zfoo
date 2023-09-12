@@ -16,7 +16,6 @@ import org.springframework.core.io.Resource;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class StorageDefinition {
 

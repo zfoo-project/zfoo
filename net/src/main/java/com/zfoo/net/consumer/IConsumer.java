@@ -21,7 +21,6 @@ import org.springframework.lang.Nullable;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public interface IConsumer {
 

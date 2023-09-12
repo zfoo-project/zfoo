@@ -23,7 +23,6 @@ import io.netty.buffer.ByteBuf;
  * 只要是protocol都是使用FieldSerializer
  *
  * @author godotg
- * @version 3.0
  */
 public class ObjectProtocolSerializer implements ISerializer {
 

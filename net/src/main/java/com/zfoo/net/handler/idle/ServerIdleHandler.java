@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @ChannelHandler.Sharable
 public class ServerIdleHandler extends ChannelDuplexHandler {

@@ -23,7 +23,6 @@ import java.util.TreeMap;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class TreeMapTest {
 

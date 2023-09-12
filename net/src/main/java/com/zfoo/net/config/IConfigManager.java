@@ -17,7 +17,6 @@ import com.zfoo.net.consumer.registry.IRegistry;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public interface IConfigManager {
 

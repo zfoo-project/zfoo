@@ -20,7 +20,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class ApplicationTest {
 

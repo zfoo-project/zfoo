@@ -34,7 +34,6 @@ import java.util.List;
  * header = body(bytes.length) + protocolId.length(2byte)
  *
  * @author godotg
- * @version 3.0
  */
 public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
 

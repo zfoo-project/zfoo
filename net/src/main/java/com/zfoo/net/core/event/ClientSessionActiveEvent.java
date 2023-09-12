@@ -17,7 +17,6 @@ import com.zfoo.net.session.Session;
 
 /**
  * @author tingyanshen
- * @version 3.0
  */
 public class ClientSessionActiveEvent implements IEvent {
 

@@ -41,7 +41,6 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class GenerateGoUtils {
 

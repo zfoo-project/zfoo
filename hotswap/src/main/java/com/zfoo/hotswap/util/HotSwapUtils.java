@@ -18,7 +18,6 @@ import java.lang.instrument.ClassDefinition;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class HotSwapUtils {
 

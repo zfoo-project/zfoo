@@ -19,7 +19,6 @@ import java.lang.annotation.*;
  * Receive annotations for events (observers).
  *
  * @author godotg
- * @version 3.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

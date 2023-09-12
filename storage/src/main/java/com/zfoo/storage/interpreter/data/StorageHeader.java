@@ -13,7 +13,6 @@ package com.zfoo.storage.interpreter.data;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class StorageHeader {
 

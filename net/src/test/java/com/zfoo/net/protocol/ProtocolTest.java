@@ -29,7 +29,6 @@ import java.util.Set;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class ProtocolTest {
 

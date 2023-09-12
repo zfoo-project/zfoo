@@ -24,7 +24,6 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Ignore
 public class SignalBridgeTest {

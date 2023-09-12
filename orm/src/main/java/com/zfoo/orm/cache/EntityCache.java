@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> implements IEntityCache<PK, E> {
 

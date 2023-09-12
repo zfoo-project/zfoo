@@ -21,7 +21,6 @@ import java.lang.annotation.*;
  * CN: 索引的名称使用字段属性的名称，用HaspMap实现
  *
  * @author godotg
- * @version 3.0
  */
 
 @Documented

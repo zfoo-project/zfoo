@@ -52,8 +52,6 @@
 
 #######################################################################################################################
 # @author godotg
-# @version 3.0
-
 
 if [ $# -lt 1 ]; then
     echo "deploy.sh script use error, command parameter is illegal"

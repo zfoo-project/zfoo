@@ -24,7 +24,6 @@ import java.lang.reflect.Modifier;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class EnhanceUtils {
 

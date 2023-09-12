@@ -1,5 +1,4 @@
 // @author godotg
-// @version 3.0
 const ObjectB = function(flag) {
     this.flag = flag; // boolean
 };

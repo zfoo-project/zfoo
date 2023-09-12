@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 0)
 @JsonIgnoreProperties("responseFuture")

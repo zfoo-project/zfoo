@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
  * 网络相关工具
  *
  * @author godotg
- * @version 3.0
  */
 public class NetUtils {
 

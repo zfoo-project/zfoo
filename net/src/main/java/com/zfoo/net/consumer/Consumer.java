@@ -45,7 +45,6 @@ import java.util.concurrent.TimeoutException;
  * 在clientSession中选择一个可用的session，最终还是调用的IRouter中的方法
  *
  * @author godotg
- * @version 3.0
  */
 public class Consumer implements IConsumer {
 

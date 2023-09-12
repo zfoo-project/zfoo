@@ -22,7 +22,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class RandomUtils {
 
@@ -404,10 +403,6 @@ public abstract class RandomUtils {
         return baseString.charAt(getRandom().nextInt(baseString.length()));
     }
 
-    /**
-     * @author godotg
-     * @version 3.0
-     */
     public static class RandomSelector<T> {
 
         private int cursor = 0;

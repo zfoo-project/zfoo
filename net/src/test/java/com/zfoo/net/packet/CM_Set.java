@@ -22,7 +22,6 @@ import java.util.Set;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 1121, enhance = false)
 public class CM_Set {

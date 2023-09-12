@@ -37,7 +37,6 @@ import java.util.Map;
  * 实现类，类名必须为接口sufixMBean的前缀。也就是Hello。如果不按这个命名注册MBean就会有问题。
  *
  * @author godotg
- * @version 3.0
  */
 
 @MXBean

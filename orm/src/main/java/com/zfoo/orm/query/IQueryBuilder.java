@@ -30,7 +30,6 @@ import java.util.List;
  * [n] in	（不在）IN 查询
  *
  * @author sinprog
- * @version 3.0
  */
 public interface IQueryBuilder<E extends IEntity> {
 

@@ -22,7 +22,6 @@ import java.util.List;
  * 对数据库进行（增，删，改）的相关方法
  *
  * @author godotg
- * @version 3.0
  */
 public interface IAccessor {
 

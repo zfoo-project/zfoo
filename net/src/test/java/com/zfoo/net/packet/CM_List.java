@@ -21,7 +21,6 @@ import java.util.Objects;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 1118, enhance = false)
 public class CM_List {

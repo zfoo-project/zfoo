@@ -24,7 +24,6 @@ import java.util.Map;
  * deemed invalid, an {@link IllegalArgumentException} is thrown (typically).
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class AssertionUtils {
 

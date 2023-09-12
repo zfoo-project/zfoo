@@ -60,7 +60,6 @@ import java.util.stream.Collectors;
  * 服务注册，服务发现
  *
  * @author godotg
- * @version 3.0
  */
 public class ZookeeperRegistry implements IRegistry {
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperRegistry.class);

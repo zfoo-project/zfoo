@@ -20,7 +20,6 @@ import java.lang.reflect.Method;
  * 动态代理被Scheduler注解标注的方法，为了避免反射最终会用javassist字节码增强的方法去代理ReflectScheduler
  *
  * @author godotg
- * @version 3.0
  */
 public class ReflectScheduler implements IScheduler {
 

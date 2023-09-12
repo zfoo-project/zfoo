@@ -17,7 +17,6 @@ import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 5000)
 public class GatewayToProviderRequest {

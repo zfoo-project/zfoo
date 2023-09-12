@@ -16,7 +16,6 @@ import com.zfoo.protocol.util.StringUtils;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class AssertException extends RuntimeException {
 

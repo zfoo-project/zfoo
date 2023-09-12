@@ -14,7 +14,6 @@ package com.zfoo.orm.config;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class CacheStrategy {
 

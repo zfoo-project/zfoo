@@ -17,7 +17,6 @@ import com.zfoo.event.model.IEvent;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public interface IEventReceiver {
     Bus bus();

@@ -22,7 +22,6 @@ import java.io.InputStream;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class JsonReader {
 

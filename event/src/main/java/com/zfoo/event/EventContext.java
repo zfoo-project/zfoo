@@ -30,7 +30,6 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class EventContext implements ApplicationListener<ApplicationContextEvent>, Ordered {
 

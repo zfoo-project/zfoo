@@ -15,7 +15,6 @@ package com.zfoo.event.anno;
  * event bus thread type
  *
  * @author godotg
- * @version 3.0
  */
 public enum Bus {
 

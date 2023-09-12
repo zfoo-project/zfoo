@@ -27,7 +27,6 @@ import java.util.jar.JarFile;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class ClassUtils {
 

@@ -20,7 +20,6 @@ import java.util.Objects;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class HashSetLong extends AbstractSet<Long> {
 

@@ -19,7 +19,6 @@ import java.util.Objects;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 2071)
 public class WebSocketObjectA {

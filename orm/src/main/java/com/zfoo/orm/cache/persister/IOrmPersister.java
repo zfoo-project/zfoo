@@ -15,7 +15,6 @@ package com.zfoo.orm.cache.persister;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public interface IOrmPersister {
 

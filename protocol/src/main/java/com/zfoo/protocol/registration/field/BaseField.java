@@ -20,7 +20,6 @@ import com.zfoo.protocol.serializer.reflect.ISerializer;
  * 描述boolean，byte，short，int，long，float，double，char，String等基本序列化器
  *
  * @author godotg
- * @version 3.0
  */
 public class BaseField implements IFieldRegistration {
 

@@ -22,7 +22,6 @@ import java.util.Date;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class StringToDateConverter implements Converter<String, Date> {
 

@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class ThreadUtils {
 

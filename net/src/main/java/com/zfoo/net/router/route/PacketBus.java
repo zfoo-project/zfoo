@@ -40,7 +40,6 @@ import java.lang.reflect.Modifier;
  * CN:包的接收路线，服务器收到packet然后调用对应的Receiver
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class PacketBus {
 

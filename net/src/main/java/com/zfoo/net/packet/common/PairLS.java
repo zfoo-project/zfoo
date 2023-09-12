@@ -21,7 +21,6 @@ import com.zfoo.protocol.anno.Protocol;
  * Long + String
  *
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 113)
 public class PairLS {

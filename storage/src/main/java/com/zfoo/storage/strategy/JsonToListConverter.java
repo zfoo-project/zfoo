@@ -23,7 +23,6 @@ import java.util.Set;
 
 /**
  * @author liqi
- * @version 3.0
  */
 public class JsonToListConverter implements ConditionalGenericConverter {
 

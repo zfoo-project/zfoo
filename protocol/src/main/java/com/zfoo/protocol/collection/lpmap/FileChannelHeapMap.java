@@ -19,7 +19,6 @@ import java.util.function.BiConsumer;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class FileChannelHeapMap<V> implements LpMap<V>, Closeable {
 

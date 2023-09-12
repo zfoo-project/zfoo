@@ -16,7 +16,6 @@ import com.zfoo.protocol.util.RandomUtils;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public interface IEvent {
 

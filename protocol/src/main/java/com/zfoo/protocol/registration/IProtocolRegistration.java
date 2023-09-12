@@ -19,7 +19,6 @@ import java.lang.reflect.Constructor;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public interface IProtocolRegistration {
 

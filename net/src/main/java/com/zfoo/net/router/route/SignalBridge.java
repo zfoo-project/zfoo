@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * CN:同步或异步的调用控制器，同步和异步调用的信号沟通桥梁
  *
  * @author godotg
- * @version 3.0
  */
 public class SignalBridge {
 

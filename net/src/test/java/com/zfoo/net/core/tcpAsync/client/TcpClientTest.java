@@ -28,7 +28,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Ignore
 public class TcpClientTest {

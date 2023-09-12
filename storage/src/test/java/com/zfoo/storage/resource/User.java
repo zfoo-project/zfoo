@@ -15,7 +15,6 @@ package com.zfoo.storage.resource;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class User {
 

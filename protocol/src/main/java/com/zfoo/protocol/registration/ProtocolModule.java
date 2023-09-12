@@ -19,7 +19,6 @@ import com.zfoo.protocol.util.StringUtils;
  * 模块id和模块名的封装
  *
  * @author godotg
- * @version 3.0
  */
 public class ProtocolModule {
 

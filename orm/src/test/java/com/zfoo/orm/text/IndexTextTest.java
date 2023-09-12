@@ -26,7 +26,6 @@ import java.util.function.Consumer;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Ignore
 public class IndexTextTest {

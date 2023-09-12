@@ -32,7 +32,6 @@ import java.util.Set;
  * “可变长字节码算法”的压缩数据的算法，压缩数据和减少磁盘IO。google的ProtocolBuf和Facebook的thrift底层的通信协议都是由这个算法实现
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class ByteBufUtils {
 

@@ -35,7 +35,6 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class WebsocketSslClient extends AbstractClient<SocketChannel> {
 

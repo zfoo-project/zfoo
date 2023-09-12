@@ -33,7 +33,6 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * 通过argument计算一致性hash
  *
  * @author godotg
- * @version 3.0
  */
 public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBalancer {
 

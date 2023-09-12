@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Ignore
 public class ConcurrentFileChannelMapTesting {

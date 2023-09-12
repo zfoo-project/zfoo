@@ -20,7 +20,6 @@ import java.lang.reflect.Type;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class SetField implements IFieldRegistration {
 

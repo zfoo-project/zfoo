@@ -23,7 +23,6 @@ import static com.zfoo.protocol.collection.HashMapIntInt.*;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class HashMapIntLong implements Map<Integer, Long> {
 

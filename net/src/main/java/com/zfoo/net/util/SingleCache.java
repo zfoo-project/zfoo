@@ -24,7 +24,6 @@ import java.util.function.Supplier;
  * 单值缓存，会隔一段时间在后台刷新一下缓存
  *
  * @author godotg
- * @version 3.0
  */
 public class SingleCache<V> {
 

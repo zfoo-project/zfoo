@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Import;
  * and when each bean is injected into the IOC container, it will pass through the EventRegisterProcessor.
  *
  * @author godotg
- * @version 3.0
  */
 @Configuration(proxyBeanMethods = false)
 @Import({EventRegisterProcessor.class})

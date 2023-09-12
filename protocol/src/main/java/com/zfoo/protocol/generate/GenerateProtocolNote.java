@@ -32,7 +32,6 @@ import java.util.Map;
  * CN: 生成协议的时候，协议的文档注释和字段注释会使用这个类
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class GenerateProtocolNote {
 

@@ -23,7 +23,6 @@ import java.util.Date;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @EntityCache
 public class MailEntity implements IEntity<String> {

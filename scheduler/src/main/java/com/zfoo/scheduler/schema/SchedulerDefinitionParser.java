@@ -32,7 +32,6 @@ import org.w3c.dom.Element;
  * 因此这些实现BeanDefinitionParser接口的parse方法是都不会执行的。
  *
  * @author godotg
- * @version 3.0
  */
 public class SchedulerDefinitionParser implements BeanDefinitionParser {
 

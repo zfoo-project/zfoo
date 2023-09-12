@@ -17,7 +17,6 @@ import com.zfoo.protocol.exception.RunException;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class NetTimeOutException extends RunException {
 

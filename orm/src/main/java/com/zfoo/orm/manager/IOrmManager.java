@@ -23,7 +23,6 @@ import java.util.Collection;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public interface IOrmManager {
 

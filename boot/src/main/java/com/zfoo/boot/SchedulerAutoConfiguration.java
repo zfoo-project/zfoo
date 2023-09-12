@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Configuration(proxyBeanMethods = false)
 public class SchedulerAutoConfiguration {

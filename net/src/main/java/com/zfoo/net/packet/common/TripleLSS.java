@@ -21,7 +21,6 @@ import com.zfoo.protocol.anno.Protocol;
  * Long + String + String
  *
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 116)
 public class TripleLSS {

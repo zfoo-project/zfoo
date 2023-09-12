@@ -20,7 +20,6 @@ import java.lang.annotation.*;
  * time task scheduling based on cron expression
  *
  * @author godotg
- * @version 3.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

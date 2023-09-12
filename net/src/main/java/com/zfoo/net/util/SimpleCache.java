@@ -39,7 +39,6 @@ import java.util.function.Function;
  * 批量查找通过batchLoadCallback方法查找，当查找的key不存在的时候，调用defaultValueBuilder生成一个默认值放入缓存。
  *
  * @author godotg
- * @version 3.0
  */
 public class SimpleCache<K, V> {
 

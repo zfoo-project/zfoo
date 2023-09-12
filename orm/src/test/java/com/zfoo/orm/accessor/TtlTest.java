@@ -23,7 +23,6 @@ import java.util.Date;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Ignore
 public class TtlTest {

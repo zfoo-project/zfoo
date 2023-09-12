@@ -19,7 +19,6 @@ import com.zfoo.protocol.anno.Protocol;
  * 网关登录成功过后，将uid授权给网关的返回
  *
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 21)
 public class AuthUidToGatewayConfirm {

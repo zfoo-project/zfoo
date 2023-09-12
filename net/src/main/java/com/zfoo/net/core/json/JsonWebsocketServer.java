@@ -26,7 +26,6 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class JsonWebsocketServer extends AbstractServer<SocketChannel> {
 

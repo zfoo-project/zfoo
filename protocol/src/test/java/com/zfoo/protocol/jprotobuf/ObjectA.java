@@ -23,7 +23,6 @@ import java.util.Map;
  * 包括了各种复杂的结构，对象，map
  *
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 102)
 public class ObjectA {

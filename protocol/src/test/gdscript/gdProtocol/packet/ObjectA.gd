@@ -1,5 +1,4 @@
 # @author godotg
-# @version 3.0
 
 var a # int
 var m # java.util.Map<java.lang.Integer, java.lang.String>

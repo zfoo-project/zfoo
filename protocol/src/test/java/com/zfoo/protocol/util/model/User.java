@@ -18,7 +18,6 @@ import java.util.Map;
 
 /**
  * @author godotg
- * @version 3.0
  */ //@JsonIgnoreProperties({"name", "age"})//可以将它看做是@JsonIgnore的批量操作
 public class User {
     private String id;

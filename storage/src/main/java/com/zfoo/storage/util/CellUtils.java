@@ -21,7 +21,6 @@ import org.apache.poi.ss.usermodel.FormulaError;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class CellUtils {
 
