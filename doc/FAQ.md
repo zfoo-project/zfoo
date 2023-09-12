@@ -66,7 +66,7 @@ SignalAttachment的signalId就是用于RPC的同步和异步的信号，通过�
 
 #### zfoo的RPC协议格式为什么没有dubbo复杂
 
-- duboo没有自己实现的比较好的协议所以要支持其它协议，zfoo有自己实现的协议已经最快，只需要专注自己的协议和protobuf，兼容就比较简单
+- duboo没有自己实现的比较好的协议所以要支持其它协议，zfoo有自己实现的协议已经极快了，只需要专注自己的协议和protobuf，兼容就比较简单
 - zfoo作为rpc协议是，length | packet | attachment，当作普通服务器协议就是，length | packet
 - attachment能装很多东西，算是协议上的多态，就不需要dubbo那么复杂的设计了
 

@@ -50,7 +50,7 @@ Some of them are listed below：
     akka，Using Scala language, the learning cost is extremely high, just give up;
     
 So I wrote a universal rpc framework, the code is lightweight, can be easily customized, with its own gateway, inherently asynchronous, and the tool chain is complete.
-After subsequent continuous optimization, a serialization framework with the fastest speed in Java was also made, and then the speed took off directly.
+After subsequent continuous optimization, a serialization framework with the very fast speed in Java was also made, and then the speed took off directly.
 Later, I found out that it can be used not only for games, but also for rpc scenes with extreme performance requirements.
 ```
 

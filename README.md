@@ -21,7 +21,7 @@ Why is zfoo protocol ?
 - The protocol currently supports C++ C# Go Java Javascript TypeScript Lua GDScript Python
 - Universal distributed server protocol implementation, there are implementations in other languages, which can easily
   implement RPC, servers, and microservices on other platforms
-- The fastest custom format framework for Java binary serialization, with the fewest serialized bytes, more secure and
+- Very fast custom format framework for Java binary serialization, with the fewest serialized bytes, more secure and
   compatible
 - In the single-threaded benchmark test, serialization and deserialization are 50% faster than Protobuf and 100% faster
   than Kryo
@@ -30,7 +30,7 @@ Why is zfoo protocol ?
 -----------
 
 - **Extremely fast, asynchronous, Actor design pattern, lock-free design, RPC framework based on Spring MVC**
-- **Fastest serialization and deserialization**，use [zfoo protocol](protocol/README.md) as a network protocol
+- **Very fast serialization and deserialization**，use [zfoo protocol](protocol/README.md) as a network protocol
 - **High scalability**，Single server deployment, microservice deployment, cluster deployment, gateway deployment
 - **Can be used as a game server framework or website server framework.**
 
@@ -80,7 +80,7 @@ If you do not have JDK installed, the quick installation method is to download d
 from Project Structure, Platform Settings, SDKs in the upper right corner of Idea
 ```
 
-#### 2. [protocol](protocol/README.md) fastest serialization and deserialization
+#### 2. [protocol](protocol/README.md) very fast serialization and deserialization
 
 ```
 // zfoo protocol registration, can only be initialized once
@@ -93,7 +93,7 @@ ProtocolManager.write(byteBuf, complexObject);
 var packet = ProtocolManager.read(byteBuf);
 ```
 
-#### 3. [net](net/README.md) fastest RPC framework, supports tcp udp websocket http
+#### 3. [net](net/README.md) very fast RPC framework, supports tcp udp websocket http
 
 ```
 // Service provider, only need to add an annotation to the method, the interface will be automatically registered
