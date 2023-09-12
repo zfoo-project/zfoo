@@ -6,12 +6,12 @@
 
     <groupId>com.zfoo</groupId>
     <artifactId>storage</artifactId>
-    <version>3.0</version>
+    <version>3.1.0</version>
 
     <packaging>jar</packaging>
 
     <properties>
-        <zfoo.version>3.0</zfoo.version>
+        <zfoo.version>3.1.0</zfoo.version>
 
         <!-- spring and spring boot -->
         <spring.version>6.0.11</spring.version>
