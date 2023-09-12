@@ -116,7 +116,7 @@ public abstract class GenerateProtocolPath {
 
         for (var i = splits.length; i > 0; i--) {
             builder.append("../");
-            var path = StringUtils.joinWith(StringUtils.PERIOD, Arrays.stream(splits).limit(i).toList();.toArray());
+            var path = StringUtils.joinWith(StringUtils.PERIOD, Arrays.stream(splits).limit(i).toList().toArray());
             if (relativePath.startsWith(path)) {
                 builder.append(StringUtils.substringAfterFirst(relativePath, path).replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH));
                 return builder.toString();
@@ -180,7 +180,7 @@ public abstract class GenerateProtocolPath {
         var allChildren = protocolTreeNode.flatTreeNodes()
                 .stream()
                 .filter(it -> it.getData() != null)
-                .toList();;
+                .toList();
         var pathBefore = StringUtils.substringBeforeLast(protocolTreeNode.fullName(), StringUtils.PERIOD);
         for (var child : allChildren) {
             var protocolSimpleName = child.getData().protocolConstructor().getDeclaringClass().getSimpleName();

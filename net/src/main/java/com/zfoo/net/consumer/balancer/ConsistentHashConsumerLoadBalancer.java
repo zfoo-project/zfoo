@@ -103,7 +103,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
         var sessionStringList = getSessionsByModule(module).stream()
                 .map(session -> new Pair<>(session.getConsumerAttribute().toString(), session.getSid()))
                 .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
-                .toList();;
+                .toList();
 
         var consistentHash = new ConsistentHash<>(sessionStringList, VIRTUAL_NODE_NUMS);
         var virtualNodeTreeMap = consistentHash.getVirtualNodeTreeMap();

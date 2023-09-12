@@ -127,7 +127,7 @@ public class MongodbAccessor implements IAccessor {
         @SuppressWarnings("unchecked")
         var entityClazz = (Class<E>) entities.get(0).getClass();
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
-        var ids = entities.stream().map(it -> (it).id()).toList();;
+        var ids = entities.stream().map(it -> (it).id()).toList();
         collection.deleteMany(in("_id", ids));
     }
 

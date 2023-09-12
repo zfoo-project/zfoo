@@ -69,7 +69,7 @@ public class HostAndPort {
     public static String toHostAndPortListStr(Collection<HostAndPort> list) {
         var urlList = list.stream()
                 .map(it -> it.toHostAndPortStr())
-                .toList();;
+                .toList();
         return StringUtils.joinWith(StringUtils.COMMA, urlList.toArray());
     }
 

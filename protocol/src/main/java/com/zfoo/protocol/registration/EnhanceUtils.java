@@ -126,7 +126,7 @@ public abstract class EnhanceUtils {
         var allSubProtocolIds = ProtocolAnalysis.getAllSubProtocolIds(protocolId)
                 .stream()
                 .sorted((a, b) -> Short.compare(a, b))
-                .toList();;
+                .toList();
 
         for (var subProtocolId : allSubProtocolIds) {
             var protocolRegistrationField = new CtField(classPool.get(IProtocolRegistration.class.getCanonicalName()), getProtocolRegistrationFieldNameByProtocolId(subProtocolId), enhanceClazz);

@@ -210,7 +210,7 @@ public abstract class GenerateCppUtils {
         // ValueOf()方法
         var valueOfParams = filedList.stream()
                 .map(it -> StringUtils.format("{} {}", it.getKey(), it.getValue()))
-                .toList();;
+                .toList();
         var valueOfParamsStr = StringUtils.joinWith(StringUtils.COMMA + " ", valueOfParams.toArray());
 
         var cppBuilder = new StringBuilder();

@@ -119,7 +119,7 @@ public class ResourceInterpreter {
                 }
             }
         }
-        return fieldList.stream().map(it -> new FieldInfo(cellFieldMap.get(getExcelFieldName(it)), it)).toList();;
+        return fieldList.stream().map(it -> new FieldInfo(cellFieldMap.get(getExcelFieldName(it)), it)).toList();
     }
 
     private static class FieldInfo {

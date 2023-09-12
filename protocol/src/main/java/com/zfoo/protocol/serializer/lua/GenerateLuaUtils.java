@@ -135,7 +135,7 @@ public abstract class GenerateLuaUtils {
         var protocolId = registration.getId();
         var fields = registration.getFields();
 
-        var valueOfParams = StringUtils.joinWith(", ", Arrays.stream(fields).map(it -> it.getName()).toList();.toArray());
+        var valueOfParams = StringUtils.joinWith(", ", Arrays.stream(fields).map(it -> it.getName()).toList().toArray());
         var luaBuilder = new StringBuilder();
 
         for (var i = 0; i < fields.length; i++) {

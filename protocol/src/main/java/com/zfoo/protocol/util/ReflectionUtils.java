@@ -318,7 +318,7 @@ public abstract class ReflectionUtils {
                 .filter(it -> !Modifier.isStatic(it.getModifiers()))
                 .filter(it -> !Modifier.isTransient(it.getModifiers()))
                 .filter(it -> !it.isAnnotationPresent(Transient.class))
-                .toList();;
+                .toList();
     }
 
     public static String fieldToGetMethod(Class<?> clazz, Field field) {

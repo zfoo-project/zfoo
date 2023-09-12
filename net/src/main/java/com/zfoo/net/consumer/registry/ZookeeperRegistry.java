@@ -596,7 +596,7 @@ public class ZookeeperRegistry implements IRegistry {
         try {
             var children = curator.getChildren().forPath(path).stream()
                     .filter(it -> StringUtils.isNotBlank(it) && !"null".equals(it))
-                    .toList();;
+                    .toList();
             return children;
         } catch (Exception e) {
             logger.error("unknown exception", e);

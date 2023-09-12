@@ -83,14 +83,14 @@ public abstract class ExportUtils {
         return FileUtils.getAllReadableFiles(new File(inputDir))
                 .stream()
                 .filter(it -> StorageEnum.isExcel(FileUtils.fileExtName(it.getName())))
-                .toList();;
+                .toList();
     }
 
     public static List<File> scanCsvFiles(String inputDir) {
         return FileUtils.getAllReadableFiles(new File(inputDir))
                 .stream()
                 .filter(it -> StorageEnum.getResourceEnumByType(FileUtils.fileExtName(it.getName())) == StorageEnum.CSV)
-                .toList();;
+                .toList();
     }
 
     // 将class里的map自动赋值storage

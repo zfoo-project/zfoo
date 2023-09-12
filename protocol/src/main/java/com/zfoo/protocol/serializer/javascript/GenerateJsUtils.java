@@ -132,7 +132,7 @@ public abstract class GenerateJsUtils {
         var protocolId = registration.getId();
         var fields = registration.getFields();
 
-        var fieldValueOf = StringUtils.joinWith(", ", Arrays.stream(fields).map(it -> it.getName()).toList();.toArray());
+        var fieldValueOf = StringUtils.joinWith(", ", Arrays.stream(fields).map(it -> it.getName()).toList().toArray());
         var fieldDefinitionBuilder = new StringBuilder();
 
         for (var field : fields) {
