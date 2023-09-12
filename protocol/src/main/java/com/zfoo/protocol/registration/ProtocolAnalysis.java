@@ -42,7 +42,6 @@ import javassist.NotFoundException;
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.ProtocolManager.*;
 
@@ -108,7 +107,7 @@ public class ProtocolAnalysis {
         }
 
         // 通过指定类注册的协议，全部使用字节码增强
-        var enhanceList = Arrays.stream(protocols).filter(Objects::nonNull).collect(Collectors.toList());
+        var enhanceList = Arrays.stream(protocols).filter(Objects::nonNull).toList();;
         enhance(generateOperation, enhanceList);
     }
 
@@ -122,7 +121,7 @@ public class ProtocolAnalysis {
 
         var relevantClassList = relevantClassSet.stream()
                 .sorted((a, b) -> a.getCanonicalName().compareTo(b.getCanonicalName()))
-                .collect(Collectors.toList());
+                .toList();;
 
         // 检查协议类是否合法
         var noProtocolIds = new ArrayList<Class<?>>();
@@ -149,7 +148,7 @@ public class ProtocolAnalysis {
         }
 
         // 通过指定类注册的协议，全部使用字节码增强
-        var enhanceList = Arrays.stream(protocols).filter(Objects::nonNull).collect(Collectors.toList());
+        var enhanceList = Arrays.stream(protocols).filter(Objects::nonNull).toList();;
         enhance(generateOperation, enhanceList);
     }
 
@@ -415,7 +414,7 @@ public class ProtocolAnalysis {
                 .stream()
                 .sorted((a, b) -> a.getKey() - b.getKey())
                 .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+                .toList();;
         notCompatibleFields.addAll(compatibleFields);
         return notCompatibleFields;
     }

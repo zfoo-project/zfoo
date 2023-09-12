@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 
 /**
@@ -319,7 +318,7 @@ public abstract class ReflectionUtils {
                 .filter(it -> !Modifier.isStatic(it.getModifiers()))
                 .filter(it -> !Modifier.isTransient(it.getModifiers()))
                 .filter(it -> !it.isAnnotationPresent(Transient.class))
-                .collect(Collectors.toList());
+                .toList();;
     }
 
     public static String fieldToGetMethod(Class<?> clazz, Field field) {

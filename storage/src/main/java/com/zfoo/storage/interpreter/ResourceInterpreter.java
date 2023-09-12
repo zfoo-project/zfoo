@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author godotg
@@ -120,7 +119,7 @@ public class ResourceInterpreter {
                 }
             }
         }
-        return fieldList.stream().map(it -> new FieldInfo(cellFieldMap.get(getExcelFieldName(it)), it)).collect(Collectors.toList());
+        return fieldList.stream().map(it -> new FieldInfo(cellFieldMap.get(getExcelFieldName(it)), it)).toList();;
     }
 
     private static class FieldInfo {

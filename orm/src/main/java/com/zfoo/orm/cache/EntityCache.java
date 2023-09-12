@@ -230,7 +230,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
                                 return new ReplaceOneModel<>(filter, it);
                             })
-                            .collect(Collectors.toList());
+                            .toList();;
 
                     var result = collection.bulkWrite(batchList, new BulkWriteOptions().ordered(false));
                     if (result.getModifiedCount() == batchList.size()) {
@@ -261,7 +261,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             return;
         }
 
-        var ids = updateList.stream().map(it -> it.id()).collect(Collectors.toList());
+        var ids = updateList.stream().map(it -> it.id()).toList();;
 
         try {
             @SuppressWarnings("unchecked")
@@ -314,7 +314,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         if (allPnodes.isEmpty()) {
             return Collections.emptyList();
         }
-        return allPnodes.stream().map(it -> it.getEntity()).collect(Collectors.toList());
+        return allPnodes.stream().map(it -> it.getEntity()).toList();;
     }
 
     @Override

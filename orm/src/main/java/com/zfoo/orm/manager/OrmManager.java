@@ -53,7 +53,6 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 
 /**
@@ -110,11 +109,11 @@ public class OrmManager implements IOrmManager {
                     .stream()
                     .map(it -> it.split(StringUtils.COMMA_REGEX))
                     .flatMap(it -> Arrays.stream(it))
-                    .map(it -> StringUtils.trim(it))
                     .filter(it -> StringUtils.isNotBlank(it))
+                    .map(it -> StringUtils.trim(it))
                     .map(it -> it.split(StringUtils.COLON_REGEX))
                     .map(it -> new ServerAddress(it[0], Integer.parseInt(it[1])))
-                    .collect(Collectors.toList());
+                    .toList();
             mongoBuilder.applyToClusterSettings(builder -> builder.hosts(hostList));
         }
 
@@ -271,7 +270,7 @@ public class OrmManager implements IOrmManager {
                     .values()
                     .stream()
                     .map(it -> it.getClass())
-                    .collect(Collectors.toList());
+                    .toList();
             classSet.addAll(classes);
         } else {
             var classes = scanEntityCacheAnno();

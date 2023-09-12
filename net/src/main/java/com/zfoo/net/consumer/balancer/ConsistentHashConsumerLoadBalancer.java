@@ -26,7 +26,6 @@ import org.springframework.lang.Nullable;
 
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReferenceArray;
-import java.util.stream.Collectors;
 
 /**
  * 一致性hash负载均衡器，同一个session总是发到同一提供者
@@ -104,7 +103,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
         var sessionStringList = getSessionsByModule(module).stream()
                 .map(session -> new Pair<>(session.getConsumerAttribute().toString(), session.getSid()))
                 .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
-                .collect(Collectors.toList());
+                .toList();;
 
         var consistentHash = new ConsistentHash<>(sessionStringList, VIRTUAL_NODE_NUMS);
         var virtualNodeTreeMap = consistentHash.getVirtualNodeTreeMap();

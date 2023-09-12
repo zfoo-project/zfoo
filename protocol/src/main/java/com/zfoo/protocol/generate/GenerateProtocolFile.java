@@ -35,7 +35,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.util.StringUtils.TAB;
 import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
@@ -85,7 +84,7 @@ public abstract class GenerateProtocolFile {
         var outsideGenerateProtocols = Arrays.stream(protocols)
                 .filter(it -> Objects.nonNull(it))
                 .filter(it -> generateProtocolFilter.test(it))
-                .collect(Collectors.toList());
+                .toList();;
 
         // 需要生成的子协议，因为外层协议的内部有其它协议
         var insideGenerateProtocols = outsideGenerateProtocols.stream()
@@ -93,7 +92,7 @@ public abstract class GenerateProtocolFile {
                 .flatMap(it -> it.stream())
                 .map(it -> protocols[it])
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();;
 
         var allGenerateProtocols = new HashSet<IProtocolRegistration>();
         allGenerateProtocols.addAll(outsideGenerateProtocols);
@@ -102,7 +101,7 @@ public abstract class GenerateProtocolFile {
         // 通过协议号，从小到大排序
         var allSortedGenerateProtocols = allGenerateProtocols.stream()
                 .sorted((a, b) -> a.protocolId() - b.protocolId())
-                .collect(Collectors.toList());
+                .toList();;
 
         // 解析协议的文档注释
         GenerateProtocolNote.initProtocolNote(allSortedGenerateProtocols);

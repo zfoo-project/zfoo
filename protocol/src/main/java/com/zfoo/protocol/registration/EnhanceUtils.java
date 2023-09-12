@@ -30,7 +30,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 对应于ProtocolRegistration
@@ -127,7 +126,7 @@ public abstract class EnhanceUtils {
         var allSubProtocolIds = ProtocolAnalysis.getAllSubProtocolIds(protocolId)
                 .stream()
                 .sorted((a, b) -> Short.compare(a, b))
-                .collect(Collectors.toList());
+                .toList();;
 
         for (var subProtocolId : allSubProtocolIds) {
             var protocolRegistrationField = new CtField(classPool.get(IProtocolRegistration.class.getCanonicalName()), getProtocolRegistrationFieldNameByProtocolId(subProtocolId), enhanceClazz);

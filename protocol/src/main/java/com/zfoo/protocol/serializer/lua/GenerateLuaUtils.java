@@ -33,7 +33,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
@@ -136,7 +135,7 @@ public abstract class GenerateLuaUtils {
         var protocolId = registration.getId();
         var fields = registration.getFields();
 
-        var valueOfParams = StringUtils.joinWith(", ", Arrays.stream(fields).map(it -> it.getName()).collect(Collectors.toList()).toArray());
+        var valueOfParams = StringUtils.joinWith(", ", Arrays.stream(fields).map(it -> it.getName()).toList();.toArray());
         var luaBuilder = new StringBuilder();
 
         for (var i = 0; i < fields.length; i++) {

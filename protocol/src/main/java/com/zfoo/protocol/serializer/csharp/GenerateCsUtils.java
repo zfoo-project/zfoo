@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
@@ -160,7 +159,7 @@ public abstract class GenerateCsUtils {
         }
 
         // ValueOf()方法
-        var valueOfParams = filedList.stream().map(it -> StringUtils.format("{} {}", it.getKey(), it.getValue())).collect(Collectors.toList());
+        var valueOfParams = filedList.stream().map(it -> StringUtils.format("{} {}", it.getKey(), it.getValue())).toList();
         var valueOfParamsStr = StringUtils.joinWith(StringUtils.COMMA + " ", valueOfParams.toArray());
 
         var csBuilder = new StringBuilder();
