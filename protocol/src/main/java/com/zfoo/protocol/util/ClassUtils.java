@@ -15,6 +15,7 @@ package com.zfoo.protocol.util;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.RunException;
 
+import java.beans.Introspector;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,7 @@ import java.net.*;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.regex.Pattern;
 
 /**
  * @author godotg
@@ -40,6 +42,21 @@ public abstract class ClassUtils {
     public final static String JAR_PROTOCOL = "jar";
 
     public final static String JAR_URL_SEPARATOR = "!/";
+    private static final Pattern GET_PATTERN = Pattern.compile("^get[A-Z].*");
+    private static final Pattern IS_PATTERN = Pattern.compile("^is[A-Z].*");
+
+    private static ClassLoader systemClassLoader;
+
+    static {
+        try {
+            systemClassLoader = ClassLoader.getSystemClassLoader();
+        } catch (SecurityException ignored) {
+            // AccessControlException on Google App Engine
+        }
+    }
+
+    private ClassUtils() {
+    }
 
 
     public static Class<?> forName(String className) {
@@ -487,5 +504,56 @@ public abstract class ClassUtils {
                 || String.class.isAssignableFrom(clazz)
                 || Boolean.class.isAssignableFrom(clazz)
                 || Character.class.isAssignableFrom(clazz);
+    }
+
+    /**
+     * @param name
+     * @param classLoader
+     * @return
+     * @since 3.4.3
+     */
+    public static Class<?> toClassConfident(String name, ClassLoader classLoader) {
+        try {
+            return loadClass(name, getClassLoaders(classLoader));
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Class<?> loadClass(String className, ClassLoader[] classLoaders) throws ClassNotFoundException {
+        for (ClassLoader classLoader : classLoaders) {
+            if (classLoader != null) {
+                try {
+                    return Class.forName(className, true, classLoader);
+                } catch (ClassNotFoundException e) {
+                    // ignore
+                }
+            }
+        }
+        throw new ClassNotFoundException("Cannot find class: " + className);
+    }
+
+    private static ClassLoader[] getClassLoaders(ClassLoader classLoader) {
+        return new ClassLoader[]{
+                classLoader,
+                Thread.currentThread().getContextClassLoader(),
+                ClassUtils.class.getClassLoader(),
+                systemClassLoader};
+    }
+
+    /**
+     * 方法名转换为字段名
+     *
+     * @param methodName 方法名
+     * @return
+     */
+    public static String getFieldName(String methodName) {
+        // 对于非标准变量生成的Get方法这里可以直接抛出异常，或者打印异常日志
+        if (GET_PATTERN.matcher(methodName).matches()) {
+            methodName = methodName.substring(3);
+        } else if (IS_PATTERN.matcher(methodName).matches()) {
+            methodName = methodName.substring(2);
+        }
+        return Introspector.decapitalize(methodName);
     }
 }

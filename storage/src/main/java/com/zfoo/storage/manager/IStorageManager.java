@@ -39,7 +39,7 @@ public interface IStorageManager {
      */
     void initAfter();
 
-    IStorage<?, ?> getStorage(Class<?> clazz);
+    <K, V, T extends IStorage<K, V>> T  getStorage(Class<V> clazz);
 
     Map<Class<?>, IStorage<?, ?>> storageMap();
 

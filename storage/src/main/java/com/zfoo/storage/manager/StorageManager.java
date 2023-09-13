@@ -26,6 +26,7 @@ import com.zfoo.storage.config.StorageConfig;
 import com.zfoo.storage.interpreter.data.StorageEnum;
 import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.model.StorageDefinition;
+import com.zfoo.storage.util.support.SerializableFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -191,8 +192,23 @@ public class StorageManager implements IStorageManager {
         }
     }
 
+    public <T> List<T> getList(Class<T> clazz) {
+        IStorage<?, ?> storage = getStorage(clazz);
+        return (List<T>) storage.getAll();
+    }
+
+    public <T, K> List<T> getIndexes(Class<T> clazz, SerializableFunction<T, ?> function, K indexId) {
+        var storage = getStorage(clazz);
+        return storage.getIndexes(function, indexId);
+    }
+
+    public <T, UQ> T get(Class<T> clazz, UQ uniqueId) {
+        IStorage<UQ, T> storage = getStorage(clazz);
+        return storage.get(uniqueId);
+    }
+
     @Override
-    public IStorage<?, ?> getStorage(Class<?> clazz) {
+    public <K, V, T extends IStorage<K, V>> T getStorage(Class<V> clazz) {
         var storage = storageMap.get(clazz);
         if (storage == null) {
             throw new RunException("There is no [{}] defined Storage and unable to get it", clazz.getCanonicalName());
@@ -201,7 +217,7 @@ public class StorageManager implements IStorageManager {
             // Storage没有使用，为了节省内存提前释放了它；只有使用ResInjection注解的Storage才能被动态获取或者关闭配置recycle属性
             logger.warn("Storage [{}] is not used, it was freed to save memory; use @ResInjection or turn off recycle configuration", clazz.getCanonicalName());
         }
-        return storage;
+        return (T) storage;
     }
 
     @Override

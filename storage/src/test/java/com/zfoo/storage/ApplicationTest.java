@@ -16,12 +16,16 @@ package com.zfoo.storage;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.storage.manager.StorageManager;
+import com.zfoo.storage.model.IStorage;
+import com.zfoo.storage.resource.StudentCsvResource;
 import com.zfoo.storage.resource.StudentResource;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,6 +48,19 @@ public class ApplicationTest {
         // Excel的映射内容需要在被Spring管理的bean的方法上加上@ResInjection注解，即可自动注入Excel对应的对象
         // 参考StudentManager中的标准用法
 
+
+        //获取所有数据
+        List<StudentResource> list = StorageContext.getList(StudentResource.class);
+        //根据主键获取数据
+        StudentResource studentResource = StorageContext.get(StudentResource.class, 1001);
+        //获取名字索引列表
+        List<StudentResource> nameIndexList = StorageContext.getIndexes(StudentResource.class, StudentResource::getName, "james1");
+        //获取年龄索引列表
+        List<StudentResource> ageIndexList = StorageContext.getIndexes(StudentResource.class, StudentResource::getAge, 10);
+
+        //获取Storage
+        IStorage<Integer, StudentResource> storage = context.getBean(StorageManager.class).getStorage(StudentResource.class);
+
         var studentManager = context.getBean(StudentManager.class);
         var studentResources = studentManager.studentResources;
         var studentCsvResources = studentManager.studentCsvResources;
@@ -60,11 +77,11 @@ public class ApplicationTest {
         System.out.println(StringUtils.MULTIPLE_HYPHENS);
 
         // 通过索引找对应的行
-        var valuesByIndex = studentResources.getIndex("name", "james0");
+        var valuesByIndex = studentResources.getIndexes(StudentResource::getName, "james0");
         logger.info(JsonUtils.object2String(valuesByIndex));
 
         // 通过索引找对应的行
-        var csvValuesByIndex = studentCsvResources.getIndex("name", "james0");
+        var csvValuesByIndex = studentCsvResources.getIndexes(StudentCsvResource::getName, "james0");
         logger.info(JsonUtils.object2String(csvValuesByIndex));
 
         // Excel的映射内容需要在被Spring管理的bean的方法上加上@ResInjection注解，即可自动注入Excel对应的对象
