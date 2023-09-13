@@ -25,7 +25,6 @@ import java.util.Queue;
  * 文件操作工具类
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class FileUtils {
 

@@ -23,7 +23,6 @@ import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class TcpServer extends AbstractServer<SocketChannel> {
 

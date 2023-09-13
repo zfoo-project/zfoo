@@ -27,7 +27,6 @@ import java.util.Iterator;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Ignore
 public class ExcelTesting {

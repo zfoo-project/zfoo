@@ -22,7 +22,6 @@ import java.util.Map;
  * ObjectC的测试类型
  *
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 104)
 public class ObjectC {

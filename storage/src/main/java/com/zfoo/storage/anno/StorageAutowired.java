@@ -21,7 +21,6 @@ import java.lang.annotation.*;
  * CN: 静态数据的注入
  *
  * @author godotg
- * @version 3.0
  */
 
 @Documented

@@ -18,7 +18,6 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 4)
 public class HttpAttachment {

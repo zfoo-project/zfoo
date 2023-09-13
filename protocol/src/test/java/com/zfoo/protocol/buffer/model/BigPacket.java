@@ -17,7 +17,6 @@ import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 1000)
 public class BigPacket {

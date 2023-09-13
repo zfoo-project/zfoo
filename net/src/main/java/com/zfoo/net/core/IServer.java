@@ -15,7 +15,6 @@ package com.zfoo.net.core;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public interface IServer {
 

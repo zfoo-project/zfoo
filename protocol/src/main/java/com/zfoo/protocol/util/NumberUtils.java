@@ -33,7 +33,6 @@ import java.util.Collection;
  * 这是因为0.1无法准确的表示为double。因此应该使用new BigDecimal(String)。
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class NumberUtils {
 

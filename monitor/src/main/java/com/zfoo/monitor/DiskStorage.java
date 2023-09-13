@@ -14,7 +14,6 @@ package com.zfoo.monitor;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class DiskStorage implements Comparable<DiskStorage> {
 

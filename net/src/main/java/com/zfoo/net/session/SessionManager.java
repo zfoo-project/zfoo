@@ -22,7 +22,6 @@ import java.util.function.Consumer;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class SessionManager implements ISessionManager {
 

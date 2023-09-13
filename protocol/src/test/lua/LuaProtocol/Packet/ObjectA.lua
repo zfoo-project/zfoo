@@ -1,5 +1,4 @@
 -- @author godotg
--- @version 3.0
 
 local ObjectA = {}
 

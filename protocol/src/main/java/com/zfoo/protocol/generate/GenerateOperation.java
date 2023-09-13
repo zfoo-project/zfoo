@@ -24,7 +24,6 @@ import java.util.Set;
  * CN: 创建协议文件的操作类
  *
  * @author godotg
- * @version 3.0
  */
 public class GenerateOperation {
 

@@ -22,7 +22,6 @@ import com.zfoo.scheduler.util.TimeUtils;
  * 需要持久化的一个节点
  *
  * @author godotg
- * @version 3.0
  */
 public class PNode<E extends IEntity<?>> {
 

@@ -33,7 +33,6 @@ import java.util.List;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class UdpCodecHandler extends MessageToMessageCodec<DatagramPacket, EncodedPacketInfo> {
 

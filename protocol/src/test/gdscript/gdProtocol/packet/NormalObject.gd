@@ -1,5 +1,4 @@
 # @author godotg
-# @version 3.0
 
 var a # byte
 var aaa # byte[]

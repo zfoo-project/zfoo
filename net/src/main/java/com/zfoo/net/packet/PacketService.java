@@ -41,7 +41,6 @@ import java.util.function.Predicate;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class PacketService implements IPacketService {
 

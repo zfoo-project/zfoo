@@ -21,7 +21,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class CopyOnWriteHashMapLongObject<V> implements Map<Long, V> {
 

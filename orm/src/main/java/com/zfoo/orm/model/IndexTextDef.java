@@ -22,7 +22,6 @@ import java.lang.reflect.Modifier;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class IndexTextDef {
 

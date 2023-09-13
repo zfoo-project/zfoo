@@ -35,7 +35,6 @@ import java.util.function.Consumer;
  * 这是客户端连接网关，网关转发到服务提供者的测试用例
  *
  * @author godotg
- * @version 3.0
  */
 @Ignore
 public class GatewayTest {

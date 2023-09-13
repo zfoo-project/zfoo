@@ -16,7 +16,6 @@ import java.lang.annotation.*;
 
 /**
  * @author meiw
- * @version 3.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

@@ -14,7 +14,6 @@ package com.zfoo.scheduler.enhance;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public interface IScheduler {
 

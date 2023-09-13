@@ -2,7 +2,6 @@
 -- 包括了各种复杂的结构，数组，List，Set，Map
 --
 -- @author godotg
--- @version 3.0
 
 local ComplexObject = {}
 

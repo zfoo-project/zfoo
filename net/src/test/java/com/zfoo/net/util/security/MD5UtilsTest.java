@@ -18,7 +18,6 @@ import org.springframework.util.DigestUtils;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class MD5UtilsTest {
 

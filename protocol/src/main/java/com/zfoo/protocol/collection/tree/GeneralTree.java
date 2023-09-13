@@ -18,7 +18,6 @@ import com.zfoo.protocol.util.StringUtils;
  * 多叉树
  *
  * @author godotg
- * @version 3.0
  */
 public class GeneralTree<T> {
 

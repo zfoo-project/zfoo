@@ -17,7 +17,6 @@ import org.junit.Test;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class GeneralTreeTest {
 

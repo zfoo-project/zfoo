@@ -17,7 +17,6 @@ import com.zfoo.net.packet.common.Error;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class ErrorResponseException extends RuntimeException {
 

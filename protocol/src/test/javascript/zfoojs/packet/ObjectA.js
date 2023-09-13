@@ -1,5 +1,4 @@
 // @author godotg
-// @version 3.0
 const ObjectA = function(a, m, objectB) {
     this.a = a; // int
     this.m = m; // java.util.Map<java.lang.Integer, java.lang.String>

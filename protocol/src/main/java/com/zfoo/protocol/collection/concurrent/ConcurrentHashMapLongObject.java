@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
 

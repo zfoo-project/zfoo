@@ -16,7 +16,6 @@ import java.lang.reflect.Field;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class IndexDef {
 

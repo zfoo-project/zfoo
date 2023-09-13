@@ -21,7 +21,6 @@ import java.nio.ByteBuffer;
  * 自定义私有协议格式，可以针对性的对存在性能瓶颈的数据结构做特定优化
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class CustomByteBuf {
 

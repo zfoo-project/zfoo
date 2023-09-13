@@ -41,7 +41,6 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class NetContext implements ApplicationListener<ApplicationContextEvent>, Ordered {
 

@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class ClassUtils {
 

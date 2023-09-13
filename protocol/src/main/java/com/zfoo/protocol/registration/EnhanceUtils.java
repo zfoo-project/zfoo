@@ -35,7 +35,6 @@ import java.util.*;
  * 对应于ProtocolRegistration
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class EnhanceUtils {
 

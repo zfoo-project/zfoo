@@ -1,6 +1,5 @@
 
 // @author godotg
-// @version 3.0
 class ObjectB {
 
     flag: boolean = false;

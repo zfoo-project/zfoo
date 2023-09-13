@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class ExportUtils {
 

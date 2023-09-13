@@ -19,7 +19,6 @@ import java.util.function.BiConsumer;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> {
 

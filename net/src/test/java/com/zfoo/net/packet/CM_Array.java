@@ -19,7 +19,6 @@ import java.util.Arrays;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 1119)
 public class CM_Array {

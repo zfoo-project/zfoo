@@ -28,7 +28,6 @@ import java.util.function.Function;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class HttpCodecHandler extends MessageToMessageCodec<FullHttpRequest, EncodedPacketInfo> {
 

@@ -15,7 +15,6 @@ package com.zfoo.protocol.javassist;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class D {
     private int a;

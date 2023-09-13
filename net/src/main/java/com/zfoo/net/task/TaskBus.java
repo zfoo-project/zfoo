@@ -37,7 +37,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * CN: Task线程池一般是用来处理客户的请求，做一些cpu密集型任务，尽量避免做一些阻塞操作；IO密集型任务可以放在Event线程池去做
  *
  * @author godotg
- * @version 3.0
  */
 public final class TaskBus {
 

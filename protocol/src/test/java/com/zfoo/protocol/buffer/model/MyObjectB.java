@@ -20,7 +20,6 @@ import java.util.Objects;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 3)
 public class MyObjectB {

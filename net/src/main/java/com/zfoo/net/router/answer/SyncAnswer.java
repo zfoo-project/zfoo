@@ -17,7 +17,6 @@ import com.zfoo.net.router.attachment.SignalAttachment;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class SyncAnswer<T> implements ISyncAnswer<T> {
 

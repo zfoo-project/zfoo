@@ -27,7 +27,6 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class TsSetSerializer implements ITsSerializer {
 

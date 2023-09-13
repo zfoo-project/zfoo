@@ -23,7 +23,6 @@ import java.util.TreeMap;
  * 带虚拟节点的一致性Hash算法，参考：http://www.zsythink.net/archives/1182
  *
  * @author godotg
- * @version 3.0
  */
 
 public class ConsistentHash<K, V> {

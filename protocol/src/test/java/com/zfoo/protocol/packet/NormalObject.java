@@ -22,7 +22,6 @@ import java.util.Set;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 101)
 public class NormalObject {

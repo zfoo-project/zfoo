@@ -31,7 +31,6 @@ import java.util.List;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class AbstractServer<C extends Channel> extends ChannelInitializer<C> implements IServer {
     private static final Logger logger = LoggerFactory.getLogger(AbstractServer.class);

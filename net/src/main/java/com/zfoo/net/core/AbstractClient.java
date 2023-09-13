@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class AbstractClient<C extends Channel> extends ChannelInitializer<C> implements IClient {
 

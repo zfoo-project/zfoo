@@ -18,7 +18,6 @@ import com.zfoo.orm.model.EntityDef;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public abstract class AbstractOrmPersister implements IOrmPersister {
 

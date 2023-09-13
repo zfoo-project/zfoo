@@ -17,7 +17,6 @@ import com.zfoo.scheduler.util.TimeUtils;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class Sar implements Comparable<Sar> {
 

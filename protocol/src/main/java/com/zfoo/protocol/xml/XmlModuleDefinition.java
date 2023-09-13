@@ -22,7 +22,6 @@ import java.util.List;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"id", "name"})

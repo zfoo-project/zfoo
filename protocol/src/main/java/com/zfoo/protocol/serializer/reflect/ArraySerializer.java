@@ -22,7 +22,6 @@ import java.lang.reflect.Array;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class ArraySerializer implements ISerializer {
 

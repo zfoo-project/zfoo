@@ -18,7 +18,6 @@ import com.zfoo.protocol.ProtocolManager;
  * The interface of IPacket is just an identification interface
  *
  * @author godotg
- * @version 3.0
  */
 public interface IPacket {
 

@@ -21,7 +21,6 @@ import java.lang.annotation.*;
  * graalvm build must use this annotation to specify path, because native build cannot scan classes and files
  *
  * @author godotg
- * @version 3.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class StorageObject<K, V> implements IStorage<K, V> {
     private ImmutableMap<K, V> dataMap;

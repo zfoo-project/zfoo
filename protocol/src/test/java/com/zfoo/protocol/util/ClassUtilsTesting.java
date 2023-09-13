@@ -21,7 +21,6 @@ import java.io.IOException;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Ignore
 public class ClassUtilsTesting {

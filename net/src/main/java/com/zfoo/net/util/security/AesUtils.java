@@ -30,7 +30,6 @@ import java.util.Base64;
  * 默认AES/ECB/PKCS5Padding
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class AesUtils {
 

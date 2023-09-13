@@ -17,7 +17,6 @@ import com.zfoo.event.model.IEvent;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class AuthUidToGatewayEvent implements IEvent {
 

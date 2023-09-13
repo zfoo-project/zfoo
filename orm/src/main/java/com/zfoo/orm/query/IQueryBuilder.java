@@ -20,37 +20,35 @@ import java.util.List;
 
 
 /**
- * EQ、=	等于（=）
- * NE、<>	不等于（<>）
- * GT、>	大于（>）
- * GTE、>=	大于等于（>=）
- * LT、<	小于（<）
- * lte、<=	小于等于（<=）
- * LIKE	模糊查询
- * [n] in	（不在）IN 查询
- *
  * @author sinprog
- * @version 3.0
  */
 public interface IQueryBuilder<E extends IEntity> {
 
+    // EQ、=	等于（=）
     IQueryBuilder<E> eq(String fieldName, Object fieldValue);
 
+    // NE、<>	不等于（<>）
     IQueryBuilder<E> ne(String fieldName, Object fieldValue);
 
     IQueryBuilder<E> in(String fieldName, List<?> fieldValueList);
 
+    // [n] in	（不在）IN 查询
     IQueryBuilder<E> nin(String fieldName, List<?> fieldValueList);
 
-    IQueryBuilder<E> like(String fieldName, String fieldValue);
-
+    // LT、<	小于（<）
     IQueryBuilder<E> lt(String fieldName, Object fieldValue);
 
+    // lte、<=	小于等于（<=）
     IQueryBuilder<E> lte(String fieldName, Object fieldValue);
 
+    //  GT、>	大于（>）
     IQueryBuilder<E> gt(String fieldName, Object fieldValue);
 
+    // GTE、>=	大于等于（>=）
     IQueryBuilder<E> gte(String fieldName, Object fieldValue);
+
+    // LIKE	模糊查询
+    IQueryBuilder<E> like(String fieldName, String fieldValue);
 
     List<E> queryAll();
 

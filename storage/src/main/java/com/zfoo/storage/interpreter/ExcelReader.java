@@ -27,7 +27,6 @@ import java.util.*;
 
 /**
  * @author meiwei666
- * @version 3.0
  */
 public abstract class ExcelReader {
 

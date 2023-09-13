@@ -1,7 +1,6 @@
 import ObjectA from './ObjectA';
 
 // @author godotg
-// @version 3.0
 class NormalObject {
 
     a: number = 0;

@@ -21,7 +21,6 @@ import java.util.Arrays;
  * 性能更高，但是可能会浪费一定的内存
  *
  * @author godotg
- * @version 3.0
  */
 public class TreeMapIntLong {
     private static final int DEFAULT_CAPACITY = 10;

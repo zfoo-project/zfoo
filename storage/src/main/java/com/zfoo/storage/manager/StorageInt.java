@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class StorageInt<K, V> extends StorageObject<K, V> {
 

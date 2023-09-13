@@ -18,7 +18,6 @@ import com.zfoo.protocol.serializer.reflect.ObjectProtocolSerializer;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class ObjectProtocolField implements IFieldRegistration {
 

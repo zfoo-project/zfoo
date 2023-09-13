@@ -21,7 +21,6 @@ import java.util.Set;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 2070)
 public class WebSocketPacketRequest {

@@ -25,7 +25,6 @@ import java.util.List;
 /**
  * @EntityCache(persister = @Persister("time30s"))
  * @author godotg
- * @version 3.0
  */
 @EntityCache
 public class UserEntity implements IEntity<Long> {

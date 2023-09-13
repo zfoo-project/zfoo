@@ -50,7 +50,6 @@ import java.util.concurrent.TimeoutException;
  * Message distribution
  *
  * @author godotg
- * @version 3.0
  */
 public class Router implements IRouter {
 

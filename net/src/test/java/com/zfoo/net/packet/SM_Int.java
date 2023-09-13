@@ -19,7 +19,6 @@ import java.util.Objects;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 1111)
 public class SM_Int {

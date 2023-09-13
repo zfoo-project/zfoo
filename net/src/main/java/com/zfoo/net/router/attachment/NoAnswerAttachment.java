@@ -18,7 +18,6 @@ import com.zfoo.protocol.anno.Protocol;
  * not used attachment
  *
  * @author godotg
- * @version 3.0
  */
 @Protocol(id = 5)
 public class NoAnswerAttachment {

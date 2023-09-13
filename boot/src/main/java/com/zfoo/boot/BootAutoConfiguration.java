@@ -26,7 +26,6 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @Configuration(proxyBeanMethods = false)
 @ImportRuntimeHints(GraalvmProtocolHints.class)

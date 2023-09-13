@@ -40,7 +40,6 @@ import java.util.function.BiFunction;
 
 /**
  * @author godotg
- * @version 3.0
  */
 @ChannelHandler.Sharable
 public class GatewayRouteHandler extends ServerRouteHandler {

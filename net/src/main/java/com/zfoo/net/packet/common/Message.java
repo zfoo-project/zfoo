@@ -21,7 +21,6 @@ import com.zfoo.protocol.anno.Protocol;
  * 通用的返回，既可以用在远程调用，又可以嵌套在其它协议里
  *
  * @author godotg
- * @version 3.0
  */
 @ProtobufClass
 @Protocol(id = 100)

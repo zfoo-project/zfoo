@@ -21,7 +21,6 @@ import java.lang.annotation.*;
  * primary key
  *
  * @author godotg
- * @version 3.0
  */
 
 @Documented

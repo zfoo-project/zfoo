@@ -36,7 +36,6 @@ import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class SchedulerContext implements ApplicationListener<ApplicationContextEvent>, Ordered {
 

@@ -19,7 +19,6 @@ import org.springframework.core.convert.converter.Converter;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class StringToClassConverter implements Converter<String, Class<?>> {
 

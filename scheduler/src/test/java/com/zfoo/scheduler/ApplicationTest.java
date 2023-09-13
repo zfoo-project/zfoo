@@ -22,7 +22,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * google（译为古戈尔）代表10的100次方，足够穷尽宇宙万物
  *
  * @author godotg
- * @version 3.0
  */
 
 public class ApplicationTest {

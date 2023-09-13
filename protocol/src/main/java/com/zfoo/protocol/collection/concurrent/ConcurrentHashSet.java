@@ -19,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class ConcurrentHashSet<E> extends AbstractSet<E> {
 

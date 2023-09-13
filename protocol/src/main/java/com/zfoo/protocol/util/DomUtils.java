@@ -34,7 +34,6 @@ import java.util.*;
  * </p>
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class DomUtils {
 

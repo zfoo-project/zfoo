@@ -22,7 +22,6 @@ import java.lang.annotation.*;
  * CN: 可以指定对应的资源文件名（只指定文件名，不需要文件后缀），如果不指定资源文件名，则默认通过扫描路径获取与类名相同的文件资源
  *
  * @author godotg
- * @version 3.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

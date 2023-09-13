@@ -17,7 +17,6 @@ import com.zfoo.orm.model.IEntity;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class MongodbQuery implements IQuery {
 

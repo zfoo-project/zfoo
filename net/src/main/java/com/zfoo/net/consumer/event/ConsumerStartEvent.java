@@ -19,7 +19,6 @@ import com.zfoo.net.session.Session;
 
 /**
  * @author godotg
- * @version 3.0
  */
 public class ConsumerStartEvent implements IEvent {
 

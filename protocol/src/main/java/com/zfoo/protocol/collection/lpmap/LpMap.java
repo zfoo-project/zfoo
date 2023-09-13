@@ -21,7 +21,6 @@ import java.util.function.BiConsumer;
  * 其中long必须大于等于0，value可以为null
  *
  * @author godotg
- * @version 3.0
  */
 public interface LpMap<V> {
 

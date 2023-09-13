@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
  * Oshi库封装的工具类，通过此工具类，可获取系统、硬件相关信息
  *
  * @author godotg
- * @version 3.0
  */
 public abstract class OSUtils {
 
