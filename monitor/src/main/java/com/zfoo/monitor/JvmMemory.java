@@ -18,9 +18,7 @@ import java.lang.management.MemoryUsage;
 
 /**
  * @author yh
- * @date 2022/10/10 下午6:44
  */
-
 public class JvmMemory {
     private String name;
     private double total;

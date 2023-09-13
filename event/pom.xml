@@ -12,36 +12,25 @@
 
     <properties>
         <zfoo.version>3.1.0</zfoo.version>
-
         <!-- spring and spring boot -->
         <spring.version>6.0.11</spring.version>
         <spring.boot.version>3.1.3</spring.boot.version>
         <junit.version>4.12</junit.version>
-
         <!-- bytecode enhancement(字节码增强) -->
         <javassist.version>3.29.2-GA</javassist.version>
         <bytebuddy.version>1.14.6</bytebuddy.version>
-
         <!-- network framework -->
         <netty.version>4.1.97.Final</netty.version>
-
         <!-- zookeeper -->
         <curator.version>5.5.0</curator.version>
-
         <!-- hardware detection(硬件检测) -->
         <oshi.version>6.4.5</oshi.version>
-
         <!-- database and cache -->
         <mongodb-driver-sync.version>4.10.2</mongodb-driver-sync.version>
         <caffeine.version>3.1.8</caffeine.version>
-
         <!-- Office document parsing(office文档解析包) -->
         <poi.version>5.2.3</poi.version>
         <csv.version>1.10.0</csv.version>
-
-        <java.version>17</java.version>
-        <file.encoding>UTF-8</file.encoding>
-
         <!-- maven core plugin(maven核心插件) -->
         <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
@@ -49,10 +38,12 @@
         <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
         <maven-shade-plugin.version>3.5.0</maven-shade-plugin.version>
+        <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
         <versions-maven-plugin.version>2.16.0</versions-maven-plugin.version>
-
         <project.build.sourceEncoding>${file.encoding}</project.build.sourceEncoding>
         <maven.compiler.encoding>${file.encoding}</maven.compiler.encoding>
+        <java.version>17</java.version>
+        <file.encoding>UTF-8</file.encoding>
     </properties>
 
     <dependencies>
@@ -155,19 +146,100 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>${maven-deploy-plugin.version}</version>
             </plugin>
         </plugins>
     </build>
 
-    <distributionManagement>
-        <snapshotRepository>
+    <name>event</name>
+    <description>zfoo event</description>
+    <url>https://github.com/zfoo-project/zfoo</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>https://github.com/zfoo-project/zfoo.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:zfoo-project/zfoo.git</developerConnection>
+        <url>https://github.com/zfoo-project/zfoo</url>
+    </scm>
+
+    <profiles>
+        <profile>
             <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.13</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.3.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.5.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+
+            <distributionManagement>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>
