@@ -16,6 +16,19 @@
     <url>https://github.com/zfoo-project/zfoo</url>
     <inceptionYear>2016</inceptionYear>
 
+    <developers>
+        <developer>
+            <name>jaysunxiao</name>
+            <email>jaysunxiao@gmail.com</email>
+            <url>https://github.com/godotg</url>
+        </developer>
+    </developers>
+
+    <organization>
+        <name>The zfoo Authors</name>
+        <url>https://github.com/zfoo-project/zfoo</url>
+    </organization>
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
