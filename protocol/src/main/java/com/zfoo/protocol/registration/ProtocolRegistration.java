@@ -38,6 +38,8 @@ public class ProtocolRegistration implements IProtocolRegistration {
      */
     private IFieldRegistration[] fieldRegistrations;
 
+    private Field[] originalFields;
+
     public ProtocolRegistration() {
 
     }
@@ -120,6 +122,14 @@ public class ProtocolRegistration implements IProtocolRegistration {
 
     public void setFields(Field[] fields) {
         this.fields = fields;
+    }
+
+    public Field[] getOriginalFields() {
+        return originalFields;
+    }
+
+    public void setOriginalFields(Field[] originalFields) {
+        this.originalFields = originalFields;
     }
 
     public IFieldRegistration[] getFieldRegistrations() {

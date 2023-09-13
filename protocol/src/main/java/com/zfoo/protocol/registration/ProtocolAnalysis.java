@@ -42,6 +42,7 @@ import javassist.NotFoundException;
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.Map.Entry;
 
 import static com.zfoo.protocol.ProtocolManager.*;
 
@@ -311,6 +312,7 @@ public class ProtocolAnalysis {
             enhanceProtocolRegistration(enhanceList);
             enhanceProtocolAfter(generateOperation);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new UnknownException(e);
         }
     }
@@ -377,15 +379,16 @@ public class ProtocolAnalysis {
         GenerateProtobufUtils.clear();
     }
 
-    private static List<Field> customFieldOrder(Class<?> clazz) {
+    private static Entry<ArrayList<Field>, List<Field>> customFieldOrder(Class<?> clazz) {
         var notCompatibleFields = new ArrayList<Field>();
         var compatibleFieldMap = new HashMap<Integer, Field>();
+        List<Field> originalFields = new ArrayList<>();
         for (var field : clazz.getDeclaredFields()) {
             var modifiers = field.getModifiers();
             if (Modifier.isTransient(modifiers) || Modifier.isStatic(modifiers)) {
                 continue;
             }
-            if (Modifier.isFinal(modifiers)) {
+            if (!clazz.isRecord() && Modifier.isFinal(modifiers)) {
                 throw new RunException("[{}]协议号中的[field:{}]属性的访问修饰符不能为final", clazz.getCanonicalName(), field.getName());
             }
             if (!Modifier.isPublic(modifiers) && !Modifier.isPrivate(modifiers)) {
@@ -400,6 +403,7 @@ public class ProtocolAnalysis {
                     throw new RunException("[{}]协议号中的[field:{}]和[field:{}]不能有相同的Compatible顺序[order:{}]", clazz.getCanonicalName(), oldField.getName(), field.getName(), oldField, order);
                 }
             } else {
+                originalFields.add(field);
                 notCompatibleFields.add(field);
             }
         }
@@ -415,26 +419,37 @@ public class ProtocolAnalysis {
                 .map(Map.Entry::getValue)
                 .toList();
         notCompatibleFields.addAll(compatibleFields);
-        return notCompatibleFields;
+        return Map.entry(notCompatibleFields, originalFields);
     }
 
     private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) {
         var protocolId = ProtocolManager.protocolId(clazz);
         // 对象需要被序列化的属性
-        var fields = customFieldOrder(clazz);
+        var fieldsEntry = customFieldOrder(clazz);
 
         try {
             var registrationList = new ArrayList<IFieldRegistration>();
+            List<Field> fields = fieldsEntry.getKey();
+            if (clazz.isRecord()) {
+                fields = fieldsEntry.getValue();
+            }
             for (var field : fields) {
                 registrationList.add(toRegistration(clazz, field));
             }
 
-            var constructor = clazz.getDeclaredConstructor();
+            Constructor constructor;
+            if (clazz.isRecord()) {
+                constructor = ReflectionUtils.getConstructor(clazz, fields.stream().map(p -> p.getType()).toList().toArray(new Class[]{}));
+            } else {
+                constructor = clazz.getDeclaredConstructor();
+            }
+
             ReflectionUtils.makeAccessible(constructor);
             var protocol = new ProtocolRegistration();
             protocol.setId(protocolId);
             protocol.setConstructor(constructor);
-            protocol.setFields(ArrayUtils.listToArray(fields, Field.class));
+            protocol.setFields(ArrayUtils.listToArray(fieldsEntry.getKey(), Field.class));
+            protocol.setOriginalFields(ArrayUtils.listToArray(fieldsEntry.getValue(), Field.class));
             protocol.setFieldRegistrations(ArrayUtils.listToArray(registrationList, IFieldRegistration.class));
             protocol.setModule(module.getId());
             return protocol;
@@ -630,8 +645,10 @@ public class ProtocolAnalysis {
         // 不能是泛型类
         AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
 
-        // 必须要有一个空的构造器
-        Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
+        // 普通Pojo必须要有一个空的构造器
+        if (!clazz.isRecord()) {
+            Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
+        }
 
         var protocolAnnotation = clazz.getDeclaredAnnotation(Protocol.class);
         short protocolId = -1;

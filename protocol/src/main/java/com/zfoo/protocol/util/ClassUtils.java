@@ -393,8 +393,10 @@ public abstract class ClassUtils {
         ReflectionUtils.assertIsPojoClass(clazz);
         // 不能是泛型类
         AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
-        // 必须要有一个空的构造器
-        ReflectionUtils.publicEmptyConstructor(clazz);
+        // 普通Pojo必须要有一个空的构造器
+        if (!clazz.isRecord()) {
+            ReflectionUtils.publicEmptyConstructor(clazz);
+        }
 
         var filedList = ReflectionUtils.notStaticAndTransientFields(clazz);
 
