@@ -34,7 +34,7 @@ public class StudentResource {
      */
     @Index
     private String name;
-
+    @Index
     @AliasFieldName("年龄")
     private int age;
     private float score;

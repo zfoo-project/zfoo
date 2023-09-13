@@ -18,6 +18,7 @@ import io.netty.util.collection.LongObjectHashMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author godotg
@@ -85,7 +86,7 @@ public class StorageLong<K, V> extends StorageObject<K, V> {
 
     @Override
     public Collection<V> getAll() {
-        return dataMap.values();
+        return dataMap.values().stream().collect(Collectors.toUnmodifiableList());
     }
 
     @Override

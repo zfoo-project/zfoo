@@ -48,7 +48,7 @@
 
     <storage:storage id="resourceManager">
         <!-- package以及location属性都支持同时指定多个路径，路径分隔符为, ;或者空格-->
-        <storage:scan package="com.zfoo.**.resource"/>
+        <storage:scan package="com.zfoo.**.resource" recycle="false"/>
         <!-- 如果是类路径一classpath开头，如果是其它目录则以file开头,-->
         <storage:resource location="classpath:/,classpath:/excel"/>
         <!-- <storage:resource location="file:C:\Users\godotg\Desktop\excel"/>-->

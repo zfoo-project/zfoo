@@ -25,6 +25,7 @@ import org.springframework.core.convert.TypeDescriptor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -68,20 +69,45 @@ public class ResourceInterpreter {
         var cellFieldMap = getCellFieldMap(resource, clazz);
         var fieldInfos = getFieldInfos(cellFieldMap, clazz);
 
-        var iterator = resource.getRows().iterator();
-        // 从ROW_SERVER这行开始读取数据
-        while (iterator.hasNext()) {
-            var columns = iterator.next();
-            var instance = ReflectionUtils.newInstance(clazz);
+        if (clazz.isRecord()) {
+            Class[] constructParams = fieldInfos.stream().map(p -> p.field.getType()).toList().toArray(new Class[]{});
+            Constructor<T> constructor = ReflectionUtils.getConstructor(clazz, constructParams);
 
-            for (var fieldInfo : fieldInfos) {
-                var content = columns.get(fieldInfo.index);
-                if (StringUtils.isNotEmpty(content) || fieldInfo.field.getType() == String.class) {
-                    inject(instance, fieldInfo.field, content);
+            var iterator = resource.getRows().iterator();
+            // 从ROW_SERVER这行开始读取数据
+            while (iterator.hasNext()) {
+                int index = 0;
+                var columns = iterator.next();
+                var params = new Object[fieldInfos.size()];
+
+                for (var fieldInfo : fieldInfos) {
+                    var content = columns.get(fieldInfo.index);
+                    if (StringUtils.isNotEmpty(content) || fieldInfo.field.getType() == String.class) {
+                        var targetType = new TypeDescriptor(fieldInfo.field);
+                        var value = conversionServiceFactoryBean.getObject().convert(content, TYPE_DESCRIPTOR, targetType);
+                        params[index++] = value;
+                    }
                 }
+                var instance = ReflectionUtils.newInstance(constructor, params);
+                result.add(instance);
             }
-            result.add(instance);
+        } else {
+            var iterator = resource.getRows().iterator();
+            // 从ROW_SERVER这行开始读取数据
+            while (iterator.hasNext()) {
+                var columns = iterator.next();
+                var instance = ReflectionUtils.newInstance(clazz);
+
+                for (var fieldInfo : fieldInfos) {
+                    var content = columns.get(fieldInfo.index);
+                    if (StringUtils.isNotEmpty(content) || fieldInfo.field.getType() == String.class) {
+                        inject(instance, fieldInfo.field, content);
+                    }
+                }
+                result.add(instance);
+            }
         }
+
         return result;
     }
 

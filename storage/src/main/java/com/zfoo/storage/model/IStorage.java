@@ -12,6 +12,7 @@
 
 package com.zfoo.storage.model;
 
+import com.zfoo.storage.util.support.SerializableFunction;
 import org.springframework.lang.Nullable;
 
 import java.util.Collection;
@@ -43,18 +44,17 @@ public interface IStorage<K, V> {
 
     Collection<V> getAll();
 
+    List<V> getList();
+
     Map<K, V> getData();
 
     IdDef getIdDef();
 
-    List<V> getIndex(String indexName, Object key);
+    @Nullable
+    <K> List<V> getIndexes(SerializableFunction<V, ?> function, K key);
 
     @Nullable
-    V getUniqueIndex(String uniqueIndexName, Object key);
+    <K, V> V getUniqueIndex(SerializableFunction<V, ?> function, K key);
 
     int size();
-
-    V put(Object value);
-
-
 }
