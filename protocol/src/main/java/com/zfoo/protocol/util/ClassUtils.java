@@ -15,17 +15,23 @@ package com.zfoo.protocol.util;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.RunException;
 
-import java.beans.Introspector;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.net.*;
-import java.util.*;
+import java.net.JarURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.regex.Pattern;
 
 /**
  * @author godotg
@@ -41,8 +47,6 @@ public abstract class ClassUtils {
     public final static String JAR_PROTOCOL = "jar";
 
     public final static String JAR_URL_SEPARATOR = "!/";
-    private static final Pattern GET_PATTERN = Pattern.compile("^get[A-Z].*");
-    private static final Pattern IS_PATTERN = Pattern.compile("^is[A-Z].*");
 
     private static ClassLoader systemClassLoader;
 
@@ -540,21 +544,5 @@ public abstract class ClassUtils {
                 Thread.currentThread().getContextClassLoader(),
                 ClassUtils.class.getClassLoader(),
                 systemClassLoader};
-    }
-
-    /**
-     * 方法名转换为字段名
-     *
-     * @param methodName 方法名
-     * @return
-     */
-    public static String getFieldName(String methodName) {
-        // 对于非标准变量生成的Get方法这里可以直接抛出异常，或者打印异常日志
-        if (GET_PATTERN.matcher(methodName).matches()) {
-            methodName = methodName.substring(3);
-        } else if (IS_PATTERN.matcher(methodName).matches()) {
-            methodName = methodName.substring(2);
-        }
-        return Introspector.decapitalize(methodName);
     }
 }
