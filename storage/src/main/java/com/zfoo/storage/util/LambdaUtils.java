@@ -1,5 +1,6 @@
 package com.zfoo.storage.util;
 
+import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.storage.util.function.Func1;
 import com.zfoo.storage.util.support.IdeaProxyLambdaMeta;
 import com.zfoo.storage.util.support.LambdaMeta;
@@ -8,10 +9,8 @@ import com.zfoo.storage.util.support.SerializedLambda;
 import com.zfoo.storage.util.support.ShadowLambdaMeta;
 
 import java.io.Serializable;
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.security.AccessController;
 
 /**
  * @author veione
@@ -36,22 +35,12 @@ public final class LambdaUtils {
         // 2. 反射读取
         try {
             Method method = func.getClass().getDeclaredMethod("writeReplace");
-            return new ReflectLambdaMeta((SerializedLambda) setAccessible(method).invoke(func), func.getClass().getClassLoader());
+            ReflectionUtils.makeAccessible(method);
+            return new ReflectLambdaMeta((SerializedLambda) method.invoke(func), func.getClass().getClassLoader());
         } catch (Throwable e) {
             // 3. 反射失败使用序列化的方式读取
             return new ShadowLambdaMeta(SerializedLambda.extract(func));
         }
-    }
-
-    /**
-     * 设置可访问对象的可访问权限为 true
-     *
-     * @param object 可访问的对象
-     * @param <T>    类型
-     * @return 返回设置后的对象
-     */
-    public static <T extends AccessibleObject> T setAccessible(T object) {
-        return AccessController.doPrivileged(new SetAccessibleAction<>(object));
     }
 
     /**
