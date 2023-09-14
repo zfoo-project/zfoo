@@ -3,7 +3,7 @@
 ### Ⅰ. 简介
 
 - [storage](https://github.com/zfoo-project/zfoo/blob/main/storage/README.md)
-  Excel和Java类自动映射框架，只需要定义一个和Excel对应的类，直接解析Excel，json，csv
+  Java对象和excel/csv/json自动映射框架，只需要定义一个和Excel对应的类，直接解析Excel，json，csv
 
 - 利用Java动态语言的反射特性，无需任何代码就能解析Excel
 

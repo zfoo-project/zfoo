@@ -2,7 +2,7 @@ English | [简体中文](./README_CN.md)
 
 ### Ⅰ. Introduction
 
-- [orm](https://github.com/zfoo-project/zfoo/blob/main/orm/README.md) Based on Mongo DB's orm framework, it provides a
+- [orm](https://github.com/zfoo-project/zfoo/blob/main/orm/README.md) Based on MongoDB's orm framework, it provides a
   mapping between POJO objects and Mongo DB databases
 - MongoDB is a distributed database that can be used on a single machine or distributed in a single machine
 - High-performance database entity object caching based on [caffeine](https://github.com/ben-manes/caffeine)
