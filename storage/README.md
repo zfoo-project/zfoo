@@ -3,7 +3,7 @@ English | [简体中文](./README_CN.md)
 ### Ⅰ. Introduction
 
 - [storage](https://github.com/zfoo-project/zfoo/blob/main/storage/README.md)
-  Excel and Java class automatic mapping framework, only need to define a class corresponding to Excel, directly parse
+  Java pojo and excel/csv/json automatic mapping framework, only need to define a class corresponding to Excel, directly parse
   Excel, json, csv
 
 - Take advantage of the reflection nature of the Java dynamic language to parse Excel without any code

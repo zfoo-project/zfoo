@@ -15,31 +15,38 @@
         <!-- spring and spring boot -->
         <spring.version>6.0.11</spring.version>
         <spring.boot.version>3.1.3</spring.boot.version>
-        <junit.version>4.12</junit.version>
-        <!-- bytecode enhancement(字节码增强) -->
+        <junit.version>4.13.2</junit.version>
+        <!-- bytecode enhancement -->
         <javassist.version>3.29.2-GA</javassist.version>
         <bytebuddy.version>1.14.6</bytebuddy.version>
         <!-- network framework -->
         <netty.version>4.1.97.Final</netty.version>
         <!-- zookeeper -->
         <curator.version>5.5.0</curator.version>
-        <!-- hardware detection(硬件检测) -->
+        <!-- hardware detection -->
         <oshi.version>6.4.5</oshi.version>
         <!-- database and cache -->
         <mongodb-driver-sync.version>4.10.2</mongodb-driver-sync.version>
         <caffeine.version>3.1.8</caffeine.version>
-        <!-- Office document parsing(office文档解析包) -->
+        <!-- Office document parsing -->
         <poi.version>5.2.3</poi.version>
         <csv.version>1.10.0</csv.version>
-        <!-- maven core plugin(maven核心插件) -->
+        <!-- maven core plugin -->
         <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
         <maven-shade-plugin.version>3.5.0</maven-shade-plugin.version>
+        <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
+        <!-- deploy maven repository -->
+        <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
+        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
+        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
         <versions-maven-plugin.version>2.16.0</versions-maven-plugin.version>
+        <!-- encoding and java version -->
         <project.build.sourceEncoding>${file.encoding}</project.build.sourceEncoding>
         <maven.compiler.encoding>${file.encoding}</maven.compiler.encoding>
         <java.version>17</java.version>
@@ -170,26 +177,28 @@
         </plugins>
     </build>
 
+
+    <!-- deploy to maven repository should specify these tag.(部署到maven中央仓库必须指定下面的标签) -->
     <name>orm</name>
-    <description>zfoo orm</description>
+    <description>zfoo orm is MongoDB orm framework</description>
     <url>https://github.com/zfoo-project/zfoo</url>
 
     <developers>
         <developer>
-            <name>jaysunxiao</name>
-            <email>jaysunxiao@gmail.com</email>
-            <url>https://github.com/godotg</url>
+            <name>all contributors</name>
+            <email>all@zfoo.com</email>
+            <url>https://github.com/zfoo-project/zfoo</url>
         </developer>
     </developers>
 
     <organization>
-        <name>The zfoo Authors</name>
+        <name>zfoo</name>
         <url>https://github.com/zfoo-project/zfoo</url>
     </organization>
 
     <licenses>
         <license>
-            <name>The Apache Software License, Version 2.0</name>
+            <name>Apache License 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
@@ -203,15 +212,12 @@
     <profiles>
         <profile>
             <id>ossrh</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
+                        <version>${nexus-staging-maven-plugin.version}</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
@@ -223,7 +229,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.0</version>
+                        <version>${maven-source-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -237,7 +243,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.5.0</version>
+                        <version>${maven-javadoc-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -251,7 +257,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>

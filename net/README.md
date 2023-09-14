@@ -2,8 +2,8 @@ English | [简体中文](./README_CN.md)
 
 ### Ⅰ. Introduction
 
-- [net](https://github.com/zfoo-project/zfoo/blob/main/net/README.md) Naturally asynchronous, Actor design idea,
-  lock-free design, universal RPC framework based on Spring's MVC-style usage
+- [net](https://github.com/zfoo-project/zfoo/blob/main/net/README.md) Asynchronous, actor design,
+  lock-free, universal RPC framework based on Spring's MVC-style usage
 
 1. Elegant synchronous and asynchronous requests, faster, supports tcp udp websocket
 2. Service registration and discovery, the configuration center uses zookeeper, which can be extended to other
