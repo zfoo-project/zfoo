@@ -184,9 +184,6 @@
     <profiles>
         <profile>
             <id>ossrh</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
