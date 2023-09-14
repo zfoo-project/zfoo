@@ -31,7 +31,6 @@
         <!-- Office document parsing(office文档解析包) -->
         <poi.version>5.2.3</poi.version>
         <csv.version>1.10.0</csv.version>
-        <guava.version>32.1.2-jre</guava.version>
         <java.version>17</java.version>
         <file.encoding>UTF-8</file.encoding>
         <!-- maven core plugin(maven核心插件) -->
@@ -111,12 +110,6 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
         </dependency>
     </dependencies>
 

@@ -15,7 +15,7 @@ package com.zfoo.storage;
 
 import com.zfoo.scheduler.util.StopWatch;
 import com.zfoo.storage.manager.IStorageManager;
-import com.zfoo.storage.util.support.SerializableFunction;
+import com.zfoo.storage.util.function.Func1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -60,12 +60,12 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
         return instance.storageManager.getStorage(clazz).getList();
     }
 
-    public static <K, V> List<V> getIndexes(Class<V> clazz, SerializableFunction<V, ?> function, K indexId) {
-        return instance.storageManager.getStorage(clazz).getIndexes(function, indexId);
+    public static <K, V> List<V> getIndexes(Class<V> clazz, Func1<V, ?> function, K keyId) {
+        return instance.storageManager.getStorage(clazz).getIndexes(function, keyId);
     }
 
-    public static <K, V> V getUniqueIndex(Class<V> clazz, SerializableFunction<V, ?> function, K indexId) {
-        return instance.storageManager.getStorage(clazz).getUniqueIndex(function, indexId);
+    public static <K, V> V getUniqueIndex(Class<V> clazz, Func1<V, ?> func, K keyId) {
+        return instance.storageManager.getStorage(clazz).getUniqueIndex(func, keyId);
     }
 
     @Override

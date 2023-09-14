@@ -16,7 +16,11 @@ package com.zfoo.storage.manager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.exception.RunException;
-import com.zfoo.protocol.util.*;
+import com.zfoo.protocol.util.ClassUtils;
+import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.protocol.util.GraalVmUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
+import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.anno.GraalvmNativeStorage;
 import com.zfoo.storage.anno.Id;
@@ -26,7 +30,7 @@ import com.zfoo.storage.config.StorageConfig;
 import com.zfoo.storage.interpreter.data.StorageEnum;
 import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.model.StorageDefinition;
-import com.zfoo.storage.util.support.SerializableFunction;
+import com.zfoo.storage.util.function.Func1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -43,7 +47,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -196,14 +206,14 @@ public class StorageManager implements IStorageManager {
         return (List<T>) storage.getAll();
     }
 
-    public <T, K> List<T> getIndexes(Class<T> clazz, SerializableFunction<T, ?> function, K indexId) {
+    public <T, K> List<T> getIndexes(Class<T> clazz, Func1<T, ?> func, K indexId) {
         var storage = getStorage(clazz);
-        return storage.getIndexes(function, indexId);
+        return storage.getIndexes(func, indexId);
     }
 
-    public <T, UQ> T get(Class<T> clazz, UQ uniqueId) {
+    public <T, UQ> T get(Class<T> clazz, UQ keyId) {
         IStorage<UQ, T> storage = getStorage(clazz);
-        return storage.get(uniqueId);
+        return storage.get(keyId);
     }
 
     @Override

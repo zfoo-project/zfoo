@@ -12,10 +12,8 @@
 
 package com.zfoo.storage.manager;
 
-import com.google.common.collect.ImmutableMap;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -24,7 +22,7 @@ import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.model.IdDef;
 import com.zfoo.storage.model.IndexDef;
 import com.zfoo.storage.util.LambdaUtils;
-import com.zfoo.storage.util.support.SerializableFunction;
+import com.zfoo.storage.util.function.Func1;
 import org.springframework.lang.Nullable;
 
 import java.io.InputStream;
@@ -40,15 +38,15 @@ import java.util.stream.Collectors;
  * @author godotg
  */
 public class StorageObject<K, V> implements IStorage<K, V> {
-    private ImmutableMap<K, V> dataMap;
+    private Map<K, V> dataMap = new HashMap<>(64);
     // 非唯一索引
-    protected ImmutableMap<String, Map<Object, List<V>>> indexMap;
+    protected Map<String, Map<Object, List<V>>> indexMap = new HashMap<>(32);
     // 唯一索引
-    protected ImmutableMap<String, Map<Object, V>> uniqueIndexMap;
+    protected Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>(16);
 
     protected Class<?> clazz;
     protected IdDef idDef;
-    protected ImmutableMap<String, IndexDef> indexDefMap;
+    protected Map<String, IndexDef> indexDefMap;
     // 当前配置表是否在当前项目中使用，没有被使用的会清除data数据，以达到节省内存的目的
     protected boolean recycle = true;
 
@@ -59,9 +57,11 @@ public class StorageObject<K, V> implements IStorage<K, V> {
             storage.clazz = resourceClazz;
             var idDef = IdDef.valueOf(resourceClazz);
             storage.idDef = idDef;
-            storage.indexDefMap = ImmutableMap.copyOf(IndexDef.createResourceIndexes(resourceClazz));
+            storage.indexDefMap = Collections.unmodifiableMap(IndexDef.createResourceIndexes(resourceClazz));
             var list = ResourceInterpreter.read(inputStream, resourceClazz, suffix);
-            storage.append(list);
+            for (var object : list) {
+                storage.put(object);
+            }
             var idType = idDef.getField().getType();
             if (idType == int.class || idType == Integer.class) {
                 return new StorageInt<>(storage);
@@ -159,8 +159,8 @@ public class StorageObject<K, V> implements IStorage<K, V> {
     }
 
     @Override
-    public <K> List<V> getIndexes(SerializableFunction<V, ?> indexFunction, K key) {
-        String indexName = ClassUtils.getFieldName(LambdaUtils.extract(indexFunction).getImplMethodName());
+    public <K> List<V> getIndexes(Func1<V, ?> func, K key) {
+        String indexName = LambdaUtils.getFieldName(func);
         var indexValues = indexMap.get(indexName);
         AssertionUtils.notNull(indexValues, "The index of [indexName:{}] does not exist in the static resource [resource:{}]", indexName, clazz.getSimpleName());
         var values = indexValues.get(key);
@@ -172,8 +172,8 @@ public class StorageObject<K, V> implements IStorage<K, V> {
 
     @Nullable
     @Override
-    public <K, V> V getUniqueIndex(SerializableFunction<V, ?> uniqueIndexFunction, K key) {
-        String uniqueIndexName = ClassUtils.getFieldName(LambdaUtils.extract(uniqueIndexFunction).getImplMethodName());
+    public <K, V> V getUniqueIndex(Func1<V, ?> func, K key) {
+        String uniqueIndexName = LambdaUtils.getFieldName(func);
         var indexValueMap = uniqueIndexMap.get(uniqueIndexName);
         AssertionUtils.notNull(indexValueMap, "There is no a unique index for [uniqueIndexName:{}] in the static resource [resource:{}]", uniqueIndexName, clazz.getSimpleName());
         var value = indexValueMap.get(key);
@@ -185,78 +185,36 @@ public class StorageObject<K, V> implements IStorage<K, V> {
         return dataMap.size();
     }
 
-    private void append(List<?> values) {
-        ImmutableMap.Builder<K, V> dataMapBuilder = ImmutableMap.builder();
-        Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>(32);
-        Map<String, Map<Object, List<V>>> indexMap = new HashMap<>(32);
-        for (var value : values) {
-            var key = (K) ReflectionUtils.getField(idDef.getField(), value);
-
-            if (key == null) {
-                throw new RuntimeException("There is an item with an unconfigured id in the static resource");
-            }
-
-            // 添加资源
-            var v = (V) value;
-            dataMapBuilder.put(key, v);
-
-            // 添加索引
-            for (var def : indexDefMap.values()) {
-                // 使用field的名称作为索引的名称
-                var indexKey = def.getField().getName();
-                var indexValue = ReflectionUtils.getField(def.getField(), v);
-                if (def.isUnique()) {// 唯一索引
-                    var index = uniqueIndexMap.computeIfAbsent(indexKey, k -> new HashMap<>(8));
-                    if (index.put(indexValue, v) != null) {
-                        throw new RuntimeException(StringUtils.format("Duplicate unique index [index:{}][value:{}] of static resource [class:{}]", indexKey, indexValue, clazz.getName()));
-                    }
-                } else {// 不是唯一索引
-                    var index = indexMap.computeIfAbsent(indexKey, k -> new HashMap<>(12));
-                    var list = index.computeIfAbsent(indexValue, k -> new ArrayList<>());
-                    list.add(v);
-                }
-            }
-        }
-        this.uniqueIndexMap = ImmutableMap.copyOf(uniqueIndexMap);
-        this.indexMap = ImmutableMap.copyOf(indexMap);
-        this.dataMap = dataMapBuilder.build();
-    }
-
-    @Deprecated
-    protected V put(Object value) {
+    public V put(Object value) {
         @SuppressWarnings("unchecked")
         var key = (K) ReflectionUtils.getField(idDef.getField(), value);
 
         if (key == null) {
             throw new RuntimeException("There is an item with an unconfigured id in the static resource");
         }
-
         if (dataMap.containsKey(key)) {
             throw new RuntimeException(StringUtils.format("Duplicate [id:{}] of static resource [resource:{}]", key, clazz.getSimpleName()));
         }
-
         // 添加资源
         @SuppressWarnings("unchecked")
         var v = (V) value;
         var result = dataMap.put(key, v);
-
         // 添加索引
         for (var def : indexDefMap.values()) {
             // 使用field的名称作为索引的名称
             var indexKey = def.getField().getName();
             var indexValue = ReflectionUtils.getField(def.getField(), v);
             if (def.isUnique()) {// 唯一索引
-                var index = uniqueIndexMap.computeIfAbsent(indexKey, k -> new HashMap<>());
+                var index = uniqueIndexMap.computeIfAbsent(indexKey, k -> new HashMap<>(12));
                 if (index.put(indexValue, v) != null) {
                     throw new RuntimeException(StringUtils.format("Duplicate unique index [index:{}][value:{}] of static resource [class:{}]", indexKey, indexValue, clazz.getName()));
                 }
             } else {// 不是唯一索引
-                var index = indexMap.computeIfAbsent(indexKey, k -> new HashMap<>());
+                var index = indexMap.computeIfAbsent(indexKey, k -> new HashMap<>(32));
                 var list = index.computeIfAbsent(indexValue, k -> new ArrayList<V>());
                 list.add(v);
             }
         }
         return result;
     }
-
 }
