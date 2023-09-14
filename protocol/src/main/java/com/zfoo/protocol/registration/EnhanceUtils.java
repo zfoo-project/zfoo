@@ -30,6 +30,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 对应于ProtocolRegistration
@@ -181,6 +182,9 @@ public abstract class EnhanceUtils {
         var fieldRegistrations = registration.getFieldRegistrations();
 
         var packetClazz = constructor.getDeclaringClass();
+        if (packetClazz.isRecord()) {
+            fields = registration.getOriginalFields();
+        }
 
         var builder = new StringBuilder();
         builder.append("{").append(packetClazz.getCanonicalName() + " packet = (" + packetClazz.getCanonicalName() + ")$2;");
@@ -204,28 +208,46 @@ public abstract class EnhanceUtils {
     // see: ProtocolRegistration.read()
     private static String readMethodBody(ProtocolRegistration registration) {
         var constructor = registration.getConstructor();
-        var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
 
         var builder = new StringBuilder();
         builder.append("{").append("if(!" + EnhanceUtils.byteBufUtilsReadBoolean + "){").append("return null;}");
         var packetClazz = constructor.getDeclaringClass();
-        builder.append(packetClazz.getCanonicalName() + " packet=new " + packetClazz.getCanonicalName() + "();");
+        if (packetClazz.isRecord()) {
+            var fields = registration.getOriginalFields();
+            List<String> constructorParam = new ArrayList<>(fields.length);
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                var fieldRegistration = fieldRegistrations[i];
+                // protocol backwards compatibility，协议向后兼容
+                if (field.isAnnotationPresent(Compatible.class)) {
+                    builder.append("if(!$1.isReadable()){ return packet; }");
+                }
 
-        for (var i = 0; i < fields.length; i++) {
-            var field = fields[i];
-            var fieldRegistration = fieldRegistrations[i];
-            // protocol backwards compatibility，协议向后兼容
-            if (field.isAnnotationPresent(Compatible.class)) {
-                builder.append("if(!$1.isReadable()){ return packet; }");
+                var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
+                constructorParam.add(readObject);
             }
 
-            var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
+            builder.append(packetClazz.getCanonicalName() + " packet=new " + packetClazz.getCanonicalName() + "(" + constructorParam.stream().collect(Collectors.joining(StringUtils.COMMA)) + ");");
+        } else {
+            var fields = registration.getFields();
+            builder.append(packetClazz.getCanonicalName() + " packet=new " + packetClazz.getCanonicalName() + "();");
 
-            if (Modifier.isPublic(field.getModifiers())) {
-                builder.append(StringUtils.format("packet.{}={};", field.getName(), readObject));
-            } else {
-                builder.append(StringUtils.format("packet.{}({});", ReflectionUtils.fieldToSetMethod(packetClazz, field), readObject));
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                var fieldRegistration = fieldRegistrations[i];
+                // protocol backwards compatibility，协议向后兼容
+                if (field.isAnnotationPresent(Compatible.class)) {
+                    builder.append("if(!$1.isReadable()){ return packet; }");
+                }
+
+                var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
+
+                if (Modifier.isPublic(field.getModifiers())) {
+                    builder.append(StringUtils.format("packet.{}={};", field.getName(), readObject));
+                } else {
+                    builder.append(StringUtils.format("packet.{}({});", ReflectionUtils.fieldToSetMethod(packetClazz, field), readObject));
+                }
             }
         }
 

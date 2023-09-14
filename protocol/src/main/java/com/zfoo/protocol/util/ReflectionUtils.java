@@ -75,7 +75,7 @@ public abstract class ReflectionUtils {
     }
 
     public static boolean isPojoClass(Class<?> clazz) {
-        return clazz.getSuperclass().equals(Object.class);
+        return clazz.getSuperclass().equals(Object.class) || clazz.isRecord();
     }
 
     public static void assertIsPojoClass(Class<?> clazz) {
@@ -322,10 +322,13 @@ public abstract class ReflectionUtils {
 
     public static String fieldToGetMethod(Class<?> clazz, Field field) {
         var fieldName = field.getName();
-
         assertIsStandardFieldName(field);
 
         var methodName = "get" + StringUtils.capitalize(fieldName);
+
+        if (clazz.isRecord()) {
+            methodName = fieldName;
+        }
 
         try {
             clazz.getDeclaredMethod(methodName);
@@ -358,6 +361,11 @@ public abstract class ReflectionUtils {
         assertIsStandardFieldName(field);
 
         var methodName = "set" + StringUtils.capitalize(fieldName);
+
+        if (clazz.isRecord()) {
+            return methodName;
+        }
+
         try {
             clazz.getDeclaredMethod(methodName, field.getType());
             return methodName;

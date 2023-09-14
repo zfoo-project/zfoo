@@ -12,6 +12,7 @@
 
 package com.zfoo.storage.export;
 
+import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.serializer.CodeLanguage;
@@ -102,12 +103,12 @@ public class ExportBinaryTesting {
         var operation = new GenerateOperation();
         operation.setProtocolPath("D:\\github\\godot-bird\\test\\storage\\protocol");
         operation.getGenerateLanguages().add(CodeLanguage.GdScript);
-        //ProtocolManager.initProtocolAuto(protocols, operation);
+        ProtocolManager.initProtocolAuto(protocols, operation);
 
         // 生成数据
         var resourceData = ExportUtils.autoWrapData(ResourceData.class, storageManager.storageMap());
         var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, Integer.MAX_VALUE);
-        //ProtocolManager.write(buffer, resourceData);
+        ProtocolManager.write(buffer, resourceData);
         var bytes = ByteBufUtils.readAllBytes(buffer);
         FileUtils.writeInputStreamToFile(new File("D:/github/godot-bird/binary_data.cfg"), new ByteArrayInputStream(bytes));
 
