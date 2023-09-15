@@ -312,7 +312,6 @@ public class ProtocolAnalysis {
             enhanceProtocolRegistration(enhanceList);
             enhanceProtocolAfter(generateOperation);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new UnknownException(e);
         }
     }
