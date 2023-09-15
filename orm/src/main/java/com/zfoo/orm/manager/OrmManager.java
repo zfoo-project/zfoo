@@ -457,8 +457,8 @@ public class OrmManager implements IOrmManager {
 
         for (var field : filedList) {
             // entity必须包含属性的get和set方法
-            ReflectionUtils.fieldToGetMethod(clazz, field);
-            ReflectionUtils.fieldToSetMethod(clazz, field);
+            FieldUtils.fieldToGetMethod(clazz, field);
+            FieldUtils.fieldToSetMethod(clazz, field);
 
             // 是一个基本类型变量
             var fieldType = field.getType();

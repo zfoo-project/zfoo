@@ -17,6 +17,7 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.ClassUtils;
+import com.zfoo.protocol.util.FieldUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.GraalVmUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
@@ -123,7 +124,7 @@ public class StorageManager implements IStorageManager {
 
                     var setMethodName = StringUtils.EMPTY;
                     try {
-                        setMethodName = ReflectionUtils.fieldToSetMethod(clazz, field);
+                        setMethodName = FieldUtils.fieldToSetMethod(clazz, field);
                     } catch (Exception e) {
                         // 没有setMethod是正确的
                     }

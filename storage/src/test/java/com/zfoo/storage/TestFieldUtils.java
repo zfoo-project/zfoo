@@ -1,6 +1,6 @@
 package com.zfoo.storage;
 
-import com.zfoo.storage.util.PropertyNamer;
+import com.zfoo.protocol.util.FieldUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -9,20 +9,20 @@ import static org.junit.Assert.assertEquals;
  * @author veione
  * @version 1.0.0
  */
-public class TestPropertyNamer {
+public class TestFieldUtils {
 
     @Test
     public void testPropertyName() {
         //前三种主要用于普通的POJO,第四种用于是record类型,方法名就是属性名
-        String getName = PropertyNamer.methodToProperty("getName");
+        String getName = FieldUtils.methodToProperty("getName");
         assertEquals(getName, "name");
-        String setName = PropertyNamer.methodToProperty("setName");
+        String setName = FieldUtils.methodToProperty("setName");
         assertEquals(setName, "name");
-        String isName = PropertyNamer.methodToProperty("isName");
+        String isName = FieldUtils.methodToProperty("isName");
         assertEquals(isName, "name");
-        String name = PropertyNamer.methodToProperty("name");
+        String name = FieldUtils.methodToProperty("name");
         assertEquals(name, "name");
-        name = PropertyNamer.methodToProperty("Name");
+        name = FieldUtils.methodToProperty("Name");
         assertEquals(name, "name");
     }
 }

@@ -1,5 +1,6 @@
 package com.zfoo.storage.util;
 
+import com.zfoo.protocol.util.FieldUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.storage.util.function.Func1;
 import com.zfoo.storage.util.support.IdeaProxyLambdaMeta;
@@ -7,6 +8,7 @@ import com.zfoo.storage.util.support.LambdaMeta;
 import com.zfoo.storage.util.support.ReflectLambdaMeta;
 import com.zfoo.storage.util.support.SerializedLambda;
 import com.zfoo.storage.util.support.ShadowLambdaMeta;
+import org.springframework.util.ConcurrentReferenceHashMap;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -15,19 +17,17 @@ import java.lang.reflect.Proxy;
 /**
  * @author veione
  * @version 1.0
- * @date 2023/9/12
  */
 public final class LambdaUtils {
-    private static final SimpleCache<Class, LambdaMeta> FUNC_CACHE = new SimpleCache<>(64);
+    private static final ConcurrentReferenceHashMap<Class, LambdaMeta> CACHE = new ConcurrentReferenceHashMap<>(64, 0.75F, 16, ConcurrentReferenceHashMap.ReferenceType.WEAK);
 
     /**
      * 该缓存可能会在任意不定的时间被清除
      *
      * @param func 需要解析的 lambda 对象
-     * @param <T>  类型，被调用的 Function 对象的目标类型
      * @return 返回解析后的结果
      */
-    public static <T> LambdaMeta extract(Serializable func) {
+    public static LambdaMeta extract(Serializable func) {
         // 1. IDEA 调试模式下 lambda 表达式是一个代理
         if (func instanceof Proxy) {
             return new IdeaProxyLambdaMeta((Proxy) func);
@@ -75,7 +75,7 @@ public final class LambdaUtils {
      * @return 字段名称
      */
     public static <T> String getFieldName(Func1<T, ?> func) {
-        return PropertyNamer.methodToProperty(getMethodName(func));
+        return FieldUtils.methodToProperty(getMethodName(func));
     }
 
     /**
@@ -85,7 +85,7 @@ public final class LambdaUtils {
      * @param func 需要解析的 lambda 对象
      * @return 返回解析后的结果
      */
-    private static <T> LambdaMeta _resolve(Serializable func) {
-        return FUNC_CACHE.get(func.getClass(), () -> extract(func));
+    private static LambdaMeta _resolve(Serializable func) {
+        return CACHE.computeIfAbsent(func.getClass(), c -> extract(func));
     }
 }

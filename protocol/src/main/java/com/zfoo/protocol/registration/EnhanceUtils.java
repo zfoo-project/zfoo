@@ -21,7 +21,7 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.enhance.*;
 import com.zfoo.protocol.serializer.reflect.*;
-import com.zfoo.protocol.util.ReflectionUtils;
+import com.zfoo.protocol.util.FieldUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import javassist.*;
@@ -198,7 +198,7 @@ public abstract class EnhanceUtils {
                         .writeObject(builder, StringUtils.format("packet.{}", field.getName()), field, fieldRegistration);
             } else {
                 enhanceSerializer(fieldRegistration.serializer())
-                        .writeObject(builder, StringUtils.format("packet.{}()", ReflectionUtils.fieldToGetMethod(packetClazz, field)), field, fieldRegistration);
+                        .writeObject(builder, StringUtils.format("packet.{}()", FieldUtils.fieldToGetMethod(packetClazz, field)), field, fieldRegistration);
             }
         }
         builder.append("}");
@@ -246,7 +246,7 @@ public abstract class EnhanceUtils {
                 if (Modifier.isPublic(field.getModifiers())) {
                     builder.append(StringUtils.format("packet.{}={};", field.getName(), readObject));
                 } else {
-                    builder.append(StringUtils.format("packet.{}({});", ReflectionUtils.fieldToSetMethod(packetClazz, field), readObject));
+                    builder.append(StringUtils.format("packet.{}({});", FieldUtils.fieldToSetMethod(packetClazz, field), readObject));
                 }
             }
         }

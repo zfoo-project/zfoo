@@ -19,6 +19,21 @@
   "lambdaCapturingTypes": [
     {
       "name": "com.zfoo.storage.util.LambdaUtils"
+    },
+    {
+      "name": "com.zfoo.storage.util.support.SerializedLambda"
+    },
+    {
+      "name": "java.lang.invoke.SerializedLambda"
+    },
+    {
+      "name": "com.zfoo.storage.util.function.Func"
+    },
+    {
+      "name": "com.zfoo.storage.util.function.Func0"
+    },
+    {
+      "name": "com.zfoo.storage.util.function.Func1"
     }
   ]
 }
