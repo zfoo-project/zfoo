@@ -7,11 +7,11 @@ import com.zfoo.protocol.util.StringUtils;
  * Created by hcl at 2021/5/14
  */
 public class ReflectLambdaMeta implements LambdaMeta {
-    private final SerializedLambda lambda;
+    private final java.lang.invoke.SerializedLambda lambda;
 
     private final ClassLoader classLoader;
 
-    public ReflectLambdaMeta(SerializedLambda lambda, ClassLoader classLoader) {
+    public ReflectLambdaMeta(java.lang.invoke.SerializedLambda lambda, ClassLoader classLoader) {
         this.lambda = lambda;
         this.classLoader = classLoader;
     }

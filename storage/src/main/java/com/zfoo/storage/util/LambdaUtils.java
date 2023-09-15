@@ -34,9 +34,10 @@ public final class LambdaUtils {
         }
         // 2. 反射读取
         try {
-            Method method = func.getClass().getDeclaredMethod("writeReplace");
+            Class<? extends Serializable> clazz = func.getClass();
+            Method method = clazz.getDeclaredMethod("writeReplace");
             ReflectionUtils.makeAccessible(method);
-            return new ReflectLambdaMeta((SerializedLambda) method.invoke(func), func.getClass().getClassLoader());
+            return new ReflectLambdaMeta((java.lang.invoke.SerializedLambda) method.invoke(func), clazz.getClassLoader());
         } catch (Throwable e) {
             // 3. 反射失败使用序列化的方式读取
             return new ShadowLambdaMeta(SerializedLambda.extract(func));
