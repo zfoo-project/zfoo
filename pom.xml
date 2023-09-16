@@ -7,7 +7,7 @@
 
     <groupId>com.zfoo</groupId>
     <artifactId>zfoo</artifactId>
-    <version>3.1.0</version>
+    <version>${zfoo.version}</version>
 
     <packaging>pom</packaging>
 
@@ -36,6 +36,84 @@
         </license>
     </licenses>
 
+    <scm>
+        <connection>https://github.com/zfoo-project/zfoo.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:zfoo-project/zfoo.git</developerConnection>
+        <url>https://github.com/zfoo-project/zfoo</url>
+    </scm>
+
+    <profiles>
+        <profile>
+            <id>ossrh</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>${nexus-staging-maven-plugin.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpg-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+
+            <distributionManagement>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
     <modules>
         <module>boot</module>
         <module>event</module>
@@ -49,7 +127,7 @@
     </modules>
 
     <properties>
-        <zfoo.version>3.1.0</zfoo.version>
+        <zfoo.version>3.1.2</zfoo.version>
         <!-- spring and spring boot -->
         <spring.version>6.0.11</spring.version>
         <spring.boot.version>3.1.3</spring.boot.version>
