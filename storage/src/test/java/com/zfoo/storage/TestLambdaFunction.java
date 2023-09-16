@@ -28,10 +28,10 @@ public class TestLambdaFunction {
         LambdaMeta meta = LambdaUtils.extract(func);
         System.out.println(meta);
 
-        Function<StudentResource, String> func2 = StudentResource::name;
-        Method method = func2.getClass().getDeclaredMethod("writeReplace");
-        object = method.invoke(func2);
-        System.out.println(object);
+//        Function<StudentResource, String> func2 = StudentResource::name;
+//        Method method = func2.getClass().getDeclaredMethod("writeReplace");
+//        object = method.invoke(func2);
+//        System.out.println(object);
     }
 
     private static Object getObject(Serializable func) throws Exception {
