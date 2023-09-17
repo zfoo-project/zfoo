@@ -96,13 +96,8 @@ public abstract class PacketBus {
             // These rules are not necessary, but can reduce us from making low-level mistakes
             // If the request class name ends with Request which is for outer net client, then the attachment can not be a SignalAttachment
             // If the request class name ends with Ask which is for intranet client, then attachment can not be a GatewayAttachment
-            if (attachmentClazz != null) {
-                if (packetName.endsWith(PacketService.NET_REQUEST_SUFFIX)) {
-                    AssertionUtils.isTrue(!attachmentClazz.equals(SignalAttachment.class), "[class:{}] [method:{}] [packet:{}] must use [attachment:{}]!"
-                            , bean.getClass().getName(), methodName, packetName, GatewayAttachment.class.getCanonicalName());
-                } else if (packetName.endsWith(PacketService.NET_ASK_SUFFIX)) {
-                    AssertionUtils.isTrue(!attachmentClazz.equals(GatewayAttachment.class), "[class:{}] [method:{}] [packet:{}] can not match with [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayAttachment.class.getCanonicalName());
-                }
+            if (attachmentClazz != null && packetName.endsWith(PacketService.NET_ASK_SUFFIX)) {
+                AssertionUtils.isTrue(!attachmentClazz.equals(GatewayAttachment.class), "[class:{}] [method:{}] [packet:{}] can not match with [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayAttachment.class.getCanonicalName());
             }
 
             var protocolId = Short.MIN_VALUE;
