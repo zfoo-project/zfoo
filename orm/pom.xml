@@ -6,9 +6,8 @@
 
     <groupId>com.zfoo</groupId>
     <artifactId>orm</artifactId>
-    <version>${zfoo.version}</version>
-
     <packaging>jar</packaging>
+    <version>3.1.2</version>
 
     <properties>
         <zfoo.version>3.1.2</zfoo.version>
