@@ -14,6 +14,7 @@ package com.zfoo.net.router.attachment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.zfoo.protocol.anno.Note;
 import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.scheduler.util.TimeUtils;
 
@@ -33,7 +34,7 @@ public class SignalAttachment {
      */
     public static final AtomicInteger ATOMIC_ID = new AtomicInteger(0);
     /**
-     * 0 for the server, 1 for the sync or async native client, 2 for the outside client such as browser, mobile
+     * 0 for the server, 1 or 2 for the sync or async native client, 12 for the outside client such as browser, mobile
      */
     public static final byte SIGNAL_SERVER = 0;
     public static final byte SIGNAL_NATIVE_ARGUMENT_CLIENT = 1;
@@ -52,9 +53,7 @@ public class SignalAttachment {
      */
     private int taskExecutorHash = -1;
 
-    /**
-     * 0 for the server, 1 for the sync or async native client, 2 for the outside client such as browser, mobile
-     */
+    @Note("0 for the server, 1 or 2 for the sync or async native client, 12 for the outside client such as browser, mobile")
     private byte client = SIGNAL_NATIVE_ARGUMENT_CLIENT;
 
     /**
