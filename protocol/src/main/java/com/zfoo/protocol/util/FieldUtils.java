@@ -10,7 +10,7 @@ import java.util.Locale;
  *
  * @author veione
  */
-public class FieldUtils {
+public abstract class FieldUtils {
 
     public static String fieldToGetMethod(Class<?> clazz, Field field) {
         var fieldName = field.getName();

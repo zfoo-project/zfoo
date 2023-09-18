@@ -15,6 +15,7 @@ package com.zfoo.boot;
 import com.zfoo.boot.graalvm.GraalvmStorageHints;
 import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.config.StorageConfig;
+import com.zfoo.storage.graalvm.feature.RuntimeRegistrationFeature;
 import com.zfoo.storage.manager.StorageManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,6 +37,7 @@ public class StorageAutoConfiguration {
     public StorageManager storageManager(StorageConfig storageConfig) {
         var storageManager = new StorageManager();
         storageManager.setStorageConfig(storageConfig);
+        RuntimeRegistrationFeature.setLambdaCapturePackage(storageConfig.getLambdaCapturePackage());
         return storageManager;
     }
 

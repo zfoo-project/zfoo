@@ -29,6 +29,9 @@ public class StorageConfig {
     // 未被使用的Storage是否回收，默认开启节省资源
     private boolean recycle;
 
+    // 函数式capture扫描包
+    private String lambdaCapturePackage;
+
     public String getId() {
         return id;
     }
@@ -67,5 +70,13 @@ public class StorageConfig {
 
     public void setRecycle(boolean recycle) {
         this.recycle = recycle;
+    }
+
+    public String getLambdaCapturePackage() {
+        return lambdaCapturePackage;
+    }
+
+    public void setLambdaCapturePackage(String lambdaCapturePackage) {
+        this.lambdaCapturePackage = lambdaCapturePackage;
     }
 }

@@ -91,6 +91,7 @@ public class ExportBinaryTesting {
         config.setResourceLocation("classpath:/excel");
         config.setWriteable(true);
         config.setRecycle(false);
+        config.setLambdaCapturePackage("com.zfoo.storage");
         var storageManager = new StorageManager();
         storageManager.setStorageConfig(config);
         storageManager.initBefore();

@@ -14,11 +14,4 @@ public interface LambdaMeta {
      */
     String getImplMethodName();
 
-    /**
-     * 实例化该方法的类
-     *
-     * @return 返回对应的类名称
-     */
-    Class<?> getInstantiatedClass();
-
 }
