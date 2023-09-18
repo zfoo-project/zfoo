@@ -429,7 +429,8 @@ public class ProtocolAnalysis {
         try {
             var registrationList = new ArrayList<IFieldRegistration>();
             List<Field> fields = fieldsEntry.getKey();
-            if (clazz.isRecord()) {
+            boolean isRecord = clazz.isRecord();
+            if (isRecord) {
                 fields = fieldsEntry.getValue();
             }
             for (var field : fields) {
@@ -437,7 +438,7 @@ public class ProtocolAnalysis {
             }
 
             Constructor constructor;
-            if (clazz.isRecord()) {
+            if (isRecord) {
                 constructor = ReflectionUtils.getConstructor(clazz, fields.stream().map(p -> p.getType()).toList().toArray(new Class[]{}));
             } else {
                 constructor = clazz.getDeclaredConstructor();
@@ -447,8 +448,12 @@ public class ProtocolAnalysis {
             var protocol = new ProtocolRegistration();
             protocol.setId(protocolId);
             protocol.setConstructor(constructor);
-            protocol.setFields(ArrayUtils.listToArray(fieldsEntry.getKey(), Field.class));
-            protocol.setOriginalFields(ArrayUtils.listToArray(fieldsEntry.getValue(), Field.class));
+            if (isRecord) {
+                protocol.setFields(ArrayUtils.listToArray(fieldsEntry.getValue(), Field.class));
+                protocol.setOriginalFields(ArrayUtils.listToArray(fieldsEntry.getValue(), Field.class));
+            } else {
+                protocol.setFields(ArrayUtils.listToArray(fieldsEntry.getKey(), Field.class));
+            }
             protocol.setFieldRegistrations(ArrayUtils.listToArray(registrationList, IFieldRegistration.class));
             protocol.setModule(module.getId());
             return protocol;

@@ -145,7 +145,7 @@ public class StorageObject<K, V> implements IStorage<K, V> {
     @Override
     public List<V> getList() {
         Collection<V> all = getAll();
-        return all.stream().collect(Collectors.toUnmodifiableList());
+        return all.stream().toList();
     }
 
     @Override

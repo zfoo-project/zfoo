@@ -86,7 +86,7 @@ public class StorageLong<K, V> extends StorageObject<K, V> {
 
     @Override
     public Collection<V> getAll() {
-        return dataMap.values().stream().collect(Collectors.toUnmodifiableList());
+        return dataMap.values().stream().toList();
     }
 
     @Override
