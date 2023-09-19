@@ -159,7 +159,7 @@ public class StorageObject<K, V> implements IStorage<K, V> {
     }
 
     @Override
-    public <K> List<V> getIndexes(Func1<V, ?> func, K key) {
+    public <INDEX> List<V> getIndexes(Func1<V, ?> func, INDEX key) {
         String indexName = LambdaUtils.getFieldName(func);
         var indexValues = indexMap.get(indexName);
         AssertionUtils.notNull(indexValues, "The index of [indexName:{}] does not exist in the static resource [resource:{}]", indexName, clazz.getSimpleName());
@@ -172,7 +172,7 @@ public class StorageObject<K, V> implements IStorage<K, V> {
 
     @Nullable
     @Override
-    public <K, V> V getUniqueIndex(Func1<V, ?> func, K key) {
+    public <INDEX, V> V getUniqueIndex(Func1<V, ?> func, INDEX key) {
         String uniqueIndexName = LambdaUtils.getFieldName(func);
         var indexValueMap = uniqueIndexMap.get(uniqueIndexName);
         AssertionUtils.notNull(indexValueMap, "There is no a unique index for [uniqueIndexName:{}] in the static resource [resource:{}]", uniqueIndexName, clazz.getSimpleName());

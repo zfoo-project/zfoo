@@ -378,10 +378,8 @@ public class ProtocolAnalysis {
         GenerateProtobufUtils.clear();
     }
 
-    private static Entry<ArrayList<Field>, List<Field>> customFieldOrder(Class<?> clazz) {
-        var notCompatibleFields = new ArrayList<Field>();
-        var compatibleFieldMap = new HashMap<Integer, Field>();
-        List<Field> originalFields = new ArrayList<>();
+    public static List<Field> getFields(Class<?> clazz) {
+        var fields = new ArrayList<Field>();
         for (var field : clazz.getDeclaredFields()) {
             var modifiers = field.getModifiers();
             if (Modifier.isTransient(modifiers) || Modifier.isStatic(modifiers)) {
@@ -395,6 +393,15 @@ public class ProtocolAnalysis {
             }
 
             ReflectionUtils.makeAccessible(field);
+            fields.add(field);
+        }
+        return fields;
+    }
+
+    private static List<Field> customFieldOrder(Class<?> clazz, List<Field> fields) {
+        var notCompatibleFields = new ArrayList<Field>();
+        var compatibleFieldMap = new HashMap<Integer, Field>();
+        for (var field : fields) {
             if (field.isAnnotationPresent(Compatible.class)) {
                 var order = field.getAnnotation(Compatible.class).order();
                 var oldField = compatibleFieldMap.put(order, field);
@@ -402,7 +409,6 @@ public class ProtocolAnalysis {
                     throw new RunException("[{}]协议号中的[field:{}]和[field:{}]不能有相同的Compatible顺序[order:{}]", clazz.getCanonicalName(), oldField.getName(), field.getName(), oldField, order);
                 }
             } else {
-                originalFields.add(field);
                 notCompatibleFields.add(field);
             }
         }
@@ -418,28 +424,25 @@ public class ProtocolAnalysis {
                 .map(Map.Entry::getValue)
                 .toList();
         notCompatibleFields.addAll(compatibleFields);
-        return Map.entry(notCompatibleFields, originalFields);
+        return notCompatibleFields;
     }
 
     private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) {
         var protocolId = ProtocolManager.protocolId(clazz);
+        var declaredFields = getFields(clazz);
         // 对象需要被序列化的属性
-        var fieldsEntry = customFieldOrder(clazz);
+        var fields = customFieldOrder(clazz, declaredFields);
 
         try {
             var registrationList = new ArrayList<IFieldRegistration>();
-            List<Field> fields = fieldsEntry.getKey();
             boolean isRecord = clazz.isRecord();
-            if (isRecord) {
-                fields = fieldsEntry.getValue();
-            }
             for (var field : fields) {
                 registrationList.add(toRegistration(clazz, field));
             }
 
             Constructor constructor;
             if (isRecord) {
-                constructor = ReflectionUtils.getConstructor(clazz, fields.stream().map(p -> p.getType()).toList().toArray(new Class[]{}));
+                constructor = ReflectionUtils.getConstructor(clazz, declaredFields.stream().map(p -> p.getType()).toList().toArray(new Class[]{}));
             } else {
                 constructor = clazz.getDeclaredConstructor();
             }
@@ -448,12 +451,7 @@ public class ProtocolAnalysis {
             var protocol = new ProtocolRegistration();
             protocol.setId(protocolId);
             protocol.setConstructor(constructor);
-            if (isRecord) {
-                protocol.setFields(ArrayUtils.listToArray(fieldsEntry.getValue(), Field.class));
-                protocol.setOriginalFields(ArrayUtils.listToArray(fieldsEntry.getValue(), Field.class));
-            } else {
-                protocol.setFields(ArrayUtils.listToArray(fieldsEntry.getKey(), Field.class));
-            }
+            protocol.setFields(ArrayUtils.listToArray(fields, Field.class));
             protocol.setFieldRegistrations(ArrayUtils.listToArray(registrationList, IFieldRegistration.class));
             protocol.setModule(module.getId());
             return protocol;

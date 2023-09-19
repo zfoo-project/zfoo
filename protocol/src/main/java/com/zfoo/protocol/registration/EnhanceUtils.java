@@ -27,6 +27,7 @@ import io.netty.buffer.ByteBuf;
 import javassist.*;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -182,9 +183,6 @@ public abstract class EnhanceUtils {
         var fieldRegistrations = registration.getFieldRegistrations();
 
         var packetClazz = constructor.getDeclaringClass();
-        if (packetClazz.isRecord()) {
-            fields = registration.getOriginalFields();
-        }
 
         var builder = new StringBuilder();
         builder.append("{").append(packetClazz.getCanonicalName() + " packet = (" + packetClazz.getCanonicalName() + ")$2;");
@@ -214,8 +212,10 @@ public abstract class EnhanceUtils {
         builder.append("{").append("if(!" + EnhanceUtils.byteBufUtilsReadBoolean + "){").append("return null;}");
         var packetClazz = constructor.getDeclaringClass();
         if (packetClazz.isRecord()) {
-            var fields = registration.getOriginalFields();
-            List<String> constructorParam = new ArrayList<>(fields.length);
+            var fields = registration.getFields();
+            var fieldNames = ProtocolAnalysis.getFields(packetClazz).stream().map(Field::getName).toList();
+            List<String> constructorParam = fieldNames.stream().collect(Collectors.toList());
+
             for (var i = 0; i < fields.length; i++) {
                 var field = fields[i];
                 var fieldRegistration = fieldRegistrations[i];
@@ -225,7 +225,8 @@ public abstract class EnhanceUtils {
                 }
 
                 var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
-                constructorParam.add(readObject);
+                int index = fieldNames.indexOf(field.getName());
+                constructorParam.set(index, readObject);
             }
 
             builder.append(packetClazz.getCanonicalName() + " packet=new " + packetClazz.getCanonicalName() + "(" + constructorParam.stream().collect(Collectors.joining(StringUtils.COMMA)) + ");");

@@ -38,8 +38,6 @@ public class ProtocolRegistration implements IProtocolRegistration {
      */
     private IFieldRegistration[] fieldRegistrations;
 
-    private Field[] originalFields;
-
     public ProtocolRegistration() {
 
     }
@@ -58,7 +56,6 @@ public class ProtocolRegistration implements IProtocolRegistration {
     public Constructor<?> protocolConstructor() {
         return constructor;
     }
-
 
     @Override
     public void write(ByteBuf buffer, Object packet) {
@@ -99,7 +96,6 @@ public class ProtocolRegistration implements IProtocolRegistration {
         return object;
     }
 
-
     public short getId() {
         return id;
     }
@@ -122,14 +118,6 @@ public class ProtocolRegistration implements IProtocolRegistration {
 
     public void setFields(Field[] fields) {
         this.fields = fields;
-    }
-
-    public Field[] getOriginalFields() {
-        return originalFields;
-    }
-
-    public void setOriginalFields(Field[] originalFields) {
-        this.originalFields = originalFields;
     }
 
     public IFieldRegistration[] getFieldRegistrations() {
