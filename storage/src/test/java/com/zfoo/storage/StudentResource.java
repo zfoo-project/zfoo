@@ -10,7 +10,6 @@ import java.util.List;
 
 /**
  * @author veione
- * @version 1.0.0
  */
 @Storage
 public record StudentResource(

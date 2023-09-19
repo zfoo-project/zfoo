@@ -21,6 +21,10 @@ English | [简体中文](./README_CN.md)
 
 ![Image text](../doc/image/storage/storage02.png)
 
+- In addition, you can also use the record class provided by Java's new features
+
+![Image text](../doc/image/storage/storage03.png)
+
 - After parsing, there are two ways to use it
   1. By annotation
   ```
@@ -28,13 +32,13 @@ English | [简体中文](./README_CN.md)
    public class StudentManager {
 
     @ResInjection
-    private Storage<Integer, StudentResource> studentResources;
+    private IStorage<Integer, StudentResource> studentResources;
 
     }
   ```
   2. Dynamically obtained through classes
   ```
-  Storage<Integer, StudentResource> studentResources = (Storage<Integer, StudentResource>) StorageContext.getStorageManager().getStorage(StudentResource.class);
+  IStorage<Integer, StudentResource> studentResources = StorageContext.getStorageManager().getStorage(StudentResource.class);
   ```
 
 - Find the corresponding row by id
@@ -43,19 +47,35 @@ English | [简体中文](./README_CN.md)
 var studentResource = studentResources.get(1000);
 ```
 
+Alternatively, it can be obtained through the following methods
+
+```
+var resource = StorageContext.get(StudentResource.class, 1001);
+```
+
 - Find the corresponding row by index, default to a repeatable index, and return a list
 
 ```
-var students = studentResources.getIndex("name", "james0");
+var students = studentResources.getIndex(StudentResource::getName, "james0");
+```
+
+If you are a record class, the usage is as follows
+
+```
+var students = studentStorage.getIndexes(StudentResource::name, "james0");
 ```
 
 - The unique index is obtained through Storage.getUniqueIndex(), and the index annotation needs to be marked as @Index(
   unique = true)
 
+```
+StudentResource student = storage.getUniqueIndex(StudentResource::idCard, "110101200007281903");
+```
+
 ### Ⅲ. Hot update Excel Json
 
 - [tank](https://github.com/zfoo-project/tank-game-server/blob/main/common/src/main/java/com/zfoo/tank/common/util/HotUtils.java)
-  Distributed hot update Excel Jsoncsv configuration file implementation
+  Distributed hot update Excel Json csv configuration file implementation
 
 ### Ⅳ. Use
 

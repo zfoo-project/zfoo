@@ -1,4 +1,4 @@
-package com.zfoo.storage;
+package com.zfoo.storage.util.support;
 
 import com.zfoo.protocol.util.FieldUtils;
 import org.junit.Test;
@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * @author veione
- * @version 1.0.0
  */
 public class TestFieldUtils {
 

@@ -1,4 +1,4 @@
-package com.zfoo.storage;
+package com.zfoo.storage.util.support;
 
 import com.zfoo.storage.resource.StudentResource;
 import com.zfoo.storage.util.LambdaUtils;
@@ -7,7 +7,6 @@ import org.junit.Test;
 
 /**
  * @author veione
- * @version 1.0.0
  */
 public class TestLambdaFunctionCache {
 

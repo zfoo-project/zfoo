@@ -23,6 +23,7 @@ import com.zfoo.storage.resource.StudentResource;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
@@ -36,6 +37,14 @@ public class ApplicationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationTest.class);
 
+
+    @Autowired
+    public String testSpringInject(IStorage<Integer, StudentResource> studentStorage) {
+        StudentResource resource = studentStorage.get(1001);
+
+        return resource.getName();
+    }
+
     // storage教程
     @Test
     public void startStorageTest() {
@@ -47,6 +56,7 @@ public class ApplicationTest {
         // Excel的映射内容需要在被Spring管理的bean的方法上加上@ResInjection注解，即可自动注入Excel对应的对象
         // 参考StudentManager中的标准用法
 
+        IStorage<Integer, StudentResource> storage1 = StorageContext.getStorageManager().getStorage(StudentResource.class);
 
         //获取所有数据
         List<StudentResource> list = StorageContext.getList(StudentResource.class);

@@ -1,5 +1,6 @@
-package com.zfoo.storage;
+package com.zfoo.storage.util.support;
 
+import com.zfoo.storage.StudentResource;
 import com.zfoo.storage.util.LambdaUtils;
 import com.zfoo.storage.util.function.Func1;
 import com.zfoo.storage.util.support.LambdaMeta;
@@ -11,7 +12,6 @@ import java.util.function.Function;
 
 /**
  * @author veione
- * @version 1.0.0
  */
 public class TestLambdaFunction {
     //https://blog.csdn.net/iteye_19045/article/details/119299015
