@@ -53,7 +53,7 @@ public interface IStorage<K, V> {
     <INDEX> List<V> getIndexes(Func1<V, ?> function, INDEX key);
 
     @Nullable
-    <INDEX, V> V getUniqueIndex(Func1<V, ?> function, INDEX key);
+    <UINDEX> V getUniqueIndex(Func1<V, ?> function, UINDEX key);
 
     int size();
 }

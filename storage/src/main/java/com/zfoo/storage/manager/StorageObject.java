@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author godotg
@@ -172,12 +171,12 @@ public class StorageObject<K, V> implements IStorage<K, V> {
 
     @Nullable
     @Override
-    public <INDEX, V> V getUniqueIndex(Func1<V, ?> func, INDEX key) {
+    public <UINDEX> V getUniqueIndex(Func1<V, ?> func, UINDEX key) {
         String uniqueIndexName = LambdaUtils.getFieldName(func);
         var indexValueMap = uniqueIndexMap.get(uniqueIndexName);
         AssertionUtils.notNull(indexValueMap, "There is no a unique index for [uniqueIndexName:{}] in the static resource [resource:{}]", uniqueIndexName, clazz.getSimpleName());
         var value = indexValueMap.get(key);
-        return (V) value;
+        return value;
     }
 
     @Override
