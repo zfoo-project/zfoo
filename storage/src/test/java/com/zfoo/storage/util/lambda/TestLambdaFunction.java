@@ -1,6 +1,6 @@
 package com.zfoo.storage.util.lambda;
 
-import com.zfoo.storage.StudentResource;
+import com.zfoo.storage.resource.TeacherResource;
 import com.zfoo.storage.util.LambdaUtils;
 import com.zfoo.storage.util.function.Func1;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class TestLambdaFunction {
     //https://blog.csdn.net/iteye_19045/article/details/119299015
     @Test
     public void testFuncSerialization() throws Exception {
-        Func1<StudentResource, String> func = StudentResource::name;
+        Func1<TeacherResource, String> func = TeacherResource::name;
         Object object = getObject(func);
         System.out.println(object);
 

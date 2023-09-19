@@ -23,7 +23,6 @@ import com.zfoo.storage.resource.StudentResource;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
@@ -37,13 +36,6 @@ public class ApplicationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationTest.class);
 
-
-    @Autowired
-    public String testSpringInject(IStorage<Integer, StudentResource> studentStorage) {
-        StudentResource resource = studentStorage.get(1001);
-
-        return resource.getName();
-    }
 
     // storage教程
     @Test
