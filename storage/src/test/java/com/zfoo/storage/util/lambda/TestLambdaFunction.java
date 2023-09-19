@@ -1,14 +1,12 @@
-package com.zfoo.storage.util.support;
+package com.zfoo.storage.util.lambda;
 
 import com.zfoo.storage.StudentResource;
 import com.zfoo.storage.util.LambdaUtils;
 import com.zfoo.storage.util.function.Func1;
-import com.zfoo.storage.util.support.LambdaMeta;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.function.Function;
 
 /**
  * @author veione

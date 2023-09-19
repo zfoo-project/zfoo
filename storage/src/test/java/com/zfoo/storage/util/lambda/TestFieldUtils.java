@@ -1,4 +1,4 @@
-package com.zfoo.storage.util.support;
+package com.zfoo.storage.util.lambda;
 
 import com.zfoo.protocol.util.FieldUtils;
 import org.junit.Test;

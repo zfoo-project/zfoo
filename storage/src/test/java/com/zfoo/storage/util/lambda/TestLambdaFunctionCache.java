@@ -1,4 +1,4 @@
-package com.zfoo.storage.util.support;
+package com.zfoo.storage.util.lambda;
 
 import com.zfoo.storage.resource.StudentResource;
 import com.zfoo.storage.util.LambdaUtils;

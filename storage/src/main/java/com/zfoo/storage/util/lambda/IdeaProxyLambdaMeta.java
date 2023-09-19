@@ -1,4 +1,4 @@
-package com.zfoo.storage.util.support;
+package com.zfoo.storage.util.lambda;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandleProxies;

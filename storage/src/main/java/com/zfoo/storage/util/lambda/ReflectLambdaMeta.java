@@ -1,4 +1,4 @@
-package com.zfoo.storage.util.support;
+package com.zfoo.storage.util.lambda;
 
 /**
  * Created by hcl at 2021/5/14

@@ -1,4 +1,4 @@
-package com.zfoo.storage.util.support;
+package com.zfoo.storage.util.lambda;
 
 /**
  * 基于 {@link SerializedLambda} 创建的元信息

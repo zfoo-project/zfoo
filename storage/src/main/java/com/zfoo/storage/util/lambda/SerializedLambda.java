@@ -1,12 +1,6 @@
-package com.zfoo.storage.util.support;
+package com.zfoo.storage.util.lambda;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamClass;
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * 当前类是 {@link java.lang.invoke.SerializedLambda } 的一个镜像

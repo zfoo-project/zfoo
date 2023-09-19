@@ -3,11 +3,7 @@ package com.zfoo.storage.util;
 import com.zfoo.protocol.util.FieldUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.storage.util.function.Func1;
-import com.zfoo.storage.util.support.IdeaProxyLambdaMeta;
-import com.zfoo.storage.util.support.LambdaMeta;
-import com.zfoo.storage.util.support.ReflectLambdaMeta;
-import com.zfoo.storage.util.support.SerializedLambda;
-import com.zfoo.storage.util.support.ShadowLambdaMeta;
+import com.zfoo.storage.util.lambda.*;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
 import java.io.Serializable;
