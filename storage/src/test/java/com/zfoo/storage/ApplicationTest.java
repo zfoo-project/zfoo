@@ -20,6 +20,7 @@ import com.zfoo.storage.manager.StorageManager;
 import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.resource.StudentCsvResource;
 import com.zfoo.storage.resource.StudentResource;
+import com.zfoo.storage.resource.TeacherResource;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +55,7 @@ public class ApplicationTest {
         List<StudentResource> list = StorageContext.getList(StudentResource.class);
         //根据主键获取数据
         StudentResource studentResource = StorageContext.get(StudentResource.class, 1001);
+        TeacherResource teacherResource = StorageContext.get(TeacherResource.class, 1001);
         //获取名字索引列表
         List<StudentResource> nameIndexList = StorageContext.getIndexes(StudentResource.class, StudentResource::getName, "james1");
         //获取年龄索引列表

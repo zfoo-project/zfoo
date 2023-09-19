@@ -54,10 +54,6 @@ public abstract class FieldUtils {
 
         var methodName = "set" + StringUtils.capitalize(fieldName);
 
-        if (clazz.isRecord()) {
-            return methodName;
-        }
-
         try {
             clazz.getDeclaredMethod(methodName, field.getType());
             return methodName;

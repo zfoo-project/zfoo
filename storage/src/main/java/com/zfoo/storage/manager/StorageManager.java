@@ -104,6 +104,9 @@ public class StorageManager implements IStorageManager {
             var allRelevantClass = new HashSet<Class<?>>();
             resourceDefinitionMap.values().forEach(it -> allRelevantClass.addAll(ClassUtils.relevantClass(it.getClazz())));
             for (var clazz : allRelevantClass) {
+                if (clazz.isRecord()) {
+                    continue;
+                }
                 var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
                 for (var field : fieldList) {
                     if (Modifier.isPublic(field.getModifiers())) {
