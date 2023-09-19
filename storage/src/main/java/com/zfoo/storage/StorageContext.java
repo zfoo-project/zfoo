@@ -60,12 +60,12 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
         return instance.storageManager.getStorage(clazz).getList();
     }
 
-    public static <K, V> List<V> getIndexes(Class<V> clazz, Func1<V, ?> function, K keyId) {
-        return instance.storageManager.getStorage(clazz).getIndexes(function, keyId);
+    public static <Index, V> List<V> getIndexes(Class<V> clazz, Func1<V, Index> function, Index index) {
+        return instance.storageManager.getStorage(clazz).getIndexes(function, index);
     }
 
-    public static <K, V> V getUniqueIndex(Class<V> clazz, Func1<V, ?> func, K keyId) {
-        return instance.storageManager.getStorage(clazz).getUniqueIndex(func, keyId);
+    public static <INDEX, V> V getUniqueIndex(Class<V> clazz, Func1<V, INDEX> func, INDEX uindex) {
+        return instance.storageManager.getStorage(clazz).getUniqueIndex(func, uindex);
     }
 
     @Override

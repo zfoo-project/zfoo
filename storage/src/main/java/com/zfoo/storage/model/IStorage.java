@@ -50,10 +50,10 @@ public interface IStorage<K, V> {
 
     IdDef getIdDef();
 
-    <INDEX> List<V> getIndexes(Func1<V, ?> function, INDEX key);
+    <INDEX> List<V> getIndexes(Func1<V, INDEX> function, INDEX index);
 
     @Nullable
-    <UINDEX> V getUniqueIndex(Func1<V, ?> function, UINDEX key);
+    <INDEX> V getUniqueIndex(Func1<V, INDEX> function, INDEX uindex);
 
     int size();
 }

@@ -26,12 +26,7 @@ import com.zfoo.storage.util.function.Func1;
 import org.springframework.lang.Nullable;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author godotg
@@ -158,11 +153,11 @@ public class StorageObject<K, V> implements IStorage<K, V> {
     }
 
     @Override
-    public <INDEX> List<V> getIndexes(Func1<V, ?> func, INDEX key) {
+    public <INDEX> List<V> getIndexes(Func1<V, INDEX> func, INDEX index) {
         String indexName = LambdaUtils.getFieldName(func);
         var indexValues = indexMap.get(indexName);
         AssertionUtils.notNull(indexValues, "The index of [indexName:{}] does not exist in the static resource [resource:{}]", indexName, clazz.getSimpleName());
-        var values = indexValues.get(key);
+        var values = indexValues.get(index);
         if (CollectionUtils.isEmpty(values)) {
             return Collections.emptyList();
         }
@@ -171,11 +166,11 @@ public class StorageObject<K, V> implements IStorage<K, V> {
 
     @Nullable
     @Override
-    public <UINDEX> V getUniqueIndex(Func1<V, ?> func, UINDEX key) {
+    public <INDEX> V getUniqueIndex(Func1<V, INDEX> func, INDEX index) {
         String uniqueIndexName = LambdaUtils.getFieldName(func);
         var indexValueMap = uniqueIndexMap.get(uniqueIndexName);
         AssertionUtils.notNull(indexValueMap, "There is no a unique index for [uniqueIndexName:{}] in the static resource [resource:{}]", uniqueIndexName, clazz.getSimpleName());
-        var value = indexValueMap.get(key);
+        var value = indexValueMap.get(index);
         return value;
     }
 

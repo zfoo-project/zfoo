@@ -26,18 +26,4 @@ public interface Func1<P, R> extends Serializable {
 	 */
 	R call(P parameter) throws Exception;
 
-	/**
-	 * 执行函数，异常包装为RuntimeException
-	 *
-	 * @param parameter 参数
-	 * @return 函数执行结果
-	 * @since 5.3.6
-	 */
-	default R callWithRuntimeException(P parameter){
-		try {
-			return call(parameter);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 }

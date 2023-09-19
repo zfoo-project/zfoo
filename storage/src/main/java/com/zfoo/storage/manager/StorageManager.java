@@ -16,12 +16,7 @@ package com.zfoo.storage.manager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.exception.RunException;
-import com.zfoo.protocol.util.ClassUtils;
-import com.zfoo.protocol.util.FieldUtils;
-import com.zfoo.protocol.util.FileUtils;
-import com.zfoo.protocol.util.GraalVmUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.*;
 import com.zfoo.storage.StorageContext;
 import com.zfoo.storage.anno.GraalvmNativeStorage;
 import com.zfoo.storage.anno.Id;
@@ -48,13 +43,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -207,14 +196,14 @@ public class StorageManager implements IStorageManager {
         return (List<T>) storage.getAll();
     }
 
-    public <T, K> List<T> getIndexes(Class<T> clazz, Func1<T, ?> func, K indexId) {
+    public <T, INDEX> List<T> getIndexes(Class<T> clazz, Func1<T, INDEX> func, INDEX index) {
         var storage = getStorage(clazz);
-        return storage.getIndexes(func, indexId);
+        return storage.getIndexes(func, index);
     }
 
-    public <T, UQ> T get(Class<T> clazz, UQ keyId) {
-        IStorage<UQ, T> storage = getStorage(clazz);
-        return storage.get(keyId);
+    public <T, K> T get(Class<T> clazz, K key) {
+        var storage = getStorage(clazz);
+        return storage.get(key);
     }
 
     @Override

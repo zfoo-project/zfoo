@@ -26,18 +26,4 @@ public interface Func<P, R> extends Serializable {
 	@SuppressWarnings("unchecked")
 	R call(P... parameters) throws Exception;
 
-	/**
-	 * 执行函数，异常包装为RuntimeException
-	 *
-	 * @param parameters 参数列表
-	 * @return 函数执行结果
-	 */
-	@SuppressWarnings("unchecked")
-	default R callWithRuntimeException(P... parameters){
-		try {
-			return call(parameters);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 }
