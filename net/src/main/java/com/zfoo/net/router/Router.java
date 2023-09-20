@@ -383,7 +383,7 @@ public class Router implements IRouter {
             }
 
             if (receiver.task() == Task.VirtualThread && receiver.attachment() == null) {
-                logger.warn("virtual thread task can not set Attachment, may cause some sync and async timeout, please use attachment in receiver method signature");
+                logger.warn("virtual thread task can not set Attachment, may cause some sync and async timeout exception, please use attachment in receiver method signature and use attachment in sync and async request");
             }
 
             receiver.invoke(session, packet, attachment);
