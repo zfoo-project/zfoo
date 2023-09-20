@@ -108,7 +108,7 @@ public abstract class EventBus {
                     execute(event.executorHash(), () -> doReceiver(receiver, event));
                     break;
                 case VirtualThread:
-                    logger.error("waiting for java 21 virtual thread");
+                    Thread.ofVirtual().name("virtual-" + clazz.getSimpleName()).start(ThreadUtils.safeRunnable(() -> doReceiver(receiver, event)));
                     break;
             }
         }

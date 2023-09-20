@@ -23,17 +23,13 @@ import org.springframework.stereotype.Component;
  * @author godotg
  */
 @Component
-public class MyController2 {
+public class MyController3 {
 
-    private static final Logger logger = LoggerFactory.getLogger(MyController2.class);
+    private static final Logger logger = LoggerFactory.getLogger(MyController3.class);
 
-    /**
-     * 同一个事件可以被重复注册和接受
-     * 异步事件会被不会立刻执行，注意日志打印的线程号
-     */
-    @EventReceiver(Bus.AsyncThread)
+    @EventReceiver(Bus.VirtualThread)
     public void onMyNoticeEvent(MyNoticeEvent event) {
-        logger.info("方法2异步执行事件：" + event.getMessage());
+        logger.info("方法3虚拟线程执行事件：" + event.getMessage());
     }
 
 }
