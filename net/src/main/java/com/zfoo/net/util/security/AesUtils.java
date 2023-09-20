@@ -13,16 +13,14 @@
 package com.zfoo.net.util.security;
 
 
+import com.zfoo.protocol.util.FastThreadLocalAdapter;
 import com.zfoo.protocol.util.StringUtils;
-import io.netty.util.concurrent.FastThreadLocal;
 
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidKeyException;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.function.Supplier;
 
 /**
  * AES加密和解密
@@ -53,23 +51,31 @@ public abstract class AesUtils {
         }
     }
 
-    private static final FastThreadLocal<Cipher> LOCAL_ENCRYPT_CIPHER = new FastThreadLocal<Cipher>() {
+    private static final FastThreadLocalAdapter<Cipher> LOCAL_ENCRYPT_CIPHER = new FastThreadLocalAdapter<>(new Supplier<>() {
         @Override
-        protected Cipher initialValue() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
-            var cipher = Cipher.getInstance(ALGORITHM_STR);
-            cipher.init(Cipher.ENCRYPT_MODE, KEY);
-            return cipher;
+        public Cipher get() {
+            try {
+                Cipher cipher = Cipher.getInstance(ALGORITHM_STR);
+                cipher.init(Cipher.ENCRYPT_MODE, KEY);
+                return cipher;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
-    };
+    });
 
-    private static final FastThreadLocal<Cipher> LOCAL_DECRYPT_CIPHER = new FastThreadLocal<Cipher>() {
+    private static final FastThreadLocalAdapter<Cipher> LOCAL_DECRYPT_CIPHER = new FastThreadLocalAdapter<Cipher>(new Supplier<Cipher>() {
         @Override
-        protected Cipher initialValue() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
-            var cipher = Cipher.getInstance(ALGORITHM_STR);
-            cipher.init(Cipher.DECRYPT_MODE, KEY);
-            return cipher;
+        public Cipher get() {
+            try {
+                var cipher = Cipher.getInstance(ALGORITHM_STR);
+                cipher.init(Cipher.DECRYPT_MODE, KEY);
+                return cipher;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
-    };
+    });
 
 
     /**

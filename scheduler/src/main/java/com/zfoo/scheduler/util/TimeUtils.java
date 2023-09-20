@@ -13,8 +13,8 @@
 
 package com.zfoo.scheduler.util;
 
+import com.zfoo.protocol.util.FastThreadLocalAdapter;
 import com.zfoo.scheduler.manager.SchedulerBus;
-import io.netty.util.concurrent.FastThreadLocal;
 import org.springframework.scheduling.support.CronExpression;
 
 import java.text.ParseException;
@@ -55,26 +55,11 @@ public abstract class TimeUtils {
     // 统一的时间格式模板
     public static final String DATE_FORMAT_TEMPLATE_FOR_DAY = "yyyy-MM-dd";
 
-    private static final FastThreadLocal<SimpleDateFormat> DATE_FORMAT = new FastThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat(DATE_FORMAT_TEMPLATE);
-        }
-    };
+    private static final FastThreadLocalAdapter<SimpleDateFormat> DATE_FORMAT = new FastThreadLocalAdapter<>(() -> new SimpleDateFormat(DATE_FORMAT_TEMPLATE));
 
-    private static final FastThreadLocal<SimpleDateFormat> SIMPLE_DATE_FORMAT = new FastThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat(SIMPLE_DATE_FORMAT_TEMPLATE);
-        }
-    };
+    private static final FastThreadLocalAdapter<SimpleDateFormat> SIMPLE_DATE_FORMAT = new FastThreadLocalAdapter<>(() -> new SimpleDateFormat(SIMPLE_DATE_FORMAT_TEMPLATE));
 
-    private static final FastThreadLocal<SimpleDateFormat> DATE_FORMAT_FOR_DAY = new FastThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat(DATE_FORMAT_TEMPLATE_FOR_DAY);
-        }
-    };
+    private static final FastThreadLocalAdapter<SimpleDateFormat> DATE_FORMAT_FOR_DAY = new FastThreadLocalAdapter<>(() -> new SimpleDateFormat(DATE_FORMAT_TEMPLATE_FOR_DAY));
 
     static {
         currentTimeMillis();
