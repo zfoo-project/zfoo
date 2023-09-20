@@ -11,9 +11,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.router.receiver;
+package com.zfoo.net.enhance;
 
-import com.zfoo.event.anno.Bus;
 import com.zfoo.net.anno.Task;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.StringUtils;
@@ -76,7 +75,7 @@ public abstract class EnhanceUtils {
         enhanceClazz.addMethod(invokeMethod);
 
         // 定义类实现的接口方法bus
-        CtMethod busMethod = new CtMethod(classPool.get(Bus.class.getCanonicalName()), "task", null, enhanceClazz);
+        CtMethod busMethod = new CtMethod(classPool.get(Task.class.getCanonicalName()), "task", null, enhanceClazz);
         busMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         String busMethodBody = StringUtils.format("{ return {}.{}; }", Task.class.getCanonicalName(), definition.getTask());
         busMethod.setBody(busMethodBody);

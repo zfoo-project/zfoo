@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.router.receiver;
+package com.zfoo.net.enhance;
 
 import com.zfoo.net.anno.Task;
 import com.zfoo.net.session.Session;
