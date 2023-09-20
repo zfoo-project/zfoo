@@ -74,12 +74,24 @@ public abstract class EnhanceUtils {
         }
         enhanceClazz.addMethod(invokeMethod);
 
-        // 定义类实现的接口方法bus
-        CtMethod busMethod = new CtMethod(classPool.get(Task.class.getCanonicalName()), "task", null, enhanceClazz);
-        busMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String busMethodBody = StringUtils.format("{ return {}.{}; }", Task.class.getCanonicalName(), definition.getTask());
-        busMethod.setBody(busMethodBody);
-        enhanceClazz.addMethod(busMethod);
+        // 定义类实现的接口方法task
+        CtMethod taskMethod = new CtMethod(classPool.get(Task.class.getCanonicalName()), "task", null, enhanceClazz);
+        taskMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
+        String taskMethodBody = StringUtils.format("{ return {}.{}; }", Task.class.getCanonicalName(), definition.getTask());
+        taskMethod.setBody(taskMethodBody);
+        enhanceClazz.addMethod(taskMethod);
+
+        // 定义类实现的接口方法attachment
+        CtMethod attachmentMethod = new CtMethod(classPool.get(Class.class.getCanonicalName()), "attachment", null, enhanceClazz);
+        attachmentMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
+        if (attachmentClazz == null) {
+            String attachmentMethodBody = "{ return null; }";
+            attachmentMethod.setBody(attachmentMethodBody);
+        } else {
+            String attachmentMethodBody = StringUtils.format("{ return {}.class; }", attachmentClazz.getName());
+            attachmentMethod.setBody(attachmentMethodBody);
+        }
+        enhanceClazz.addMethod(attachmentMethod);
 
         enhanceClazz.detach();
 

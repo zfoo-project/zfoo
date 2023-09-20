@@ -16,6 +16,7 @@ package com.zfoo.net.router;
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.anno.PacketReceiver;
+import com.zfoo.net.anno.Task;
 import com.zfoo.net.core.event.ServerExceptionEvent;
 import com.zfoo.net.core.gateway.model.AuthUidToGatewayCheck;
 import com.zfoo.net.core.gateway.model.AuthUidToGatewayConfirm;
@@ -370,14 +371,21 @@ public class Router implements IRouter {
         var session = packetReceiverTask.getSession();
         var packet = packetReceiverTask.getPacket();
         var attachment = packetReceiverTask.getAttachment();
+
+        // The routing of the message
+        var receiver = receiverMap.get(ProtocolManager.protocolId(packet.getClass()));
+        var threadLocalAttachment = attachment != null && receiver.task() != Task.VirtualThread;
         try {
+
             // 接收者（服务器）同步和异步消息的接收
-            if (attachment != null) {
+            if (threadLocalAttachment) {
                 serverReceiverAttachmentThreadLocal.set(attachment);
             }
 
-            // The routing of the message
-            var receiver = receiverMap.get(ProtocolManager.protocolId(packet.getClass()));
+            if (receiver.task() == Task.VirtualThread && receiver.attachment() == null) {
+                logger.warn("virtual thread task can not set Attachment, may cause some sync and async timeout, please use attachment in receiver method signature");
+            }
+
             receiver.invoke(session, packet, attachment);
         } catch (Exception e) {
             EventBus.post(ServerExceptionEvent.valueOf(session, packet, attachment, e));
@@ -386,7 +394,7 @@ public class Router implements IRouter {
             logger.error(StringUtils.format("e[uid:{}][sid:{}] unknown error", session.getUid(), session.getSid(), t.getMessage()), t);
         } finally {
             // 如果有服务器在处理同步或者异步消息的时候由于错误没有返回给客户端消息，则可能会残留serverAttachment，所以先移除
-            if (attachment != null) {
+            if (threadLocalAttachment) {
                 serverReceiverAttachmentThreadLocal.set(null);
             }
         }

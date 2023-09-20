@@ -23,6 +23,8 @@ public interface IPacketReceiver {
 
     Task task();
 
+    Class<?> attachment();
+
     void invoke(Session session, Object packet, Object attachment);
 
 }

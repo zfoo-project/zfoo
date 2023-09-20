@@ -67,6 +67,12 @@ public class PacketReceiverDefinition implements IPacketReceiver {
     }
 
     @Override
+    public Class<?> attachment() {
+        return attachmentClazz;
+    }
+
+
+    @Override
     public void invoke(Session session, Object packet, Object attachment) {
         if (attachmentClazz == null) {
             ReflectionUtils.invokeMethod(bean, method, session, packet);
