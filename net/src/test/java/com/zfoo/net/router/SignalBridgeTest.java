@@ -14,7 +14,6 @@ package com.zfoo.net.router;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.router.attachment.SignalAttachment;
-import com.zfoo.net.router.route.SignalBridge;
 import com.zfoo.scheduler.util.TimeUtils;
 import org.junit.Ignore;
 import org.junit.Test;

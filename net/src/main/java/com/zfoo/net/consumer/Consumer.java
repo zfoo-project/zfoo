@@ -25,7 +25,7 @@ import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
-import com.zfoo.net.router.route.SignalBridge;
+import com.zfoo.net.router.SignalBridge;
 import com.zfoo.net.task.TaskBus;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;

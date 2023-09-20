@@ -36,7 +36,6 @@ import com.zfoo.net.router.exception.UnexpectedProtocolException;
 import com.zfoo.net.router.receiver.EnhanceUtils;
 import com.zfoo.net.router.receiver.IPacketReceiver;
 import com.zfoo.net.router.receiver.PacketReceiverDefinition;
-import com.zfoo.net.router.route.SignalBridge;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.task.PacketReceiverTask;
 import com.zfoo.net.task.TaskBus;

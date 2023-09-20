@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.router.route;
+package com.zfoo.net.router;
 
 import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.protocol.util.JsonUtils;
