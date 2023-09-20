@@ -13,6 +13,8 @@
 
 package com.zfoo.net.router.receiver;
 
+import com.zfoo.event.anno.Bus;
+import com.zfoo.net.anno.Task;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.UuidUtils;
@@ -72,6 +74,13 @@ public abstract class EnhanceUtils {
             invokeMethod.setBody(invokeMethodBody);
         }
         enhanceClazz.addMethod(invokeMethod);
+
+        // 定义类实现的接口方法bus
+        CtMethod busMethod = new CtMethod(classPool.get(Bus.class.getCanonicalName()), "task", null, enhanceClazz);
+        busMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
+        String busMethodBody = StringUtils.format("{ return {}.{}; }", Task.class.getCanonicalName(), definition.getTask());
+        busMethod.setBody(busMethodBody);
+        enhanceClazz.addMethod(busMethod);
 
         enhanceClazz.detach();
 

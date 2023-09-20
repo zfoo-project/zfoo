@@ -14,7 +14,6 @@ package com.zfoo.net.packet;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.router.attachment.SignalAttachment;
-import com.zfoo.net.router.route.PacketBus;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
@@ -121,7 +120,7 @@ public class PacketService implements IPacketService {
         // 注册协议接收器
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
-            PacketBus.registerPacketReceiverDefinition(bean);
+            NetContext.getRouter().registerPacketReceiverDefinition(bean);
         }
     }
 

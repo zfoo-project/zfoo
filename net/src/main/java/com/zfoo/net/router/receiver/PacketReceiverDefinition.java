@@ -13,6 +13,7 @@
 
 package com.zfoo.net.router.receiver;
 
+import com.zfoo.net.anno.Task;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.ReflectionUtils;
 
@@ -37,6 +38,11 @@ public class PacketReceiverDefinition implements IPacketReceiver {
     private Method method;
 
     /**
+     * packet receiver type
+     */
+    private Task task;
+
+    /**
      * The protocol class that receives the package, eg: TcpHelloRequest
      */
     private Class<?> packetClazz;
@@ -46,12 +52,18 @@ public class PacketReceiverDefinition implements IPacketReceiver {
      */
     private Class<?> attachmentClazz;
 
-    public PacketReceiverDefinition(Object bean, Method method, Class<?> packetClazz, Class<?> attachmentClazz) {
+    public PacketReceiverDefinition(Object bean, Method method, Task task, Class<?> packetClazz, Class<?> attachmentClazz) {
         this.bean = bean;
         this.method = method;
+        this.task = task;
         this.packetClazz = packetClazz;
         this.attachmentClazz = attachmentClazz;
         ReflectionUtils.makeAccessible(method);
+    }
+
+    @Override
+    public Task task() {
+        return task;
     }
 
     @Override
@@ -77,6 +89,14 @@ public class PacketReceiverDefinition implements IPacketReceiver {
 
     public void setMethod(Method method) {
         this.method = method;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public Class<?> getPacketClazz() {

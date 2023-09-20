@@ -32,7 +32,7 @@ public final class PacketReceiverTask implements Runnable {
 
     @Override
     public void run() {
-        NetContext.getRouter().atReceiver(session, packet, attachment);
+        NetContext.getRouter().atReceiver(this);
     }
 
 

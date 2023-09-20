@@ -25,4 +25,5 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD})
 @Reflective
 public @interface PacketReceiver {
+    Task value() default Task.TaskBus;
 }

@@ -16,6 +16,7 @@ package com.zfoo.net.router;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
 import com.zfoo.net.session.Session;
+import com.zfoo.net.task.PacketReceiverTask;
 import org.springframework.lang.Nullable;
 
 /**
@@ -33,7 +34,9 @@ public interface IRouter {
 
     void receive(Session session, Object packet, @Nullable Object attachment);
 
-    void atReceiver(Session session, Object packet, @Nullable Object attachment);
+    void atReceiver(PacketReceiverTask packetReceiverTask);
+
+    void registerPacketReceiverDefinition(Object bean);
 
     /**
      * attention：syncAsk和asyncAsk只能客户端调用
