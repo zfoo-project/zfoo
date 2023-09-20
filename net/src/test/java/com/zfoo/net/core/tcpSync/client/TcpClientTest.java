@@ -46,7 +46,6 @@ public class TcpClientTest {
             ask.setMessage("Hello, this is sync client!");
             var answer = NetContext.getRouter().syncAsk(session, ask, SyncMessAnswer.class, null).packet();
             logger.info("同步请求收到结果[{}]", JsonUtils.object2String(answer));
-            ThreadUtils.sleep(1000);
         }
 
         ThreadUtils.sleep(Long.MAX_VALUE);
