@@ -200,12 +200,12 @@ public class StorageObject<K, V> implements IStorage<K, V> {
                 var indexKey = def.getField().getName();
                 var indexValue = ReflectionUtils.getField(def.getField(), v);
                 if (def.isUnique()) {
-                    var uniqueIndex = uniqueIndexMap.computeIfAbsent(indexKey, it -> HashMap.newHashMap(values.size()));
+                    var uniqueIndex = uniqueIndexMap.computeIfAbsent(indexKey, it -> new HashMap<>(values.size()));
                     if (uniqueIndex.put(indexValue, v) != null) {
                         throw new RuntimeException(StringUtils.format("Duplicate unique index [index:{}][value:{}] of static resource [class:{}]", indexKey, indexValue, clazz.getName()));
                     }
                 } else {
-                    var index = indexMap.computeIfAbsent(indexKey, it -> HashMap.newHashMap(values.size()));
+                    var index = indexMap.computeIfAbsent(indexKey, it -> new HashMap<>(values.size()));
                     var list = index.computeIfAbsent(indexValue, it -> new ArrayList<V>());
                     list.add(v);
                 }
