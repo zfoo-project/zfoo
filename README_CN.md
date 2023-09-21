@@ -1,20 +1,11 @@
 简体中文 | [English](./README.md)
 <a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg" width="30%"></a>
 
------------
-Why is zfoo protocol ?
------------
-
-- 协议原生支持 C++ C# Java Go Javascript TypeScript Lua GDScript Python
-- 通用的分布式服务器协议实现，有其它语言的实现，可以轻易实现其它平台的的RPC，微服务
-- 二进制序列化速度极致快的自定义协议格式框架，并且为序列化字节最少的框架，更加安全，可前后兼容
-- 单线程的Benchmark测试中，序列化和反序列化速度比Protobuf快50%，比Kryo快100%
-
 Ⅰ. zfoo简介🚩
 -----------
 
 - **极致性能，天生异步，Actor设计思想，无锁化设计，MVC式用法的万能RPC框架**
-- **极致序列化**，原生集成目前二进制序列化和反序列化速度极快的 [zfoo protocol](protocol/README.md) 作为网络通讯协议
+- **极致序列化 [zfoo protocol](protocol/README.md)**，协议原生支持 C++ C# Java Go Javascript TypeScript Lua GDScript Python
 - **高可拓展性**，单台服务器部署，微服务部署，注册中心加集群部署，网关加集群部署，随意搭配
 - **上能做游戏服务器框架，下能做应用网站服务器框架**
 

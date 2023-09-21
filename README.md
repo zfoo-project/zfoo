@@ -1,23 +1,11 @@
 English | [简体中文](./README_CN.md)
 <a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg" width="30%"></a>
 
------------
-Why is zfoo protocol ?
------------
-
-- The protocol currently supports C++ C# Go Java Javascript TypeScript Lua GDScript Python
-- Universal distributed server protocol implementation, there are implementations in other languages, which can easily
-  implement RPC, servers, and microservices on other platforms
-- Very fast custom format framework for Java binary serialization, with the fewest serialized bytes, more secure and
-  compatible
-- In the single-threaded benchmark test, serialization and deserialization are 50% faster than Protobuf and 100% faster
-  than Kryo
-
 Ⅰ. Introduction of zfoo🚩
 -----------
 
-- **Extremely fast, asynchronous, Actor design pattern, lock-free design, RPC framework based on Spring MVC**
-- **Very fast serialization and deserialization**，use [zfoo protocol](protocol/README.md) as a network protocol
+- **Extremely fast, asynchronous, Actor design pattern, lock-free design, RPC framework, GraalVM native support**
+- **Ultimate performance serialization and deserialization [zfoo protocol](protocol/README.md)**，supports C++ C# Go Java Javascript TypeScript Lua GDScript Python
 - **High scalability**，Single server deployment, microservice deployment, cluster deployment, gateway deployment
 - **Can be used as a game server framework or website server framework.**
 
