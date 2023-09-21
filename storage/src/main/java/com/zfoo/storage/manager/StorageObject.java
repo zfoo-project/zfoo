@@ -34,7 +34,7 @@ import java.util.*;
 public class StorageObject<K, V> implements IStorage<K, V> {
     private Map<K, V> dataMap = new HashMap<>(64);
     // 非唯一索引
-    protected Map<String, Map<Object, List<V>>> indexMap = new HashMap<>(32);
+    protected Map<String, Map<Object, List<V>>> indexMap = new HashMap<>(16);
     // 唯一索引
     protected Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>(16);
 
@@ -198,13 +198,13 @@ public class StorageObject<K, V> implements IStorage<K, V> {
             // 使用field的名称作为索引的名称
             var indexKey = def.getField().getName();
             var indexValue = ReflectionUtils.getField(def.getField(), v);
-            if (def.isUnique()) {// 唯一索引
-                var index = uniqueIndexMap.computeIfAbsent(indexKey, it -> HashMap.newHashMap(12));
-                if (index.put(indexValue, v) != null) {
+            if (def.isUnique()) {
+                var uniqueIndex = uniqueIndexMap.computeIfAbsent(indexKey, it -> new HashMap<>(32));
+                if (uniqueIndex.put(indexValue, v) != null) {
                     throw new RuntimeException(StringUtils.format("Duplicate unique index [index:{}][value:{}] of static resource [class:{}]", indexKey, indexValue, clazz.getName()));
                 }
-            } else {// 不是唯一索引
-                var index = indexMap.computeIfAbsent(indexKey, it -> HashMap.newHashMap(32));
+            } else {
+                var index = indexMap.computeIfAbsent(indexKey, it -> new HashMap<>(32));
                 var list = index.computeIfAbsent(indexValue, it -> new ArrayList<V>());
                 list.add(v);
             }
