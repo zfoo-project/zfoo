@@ -2,24 +2,12 @@
 <a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg" width="30%"></a>
 
 -----------
-注意
------------
-
-- 主干main是当前是面向java 21和GraalVM的开发版本，稳定版本请使用 [zfoo-java-11-17](https://github.com/zfoo-project/zfoo/tree/zfoo-java-11-17)
-- 升级流程
-  - 重新导入找不到的类
-  - 不需要再继承IPacket
-  - SafeRunnable删除了，请使用ThreadUtils.safeRunnable()
-  - 重命名接口和注解，Storage -> IStorage，@Resource -> @Storage，@ResInjection -> @StorageAutowired
-  - 重命名接口和注解，@EntityCachesInjection -> @EntityCacheAutowired，@EntityCaches -> @EntityCache
-
------------
 Why is zfoo protocol ?
 -----------
 
 - 协议原生支持 C++ C# Java Go Javascript TypeScript Lua GDScript Python
 - 通用的分布式服务器协议实现，有其它语言的实现，可以轻易实现其它平台的的RPC，微服务
-- 二进制序列化速度极快的自定义格式框架，并且为序列化字节最少的框架，更加安全，可前后兼容
+- 二进制序列化速度极致快的自定义协议格式框架，并且为序列化字节最少的框架，更加安全，可前后兼容
 - 单线程的Benchmark测试中，序列化和反序列化速度比Protobuf快50%，比Kryo快100%
 
 Ⅰ. zfoo简介🚩
@@ -32,12 +20,15 @@ Why is zfoo protocol ?
 
 完善的工作开发流程，完整的线上解决方案
 
-- 普通java项目，spring项目，分布式项目，容器项目， **不停机完美热更新代码** [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
-- Excel json csv配置自动映射和解析，**在线不停机热更新Excel配置** [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
+- 普通java项目，spring项目，分布式项目，容器项目， **不停机完美热更新代码
+  ** [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
+- Excel json csv配置自动映射和解析，**在线不停机热更新Excel配置
+  ** [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
 - MongoDB的自动映射框架 [orm](orm/README.md)
 - 事件总线 [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
 - 时间任务调度 [scheduler](scheduler/README.md)
-- 内置在程序里的**轻量级cpu，内存，硬盘，网络监控，** 无需代码和额外工具，解放运维生产力 [monitor](monitor/src/test/java/com/zfoo/monitor/ApplicationTest.java)
+- 内置在程序里的**轻量级cpu，内存，硬盘，网络监控，**
+  无需代码和额外工具，解放运维生产力 [monitor](monitor/src/test/java/com/zfoo/monitor/ApplicationTest.java)
 
 Ⅱ. 背景和适用项目
 ---------------
@@ -54,7 +45,8 @@ Why is zfoo protocol ?
 - 依然有问题，参考每个工程目录的test文件夹下的标准demo展示和注释说明，可以直接运行
     - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
 
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of Tanks）》，新手友好，难度2星
+- [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of
+  Tanks）》，新手友好，难度2星
 
 - [godot-bird](https://github.com/zfoo-project/godot-bird) 鸟了个鸟，客户端使用godot开发，服务器依然使用的tank-game-server
 
@@ -67,7 +59,7 @@ Why is zfoo protocol ?
 
 #### 1. 环境要求和安装
 
-**JDK 11 或者 JDK 17**，可以在 **OpenJDK** 和 **Oracle JDK** 无缝切换，下载完本项目，maven install到本地仓库即可使用
+**JDK 17**，可以在 **OpenJDK** 和 **Oracle JDK** 无缝切换，下载完本项目，maven install到本地仓库即可使用
 
 ```
 如果你没有安装JDK，快速的安装方法是在Idea的右上角Project Structure，Platform Settings，SDKs中直接下载
@@ -154,7 +146,7 @@ public void cronSchedulerPerSecond() {
 #### 8. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel类自动映射框架，只需要定义一个和Excel对应的类，直接解析Excel
 
 ```
-@Resource
+@Storage
 public class StudentResource {
     @Id
     private int id;

@@ -2,19 +2,6 @@ English | [简体中文](./README_CN.md)
 <a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg" width="30%"></a>
 
 -----------
-Attention:
------------
-
-- The main branch is a development version for Java 21 and GraalVM. The stable version is [zfoo-java-11-17](https://github.com/zfoo-project/zfoo/tree/zfoo-java-11-17)
-- Upgrade process
-  - reimport not found classes
-  - no need to inherit IPacket anymore
-  - SafeRunnable has been deleted, please use ThreadUtils.safeRunnable()
-  - rename interfaces and annotations，Storage -> IStorage，@Resource -> @Storage，@ResInjection -> @StorageAutowired
-  - rename interfaces and annotations，@EntityCachesInjection -> @EntityCacheAutowired，@EntityCaches -> @EntityCache
-
-
------------
 Why is zfoo protocol ?
 -----------
 
@@ -61,19 +48,19 @@ Perfect work development process, complete online solution
 - [FAQ](./doc/FAQ.md)，There are standard demo display and instructions in the test folder of each project directory,
   which can be run directly
 
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》，novice friendly, difficulty 2 stars
+- [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》，novice friendly,
+  difficulty 2 stars
 
 - [godot-bird](https://github.com/zfoo-project/godot-bird) bird and bird，powered by godot
 
 - [cocos-fivechess](https://github.com/zfoo-project/fivechess) five chess，use cocos as client
-
 
 Ⅳ. Install and use⭐
 ------------
 
 #### 1. Environmental Requirements and Installation
 
-**JDK 11 or 17**，**OpenJDK** or **Oracle JDK** ，maven install to local repository
+**17**，**OpenJDK** or **Oracle JDK** ，maven install to local repository
 
 ```
 If you do not have JDK installed, the quick installation method is to download directly 
@@ -160,7 +147,7 @@ public void cronSchedulerPerSecond() {
 #### 8. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel to class automatic mapping framework, you only need to define a class corresponding to Excel, and directly parse Excel
 
 ```
-@Resource
+@Storage
 public class StudentResource {
     @Id
     private int id;
