@@ -24,6 +24,6 @@ public class FastThreadLocalAdapter<T> {
     }
 
     public T get() {
-        return Thread.currentThread().isVirtual() ? supplier.get() : fastThreadLocal.get();
+        return fastThreadLocal.get();
     }
 }
