@@ -54,7 +54,19 @@ Why is zfoo protocol ?
 
 - [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，标准的https企业级网站，难度5星
 
-Ⅳ. 安装和使用⭐
+
+Ⅳ. Maven依赖✨
+------------
+
+```
+<dependency>
+    <groupId>com.zfoo</groupId>
+    <artifactId>boot</artifactId>
+    <version>3.1.4</version>
+</dependency>
+```
+
+Ⅴ. 安装和使用⭐
 ------------
 
 #### 1. 环境要求和安装
@@ -156,7 +168,7 @@ public class StudentResource {
 }
 ```
 
-Ⅴ. 提交规范👏
+Ⅵ. 提交规范👏
 ----------
 
 - 欢迎喜欢这个项目的人来一起维护这个项目，提交代码的时候注意下面规范
@@ -174,7 +186,7 @@ ref[module]: 重命名或者重构了模块
 doc[module]: 增加了什么文档
 ```
 
-Ⅵ. License
+Ⅶ. License
 -----------
 
 zfoo使用 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)

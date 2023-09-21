@@ -55,7 +55,20 @@ Perfect work development process, complete online solution
 
 - [cocos-fivechess](https://github.com/zfoo-project/fivechess) five chess，use cocos as client
 
-Ⅳ. Install and use⭐
+
+Ⅳ. Maven dependency✨
+------------
+
+```
+<dependency>
+    <groupId>com.zfoo</groupId>
+    <artifactId>boot</artifactId>
+    <version>3.1.4</version>
+</dependency>
+```
+
+
+Ⅴ. Install and use⭐
 ------------
 
 #### 1. Environmental Requirements and Installation
@@ -157,7 +170,7 @@ public class StudentResource {
 }
 ```
 
-Ⅴ. Commit specification👏
+Ⅵ. Commit specification👏
 ----------
 
 - People who like this project are welcome to maintain this project together, and pay attention to the following
@@ -165,7 +178,7 @@ public class StudentResource {
 - The code formats uses the default formatting of IntelliJ Idea
 - [conventional-changelog-metahub](https://github.com/pvdlg/conventional-changelog-metahub#commit-types)
 
-Ⅵ. License
+Ⅶ. License
 -----------
 
 zfoo use [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
