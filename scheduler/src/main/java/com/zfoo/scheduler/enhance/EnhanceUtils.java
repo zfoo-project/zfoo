@@ -36,7 +36,7 @@ public abstract class EnhanceUtils {
         var classPool = ClassPool.getDefault();
 
         for (var clazz : classArray) {
-            if (classPool.find(clazz.getCanonicalName()) == null) {
+            if (classPool.find(clazz.getName()) == null) {
                 ClassClassPath classPath = new ClassClassPath(clazz);
                 classPool.insertClassPath(classPath);
             }
@@ -50,22 +50,22 @@ public abstract class EnhanceUtils {
         Method method = reflectScheduler.getMethod();
 
         // 定义类名称
-        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + StringUtils.capitalize(NamespaceHandler.SCHEDULER) + UuidUtils.getLocalIntId());
-        enhanceClazz.addInterface(classPool.get(IScheduler.class.getCanonicalName()));
+        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.SCHEDULER) + UuidUtils.getLocalIntId());
+        enhanceClazz.addInterface(classPool.get(IScheduler.class.getName()));
 
         // 定义类中的一个成员
-        CtField field = new CtField(classPool.get(bean.getClass().getCanonicalName()), "bean", enhanceClazz);
+        CtField field = new CtField(classPool.get(bean.getClass().getName()), "bean", enhanceClazz);
         field.setModifiers(Modifier.PRIVATE);
         enhanceClazz.addField(field);
 
         // 定义类的构造器
-        CtConstructor constructor = new CtConstructor(classPool.get(new String[]{bean.getClass().getCanonicalName()}), enhanceClazz);
+        CtConstructor constructor = new CtConstructor(classPool.get(new String[]{bean.getClass().getName()}), enhanceClazz);
         constructor.setBody("{this.bean=$1;}");
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
         // 定义类实现的接口方法
-        CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "invoke", null, enhanceClazz);
+        CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getName()), "invoke", null, enhanceClazz);
         invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         String invokeMethodBody = "{this.bean." + method.getName() + "();}";
         invokeMethod.setBody(invokeMethodBody);

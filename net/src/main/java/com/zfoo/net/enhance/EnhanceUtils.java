@@ -36,7 +36,7 @@ public abstract class EnhanceUtils {
         var classPool = ClassPool.getDefault();
 
         for (var clazz : classArray) {
-            if (classPool.find(clazz.getCanonicalName()) == null) {
+            if (classPool.find(clazz.getName()) == null) {
                 ClassClassPath classPath = new ClassClassPath(clazz);
                 classPool.insertClassPath(classPath);
             }
@@ -50,39 +50,39 @@ public abstract class EnhanceUtils {
         var packetClazz = definition.getPacketClazz();
         var attachmentClazz = definition.getAttachmentClazz();
 
-        var enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + "Route" + UuidUtils.getLocalIntId());
-        enhanceClazz.addInterface(classPool.get(IPacketReceiver.class.getCanonicalName()));
+        var enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + "Route" + UuidUtils.getLocalIntId());
+        enhanceClazz.addInterface(classPool.get(IPacketReceiver.class.getName()));
 
-        var field = new CtField(classPool.get(bean.getClass().getCanonicalName()), "bean", enhanceClazz);
+        var field = new CtField(classPool.get(bean.getClass().getName()), "bean", enhanceClazz);
         field.setModifiers(Modifier.PRIVATE);
         enhanceClazz.addField(field);
 
-        var constructor = new CtConstructor(classPool.get(new String[]{bean.getClass().getCanonicalName()}), enhanceClazz);
+        var constructor = new CtConstructor(classPool.get(new String[]{bean.getClass().getName()}), enhanceClazz);
         constructor.setBody("{this.bean=$1;}");
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
-        var invokeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "invoke", classPool.get(new String[]{Session.class.getCanonicalName(), Object.class.getCanonicalName(), Object.class.getCanonicalName()}), enhanceClazz);
+        var invokeMethod = new CtMethod(classPool.get(void.class.getName()), "invoke", classPool.get(new String[]{Session.class.getName(), Object.class.getName(), Object.class.getName()}), enhanceClazz);
         invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         if (attachmentClazz == null) {
             // Cast type(强制类型转换)
-            String invokeMethodBody = StringUtils.format("{this.bean.{}($1, ({})$2);}", method.getName(), packetClazz.getCanonicalName());
+            String invokeMethodBody = StringUtils.format("{this.bean.{}($1, ({})$2);}", method.getName(), packetClazz.getName());
             invokeMethod.setBody(invokeMethodBody);
         } else {
-            String invokeMethodBody = StringUtils.format("{this.bean.{}($1, ({})$2, ({})$3);}", method.getName(), packetClazz.getCanonicalName(), attachmentClazz.getCanonicalName());
+            String invokeMethodBody = StringUtils.format("{this.bean.{}($1, ({})$2, ({})$3);}", method.getName(), packetClazz.getName(), attachmentClazz.getName());
             invokeMethod.setBody(invokeMethodBody);
         }
         enhanceClazz.addMethod(invokeMethod);
 
         // 定义类实现的接口方法task
-        CtMethod taskMethod = new CtMethod(classPool.get(Task.class.getCanonicalName()), "task", null, enhanceClazz);
+        CtMethod taskMethod = new CtMethod(classPool.get(Task.class.getName()), "task", null, enhanceClazz);
         taskMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String taskMethodBody = StringUtils.format("{ return {}.{}; }", Task.class.getCanonicalName(), definition.getTask());
+        String taskMethodBody = StringUtils.format("{ return {}.{}; }", Task.class.getName(), definition.getTask());
         taskMethod.setBody(taskMethodBody);
         enhanceClazz.addMethod(taskMethod);
 
         // 定义类实现的接口方法attachment
-        CtMethod attachmentMethod = new CtMethod(classPool.get(Class.class.getCanonicalName()), "attachment", null, enhanceClazz);
+        CtMethod attachmentMethod = new CtMethod(classPool.get(Class.class.getName()), "attachment", null, enhanceClazz);
         attachmentMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         if (attachmentClazz == null) {
             String attachmentMethodBody = "{ return null; }";

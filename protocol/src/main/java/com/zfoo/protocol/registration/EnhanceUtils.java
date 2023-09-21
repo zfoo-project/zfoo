@@ -55,17 +55,17 @@ public abstract class EnhanceUtils {
         var classPool = ClassPool.getDefault();
 
         // 导入需要的包
-        classPool.importPackage(ByteBufUtils.class.getCanonicalName());
-        classPool.importPackage(CollectionUtils.class.getCanonicalName());
-        classPool.importPackage(ArrayUtils.class.getCanonicalName());
-        classPool.importPackage(Iterator.class.getCanonicalName());
-        classPool.importPackage(List.class.getCanonicalName());
-        classPool.importPackage(Map.class.getCanonicalName());
-        classPool.importPackage(Set.class.getCanonicalName());
+        classPool.importPackage(ByteBufUtils.class.getName());
+        classPool.importPackage(CollectionUtils.class.getName());
+        classPool.importPackage(ArrayUtils.class.getName());
+        classPool.importPackage(Iterator.class.getName());
+        classPool.importPackage(List.class.getName());
+        classPool.importPackage(Map.class.getName());
+        classPool.importPackage(Set.class.getName());
 
         // 增加类的路径
         for (var clazz : classArray) {
-            if (classPool.find(clazz.getCanonicalName()) == null) {
+            if (classPool.find(clazz.getName()) == null) {
                 ClassClassPath classPath = new ClassClassPath(clazz);
                 classPool.insertClassPath(classPath);
             }
@@ -114,11 +114,11 @@ public abstract class EnhanceUtils {
         var packetFields = registration.getFieldRegistrations();
 
         // 定义类名称
-        CtClass enhanceClazz = classPool.makeClass(ProtocolRegistration.class.getCanonicalName() + protocolId);
-        enhanceClazz.addInterface(classPool.get(IProtocolRegistration.class.getCanonicalName()));
+        CtClass enhanceClazz = classPool.makeClass(ProtocolRegistration.class.getName() + protocolId);
+        enhanceClazz.addInterface(classPool.get(IProtocolRegistration.class.getName()));
 
         // 定义类中的一个成员
-        CtField constructorFiled = new CtField(classPool.get(Constructor.class.getCanonicalName()), "constructor", enhanceClazz);
+        CtField constructorFiled = new CtField(classPool.get(Constructor.class.getName()), "constructor", enhanceClazz);
         constructorFiled.setModifiers(Modifier.PRIVATE);
         enhanceClazz.addField(constructorFiled);
 
@@ -130,39 +130,39 @@ public abstract class EnhanceUtils {
                 .toList();
 
         for (var subProtocolId : allSubProtocolIds) {
-            var protocolRegistrationField = new CtField(classPool.get(IProtocolRegistration.class.getCanonicalName()), getProtocolRegistrationFieldNameByProtocolId(subProtocolId), enhanceClazz);
+            var protocolRegistrationField = new CtField(classPool.get(IProtocolRegistration.class.getName()), getProtocolRegistrationFieldNameByProtocolId(subProtocolId), enhanceClazz);
             protocolRegistrationField.setModifiers(Modifier.PRIVATE);
             enhanceClazz.addField(protocolRegistrationField);
         }
 
         // 定义类的构造器
-        CtConstructor constructor = new CtConstructor(classPool.get(new String[]{Constructor.class.getCanonicalName()}), enhanceClazz);
+        CtConstructor constructor = new CtConstructor(classPool.get(new String[]{Constructor.class.getName()}), enhanceClazz);
         constructor.setBody("{this.constructor=$1;}");
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
         // 定义类实现的接口方法
-        CtMethod protocolIdMethod = new CtMethod(classPool.get(short.class.getCanonicalName()), "protocolId", null, enhanceClazz);
+        CtMethod protocolIdMethod = new CtMethod(classPool.get(short.class.getName()), "protocolId", null, enhanceClazz);
         protocolIdMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         protocolIdMethod.setBody("{return " + registration.protocolId() + ";}");
         enhanceClazz.addMethod(protocolIdMethod);
 
-        CtMethod protocolConstructorMethod = new CtMethod(classPool.get(Constructor.class.getCanonicalName()), "protocolConstructor", null, enhanceClazz);
+        CtMethod protocolConstructorMethod = new CtMethod(classPool.get(Constructor.class.getName()), "protocolConstructor", null, enhanceClazz);
         protocolConstructorMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         protocolConstructorMethod.setBody("{return this.constructor;}");
         enhanceClazz.addMethod(protocolConstructorMethod);
 
-        CtMethod moduleMethod = new CtMethod(classPool.get(byte.class.getCanonicalName()), "module", null, enhanceClazz);
+        CtMethod moduleMethod = new CtMethod(classPool.get(byte.class.getName()), "module", null, enhanceClazz);
         moduleMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         moduleMethod.setBody("{return " + registration.module() + ";}");
         enhanceClazz.addMethod(moduleMethod);
 
-        CtMethod writeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "write", classPool.get(new String[]{ByteBuf.class.getCanonicalName(), Object.class.getCanonicalName()}), enhanceClazz);
+        CtMethod writeMethod = new CtMethod(classPool.get(void.class.getName()), "write", classPool.get(new String[]{ByteBuf.class.getName(), Object.class.getName()}), enhanceClazz);
         writeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         writeMethod.setBody(writeMethodBody(registration));
         enhanceClazz.addMethod(writeMethod);
 
-        CtMethod readMethod = new CtMethod(classPool.get(Object.class.getCanonicalName()), "read", classPool.get(new String[]{ByteBuf.class.getCanonicalName()}), enhanceClazz);
+        CtMethod readMethod = new CtMethod(classPool.get(Object.class.getName()), "read", classPool.get(new String[]{ByteBuf.class.getName()}), enhanceClazz);
         readMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         readMethod.setBody(readMethodBody(registration));
         enhanceClazz.addMethod(readMethod);
@@ -185,7 +185,7 @@ public abstract class EnhanceUtils {
         var packetClazz = constructor.getDeclaringClass();
 
         var builder = new StringBuilder();
-        builder.append("{").append(packetClazz.getCanonicalName() + " packet = (" + packetClazz.getCanonicalName() + ")$2;");
+        builder.append("{").append(packetClazz.getName() + " packet = (" + packetClazz.getName() + ")$2;");
         builder.append("if(ByteBufUtils.writePacketFlag($1, packet)){").append("return;}");
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
@@ -229,10 +229,10 @@ public abstract class EnhanceUtils {
                 constructorParam.set(index, readObject);
             }
 
-            builder.append(packetClazz.getCanonicalName() + " packet=new " + packetClazz.getCanonicalName() + "(" + constructorParam.stream().collect(Collectors.joining(StringUtils.COMMA)) + ");");
+            builder.append(packetClazz.getName() + " packet=new " + packetClazz.getName() + "(" + constructorParam.stream().collect(Collectors.joining(StringUtils.COMMA)) + ");");
         } else {
             var fields = registration.getFields();
-            builder.append(packetClazz.getCanonicalName() + " packet=new " + packetClazz.getCanonicalName() + "();");
+            builder.append(packetClazz.getName() + " packet=new " + packetClazz.getName() + "();");
 
             for (var i = 0; i < fields.length; i++) {
                 var field = fields[i];

@@ -39,7 +39,7 @@ public abstract class EnhanceUtils {
         var classPool = ClassPool.getDefault();
 
         for (var clazz : classArray) {
-            if (classPool.find(clazz.getCanonicalName()) == null) {
+            if (classPool.find(clazz.getName()) == null) {
                 ClassClassPath classPath = new ClassClassPath(clazz);
                 classPool.insertClassPath(classPath);
             }
@@ -54,31 +54,31 @@ public abstract class EnhanceUtils {
         Class<?> clazz = definition.getEventClazz();
 
         // 定义类名称
-        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getCanonicalName() + StringUtils.capitalize(NamespaceHandler.EVENT) + UuidUtils.getLocalIntId());
-        enhanceClazz.addInterface(classPool.get(IEventReceiver.class.getCanonicalName()));
+        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.EVENT) + UuidUtils.getLocalIntId());
+        enhanceClazz.addInterface(classPool.get(IEventReceiver.class.getName()));
 
         // 定义类中的一个成员
-        CtField field = new CtField(classPool.get(bean.getClass().getCanonicalName()), "bean", enhanceClazz);
+        CtField field = new CtField(classPool.get(bean.getClass().getName()), "bean", enhanceClazz);
         field.setModifiers(Modifier.PRIVATE);
         enhanceClazz.addField(field);
 
         // 定义类的构造器
-        CtConstructor constructor = new CtConstructor(classPool.get(new String[]{bean.getClass().getCanonicalName()}), enhanceClazz);
+        CtConstructor constructor = new CtConstructor(classPool.get(new String[]{bean.getClass().getName()}), enhanceClazz);
         constructor.setBody("{this.bean=$1;}");
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
         // 定义类实现的接口方法invoker
-        CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getCanonicalName()), "invoke", classPool.get(new String[]{IEvent.class.getCanonicalName()}), enhanceClazz);
+        CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getName()), "invoke", classPool.get(new String[]{IEvent.class.getName()}), enhanceClazz);
         invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String invokeMethodBody = StringUtils.format("{ this.bean.{}(({})$1); }", method.getName(), clazz.getCanonicalName()); // 强制类型转换，转换为具体的Event类型的类型
+        String invokeMethodBody = StringUtils.format("{ this.bean.{}(({})$1); }", method.getName(), clazz.getName()); // 强制类型转换，转换为具体的Event类型的类型
         invokeMethod.setBody(invokeMethodBody);
         enhanceClazz.addMethod(invokeMethod);
 
         // 定义类实现的接口方法bus
-        CtMethod busMethod = new CtMethod(classPool.get(Bus.class.getCanonicalName()), "bus", null, enhanceClazz);
+        CtMethod busMethod = new CtMethod(classPool.get(Bus.class.getName()), "bus", null, enhanceClazz);
         busMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String busMethodBody = StringUtils.format("{ return {}.{}; }", Bus.class.getCanonicalName(), definition.getBus());
+        String busMethodBody = StringUtils.format("{ return {}.{}; }", Bus.class.getName(), definition.getBus());
         busMethod.setBody(busMethodBody);
         enhanceClazz.addMethod(busMethod);
 
