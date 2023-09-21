@@ -3,8 +3,7 @@ English | [简体中文](./README_CN.md)
 ### Ⅰ. Introduction
 
 - [zfoo protocol](https://github.com/zfoo-project/zfoo/blob/main/protocol/README.md)
-  Fast framework for binary serialization and deserialization in Java, and has the fewest
-  serialization bytes
+  Ultimate performance binary serialization and deserialization in Java, and has the fewest serialization bytes
 - The protocol is currently natively supported **C++ Java Javascript C# Go Lua GDScript Python**，It's easy to do cross-platform
 - The protocol can customize the private protocol format to make your protocol more secure, and supports adding fields
   and being compatible with previous and subsequent protocols

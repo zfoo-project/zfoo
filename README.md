@@ -47,6 +47,8 @@ Perfect work development process, complete online solution
 Ⅳ. Maven dependency✨
 ------------
 
+**JDK 17+**，**OpenJDK** or **Oracle JDK** 
+
 ```
 <dependency>
     <groupId>com.zfoo</groupId>
@@ -59,16 +61,7 @@ Perfect work development process, complete online solution
 Ⅴ. Install and use⭐
 ------------
 
-#### 1. Environmental Requirements and Installation
-
-**17**，**OpenJDK** or **Oracle JDK** ，maven install to local repository
-
-```
-If you do not have JDK installed, the quick installation method is to download directly 
-from Project Structure, Platform Settings, SDKs in the upper right corner of Idea
-```
-
-#### 2. [protocol](protocol/README.md) very fast serialization and deserialization
+#### 1. [protocol](protocol/README.md) ultimate performance serialization and deserialization
 
 ```
 // zfoo protocol registration, can only be initialized once
@@ -81,7 +74,7 @@ ProtocolManager.write(byteBuf, complexObject);
 var packet = ProtocolManager.read(byteBuf);
 ```
 
-#### 3. [net](net/README.md) very fast RPC framework, supports tcp udp websocket http
+#### 2. [net](net/README.md) ultimate performance RPC framework, supports tcp udp websocket http
 
 ```
 // Service provider, only need to add an annotation to the method, the interface will be automatically registered
@@ -101,14 +94,14 @@ NetContext.getCosumer()
                     );
 ```
 
-#### 4. [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java) hot update code, no need to stop the server, no additional configuration, just one line of code to start hot update
+#### 3. [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java) hot update code, no need to stop the server, no additional configuration, just one line of code to start hot update
 
 ```
 // Pass in the class file that needs to be updated
 HotSwapUtils.hotswapClass(bytes);
 ```
 
-#### 5. [orm](orm/README.md) automatic mapping framework based on mongodb，The secondary cache is designed using [caffeine](https://github.com/ben-manes/caffeine) to fully release the database pressure
+#### 4. [orm](orm/README.md) automatic mapping framework based on mongodb，The secondary cache is designed using [caffeine](https://github.com/ben-manes/caffeine) to fully release the database pressure
 
 ```
 // You don't need to write sql and any configuration yourself, define a table in the database directly through annotation definitions
@@ -123,7 +116,7 @@ public class UserEntity implements IEntity<Long> {
 entityCaches.update(userEntity);
 ```
 
-#### 6. [event](event/src/test/java/com/zfoo/event/ApplicationTest.java) use the observer design pattern, decouples different modules and improves the quality of the code
+#### 5. [event](event/src/test/java/com/zfoo/event/ApplicationTest.java) use the observer design pattern, decouples different modules and improves the quality of the code
 
 ```
 // To receive an event, you only need to add an annotation to the method and the method will be automatically listen for the event
@@ -136,7 +129,7 @@ public void onMyNoticeEvent(MyNoticeEvent event) {
 EventBus.post(MyNoticeEvent.valueOf("My event"));
 ```
 
-#### 7. [scheduler](scheduler/README.md) scheduling Framework Based on Cron Expression
+#### 6. [scheduler](scheduler/README.md) scheduling Framework Based on Cron Expression
 
 ````
 @Scheduler(cron = "0/1 * * * * ?")
@@ -145,7 +138,7 @@ public void cronSchedulerPerSecond() {
 }
 ````
 
-#### 8. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel to class automatic mapping framework, you only need to define a class corresponding to Excel, and directly parse Excel
+#### 7. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel to class automatic mapping framework, you only need to define a class corresponding to Excel, and directly parse Excel
 
 ```
 @Storage

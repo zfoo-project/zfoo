@@ -49,6 +49,8 @@
 Ⅳ. Maven依赖✨
 ------------
 
+**JDK 17+**，**OpenJDK** or **Oracle JDK**
+
 ```
 <dependency>
     <groupId>com.zfoo</groupId>
@@ -60,15 +62,7 @@
 Ⅴ. 安装和使用⭐
 ------------
 
-#### 1. 环境要求和安装
-
-**JDK 17**，可以在 **OpenJDK** 和 **Oracle JDK** 无缝切换，下载完本项目，maven install到本地仓库即可使用
-
-```
-如果你没有安装JDK，快速的安装方法是在Idea的右上角Project Structure，Platform Settings，SDKs中直接下载
-```
-
-#### 2. [protocol](protocol/README.md) 目前性能最好的Java序列化和反序列化库
+#### 1. [protocol](protocol/README.md) 极致性能的Java序列化和反序列化库
 
 ```
 // zfoo协议注册，只能初始化一次
@@ -82,7 +76,7 @@ ProtocolManager.write(byteBuf, complexObject);
 var packet = ProtocolManager.read(byteBuf);
 ```
 
-#### 3. [net](net/README.md) 目前速度极快的RPC框架，支持 tcp udp websocket http
+#### 2. [net](net/README.md) 极致性能的RPC框架，支持 tcp udp websocket http
 
 ```
 // 服务提供者，只需要在方法上加个注解，则自动注册接口
@@ -102,14 +96,14 @@ NetContext.getCosumer()
                     );
 ```
 
-#### 4. [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java) 热更新代码，不需要停止服务器，不需要额外的任何配置，一行代码开启热更新
+#### 3. [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java) 热更新代码，不需要停止服务器，不需要额外的任何配置，一行代码开启热更新
 
 ```
 // 传入需要更新的class文件
 HotSwapUtils.hotswapClass(bytes);
 ```
 
-#### 5. [orm](orm/README.md) 基于mongodb的自动映射框架，使用 [caffeine](https://github.com/ben-manes/caffeine) 设计了二级缓存，充分释放数据库压力
+#### 4. [orm](orm/README.md) 基于mongodb的自动映射框架，使用 [caffeine](https://github.com/ben-manes/caffeine) 设计了二级缓存，充分释放数据库压力
 
 ```
 // 无需自己写sql和任何配置，直接通过注解定义在数据库中定义一张表
@@ -124,7 +118,7 @@ public class UserEntity implements IEntity<Long> {
 entityCaches.update(userEntity);
 ```
 
-#### 6. [event](event/src/test/java/com/zfoo/event/ApplicationTest.java) 事件总线解耦不同模块，提高代码的质量，核心思想是观察者设计模式
+#### 5. [event](event/src/test/java/com/zfoo/event/ApplicationTest.java) 事件总线解耦不同模块，提高代码的质量，核心思想是观察者设计模式
 
 ```
 // 接收一个事件，只需要在需要接收事件的方法上加一个注解就会自动监听这个事件
@@ -137,7 +131,7 @@ public void onMyNoticeEvent(MyNoticeEvent event) {
 EventBus.post(MyNoticeEvent.valueOf("我的事件"));
 ```
 
-#### 7. [scheduler](scheduler/README.md) 基于cron表达式的定时任务调度框架
+#### 6. [scheduler](scheduler/README.md) 基于cron表达式的定时任务调度框架
 
 ````
 @Scheduler(cron = "0/1 * * * * ?")
@@ -146,7 +140,7 @@ public void cronSchedulerPerSecond() {
 }
 ````
 
-#### 8. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel类自动映射框架，只需要定义一个和Excel对应的类，直接解析Excel
+#### 7. [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java) Excel类自动映射框架，只需要定义一个和Excel对应的类，直接解析Excel
 
 ```
 @Storage
