@@ -204,9 +204,9 @@ public class StorageManager implements IStorageManager {
         return storage.getIndexes(func, index);
     }
 
-    public <T, K> T get(Class<T> clazz, K key) {
+    public <T, K> T get(Class<T> clazz, K id) {
         var storage = getStorage(clazz);
-        return storage.get(key);
+        return storage.get(id);
     }
 
     @Override

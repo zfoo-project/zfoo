@@ -24,11 +24,11 @@ import java.util.Map;
  */
 public interface IStorage<K, V> {
 
-    boolean contain(K key);
+    boolean contain(K id);
 
-    boolean contain(int key);
+    boolean contain(int id);
 
-    boolean contain(long key);
+    boolean contain(long id);
 
     V get(K id);
 

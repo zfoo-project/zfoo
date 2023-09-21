@@ -52,8 +52,8 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
         return instance.storageManager;
     }
 
-    public static <V, K> V get(Class<V> clazz, K keyId) {
-        return instance.storageManager.getStorage(clazz).get(keyId);
+    public static <V, K> V get(Class<V> clazz, K id) {
+        return instance.storageManager.getStorage(clazz).get(id);
     }
 
     public static <V> List<V> getList(Class<V> clazz) {

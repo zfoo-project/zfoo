@@ -18,7 +18,6 @@ import io.netty.util.collection.IntObjectHashMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author godotg
@@ -42,18 +41,18 @@ public class StorageInt<K, V> extends StorageObject<K, V> {
     }
 
     @Override
-    public boolean contain(K key) {
-        return contain((int) key);
+    public boolean contain(K id) {
+        return contain((int) id);
     }
 
     @Override
-    public boolean contain(int key) {
-        return dataMap.containsKey(key);
+    public boolean contain(int id) {
+        return dataMap.containsKey(id);
     }
 
     @Override
-    public boolean contain(long key) {
-        return contain((int) key);
+    public boolean contain(long id) {
+        return contain((int) id);
     }
 
     @Override
