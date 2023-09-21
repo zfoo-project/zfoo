@@ -7,7 +7,7 @@
     <groupId>com.zfoo</groupId>
     <artifactId>zfoo</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.2</version>
+    <version>3.1.3</version>
 
 
     <name>zfoo</name>
@@ -44,9 +44,6 @@
     <profiles>
         <profile>
             <id>ossrh</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
