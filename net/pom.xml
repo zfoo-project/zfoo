@@ -48,7 +48,7 @@
         <!-- encoding and java version -->
         <project.build.sourceEncoding>${file.encoding}</project.build.sourceEncoding>
         <maven.compiler.encoding>${file.encoding}</maven.compiler.encoding>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <file.encoding>UTF-8</file.encoding>
     </properties>
 
@@ -256,6 +256,9 @@
     <profiles>
         <profile>
             <id>ossrh</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
