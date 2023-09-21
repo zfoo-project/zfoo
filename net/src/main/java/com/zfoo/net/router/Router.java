@@ -204,6 +204,7 @@ public class Router implements IRouter {
         switch (receiver.task()) {
             case TaskBus -> TaskBus.execute(taskExecutorHash, packetReceiverTask);
             case NettyIO -> atReceiver(packetReceiverTask);
+//            case VirtualThread -> Thread.ofVirtual().name("virtual-at" + clazz.getSimpleName()).start(() -> atReceiver(packetReceiverTask));
         }
     }
 

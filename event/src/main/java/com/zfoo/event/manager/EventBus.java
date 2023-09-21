@@ -103,6 +103,7 @@ public abstract class EventBus {
             switch (receiver.bus()) {
                 case CurrentThread -> doReceiver(receiver, event);
                 case AsyncThread -> execute(event.executorHash(), () -> doReceiver(receiver, event));
+//                case VirtualThread -> Thread.ofVirtual().name("virtual-on" + clazz.getSimpleName()).start(() -> doReceiver(receiver, event));
             }
         }
     }
