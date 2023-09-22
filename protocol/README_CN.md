@@ -11,7 +11,7 @@
 
 ### Ⅱ. 快速使用
 
-- 环境要求 **JDK 11+**，可以在 **OpenJDK** 和 **Oracle JDK** 无缝切换
+- 环境要求**JDK 17+**，支持**OpenJDK**, **Oracle JDK**, **native GraalVM**
 
 - protocol是独立项目，不依赖其它项目，可以直接打开，本地install到自己的本地maven仓库，即可单独使用
 

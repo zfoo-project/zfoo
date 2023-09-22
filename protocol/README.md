@@ -14,7 +14,7 @@ English | [简体中文](./README_CN.md)
 
 ### Ⅱ. Quick use
 
-- Environmental requirements **JDK 11+**
+- Environment requirement **JDK 17+**, support **OpenJDK**, **Oracle JDK** and **native GraalVM**
 
 - Protocol is an independent project, does not depend on other projects, can be directly opened, locally installed to
   its own local maven repository, can be used alone

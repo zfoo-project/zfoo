@@ -5,7 +5,8 @@ English | [简体中文](./README_CN.md)
 -----------
 
 - **Extremely fast, asynchronous, Actor design pattern, lock-free design, RPC framework, GraalVM native support**
-- **Ultimate performance serialization and deserialization [zfoo protocol](protocol/README.md)**，supports C++ C# Go Java Javascript TypeScript Lua GDScript Python
+- **Ultimate performance serialization and deserialization [zfoo protocol](protocol/README.md)**，supports C++ C# Go Java
+  Javascript TypeScript Lua GDScript Python
 - **High scalability**，Single server deployment, microservice deployment, cluster deployment, gateway deployment
 - **Can be used as a game server framework or website server framework.**
 
@@ -30,21 +31,7 @@ Perfect work development process, complete online solution
 - As a backend infrastructure for **Godot，Unity，Cocos，Webgl，H5**，Network protocol supports tcp udp websocket http
 - [Keep it Simple and Stupid](https://baike.baidu.com/item/KISS原则/3242383) ，simple configuration, lightweight code
 
-Ⅲ. Tutorials
---------------------
-
-- [FAQ](./doc/FAQ.md)，There are standard demo display and instructions in the test folder of each project directory,
-  which can be run directly
-
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》，novice friendly,
-  difficulty 2 stars
-
-- [godot-bird](https://github.com/zfoo-project/godot-bird) bird and bird，powered by godot
-
-- [cocos-fivechess](https://github.com/zfoo-project/fivechess) five chess，use cocos as client
-
-
-Ⅳ. Maven dependency✨
+Ⅲ. Maven dependency✨
 ------------
 
 - Environment requirement **JDK 17+**, support **OpenJDK**, **Oracle JDK** and **native GraalVM**
@@ -67,6 +54,18 @@ Perfect work development process, complete online solution
 </dependency>
 ```
 
+Ⅳ. Tutorials
+--------------------
+
+- [FAQ](./doc/FAQ.md)，There are standard demo display and instructions in the test folder of each project directory,
+  which can be run directly
+
+- [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》，novice friendly,
+  difficulty 2 stars
+
+- [godot-bird](https://github.com/zfoo-project/godot-bird) bird and bird，powered by godot
+
+- [cocos-fivechess](https://github.com/zfoo-project/fivechess) five chess，use cocos as client
 
 Ⅴ. Usage⭐
 ------------

@@ -5,7 +5,8 @@
 -----------
 
 - **极致性能，天生异步，Actor设计思想，无锁化设计，万能RPC框架，GraalVM native编译**
-- **极致序列化 [zfoo protocol](protocol/README.md)**，协议原生支持 C++ C# Java Go Javascript TypeScript Lua GDScript Python
+- **极致序列化 [zfoo protocol](protocol/README.md)**，协议原生支持 C++ C# Java Go Javascript TypeScript Lua GDScript
+  Python
 - **高可拓展性**，单台服务器部署，微服务部署，注册中心加集群部署，网关加集群部署，随意搭配
 - **上能做游戏服务器框架，下能做应用网站服务器框架**
 
@@ -29,24 +30,7 @@
 - 适合作为 **Godot，Unity，Cocos，Webgl，H5** 的后端基础框架，网络通信协议支持 tcp udp websocket http
 - 喜欢 [KISS法则](https://baike.baidu.com/item/KISS原则/3242383) 的项目 ，简单的配置，优雅的代码
 
-Ⅲ. 详细的教程和完整的工程案例
---------------------
-
-- 有问题，先看 [FAQ](./doc/FAQ.md) 能否解决你的问题
-- 依然有问题，参考每个工程目录的test文件夹下的标准demo展示和注释说明，可以直接运行
-    - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
-
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of
-  Tanks）》，新手友好，难度2星
-
-- [godot-bird](https://github.com/zfoo-project/godot-bird) 鸟了个鸟，客户端使用godot开发，服务器依然使用的tank-game-server
-
-- [cocos-fivechess](https://github.com/zfoo-project/fivechess) 五子棋，客户端使用cocos开发
-
-- [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，标准的https企业级网站，难度5星
-
-
-Ⅳ. Maven依赖✨
+Ⅲ. Maven依赖✨
 ------------
 
 - 环境要求**JDK 17+**，支持**OpenJDK**, **Oracle JDK**, **native GraalVM**
@@ -68,6 +52,22 @@
     <version>3.1.4</version>
 </dependency>
 ```
+
+Ⅳ. 详细的教程和完整的工程案例
+--------------------
+
+- 有问题，先看 [FAQ](./doc/FAQ.md) 能否解决你的问题
+- 依然有问题，参考每个工程目录的test文件夹下的标准demo展示和注释说明，可以直接运行
+    - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
+
+- [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of
+  Tanks）》，新手友好，难度2星
+
+- [godot-bird](https://github.com/zfoo-project/godot-bird) 鸟了个鸟，客户端使用godot开发，服务器依然使用的tank-game-server
+
+- [cocos-fivechess](https://github.com/zfoo-project/fivechess) 五子棋，客户端使用cocos开发
+
+- [zapp](https://github.com/zfoo-project/zapp) 图片分享聊天网站，标准的https企业级网站，难度5星
 
 Ⅴ. 使用⭐
 ------------
