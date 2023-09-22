@@ -17,56 +17,17 @@ package com.zfoo.protocol.packet;
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author godotg
  */
 @Protocol(id = 102)
-public class ObjectA {
+public record ObjectA(
 
-    private int a;
+        int a,
 
-    private Map<Integer, String> m;
+        Map<Integer, String> m,
 
-    private ObjectB objectB;
-
-    public int getA() {
-        return a;
-    }
-
-    public void setA(int a) {
-        this.a = a;
-    }
-
-    public Map<Integer, String> getM() {
-        return m;
-    }
-
-    public void setM(Map<Integer, String> m) {
-        this.m = m;
-    }
-
-    public ObjectB getObjectB() {
-        return objectB;
-    }
-
-    public void setObjectB(ObjectB objectB) {
-        this.objectB = objectB;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ObjectA objectA = (ObjectA) o;
-        return a == objectA.a &&
-                Objects.equals(m, objectA.m) &&
-                Objects.equals(objectB, objectA.objectB);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(a, m, objectB);
-    }
+        ObjectB objectB
+) {
 }

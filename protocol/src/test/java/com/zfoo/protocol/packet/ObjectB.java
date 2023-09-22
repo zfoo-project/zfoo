@@ -16,35 +16,14 @@ package com.zfoo.protocol.packet;
 
 import com.zfoo.protocol.anno.Protocol;
 
-import java.util.Objects;
-
 /**
  * @author godotg
  */
 @Protocol(id = 103)
-public class ObjectB {
+public record ObjectB(
 
-    private boolean flag;
+        boolean flag
 
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ObjectB objectB = (ObjectB) o;
-        return flag == objectB.flag;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(flag);
-    }
+) {
 }
 

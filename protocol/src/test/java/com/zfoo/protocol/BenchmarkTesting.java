@@ -24,11 +24,6 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.*;
 import com.zfoo.protocol.util.StringUtils;
-import io.fury.Fury;
-import io.fury.Language;
-import io.fury.ThreadLocalFury;
-import io.fury.ThreadSafeFury;
-import io.fury.memory.MemoryBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
@@ -68,7 +63,7 @@ public class BenchmarkTesting {
             System.out.println(StringUtils.format("[单线程性能测试-->[benchmark:{}]]", benchmark));
 
             zfooTest();
-            furyTest();
+//            furyTest();
             protobufTest();
             kryoTest();
 
@@ -90,7 +85,7 @@ public class BenchmarkTesting {
             System.out.println(StringUtils.format("[多线程性能测试-->[benchmark:{}]]", benchmark));
 
             zfooMultipleThreadTest();
-            furyMultipleThreadTest();
+//            furyMultipleThreadTest();
             protobufMultipleThreadTest();
             kryoMultipleThreadTest();
 
@@ -142,41 +137,41 @@ public class BenchmarkTesting {
         System.out.println(StringUtils.format("[zfoo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
     }
 
-    @Test
-    public void furyTest() {
-        var buffer = MemoryBuffer.newHeapBuffer(1_0000);
-        // 序列化和反序列化简单对象
-        long startTime = System.currentTimeMillis();
-        for (int i = 0; i < benchmark; i++) {
-            buffer.writerIndex(0);
-            buffer.readerIndex(0);
-            fury.serialize(buffer, simpleObject);
-            var obj = fury.deserialize(buffer);
-        }
-
-        System.out.println(StringUtils.format("[fury]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
-
-        // 序列化和反序列化常规对象
-        startTime = System.currentTimeMillis();
-        for (int i = 0; i < benchmark; i++) {
-            buffer.writerIndex(0);
-            buffer.readerIndex(0);
-            fury.serialize(buffer, normalObject);
-            var obj = fury.deserialize(buffer);
-        }
-
-        System.out.println(StringUtils.format("[fury]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
-
-        // 序列化和反序列化复杂对象
-        startTime = System.currentTimeMillis();
-        for (int i = 0; i < benchmark; i++) {
-            buffer.writerIndex(0);
-            buffer.readerIndex(0);
-            fury.serialize(buffer, complexObject);
-            var obj = fury.deserialize(buffer);
-        }
-        System.out.println(StringUtils.format("[fury]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
-    }
+//    @Test
+//    public void furyTest() {
+//        var buffer = MemoryBuffer.newHeapBuffer(1_0000);
+//        // 序列化和反序列化简单对象
+//        long startTime = System.currentTimeMillis();
+//        for (int i = 0; i < benchmark; i++) {
+//            buffer.writerIndex(0);
+//            buffer.readerIndex(0);
+//            fury.serialize(buffer, simpleObject);
+//            var obj = fury.deserialize(buffer);
+//        }
+//
+//        System.out.println(StringUtils.format("[fury]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+//
+//        // 序列化和反序列化常规对象
+//        startTime = System.currentTimeMillis();
+//        for (int i = 0; i < benchmark; i++) {
+//            buffer.writerIndex(0);
+//            buffer.readerIndex(0);
+//            fury.serialize(buffer, normalObject);
+//            var obj = fury.deserialize(buffer);
+//        }
+//
+//        System.out.println(StringUtils.format("[fury]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+//
+//        // 序列化和反序列化复杂对象
+//        startTime = System.currentTimeMillis();
+//        for (int i = 0; i < benchmark; i++) {
+//            buffer.writerIndex(0);
+//            buffer.readerIndex(0);
+//            fury.serialize(buffer, complexObject);
+//            var obj = fury.deserialize(buffer);
+//        }
+//        System.out.println(StringUtils.format("[fury]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+//    }
 
     @Test
     public void kryoTest() {
@@ -278,17 +273,17 @@ public class BenchmarkTesting {
         countdown.await();
     }
 
-    @Test
-    public void furyMultipleThreadTest() throws InterruptedException {
-        var countdown = new CountDownLatch(threadNum);
-        for (var i = 0; i < threadNum; i++) {
-            executors[i].execute(() -> {
-                furyTest();
-                countdown.countDown();
-            });
-        }
-        countdown.await();
-    }
+//    @Test
+//    public void furyMultipleThreadTest() throws InterruptedException {
+//        var countdown = new CountDownLatch(threadNum);
+//        for (var i = 0; i < threadNum; i++) {
+//            executors[i].execute(() -> {
+//                furyTest();
+//                countdown.countDown();
+//            });
+//        }
+//        countdown.await();
+//    }
 
     @Test
     public void kryoMultipleThreadTest() throws InterruptedException {
@@ -364,21 +359,21 @@ public class BenchmarkTesting {
         }
     }
 
-    private static ThreadSafeFury fury;
-
-    static {
-        fury = new ThreadLocalFury(classLoader -> {
-            Fury f = Fury.builder().withLanguage(Language.JAVA)
-                    .build();
-            f.register(ComplexObject.class);
-            f.register(NormalObject.class);
-            f.register(SimpleObject.class);
-            f.register(VeryBigObject.class);
-            f.register(ObjectA.class);
-            f.register(ObjectB.class);
-            return f;
-        });
-    }
+//    private static ThreadSafeFury fury;
+//
+//    static {
+//        fury = new ThreadLocalFury(classLoader -> {
+//            Fury f = Fury.builder().withLanguage(Language.JAVA)
+//                    .build();
+//            f.register(ComplexObject.class);
+//            f.register(NormalObject.class);
+//            f.register(SimpleObject.class);
+//            f.register(VeryBigObject.class);
+//            f.register(ObjectA.class);
+//            f.register(ObjectB.class);
+//            return f;
+//        });
+//    }
 
     // -------------------------------------------以下为测试用例---------------------------------------------------------------
     // 简单类型
@@ -404,10 +399,10 @@ public class BenchmarkTesting {
     public static final double[] doubleArray = new double[]{Double.MIN_VALUE, -99999999.9F, -99.9D, 0D, 99.9D, 99999999.9F, Double.MAX_VALUE};
     public static final char[] charArray = new char[]{'a', 'b', 'c', 'd', 'e'};
     public static final String[] stringArray = new String[]{"a", "b", "c", "d", "e"};
-
-    public static final ObjectA objectA = new ObjectA();
-    public static final ObjectB objectB = new ObjectB();
     public static final Map<Integer, String> mapWithInteger = new HashMap<>(Map.of(Integer.MIN_VALUE, "a", -99, "b", 0, "c", 99, "d", Integer.MAX_VALUE, "e"));
+
+    public static final ObjectB objectB = new ObjectB(true);
+    public static final ObjectA objectA = new ObjectA(Integer.MAX_VALUE, mapWithInteger, objectB);
     public static final List<Integer> listWithInteger = new ArrayList<>(ArrayUtils.toList(intArray));
     public static final List<Integer> listWithInteger1 = new ArrayList<>(ArrayUtils.toList(intArray1));
     public static final List<Integer> listWithInteger2 = new ArrayList<>(ArrayUtils.toList(intArray2));
@@ -445,12 +440,6 @@ public class BenchmarkTesting {
     public static ProtobufObject.ProtobufNormalObject protobufNormalObject = null;
     public static ProtobufObject.ProtobufSimpleObject protobufSimpleObject = null;
 
-    static {
-        objectA.setA(Integer.MAX_VALUE);
-        objectA.setM(mapWithInteger);
-        objectA.setObjectB(objectB);
-        objectB.setFlag(false);
-    }
 
     static {
         complexObject.setA(byteValue);

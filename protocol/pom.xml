@@ -124,22 +124,22 @@
         <dependency>
             <groupId>com.esotericsoftware</groupId>
             <artifactId>kryo</artifactId>
-            <version>5.3.0</version>
+            <version>5.5.0</version>
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.furyio</groupId>
-            <artifactId>fury-core</artifactId>
-            <version>0.1.0</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.furyio</groupId>-->
+<!--            <artifactId>fury-core</artifactId>-->
+<!--            <version>0.1.0</version>-->
+<!--            <scope>test</scope>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>slf4j-api</artifactId>-->
+<!--                    <groupId>org.slf4j</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>junit</groupId>
