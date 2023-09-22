@@ -49,7 +49,7 @@
 Ⅳ. Maven依赖✨
 ------------
 
-**JDK 17+**，**OpenJDK** or **Oracle JDK**
+**JDK 17+**，**OpenJDK**, **Oracle JDK**, **GraalVM**
 
 ```
 <dependency>
@@ -59,7 +59,17 @@
 </dependency>
 ```
 
-Ⅴ. 安装和使用⭐
+- 如果不想引入全部的zfoo模块，只需要选择依赖其中一个模块
+
+```
+<dependency>
+    <groupId>com.zfoo</groupId>
+    <artifactId>protocol</artifactId>
+    <version>3.1.4</version>
+</dependency>
+```
+
+Ⅴ. 使用⭐
 ------------
 
 #### 1. [protocol](protocol/README.md) 极致性能的Java序列化和反序列化库

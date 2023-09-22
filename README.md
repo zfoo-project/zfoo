@@ -47,7 +47,7 @@ Perfect work development process, complete online solution
 Ⅳ. Maven dependency✨
 ------------
 
-**JDK 17+**，**OpenJDK** or **Oracle JDK** 
+**JDK 17+**，**OpenJDK**, **Oracle JDK**, **GraalVM**
 
 ```
 <dependency>
@@ -57,8 +57,18 @@ Perfect work development process, complete online solution
 </dependency>
 ```
 
+- If you don't want to depend all zfoo modules, you only need to choose to depend on one of them
 
-Ⅴ. Install and use⭐
+```
+<dependency>
+    <groupId>com.zfoo</groupId>
+    <artifactId>protocol</artifactId>
+    <version>3.1.4</version>
+</dependency>
+```
+
+
+Ⅴ. Usage⭐
 ------------
 
 #### 1. [protocol](protocol/README.md) ultimate performance serialization and deserialization
