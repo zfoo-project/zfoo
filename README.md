@@ -47,7 +47,7 @@ Perfect work development process, complete online solution
 Ⅳ. Maven dependency✨
 ------------
 
-**JDK 17+**，**OpenJDK**, **Oracle JDK**, **GraalVM**
+- Environment requirement **JDK 17+**, support **OpenJDK**, **Oracle JDK** and **native GraalVM**
 
 ```
 <dependency>

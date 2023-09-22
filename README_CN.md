@@ -49,7 +49,7 @@
 Ⅳ. Maven依赖✨
 ------------
 
-**JDK 17+**，**OpenJDK**, **Oracle JDK**, **GraalVM**
+- 环境要求**JDK 17+**，支持**OpenJDK**, **Oracle JDK**, **native GraalVM**
 
 ```
 <dependency>
