@@ -19,9 +19,11 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.reflect.ISerializer;
 import com.zfoo.protocol.util.ReflectionUtils;
 import io.netty.buffer.ByteBuf;
+import io.netty.util.ReferenceCountUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 /**
  * @author godotg
@@ -38,8 +40,19 @@ public class ProtocolRegistration implements IProtocolRegistration {
      */
     private IFieldRegistration[] fieldRegistrations;
 
-    public ProtocolRegistration() {
+    // 兼容相关
+    private boolean compatible;
+    private int predictionLength;
 
+    public ProtocolRegistration(short id, byte module, Constructor<?> constructor, Field[] fields, IFieldRegistration[] fieldRegistrations) {
+        this.id = id;
+        this.module = module;
+        this.constructor = constructor;
+        this.fields = fields;
+        this.fieldRegistrations = fieldRegistrations;
+
+        this.compatible = Arrays.stream(fields).anyMatch(it -> it.isAnnotationPresent(Compatible.class));
+        this.predictionLength = 128;
     }
 
     @Override
@@ -58,41 +71,86 @@ public class ProtocolRegistration implements IProtocolRegistration {
     }
 
     @Override
-    public void write(ByteBuf buffer, Object packet) {
+    public void write(ByteBuf byteBuf, Object packet) {
         if (packet == null) {
-            ByteBufUtils.writeBoolean(buffer, false);
+            ByteBufUtils.writeByte(byteBuf, (byte) 0);
             return;
         }
 
-        ByteBufUtils.writeBoolean(buffer, true);
+        if (compatible) {
+            byteBuf.markWriterIndex();
+            ByteBufUtils.writeInt(byteBuf, predictionLength);
+        } else {
+            ByteBufUtils.writeInt(byteBuf, -1);
+        }
 
+        var beforeWriteIndex = byteBuf.writerIndex();
         for (int i = 0, length = fields.length; i < length; i++) {
             Field field = fields[i];
             IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
             ISerializer serializer = packetFieldRegistration.serializer();
             Object fieldValue = ReflectionUtils.getField(field, packet);
-            serializer.writeObject(buffer, fieldValue, packetFieldRegistration);
+            serializer.writeObject(byteBuf, fieldValue, packetFieldRegistration);
+        }
+
+        if (compatible) {
+            // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+            var currentWriteIndex = byteBuf.writerIndex();
+            var length = currentWriteIndex - beforeWriteIndex;
+            var lengthCount = ByteBufUtils.writeIntCount(length);
+            var padding = lengthCount - ByteBufUtils.writeIntCount(predictionLength);
+            if (padding == 0) {
+                byteBuf.resetWriterIndex();
+                ByteBufUtils.writeInt(byteBuf, length);
+                byteBuf.writerIndex(currentWriteIndex);
+            } else if (padding < 0) {
+                var retainedByteBuf = byteBuf.retainedSlice(currentWriteIndex - length, length);
+                byteBuf.resetWriterIndex();
+                ByteBufUtils.writeInt(byteBuf, length);
+                byteBuf.writeBytes(retainedByteBuf);
+                ReferenceCountUtil.release(retainedByteBuf);
+            } else {
+                var retainedByteBuf = byteBuf.retainedSlice(currentWriteIndex - length, length);
+                var bytes = ByteBufUtils.readAllBytes(retainedByteBuf);
+                byteBuf.resetWriterIndex();
+                ByteBufUtils.writeInt(byteBuf, length);
+                byteBuf.writeBytes(bytes);
+                ReferenceCountUtil.release(retainedByteBuf);
+            }
         }
     }
 
     @Override
-    public Object read(ByteBuf buffer) {
-        if (!ByteBufUtils.readBoolean(buffer)) {
+    public Object read(ByteBuf byteBuf) {
+        var length = ByteBufUtils.readInt(byteBuf);
+        if (length == 0) {
             return null;
         }
         Object object = ReflectionUtils.newInstance(constructor);
 
-        for (int i = 0, length = fields.length; i < length; i++) {
+        var readIndex = byteBuf.readerIndex();
+        for (int i = 0, j = fields.length; i < j; i++) {
             Field field = fields[i];
             // 协议向后兼容
-            if (field.isAnnotationPresent(Compatible.class) && !buffer.isReadable()) {
-                break;
+            if (field.isAnnotationPresent(Compatible.class)) {
+                if (length == -1) {
+                    break;
+                } else {
+                    if (byteBuf.readerIndex() - readIndex >= length) {
+                        break;
+                    }
+                }
             }
             IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
             ISerializer serializer = packetFieldRegistration.serializer();
-            Object fieldValue = serializer.readObject(buffer, packetFieldRegistration);
+            Object fieldValue = serializer.readObject(byteBuf, packetFieldRegistration);
             ReflectionUtils.setField(field, object, fieldValue);
         }
+
+        if (length > 0 && byteBuf.readInt() - readIndex < length) {
+            byteBuf.readerIndex(readIndex + length);
+        }
+
         return object;
     }
 

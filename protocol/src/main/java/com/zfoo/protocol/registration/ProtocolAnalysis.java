@@ -448,13 +448,7 @@ public class ProtocolAnalysis {
             }
 
             ReflectionUtils.makeAccessible(constructor);
-            var protocol = new ProtocolRegistration();
-            protocol.setId(protocolId);
-            protocol.setConstructor(constructor);
-            protocol.setFields(ArrayUtils.listToArray(fields, Field.class));
-            protocol.setFieldRegistrations(ArrayUtils.listToArray(registrationList, IFieldRegistration.class));
-            protocol.setModule(module.getId());
-            return protocol;
+            return new ProtocolRegistration(protocolId, module.getId(), constructor, ArrayUtils.listToArray(fields, Field.class), ArrayUtils.listToArray(registrationList, IFieldRegistration.class));
         } catch (Exception e) {
             throw new RuntimeException(StringUtils.format("解析协议[class:{}]异常", clazz), e);
         }
