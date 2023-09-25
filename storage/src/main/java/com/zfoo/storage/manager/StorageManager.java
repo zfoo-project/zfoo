@@ -156,7 +156,7 @@ public class StorageManager implements IStorageManager {
 
                 Type[] types = ((ParameterizedType) type).getActualTypeArguments();
 
-                // @ResInjection
+                // @StorageAutowired
                 // Storage<Integer, ActivityResource> resources;
                 Class<?> keyClazz = (Class<?>) types[0];
 
@@ -216,8 +216,8 @@ public class StorageManager implements IStorageManager {
             throw new RunException("There is no [{}] defined Storage and unable to get it", clazz.getCanonicalName());
         }
         if (storage.isRecycle()) {
-            // Storage没有使用，为了节省内存提前释放了它；只有使用ResInjection注解的Storage才能被动态获取或者关闭配置recycle属性
-            logger.warn("Storage [{}] is not used, it was freed to save memory; use @ResInjection or turn off recycle configuration", clazz.getCanonicalName());
+            // Storage没有使用，为了节省内存提前释放了它；只有使用@StorageAutowired注解的Storage才能被动态获取或者关闭配置recycle属性
+            logger.warn("Storage [{}] is not used, it was freed to save memory; use @StorageAutowired or turn off recycle configuration", clazz.getCanonicalName());
         }
         return (T) storage;
     }
