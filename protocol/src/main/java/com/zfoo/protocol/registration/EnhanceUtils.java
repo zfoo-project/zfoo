@@ -232,7 +232,7 @@ public abstract class EnhanceUtils {
                 // protocol backwards compatibility，协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
                     var defaultReadObject = enhanceSerializer(fieldRegistration.serializer()).defaultValue(builder, field, fieldRegistration);
-                    builder.append("if (length == -1 || $1.readerIndex() < length + readIndex) {");
+                    builder.append("if (length != -1 && $1.readerIndex() < length + readIndex) {");
                     var compatibleReadObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
                     builder.append(StringUtils.format("{} = {};", defaultReadObject, compatibleReadObject));
                     builder.append("}");
