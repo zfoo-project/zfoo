@@ -133,12 +133,8 @@ public class ProtocolRegistration implements IProtocolRegistration {
             Field field = fields[i];
             // 协议向后兼容
             if (field.isAnnotationPresent(Compatible.class)) {
-                if (length == -1) {
+                if (length == -1 || byteBuf.readerIndex() - readIndex >= length) {
                     break;
-                } else {
-                    if (byteBuf.readerIndex() - readIndex >= length) {
-                        break;
-                    }
                 }
             }
             IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
@@ -147,7 +143,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
             ReflectionUtils.setField(field, object, fieldValue);
         }
 
-        if (length > 0 && byteBuf.readInt() - readIndex < length) {
+        if (length > 0) {
             byteBuf.readerIndex(readIndex + length);
         }
 
