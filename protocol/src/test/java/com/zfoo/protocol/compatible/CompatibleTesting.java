@@ -10,14 +10,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.compatiblity;
+package com.zfoo.protocol.compatible;
 
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.*;
-import com.zfoo.protocol.util.ClassUtils;
-import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.*;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
 import org.junit.Ignore;
@@ -33,7 +31,7 @@ import static com.zfoo.protocol.BenchmarkTesting.normalObject;
  * @author godotg
  */
 @Ignore
-public class CompatibilityTesting {
+public class CompatibleTesting {
 
     /**
      * EN: The order of the bytecode-enhanced Map traversal order will be different, so the order of the serialized content will change.
@@ -42,7 +40,7 @@ public class CompatibilityTesting {
      * CN: 字节码增强的Map遍历顺序会出现不一样，所以序列化的内容顺序会改变，可以看到不相同的字节并不是连续的
      */
     @Test
-    public void compatiblityTest() throws IOException {
+    public void compatibleTest() throws IOException {
         ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), GenerateOperation.NO_OPERATION);
 
         var bytes = IOUtils.toByteArray(ClassUtils.getFileFromClassPath("ComplexObject.bytes"));
@@ -88,5 +86,32 @@ public class CompatibilityTesting {
         packet = ProtocolManager.read(buffer);
 
         buffer.clear();
+    }
+
+    @Test
+    public void normalTest() {
+        var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
+        ProtocolManager.write(buffer, normalObject);
+        var packet = ProtocolManager.read(buffer);
+
+
+        var newBuffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
+        ProtocolManager.write(newBuffer, packet);
+
+        buffer.resetReaderIndex();
+        newBuffer.resetReaderIndex();
+
+        var equal = 0;
+        var notEqual = 0;
+        for (int i = 0; i < buffer.writerIndex(); i++) {
+            var a = buffer.readByte();
+            var b = newBuffer.readByte();
+            if (a == b) {
+                equal++;
+            } else {
+                notEqual++;
+            }
+        }
+        System.out.println(StringUtils.format("equal [{}], not equal [{}]", equal, notEqual));
     }
 }
