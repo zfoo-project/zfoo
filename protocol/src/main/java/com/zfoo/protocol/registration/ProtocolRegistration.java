@@ -77,14 +77,14 @@ public class ProtocolRegistration implements IProtocolRegistration {
             return;
         }
 
+        var beforeWriteIndex = byteBuf.writerIndex();
+
         if (compatible) {
-            byteBuf.markWriterIndex();
             ByteBufUtils.writeInt(byteBuf, predictionLength);
         } else {
             ByteBufUtils.writeInt(byteBuf, -1);
         }
 
-        var beforeWriteIndex = byteBuf.writerIndex();
         for (int i = 0, length = fields.length; i < length; i++) {
             Field field = fields[i];
             IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
@@ -96,23 +96,24 @@ public class ProtocolRegistration implements IProtocolRegistration {
         if (compatible) {
             // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
             var currentWriteIndex = byteBuf.writerIndex();
-            var length = currentWriteIndex - beforeWriteIndex;
+            var predictionCount = ByteBufUtils.writeIntCount(predictionLength);
+            var length = currentWriteIndex - beforeWriteIndex - predictionCount;
             var lengthCount = ByteBufUtils.writeIntCount(length);
-            var padding = lengthCount - ByteBufUtils.writeIntCount(predictionLength);
+            var padding = lengthCount - predictionCount;
             if (padding == 0) {
-                byteBuf.resetWriterIndex();
+                byteBuf.writerIndex(beforeWriteIndex);
                 ByteBufUtils.writeInt(byteBuf, length);
                 byteBuf.writerIndex(currentWriteIndex);
             } else if (padding < 0) {
                 var retainedByteBuf = byteBuf.retainedSlice(currentWriteIndex - length, length);
-                byteBuf.resetWriterIndex();
+                byteBuf.writerIndex(beforeWriteIndex);
                 ByteBufUtils.writeInt(byteBuf, length);
                 byteBuf.writeBytes(retainedByteBuf);
                 ReferenceCountUtil.release(retainedByteBuf);
             } else {
                 var retainedByteBuf = byteBuf.retainedSlice(currentWriteIndex - length, length);
                 var bytes = ByteBufUtils.readAllBytes(retainedByteBuf);
-                byteBuf.resetWriterIndex();
+                byteBuf.writerIndex(beforeWriteIndex);
                 ByteBufUtils.writeInt(byteBuf, length);
                 byteBuf.writeBytes(bytes);
                 ReferenceCountUtil.release(retainedByteBuf);

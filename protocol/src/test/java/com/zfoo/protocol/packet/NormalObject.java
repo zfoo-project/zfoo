@@ -14,6 +14,7 @@
 package com.zfoo.protocol.packet;
 
 
+import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.List;
@@ -56,6 +57,9 @@ public class NormalObject {
 
     private Set<Integer> s;
     private Set<String> ssss;
+
+//    @Compatible(1)
+//    public int outCompatibleValue;
 
     public byte getA() {
         return a;

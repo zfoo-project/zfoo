@@ -95,7 +95,8 @@ public class CompatibleTesting {
     public void normalTest() {
         var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
         ProtocolManager.write(buffer, normalObject);
-//        FileUtils.writeInputStreamToFile(new File("normal-no-compatible.bytes"), new ByteArrayInputStream(ByteBufUtils.readAllBytes(buffer)));
+        // normalObject.outCompatibleValue = 88;
+        // FileUtils.writeInputStreamToFile(new File("normal-no-compatible.bytes"), new ByteArrayInputStream(ByteBufUtils.readAllBytes(buffer)));
         var packet = ProtocolManager.read(buffer);
 
 

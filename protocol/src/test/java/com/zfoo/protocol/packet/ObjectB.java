@@ -14,6 +14,7 @@
 package com.zfoo.protocol.packet;
 
 
+import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
@@ -23,6 +24,9 @@ import com.zfoo.protocol.anno.Protocol;
 public record ObjectB(
 
         boolean flag
+
+//        @Compatible(1)
+//        int innerCompatibleValue
 
 ) {
 }

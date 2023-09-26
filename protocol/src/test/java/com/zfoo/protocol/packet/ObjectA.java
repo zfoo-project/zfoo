@@ -14,6 +14,7 @@
 package com.zfoo.protocol.packet;
 
 
+import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.anno.Protocol;
 
 import java.util.Map;
@@ -29,5 +30,8 @@ public record ObjectA(
         Map<Integer, String> m,
 
         ObjectB objectB
+
+//        @Compatible(1)
+//        int innerCompatibleValue,
 ) {
 }

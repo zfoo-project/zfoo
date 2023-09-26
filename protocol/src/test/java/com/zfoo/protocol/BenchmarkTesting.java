@@ -338,7 +338,9 @@ public class BenchmarkTesting {
     public static final Map<Integer, String> mapWithInteger = new HashMap<>(Map.of(Integer.MIN_VALUE, "a", -99, "b", 0, "c", 99, "d", Integer.MAX_VALUE, "e"));
 
     public static final ObjectB objectB = new ObjectB(true);
+//    public static final ObjectB objectB = new ObjectB(true, 44);
     public static final ObjectA objectA = new ObjectA(Integer.MAX_VALUE, mapWithInteger, objectB);
+//    public static final ObjectA objectA = new ObjectA(Integer.MAX_VALUE, mapWithInteger, objectB, 66);
     public static final List<Integer> listWithInteger = new ArrayList<>(ArrayUtils.toList(intArray));
     public static final List<Integer> listWithInteger1 = new ArrayList<>(ArrayUtils.toList(intArray1));
     public static final List<Integer> listWithInteger2 = new ArrayList<>(ArrayUtils.toList(intArray2));
