@@ -218,9 +218,7 @@ public abstract class EnhanceUtils {
         builder.append("{");
         builder.append(StringUtils.format("int length = {}.readInt($1);", byteBufUtils));
         builder.append("if(length==0){return null;}");
-        if (registration.isCompatible()) {
-            builder.append("int readIndex = $1.readerIndex();");
-        }
+        builder.append("int readIndex = $1.readerIndex();");
         var packetClazz = constructor.getDeclaringClass();
         if (packetClazz.isRecord()) {
             var fields = registration.getFields();
@@ -230,13 +228,19 @@ public abstract class EnhanceUtils {
             for (var i = 0; i < fields.length; i++) {
                 var field = fields[i];
                 var fieldRegistration = fieldRegistrations[i];
+                int index = originFields.indexOf(field);
                 // protocol backwards compatibility，协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
-                    builder.append("if(!$1.isReadable()){ return packet; }");
+                    var defaultReadObject = enhanceSerializer(fieldRegistration.serializer()).defaultValue(builder, field, fieldRegistration);
+                    builder.append("if (length == -1 || $1.readerIndex() < length + readIndex) {");
+                    var compatibleReadObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
+                    builder.append(StringUtils.format("{} = {};", defaultReadObject, compatibleReadObject));
+                    builder.append("}");
+                    constructorParams[index] = defaultReadObject;
+                    continue;
                 }
 
                 var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
-                int index = originFields.indexOf(field);
                 constructorParams[index] = readObject;
             }
             builder.append(packetClazz.getName() + " packet=new " + packetClazz.getName() + "(" + String.join(StringUtils.COMMA, constructorParams) + ");");
@@ -250,8 +254,22 @@ public abstract class EnhanceUtils {
                 // protocol backwards compatibility，协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
                     builder.append("if (length == -1 || $1.readerIndex() >= length + readIndex) {");
+                    var defaultReadObject = enhanceSerializer(fieldRegistration.serializer()).defaultValue(builder, field, fieldRegistration);
+                    if (Modifier.isPublic(field.getModifiers())) {
+                        builder.append(StringUtils.format("packet.{}={};", field.getName(), defaultReadObject));
+                    } else {
+                        builder.append(StringUtils.format("packet.{}({});", FieldUtils.fieldToSetMethod(packetClazz, field), defaultReadObject));
+                    }
+                    builder.append("} else {");
+                    var compatibleReadObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
+                    if (Modifier.isPublic(field.getModifiers())) {
+                        builder.append(StringUtils.format("packet.{}={};", field.getName(), compatibleReadObject));
+                    } else {
+                        builder.append(StringUtils.format("packet.{}({});", FieldUtils.fieldToSetMethod(packetClazz, field), compatibleReadObject));
+                    }
+                    builder.append("}");
+                    continue;
                 }
-
                 var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
                 if (Modifier.isPublic(field.getModifiers())) {
                     builder.append(StringUtils.format("packet.{}={};", field.getName(), readObject));
@@ -260,6 +278,8 @@ public abstract class EnhanceUtils {
                 }
             }
         }
+
+        builder.append("if (length > 0) { $1.readerIndex(readIndex + length); }");
 
         builder.append("return packet;}");
         return builder.toString();
