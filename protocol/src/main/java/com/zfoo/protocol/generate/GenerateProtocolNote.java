@@ -109,9 +109,9 @@ public abstract class GenerateProtocolNote {
         for (var protocolRegistration : protocolRegistrations) {
             var protocolClazz = protocolRegistration.protocolConstructor().getDeclaringClass();
             var classNote = StringUtils.EMPTY;
-            var protocolClass = protocolClazz.getDeclaredAnnotation(Protocol.class);
-            if (protocolClass != null && StringUtils.isNotEmpty(protocolClass.note())) {
-                classNote = StringUtils.trim(protocolClass.note());
+            var protocolClass = protocolClazz.getDeclaredAnnotation(Note.class);
+            if (protocolClass != null && StringUtils.isNotEmpty(protocolClass.value())) {
+                classNote = StringUtils.trim(protocolClass.value());
             }
 
             var fieldNoteMap = new HashMap<String, String>();

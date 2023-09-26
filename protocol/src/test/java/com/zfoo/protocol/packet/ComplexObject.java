@@ -20,7 +20,8 @@ import com.zfoo.protocol.anno.Protocol;
 
 import java.util.*;
 
-@Protocol(id = 100, note = "复杂的对象，包括了各种复杂的结构，数组，List，Set，Map")
+@Protocol(id = 100)
+@Note("复杂的对象，包括了各种复杂的结构，数组，List，Set，Map")
 public class ComplexObject {
 
 

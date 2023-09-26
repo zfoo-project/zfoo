@@ -26,6 +26,5 @@ public @interface Protocol {
 
     boolean enhance() default true;
 
-    String note() default "";
 }
 
