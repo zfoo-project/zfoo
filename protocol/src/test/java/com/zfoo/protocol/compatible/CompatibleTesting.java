@@ -13,6 +13,7 @@
 package com.zfoo.protocol.compatible;
 
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.packet.*;
 import com.zfoo.protocol.util.*;
@@ -21,6 +22,8 @@ import io.netty.buffer.UnpooledHeapByteBuf;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
@@ -92,6 +95,7 @@ public class CompatibleTesting {
     public void normalTest() {
         var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
         ProtocolManager.write(buffer, normalObject);
+//        FileUtils.writeInputStreamToFile(new File("normal-no-compatible.bytes"), new ByteArrayInputStream(ByteBufUtils.readAllBytes(buffer)));
         var packet = ProtocolManager.read(buffer);
 
 
