@@ -43,7 +43,7 @@ class Longbits {
   /**
    * Converts this long bits to a long.
    */
-  toLong(unsigned): Long {
+  toLong(unsigned: boolean): Long {
     return new Long(this.lo | 0, this.hi | 0, Boolean(unsigned));
   };
 
