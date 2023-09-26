@@ -179,31 +179,42 @@ public abstract class GenerateTsUtils {
     private static String writeObject(ProtocolRegistration registration) {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
-        var jsBuilder = new StringBuilder();
+        var tsBuilder = new StringBuilder();
+        if (registration.isCompatible()) {
+            tsBuilder.append("const beforeWriteIndex = buffer.getWriteOffset();").append(LS);
+            tsBuilder.append(TAB + TAB).append(StringUtils.format("buffer.writeInt({});", registration.getPredictionLength())).append(LS);
+        } else {
+            tsBuilder.append(TAB + TAB).append("buffer.writeInt(-1);").append(LS);
+        }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            tsSerializer(fieldRegistration.serializer()).writeObject(jsBuilder, "packet." + field.getName(), 2, field, fieldRegistration);
+            tsSerializer(fieldRegistration.serializer()).writeObject(tsBuilder, "packet." + field.getName(), 2, field, fieldRegistration);
         }
-        return jsBuilder.toString();
+        if (registration.isCompatible()) {
+            tsBuilder.append(TAB + TAB).append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex);", registration.getPredictionLength())).append(LS);
+        }
+        return tsBuilder.toString();
     }
 
     private static String readObject(ProtocolRegistration registration) {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
-        var jsBuilder = new StringBuilder();
+        var tsBuilder = new StringBuilder();
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                jsBuilder.append(TAB + TAB).append("if (!buffer.isReadable()) {").append(LS);
-                jsBuilder.append(TAB + TAB + TAB).append("return packet;").append(LS);
-                jsBuilder.append(TAB + TAB).append("}").append(LS);
+                tsBuilder.append(TAB + TAB).append("if (length !== -1 && buffer.getReadOffset() - readIndex < length) {").append(LS);
+                var compatibleReadObject = tsSerializer(fieldRegistration.serializer()).readObject(tsBuilder, 3, field, fieldRegistration);
+                tsBuilder.append(TAB + TAB+ TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
+                tsBuilder.append(TAB + TAB).append("}").append(LS);
+                continue;
             }
-            var readObject = tsSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 2, field, fieldRegistration);
-            jsBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
+            var readObject = tsSerializer(fieldRegistration.serializer()).readObject(tsBuilder, 2, field, fieldRegistration);
+            tsBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
         }
-        return jsBuilder.toString();
+        return tsBuilder.toString();
     }
 
     public static String toTsClassName(String typeName) {

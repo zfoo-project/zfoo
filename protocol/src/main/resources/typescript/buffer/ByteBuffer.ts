@@ -57,6 +57,24 @@ class ByteBuffer {
         this.bufferView = new DataView(this.buffer, 0, this.buffer.byteLength);
     }
 
+    adjustPadding(predictionLength: number, beforeWriteIndex: number): void {
+        const currentWriteIndex = this.writeOffset;
+        const predictionCount = this.writeIntCount(predictionLength);
+        const length = currentWriteIndex - beforeWriteIndex - predictionCount;
+        const lengthCount = this.writeIntCount(length);
+        const padding = lengthCount - predictionCount;
+        if (padding == 0) {
+            this.setWriteOffset(beforeWriteIndex);
+            this.writeInt(length);
+            this.setWriteOffset(currentWriteIndex);
+        } else {
+            const retainedByteBuf = this.buffer.slice(currentWriteIndex - length, currentWriteIndex);
+            this.setWriteOffset(beforeWriteIndex);
+            this.writeInt(length);
+            this.writeBytes(retainedByteBuf);
+        }
+    }
+
     setWriteOffset(writeOffset: number): void {
         if (writeOffset > this.buffer.byteLength) {
             throw new Error('index out of bounds exception:readerIndex:' + this.readOffset +
@@ -66,6 +84,10 @@ class ByteBuffer {
         this.writeOffset = writeOffset;
     }
 
+    getWriteOffset(): number {
+        return this.writeOffset;
+    }
+
     setReadOffset(readOffset: number): void {
         if (readOffset > this.writeOffset) {
             throw new Error('index out of bounds exception:readerIndex:' + this.readOffset +
@@ -73,6 +95,10 @@ class ByteBuffer {
                 '(expected:0 <= readerIndex <= writerIndex <= capacity:' + this.buffer.byteLength);
         }
         this.readOffset = readOffset;
+    }
+
+    getReadOffset(): number {
+        return this.readOffset;
     }
 
     getCapacity(): number {
@@ -209,6 +235,25 @@ class ByteBuffer {
         this.writeByte(value >>> 28);
     }
 
+    writeIntCount(value: number): number {
+        if (!(minInt <= value && value <= maxInt)) {
+            throw new Error('value must range between minInt:-2147483648 and maxInt:2147483647');
+        }
+        if (value >>> 7 === 0) {
+            return 1;
+        }
+        if (value >>> 14 === 0) {
+            return 2;
+        }
+        if (value >>> 21 === 0) {
+            return 3;
+        }
+        if (value >>> 28 === 0) {
+            return 4;
+        }
+        return 5;
+    }
+
     readInt(): number {
         let b = this.readByte();
         let value = b & 0x7F;
@@ -311,18 +356,6 @@ class ByteBuffer {
         const value = this.bufferView.getFloat64(this.readOffset);
         this.readOffset += 8;
         return value;
-    }
-
-    writeChar(value: string): void {
-        if (value === null || value === undefined || value.length === 0) {
-            this.writeString(empty_str);
-            return;
-        }
-        this.writeString(value.charAt(0));
-    }
-
-    readChar(): string {
-        return this.readString();
     }
 
     writeString(value: string): void {
@@ -542,28 +575,6 @@ class ByteBuffer {
         return array;
     };
 
-    writeCharArray(array: Array<string> | null) {
-        if (array === null) {
-            this.writeInt(0);
-        } else {
-            this.writeInt(array.length);
-            array.forEach(element => {
-                this.writeChar(element);
-            });
-        }
-    };
-
-    readCharArray(): any {
-        const array: string[] = [];
-        const length = this.readInt();
-        if (length > 0) {
-            for (let index = 0; index < length; index++) {
-                array.push(this.readChar());
-            }
-        }
-        return array;
-    };
-
     writePacketArray(array: Array<any> | null, protocolId: number) {
         if (array === null) {
             this.writeInt(0);
@@ -651,14 +662,6 @@ class ByteBuffer {
 
     readStringList(): any {
         return this.readStringArray();
-    };
-
-    writeCharList(list: any) {
-        this.writeCharArray(list);
-    };
-
-    readCharList(): any {
-        return this.readCharArray();
     };
 
     writePacketList(list: any, protocolId: number) {
@@ -788,21 +791,6 @@ class ByteBuffer {
 
     readStringSet(): any {
         return new Set(this.readStringArray());
-    };
-
-    writeCharSet(set: Set<string> | null) {
-        if (set === null) {
-            this.writeInt(0);
-        } else {
-            this.writeInt(set.size);
-            set.forEach(element => {
-                this.writeChar(element);
-            });
-        }
-    };
-
-    readCharSet(): any {
-        return new Set(this.readCharArray());
     };
 
     writePacketSet(set: Set<any> | null, protocolId: number) {

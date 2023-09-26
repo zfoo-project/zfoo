@@ -11,18 +11,24 @@ class {} {
     }
 
     static write(buffer: any, packet: {} | null) {
-        if (buffer.writePacketFlag(packet) || packet == null) {
+        if (packet === null) {
+            buffer.writeInt(0);
             return;
         }
         {}
     }
 
     static read(buffer: any): {} | null {
-        if (!buffer.readBoolean()) {
+        const length = buffer.readInt();
+        if (length === 0) {
             return null;
         }
+        const readIndex = buffer.getReadOffset();
         const packet = new {}();
         {}
+        if (length > 0) {
+            buffer.setReadOffset(readIndex + length);
+        }
         return packet;
     }
 }

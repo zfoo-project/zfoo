@@ -73,6 +73,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
     @Override
     public void write(ByteBuf byteBuf, Object packet) {
         if (packet == null) {
+            // equals with ByteBufUtils.writeInt(byteBuf, 0);
             ByteBufUtils.writeByte(byteBuf, (byte) 0);
             return;
         }
