@@ -693,11 +693,11 @@ public class ProtocolAnalysis {
         }
 
 
-        //拓扑排序检查循环协议
+        // 拓扑排序检查循环协议
         if (subProtocolIdMap.isEmpty()) {
             return;
         }
-        //先判断自循环引用
+        // 先判断自循环引用
         for (var protocolEntry : subProtocolIdMap.entrySet()) {
             var protocolId = protocolEntry.getKey();
             var subProtocolSet = protocolEntry.getValue();
@@ -706,9 +706,9 @@ public class ProtocolAnalysis {
                 throw new RunException("[class:{}]中存在自循环引用", protocolClass.getSimpleName());
             }
         }
-        //入度
+        // 入度
         var inDegree = new HashMap<Short, Integer>();
-        //初始化入度
+        // 初始化入度
         for (var protocolEntry : subProtocolIdMap.entrySet()) {
             var protocolId = protocolEntry.getKey();
             inDegree.put(protocolId, inDegree.getOrDefault(protocolId, 0));
@@ -736,14 +736,14 @@ public class ProtocolAnalysis {
             }
         }
         var circularReferenceProtocols = new ArrayList<String>();
-        //入度不为0的表示存在循环引用的协议
+        // 入度不为0的表示存在循环引用的协议
         for (var protocolEntry : inDegree.entrySet()) {
             if (protocolEntry.getValue() > 0) {
                 circularReferenceProtocols.add(protocols[protocolEntry.getKey()].protocolConstructor().getDeclaringClass().getSimpleName());
             }
         }
-        //抛出所有存在循环引用的协议类名
-        if (circularReferenceProtocols.size() > 0) {
+        // 抛出所有存在循环引用的协议类名
+        if (!circularReferenceProtocols.isEmpty()) {
             throw new RunException("[class:{}]中存在循环引用", StringUtils.joinWith(",", circularReferenceProtocols.toArray()));
         }
     }
