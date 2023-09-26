@@ -32,4 +32,6 @@ public interface ISerializer {
 
     Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration);
 
+    Object defaultValue(IFieldRegistration fieldRegistration);
+
 }

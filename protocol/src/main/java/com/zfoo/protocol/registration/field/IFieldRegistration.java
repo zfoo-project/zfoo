@@ -22,6 +22,10 @@ import com.zfoo.protocol.serializer.reflect.ISerializer;
  */
 public interface IFieldRegistration {
 
+    default Object defaultValue() {
+        return serializer().defaultValue(this);
+    }
+
     ISerializer serializer();
 
 }

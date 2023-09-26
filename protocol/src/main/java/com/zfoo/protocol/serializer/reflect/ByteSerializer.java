@@ -34,4 +34,9 @@ public class ByteSerializer implements ISerializer {
         return ByteBufUtils.readByteBox(buffer);
     }
 
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        return Byte.valueOf((byte) 0);
+    }
+
 }

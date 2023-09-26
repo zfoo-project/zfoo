@@ -19,6 +19,7 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.SetField;
 import io.netty.buffer.ByteBuf;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -62,6 +63,11 @@ public class SetSerializer implements ISerializer {
         }
 
         return set;
+    }
+
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        return new HashSet<>();
     }
 
 }

@@ -33,4 +33,9 @@ public class CharSerializer implements ISerializer {
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
         return ByteBufUtils.readCharBox(buffer);
     }
+
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        return Character.MIN_VALUE;
+    }
 }

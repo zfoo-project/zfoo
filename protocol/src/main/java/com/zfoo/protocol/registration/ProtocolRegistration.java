@@ -135,17 +135,19 @@ public class ProtocolRegistration implements IProtocolRegistration {
             var originFields = ProtocolAnalysis.getFields(packetClazz);
             var constructorParams = new Object[originFields.size()];
             for (int i = 0, j = fields.length; i < j; i++) {
-                Field field = fields[i];
+                var field = fields[i];
+                var index = originFields.indexOf(field);
+                var packetFieldRegistration = fieldRegistrations[i];
+
                 // 协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
                     if (length == -1 || byteBuf.readerIndex() - readIndex >= length) {
-                        break;
+                        constructorParams[index] = packetFieldRegistration.defaultValue();
+                        continue;
                     }
                 }
-                IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
                 ISerializer serializer = packetFieldRegistration.serializer();
                 Object fieldValue = serializer.readObject(byteBuf, packetFieldRegistration);
-                var index = originFields.indexOf(field);
                 constructorParams[index] = fieldValue;
             }
             object = ReflectionUtils.newInstance(constructor, constructorParams);

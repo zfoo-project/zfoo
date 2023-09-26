@@ -68,4 +68,10 @@ public class ArraySerializer implements ISerializer {
         return array;
     }
 
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        ArrayField arrayField = (ArrayField) fieldRegistration;
+        return Array.newInstance(arrayField.getType(), 0);
+    }
+
 }

@@ -33,4 +33,9 @@ public class IntSerializer implements ISerializer {
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
         return ByteBufUtils.readIntBox(buffer);
     }
+
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        return Integer.valueOf(0);
+    }
 }

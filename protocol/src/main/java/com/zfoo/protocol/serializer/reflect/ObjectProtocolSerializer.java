@@ -44,4 +44,9 @@ public class ObjectProtocolSerializer implements ISerializer {
         IProtocolRegistration protocol = ProtocolManager.getProtocol(objectProtocolField.getProtocolId());
         return protocol.read(buffer);
     }
+
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        return null;
+    }
 }

@@ -33,4 +33,9 @@ public class BooleanSerializer implements ISerializer {
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
         return ByteBufUtils.readBooleanBox(buffer);
     }
+
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        return Boolean.FALSE;
+    }
 }

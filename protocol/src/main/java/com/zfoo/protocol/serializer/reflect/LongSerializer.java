@@ -33,4 +33,9 @@ public class LongSerializer implements ISerializer {
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
         return ByteBufUtils.readLongBox(buffer);
     }
+
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        return Long.valueOf(0);
+    }
 }

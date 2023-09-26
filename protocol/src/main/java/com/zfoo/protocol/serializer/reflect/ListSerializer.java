@@ -19,6 +19,7 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ListField;
 import io.netty.buffer.ByteBuf;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,5 +62,10 @@ public class ListSerializer implements ISerializer {
         }
 
         return list;
+    }
+
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        return new ArrayList<>();
     }
 }

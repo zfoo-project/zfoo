@@ -33,4 +33,9 @@ public class ShortSerializer implements ISerializer {
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
         return ByteBufUtils.readShortBox(buffer);
     }
+
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        return Short.valueOf((short) 0);
+    }
 }

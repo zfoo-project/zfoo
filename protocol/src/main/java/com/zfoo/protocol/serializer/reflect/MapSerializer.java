@@ -19,6 +19,7 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.MapField;
 import io.netty.buffer.ByteBuf;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -68,5 +69,10 @@ public class MapSerializer implements ISerializer {
             map.put(key, value);
         }
         return map;
+    }
+
+    @Override
+    public Object defaultValue(IFieldRegistration fieldRegistration) {
+        return new HashMap<>();
     }
 }
