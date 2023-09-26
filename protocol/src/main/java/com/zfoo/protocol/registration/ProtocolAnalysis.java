@@ -51,13 +51,22 @@ import static com.zfoo.protocol.ProtocolManager.*;
  */
 public class ProtocolAnalysis {
 
-    // 临时变量，启动完成就会销毁，协议Id对应的Class类
+    /**
+     * EN: Temporary variables will be destroyed after startup, and the class corresponding to the protocolId
+     * CN: 临时变量，启动完成就会销毁，协议Id对应的Class类
+     */
     private static final Map<Short, Class<?>> protocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
-    // 临时变量，启动完成就会销毁，协议下包含的子协议，只包含一层子协议
+    /**
+     * EN: Temp field, sub protocols
+     * CN: 临时变量，启动完成就会销毁，协议下包含的子协议，只包含一层子协议
+     */
     private static Map<Short, Set<Short>> subProtocolIdMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
-    // 临时变量，启动完成就会销毁，协议名称保留字符，即协议的名称不能用以下名称命名
+    /**
+     * EN: Temp field, name reserved keywords, The name of the protocol cannot be named with the following name
+     * CN: 临时变量，启动完成就会销毁，协议名称保留字符，即协议的名称不能用以下名称命名
+     */
     private static Set<String> protocolReserved = Set.of("Buffer", "ByteBuf", "ByteBuffer", "LittleEndianByteBuffer", "NormalByteBuffer"
             , "IProtocol", "IProtocolRegistration", "ProtocolManager", "IFieldRegistration"
             , "ByteBufUtils", "ArrayUtils", "CollectionUtils"
