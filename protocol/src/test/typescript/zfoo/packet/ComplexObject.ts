@@ -69,7 +69,7 @@ class ComplexObject {
             return;
         }
         const beforeWriteIndex = buffer.getWriteOffset();
-        buffer.writeInt(128);
+        buffer.writeInt(1);
         buffer.writeByte(packet.a);
         buffer.writeByte(packet.aa);
         buffer.writeByteArray(packet.aaa);
@@ -234,7 +234,7 @@ class ComplexObject {
         }
         buffer.writeInt(packet.myCompatible);
         buffer.writePacket(packet.myObject, 102);
-        buffer.adjustPadding(128, beforeWriteIndex);
+        buffer.adjustPadding(1, beforeWriteIndex);
     }
 
     static read(buffer: any): ComplexObject | null {

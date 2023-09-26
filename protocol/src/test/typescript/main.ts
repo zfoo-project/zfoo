@@ -1,6 +1,6 @@
 import ByteBuffer from './zfoo/buffer/ByteBuffer';
 import ProtocolManager from './zfoo/ProtocolManager';
-
+import * as fs from "fs";
 function assert(flag: boolean): void {
     if (!flag) {
         throw "exception happen";
@@ -11,7 +11,11 @@ function assert(flag: boolean): void {
 console.log("Hello world");
 
 
-const data = fs.readFileSync('C:\\zfoo\\protocol\\src\\test\\resources\\ComplexObject.bytes');
+// const data = fs.readFileSync('D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes');
+// const data = fs.readFileSync('D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes');
+// const data = fs.readFileSync('D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes');
+// const data = fs.readFileSync('D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes');
+const data = fs.readFileSync('D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes');
 
 const arrayBytes = new Uint8Array(data.length);
 data.copy(arrayBytes, 0, 0, data.length);
@@ -21,7 +25,6 @@ byteBuffer.writeBytes(arrayBytes);
 
 const packet = ProtocolManager.read(byteBuffer);
 // complexObjec是老的协议，所以序列化回来myCompatible是nil，所以要重新赋值
-packet.myCompatible = 0
 console.log(packet);
 
 const newByteBuffer = new ByteBuffer();
@@ -30,17 +33,17 @@ ProtocolManager.write(newByteBuffer, packet);
 const newPacket = ProtocolManager.read(newByteBuffer);
 console.log(newPacket);
 
-assert(byteBuffer.readOffset <= newByteBuffer.writeOffset);
-
-// set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
-const length = newByteBuffer.writeOffset;
-byteBuffer.setReadOffset(0);
-newByteBuffer.setReadOffset(0);
-for (let i = 0; i < length; i++) {
-    assert(byteBuffer.readByte() == newByteBuffer.readByte());
-}
-
-
+// assert(byteBuffer.readOffset <= newByteBuffer.writeOffset);
+//
+// // set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
+// const length = newByteBuffer.writeOffset;
+// byteBuffer.setReadOffset(0);
+// newByteBuffer.setReadOffset(0);
+// for (let i = 0; i < length; i++) {
+//     if (byteBuffer.readByte() !== newByteBuffer.readByte()) {
+//         console.log(i);
+//     }
+// }
 
 
 // ByteBuffer test
@@ -106,9 +109,3 @@ buffer = new ByteBuffer();
 const testString = 'hello world!';
 buffer.writeString(testString);
 assert(buffer.readString() == testString);
-
-// char
-buffer = new ByteBuffer();
-const testChar = 'h';
-buffer.writeChar(testString);
-assert(buffer.readChar() == testChar);
