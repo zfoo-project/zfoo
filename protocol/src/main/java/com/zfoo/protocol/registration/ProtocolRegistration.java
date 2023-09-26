@@ -155,14 +155,15 @@ public class ProtocolRegistration implements IProtocolRegistration {
             object = ReflectionUtils.newInstance(constructor);
             for (int i = 0, j = fields.length; i < j; i++) {
                 Field field = fields[i];
+                IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
+                ISerializer serializer = packetFieldRegistration.serializer();
                 // 协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
                     if (length == -1 || byteBuf.readerIndex() - readIndex >= length) {
-                        break;
+                        ReflectionUtils.setField(field, object, packetFieldRegistration.defaultValue());
+                        continue;
                     }
                 }
-                IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
-                ISerializer serializer = packetFieldRegistration.serializer();
                 Object fieldValue = serializer.readObject(byteBuf, packetFieldRegistration);
                 ReflectionUtils.setField(field, object, fieldValue);
             }
