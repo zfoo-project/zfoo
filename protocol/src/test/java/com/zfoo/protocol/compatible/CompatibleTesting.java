@@ -95,8 +95,6 @@ public class CompatibleTesting {
     public void normalTest() {
         var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
         ProtocolManager.write(buffer, normalObject);
-        // normalObject.outCompatibleValue = 88;
-        // FileUtils.writeInputStreamToFile(new File("normal-no-compatible.bytes"), new ByteArrayInputStream(ByteBufUtils.readAllBytes(buffer)));
         var packet = ProtocolManager.read(buffer);
 
 
@@ -118,5 +116,30 @@ public class CompatibleTesting {
             }
         }
         System.out.println(StringUtils.format("equal [{}], not equal [{}]", equal, notEqual));
+    }
+
+    @Test
+    public void normalWriteTest() {
+        var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
+//        normalObject.outCompatibleValue = 88;
+        ProtocolManager.write(buffer, normalObject);
+        FileUtils.writeInputStreamToFile(new File("normal-no-compatible.bytes"), new ByteArrayInputStream(ByteBufUtils.readAllBytes(buffer)));
+    }
+
+    @Test
+    public void normalReadTest() throws IOException {
+        ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), GenerateOperation.NO_OPERATION);
+
+//        var bytes = IOUtils.toByteArray(ClassUtils.getFileFromClassPath("compatible/normal-no-compatible.bytes"));
+//        var bytes = IOUtils.toByteArray(ClassUtils.getFileFromClassPath("compatible/normal-out-compatible.bytes"));
+//        var bytes = IOUtils.toByteArray(ClassUtils.getFileFromClassPath("compatible/normal-inner-compatible.bytes"));
+//        var bytes = IOUtils.toByteArray(ClassUtils.getFileFromClassPath("compatible/normal-out-inner-compatible.bytes"));
+        var bytes = IOUtils.toByteArray(ClassUtils.getFileFromClassPath("compatible/normal-out-inner-inner-compatible.bytes"));
+
+        var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
+        buffer.writeBytes(bytes);
+        var packet = ProtocolManager.read(buffer);
+
+        System.out.println(JsonUtils.object2String(packet));
     }
 }
