@@ -1,10 +1,10 @@
 import ObjectA from './ObjectA';
 
-// @author godotg
+
 class NormalObject {
 
     a: number = 0;
-    aaa: Array<number> | null = null;
+    aaa: Array<number> = [];
     b: number = 0;
     c: number = 0;
     d: number = 0;
@@ -13,27 +13,27 @@ class NormalObject {
     g: boolean = false;
     jj: string = '';
     kk: ObjectA | null = null;
-    l: Array<number> | null = null;
-    ll: Array<number> | null = null;
-    lll: Array<ObjectA> | null = null;
-    llll: Array<string> | null = null;
-    m: Map<number, string> | null = null;
-    mm: Map<number, ObjectA> | null = null;
-    s: Set<number> | null = null;
-    ssss: Set<string> | null = null;
+    l: Array<number> = [];
+    ll: Array<number> = [];
+    lll: Array<ObjectA> = [];
+    llll: Array<string> = [];
+    m: Map<number, string> = new Map();
+    mm: Map<number, ObjectA> = new Map();
+    s: Set<number> = new Set();
+    ssss: Set<string> = new Set();
+
+    static PROTOCOL_ID: number = 101;
 
     protocolId(): number {
-        return 101;
+        return NormalObject.PROTOCOL_ID;
     }
 
     static write(buffer: any, packet: NormalObject | null) {
-        if (buffer.writePacketFlag(packet)) {
-            return;
-        }
         if (packet === null) {
+            buffer.writeInt(0);
             return;
         }
-
+        buffer.writeInt(-1);
         buffer.writeByte(packet.a);
         buffer.writeByteArray(packet.aaa);
         buffer.writeShort(packet.b);
@@ -55,9 +55,11 @@ class NormalObject {
     }
 
     static read(buffer: any): NormalObject | null {
-        if (!buffer.readBoolean()) {
+        const length = buffer.readInt();
+        if (length === 0) {
             return null;
         }
+        const readIndex = buffer.getReadOffset();
         const packet = new NormalObject();
         const result0 = buffer.readByte();
         packet.a = result0;
@@ -95,6 +97,9 @@ class NormalObject {
         packet.s = set16;
         const set17 = buffer.readStringSet();
         packet.ssss = set17;
+        if (length > 0) {
+            buffer.setReadOffset(readIndex + length);
+        }
         return packet;
     }
 }

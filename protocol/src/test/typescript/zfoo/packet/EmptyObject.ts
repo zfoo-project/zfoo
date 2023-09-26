@@ -1,33 +1,31 @@
 
 
-class ObjectB {
+class EmptyObject {
 
-    flag: boolean = false;
+    
 
-    static PROTOCOL_ID: number = 103;
+    static PROTOCOL_ID: number = 0;
 
     protocolId(): number {
-        return ObjectB.PROTOCOL_ID;
+        return EmptyObject.PROTOCOL_ID;
     }
 
-    static write(buffer: any, packet: ObjectB | null) {
+    static write(buffer: any, packet: EmptyObject | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
         }
         buffer.writeInt(-1);
-        buffer.writeBoolean(packet.flag);
     }
 
-    static read(buffer: any): ObjectB | null {
+    static read(buffer: any): EmptyObject | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
         }
         const readIndex = buffer.getReadOffset();
-        const packet = new ObjectB();
-        const result0 = buffer.readBoolean(); 
-        packet.flag = result0;
+        const packet = new EmptyObject();
+        
         if (length > 0) {
             buffer.setReadOffset(readIndex + length);
         }
@@ -35,4 +33,4 @@ class ObjectB {
     }
 }
 
-export default ObjectB;
+export default EmptyObject;

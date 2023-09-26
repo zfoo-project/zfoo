@@ -1,7 +1,6 @@
-// from protobuf
-const Long = require('./long.js')
+// from https://github.com/hornta/long-ts
+import {Long} from "./Long";
 
-module.exports = LongBits;
 
 /**
  * Constructs new long bits.
@@ -11,101 +10,92 @@ module.exports = LongBits;
  * @param {number} lo Low 32 bits, unsigned
  * @param {number} hi High 32 bits, unsigned
  */
-function LongBits(lo, hi) {
-    // note that the casts below are theoretically unnecessary as of today, but older statically
-    // generated converter code might still call the ctor with signed 32bits. kept for compat.
+class Longbits {
+  lo: number;
+  hi: number;
 
-    /**
-     * Low bits.
-     * @type {number}
-     */
+  constructor(lo:number, hi:number) {
     this.lo = lo >>> 0;
-
-    /**
-     * High bits.
-     * @type {number}
-     */
     this.hi = hi >>> 0;
-}
+  }
 
-/**
- * Zig-zag encodes this long bits.
- * @returns {util.LongBits} `this`
- */
-LongBits.prototype.zzEncode = function zzEncode() {
+  /**
+   * Zig-zag encodes this long bits.
+   */
+  zzEncode(): Longbits {
     const mask = this.hi >> 31;
     this.hi = ((this.hi << 1 | this.lo >>> 31) ^ mask) >>> 0;
     this.lo = (this.lo << 1 ^ mask) >>> 0;
     return this;
-};
+  };
 
-/**
- * Zig-zag decodes this long bits.
- * @returns {util.LongBits} `this`
- */
-LongBits.prototype.zzDecode = function zzDecode() {
+  /**
+   * Zig-zag decodes this long bits.
+   */
+  zzDecode(): Longbits {
     const mask = -(this.lo & 1);
     this.lo = ((this.lo >>> 1 | this.hi << 31) ^ mask) >>> 0;
     this.hi = (this.hi >>> 1 ^ mask) >>> 0;
     return this;
-};
+  };
 
-/**
- * Converts this long bits to a long.
- * @param {boolean} [unsigned=false] Whether unsigned or not
- * @returns {Long} Long
- */
-LongBits.prototype.toLong = function toLong(unsigned) {
+
+  /**
+   * Converts this long bits to a long.
+   */
+  toLong(unsigned): Long {
     return new Long(this.lo | 0, this.hi | 0, Boolean(unsigned));
-};
+  };
 
-/**
- * Zero bits.
- * @memberof util.LongBits
- * @type {util.LongBits}
- */
-const zero = LongBits.zero = new LongBits(0, 0);
-
-function from(value) {
+  /**
+   * Constructs new long bits from the specified number.
+   */
+  static from(value: any) {
     if (typeof value === 'number') {
-        return fromNumber(value);
+      return Longbits.fromNumber(value as number);
     }
     if (typeof value === 'string' || value instanceof String) {
-        value = Long.fromString(value);
+      value = Long.fromString(value as string);
     }
-    return value.low || value.high ? new LongBits(value.low >>> 0, value.high >>> 0) : zero;
-}
+    return value.low || value.high ? new Longbits(value.low >>> 0, value.high >>> 0) : zero;
+  }
 
-
-/**
- * Constructs new long bits from the specified number.
- * @param {number} value Value
- * @returns {util.LongBits} Instance
- */
-function fromNumber(value) {
+  /**
+   * Constructs new long bits from the specified number.
+   */
+  static fromNumber(value: number): Longbits {
     if (value === 0) {
-        return zero;
+      return zero;
     }
     const sign = value < 0;
     if (sign) {
-        value = -value;
+      value = -value;
     }
     let lo = value >>> 0;
     let hi = (value - lo) / 4294967296 >>> 0;
     if (sign) {
-        hi = ~hi >>> 0;
-        lo = ~lo >>> 0;
-        if (++lo > 4294967295) {
-            lo = 0;
-            if (++hi > 4294967295) {
-                hi = 0;
-            }
+      hi = ~hi >>> 0;
+      lo = ~lo >>> 0;
+      if (++lo > 4294967295) {
+        lo = 0;
+        if (++hi > 4294967295) {
+          hi = 0;
         }
+      }
     }
-    return new LongBits(lo, hi);
+    return new Longbits(lo, hi);
+  }
 }
 
-function writeVarint64(byteBuffer, value) {
+
+
+/**
+ * Zero bits.
+ */
+const zero = new Longbits(0, 0);
+
+
+function writeVarint64(byteBuffer: any, value: Longbits) {
     let count = 0;
     while (value.hi) {
         byteBuffer.writeByte(value.lo & 127 | 128);
@@ -125,9 +115,9 @@ function writeVarint64(byteBuffer, value) {
     byteBuffer.writeByte(value.lo);
 }
 
-function readLongVarint(buffer) {
+function readLongVarint(buffer: any) {
     // tends to deopt with local vars for octet etc.
-    const bits = new LongBits(0, 0);
+    const bits = new Longbits(0, 0);
     let i = 0;
     const len = buffer.length;
     let pos = 0;
@@ -175,15 +165,11 @@ function readLongVarint(buffer) {
     return bits;
 }
 
-function writeInt64(byteBuffer, value) {
-    const bits = from(value).zzEncode();
+export function writeInt64(byteBuffer: any, value: any) {
+    const bits = Longbits.from(value).zzEncode();
     writeVarint64(byteBuffer, bits);
 }
 
-function readInt64(buffer) {
+export function readInt64(buffer: any): Long {
     return readLongVarint(buffer).zzDecode().toLong(false);
 }
-
-LongBits.writeInt64 = writeInt64;
-
-LongBits.readInt64 = readInt64;

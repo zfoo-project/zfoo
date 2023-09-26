@@ -1,35 +1,40 @@
 
-// @author godotg
+
 class SimpleObject {
 
     c: number = 0;
     g: boolean = false;
 
+    static PROTOCOL_ID: number = 104;
+
     protocolId(): number {
-        return 104;
+        return SimpleObject.PROTOCOL_ID;
     }
 
     static write(buffer: any, packet: SimpleObject | null) {
-        if (buffer.writePacketFlag(packet)) {
-            return;
-        }
         if (packet === null) {
+            buffer.writeInt(0);
             return;
         }
-
+        buffer.writeInt(-1);
         buffer.writeInt(packet.c);
         buffer.writeBoolean(packet.g);
     }
 
     static read(buffer: any): SimpleObject | null {
-        if (!buffer.readBoolean()) {
+        const length = buffer.readInt();
+        if (length === 0) {
             return null;
         }
+        const readIndex = buffer.getReadOffset();
         const packet = new SimpleObject();
         const result0 = buffer.readInt();
         packet.c = result0;
         const result1 = buffer.readBoolean(); 
         packet.g = result1;
+        if (length > 0) {
+            buffer.setReadOffset(readIndex + length);
+        }
         return packet;
     }
 }

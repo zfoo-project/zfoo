@@ -1,6 +1,6 @@
 import ProtocolManager from "../ProtocolManager";
 
-const Longbits = require('./longbits.js');
+import {writeInt64, readInt64} from "./Longbits";
 
 const empty_str = '';
 const initSize = 128;
@@ -13,13 +13,13 @@ const maxInt = 2147483647;
 const minInt = -2147483648;
 
 // UTF-8编码与解码
-const encoder = new TextEncoder('utf-8');
-const decoder = new TextDecoder('utf-8');
+// const encoder = new TextEncoder();
+// const decoder = new TextDecoder();
 
 // nodejs的测试环境需要用以下方式特殊处理
-// const util = require('util');
-// const encoder = new util.TextEncoder('utf-8');
-// const decoder = new util.TextDecoder('utf-8');
+const util = require('util');
+const encoder = new util.TextEncoder('utf-8');
+const decoder = new util.TextDecoder('utf-8');
 
 // 在js中long可以支持的最大值
 // const maxLong = 9007199254740992;
@@ -57,6 +57,24 @@ class ByteBuffer {
         this.bufferView = new DataView(this.buffer, 0, this.buffer.byteLength);
     }
 
+    adjustPadding(predictionLength: number, beforeWriteIndex: number): void {
+        const currentWriteIndex = this.writeOffset;
+        const predictionCount = this.writeIntCount(predictionLength);
+        const length = currentWriteIndex - beforeWriteIndex - predictionCount;
+        const lengthCount = this.writeIntCount(length);
+        const padding = lengthCount - predictionCount;
+        if (padding == 0) {
+            this.setWriteOffset(beforeWriteIndex);
+            this.writeInt(length);
+            this.setWriteOffset(currentWriteIndex);
+        } else {
+            const retainedByteBuf = this.buffer.slice(currentWriteIndex - length, currentWriteIndex);
+            this.setWriteOffset(beforeWriteIndex);
+            this.writeInt(length);
+            this.writeBytes(retainedByteBuf);
+        }
+    }
+
     setWriteOffset(writeOffset: number): void {
         if (writeOffset > this.buffer.byteLength) {
             throw new Error('index out of bounds exception:readerIndex:' + this.readOffset +
@@ -66,6 +84,10 @@ class ByteBuffer {
         this.writeOffset = writeOffset;
     }
 
+    getWriteOffset(): number {
+        return this.writeOffset;
+    }
+
     setReadOffset(readOffset: number): void {
         if (readOffset > this.writeOffset) {
             throw new Error('index out of bounds exception:readerIndex:' + this.readOffset +
@@ -73,6 +95,10 @@ class ByteBuffer {
                 '(expected:0 <= readerIndex <= writerIndex <= capacity:' + this.buffer.byteLength);
         }
         this.readOffset = readOffset;
+    }
+
+    getReadOffset(): number {
+        return this.readOffset;
     }
 
     getCapacity(): number {
@@ -209,6 +235,25 @@ class ByteBuffer {
         this.writeByte(value >>> 28);
     }
 
+    writeIntCount(value: number): number {
+        if (!(minInt <= value && value <= maxInt)) {
+            throw new Error('value must range between minInt:-2147483648 and maxInt:2147483647');
+        }
+        if (value >>> 7 === 0) {
+            return 1;
+        }
+        if (value >>> 14 === 0) {
+            return 2;
+        }
+        if (value >>> 21 === 0) {
+            return 3;
+        }
+        if (value >>> 28 === 0) {
+            return 4;
+        }
+        return 5;
+    }
+
     readInt(): number {
         let b = this.readByte();
         let value = b & 0x7F;
@@ -238,7 +283,7 @@ class ByteBuffer {
         }
         this.ensureCapacity(9);
 
-        Longbits.writeInt64(this, value);
+        writeInt64(this, value);
     }
 
     readLong(): number {
@@ -280,7 +325,7 @@ class ByteBuffer {
                 }
             }
         }
-        return Longbits.readInt64(new Uint8Array(buffer.slice(0, count))).toString();
+        return readInt64(new Uint8Array(buffer.slice(0, count))).toNumber();
     }
 
     writeFloat(value: number): void {
@@ -311,18 +356,6 @@ class ByteBuffer {
         const value = this.bufferView.getFloat64(this.readOffset);
         this.readOffset += 8;
         return value;
-    }
-
-    writeChar(value: string): void {
-        if (value === null || value === undefined || value.length === 0) {
-            this.writeString(empty_str);
-            return;
-        }
-        this.writeString(value.charAt(0));
-    }
-
-    readChar(): string {
-        return this.readString();
     }
 
     writeString(value: string): void {
@@ -378,7 +411,7 @@ class ByteBuffer {
     };
 
     readBooleanArray(): any {
-        const array = [];
+        const array: boolean[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -400,7 +433,7 @@ class ByteBuffer {
     };
 
     readByteArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -422,7 +455,7 @@ class ByteBuffer {
     };
 
     readShortArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -444,7 +477,7 @@ class ByteBuffer {
     };
 
     readIntArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -466,7 +499,7 @@ class ByteBuffer {
     };
 
     readLongArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -488,7 +521,7 @@ class ByteBuffer {
     };
 
     readFloatArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -510,7 +543,7 @@ class ByteBuffer {
     };
 
     readDoubleArray(): any {
-        const array = [];
+        const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
@@ -532,33 +565,11 @@ class ByteBuffer {
     };
 
     readStringArray(): any {
-        const array = [];
+        const array: string[] = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
                 array.push(this.readString());
-            }
-        }
-        return array;
-    };
-
-    writeCharArray(array: Array<string> | null) {
-        if (array === null) {
-            this.writeInt(0);
-        } else {
-            this.writeInt(array.length);
-            array.forEach(element => {
-                this.writeChar(element);
-            });
-        }
-    };
-
-    readCharArray(): any {
-        const array = [];
-        const length = this.readInt();
-        if (length > 0) {
-            for (let index = 0; index < length; index++) {
-                array.push(this.readChar());
             }
         }
         return array;
@@ -577,7 +588,7 @@ class ByteBuffer {
     };
 
     readPacketArray(protocolId: number): any {
-        const array = [];
+        const array: any[] = [];
         const length = this.readInt();
         if (length > 0) {
             const protocolRegistration = ProtocolManager.getProtocol(protocolId);
@@ -651,14 +662,6 @@ class ByteBuffer {
 
     readStringList(): any {
         return this.readStringArray();
-    };
-
-    writeCharList(list: any) {
-        this.writeCharArray(list);
-    };
-
-    readCharList(): any {
-        return this.readCharArray();
     };
 
     writePacketList(list: any, protocolId: number) {
@@ -788,21 +791,6 @@ class ByteBuffer {
 
     readStringSet(): any {
         return new Set(this.readStringArray());
-    };
-
-    writeCharSet(set: Set<string> | null) {
-        if (set === null) {
-            this.writeInt(0);
-        } else {
-            this.writeInt(set.size);
-            set.forEach(element => {
-                this.writeChar(element);
-            });
-        }
-    };
-
-    readCharSet(): any {
-        return new Set(this.readCharArray());
     };
 
     writePacketSet(set: Set<any> | null, protocolId: number) {
