@@ -35,6 +35,32 @@ import java.util.Set;
  */
 public abstract class ByteBufUtils {
 
+    public static void adjustPadding(ByteBuf byteBuf, int predictionLength, int beforeWriteIndex) {
+        // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+        var currentWriteIndex = byteBuf.writerIndex();
+        var predictionCount = writeIntCount(predictionLength);
+        var length = currentWriteIndex - beforeWriteIndex - predictionCount;
+        var lengthCount = writeIntCount(length);
+        var padding = lengthCount - predictionCount;
+        if (padding == 0) {
+            byteBuf.writerIndex(beforeWriteIndex);
+            writeInt(byteBuf, length);
+            byteBuf.writerIndex(currentWriteIndex);
+        } else if (padding < 0) {
+            var retainedByteBuf = byteBuf.retainedSlice(currentWriteIndex - length, length);
+            byteBuf.writerIndex(beforeWriteIndex);
+            writeInt(byteBuf, length);
+            byteBuf.writeBytes(retainedByteBuf);
+            ReferenceCountUtil.release(retainedByteBuf);
+        } else {
+            var retainedByteBuf = byteBuf.retainedSlice(currentWriteIndex - length, length);
+            var bytes = readAllBytes(retainedByteBuf);
+            byteBuf.writerIndex(beforeWriteIndex);
+            writeInt(byteBuf, length);
+            byteBuf.writeBytes(bytes);
+            ReferenceCountUtil.release(retainedByteBuf);
+        }
+    }
 
     //---------------------------------boolean--------------------------------------
     public static void writeBoolean(ByteBuf byteBuf, boolean value) {
@@ -343,26 +369,11 @@ public abstract class ByteBufUtils {
         }
 
         // 预估需要写入的字节数，并预留位置
+        var beforeWriteIndex = byteBuf.writerIndex();
         var maxLength = ByteBufUtil.utf8MaxBytes(value);
-        var writeIntCountByte = writeInt(byteBuf, maxLength);
-
-        var length = byteBuf.writeCharSequence(value, StringUtils.DEFAULT_CHARSET);
-
-        var currentWriteIndex = byteBuf.writerIndex();
-
-        // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
-        var padding = writeIntCountByte - writeIntCount(length);
-        if (padding == 0) {
-            byteBuf.writerIndex(currentWriteIndex - length - writeIntCountByte);
-            writeInt(byteBuf, length);
-            byteBuf.writerIndex(currentWriteIndex);
-        } else {
-            var retainedByteBuf = byteBuf.retainedSlice(currentWriteIndex - length, length);
-            byteBuf.writerIndex(currentWriteIndex - length - writeIntCountByte);
-            writeInt(byteBuf, length);
-            byteBuf.writeBytes(retainedByteBuf);
-            ReferenceCountUtil.release(retainedByteBuf);
-        }
+        writeInt(byteBuf, maxLength);
+        byteBuf.writeCharSequence(value, StringUtils.DEFAULT_CHARSET);
+        adjustPadding(byteBuf, maxLength, beforeWriteIndex);
     }
 
     public static String readString(ByteBuf byteBuf) {
