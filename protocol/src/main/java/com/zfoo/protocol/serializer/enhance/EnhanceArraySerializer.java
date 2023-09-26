@@ -79,4 +79,14 @@ public class EnhanceArraySerializer implements IEnhanceSerializer {
         return array;
     }
 
+    @Override
+    public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
+        var arrayField = (ArrayField) fieldRegistration;
+        var arrayName = CutDownArraySerializer.getInstance().getArrayClassName(arrayField);
+        var array = "array" + GenerateProtocolFile.index.getAndIncrement();
+        builder.append(StringUtils.format("{}[] {} = new {}[0];", arrayName, array, arrayName));
+        return array;
+    }
+
+
 }

@@ -64,7 +64,6 @@ public abstract class GenerateLuaUtils {
         luaSerializerMap.put(LongSerializer.INSTANCE, new LuaLongSerializer());
         luaSerializerMap.put(FloatSerializer.INSTANCE, new LuaFloatSerializer());
         luaSerializerMap.put(DoubleSerializer.INSTANCE, new LuaDoubleSerializer());
-        luaSerializerMap.put(CharSerializer.INSTANCE, new LuaCharSerializer());
         luaSerializerMap.put(StringSerializer.INSTANCE, new LuaStringSerializer());
         luaSerializerMap.put(ArraySerializer.INSTANCE, new LuaArraySerializer());
         luaSerializerMap.put(ListSerializer.INSTANCE, new LuaListSerializer());

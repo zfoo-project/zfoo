@@ -44,6 +44,15 @@ public class EnhanceObjectProtocolSerializer implements IEnhanceSerializer {
         return result;
     }
 
+    @Override
+    public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
+        var objectProtocolField = (ObjectProtocolField) fieldRegistration;
+        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var protocolName = getProtocolClassCanonicalName(objectProtocolField.getProtocolId());
+        builder.append(StringUtils.format("{} {} = null;", protocolName, result));
+        return result;
+    }
+
     public static String getProtocolClassSimpleName(short protocolId) {
         return ProtocolManager.getProtocol(protocolId).protocolConstructor().getDeclaringClass().getSimpleName();
     }

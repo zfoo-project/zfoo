@@ -45,4 +45,15 @@ public class EnhanceLongSerializer implements IEnhanceSerializer {
         return result;
     }
 
+    @Override
+    public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
+        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        if (isPrimitiveField(field)) {
+            builder.append(StringUtils.format("long {} = 0;", result));
+        } else {
+            builder.append(StringUtils.format("Long {} = Long.valueOf(0);", result));
+        }
+        return result;
+    }
+
 }

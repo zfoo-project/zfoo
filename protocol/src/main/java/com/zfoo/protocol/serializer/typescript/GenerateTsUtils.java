@@ -74,7 +74,6 @@ public abstract class GenerateTsUtils {
         tsSerializerMap.put(LongSerializer.INSTANCE, new TsLongSerializer());
         tsSerializerMap.put(FloatSerializer.INSTANCE, new TsFloatSerializer());
         tsSerializerMap.put(DoubleSerializer.INSTANCE, new TsDoubleSerializer());
-        tsSerializerMap.put(CharSerializer.INSTANCE, new TsCharSerializer());
         tsSerializerMap.put(StringSerializer.INSTANCE, new TsStringSerializer());
         tsSerializerMap.put(ArraySerializer.INSTANCE, new TsArraySerializer());
         tsSerializerMap.put(ListSerializer.INSTANCE, new TsListSerializer());

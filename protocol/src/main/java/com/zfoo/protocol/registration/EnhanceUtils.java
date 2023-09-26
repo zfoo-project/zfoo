@@ -27,11 +27,9 @@ import io.netty.buffer.ByteBuf;
 import javassist.*;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 对应于ProtocolRegistration
@@ -78,7 +76,6 @@ public abstract class EnhanceUtils {
         tempEnhanceSerializerMap.put(LongSerializer.INSTANCE, new EnhanceLongSerializer());
         tempEnhanceSerializerMap.put(FloatSerializer.INSTANCE, new EnhanceFloatSerializer());
         tempEnhanceSerializerMap.put(DoubleSerializer.INSTANCE, new EnhanceDoubleSerializer());
-        tempEnhanceSerializerMap.put(CharSerializer.INSTANCE, new EnhanceCharSerializer());
         tempEnhanceSerializerMap.put(StringSerializer.INSTANCE, new EnhanceStringSerializer());
         tempEnhanceSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new EnhanceObjectProtocolSerializer());
         tempEnhanceSerializerMap.put(ListSerializer.INSTANCE, new EnhanceListSerializer());
@@ -185,8 +182,14 @@ public abstract class EnhanceUtils {
         var packetClazz = constructor.getDeclaringClass();
 
         var builder = new StringBuilder();
-        builder.append("{").append(packetClazz.getName() + " packet = (" + packetClazz.getName() + ")$2;");
-        builder.append("if(ByteBufUtils.writePacketFlag($1, packet)){").append("return;}");
+        builder.append("{");
+        builder.append(StringUtils.format("{} packet = ({})$2;", packetClazz.getName(), packetClazz.getName()));
+        if (registration.isCompatible()) {
+            builder.append("int beforeWriteIndex = $1.writerIndex();");
+            builder.append(StringUtils.format("{}.writeInt($1, {});", byteBufUtils, registration.getPredictionLength()));
+        } else {
+            builder.append("$1.writeByte(1);");
+        }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
@@ -199,6 +202,9 @@ public abstract class EnhanceUtils {
                         .writeObject(builder, StringUtils.format("packet.{}()", FieldUtils.fieldToGetMethod(packetClazz, field)), field, fieldRegistration);
             }
         }
+        if (registration.isCompatible()) {
+            builder.append(StringUtils.format("{}.adjustPadding($1, {}, beforeWriteIndex);", byteBufUtils, registration.getPredictionLength()));
+        }
         builder.append("}");
         return builder.toString();
     }
@@ -209,7 +215,12 @@ public abstract class EnhanceUtils {
         var fieldRegistrations = registration.getFieldRegistrations();
 
         var builder = new StringBuilder();
-        builder.append("{").append("if(!" + EnhanceUtils.byteBufUtilsReadBoolean + "){").append("return null;}");
+        builder.append("{");
+        builder.append(StringUtils.format("int length = {}.readInt($1);", byteBufUtils));
+        builder.append("if(length==0){return null;}");
+        if (registration.isCompatible()) {
+            builder.append("int readIndex = $1.readerIndex();");
+        }
         var packetClazz = constructor.getDeclaringClass();
         if (packetClazz.isRecord()) {
             var fields = registration.getFields();
@@ -238,11 +249,10 @@ public abstract class EnhanceUtils {
                 var fieldRegistration = fieldRegistrations[i];
                 // protocol backwards compatibility，协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
-                    builder.append("if(!$1.isReadable()){ return packet; }");
+                    builder.append("if (length == -1 || $1.readerIndex() >= length + readIndex) {");
                 }
 
                 var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
-
                 if (Modifier.isPublic(field.getModifiers())) {
                     builder.append(StringUtils.format("packet.{}={};", field.getName(), readObject));
                 } else {

@@ -63,10 +63,6 @@ public class ComplexObject {
     private boolean[] ggg;
     private Boolean[] gggg;
 
-    private char h;
-    private Character hh;
-    private char[] hhh;
-    private Character[] hhhh;
 
     private String jj;
     private String[] jjj;
@@ -323,38 +319,6 @@ public class ComplexObject {
         this.gggg = gggg;
     }
 
-    public char getH() {
-        return h;
-    }
-
-    public void setH(char h) {
-        this.h = h;
-    }
-
-    public Character getHh() {
-        return hh;
-    }
-
-    public void setHh(Character hh) {
-        this.hh = hh;
-    }
-
-    public char[] getHhh() {
-        return hhh;
-    }
-
-    public void setHhh(char[] hhh) {
-        this.hhh = hhh;
-    }
-
-    public Character[] getHhhh() {
-        return hhhh;
-    }
-
-    public void setHhhh(Character[] hhhh) {
-        this.hhhh = hhhh;
-    }
-
     public String getJj() {
         return jj;
     }
@@ -535,7 +499,6 @@ public class ComplexObject {
                 Float.compare(that.e, e) == 0 &&
                 Double.compare(that.f, f) == 0 &&
                 g == that.g &&
-                h == that.h &&
                 Objects.equals(aa, that.aa) &&
                 Arrays.equals(aaa, that.aaa) &&
                 Arrays.equals(aaaa, that.aaaa) &&
@@ -557,9 +520,6 @@ public class ComplexObject {
                 Objects.equals(gg, that.gg) &&
                 Arrays.equals(ggg, that.ggg) &&
                 Arrays.equals(gggg, that.gggg) &&
-                Objects.equals(hh, that.hh) &&
-                Arrays.equals(hhh, that.hhh) &&
-                Arrays.equals(hhhh, that.hhhh) &&
                 Objects.equals(jj, that.jj) &&
                 Arrays.equals(jjj, that.jjj) &&
                 Objects.equals(kk, that.kk) &&
@@ -583,7 +543,7 @@ public class ComplexObject {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(a, aa, b, bb, c, cc, d, dd, e, ee, f, ff, g, gg, h, hh, jj, kk, l, ll, lll, llll, lllll, m, mm, mmm, mmmm, mmmmm, s, ss, sss, ssss, sssss);
+        int result = Objects.hash(a, aa, b, bb, c, cc, d, dd, e, ee, f, ff, g, gg, jj, kk, l, ll, lll, llll, lllll, m, mm, mmm, mmmm, mmmmm, s, ss, sss, ssss, sssss);
         result = 31 * result + Arrays.hashCode(aaa);
         result = 31 * result + Arrays.hashCode(aaaa);
         result = 31 * result + Arrays.hashCode(bbb);
@@ -598,8 +558,6 @@ public class ComplexObject {
         result = 31 * result + Arrays.hashCode(ffff);
         result = 31 * result + Arrays.hashCode(ggg);
         result = 31 * result + Arrays.hashCode(gggg);
-        result = 31 * result + Arrays.hashCode(hhh);
-        result = 31 * result + Arrays.hashCode(hhhh);
         result = 31 * result + Arrays.hashCode(jjj);
         result = 31 * result + Arrays.hashCode(kkk);
         return result;

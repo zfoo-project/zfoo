@@ -82,7 +82,8 @@ public class ProtocolRegistration implements IProtocolRegistration {
         if (compatible) {
             ByteBufUtils.writeInt(byteBuf, predictionLength);
         } else {
-            ByteBufUtils.writeInt(byteBuf, -1);
+            // equals with ByteBufUtils.writeInt(byteBuf, -1);
+            byteBuf.writeByte(1);
         }
 
         for (int i = 0, length = fields.length; i < length; i++) {
@@ -95,29 +96,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
 
         if (compatible) {
             // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
-            var currentWriteIndex = byteBuf.writerIndex();
-            var predictionCount = ByteBufUtils.writeIntCount(predictionLength);
-            var length = currentWriteIndex - beforeWriteIndex - predictionCount;
-            var lengthCount = ByteBufUtils.writeIntCount(length);
-            var padding = lengthCount - predictionCount;
-            if (padding == 0) {
-                byteBuf.writerIndex(beforeWriteIndex);
-                ByteBufUtils.writeInt(byteBuf, length);
-                byteBuf.writerIndex(currentWriteIndex);
-            } else if (padding < 0) {
-                var retainedByteBuf = byteBuf.retainedSlice(currentWriteIndex - length, length);
-                byteBuf.writerIndex(beforeWriteIndex);
-                ByteBufUtils.writeInt(byteBuf, length);
-                byteBuf.writeBytes(retainedByteBuf);
-                ReferenceCountUtil.release(retainedByteBuf);
-            } else {
-                var retainedByteBuf = byteBuf.retainedSlice(currentWriteIndex - length, length);
-                var bytes = ByteBufUtils.readAllBytes(retainedByteBuf);
-                byteBuf.writerIndex(beforeWriteIndex);
-                ByteBufUtils.writeInt(byteBuf, length);
-                byteBuf.writeBytes(bytes);
-                ReferenceCountUtil.release(retainedByteBuf);
-            }
+            ByteBufUtils.adjustPadding(byteBuf, predictionLength, beforeWriteIndex);
         }
     }
 
@@ -141,7 +120,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
 
                 // 协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
-                    if (length == -1 || byteBuf.readerIndex() - readIndex >= length) {
+                    if (length == -1 || byteBuf.readerIndex() >= length + readIndex) {
                         constructorParams[index] = packetFieldRegistration.defaultValue();
                         continue;
                     }
@@ -216,4 +195,19 @@ public class ProtocolRegistration implements IProtocolRegistration {
         this.constructor = constructor;
     }
 
+    public boolean isCompatible() {
+        return compatible;
+    }
+
+    public void setCompatible(boolean compatible) {
+        this.compatible = compatible;
+    }
+
+    public int getPredictionLength() {
+        return predictionLength;
+    }
+
+    public void setPredictionLength(int predictionLength) {
+        this.predictionLength = predictionLength;
+    }
 }

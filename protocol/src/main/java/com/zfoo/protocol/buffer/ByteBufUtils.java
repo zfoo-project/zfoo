@@ -35,6 +35,10 @@ import java.util.Set;
  */
 public abstract class ByteBufUtils {
 
+    public static final Double ZERO_DOUBLE = Double.valueOf(0D);
+    public static final Float ZERO_FLOAT = Float.valueOf(0F);
+
+
     public static void adjustPadding(ByteBuf byteBuf, int predictionLength, int beforeWriteIndex) {
         // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
         var currentWriteIndex = byteBuf.writerIndex();

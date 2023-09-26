@@ -83,8 +83,6 @@ public class ProtocolAnalysis {
         baseSerializerMap.put(Float.class, FloatSerializer.INSTANCE);
         baseSerializerMap.put(double.class, DoubleSerializer.INSTANCE);
         baseSerializerMap.put(Double.class, DoubleSerializer.INSTANCE);
-        baseSerializerMap.put(char.class, CharSerializer.INSTANCE);
-        baseSerializerMap.put(Character.class, CharSerializer.INSTANCE);
         baseSerializerMap.put(String.class, StringSerializer.INSTANCE);
     }
 

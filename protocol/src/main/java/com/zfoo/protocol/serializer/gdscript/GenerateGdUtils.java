@@ -76,7 +76,6 @@ public abstract class GenerateGdUtils {
         gdSerializerMap.put(LongSerializer.INSTANCE, new GdLongSerializer());
         gdSerializerMap.put(FloatSerializer.INSTANCE, new GdFloatSerializer());
         gdSerializerMap.put(DoubleSerializer.INSTANCE, new GdDoubleSerializer());
-        gdSerializerMap.put(CharSerializer.INSTANCE, new GdCharSerializer());
         gdSerializerMap.put(StringSerializer.INSTANCE, new GdStringSerializer());
         gdSerializerMap.put(ArraySerializer.INSTANCE, new GdArraySerializer());
         gdSerializerMap.put(ListSerializer.INSTANCE, new GdListSerializer());

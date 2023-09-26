@@ -23,7 +23,6 @@ import io.netty.buffer.ByteBuf;
 public class DoubleSerializer implements ISerializer {
 
     public static final DoubleSerializer INSTANCE = new DoubleSerializer();
-    public static final Double ZERO = Double.valueOf(0D);
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
@@ -38,6 +37,6 @@ public class DoubleSerializer implements ISerializer {
 
     @Override
     public Object defaultValue(IFieldRegistration fieldRegistration) {
-        return ZERO;
+        return ByteBufUtils.ZERO_DOUBLE;
     }
 }

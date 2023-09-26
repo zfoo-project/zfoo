@@ -91,4 +91,12 @@ public class EnhanceMapSerializer implements IEnhanceSerializer {
         return map;
     }
 
+    @Override
+    public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
+        var mapField = (MapField) fieldRegistration;
+        var map = "map" + GenerateProtocolFile.index.getAndIncrement();
+        builder.append(StringUtils.format("Map {} = CollectionUtils.newMap(0);", map));
+        return map;
+    }
+
 }

@@ -23,7 +23,7 @@ import io.netty.buffer.ByteBuf;
 public class FloatSerializer implements ISerializer {
 
     public static final FloatSerializer INSTANCE = new FloatSerializer();
-    public static final Float ZERO = Float.valueOf(0F);
+
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
         ByteBufUtils.writeFloatBox(buffer, (Float) object);
@@ -36,6 +36,6 @@ public class FloatSerializer implements ISerializer {
 
     @Override
     public Object defaultValue(IFieldRegistration fieldRegistration) {
-        return ZERO;
+        return ByteBufUtils.ZERO_FLOAT;
     }
 }

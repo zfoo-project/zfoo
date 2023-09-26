@@ -45,4 +45,15 @@ public class EnhanceShortSerializer implements IEnhanceSerializer {
         return result;
     }
 
+    @Override
+    public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
+        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        if (isPrimitiveField(field)) {
+            builder.append(StringUtils.format("short {} = 0;", result));
+        } else {
+            builder.append(StringUtils.format("Short {} = Short.valueOf((short) 0);", result));
+        }
+        return result;
+    }
+
 }

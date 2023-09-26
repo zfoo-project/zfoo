@@ -76,4 +76,12 @@ public class EnhanceListSerializer implements IEnhanceSerializer {
         return list;
     }
 
+    @Override
+    public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
+        var listField = (ListField) fieldRegistration;
+        var list = "list" + GenerateProtocolFile.index.getAndIncrement();
+        builder.append(StringUtils.format("List {} = CollectionUtils.newList(0);", list));
+        return list;
+    }
+
 }

@@ -66,7 +66,6 @@ public abstract class GeneratePyUtils {
         pySerializerMap.put(LongSerializer.INSTANCE, new PyLongSerializer());
         pySerializerMap.put(FloatSerializer.INSTANCE, new PyFloatSerializer());
         pySerializerMap.put(DoubleSerializer.INSTANCE, new PyDoubleSerializer());
-        pySerializerMap.put(CharSerializer.INSTANCE, new PyCharSerializer());
         pySerializerMap.put(StringSerializer.INSTANCE, new PyStringSerializer());
         pySerializerMap.put(ArraySerializer.INSTANCE, new PyArraySerializer());
         pySerializerMap.put(ListSerializer.INSTANCE, new PyListSerializer());

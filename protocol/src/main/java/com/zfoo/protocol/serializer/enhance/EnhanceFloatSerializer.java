@@ -45,4 +45,14 @@ public class EnhanceFloatSerializer implements IEnhanceSerializer {
         return result;
     }
 
+    @Override
+    public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
+        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        if (isPrimitiveField(field)) {
+            builder.append(StringUtils.format("float {} = 0F;", result));
+        } else {
+            builder.append(StringUtils.format("Float {} = {}.ZERO_FLOAT;", result, EnhanceUtils.byteBufUtils));
+        }
+        return result;
+    }
 }

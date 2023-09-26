@@ -74,4 +74,12 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
         return set;
     }
 
+    @Override
+    public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
+        var setField = (SetField) fieldRegistration;
+        var set = "set" + GenerateProtocolFile.index.getAndIncrement();
+        builder.append(StringUtils.format("Set {} = CollectionUtils.newSet(0);", set));
+        return set;
+    }
+
 }

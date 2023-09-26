@@ -42,4 +42,6 @@ public interface IEnhanceSerializer {
      */
     String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration);
 
+    String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration);
+
 }

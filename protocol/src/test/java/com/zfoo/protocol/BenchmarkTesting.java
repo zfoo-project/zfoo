@@ -319,8 +319,6 @@ public class BenchmarkTesting {
     public static final long longValue = 9999999999999999L;
     public static final float floatValue = 99999999.9F;
     public static final double doubleValue = 99999999.9D;
-    public static final char charValue = 'c';
-    public static final String charValueString = "c";
     public static final String stringValue = "hello";
 
     // 数组类型
@@ -408,10 +406,6 @@ public class BenchmarkTesting {
         complexObject.setGg(true);
         complexObject.setGgg(booleanArray);
         complexObject.setGggg(booleanBoxArray);
-        complexObject.setH(charValue);
-        complexObject.setHh(charValue);
-        complexObject.setHhh(charArray);
-        complexObject.setHhhh(charBoxArray);
         complexObject.setJj(stringValue);
         complexObject.setJjj(stringArray);
         complexObject.setKk(objectA);
@@ -536,8 +530,6 @@ public class BenchmarkTesting {
         protobufComplexBuilder.setGg(true);
         protobufComplexBuilder.addAllGgg(listWithBoolean);
         protobufComplexBuilder.addAllGggg(listWithBoolean);
-        protobufComplexBuilder.setH(charValueString);
-        protobufComplexBuilder.setHh(charValueString);
         protobufComplexBuilder.addAllHhh(listWithString);
         protobufComplexBuilder.addAllHhhh(listWithString);
         protobufComplexBuilder.setJj(stringValue);

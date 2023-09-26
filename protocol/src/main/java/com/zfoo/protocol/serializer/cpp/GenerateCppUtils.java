@@ -71,7 +71,6 @@ public abstract class GenerateCppUtils {
         cppSerializerMap.put(LongSerializer.INSTANCE, new CppLongSerializer());
         cppSerializerMap.put(FloatSerializer.INSTANCE, new CppFloatSerializer());
         cppSerializerMap.put(DoubleSerializer.INSTANCE, new CppDoubleSerializer());
-        cppSerializerMap.put(CharSerializer.INSTANCE, new CppCharSerializer());
         cppSerializerMap.put(StringSerializer.INSTANCE, new CppStringSerializer());
         cppSerializerMap.put(ArraySerializer.INSTANCE, new CppArraySerializer());
         cppSerializerMap.put(ListSerializer.INSTANCE, new CppListSerializer());

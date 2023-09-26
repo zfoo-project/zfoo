@@ -65,7 +65,6 @@ public abstract class GenerateJsUtils {
         jsSerializerMap.put(LongSerializer.INSTANCE, new JsLongSerializer());
         jsSerializerMap.put(FloatSerializer.INSTANCE, new JsFloatSerializer());
         jsSerializerMap.put(DoubleSerializer.INSTANCE, new JsDoubleSerializer());
-        jsSerializerMap.put(CharSerializer.INSTANCE, new JsCharSerializer());
         jsSerializerMap.put(StringSerializer.INSTANCE, new JsStringSerializer());
         jsSerializerMap.put(ArraySerializer.INSTANCE, new JsArraySerializer());
         jsSerializerMap.put(ListSerializer.INSTANCE, new JsListSerializer());

@@ -65,7 +65,6 @@ public abstract class GenerateCsUtils {
         csSerializerMap.put(LongSerializer.INSTANCE, new CsLongSerializer());
         csSerializerMap.put(FloatSerializer.INSTANCE, new CsFloatSerializer());
         csSerializerMap.put(DoubleSerializer.INSTANCE, new CsDoubleSerializer());
-        csSerializerMap.put(CharSerializer.INSTANCE, new CsCharSerializer());
         csSerializerMap.put(StringSerializer.INSTANCE, new CsStringSerializer());
         csSerializerMap.put(ArraySerializer.INSTANCE, new CsArraySerializer());
         csSerializerMap.put(ListSerializer.INSTANCE, new CsListSerializer());
