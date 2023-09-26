@@ -42,7 +42,6 @@ import javassist.NotFoundException;
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.Map.Entry;
 
 import static com.zfoo.protocol.ProtocolManager.*;
 
@@ -52,10 +51,10 @@ import static com.zfoo.protocol.ProtocolManager.*;
 public class ProtocolAnalysis {
 
     /**
-     * EN: Temporary variables will be destroyed after startup, and the class corresponding to the protocolId
+     * EN: Temp field will be destroyed after startup, and the class corresponding to the protocolId
      * CN: 临时变量，启动完成就会销毁，协议Id对应的Class类
      */
-    private static final Map<Short, Class<?>> protocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
+    private static Map<Short, Class<?>> protocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
     /**
      * EN: Temp field, sub protocols
@@ -73,7 +72,16 @@ public class ProtocolAnalysis {
             , "Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double", "String", "Character", "Object"
             , "Collections", "Iterator", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet");
 
-    // 临时变量，启动完成就会销毁，是一个基本类型序列化器
+    /**
+     * EN: Temp field, unsupported type
+     * CN: 临时变量，启动完成就会销毁，不支持的类型
+     */
+    private static Set<Class<?>> unsupportedTypes = Set.of(char.class, Character.class);
+
+    /**
+     * EN: Temp field, base type serializer
+     * CN: 临时变量，启动完成就会销毁，是基本类型序列化器
+     */
     private static Map<Class<?>, ISerializer> baseSerializerMap = new HashMap<>(128);
 
     static {
@@ -361,9 +369,11 @@ public class ProtocolAnalysis {
             protocolIdPrimitiveMap = null;
         }
 
+        protocolClassMap = null;
         subProtocolIdMap = null;
         protocolReserved = null;
         baseSerializerMap = null;
+        unsupportedTypes = null;
 
         EnhanceUtils.clear();
 
@@ -537,12 +547,13 @@ public class ProtocolAnalysis {
 
             return MapField.valueOf(keyRegistration, valueRegistration, type);
         } else {
+            checkUnsupportedType(fieldTypeClazz);
             // 是一个协议引用变量
-            if (!protocolIdMap.containsKey(field.getType())) {
-                throw new RunException("协议[{}]的子协议[{}]没有注册", clazz.getCanonicalName(), field.getType().getCanonicalName());
+            if (!protocolIdMap.containsKey(fieldTypeClazz)) {
+                throw new RunException("sub protocol:[{}] needs to register in protocol:[{}]", fieldTypeClazz.getCanonicalName(), clazz.getCanonicalName());
             }
             var protocolId = ProtocolManager.protocolId(clazz);
-            var subProtocolId = ProtocolManager.protocolId(field.getType());
+            var subProtocolId = ProtocolManager.protocolId(fieldTypeClazz);
             subProtocolIdMap.computeIfAbsent(protocolId, it -> new HashSet<>()).add(subProtocolId);
             return ObjectProtocolField.valueOf(subProtocolId);
         }
@@ -578,9 +589,10 @@ public class ProtocolAnalysis {
             } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
                 throw new RunException("不支持数组和集合联合使用[type:{}]类型", type);
             } else {
+                checkUnsupportedType(clazz);
                 // 是一个协议引用变量
                 if (!protocolIdMap.containsKey(clazz)) {
-                    throw new RunException("协议[{}]的子协议[{}]没有注册", currentProtocolClass.getCanonicalName(), clazz.getCanonicalName());
+                    throw new RunException("sub protocol:[{}] needs to register in protocol:[{}]", clazz.getCanonicalName(), currentProtocolClass.getCanonicalName());
                 }
                 var protocolId = ProtocolManager.protocolId(currentProtocolClass);
                 var subProtocolId = ProtocolManager.protocolId(clazz);
@@ -588,7 +600,7 @@ public class ProtocolAnalysis {
                 return ObjectProtocolField.valueOf(subProtocolId);
             }
         }
-        throw new RunException("[type:{}]类型不正确", type);
+        throw new RunException("[type:{}] is incorrect", type);
     }
 
 
@@ -643,6 +655,7 @@ public class ProtocolAnalysis {
     }
 
     public static short getProtocolIdAndCheckClass(Class<?> clazz) {
+        checkUnsupportedType(clazz);
         // 是否为一个简单的javabean
         ReflectionUtils.assertIsPojoClass(clazz);
         // 不能是泛型类
@@ -660,6 +673,15 @@ public class ProtocolAnalysis {
         }
 
         return protocolId;
+    }
+
+    private static void checkUnsupportedType(Class<?> clazz) {
+        if (clazz.isEnum()) {
+            throw new RunException("[{}] enum is not supported, since other language not support enum", clazz.getSimpleName());
+        }
+        if (unsupportedTypes.stream().anyMatch(it -> clazz.isAssignableFrom(it))) {
+            throw new RunException("[{}] is not supported, since other language not support it", clazz.getSimpleName());
+        }
     }
 
     private static void checkAllModules() {

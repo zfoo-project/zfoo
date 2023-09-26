@@ -380,13 +380,8 @@ public abstract class ClassUtils {
         }
 
         // 是否为一个简单的javabean，为了防止不同层对象混用造成潜在的并发问题，特别是网络层和po层混用
-        ReflectionUtils.assertIsPojoClass(clazz);
         // 不能是泛型类
-        AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}]不能是泛型类", clazz.getCanonicalName());
-        // 普通Pojo必须要有一个空的构造器
-        if (!clazz.isRecord()) {
-            ReflectionUtils.publicEmptyConstructor(clazz);
-        }
+        AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}] cannot be generic class", clazz.getCanonicalName());
 
         var filedList = ReflectionUtils.notStaticAndTransientFields(clazz);
 

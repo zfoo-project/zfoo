@@ -107,6 +107,8 @@ public class StorageManager implements IStorageManager {
                 if (clazz.isRecord()) {
                     continue;
                 }
+                ReflectionUtils.assertIsPojoClass(clazz);
+                ReflectionUtils.publicEmptyConstructor(clazz);
                 var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
                 for (var field : fieldList) {
                     if (Modifier.isPublic(field.getModifiers())) {
