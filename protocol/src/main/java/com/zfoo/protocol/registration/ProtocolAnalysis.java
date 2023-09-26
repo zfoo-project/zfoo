@@ -403,7 +403,7 @@ public class ProtocolAnalysis {
         var compatibleFieldMap = new HashMap<Integer, Field>();
         for (var field : fields) {
             if (field.isAnnotationPresent(Compatible.class)) {
-                var order = field.getAnnotation(Compatible.class).order();
+                var order = field.getAnnotation(Compatible.class).value();
                 var oldField = compatibleFieldMap.put(order, field);
                 if (oldField != null) {
                     throw new RunException("[{}]协议号中的[field:{}]和[field:{}]不能有相同的Compatible顺序[order:{}]", clazz.getCanonicalName(), oldField.getName(), field.getName(), oldField, order);

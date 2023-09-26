@@ -22,6 +22,6 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 public @interface Compatible {
 
-    int order();
+    int value();
 
 }

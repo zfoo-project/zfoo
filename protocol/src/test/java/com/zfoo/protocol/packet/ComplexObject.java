@@ -93,9 +93,9 @@ public class ComplexObject {
     private Set<Map<Integer, String>> sssss;
 
     @Note("如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order")
-    @Compatible(order = 1)
+    @Compatible(1)
     private int myCompatible;
-    @Compatible(order = 2)
+    @Compatible(2)
     private ObjectA myObject;
 
     public byte getA() {
