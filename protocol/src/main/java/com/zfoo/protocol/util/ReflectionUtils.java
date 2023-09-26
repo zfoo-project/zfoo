@@ -198,7 +198,7 @@ public abstract class ReflectionUtils {
         try {
             return newInstance(clazz.getDeclaredConstructor());
         } catch (NoSuchMethodException e) {
-            throw new RunException("[{}]无法被实例化", clazz);
+            throw new RunException("[{}] cannot be instantiated", clazz);
         }
     }
 
@@ -206,7 +206,15 @@ public abstract class ReflectionUtils {
         try {
             return constructor.newInstance();
         } catch (Exception e) {
-            throw new RunException("[{}]无法被实例化", constructor);
+            throw new RunException("[{}] cannot be instantiated", constructor);
+        }
+    }
+
+    public static <T> T newInstance(Constructor<T> constructor, Object ... initargs) {
+        try {
+            return constructor.newInstance(initargs);
+        } catch (Exception e) {
+            throw new RunException("[{}] cannot be instantiated", constructor);
         }
     }
 
@@ -336,12 +344,5 @@ public abstract class ReflectionUtils {
         }
     }
 
-    public static <T> T newInstance(Constructor<T> constructor, Object[] params) {
-        try {
-            return constructor.newInstance(params);
-        } catch (Exception e) {
-            throw new RunException("[{}]无法被实例化", constructor);
-        }
-    }
 }
 

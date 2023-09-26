@@ -213,8 +213,8 @@ public abstract class EnhanceUtils {
         var packetClazz = constructor.getDeclaringClass();
         if (packetClazz.isRecord()) {
             var fields = registration.getFields();
-            var fieldNames = ProtocolAnalysis.getFields(packetClazz).stream().map(Field::getName).toList();
-            List<String> constructorParam = fieldNames.stream().collect(Collectors.toList());
+            var originFields = ProtocolAnalysis.getFields(packetClazz);
+            var constructorParams = new String[originFields.size()];
 
             for (var i = 0; i < fields.length; i++) {
                 var field = fields[i];
@@ -225,11 +225,10 @@ public abstract class EnhanceUtils {
                 }
 
                 var readObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
-                int index = fieldNames.indexOf(field.getName());
-                constructorParam.set(index, readObject);
+                int index = originFields.indexOf(field);
+                constructorParams[index] = readObject;
             }
-
-            builder.append(packetClazz.getName() + " packet=new " + packetClazz.getName() + "(" + constructorParam.stream().collect(Collectors.joining(StringUtils.COMMA)) + ");");
+            builder.append(packetClazz.getName() + " packet=new " + packetClazz.getName() + "(" + String.join(StringUtils.COMMA, constructorParams) + ");");
         } else {
             var fields = registration.getFields();
             builder.append(packetClazz.getName() + " packet=new " + packetClazz.getName() + "();");

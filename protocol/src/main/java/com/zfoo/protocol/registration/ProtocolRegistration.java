@@ -126,21 +126,43 @@ public class ProtocolRegistration implements IProtocolRegistration {
         if (length == 0) {
             return null;
         }
-        Object object = ReflectionUtils.newInstance(constructor);
+        Object object = null;
 
         var readIndex = byteBuf.readerIndex();
-        for (int i = 0, j = fields.length; i < j; i++) {
-            Field field = fields[i];
-            // 协议向后兼容
-            if (field.isAnnotationPresent(Compatible.class)) {
-                if (length == -1 || byteBuf.readerIndex() - readIndex >= length) {
-                    break;
+        var packetClazz = constructor.getDeclaringClass();
+        if (packetClazz.isRecord()) {
+            var originFields = ProtocolAnalysis.getFields(packetClazz);
+            var constructorParams = new Object[originFields.size()];
+            for (int i = 0, j = fields.length; i < j; i++) {
+                Field field = fields[i];
+                // 协议向后兼容
+                if (field.isAnnotationPresent(Compatible.class)) {
+                    if (length == -1 || byteBuf.readerIndex() - readIndex >= length) {
+                        break;
+                    }
                 }
+                IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
+                ISerializer serializer = packetFieldRegistration.serializer();
+                Object fieldValue = serializer.readObject(byteBuf, packetFieldRegistration);
+                var index = originFields.indexOf(field);
+                constructorParams[index] = fieldValue;
             }
-            IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
-            ISerializer serializer = packetFieldRegistration.serializer();
-            Object fieldValue = serializer.readObject(byteBuf, packetFieldRegistration);
-            ReflectionUtils.setField(field, object, fieldValue);
+            object = ReflectionUtils.newInstance(constructor, constructorParams);
+        } else {
+            object = ReflectionUtils.newInstance(constructor);
+            for (int i = 0, j = fields.length; i < j; i++) {
+                Field field = fields[i];
+                // 协议向后兼容
+                if (field.isAnnotationPresent(Compatible.class)) {
+                    if (length == -1 || byteBuf.readerIndex() - readIndex >= length) {
+                        break;
+                    }
+                }
+                IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
+                ISerializer serializer = packetFieldRegistration.serializer();
+                Object fieldValue = serializer.readObject(byteBuf, packetFieldRegistration);
+                ReflectionUtils.setField(field, object, fieldValue);
+            }
         }
 
         if (length > 0) {
