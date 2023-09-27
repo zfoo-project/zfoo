@@ -1,23 +1,25 @@
-// @author godotg
-const NormalObject = function(a, aaa, b, c, d, e, f, g, jj, kk, l, ll, lll, llll, m, mm, s, ssss) {
-    this.a = a; // byte
-    this.aaa = aaa; // byte[]
-    this.b = b; // short
-    this.c = c; // int
-    this.d = d; // long
-    this.e = e; // float
-    this.f = f; // double
-    this.g = g; // boolean
-    this.jj = jj; // java.lang.String
-    this.kk = kk; // com.zfoo.protocol.packet.ObjectA
-    this.l = l; // java.util.List<java.lang.Integer>
-    this.ll = ll; // java.util.List<java.lang.Long>
-    this.lll = lll; // java.util.List<com.zfoo.protocol.packet.ObjectA>
-    this.llll = llll; // java.util.List<java.lang.String>
-    this.m = m; // java.util.Map<java.lang.Integer, java.lang.String>
-    this.mm = mm; // java.util.Map<java.lang.Integer, com.zfoo.protocol.packet.ObjectA>
-    this.s = s; // java.util.Set<java.lang.Integer>
-    this.ssss = ssss; // java.util.Set<java.lang.String>
+
+const NormalObject = function() {
+    this.a = 0; // number
+    this.aaa = []; // Array<number>
+    this.b = 0; // number
+    this.c = 0; // number
+    this.d = 0; // number
+    this.e = 0; // number
+    this.f = 0; // number
+    this.g = false; // boolean
+    this.jj = ""; // string
+    this.kk = null; // ObjectA | null
+    this.l = []; // Array<number>
+    this.ll = []; // Array<number>
+    this.lll = []; // Array<ObjectA>
+    this.llll = []; // Array<string>
+    this.m = new Map(); // Map<number, string>
+    this.mm = new Map(); // Map<number, ObjectA>
+    this.s = new Set(); // Set<number>
+    this.ssss = new Set(); // Set<string>
+    this.outCompatibleValue = 0; // number
+    this.outCompatibleValue2 = 0; // number
 };
 
 NormalObject.prototype.protocolId = function() {
@@ -25,9 +27,12 @@ NormalObject.prototype.protocolId = function() {
 };
 
 NormalObject.write = function(buffer, packet) {
-    if (buffer.writePacketFlag(packet)) {
+    if (packet === null) {
+        buffer.writeInt(0);
         return;
     }
+    const beforeWriteIndex = buffer.getWriteOffset();
+    buffer.writeInt(857);
     buffer.writeByte(packet.a);
     buffer.writeByteArray(packet.aaa);
     buffer.writeShort(packet.b);
@@ -46,12 +51,17 @@ NormalObject.write = function(buffer, packet) {
     buffer.writeIntPacketMap(packet.mm, 102);
     buffer.writeIntSet(packet.s);
     buffer.writeStringSet(packet.ssss);
+    buffer.writeInt(packet.outCompatibleValue);
+    buffer.writeInt(packet.outCompatibleValue2);
+    buffer.adjustPadding(857, beforeWriteIndex);
 };
 
 NormalObject.read = function(buffer) {
-    if (!buffer.readBoolean()) {
+    const length = buffer.readInt();
+    if (length === 0) {
         return null;
     }
+    const beforeReadIndex = buffer.getReadOffset();
     const packet = new NormalObject();
     const result0 = buffer.readByte();
     packet.a = result0;
@@ -89,6 +99,17 @@ NormalObject.read = function(buffer) {
     packet.s = set16;
     const set17 = buffer.readStringSet();
     packet.ssss = set17;
+    if (buffer.compatibleRead(beforeReadIndex, length)) {
+        const result18 = buffer.readInt();
+        packet.outCompatibleValue = result18;
+    }
+    if (buffer.compatibleRead(beforeReadIndex, length)) {
+        const result19 = buffer.readInt();
+        packet.outCompatibleValue2 = result19;
+    }
+    if (length > 0) {
+        buffer.setReadOffset(beforeReadIndex + length);
+    }
     return packet;
 };
 

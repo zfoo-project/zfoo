@@ -1,66 +1,58 @@
-// 复杂的对象
-// 包括了各种复杂的结构，数组，List，Set，Map
-//
-// @author godotg
-const ComplexObject = function(a, aa, aaa, aaaa, b, bb, bbb, bbbb, c, cc, ccc, cccc, d, dd, ddd, dddd, e, ee, eee, eeee, f, ff, fff, ffff, g, gg, ggg, gggg, h, hh, hhh, hhhh, jj, jjj, kk, kkk, l, ll, lll, llll, lllll, m, mm, mmm, mmmm, mmmmm, s, ss, sss, ssss, sssss, myCompatible, myObject) {
+// 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
+const ComplexObject = function() {
     // byte类型，最简单的整形
-    this.a = a; // byte
-    // byte的包装类型
-    // 优先使用基础类型，包装类型会有装箱拆箱
-    this.aa = aa; // java.lang.Byte
+    this.a = 0; // number
+    // byte的包装类型，优先使用基础类型，包装类型会有装箱拆箱
+    this.aa = 0; // number
     // 数组类型
-    this.aaa = aaa; // byte[]
-    this.aaaa = aaaa; // java.lang.Byte[]
-    this.b = b; // short
-    this.bb = bb; // java.lang.Short
-    this.bbb = bbb; // short[]
-    this.bbbb = bbbb; // java.lang.Short[]
-    this.c = c; // int
-    this.cc = cc; // java.lang.Integer
-    this.ccc = ccc; // int[]
-    this.cccc = cccc; // java.lang.Integer[]
-    this.d = d; // long
-    this.dd = dd; // java.lang.Long
-    this.ddd = ddd; // long[]
-    this.dddd = dddd; // java.lang.Long[]
-    this.e = e; // float
-    this.ee = ee; // java.lang.Float
-    this.eee = eee; // float[]
-    this.eeee = eeee; // java.lang.Float[]
-    this.f = f; // double
-    this.ff = ff; // java.lang.Double
-    this.fff = fff; // double[]
-    this.ffff = ffff; // java.lang.Double[]
-    this.g = g; // boolean
-    this.gg = gg; // java.lang.Boolean
-    this.ggg = ggg; // boolean[]
-    this.gggg = gggg; // java.lang.Boolean[]
-    this.h = h; // char
-    this.hh = hh; // java.lang.Character
-    this.hhh = hhh; // char[]
-    this.hhhh = hhhh; // java.lang.Character[]
-    this.jj = jj; // java.lang.String
-    this.jjj = jjj; // java.lang.String[]
-    this.kk = kk; // com.zfoo.protocol.packet.ObjectA
-    this.kkk = kkk; // com.zfoo.protocol.packet.ObjectA[]
-    this.l = l; // java.util.List<java.lang.Integer>
-    this.ll = ll; // java.util.List<java.util.List<java.util.List<java.lang.Integer>>>
-    this.lll = lll; // java.util.List<java.util.List<com.zfoo.protocol.packet.ObjectA>>
-    this.llll = llll; // java.util.List<java.lang.String>
-    this.lllll = lllll; // java.util.List<java.util.Map<java.lang.Integer, java.lang.String>>
-    this.m = m; // java.util.Map<java.lang.Integer, java.lang.String>
-    this.mm = mm; // java.util.Map<java.lang.Integer, com.zfoo.protocol.packet.ObjectA>
-    this.mmm = mmm; // java.util.Map<com.zfoo.protocol.packet.ObjectA, java.util.List<java.lang.Integer>>
-    this.mmmm = mmmm; // java.util.Map<java.util.List<java.util.List<com.zfoo.protocol.packet.ObjectA>>, java.util.List<java.util.List<java.util.List<java.lang.Integer>>>>
-    this.mmmmm = mmmmm; // java.util.Map<java.util.List<java.util.Map<java.lang.Integer, java.lang.String>>, java.util.Set<java.util.Map<java.lang.Integer, java.lang.String>>>
-    this.s = s; // java.util.Set<java.lang.Integer>
-    this.ss = ss; // java.util.Set<java.util.Set<java.util.List<java.lang.Integer>>>
-    this.sss = sss; // java.util.Set<java.util.Set<com.zfoo.protocol.packet.ObjectA>>
-    this.ssss = ssss; // java.util.Set<java.lang.String>
-    this.sssss = sssss; // java.util.Set<java.util.Map<java.lang.Integer, java.lang.String>>
+    this.aaa = []; // Array<number>
+    this.aaaa = []; // Array<number>
+    this.b = 0; // number
+    this.bb = 0; // number
+    this.bbb = []; // Array<number>
+    this.bbbb = []; // Array<number>
+    this.c = 0; // number
+    this.cc = 0; // number
+    this.ccc = []; // Array<number>
+    this.cccc = []; // Array<number>
+    this.d = 0; // number
+    this.dd = 0; // number
+    this.ddd = []; // Array<number>
+    this.dddd = []; // Array<number>
+    this.e = 0; // number
+    this.ee = 0; // number
+    this.eee = []; // Array<number>
+    this.eeee = []; // Array<number>
+    this.f = 0; // number
+    this.ff = 0; // number
+    this.fff = []; // Array<number>
+    this.ffff = []; // Array<number>
+    this.g = false; // boolean
+    this.gg = false; // boolean
+    this.ggg = []; // Array<boolean>
+    this.gggg = []; // Array<boolean>
+    this.jj = ""; // string
+    this.jjj = []; // Array<string>
+    this.kk = null; // ObjectA | null
+    this.kkk = []; // Array<ObjectA>
+    this.l = []; // Array<number>
+    this.ll = []; // Array<Array<Array<number>>>
+    this.lll = []; // Array<Array<ObjectA>>
+    this.llll = []; // Array<string>
+    this.lllll = []; // Array<Map<number, string>>
+    this.m = new Map(); // Map<number, string>
+    this.mm = new Map(); // Map<number, ObjectA>
+    this.mmm = new Map(); // Map<ObjectA, Array<number>>
+    this.mmmm = new Map(); // Map<Array<Array<ObjectA>>, Array<Array<Array<number>>>>
+    this.mmmmm = new Map(); // Map<Array<Map<number, string>>, Set<Map<number, string>>>
+    this.s = new Set(); // Set<number>
+    this.ss = new Set(); // Set<Set<Array<number>>>
+    this.sss = new Set(); // Set<Set<ObjectA>>
+    this.ssss = new Set(); // Set<string>
+    this.sssss = new Set(); // Set<Map<number, string>>
     // 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
-    this.myCompatible = myCompatible; // int
-    this.myObject = myObject; // com.zfoo.protocol.packet.ObjectA
+    this.myCompatible = 0; // number
+    this.myObject = null; // ObjectA | null
 };
 
 ComplexObject.prototype.protocolId = function() {
@@ -68,9 +60,12 @@ ComplexObject.prototype.protocolId = function() {
 };
 
 ComplexObject.write = function(buffer, packet) {
-    if (buffer.writePacketFlag(packet)) {
+    if (packet === null) {
+        buffer.writeInt(0);
         return;
     }
+    const beforeWriteIndex = buffer.getWriteOffset();
+    buffer.writeInt(36962);
     buffer.writeByte(packet.a);
     buffer.writeByte(packet.aa);
     buffer.writeByteArray(packet.aaa);
@@ -99,10 +94,6 @@ ComplexObject.write = function(buffer, packet) {
     buffer.writeBoolean(packet.gg);
     buffer.writeBooleanArray(packet.ggg);
     buffer.writeBooleanArray(packet.gggg);
-    buffer.writeChar(packet.h);
-    buffer.writeChar(packet.hh);
-    buffer.writeCharArray(packet.hhh);
-    buffer.writeCharArray(packet.hhhh);
     buffer.writeString(packet.jj);
     buffer.writeStringArray(packet.jjj);
     buffer.writePacket(packet.kk, 102);
@@ -239,12 +230,15 @@ ComplexObject.write = function(buffer, packet) {
     }
     buffer.writeInt(packet.myCompatible);
     buffer.writePacket(packet.myObject, 102);
+    buffer.adjustPadding(36962, beforeWriteIndex);
 };
 
 ComplexObject.read = function(buffer) {
-    if (!buffer.readBoolean()) {
+    const length = buffer.readInt();
+    if (length === 0) {
         return null;
     }
+    const beforeReadIndex = buffer.getReadOffset();
     const packet = new ComplexObject();
     const result19 = buffer.readByte();
     packet.a = result19;
@@ -302,177 +296,170 @@ ComplexObject.read = function(buffer) {
     packet.ggg = array45;
     const array46 = buffer.readBooleanArray();
     packet.gggg = array46;
-    const result47 = buffer.readChar();
-    packet.h = result47;
-    const result48 = buffer.readChar();
-    packet.hh = result48;
-    const array49 = buffer.readCharArray();
-    packet.hhh = array49;
-    const array50 = buffer.readCharArray();
-    packet.hhhh = array50;
-    const result51 = buffer.readString();
-    packet.jj = result51;
-    const array52 = buffer.readStringArray();
-    packet.jjj = array52;
-    const result53 = buffer.readPacket(102);
-    packet.kk = result53;
-    const array54 = buffer.readPacketArray(102);
-    packet.kkk = array54;
-    const list55 = buffer.readIntList();
-    packet.l = list55;
-    const result56 = [];
-    const size57 = buffer.readInt();
-    if (size57 > 0) {
-        for (let index58 = 0; index58 < size57; index58++) {
-            const result59 = [];
-            const size60 = buffer.readInt();
-            if (size60 > 0) {
-                for (let index61 = 0; index61 < size60; index61++) {
-                    const list62 = buffer.readIntList();
-                    result59.push(list62);
+    const result47 = buffer.readString();
+    packet.jj = result47;
+    const array48 = buffer.readStringArray();
+    packet.jjj = array48;
+    const result49 = buffer.readPacket(102);
+    packet.kk = result49;
+    const array50 = buffer.readPacketArray(102);
+    packet.kkk = array50;
+    const list51 = buffer.readIntList();
+    packet.l = list51;
+    const result52 = [];
+    const size53 = buffer.readInt();
+    if (size53 > 0) {
+        for (let index54 = 0; index54 < size53; index54++) {
+            const result55 = [];
+            const size56 = buffer.readInt();
+            if (size56 > 0) {
+                for (let index57 = 0; index57 < size56; index57++) {
+                    const list58 = buffer.readIntList();
+                    result55.push(list58);
                 }
             }
-            result56.push(result59);
+            result52.push(result55);
         }
     }
-    packet.ll = result56;
-    const result63 = [];
-    const size64 = buffer.readInt();
-    if (size64 > 0) {
-        for (let index65 = 0; index65 < size64; index65++) {
-            const list66 = buffer.readPacketList(102);
-            result63.push(list66);
+    packet.ll = result52;
+    const result59 = [];
+    const size60 = buffer.readInt();
+    if (size60 > 0) {
+        for (let index61 = 0; index61 < size60; index61++) {
+            const list62 = buffer.readPacketList(102);
+            result59.push(list62);
         }
     }
-    packet.lll = result63;
-    const list67 = buffer.readStringList();
-    packet.llll = list67;
-    const result68 = [];
-    const size69 = buffer.readInt();
-    if (size69 > 0) {
-        for (let index70 = 0; index70 < size69; index70++) {
-            const map71 = buffer.readIntStringMap();
-            result68.push(map71);
+    packet.lll = result59;
+    const list63 = buffer.readStringList();
+    packet.llll = list63;
+    const result64 = [];
+    const size65 = buffer.readInt();
+    if (size65 > 0) {
+        for (let index66 = 0; index66 < size65; index66++) {
+            const map67 = buffer.readIntStringMap();
+            result64.push(map67);
         }
     }
-    packet.lllll = result68;
-    const map72 = buffer.readIntStringMap();
-    packet.m = map72;
-    const map73 = buffer.readIntPacketMap(102);
-    packet.mm = map73;
-    const result74 = new Map();
-    const size75 = buffer.readInt();
-    if (size75 > 0) {
-        for (let index76 = 0; index76 < size75; index76++) {
-            const result77 = buffer.readPacket(102);
-            const list78 = buffer.readIntList();
-            result74.set(result77, list78);
+    packet.lllll = result64;
+    const map68 = buffer.readIntStringMap();
+    packet.m = map68;
+    const map69 = buffer.readIntPacketMap(102);
+    packet.mm = map69;
+    const result70 = new Map();
+    const size71 = buffer.readInt();
+    if (size71 > 0) {
+        for (let index72 = 0; index72 < size71; index72++) {
+            const result73 = buffer.readPacket(102);
+            const list74 = buffer.readIntList();
+            result70.set(result73, list74);
         }
     }
-    packet.mmm = result74;
-    const result79 = new Map();
-    const size80 = buffer.readInt();
-    if (size80 > 0) {
-        for (let index81 = 0; index81 < size80; index81++) {
+    packet.mmm = result70;
+    const result75 = new Map();
+    const size76 = buffer.readInt();
+    if (size76 > 0) {
+        for (let index77 = 0; index77 < size76; index77++) {
+            const result78 = [];
+            const size79 = buffer.readInt();
+            if (size79 > 0) {
+                for (let index80 = 0; index80 < size79; index80++) {
+                    const list81 = buffer.readPacketList(102);
+                    result78.push(list81);
+                }
+            }
             const result82 = [];
             const size83 = buffer.readInt();
             if (size83 > 0) {
                 for (let index84 = 0; index84 < size83; index84++) {
-                    const list85 = buffer.readPacketList(102);
-                    result82.push(list85);
-                }
-            }
-            const result86 = [];
-            const size87 = buffer.readInt();
-            if (size87 > 0) {
-                for (let index88 = 0; index88 < size87; index88++) {
-                    const result89 = [];
-                    const size90 = buffer.readInt();
-                    if (size90 > 0) {
-                        for (let index91 = 0; index91 < size90; index91++) {
-                            const list92 = buffer.readIntList();
-                            result89.push(list92);
+                    const result85 = [];
+                    const size86 = buffer.readInt();
+                    if (size86 > 0) {
+                        for (let index87 = 0; index87 < size86; index87++) {
+                            const list88 = buffer.readIntList();
+                            result85.push(list88);
                         }
                     }
-                    result86.push(result89);
+                    result82.push(result85);
                 }
             }
-            result79.set(result82, result86);
+            result75.set(result78, result82);
         }
     }
-    packet.mmmm = result79;
-    const result93 = new Map();
-    const size94 = buffer.readInt();
-    if (size94 > 0) {
-        for (let index95 = 0; index95 < size94; index95++) {
-            const result96 = [];
+    packet.mmmm = result75;
+    const result89 = new Map();
+    const size90 = buffer.readInt();
+    if (size90 > 0) {
+        for (let index91 = 0; index91 < size90; index91++) {
+            const result92 = [];
+            const size93 = buffer.readInt();
+            if (size93 > 0) {
+                for (let index94 = 0; index94 < size93; index94++) {
+                    const map95 = buffer.readIntStringMap();
+                    result92.push(map95);
+                }
+            }
+            const result96 = new Set();
             const size97 = buffer.readInt();
             if (size97 > 0) {
                 for (let index98 = 0; index98 < size97; index98++) {
                     const map99 = buffer.readIntStringMap();
-                    result96.push(map99);
+                    result96.add(map99);
                 }
             }
-            const result100 = new Set();
-            const size101 = buffer.readInt();
-            if (size101 > 0) {
-                for (let index102 = 0; index102 < size101; index102++) {
-                    const map103 = buffer.readIntStringMap();
-                    result100.add(map103);
+            result89.set(result92, result96);
+        }
+    }
+    packet.mmmmm = result89;
+    const set100 = buffer.readIntSet();
+    packet.s = set100;
+    const result101 = new Set();
+    const size102 = buffer.readInt();
+    if (size102 > 0) {
+        for (let index103 = 0; index103 < size102; index103++) {
+            const result104 = new Set();
+            const size105 = buffer.readInt();
+            if (size105 > 0) {
+                for (let index106 = 0; index106 < size105; index106++) {
+                    const list107 = buffer.readIntList();
+                    result104.add(list107);
                 }
             }
-            result93.set(result96, result100);
+            result101.add(result104);
         }
     }
-    packet.mmmmm = result93;
-    const set104 = buffer.readIntSet();
-    packet.s = set104;
-    const result105 = new Set();
-    const size106 = buffer.readInt();
-    if (size106 > 0) {
-        for (let index107 = 0; index107 < size106; index107++) {
-            const result108 = new Set();
-            const size109 = buffer.readInt();
-            if (size109 > 0) {
-                for (let index110 = 0; index110 < size109; index110++) {
-                    const list111 = buffer.readIntList();
-                    result108.add(list111);
-                }
-            }
-            result105.add(result108);
+    packet.ss = result101;
+    const result108 = new Set();
+    const size109 = buffer.readInt();
+    if (size109 > 0) {
+        for (let index110 = 0; index110 < size109; index110++) {
+            const set111 = buffer.readPacketSet(102);
+            result108.add(set111);
         }
     }
-    packet.ss = result105;
-    const result112 = new Set();
-    const size113 = buffer.readInt();
-    if (size113 > 0) {
-        for (let index114 = 0; index114 < size113; index114++) {
-            const set115 = buffer.readPacketSet(102);
-            result112.add(set115);
+    packet.sss = result108;
+    const set112 = buffer.readStringSet();
+    packet.ssss = set112;
+    const result113 = new Set();
+    const size114 = buffer.readInt();
+    if (size114 > 0) {
+        for (let index115 = 0; index115 < size114; index115++) {
+            const map116 = buffer.readIntStringMap();
+            result113.add(map116);
         }
     }
-    packet.sss = result112;
-    const set116 = buffer.readStringSet();
-    packet.ssss = set116;
-    const result117 = new Set();
-    const size118 = buffer.readInt();
-    if (size118 > 0) {
-        for (let index119 = 0; index119 < size118; index119++) {
-            const map120 = buffer.readIntStringMap();
-            result117.add(map120);
-        }
+    packet.sssss = result113;
+    if (buffer.compatibleRead(beforeReadIndex, length)) {
+        const result117 = buffer.readInt();
+        packet.myCompatible = result117;
     }
-    packet.sssss = result117;
-    if (!buffer.isReadable()) {
-        return packet;
+    if (buffer.compatibleRead(beforeReadIndex, length)) {
+        const result118 = buffer.readPacket(102);
+        packet.myObject = result118;
     }
-    const result121 = buffer.readInt();
-    packet.myCompatible = result121;
-    if (!buffer.isReadable()) {
-        return packet;
+    if (length > 0) {
+        buffer.setReadOffset(beforeReadIndex + length);
     }
-    const result122 = buffer.readPacket(102);
-    packet.myObject = result122;
     return packet;
 };
 
