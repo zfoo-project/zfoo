@@ -14,8 +14,10 @@
 package com.zfoo.protocol.serializer.javascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
+import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -26,6 +28,14 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  * @author godotg
  */
 public class JsObjectProtocolSerializer implements IJsSerializer {
+    @Override
+    public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
+        ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
+        var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
+        var type = StringUtils.format("{} | null", protocolSimpleName);
+        return new Triple<>(type, field.getName(), "null");
+    }
+
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;

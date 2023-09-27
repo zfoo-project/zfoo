@@ -18,9 +18,9 @@ import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
+import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
@@ -114,38 +114,39 @@ public abstract class GenerateJsUtils {
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolTemplate.js");
 
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.JavaScript);
-        var valueOfMethod = valueOfMethod(registration);
+        var fieldDefinition = fieldDefinition(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName
-                , valueOfMethod.getKey().trim(), valueOfMethod.getValue().trim(), protocolClazzName, protocolId, protocolClazzName
+                , fieldDefinition.trim(), protocolClazzName, protocolId, protocolClazzName
                 , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
         var protocolOutputPath = StringUtils.format("{}/{}/{}.js", protocolOutputRootPath
                 , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
     }
 
-    private static Pair<String, String> valueOfMethod(ProtocolRegistration registration) {
+    private static String fieldDefinition(ProtocolRegistration registration) {
         var protocolId = registration.getId();
         var fields = registration.getFields();
-
-        var fieldValueOf = StringUtils.joinWith(", ", Arrays.stream(fields).map(it -> it.getName()).toList().toArray());
+        var fieldRegistrations = registration.getFieldRegistrations();
         var fieldDefinitionBuilder = new StringBuilder();
-
-        for (var field : fields) {
+        for (int i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            IFieldRegistration fieldRegistration = fieldRegistrations[i];
             var fieldName = field.getName();
             // 生成注释
-            var fileNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.JavaScript);
-            if (StringUtils.isNotBlank(fileNote)) {
-                fieldDefinitionBuilder.append(TAB).append(fileNote).append(LS);
+            var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.JavaScript);
+            if (StringUtils.isNotBlank(fieldNote)) {
+                fieldDefinitionBuilder.append(TAB).append(fieldNote).append(LS);
             }
+            var triple = jsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
             fieldDefinitionBuilder.append(TAB)
-                    .append(StringUtils.format("this.{} = {};", fieldName, fieldName))
-                    .append(" // ").append(field.getGenericType().getTypeName())// 生成类型的注释
+                    .append(StringUtils.format("this.{} = {}; // {}", fieldName, triple.getRight(), triple.getLeft()))
                     .append(LS);
+
         }
-        return new Pair<>(fieldValueOf, fieldDefinitionBuilder.toString());
+        return fieldDefinitionBuilder.toString();
     }
 
     private static String writeObject(ProtocolRegistration registration) {

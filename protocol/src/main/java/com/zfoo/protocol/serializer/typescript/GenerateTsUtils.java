@@ -160,10 +160,9 @@ public abstract class GenerateTsUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var fieldDefinitionBuilder = new StringBuilder();
-        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
-        for (int i = 0; i < sequencedFields.size(); i++) {
-            var field = sequencedFields.get(i);
-            IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
+        for (int i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            IFieldRegistration fieldRegistration = fieldRegistrations[i];
             var fieldName = field.getName();
             // 生成注释
             var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.TypeScript);

@@ -1,5 +1,5 @@
 {}
-const {} = function({}) {
+const {} = function() {
     {}
 };
 

@@ -14,6 +14,7 @@
 package com.zfoo.protocol.serializer.javascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -25,6 +26,11 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  * @author godotg
  */
 public class JsBooleanSerializer implements IJsSerializer {
+    @Override
+    public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
+        return new Triple<>("boolean", field.getName(), "false");
+    }
+
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
