@@ -40,7 +40,7 @@ public class EnhanceStringSerializer implements IEnhanceSerializer {
     @Override
     public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
-        builder.append(StringUtils.format("String {} = \"\"", result));
+        builder.append(StringUtils.format("String {} = \"\";", result));
         return result;
     }
 

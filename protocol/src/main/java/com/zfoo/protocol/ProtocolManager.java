@@ -65,6 +65,9 @@ public class ProtocolManager {
 
     /**
      * deserialization a packet from the buffer
+     * <p>
+     * byte[] convert to ByteBuf using Unpooled.wrappedBuffer(byte[]) in netty
+     * ByteBuf convert to byte[] using ByteBufUtils.readAllBytes(ByteBuf) in zfoo
      */
     public static Object read(ByteBuf buffer) {
         return protocols[ByteBufUtils.readShort(buffer)].read(buffer);
@@ -81,6 +84,7 @@ public class ProtocolManager {
     public static ProtocolModule moduleByProtocolId(short id) {
         return modules[protocols[id].module()];
     }
+
     public static ProtocolModule moduleByProtocol(Class<?> clazz) {
         return moduleByProtocolId(protocolId(clazz));
     }
