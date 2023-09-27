@@ -430,12 +430,6 @@ public abstract class ByteBufUtils {
 
     //-----------------------------------------------------------------------
     //---------------------------------以下方法会被字节码生成的代码调用--------------------------------------
-    public static boolean writePacketFlag(ByteBuf byteBuf, Object packet) {
-        boolean flag = packet == null;
-        byteBuf.writeBoolean(!flag);
-        return flag;
-    }
-
     public static void writePacketCollection(ByteBuf byteBuf, Collection<?> collection, IProtocolRegistration protocolRegistration) {
         if (collection == null) {
             byteBuf.writeByte(0);

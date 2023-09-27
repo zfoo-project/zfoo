@@ -74,7 +74,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
     public void write(ByteBuf byteBuf, Object packet) {
         if (packet == null) {
             // equals with ByteBufUtils.writeInt(byteBuf, 0);
-            ByteBufUtils.writeByte(byteBuf, (byte) 0);
+            byteBuf.writeByte(0);
             return;
         }
 

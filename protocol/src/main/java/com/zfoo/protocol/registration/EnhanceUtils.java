@@ -183,6 +183,7 @@ public abstract class EnhanceUtils {
 
         var builder = new StringBuilder();
         builder.append("{");
+        builder.append("if ($2 == null) { $1.writeByte(0); return; }");
         builder.append(StringUtils.format("{} packet = ({})$2;", packetClazz.getName(), packetClazz.getName()));
         if (registration.isCompatible()) {
             builder.append("int beforeWriteIndex = $1.writerIndex();");
