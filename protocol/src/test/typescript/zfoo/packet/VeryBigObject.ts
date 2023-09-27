@@ -6711,7 +6711,7 @@ class VeryBigObject {
         if (length === 0) {
             return null;
         }
-        const readIndex = buffer.getReadOffset();
+        const beforeReadIndex = buffer.getReadOffset();
         const packet = new VeryBigObject();
         const result0 = buffer.readByte();
         packet.a1 = result0;
@@ -13402,7 +13402,7 @@ class VeryBigObject {
         const set3343 = buffer.readStringSet();
         packet.ssss9 = set3343;
         if (length > 0) {
-            buffer.setReadOffset(readIndex + length);
+            buffer.setReadOffset(beforeReadIndex + length);
         }
         return packet;
     }

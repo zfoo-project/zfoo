@@ -26,14 +26,14 @@ class SimpleObject {
         if (length === 0) {
             return null;
         }
-        const readIndex = buffer.getReadOffset();
+        const beforeReadIndex = buffer.getReadOffset();
         const packet = new SimpleObject();
         const result0 = buffer.readInt();
         packet.c = result0;
         const result1 = buffer.readBoolean(); 
         packet.g = result1;
         if (length > 0) {
-            buffer.setReadOffset(readIndex + length);
+            buffer.setReadOffset(beforeReadIndex + length);
         }
         return packet;
     }

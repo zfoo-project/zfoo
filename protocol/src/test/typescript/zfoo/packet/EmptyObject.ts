@@ -23,11 +23,11 @@ class EmptyObject {
         if (length === 0) {
             return null;
         }
-        const readIndex = buffer.getReadOffset();
+        const beforeReadIndex = buffer.getReadOffset();
         const packet = new EmptyObject();
         
         if (length > 0) {
-            buffer.setReadOffset(readIndex + length);
+            buffer.setReadOffset(beforeReadIndex + length);
         }
         return packet;
     }

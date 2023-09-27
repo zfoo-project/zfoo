@@ -69,7 +69,7 @@ class ComplexObject {
             return;
         }
         const beforeWriteIndex = buffer.getWriteOffset();
-        buffer.writeInt(1);
+        buffer.writeInt(36962);
         buffer.writeByte(packet.a);
         buffer.writeByte(packet.aa);
         buffer.writeByteArray(packet.aaa);
@@ -234,7 +234,7 @@ class ComplexObject {
         }
         buffer.writeInt(packet.myCompatible);
         buffer.writePacket(packet.myObject, 102);
-        buffer.adjustPadding(1, beforeWriteIndex);
+        buffer.adjustPadding(36962, beforeWriteIndex);
     }
 
     static read(buffer: any): ComplexObject | null {
@@ -242,7 +242,7 @@ class ComplexObject {
         if (length === 0) {
             return null;
         }
-        const readIndex = buffer.getReadOffset();
+        const beforeReadIndex = buffer.getReadOffset();
         const packet = new ComplexObject();
         const result19 = buffer.readByte();
         packet.a = result19;
@@ -453,16 +453,16 @@ class ComplexObject {
             }
         }
         packet.sssss = result113;
-        if (length !== -1 && buffer.getReadOffset() - readIndex < length) {
+        if (buffer.compatibleRead(beforeReadIndex, length)) {
             const result117 = buffer.readInt();
             packet.myCompatible = result117;
         }
-        if (length !== -1 && buffer.getReadOffset() - readIndex < length) {
+        if (buffer.compatibleRead(beforeReadIndex, length)) {
             const result118 = buffer.readPacket(102);
             packet.myObject = result118;
         }
         if (length > 0) {
-            buffer.setReadOffset(readIndex + length);
+            buffer.setReadOffset(beforeReadIndex + length);
         }
         return packet;
     }

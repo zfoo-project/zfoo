@@ -36,7 +36,7 @@ class NormalObject {
             return;
         }
         const beforeWriteIndex = buffer.getWriteOffset();
-        buffer.writeInt(1);
+        buffer.writeInt(857);
         buffer.writeByte(packet.a);
         buffer.writeByteArray(packet.aaa);
         buffer.writeShort(packet.b);
@@ -57,7 +57,7 @@ class NormalObject {
         buffer.writeStringSet(packet.ssss);
         buffer.writeInt(packet.outCompatibleValue);
         buffer.writeInt(packet.outCompatibleValue2);
-        buffer.adjustPadding(1, beforeWriteIndex);
+        buffer.adjustPadding(857, beforeWriteIndex);
     }
 
     static read(buffer: any): NormalObject | null {
@@ -65,7 +65,7 @@ class NormalObject {
         if (length === 0) {
             return null;
         }
-        const readIndex = buffer.getReadOffset();
+        const beforeReadIndex = buffer.getReadOffset();
         const packet = new NormalObject();
         const result0 = buffer.readByte();
         packet.a = result0;
@@ -103,16 +103,16 @@ class NormalObject {
         packet.s = set16;
         const set17 = buffer.readStringSet();
         packet.ssss = set17;
-        if (length !== -1 && buffer.getReadOffset() - readIndex < length) {
+        if (buffer.compatibleRead(beforeReadIndex, length)) {
             const result18 = buffer.readInt();
             packet.outCompatibleValue = result18;
         }
-        if (length !== -1 && buffer.getReadOffset() - readIndex < length) {
+        if (buffer.compatibleRead(beforeReadIndex, length)) {
             const result19 = buffer.readInt();
             packet.outCompatibleValue2 = result19;
         }
         if (length > 0) {
-            buffer.setReadOffset(readIndex + length);
+            buffer.setReadOffset(beforeReadIndex + length);
         }
         return packet;
     }

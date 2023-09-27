@@ -3,7 +3,6 @@
 class ObjectB {
 
     flag: boolean = false;
-    innerCompatibleValue: number = 0;
 
     static PROTOCOL_ID: number = 103;
 
@@ -16,11 +15,8 @@ class ObjectB {
             buffer.writeInt(0);
             return;
         }
-        const beforeWriteIndex = buffer.getWriteOffset();
-        buffer.writeInt(1);
+        buffer.writeInt(-1);
         buffer.writeBoolean(packet.flag);
-        buffer.writeInt(packet.innerCompatibleValue);
-        buffer.adjustPadding(1, beforeWriteIndex);
     }
 
     static read(buffer: any): ObjectB | null {
@@ -28,16 +24,12 @@ class ObjectB {
         if (length === 0) {
             return null;
         }
-        const readIndex = buffer.getReadOffset();
+        const beforeReadIndex = buffer.getReadOffset();
         const packet = new ObjectB();
         const result0 = buffer.readBoolean(); 
         packet.flag = result0;
-        if (length !== -1 && buffer.getReadOffset() - readIndex < length) {
-            const result1 = buffer.readInt();
-            packet.innerCompatibleValue = result1;
-        }
         if (length > 0) {
-            buffer.setReadOffset(readIndex + length);
+            buffer.setReadOffset(beforeReadIndex + length);
         }
         return packet;
     }
