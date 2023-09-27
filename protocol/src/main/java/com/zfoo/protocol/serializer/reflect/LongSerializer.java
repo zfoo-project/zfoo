@@ -38,4 +38,9 @@ public class LongSerializer implements ISerializer {
     public Object defaultValue(IFieldRegistration fieldRegistration) {
         return Long.valueOf(0);
     }
+
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        return 5;
+    }
 }

@@ -38,4 +38,9 @@ public class FloatSerializer implements ISerializer {
     public Object defaultValue(IFieldRegistration fieldRegistration) {
         return ByteBufUtils.ZERO_FLOAT;
     }
+
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        return 4;
+    }
 }

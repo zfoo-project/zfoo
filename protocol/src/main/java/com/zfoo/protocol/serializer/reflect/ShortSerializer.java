@@ -38,4 +38,9 @@ public class ShortSerializer implements ISerializer {
     public Object defaultValue(IFieldRegistration fieldRegistration) {
         return Short.valueOf((short) 0);
     }
+
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        return 2;
+    }
 }

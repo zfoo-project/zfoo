@@ -74,4 +74,11 @@ public class ArraySerializer implements ISerializer {
         return Array.newInstance(arrayField.getType(), 0);
     }
 
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        ArrayField arrayField = (ArrayField) fieldRegistration;
+        var length = arrayField.getArrayElementRegistration().serializer().predictionLength(arrayField.getArrayElementRegistration());
+        return 9 * length;
+    }
+
 }

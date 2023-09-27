@@ -49,4 +49,9 @@ public class ObjectProtocolSerializer implements ISerializer {
     public Object defaultValue(IFieldRegistration fieldRegistration) {
         return null;
     }
+
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        return 13;
+    }
 }

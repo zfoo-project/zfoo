@@ -39,4 +39,9 @@ public class StringSerializer implements ISerializer {
     public Object defaultValue(IFieldRegistration fieldRegistration) {
         return StringUtils.EMPTY;
     }
+
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        return 23;
+    }
 }

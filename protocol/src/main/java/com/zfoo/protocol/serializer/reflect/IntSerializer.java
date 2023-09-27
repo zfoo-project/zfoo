@@ -38,4 +38,9 @@ public class IntSerializer implements ISerializer {
     public Object defaultValue(IFieldRegistration fieldRegistration) {
         return Integer.valueOf(0);
     }
+
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        return 3;
+    }
 }

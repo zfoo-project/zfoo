@@ -15,6 +15,7 @@ package com.zfoo.protocol.serializer.reflect;
 
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.SetField;
 import io.netty.buffer.ByteBuf;
@@ -68,6 +69,13 @@ public class SetSerializer implements ISerializer {
     @Override
     public Object defaultValue(IFieldRegistration fieldRegistration) {
         return new HashSet<>();
+    }
+
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        var setField = (SetField) fieldRegistration;
+        var length = setField.getSetElementRegistration().serializer().predictionLength(setField.getSetElementRegistration());
+        return 9 * length;
     }
 
 }

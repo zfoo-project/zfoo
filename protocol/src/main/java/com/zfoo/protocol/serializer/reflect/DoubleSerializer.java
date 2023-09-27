@@ -39,4 +39,9 @@ public class DoubleSerializer implements ISerializer {
     public Object defaultValue(IFieldRegistration fieldRegistration) {
         return ByteBufUtils.ZERO_DOUBLE;
     }
+
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        return 8;
+    }
 }

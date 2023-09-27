@@ -26,6 +26,10 @@ public interface IFieldRegistration {
         return serializer().defaultValue(this);
     }
 
+    default int predictionLength() {
+        return serializer().predictionLength(this);
+    }
+
     ISerializer serializer();
 
 }

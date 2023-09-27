@@ -34,4 +34,6 @@ public interface ISerializer {
 
     Object defaultValue(IFieldRegistration fieldRegistration);
 
+    int predictionLength(IFieldRegistration fieldRegistration);
+
 }

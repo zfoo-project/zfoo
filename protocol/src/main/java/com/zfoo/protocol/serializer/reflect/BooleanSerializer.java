@@ -38,4 +38,9 @@ public class BooleanSerializer implements ISerializer {
     public Object defaultValue(IFieldRegistration fieldRegistration) {
         return Boolean.FALSE;
     }
+
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        return 1;
+    }
 }

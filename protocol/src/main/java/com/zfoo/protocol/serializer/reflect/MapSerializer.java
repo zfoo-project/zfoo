@@ -75,4 +75,12 @@ public class MapSerializer implements ISerializer {
     public Object defaultValue(IFieldRegistration fieldRegistration) {
         return new HashMap<>();
     }
+
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        var mapField = (MapField) fieldRegistration;
+        var keyLength = mapField.getMapKeyRegistration().serializer().predictionLength(mapField.getMapKeyRegistration());
+        var valueLength = mapField.getMapValueRegistration().serializer().predictionLength(mapField.getMapValueRegistration());
+        return 9 * (keyLength + valueLength);
+    }
 }

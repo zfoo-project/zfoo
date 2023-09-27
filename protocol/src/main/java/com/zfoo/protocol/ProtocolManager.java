@@ -102,10 +102,7 @@ public class ProtocolManager {
                 .filter(Objects::nonNull)
                 .filter(it -> it.getName().equals(name))
                 .findFirst();
-        if (moduleOptional.isEmpty()) {
-            return null;
-        }
-        return moduleOptional.get();
+        return moduleOptional.orElse(null);
     }
 
     public static short protocolId(Class<?> clazz) {

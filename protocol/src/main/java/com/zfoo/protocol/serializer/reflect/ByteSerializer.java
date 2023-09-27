@@ -39,4 +39,9 @@ public class ByteSerializer implements ISerializer {
         return Byte.valueOf((byte) 0);
     }
 
+    @Override
+    public int predictionLength(IFieldRegistration fieldRegistration) {
+        return 1;
+    }
+
 }

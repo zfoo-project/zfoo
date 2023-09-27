@@ -52,7 +52,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
         this.fieldRegistrations = fieldRegistrations;
 
         this.compatible = Arrays.stream(fields).anyMatch(it -> it.isAnnotationPresent(Compatible.class));
-        this.predictionLength = 128;
+        this.predictionLength = Arrays.stream(fieldRegistrations).mapToInt(it -> it.predictionLength()).sum();
     }
 
     @Override
