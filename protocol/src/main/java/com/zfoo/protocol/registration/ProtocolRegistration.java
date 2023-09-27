@@ -103,13 +103,14 @@ public class ProtocolRegistration implements IProtocolRegistration {
 
     @Override
     public Object read(ByteBuf byteBuf) {
+        // length为-1代表协议没有可兼容的部分，0代表为空对象，正数代表需要兼容的协议长度
         var length = ByteBufUtils.readInt(byteBuf);
         if (length == 0) {
             return null;
         }
         Object object = null;
 
-        var readIndex = byteBuf.readerIndex();
+        var beforeReadIndex = byteBuf.readerIndex();
         var packetClazz = constructor.getDeclaringClass();
         if (packetClazz.isRecord()) {
             var originFields = ProtocolAnalysis.getFields(packetClazz);
@@ -121,7 +122,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
 
                 // 协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
-                    if (length == -1 || byteBuf.readerIndex() >= length + readIndex) {
+                    if (ByteBufUtils.compatibleRead(byteBuf, beforeReadIndex, length)) {
                         constructorParams[index] = packetFieldRegistration.defaultValue();
                         continue;
                     }
@@ -139,7 +140,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
                 ISerializer serializer = packetFieldRegistration.serializer();
                 // 协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
-                    if (length == -1 || byteBuf.readerIndex() - readIndex >= length) {
+                    if (ByteBufUtils.compatibleRead(byteBuf, beforeReadIndex, length)) {
                         ReflectionUtils.setField(field, object, packetFieldRegistration.defaultValue());
                         continue;
                     }
@@ -150,7 +151,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
         }
 
         if (length > 0) {
-            byteBuf.readerIndex(readIndex + length);
+            byteBuf.readerIndex(beforeReadIndex + length);
         }
 
         return object;

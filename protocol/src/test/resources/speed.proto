@@ -4,6 +4,9 @@ option java_package = "com.zfoo.protocol.packet";
 option java_outer_classname = "ProtobufObject";
 
 // protoc -I=D:\zfoo\protocol\src\test\resources --java_out=D:\zfoo\protocol\src\test\java D:\zfoo\protocol\src\test\resources\speed.proto
+// protoc -I=D:\Project\zfoo\protocol\src\test\resources --js_out=D:\Project\zfoo\protocol\src\test D:\Project\zfoo\protocol\src\test\resources\speed.proto
+// npm install -g ts-protoc-gen
+// protoc -I=D:\Project\zfoo\protocol\src\test\resources --ts_out=D:\Project\zfoo\protocol\src\test D:\Project\zfoo\protocol\src\test\resources\speed.proto
 
 message ObjectB {
   bool flag = 1;

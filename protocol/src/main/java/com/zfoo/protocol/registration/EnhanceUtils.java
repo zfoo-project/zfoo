@@ -218,7 +218,7 @@ public abstract class EnhanceUtils {
         builder.append("{");
         builder.append(StringUtils.format("int length = {}.readInt($1);", byteBufUtils));
         builder.append("if(length==0){return null;}");
-        builder.append("int readIndex = $1.readerIndex();");
+        builder.append("int beforeReadIndex = $1.readerIndex();");
         var packetClazz = constructor.getDeclaringClass();
         if (packetClazz.isRecord()) {
             var fields = registration.getFields();
@@ -232,7 +232,7 @@ public abstract class EnhanceUtils {
                 // protocol backwards compatibility，协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
                     var defaultReadObject = enhanceSerializer(fieldRegistration.serializer()).defaultValue(builder, field, fieldRegistration);
-                    builder.append("if (length != -1 && $1.readerIndex() < length + readIndex) {");
+                    builder.append(StringUtils.format("if (!{}.compatibleRead($1, beforeReadIndex, length)) {", byteBufUtils));
                     var compatibleReadObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
                     builder.append(StringUtils.format("{} = {};", defaultReadObject, compatibleReadObject));
                     builder.append("}");
@@ -253,7 +253,7 @@ public abstract class EnhanceUtils {
                 var fieldRegistration = fieldRegistrations[i];
                 // protocol backwards compatibility，协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
-                    builder.append("if (length == -1 || $1.readerIndex() >= length + readIndex) {");
+                    builder.append(StringUtils.format("if ({}.compatibleRead($1, beforeReadIndex, length)) {", byteBufUtils));
                     var defaultReadObject = enhanceSerializer(fieldRegistration.serializer()).defaultValue(builder, field, fieldRegistration);
                     if (Modifier.isPublic(field.getModifiers())) {
                         builder.append(StringUtils.format("packet.{}={};", field.getName(), defaultReadObject));
@@ -279,7 +279,7 @@ public abstract class EnhanceUtils {
             }
         }
 
-        builder.append("if (length > 0) { $1.readerIndex(readIndex + length); }");
+        builder.append("if (length > 0) { $1.readerIndex(beforeReadIndex + length); }");
 
         builder.append("return packet;}");
         return builder.toString();

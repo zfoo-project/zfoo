@@ -35,9 +35,9 @@ import java.util.Set;
  */
 public abstract class ByteBufUtils {
 
+    //---------------------------------compatible--------------------------------------
     public static final Double ZERO_DOUBLE = Double.valueOf(0D);
     public static final Float ZERO_FLOAT = Float.valueOf(0F);
-
 
     public static void adjustPadding(ByteBuf byteBuf, int predictionLength, int beforeWriteIndex) {
         // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
@@ -64,6 +64,10 @@ public abstract class ByteBufUtils {
             byteBuf.writeBytes(bytes);
             ReferenceCountUtil.release(retainedByteBuf);
         }
+    }
+
+    public static boolean compatibleRead(ByteBuf byteBuf, int beforeReadIndex, int length) {
+        return length == -1 || byteBuf.readerIndex() >= length + beforeReadIndex;
     }
 
     //---------------------------------boolean--------------------------------------
