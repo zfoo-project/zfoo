@@ -232,7 +232,7 @@ public abstract class EnhanceUtils {
                 // protocol backwards compatibility，协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
                     var defaultReadObject = enhanceSerializer(fieldRegistration.serializer()).defaultValue(builder, field, fieldRegistration);
-                    builder.append(StringUtils.format("if (!{}.compatibleRead($1, beforeReadIndex, length)) {", byteBufUtils));
+                    builder.append(StringUtils.format("if ({}.compatibleRead($1, beforeReadIndex, length)) {", byteBufUtils));
                     var compatibleReadObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
                     builder.append(StringUtils.format("{} = {};", defaultReadObject, compatibleReadObject));
                     builder.append("}");
@@ -254,18 +254,18 @@ public abstract class EnhanceUtils {
                 // protocol backwards compatibility，协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
                     builder.append(StringUtils.format("if ({}.compatibleRead($1, beforeReadIndex, length)) {", byteBufUtils));
-                    var defaultReadObject = enhanceSerializer(fieldRegistration.serializer()).defaultValue(builder, field, fieldRegistration);
-                    if (Modifier.isPublic(field.getModifiers())) {
-                        builder.append(StringUtils.format("packet.{}={};", field.getName(), defaultReadObject));
-                    } else {
-                        builder.append(StringUtils.format("packet.{}({});", FieldUtils.fieldToSetMethod(packetClazz, field), defaultReadObject));
-                    }
-                    builder.append("} else {");
                     var compatibleReadObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);
                     if (Modifier.isPublic(field.getModifiers())) {
                         builder.append(StringUtils.format("packet.{}={};", field.getName(), compatibleReadObject));
                     } else {
                         builder.append(StringUtils.format("packet.{}({});", FieldUtils.fieldToSetMethod(packetClazz, field), compatibleReadObject));
+                    }
+                    builder.append("} else {");
+                    var defaultReadObject = enhanceSerializer(fieldRegistration.serializer()).defaultValue(builder, field, fieldRegistration);
+                    if (Modifier.isPublic(field.getModifiers())) {
+                        builder.append(StringUtils.format("packet.{}={};", field.getName(), defaultReadObject));
+                    } else {
+                        builder.append(StringUtils.format("packet.{}({});", FieldUtils.fieldToSetMethod(packetClazz, field), defaultReadObject));
                     }
                     builder.append("}");
                     continue;

@@ -122,7 +122,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
 
                 // 协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
-                    if (ByteBufUtils.compatibleRead(byteBuf, beforeReadIndex, length)) {
+                    if (!ByteBufUtils.compatibleRead(byteBuf, beforeReadIndex, length)) {
                         constructorParams[index] = packetFieldRegistration.defaultValue();
                         continue;
                     }
@@ -140,7 +140,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
                 ISerializer serializer = packetFieldRegistration.serializer();
                 // 协议向后兼容
                 if (field.isAnnotationPresent(Compatible.class)) {
-                    if (ByteBufUtils.compatibleRead(byteBuf, beforeReadIndex, length)) {
+                    if (!ByteBufUtils.compatibleRead(byteBuf, beforeReadIndex, length)) {
                         ReflectionUtils.setField(field, object, packetFieldRegistration.defaultValue());
                         continue;
                     }

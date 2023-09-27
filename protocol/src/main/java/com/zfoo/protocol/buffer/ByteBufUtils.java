@@ -67,7 +67,7 @@ public abstract class ByteBufUtils {
     }
 
     public static boolean compatibleRead(ByteBuf byteBuf, int beforeReadIndex, int length) {
-        return length == -1 || byteBuf.readerIndex() >= length + beforeReadIndex;
+        return length != -1 && byteBuf.readerIndex() < length + beforeReadIndex;
     }
 
     //---------------------------------boolean--------------------------------------

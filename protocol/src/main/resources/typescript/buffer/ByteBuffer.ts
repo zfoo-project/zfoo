@@ -75,6 +75,10 @@ class ByteBuffer {
         }
     }
 
+    compatibleRead(beforeReadIndex: number, length: number): boolean {
+        return length !== -1 && this.getReadOffset() < length + beforeReadIndex;
+    }
+
     setWriteOffset(writeOffset: number): void {
         if (writeOffset > this.buffer.byteLength) {
             throw new Error('index out of bounds exception:readerIndex:' + this.readOffset +
