@@ -73,6 +73,6 @@ public class ListSerializer implements ISerializer {
     public int predictionLength(IFieldRegistration fieldRegistration) {
         ListField listField = (ListField) fieldRegistration;
         var length = listField.getListElementRegistration().serializer().predictionLength(listField.getListElementRegistration());
-        return 9 * length;
+        return 7 * length;
     }
 }

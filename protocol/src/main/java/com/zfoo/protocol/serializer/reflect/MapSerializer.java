@@ -81,6 +81,6 @@ public class MapSerializer implements ISerializer {
         var mapField = (MapField) fieldRegistration;
         var keyLength = mapField.getMapKeyRegistration().serializer().predictionLength(mapField.getMapKeyRegistration());
         var valueLength = mapField.getMapValueRegistration().serializer().predictionLength(mapField.getMapValueRegistration());
-        return 9 * (keyLength + valueLength);
+        return 7 * (keyLength + valueLength);
     }
 }

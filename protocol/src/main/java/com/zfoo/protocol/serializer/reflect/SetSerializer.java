@@ -75,7 +75,7 @@ public class SetSerializer implements ISerializer {
     public int predictionLength(IFieldRegistration fieldRegistration) {
         var setField = (SetField) fieldRegistration;
         var length = setField.getSetElementRegistration().serializer().predictionLength(setField.getSetElementRegistration());
-        return 9 * length;
+        return 7 * length;
     }
 
 }
