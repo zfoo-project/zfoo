@@ -1,6 +1,5 @@
 /* eslint-disable */
 // from https://github.com/dcodeIO/long.js/blob/master/src/long.js
-module.exports = Long;
 
 /**
  * wasm optimizations, to do native i64 multiplication and divide
@@ -1323,3 +1322,5 @@ Long.fromBytesBE = function fromBytesBE(bytes, unsigned) {
         unsigned
     );
 };
+
+export default Long;

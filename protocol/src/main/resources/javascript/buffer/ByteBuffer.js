@@ -354,18 +354,6 @@ const ByteBuffer = function() {
         return value;
     };
 
-    this.writeChar = function(value) {
-        if (value === null || value === undefined || value.length === 0) {
-            this.writeString(empty_str);
-            return;
-        }
-        this.writeString(value.charAt(0));
-    };
-
-    this.readChar = function() {
-        return this.readString();
-    };
-
     this.writeString = function(value) {
         if (value === null || value === undefined || value.trim().length === 0) {
             this.writeInt(0);
@@ -583,28 +571,6 @@ const ByteBuffer = function() {
         return array;
     };
 
-    this.writeCharArray = function(array) {
-        if (array === null) {
-            this.writeInt(0);
-        } else {
-            this.writeInt(array.length);
-            array.forEach(element => {
-                this.writeChar(element);
-            });
-        }
-    };
-
-    this.readCharArray = function() {
-        const array = [];
-        const length = this.readInt();
-        if (length > 0) {
-            for (let index = 0; index < length; index++) {
-                array.push(this.readChar());
-            }
-        }
-        return array;
-    };
-
     this.writePacketArray = function(array, protocolId) {
         if (array === null) {
             this.writeInt(0);
@@ -692,14 +658,6 @@ const ByteBuffer = function() {
 
     this.readStringList = function() {
         return this.readStringArray();
-    };
-
-    this.writeCharList = function(list) {
-        this.writeCharArray(list);
-    };
-
-    this.readCharList = function() {
-        return this.readCharArray();
     };
 
     this.writePacketList = function(list, protocolId) {
@@ -829,21 +787,6 @@ const ByteBuffer = function() {
 
     this.readStringSet = function() {
         return new Set(this.readStringArray());
-    };
-
-    this.writeCharSet = function(set) {
-        if (set === null) {
-            this.writeInt(0);
-        } else {
-            this.writeInt(set.size);
-            set.forEach(element => {
-                this.writeChar(element);
-            });
-        }
-    };
-
-    this.readCharSet = function() {
-        return new Set(this.readCharArray());
     };
 
     this.writePacketSet = function(set, protocolId) {
