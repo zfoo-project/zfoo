@@ -49,6 +49,32 @@ const ByteBuffer = function() {
     this.buffer = new ArrayBuffer(initSize);
     this.bufferView = new DataView(this.buffer, 0, this.buffer.byteLength);
 
+    this.adjustPadding = function(predictionLength, beforeWriteIndex) {
+        const currentWriteIndex = this.writeOffset;
+        const predictionCount = this.writeIntCount(predictionLength);
+        const length = currentWriteIndex - beforeWriteIndex - predictionCount;
+        const lengthCount = this.writeIntCount(length);
+        const padding = lengthCount - predictionCount;
+        if (padding === 0) {
+            this.setWriteOffset(beforeWriteIndex);
+            this.writeInt(length);
+            this.setWriteOffset(currentWriteIndex);
+        } else {
+            const retainedByteBuf = this.buffer.slice(currentWriteIndex - length, currentWriteIndex);
+            this.setWriteOffset(beforeWriteIndex);
+            this.writeInt(length);
+            this.writeBytes(retainedByteBuf);
+        }
+    }
+
+    this.compatibleRead = function(beforeReadIndex, length) {
+        return length !== -1 && this.getReadOffset() < length + beforeReadIndex;
+    }
+
+    this.getWriteOffset = function() {
+        return this.writeOffset;
+    }
+
     this.setWriteOffset = function(writeOffset) {
         if (writeOffset > this.buffer.byteLength) {
             throw new Error('index out of bounds exception: readerIndex: ' + this.readOffset +
@@ -57,6 +83,10 @@ const ByteBuffer = function() {
         }
         this.writeOffset = writeOffset;
     };
+
+    this.getReadOffset = function() {
+        return this.readOffset;
+    }
 
     this.setReadOffset = function(readOffset) {
         if (readOffset > this.writeOffset) {
@@ -200,6 +230,25 @@ const ByteBuffer = function() {
         this.writeByte((value >>> 21 | 0x80));
         this.writeByte(value >>> 28);
     };
+
+    this.writeIntCount = function(value) {
+        if (!(minInt <= value && value <= maxInt)) {
+            throw new Error('value must range between minInt:-2147483648 and maxInt:2147483647');
+        }
+        if (value >>> 7 === 0) {
+            return 1;
+        }
+        if (value >>> 14 === 0) {
+            return 2;
+        }
+        if (value >>> 21 === 0) {
+            return 3;
+        }
+        if (value >>> 28 === 0) {
+            return 4;
+        }
+        return 5;
+    }
 
     this.readInt = function() {
         let b = this.readByte();

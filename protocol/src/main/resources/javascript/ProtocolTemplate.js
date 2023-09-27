@@ -8,18 +8,24 @@ const {} = function({}) {
 };
 
 {}.write = function(buffer, packet) {
-    if (buffer.writePacketFlag(packet)) {
+    if (packet === null) {
+        buffer.writeInt(0);
         return;
     }
     {}
 };
 
 {}.read = function(buffer) {
-    if (!buffer.readBoolean()) {
+    const length = buffer.readInt();
+    if (length === 0) {
         return null;
     }
+    const beforeReadIndex = buffer.getReadOffset();
     const packet = new {}();
     {}
+    if (length > 0) {
+        buffer.setReadOffset(beforeReadIndex + length);
+    }
     return packet;
 };
 

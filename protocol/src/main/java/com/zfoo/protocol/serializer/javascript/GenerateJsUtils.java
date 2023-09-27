@@ -152,10 +152,19 @@ public abstract class GenerateJsUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var jsBuilder = new StringBuilder();
+        if (registration.isCompatible()) {
+            jsBuilder.append("const beforeWriteIndex = buffer.getWriteOffset();").append(LS);
+            jsBuilder.append(TAB).append(StringUtils.format("buffer.writeInt({});", registration.getPredictionLength())).append(LS);
+        } else {
+            jsBuilder.append(TAB).append("buffer.writeInt(-1);").append(LS);
+        }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             jsSerializer(fieldRegistration.serializer()).writeObject(jsBuilder, "packet." + field.getName(), 1, field, fieldRegistration);
+        }
+        if (registration.isCompatible()) {
+            jsBuilder.append(TAB).append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex);", registration.getPredictionLength())).append(LS);
         }
         return jsBuilder.toString();
     }
@@ -168,9 +177,11 @@ public abstract class GenerateJsUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                jsBuilder.append(TAB).append("if (!buffer.isReadable()) {").append(LS);
-                jsBuilder.append(TAB + TAB).append("return packet;").append(LS);
+                jsBuilder.append(TAB).append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
+                var compatibleReadObject = jsSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 2, field, fieldRegistration);
+                jsBuilder.append(TAB+ TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
                 jsBuilder.append(TAB).append("}").append(LS);
+                continue;
             }
             var readObject = jsSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 1, field, fieldRegistration);
             jsBuilder.append(TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
