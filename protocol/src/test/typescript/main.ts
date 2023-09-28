@@ -1,5 +1,5 @@
-import ByteBuffer from './zfoo/buffer/ByteBuffer';
-import ProtocolManager from './zfoo/ProtocolManager';
+import ByteBuffer from './zfoots/buffer/ByteBuffer';
+import ProtocolManager from './zfoots/ProtocolManager';
 import * as fs from "fs";
 function assert(flag: boolean): void {
     if (!flag) {
