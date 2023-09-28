@@ -55,7 +55,7 @@ public abstract class GenerateTsUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        // 如果没有配置路径，则使用默认路径
+        // if not specify output path, then use current default path
         if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
             protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         } else {
@@ -63,8 +63,6 @@ public abstract class GenerateTsUtils {
         }
 
         FileUtils.deleteFile(new File(protocolOutputPath));
-        var protocolOutputPathFile = FileUtils.createDirectory(protocolOutputPath);
-        protocolOutputRootPath = protocolOutputPathFile.getName();
 
         tsSerializerMap = new HashMap<>();
         tsSerializerMap.put(BooleanSerializer.INSTANCE, new TsBooleanSerializer());
@@ -84,6 +82,7 @@ public abstract class GenerateTsUtils {
 
     public static void clear() {
         protocolOutputRootPath = null;
+        protocolOutputPath = null;
         tsSerializerMap = null;
     }
 
