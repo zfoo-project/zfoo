@@ -87,7 +87,8 @@ public abstract class GenerateJsUtils {
         var list = List.of("javascript/buffer/ByteBuffer.js", "javascript/buffer/long.js", "javascript/buffer/longbits.js");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "javascript/")));
+            var outputPath = StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "javascript/"));
+            var createFile = new File(outputPath);
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
@@ -184,7 +185,7 @@ public abstract class GenerateJsUtils {
             if (field.isAnnotationPresent(Compatible.class)) {
                 jsBuilder.append(TAB).append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
                 var compatibleReadObject = jsSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 2, field, fieldRegistration);
-                jsBuilder.append(TAB+ TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
+                jsBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
                 jsBuilder.append(TAB).append("}").append(LS);
                 continue;
             }

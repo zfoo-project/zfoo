@@ -109,7 +109,8 @@ public abstract class GenerateTsUtils {
         }
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), initProtocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.ts")), protocolManagerTemplate, true);
+        var outputPath = StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.ts");
+        FileUtils.writeStringToFile(new File(outputPath), protocolManagerTemplate, true);
     }
 
     public static void createTsProtocolFile(ProtocolRegistration registration) throws IOException {
