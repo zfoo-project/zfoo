@@ -1,3 +1,4 @@
+from . import EmptyObject
 from . import VeryBigObject
 from . import ComplexObject
 from . import NormalObject
@@ -7,7 +8,8 @@ from . import SimpleObject
 
 protocols = {}
 
-protocols[0] = VeryBigObject.VeryBigObject
+protocols[0] = EmptyObject.EmptyObject
+protocols[1] = VeryBigObject.VeryBigObject
 protocols[100] = ComplexObject.ComplexObject
 protocols[101] = NormalObject.NormalObject
 protocols[102] = ObjectA.ObjectA

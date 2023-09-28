@@ -32,10 +32,6 @@ class ComplexObject:
     gg = False  # bool
     ggg = []  # bool[]
     gggg = []  # bool[]
-    h = ""  # char
-    hh = ""  # char
-    hhh = []  # char[]
-    hhhh = []  # char[]
     jj = ""  # string
     jjj = []  # string[]
     kk = None  # ObjectA
@@ -64,8 +60,11 @@ class ComplexObject:
 
     @classmethod
     def write(cls, buffer, packet):
-        if buffer.writePacketFlag(packet):
+        if packet is None:
+            buffer.writeInt(0)
             return
+        beforeWriteIndex = buffer.getWriteOffset()
+        buffer.writeInt(36962)
         buffer.writeByte(packet.a)
         buffer.writeByte(packet.aa)
         buffer.writeByteArray(packet.aaa)
@@ -94,10 +93,6 @@ class ComplexObject:
         buffer.writeBool(packet.gg)
         buffer.writeBooleanArray(packet.ggg)
         buffer.writeBooleanArray(packet.gggg)
-        buffer.writeChar(packet.h)
-        buffer.writeChar(packet.hh)
-        buffer.writeCharArray(packet.hhh)
-        buffer.writeCharArray(packet.hhhh)
         buffer.writeString(packet.jj)
         buffer.writeStringArray(packet.jjj)
         buffer.writePacket(packet.kk, 102)
@@ -205,12 +200,15 @@ class ComplexObject:
                 buffer.writeIntStringMap(element18)
         buffer.writeInt(packet.myCompatible)
         buffer.writePacket(packet.myObject, 102)
+        buffer.adjustPadding(36962, beforeWriteIndex)
         pass
 
     @classmethod
     def read(cls, buffer):
-        if not buffer.readBool():
+        length = buffer.readInt()
+        if length == 0:
             return None
+        beforeReadIndex = buffer.getReadOffset()
         packet = ComplexObject()
         result19 = buffer.readByte()
         packet.a = result19
@@ -268,144 +266,134 @@ class ComplexObject:
         packet.ggg = array45
         array46 = buffer.readBooleanArray()
         packet.gggg = array46
-        result47 = buffer.readChar()
-        packet.h = result47
-        result48 = buffer.readChar()
-        packet.hh = result48
-        array49 = buffer.readCharArray()
-        packet.hhh = array49
-        array50 = buffer.readCharArray()
-        packet.hhhh = array50
-        result51 = buffer.readString()
-        packet.jj = result51
-        array52 = buffer.readStringArray()
-        packet.jjj = array52
-        result53 = buffer.readPacket(102)
-        packet.kk = result53
-        array54 = buffer.readPacketArray(102)
-        packet.kkk = array54
-        list55 = buffer.readIntArray()
-        packet.l = list55
-        result56 = []
-        size58 = buffer.readInt()
-        if size58 > 0:
-            for index57 in range(size58):
-                result59 = []
-                size61 = buffer.readInt()
-                if size61 > 0:
-                    for index60 in range(size61):
-                        list62 = buffer.readIntArray()
-                        result59.append(list62)
-                result56.append(result59)
-        packet.ll = result56
-        result63 = []
-        size65 = buffer.readInt()
-        if size65 > 0:
-            for index64 in range(size65):
-                list66 = buffer.readPacketArray(102)
-                result63.append(list66)
-        packet.lll = result63
-        list67 = buffer.readStringArray()
-        packet.llll = list67
-        result68 = []
-        size70 = buffer.readInt()
-        if size70 > 0:
-            for index69 in range(size70):
-                map71 = buffer.readIntStringMap()
-                result68.append(map71)
-        packet.lllll = result68
-        map72 = buffer.readIntStringMap()
-        packet.m = map72
-        map73 = buffer.readIntPacketMap(102)
-        packet.mm = map73
-        result74 = {}
-        size75 = buffer.readInt()
-        if size75 > 0:
-            for index76 in range(size75):
-                result77 = buffer.readPacket(102)
-                list78 = buffer.readIntArray()
-                result74[result77] = list78
-        packet.mmm = result74
-        result79 = {}
-        size80 = buffer.readInt()
-        if size80 > 0:
-            for index81 in range(size80):
+        result47 = buffer.readString()
+        packet.jj = result47
+        array48 = buffer.readStringArray()
+        packet.jjj = array48
+        result49 = buffer.readPacket(102)
+        packet.kk = result49
+        array50 = buffer.readPacketArray(102)
+        packet.kkk = array50
+        list51 = buffer.readIntArray()
+        packet.l = list51
+        result52 = []
+        size54 = buffer.readInt()
+        if size54 > 0:
+            for index53 in range(size54):
+                result55 = []
+                size57 = buffer.readInt()
+                if size57 > 0:
+                    for index56 in range(size57):
+                        list58 = buffer.readIntArray()
+                        result55.append(list58)
+                result52.append(result55)
+        packet.ll = result52
+        result59 = []
+        size61 = buffer.readInt()
+        if size61 > 0:
+            for index60 in range(size61):
+                list62 = buffer.readPacketArray(102)
+                result59.append(list62)
+        packet.lll = result59
+        list63 = buffer.readStringArray()
+        packet.llll = list63
+        result64 = []
+        size66 = buffer.readInt()
+        if size66 > 0:
+            for index65 in range(size66):
+                map67 = buffer.readIntStringMap()
+                result64.append(map67)
+        packet.lllll = result64
+        map68 = buffer.readIntStringMap()
+        packet.m = map68
+        map69 = buffer.readIntPacketMap(102)
+        packet.mm = map69
+        result70 = {}
+        size71 = buffer.readInt()
+        if size71 > 0:
+            for index72 in range(size71):
+                result73 = buffer.readPacket(102)
+                list74 = buffer.readIntArray()
+                result70[result73] = list74
+        packet.mmm = result70
+        result75 = {}
+        size76 = buffer.readInt()
+        if size76 > 0:
+            for index77 in range(size76):
+                result78 = []
+                size80 = buffer.readInt()
+                if size80 > 0:
+                    for index79 in range(size80):
+                        list81 = buffer.readPacketArray(102)
+                        result78.append(list81)
                 result82 = []
                 size84 = buffer.readInt()
                 if size84 > 0:
                     for index83 in range(size84):
-                        list85 = buffer.readPacketArray(102)
-                        result82.append(list85)
-                result86 = []
-                size88 = buffer.readInt()
-                if size88 > 0:
-                    for index87 in range(size88):
-                        result89 = []
-                        size91 = buffer.readInt()
-                        if size91 > 0:
-                            for index90 in range(size91):
-                                list92 = buffer.readIntArray()
-                                result89.append(list92)
-                        result86.append(result89)
-                result79[result82] = result86
-        packet.mmmm = result79
-        result93 = {}
-        size94 = buffer.readInt()
-        if size94 > 0:
-            for index95 in range(size94):
+                        result85 = []
+                        size87 = buffer.readInt()
+                        if size87 > 0:
+                            for index86 in range(size87):
+                                list88 = buffer.readIntArray()
+                                result85.append(list88)
+                        result82.append(result85)
+                result75[result78] = result82
+        packet.mmmm = result75
+        result89 = {}
+        size90 = buffer.readInt()
+        if size90 > 0:
+            for index91 in range(size90):
+                result92 = []
+                size94 = buffer.readInt()
+                if size94 > 0:
+                    for index93 in range(size94):
+                        map95 = buffer.readIntStringMap()
+                        result92.append(map95)
                 result96 = []
                 size98 = buffer.readInt()
                 if size98 > 0:
                     for index97 in range(size98):
                         map99 = buffer.readIntStringMap()
                         result96.append(map99)
-                result100 = []
-                size102 = buffer.readInt()
-                if size102 > 0:
-                    for index101 in range(size102):
-                        map103 = buffer.readIntStringMap()
-                        result100.append(map103)
-                result93[result96] = result100
-        packet.mmmmm = result93
-        set104 = buffer.readIntSet()
-        packet.s = set104
-        result105 = []
-        size107 = buffer.readInt()
-        if size107 > 0:
-            for index106 in range(size107):
-                result108 = []
-                size110 = buffer.readInt()
-                if size110 > 0:
-                    for index109 in range(size110):
-                        list111 = buffer.readIntArray()
-                        result108.append(list111)
-                result105.append(result108)
-        packet.ss = result105
-        result112 = []
-        size114 = buffer.readInt()
-        if size114 > 0:
-            for index113 in range(size114):
-                set115 = buffer.readPacketSet(102)
-                result112.append(set115)
-        packet.sss = result112
-        set116 = buffer.readStringSet()
-        packet.ssss = set116
-        result117 = []
-        size119 = buffer.readInt()
-        if size119 > 0:
-            for index118 in range(size119):
-                map120 = buffer.readIntStringMap()
-                result117.append(map120)
-        packet.sssss = result117
-        if not buffer.isReadable():
-            return packet
-        pass
-        result121 = buffer.readInt()
-        packet.myCompatible = result121
-        if not buffer.isReadable():
-            return packet
-        pass
-        result122 = buffer.readPacket(102)
-        packet.myObject = result122
+                result89[result92] = result96
+        packet.mmmmm = result89
+        set100 = buffer.readIntSet()
+        packet.s = set100
+        result101 = []
+        size103 = buffer.readInt()
+        if size103 > 0:
+            for index102 in range(size103):
+                result104 = []
+                size106 = buffer.readInt()
+                if size106 > 0:
+                    for index105 in range(size106):
+                        list107 = buffer.readIntArray()
+                        result104.append(list107)
+                result101.append(result104)
+        packet.ss = result101
+        result108 = []
+        size110 = buffer.readInt()
+        if size110 > 0:
+            for index109 in range(size110):
+                set111 = buffer.readPacketSet(102)
+                result108.append(set111)
+        packet.sss = result108
+        set112 = buffer.readStringSet()
+        packet.ssss = set112
+        result113 = []
+        size115 = buffer.readInt()
+        if size115 > 0:
+            for index114 in range(size115):
+                map116 = buffer.readIntStringMap()
+                result113.append(map116)
+        packet.sssss = result113
+        if buffer.compatibleRead(beforeReadIndex, length):
+            result117 = buffer.readInt()
+            packet.myCompatible = result117
+        if buffer.compatibleRead(beforeReadIndex, length):
+            result118 = buffer.readPacket(102)
+            packet.myObject = result118
+        if length > 0:
+            buffer.setReadOffset(beforeReadIndex + length)
         return packet
 

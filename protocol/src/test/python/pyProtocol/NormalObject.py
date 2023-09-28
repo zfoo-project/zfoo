@@ -19,14 +19,19 @@ class NormalObject:
     mm = {}  # Dictionary<int, ObjectA>
     s = {}  # HashSet<int>
     ssss = {}  # HashSet<string>
+    outCompatibleValue = 0  # int
+    outCompatibleValue2 = 0  # int
 
     def protocolId(self):
         return 101
 
     @classmethod
     def write(cls, buffer, packet):
-        if buffer.writePacketFlag(packet):
+        if packet is None:
+            buffer.writeInt(0)
             return
+        beforeWriteIndex = buffer.getWriteOffset()
+        buffer.writeInt(857)
         buffer.writeByte(packet.a)
         buffer.writeByteArray(packet.aaa)
         buffer.writeShort(packet.b)
@@ -45,12 +50,17 @@ class NormalObject:
         buffer.writeIntPacketMap(packet.mm, 102)
         buffer.writeIntSet(packet.s)
         buffer.writeStringSet(packet.ssss)
+        buffer.writeInt(packet.outCompatibleValue)
+        buffer.writeInt(packet.outCompatibleValue2)
+        buffer.adjustPadding(857, beforeWriteIndex)
         pass
 
     @classmethod
     def read(cls, buffer):
-        if not buffer.readBool():
+        length = buffer.readInt()
+        if length == 0:
             return None
+        beforeReadIndex = buffer.getReadOffset()
         packet = NormalObject()
         result0 = buffer.readByte()
         packet.a = result0
@@ -88,5 +98,13 @@ class NormalObject:
         packet.s = set16
         set17 = buffer.readStringSet()
         packet.ssss = set17
+        if buffer.compatibleRead(beforeReadIndex, length):
+            result18 = buffer.readInt()
+            packet.outCompatibleValue = result18
+        if buffer.compatibleRead(beforeReadIndex, length):
+            result19 = buffer.readInt()
+            packet.outCompatibleValue2 = result19
+        if length > 0:
+            buffer.setReadOffset(beforeReadIndex + length)
         return packet
 

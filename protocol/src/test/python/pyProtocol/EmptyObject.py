@@ -1,11 +1,10 @@
 
-class SimpleObject:
+class EmptyObject:
 
-    c = 0  # int
-    g = False  # bool
+    
 
     def protocolId(self):
-        return 104
+        return 0
 
     @classmethod
     def write(cls, buffer, packet):
@@ -13,8 +12,6 @@ class SimpleObject:
             buffer.writeInt(0)
             return
         buffer.writeInt(-1)
-        buffer.writeInt(packet.c)
-        buffer.writeBool(packet.g)
         pass
 
     @classmethod
@@ -23,11 +20,8 @@ class SimpleObject:
         if length == 0:
             return None
         beforeReadIndex = buffer.getReadOffset()
-        packet = SimpleObject()
-        result0 = buffer.readInt()
-        packet.c = result0
-        result1 = buffer.readBool() 
-        packet.g = result1
+        packet = EmptyObject()
+        
         if length > 0:
             buffer.setReadOffset(beforeReadIndex + length)
         return packet
