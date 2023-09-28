@@ -27,6 +27,7 @@ import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
+import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
@@ -169,13 +170,9 @@ public abstract class GenerateGdUtils {
             var fieldType = gdSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
             // 生成类型的注释
             gdBuilder.append(StringUtils.format("var {}: {}", fieldName, fieldType));
-            if (fieldRegistration instanceof MapField) {
-                var mapField = (MapField) fieldRegistration;
-                var mapKeyRegistration = mapField.getMapKeyRegistration();
-                var keyType = gdSerializer(mapKeyRegistration.serializer()).fieldType(field, mapKeyRegistration);
-                var mapValueRegistration = mapField.getMapValueRegistration();
-                var valueType = gdSerializer(mapValueRegistration.serializer()).fieldType(field, mapValueRegistration);
-                gdBuilder.append(StringUtils.format(" # Dictionary<{}, {}>", keyType, valueType));
+            if (fieldType.equals("Dictionary") || fieldType.equals("Array")) {
+                var typeNote = GenerateTsUtils.toTsClassName(field.getGenericType().toString());
+                gdBuilder.append(StringUtils.format(TAB_ASCII  + "# {}", typeNote));
             }
             gdBuilder.append(LS);
         }
