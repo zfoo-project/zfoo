@@ -32,7 +32,7 @@ class ByteBuffer():
         pass
 
     def compatibleRead(self, beforeReadIndex, length):
-        return length != -1 && self.getReadOffset() < length + beforeReadIndex
+        return length != -1 and self.getReadOffset() < length + beforeReadIndex
 
     def getWriteOffset(self):
         return self.writeOffset

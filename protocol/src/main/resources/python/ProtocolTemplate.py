@@ -8,16 +8,21 @@ class {}:
 
     @classmethod
     def write(cls, buffer, packet):
-        if buffer.writePacketFlag(packet):
+        if packet is None:
+            buffer.writeInt(0)
             return
         {}
         pass
 
     @classmethod
     def read(cls, buffer):
-        if not buffer.readBool():
+        length = buffer.readInt()
+        if length == 0:
             return None
+        beforeReadIndex = buffer.getReadOffset()
         packet = {}()
         {}
+        if length > 0:
+            buffer.setReadOffset(beforeReadIndex + length)
         return packet
 

@@ -153,10 +153,19 @@ public abstract class GeneratePyUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var pyBuilder = new StringBuilder();
+        if (registration.isCompatible()) {
+            pyBuilder.append("beforeWriteIndex = buffer.getWriteOffset()").append(LS);
+            pyBuilder.append(TAB + TAB).append(StringUtils.format("buffer.writeInt({})", registration.getPredictionLength())).append(LS);
+        } else {
+            pyBuilder.append(TAB + TAB).append("buffer.writeInt(-1)").append(LS);
+        }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             pySerializer(fieldRegistration.serializer()).writeObject(pyBuilder, "packet." + field.getName(), 2, field, fieldRegistration);
+        }
+        if (registration.isCompatible()) {
+            pyBuilder.append(TAB + TAB).append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex)", registration.getPredictionLength())).append(LS);
         }
         return pyBuilder.toString();
     }
@@ -169,9 +178,10 @@ public abstract class GeneratePyUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                pyBuilder.append(TAB + TAB).append("if not buffer.isReadable():").append(LS);
-                pyBuilder.append(TAB + TAB + TAB).append("return packet").append(LS);
-                pyBuilder.append(TAB + TAB).append("pass").append(LS);
+                pyBuilder.append(TAB + TAB).append("if buffer.compatibleRead(beforeReadIndex, length):").append(LS);
+                var compatibleReadObject = pySerializer(fieldRegistration.serializer()).readObject(pyBuilder, 3, field, fieldRegistration);
+                pyBuilder.append(TAB + TAB+ TAB).append(StringUtils.format("packet.{} = {}", field.getName(), compatibleReadObject)).append(LS);
+                continue;
             }
             var readObject = pySerializer(fieldRegistration.serializer()).readObject(pyBuilder, 2, field, fieldRegistration);
             pyBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);
