@@ -14,12 +14,39 @@ class ByteBuffer():
     readOffset = 0
     buffer = bytearray(256)
 
+    def adjustPadding(self, predictionLength, beforeWriteIndex):
+        currentWriteIndex = self.writeOffset
+        predictionCount = self.writeIntCount(predictionLength)
+        length = currentWriteIndex - beforeWriteIndex - predictionCount
+        lengthCount = self.writeIntCount(length)
+        padding = lengthCount - predictionCount
+        if (padding == 0):
+            self.setWriteOffset(beforeWriteIndex)
+            self.writeInt(length)
+            self.setWriteOffset(currentWriteIndex)
+        else:
+            retainedByteBuf = self.buffer[(currentWriteIndex - length):currentWriteIndex]
+            self.setWriteOffset(beforeWriteIndex)
+            self.writeInt(length)
+            self.writeBytes(retainedByteBuf)
+        pass
+
+    def compatibleRead(self, beforeReadIndex, length):
+        return length != -1 && self.getReadOffset() < length + beforeReadIndex
+
+    def getWriteOffset(self):
+        return self.writeOffset
+
     def setWriteOffset(self, writeOffset):
         if writeOffset > len(self.buffer):
             raise ValueError("index out of bounds exception:readerIndex:" + str(self.readOffset) +
                              ", writerIndex:" + str(self.writeOffset) +
                              "(expected:0 <= readerIndex <= writerIndex <= capacity:" + str(len(self.buffer)))
         self.writeOffset = writeOffset
+        pass
+
+    def getReadOffset(self):
+        return self.readOffset
 
     def setReadOffset(self, readOffset):
         if readOffset > self.writeOffset:
@@ -27,6 +54,7 @@ class ByteBuffer():
                              ", writerIndex:" + str(self.writeOffset) +
                              "(expected:0 <= readerIndex <= writerIndex <= capacity:" + str(len(self.buffer)))
         self.readOffset = readOffset
+        pass
 
     def isReadable(self):
         return self.writeOffset > self.readOffset
@@ -57,6 +85,7 @@ class ByteBuffer():
             self.writeByte(1)
         else:
             self.writeByte(0)
+        pass
 
     def readBool(self):
         if self.readByte():
@@ -68,6 +97,7 @@ class ByteBuffer():
         self.ensureCapacity(1)
         struct.pack_into('>b', self.buffer, self.writeOffset, value)
         self.writeOffset += 1
+        pass
 
     def readByte(self):
         value = struct.unpack_from('>b', self.buffer, self.readOffset)[0]
@@ -79,11 +109,13 @@ class ByteBuffer():
         self.ensureCapacity(length)
         self.buffer[self.writeOffset:length] = value[:]
         self.writeOffset += length
+        pass
 
     def writeUByte(self, value):
         self.ensureCapacity(1)
         struct.pack_into('>B', self.buffer, self.writeOffset, value)
         self.writeOffset += 1
+        pass
 
     def readUByte(self):
         value = struct.unpack_from('>B', self.buffer, self.readOffset)[0]
@@ -94,6 +126,7 @@ class ByteBuffer():
         self.ensureCapacity(2)
         struct.pack_into('>h', self.buffer, self.writeOffset, value)
         self.writeOffset += 2
+        pass
 
     def readShort(self):
         value = struct.unpack_from('>h', self.buffer, self.readOffset)[0]
@@ -104,6 +137,7 @@ class ByteBuffer():
         self.ensureCapacity(4)
         struct.pack_into('>i', self.buffer, self.writeOffset, value)
         self.writeOffset += 4
+        pass
 
     def readRawInt(self):
         value = struct.unpack_from('>i', self.buffer, self.readOffset)[0]
@@ -143,6 +177,20 @@ class ByteBuffer():
         self.writeUByte(((value >> 21) & 0x7F | 0x80))
         self.writeUByte((value >> 28) & 0x7F)
         pass
+
+    def writeIntCount(self, value):
+        if not (minInt <= value <= maxInt):
+            raise ValueError('value must range between minInt:-2147483648 and maxInt:2147483647')
+        value = (value << 1) ^ (value >> 31)
+        if value >> 7 == 0:
+            return 1
+        if value >> 14 == 0:
+            return 2
+        if value >> 21 == 0:
+            return 3
+        if value >> 28 == 0:
+            return 4
+        return 5
 
     def readInt(self):
         b = self.readUByte()
@@ -265,6 +313,7 @@ class ByteBuffer():
         self.ensureCapacity(4)
         struct.pack_into('>f', self.buffer, self.writeOffset, value)
         self.writeOffset += 4
+        pass
 
     def readFloat(self):
         value = struct.unpack_from('>f', self.buffer, self.readOffset)[0]
@@ -275,20 +324,12 @@ class ByteBuffer():
         self.ensureCapacity(8)
         struct.pack_into('>d', self.buffer, self.writeOffset, value)
         self.writeOffset += 8
+        pass
 
     def readDouble(self):
         value = struct.unpack_from('>d', self.buffer, self.readOffset)[0]
         self.readOffset += 8
         return value
-
-    def writeChar(self, value):
-        if len(value) == 0:
-            self.writeInt(0)
-            return
-        self.writeString(value[0])
-
-    def readChar(self):
-        return self.readString()
 
     def writeString(self, value):
         if len(value) == 0:
@@ -300,6 +341,7 @@ class ByteBuffer():
         self.writeInt(length)
         self.buffer[self.writeOffset:self.writeOffset + length] = byte_array[:]
         self.writeOffset += length
+        pass
 
     def readString(self):
         length = self.readInt()
@@ -321,6 +363,7 @@ class ByteBuffer():
     def writePacket(self, packet, protocolId):
         protocolRegistration = ProtocolManager.getProtocol(protocolId)
         protocolRegistration.write(self, packet)
+        pass
 
     def readPacket(self, protocolId):
         protocolRegistration = ProtocolManager.getProtocol(protocolId)
@@ -443,23 +486,6 @@ class ByteBuffer():
         if size > 0:
             for index in range(size):
                 array.append(self.readDouble())
-        return array
-
-    def writeCharArray(self, array):
-        if array is None:
-            self.writeInt(0)
-        else:
-            self.writeInt(len(array))
-            for element in array:
-                self.writeChar(element)
-        pass
-
-    def readCharArray(self):
-        array = []
-        size = self.readInt()
-        if size > 0:
-            for index in range(size):
-                array.append(self.readChar())
         return array
 
     def writeStringArray(self, array):
@@ -853,23 +879,6 @@ class ByteBuffer():
         if size > 0:
             for index in range(size):
                 value.add(self.readDouble())
-        return value
-
-    def writeCharSet(self, value):
-        if value is None:
-            self.writeInt(0)
-        else:
-            self.writeInt(len(value))
-            for element in value:
-                self.writeChar(element)
-        pass
-
-    def readCharValue(self):
-        value = set()
-        size = self.readInt()
-        if size > 0:
-            for index in range(size):
-                value.add(self.readChar())
         return value
 
     def writeStringSet(self, value):
