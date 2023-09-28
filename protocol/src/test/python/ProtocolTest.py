@@ -3,8 +3,8 @@
 from unittest import TestCase
 import struct
 
-from pyProtocol import ProtocolManager
-from pyProtocol import ByteBuffer
+from zfoopy import ProtocolManager
+from zfoopy import ByteBuffer
 
 def print_bytearray(array):
     signed_byte_array = struct.unpack('b' * len(array), array)
