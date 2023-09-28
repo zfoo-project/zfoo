@@ -130,8 +130,8 @@ public abstract class GenerateTsUtils {
 
         protocolTemplate = StringUtils.format(protocolTemplate, importSubProtocol, classNote, protocolClazzName, fieldDefinition.trim()
                 , protocolId, protocolClazzName, protocolClazzName, writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}/{}.ts", protocolOutputPath
-                , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName)), protocolTemplate, true);
+        var outputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
+        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
     }
 
     private static String importSubProtocol(ProtocolRegistration registration) {

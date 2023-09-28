@@ -126,9 +126,8 @@ public abstract class GenerateJsUtils {
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName
                 , fieldDefinition.trim(), protocolClazzName, protocolId, protocolClazzName
                 , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
-        var protocolOutputPath = StringUtils.format("{}/{}/{}.js", protocolOutputRootPath
-                , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
+        var outputPath = StringUtils.format("{}/{}/{}.js", protocolOutputRootPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
+        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
     }
 
     private static String fieldDefinition(ProtocolRegistration registration) {
