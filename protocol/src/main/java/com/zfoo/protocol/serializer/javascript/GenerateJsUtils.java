@@ -42,7 +42,8 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateJsUtils {
 
-    private static String protocolOutputRootPath = "jsProtocol/";
+    private static String protocolOutputRootPath = "zfoojs";
+    private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, IJsSerializer> jsSerializerMap;
 
@@ -52,10 +53,13 @@ public abstract class GenerateJsUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
-
-        FileUtils.deleteFile(new File(protocolOutputRootPath));
-        FileUtils.createDirectory(protocolOutputRootPath);
+        // if not specify output path, then use current default path
+        if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
+            protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+        } else {
+            protocolOutputPath = generateOperation.getProtocolPath();
+        }
+        FileUtils.deleteFile(new File(protocolOutputPath));
 
         jsSerializerMap = new HashMap<>();
         jsSerializerMap.put(BooleanSerializer.INSTANCE, new JsBooleanSerializer());
@@ -74,8 +78,9 @@ public abstract class GenerateJsUtils {
     }
 
     public static void clear() {
-        jsSerializerMap = null;
         protocolOutputRootPath = null;
+        protocolOutputPath = null;
+        jsSerializerMap = null;
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
