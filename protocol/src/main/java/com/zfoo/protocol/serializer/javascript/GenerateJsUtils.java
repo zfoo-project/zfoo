@@ -87,7 +87,7 @@ public abstract class GenerateJsUtils {
         var list = List.of("javascript/buffer/ByteBuffer.js", "javascript/buffer/long.js", "javascript/buffer/longbits.js");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var outputPath = StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "javascript/"));
+            var outputPath = StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "javascript/"));
             var createFile = new File(outputPath);
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
@@ -106,7 +106,7 @@ public abstract class GenerateJsUtils {
         }
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), StringUtils.EMPTY_JSON, initProtocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.js")), protocolManagerTemplate, true);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.js")), protocolManagerTemplate, true);
     }
 
     public static void createJsProtocolFile(ProtocolRegistration registration) throws IOException {
@@ -127,7 +127,7 @@ public abstract class GenerateJsUtils {
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName
                 , fieldDefinition.trim(), protocolClazzName, protocolId, protocolClazzName
                 , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
-        var outputPath = StringUtils.format("{}/{}/{}.js", protocolOutputRootPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
+        var outputPath = StringUtils.format("{}/{}/{}.js", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
     }
 
