@@ -43,7 +43,9 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GeneratePyUtils {
 
-    private static String protocolOutputRootPath = "pyProtocol/";
+    // custom configuration
+    public static String protocolOutputRootPath = "zfoopy";
+    public static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, IPySerializer> pySerializerMap;
 
@@ -53,10 +55,13 @@ public abstract class GeneratePyUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
-
-        FileUtils.deleteFile(new File(protocolOutputRootPath));
-        FileUtils.createDirectory(protocolOutputRootPath);
+        // if not specify output path, then use current default path
+        if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
+            protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+        } else {
+            protocolOutputPath = generateOperation.getProtocolPath();
+        }
+        FileUtils.deleteFile(new File(protocolOutputPath));
 
         pySerializerMap = new HashMap<>();
         pySerializerMap.put(BooleanSerializer.INSTANCE, new PyBooleanSerializer());
@@ -75,15 +80,17 @@ public abstract class GeneratePyUtils {
     }
 
     public static void clear() {
-        pySerializerMap = null;
+        protocolOutputPath = null;
         protocolOutputRootPath = null;
+        pySerializerMap = null;
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
         var list = List.of("python/ByteBuffer.py");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "python/")));
+            var outputPath = StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "python/"));
+            var createFile = new File(outputPath);
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
@@ -100,7 +107,8 @@ public abstract class GeneratePyUtils {
         }
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), StringUtils.EMPTY_JSON, initProtocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.py")), protocolManagerTemplate, true);
+        var outputPath = StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.py");
+        FileUtils.writeStringToFile(new File(outputPath), protocolManagerTemplate, true);
     }
 
     public static void createPyProtocolFile(ProtocolRegistration registration) {
@@ -119,9 +127,8 @@ public abstract class GeneratePyUtils {
 
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName
                 , fieldDefinition.trim(), protocolId, writeObject.trim(), protocolClazzName, readObject.trim());
-        var protocolOutputPath = StringUtils.format("{}/{}/{}.py", protocolOutputRootPath
-                , GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
+        var outputPath = StringUtils.format("{}/{}/{}.py", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
+        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
     }
 
     private static String fieldDefinition(ProtocolRegistration registration) {

@@ -42,8 +42,9 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateJsUtils {
 
-    private static String protocolOutputRootPath = "zfoojs";
-    private static String protocolOutputPath = StringUtils.EMPTY;
+    // custom configuration
+    public static String protocolOutputRootPath = "zfoojs";
+    public static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, IJsSerializer> jsSerializerMap;
 

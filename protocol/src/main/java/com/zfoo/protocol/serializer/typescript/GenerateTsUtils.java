@@ -45,8 +45,9 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateTsUtils {
 
-    private static String protocolOutputRootPath = "zfoots";
-    private static String protocolOutputPath = StringUtils.EMPTY;
+    // custom configuration
+    public static String protocolOutputRootPath = "zfoots";
+    public static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, ITsSerializer> tsSerializerMap;
 
@@ -61,7 +62,6 @@ public abstract class GenerateTsUtils {
         } else {
             protocolOutputPath = generateOperation.getProtocolPath();
         }
-
         FileUtils.deleteFile(new File(protocolOutputPath));
 
         tsSerializerMap = new HashMap<>();
