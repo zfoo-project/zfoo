@@ -45,7 +45,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateTsUtils {
 
-    private static String protocolOutputRootPath = "tsProtocol";
+    private static String protocolOutputRootPath = "zfoots";
     private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, ITsSerializer> tsSerializerMap;
