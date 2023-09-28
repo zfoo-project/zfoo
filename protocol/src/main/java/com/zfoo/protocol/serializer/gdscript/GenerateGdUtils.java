@@ -48,8 +48,9 @@ import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
  */
 public abstract class GenerateGdUtils {
 
-    private static String protocolOutputRootPath = "gdProtocol";
-    private static String protocolOutputPath = StringUtils.EMPTY;
+    // custom configuration
+    public static String protocolOutputRootPath = "zfoogd";
+    public static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, IGdSerializer> gdSerializerMap;
 
@@ -58,16 +59,13 @@ public abstract class GenerateGdUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        // 如果没有配置路径，则使用默认路径
+        // if not specify output path, then use current default path
         if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
             protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         } else {
             protocolOutputPath = generateOperation.getProtocolPath();
         }
-
         FileUtils.deleteFile(new File(protocolOutputPath));
-        var protocolOutputPathFile = FileUtils.createDirectory(protocolOutputPath);
-        protocolOutputRootPath = protocolOutputPathFile.getName();
 
         gdSerializerMap = new HashMap<>();
         gdSerializerMap.put(BooleanSerializer.INSTANCE, new GdBooleanSerializer());
