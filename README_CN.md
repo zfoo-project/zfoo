@@ -12,15 +12,12 @@
 
 完善的工作开发流程，完整的线上解决方案
 
-- 普通java项目，spring项目，分布式项目，容器项目， **不停机完美热更新代码
-  ** [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
-- Excel json csv配置自动映射和解析，**在线不停机热更新Excel配置
-  ** [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
+- 普通java项目，spring项目，分布式项目，容器项目， **不停机完美热更新代码** [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java)
+- Excel json csv配置自动映射和解析，**在线不停机热更新Excel配置** [storage](storage/src/test/java/com/zfoo/storage/ApplicationTest.java)
 - MongoDB的自动映射框架 [orm](orm/README.md)
 - 事件总线 [event](event/src/test/java/com/zfoo/event/ApplicationTest.java)
 - 时间任务调度 [scheduler](scheduler/README.md)
-- 内置在程序里的**轻量级cpu，内存，硬盘，网络监控，**
-  无需代码和额外工具，解放运维生产力 [monitor](monitor/src/test/java/com/zfoo/monitor/ApplicationTest.java)
+- 内置在程序里的**轻量级cpu，内存，硬盘，网络监控，** 无需代码和额外工具，解放运维生产力 [monitor](monitor/src/test/java/com/zfoo/monitor/ApplicationTest.java)
 
 Ⅱ. 背景和适用项目
 ---------------
