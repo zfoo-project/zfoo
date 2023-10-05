@@ -186,7 +186,7 @@ public abstract class GenerateGdUtils {
             var field = sequencedFields.get(i);
             IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            gdBuilder.append(TAB_ASCII).append(StringUtils.format("map[\"{}\"] = {}", fieldName, fieldName));
+            gdBuilder.append(TAB_ASCII).append(StringUtils.format("m[\"{}\"] = {}", fieldName, fieldName));
             if (i != sequencedFields.size() - 1) {
                 gdBuilder.append(LS);
             }

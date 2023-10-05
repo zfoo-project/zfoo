@@ -4,13 +4,10 @@ const PROTOCOL_CLASS_NAME = "{}"
 {}
 {}
 
-func map() -> Dictionary:
-	var map = {}
-{}
-	return map
-
 func _to_string() -> String:
-	return JSON.stringify(map())
+	var m = {}
+{}
+	return JSON.stringify(m)
 
 static func write(buffer, packet):
 	if (buffer.writePacketFlag(packet)):
