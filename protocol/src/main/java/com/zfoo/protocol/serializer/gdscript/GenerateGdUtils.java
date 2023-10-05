@@ -95,7 +95,6 @@ public abstract class GenerateGdUtils {
         FileUtils.writeStringToFile(byteBufferFile, StringUtils.format(byteBufferTemplate, protocolOutputRootPath), false);
 
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("gdscript/ProtocolManagerTemplate.gd");
-        // 生成ProtocolManager.gd文件
         var importBuilder = new StringBuilder();
         var initList = new ArrayList<String>();
         for (var protocol : protocolList) {
@@ -170,7 +169,7 @@ public abstract class GenerateGdUtils {
             gdBuilder.append(StringUtils.format("var {}: {}", fieldName, fieldType));
             if (fieldType.equals("Dictionary") || fieldType.equals("Array")) {
                 var typeNote = GenerateTsUtils.toTsClassName(field.getGenericType().toString());
-                gdBuilder.append(StringUtils.format(TAB_ASCII  + "# {}", typeNote));
+                gdBuilder.append(StringUtils.format(TAB_ASCII + "# {}", typeNote));
             }
             gdBuilder.append(LS);
         }
@@ -198,10 +197,19 @@ public abstract class GenerateGdUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var gdBuilder = new StringBuilder();
+        if (registration.isCompatible()) {
+            gdBuilder.append("var beforeWriteIndex = buffer.getWriteOffset()").append(LS);
+            gdBuilder.append(TAB_ASCII).append(StringUtils.format("buffer.writeInt({})", registration.getPredictionLength())).append(LS);
+        } else {
+            gdBuilder.append(TAB_ASCII).append("buffer.writeInt(-1)").append(LS);
+        }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             gdSerializer(fieldRegistration.serializer()).writeObject(gdBuilder, "packet." + field.getName(), 1, field, fieldRegistration);
+        }
+        if (registration.isCompatible()) {
+            gdBuilder.append(TAB_ASCII).append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex)", registration.getPredictionLength())).append(LS);
         }
         return gdBuilder.toString();
     }
@@ -214,8 +222,10 @@ public abstract class GenerateGdUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                gdBuilder.append(TAB_ASCII).append("if (!buffer.isReadable()):").append(LS);
-                gdBuilder.append(TAB_ASCII + TAB_ASCII).append("return packet").append(LS);
+                gdBuilder.append(TAB_ASCII).append("if buffer.compatibleRead(beforeReadIndex, length):").append(LS);
+                var compatibleReadObject = gdSerializer(fieldRegistration.serializer()).readObject(gdBuilder, 2, field, fieldRegistration);
+                gdBuilder.append(TAB_ASCII + TAB_ASCII).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
+                continue;
             }
             var readObject = gdSerializer(fieldRegistration.serializer()).readObject(gdBuilder, 1, field, fieldRegistration);
             gdBuilder.append(TAB_ASCII).append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);

@@ -10,13 +10,19 @@ func _to_string() -> String:
 	return JSON.stringify(m)
 
 static func write(buffer, packet):
-	if (buffer.writePacketFlag(packet)):
+	if (packet == null):
+		buffer.writeInt(0)
 		return
 	{}
+	pass
 
 static func read(buffer):
-	if (!buffer.readBool()):
+	var length = buffer.readInt()
+	if (length == 0):
 		return null
+	var beforeReadIndex = buffer.getReadOffset()
 	var packet = buffer.newInstance(PROTOCOL_ID)
 	{}
+	if (length > 0):
+		buffer.setReadOffset(beforeReadIndex + length)
 	return packet
