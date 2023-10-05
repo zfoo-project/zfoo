@@ -162,8 +162,7 @@ public abstract class GenerateTsUtils {
         // when generate source code fields, use origin fields sort
         var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
         var fieldDefinitionBuilder = new StringBuilder();
-        for (int i = 0; i < sequencedFields.size(); i++) {
-            var field = sequencedFields.get(i);
+        for (var field : sequencedFields) {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
             // 生成注释
