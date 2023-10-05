@@ -136,11 +136,11 @@ public abstract class GeneratePyUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var pyBuilder = new StringBuilder();
-        // 生成源代码字段的时候，按照原始定义的方式生成
+        // when generate source code fields, use origin fields sort
         var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
         for (int i = 0; i < sequencedFields.size(); i++) {
             var field = sequencedFields.get(i);
-            IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
+            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
             // 生成注释
             var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Python);

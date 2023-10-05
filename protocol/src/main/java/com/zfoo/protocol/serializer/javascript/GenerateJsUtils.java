@@ -25,6 +25,7 @@ import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
@@ -136,10 +137,12 @@ public abstract class GenerateJsUtils {
         var protocolId = registration.getId();
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
+        // when generate source code fields, use origin fields sort
+        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
         var fieldDefinitionBuilder = new StringBuilder();
-        for (int i = 0; i < fields.length; i++) {
-            var field = fields[i];
-            IFieldRegistration fieldRegistration = fieldRegistrations[i];
+        for (int i = 0; i < sequencedFields.size(); i++) {
+            var field = sequencedFields.get(i);
+            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
             // 生成注释
             var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.JavaScript);
