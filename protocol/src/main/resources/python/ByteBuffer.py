@@ -353,13 +353,6 @@ class ByteBuffer():
         self.readOffset += length
         return value
 
-    def writePacketFlag(self, value):
-        if value is None:
-            self.writeBool(False)
-        else:
-            self.writeBool(True)
-        pass
-
     def writePacket(self, packet, protocolId):
         protocolRegistration = ProtocolManager.getProtocol(protocolId)
         protocolRegistration.write(self, packet)
