@@ -5,9 +5,9 @@ const PROTOCOL_CLASS_NAME = "{}"
 {}
 
 func _to_string() -> String:
-	var m = {}
-{}
-	return JSON.stringify(m)
+	const jsonTemplate = "{}"
+	var params = {}
+	return jsonTemplate.format(params, "{}")
 
 static func write(buffer, packet):
 	if (packet == null):

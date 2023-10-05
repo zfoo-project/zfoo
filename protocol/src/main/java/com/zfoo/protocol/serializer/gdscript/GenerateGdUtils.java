@@ -23,7 +23,6 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
@@ -39,8 +38,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
+import static com.zfoo.protocol.util.StringUtils.TAB;
 import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
 
 /**
@@ -120,13 +121,14 @@ public abstract class GenerateGdUtils {
         var includeSubProtocol = includeSubProtocol(registration);
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.GdScript);
         var fieldDefinition = fieldDefinition(registration);
-        var toStringMethod = toStringMethod(registration);
+        var toStringJsonTemplate = toStringJsonTemplate(registration);
+        var toStringParams = toStringParams(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("gdscript/ProtocolTemplate.gd");
         protocolTemplate = StringUtils.format(protocolTemplate, protocolId, protocolClazzName, includeSubProtocol, classNote, fieldDefinition.trim(),
-                StringUtils.EMPTY_JSON, toStringMethod, writeObject.trim(), readObject.trim());
+                toStringJsonTemplate, toStringParams, StringUtils.EMPTY_JSON, writeObject.trim(), readObject.trim());
 
         var outputPath = StringUtils.format("{}/{}/{}.gd", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
@@ -176,20 +178,49 @@ public abstract class GenerateGdUtils {
         return gdBuilder.toString();
     }
 
-    private static String toStringMethod(ProtocolRegistration registration) {
+    private static String toStringJsonTemplate(ProtocolRegistration registration) {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var gdBuilder = new StringBuilder();
+        gdBuilder.append("{");
+        // when generate source code fields, use origin fields sort
         var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
-        for (int i = 0; i < sequencedFields.size(); i++) {
-            var field = sequencedFields.get(i);
-            IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
+        var params = new ArrayList<String>();
+        for (var field : sequencedFields) {
+            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            gdBuilder.append(TAB_ASCII).append(StringUtils.format("m[\"{}\"] = {}", fieldName, fieldName));
-            if (i != sequencedFields.size() - 1) {
-                gdBuilder.append(LS);
+            var fieldType = gdSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
+            if (fieldType.equals("String")) {
+                params.add(StringUtils.format("{}:'{}'", fieldName));
+            } else {
+                params.add(StringUtils.format("{}:{}", fieldName));
             }
         }
+        gdBuilder.append(StringUtils.joinWith(", ", params.toArray()));
+        gdBuilder.append("}");
+        return gdBuilder.toString();
+    }
+
+    private static String toStringParams(ProtocolRegistration registration) {
+        var fields = registration.getFields();
+        var fieldRegistrations = registration.getFieldRegistrations();
+        var gdBuilder = new StringBuilder();
+        gdBuilder.append("[");
+        // when generate source code fields, use origin fields sort
+        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
+        var params = new ArrayList<String>();
+        for (var field : sequencedFields) {
+            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
+            var fieldName = field.getName();
+            var fieldType = gdSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
+            if (fieldType.equals("Dictionary") || fieldType.startsWith("Array")) {
+                params.add(StringUtils.format("JSON.stringify(self.{})", field.getName()));
+            } else {
+                params.add(StringUtils.format("self.{}", field.getName()));
+            }
+        }
+        gdBuilder.append(StringUtils.joinWith(", ", params.toArray()));
+        gdBuilder.append("]");
         return gdBuilder.toString();
     }
 
