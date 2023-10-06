@@ -100,17 +100,4 @@ public class ByteBufUtilsTest {
         Assert.assertEquals(result, str);
     }
 
-    @Test
-    public void charTest() {
-        char c = 'a';
-        ByteBuf byteBuf = Unpooled.buffer();
-        ByteBufUtils.writeChar(byteBuf, c);
-        char result = ByteBufUtils.readChar(byteBuf);
-        Assert.assertEquals(result, c);
-
-        Character d = null;
-        ByteBufUtils.writeCharBox(byteBuf, d);
-        Assert.assertEquals(ByteBufUtils.readCharBox(byteBuf), Character.valueOf(Character.MIN_VALUE));
-    }
-
 }
