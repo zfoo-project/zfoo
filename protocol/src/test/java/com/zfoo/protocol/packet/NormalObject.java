@@ -60,6 +60,9 @@ public class NormalObject {
 
 //    @Compatible(1)
 //    public int outCompatibleValue;
+
+
+
 //    @Compatible(2)
 //    public int outCompatibleValue2;
 

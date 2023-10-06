@@ -406,28 +406,6 @@ public abstract class ByteBufUtils {
     }
 
 
-    //---------------------------------char--------------------------------------
-    // 很多脚本语言没有char，所以这里使用string代替
-    public static void writeChar(ByteBuf byteBuf, char value) {
-        writeString(byteBuf, String.valueOf(value));
-    }
-
-    public static char readChar(ByteBuf byteBuf) {
-        var value = readString(byteBuf);
-        if (StringUtils.isEmpty(value)) {
-            return Character.MIN_VALUE;
-        }
-        return value.charAt(0);
-    }
-
-    public static void writeCharBox(ByteBuf byteBuf, Character value) {
-        writeChar(byteBuf, value == null ? Character.MIN_VALUE : value);
-    }
-
-    public static Character readCharBox(ByteBuf byteBuf) {
-        return readChar(byteBuf);
-    }
-
     //-----------------------------------------------------------------------
     //---------------------------------以下方法会被字节码生成的代码调用--------------------------------------
     public static void writePacketCollection(ByteBuf byteBuf, Collection<?> collection, IProtocolRegistration protocolRegistration) {
@@ -1317,48 +1295,6 @@ public abstract class ByteBufUtils {
             set.add(readString(byteBuf));
         }
         return set;
-    }
-
-
-    //---------------------------------char--------------------------------------
-    public static void writeCharArray(ByteBuf byteBuf, char[] array) {
-        if (array == null) {
-            byteBuf.writeByte(0);
-            return;
-        }
-        writeInt(byteBuf, array.length);
-        for (var value : array) {
-            writeChar(byteBuf, value);
-        }
-    }
-
-    public static char[] readCharArray(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var chars = new char[CollectionUtils.comfortableLength(length)];
-        for (var i = 0; i < length; i++) {
-            chars[i] = readChar(byteBuf);
-        }
-        return chars;
-    }
-
-    public static void writeCharBoxArray(ByteBuf byteBuf, Character[] array) {
-        if (array == null) {
-            byteBuf.writeByte(0);
-            return;
-        }
-        writeInt(byteBuf, array.length);
-        for (var value : array) {
-            writeCharBox(byteBuf, value);
-        }
-    }
-
-    public static Character[] readCharBoxArray(ByteBuf byteBuf) {
-        var length = readInt(byteBuf);
-        var chars = new Character[CollectionUtils.comfortableLength(length)];
-        for (var i = 0; i < length; i++) {
-            chars[i] = readCharBox(byteBuf);
-        }
-        return chars;
     }
 
     public static <T> void writePacketArray(ByteBuf byteBuf, T[] array, IProtocolRegistration protocolRegistration) {
