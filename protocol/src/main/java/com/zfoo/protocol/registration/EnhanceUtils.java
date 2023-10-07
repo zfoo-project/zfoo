@@ -39,7 +39,7 @@ import java.util.*;
 public abstract class EnhanceUtils {
 
     // 临时变量，是一个基本类型序列化器对应的增强类型序列化器
-    private static Map<ISerializer, IEnhanceSerializer> tempEnhanceSerializerMap = new HashMap<>();
+    private static Map<ISerializer, IEnhanceSerializer> enhanceSerializerMap = new HashMap<>();
 
     public static String byteBufUtils = ByteBufUtils.class.getSimpleName();
     public static String byteBufUtilsWriteBooleanFalse = byteBufUtils + ".writeBoolean($1, false);";
@@ -69,28 +69,28 @@ public abstract class EnhanceUtils {
             }
         }
 
-        tempEnhanceSerializerMap.put(BooleanSerializer.INSTANCE, new EnhanceBooleanSerializer());
-        tempEnhanceSerializerMap.put(ByteSerializer.INSTANCE, new EnhanceByteSerializer());
-        tempEnhanceSerializerMap.put(ShortSerializer.INSTANCE, new EnhanceShortSerializer());
-        tempEnhanceSerializerMap.put(IntSerializer.INSTANCE, new EnhanceIntSerializer());
-        tempEnhanceSerializerMap.put(LongSerializer.INSTANCE, new EnhanceLongSerializer());
-        tempEnhanceSerializerMap.put(FloatSerializer.INSTANCE, new EnhanceFloatSerializer());
-        tempEnhanceSerializerMap.put(DoubleSerializer.INSTANCE, new EnhanceDoubleSerializer());
-        tempEnhanceSerializerMap.put(StringSerializer.INSTANCE, new EnhanceStringSerializer());
-        tempEnhanceSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new EnhanceObjectProtocolSerializer());
-        tempEnhanceSerializerMap.put(ListSerializer.INSTANCE, new EnhanceListSerializer());
-        tempEnhanceSerializerMap.put(SetSerializer.INSTANCE, new EnhanceSetSerializer());
-        tempEnhanceSerializerMap.put(MapSerializer.INSTANCE, new EnhanceMapSerializer());
-        tempEnhanceSerializerMap.put(ArraySerializer.INSTANCE, new EnhanceArraySerializer());
+        enhanceSerializerMap.put(BooleanSerializer.INSTANCE, new EnhanceBooleanSerializer());
+        enhanceSerializerMap.put(ByteSerializer.INSTANCE, new EnhanceByteSerializer());
+        enhanceSerializerMap.put(ShortSerializer.INSTANCE, new EnhanceShortSerializer());
+        enhanceSerializerMap.put(IntSerializer.INSTANCE, new EnhanceIntSerializer());
+        enhanceSerializerMap.put(LongSerializer.INSTANCE, new EnhanceLongSerializer());
+        enhanceSerializerMap.put(FloatSerializer.INSTANCE, new EnhanceFloatSerializer());
+        enhanceSerializerMap.put(DoubleSerializer.INSTANCE, new EnhanceDoubleSerializer());
+        enhanceSerializerMap.put(StringSerializer.INSTANCE, new EnhanceStringSerializer());
+        enhanceSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new EnhanceObjectProtocolSerializer());
+        enhanceSerializerMap.put(ListSerializer.INSTANCE, new EnhanceListSerializer());
+        enhanceSerializerMap.put(SetSerializer.INSTANCE, new EnhanceSetSerializer());
+        enhanceSerializerMap.put(MapSerializer.INSTANCE, new EnhanceMapSerializer());
+        enhanceSerializerMap.put(ArraySerializer.INSTANCE, new EnhanceArraySerializer());
     }
 
     public static IEnhanceSerializer enhanceSerializer(ISerializer serializer) {
-        return tempEnhanceSerializerMap.get(serializer);
+        return enhanceSerializerMap.get(serializer);
     }
 
     public static void clear() {
-        tempEnhanceSerializerMap.clear();
-        tempEnhanceSerializerMap = null;
+        enhanceSerializerMap.clear();
+        enhanceSerializerMap = null;
 
         byteBufUtils = null;
         byteBufUtilsWriteBooleanFalse = null;

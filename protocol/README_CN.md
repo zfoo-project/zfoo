@@ -80,8 +80,8 @@ cpu： i9900k
 ### Ⅵ. 数据类型
 
 - 默认的数据格式支持，无需用户手动注册，[参考类定义](src/test/java/com/zfoo/protocol/packet/ComplexObject.java)
-    - boolean，byte，short，int，long，float，double，char，String
-    - Boolean，Byte，Short，Integer，Long，Float，Double，Character，序列化的时候如果null，会给个默认值0（Character默认值为Character.MIN_VALUE）
+    - boolean，byte，short，int，long，float，double，String
+    - Boolean，Byte，Short，Integer，Long，Float，Double，String 序列化的时候如果null，会给个默认值
     - int[]，Integer[]，如果是null，则解析后的为一个长度为0的数组
         - 原生泛型List，Set，Map，反序列化返回类型为HashSet，ArrayList，HashMap，并且空指针安全（返回大小为0的集合）
         - List<Integer>，必须指定泛型类，如果发送的是[1,1,null,1]，接收到的是[1,1,0,1]
@@ -91,6 +91,7 @@ cpu： i9900k
     - int[][]，二维以上数组，考虑到不是所有语言都支持多维数组
     - List<Integer>[]，Map<Integer, Integer>[]，Java语言本身就没有支持泛型类数组
     - List<int[]>，Map<Integer, Integer[]>，泛型里面套数组，这种写法看起来比较奇怪，实际使用的地方很少
+    - char和Character类型，考虑到很多其他语言不支持char，可以用string在代码层面做替换
     - 枚举类，考虑到很多其他语言不支持枚举类，可以用int或者string在代码层面做替换
     - 自定义泛型类XXXClass<T>，泛型类在很多框架中都极易出现性能上和解析上的问题，而且并不是所有语言都支持
     - 循环引用，虽然底层支持循环引用，但是考虑到循环引用带来语义上难以理解，容易出现错误，所以就屏蔽了

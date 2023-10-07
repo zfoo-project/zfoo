@@ -95,9 +95,8 @@ For complex objects, ZFOO package size 2216, KRYO package size 2528, and Protobu
 
 - Default data format support eliminates the need for users to register
   manually.[参考类定义](src/test/java/com/zfoo/protocol/packet/ComplexObject.java)
-    - boolean，byte，short，int，long，float，double，char，String
-    - Boolean，Byte，Short，Integer，Long，Float，Double，Character，If it is null during serialization, a default value of 0
-      will be given (the default value of Character is Character.MIN VALUE)
+    - boolean，byte，short，int，long，float，double，String
+    - Boolean，Byte，Short，Integer，Long，Float，Double，String，If it is null during serialization, a default value will be given
     - int[]，Integer[]，If it is null, it is parsed as an array of length 0
         - Native generic List, Set, Map, deserialization return type Hash Set, Array List, Hash Map, and null pointer
           safe (returns a collection of size 0)
@@ -110,8 +109,8 @@ For complex objects, ZFOO package size 2216, KRYO package size 2528, and Protobu
     - int[][]，Arrays above two dimensions, considering that not all languages support multidimensional arrays
     - List<Integer>[]，Map<Integer, Integer>[]，The Java language itself does not support generic class arrays
     - List<int[]>，Map<Integer, Integer[]>，Generics are set in arrays, which looks strange and has few actual uses
-    - Enumerated classes, considering that many other languages do not support enumerated classes, can be replaced at
-      the code level with int or string
+    - char or Character, many other languages do not support char and can be replaced with string
+    - Enumerated classes, many other languages do not support enumerated classes and can be replaced with int or string
     - Custom generic class XXX Class, <T>generic classes are prone to performance and parsing problems in many
       frameworks, and are not supported in all languages
     - Circular references, although the underlying support circular references, but considering that circular references

@@ -450,60 +450,6 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         flag = false;
                 }
                 break;
-            case "char":
-                switch (language) {
-                    case Enhance:
-                        builder.append(StringUtils.format("{}.writeCharArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
-                        break;
-                    case GdScript:
-                    case Python:
-                        builder.append(StringUtils.format("buffer.writeCharArray({})", objectStr)).append(LS);
-                        break;
-                    case Lua:
-                        builder.append(StringUtils.format("buffer:writeCharArray({})", objectStr)).append(LS);
-                        break;
-                    case CSharp:
-                        builder.append(StringUtils.format("buffer.WriteCharArray({});", objectStr)).append(LS);
-                        break;
-                    case Go:
-                        builder.append(StringUtils.format("buffer.WriteCharArray({})", objectStr)).append(LS);
-                        break;
-                    case Cpp:
-                    case JavaScript:
-                    case TypeScript:
-                        builder.append(StringUtils.format("buffer.writeCharArray({});", objectStr)).append(LS);
-                        break;
-                    default:
-                        flag = false;
-                }
-                break;
-            case "Character":
-                switch (language) {
-                    case Enhance:
-                        builder.append(StringUtils.format("{}.writeCharBoxArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
-                        break;
-                    case GdScript:
-                    case Python:
-                        builder.append(StringUtils.format("buffer.writeCharArray({})", objectStr)).append(LS);
-                        break;
-                    case Lua:
-                        builder.append(StringUtils.format("buffer:writeCharArray({})", objectStr)).append(LS);
-                        break;
-                    case CSharp:
-                        builder.append(StringUtils.format("buffer.WriteCharArray({});", objectStr)).append(LS);
-                        break;
-                    case Go:
-                        builder.append(StringUtils.format("buffer.WriteCharArray({})", objectStr)).append(LS);
-                        break;
-                    case Cpp:
-                    case JavaScript:
-                    case TypeScript:
-                        builder.append(StringUtils.format("buffer.writeCharArray({});", objectStr)).append(LS);
-                        break;
-                    default:
-                        flag = false;
-                }
-                break;
             default:
                 if (arrayField.getArrayElementRegistration() instanceof ObjectProtocolField) {
                     var protocolId = ((ObjectProtocolField) arrayField.getArrayElementRegistration()).getProtocolId();
@@ -1010,68 +956,6 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case JavaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readStringArray();", array)).append(LS);
-                        break;
-                    default:
-                        flag = false;
-                }
-                break;
-            case "char":
-                switch (language) {
-                    case Enhance:
-                        builder.append(StringUtils.format("{}[] {} = {}.readCharArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
-                        break;
-                    case GdScript:
-                        builder.append(StringUtils.format("var {} = buffer.readCharArray()", array)).append(LS);
-                        break;
-                    case Python:
-                        builder.append(StringUtils.format("{} = buffer.readCharArray()", array)).append(LS);
-                        break;
-                    case Lua:
-                        builder.append(StringUtils.format("local {} = buffer:readCharArray()", array)).append(LS);
-                        break;
-                    case CSharp:
-                        builder.append(StringUtils.format("var {} = buffer.ReadCharArray();", array)).append(LS);
-                        break;
-                    case Go:
-                        builder.append(StringUtils.format("var {} = buffer.ReadCharArray()", array)).append(LS);
-                        break;
-                    case Cpp:
-                        builder.append(StringUtils.format("auto {} = buffer.readCharArray();", array)).append(LS);
-                        break;
-                    case JavaScript:
-                    case TypeScript:
-                        builder.append(StringUtils.format("const {} = buffer.readCharArray();", array)).append(LS);
-                        break;
-                    default:
-                        flag = false;
-                }
-                break;
-            case "Character":
-                switch (language) {
-                    case Enhance:
-                        builder.append(StringUtils.format("{}[] {} = {}.readCharBoxArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
-                        break;
-                    case GdScript:
-                        builder.append(StringUtils.format("var {} = buffer.readCharArray()", array)).append(LS);
-                        break;
-                    case Python:
-                        builder.append(StringUtils.format("{} = buffer.readCharArray()", array)).append(LS);
-                        break;
-                    case Lua:
-                        builder.append(StringUtils.format("local {} = buffer:readCharArray()", array)).append(LS);
-                        break;
-                    case CSharp:
-                        builder.append(StringUtils.format("var {} = buffer.ReadCharArray();", array)).append(LS);
-                        break;
-                    case Go:
-                        builder.append(StringUtils.format("var {} = buffer.ReadCharArray()", array)).append(LS);
-                        break;
-                    case Cpp:
-                        builder.append(StringUtils.format("auto {} = buffer.readCharArray();", array)).append(LS);
-                        break;
-                    case JavaScript:
-                    case TypeScript:
-                        builder.append(StringUtils.format("const {} = buffer.readCharArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;
