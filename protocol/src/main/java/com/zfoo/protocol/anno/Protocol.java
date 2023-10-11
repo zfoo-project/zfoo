@@ -15,6 +15,9 @@ package com.zfoo.protocol.anno;
 import java.lang.annotation.*;
 
 /**
+ * EN: Unique protocol number
+ * CN: 唯一的协议号
+ *
  * @author meiw
  */
 @Documented
@@ -24,6 +27,10 @@ public @interface Protocol {
 
     short id() default 0;
 
+    /**
+     * EN: Use Javassist bytecode to enhance serialization of the protocol
+     * CN: 使用Javassist字节码增强协议的序列化
+     */
     boolean enhance() default true;
 
 }

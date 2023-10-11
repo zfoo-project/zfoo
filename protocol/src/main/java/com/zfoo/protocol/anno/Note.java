@@ -15,6 +15,9 @@ package com.zfoo.protocol.anno;
 import java.lang.annotation.*;
 
 /**
+ * EN: Generate comments in other languages
+ * CN: 生成其它语言的注释
+ *
  * @author meiw
  */
 @Documented

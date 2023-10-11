@@ -15,6 +15,9 @@ package com.zfoo.protocol.anno;
 import java.lang.annotation.*;
 
 /**
+ * EN: Make the fields of the old and new protocols compatible in different version
+ * CN: 让新老协议的字段前后兼容
+ *
  * @author godotg
  */
 @Documented
