@@ -177,6 +177,7 @@ public abstract class EnhanceUtils {
     private static String writeMethodBody(ProtocolRegistration registration) {
         var constructor = registration.getConstructor();
         var fields = registration.getFields();
+        var compatible = registration.isCompatible();
         var fieldRegistrations = registration.getFieldRegistrations();
 
         var packetClazz = constructor.getDeclaringClass();
@@ -185,7 +186,7 @@ public abstract class EnhanceUtils {
         builder.append("{");
         builder.append("if ($2 == null) { $1.writeByte(0); return; }");
         builder.append(StringUtils.format("{} packet = ({})$2;", packetClazz.getName(), packetClazz.getName()));
-        if (registration.isCompatible()) {
+        if (compatible) {
             builder.append("int beforeWriteIndex = $1.writerIndex();");
             builder.append(StringUtils.format("{}.writeInt($1, {});", byteBufUtils, registration.getPredictionLength()));
         } else {
@@ -203,7 +204,7 @@ public abstract class EnhanceUtils {
                         .writeObject(builder, StringUtils.format("packet.{}()", FieldUtils.fieldToGetMethod(packetClazz, field)), field, fieldRegistration);
             }
         }
-        if (registration.isCompatible()) {
+        if (compatible) {
             builder.append(StringUtils.format("{}.adjustPadding($1, {}, beforeWriteIndex);", byteBufUtils, registration.getPredictionLength()));
         }
         builder.append("}");

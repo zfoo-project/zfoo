@@ -25,6 +25,10 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 public @interface Compatible {
 
+    /**
+     * EN: new compatible field value must be always greater than old compatible field value
+     * CN: 新的兼容字段值必须始终大于旧的兼容字段
+     */
     int value();
 
 }
