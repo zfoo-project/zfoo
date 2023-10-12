@@ -1,9 +1,14 @@
 extends Node2D
 
 
-const ProtocolManager = preload("res://gdProtocol/ProtocolManager.gd")
-const ByteBuffer = preload("res://gdProtocol/buffer/ByteBuffer.gd")
-const FileUtils = preload("res://zfoo/util/FileUtils.gd")
+const ProtocolManager = preload("res://zfoogd/ProtocolManager.gd")
+const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
+const FileUtils = preload("res://zfoo/FileUtils.gd")
+
+# 测试参数
+#op.setFoldProtocol(true);
+#op.setProtocolPath("D:\\github\\godot-bird\\protocoltest");
+#op.getGenerateLanguages().add(CodeLanguage.GdScript);
 
 func _ready():
 	var buffer = ByteBuffer.new()
@@ -38,8 +43,8 @@ func _ready():
 	assert(999999 == buffer.readInt())
 	assert(2147483647 == buffer.readInt())
 	
-	var maxLong = int("9223372036854775807")
-	var minLong = int("-9223372036854775808")
+	var maxLong: int = 9223372036854775807
+	var minLong: int = maxLong + 1
 	buffer.writeLong(maxLong)
 	buffer.writeLong(9999999999999999)
 	buffer.writeLong(99999999)
@@ -74,22 +79,22 @@ func _ready():
 	buffer.writeString(strValue)
 	assert(strValue == buffer.readString())
 	
-	buffer.writeChar(strValue)
-	assert(strValue[0] == buffer.readChar())
-	buffer.writeChar("")
-	assert(ByteBuffer.EMPTY == buffer.readChar())
 	test()
 
 
 func test():
-	ProtocolManager.initProtocol()
 	var buffer = ByteBuffer.new()
-	var poolByteArray = FileUtils.readFileToByteArray("user://ComplexObject.bytes")
-	buffer.writePoolByteArray(poolByteArray)
+	#var poolByteArray = FileUtils.readFileToByteArray("res://test/protocol/normal-no-compatible.txt")
+	#var poolByteArray = FileUtils.readFileToByteArray("res://test/protocol/normal-inner-compatible.txt")
+	#var poolByteArray = FileUtils.readFileToByteArray("res://test/protocol/normal-out-compatible.txt")
+	#var poolByteArray = FileUtils.readFileToByteArray("res://test/protocol/normal-out-inner-compatible.txt")
+	var poolByteArray = FileUtils.readFileToByteArray("res://test/protocol/normal-out-inner-inner-compatible.txt")
+
+	buffer.writePackedByteArray(poolByteArray)
 	
 	var packet = ProtocolManager.read(buffer)
 	print(packet)
-	packet.myCompatible = 0
+
 	var newByteBuffer = ByteBuffer.new()
 	ProtocolManager.write(newByteBuffer, packet);
 	print(newByteBuffer.getWriteOffset())
