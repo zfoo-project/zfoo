@@ -97,6 +97,9 @@ public abstract class EnhanceUtils {
         byteBufUtilsWriteBooleanTrue = null;
         byteBufUtilsReadBoolean = null;
         byteBufUtilsWriteInt0 = null;
+
+        var classPool = ClassPool.getDefault();
+        classPool.clearImportedPackages();
     }
 
     /**
