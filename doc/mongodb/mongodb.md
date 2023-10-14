@@ -681,7 +681,10 @@ mongoexport --uri mongodb://localhost:27017/test -u "root" -p "123456" --authent
 - json格式导入，使用备份文件/home/test.json导入数据到test数据库的student集合中
 
 ```
-# --upsert表示更新现有数据，如果不使用—upsert则导入时已经存在的文档会报_id重复，数据不再插入。也可以使用--drop删除原数据。
+# --upsert表示更新现有数据，如果不使用—upsert则导入时已经存在的文档会报_id重复，数据不再插入。
+# "upsert"是"update"和"insert"的组合，表示如果导入的数据在目标集合中已经存在，则更新该数据；如果数据在目标集合中不存在，则插入一条新的文档。
+
+# --drop在导入之前删除目标集合中的所有文档。
 mongoimport --uri mongodb://localhost:27017/test -u "root" -p "123456" -authenticationDatabase=admin --collection=student --type=json /home/test.json --upsert
 ```
 
