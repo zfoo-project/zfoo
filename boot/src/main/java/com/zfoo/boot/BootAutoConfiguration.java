@@ -14,7 +14,6 @@ package com.zfoo.boot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zfoo.boot.graalvm.GraalvmProtocolHints;
-import com.zfoo.boot.graalvm.GraalvmStorageHints;
 import com.zfoo.protocol.util.GraalVmUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
@@ -36,8 +35,8 @@ public class BootAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public ObjectMapper getObjectMapper() {
+        logger.info("native GraalVM environment [{}]", GraalVmUtils.isGraalVM());
         logger.info("Jackson auto config successfully!");
-        logger.info("GraalVM environment [{}]", GraalVmUtils.isGraalVM());
         return JsonUtils.MAPPER;
     }
 
