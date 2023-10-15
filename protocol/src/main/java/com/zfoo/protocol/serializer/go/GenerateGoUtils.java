@@ -115,16 +115,24 @@ public abstract class GenerateGoUtils {
         var registrationConstructor = registration.getConstructor();
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
 
-        var protocolTemplate = ClassUtils.getFileFromClassPathToString("go/ProtocolTemplate.go");
+        var protocolTemplate = ArrayUtils.isEmpty(registration.getFields())
+                ? ClassUtils.getFileFromClassPathToString("go/ProtocolTemplateEmpty.go")
+                : ClassUtils.getFileFromClassPathToString("go/ProtocolTemplate.go");
+
 
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Go);
         var fieldDefinition = fieldDefinition(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
 
-        protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, fieldDefinition.trim()
-                , protocolClazzName, protocolId, protocolClazzName, protocolClazzName
-                , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim());
+        if (ArrayUtils.isEmpty(registration.getFields())) {
+            protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, fieldDefinition.trim()
+                    , protocolClazzName, protocolId, protocolClazzName, protocolClazzName, protocolClazzName);
+        } else {
+            protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, fieldDefinition.trim()
+                    , protocolClazzName, protocolId, protocolClazzName, protocolClazzName
+                    , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim());
+        }
 
         var outputPath = StringUtils.format("{}/{}.go", protocolOutputPath, protocolClazzName);
         FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
@@ -157,14 +165,22 @@ public abstract class GenerateGoUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var goBuilder = new StringBuilder();
+        if (registration.isCompatible()) {
+            goBuilder.append(TAB).append("var beforeWriteIndex = buffer.WriteOffset()").append(LS);
+            goBuilder.append(TAB ).append(StringUtils.format("buffer.WriteInt({})", registration.getPredictionLength())).append(LS);
+        } else {
+            goBuilder.append(TAB).append("buffer.WriteInt(-1)").append(LS);
+        }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             goSerializer(fieldRegistration.serializer()).writeObject(goBuilder, "message." + StringUtils.capitalize(field.getName()), 1, field, fieldRegistration);
         }
+        if (registration.isCompatible()) {
+            goBuilder.append(TAB).append(StringUtils.format("buffer.AdjustPadding({}, beforeWriteIndex)", registration.getPredictionLength())).append(LS);
+        }
         return goBuilder.toString();
     }
-
 
     private static String readObject(ProtocolRegistration registration) {
         var fields = registration.getFields();
@@ -174,10 +190,11 @@ public abstract class GenerateGoUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                goBuilder.append(TAB).append("if !buffer.IsReadable()").append(LS);
-                goBuilder.append(TAB).append("{").append(LS);
-                goBuilder.append(TAB + TAB).append("return packet").append(LS);
+                goBuilder.append(TAB ).append("if buffer.CompatibleRead(beforeReadIndex, length) {").append(LS);
+                var compatibleReadObject = goSerializer(fieldRegistration.serializer()).readObject(goBuilder, 2, field, fieldRegistration);
+                goBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {}", field.getName(), compatibleReadObject)).append(LS);
                 goBuilder.append(TAB).append("}").append(LS);
+                continue;
             }
             var readObject = goSerializer(fieldRegistration.serializer()).readObject(goBuilder, 1, field, fieldRegistration);
             goBuilder.append(TAB).append(StringUtils.format("packet.{} = {}", StringUtils.capitalize(field.getName()), readObject)).append(LS);
@@ -185,44 +202,4 @@ public abstract class GenerateGoUtils {
         return goBuilder.toString();
     }
 
-    public static String toGoClassName(String typeName) {
-        typeName = typeName.replaceAll("java.util.|java.lang.", StringUtils.EMPTY);
-        typeName = typeName.replaceAll("[a-zA-Z0-9_.]*\\.", StringUtils.EMPTY);
-
-        // CSharp不适用基础类型的泛型，会影响性能
-        switch (typeName) {
-            case "boolean":
-            case "Boolean":
-                typeName = "bool";
-                return typeName;
-            case "byte":
-            case "Byte":
-                typeName = "int8";
-                return typeName;
-            case "short":
-            case "Short":
-                typeName = "int16";
-                return typeName;
-            case "int":
-            case "Integer":
-                typeName = "int";
-                return typeName;
-            case "long":
-            case "Long":
-                typeName = "int64";
-                return typeName;
-            case "Float":
-                typeName = "float32";
-                return typeName;
-            case "Double":
-                typeName = "float64";
-                return typeName;
-            case "Character":
-                typeName = "string";
-                return typeName;
-            default:
-        }
-
-        return typeName;
-    }
 }

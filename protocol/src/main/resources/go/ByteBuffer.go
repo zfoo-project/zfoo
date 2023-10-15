@@ -38,6 +38,10 @@ func (byteBuffer *ByteBuffer) AdjustPadding(predictionLength int, beforeWriteInd
 	}
 }
 
+func (byteBuffer *ByteBuffer) CompatibleRead(beforeReadIndex int, length int) bool {
+	return length != -1 && byteBuffer.readIndex < length+beforeReadIndex
+}
+
 // -------------------------------------------------get/set-------------------------------------------------
 func (byteBuffer *ByteBuffer) WriteOffset() int {
 	return byteBuffer.writeIndex
@@ -49,6 +53,10 @@ func (byteBuffer *ByteBuffer) SetWriteOffset(writeIndex int) {
 		panic(error)
 	}
 	byteBuffer.writeIndex = writeIndex
+}
+
+func (byteBuffer *ByteBuffer) ReadOffset() int {
+	return byteBuffer.readIndex
 }
 
 func (byteBuffer *ByteBuffer) SetReadOffset(readIndex int) {
@@ -468,12 +476,6 @@ func (byteBuffer *ByteBuffer) ReadChar() string {
 	return byteBuffer.ReadString()
 }
 
-func (byteBuffer *ByteBuffer) WritePacketFlag(packet any) bool {
-	var flag = packet == nil
-	byteBuffer.WriteBool(!flag)
-	return flag
-}
-
 func (byteBuffer *ByteBuffer) WritePacket(packet any, protocolId int16) {
 	var protocolRegistration = GetProtocol(protocolId)
 	protocolRegistration.write(byteBuffer, packet)
@@ -486,7 +488,7 @@ func (byteBuffer *ByteBuffer) ReadPacket(protocolId int16) any {
 
 // -------------------------------------------------IProtocolRegistration-------------------------------------------------
 type IProtocolRegistration interface {
-	protocolId() int16
+	ProtocolId() int16
 
 	write(buffer *ByteBuffer, packet any)
 
@@ -501,7 +503,7 @@ func GetProtocol(protocolId int16) IProtocolRegistration {
 }
 
 func Write(buffer *ByteBuffer, packet any) {
-	var protocolId = packet.(IProtocolRegistration).protocolId()
+	var protocolId = packet.(IProtocolRegistration).ProtocolId()
 	buffer.WriteShort(protocolId)
 	var protocolRegistration = GetProtocol(protocolId)
 	protocolRegistration.write(buffer, packet)

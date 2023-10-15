@@ -13,8 +13,7 @@ func (protocol {}) write(buffer *ByteBuffer, packet any) {
 	    buffer.WriteInt(0)
 		return
 	}
-	var message = packet.(*{})
-	{}
+	buffer.WriteInt(-1)
 }
 
 func (protocol {}) read(buffer *ByteBuffer) any {
@@ -24,7 +23,6 @@ func (protocol {}) read(buffer *ByteBuffer) any {
 		return packet
 	}
 	var beforeReadIndex = buffer.ReadOffset()
-	{}
 	if length > 0 {
         buffer.SetReadOffset(beforeReadIndex + length)
     }
