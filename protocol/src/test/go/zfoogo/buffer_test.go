@@ -123,14 +123,20 @@ func stringTest(buffer *ByteBuffer) {
 }
 
 func packetTest() {
-	bytes, _ := os.ReadFile("../../resources/NormalObject.bytes")
+	//bytes, _ := os.ReadFile("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes")
+	//bytes, _ := os.ReadFile("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes")
+	//bytes, _ := os.ReadFile("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes")
+	//bytes, _ := os.ReadFile("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes")
+	bytes, _ := os.ReadFile("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes")
 	var buffer = new(ByteBuffer)
 	buffer.WriteUBytes(bytes)
 	var packet = Read(buffer)
 	fmt.Println(packet)
+	fmt.Println("source size ", buffer.WriteOffset())
 
 	buffer.Clear()
 	Write(buffer, packet)
 	var newPacket = Read(buffer)
+	fmt.Println("target size ", buffer.WriteOffset())
 	fmt.Println(newPacket)
 }
