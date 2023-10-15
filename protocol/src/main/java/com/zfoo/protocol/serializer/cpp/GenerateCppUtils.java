@@ -48,8 +48,9 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateCppUtils {
 
-    private static String protocolOutputRootPath = "cppProtocol";
-    private static String protocolOutputPath = StringUtils.EMPTY;
+    // custom configuration
+    public static String protocolOutputRootPath = "zfoocpp";
+    public static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, ICppSerializer> cppSerializerMap;
 
@@ -58,10 +59,13 @@ public abstract class GenerateCppUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
-
+        // if not specify output path, then use current default path
+        if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
+            protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+        } else {
+            protocolOutputPath = generateOperation.getProtocolPath();
+        }
         FileUtils.deleteFile(new File(protocolOutputPath));
-        FileUtils.createDirectory(protocolOutputPath);
 
         cppSerializerMap = new HashMap<>();
         cppSerializerMap.put(BooleanSerializer.INSTANCE, new CppBooleanSerializer());
