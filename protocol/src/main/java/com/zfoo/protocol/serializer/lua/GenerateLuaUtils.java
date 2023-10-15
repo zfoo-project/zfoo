@@ -124,9 +124,9 @@ public abstract class GenerateLuaUtils {
                 , valueOfMethod.getKey().trim(), valueOfMethod.getValue().trim(), protocolClazzName, protocolId
                 , protocolClazzName, writePacket.trim(), protocolClazzName, protocolClazzName, readPacket.trim(), protocolClazzName);
 
-        var protocolOutputPath = StringUtils.format("{}/{}/{}.lua"
+        var outputPath = StringUtils.format("{}/{}/{}.lua"
                 , protocolOutputRootPath, GenerateProtocolPath.getCapitalizeProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
+        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
     }
 
     private static Pair<String, String> valueOfMethod(ProtocolRegistration registration) {

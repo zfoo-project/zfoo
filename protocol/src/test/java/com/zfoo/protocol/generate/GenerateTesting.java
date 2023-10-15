@@ -34,18 +34,7 @@ public class GenerateTesting {
         var generateLanguages = op.getGenerateLanguages();
 
         // generate the jsProtocol folder and its corresponding js protocol file in the current protocol directory
-        generateLanguages.add(CodeLanguage.Cpp);
         generateLanguages.add(CodeLanguage.Go);
-        generateLanguages.add(CodeLanguage.JavaScript);
-        generateLanguages.add(CodeLanguage.TypeScript);
-        generateLanguages.add(CodeLanguage.Lua);
-        generateLanguages.add(CodeLanguage.CSharp);
-        generateLanguages.add(CodeLanguage.GdScript);
-        generateLanguages.add(CodeLanguage.Python);
-
-        // Protobuf needs to specify protobuf.xml to generate a protocol
-        op.setProtocolParam("protobuf=protobuf.xml");
-        generateLanguages.add(CodeLanguage.Protobuf);
 
         // Initialize and then generate the protocol
         ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), op);

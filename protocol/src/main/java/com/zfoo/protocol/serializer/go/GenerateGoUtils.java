@@ -23,6 +23,7 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -114,39 +115,25 @@ public abstract class GenerateGoUtils {
         var registrationConstructor = registration.getConstructor();
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
 
-        var protocolTemplate = ArrayUtils.isEmpty(registration.getFields())
-                ? ClassUtils.getFileFromClassPathToString("go/ProtocolTemplateEmpty.go")
-                : ClassUtils.getFileFromClassPathToString("go/ProtocolTemplate.go");
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("go/ProtocolTemplate.go");
 
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Go);
         var fieldDefinition = fieldDefinition(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
-        if (ArrayUtils.isEmpty(registration.getFields())) {
-            protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, fieldDefinition.trim()
-                    , protocolClazzName, protocolId, protocolClazzName, protocolClazzName, protocolClazzName);
-        } else {
-            protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, fieldDefinition.trim()
-                    , protocolClazzName, protocolId, protocolClazzName, protocolClazzName
-                    , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim());
-        }
 
-        var protocolPath = GenerateProtocolPath.getProtocolPath(protocolId);
+        protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, fieldDefinition.trim()
+                , protocolClazzName, protocolId, protocolClazzName, protocolClazzName
+                , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim());
+
+        var protocolPath = GenerateProtocolPath.protocolAbsolutePath(protocolId);
         if (StringUtils.isEmpty(protocolPath)) {
             protocolPath = protocolClazzName;
         } else if (protocolPath.contains(StringUtils.SLASH)) {
             protocolPath = StringUtils.substringAfterLast(protocolPath, StringUtils.SLASH);
         }
-
-        var protocolOutputPath = StringUtils.format("{}/{}.go"
-                , protocolOutputRootPath
-                , protocolPath);
-        var protocolFile = new File(protocolOutputPath);
-        if (protocolFile.exists()) {
-            FileUtils.writeStringToFile(protocolFile, StringUtils.substringAfterFirst(protocolTemplate, "package protocol"), true);
-        } else {
-            FileUtils.writeStringToFile(protocolFile, protocolTemplate, true);
-        }
+        var outputPath = StringUtils.format("{}/{}/{}.go", protocolOutputPath, protocolOutputRootPath, protocolClazzName);
+        FileUtils.writeStringToFile(outputPath, protocolTemplate, true);
     }
 
     private static String fieldDefinition(ProtocolRegistration registration) {

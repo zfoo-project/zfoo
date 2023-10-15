@@ -118,11 +118,11 @@ public abstract class GenerateCsUtils {
                 , protocolId, protocolClazzName, protocolId, protocolClazzName, protocolClazzName, writeObject.trim()
                 , protocolClazzName, protocolClazzName, readObject.trim());
 
-        var protocolOutputPath = StringUtils.format("{}/{}/{}.cs"
+        var outputPath = StringUtils.format("{}/{}/{}.cs"
                 , protocolOutputRootPath
                 , GenerateProtocolPath.getCapitalizeProtocolPath(protocolId)
                 , protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
+        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
     }
 
     private static String fieldDefinition(ProtocolRegistration registration) {

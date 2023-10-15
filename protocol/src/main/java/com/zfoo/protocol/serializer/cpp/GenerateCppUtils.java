@@ -141,11 +141,11 @@ public abstract class GenerateCppUtils {
                 , valueOfMethod.getValue().trim(), protocolId, protocolClazzName, operator.trim(),
                 protocolClazzName, protocolId, protocolClazzName, writeObject.trim(), protocolClazzName, readObject.trim());
 
-        var protocolOutputPath = StringUtils.format("{}/{}/{}.h"
+        var outputPath = StringUtils.format("{}/{}/{}.h"
                 , GenerateCppUtils.protocolOutputPath
                 , GenerateProtocolPath.getProtocolPath(protocolId)
                 , protocolClazzName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
+        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
     }
 
 

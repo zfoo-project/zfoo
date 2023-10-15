@@ -119,8 +119,8 @@ public abstract class GenerateProtobufUtils {
 
         builder.append("}").append(LS);
 
-        var protocolOutputPath = StringUtils.format("{}/{}.proto", protocolOutputRootPath, protocolManagerName);
-        FileUtils.writeStringToFile(new File(protocolOutputPath), builder.toString(), true);
+        var outputPath = StringUtils.format("{}/{}.proto", protocolOutputRootPath, protocolManagerName);
+        FileUtils.writeStringToFile(new File(outputPath), builder.toString(), true);
     }
 
     public static void createProtocols(List<IProtocolRegistration> allGenerateProtocols) {
@@ -168,8 +168,8 @@ public abstract class GenerateProtobufUtils {
             }
 
             String protoName = StringUtils.substringAfterLast(protos.getKey(), StringUtils.PERIOD);
-            var protocolOutputPath = StringUtils.format("{}/{}.proto", protocolOutputRootPath, protoName);
-            FileUtils.writeStringToFile(new File(protocolOutputPath), builder.toString(), true);
+            var outputPath = StringUtils.format("{}/{}.proto", protocolOutputRootPath, protoName);
+            FileUtils.writeStringToFile(new File(outputPath), builder.toString(), true);
         }
     }
 
