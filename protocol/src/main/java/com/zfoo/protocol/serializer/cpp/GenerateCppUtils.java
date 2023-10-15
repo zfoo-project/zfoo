@@ -143,7 +143,7 @@ public abstract class GenerateCppUtils {
 
         var protocolOutputPath = StringUtils.format("{}/{}/{}.h"
                 , GenerateCppUtils.protocolOutputPath
-                , GenerateProtocolPath.getCapitalizeProtocolPath(protocolId)
+                , GenerateProtocolPath.getProtocolPath(protocolId)
                 , protocolClazzName);
         FileUtils.writeStringToFile(new File(protocolOutputPath), protocolTemplate, true);
     }

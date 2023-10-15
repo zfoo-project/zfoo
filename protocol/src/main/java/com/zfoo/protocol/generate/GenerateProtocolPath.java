@@ -99,6 +99,13 @@ public abstract class GenerateProtocolPath {
         return protocolPath.replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH);
     }
 
+    /**
+     * 获取协议生成的首字母大写的路径
+     */
+    public static String getCapitalizeProtocolPath(short protocolId) {
+        return StringUtils.joinWith(StringUtils.SLASH, Arrays.stream(getProtocolPath(protocolId).split(StringUtils.SLASH)).map(it -> StringUtils.capitalize(it)).toArray());
+    }
+
     public static String getRelativePath(short protocolId, short relativeProtocolId) {
         // 不是折叠协议的话，protocolPathMap一定是空，这里返回“”，上层会解析为同一个文件下
         if (CollectionUtils.isEmpty(protocolPathMap)) {
@@ -123,13 +130,6 @@ public abstract class GenerateProtocolPath {
         }
         builder.append(relativePath.replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH));
         return builder.toString();
-    }
-
-    /**
-     * 获取协议生成的首字母大写的路径
-     */
-    public static String getCapitalizeProtocolPath(short protocolId) {
-        return StringUtils.joinWith(StringUtils.SLASH, Arrays.stream(getProtocolPath(protocolId).split(StringUtils.SLASH)).map(it -> StringUtils.capitalize(it)).toArray());
     }
 
     /**
