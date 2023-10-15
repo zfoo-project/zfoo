@@ -192,7 +192,7 @@ public abstract class GenerateGoUtils {
             if (field.isAnnotationPresent(Compatible.class)) {
                 goBuilder.append(TAB ).append("if buffer.CompatibleRead(beforeReadIndex, length) {").append(LS);
                 var compatibleReadObject = goSerializer(fieldRegistration.serializer()).readObject(goBuilder, 2, field, fieldRegistration);
-                goBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {}", field.getName(), compatibleReadObject)).append(LS);
+                goBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {}", StringUtils.capitalize(field.getName()), compatibleReadObject)).append(LS);
                 goBuilder.append(TAB).append("}").append(LS);
                 continue;
             }

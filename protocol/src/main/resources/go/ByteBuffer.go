@@ -30,8 +30,7 @@ func (byteBuffer *ByteBuffer) AdjustPadding(predictionLength int, beforeWriteInd
 		byteBuffer.WriteInt(length)
 		byteBuffer.SetWriteOffset(currentWriteIndex)
 	} else {
-		byteBuffer.SetWriteOffset(currentWriteIndex - length)
-		var byteArray = byteBuffer.ReadUBytes(length)
+		var byteArray = byteBuffer.buffer[(currentWriteIndex - length):currentWriteIndex]
 		byteBuffer.SetWriteOffset(beforeWriteIndex)
 		byteBuffer.WriteInt(length)
 		byteBuffer.WriteUBytes(byteArray)
