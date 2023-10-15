@@ -126,14 +126,8 @@ public abstract class GenerateGoUtils {
                 , protocolClazzName, protocolId, protocolClazzName, protocolClazzName
                 , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim());
 
-        var protocolPath = GenerateProtocolPath.protocolAbsolutePath(protocolId);
-        if (StringUtils.isEmpty(protocolPath)) {
-            protocolPath = protocolClazzName;
-        } else if (protocolPath.contains(StringUtils.SLASH)) {
-            protocolPath = StringUtils.substringAfterLast(protocolPath, StringUtils.SLASH);
-        }
-        var outputPath = StringUtils.format("{}/{}/{}.go", protocolOutputPath, protocolOutputRootPath, protocolClazzName);
-        FileUtils.writeStringToFile(outputPath, protocolTemplate, true);
+        var outputPath = StringUtils.format("{}/{}.go", protocolOutputPath, protocolClazzName);
+        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
     }
 
     private static String fieldDefinition(ProtocolRegistration registration) {
