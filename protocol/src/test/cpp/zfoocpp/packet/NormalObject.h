@@ -1,9 +1,9 @@
 #ifndef ZFOO_NORMALOBJECT_H
 #define ZFOO_NORMALOBJECT_H
 
-#include "cppProtocol/ByteBuffer.h"
-#include "cppProtocol/Packet/ObjectA.h"
-#include "cppProtocol/Packet/ObjectB.h"
+#include "zfoocpp/ByteBuffer.h"
+#include "zfoocpp/Packet/ObjectA.h"
+#include "zfoocpp/Packet/ObjectB.h"
 
 namespace zfoo {
 
@@ -28,10 +28,12 @@ namespace zfoo {
         map<int32_t, ObjectA> mm;
         set<int32_t> s;
         set<string> ssss;
+        int32_t outCompatibleValue;
+        int32_t outCompatibleValue2;
 
         ~NormalObject() override = default;
 
-        static NormalObject valueOf(int8_t a, vector<int8_t> aaa, int16_t b, int32_t c, int64_t d, float e, double f, bool g, string jj, ObjectA kk, list<int32_t> l, list<int64_t> ll, list<ObjectA> lll, list<string> llll, map<int32_t, string> m, map<int32_t, ObjectA> mm, set<int32_t> s, set<string> ssss) {
+        static NormalObject valueOf(int8_t a, vector<int8_t> aaa, int16_t b, int32_t c, int64_t d, float e, double f, bool g, string jj, ObjectA kk, list<int32_t> l, list<int64_t> ll, list<ObjectA> lll, list<string> llll, map<int32_t, string> m, map<int32_t, ObjectA> mm, set<int32_t> s, set<string> ssss, int32_t outCompatibleValue, int32_t outCompatibleValue2) {
             auto packet = NormalObject();
             packet.a = a;
             packet.aaa = aaa;
@@ -51,6 +53,8 @@ namespace zfoo {
             packet.mm = mm;
             packet.s = s;
             packet.ssss = ssss;
+            packet.outCompatibleValue = outCompatibleValue;
+            packet.outCompatibleValue2 = outCompatibleValue2;
             return packet;
         }
 
@@ -95,6 +99,10 @@ namespace zfoo {
             if (_.s < s) { return false; }
             if (ssss < _.ssss) { return true; }
             if (_.ssss < ssss) { return false; }
+            if (outCompatibleValue < _.outCompatibleValue) { return true; }
+            if (_.outCompatibleValue < outCompatibleValue) { return false; }
+            if (outCompatibleValue2 < _.outCompatibleValue2) { return true; }
+            if (_.outCompatibleValue2 < outCompatibleValue2) { return false; }
             return false;
         }
     };
@@ -107,10 +115,13 @@ namespace zfoo {
         }
 
         void write(ByteBuffer &buffer, IProtocol *packet) override {
-            if (buffer.writePacketFlag(packet)) {
+            if (packet == nullptr) {
+                buffer.writeInt(0);
                 return;
             }
             auto *message = (NormalObject *) packet;
+            auto beforeWriteIndex = buffer.writerIndex();
+            buffer.writeInt(857);
             buffer.writeByte(message->a);
             buffer.writeByteArray(message->aaa);
             buffer.writeShort(message->b);
@@ -129,13 +140,18 @@ namespace zfoo {
             buffer.writeIntPacketMap(message->mm, 102);
             buffer.writeIntSet(message->s);
             buffer.writeStringSet(message->ssss);
+            buffer.writeInt(message->outCompatibleValue);
+            buffer.writeInt(message->outCompatibleValue2);
+            buffer.adjustPadding(857, beforeWriteIndex);
         }
 
         IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new NormalObject();
-            if (!buffer.readBool()) {
+            auto length = buffer.readInt();
+            if (length == 0) {
                 return packet;
             }
+            auto beforeReadIndex = buffer.readerIndex();
             int8_t result0 = buffer.readByte();
             packet->a = result0;
             auto array1 = buffer.readByteArray();
@@ -173,6 +189,17 @@ namespace zfoo {
             packet->s = set17;
             auto set18 = buffer.readStringSet();
             packet->ssss = set18;
+            if (buffer.compatibleRead(beforeReadIndex, length)) {
+                int32_t result19 = buffer.readInt();
+                packet->outCompatibleValue = result19;
+            }
+            if (buffer.compatibleRead(beforeReadIndex, length)) {
+                int32_t result20 = buffer.readInt();
+                packet->outCompatibleValue2 = result20;
+            }
+            if (length > 0) {
+                buffer.readerIndex(beforeReadIndex + length);
+            }
             return packet;
         }
     };

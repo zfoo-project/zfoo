@@ -6,19 +6,12 @@
 using namespace zfoo;
 using namespace std;
 
-
 int main() {
-    try {
-        list_test::list_all_test();
-        byte_buffer_test::byte_buffer_all_test();
-        serialization_test::protocol_all_test();
+    list_test::list_all_test();
+    byte_buffer_test::byte_buffer_all_test();
+    serialization_test::protocol_all_test();
 
-        speed_test::parseObject();
-        speed_test::singleThreadBenchmarks();
-    } catch (string &e) {
-        cout << e << endl;
-    } catch (...) {
-        cout << "unknown" << endl;
-    }
+    speed_test::parseObject();
+    speed_test::singleThreadBenchmarks();
     return 0;
 }

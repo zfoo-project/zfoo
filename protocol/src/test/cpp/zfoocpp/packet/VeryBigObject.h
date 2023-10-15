@@ -1,9 +1,9 @@
 #ifndef ZFOO_VERYBIGOBJECT_H
 #define ZFOO_VERYBIGOBJECT_H
 
-#include "cppProtocol/ByteBuffer.h"
-#include "cppProtocol/Packet/ObjectA.h"
-#include "cppProtocol/Packet/ObjectB.h"
+#include "zfoocpp/ByteBuffer.h"
+#include "zfoocpp/Packet/ObjectA.h"
+#include "zfoocpp/Packet/ObjectB.h"
 
 namespace zfoo {
 
@@ -38,10 +38,6 @@ namespace zfoo {
         bool gg1;
         vector<bool> ggg1;
         vector<bool> gggg1;
-        char h1;
-        char hh1;
-        vector<char> hhh1;
-        vector<char> hhhh1;
         string jj1;
         vector<string> jjj1;
         ObjectA kk1;
@@ -80,10 +76,6 @@ namespace zfoo {
         bool gg2;
         vector<bool> ggg2;
         vector<bool> gggg2;
-        char h2;
-        char hh2;
-        vector<char> hhh2;
-        vector<char> hhhh2;
         string jj2;
         vector<string> jjj2;
         ObjectA kk2;
@@ -122,10 +114,6 @@ namespace zfoo {
         bool gg3;
         vector<bool> ggg3;
         vector<bool> gggg3;
-        char h3;
-        char hh3;
-        vector<char> hhh3;
-        vector<char> hhhh3;
         string jj3;
         vector<string> jjj3;
         ObjectA kk3;
@@ -164,10 +152,6 @@ namespace zfoo {
         bool gg4;
         vector<bool> ggg4;
         vector<bool> gggg4;
-        char h4;
-        char hh4;
-        vector<char> hhh4;
-        vector<char> hhhh4;
         string jj4;
         vector<string> jjj4;
         ObjectA kk4;
@@ -206,10 +190,6 @@ namespace zfoo {
         bool gg5;
         vector<bool> ggg5;
         vector<bool> gggg5;
-        char h5;
-        char hh5;
-        vector<char> hhh5;
-        vector<char> hhhh5;
         string jj5;
         vector<string> jjj5;
         ObjectA kk5;
@@ -248,10 +228,6 @@ namespace zfoo {
         bool gg6;
         vector<bool> ggg6;
         vector<bool> gggg6;
-        char h6;
-        char hh6;
-        vector<char> hhh6;
-        vector<char> hhhh6;
         string jj6;
         vector<string> jjj6;
         ObjectA kk6;
@@ -290,10 +266,6 @@ namespace zfoo {
         bool gg7;
         vector<bool> ggg7;
         vector<bool> gggg7;
-        char h7;
-        char hh7;
-        vector<char> hhh7;
-        vector<char> hhhh7;
         string jj7;
         vector<string> jjj7;
         ObjectA kk7;
@@ -332,10 +304,6 @@ namespace zfoo {
         bool gg8;
         vector<bool> ggg8;
         vector<bool> gggg8;
-        char h8;
-        char hh8;
-        vector<char> hhh8;
-        vector<char> hhhh8;
         string jj8;
         vector<string> jjj8;
         ObjectA kk8;
@@ -374,10 +342,6 @@ namespace zfoo {
         bool gg9;
         vector<bool> ggg9;
         vector<bool> gggg9;
-        char h9;
-        char hh9;
-        vector<char> hhh9;
-        vector<char> hhhh9;
         string jj9;
         vector<string> jjj9;
         ObjectA kk9;
@@ -416,10 +380,6 @@ namespace zfoo {
         bool gg10;
         vector<bool> ggg10;
         vector<bool> gggg10;
-        char h10;
-        char hh10;
-        vector<char> hhh10;
-        vector<char> hhhh10;
         string jj10;
         vector<string> jjj10;
         ObjectA kk10;
@@ -458,10 +418,6 @@ namespace zfoo {
         bool gg11;
         vector<bool> ggg11;
         vector<bool> gggg11;
-        char h11;
-        char hh11;
-        vector<char> hhh11;
-        vector<char> hhhh11;
         string jj11;
         vector<string> jjj11;
         ObjectA kk11;
@@ -500,10 +456,6 @@ namespace zfoo {
         bool gg12;
         vector<bool> ggg12;
         vector<bool> gggg12;
-        char h12;
-        char hh12;
-        vector<char> hhh12;
-        vector<char> hhhh12;
         string jj12;
         vector<string> jjj12;
         ObjectA kk12;
@@ -542,10 +494,6 @@ namespace zfoo {
         bool gg13;
         vector<bool> ggg13;
         vector<bool> gggg13;
-        char h13;
-        char hh13;
-        vector<char> hhh13;
-        vector<char> hhhh13;
         string jj13;
         vector<string> jjj13;
         ObjectA kk13;
@@ -584,10 +532,6 @@ namespace zfoo {
         bool gg14;
         vector<bool> ggg14;
         vector<bool> gggg14;
-        char h14;
-        char hh14;
-        vector<char> hhh14;
-        vector<char> hhhh14;
         string jj14;
         vector<string> jjj14;
         ObjectA kk14;
@@ -626,10 +570,6 @@ namespace zfoo {
         bool gg15;
         vector<bool> ggg15;
         vector<bool> gggg15;
-        char h15;
-        char hh15;
-        vector<char> hhh15;
-        vector<char> hhhh15;
         string jj15;
         vector<string> jjj15;
         ObjectA kk15;
@@ -668,10 +608,6 @@ namespace zfoo {
         bool gg16;
         vector<bool> ggg16;
         vector<bool> gggg16;
-        char h16;
-        char hh16;
-        vector<char> hhh16;
-        vector<char> hhhh16;
         string jj16;
         vector<string> jjj16;
         ObjectA kk16;
@@ -710,10 +646,6 @@ namespace zfoo {
         bool gg17;
         vector<bool> ggg17;
         vector<bool> gggg17;
-        char h17;
-        char hh17;
-        vector<char> hhh17;
-        vector<char> hhhh17;
         string jj17;
         vector<string> jjj17;
         ObjectA kk17;
@@ -752,10 +684,6 @@ namespace zfoo {
         bool gg18;
         vector<bool> ggg18;
         vector<bool> gggg18;
-        char h18;
-        char hh18;
-        vector<char> hhh18;
-        vector<char> hhhh18;
         string jj18;
         vector<string> jjj18;
         ObjectA kk18;
@@ -794,10 +722,6 @@ namespace zfoo {
         bool gg19;
         vector<bool> ggg19;
         vector<bool> gggg19;
-        char h19;
-        char hh19;
-        vector<char> hhh19;
-        vector<char> hhhh19;
         string jj19;
         vector<string> jjj19;
         ObjectA kk19;
@@ -836,10 +760,6 @@ namespace zfoo {
         bool gg20;
         vector<bool> ggg20;
         vector<bool> gggg20;
-        char h20;
-        char hh20;
-        vector<char> hhh20;
-        vector<char> hhhh20;
         string jj20;
         vector<string> jjj20;
         ObjectA kk20;
@@ -878,10 +798,6 @@ namespace zfoo {
         bool gg21;
         vector<bool> ggg21;
         vector<bool> gggg21;
-        char h21;
-        char hh21;
-        vector<char> hhh21;
-        vector<char> hhhh21;
         string jj21;
         vector<string> jjj21;
         ObjectA kk21;
@@ -920,10 +836,6 @@ namespace zfoo {
         bool gg22;
         vector<bool> ggg22;
         vector<bool> gggg22;
-        char h22;
-        char hh22;
-        vector<char> hhh22;
-        vector<char> hhhh22;
         string jj22;
         vector<string> jjj22;
         ObjectA kk22;
@@ -962,10 +874,6 @@ namespace zfoo {
         bool gg23;
         vector<bool> ggg23;
         vector<bool> gggg23;
-        char h23;
-        char hh23;
-        vector<char> hhh23;
-        vector<char> hhhh23;
         string jj23;
         vector<string> jjj23;
         ObjectA kk23;
@@ -1004,10 +912,6 @@ namespace zfoo {
         bool gg24;
         vector<bool> ggg24;
         vector<bool> gggg24;
-        char h24;
-        char hh24;
-        vector<char> hhh24;
-        vector<char> hhhh24;
         string jj24;
         vector<string> jjj24;
         ObjectA kk24;
@@ -1046,10 +950,6 @@ namespace zfoo {
         bool gg25;
         vector<bool> ggg25;
         vector<bool> gggg25;
-        char h25;
-        char hh25;
-        vector<char> hhh25;
-        vector<char> hhhh25;
         string jj25;
         vector<string> jjj25;
         ObjectA kk25;
@@ -1088,10 +988,6 @@ namespace zfoo {
         bool gg26;
         vector<bool> ggg26;
         vector<bool> gggg26;
-        char h26;
-        char hh26;
-        vector<char> hhh26;
-        vector<char> hhhh26;
         string jj26;
         vector<string> jjj26;
         ObjectA kk26;
@@ -1130,10 +1026,6 @@ namespace zfoo {
         bool gg27;
         vector<bool> ggg27;
         vector<bool> gggg27;
-        char h27;
-        char hh27;
-        vector<char> hhh27;
-        vector<char> hhhh27;
         string jj27;
         vector<string> jjj27;
         ObjectA kk27;
@@ -1172,10 +1064,6 @@ namespace zfoo {
         bool gg28;
         vector<bool> ggg28;
         vector<bool> gggg28;
-        char h28;
-        char hh28;
-        vector<char> hhh28;
-        vector<char> hhhh28;
         string jj28;
         vector<string> jjj28;
         ObjectA kk28;
@@ -1214,10 +1102,6 @@ namespace zfoo {
         bool gg29;
         vector<bool> ggg29;
         vector<bool> gggg29;
-        char h29;
-        char hh29;
-        vector<char> hhh29;
-        vector<char> hhhh29;
         string jj29;
         vector<string> jjj29;
         ObjectA kk29;
@@ -1256,10 +1140,6 @@ namespace zfoo {
         bool gg30;
         vector<bool> ggg30;
         vector<bool> gggg30;
-        char h30;
-        char hh30;
-        vector<char> hhh30;
-        vector<char> hhhh30;
         string jj30;
         vector<string> jjj30;
         ObjectA kk30;
@@ -1298,10 +1178,6 @@ namespace zfoo {
         bool gg31;
         vector<bool> ggg31;
         vector<bool> gggg31;
-        char h31;
-        char hh31;
-        vector<char> hhh31;
-        vector<char> hhhh31;
         string jj31;
         vector<string> jjj31;
         ObjectA kk31;
@@ -1340,10 +1216,6 @@ namespace zfoo {
         bool gg32;
         vector<bool> ggg32;
         vector<bool> gggg32;
-        char h32;
-        char hh32;
-        vector<char> hhh32;
-        vector<char> hhhh32;
         string jj32;
         vector<string> jjj32;
         ObjectA kk32;
@@ -1382,10 +1254,6 @@ namespace zfoo {
         bool gg33;
         vector<bool> ggg33;
         vector<bool> gggg33;
-        char h33;
-        char hh33;
-        vector<char> hhh33;
-        vector<char> hhhh33;
         string jj33;
         vector<string> jjj33;
         ObjectA kk33;
@@ -1424,10 +1292,6 @@ namespace zfoo {
         bool gg34;
         vector<bool> ggg34;
         vector<bool> gggg34;
-        char h34;
-        char hh34;
-        vector<char> hhh34;
-        vector<char> hhhh34;
         string jj34;
         vector<string> jjj34;
         ObjectA kk34;
@@ -1466,10 +1330,6 @@ namespace zfoo {
         bool gg35;
         vector<bool> ggg35;
         vector<bool> gggg35;
-        char h35;
-        char hh35;
-        vector<char> hhh35;
-        vector<char> hhhh35;
         string jj35;
         vector<string> jjj35;
         ObjectA kk35;
@@ -1508,10 +1368,6 @@ namespace zfoo {
         bool gg36;
         vector<bool> ggg36;
         vector<bool> gggg36;
-        char h36;
-        char hh36;
-        vector<char> hhh36;
-        vector<char> hhhh36;
         string jj36;
         vector<string> jjj36;
         ObjectA kk36;
@@ -1550,10 +1406,6 @@ namespace zfoo {
         bool gg37;
         vector<bool> ggg37;
         vector<bool> gggg37;
-        char h37;
-        char hh37;
-        vector<char> hhh37;
-        vector<char> hhhh37;
         string jj37;
         vector<string> jjj37;
         ObjectA kk37;
@@ -1592,10 +1444,6 @@ namespace zfoo {
         bool gg38;
         vector<bool> ggg38;
         vector<bool> gggg38;
-        char h38;
-        char hh38;
-        vector<char> hhh38;
-        vector<char> hhhh38;
         string jj38;
         vector<string> jjj38;
         ObjectA kk38;
@@ -1634,10 +1482,6 @@ namespace zfoo {
         bool gg39;
         vector<bool> ggg39;
         vector<bool> gggg39;
-        char h39;
-        char hh39;
-        vector<char> hhh39;
-        vector<char> hhhh39;
         string jj39;
         vector<string> jjj39;
         ObjectA kk39;
@@ -1676,10 +1520,6 @@ namespace zfoo {
         bool gg40;
         vector<bool> ggg40;
         vector<bool> gggg40;
-        char h40;
-        char hh40;
-        vector<char> hhh40;
-        vector<char> hhhh40;
         string jj40;
         vector<string> jjj40;
         ObjectA kk40;
@@ -1718,10 +1558,6 @@ namespace zfoo {
         bool gg41;
         vector<bool> ggg41;
         vector<bool> gggg41;
-        char h41;
-        char hh41;
-        vector<char> hhh41;
-        vector<char> hhhh41;
         string jj41;
         vector<string> jjj41;
         ObjectA kk41;
@@ -1760,10 +1596,6 @@ namespace zfoo {
         bool gg42;
         vector<bool> ggg42;
         vector<bool> gggg42;
-        char h42;
-        char hh42;
-        vector<char> hhh42;
-        vector<char> hhhh42;
         string jj42;
         vector<string> jjj42;
         ObjectA kk42;
@@ -1802,10 +1634,6 @@ namespace zfoo {
         bool gg43;
         vector<bool> ggg43;
         vector<bool> gggg43;
-        char h43;
-        char hh43;
-        vector<char> hhh43;
-        vector<char> hhhh43;
         string jj43;
         vector<string> jjj43;
         ObjectA kk43;
@@ -1844,10 +1672,6 @@ namespace zfoo {
         bool gg44;
         vector<bool> ggg44;
         vector<bool> gggg44;
-        char h44;
-        char hh44;
-        vector<char> hhh44;
-        vector<char> hhhh44;
         string jj44;
         vector<string> jjj44;
         ObjectA kk44;
@@ -1886,10 +1710,6 @@ namespace zfoo {
         bool gg45;
         vector<bool> ggg45;
         vector<bool> gggg45;
-        char h45;
-        char hh45;
-        vector<char> hhh45;
-        vector<char> hhhh45;
         string jj45;
         vector<string> jjj45;
         ObjectA kk45;
@@ -1928,10 +1748,6 @@ namespace zfoo {
         bool gg46;
         vector<bool> ggg46;
         vector<bool> gggg46;
-        char h46;
-        char hh46;
-        vector<char> hhh46;
-        vector<char> hhhh46;
         string jj46;
         vector<string> jjj46;
         ObjectA kk46;
@@ -1970,10 +1786,6 @@ namespace zfoo {
         bool gg47;
         vector<bool> ggg47;
         vector<bool> gggg47;
-        char h47;
-        char hh47;
-        vector<char> hhh47;
-        vector<char> hhhh47;
         string jj47;
         vector<string> jjj47;
         ObjectA kk47;
@@ -2012,10 +1824,6 @@ namespace zfoo {
         bool gg48;
         vector<bool> ggg48;
         vector<bool> gggg48;
-        char h48;
-        char hh48;
-        vector<char> hhh48;
-        vector<char> hhhh48;
         string jj48;
         vector<string> jjj48;
         ObjectA kk48;
@@ -2054,10 +1862,6 @@ namespace zfoo {
         bool gg49;
         vector<bool> ggg49;
         vector<bool> gggg49;
-        char h49;
-        char hh49;
-        vector<char> hhh49;
-        vector<char> hhhh49;
         string jj49;
         vector<string> jjj49;
         ObjectA kk49;
@@ -2096,10 +1900,6 @@ namespace zfoo {
         bool gg50;
         vector<bool> ggg50;
         vector<bool> gggg50;
-        char h50;
-        char hh50;
-        vector<char> hhh50;
-        vector<char> hhhh50;
         string jj50;
         vector<string> jjj50;
         ObjectA kk50;
@@ -2138,10 +1938,6 @@ namespace zfoo {
         bool gg51;
         vector<bool> ggg51;
         vector<bool> gggg51;
-        char h51;
-        char hh51;
-        vector<char> hhh51;
-        vector<char> hhhh51;
         string jj51;
         vector<string> jjj51;
         ObjectA kk51;
@@ -2180,10 +1976,6 @@ namespace zfoo {
         bool gg52;
         vector<bool> ggg52;
         vector<bool> gggg52;
-        char h52;
-        char hh52;
-        vector<char> hhh52;
-        vector<char> hhhh52;
         string jj52;
         vector<string> jjj52;
         ObjectA kk52;
@@ -2222,10 +2014,6 @@ namespace zfoo {
         bool gg53;
         vector<bool> ggg53;
         vector<bool> gggg53;
-        char h53;
-        char hh53;
-        vector<char> hhh53;
-        vector<char> hhhh53;
         string jj53;
         vector<string> jjj53;
         ObjectA kk53;
@@ -2264,10 +2052,6 @@ namespace zfoo {
         bool gg54;
         vector<bool> ggg54;
         vector<bool> gggg54;
-        char h54;
-        char hh54;
-        vector<char> hhh54;
-        vector<char> hhhh54;
         string jj54;
         vector<string> jjj54;
         ObjectA kk54;
@@ -2306,10 +2090,6 @@ namespace zfoo {
         bool gg55;
         vector<bool> ggg55;
         vector<bool> gggg55;
-        char h55;
-        char hh55;
-        vector<char> hhh55;
-        vector<char> hhhh55;
         string jj55;
         vector<string> jjj55;
         ObjectA kk55;
@@ -2348,10 +2128,6 @@ namespace zfoo {
         bool gg56;
         vector<bool> ggg56;
         vector<bool> gggg56;
-        char h56;
-        char hh56;
-        vector<char> hhh56;
-        vector<char> hhhh56;
         string jj56;
         vector<string> jjj56;
         ObjectA kk56;
@@ -2390,10 +2166,6 @@ namespace zfoo {
         bool gg57;
         vector<bool> ggg57;
         vector<bool> gggg57;
-        char h57;
-        char hh57;
-        vector<char> hhh57;
-        vector<char> hhhh57;
         string jj57;
         vector<string> jjj57;
         ObjectA kk57;
@@ -2432,10 +2204,6 @@ namespace zfoo {
         bool gg58;
         vector<bool> ggg58;
         vector<bool> gggg58;
-        char h58;
-        char hh58;
-        vector<char> hhh58;
-        vector<char> hhhh58;
         string jj58;
         vector<string> jjj58;
         ObjectA kk58;
@@ -2474,10 +2242,6 @@ namespace zfoo {
         bool gg59;
         vector<bool> ggg59;
         vector<bool> gggg59;
-        char h59;
-        char hh59;
-        vector<char> hhh59;
-        vector<char> hhhh59;
         string jj59;
         vector<string> jjj59;
         ObjectA kk59;
@@ -2516,10 +2280,6 @@ namespace zfoo {
         bool gg60;
         vector<bool> ggg60;
         vector<bool> gggg60;
-        char h60;
-        char hh60;
-        vector<char> hhh60;
-        vector<char> hhhh60;
         string jj60;
         vector<string> jjj60;
         ObjectA kk60;
@@ -2558,10 +2318,6 @@ namespace zfoo {
         bool gg61;
         vector<bool> ggg61;
         vector<bool> gggg61;
-        char h61;
-        char hh61;
-        vector<char> hhh61;
-        vector<char> hhhh61;
         string jj61;
         vector<string> jjj61;
         ObjectA kk61;
@@ -2600,10 +2356,6 @@ namespace zfoo {
         bool gg62;
         vector<bool> ggg62;
         vector<bool> gggg62;
-        char h62;
-        char hh62;
-        vector<char> hhh62;
-        vector<char> hhhh62;
         string jj62;
         vector<string> jjj62;
         ObjectA kk62;
@@ -2642,10 +2394,6 @@ namespace zfoo {
         bool gg63;
         vector<bool> ggg63;
         vector<bool> gggg63;
-        char h63;
-        char hh63;
-        vector<char> hhh63;
-        vector<char> hhhh63;
         string jj63;
         vector<string> jjj63;
         ObjectA kk63;
@@ -2684,10 +2432,6 @@ namespace zfoo {
         bool gg64;
         vector<bool> ggg64;
         vector<bool> gggg64;
-        char h64;
-        char hh64;
-        vector<char> hhh64;
-        vector<char> hhhh64;
         string jj64;
         vector<string> jjj64;
         ObjectA kk64;
@@ -2726,10 +2470,6 @@ namespace zfoo {
         bool gg65;
         vector<bool> ggg65;
         vector<bool> gggg65;
-        char h65;
-        char hh65;
-        vector<char> hhh65;
-        vector<char> hhhh65;
         string jj65;
         vector<string> jjj65;
         ObjectA kk65;
@@ -2768,10 +2508,6 @@ namespace zfoo {
         bool gg66;
         vector<bool> ggg66;
         vector<bool> gggg66;
-        char h66;
-        char hh66;
-        vector<char> hhh66;
-        vector<char> hhhh66;
         string jj66;
         vector<string> jjj66;
         ObjectA kk66;
@@ -2810,10 +2546,6 @@ namespace zfoo {
         bool gg67;
         vector<bool> ggg67;
         vector<bool> gggg67;
-        char h67;
-        char hh67;
-        vector<char> hhh67;
-        vector<char> hhhh67;
         string jj67;
         vector<string> jjj67;
         ObjectA kk67;
@@ -2852,10 +2584,6 @@ namespace zfoo {
         bool gg68;
         vector<bool> ggg68;
         vector<bool> gggg68;
-        char h68;
-        char hh68;
-        vector<char> hhh68;
-        vector<char> hhhh68;
         string jj68;
         vector<string> jjj68;
         ObjectA kk68;
@@ -2894,10 +2622,6 @@ namespace zfoo {
         bool gg69;
         vector<bool> ggg69;
         vector<bool> gggg69;
-        char h69;
-        char hh69;
-        vector<char> hhh69;
-        vector<char> hhhh69;
         string jj69;
         vector<string> jjj69;
         ObjectA kk69;
@@ -2936,10 +2660,6 @@ namespace zfoo {
         bool gg70;
         vector<bool> ggg70;
         vector<bool> gggg70;
-        char h70;
-        char hh70;
-        vector<char> hhh70;
-        vector<char> hhhh70;
         string jj70;
         vector<string> jjj70;
         ObjectA kk70;
@@ -2978,10 +2698,6 @@ namespace zfoo {
         bool gg71;
         vector<bool> ggg71;
         vector<bool> gggg71;
-        char h71;
-        char hh71;
-        vector<char> hhh71;
-        vector<char> hhhh71;
         string jj71;
         vector<string> jjj71;
         ObjectA kk71;
@@ -3020,10 +2736,6 @@ namespace zfoo {
         bool gg72;
         vector<bool> ggg72;
         vector<bool> gggg72;
-        char h72;
-        char hh72;
-        vector<char> hhh72;
-        vector<char> hhhh72;
         string jj72;
         vector<string> jjj72;
         ObjectA kk72;
@@ -3062,10 +2774,6 @@ namespace zfoo {
         bool gg73;
         vector<bool> ggg73;
         vector<bool> gggg73;
-        char h73;
-        char hh73;
-        vector<char> hhh73;
-        vector<char> hhhh73;
         string jj73;
         vector<string> jjj73;
         ObjectA kk73;
@@ -3104,10 +2812,6 @@ namespace zfoo {
         bool gg74;
         vector<bool> ggg74;
         vector<bool> gggg74;
-        char h74;
-        char hh74;
-        vector<char> hhh74;
-        vector<char> hhhh74;
         string jj74;
         vector<string> jjj74;
         ObjectA kk74;
@@ -3146,10 +2850,6 @@ namespace zfoo {
         bool gg75;
         vector<bool> ggg75;
         vector<bool> gggg75;
-        char h75;
-        char hh75;
-        vector<char> hhh75;
-        vector<char> hhhh75;
         string jj75;
         vector<string> jjj75;
         ObjectA kk75;
@@ -3188,10 +2888,6 @@ namespace zfoo {
         bool gg76;
         vector<bool> ggg76;
         vector<bool> gggg76;
-        char h76;
-        char hh76;
-        vector<char> hhh76;
-        vector<char> hhhh76;
         string jj76;
         vector<string> jjj76;
         ObjectA kk76;
@@ -3230,10 +2926,6 @@ namespace zfoo {
         bool gg77;
         vector<bool> ggg77;
         vector<bool> gggg77;
-        char h77;
-        char hh77;
-        vector<char> hhh77;
-        vector<char> hhhh77;
         string jj77;
         vector<string> jjj77;
         ObjectA kk77;
@@ -3272,10 +2964,6 @@ namespace zfoo {
         bool gg78;
         vector<bool> ggg78;
         vector<bool> gggg78;
-        char h78;
-        char hh78;
-        vector<char> hhh78;
-        vector<char> hhhh78;
         string jj78;
         vector<string> jjj78;
         ObjectA kk78;
@@ -3314,10 +3002,6 @@ namespace zfoo {
         bool gg79;
         vector<bool> ggg79;
         vector<bool> gggg79;
-        char h79;
-        char hh79;
-        vector<char> hhh79;
-        vector<char> hhhh79;
         string jj79;
         vector<string> jjj79;
         ObjectA kk79;
@@ -3356,10 +3040,6 @@ namespace zfoo {
         bool gg80;
         vector<bool> ggg80;
         vector<bool> gggg80;
-        char h80;
-        char hh80;
-        vector<char> hhh80;
-        vector<char> hhhh80;
         string jj80;
         vector<string> jjj80;
         ObjectA kk80;
@@ -3398,10 +3078,6 @@ namespace zfoo {
         bool gg81;
         vector<bool> ggg81;
         vector<bool> gggg81;
-        char h81;
-        char hh81;
-        vector<char> hhh81;
-        vector<char> hhhh81;
         string jj81;
         vector<string> jjj81;
         ObjectA kk81;
@@ -3440,10 +3116,6 @@ namespace zfoo {
         bool gg82;
         vector<bool> ggg82;
         vector<bool> gggg82;
-        char h82;
-        char hh82;
-        vector<char> hhh82;
-        vector<char> hhhh82;
         string jj82;
         vector<string> jjj82;
         ObjectA kk82;
@@ -3482,10 +3154,6 @@ namespace zfoo {
         bool gg83;
         vector<bool> ggg83;
         vector<bool> gggg83;
-        char h83;
-        char hh83;
-        vector<char> hhh83;
-        vector<char> hhhh83;
         string jj83;
         vector<string> jjj83;
         ObjectA kk83;
@@ -3524,10 +3192,6 @@ namespace zfoo {
         bool gg84;
         vector<bool> ggg84;
         vector<bool> gggg84;
-        char h84;
-        char hh84;
-        vector<char> hhh84;
-        vector<char> hhhh84;
         string jj84;
         vector<string> jjj84;
         ObjectA kk84;
@@ -3566,10 +3230,6 @@ namespace zfoo {
         bool gg85;
         vector<bool> ggg85;
         vector<bool> gggg85;
-        char h85;
-        char hh85;
-        vector<char> hhh85;
-        vector<char> hhhh85;
         string jj85;
         vector<string> jjj85;
         ObjectA kk85;
@@ -3608,10 +3268,6 @@ namespace zfoo {
         bool gg86;
         vector<bool> ggg86;
         vector<bool> gggg86;
-        char h86;
-        char hh86;
-        vector<char> hhh86;
-        vector<char> hhhh86;
         string jj86;
         vector<string> jjj86;
         ObjectA kk86;
@@ -3650,10 +3306,6 @@ namespace zfoo {
         bool gg87;
         vector<bool> ggg87;
         vector<bool> gggg87;
-        char h87;
-        char hh87;
-        vector<char> hhh87;
-        vector<char> hhhh87;
         string jj87;
         vector<string> jjj87;
         ObjectA kk87;
@@ -3692,10 +3344,6 @@ namespace zfoo {
         bool gg88;
         vector<bool> ggg88;
         vector<bool> gggg88;
-        char h88;
-        char hh88;
-        vector<char> hhh88;
-        vector<char> hhhh88;
         string jj88;
         vector<string> jjj88;
         ObjectA kk88;
@@ -3709,7 +3357,7 @@ namespace zfoo {
 
         ~VeryBigObject() override = default;
 
-        static VeryBigObject valueOf(int8_t a1, int8_t a10, int8_t a11, int8_t a12, int8_t a13, int8_t a14, int8_t a15, int8_t a16, int8_t a17, int8_t a18, int8_t a19, int8_t a2, int8_t a20, int8_t a21, int8_t a22, int8_t a23, int8_t a24, int8_t a25, int8_t a26, int8_t a27, int8_t a28, int8_t a29, int8_t a3, int8_t a30, int8_t a31, int8_t a32, int8_t a33, int8_t a34, int8_t a35, int8_t a36, int8_t a37, int8_t a38, int8_t a39, int8_t a4, int8_t a40, int8_t a41, int8_t a42, int8_t a43, int8_t a44, int8_t a45, int8_t a46, int8_t a47, int8_t a48, int8_t a49, int8_t a5, int8_t a50, int8_t a51, int8_t a52, int8_t a53, int8_t a54, int8_t a55, int8_t a56, int8_t a57, int8_t a58, int8_t a59, int8_t a6, int8_t a60, int8_t a61, int8_t a62, int8_t a63, int8_t a64, int8_t a65, int8_t a66, int8_t a67, int8_t a68, int8_t a69, int8_t a7, int8_t a70, int8_t a71, int8_t a72, int8_t a73, int8_t a74, int8_t a75, int8_t a76, int8_t a77, int8_t a78, int8_t a79, int8_t a8, int8_t a80, int8_t a81, int8_t a82, int8_t a83, int8_t a84, int8_t a85, int8_t a86, int8_t a87, int8_t a88, int8_t a9, int8_t aa1, int8_t aa10, int8_t aa11, int8_t aa12, int8_t aa13, int8_t aa14, int8_t aa15, int8_t aa16, int8_t aa17, int8_t aa18, int8_t aa19, int8_t aa2, int8_t aa20, int8_t aa21, int8_t aa22, int8_t aa23, int8_t aa24, int8_t aa25, int8_t aa26, int8_t aa27, int8_t aa28, int8_t aa29, int8_t aa3, int8_t aa30, int8_t aa31, int8_t aa32, int8_t aa33, int8_t aa34, int8_t aa35, int8_t aa36, int8_t aa37, int8_t aa38, int8_t aa39, int8_t aa4, int8_t aa40, int8_t aa41, int8_t aa42, int8_t aa43, int8_t aa44, int8_t aa45, int8_t aa46, int8_t aa47, int8_t aa48, int8_t aa49, int8_t aa5, int8_t aa50, int8_t aa51, int8_t aa52, int8_t aa53, int8_t aa54, int8_t aa55, int8_t aa56, int8_t aa57, int8_t aa58, int8_t aa59, int8_t aa6, int8_t aa60, int8_t aa61, int8_t aa62, int8_t aa63, int8_t aa64, int8_t aa65, int8_t aa66, int8_t aa67, int8_t aa68, int8_t aa69, int8_t aa7, int8_t aa70, int8_t aa71, int8_t aa72, int8_t aa73, int8_t aa74, int8_t aa75, int8_t aa76, int8_t aa77, int8_t aa78, int8_t aa79, int8_t aa8, int8_t aa80, int8_t aa81, int8_t aa82, int8_t aa83, int8_t aa84, int8_t aa85, int8_t aa86, int8_t aa87, int8_t aa88, int8_t aa9, vector<int8_t> aaa1, vector<int8_t> aaa10, vector<int8_t> aaa11, vector<int8_t> aaa12, vector<int8_t> aaa13, vector<int8_t> aaa14, vector<int8_t> aaa15, vector<int8_t> aaa16, vector<int8_t> aaa17, vector<int8_t> aaa18, vector<int8_t> aaa19, vector<int8_t> aaa2, vector<int8_t> aaa20, vector<int8_t> aaa21, vector<int8_t> aaa22, vector<int8_t> aaa23, vector<int8_t> aaa24, vector<int8_t> aaa25, vector<int8_t> aaa26, vector<int8_t> aaa27, vector<int8_t> aaa28, vector<int8_t> aaa29, vector<int8_t> aaa3, vector<int8_t> aaa30, vector<int8_t> aaa31, vector<int8_t> aaa32, vector<int8_t> aaa33, vector<int8_t> aaa34, vector<int8_t> aaa35, vector<int8_t> aaa36, vector<int8_t> aaa37, vector<int8_t> aaa38, vector<int8_t> aaa39, vector<int8_t> aaa4, vector<int8_t> aaa40, vector<int8_t> aaa41, vector<int8_t> aaa42, vector<int8_t> aaa43, vector<int8_t> aaa44, vector<int8_t> aaa45, vector<int8_t> aaa46, vector<int8_t> aaa47, vector<int8_t> aaa48, vector<int8_t> aaa49, vector<int8_t> aaa5, vector<int8_t> aaa50, vector<int8_t> aaa51, vector<int8_t> aaa52, vector<int8_t> aaa53, vector<int8_t> aaa54, vector<int8_t> aaa55, vector<int8_t> aaa56, vector<int8_t> aaa57, vector<int8_t> aaa58, vector<int8_t> aaa59, vector<int8_t> aaa6, vector<int8_t> aaa60, vector<int8_t> aaa61, vector<int8_t> aaa62, vector<int8_t> aaa63, vector<int8_t> aaa64, vector<int8_t> aaa65, vector<int8_t> aaa66, vector<int8_t> aaa67, vector<int8_t> aaa68, vector<int8_t> aaa69, vector<int8_t> aaa7, vector<int8_t> aaa70, vector<int8_t> aaa71, vector<int8_t> aaa72, vector<int8_t> aaa73, vector<int8_t> aaa74, vector<int8_t> aaa75, vector<int8_t> aaa76, vector<int8_t> aaa77, vector<int8_t> aaa78, vector<int8_t> aaa79, vector<int8_t> aaa8, vector<int8_t> aaa80, vector<int8_t> aaa81, vector<int8_t> aaa82, vector<int8_t> aaa83, vector<int8_t> aaa84, vector<int8_t> aaa85, vector<int8_t> aaa86, vector<int8_t> aaa87, vector<int8_t> aaa88, vector<int8_t> aaa9, vector<int8_t> aaaa1, vector<int8_t> aaaa10, vector<int8_t> aaaa11, vector<int8_t> aaaa12, vector<int8_t> aaaa13, vector<int8_t> aaaa14, vector<int8_t> aaaa15, vector<int8_t> aaaa16, vector<int8_t> aaaa17, vector<int8_t> aaaa18, vector<int8_t> aaaa19, vector<int8_t> aaaa2, vector<int8_t> aaaa20, vector<int8_t> aaaa21, vector<int8_t> aaaa22, vector<int8_t> aaaa23, vector<int8_t> aaaa24, vector<int8_t> aaaa25, vector<int8_t> aaaa26, vector<int8_t> aaaa27, vector<int8_t> aaaa28, vector<int8_t> aaaa29, vector<int8_t> aaaa3, vector<int8_t> aaaa30, vector<int8_t> aaaa31, vector<int8_t> aaaa32, vector<int8_t> aaaa33, vector<int8_t> aaaa34, vector<int8_t> aaaa35, vector<int8_t> aaaa36, vector<int8_t> aaaa37, vector<int8_t> aaaa38, vector<int8_t> aaaa39, vector<int8_t> aaaa4, vector<int8_t> aaaa40, vector<int8_t> aaaa41, vector<int8_t> aaaa42, vector<int8_t> aaaa43, vector<int8_t> aaaa44, vector<int8_t> aaaa45, vector<int8_t> aaaa46, vector<int8_t> aaaa47, vector<int8_t> aaaa48, vector<int8_t> aaaa49, vector<int8_t> aaaa5, vector<int8_t> aaaa50, vector<int8_t> aaaa51, vector<int8_t> aaaa52, vector<int8_t> aaaa53, vector<int8_t> aaaa54, vector<int8_t> aaaa55, vector<int8_t> aaaa56, vector<int8_t> aaaa57, vector<int8_t> aaaa58, vector<int8_t> aaaa59, vector<int8_t> aaaa6, vector<int8_t> aaaa60, vector<int8_t> aaaa61, vector<int8_t> aaaa62, vector<int8_t> aaaa63, vector<int8_t> aaaa64, vector<int8_t> aaaa65, vector<int8_t> aaaa66, vector<int8_t> aaaa67, vector<int8_t> aaaa68, vector<int8_t> aaaa69, vector<int8_t> aaaa7, vector<int8_t> aaaa70, vector<int8_t> aaaa71, vector<int8_t> aaaa72, vector<int8_t> aaaa73, vector<int8_t> aaaa74, vector<int8_t> aaaa75, vector<int8_t> aaaa76, vector<int8_t> aaaa77, vector<int8_t> aaaa78, vector<int8_t> aaaa79, vector<int8_t> aaaa8, vector<int8_t> aaaa80, vector<int8_t> aaaa81, vector<int8_t> aaaa82, vector<int8_t> aaaa83, vector<int8_t> aaaa84, vector<int8_t> aaaa85, vector<int8_t> aaaa86, vector<int8_t> aaaa87, vector<int8_t> aaaa88, vector<int8_t> aaaa9, int16_t b1, int16_t b10, int16_t b11, int16_t b12, int16_t b13, int16_t b14, int16_t b15, int16_t b16, int16_t b17, int16_t b18, int16_t b19, int16_t b2, int16_t b20, int16_t b21, int16_t b22, int16_t b23, int16_t b24, int16_t b25, int16_t b26, int16_t b27, int16_t b28, int16_t b29, int16_t b3, int16_t b30, int16_t b31, int16_t b32, int16_t b33, int16_t b34, int16_t b35, int16_t b36, int16_t b37, int16_t b38, int16_t b39, int16_t b4, int16_t b40, int16_t b41, int16_t b42, int16_t b43, int16_t b44, int16_t b45, int16_t b46, int16_t b47, int16_t b48, int16_t b49, int16_t b5, int16_t b50, int16_t b51, int16_t b52, int16_t b53, int16_t b54, int16_t b55, int16_t b56, int16_t b57, int16_t b58, int16_t b59, int16_t b6, int16_t b60, int16_t b61, int16_t b62, int16_t b63, int16_t b64, int16_t b65, int16_t b66, int16_t b67, int16_t b68, int16_t b69, int16_t b7, int16_t b70, int16_t b71, int16_t b72, int16_t b73, int16_t b74, int16_t b75, int16_t b76, int16_t b77, int16_t b78, int16_t b79, int16_t b8, int16_t b80, int16_t b81, int16_t b82, int16_t b83, int16_t b84, int16_t b85, int16_t b86, int16_t b87, int16_t b88, int16_t b9, int16_t bb1, int16_t bb10, int16_t bb11, int16_t bb12, int16_t bb13, int16_t bb14, int16_t bb15, int16_t bb16, int16_t bb17, int16_t bb18, int16_t bb19, int16_t bb2, int16_t bb20, int16_t bb21, int16_t bb22, int16_t bb23, int16_t bb24, int16_t bb25, int16_t bb26, int16_t bb27, int16_t bb28, int16_t bb29, int16_t bb3, int16_t bb30, int16_t bb31, int16_t bb32, int16_t bb33, int16_t bb34, int16_t bb35, int16_t bb36, int16_t bb37, int16_t bb38, int16_t bb39, int16_t bb4, int16_t bb40, int16_t bb41, int16_t bb42, int16_t bb43, int16_t bb44, int16_t bb45, int16_t bb46, int16_t bb47, int16_t bb48, int16_t bb49, int16_t bb5, int16_t bb50, int16_t bb51, int16_t bb52, int16_t bb53, int16_t bb54, int16_t bb55, int16_t bb56, int16_t bb57, int16_t bb58, int16_t bb59, int16_t bb6, int16_t bb60, int16_t bb61, int16_t bb62, int16_t bb63, int16_t bb64, int16_t bb65, int16_t bb66, int16_t bb67, int16_t bb68, int16_t bb69, int16_t bb7, int16_t bb70, int16_t bb71, int16_t bb72, int16_t bb73, int16_t bb74, int16_t bb75, int16_t bb76, int16_t bb77, int16_t bb78, int16_t bb79, int16_t bb8, int16_t bb80, int16_t bb81, int16_t bb82, int16_t bb83, int16_t bb84, int16_t bb85, int16_t bb86, int16_t bb87, int16_t bb88, int16_t bb9, vector<int16_t> bbb1, vector<int16_t> bbb10, vector<int16_t> bbb11, vector<int16_t> bbb12, vector<int16_t> bbb13, vector<int16_t> bbb14, vector<int16_t> bbb15, vector<int16_t> bbb16, vector<int16_t> bbb17, vector<int16_t> bbb18, vector<int16_t> bbb19, vector<int16_t> bbb2, vector<int16_t> bbb20, vector<int16_t> bbb21, vector<int16_t> bbb22, vector<int16_t> bbb23, vector<int16_t> bbb24, vector<int16_t> bbb25, vector<int16_t> bbb26, vector<int16_t> bbb27, vector<int16_t> bbb28, vector<int16_t> bbb29, vector<int16_t> bbb3, vector<int16_t> bbb30, vector<int16_t> bbb31, vector<int16_t> bbb32, vector<int16_t> bbb33, vector<int16_t> bbb34, vector<int16_t> bbb35, vector<int16_t> bbb36, vector<int16_t> bbb37, vector<int16_t> bbb38, vector<int16_t> bbb39, vector<int16_t> bbb4, vector<int16_t> bbb40, vector<int16_t> bbb41, vector<int16_t> bbb42, vector<int16_t> bbb43, vector<int16_t> bbb44, vector<int16_t> bbb45, vector<int16_t> bbb46, vector<int16_t> bbb47, vector<int16_t> bbb48, vector<int16_t> bbb49, vector<int16_t> bbb5, vector<int16_t> bbb50, vector<int16_t> bbb51, vector<int16_t> bbb52, vector<int16_t> bbb53, vector<int16_t> bbb54, vector<int16_t> bbb55, vector<int16_t> bbb56, vector<int16_t> bbb57, vector<int16_t> bbb58, vector<int16_t> bbb59, vector<int16_t> bbb6, vector<int16_t> bbb60, vector<int16_t> bbb61, vector<int16_t> bbb62, vector<int16_t> bbb63, vector<int16_t> bbb64, vector<int16_t> bbb65, vector<int16_t> bbb66, vector<int16_t> bbb67, vector<int16_t> bbb68, vector<int16_t> bbb69, vector<int16_t> bbb7, vector<int16_t> bbb70, vector<int16_t> bbb71, vector<int16_t> bbb72, vector<int16_t> bbb73, vector<int16_t> bbb74, vector<int16_t> bbb75, vector<int16_t> bbb76, vector<int16_t> bbb77, vector<int16_t> bbb78, vector<int16_t> bbb79, vector<int16_t> bbb8, vector<int16_t> bbb80, vector<int16_t> bbb81, vector<int16_t> bbb82, vector<int16_t> bbb83, vector<int16_t> bbb84, vector<int16_t> bbb85, vector<int16_t> bbb86, vector<int16_t> bbb87, vector<int16_t> bbb88, vector<int16_t> bbb9, vector<int16_t> bbbb1, vector<int16_t> bbbb10, vector<int16_t> bbbb11, vector<int16_t> bbbb12, vector<int16_t> bbbb13, vector<int16_t> bbbb14, vector<int16_t> bbbb15, vector<int16_t> bbbb16, vector<int16_t> bbbb17, vector<int16_t> bbbb18, vector<int16_t> bbbb19, vector<int16_t> bbbb2, vector<int16_t> bbbb20, vector<int16_t> bbbb21, vector<int16_t> bbbb22, vector<int16_t> bbbb23, vector<int16_t> bbbb24, vector<int16_t> bbbb25, vector<int16_t> bbbb26, vector<int16_t> bbbb27, vector<int16_t> bbbb28, vector<int16_t> bbbb29, vector<int16_t> bbbb3, vector<int16_t> bbbb30, vector<int16_t> bbbb31, vector<int16_t> bbbb32, vector<int16_t> bbbb33, vector<int16_t> bbbb34, vector<int16_t> bbbb35, vector<int16_t> bbbb36, vector<int16_t> bbbb37, vector<int16_t> bbbb38, vector<int16_t> bbbb39, vector<int16_t> bbbb4, vector<int16_t> bbbb40, vector<int16_t> bbbb41, vector<int16_t> bbbb42, vector<int16_t> bbbb43, vector<int16_t> bbbb44, vector<int16_t> bbbb45, vector<int16_t> bbbb46, vector<int16_t> bbbb47, vector<int16_t> bbbb48, vector<int16_t> bbbb49, vector<int16_t> bbbb5, vector<int16_t> bbbb50, vector<int16_t> bbbb51, vector<int16_t> bbbb52, vector<int16_t> bbbb53, vector<int16_t> bbbb54, vector<int16_t> bbbb55, vector<int16_t> bbbb56, vector<int16_t> bbbb57, vector<int16_t> bbbb58, vector<int16_t> bbbb59, vector<int16_t> bbbb6, vector<int16_t> bbbb60, vector<int16_t> bbbb61, vector<int16_t> bbbb62, vector<int16_t> bbbb63, vector<int16_t> bbbb64, vector<int16_t> bbbb65, vector<int16_t> bbbb66, vector<int16_t> bbbb67, vector<int16_t> bbbb68, vector<int16_t> bbbb69, vector<int16_t> bbbb7, vector<int16_t> bbbb70, vector<int16_t> bbbb71, vector<int16_t> bbbb72, vector<int16_t> bbbb73, vector<int16_t> bbbb74, vector<int16_t> bbbb75, vector<int16_t> bbbb76, vector<int16_t> bbbb77, vector<int16_t> bbbb78, vector<int16_t> bbbb79, vector<int16_t> bbbb8, vector<int16_t> bbbb80, vector<int16_t> bbbb81, vector<int16_t> bbbb82, vector<int16_t> bbbb83, vector<int16_t> bbbb84, vector<int16_t> bbbb85, vector<int16_t> bbbb86, vector<int16_t> bbbb87, vector<int16_t> bbbb88, vector<int16_t> bbbb9, int32_t c1, int32_t c10, int32_t c11, int32_t c12, int32_t c13, int32_t c14, int32_t c15, int32_t c16, int32_t c17, int32_t c18, int32_t c19, int32_t c2, int32_t c20, int32_t c21, int32_t c22, int32_t c23, int32_t c24, int32_t c25, int32_t c26, int32_t c27, int32_t c28, int32_t c29, int32_t c3, int32_t c30, int32_t c31, int32_t c32, int32_t c33, int32_t c34, int32_t c35, int32_t c36, int32_t c37, int32_t c38, int32_t c39, int32_t c4, int32_t c40, int32_t c41, int32_t c42, int32_t c43, int32_t c44, int32_t c45, int32_t c46, int32_t c47, int32_t c48, int32_t c49, int32_t c5, int32_t c50, int32_t c51, int32_t c52, int32_t c53, int32_t c54, int32_t c55, int32_t c56, int32_t c57, int32_t c58, int32_t c59, int32_t c6, int32_t c60, int32_t c61, int32_t c62, int32_t c63, int32_t c64, int32_t c65, int32_t c66, int32_t c67, int32_t c68, int32_t c69, int32_t c7, int32_t c70, int32_t c71, int32_t c72, int32_t c73, int32_t c74, int32_t c75, int32_t c76, int32_t c77, int32_t c78, int32_t c79, int32_t c8, int32_t c80, int32_t c81, int32_t c82, int32_t c83, int32_t c84, int32_t c85, int32_t c86, int32_t c87, int32_t c88, int32_t c9, int32_t cc1, int32_t cc10, int32_t cc11, int32_t cc12, int32_t cc13, int32_t cc14, int32_t cc15, int32_t cc16, int32_t cc17, int32_t cc18, int32_t cc19, int32_t cc2, int32_t cc20, int32_t cc21, int32_t cc22, int32_t cc23, int32_t cc24, int32_t cc25, int32_t cc26, int32_t cc27, int32_t cc28, int32_t cc29, int32_t cc3, int32_t cc30, int32_t cc31, int32_t cc32, int32_t cc33, int32_t cc34, int32_t cc35, int32_t cc36, int32_t cc37, int32_t cc38, int32_t cc39, int32_t cc4, int32_t cc40, int32_t cc41, int32_t cc42, int32_t cc43, int32_t cc44, int32_t cc45, int32_t cc46, int32_t cc47, int32_t cc48, int32_t cc49, int32_t cc5, int32_t cc50, int32_t cc51, int32_t cc52, int32_t cc53, int32_t cc54, int32_t cc55, int32_t cc56, int32_t cc57, int32_t cc58, int32_t cc59, int32_t cc6, int32_t cc60, int32_t cc61, int32_t cc62, int32_t cc63, int32_t cc64, int32_t cc65, int32_t cc66, int32_t cc67, int32_t cc68, int32_t cc69, int32_t cc7, int32_t cc70, int32_t cc71, int32_t cc72, int32_t cc73, int32_t cc74, int32_t cc75, int32_t cc76, int32_t cc77, int32_t cc78, int32_t cc79, int32_t cc8, int32_t cc80, int32_t cc81, int32_t cc82, int32_t cc83, int32_t cc84, int32_t cc85, int32_t cc86, int32_t cc87, int32_t cc88, int32_t cc9, vector<int32_t> ccc1, vector<int32_t> ccc10, vector<int32_t> ccc11, vector<int32_t> ccc12, vector<int32_t> ccc13, vector<int32_t> ccc14, vector<int32_t> ccc15, vector<int32_t> ccc16, vector<int32_t> ccc17, vector<int32_t> ccc18, vector<int32_t> ccc19, vector<int32_t> ccc2, vector<int32_t> ccc20, vector<int32_t> ccc21, vector<int32_t> ccc22, vector<int32_t> ccc23, vector<int32_t> ccc24, vector<int32_t> ccc25, vector<int32_t> ccc26, vector<int32_t> ccc27, vector<int32_t> ccc28, vector<int32_t> ccc29, vector<int32_t> ccc3, vector<int32_t> ccc30, vector<int32_t> ccc31, vector<int32_t> ccc32, vector<int32_t> ccc33, vector<int32_t> ccc34, vector<int32_t> ccc35, vector<int32_t> ccc36, vector<int32_t> ccc37, vector<int32_t> ccc38, vector<int32_t> ccc39, vector<int32_t> ccc4, vector<int32_t> ccc40, vector<int32_t> ccc41, vector<int32_t> ccc42, vector<int32_t> ccc43, vector<int32_t> ccc44, vector<int32_t> ccc45, vector<int32_t> ccc46, vector<int32_t> ccc47, vector<int32_t> ccc48, vector<int32_t> ccc49, vector<int32_t> ccc5, vector<int32_t> ccc50, vector<int32_t> ccc51, vector<int32_t> ccc52, vector<int32_t> ccc53, vector<int32_t> ccc54, vector<int32_t> ccc55, vector<int32_t> ccc56, vector<int32_t> ccc57, vector<int32_t> ccc58, vector<int32_t> ccc59, vector<int32_t> ccc6, vector<int32_t> ccc60, vector<int32_t> ccc61, vector<int32_t> ccc62, vector<int32_t> ccc63, vector<int32_t> ccc64, vector<int32_t> ccc65, vector<int32_t> ccc66, vector<int32_t> ccc67, vector<int32_t> ccc68, vector<int32_t> ccc69, vector<int32_t> ccc7, vector<int32_t> ccc70, vector<int32_t> ccc71, vector<int32_t> ccc72, vector<int32_t> ccc73, vector<int32_t> ccc74, vector<int32_t> ccc75, vector<int32_t> ccc76, vector<int32_t> ccc77, vector<int32_t> ccc78, vector<int32_t> ccc79, vector<int32_t> ccc8, vector<int32_t> ccc80, vector<int32_t> ccc81, vector<int32_t> ccc82, vector<int32_t> ccc83, vector<int32_t> ccc84, vector<int32_t> ccc85, vector<int32_t> ccc86, vector<int32_t> ccc87, vector<int32_t> ccc88, vector<int32_t> ccc9, vector<int32_t> cccc1, vector<int32_t> cccc10, vector<int32_t> cccc11, vector<int32_t> cccc12, vector<int32_t> cccc13, vector<int32_t> cccc14, vector<int32_t> cccc15, vector<int32_t> cccc16, vector<int32_t> cccc17, vector<int32_t> cccc18, vector<int32_t> cccc19, vector<int32_t> cccc2, vector<int32_t> cccc20, vector<int32_t> cccc21, vector<int32_t> cccc22, vector<int32_t> cccc23, vector<int32_t> cccc24, vector<int32_t> cccc25, vector<int32_t> cccc26, vector<int32_t> cccc27, vector<int32_t> cccc28, vector<int32_t> cccc29, vector<int32_t> cccc3, vector<int32_t> cccc30, vector<int32_t> cccc31, vector<int32_t> cccc32, vector<int32_t> cccc33, vector<int32_t> cccc34, vector<int32_t> cccc35, vector<int32_t> cccc36, vector<int32_t> cccc37, vector<int32_t> cccc38, vector<int32_t> cccc39, vector<int32_t> cccc4, vector<int32_t> cccc40, vector<int32_t> cccc41, vector<int32_t> cccc42, vector<int32_t> cccc43, vector<int32_t> cccc44, vector<int32_t> cccc45, vector<int32_t> cccc46, vector<int32_t> cccc47, vector<int32_t> cccc48, vector<int32_t> cccc49, vector<int32_t> cccc5, vector<int32_t> cccc50, vector<int32_t> cccc51, vector<int32_t> cccc52, vector<int32_t> cccc53, vector<int32_t> cccc54, vector<int32_t> cccc55, vector<int32_t> cccc56, vector<int32_t> cccc57, vector<int32_t> cccc58, vector<int32_t> cccc59, vector<int32_t> cccc6, vector<int32_t> cccc60, vector<int32_t> cccc61, vector<int32_t> cccc62, vector<int32_t> cccc63, vector<int32_t> cccc64, vector<int32_t> cccc65, vector<int32_t> cccc66, vector<int32_t> cccc67, vector<int32_t> cccc68, vector<int32_t> cccc69, vector<int32_t> cccc7, vector<int32_t> cccc70, vector<int32_t> cccc71, vector<int32_t> cccc72, vector<int32_t> cccc73, vector<int32_t> cccc74, vector<int32_t> cccc75, vector<int32_t> cccc76, vector<int32_t> cccc77, vector<int32_t> cccc78, vector<int32_t> cccc79, vector<int32_t> cccc8, vector<int32_t> cccc80, vector<int32_t> cccc81, vector<int32_t> cccc82, vector<int32_t> cccc83, vector<int32_t> cccc84, vector<int32_t> cccc85, vector<int32_t> cccc86, vector<int32_t> cccc87, vector<int32_t> cccc88, vector<int32_t> cccc9, int64_t d1, int64_t d10, int64_t d11, int64_t d12, int64_t d13, int64_t d14, int64_t d15, int64_t d16, int64_t d17, int64_t d18, int64_t d19, int64_t d2, int64_t d20, int64_t d21, int64_t d22, int64_t d23, int64_t d24, int64_t d25, int64_t d26, int64_t d27, int64_t d28, int64_t d29, int64_t d3, int64_t d30, int64_t d31, int64_t d32, int64_t d33, int64_t d34, int64_t d35, int64_t d36, int64_t d37, int64_t d38, int64_t d39, int64_t d4, int64_t d40, int64_t d41, int64_t d42, int64_t d43, int64_t d44, int64_t d45, int64_t d46, int64_t d47, int64_t d48, int64_t d49, int64_t d5, int64_t d50, int64_t d51, int64_t d52, int64_t d53, int64_t d54, int64_t d55, int64_t d56, int64_t d57, int64_t d58, int64_t d59, int64_t d6, int64_t d60, int64_t d61, int64_t d62, int64_t d63, int64_t d64, int64_t d65, int64_t d66, int64_t d67, int64_t d68, int64_t d69, int64_t d7, int64_t d70, int64_t d71, int64_t d72, int64_t d73, int64_t d74, int64_t d75, int64_t d76, int64_t d77, int64_t d78, int64_t d79, int64_t d8, int64_t d80, int64_t d81, int64_t d82, int64_t d83, int64_t d84, int64_t d85, int64_t d86, int64_t d87, int64_t d88, int64_t d9, int64_t dd1, int64_t dd10, int64_t dd11, int64_t dd12, int64_t dd13, int64_t dd14, int64_t dd15, int64_t dd16, int64_t dd17, int64_t dd18, int64_t dd19, int64_t dd2, int64_t dd20, int64_t dd21, int64_t dd22, int64_t dd23, int64_t dd24, int64_t dd25, int64_t dd26, int64_t dd27, int64_t dd28, int64_t dd29, int64_t dd3, int64_t dd30, int64_t dd31, int64_t dd32, int64_t dd33, int64_t dd34, int64_t dd35, int64_t dd36, int64_t dd37, int64_t dd38, int64_t dd39, int64_t dd4, int64_t dd40, int64_t dd41, int64_t dd42, int64_t dd43, int64_t dd44, int64_t dd45, int64_t dd46, int64_t dd47, int64_t dd48, int64_t dd49, int64_t dd5, int64_t dd50, int64_t dd51, int64_t dd52, int64_t dd53, int64_t dd54, int64_t dd55, int64_t dd56, int64_t dd57, int64_t dd58, int64_t dd59, int64_t dd6, int64_t dd60, int64_t dd61, int64_t dd62, int64_t dd63, int64_t dd64, int64_t dd65, int64_t dd66, int64_t dd67, int64_t dd68, int64_t dd69, int64_t dd7, int64_t dd70, int64_t dd71, int64_t dd72, int64_t dd73, int64_t dd74, int64_t dd75, int64_t dd76, int64_t dd77, int64_t dd78, int64_t dd79, int64_t dd8, int64_t dd80, int64_t dd81, int64_t dd82, int64_t dd83, int64_t dd84, int64_t dd85, int64_t dd86, int64_t dd87, int64_t dd88, int64_t dd9, vector<int64_t> ddd1, vector<int64_t> ddd10, vector<int64_t> ddd11, vector<int64_t> ddd12, vector<int64_t> ddd13, vector<int64_t> ddd14, vector<int64_t> ddd15, vector<int64_t> ddd16, vector<int64_t> ddd17, vector<int64_t> ddd18, vector<int64_t> ddd19, vector<int64_t> ddd2, vector<int64_t> ddd20, vector<int64_t> ddd21, vector<int64_t> ddd22, vector<int64_t> ddd23, vector<int64_t> ddd24, vector<int64_t> ddd25, vector<int64_t> ddd26, vector<int64_t> ddd27, vector<int64_t> ddd28, vector<int64_t> ddd29, vector<int64_t> ddd3, vector<int64_t> ddd30, vector<int64_t> ddd31, vector<int64_t> ddd32, vector<int64_t> ddd33, vector<int64_t> ddd34, vector<int64_t> ddd35, vector<int64_t> ddd36, vector<int64_t> ddd37, vector<int64_t> ddd38, vector<int64_t> ddd39, vector<int64_t> ddd4, vector<int64_t> ddd40, vector<int64_t> ddd41, vector<int64_t> ddd42, vector<int64_t> ddd43, vector<int64_t> ddd44, vector<int64_t> ddd45, vector<int64_t> ddd46, vector<int64_t> ddd47, vector<int64_t> ddd48, vector<int64_t> ddd49, vector<int64_t> ddd5, vector<int64_t> ddd50, vector<int64_t> ddd51, vector<int64_t> ddd52, vector<int64_t> ddd53, vector<int64_t> ddd54, vector<int64_t> ddd55, vector<int64_t> ddd56, vector<int64_t> ddd57, vector<int64_t> ddd58, vector<int64_t> ddd59, vector<int64_t> ddd6, vector<int64_t> ddd60, vector<int64_t> ddd61, vector<int64_t> ddd62, vector<int64_t> ddd63, vector<int64_t> ddd64, vector<int64_t> ddd65, vector<int64_t> ddd66, vector<int64_t> ddd67, vector<int64_t> ddd68, vector<int64_t> ddd69, vector<int64_t> ddd7, vector<int64_t> ddd70, vector<int64_t> ddd71, vector<int64_t> ddd72, vector<int64_t> ddd73, vector<int64_t> ddd74, vector<int64_t> ddd75, vector<int64_t> ddd76, vector<int64_t> ddd77, vector<int64_t> ddd78, vector<int64_t> ddd79, vector<int64_t> ddd8, vector<int64_t> ddd80, vector<int64_t> ddd81, vector<int64_t> ddd82, vector<int64_t> ddd83, vector<int64_t> ddd84, vector<int64_t> ddd85, vector<int64_t> ddd86, vector<int64_t> ddd87, vector<int64_t> ddd88, vector<int64_t> ddd9, vector<int64_t> dddd1, vector<int64_t> dddd10, vector<int64_t> dddd11, vector<int64_t> dddd12, vector<int64_t> dddd13, vector<int64_t> dddd14, vector<int64_t> dddd15, vector<int64_t> dddd16, vector<int64_t> dddd17, vector<int64_t> dddd18, vector<int64_t> dddd19, vector<int64_t> dddd2, vector<int64_t> dddd20, vector<int64_t> dddd21, vector<int64_t> dddd22, vector<int64_t> dddd23, vector<int64_t> dddd24, vector<int64_t> dddd25, vector<int64_t> dddd26, vector<int64_t> dddd27, vector<int64_t> dddd28, vector<int64_t> dddd29, vector<int64_t> dddd3, vector<int64_t> dddd30, vector<int64_t> dddd31, vector<int64_t> dddd32, vector<int64_t> dddd33, vector<int64_t> dddd34, vector<int64_t> dddd35, vector<int64_t> dddd36, vector<int64_t> dddd37, vector<int64_t> dddd38, vector<int64_t> dddd39, vector<int64_t> dddd4, vector<int64_t> dddd40, vector<int64_t> dddd41, vector<int64_t> dddd42, vector<int64_t> dddd43, vector<int64_t> dddd44, vector<int64_t> dddd45, vector<int64_t> dddd46, vector<int64_t> dddd47, vector<int64_t> dddd48, vector<int64_t> dddd49, vector<int64_t> dddd5, vector<int64_t> dddd50, vector<int64_t> dddd51, vector<int64_t> dddd52, vector<int64_t> dddd53, vector<int64_t> dddd54, vector<int64_t> dddd55, vector<int64_t> dddd56, vector<int64_t> dddd57, vector<int64_t> dddd58, vector<int64_t> dddd59, vector<int64_t> dddd6, vector<int64_t> dddd60, vector<int64_t> dddd61, vector<int64_t> dddd62, vector<int64_t> dddd63, vector<int64_t> dddd64, vector<int64_t> dddd65, vector<int64_t> dddd66, vector<int64_t> dddd67, vector<int64_t> dddd68, vector<int64_t> dddd69, vector<int64_t> dddd7, vector<int64_t> dddd70, vector<int64_t> dddd71, vector<int64_t> dddd72, vector<int64_t> dddd73, vector<int64_t> dddd74, vector<int64_t> dddd75, vector<int64_t> dddd76, vector<int64_t> dddd77, vector<int64_t> dddd78, vector<int64_t> dddd79, vector<int64_t> dddd8, vector<int64_t> dddd80, vector<int64_t> dddd81, vector<int64_t> dddd82, vector<int64_t> dddd83, vector<int64_t> dddd84, vector<int64_t> dddd85, vector<int64_t> dddd86, vector<int64_t> dddd87, vector<int64_t> dddd88, vector<int64_t> dddd9, float e1, float e10, float e11, float e12, float e13, float e14, float e15, float e16, float e17, float e18, float e19, float e2, float e20, float e21, float e22, float e23, float e24, float e25, float e26, float e27, float e28, float e29, float e3, float e30, float e31, float e32, float e33, float e34, float e35, float e36, float e37, float e38, float e39, float e4, float e40, float e41, float e42, float e43, float e44, float e45, float e46, float e47, float e48, float e49, float e5, float e50, float e51, float e52, float e53, float e54, float e55, float e56, float e57, float e58, float e59, float e6, float e60, float e61, float e62, float e63, float e64, float e65, float e66, float e67, float e68, float e69, float e7, float e70, float e71, float e72, float e73, float e74, float e75, float e76, float e77, float e78, float e79, float e8, float e80, float e81, float e82, float e83, float e84, float e85, float e86, float e87, float e88, float e9, float ee1, float ee10, float ee11, float ee12, float ee13, float ee14, float ee15, float ee16, float ee17, float ee18, float ee19, float ee2, float ee20, float ee21, float ee22, float ee23, float ee24, float ee25, float ee26, float ee27, float ee28, float ee29, float ee3, float ee30, float ee31, float ee32, float ee33, float ee34, float ee35, float ee36, float ee37, float ee38, float ee39, float ee4, float ee40, float ee41, float ee42, float ee43, float ee44, float ee45, float ee46, float ee47, float ee48, float ee49, float ee5, float ee50, float ee51, float ee52, float ee53, float ee54, float ee55, float ee56, float ee57, float ee58, float ee59, float ee6, float ee60, float ee61, float ee62, float ee63, float ee64, float ee65, float ee66, float ee67, float ee68, float ee69, float ee7, float ee70, float ee71, float ee72, float ee73, float ee74, float ee75, float ee76, float ee77, float ee78, float ee79, float ee8, float ee80, float ee81, float ee82, float ee83, float ee84, float ee85, float ee86, float ee87, float ee88, float ee9, vector<float> eee1, vector<float> eee10, vector<float> eee11, vector<float> eee12, vector<float> eee13, vector<float> eee14, vector<float> eee15, vector<float> eee16, vector<float> eee17, vector<float> eee18, vector<float> eee19, vector<float> eee2, vector<float> eee20, vector<float> eee21, vector<float> eee22, vector<float> eee23, vector<float> eee24, vector<float> eee25, vector<float> eee26, vector<float> eee27, vector<float> eee28, vector<float> eee29, vector<float> eee3, vector<float> eee30, vector<float> eee31, vector<float> eee32, vector<float> eee33, vector<float> eee34, vector<float> eee35, vector<float> eee36, vector<float> eee37, vector<float> eee38, vector<float> eee39, vector<float> eee4, vector<float> eee40, vector<float> eee41, vector<float> eee42, vector<float> eee43, vector<float> eee44, vector<float> eee45, vector<float> eee46, vector<float> eee47, vector<float> eee48, vector<float> eee49, vector<float> eee5, vector<float> eee50, vector<float> eee51, vector<float> eee52, vector<float> eee53, vector<float> eee54, vector<float> eee55, vector<float> eee56, vector<float> eee57, vector<float> eee58, vector<float> eee59, vector<float> eee6, vector<float> eee60, vector<float> eee61, vector<float> eee62, vector<float> eee63, vector<float> eee64, vector<float> eee65, vector<float> eee66, vector<float> eee67, vector<float> eee68, vector<float> eee69, vector<float> eee7, vector<float> eee70, vector<float> eee71, vector<float> eee72, vector<float> eee73, vector<float> eee74, vector<float> eee75, vector<float> eee76, vector<float> eee77, vector<float> eee78, vector<float> eee79, vector<float> eee8, vector<float> eee80, vector<float> eee81, vector<float> eee82, vector<float> eee83, vector<float> eee84, vector<float> eee85, vector<float> eee86, vector<float> eee87, vector<float> eee88, vector<float> eee9, vector<float> eeee1, vector<float> eeee10, vector<float> eeee11, vector<float> eeee12, vector<float> eeee13, vector<float> eeee14, vector<float> eeee15, vector<float> eeee16, vector<float> eeee17, vector<float> eeee18, vector<float> eeee19, vector<float> eeee2, vector<float> eeee20, vector<float> eeee21, vector<float> eeee22, vector<float> eeee23, vector<float> eeee24, vector<float> eeee25, vector<float> eeee26, vector<float> eeee27, vector<float> eeee28, vector<float> eeee29, vector<float> eeee3, vector<float> eeee30, vector<float> eeee31, vector<float> eeee32, vector<float> eeee33, vector<float> eeee34, vector<float> eeee35, vector<float> eeee36, vector<float> eeee37, vector<float> eeee38, vector<float> eeee39, vector<float> eeee4, vector<float> eeee40, vector<float> eeee41, vector<float> eeee42, vector<float> eeee43, vector<float> eeee44, vector<float> eeee45, vector<float> eeee46, vector<float> eeee47, vector<float> eeee48, vector<float> eeee49, vector<float> eeee5, vector<float> eeee50, vector<float> eeee51, vector<float> eeee52, vector<float> eeee53, vector<float> eeee54, vector<float> eeee55, vector<float> eeee56, vector<float> eeee57, vector<float> eeee58, vector<float> eeee59, vector<float> eeee6, vector<float> eeee60, vector<float> eeee61, vector<float> eeee62, vector<float> eeee63, vector<float> eeee64, vector<float> eeee65, vector<float> eeee66, vector<float> eeee67, vector<float> eeee68, vector<float> eeee69, vector<float> eeee7, vector<float> eeee70, vector<float> eeee71, vector<float> eeee72, vector<float> eeee73, vector<float> eeee74, vector<float> eeee75, vector<float> eeee76, vector<float> eeee77, vector<float> eeee78, vector<float> eeee79, vector<float> eeee8, vector<float> eeee80, vector<float> eeee81, vector<float> eeee82, vector<float> eeee83, vector<float> eeee84, vector<float> eeee85, vector<float> eeee86, vector<float> eeee87, vector<float> eeee88, vector<float> eeee9, double f1, double f10, double f11, double f12, double f13, double f14, double f15, double f16, double f17, double f18, double f19, double f2, double f20, double f21, double f22, double f23, double f24, double f25, double f26, double f27, double f28, double f29, double f3, double f30, double f31, double f32, double f33, double f34, double f35, double f36, double f37, double f38, double f39, double f4, double f40, double f41, double f42, double f43, double f44, double f45, double f46, double f47, double f48, double f49, double f5, double f50, double f51, double f52, double f53, double f54, double f55, double f56, double f57, double f58, double f59, double f6, double f60, double f61, double f62, double f63, double f64, double f65, double f66, double f67, double f68, double f69, double f7, double f70, double f71, double f72, double f73, double f74, double f75, double f76, double f77, double f78, double f79, double f8, double f80, double f81, double f82, double f83, double f84, double f85, double f86, double f87, double f88, double f9, double ff1, double ff10, double ff11, double ff12, double ff13, double ff14, double ff15, double ff16, double ff17, double ff18, double ff19, double ff2, double ff20, double ff21, double ff22, double ff23, double ff24, double ff25, double ff26, double ff27, double ff28, double ff29, double ff3, double ff30, double ff31, double ff32, double ff33, double ff34, double ff35, double ff36, double ff37, double ff38, double ff39, double ff4, double ff40, double ff41, double ff42, double ff43, double ff44, double ff45, double ff46, double ff47, double ff48, double ff49, double ff5, double ff50, double ff51, double ff52, double ff53, double ff54, double ff55, double ff56, double ff57, double ff58, double ff59, double ff6, double ff60, double ff61, double ff62, double ff63, double ff64, double ff65, double ff66, double ff67, double ff68, double ff69, double ff7, double ff70, double ff71, double ff72, double ff73, double ff74, double ff75, double ff76, double ff77, double ff78, double ff79, double ff8, double ff80, double ff81, double ff82, double ff83, double ff84, double ff85, double ff86, double ff87, double ff88, double ff9, vector<double> fff1, vector<double> fff10, vector<double> fff11, vector<double> fff12, vector<double> fff13, vector<double> fff14, vector<double> fff15, vector<double> fff16, vector<double> fff17, vector<double> fff18, vector<double> fff19, vector<double> fff2, vector<double> fff20, vector<double> fff21, vector<double> fff22, vector<double> fff23, vector<double> fff24, vector<double> fff25, vector<double> fff26, vector<double> fff27, vector<double> fff28, vector<double> fff29, vector<double> fff3, vector<double> fff30, vector<double> fff31, vector<double> fff32, vector<double> fff33, vector<double> fff34, vector<double> fff35, vector<double> fff36, vector<double> fff37, vector<double> fff38, vector<double> fff39, vector<double> fff4, vector<double> fff40, vector<double> fff41, vector<double> fff42, vector<double> fff43, vector<double> fff44, vector<double> fff45, vector<double> fff46, vector<double> fff47, vector<double> fff48, vector<double> fff49, vector<double> fff5, vector<double> fff50, vector<double> fff51, vector<double> fff52, vector<double> fff53, vector<double> fff54, vector<double> fff55, vector<double> fff56, vector<double> fff57, vector<double> fff58, vector<double> fff59, vector<double> fff6, vector<double> fff60, vector<double> fff61, vector<double> fff62, vector<double> fff63, vector<double> fff64, vector<double> fff65, vector<double> fff66, vector<double> fff67, vector<double> fff68, vector<double> fff69, vector<double> fff7, vector<double> fff70, vector<double> fff71, vector<double> fff72, vector<double> fff73, vector<double> fff74, vector<double> fff75, vector<double> fff76, vector<double> fff77, vector<double> fff78, vector<double> fff79, vector<double> fff8, vector<double> fff80, vector<double> fff81, vector<double> fff82, vector<double> fff83, vector<double> fff84, vector<double> fff85, vector<double> fff86, vector<double> fff87, vector<double> fff88, vector<double> fff9, vector<double> ffff1, vector<double> ffff10, vector<double> ffff11, vector<double> ffff12, vector<double> ffff13, vector<double> ffff14, vector<double> ffff15, vector<double> ffff16, vector<double> ffff17, vector<double> ffff18, vector<double> ffff19, vector<double> ffff2, vector<double> ffff20, vector<double> ffff21, vector<double> ffff22, vector<double> ffff23, vector<double> ffff24, vector<double> ffff25, vector<double> ffff26, vector<double> ffff27, vector<double> ffff28, vector<double> ffff29, vector<double> ffff3, vector<double> ffff30, vector<double> ffff31, vector<double> ffff32, vector<double> ffff33, vector<double> ffff34, vector<double> ffff35, vector<double> ffff36, vector<double> ffff37, vector<double> ffff38, vector<double> ffff39, vector<double> ffff4, vector<double> ffff40, vector<double> ffff41, vector<double> ffff42, vector<double> ffff43, vector<double> ffff44, vector<double> ffff45, vector<double> ffff46, vector<double> ffff47, vector<double> ffff48, vector<double> ffff49, vector<double> ffff5, vector<double> ffff50, vector<double> ffff51, vector<double> ffff52, vector<double> ffff53, vector<double> ffff54, vector<double> ffff55, vector<double> ffff56, vector<double> ffff57, vector<double> ffff58, vector<double> ffff59, vector<double> ffff6, vector<double> ffff60, vector<double> ffff61, vector<double> ffff62, vector<double> ffff63, vector<double> ffff64, vector<double> ffff65, vector<double> ffff66, vector<double> ffff67, vector<double> ffff68, vector<double> ffff69, vector<double> ffff7, vector<double> ffff70, vector<double> ffff71, vector<double> ffff72, vector<double> ffff73, vector<double> ffff74, vector<double> ffff75, vector<double> ffff76, vector<double> ffff77, vector<double> ffff78, vector<double> ffff79, vector<double> ffff8, vector<double> ffff80, vector<double> ffff81, vector<double> ffff82, vector<double> ffff83, vector<double> ffff84, vector<double> ffff85, vector<double> ffff86, vector<double> ffff87, vector<double> ffff88, vector<double> ffff9, bool g1, bool g10, bool g11, bool g12, bool g13, bool g14, bool g15, bool g16, bool g17, bool g18, bool g19, bool g2, bool g20, bool g21, bool g22, bool g23, bool g24, bool g25, bool g26, bool g27, bool g28, bool g29, bool g3, bool g30, bool g31, bool g32, bool g33, bool g34, bool g35, bool g36, bool g37, bool g38, bool g39, bool g4, bool g40, bool g41, bool g42, bool g43, bool g44, bool g45, bool g46, bool g47, bool g48, bool g49, bool g5, bool g50, bool g51, bool g52, bool g53, bool g54, bool g55, bool g56, bool g57, bool g58, bool g59, bool g6, bool g60, bool g61, bool g62, bool g63, bool g64, bool g65, bool g66, bool g67, bool g68, bool g69, bool g7, bool g70, bool g71, bool g72, bool g73, bool g74, bool g75, bool g76, bool g77, bool g78, bool g79, bool g8, bool g80, bool g81, bool g82, bool g83, bool g84, bool g85, bool g86, bool g87, bool g88, bool g9, bool gg1, bool gg10, bool gg11, bool gg12, bool gg13, bool gg14, bool gg15, bool gg16, bool gg17, bool gg18, bool gg19, bool gg2, bool gg20, bool gg21, bool gg22, bool gg23, bool gg24, bool gg25, bool gg26, bool gg27, bool gg28, bool gg29, bool gg3, bool gg30, bool gg31, bool gg32, bool gg33, bool gg34, bool gg35, bool gg36, bool gg37, bool gg38, bool gg39, bool gg4, bool gg40, bool gg41, bool gg42, bool gg43, bool gg44, bool gg45, bool gg46, bool gg47, bool gg48, bool gg49, bool gg5, bool gg50, bool gg51, bool gg52, bool gg53, bool gg54, bool gg55, bool gg56, bool gg57, bool gg58, bool gg59, bool gg6, bool gg60, bool gg61, bool gg62, bool gg63, bool gg64, bool gg65, bool gg66, bool gg67, bool gg68, bool gg69, bool gg7, bool gg70, bool gg71, bool gg72, bool gg73, bool gg74, bool gg75, bool gg76, bool gg77, bool gg78, bool gg79, bool gg8, bool gg80, bool gg81, bool gg82, bool gg83, bool gg84, bool gg85, bool gg86, bool gg87, bool gg88, bool gg9, vector<bool> ggg1, vector<bool> ggg10, vector<bool> ggg11, vector<bool> ggg12, vector<bool> ggg13, vector<bool> ggg14, vector<bool> ggg15, vector<bool> ggg16, vector<bool> ggg17, vector<bool> ggg18, vector<bool> ggg19, vector<bool> ggg2, vector<bool> ggg20, vector<bool> ggg21, vector<bool> ggg22, vector<bool> ggg23, vector<bool> ggg24, vector<bool> ggg25, vector<bool> ggg26, vector<bool> ggg27, vector<bool> ggg28, vector<bool> ggg29, vector<bool> ggg3, vector<bool> ggg30, vector<bool> ggg31, vector<bool> ggg32, vector<bool> ggg33, vector<bool> ggg34, vector<bool> ggg35, vector<bool> ggg36, vector<bool> ggg37, vector<bool> ggg38, vector<bool> ggg39, vector<bool> ggg4, vector<bool> ggg40, vector<bool> ggg41, vector<bool> ggg42, vector<bool> ggg43, vector<bool> ggg44, vector<bool> ggg45, vector<bool> ggg46, vector<bool> ggg47, vector<bool> ggg48, vector<bool> ggg49, vector<bool> ggg5, vector<bool> ggg50, vector<bool> ggg51, vector<bool> ggg52, vector<bool> ggg53, vector<bool> ggg54, vector<bool> ggg55, vector<bool> ggg56, vector<bool> ggg57, vector<bool> ggg58, vector<bool> ggg59, vector<bool> ggg6, vector<bool> ggg60, vector<bool> ggg61, vector<bool> ggg62, vector<bool> ggg63, vector<bool> ggg64, vector<bool> ggg65, vector<bool> ggg66, vector<bool> ggg67, vector<bool> ggg68, vector<bool> ggg69, vector<bool> ggg7, vector<bool> ggg70, vector<bool> ggg71, vector<bool> ggg72, vector<bool> ggg73, vector<bool> ggg74, vector<bool> ggg75, vector<bool> ggg76, vector<bool> ggg77, vector<bool> ggg78, vector<bool> ggg79, vector<bool> ggg8, vector<bool> ggg80, vector<bool> ggg81, vector<bool> ggg82, vector<bool> ggg83, vector<bool> ggg84, vector<bool> ggg85, vector<bool> ggg86, vector<bool> ggg87, vector<bool> ggg88, vector<bool> ggg9, vector<bool> gggg1, vector<bool> gggg10, vector<bool> gggg11, vector<bool> gggg12, vector<bool> gggg13, vector<bool> gggg14, vector<bool> gggg15, vector<bool> gggg16, vector<bool> gggg17, vector<bool> gggg18, vector<bool> gggg19, vector<bool> gggg2, vector<bool> gggg20, vector<bool> gggg21, vector<bool> gggg22, vector<bool> gggg23, vector<bool> gggg24, vector<bool> gggg25, vector<bool> gggg26, vector<bool> gggg27, vector<bool> gggg28, vector<bool> gggg29, vector<bool> gggg3, vector<bool> gggg30, vector<bool> gggg31, vector<bool> gggg32, vector<bool> gggg33, vector<bool> gggg34, vector<bool> gggg35, vector<bool> gggg36, vector<bool> gggg37, vector<bool> gggg38, vector<bool> gggg39, vector<bool> gggg4, vector<bool> gggg40, vector<bool> gggg41, vector<bool> gggg42, vector<bool> gggg43, vector<bool> gggg44, vector<bool> gggg45, vector<bool> gggg46, vector<bool> gggg47, vector<bool> gggg48, vector<bool> gggg49, vector<bool> gggg5, vector<bool> gggg50, vector<bool> gggg51, vector<bool> gggg52, vector<bool> gggg53, vector<bool> gggg54, vector<bool> gggg55, vector<bool> gggg56, vector<bool> gggg57, vector<bool> gggg58, vector<bool> gggg59, vector<bool> gggg6, vector<bool> gggg60, vector<bool> gggg61, vector<bool> gggg62, vector<bool> gggg63, vector<bool> gggg64, vector<bool> gggg65, vector<bool> gggg66, vector<bool> gggg67, vector<bool> gggg68, vector<bool> gggg69, vector<bool> gggg7, vector<bool> gggg70, vector<bool> gggg71, vector<bool> gggg72, vector<bool> gggg73, vector<bool> gggg74, vector<bool> gggg75, vector<bool> gggg76, vector<bool> gggg77, vector<bool> gggg78, vector<bool> gggg79, vector<bool> gggg8, vector<bool> gggg80, vector<bool> gggg81, vector<bool> gggg82, vector<bool> gggg83, vector<bool> gggg84, vector<bool> gggg85, vector<bool> gggg86, vector<bool> gggg87, vector<bool> gggg88, vector<bool> gggg9, char h1, char h10, char h11, char h12, char h13, char h14, char h15, char h16, char h17, char h18, char h19, char h2, char h20, char h21, char h22, char h23, char h24, char h25, char h26, char h27, char h28, char h29, char h3, char h30, char h31, char h32, char h33, char h34, char h35, char h36, char h37, char h38, char h39, char h4, char h40, char h41, char h42, char h43, char h44, char h45, char h46, char h47, char h48, char h49, char h5, char h50, char h51, char h52, char h53, char h54, char h55, char h56, char h57, char h58, char h59, char h6, char h60, char h61, char h62, char h63, char h64, char h65, char h66, char h67, char h68, char h69, char h7, char h70, char h71, char h72, char h73, char h74, char h75, char h76, char h77, char h78, char h79, char h8, char h80, char h81, char h82, char h83, char h84, char h85, char h86, char h87, char h88, char h9, char hh1, char hh10, char hh11, char hh12, char hh13, char hh14, char hh15, char hh16, char hh17, char hh18, char hh19, char hh2, char hh20, char hh21, char hh22, char hh23, char hh24, char hh25, char hh26, char hh27, char hh28, char hh29, char hh3, char hh30, char hh31, char hh32, char hh33, char hh34, char hh35, char hh36, char hh37, char hh38, char hh39, char hh4, char hh40, char hh41, char hh42, char hh43, char hh44, char hh45, char hh46, char hh47, char hh48, char hh49, char hh5, char hh50, char hh51, char hh52, char hh53, char hh54, char hh55, char hh56, char hh57, char hh58, char hh59, char hh6, char hh60, char hh61, char hh62, char hh63, char hh64, char hh65, char hh66, char hh67, char hh68, char hh69, char hh7, char hh70, char hh71, char hh72, char hh73, char hh74, char hh75, char hh76, char hh77, char hh78, char hh79, char hh8, char hh80, char hh81, char hh82, char hh83, char hh84, char hh85, char hh86, char hh87, char hh88, char hh9, vector<char> hhh1, vector<char> hhh10, vector<char> hhh11, vector<char> hhh12, vector<char> hhh13, vector<char> hhh14, vector<char> hhh15, vector<char> hhh16, vector<char> hhh17, vector<char> hhh18, vector<char> hhh19, vector<char> hhh2, vector<char> hhh20, vector<char> hhh21, vector<char> hhh22, vector<char> hhh23, vector<char> hhh24, vector<char> hhh25, vector<char> hhh26, vector<char> hhh27, vector<char> hhh28, vector<char> hhh29, vector<char> hhh3, vector<char> hhh30, vector<char> hhh31, vector<char> hhh32, vector<char> hhh33, vector<char> hhh34, vector<char> hhh35, vector<char> hhh36, vector<char> hhh37, vector<char> hhh38, vector<char> hhh39, vector<char> hhh4, vector<char> hhh40, vector<char> hhh41, vector<char> hhh42, vector<char> hhh43, vector<char> hhh44, vector<char> hhh45, vector<char> hhh46, vector<char> hhh47, vector<char> hhh48, vector<char> hhh49, vector<char> hhh5, vector<char> hhh50, vector<char> hhh51, vector<char> hhh52, vector<char> hhh53, vector<char> hhh54, vector<char> hhh55, vector<char> hhh56, vector<char> hhh57, vector<char> hhh58, vector<char> hhh59, vector<char> hhh6, vector<char> hhh60, vector<char> hhh61, vector<char> hhh62, vector<char> hhh63, vector<char> hhh64, vector<char> hhh65, vector<char> hhh66, vector<char> hhh67, vector<char> hhh68, vector<char> hhh69, vector<char> hhh7, vector<char> hhh70, vector<char> hhh71, vector<char> hhh72, vector<char> hhh73, vector<char> hhh74, vector<char> hhh75, vector<char> hhh76, vector<char> hhh77, vector<char> hhh78, vector<char> hhh79, vector<char> hhh8, vector<char> hhh80, vector<char> hhh81, vector<char> hhh82, vector<char> hhh83, vector<char> hhh84, vector<char> hhh85, vector<char> hhh86, vector<char> hhh87, vector<char> hhh88, vector<char> hhh9, vector<char> hhhh1, vector<char> hhhh10, vector<char> hhhh11, vector<char> hhhh12, vector<char> hhhh13, vector<char> hhhh14, vector<char> hhhh15, vector<char> hhhh16, vector<char> hhhh17, vector<char> hhhh18, vector<char> hhhh19, vector<char> hhhh2, vector<char> hhhh20, vector<char> hhhh21, vector<char> hhhh22, vector<char> hhhh23, vector<char> hhhh24, vector<char> hhhh25, vector<char> hhhh26, vector<char> hhhh27, vector<char> hhhh28, vector<char> hhhh29, vector<char> hhhh3, vector<char> hhhh30, vector<char> hhhh31, vector<char> hhhh32, vector<char> hhhh33, vector<char> hhhh34, vector<char> hhhh35, vector<char> hhhh36, vector<char> hhhh37, vector<char> hhhh38, vector<char> hhhh39, vector<char> hhhh4, vector<char> hhhh40, vector<char> hhhh41, vector<char> hhhh42, vector<char> hhhh43, vector<char> hhhh44, vector<char> hhhh45, vector<char> hhhh46, vector<char> hhhh47, vector<char> hhhh48, vector<char> hhhh49, vector<char> hhhh5, vector<char> hhhh50, vector<char> hhhh51, vector<char> hhhh52, vector<char> hhhh53, vector<char> hhhh54, vector<char> hhhh55, vector<char> hhhh56, vector<char> hhhh57, vector<char> hhhh58, vector<char> hhhh59, vector<char> hhhh6, vector<char> hhhh60, vector<char> hhhh61, vector<char> hhhh62, vector<char> hhhh63, vector<char> hhhh64, vector<char> hhhh65, vector<char> hhhh66, vector<char> hhhh67, vector<char> hhhh68, vector<char> hhhh69, vector<char> hhhh7, vector<char> hhhh70, vector<char> hhhh71, vector<char> hhhh72, vector<char> hhhh73, vector<char> hhhh74, vector<char> hhhh75, vector<char> hhhh76, vector<char> hhhh77, vector<char> hhhh78, vector<char> hhhh79, vector<char> hhhh8, vector<char> hhhh80, vector<char> hhhh81, vector<char> hhhh82, vector<char> hhhh83, vector<char> hhhh84, vector<char> hhhh85, vector<char> hhhh86, vector<char> hhhh87, vector<char> hhhh88, vector<char> hhhh9, string jj1, string jj10, string jj11, string jj12, string jj13, string jj14, string jj15, string jj16, string jj17, string jj18, string jj19, string jj2, string jj20, string jj21, string jj22, string jj23, string jj24, string jj25, string jj26, string jj27, string jj28, string jj29, string jj3, string jj30, string jj31, string jj32, string jj33, string jj34, string jj35, string jj36, string jj37, string jj38, string jj39, string jj4, string jj40, string jj41, string jj42, string jj43, string jj44, string jj45, string jj46, string jj47, string jj48, string jj49, string jj5, string jj50, string jj51, string jj52, string jj53, string jj54, string jj55, string jj56, string jj57, string jj58, string jj59, string jj6, string jj60, string jj61, string jj62, string jj63, string jj64, string jj65, string jj66, string jj67, string jj68, string jj69, string jj7, string jj70, string jj71, string jj72, string jj73, string jj74, string jj75, string jj76, string jj77, string jj78, string jj79, string jj8, string jj80, string jj81, string jj82, string jj83, string jj84, string jj85, string jj86, string jj87, string jj88, string jj9, vector<string> jjj1, vector<string> jjj10, vector<string> jjj11, vector<string> jjj12, vector<string> jjj13, vector<string> jjj14, vector<string> jjj15, vector<string> jjj16, vector<string> jjj17, vector<string> jjj18, vector<string> jjj19, vector<string> jjj2, vector<string> jjj20, vector<string> jjj21, vector<string> jjj22, vector<string> jjj23, vector<string> jjj24, vector<string> jjj25, vector<string> jjj26, vector<string> jjj27, vector<string> jjj28, vector<string> jjj29, vector<string> jjj3, vector<string> jjj30, vector<string> jjj31, vector<string> jjj32, vector<string> jjj33, vector<string> jjj34, vector<string> jjj35, vector<string> jjj36, vector<string> jjj37, vector<string> jjj38, vector<string> jjj39, vector<string> jjj4, vector<string> jjj40, vector<string> jjj41, vector<string> jjj42, vector<string> jjj43, vector<string> jjj44, vector<string> jjj45, vector<string> jjj46, vector<string> jjj47, vector<string> jjj48, vector<string> jjj49, vector<string> jjj5, vector<string> jjj50, vector<string> jjj51, vector<string> jjj52, vector<string> jjj53, vector<string> jjj54, vector<string> jjj55, vector<string> jjj56, vector<string> jjj57, vector<string> jjj58, vector<string> jjj59, vector<string> jjj6, vector<string> jjj60, vector<string> jjj61, vector<string> jjj62, vector<string> jjj63, vector<string> jjj64, vector<string> jjj65, vector<string> jjj66, vector<string> jjj67, vector<string> jjj68, vector<string> jjj69, vector<string> jjj7, vector<string> jjj70, vector<string> jjj71, vector<string> jjj72, vector<string> jjj73, vector<string> jjj74, vector<string> jjj75, vector<string> jjj76, vector<string> jjj77, vector<string> jjj78, vector<string> jjj79, vector<string> jjj8, vector<string> jjj80, vector<string> jjj81, vector<string> jjj82, vector<string> jjj83, vector<string> jjj84, vector<string> jjj85, vector<string> jjj86, vector<string> jjj87, vector<string> jjj88, vector<string> jjj9, ObjectA kk1, ObjectA kk10, ObjectA kk11, ObjectA kk12, ObjectA kk13, ObjectA kk14, ObjectA kk15, ObjectA kk16, ObjectA kk17, ObjectA kk18, ObjectA kk19, ObjectA kk2, ObjectA kk20, ObjectA kk21, ObjectA kk22, ObjectA kk23, ObjectA kk24, ObjectA kk25, ObjectA kk26, ObjectA kk27, ObjectA kk28, ObjectA kk29, ObjectA kk3, ObjectA kk30, ObjectA kk31, ObjectA kk32, ObjectA kk33, ObjectA kk34, ObjectA kk35, ObjectA kk36, ObjectA kk37, ObjectA kk38, ObjectA kk39, ObjectA kk4, ObjectA kk40, ObjectA kk41, ObjectA kk42, ObjectA kk43, ObjectA kk44, ObjectA kk45, ObjectA kk46, ObjectA kk47, ObjectA kk48, ObjectA kk49, ObjectA kk5, ObjectA kk50, ObjectA kk51, ObjectA kk52, ObjectA kk53, ObjectA kk54, ObjectA kk55, ObjectA kk56, ObjectA kk57, ObjectA kk58, ObjectA kk59, ObjectA kk6, ObjectA kk60, ObjectA kk61, ObjectA kk62, ObjectA kk63, ObjectA kk64, ObjectA kk65, ObjectA kk66, ObjectA kk67, ObjectA kk68, ObjectA kk69, ObjectA kk7, ObjectA kk70, ObjectA kk71, ObjectA kk72, ObjectA kk73, ObjectA kk74, ObjectA kk75, ObjectA kk76, ObjectA kk77, ObjectA kk78, ObjectA kk79, ObjectA kk8, ObjectA kk80, ObjectA kk81, ObjectA kk82, ObjectA kk83, ObjectA kk84, ObjectA kk85, ObjectA kk86, ObjectA kk87, ObjectA kk88, ObjectA kk9, vector<ObjectA> kkk1, vector<ObjectA> kkk10, vector<ObjectA> kkk11, vector<ObjectA> kkk12, vector<ObjectA> kkk13, vector<ObjectA> kkk14, vector<ObjectA> kkk15, vector<ObjectA> kkk16, vector<ObjectA> kkk17, vector<ObjectA> kkk18, vector<ObjectA> kkk19, vector<ObjectA> kkk2, vector<ObjectA> kkk20, vector<ObjectA> kkk21, vector<ObjectA> kkk22, vector<ObjectA> kkk23, vector<ObjectA> kkk24, vector<ObjectA> kkk25, vector<ObjectA> kkk26, vector<ObjectA> kkk27, vector<ObjectA> kkk28, vector<ObjectA> kkk29, vector<ObjectA> kkk3, vector<ObjectA> kkk30, vector<ObjectA> kkk31, vector<ObjectA> kkk32, vector<ObjectA> kkk33, vector<ObjectA> kkk34, vector<ObjectA> kkk35, vector<ObjectA> kkk36, vector<ObjectA> kkk37, vector<ObjectA> kkk38, vector<ObjectA> kkk39, vector<ObjectA> kkk4, vector<ObjectA> kkk40, vector<ObjectA> kkk41, vector<ObjectA> kkk42, vector<ObjectA> kkk43, vector<ObjectA> kkk44, vector<ObjectA> kkk45, vector<ObjectA> kkk46, vector<ObjectA> kkk47, vector<ObjectA> kkk48, vector<ObjectA> kkk49, vector<ObjectA> kkk5, vector<ObjectA> kkk50, vector<ObjectA> kkk51, vector<ObjectA> kkk52, vector<ObjectA> kkk53, vector<ObjectA> kkk54, vector<ObjectA> kkk55, vector<ObjectA> kkk56, vector<ObjectA> kkk57, vector<ObjectA> kkk58, vector<ObjectA> kkk59, vector<ObjectA> kkk6, vector<ObjectA> kkk60, vector<ObjectA> kkk61, vector<ObjectA> kkk62, vector<ObjectA> kkk63, vector<ObjectA> kkk64, vector<ObjectA> kkk65, vector<ObjectA> kkk66, vector<ObjectA> kkk67, vector<ObjectA> kkk68, vector<ObjectA> kkk69, vector<ObjectA> kkk7, vector<ObjectA> kkk70, vector<ObjectA> kkk71, vector<ObjectA> kkk72, vector<ObjectA> kkk73, vector<ObjectA> kkk74, vector<ObjectA> kkk75, vector<ObjectA> kkk76, vector<ObjectA> kkk77, vector<ObjectA> kkk78, vector<ObjectA> kkk79, vector<ObjectA> kkk8, vector<ObjectA> kkk80, vector<ObjectA> kkk81, vector<ObjectA> kkk82, vector<ObjectA> kkk83, vector<ObjectA> kkk84, vector<ObjectA> kkk85, vector<ObjectA> kkk86, vector<ObjectA> kkk87, vector<ObjectA> kkk88, vector<ObjectA> kkk9, list<int32_t> l1, list<int32_t> l10, list<int32_t> l11, list<int32_t> l12, list<int32_t> l13, list<int32_t> l14, list<int32_t> l15, list<int32_t> l16, list<int32_t> l17, list<int32_t> l18, list<int32_t> l19, list<int32_t> l2, list<int32_t> l20, list<int32_t> l21, list<int32_t> l22, list<int32_t> l23, list<int32_t> l24, list<int32_t> l25, list<int32_t> l26, list<int32_t> l27, list<int32_t> l28, list<int32_t> l29, list<int32_t> l3, list<int32_t> l30, list<int32_t> l31, list<int32_t> l32, list<int32_t> l33, list<int32_t> l34, list<int32_t> l35, list<int32_t> l36, list<int32_t> l37, list<int32_t> l38, list<int32_t> l39, list<int32_t> l4, list<int32_t> l40, list<int32_t> l41, list<int32_t> l42, list<int32_t> l43, list<int32_t> l44, list<int32_t> l45, list<int32_t> l46, list<int32_t> l47, list<int32_t> l48, list<int32_t> l49, list<int32_t> l5, list<int32_t> l50, list<int32_t> l51, list<int32_t> l52, list<int32_t> l53, list<int32_t> l54, list<int32_t> l55, list<int32_t> l56, list<int32_t> l57, list<int32_t> l58, list<int32_t> l59, list<int32_t> l6, list<int32_t> l60, list<int32_t> l61, list<int32_t> l62, list<int32_t> l63, list<int32_t> l64, list<int32_t> l65, list<int32_t> l66, list<int32_t> l67, list<int32_t> l68, list<int32_t> l69, list<int32_t> l7, list<int32_t> l70, list<int32_t> l71, list<int32_t> l72, list<int32_t> l73, list<int32_t> l74, list<int32_t> l75, list<int32_t> l76, list<int32_t> l77, list<int32_t> l78, list<int32_t> l79, list<int32_t> l8, list<int32_t> l80, list<int32_t> l81, list<int32_t> l82, list<int32_t> l83, list<int32_t> l84, list<int32_t> l85, list<int32_t> l86, list<int32_t> l87, list<int32_t> l88, list<int32_t> l9, list<string> llll1, list<string> llll10, list<string> llll11, list<string> llll12, list<string> llll13, list<string> llll14, list<string> llll15, list<string> llll16, list<string> llll17, list<string> llll18, list<string> llll19, list<string> llll2, list<string> llll20, list<string> llll21, list<string> llll22, list<string> llll23, list<string> llll24, list<string> llll25, list<string> llll26, list<string> llll27, list<string> llll28, list<string> llll29, list<string> llll3, list<string> llll30, list<string> llll31, list<string> llll32, list<string> llll33, list<string> llll34, list<string> llll35, list<string> llll36, list<string> llll37, list<string> llll38, list<string> llll39, list<string> llll4, list<string> llll40, list<string> llll41, list<string> llll42, list<string> llll43, list<string> llll44, list<string> llll45, list<string> llll46, list<string> llll47, list<string> llll48, list<string> llll49, list<string> llll5, list<string> llll50, list<string> llll51, list<string> llll52, list<string> llll53, list<string> llll54, list<string> llll55, list<string> llll56, list<string> llll57, list<string> llll58, list<string> llll59, list<string> llll6, list<string> llll60, list<string> llll61, list<string> llll62, list<string> llll63, list<string> llll64, list<string> llll65, list<string> llll66, list<string> llll67, list<string> llll68, list<string> llll69, list<string> llll7, list<string> llll70, list<string> llll71, list<string> llll72, list<string> llll73, list<string> llll74, list<string> llll75, list<string> llll76, list<string> llll77, list<string> llll78, list<string> llll79, list<string> llll8, list<string> llll80, list<string> llll81, list<string> llll82, list<string> llll83, list<string> llll84, list<string> llll85, list<string> llll86, list<string> llll87, list<string> llll88, list<string> llll9, map<int32_t, string> m1, map<int32_t, string> m10, map<int32_t, string> m11, map<int32_t, string> m12, map<int32_t, string> m13, map<int32_t, string> m14, map<int32_t, string> m15, map<int32_t, string> m16, map<int32_t, string> m17, map<int32_t, string> m18, map<int32_t, string> m19, map<int32_t, string> m2, map<int32_t, string> m20, map<int32_t, string> m21, map<int32_t, string> m22, map<int32_t, string> m23, map<int32_t, string> m24, map<int32_t, string> m25, map<int32_t, string> m26, map<int32_t, string> m27, map<int32_t, string> m28, map<int32_t, string> m29, map<int32_t, string> m3, map<int32_t, string> m30, map<int32_t, string> m31, map<int32_t, string> m32, map<int32_t, string> m33, map<int32_t, string> m34, map<int32_t, string> m35, map<int32_t, string> m36, map<int32_t, string> m37, map<int32_t, string> m38, map<int32_t, string> m39, map<int32_t, string> m4, map<int32_t, string> m40, map<int32_t, string> m41, map<int32_t, string> m42, map<int32_t, string> m43, map<int32_t, string> m44, map<int32_t, string> m45, map<int32_t, string> m46, map<int32_t, string> m47, map<int32_t, string> m48, map<int32_t, string> m49, map<int32_t, string> m5, map<int32_t, string> m50, map<int32_t, string> m51, map<int32_t, string> m52, map<int32_t, string> m53, map<int32_t, string> m54, map<int32_t, string> m55, map<int32_t, string> m56, map<int32_t, string> m57, map<int32_t, string> m58, map<int32_t, string> m59, map<int32_t, string> m6, map<int32_t, string> m60, map<int32_t, string> m61, map<int32_t, string> m62, map<int32_t, string> m63, map<int32_t, string> m64, map<int32_t, string> m65, map<int32_t, string> m66, map<int32_t, string> m67, map<int32_t, string> m68, map<int32_t, string> m69, map<int32_t, string> m7, map<int32_t, string> m70, map<int32_t, string> m71, map<int32_t, string> m72, map<int32_t, string> m73, map<int32_t, string> m74, map<int32_t, string> m75, map<int32_t, string> m76, map<int32_t, string> m77, map<int32_t, string> m78, map<int32_t, string> m79, map<int32_t, string> m8, map<int32_t, string> m80, map<int32_t, string> m81, map<int32_t, string> m82, map<int32_t, string> m83, map<int32_t, string> m84, map<int32_t, string> m85, map<int32_t, string> m86, map<int32_t, string> m87, map<int32_t, string> m88, map<int32_t, string> m9, map<int32_t, ObjectA> mm1, map<int32_t, ObjectA> mm10, map<int32_t, ObjectA> mm11, map<int32_t, ObjectA> mm12, map<int32_t, ObjectA> mm13, map<int32_t, ObjectA> mm14, map<int32_t, ObjectA> mm15, map<int32_t, ObjectA> mm16, map<int32_t, ObjectA> mm17, map<int32_t, ObjectA> mm18, map<int32_t, ObjectA> mm19, map<int32_t, ObjectA> mm2, map<int32_t, ObjectA> mm20, map<int32_t, ObjectA> mm21, map<int32_t, ObjectA> mm22, map<int32_t, ObjectA> mm23, map<int32_t, ObjectA> mm24, map<int32_t, ObjectA> mm25, map<int32_t, ObjectA> mm26, map<int32_t, ObjectA> mm27, map<int32_t, ObjectA> mm28, map<int32_t, ObjectA> mm29, map<int32_t, ObjectA> mm3, map<int32_t, ObjectA> mm30, map<int32_t, ObjectA> mm31, map<int32_t, ObjectA> mm32, map<int32_t, ObjectA> mm33, map<int32_t, ObjectA> mm34, map<int32_t, ObjectA> mm35, map<int32_t, ObjectA> mm36, map<int32_t, ObjectA> mm37, map<int32_t, ObjectA> mm38, map<int32_t, ObjectA> mm39, map<int32_t, ObjectA> mm4, map<int32_t, ObjectA> mm40, map<int32_t, ObjectA> mm41, map<int32_t, ObjectA> mm42, map<int32_t, ObjectA> mm43, map<int32_t, ObjectA> mm44, map<int32_t, ObjectA> mm45, map<int32_t, ObjectA> mm46, map<int32_t, ObjectA> mm47, map<int32_t, ObjectA> mm48, map<int32_t, ObjectA> mm49, map<int32_t, ObjectA> mm5, map<int32_t, ObjectA> mm50, map<int32_t, ObjectA> mm51, map<int32_t, ObjectA> mm52, map<int32_t, ObjectA> mm53, map<int32_t, ObjectA> mm54, map<int32_t, ObjectA> mm55, map<int32_t, ObjectA> mm56, map<int32_t, ObjectA> mm57, map<int32_t, ObjectA> mm58, map<int32_t, ObjectA> mm59, map<int32_t, ObjectA> mm6, map<int32_t, ObjectA> mm60, map<int32_t, ObjectA> mm61, map<int32_t, ObjectA> mm62, map<int32_t, ObjectA> mm63, map<int32_t, ObjectA> mm64, map<int32_t, ObjectA> mm65, map<int32_t, ObjectA> mm66, map<int32_t, ObjectA> mm67, map<int32_t, ObjectA> mm68, map<int32_t, ObjectA> mm69, map<int32_t, ObjectA> mm7, map<int32_t, ObjectA> mm70, map<int32_t, ObjectA> mm71, map<int32_t, ObjectA> mm72, map<int32_t, ObjectA> mm73, map<int32_t, ObjectA> mm74, map<int32_t, ObjectA> mm75, map<int32_t, ObjectA> mm76, map<int32_t, ObjectA> mm77, map<int32_t, ObjectA> mm78, map<int32_t, ObjectA> mm79, map<int32_t, ObjectA> mm8, map<int32_t, ObjectA> mm80, map<int32_t, ObjectA> mm81, map<int32_t, ObjectA> mm82, map<int32_t, ObjectA> mm83, map<int32_t, ObjectA> mm84, map<int32_t, ObjectA> mm85, map<int32_t, ObjectA> mm86, map<int32_t, ObjectA> mm87, map<int32_t, ObjectA> mm88, map<int32_t, ObjectA> mm9, set<int32_t> s1, set<int32_t> s10, set<int32_t> s11, set<int32_t> s12, set<int32_t> s13, set<int32_t> s14, set<int32_t> s15, set<int32_t> s16, set<int32_t> s17, set<int32_t> s18, set<int32_t> s19, set<int32_t> s2, set<int32_t> s20, set<int32_t> s21, set<int32_t> s22, set<int32_t> s23, set<int32_t> s24, set<int32_t> s25, set<int32_t> s26, set<int32_t> s27, set<int32_t> s28, set<int32_t> s29, set<int32_t> s3, set<int32_t> s30, set<int32_t> s31, set<int32_t> s32, set<int32_t> s33, set<int32_t> s34, set<int32_t> s35, set<int32_t> s36, set<int32_t> s37, set<int32_t> s38, set<int32_t> s39, set<int32_t> s4, set<int32_t> s40, set<int32_t> s41, set<int32_t> s42, set<int32_t> s43, set<int32_t> s44, set<int32_t> s45, set<int32_t> s46, set<int32_t> s47, set<int32_t> s48, set<int32_t> s49, set<int32_t> s5, set<int32_t> s50, set<int32_t> s51, set<int32_t> s52, set<int32_t> s53, set<int32_t> s54, set<int32_t> s55, set<int32_t> s56, set<int32_t> s57, set<int32_t> s58, set<int32_t> s59, set<int32_t> s6, set<int32_t> s60, set<int32_t> s61, set<int32_t> s62, set<int32_t> s63, set<int32_t> s64, set<int32_t> s65, set<int32_t> s66, set<int32_t> s67, set<int32_t> s68, set<int32_t> s69, set<int32_t> s7, set<int32_t> s70, set<int32_t> s71, set<int32_t> s72, set<int32_t> s73, set<int32_t> s74, set<int32_t> s75, set<int32_t> s76, set<int32_t> s77, set<int32_t> s78, set<int32_t> s79, set<int32_t> s8, set<int32_t> s80, set<int32_t> s81, set<int32_t> s82, set<int32_t> s83, set<int32_t> s84, set<int32_t> s85, set<int32_t> s86, set<int32_t> s87, set<int32_t> s88, set<int32_t> s9, set<string> ssss1, set<string> ssss10, set<string> ssss11, set<string> ssss12, set<string> ssss13, set<string> ssss14, set<string> ssss15, set<string> ssss16, set<string> ssss17, set<string> ssss18, set<string> ssss19, set<string> ssss2, set<string> ssss20, set<string> ssss21, set<string> ssss22, set<string> ssss23, set<string> ssss24, set<string> ssss25, set<string> ssss26, set<string> ssss27, set<string> ssss28, set<string> ssss29, set<string> ssss3, set<string> ssss30, set<string> ssss31, set<string> ssss32, set<string> ssss33, set<string> ssss34, set<string> ssss35, set<string> ssss36, set<string> ssss37, set<string> ssss38, set<string> ssss39, set<string> ssss4, set<string> ssss40, set<string> ssss41, set<string> ssss42, set<string> ssss43, set<string> ssss44, set<string> ssss45, set<string> ssss46, set<string> ssss47, set<string> ssss48, set<string> ssss49, set<string> ssss5, set<string> ssss50, set<string> ssss51, set<string> ssss52, set<string> ssss53, set<string> ssss54, set<string> ssss55, set<string> ssss56, set<string> ssss57, set<string> ssss58, set<string> ssss59, set<string> ssss6, set<string> ssss60, set<string> ssss61, set<string> ssss62, set<string> ssss63, set<string> ssss64, set<string> ssss65, set<string> ssss66, set<string> ssss67, set<string> ssss68, set<string> ssss69, set<string> ssss7, set<string> ssss70, set<string> ssss71, set<string> ssss72, set<string> ssss73, set<string> ssss74, set<string> ssss75, set<string> ssss76, set<string> ssss77, set<string> ssss78, set<string> ssss79, set<string> ssss8, set<string> ssss80, set<string> ssss81, set<string> ssss82, set<string> ssss83, set<string> ssss84, set<string> ssss85, set<string> ssss86, set<string> ssss87, set<string> ssss88, set<string> ssss9) {
+        static VeryBigObject valueOf(int8_t a1, int8_t a10, int8_t a11, int8_t a12, int8_t a13, int8_t a14, int8_t a15, int8_t a16, int8_t a17, int8_t a18, int8_t a19, int8_t a2, int8_t a20, int8_t a21, int8_t a22, int8_t a23, int8_t a24, int8_t a25, int8_t a26, int8_t a27, int8_t a28, int8_t a29, int8_t a3, int8_t a30, int8_t a31, int8_t a32, int8_t a33, int8_t a34, int8_t a35, int8_t a36, int8_t a37, int8_t a38, int8_t a39, int8_t a4, int8_t a40, int8_t a41, int8_t a42, int8_t a43, int8_t a44, int8_t a45, int8_t a46, int8_t a47, int8_t a48, int8_t a49, int8_t a5, int8_t a50, int8_t a51, int8_t a52, int8_t a53, int8_t a54, int8_t a55, int8_t a56, int8_t a57, int8_t a58, int8_t a59, int8_t a6, int8_t a60, int8_t a61, int8_t a62, int8_t a63, int8_t a64, int8_t a65, int8_t a66, int8_t a67, int8_t a68, int8_t a69, int8_t a7, int8_t a70, int8_t a71, int8_t a72, int8_t a73, int8_t a74, int8_t a75, int8_t a76, int8_t a77, int8_t a78, int8_t a79, int8_t a8, int8_t a80, int8_t a81, int8_t a82, int8_t a83, int8_t a84, int8_t a85, int8_t a86, int8_t a87, int8_t a88, int8_t a9, int8_t aa1, int8_t aa10, int8_t aa11, int8_t aa12, int8_t aa13, int8_t aa14, int8_t aa15, int8_t aa16, int8_t aa17, int8_t aa18, int8_t aa19, int8_t aa2, int8_t aa20, int8_t aa21, int8_t aa22, int8_t aa23, int8_t aa24, int8_t aa25, int8_t aa26, int8_t aa27, int8_t aa28, int8_t aa29, int8_t aa3, int8_t aa30, int8_t aa31, int8_t aa32, int8_t aa33, int8_t aa34, int8_t aa35, int8_t aa36, int8_t aa37, int8_t aa38, int8_t aa39, int8_t aa4, int8_t aa40, int8_t aa41, int8_t aa42, int8_t aa43, int8_t aa44, int8_t aa45, int8_t aa46, int8_t aa47, int8_t aa48, int8_t aa49, int8_t aa5, int8_t aa50, int8_t aa51, int8_t aa52, int8_t aa53, int8_t aa54, int8_t aa55, int8_t aa56, int8_t aa57, int8_t aa58, int8_t aa59, int8_t aa6, int8_t aa60, int8_t aa61, int8_t aa62, int8_t aa63, int8_t aa64, int8_t aa65, int8_t aa66, int8_t aa67, int8_t aa68, int8_t aa69, int8_t aa7, int8_t aa70, int8_t aa71, int8_t aa72, int8_t aa73, int8_t aa74, int8_t aa75, int8_t aa76, int8_t aa77, int8_t aa78, int8_t aa79, int8_t aa8, int8_t aa80, int8_t aa81, int8_t aa82, int8_t aa83, int8_t aa84, int8_t aa85, int8_t aa86, int8_t aa87, int8_t aa88, int8_t aa9, vector<int8_t> aaa1, vector<int8_t> aaa10, vector<int8_t> aaa11, vector<int8_t> aaa12, vector<int8_t> aaa13, vector<int8_t> aaa14, vector<int8_t> aaa15, vector<int8_t> aaa16, vector<int8_t> aaa17, vector<int8_t> aaa18, vector<int8_t> aaa19, vector<int8_t> aaa2, vector<int8_t> aaa20, vector<int8_t> aaa21, vector<int8_t> aaa22, vector<int8_t> aaa23, vector<int8_t> aaa24, vector<int8_t> aaa25, vector<int8_t> aaa26, vector<int8_t> aaa27, vector<int8_t> aaa28, vector<int8_t> aaa29, vector<int8_t> aaa3, vector<int8_t> aaa30, vector<int8_t> aaa31, vector<int8_t> aaa32, vector<int8_t> aaa33, vector<int8_t> aaa34, vector<int8_t> aaa35, vector<int8_t> aaa36, vector<int8_t> aaa37, vector<int8_t> aaa38, vector<int8_t> aaa39, vector<int8_t> aaa4, vector<int8_t> aaa40, vector<int8_t> aaa41, vector<int8_t> aaa42, vector<int8_t> aaa43, vector<int8_t> aaa44, vector<int8_t> aaa45, vector<int8_t> aaa46, vector<int8_t> aaa47, vector<int8_t> aaa48, vector<int8_t> aaa49, vector<int8_t> aaa5, vector<int8_t> aaa50, vector<int8_t> aaa51, vector<int8_t> aaa52, vector<int8_t> aaa53, vector<int8_t> aaa54, vector<int8_t> aaa55, vector<int8_t> aaa56, vector<int8_t> aaa57, vector<int8_t> aaa58, vector<int8_t> aaa59, vector<int8_t> aaa6, vector<int8_t> aaa60, vector<int8_t> aaa61, vector<int8_t> aaa62, vector<int8_t> aaa63, vector<int8_t> aaa64, vector<int8_t> aaa65, vector<int8_t> aaa66, vector<int8_t> aaa67, vector<int8_t> aaa68, vector<int8_t> aaa69, vector<int8_t> aaa7, vector<int8_t> aaa70, vector<int8_t> aaa71, vector<int8_t> aaa72, vector<int8_t> aaa73, vector<int8_t> aaa74, vector<int8_t> aaa75, vector<int8_t> aaa76, vector<int8_t> aaa77, vector<int8_t> aaa78, vector<int8_t> aaa79, vector<int8_t> aaa8, vector<int8_t> aaa80, vector<int8_t> aaa81, vector<int8_t> aaa82, vector<int8_t> aaa83, vector<int8_t> aaa84, vector<int8_t> aaa85, vector<int8_t> aaa86, vector<int8_t> aaa87, vector<int8_t> aaa88, vector<int8_t> aaa9, vector<int8_t> aaaa1, vector<int8_t> aaaa10, vector<int8_t> aaaa11, vector<int8_t> aaaa12, vector<int8_t> aaaa13, vector<int8_t> aaaa14, vector<int8_t> aaaa15, vector<int8_t> aaaa16, vector<int8_t> aaaa17, vector<int8_t> aaaa18, vector<int8_t> aaaa19, vector<int8_t> aaaa2, vector<int8_t> aaaa20, vector<int8_t> aaaa21, vector<int8_t> aaaa22, vector<int8_t> aaaa23, vector<int8_t> aaaa24, vector<int8_t> aaaa25, vector<int8_t> aaaa26, vector<int8_t> aaaa27, vector<int8_t> aaaa28, vector<int8_t> aaaa29, vector<int8_t> aaaa3, vector<int8_t> aaaa30, vector<int8_t> aaaa31, vector<int8_t> aaaa32, vector<int8_t> aaaa33, vector<int8_t> aaaa34, vector<int8_t> aaaa35, vector<int8_t> aaaa36, vector<int8_t> aaaa37, vector<int8_t> aaaa38, vector<int8_t> aaaa39, vector<int8_t> aaaa4, vector<int8_t> aaaa40, vector<int8_t> aaaa41, vector<int8_t> aaaa42, vector<int8_t> aaaa43, vector<int8_t> aaaa44, vector<int8_t> aaaa45, vector<int8_t> aaaa46, vector<int8_t> aaaa47, vector<int8_t> aaaa48, vector<int8_t> aaaa49, vector<int8_t> aaaa5, vector<int8_t> aaaa50, vector<int8_t> aaaa51, vector<int8_t> aaaa52, vector<int8_t> aaaa53, vector<int8_t> aaaa54, vector<int8_t> aaaa55, vector<int8_t> aaaa56, vector<int8_t> aaaa57, vector<int8_t> aaaa58, vector<int8_t> aaaa59, vector<int8_t> aaaa6, vector<int8_t> aaaa60, vector<int8_t> aaaa61, vector<int8_t> aaaa62, vector<int8_t> aaaa63, vector<int8_t> aaaa64, vector<int8_t> aaaa65, vector<int8_t> aaaa66, vector<int8_t> aaaa67, vector<int8_t> aaaa68, vector<int8_t> aaaa69, vector<int8_t> aaaa7, vector<int8_t> aaaa70, vector<int8_t> aaaa71, vector<int8_t> aaaa72, vector<int8_t> aaaa73, vector<int8_t> aaaa74, vector<int8_t> aaaa75, vector<int8_t> aaaa76, vector<int8_t> aaaa77, vector<int8_t> aaaa78, vector<int8_t> aaaa79, vector<int8_t> aaaa8, vector<int8_t> aaaa80, vector<int8_t> aaaa81, vector<int8_t> aaaa82, vector<int8_t> aaaa83, vector<int8_t> aaaa84, vector<int8_t> aaaa85, vector<int8_t> aaaa86, vector<int8_t> aaaa87, vector<int8_t> aaaa88, vector<int8_t> aaaa9, int16_t b1, int16_t b10, int16_t b11, int16_t b12, int16_t b13, int16_t b14, int16_t b15, int16_t b16, int16_t b17, int16_t b18, int16_t b19, int16_t b2, int16_t b20, int16_t b21, int16_t b22, int16_t b23, int16_t b24, int16_t b25, int16_t b26, int16_t b27, int16_t b28, int16_t b29, int16_t b3, int16_t b30, int16_t b31, int16_t b32, int16_t b33, int16_t b34, int16_t b35, int16_t b36, int16_t b37, int16_t b38, int16_t b39, int16_t b4, int16_t b40, int16_t b41, int16_t b42, int16_t b43, int16_t b44, int16_t b45, int16_t b46, int16_t b47, int16_t b48, int16_t b49, int16_t b5, int16_t b50, int16_t b51, int16_t b52, int16_t b53, int16_t b54, int16_t b55, int16_t b56, int16_t b57, int16_t b58, int16_t b59, int16_t b6, int16_t b60, int16_t b61, int16_t b62, int16_t b63, int16_t b64, int16_t b65, int16_t b66, int16_t b67, int16_t b68, int16_t b69, int16_t b7, int16_t b70, int16_t b71, int16_t b72, int16_t b73, int16_t b74, int16_t b75, int16_t b76, int16_t b77, int16_t b78, int16_t b79, int16_t b8, int16_t b80, int16_t b81, int16_t b82, int16_t b83, int16_t b84, int16_t b85, int16_t b86, int16_t b87, int16_t b88, int16_t b9, int16_t bb1, int16_t bb10, int16_t bb11, int16_t bb12, int16_t bb13, int16_t bb14, int16_t bb15, int16_t bb16, int16_t bb17, int16_t bb18, int16_t bb19, int16_t bb2, int16_t bb20, int16_t bb21, int16_t bb22, int16_t bb23, int16_t bb24, int16_t bb25, int16_t bb26, int16_t bb27, int16_t bb28, int16_t bb29, int16_t bb3, int16_t bb30, int16_t bb31, int16_t bb32, int16_t bb33, int16_t bb34, int16_t bb35, int16_t bb36, int16_t bb37, int16_t bb38, int16_t bb39, int16_t bb4, int16_t bb40, int16_t bb41, int16_t bb42, int16_t bb43, int16_t bb44, int16_t bb45, int16_t bb46, int16_t bb47, int16_t bb48, int16_t bb49, int16_t bb5, int16_t bb50, int16_t bb51, int16_t bb52, int16_t bb53, int16_t bb54, int16_t bb55, int16_t bb56, int16_t bb57, int16_t bb58, int16_t bb59, int16_t bb6, int16_t bb60, int16_t bb61, int16_t bb62, int16_t bb63, int16_t bb64, int16_t bb65, int16_t bb66, int16_t bb67, int16_t bb68, int16_t bb69, int16_t bb7, int16_t bb70, int16_t bb71, int16_t bb72, int16_t bb73, int16_t bb74, int16_t bb75, int16_t bb76, int16_t bb77, int16_t bb78, int16_t bb79, int16_t bb8, int16_t bb80, int16_t bb81, int16_t bb82, int16_t bb83, int16_t bb84, int16_t bb85, int16_t bb86, int16_t bb87, int16_t bb88, int16_t bb9, vector<int16_t> bbb1, vector<int16_t> bbb10, vector<int16_t> bbb11, vector<int16_t> bbb12, vector<int16_t> bbb13, vector<int16_t> bbb14, vector<int16_t> bbb15, vector<int16_t> bbb16, vector<int16_t> bbb17, vector<int16_t> bbb18, vector<int16_t> bbb19, vector<int16_t> bbb2, vector<int16_t> bbb20, vector<int16_t> bbb21, vector<int16_t> bbb22, vector<int16_t> bbb23, vector<int16_t> bbb24, vector<int16_t> bbb25, vector<int16_t> bbb26, vector<int16_t> bbb27, vector<int16_t> bbb28, vector<int16_t> bbb29, vector<int16_t> bbb3, vector<int16_t> bbb30, vector<int16_t> bbb31, vector<int16_t> bbb32, vector<int16_t> bbb33, vector<int16_t> bbb34, vector<int16_t> bbb35, vector<int16_t> bbb36, vector<int16_t> bbb37, vector<int16_t> bbb38, vector<int16_t> bbb39, vector<int16_t> bbb4, vector<int16_t> bbb40, vector<int16_t> bbb41, vector<int16_t> bbb42, vector<int16_t> bbb43, vector<int16_t> bbb44, vector<int16_t> bbb45, vector<int16_t> bbb46, vector<int16_t> bbb47, vector<int16_t> bbb48, vector<int16_t> bbb49, vector<int16_t> bbb5, vector<int16_t> bbb50, vector<int16_t> bbb51, vector<int16_t> bbb52, vector<int16_t> bbb53, vector<int16_t> bbb54, vector<int16_t> bbb55, vector<int16_t> bbb56, vector<int16_t> bbb57, vector<int16_t> bbb58, vector<int16_t> bbb59, vector<int16_t> bbb6, vector<int16_t> bbb60, vector<int16_t> bbb61, vector<int16_t> bbb62, vector<int16_t> bbb63, vector<int16_t> bbb64, vector<int16_t> bbb65, vector<int16_t> bbb66, vector<int16_t> bbb67, vector<int16_t> bbb68, vector<int16_t> bbb69, vector<int16_t> bbb7, vector<int16_t> bbb70, vector<int16_t> bbb71, vector<int16_t> bbb72, vector<int16_t> bbb73, vector<int16_t> bbb74, vector<int16_t> bbb75, vector<int16_t> bbb76, vector<int16_t> bbb77, vector<int16_t> bbb78, vector<int16_t> bbb79, vector<int16_t> bbb8, vector<int16_t> bbb80, vector<int16_t> bbb81, vector<int16_t> bbb82, vector<int16_t> bbb83, vector<int16_t> bbb84, vector<int16_t> bbb85, vector<int16_t> bbb86, vector<int16_t> bbb87, vector<int16_t> bbb88, vector<int16_t> bbb9, vector<int16_t> bbbb1, vector<int16_t> bbbb10, vector<int16_t> bbbb11, vector<int16_t> bbbb12, vector<int16_t> bbbb13, vector<int16_t> bbbb14, vector<int16_t> bbbb15, vector<int16_t> bbbb16, vector<int16_t> bbbb17, vector<int16_t> bbbb18, vector<int16_t> bbbb19, vector<int16_t> bbbb2, vector<int16_t> bbbb20, vector<int16_t> bbbb21, vector<int16_t> bbbb22, vector<int16_t> bbbb23, vector<int16_t> bbbb24, vector<int16_t> bbbb25, vector<int16_t> bbbb26, vector<int16_t> bbbb27, vector<int16_t> bbbb28, vector<int16_t> bbbb29, vector<int16_t> bbbb3, vector<int16_t> bbbb30, vector<int16_t> bbbb31, vector<int16_t> bbbb32, vector<int16_t> bbbb33, vector<int16_t> bbbb34, vector<int16_t> bbbb35, vector<int16_t> bbbb36, vector<int16_t> bbbb37, vector<int16_t> bbbb38, vector<int16_t> bbbb39, vector<int16_t> bbbb4, vector<int16_t> bbbb40, vector<int16_t> bbbb41, vector<int16_t> bbbb42, vector<int16_t> bbbb43, vector<int16_t> bbbb44, vector<int16_t> bbbb45, vector<int16_t> bbbb46, vector<int16_t> bbbb47, vector<int16_t> bbbb48, vector<int16_t> bbbb49, vector<int16_t> bbbb5, vector<int16_t> bbbb50, vector<int16_t> bbbb51, vector<int16_t> bbbb52, vector<int16_t> bbbb53, vector<int16_t> bbbb54, vector<int16_t> bbbb55, vector<int16_t> bbbb56, vector<int16_t> bbbb57, vector<int16_t> bbbb58, vector<int16_t> bbbb59, vector<int16_t> bbbb6, vector<int16_t> bbbb60, vector<int16_t> bbbb61, vector<int16_t> bbbb62, vector<int16_t> bbbb63, vector<int16_t> bbbb64, vector<int16_t> bbbb65, vector<int16_t> bbbb66, vector<int16_t> bbbb67, vector<int16_t> bbbb68, vector<int16_t> bbbb69, vector<int16_t> bbbb7, vector<int16_t> bbbb70, vector<int16_t> bbbb71, vector<int16_t> bbbb72, vector<int16_t> bbbb73, vector<int16_t> bbbb74, vector<int16_t> bbbb75, vector<int16_t> bbbb76, vector<int16_t> bbbb77, vector<int16_t> bbbb78, vector<int16_t> bbbb79, vector<int16_t> bbbb8, vector<int16_t> bbbb80, vector<int16_t> bbbb81, vector<int16_t> bbbb82, vector<int16_t> bbbb83, vector<int16_t> bbbb84, vector<int16_t> bbbb85, vector<int16_t> bbbb86, vector<int16_t> bbbb87, vector<int16_t> bbbb88, vector<int16_t> bbbb9, int32_t c1, int32_t c10, int32_t c11, int32_t c12, int32_t c13, int32_t c14, int32_t c15, int32_t c16, int32_t c17, int32_t c18, int32_t c19, int32_t c2, int32_t c20, int32_t c21, int32_t c22, int32_t c23, int32_t c24, int32_t c25, int32_t c26, int32_t c27, int32_t c28, int32_t c29, int32_t c3, int32_t c30, int32_t c31, int32_t c32, int32_t c33, int32_t c34, int32_t c35, int32_t c36, int32_t c37, int32_t c38, int32_t c39, int32_t c4, int32_t c40, int32_t c41, int32_t c42, int32_t c43, int32_t c44, int32_t c45, int32_t c46, int32_t c47, int32_t c48, int32_t c49, int32_t c5, int32_t c50, int32_t c51, int32_t c52, int32_t c53, int32_t c54, int32_t c55, int32_t c56, int32_t c57, int32_t c58, int32_t c59, int32_t c6, int32_t c60, int32_t c61, int32_t c62, int32_t c63, int32_t c64, int32_t c65, int32_t c66, int32_t c67, int32_t c68, int32_t c69, int32_t c7, int32_t c70, int32_t c71, int32_t c72, int32_t c73, int32_t c74, int32_t c75, int32_t c76, int32_t c77, int32_t c78, int32_t c79, int32_t c8, int32_t c80, int32_t c81, int32_t c82, int32_t c83, int32_t c84, int32_t c85, int32_t c86, int32_t c87, int32_t c88, int32_t c9, int32_t cc1, int32_t cc10, int32_t cc11, int32_t cc12, int32_t cc13, int32_t cc14, int32_t cc15, int32_t cc16, int32_t cc17, int32_t cc18, int32_t cc19, int32_t cc2, int32_t cc20, int32_t cc21, int32_t cc22, int32_t cc23, int32_t cc24, int32_t cc25, int32_t cc26, int32_t cc27, int32_t cc28, int32_t cc29, int32_t cc3, int32_t cc30, int32_t cc31, int32_t cc32, int32_t cc33, int32_t cc34, int32_t cc35, int32_t cc36, int32_t cc37, int32_t cc38, int32_t cc39, int32_t cc4, int32_t cc40, int32_t cc41, int32_t cc42, int32_t cc43, int32_t cc44, int32_t cc45, int32_t cc46, int32_t cc47, int32_t cc48, int32_t cc49, int32_t cc5, int32_t cc50, int32_t cc51, int32_t cc52, int32_t cc53, int32_t cc54, int32_t cc55, int32_t cc56, int32_t cc57, int32_t cc58, int32_t cc59, int32_t cc6, int32_t cc60, int32_t cc61, int32_t cc62, int32_t cc63, int32_t cc64, int32_t cc65, int32_t cc66, int32_t cc67, int32_t cc68, int32_t cc69, int32_t cc7, int32_t cc70, int32_t cc71, int32_t cc72, int32_t cc73, int32_t cc74, int32_t cc75, int32_t cc76, int32_t cc77, int32_t cc78, int32_t cc79, int32_t cc8, int32_t cc80, int32_t cc81, int32_t cc82, int32_t cc83, int32_t cc84, int32_t cc85, int32_t cc86, int32_t cc87, int32_t cc88, int32_t cc9, vector<int32_t> ccc1, vector<int32_t> ccc10, vector<int32_t> ccc11, vector<int32_t> ccc12, vector<int32_t> ccc13, vector<int32_t> ccc14, vector<int32_t> ccc15, vector<int32_t> ccc16, vector<int32_t> ccc17, vector<int32_t> ccc18, vector<int32_t> ccc19, vector<int32_t> ccc2, vector<int32_t> ccc20, vector<int32_t> ccc21, vector<int32_t> ccc22, vector<int32_t> ccc23, vector<int32_t> ccc24, vector<int32_t> ccc25, vector<int32_t> ccc26, vector<int32_t> ccc27, vector<int32_t> ccc28, vector<int32_t> ccc29, vector<int32_t> ccc3, vector<int32_t> ccc30, vector<int32_t> ccc31, vector<int32_t> ccc32, vector<int32_t> ccc33, vector<int32_t> ccc34, vector<int32_t> ccc35, vector<int32_t> ccc36, vector<int32_t> ccc37, vector<int32_t> ccc38, vector<int32_t> ccc39, vector<int32_t> ccc4, vector<int32_t> ccc40, vector<int32_t> ccc41, vector<int32_t> ccc42, vector<int32_t> ccc43, vector<int32_t> ccc44, vector<int32_t> ccc45, vector<int32_t> ccc46, vector<int32_t> ccc47, vector<int32_t> ccc48, vector<int32_t> ccc49, vector<int32_t> ccc5, vector<int32_t> ccc50, vector<int32_t> ccc51, vector<int32_t> ccc52, vector<int32_t> ccc53, vector<int32_t> ccc54, vector<int32_t> ccc55, vector<int32_t> ccc56, vector<int32_t> ccc57, vector<int32_t> ccc58, vector<int32_t> ccc59, vector<int32_t> ccc6, vector<int32_t> ccc60, vector<int32_t> ccc61, vector<int32_t> ccc62, vector<int32_t> ccc63, vector<int32_t> ccc64, vector<int32_t> ccc65, vector<int32_t> ccc66, vector<int32_t> ccc67, vector<int32_t> ccc68, vector<int32_t> ccc69, vector<int32_t> ccc7, vector<int32_t> ccc70, vector<int32_t> ccc71, vector<int32_t> ccc72, vector<int32_t> ccc73, vector<int32_t> ccc74, vector<int32_t> ccc75, vector<int32_t> ccc76, vector<int32_t> ccc77, vector<int32_t> ccc78, vector<int32_t> ccc79, vector<int32_t> ccc8, vector<int32_t> ccc80, vector<int32_t> ccc81, vector<int32_t> ccc82, vector<int32_t> ccc83, vector<int32_t> ccc84, vector<int32_t> ccc85, vector<int32_t> ccc86, vector<int32_t> ccc87, vector<int32_t> ccc88, vector<int32_t> ccc9, vector<int32_t> cccc1, vector<int32_t> cccc10, vector<int32_t> cccc11, vector<int32_t> cccc12, vector<int32_t> cccc13, vector<int32_t> cccc14, vector<int32_t> cccc15, vector<int32_t> cccc16, vector<int32_t> cccc17, vector<int32_t> cccc18, vector<int32_t> cccc19, vector<int32_t> cccc2, vector<int32_t> cccc20, vector<int32_t> cccc21, vector<int32_t> cccc22, vector<int32_t> cccc23, vector<int32_t> cccc24, vector<int32_t> cccc25, vector<int32_t> cccc26, vector<int32_t> cccc27, vector<int32_t> cccc28, vector<int32_t> cccc29, vector<int32_t> cccc3, vector<int32_t> cccc30, vector<int32_t> cccc31, vector<int32_t> cccc32, vector<int32_t> cccc33, vector<int32_t> cccc34, vector<int32_t> cccc35, vector<int32_t> cccc36, vector<int32_t> cccc37, vector<int32_t> cccc38, vector<int32_t> cccc39, vector<int32_t> cccc4, vector<int32_t> cccc40, vector<int32_t> cccc41, vector<int32_t> cccc42, vector<int32_t> cccc43, vector<int32_t> cccc44, vector<int32_t> cccc45, vector<int32_t> cccc46, vector<int32_t> cccc47, vector<int32_t> cccc48, vector<int32_t> cccc49, vector<int32_t> cccc5, vector<int32_t> cccc50, vector<int32_t> cccc51, vector<int32_t> cccc52, vector<int32_t> cccc53, vector<int32_t> cccc54, vector<int32_t> cccc55, vector<int32_t> cccc56, vector<int32_t> cccc57, vector<int32_t> cccc58, vector<int32_t> cccc59, vector<int32_t> cccc6, vector<int32_t> cccc60, vector<int32_t> cccc61, vector<int32_t> cccc62, vector<int32_t> cccc63, vector<int32_t> cccc64, vector<int32_t> cccc65, vector<int32_t> cccc66, vector<int32_t> cccc67, vector<int32_t> cccc68, vector<int32_t> cccc69, vector<int32_t> cccc7, vector<int32_t> cccc70, vector<int32_t> cccc71, vector<int32_t> cccc72, vector<int32_t> cccc73, vector<int32_t> cccc74, vector<int32_t> cccc75, vector<int32_t> cccc76, vector<int32_t> cccc77, vector<int32_t> cccc78, vector<int32_t> cccc79, vector<int32_t> cccc8, vector<int32_t> cccc80, vector<int32_t> cccc81, vector<int32_t> cccc82, vector<int32_t> cccc83, vector<int32_t> cccc84, vector<int32_t> cccc85, vector<int32_t> cccc86, vector<int32_t> cccc87, vector<int32_t> cccc88, vector<int32_t> cccc9, int64_t d1, int64_t d10, int64_t d11, int64_t d12, int64_t d13, int64_t d14, int64_t d15, int64_t d16, int64_t d17, int64_t d18, int64_t d19, int64_t d2, int64_t d20, int64_t d21, int64_t d22, int64_t d23, int64_t d24, int64_t d25, int64_t d26, int64_t d27, int64_t d28, int64_t d29, int64_t d3, int64_t d30, int64_t d31, int64_t d32, int64_t d33, int64_t d34, int64_t d35, int64_t d36, int64_t d37, int64_t d38, int64_t d39, int64_t d4, int64_t d40, int64_t d41, int64_t d42, int64_t d43, int64_t d44, int64_t d45, int64_t d46, int64_t d47, int64_t d48, int64_t d49, int64_t d5, int64_t d50, int64_t d51, int64_t d52, int64_t d53, int64_t d54, int64_t d55, int64_t d56, int64_t d57, int64_t d58, int64_t d59, int64_t d6, int64_t d60, int64_t d61, int64_t d62, int64_t d63, int64_t d64, int64_t d65, int64_t d66, int64_t d67, int64_t d68, int64_t d69, int64_t d7, int64_t d70, int64_t d71, int64_t d72, int64_t d73, int64_t d74, int64_t d75, int64_t d76, int64_t d77, int64_t d78, int64_t d79, int64_t d8, int64_t d80, int64_t d81, int64_t d82, int64_t d83, int64_t d84, int64_t d85, int64_t d86, int64_t d87, int64_t d88, int64_t d9, int64_t dd1, int64_t dd10, int64_t dd11, int64_t dd12, int64_t dd13, int64_t dd14, int64_t dd15, int64_t dd16, int64_t dd17, int64_t dd18, int64_t dd19, int64_t dd2, int64_t dd20, int64_t dd21, int64_t dd22, int64_t dd23, int64_t dd24, int64_t dd25, int64_t dd26, int64_t dd27, int64_t dd28, int64_t dd29, int64_t dd3, int64_t dd30, int64_t dd31, int64_t dd32, int64_t dd33, int64_t dd34, int64_t dd35, int64_t dd36, int64_t dd37, int64_t dd38, int64_t dd39, int64_t dd4, int64_t dd40, int64_t dd41, int64_t dd42, int64_t dd43, int64_t dd44, int64_t dd45, int64_t dd46, int64_t dd47, int64_t dd48, int64_t dd49, int64_t dd5, int64_t dd50, int64_t dd51, int64_t dd52, int64_t dd53, int64_t dd54, int64_t dd55, int64_t dd56, int64_t dd57, int64_t dd58, int64_t dd59, int64_t dd6, int64_t dd60, int64_t dd61, int64_t dd62, int64_t dd63, int64_t dd64, int64_t dd65, int64_t dd66, int64_t dd67, int64_t dd68, int64_t dd69, int64_t dd7, int64_t dd70, int64_t dd71, int64_t dd72, int64_t dd73, int64_t dd74, int64_t dd75, int64_t dd76, int64_t dd77, int64_t dd78, int64_t dd79, int64_t dd8, int64_t dd80, int64_t dd81, int64_t dd82, int64_t dd83, int64_t dd84, int64_t dd85, int64_t dd86, int64_t dd87, int64_t dd88, int64_t dd9, vector<int64_t> ddd1, vector<int64_t> ddd10, vector<int64_t> ddd11, vector<int64_t> ddd12, vector<int64_t> ddd13, vector<int64_t> ddd14, vector<int64_t> ddd15, vector<int64_t> ddd16, vector<int64_t> ddd17, vector<int64_t> ddd18, vector<int64_t> ddd19, vector<int64_t> ddd2, vector<int64_t> ddd20, vector<int64_t> ddd21, vector<int64_t> ddd22, vector<int64_t> ddd23, vector<int64_t> ddd24, vector<int64_t> ddd25, vector<int64_t> ddd26, vector<int64_t> ddd27, vector<int64_t> ddd28, vector<int64_t> ddd29, vector<int64_t> ddd3, vector<int64_t> ddd30, vector<int64_t> ddd31, vector<int64_t> ddd32, vector<int64_t> ddd33, vector<int64_t> ddd34, vector<int64_t> ddd35, vector<int64_t> ddd36, vector<int64_t> ddd37, vector<int64_t> ddd38, vector<int64_t> ddd39, vector<int64_t> ddd4, vector<int64_t> ddd40, vector<int64_t> ddd41, vector<int64_t> ddd42, vector<int64_t> ddd43, vector<int64_t> ddd44, vector<int64_t> ddd45, vector<int64_t> ddd46, vector<int64_t> ddd47, vector<int64_t> ddd48, vector<int64_t> ddd49, vector<int64_t> ddd5, vector<int64_t> ddd50, vector<int64_t> ddd51, vector<int64_t> ddd52, vector<int64_t> ddd53, vector<int64_t> ddd54, vector<int64_t> ddd55, vector<int64_t> ddd56, vector<int64_t> ddd57, vector<int64_t> ddd58, vector<int64_t> ddd59, vector<int64_t> ddd6, vector<int64_t> ddd60, vector<int64_t> ddd61, vector<int64_t> ddd62, vector<int64_t> ddd63, vector<int64_t> ddd64, vector<int64_t> ddd65, vector<int64_t> ddd66, vector<int64_t> ddd67, vector<int64_t> ddd68, vector<int64_t> ddd69, vector<int64_t> ddd7, vector<int64_t> ddd70, vector<int64_t> ddd71, vector<int64_t> ddd72, vector<int64_t> ddd73, vector<int64_t> ddd74, vector<int64_t> ddd75, vector<int64_t> ddd76, vector<int64_t> ddd77, vector<int64_t> ddd78, vector<int64_t> ddd79, vector<int64_t> ddd8, vector<int64_t> ddd80, vector<int64_t> ddd81, vector<int64_t> ddd82, vector<int64_t> ddd83, vector<int64_t> ddd84, vector<int64_t> ddd85, vector<int64_t> ddd86, vector<int64_t> ddd87, vector<int64_t> ddd88, vector<int64_t> ddd9, vector<int64_t> dddd1, vector<int64_t> dddd10, vector<int64_t> dddd11, vector<int64_t> dddd12, vector<int64_t> dddd13, vector<int64_t> dddd14, vector<int64_t> dddd15, vector<int64_t> dddd16, vector<int64_t> dddd17, vector<int64_t> dddd18, vector<int64_t> dddd19, vector<int64_t> dddd2, vector<int64_t> dddd20, vector<int64_t> dddd21, vector<int64_t> dddd22, vector<int64_t> dddd23, vector<int64_t> dddd24, vector<int64_t> dddd25, vector<int64_t> dddd26, vector<int64_t> dddd27, vector<int64_t> dddd28, vector<int64_t> dddd29, vector<int64_t> dddd3, vector<int64_t> dddd30, vector<int64_t> dddd31, vector<int64_t> dddd32, vector<int64_t> dddd33, vector<int64_t> dddd34, vector<int64_t> dddd35, vector<int64_t> dddd36, vector<int64_t> dddd37, vector<int64_t> dddd38, vector<int64_t> dddd39, vector<int64_t> dddd4, vector<int64_t> dddd40, vector<int64_t> dddd41, vector<int64_t> dddd42, vector<int64_t> dddd43, vector<int64_t> dddd44, vector<int64_t> dddd45, vector<int64_t> dddd46, vector<int64_t> dddd47, vector<int64_t> dddd48, vector<int64_t> dddd49, vector<int64_t> dddd5, vector<int64_t> dddd50, vector<int64_t> dddd51, vector<int64_t> dddd52, vector<int64_t> dddd53, vector<int64_t> dddd54, vector<int64_t> dddd55, vector<int64_t> dddd56, vector<int64_t> dddd57, vector<int64_t> dddd58, vector<int64_t> dddd59, vector<int64_t> dddd6, vector<int64_t> dddd60, vector<int64_t> dddd61, vector<int64_t> dddd62, vector<int64_t> dddd63, vector<int64_t> dddd64, vector<int64_t> dddd65, vector<int64_t> dddd66, vector<int64_t> dddd67, vector<int64_t> dddd68, vector<int64_t> dddd69, vector<int64_t> dddd7, vector<int64_t> dddd70, vector<int64_t> dddd71, vector<int64_t> dddd72, vector<int64_t> dddd73, vector<int64_t> dddd74, vector<int64_t> dddd75, vector<int64_t> dddd76, vector<int64_t> dddd77, vector<int64_t> dddd78, vector<int64_t> dddd79, vector<int64_t> dddd8, vector<int64_t> dddd80, vector<int64_t> dddd81, vector<int64_t> dddd82, vector<int64_t> dddd83, vector<int64_t> dddd84, vector<int64_t> dddd85, vector<int64_t> dddd86, vector<int64_t> dddd87, vector<int64_t> dddd88, vector<int64_t> dddd9, float e1, float e10, float e11, float e12, float e13, float e14, float e15, float e16, float e17, float e18, float e19, float e2, float e20, float e21, float e22, float e23, float e24, float e25, float e26, float e27, float e28, float e29, float e3, float e30, float e31, float e32, float e33, float e34, float e35, float e36, float e37, float e38, float e39, float e4, float e40, float e41, float e42, float e43, float e44, float e45, float e46, float e47, float e48, float e49, float e5, float e50, float e51, float e52, float e53, float e54, float e55, float e56, float e57, float e58, float e59, float e6, float e60, float e61, float e62, float e63, float e64, float e65, float e66, float e67, float e68, float e69, float e7, float e70, float e71, float e72, float e73, float e74, float e75, float e76, float e77, float e78, float e79, float e8, float e80, float e81, float e82, float e83, float e84, float e85, float e86, float e87, float e88, float e9, float ee1, float ee10, float ee11, float ee12, float ee13, float ee14, float ee15, float ee16, float ee17, float ee18, float ee19, float ee2, float ee20, float ee21, float ee22, float ee23, float ee24, float ee25, float ee26, float ee27, float ee28, float ee29, float ee3, float ee30, float ee31, float ee32, float ee33, float ee34, float ee35, float ee36, float ee37, float ee38, float ee39, float ee4, float ee40, float ee41, float ee42, float ee43, float ee44, float ee45, float ee46, float ee47, float ee48, float ee49, float ee5, float ee50, float ee51, float ee52, float ee53, float ee54, float ee55, float ee56, float ee57, float ee58, float ee59, float ee6, float ee60, float ee61, float ee62, float ee63, float ee64, float ee65, float ee66, float ee67, float ee68, float ee69, float ee7, float ee70, float ee71, float ee72, float ee73, float ee74, float ee75, float ee76, float ee77, float ee78, float ee79, float ee8, float ee80, float ee81, float ee82, float ee83, float ee84, float ee85, float ee86, float ee87, float ee88, float ee9, vector<float> eee1, vector<float> eee10, vector<float> eee11, vector<float> eee12, vector<float> eee13, vector<float> eee14, vector<float> eee15, vector<float> eee16, vector<float> eee17, vector<float> eee18, vector<float> eee19, vector<float> eee2, vector<float> eee20, vector<float> eee21, vector<float> eee22, vector<float> eee23, vector<float> eee24, vector<float> eee25, vector<float> eee26, vector<float> eee27, vector<float> eee28, vector<float> eee29, vector<float> eee3, vector<float> eee30, vector<float> eee31, vector<float> eee32, vector<float> eee33, vector<float> eee34, vector<float> eee35, vector<float> eee36, vector<float> eee37, vector<float> eee38, vector<float> eee39, vector<float> eee4, vector<float> eee40, vector<float> eee41, vector<float> eee42, vector<float> eee43, vector<float> eee44, vector<float> eee45, vector<float> eee46, vector<float> eee47, vector<float> eee48, vector<float> eee49, vector<float> eee5, vector<float> eee50, vector<float> eee51, vector<float> eee52, vector<float> eee53, vector<float> eee54, vector<float> eee55, vector<float> eee56, vector<float> eee57, vector<float> eee58, vector<float> eee59, vector<float> eee6, vector<float> eee60, vector<float> eee61, vector<float> eee62, vector<float> eee63, vector<float> eee64, vector<float> eee65, vector<float> eee66, vector<float> eee67, vector<float> eee68, vector<float> eee69, vector<float> eee7, vector<float> eee70, vector<float> eee71, vector<float> eee72, vector<float> eee73, vector<float> eee74, vector<float> eee75, vector<float> eee76, vector<float> eee77, vector<float> eee78, vector<float> eee79, vector<float> eee8, vector<float> eee80, vector<float> eee81, vector<float> eee82, vector<float> eee83, vector<float> eee84, vector<float> eee85, vector<float> eee86, vector<float> eee87, vector<float> eee88, vector<float> eee9, vector<float> eeee1, vector<float> eeee10, vector<float> eeee11, vector<float> eeee12, vector<float> eeee13, vector<float> eeee14, vector<float> eeee15, vector<float> eeee16, vector<float> eeee17, vector<float> eeee18, vector<float> eeee19, vector<float> eeee2, vector<float> eeee20, vector<float> eeee21, vector<float> eeee22, vector<float> eeee23, vector<float> eeee24, vector<float> eeee25, vector<float> eeee26, vector<float> eeee27, vector<float> eeee28, vector<float> eeee29, vector<float> eeee3, vector<float> eeee30, vector<float> eeee31, vector<float> eeee32, vector<float> eeee33, vector<float> eeee34, vector<float> eeee35, vector<float> eeee36, vector<float> eeee37, vector<float> eeee38, vector<float> eeee39, vector<float> eeee4, vector<float> eeee40, vector<float> eeee41, vector<float> eeee42, vector<float> eeee43, vector<float> eeee44, vector<float> eeee45, vector<float> eeee46, vector<float> eeee47, vector<float> eeee48, vector<float> eeee49, vector<float> eeee5, vector<float> eeee50, vector<float> eeee51, vector<float> eeee52, vector<float> eeee53, vector<float> eeee54, vector<float> eeee55, vector<float> eeee56, vector<float> eeee57, vector<float> eeee58, vector<float> eeee59, vector<float> eeee6, vector<float> eeee60, vector<float> eeee61, vector<float> eeee62, vector<float> eeee63, vector<float> eeee64, vector<float> eeee65, vector<float> eeee66, vector<float> eeee67, vector<float> eeee68, vector<float> eeee69, vector<float> eeee7, vector<float> eeee70, vector<float> eeee71, vector<float> eeee72, vector<float> eeee73, vector<float> eeee74, vector<float> eeee75, vector<float> eeee76, vector<float> eeee77, vector<float> eeee78, vector<float> eeee79, vector<float> eeee8, vector<float> eeee80, vector<float> eeee81, vector<float> eeee82, vector<float> eeee83, vector<float> eeee84, vector<float> eeee85, vector<float> eeee86, vector<float> eeee87, vector<float> eeee88, vector<float> eeee9, double f1, double f10, double f11, double f12, double f13, double f14, double f15, double f16, double f17, double f18, double f19, double f2, double f20, double f21, double f22, double f23, double f24, double f25, double f26, double f27, double f28, double f29, double f3, double f30, double f31, double f32, double f33, double f34, double f35, double f36, double f37, double f38, double f39, double f4, double f40, double f41, double f42, double f43, double f44, double f45, double f46, double f47, double f48, double f49, double f5, double f50, double f51, double f52, double f53, double f54, double f55, double f56, double f57, double f58, double f59, double f6, double f60, double f61, double f62, double f63, double f64, double f65, double f66, double f67, double f68, double f69, double f7, double f70, double f71, double f72, double f73, double f74, double f75, double f76, double f77, double f78, double f79, double f8, double f80, double f81, double f82, double f83, double f84, double f85, double f86, double f87, double f88, double f9, double ff1, double ff10, double ff11, double ff12, double ff13, double ff14, double ff15, double ff16, double ff17, double ff18, double ff19, double ff2, double ff20, double ff21, double ff22, double ff23, double ff24, double ff25, double ff26, double ff27, double ff28, double ff29, double ff3, double ff30, double ff31, double ff32, double ff33, double ff34, double ff35, double ff36, double ff37, double ff38, double ff39, double ff4, double ff40, double ff41, double ff42, double ff43, double ff44, double ff45, double ff46, double ff47, double ff48, double ff49, double ff5, double ff50, double ff51, double ff52, double ff53, double ff54, double ff55, double ff56, double ff57, double ff58, double ff59, double ff6, double ff60, double ff61, double ff62, double ff63, double ff64, double ff65, double ff66, double ff67, double ff68, double ff69, double ff7, double ff70, double ff71, double ff72, double ff73, double ff74, double ff75, double ff76, double ff77, double ff78, double ff79, double ff8, double ff80, double ff81, double ff82, double ff83, double ff84, double ff85, double ff86, double ff87, double ff88, double ff9, vector<double> fff1, vector<double> fff10, vector<double> fff11, vector<double> fff12, vector<double> fff13, vector<double> fff14, vector<double> fff15, vector<double> fff16, vector<double> fff17, vector<double> fff18, vector<double> fff19, vector<double> fff2, vector<double> fff20, vector<double> fff21, vector<double> fff22, vector<double> fff23, vector<double> fff24, vector<double> fff25, vector<double> fff26, vector<double> fff27, vector<double> fff28, vector<double> fff29, vector<double> fff3, vector<double> fff30, vector<double> fff31, vector<double> fff32, vector<double> fff33, vector<double> fff34, vector<double> fff35, vector<double> fff36, vector<double> fff37, vector<double> fff38, vector<double> fff39, vector<double> fff4, vector<double> fff40, vector<double> fff41, vector<double> fff42, vector<double> fff43, vector<double> fff44, vector<double> fff45, vector<double> fff46, vector<double> fff47, vector<double> fff48, vector<double> fff49, vector<double> fff5, vector<double> fff50, vector<double> fff51, vector<double> fff52, vector<double> fff53, vector<double> fff54, vector<double> fff55, vector<double> fff56, vector<double> fff57, vector<double> fff58, vector<double> fff59, vector<double> fff6, vector<double> fff60, vector<double> fff61, vector<double> fff62, vector<double> fff63, vector<double> fff64, vector<double> fff65, vector<double> fff66, vector<double> fff67, vector<double> fff68, vector<double> fff69, vector<double> fff7, vector<double> fff70, vector<double> fff71, vector<double> fff72, vector<double> fff73, vector<double> fff74, vector<double> fff75, vector<double> fff76, vector<double> fff77, vector<double> fff78, vector<double> fff79, vector<double> fff8, vector<double> fff80, vector<double> fff81, vector<double> fff82, vector<double> fff83, vector<double> fff84, vector<double> fff85, vector<double> fff86, vector<double> fff87, vector<double> fff88, vector<double> fff9, vector<double> ffff1, vector<double> ffff10, vector<double> ffff11, vector<double> ffff12, vector<double> ffff13, vector<double> ffff14, vector<double> ffff15, vector<double> ffff16, vector<double> ffff17, vector<double> ffff18, vector<double> ffff19, vector<double> ffff2, vector<double> ffff20, vector<double> ffff21, vector<double> ffff22, vector<double> ffff23, vector<double> ffff24, vector<double> ffff25, vector<double> ffff26, vector<double> ffff27, vector<double> ffff28, vector<double> ffff29, vector<double> ffff3, vector<double> ffff30, vector<double> ffff31, vector<double> ffff32, vector<double> ffff33, vector<double> ffff34, vector<double> ffff35, vector<double> ffff36, vector<double> ffff37, vector<double> ffff38, vector<double> ffff39, vector<double> ffff4, vector<double> ffff40, vector<double> ffff41, vector<double> ffff42, vector<double> ffff43, vector<double> ffff44, vector<double> ffff45, vector<double> ffff46, vector<double> ffff47, vector<double> ffff48, vector<double> ffff49, vector<double> ffff5, vector<double> ffff50, vector<double> ffff51, vector<double> ffff52, vector<double> ffff53, vector<double> ffff54, vector<double> ffff55, vector<double> ffff56, vector<double> ffff57, vector<double> ffff58, vector<double> ffff59, vector<double> ffff6, vector<double> ffff60, vector<double> ffff61, vector<double> ffff62, vector<double> ffff63, vector<double> ffff64, vector<double> ffff65, vector<double> ffff66, vector<double> ffff67, vector<double> ffff68, vector<double> ffff69, vector<double> ffff7, vector<double> ffff70, vector<double> ffff71, vector<double> ffff72, vector<double> ffff73, vector<double> ffff74, vector<double> ffff75, vector<double> ffff76, vector<double> ffff77, vector<double> ffff78, vector<double> ffff79, vector<double> ffff8, vector<double> ffff80, vector<double> ffff81, vector<double> ffff82, vector<double> ffff83, vector<double> ffff84, vector<double> ffff85, vector<double> ffff86, vector<double> ffff87, vector<double> ffff88, vector<double> ffff9, bool g1, bool g10, bool g11, bool g12, bool g13, bool g14, bool g15, bool g16, bool g17, bool g18, bool g19, bool g2, bool g20, bool g21, bool g22, bool g23, bool g24, bool g25, bool g26, bool g27, bool g28, bool g29, bool g3, bool g30, bool g31, bool g32, bool g33, bool g34, bool g35, bool g36, bool g37, bool g38, bool g39, bool g4, bool g40, bool g41, bool g42, bool g43, bool g44, bool g45, bool g46, bool g47, bool g48, bool g49, bool g5, bool g50, bool g51, bool g52, bool g53, bool g54, bool g55, bool g56, bool g57, bool g58, bool g59, bool g6, bool g60, bool g61, bool g62, bool g63, bool g64, bool g65, bool g66, bool g67, bool g68, bool g69, bool g7, bool g70, bool g71, bool g72, bool g73, bool g74, bool g75, bool g76, bool g77, bool g78, bool g79, bool g8, bool g80, bool g81, bool g82, bool g83, bool g84, bool g85, bool g86, bool g87, bool g88, bool g9, bool gg1, bool gg10, bool gg11, bool gg12, bool gg13, bool gg14, bool gg15, bool gg16, bool gg17, bool gg18, bool gg19, bool gg2, bool gg20, bool gg21, bool gg22, bool gg23, bool gg24, bool gg25, bool gg26, bool gg27, bool gg28, bool gg29, bool gg3, bool gg30, bool gg31, bool gg32, bool gg33, bool gg34, bool gg35, bool gg36, bool gg37, bool gg38, bool gg39, bool gg4, bool gg40, bool gg41, bool gg42, bool gg43, bool gg44, bool gg45, bool gg46, bool gg47, bool gg48, bool gg49, bool gg5, bool gg50, bool gg51, bool gg52, bool gg53, bool gg54, bool gg55, bool gg56, bool gg57, bool gg58, bool gg59, bool gg6, bool gg60, bool gg61, bool gg62, bool gg63, bool gg64, bool gg65, bool gg66, bool gg67, bool gg68, bool gg69, bool gg7, bool gg70, bool gg71, bool gg72, bool gg73, bool gg74, bool gg75, bool gg76, bool gg77, bool gg78, bool gg79, bool gg8, bool gg80, bool gg81, bool gg82, bool gg83, bool gg84, bool gg85, bool gg86, bool gg87, bool gg88, bool gg9, vector<bool> ggg1, vector<bool> ggg10, vector<bool> ggg11, vector<bool> ggg12, vector<bool> ggg13, vector<bool> ggg14, vector<bool> ggg15, vector<bool> ggg16, vector<bool> ggg17, vector<bool> ggg18, vector<bool> ggg19, vector<bool> ggg2, vector<bool> ggg20, vector<bool> ggg21, vector<bool> ggg22, vector<bool> ggg23, vector<bool> ggg24, vector<bool> ggg25, vector<bool> ggg26, vector<bool> ggg27, vector<bool> ggg28, vector<bool> ggg29, vector<bool> ggg3, vector<bool> ggg30, vector<bool> ggg31, vector<bool> ggg32, vector<bool> ggg33, vector<bool> ggg34, vector<bool> ggg35, vector<bool> ggg36, vector<bool> ggg37, vector<bool> ggg38, vector<bool> ggg39, vector<bool> ggg4, vector<bool> ggg40, vector<bool> ggg41, vector<bool> ggg42, vector<bool> ggg43, vector<bool> ggg44, vector<bool> ggg45, vector<bool> ggg46, vector<bool> ggg47, vector<bool> ggg48, vector<bool> ggg49, vector<bool> ggg5, vector<bool> ggg50, vector<bool> ggg51, vector<bool> ggg52, vector<bool> ggg53, vector<bool> ggg54, vector<bool> ggg55, vector<bool> ggg56, vector<bool> ggg57, vector<bool> ggg58, vector<bool> ggg59, vector<bool> ggg6, vector<bool> ggg60, vector<bool> ggg61, vector<bool> ggg62, vector<bool> ggg63, vector<bool> ggg64, vector<bool> ggg65, vector<bool> ggg66, vector<bool> ggg67, vector<bool> ggg68, vector<bool> ggg69, vector<bool> ggg7, vector<bool> ggg70, vector<bool> ggg71, vector<bool> ggg72, vector<bool> ggg73, vector<bool> ggg74, vector<bool> ggg75, vector<bool> ggg76, vector<bool> ggg77, vector<bool> ggg78, vector<bool> ggg79, vector<bool> ggg8, vector<bool> ggg80, vector<bool> ggg81, vector<bool> ggg82, vector<bool> ggg83, vector<bool> ggg84, vector<bool> ggg85, vector<bool> ggg86, vector<bool> ggg87, vector<bool> ggg88, vector<bool> ggg9, vector<bool> gggg1, vector<bool> gggg10, vector<bool> gggg11, vector<bool> gggg12, vector<bool> gggg13, vector<bool> gggg14, vector<bool> gggg15, vector<bool> gggg16, vector<bool> gggg17, vector<bool> gggg18, vector<bool> gggg19, vector<bool> gggg2, vector<bool> gggg20, vector<bool> gggg21, vector<bool> gggg22, vector<bool> gggg23, vector<bool> gggg24, vector<bool> gggg25, vector<bool> gggg26, vector<bool> gggg27, vector<bool> gggg28, vector<bool> gggg29, vector<bool> gggg3, vector<bool> gggg30, vector<bool> gggg31, vector<bool> gggg32, vector<bool> gggg33, vector<bool> gggg34, vector<bool> gggg35, vector<bool> gggg36, vector<bool> gggg37, vector<bool> gggg38, vector<bool> gggg39, vector<bool> gggg4, vector<bool> gggg40, vector<bool> gggg41, vector<bool> gggg42, vector<bool> gggg43, vector<bool> gggg44, vector<bool> gggg45, vector<bool> gggg46, vector<bool> gggg47, vector<bool> gggg48, vector<bool> gggg49, vector<bool> gggg5, vector<bool> gggg50, vector<bool> gggg51, vector<bool> gggg52, vector<bool> gggg53, vector<bool> gggg54, vector<bool> gggg55, vector<bool> gggg56, vector<bool> gggg57, vector<bool> gggg58, vector<bool> gggg59, vector<bool> gggg6, vector<bool> gggg60, vector<bool> gggg61, vector<bool> gggg62, vector<bool> gggg63, vector<bool> gggg64, vector<bool> gggg65, vector<bool> gggg66, vector<bool> gggg67, vector<bool> gggg68, vector<bool> gggg69, vector<bool> gggg7, vector<bool> gggg70, vector<bool> gggg71, vector<bool> gggg72, vector<bool> gggg73, vector<bool> gggg74, vector<bool> gggg75, vector<bool> gggg76, vector<bool> gggg77, vector<bool> gggg78, vector<bool> gggg79, vector<bool> gggg8, vector<bool> gggg80, vector<bool> gggg81, vector<bool> gggg82, vector<bool> gggg83, vector<bool> gggg84, vector<bool> gggg85, vector<bool> gggg86, vector<bool> gggg87, vector<bool> gggg88, vector<bool> gggg9, string jj1, string jj10, string jj11, string jj12, string jj13, string jj14, string jj15, string jj16, string jj17, string jj18, string jj19, string jj2, string jj20, string jj21, string jj22, string jj23, string jj24, string jj25, string jj26, string jj27, string jj28, string jj29, string jj3, string jj30, string jj31, string jj32, string jj33, string jj34, string jj35, string jj36, string jj37, string jj38, string jj39, string jj4, string jj40, string jj41, string jj42, string jj43, string jj44, string jj45, string jj46, string jj47, string jj48, string jj49, string jj5, string jj50, string jj51, string jj52, string jj53, string jj54, string jj55, string jj56, string jj57, string jj58, string jj59, string jj6, string jj60, string jj61, string jj62, string jj63, string jj64, string jj65, string jj66, string jj67, string jj68, string jj69, string jj7, string jj70, string jj71, string jj72, string jj73, string jj74, string jj75, string jj76, string jj77, string jj78, string jj79, string jj8, string jj80, string jj81, string jj82, string jj83, string jj84, string jj85, string jj86, string jj87, string jj88, string jj9, vector<string> jjj1, vector<string> jjj10, vector<string> jjj11, vector<string> jjj12, vector<string> jjj13, vector<string> jjj14, vector<string> jjj15, vector<string> jjj16, vector<string> jjj17, vector<string> jjj18, vector<string> jjj19, vector<string> jjj2, vector<string> jjj20, vector<string> jjj21, vector<string> jjj22, vector<string> jjj23, vector<string> jjj24, vector<string> jjj25, vector<string> jjj26, vector<string> jjj27, vector<string> jjj28, vector<string> jjj29, vector<string> jjj3, vector<string> jjj30, vector<string> jjj31, vector<string> jjj32, vector<string> jjj33, vector<string> jjj34, vector<string> jjj35, vector<string> jjj36, vector<string> jjj37, vector<string> jjj38, vector<string> jjj39, vector<string> jjj4, vector<string> jjj40, vector<string> jjj41, vector<string> jjj42, vector<string> jjj43, vector<string> jjj44, vector<string> jjj45, vector<string> jjj46, vector<string> jjj47, vector<string> jjj48, vector<string> jjj49, vector<string> jjj5, vector<string> jjj50, vector<string> jjj51, vector<string> jjj52, vector<string> jjj53, vector<string> jjj54, vector<string> jjj55, vector<string> jjj56, vector<string> jjj57, vector<string> jjj58, vector<string> jjj59, vector<string> jjj6, vector<string> jjj60, vector<string> jjj61, vector<string> jjj62, vector<string> jjj63, vector<string> jjj64, vector<string> jjj65, vector<string> jjj66, vector<string> jjj67, vector<string> jjj68, vector<string> jjj69, vector<string> jjj7, vector<string> jjj70, vector<string> jjj71, vector<string> jjj72, vector<string> jjj73, vector<string> jjj74, vector<string> jjj75, vector<string> jjj76, vector<string> jjj77, vector<string> jjj78, vector<string> jjj79, vector<string> jjj8, vector<string> jjj80, vector<string> jjj81, vector<string> jjj82, vector<string> jjj83, vector<string> jjj84, vector<string> jjj85, vector<string> jjj86, vector<string> jjj87, vector<string> jjj88, vector<string> jjj9, ObjectA kk1, ObjectA kk10, ObjectA kk11, ObjectA kk12, ObjectA kk13, ObjectA kk14, ObjectA kk15, ObjectA kk16, ObjectA kk17, ObjectA kk18, ObjectA kk19, ObjectA kk2, ObjectA kk20, ObjectA kk21, ObjectA kk22, ObjectA kk23, ObjectA kk24, ObjectA kk25, ObjectA kk26, ObjectA kk27, ObjectA kk28, ObjectA kk29, ObjectA kk3, ObjectA kk30, ObjectA kk31, ObjectA kk32, ObjectA kk33, ObjectA kk34, ObjectA kk35, ObjectA kk36, ObjectA kk37, ObjectA kk38, ObjectA kk39, ObjectA kk4, ObjectA kk40, ObjectA kk41, ObjectA kk42, ObjectA kk43, ObjectA kk44, ObjectA kk45, ObjectA kk46, ObjectA kk47, ObjectA kk48, ObjectA kk49, ObjectA kk5, ObjectA kk50, ObjectA kk51, ObjectA kk52, ObjectA kk53, ObjectA kk54, ObjectA kk55, ObjectA kk56, ObjectA kk57, ObjectA kk58, ObjectA kk59, ObjectA kk6, ObjectA kk60, ObjectA kk61, ObjectA kk62, ObjectA kk63, ObjectA kk64, ObjectA kk65, ObjectA kk66, ObjectA kk67, ObjectA kk68, ObjectA kk69, ObjectA kk7, ObjectA kk70, ObjectA kk71, ObjectA kk72, ObjectA kk73, ObjectA kk74, ObjectA kk75, ObjectA kk76, ObjectA kk77, ObjectA kk78, ObjectA kk79, ObjectA kk8, ObjectA kk80, ObjectA kk81, ObjectA kk82, ObjectA kk83, ObjectA kk84, ObjectA kk85, ObjectA kk86, ObjectA kk87, ObjectA kk88, ObjectA kk9, vector<ObjectA> kkk1, vector<ObjectA> kkk10, vector<ObjectA> kkk11, vector<ObjectA> kkk12, vector<ObjectA> kkk13, vector<ObjectA> kkk14, vector<ObjectA> kkk15, vector<ObjectA> kkk16, vector<ObjectA> kkk17, vector<ObjectA> kkk18, vector<ObjectA> kkk19, vector<ObjectA> kkk2, vector<ObjectA> kkk20, vector<ObjectA> kkk21, vector<ObjectA> kkk22, vector<ObjectA> kkk23, vector<ObjectA> kkk24, vector<ObjectA> kkk25, vector<ObjectA> kkk26, vector<ObjectA> kkk27, vector<ObjectA> kkk28, vector<ObjectA> kkk29, vector<ObjectA> kkk3, vector<ObjectA> kkk30, vector<ObjectA> kkk31, vector<ObjectA> kkk32, vector<ObjectA> kkk33, vector<ObjectA> kkk34, vector<ObjectA> kkk35, vector<ObjectA> kkk36, vector<ObjectA> kkk37, vector<ObjectA> kkk38, vector<ObjectA> kkk39, vector<ObjectA> kkk4, vector<ObjectA> kkk40, vector<ObjectA> kkk41, vector<ObjectA> kkk42, vector<ObjectA> kkk43, vector<ObjectA> kkk44, vector<ObjectA> kkk45, vector<ObjectA> kkk46, vector<ObjectA> kkk47, vector<ObjectA> kkk48, vector<ObjectA> kkk49, vector<ObjectA> kkk5, vector<ObjectA> kkk50, vector<ObjectA> kkk51, vector<ObjectA> kkk52, vector<ObjectA> kkk53, vector<ObjectA> kkk54, vector<ObjectA> kkk55, vector<ObjectA> kkk56, vector<ObjectA> kkk57, vector<ObjectA> kkk58, vector<ObjectA> kkk59, vector<ObjectA> kkk6, vector<ObjectA> kkk60, vector<ObjectA> kkk61, vector<ObjectA> kkk62, vector<ObjectA> kkk63, vector<ObjectA> kkk64, vector<ObjectA> kkk65, vector<ObjectA> kkk66, vector<ObjectA> kkk67, vector<ObjectA> kkk68, vector<ObjectA> kkk69, vector<ObjectA> kkk7, vector<ObjectA> kkk70, vector<ObjectA> kkk71, vector<ObjectA> kkk72, vector<ObjectA> kkk73, vector<ObjectA> kkk74, vector<ObjectA> kkk75, vector<ObjectA> kkk76, vector<ObjectA> kkk77, vector<ObjectA> kkk78, vector<ObjectA> kkk79, vector<ObjectA> kkk8, vector<ObjectA> kkk80, vector<ObjectA> kkk81, vector<ObjectA> kkk82, vector<ObjectA> kkk83, vector<ObjectA> kkk84, vector<ObjectA> kkk85, vector<ObjectA> kkk86, vector<ObjectA> kkk87, vector<ObjectA> kkk88, vector<ObjectA> kkk9, list<int32_t> l1, list<int32_t> l10, list<int32_t> l11, list<int32_t> l12, list<int32_t> l13, list<int32_t> l14, list<int32_t> l15, list<int32_t> l16, list<int32_t> l17, list<int32_t> l18, list<int32_t> l19, list<int32_t> l2, list<int32_t> l20, list<int32_t> l21, list<int32_t> l22, list<int32_t> l23, list<int32_t> l24, list<int32_t> l25, list<int32_t> l26, list<int32_t> l27, list<int32_t> l28, list<int32_t> l29, list<int32_t> l3, list<int32_t> l30, list<int32_t> l31, list<int32_t> l32, list<int32_t> l33, list<int32_t> l34, list<int32_t> l35, list<int32_t> l36, list<int32_t> l37, list<int32_t> l38, list<int32_t> l39, list<int32_t> l4, list<int32_t> l40, list<int32_t> l41, list<int32_t> l42, list<int32_t> l43, list<int32_t> l44, list<int32_t> l45, list<int32_t> l46, list<int32_t> l47, list<int32_t> l48, list<int32_t> l49, list<int32_t> l5, list<int32_t> l50, list<int32_t> l51, list<int32_t> l52, list<int32_t> l53, list<int32_t> l54, list<int32_t> l55, list<int32_t> l56, list<int32_t> l57, list<int32_t> l58, list<int32_t> l59, list<int32_t> l6, list<int32_t> l60, list<int32_t> l61, list<int32_t> l62, list<int32_t> l63, list<int32_t> l64, list<int32_t> l65, list<int32_t> l66, list<int32_t> l67, list<int32_t> l68, list<int32_t> l69, list<int32_t> l7, list<int32_t> l70, list<int32_t> l71, list<int32_t> l72, list<int32_t> l73, list<int32_t> l74, list<int32_t> l75, list<int32_t> l76, list<int32_t> l77, list<int32_t> l78, list<int32_t> l79, list<int32_t> l8, list<int32_t> l80, list<int32_t> l81, list<int32_t> l82, list<int32_t> l83, list<int32_t> l84, list<int32_t> l85, list<int32_t> l86, list<int32_t> l87, list<int32_t> l88, list<int32_t> l9, list<string> llll1, list<string> llll10, list<string> llll11, list<string> llll12, list<string> llll13, list<string> llll14, list<string> llll15, list<string> llll16, list<string> llll17, list<string> llll18, list<string> llll19, list<string> llll2, list<string> llll20, list<string> llll21, list<string> llll22, list<string> llll23, list<string> llll24, list<string> llll25, list<string> llll26, list<string> llll27, list<string> llll28, list<string> llll29, list<string> llll3, list<string> llll30, list<string> llll31, list<string> llll32, list<string> llll33, list<string> llll34, list<string> llll35, list<string> llll36, list<string> llll37, list<string> llll38, list<string> llll39, list<string> llll4, list<string> llll40, list<string> llll41, list<string> llll42, list<string> llll43, list<string> llll44, list<string> llll45, list<string> llll46, list<string> llll47, list<string> llll48, list<string> llll49, list<string> llll5, list<string> llll50, list<string> llll51, list<string> llll52, list<string> llll53, list<string> llll54, list<string> llll55, list<string> llll56, list<string> llll57, list<string> llll58, list<string> llll59, list<string> llll6, list<string> llll60, list<string> llll61, list<string> llll62, list<string> llll63, list<string> llll64, list<string> llll65, list<string> llll66, list<string> llll67, list<string> llll68, list<string> llll69, list<string> llll7, list<string> llll70, list<string> llll71, list<string> llll72, list<string> llll73, list<string> llll74, list<string> llll75, list<string> llll76, list<string> llll77, list<string> llll78, list<string> llll79, list<string> llll8, list<string> llll80, list<string> llll81, list<string> llll82, list<string> llll83, list<string> llll84, list<string> llll85, list<string> llll86, list<string> llll87, list<string> llll88, list<string> llll9, map<int32_t, string> m1, map<int32_t, string> m10, map<int32_t, string> m11, map<int32_t, string> m12, map<int32_t, string> m13, map<int32_t, string> m14, map<int32_t, string> m15, map<int32_t, string> m16, map<int32_t, string> m17, map<int32_t, string> m18, map<int32_t, string> m19, map<int32_t, string> m2, map<int32_t, string> m20, map<int32_t, string> m21, map<int32_t, string> m22, map<int32_t, string> m23, map<int32_t, string> m24, map<int32_t, string> m25, map<int32_t, string> m26, map<int32_t, string> m27, map<int32_t, string> m28, map<int32_t, string> m29, map<int32_t, string> m3, map<int32_t, string> m30, map<int32_t, string> m31, map<int32_t, string> m32, map<int32_t, string> m33, map<int32_t, string> m34, map<int32_t, string> m35, map<int32_t, string> m36, map<int32_t, string> m37, map<int32_t, string> m38, map<int32_t, string> m39, map<int32_t, string> m4, map<int32_t, string> m40, map<int32_t, string> m41, map<int32_t, string> m42, map<int32_t, string> m43, map<int32_t, string> m44, map<int32_t, string> m45, map<int32_t, string> m46, map<int32_t, string> m47, map<int32_t, string> m48, map<int32_t, string> m49, map<int32_t, string> m5, map<int32_t, string> m50, map<int32_t, string> m51, map<int32_t, string> m52, map<int32_t, string> m53, map<int32_t, string> m54, map<int32_t, string> m55, map<int32_t, string> m56, map<int32_t, string> m57, map<int32_t, string> m58, map<int32_t, string> m59, map<int32_t, string> m6, map<int32_t, string> m60, map<int32_t, string> m61, map<int32_t, string> m62, map<int32_t, string> m63, map<int32_t, string> m64, map<int32_t, string> m65, map<int32_t, string> m66, map<int32_t, string> m67, map<int32_t, string> m68, map<int32_t, string> m69, map<int32_t, string> m7, map<int32_t, string> m70, map<int32_t, string> m71, map<int32_t, string> m72, map<int32_t, string> m73, map<int32_t, string> m74, map<int32_t, string> m75, map<int32_t, string> m76, map<int32_t, string> m77, map<int32_t, string> m78, map<int32_t, string> m79, map<int32_t, string> m8, map<int32_t, string> m80, map<int32_t, string> m81, map<int32_t, string> m82, map<int32_t, string> m83, map<int32_t, string> m84, map<int32_t, string> m85, map<int32_t, string> m86, map<int32_t, string> m87, map<int32_t, string> m88, map<int32_t, string> m9, map<int32_t, ObjectA> mm1, map<int32_t, ObjectA> mm10, map<int32_t, ObjectA> mm11, map<int32_t, ObjectA> mm12, map<int32_t, ObjectA> mm13, map<int32_t, ObjectA> mm14, map<int32_t, ObjectA> mm15, map<int32_t, ObjectA> mm16, map<int32_t, ObjectA> mm17, map<int32_t, ObjectA> mm18, map<int32_t, ObjectA> mm19, map<int32_t, ObjectA> mm2, map<int32_t, ObjectA> mm20, map<int32_t, ObjectA> mm21, map<int32_t, ObjectA> mm22, map<int32_t, ObjectA> mm23, map<int32_t, ObjectA> mm24, map<int32_t, ObjectA> mm25, map<int32_t, ObjectA> mm26, map<int32_t, ObjectA> mm27, map<int32_t, ObjectA> mm28, map<int32_t, ObjectA> mm29, map<int32_t, ObjectA> mm3, map<int32_t, ObjectA> mm30, map<int32_t, ObjectA> mm31, map<int32_t, ObjectA> mm32, map<int32_t, ObjectA> mm33, map<int32_t, ObjectA> mm34, map<int32_t, ObjectA> mm35, map<int32_t, ObjectA> mm36, map<int32_t, ObjectA> mm37, map<int32_t, ObjectA> mm38, map<int32_t, ObjectA> mm39, map<int32_t, ObjectA> mm4, map<int32_t, ObjectA> mm40, map<int32_t, ObjectA> mm41, map<int32_t, ObjectA> mm42, map<int32_t, ObjectA> mm43, map<int32_t, ObjectA> mm44, map<int32_t, ObjectA> mm45, map<int32_t, ObjectA> mm46, map<int32_t, ObjectA> mm47, map<int32_t, ObjectA> mm48, map<int32_t, ObjectA> mm49, map<int32_t, ObjectA> mm5, map<int32_t, ObjectA> mm50, map<int32_t, ObjectA> mm51, map<int32_t, ObjectA> mm52, map<int32_t, ObjectA> mm53, map<int32_t, ObjectA> mm54, map<int32_t, ObjectA> mm55, map<int32_t, ObjectA> mm56, map<int32_t, ObjectA> mm57, map<int32_t, ObjectA> mm58, map<int32_t, ObjectA> mm59, map<int32_t, ObjectA> mm6, map<int32_t, ObjectA> mm60, map<int32_t, ObjectA> mm61, map<int32_t, ObjectA> mm62, map<int32_t, ObjectA> mm63, map<int32_t, ObjectA> mm64, map<int32_t, ObjectA> mm65, map<int32_t, ObjectA> mm66, map<int32_t, ObjectA> mm67, map<int32_t, ObjectA> mm68, map<int32_t, ObjectA> mm69, map<int32_t, ObjectA> mm7, map<int32_t, ObjectA> mm70, map<int32_t, ObjectA> mm71, map<int32_t, ObjectA> mm72, map<int32_t, ObjectA> mm73, map<int32_t, ObjectA> mm74, map<int32_t, ObjectA> mm75, map<int32_t, ObjectA> mm76, map<int32_t, ObjectA> mm77, map<int32_t, ObjectA> mm78, map<int32_t, ObjectA> mm79, map<int32_t, ObjectA> mm8, map<int32_t, ObjectA> mm80, map<int32_t, ObjectA> mm81, map<int32_t, ObjectA> mm82, map<int32_t, ObjectA> mm83, map<int32_t, ObjectA> mm84, map<int32_t, ObjectA> mm85, map<int32_t, ObjectA> mm86, map<int32_t, ObjectA> mm87, map<int32_t, ObjectA> mm88, map<int32_t, ObjectA> mm9, set<int32_t> s1, set<int32_t> s10, set<int32_t> s11, set<int32_t> s12, set<int32_t> s13, set<int32_t> s14, set<int32_t> s15, set<int32_t> s16, set<int32_t> s17, set<int32_t> s18, set<int32_t> s19, set<int32_t> s2, set<int32_t> s20, set<int32_t> s21, set<int32_t> s22, set<int32_t> s23, set<int32_t> s24, set<int32_t> s25, set<int32_t> s26, set<int32_t> s27, set<int32_t> s28, set<int32_t> s29, set<int32_t> s3, set<int32_t> s30, set<int32_t> s31, set<int32_t> s32, set<int32_t> s33, set<int32_t> s34, set<int32_t> s35, set<int32_t> s36, set<int32_t> s37, set<int32_t> s38, set<int32_t> s39, set<int32_t> s4, set<int32_t> s40, set<int32_t> s41, set<int32_t> s42, set<int32_t> s43, set<int32_t> s44, set<int32_t> s45, set<int32_t> s46, set<int32_t> s47, set<int32_t> s48, set<int32_t> s49, set<int32_t> s5, set<int32_t> s50, set<int32_t> s51, set<int32_t> s52, set<int32_t> s53, set<int32_t> s54, set<int32_t> s55, set<int32_t> s56, set<int32_t> s57, set<int32_t> s58, set<int32_t> s59, set<int32_t> s6, set<int32_t> s60, set<int32_t> s61, set<int32_t> s62, set<int32_t> s63, set<int32_t> s64, set<int32_t> s65, set<int32_t> s66, set<int32_t> s67, set<int32_t> s68, set<int32_t> s69, set<int32_t> s7, set<int32_t> s70, set<int32_t> s71, set<int32_t> s72, set<int32_t> s73, set<int32_t> s74, set<int32_t> s75, set<int32_t> s76, set<int32_t> s77, set<int32_t> s78, set<int32_t> s79, set<int32_t> s8, set<int32_t> s80, set<int32_t> s81, set<int32_t> s82, set<int32_t> s83, set<int32_t> s84, set<int32_t> s85, set<int32_t> s86, set<int32_t> s87, set<int32_t> s88, set<int32_t> s9, set<string> ssss1, set<string> ssss10, set<string> ssss11, set<string> ssss12, set<string> ssss13, set<string> ssss14, set<string> ssss15, set<string> ssss16, set<string> ssss17, set<string> ssss18, set<string> ssss19, set<string> ssss2, set<string> ssss20, set<string> ssss21, set<string> ssss22, set<string> ssss23, set<string> ssss24, set<string> ssss25, set<string> ssss26, set<string> ssss27, set<string> ssss28, set<string> ssss29, set<string> ssss3, set<string> ssss30, set<string> ssss31, set<string> ssss32, set<string> ssss33, set<string> ssss34, set<string> ssss35, set<string> ssss36, set<string> ssss37, set<string> ssss38, set<string> ssss39, set<string> ssss4, set<string> ssss40, set<string> ssss41, set<string> ssss42, set<string> ssss43, set<string> ssss44, set<string> ssss45, set<string> ssss46, set<string> ssss47, set<string> ssss48, set<string> ssss49, set<string> ssss5, set<string> ssss50, set<string> ssss51, set<string> ssss52, set<string> ssss53, set<string> ssss54, set<string> ssss55, set<string> ssss56, set<string> ssss57, set<string> ssss58, set<string> ssss59, set<string> ssss6, set<string> ssss60, set<string> ssss61, set<string> ssss62, set<string> ssss63, set<string> ssss64, set<string> ssss65, set<string> ssss66, set<string> ssss67, set<string> ssss68, set<string> ssss69, set<string> ssss7, set<string> ssss70, set<string> ssss71, set<string> ssss72, set<string> ssss73, set<string> ssss74, set<string> ssss75, set<string> ssss76, set<string> ssss77, set<string> ssss78, set<string> ssss79, set<string> ssss8, set<string> ssss80, set<string> ssss81, set<string> ssss82, set<string> ssss83, set<string> ssss84, set<string> ssss85, set<string> ssss86, set<string> ssss87, set<string> ssss88, set<string> ssss9) {
             auto packet = VeryBigObject();
             packet.a1 = a1;
             packet.a10 = a10;
@@ -6175,358 +5823,6 @@ namespace zfoo {
             packet.gggg87 = gggg87;
             packet.gggg88 = gggg88;
             packet.gggg9 = gggg9;
-            packet.h1 = h1;
-            packet.h10 = h10;
-            packet.h11 = h11;
-            packet.h12 = h12;
-            packet.h13 = h13;
-            packet.h14 = h14;
-            packet.h15 = h15;
-            packet.h16 = h16;
-            packet.h17 = h17;
-            packet.h18 = h18;
-            packet.h19 = h19;
-            packet.h2 = h2;
-            packet.h20 = h20;
-            packet.h21 = h21;
-            packet.h22 = h22;
-            packet.h23 = h23;
-            packet.h24 = h24;
-            packet.h25 = h25;
-            packet.h26 = h26;
-            packet.h27 = h27;
-            packet.h28 = h28;
-            packet.h29 = h29;
-            packet.h3 = h3;
-            packet.h30 = h30;
-            packet.h31 = h31;
-            packet.h32 = h32;
-            packet.h33 = h33;
-            packet.h34 = h34;
-            packet.h35 = h35;
-            packet.h36 = h36;
-            packet.h37 = h37;
-            packet.h38 = h38;
-            packet.h39 = h39;
-            packet.h4 = h4;
-            packet.h40 = h40;
-            packet.h41 = h41;
-            packet.h42 = h42;
-            packet.h43 = h43;
-            packet.h44 = h44;
-            packet.h45 = h45;
-            packet.h46 = h46;
-            packet.h47 = h47;
-            packet.h48 = h48;
-            packet.h49 = h49;
-            packet.h5 = h5;
-            packet.h50 = h50;
-            packet.h51 = h51;
-            packet.h52 = h52;
-            packet.h53 = h53;
-            packet.h54 = h54;
-            packet.h55 = h55;
-            packet.h56 = h56;
-            packet.h57 = h57;
-            packet.h58 = h58;
-            packet.h59 = h59;
-            packet.h6 = h6;
-            packet.h60 = h60;
-            packet.h61 = h61;
-            packet.h62 = h62;
-            packet.h63 = h63;
-            packet.h64 = h64;
-            packet.h65 = h65;
-            packet.h66 = h66;
-            packet.h67 = h67;
-            packet.h68 = h68;
-            packet.h69 = h69;
-            packet.h7 = h7;
-            packet.h70 = h70;
-            packet.h71 = h71;
-            packet.h72 = h72;
-            packet.h73 = h73;
-            packet.h74 = h74;
-            packet.h75 = h75;
-            packet.h76 = h76;
-            packet.h77 = h77;
-            packet.h78 = h78;
-            packet.h79 = h79;
-            packet.h8 = h8;
-            packet.h80 = h80;
-            packet.h81 = h81;
-            packet.h82 = h82;
-            packet.h83 = h83;
-            packet.h84 = h84;
-            packet.h85 = h85;
-            packet.h86 = h86;
-            packet.h87 = h87;
-            packet.h88 = h88;
-            packet.h9 = h9;
-            packet.hh1 = hh1;
-            packet.hh10 = hh10;
-            packet.hh11 = hh11;
-            packet.hh12 = hh12;
-            packet.hh13 = hh13;
-            packet.hh14 = hh14;
-            packet.hh15 = hh15;
-            packet.hh16 = hh16;
-            packet.hh17 = hh17;
-            packet.hh18 = hh18;
-            packet.hh19 = hh19;
-            packet.hh2 = hh2;
-            packet.hh20 = hh20;
-            packet.hh21 = hh21;
-            packet.hh22 = hh22;
-            packet.hh23 = hh23;
-            packet.hh24 = hh24;
-            packet.hh25 = hh25;
-            packet.hh26 = hh26;
-            packet.hh27 = hh27;
-            packet.hh28 = hh28;
-            packet.hh29 = hh29;
-            packet.hh3 = hh3;
-            packet.hh30 = hh30;
-            packet.hh31 = hh31;
-            packet.hh32 = hh32;
-            packet.hh33 = hh33;
-            packet.hh34 = hh34;
-            packet.hh35 = hh35;
-            packet.hh36 = hh36;
-            packet.hh37 = hh37;
-            packet.hh38 = hh38;
-            packet.hh39 = hh39;
-            packet.hh4 = hh4;
-            packet.hh40 = hh40;
-            packet.hh41 = hh41;
-            packet.hh42 = hh42;
-            packet.hh43 = hh43;
-            packet.hh44 = hh44;
-            packet.hh45 = hh45;
-            packet.hh46 = hh46;
-            packet.hh47 = hh47;
-            packet.hh48 = hh48;
-            packet.hh49 = hh49;
-            packet.hh5 = hh5;
-            packet.hh50 = hh50;
-            packet.hh51 = hh51;
-            packet.hh52 = hh52;
-            packet.hh53 = hh53;
-            packet.hh54 = hh54;
-            packet.hh55 = hh55;
-            packet.hh56 = hh56;
-            packet.hh57 = hh57;
-            packet.hh58 = hh58;
-            packet.hh59 = hh59;
-            packet.hh6 = hh6;
-            packet.hh60 = hh60;
-            packet.hh61 = hh61;
-            packet.hh62 = hh62;
-            packet.hh63 = hh63;
-            packet.hh64 = hh64;
-            packet.hh65 = hh65;
-            packet.hh66 = hh66;
-            packet.hh67 = hh67;
-            packet.hh68 = hh68;
-            packet.hh69 = hh69;
-            packet.hh7 = hh7;
-            packet.hh70 = hh70;
-            packet.hh71 = hh71;
-            packet.hh72 = hh72;
-            packet.hh73 = hh73;
-            packet.hh74 = hh74;
-            packet.hh75 = hh75;
-            packet.hh76 = hh76;
-            packet.hh77 = hh77;
-            packet.hh78 = hh78;
-            packet.hh79 = hh79;
-            packet.hh8 = hh8;
-            packet.hh80 = hh80;
-            packet.hh81 = hh81;
-            packet.hh82 = hh82;
-            packet.hh83 = hh83;
-            packet.hh84 = hh84;
-            packet.hh85 = hh85;
-            packet.hh86 = hh86;
-            packet.hh87 = hh87;
-            packet.hh88 = hh88;
-            packet.hh9 = hh9;
-            packet.hhh1 = hhh1;
-            packet.hhh10 = hhh10;
-            packet.hhh11 = hhh11;
-            packet.hhh12 = hhh12;
-            packet.hhh13 = hhh13;
-            packet.hhh14 = hhh14;
-            packet.hhh15 = hhh15;
-            packet.hhh16 = hhh16;
-            packet.hhh17 = hhh17;
-            packet.hhh18 = hhh18;
-            packet.hhh19 = hhh19;
-            packet.hhh2 = hhh2;
-            packet.hhh20 = hhh20;
-            packet.hhh21 = hhh21;
-            packet.hhh22 = hhh22;
-            packet.hhh23 = hhh23;
-            packet.hhh24 = hhh24;
-            packet.hhh25 = hhh25;
-            packet.hhh26 = hhh26;
-            packet.hhh27 = hhh27;
-            packet.hhh28 = hhh28;
-            packet.hhh29 = hhh29;
-            packet.hhh3 = hhh3;
-            packet.hhh30 = hhh30;
-            packet.hhh31 = hhh31;
-            packet.hhh32 = hhh32;
-            packet.hhh33 = hhh33;
-            packet.hhh34 = hhh34;
-            packet.hhh35 = hhh35;
-            packet.hhh36 = hhh36;
-            packet.hhh37 = hhh37;
-            packet.hhh38 = hhh38;
-            packet.hhh39 = hhh39;
-            packet.hhh4 = hhh4;
-            packet.hhh40 = hhh40;
-            packet.hhh41 = hhh41;
-            packet.hhh42 = hhh42;
-            packet.hhh43 = hhh43;
-            packet.hhh44 = hhh44;
-            packet.hhh45 = hhh45;
-            packet.hhh46 = hhh46;
-            packet.hhh47 = hhh47;
-            packet.hhh48 = hhh48;
-            packet.hhh49 = hhh49;
-            packet.hhh5 = hhh5;
-            packet.hhh50 = hhh50;
-            packet.hhh51 = hhh51;
-            packet.hhh52 = hhh52;
-            packet.hhh53 = hhh53;
-            packet.hhh54 = hhh54;
-            packet.hhh55 = hhh55;
-            packet.hhh56 = hhh56;
-            packet.hhh57 = hhh57;
-            packet.hhh58 = hhh58;
-            packet.hhh59 = hhh59;
-            packet.hhh6 = hhh6;
-            packet.hhh60 = hhh60;
-            packet.hhh61 = hhh61;
-            packet.hhh62 = hhh62;
-            packet.hhh63 = hhh63;
-            packet.hhh64 = hhh64;
-            packet.hhh65 = hhh65;
-            packet.hhh66 = hhh66;
-            packet.hhh67 = hhh67;
-            packet.hhh68 = hhh68;
-            packet.hhh69 = hhh69;
-            packet.hhh7 = hhh7;
-            packet.hhh70 = hhh70;
-            packet.hhh71 = hhh71;
-            packet.hhh72 = hhh72;
-            packet.hhh73 = hhh73;
-            packet.hhh74 = hhh74;
-            packet.hhh75 = hhh75;
-            packet.hhh76 = hhh76;
-            packet.hhh77 = hhh77;
-            packet.hhh78 = hhh78;
-            packet.hhh79 = hhh79;
-            packet.hhh8 = hhh8;
-            packet.hhh80 = hhh80;
-            packet.hhh81 = hhh81;
-            packet.hhh82 = hhh82;
-            packet.hhh83 = hhh83;
-            packet.hhh84 = hhh84;
-            packet.hhh85 = hhh85;
-            packet.hhh86 = hhh86;
-            packet.hhh87 = hhh87;
-            packet.hhh88 = hhh88;
-            packet.hhh9 = hhh9;
-            packet.hhhh1 = hhhh1;
-            packet.hhhh10 = hhhh10;
-            packet.hhhh11 = hhhh11;
-            packet.hhhh12 = hhhh12;
-            packet.hhhh13 = hhhh13;
-            packet.hhhh14 = hhhh14;
-            packet.hhhh15 = hhhh15;
-            packet.hhhh16 = hhhh16;
-            packet.hhhh17 = hhhh17;
-            packet.hhhh18 = hhhh18;
-            packet.hhhh19 = hhhh19;
-            packet.hhhh2 = hhhh2;
-            packet.hhhh20 = hhhh20;
-            packet.hhhh21 = hhhh21;
-            packet.hhhh22 = hhhh22;
-            packet.hhhh23 = hhhh23;
-            packet.hhhh24 = hhhh24;
-            packet.hhhh25 = hhhh25;
-            packet.hhhh26 = hhhh26;
-            packet.hhhh27 = hhhh27;
-            packet.hhhh28 = hhhh28;
-            packet.hhhh29 = hhhh29;
-            packet.hhhh3 = hhhh3;
-            packet.hhhh30 = hhhh30;
-            packet.hhhh31 = hhhh31;
-            packet.hhhh32 = hhhh32;
-            packet.hhhh33 = hhhh33;
-            packet.hhhh34 = hhhh34;
-            packet.hhhh35 = hhhh35;
-            packet.hhhh36 = hhhh36;
-            packet.hhhh37 = hhhh37;
-            packet.hhhh38 = hhhh38;
-            packet.hhhh39 = hhhh39;
-            packet.hhhh4 = hhhh4;
-            packet.hhhh40 = hhhh40;
-            packet.hhhh41 = hhhh41;
-            packet.hhhh42 = hhhh42;
-            packet.hhhh43 = hhhh43;
-            packet.hhhh44 = hhhh44;
-            packet.hhhh45 = hhhh45;
-            packet.hhhh46 = hhhh46;
-            packet.hhhh47 = hhhh47;
-            packet.hhhh48 = hhhh48;
-            packet.hhhh49 = hhhh49;
-            packet.hhhh5 = hhhh5;
-            packet.hhhh50 = hhhh50;
-            packet.hhhh51 = hhhh51;
-            packet.hhhh52 = hhhh52;
-            packet.hhhh53 = hhhh53;
-            packet.hhhh54 = hhhh54;
-            packet.hhhh55 = hhhh55;
-            packet.hhhh56 = hhhh56;
-            packet.hhhh57 = hhhh57;
-            packet.hhhh58 = hhhh58;
-            packet.hhhh59 = hhhh59;
-            packet.hhhh6 = hhhh6;
-            packet.hhhh60 = hhhh60;
-            packet.hhhh61 = hhhh61;
-            packet.hhhh62 = hhhh62;
-            packet.hhhh63 = hhhh63;
-            packet.hhhh64 = hhhh64;
-            packet.hhhh65 = hhhh65;
-            packet.hhhh66 = hhhh66;
-            packet.hhhh67 = hhhh67;
-            packet.hhhh68 = hhhh68;
-            packet.hhhh69 = hhhh69;
-            packet.hhhh7 = hhhh7;
-            packet.hhhh70 = hhhh70;
-            packet.hhhh71 = hhhh71;
-            packet.hhhh72 = hhhh72;
-            packet.hhhh73 = hhhh73;
-            packet.hhhh74 = hhhh74;
-            packet.hhhh75 = hhhh75;
-            packet.hhhh76 = hhhh76;
-            packet.hhhh77 = hhhh77;
-            packet.hhhh78 = hhhh78;
-            packet.hhhh79 = hhhh79;
-            packet.hhhh8 = hhhh8;
-            packet.hhhh80 = hhhh80;
-            packet.hhhh81 = hhhh81;
-            packet.hhhh82 = hhhh82;
-            packet.hhhh83 = hhhh83;
-            packet.hhhh84 = hhhh84;
-            packet.hhhh85 = hhhh85;
-            packet.hhhh86 = hhhh86;
-            packet.hhhh87 = hhhh87;
-            packet.hhhh88 = hhhh88;
-            packet.hhhh9 = hhhh9;
             packet.jj1 = jj1;
             packet.jj10 = jj10;
             packet.jj11 = jj11;
@@ -12343,710 +11639,6 @@ namespace zfoo {
             if (_.gggg88 < gggg88) { return false; }
             if (gggg9 < _.gggg9) { return true; }
             if (_.gggg9 < gggg9) { return false; }
-            if (h1 < _.h1) { return true; }
-            if (_.h1 < h1) { return false; }
-            if (h10 < _.h10) { return true; }
-            if (_.h10 < h10) { return false; }
-            if (h11 < _.h11) { return true; }
-            if (_.h11 < h11) { return false; }
-            if (h12 < _.h12) { return true; }
-            if (_.h12 < h12) { return false; }
-            if (h13 < _.h13) { return true; }
-            if (_.h13 < h13) { return false; }
-            if (h14 < _.h14) { return true; }
-            if (_.h14 < h14) { return false; }
-            if (h15 < _.h15) { return true; }
-            if (_.h15 < h15) { return false; }
-            if (h16 < _.h16) { return true; }
-            if (_.h16 < h16) { return false; }
-            if (h17 < _.h17) { return true; }
-            if (_.h17 < h17) { return false; }
-            if (h18 < _.h18) { return true; }
-            if (_.h18 < h18) { return false; }
-            if (h19 < _.h19) { return true; }
-            if (_.h19 < h19) { return false; }
-            if (h2 < _.h2) { return true; }
-            if (_.h2 < h2) { return false; }
-            if (h20 < _.h20) { return true; }
-            if (_.h20 < h20) { return false; }
-            if (h21 < _.h21) { return true; }
-            if (_.h21 < h21) { return false; }
-            if (h22 < _.h22) { return true; }
-            if (_.h22 < h22) { return false; }
-            if (h23 < _.h23) { return true; }
-            if (_.h23 < h23) { return false; }
-            if (h24 < _.h24) { return true; }
-            if (_.h24 < h24) { return false; }
-            if (h25 < _.h25) { return true; }
-            if (_.h25 < h25) { return false; }
-            if (h26 < _.h26) { return true; }
-            if (_.h26 < h26) { return false; }
-            if (h27 < _.h27) { return true; }
-            if (_.h27 < h27) { return false; }
-            if (h28 < _.h28) { return true; }
-            if (_.h28 < h28) { return false; }
-            if (h29 < _.h29) { return true; }
-            if (_.h29 < h29) { return false; }
-            if (h3 < _.h3) { return true; }
-            if (_.h3 < h3) { return false; }
-            if (h30 < _.h30) { return true; }
-            if (_.h30 < h30) { return false; }
-            if (h31 < _.h31) { return true; }
-            if (_.h31 < h31) { return false; }
-            if (h32 < _.h32) { return true; }
-            if (_.h32 < h32) { return false; }
-            if (h33 < _.h33) { return true; }
-            if (_.h33 < h33) { return false; }
-            if (h34 < _.h34) { return true; }
-            if (_.h34 < h34) { return false; }
-            if (h35 < _.h35) { return true; }
-            if (_.h35 < h35) { return false; }
-            if (h36 < _.h36) { return true; }
-            if (_.h36 < h36) { return false; }
-            if (h37 < _.h37) { return true; }
-            if (_.h37 < h37) { return false; }
-            if (h38 < _.h38) { return true; }
-            if (_.h38 < h38) { return false; }
-            if (h39 < _.h39) { return true; }
-            if (_.h39 < h39) { return false; }
-            if (h4 < _.h4) { return true; }
-            if (_.h4 < h4) { return false; }
-            if (h40 < _.h40) { return true; }
-            if (_.h40 < h40) { return false; }
-            if (h41 < _.h41) { return true; }
-            if (_.h41 < h41) { return false; }
-            if (h42 < _.h42) { return true; }
-            if (_.h42 < h42) { return false; }
-            if (h43 < _.h43) { return true; }
-            if (_.h43 < h43) { return false; }
-            if (h44 < _.h44) { return true; }
-            if (_.h44 < h44) { return false; }
-            if (h45 < _.h45) { return true; }
-            if (_.h45 < h45) { return false; }
-            if (h46 < _.h46) { return true; }
-            if (_.h46 < h46) { return false; }
-            if (h47 < _.h47) { return true; }
-            if (_.h47 < h47) { return false; }
-            if (h48 < _.h48) { return true; }
-            if (_.h48 < h48) { return false; }
-            if (h49 < _.h49) { return true; }
-            if (_.h49 < h49) { return false; }
-            if (h5 < _.h5) { return true; }
-            if (_.h5 < h5) { return false; }
-            if (h50 < _.h50) { return true; }
-            if (_.h50 < h50) { return false; }
-            if (h51 < _.h51) { return true; }
-            if (_.h51 < h51) { return false; }
-            if (h52 < _.h52) { return true; }
-            if (_.h52 < h52) { return false; }
-            if (h53 < _.h53) { return true; }
-            if (_.h53 < h53) { return false; }
-            if (h54 < _.h54) { return true; }
-            if (_.h54 < h54) { return false; }
-            if (h55 < _.h55) { return true; }
-            if (_.h55 < h55) { return false; }
-            if (h56 < _.h56) { return true; }
-            if (_.h56 < h56) { return false; }
-            if (h57 < _.h57) { return true; }
-            if (_.h57 < h57) { return false; }
-            if (h58 < _.h58) { return true; }
-            if (_.h58 < h58) { return false; }
-            if (h59 < _.h59) { return true; }
-            if (_.h59 < h59) { return false; }
-            if (h6 < _.h6) { return true; }
-            if (_.h6 < h6) { return false; }
-            if (h60 < _.h60) { return true; }
-            if (_.h60 < h60) { return false; }
-            if (h61 < _.h61) { return true; }
-            if (_.h61 < h61) { return false; }
-            if (h62 < _.h62) { return true; }
-            if (_.h62 < h62) { return false; }
-            if (h63 < _.h63) { return true; }
-            if (_.h63 < h63) { return false; }
-            if (h64 < _.h64) { return true; }
-            if (_.h64 < h64) { return false; }
-            if (h65 < _.h65) { return true; }
-            if (_.h65 < h65) { return false; }
-            if (h66 < _.h66) { return true; }
-            if (_.h66 < h66) { return false; }
-            if (h67 < _.h67) { return true; }
-            if (_.h67 < h67) { return false; }
-            if (h68 < _.h68) { return true; }
-            if (_.h68 < h68) { return false; }
-            if (h69 < _.h69) { return true; }
-            if (_.h69 < h69) { return false; }
-            if (h7 < _.h7) { return true; }
-            if (_.h7 < h7) { return false; }
-            if (h70 < _.h70) { return true; }
-            if (_.h70 < h70) { return false; }
-            if (h71 < _.h71) { return true; }
-            if (_.h71 < h71) { return false; }
-            if (h72 < _.h72) { return true; }
-            if (_.h72 < h72) { return false; }
-            if (h73 < _.h73) { return true; }
-            if (_.h73 < h73) { return false; }
-            if (h74 < _.h74) { return true; }
-            if (_.h74 < h74) { return false; }
-            if (h75 < _.h75) { return true; }
-            if (_.h75 < h75) { return false; }
-            if (h76 < _.h76) { return true; }
-            if (_.h76 < h76) { return false; }
-            if (h77 < _.h77) { return true; }
-            if (_.h77 < h77) { return false; }
-            if (h78 < _.h78) { return true; }
-            if (_.h78 < h78) { return false; }
-            if (h79 < _.h79) { return true; }
-            if (_.h79 < h79) { return false; }
-            if (h8 < _.h8) { return true; }
-            if (_.h8 < h8) { return false; }
-            if (h80 < _.h80) { return true; }
-            if (_.h80 < h80) { return false; }
-            if (h81 < _.h81) { return true; }
-            if (_.h81 < h81) { return false; }
-            if (h82 < _.h82) { return true; }
-            if (_.h82 < h82) { return false; }
-            if (h83 < _.h83) { return true; }
-            if (_.h83 < h83) { return false; }
-            if (h84 < _.h84) { return true; }
-            if (_.h84 < h84) { return false; }
-            if (h85 < _.h85) { return true; }
-            if (_.h85 < h85) { return false; }
-            if (h86 < _.h86) { return true; }
-            if (_.h86 < h86) { return false; }
-            if (h87 < _.h87) { return true; }
-            if (_.h87 < h87) { return false; }
-            if (h88 < _.h88) { return true; }
-            if (_.h88 < h88) { return false; }
-            if (h9 < _.h9) { return true; }
-            if (_.h9 < h9) { return false; }
-            if (hh1 < _.hh1) { return true; }
-            if (_.hh1 < hh1) { return false; }
-            if (hh10 < _.hh10) { return true; }
-            if (_.hh10 < hh10) { return false; }
-            if (hh11 < _.hh11) { return true; }
-            if (_.hh11 < hh11) { return false; }
-            if (hh12 < _.hh12) { return true; }
-            if (_.hh12 < hh12) { return false; }
-            if (hh13 < _.hh13) { return true; }
-            if (_.hh13 < hh13) { return false; }
-            if (hh14 < _.hh14) { return true; }
-            if (_.hh14 < hh14) { return false; }
-            if (hh15 < _.hh15) { return true; }
-            if (_.hh15 < hh15) { return false; }
-            if (hh16 < _.hh16) { return true; }
-            if (_.hh16 < hh16) { return false; }
-            if (hh17 < _.hh17) { return true; }
-            if (_.hh17 < hh17) { return false; }
-            if (hh18 < _.hh18) { return true; }
-            if (_.hh18 < hh18) { return false; }
-            if (hh19 < _.hh19) { return true; }
-            if (_.hh19 < hh19) { return false; }
-            if (hh2 < _.hh2) { return true; }
-            if (_.hh2 < hh2) { return false; }
-            if (hh20 < _.hh20) { return true; }
-            if (_.hh20 < hh20) { return false; }
-            if (hh21 < _.hh21) { return true; }
-            if (_.hh21 < hh21) { return false; }
-            if (hh22 < _.hh22) { return true; }
-            if (_.hh22 < hh22) { return false; }
-            if (hh23 < _.hh23) { return true; }
-            if (_.hh23 < hh23) { return false; }
-            if (hh24 < _.hh24) { return true; }
-            if (_.hh24 < hh24) { return false; }
-            if (hh25 < _.hh25) { return true; }
-            if (_.hh25 < hh25) { return false; }
-            if (hh26 < _.hh26) { return true; }
-            if (_.hh26 < hh26) { return false; }
-            if (hh27 < _.hh27) { return true; }
-            if (_.hh27 < hh27) { return false; }
-            if (hh28 < _.hh28) { return true; }
-            if (_.hh28 < hh28) { return false; }
-            if (hh29 < _.hh29) { return true; }
-            if (_.hh29 < hh29) { return false; }
-            if (hh3 < _.hh3) { return true; }
-            if (_.hh3 < hh3) { return false; }
-            if (hh30 < _.hh30) { return true; }
-            if (_.hh30 < hh30) { return false; }
-            if (hh31 < _.hh31) { return true; }
-            if (_.hh31 < hh31) { return false; }
-            if (hh32 < _.hh32) { return true; }
-            if (_.hh32 < hh32) { return false; }
-            if (hh33 < _.hh33) { return true; }
-            if (_.hh33 < hh33) { return false; }
-            if (hh34 < _.hh34) { return true; }
-            if (_.hh34 < hh34) { return false; }
-            if (hh35 < _.hh35) { return true; }
-            if (_.hh35 < hh35) { return false; }
-            if (hh36 < _.hh36) { return true; }
-            if (_.hh36 < hh36) { return false; }
-            if (hh37 < _.hh37) { return true; }
-            if (_.hh37 < hh37) { return false; }
-            if (hh38 < _.hh38) { return true; }
-            if (_.hh38 < hh38) { return false; }
-            if (hh39 < _.hh39) { return true; }
-            if (_.hh39 < hh39) { return false; }
-            if (hh4 < _.hh4) { return true; }
-            if (_.hh4 < hh4) { return false; }
-            if (hh40 < _.hh40) { return true; }
-            if (_.hh40 < hh40) { return false; }
-            if (hh41 < _.hh41) { return true; }
-            if (_.hh41 < hh41) { return false; }
-            if (hh42 < _.hh42) { return true; }
-            if (_.hh42 < hh42) { return false; }
-            if (hh43 < _.hh43) { return true; }
-            if (_.hh43 < hh43) { return false; }
-            if (hh44 < _.hh44) { return true; }
-            if (_.hh44 < hh44) { return false; }
-            if (hh45 < _.hh45) { return true; }
-            if (_.hh45 < hh45) { return false; }
-            if (hh46 < _.hh46) { return true; }
-            if (_.hh46 < hh46) { return false; }
-            if (hh47 < _.hh47) { return true; }
-            if (_.hh47 < hh47) { return false; }
-            if (hh48 < _.hh48) { return true; }
-            if (_.hh48 < hh48) { return false; }
-            if (hh49 < _.hh49) { return true; }
-            if (_.hh49 < hh49) { return false; }
-            if (hh5 < _.hh5) { return true; }
-            if (_.hh5 < hh5) { return false; }
-            if (hh50 < _.hh50) { return true; }
-            if (_.hh50 < hh50) { return false; }
-            if (hh51 < _.hh51) { return true; }
-            if (_.hh51 < hh51) { return false; }
-            if (hh52 < _.hh52) { return true; }
-            if (_.hh52 < hh52) { return false; }
-            if (hh53 < _.hh53) { return true; }
-            if (_.hh53 < hh53) { return false; }
-            if (hh54 < _.hh54) { return true; }
-            if (_.hh54 < hh54) { return false; }
-            if (hh55 < _.hh55) { return true; }
-            if (_.hh55 < hh55) { return false; }
-            if (hh56 < _.hh56) { return true; }
-            if (_.hh56 < hh56) { return false; }
-            if (hh57 < _.hh57) { return true; }
-            if (_.hh57 < hh57) { return false; }
-            if (hh58 < _.hh58) { return true; }
-            if (_.hh58 < hh58) { return false; }
-            if (hh59 < _.hh59) { return true; }
-            if (_.hh59 < hh59) { return false; }
-            if (hh6 < _.hh6) { return true; }
-            if (_.hh6 < hh6) { return false; }
-            if (hh60 < _.hh60) { return true; }
-            if (_.hh60 < hh60) { return false; }
-            if (hh61 < _.hh61) { return true; }
-            if (_.hh61 < hh61) { return false; }
-            if (hh62 < _.hh62) { return true; }
-            if (_.hh62 < hh62) { return false; }
-            if (hh63 < _.hh63) { return true; }
-            if (_.hh63 < hh63) { return false; }
-            if (hh64 < _.hh64) { return true; }
-            if (_.hh64 < hh64) { return false; }
-            if (hh65 < _.hh65) { return true; }
-            if (_.hh65 < hh65) { return false; }
-            if (hh66 < _.hh66) { return true; }
-            if (_.hh66 < hh66) { return false; }
-            if (hh67 < _.hh67) { return true; }
-            if (_.hh67 < hh67) { return false; }
-            if (hh68 < _.hh68) { return true; }
-            if (_.hh68 < hh68) { return false; }
-            if (hh69 < _.hh69) { return true; }
-            if (_.hh69 < hh69) { return false; }
-            if (hh7 < _.hh7) { return true; }
-            if (_.hh7 < hh7) { return false; }
-            if (hh70 < _.hh70) { return true; }
-            if (_.hh70 < hh70) { return false; }
-            if (hh71 < _.hh71) { return true; }
-            if (_.hh71 < hh71) { return false; }
-            if (hh72 < _.hh72) { return true; }
-            if (_.hh72 < hh72) { return false; }
-            if (hh73 < _.hh73) { return true; }
-            if (_.hh73 < hh73) { return false; }
-            if (hh74 < _.hh74) { return true; }
-            if (_.hh74 < hh74) { return false; }
-            if (hh75 < _.hh75) { return true; }
-            if (_.hh75 < hh75) { return false; }
-            if (hh76 < _.hh76) { return true; }
-            if (_.hh76 < hh76) { return false; }
-            if (hh77 < _.hh77) { return true; }
-            if (_.hh77 < hh77) { return false; }
-            if (hh78 < _.hh78) { return true; }
-            if (_.hh78 < hh78) { return false; }
-            if (hh79 < _.hh79) { return true; }
-            if (_.hh79 < hh79) { return false; }
-            if (hh8 < _.hh8) { return true; }
-            if (_.hh8 < hh8) { return false; }
-            if (hh80 < _.hh80) { return true; }
-            if (_.hh80 < hh80) { return false; }
-            if (hh81 < _.hh81) { return true; }
-            if (_.hh81 < hh81) { return false; }
-            if (hh82 < _.hh82) { return true; }
-            if (_.hh82 < hh82) { return false; }
-            if (hh83 < _.hh83) { return true; }
-            if (_.hh83 < hh83) { return false; }
-            if (hh84 < _.hh84) { return true; }
-            if (_.hh84 < hh84) { return false; }
-            if (hh85 < _.hh85) { return true; }
-            if (_.hh85 < hh85) { return false; }
-            if (hh86 < _.hh86) { return true; }
-            if (_.hh86 < hh86) { return false; }
-            if (hh87 < _.hh87) { return true; }
-            if (_.hh87 < hh87) { return false; }
-            if (hh88 < _.hh88) { return true; }
-            if (_.hh88 < hh88) { return false; }
-            if (hh9 < _.hh9) { return true; }
-            if (_.hh9 < hh9) { return false; }
-            if (hhh1 < _.hhh1) { return true; }
-            if (_.hhh1 < hhh1) { return false; }
-            if (hhh10 < _.hhh10) { return true; }
-            if (_.hhh10 < hhh10) { return false; }
-            if (hhh11 < _.hhh11) { return true; }
-            if (_.hhh11 < hhh11) { return false; }
-            if (hhh12 < _.hhh12) { return true; }
-            if (_.hhh12 < hhh12) { return false; }
-            if (hhh13 < _.hhh13) { return true; }
-            if (_.hhh13 < hhh13) { return false; }
-            if (hhh14 < _.hhh14) { return true; }
-            if (_.hhh14 < hhh14) { return false; }
-            if (hhh15 < _.hhh15) { return true; }
-            if (_.hhh15 < hhh15) { return false; }
-            if (hhh16 < _.hhh16) { return true; }
-            if (_.hhh16 < hhh16) { return false; }
-            if (hhh17 < _.hhh17) { return true; }
-            if (_.hhh17 < hhh17) { return false; }
-            if (hhh18 < _.hhh18) { return true; }
-            if (_.hhh18 < hhh18) { return false; }
-            if (hhh19 < _.hhh19) { return true; }
-            if (_.hhh19 < hhh19) { return false; }
-            if (hhh2 < _.hhh2) { return true; }
-            if (_.hhh2 < hhh2) { return false; }
-            if (hhh20 < _.hhh20) { return true; }
-            if (_.hhh20 < hhh20) { return false; }
-            if (hhh21 < _.hhh21) { return true; }
-            if (_.hhh21 < hhh21) { return false; }
-            if (hhh22 < _.hhh22) { return true; }
-            if (_.hhh22 < hhh22) { return false; }
-            if (hhh23 < _.hhh23) { return true; }
-            if (_.hhh23 < hhh23) { return false; }
-            if (hhh24 < _.hhh24) { return true; }
-            if (_.hhh24 < hhh24) { return false; }
-            if (hhh25 < _.hhh25) { return true; }
-            if (_.hhh25 < hhh25) { return false; }
-            if (hhh26 < _.hhh26) { return true; }
-            if (_.hhh26 < hhh26) { return false; }
-            if (hhh27 < _.hhh27) { return true; }
-            if (_.hhh27 < hhh27) { return false; }
-            if (hhh28 < _.hhh28) { return true; }
-            if (_.hhh28 < hhh28) { return false; }
-            if (hhh29 < _.hhh29) { return true; }
-            if (_.hhh29 < hhh29) { return false; }
-            if (hhh3 < _.hhh3) { return true; }
-            if (_.hhh3 < hhh3) { return false; }
-            if (hhh30 < _.hhh30) { return true; }
-            if (_.hhh30 < hhh30) { return false; }
-            if (hhh31 < _.hhh31) { return true; }
-            if (_.hhh31 < hhh31) { return false; }
-            if (hhh32 < _.hhh32) { return true; }
-            if (_.hhh32 < hhh32) { return false; }
-            if (hhh33 < _.hhh33) { return true; }
-            if (_.hhh33 < hhh33) { return false; }
-            if (hhh34 < _.hhh34) { return true; }
-            if (_.hhh34 < hhh34) { return false; }
-            if (hhh35 < _.hhh35) { return true; }
-            if (_.hhh35 < hhh35) { return false; }
-            if (hhh36 < _.hhh36) { return true; }
-            if (_.hhh36 < hhh36) { return false; }
-            if (hhh37 < _.hhh37) { return true; }
-            if (_.hhh37 < hhh37) { return false; }
-            if (hhh38 < _.hhh38) { return true; }
-            if (_.hhh38 < hhh38) { return false; }
-            if (hhh39 < _.hhh39) { return true; }
-            if (_.hhh39 < hhh39) { return false; }
-            if (hhh4 < _.hhh4) { return true; }
-            if (_.hhh4 < hhh4) { return false; }
-            if (hhh40 < _.hhh40) { return true; }
-            if (_.hhh40 < hhh40) { return false; }
-            if (hhh41 < _.hhh41) { return true; }
-            if (_.hhh41 < hhh41) { return false; }
-            if (hhh42 < _.hhh42) { return true; }
-            if (_.hhh42 < hhh42) { return false; }
-            if (hhh43 < _.hhh43) { return true; }
-            if (_.hhh43 < hhh43) { return false; }
-            if (hhh44 < _.hhh44) { return true; }
-            if (_.hhh44 < hhh44) { return false; }
-            if (hhh45 < _.hhh45) { return true; }
-            if (_.hhh45 < hhh45) { return false; }
-            if (hhh46 < _.hhh46) { return true; }
-            if (_.hhh46 < hhh46) { return false; }
-            if (hhh47 < _.hhh47) { return true; }
-            if (_.hhh47 < hhh47) { return false; }
-            if (hhh48 < _.hhh48) { return true; }
-            if (_.hhh48 < hhh48) { return false; }
-            if (hhh49 < _.hhh49) { return true; }
-            if (_.hhh49 < hhh49) { return false; }
-            if (hhh5 < _.hhh5) { return true; }
-            if (_.hhh5 < hhh5) { return false; }
-            if (hhh50 < _.hhh50) { return true; }
-            if (_.hhh50 < hhh50) { return false; }
-            if (hhh51 < _.hhh51) { return true; }
-            if (_.hhh51 < hhh51) { return false; }
-            if (hhh52 < _.hhh52) { return true; }
-            if (_.hhh52 < hhh52) { return false; }
-            if (hhh53 < _.hhh53) { return true; }
-            if (_.hhh53 < hhh53) { return false; }
-            if (hhh54 < _.hhh54) { return true; }
-            if (_.hhh54 < hhh54) { return false; }
-            if (hhh55 < _.hhh55) { return true; }
-            if (_.hhh55 < hhh55) { return false; }
-            if (hhh56 < _.hhh56) { return true; }
-            if (_.hhh56 < hhh56) { return false; }
-            if (hhh57 < _.hhh57) { return true; }
-            if (_.hhh57 < hhh57) { return false; }
-            if (hhh58 < _.hhh58) { return true; }
-            if (_.hhh58 < hhh58) { return false; }
-            if (hhh59 < _.hhh59) { return true; }
-            if (_.hhh59 < hhh59) { return false; }
-            if (hhh6 < _.hhh6) { return true; }
-            if (_.hhh6 < hhh6) { return false; }
-            if (hhh60 < _.hhh60) { return true; }
-            if (_.hhh60 < hhh60) { return false; }
-            if (hhh61 < _.hhh61) { return true; }
-            if (_.hhh61 < hhh61) { return false; }
-            if (hhh62 < _.hhh62) { return true; }
-            if (_.hhh62 < hhh62) { return false; }
-            if (hhh63 < _.hhh63) { return true; }
-            if (_.hhh63 < hhh63) { return false; }
-            if (hhh64 < _.hhh64) { return true; }
-            if (_.hhh64 < hhh64) { return false; }
-            if (hhh65 < _.hhh65) { return true; }
-            if (_.hhh65 < hhh65) { return false; }
-            if (hhh66 < _.hhh66) { return true; }
-            if (_.hhh66 < hhh66) { return false; }
-            if (hhh67 < _.hhh67) { return true; }
-            if (_.hhh67 < hhh67) { return false; }
-            if (hhh68 < _.hhh68) { return true; }
-            if (_.hhh68 < hhh68) { return false; }
-            if (hhh69 < _.hhh69) { return true; }
-            if (_.hhh69 < hhh69) { return false; }
-            if (hhh7 < _.hhh7) { return true; }
-            if (_.hhh7 < hhh7) { return false; }
-            if (hhh70 < _.hhh70) { return true; }
-            if (_.hhh70 < hhh70) { return false; }
-            if (hhh71 < _.hhh71) { return true; }
-            if (_.hhh71 < hhh71) { return false; }
-            if (hhh72 < _.hhh72) { return true; }
-            if (_.hhh72 < hhh72) { return false; }
-            if (hhh73 < _.hhh73) { return true; }
-            if (_.hhh73 < hhh73) { return false; }
-            if (hhh74 < _.hhh74) { return true; }
-            if (_.hhh74 < hhh74) { return false; }
-            if (hhh75 < _.hhh75) { return true; }
-            if (_.hhh75 < hhh75) { return false; }
-            if (hhh76 < _.hhh76) { return true; }
-            if (_.hhh76 < hhh76) { return false; }
-            if (hhh77 < _.hhh77) { return true; }
-            if (_.hhh77 < hhh77) { return false; }
-            if (hhh78 < _.hhh78) { return true; }
-            if (_.hhh78 < hhh78) { return false; }
-            if (hhh79 < _.hhh79) { return true; }
-            if (_.hhh79 < hhh79) { return false; }
-            if (hhh8 < _.hhh8) { return true; }
-            if (_.hhh8 < hhh8) { return false; }
-            if (hhh80 < _.hhh80) { return true; }
-            if (_.hhh80 < hhh80) { return false; }
-            if (hhh81 < _.hhh81) { return true; }
-            if (_.hhh81 < hhh81) { return false; }
-            if (hhh82 < _.hhh82) { return true; }
-            if (_.hhh82 < hhh82) { return false; }
-            if (hhh83 < _.hhh83) { return true; }
-            if (_.hhh83 < hhh83) { return false; }
-            if (hhh84 < _.hhh84) { return true; }
-            if (_.hhh84 < hhh84) { return false; }
-            if (hhh85 < _.hhh85) { return true; }
-            if (_.hhh85 < hhh85) { return false; }
-            if (hhh86 < _.hhh86) { return true; }
-            if (_.hhh86 < hhh86) { return false; }
-            if (hhh87 < _.hhh87) { return true; }
-            if (_.hhh87 < hhh87) { return false; }
-            if (hhh88 < _.hhh88) { return true; }
-            if (_.hhh88 < hhh88) { return false; }
-            if (hhh9 < _.hhh9) { return true; }
-            if (_.hhh9 < hhh9) { return false; }
-            if (hhhh1 < _.hhhh1) { return true; }
-            if (_.hhhh1 < hhhh1) { return false; }
-            if (hhhh10 < _.hhhh10) { return true; }
-            if (_.hhhh10 < hhhh10) { return false; }
-            if (hhhh11 < _.hhhh11) { return true; }
-            if (_.hhhh11 < hhhh11) { return false; }
-            if (hhhh12 < _.hhhh12) { return true; }
-            if (_.hhhh12 < hhhh12) { return false; }
-            if (hhhh13 < _.hhhh13) { return true; }
-            if (_.hhhh13 < hhhh13) { return false; }
-            if (hhhh14 < _.hhhh14) { return true; }
-            if (_.hhhh14 < hhhh14) { return false; }
-            if (hhhh15 < _.hhhh15) { return true; }
-            if (_.hhhh15 < hhhh15) { return false; }
-            if (hhhh16 < _.hhhh16) { return true; }
-            if (_.hhhh16 < hhhh16) { return false; }
-            if (hhhh17 < _.hhhh17) { return true; }
-            if (_.hhhh17 < hhhh17) { return false; }
-            if (hhhh18 < _.hhhh18) { return true; }
-            if (_.hhhh18 < hhhh18) { return false; }
-            if (hhhh19 < _.hhhh19) { return true; }
-            if (_.hhhh19 < hhhh19) { return false; }
-            if (hhhh2 < _.hhhh2) { return true; }
-            if (_.hhhh2 < hhhh2) { return false; }
-            if (hhhh20 < _.hhhh20) { return true; }
-            if (_.hhhh20 < hhhh20) { return false; }
-            if (hhhh21 < _.hhhh21) { return true; }
-            if (_.hhhh21 < hhhh21) { return false; }
-            if (hhhh22 < _.hhhh22) { return true; }
-            if (_.hhhh22 < hhhh22) { return false; }
-            if (hhhh23 < _.hhhh23) { return true; }
-            if (_.hhhh23 < hhhh23) { return false; }
-            if (hhhh24 < _.hhhh24) { return true; }
-            if (_.hhhh24 < hhhh24) { return false; }
-            if (hhhh25 < _.hhhh25) { return true; }
-            if (_.hhhh25 < hhhh25) { return false; }
-            if (hhhh26 < _.hhhh26) { return true; }
-            if (_.hhhh26 < hhhh26) { return false; }
-            if (hhhh27 < _.hhhh27) { return true; }
-            if (_.hhhh27 < hhhh27) { return false; }
-            if (hhhh28 < _.hhhh28) { return true; }
-            if (_.hhhh28 < hhhh28) { return false; }
-            if (hhhh29 < _.hhhh29) { return true; }
-            if (_.hhhh29 < hhhh29) { return false; }
-            if (hhhh3 < _.hhhh3) { return true; }
-            if (_.hhhh3 < hhhh3) { return false; }
-            if (hhhh30 < _.hhhh30) { return true; }
-            if (_.hhhh30 < hhhh30) { return false; }
-            if (hhhh31 < _.hhhh31) { return true; }
-            if (_.hhhh31 < hhhh31) { return false; }
-            if (hhhh32 < _.hhhh32) { return true; }
-            if (_.hhhh32 < hhhh32) { return false; }
-            if (hhhh33 < _.hhhh33) { return true; }
-            if (_.hhhh33 < hhhh33) { return false; }
-            if (hhhh34 < _.hhhh34) { return true; }
-            if (_.hhhh34 < hhhh34) { return false; }
-            if (hhhh35 < _.hhhh35) { return true; }
-            if (_.hhhh35 < hhhh35) { return false; }
-            if (hhhh36 < _.hhhh36) { return true; }
-            if (_.hhhh36 < hhhh36) { return false; }
-            if (hhhh37 < _.hhhh37) { return true; }
-            if (_.hhhh37 < hhhh37) { return false; }
-            if (hhhh38 < _.hhhh38) { return true; }
-            if (_.hhhh38 < hhhh38) { return false; }
-            if (hhhh39 < _.hhhh39) { return true; }
-            if (_.hhhh39 < hhhh39) { return false; }
-            if (hhhh4 < _.hhhh4) { return true; }
-            if (_.hhhh4 < hhhh4) { return false; }
-            if (hhhh40 < _.hhhh40) { return true; }
-            if (_.hhhh40 < hhhh40) { return false; }
-            if (hhhh41 < _.hhhh41) { return true; }
-            if (_.hhhh41 < hhhh41) { return false; }
-            if (hhhh42 < _.hhhh42) { return true; }
-            if (_.hhhh42 < hhhh42) { return false; }
-            if (hhhh43 < _.hhhh43) { return true; }
-            if (_.hhhh43 < hhhh43) { return false; }
-            if (hhhh44 < _.hhhh44) { return true; }
-            if (_.hhhh44 < hhhh44) { return false; }
-            if (hhhh45 < _.hhhh45) { return true; }
-            if (_.hhhh45 < hhhh45) { return false; }
-            if (hhhh46 < _.hhhh46) { return true; }
-            if (_.hhhh46 < hhhh46) { return false; }
-            if (hhhh47 < _.hhhh47) { return true; }
-            if (_.hhhh47 < hhhh47) { return false; }
-            if (hhhh48 < _.hhhh48) { return true; }
-            if (_.hhhh48 < hhhh48) { return false; }
-            if (hhhh49 < _.hhhh49) { return true; }
-            if (_.hhhh49 < hhhh49) { return false; }
-            if (hhhh5 < _.hhhh5) { return true; }
-            if (_.hhhh5 < hhhh5) { return false; }
-            if (hhhh50 < _.hhhh50) { return true; }
-            if (_.hhhh50 < hhhh50) { return false; }
-            if (hhhh51 < _.hhhh51) { return true; }
-            if (_.hhhh51 < hhhh51) { return false; }
-            if (hhhh52 < _.hhhh52) { return true; }
-            if (_.hhhh52 < hhhh52) { return false; }
-            if (hhhh53 < _.hhhh53) { return true; }
-            if (_.hhhh53 < hhhh53) { return false; }
-            if (hhhh54 < _.hhhh54) { return true; }
-            if (_.hhhh54 < hhhh54) { return false; }
-            if (hhhh55 < _.hhhh55) { return true; }
-            if (_.hhhh55 < hhhh55) { return false; }
-            if (hhhh56 < _.hhhh56) { return true; }
-            if (_.hhhh56 < hhhh56) { return false; }
-            if (hhhh57 < _.hhhh57) { return true; }
-            if (_.hhhh57 < hhhh57) { return false; }
-            if (hhhh58 < _.hhhh58) { return true; }
-            if (_.hhhh58 < hhhh58) { return false; }
-            if (hhhh59 < _.hhhh59) { return true; }
-            if (_.hhhh59 < hhhh59) { return false; }
-            if (hhhh6 < _.hhhh6) { return true; }
-            if (_.hhhh6 < hhhh6) { return false; }
-            if (hhhh60 < _.hhhh60) { return true; }
-            if (_.hhhh60 < hhhh60) { return false; }
-            if (hhhh61 < _.hhhh61) { return true; }
-            if (_.hhhh61 < hhhh61) { return false; }
-            if (hhhh62 < _.hhhh62) { return true; }
-            if (_.hhhh62 < hhhh62) { return false; }
-            if (hhhh63 < _.hhhh63) { return true; }
-            if (_.hhhh63 < hhhh63) { return false; }
-            if (hhhh64 < _.hhhh64) { return true; }
-            if (_.hhhh64 < hhhh64) { return false; }
-            if (hhhh65 < _.hhhh65) { return true; }
-            if (_.hhhh65 < hhhh65) { return false; }
-            if (hhhh66 < _.hhhh66) { return true; }
-            if (_.hhhh66 < hhhh66) { return false; }
-            if (hhhh67 < _.hhhh67) { return true; }
-            if (_.hhhh67 < hhhh67) { return false; }
-            if (hhhh68 < _.hhhh68) { return true; }
-            if (_.hhhh68 < hhhh68) { return false; }
-            if (hhhh69 < _.hhhh69) { return true; }
-            if (_.hhhh69 < hhhh69) { return false; }
-            if (hhhh7 < _.hhhh7) { return true; }
-            if (_.hhhh7 < hhhh7) { return false; }
-            if (hhhh70 < _.hhhh70) { return true; }
-            if (_.hhhh70 < hhhh70) { return false; }
-            if (hhhh71 < _.hhhh71) { return true; }
-            if (_.hhhh71 < hhhh71) { return false; }
-            if (hhhh72 < _.hhhh72) { return true; }
-            if (_.hhhh72 < hhhh72) { return false; }
-            if (hhhh73 < _.hhhh73) { return true; }
-            if (_.hhhh73 < hhhh73) { return false; }
-            if (hhhh74 < _.hhhh74) { return true; }
-            if (_.hhhh74 < hhhh74) { return false; }
-            if (hhhh75 < _.hhhh75) { return true; }
-            if (_.hhhh75 < hhhh75) { return false; }
-            if (hhhh76 < _.hhhh76) { return true; }
-            if (_.hhhh76 < hhhh76) { return false; }
-            if (hhhh77 < _.hhhh77) { return true; }
-            if (_.hhhh77 < hhhh77) { return false; }
-            if (hhhh78 < _.hhhh78) { return true; }
-            if (_.hhhh78 < hhhh78) { return false; }
-            if (hhhh79 < _.hhhh79) { return true; }
-            if (_.hhhh79 < hhhh79) { return false; }
-            if (hhhh8 < _.hhhh8) { return true; }
-            if (_.hhhh8 < hhhh8) { return false; }
-            if (hhhh80 < _.hhhh80) { return true; }
-            if (_.hhhh80 < hhhh80) { return false; }
-            if (hhhh81 < _.hhhh81) { return true; }
-            if (_.hhhh81 < hhhh81) { return false; }
-            if (hhhh82 < _.hhhh82) { return true; }
-            if (_.hhhh82 < hhhh82) { return false; }
-            if (hhhh83 < _.hhhh83) { return true; }
-            if (_.hhhh83 < hhhh83) { return false; }
-            if (hhhh84 < _.hhhh84) { return true; }
-            if (_.hhhh84 < hhhh84) { return false; }
-            if (hhhh85 < _.hhhh85) { return true; }
-            if (_.hhhh85 < hhhh85) { return false; }
-            if (hhhh86 < _.hhhh86) { return true; }
-            if (_.hhhh86 < hhhh86) { return false; }
-            if (hhhh87 < _.hhhh87) { return true; }
-            if (_.hhhh87 < hhhh87) { return false; }
-            if (hhhh88 < _.hhhh88) { return true; }
-            if (_.hhhh88 < hhhh88) { return false; }
-            if (hhhh9 < _.hhhh9) { return true; }
-            if (_.hhhh9 < hhhh9) { return false; }
             if (jj1 < _.jj1) { return true; }
             if (_.jj1 < jj1) { return false; }
             if (jj10 < _.jj10) { return true; }
@@ -14819,10 +13411,12 @@ namespace zfoo {
         }
 
         void write(ByteBuffer &buffer, IProtocol *packet) override {
-            if (buffer.writePacketFlag(packet)) {
+            if (packet == nullptr) {
+                buffer.writeInt(0);
                 return;
             }
             auto *message = (VeryBigObject *) packet;
+            buffer.writeInt(-1);
             buffer.writeByte(message->a1);
             buffer.writeByte(message->a10);
             buffer.writeByte(message->a11);
@@ -17287,358 +15881,6 @@ namespace zfoo {
             buffer.writeBooleanArray(message->gggg87);
             buffer.writeBooleanArray(message->gggg88);
             buffer.writeBooleanArray(message->gggg9);
-            buffer.writeChar(message->h1);
-            buffer.writeChar(message->h10);
-            buffer.writeChar(message->h11);
-            buffer.writeChar(message->h12);
-            buffer.writeChar(message->h13);
-            buffer.writeChar(message->h14);
-            buffer.writeChar(message->h15);
-            buffer.writeChar(message->h16);
-            buffer.writeChar(message->h17);
-            buffer.writeChar(message->h18);
-            buffer.writeChar(message->h19);
-            buffer.writeChar(message->h2);
-            buffer.writeChar(message->h20);
-            buffer.writeChar(message->h21);
-            buffer.writeChar(message->h22);
-            buffer.writeChar(message->h23);
-            buffer.writeChar(message->h24);
-            buffer.writeChar(message->h25);
-            buffer.writeChar(message->h26);
-            buffer.writeChar(message->h27);
-            buffer.writeChar(message->h28);
-            buffer.writeChar(message->h29);
-            buffer.writeChar(message->h3);
-            buffer.writeChar(message->h30);
-            buffer.writeChar(message->h31);
-            buffer.writeChar(message->h32);
-            buffer.writeChar(message->h33);
-            buffer.writeChar(message->h34);
-            buffer.writeChar(message->h35);
-            buffer.writeChar(message->h36);
-            buffer.writeChar(message->h37);
-            buffer.writeChar(message->h38);
-            buffer.writeChar(message->h39);
-            buffer.writeChar(message->h4);
-            buffer.writeChar(message->h40);
-            buffer.writeChar(message->h41);
-            buffer.writeChar(message->h42);
-            buffer.writeChar(message->h43);
-            buffer.writeChar(message->h44);
-            buffer.writeChar(message->h45);
-            buffer.writeChar(message->h46);
-            buffer.writeChar(message->h47);
-            buffer.writeChar(message->h48);
-            buffer.writeChar(message->h49);
-            buffer.writeChar(message->h5);
-            buffer.writeChar(message->h50);
-            buffer.writeChar(message->h51);
-            buffer.writeChar(message->h52);
-            buffer.writeChar(message->h53);
-            buffer.writeChar(message->h54);
-            buffer.writeChar(message->h55);
-            buffer.writeChar(message->h56);
-            buffer.writeChar(message->h57);
-            buffer.writeChar(message->h58);
-            buffer.writeChar(message->h59);
-            buffer.writeChar(message->h6);
-            buffer.writeChar(message->h60);
-            buffer.writeChar(message->h61);
-            buffer.writeChar(message->h62);
-            buffer.writeChar(message->h63);
-            buffer.writeChar(message->h64);
-            buffer.writeChar(message->h65);
-            buffer.writeChar(message->h66);
-            buffer.writeChar(message->h67);
-            buffer.writeChar(message->h68);
-            buffer.writeChar(message->h69);
-            buffer.writeChar(message->h7);
-            buffer.writeChar(message->h70);
-            buffer.writeChar(message->h71);
-            buffer.writeChar(message->h72);
-            buffer.writeChar(message->h73);
-            buffer.writeChar(message->h74);
-            buffer.writeChar(message->h75);
-            buffer.writeChar(message->h76);
-            buffer.writeChar(message->h77);
-            buffer.writeChar(message->h78);
-            buffer.writeChar(message->h79);
-            buffer.writeChar(message->h8);
-            buffer.writeChar(message->h80);
-            buffer.writeChar(message->h81);
-            buffer.writeChar(message->h82);
-            buffer.writeChar(message->h83);
-            buffer.writeChar(message->h84);
-            buffer.writeChar(message->h85);
-            buffer.writeChar(message->h86);
-            buffer.writeChar(message->h87);
-            buffer.writeChar(message->h88);
-            buffer.writeChar(message->h9);
-            buffer.writeChar(message->hh1);
-            buffer.writeChar(message->hh10);
-            buffer.writeChar(message->hh11);
-            buffer.writeChar(message->hh12);
-            buffer.writeChar(message->hh13);
-            buffer.writeChar(message->hh14);
-            buffer.writeChar(message->hh15);
-            buffer.writeChar(message->hh16);
-            buffer.writeChar(message->hh17);
-            buffer.writeChar(message->hh18);
-            buffer.writeChar(message->hh19);
-            buffer.writeChar(message->hh2);
-            buffer.writeChar(message->hh20);
-            buffer.writeChar(message->hh21);
-            buffer.writeChar(message->hh22);
-            buffer.writeChar(message->hh23);
-            buffer.writeChar(message->hh24);
-            buffer.writeChar(message->hh25);
-            buffer.writeChar(message->hh26);
-            buffer.writeChar(message->hh27);
-            buffer.writeChar(message->hh28);
-            buffer.writeChar(message->hh29);
-            buffer.writeChar(message->hh3);
-            buffer.writeChar(message->hh30);
-            buffer.writeChar(message->hh31);
-            buffer.writeChar(message->hh32);
-            buffer.writeChar(message->hh33);
-            buffer.writeChar(message->hh34);
-            buffer.writeChar(message->hh35);
-            buffer.writeChar(message->hh36);
-            buffer.writeChar(message->hh37);
-            buffer.writeChar(message->hh38);
-            buffer.writeChar(message->hh39);
-            buffer.writeChar(message->hh4);
-            buffer.writeChar(message->hh40);
-            buffer.writeChar(message->hh41);
-            buffer.writeChar(message->hh42);
-            buffer.writeChar(message->hh43);
-            buffer.writeChar(message->hh44);
-            buffer.writeChar(message->hh45);
-            buffer.writeChar(message->hh46);
-            buffer.writeChar(message->hh47);
-            buffer.writeChar(message->hh48);
-            buffer.writeChar(message->hh49);
-            buffer.writeChar(message->hh5);
-            buffer.writeChar(message->hh50);
-            buffer.writeChar(message->hh51);
-            buffer.writeChar(message->hh52);
-            buffer.writeChar(message->hh53);
-            buffer.writeChar(message->hh54);
-            buffer.writeChar(message->hh55);
-            buffer.writeChar(message->hh56);
-            buffer.writeChar(message->hh57);
-            buffer.writeChar(message->hh58);
-            buffer.writeChar(message->hh59);
-            buffer.writeChar(message->hh6);
-            buffer.writeChar(message->hh60);
-            buffer.writeChar(message->hh61);
-            buffer.writeChar(message->hh62);
-            buffer.writeChar(message->hh63);
-            buffer.writeChar(message->hh64);
-            buffer.writeChar(message->hh65);
-            buffer.writeChar(message->hh66);
-            buffer.writeChar(message->hh67);
-            buffer.writeChar(message->hh68);
-            buffer.writeChar(message->hh69);
-            buffer.writeChar(message->hh7);
-            buffer.writeChar(message->hh70);
-            buffer.writeChar(message->hh71);
-            buffer.writeChar(message->hh72);
-            buffer.writeChar(message->hh73);
-            buffer.writeChar(message->hh74);
-            buffer.writeChar(message->hh75);
-            buffer.writeChar(message->hh76);
-            buffer.writeChar(message->hh77);
-            buffer.writeChar(message->hh78);
-            buffer.writeChar(message->hh79);
-            buffer.writeChar(message->hh8);
-            buffer.writeChar(message->hh80);
-            buffer.writeChar(message->hh81);
-            buffer.writeChar(message->hh82);
-            buffer.writeChar(message->hh83);
-            buffer.writeChar(message->hh84);
-            buffer.writeChar(message->hh85);
-            buffer.writeChar(message->hh86);
-            buffer.writeChar(message->hh87);
-            buffer.writeChar(message->hh88);
-            buffer.writeChar(message->hh9);
-            buffer.writeCharArray(message->hhh1);
-            buffer.writeCharArray(message->hhh10);
-            buffer.writeCharArray(message->hhh11);
-            buffer.writeCharArray(message->hhh12);
-            buffer.writeCharArray(message->hhh13);
-            buffer.writeCharArray(message->hhh14);
-            buffer.writeCharArray(message->hhh15);
-            buffer.writeCharArray(message->hhh16);
-            buffer.writeCharArray(message->hhh17);
-            buffer.writeCharArray(message->hhh18);
-            buffer.writeCharArray(message->hhh19);
-            buffer.writeCharArray(message->hhh2);
-            buffer.writeCharArray(message->hhh20);
-            buffer.writeCharArray(message->hhh21);
-            buffer.writeCharArray(message->hhh22);
-            buffer.writeCharArray(message->hhh23);
-            buffer.writeCharArray(message->hhh24);
-            buffer.writeCharArray(message->hhh25);
-            buffer.writeCharArray(message->hhh26);
-            buffer.writeCharArray(message->hhh27);
-            buffer.writeCharArray(message->hhh28);
-            buffer.writeCharArray(message->hhh29);
-            buffer.writeCharArray(message->hhh3);
-            buffer.writeCharArray(message->hhh30);
-            buffer.writeCharArray(message->hhh31);
-            buffer.writeCharArray(message->hhh32);
-            buffer.writeCharArray(message->hhh33);
-            buffer.writeCharArray(message->hhh34);
-            buffer.writeCharArray(message->hhh35);
-            buffer.writeCharArray(message->hhh36);
-            buffer.writeCharArray(message->hhh37);
-            buffer.writeCharArray(message->hhh38);
-            buffer.writeCharArray(message->hhh39);
-            buffer.writeCharArray(message->hhh4);
-            buffer.writeCharArray(message->hhh40);
-            buffer.writeCharArray(message->hhh41);
-            buffer.writeCharArray(message->hhh42);
-            buffer.writeCharArray(message->hhh43);
-            buffer.writeCharArray(message->hhh44);
-            buffer.writeCharArray(message->hhh45);
-            buffer.writeCharArray(message->hhh46);
-            buffer.writeCharArray(message->hhh47);
-            buffer.writeCharArray(message->hhh48);
-            buffer.writeCharArray(message->hhh49);
-            buffer.writeCharArray(message->hhh5);
-            buffer.writeCharArray(message->hhh50);
-            buffer.writeCharArray(message->hhh51);
-            buffer.writeCharArray(message->hhh52);
-            buffer.writeCharArray(message->hhh53);
-            buffer.writeCharArray(message->hhh54);
-            buffer.writeCharArray(message->hhh55);
-            buffer.writeCharArray(message->hhh56);
-            buffer.writeCharArray(message->hhh57);
-            buffer.writeCharArray(message->hhh58);
-            buffer.writeCharArray(message->hhh59);
-            buffer.writeCharArray(message->hhh6);
-            buffer.writeCharArray(message->hhh60);
-            buffer.writeCharArray(message->hhh61);
-            buffer.writeCharArray(message->hhh62);
-            buffer.writeCharArray(message->hhh63);
-            buffer.writeCharArray(message->hhh64);
-            buffer.writeCharArray(message->hhh65);
-            buffer.writeCharArray(message->hhh66);
-            buffer.writeCharArray(message->hhh67);
-            buffer.writeCharArray(message->hhh68);
-            buffer.writeCharArray(message->hhh69);
-            buffer.writeCharArray(message->hhh7);
-            buffer.writeCharArray(message->hhh70);
-            buffer.writeCharArray(message->hhh71);
-            buffer.writeCharArray(message->hhh72);
-            buffer.writeCharArray(message->hhh73);
-            buffer.writeCharArray(message->hhh74);
-            buffer.writeCharArray(message->hhh75);
-            buffer.writeCharArray(message->hhh76);
-            buffer.writeCharArray(message->hhh77);
-            buffer.writeCharArray(message->hhh78);
-            buffer.writeCharArray(message->hhh79);
-            buffer.writeCharArray(message->hhh8);
-            buffer.writeCharArray(message->hhh80);
-            buffer.writeCharArray(message->hhh81);
-            buffer.writeCharArray(message->hhh82);
-            buffer.writeCharArray(message->hhh83);
-            buffer.writeCharArray(message->hhh84);
-            buffer.writeCharArray(message->hhh85);
-            buffer.writeCharArray(message->hhh86);
-            buffer.writeCharArray(message->hhh87);
-            buffer.writeCharArray(message->hhh88);
-            buffer.writeCharArray(message->hhh9);
-            buffer.writeCharArray(message->hhhh1);
-            buffer.writeCharArray(message->hhhh10);
-            buffer.writeCharArray(message->hhhh11);
-            buffer.writeCharArray(message->hhhh12);
-            buffer.writeCharArray(message->hhhh13);
-            buffer.writeCharArray(message->hhhh14);
-            buffer.writeCharArray(message->hhhh15);
-            buffer.writeCharArray(message->hhhh16);
-            buffer.writeCharArray(message->hhhh17);
-            buffer.writeCharArray(message->hhhh18);
-            buffer.writeCharArray(message->hhhh19);
-            buffer.writeCharArray(message->hhhh2);
-            buffer.writeCharArray(message->hhhh20);
-            buffer.writeCharArray(message->hhhh21);
-            buffer.writeCharArray(message->hhhh22);
-            buffer.writeCharArray(message->hhhh23);
-            buffer.writeCharArray(message->hhhh24);
-            buffer.writeCharArray(message->hhhh25);
-            buffer.writeCharArray(message->hhhh26);
-            buffer.writeCharArray(message->hhhh27);
-            buffer.writeCharArray(message->hhhh28);
-            buffer.writeCharArray(message->hhhh29);
-            buffer.writeCharArray(message->hhhh3);
-            buffer.writeCharArray(message->hhhh30);
-            buffer.writeCharArray(message->hhhh31);
-            buffer.writeCharArray(message->hhhh32);
-            buffer.writeCharArray(message->hhhh33);
-            buffer.writeCharArray(message->hhhh34);
-            buffer.writeCharArray(message->hhhh35);
-            buffer.writeCharArray(message->hhhh36);
-            buffer.writeCharArray(message->hhhh37);
-            buffer.writeCharArray(message->hhhh38);
-            buffer.writeCharArray(message->hhhh39);
-            buffer.writeCharArray(message->hhhh4);
-            buffer.writeCharArray(message->hhhh40);
-            buffer.writeCharArray(message->hhhh41);
-            buffer.writeCharArray(message->hhhh42);
-            buffer.writeCharArray(message->hhhh43);
-            buffer.writeCharArray(message->hhhh44);
-            buffer.writeCharArray(message->hhhh45);
-            buffer.writeCharArray(message->hhhh46);
-            buffer.writeCharArray(message->hhhh47);
-            buffer.writeCharArray(message->hhhh48);
-            buffer.writeCharArray(message->hhhh49);
-            buffer.writeCharArray(message->hhhh5);
-            buffer.writeCharArray(message->hhhh50);
-            buffer.writeCharArray(message->hhhh51);
-            buffer.writeCharArray(message->hhhh52);
-            buffer.writeCharArray(message->hhhh53);
-            buffer.writeCharArray(message->hhhh54);
-            buffer.writeCharArray(message->hhhh55);
-            buffer.writeCharArray(message->hhhh56);
-            buffer.writeCharArray(message->hhhh57);
-            buffer.writeCharArray(message->hhhh58);
-            buffer.writeCharArray(message->hhhh59);
-            buffer.writeCharArray(message->hhhh6);
-            buffer.writeCharArray(message->hhhh60);
-            buffer.writeCharArray(message->hhhh61);
-            buffer.writeCharArray(message->hhhh62);
-            buffer.writeCharArray(message->hhhh63);
-            buffer.writeCharArray(message->hhhh64);
-            buffer.writeCharArray(message->hhhh65);
-            buffer.writeCharArray(message->hhhh66);
-            buffer.writeCharArray(message->hhhh67);
-            buffer.writeCharArray(message->hhhh68);
-            buffer.writeCharArray(message->hhhh69);
-            buffer.writeCharArray(message->hhhh7);
-            buffer.writeCharArray(message->hhhh70);
-            buffer.writeCharArray(message->hhhh71);
-            buffer.writeCharArray(message->hhhh72);
-            buffer.writeCharArray(message->hhhh73);
-            buffer.writeCharArray(message->hhhh74);
-            buffer.writeCharArray(message->hhhh75);
-            buffer.writeCharArray(message->hhhh76);
-            buffer.writeCharArray(message->hhhh77);
-            buffer.writeCharArray(message->hhhh78);
-            buffer.writeCharArray(message->hhhh79);
-            buffer.writeCharArray(message->hhhh8);
-            buffer.writeCharArray(message->hhhh80);
-            buffer.writeCharArray(message->hhhh81);
-            buffer.writeCharArray(message->hhhh82);
-            buffer.writeCharArray(message->hhhh83);
-            buffer.writeCharArray(message->hhhh84);
-            buffer.writeCharArray(message->hhhh85);
-            buffer.writeCharArray(message->hhhh86);
-            buffer.writeCharArray(message->hhhh87);
-            buffer.writeCharArray(message->hhhh88);
-            buffer.writeCharArray(message->hhhh9);
             buffer.writeString(message->jj1);
             buffer.writeString(message->jj10);
             buffer.writeString(message->jj11);
@@ -18523,9 +16765,11 @@ namespace zfoo {
 
         IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new VeryBigObject();
-            if (!buffer.readBool()) {
+            auto length = buffer.readInt();
+            if (length == 0) {
                 return packet;
             }
+            auto beforeReadIndex = buffer.readerIndex();
             int8_t result0 = buffer.readByte();
             packet->a1 = result0;
             int8_t result1 = buffer.readByte();
@@ -23454,2558 +21698,1857 @@ namespace zfoo {
             packet->gggg88 = array2462;
             auto array2463 = buffer.readBooleanArray();
             packet->gggg9 = array2463;
-            char result2464 = buffer.readChar();
-            packet->h1 = result2464;
-            char result2465 = buffer.readChar();
-            packet->h10 = result2465;
-            char result2466 = buffer.readChar();
-            packet->h11 = result2466;
-            char result2467 = buffer.readChar();
-            packet->h12 = result2467;
-            char result2468 = buffer.readChar();
-            packet->h13 = result2468;
-            char result2469 = buffer.readChar();
-            packet->h14 = result2469;
-            char result2470 = buffer.readChar();
-            packet->h15 = result2470;
-            char result2471 = buffer.readChar();
-            packet->h16 = result2471;
-            char result2472 = buffer.readChar();
-            packet->h17 = result2472;
-            char result2473 = buffer.readChar();
-            packet->h18 = result2473;
-            char result2474 = buffer.readChar();
-            packet->h19 = result2474;
-            char result2475 = buffer.readChar();
-            packet->h2 = result2475;
-            char result2476 = buffer.readChar();
-            packet->h20 = result2476;
-            char result2477 = buffer.readChar();
-            packet->h21 = result2477;
-            char result2478 = buffer.readChar();
-            packet->h22 = result2478;
-            char result2479 = buffer.readChar();
-            packet->h23 = result2479;
-            char result2480 = buffer.readChar();
-            packet->h24 = result2480;
-            char result2481 = buffer.readChar();
-            packet->h25 = result2481;
-            char result2482 = buffer.readChar();
-            packet->h26 = result2482;
-            char result2483 = buffer.readChar();
-            packet->h27 = result2483;
-            char result2484 = buffer.readChar();
-            packet->h28 = result2484;
-            char result2485 = buffer.readChar();
-            packet->h29 = result2485;
-            char result2486 = buffer.readChar();
-            packet->h3 = result2486;
-            char result2487 = buffer.readChar();
-            packet->h30 = result2487;
-            char result2488 = buffer.readChar();
-            packet->h31 = result2488;
-            char result2489 = buffer.readChar();
-            packet->h32 = result2489;
-            char result2490 = buffer.readChar();
-            packet->h33 = result2490;
-            char result2491 = buffer.readChar();
-            packet->h34 = result2491;
-            char result2492 = buffer.readChar();
-            packet->h35 = result2492;
-            char result2493 = buffer.readChar();
-            packet->h36 = result2493;
-            char result2494 = buffer.readChar();
-            packet->h37 = result2494;
-            char result2495 = buffer.readChar();
-            packet->h38 = result2495;
-            char result2496 = buffer.readChar();
-            packet->h39 = result2496;
-            char result2497 = buffer.readChar();
-            packet->h4 = result2497;
-            char result2498 = buffer.readChar();
-            packet->h40 = result2498;
-            char result2499 = buffer.readChar();
-            packet->h41 = result2499;
-            char result2500 = buffer.readChar();
-            packet->h42 = result2500;
-            char result2501 = buffer.readChar();
-            packet->h43 = result2501;
-            char result2502 = buffer.readChar();
-            packet->h44 = result2502;
-            char result2503 = buffer.readChar();
-            packet->h45 = result2503;
-            char result2504 = buffer.readChar();
-            packet->h46 = result2504;
-            char result2505 = buffer.readChar();
-            packet->h47 = result2505;
-            char result2506 = buffer.readChar();
-            packet->h48 = result2506;
-            char result2507 = buffer.readChar();
-            packet->h49 = result2507;
-            char result2508 = buffer.readChar();
-            packet->h5 = result2508;
-            char result2509 = buffer.readChar();
-            packet->h50 = result2509;
-            char result2510 = buffer.readChar();
-            packet->h51 = result2510;
-            char result2511 = buffer.readChar();
-            packet->h52 = result2511;
-            char result2512 = buffer.readChar();
-            packet->h53 = result2512;
-            char result2513 = buffer.readChar();
-            packet->h54 = result2513;
-            char result2514 = buffer.readChar();
-            packet->h55 = result2514;
-            char result2515 = buffer.readChar();
-            packet->h56 = result2515;
-            char result2516 = buffer.readChar();
-            packet->h57 = result2516;
-            char result2517 = buffer.readChar();
-            packet->h58 = result2517;
-            char result2518 = buffer.readChar();
-            packet->h59 = result2518;
-            char result2519 = buffer.readChar();
-            packet->h6 = result2519;
-            char result2520 = buffer.readChar();
-            packet->h60 = result2520;
-            char result2521 = buffer.readChar();
-            packet->h61 = result2521;
-            char result2522 = buffer.readChar();
-            packet->h62 = result2522;
-            char result2523 = buffer.readChar();
-            packet->h63 = result2523;
-            char result2524 = buffer.readChar();
-            packet->h64 = result2524;
-            char result2525 = buffer.readChar();
-            packet->h65 = result2525;
-            char result2526 = buffer.readChar();
-            packet->h66 = result2526;
-            char result2527 = buffer.readChar();
-            packet->h67 = result2527;
-            char result2528 = buffer.readChar();
-            packet->h68 = result2528;
-            char result2529 = buffer.readChar();
-            packet->h69 = result2529;
-            char result2530 = buffer.readChar();
-            packet->h7 = result2530;
-            char result2531 = buffer.readChar();
-            packet->h70 = result2531;
-            char result2532 = buffer.readChar();
-            packet->h71 = result2532;
-            char result2533 = buffer.readChar();
-            packet->h72 = result2533;
-            char result2534 = buffer.readChar();
-            packet->h73 = result2534;
-            char result2535 = buffer.readChar();
-            packet->h74 = result2535;
-            char result2536 = buffer.readChar();
-            packet->h75 = result2536;
-            char result2537 = buffer.readChar();
-            packet->h76 = result2537;
-            char result2538 = buffer.readChar();
-            packet->h77 = result2538;
-            char result2539 = buffer.readChar();
-            packet->h78 = result2539;
-            char result2540 = buffer.readChar();
-            packet->h79 = result2540;
-            char result2541 = buffer.readChar();
-            packet->h8 = result2541;
-            char result2542 = buffer.readChar();
-            packet->h80 = result2542;
-            char result2543 = buffer.readChar();
-            packet->h81 = result2543;
-            char result2544 = buffer.readChar();
-            packet->h82 = result2544;
-            char result2545 = buffer.readChar();
-            packet->h83 = result2545;
-            char result2546 = buffer.readChar();
-            packet->h84 = result2546;
-            char result2547 = buffer.readChar();
-            packet->h85 = result2547;
-            char result2548 = buffer.readChar();
-            packet->h86 = result2548;
-            char result2549 = buffer.readChar();
-            packet->h87 = result2549;
-            char result2550 = buffer.readChar();
-            packet->h88 = result2550;
-            char result2551 = buffer.readChar();
-            packet->h9 = result2551;
-            char result2552 = buffer.readChar();
-            packet->hh1 = result2552;
-            char result2553 = buffer.readChar();
-            packet->hh10 = result2553;
-            char result2554 = buffer.readChar();
-            packet->hh11 = result2554;
-            char result2555 = buffer.readChar();
-            packet->hh12 = result2555;
-            char result2556 = buffer.readChar();
-            packet->hh13 = result2556;
-            char result2557 = buffer.readChar();
-            packet->hh14 = result2557;
-            char result2558 = buffer.readChar();
-            packet->hh15 = result2558;
-            char result2559 = buffer.readChar();
-            packet->hh16 = result2559;
-            char result2560 = buffer.readChar();
-            packet->hh17 = result2560;
-            char result2561 = buffer.readChar();
-            packet->hh18 = result2561;
-            char result2562 = buffer.readChar();
-            packet->hh19 = result2562;
-            char result2563 = buffer.readChar();
-            packet->hh2 = result2563;
-            char result2564 = buffer.readChar();
-            packet->hh20 = result2564;
-            char result2565 = buffer.readChar();
-            packet->hh21 = result2565;
-            char result2566 = buffer.readChar();
-            packet->hh22 = result2566;
-            char result2567 = buffer.readChar();
-            packet->hh23 = result2567;
-            char result2568 = buffer.readChar();
-            packet->hh24 = result2568;
-            char result2569 = buffer.readChar();
-            packet->hh25 = result2569;
-            char result2570 = buffer.readChar();
-            packet->hh26 = result2570;
-            char result2571 = buffer.readChar();
-            packet->hh27 = result2571;
-            char result2572 = buffer.readChar();
-            packet->hh28 = result2572;
-            char result2573 = buffer.readChar();
-            packet->hh29 = result2573;
-            char result2574 = buffer.readChar();
-            packet->hh3 = result2574;
-            char result2575 = buffer.readChar();
-            packet->hh30 = result2575;
-            char result2576 = buffer.readChar();
-            packet->hh31 = result2576;
-            char result2577 = buffer.readChar();
-            packet->hh32 = result2577;
-            char result2578 = buffer.readChar();
-            packet->hh33 = result2578;
-            char result2579 = buffer.readChar();
-            packet->hh34 = result2579;
-            char result2580 = buffer.readChar();
-            packet->hh35 = result2580;
-            char result2581 = buffer.readChar();
-            packet->hh36 = result2581;
-            char result2582 = buffer.readChar();
-            packet->hh37 = result2582;
-            char result2583 = buffer.readChar();
-            packet->hh38 = result2583;
-            char result2584 = buffer.readChar();
-            packet->hh39 = result2584;
-            char result2585 = buffer.readChar();
-            packet->hh4 = result2585;
-            char result2586 = buffer.readChar();
-            packet->hh40 = result2586;
-            char result2587 = buffer.readChar();
-            packet->hh41 = result2587;
-            char result2588 = buffer.readChar();
-            packet->hh42 = result2588;
-            char result2589 = buffer.readChar();
-            packet->hh43 = result2589;
-            char result2590 = buffer.readChar();
-            packet->hh44 = result2590;
-            char result2591 = buffer.readChar();
-            packet->hh45 = result2591;
-            char result2592 = buffer.readChar();
-            packet->hh46 = result2592;
-            char result2593 = buffer.readChar();
-            packet->hh47 = result2593;
-            char result2594 = buffer.readChar();
-            packet->hh48 = result2594;
-            char result2595 = buffer.readChar();
-            packet->hh49 = result2595;
-            char result2596 = buffer.readChar();
-            packet->hh5 = result2596;
-            char result2597 = buffer.readChar();
-            packet->hh50 = result2597;
-            char result2598 = buffer.readChar();
-            packet->hh51 = result2598;
-            char result2599 = buffer.readChar();
-            packet->hh52 = result2599;
-            char result2600 = buffer.readChar();
-            packet->hh53 = result2600;
-            char result2601 = buffer.readChar();
-            packet->hh54 = result2601;
-            char result2602 = buffer.readChar();
-            packet->hh55 = result2602;
-            char result2603 = buffer.readChar();
-            packet->hh56 = result2603;
-            char result2604 = buffer.readChar();
-            packet->hh57 = result2604;
-            char result2605 = buffer.readChar();
-            packet->hh58 = result2605;
-            char result2606 = buffer.readChar();
-            packet->hh59 = result2606;
-            char result2607 = buffer.readChar();
-            packet->hh6 = result2607;
-            char result2608 = buffer.readChar();
-            packet->hh60 = result2608;
-            char result2609 = buffer.readChar();
-            packet->hh61 = result2609;
-            char result2610 = buffer.readChar();
-            packet->hh62 = result2610;
-            char result2611 = buffer.readChar();
-            packet->hh63 = result2611;
-            char result2612 = buffer.readChar();
-            packet->hh64 = result2612;
-            char result2613 = buffer.readChar();
-            packet->hh65 = result2613;
-            char result2614 = buffer.readChar();
-            packet->hh66 = result2614;
-            char result2615 = buffer.readChar();
-            packet->hh67 = result2615;
-            char result2616 = buffer.readChar();
-            packet->hh68 = result2616;
-            char result2617 = buffer.readChar();
-            packet->hh69 = result2617;
-            char result2618 = buffer.readChar();
-            packet->hh7 = result2618;
-            char result2619 = buffer.readChar();
-            packet->hh70 = result2619;
-            char result2620 = buffer.readChar();
-            packet->hh71 = result2620;
-            char result2621 = buffer.readChar();
-            packet->hh72 = result2621;
-            char result2622 = buffer.readChar();
-            packet->hh73 = result2622;
-            char result2623 = buffer.readChar();
-            packet->hh74 = result2623;
-            char result2624 = buffer.readChar();
-            packet->hh75 = result2624;
-            char result2625 = buffer.readChar();
-            packet->hh76 = result2625;
-            char result2626 = buffer.readChar();
-            packet->hh77 = result2626;
-            char result2627 = buffer.readChar();
-            packet->hh78 = result2627;
-            char result2628 = buffer.readChar();
-            packet->hh79 = result2628;
-            char result2629 = buffer.readChar();
-            packet->hh8 = result2629;
-            char result2630 = buffer.readChar();
-            packet->hh80 = result2630;
-            char result2631 = buffer.readChar();
-            packet->hh81 = result2631;
-            char result2632 = buffer.readChar();
-            packet->hh82 = result2632;
-            char result2633 = buffer.readChar();
-            packet->hh83 = result2633;
-            char result2634 = buffer.readChar();
-            packet->hh84 = result2634;
-            char result2635 = buffer.readChar();
-            packet->hh85 = result2635;
-            char result2636 = buffer.readChar();
-            packet->hh86 = result2636;
-            char result2637 = buffer.readChar();
-            packet->hh87 = result2637;
-            char result2638 = buffer.readChar();
-            packet->hh88 = result2638;
-            char result2639 = buffer.readChar();
-            packet->hh9 = result2639;
-            auto array2640 = buffer.readCharArray();
-            packet->hhh1 = array2640;
-            auto array2641 = buffer.readCharArray();
-            packet->hhh10 = array2641;
-            auto array2642 = buffer.readCharArray();
-            packet->hhh11 = array2642;
-            auto array2643 = buffer.readCharArray();
-            packet->hhh12 = array2643;
-            auto array2644 = buffer.readCharArray();
-            packet->hhh13 = array2644;
-            auto array2645 = buffer.readCharArray();
-            packet->hhh14 = array2645;
-            auto array2646 = buffer.readCharArray();
-            packet->hhh15 = array2646;
-            auto array2647 = buffer.readCharArray();
-            packet->hhh16 = array2647;
-            auto array2648 = buffer.readCharArray();
-            packet->hhh17 = array2648;
-            auto array2649 = buffer.readCharArray();
-            packet->hhh18 = array2649;
-            auto array2650 = buffer.readCharArray();
-            packet->hhh19 = array2650;
-            auto array2651 = buffer.readCharArray();
-            packet->hhh2 = array2651;
-            auto array2652 = buffer.readCharArray();
-            packet->hhh20 = array2652;
-            auto array2653 = buffer.readCharArray();
-            packet->hhh21 = array2653;
-            auto array2654 = buffer.readCharArray();
-            packet->hhh22 = array2654;
-            auto array2655 = buffer.readCharArray();
-            packet->hhh23 = array2655;
-            auto array2656 = buffer.readCharArray();
-            packet->hhh24 = array2656;
-            auto array2657 = buffer.readCharArray();
-            packet->hhh25 = array2657;
-            auto array2658 = buffer.readCharArray();
-            packet->hhh26 = array2658;
-            auto array2659 = buffer.readCharArray();
-            packet->hhh27 = array2659;
-            auto array2660 = buffer.readCharArray();
-            packet->hhh28 = array2660;
-            auto array2661 = buffer.readCharArray();
-            packet->hhh29 = array2661;
-            auto array2662 = buffer.readCharArray();
-            packet->hhh3 = array2662;
-            auto array2663 = buffer.readCharArray();
-            packet->hhh30 = array2663;
-            auto array2664 = buffer.readCharArray();
-            packet->hhh31 = array2664;
-            auto array2665 = buffer.readCharArray();
-            packet->hhh32 = array2665;
-            auto array2666 = buffer.readCharArray();
-            packet->hhh33 = array2666;
-            auto array2667 = buffer.readCharArray();
-            packet->hhh34 = array2667;
-            auto array2668 = buffer.readCharArray();
-            packet->hhh35 = array2668;
-            auto array2669 = buffer.readCharArray();
-            packet->hhh36 = array2669;
-            auto array2670 = buffer.readCharArray();
-            packet->hhh37 = array2670;
-            auto array2671 = buffer.readCharArray();
-            packet->hhh38 = array2671;
-            auto array2672 = buffer.readCharArray();
-            packet->hhh39 = array2672;
-            auto array2673 = buffer.readCharArray();
-            packet->hhh4 = array2673;
-            auto array2674 = buffer.readCharArray();
-            packet->hhh40 = array2674;
-            auto array2675 = buffer.readCharArray();
-            packet->hhh41 = array2675;
-            auto array2676 = buffer.readCharArray();
-            packet->hhh42 = array2676;
-            auto array2677 = buffer.readCharArray();
-            packet->hhh43 = array2677;
-            auto array2678 = buffer.readCharArray();
-            packet->hhh44 = array2678;
-            auto array2679 = buffer.readCharArray();
-            packet->hhh45 = array2679;
-            auto array2680 = buffer.readCharArray();
-            packet->hhh46 = array2680;
-            auto array2681 = buffer.readCharArray();
-            packet->hhh47 = array2681;
-            auto array2682 = buffer.readCharArray();
-            packet->hhh48 = array2682;
-            auto array2683 = buffer.readCharArray();
-            packet->hhh49 = array2683;
-            auto array2684 = buffer.readCharArray();
-            packet->hhh5 = array2684;
-            auto array2685 = buffer.readCharArray();
-            packet->hhh50 = array2685;
-            auto array2686 = buffer.readCharArray();
-            packet->hhh51 = array2686;
-            auto array2687 = buffer.readCharArray();
-            packet->hhh52 = array2687;
-            auto array2688 = buffer.readCharArray();
-            packet->hhh53 = array2688;
-            auto array2689 = buffer.readCharArray();
-            packet->hhh54 = array2689;
-            auto array2690 = buffer.readCharArray();
-            packet->hhh55 = array2690;
-            auto array2691 = buffer.readCharArray();
-            packet->hhh56 = array2691;
-            auto array2692 = buffer.readCharArray();
-            packet->hhh57 = array2692;
-            auto array2693 = buffer.readCharArray();
-            packet->hhh58 = array2693;
-            auto array2694 = buffer.readCharArray();
-            packet->hhh59 = array2694;
-            auto array2695 = buffer.readCharArray();
-            packet->hhh6 = array2695;
-            auto array2696 = buffer.readCharArray();
-            packet->hhh60 = array2696;
-            auto array2697 = buffer.readCharArray();
-            packet->hhh61 = array2697;
-            auto array2698 = buffer.readCharArray();
-            packet->hhh62 = array2698;
-            auto array2699 = buffer.readCharArray();
-            packet->hhh63 = array2699;
-            auto array2700 = buffer.readCharArray();
-            packet->hhh64 = array2700;
-            auto array2701 = buffer.readCharArray();
-            packet->hhh65 = array2701;
-            auto array2702 = buffer.readCharArray();
-            packet->hhh66 = array2702;
-            auto array2703 = buffer.readCharArray();
-            packet->hhh67 = array2703;
-            auto array2704 = buffer.readCharArray();
-            packet->hhh68 = array2704;
-            auto array2705 = buffer.readCharArray();
-            packet->hhh69 = array2705;
-            auto array2706 = buffer.readCharArray();
-            packet->hhh7 = array2706;
-            auto array2707 = buffer.readCharArray();
-            packet->hhh70 = array2707;
-            auto array2708 = buffer.readCharArray();
-            packet->hhh71 = array2708;
-            auto array2709 = buffer.readCharArray();
-            packet->hhh72 = array2709;
-            auto array2710 = buffer.readCharArray();
-            packet->hhh73 = array2710;
-            auto array2711 = buffer.readCharArray();
-            packet->hhh74 = array2711;
-            auto array2712 = buffer.readCharArray();
-            packet->hhh75 = array2712;
-            auto array2713 = buffer.readCharArray();
-            packet->hhh76 = array2713;
-            auto array2714 = buffer.readCharArray();
-            packet->hhh77 = array2714;
-            auto array2715 = buffer.readCharArray();
-            packet->hhh78 = array2715;
-            auto array2716 = buffer.readCharArray();
-            packet->hhh79 = array2716;
-            auto array2717 = buffer.readCharArray();
-            packet->hhh8 = array2717;
-            auto array2718 = buffer.readCharArray();
-            packet->hhh80 = array2718;
-            auto array2719 = buffer.readCharArray();
-            packet->hhh81 = array2719;
-            auto array2720 = buffer.readCharArray();
-            packet->hhh82 = array2720;
-            auto array2721 = buffer.readCharArray();
-            packet->hhh83 = array2721;
-            auto array2722 = buffer.readCharArray();
-            packet->hhh84 = array2722;
-            auto array2723 = buffer.readCharArray();
-            packet->hhh85 = array2723;
-            auto array2724 = buffer.readCharArray();
-            packet->hhh86 = array2724;
-            auto array2725 = buffer.readCharArray();
-            packet->hhh87 = array2725;
-            auto array2726 = buffer.readCharArray();
-            packet->hhh88 = array2726;
-            auto array2727 = buffer.readCharArray();
-            packet->hhh9 = array2727;
-            auto array2728 = buffer.readCharArray();
-            packet->hhhh1 = array2728;
-            auto array2729 = buffer.readCharArray();
-            packet->hhhh10 = array2729;
-            auto array2730 = buffer.readCharArray();
-            packet->hhhh11 = array2730;
-            auto array2731 = buffer.readCharArray();
-            packet->hhhh12 = array2731;
-            auto array2732 = buffer.readCharArray();
-            packet->hhhh13 = array2732;
-            auto array2733 = buffer.readCharArray();
-            packet->hhhh14 = array2733;
-            auto array2734 = buffer.readCharArray();
-            packet->hhhh15 = array2734;
-            auto array2735 = buffer.readCharArray();
-            packet->hhhh16 = array2735;
-            auto array2736 = buffer.readCharArray();
-            packet->hhhh17 = array2736;
-            auto array2737 = buffer.readCharArray();
-            packet->hhhh18 = array2737;
-            auto array2738 = buffer.readCharArray();
-            packet->hhhh19 = array2738;
-            auto array2739 = buffer.readCharArray();
-            packet->hhhh2 = array2739;
-            auto array2740 = buffer.readCharArray();
-            packet->hhhh20 = array2740;
-            auto array2741 = buffer.readCharArray();
-            packet->hhhh21 = array2741;
-            auto array2742 = buffer.readCharArray();
-            packet->hhhh22 = array2742;
-            auto array2743 = buffer.readCharArray();
-            packet->hhhh23 = array2743;
-            auto array2744 = buffer.readCharArray();
-            packet->hhhh24 = array2744;
-            auto array2745 = buffer.readCharArray();
-            packet->hhhh25 = array2745;
-            auto array2746 = buffer.readCharArray();
-            packet->hhhh26 = array2746;
-            auto array2747 = buffer.readCharArray();
-            packet->hhhh27 = array2747;
-            auto array2748 = buffer.readCharArray();
-            packet->hhhh28 = array2748;
-            auto array2749 = buffer.readCharArray();
-            packet->hhhh29 = array2749;
-            auto array2750 = buffer.readCharArray();
-            packet->hhhh3 = array2750;
-            auto array2751 = buffer.readCharArray();
-            packet->hhhh30 = array2751;
-            auto array2752 = buffer.readCharArray();
-            packet->hhhh31 = array2752;
-            auto array2753 = buffer.readCharArray();
-            packet->hhhh32 = array2753;
-            auto array2754 = buffer.readCharArray();
-            packet->hhhh33 = array2754;
-            auto array2755 = buffer.readCharArray();
-            packet->hhhh34 = array2755;
-            auto array2756 = buffer.readCharArray();
-            packet->hhhh35 = array2756;
-            auto array2757 = buffer.readCharArray();
-            packet->hhhh36 = array2757;
-            auto array2758 = buffer.readCharArray();
-            packet->hhhh37 = array2758;
-            auto array2759 = buffer.readCharArray();
-            packet->hhhh38 = array2759;
-            auto array2760 = buffer.readCharArray();
-            packet->hhhh39 = array2760;
-            auto array2761 = buffer.readCharArray();
-            packet->hhhh4 = array2761;
-            auto array2762 = buffer.readCharArray();
-            packet->hhhh40 = array2762;
-            auto array2763 = buffer.readCharArray();
-            packet->hhhh41 = array2763;
-            auto array2764 = buffer.readCharArray();
-            packet->hhhh42 = array2764;
-            auto array2765 = buffer.readCharArray();
-            packet->hhhh43 = array2765;
-            auto array2766 = buffer.readCharArray();
-            packet->hhhh44 = array2766;
-            auto array2767 = buffer.readCharArray();
-            packet->hhhh45 = array2767;
-            auto array2768 = buffer.readCharArray();
-            packet->hhhh46 = array2768;
-            auto array2769 = buffer.readCharArray();
-            packet->hhhh47 = array2769;
-            auto array2770 = buffer.readCharArray();
-            packet->hhhh48 = array2770;
-            auto array2771 = buffer.readCharArray();
-            packet->hhhh49 = array2771;
-            auto array2772 = buffer.readCharArray();
-            packet->hhhh5 = array2772;
-            auto array2773 = buffer.readCharArray();
-            packet->hhhh50 = array2773;
-            auto array2774 = buffer.readCharArray();
-            packet->hhhh51 = array2774;
-            auto array2775 = buffer.readCharArray();
-            packet->hhhh52 = array2775;
-            auto array2776 = buffer.readCharArray();
-            packet->hhhh53 = array2776;
-            auto array2777 = buffer.readCharArray();
-            packet->hhhh54 = array2777;
-            auto array2778 = buffer.readCharArray();
-            packet->hhhh55 = array2778;
-            auto array2779 = buffer.readCharArray();
-            packet->hhhh56 = array2779;
-            auto array2780 = buffer.readCharArray();
-            packet->hhhh57 = array2780;
-            auto array2781 = buffer.readCharArray();
-            packet->hhhh58 = array2781;
-            auto array2782 = buffer.readCharArray();
-            packet->hhhh59 = array2782;
-            auto array2783 = buffer.readCharArray();
-            packet->hhhh6 = array2783;
-            auto array2784 = buffer.readCharArray();
-            packet->hhhh60 = array2784;
-            auto array2785 = buffer.readCharArray();
-            packet->hhhh61 = array2785;
-            auto array2786 = buffer.readCharArray();
-            packet->hhhh62 = array2786;
-            auto array2787 = buffer.readCharArray();
-            packet->hhhh63 = array2787;
-            auto array2788 = buffer.readCharArray();
-            packet->hhhh64 = array2788;
-            auto array2789 = buffer.readCharArray();
-            packet->hhhh65 = array2789;
-            auto array2790 = buffer.readCharArray();
-            packet->hhhh66 = array2790;
-            auto array2791 = buffer.readCharArray();
-            packet->hhhh67 = array2791;
-            auto array2792 = buffer.readCharArray();
-            packet->hhhh68 = array2792;
-            auto array2793 = buffer.readCharArray();
-            packet->hhhh69 = array2793;
-            auto array2794 = buffer.readCharArray();
-            packet->hhhh7 = array2794;
-            auto array2795 = buffer.readCharArray();
-            packet->hhhh70 = array2795;
-            auto array2796 = buffer.readCharArray();
-            packet->hhhh71 = array2796;
-            auto array2797 = buffer.readCharArray();
-            packet->hhhh72 = array2797;
-            auto array2798 = buffer.readCharArray();
-            packet->hhhh73 = array2798;
-            auto array2799 = buffer.readCharArray();
-            packet->hhhh74 = array2799;
-            auto array2800 = buffer.readCharArray();
-            packet->hhhh75 = array2800;
-            auto array2801 = buffer.readCharArray();
-            packet->hhhh76 = array2801;
-            auto array2802 = buffer.readCharArray();
-            packet->hhhh77 = array2802;
-            auto array2803 = buffer.readCharArray();
-            packet->hhhh78 = array2803;
-            auto array2804 = buffer.readCharArray();
-            packet->hhhh79 = array2804;
-            auto array2805 = buffer.readCharArray();
-            packet->hhhh8 = array2805;
-            auto array2806 = buffer.readCharArray();
-            packet->hhhh80 = array2806;
-            auto array2807 = buffer.readCharArray();
-            packet->hhhh81 = array2807;
-            auto array2808 = buffer.readCharArray();
-            packet->hhhh82 = array2808;
-            auto array2809 = buffer.readCharArray();
-            packet->hhhh83 = array2809;
-            auto array2810 = buffer.readCharArray();
-            packet->hhhh84 = array2810;
-            auto array2811 = buffer.readCharArray();
-            packet->hhhh85 = array2811;
-            auto array2812 = buffer.readCharArray();
-            packet->hhhh86 = array2812;
-            auto array2813 = buffer.readCharArray();
-            packet->hhhh87 = array2813;
-            auto array2814 = buffer.readCharArray();
-            packet->hhhh88 = array2814;
-            auto array2815 = buffer.readCharArray();
-            packet->hhhh9 = array2815;
-            auto result2816 = buffer.readString();
-            packet->jj1 = result2816;
-            auto result2817 = buffer.readString();
-            packet->jj10 = result2817;
-            auto result2818 = buffer.readString();
-            packet->jj11 = result2818;
-            auto result2819 = buffer.readString();
-            packet->jj12 = result2819;
-            auto result2820 = buffer.readString();
-            packet->jj13 = result2820;
-            auto result2821 = buffer.readString();
-            packet->jj14 = result2821;
-            auto result2822 = buffer.readString();
-            packet->jj15 = result2822;
-            auto result2823 = buffer.readString();
-            packet->jj16 = result2823;
-            auto result2824 = buffer.readString();
-            packet->jj17 = result2824;
-            auto result2825 = buffer.readString();
-            packet->jj18 = result2825;
-            auto result2826 = buffer.readString();
-            packet->jj19 = result2826;
-            auto result2827 = buffer.readString();
-            packet->jj2 = result2827;
-            auto result2828 = buffer.readString();
-            packet->jj20 = result2828;
-            auto result2829 = buffer.readString();
-            packet->jj21 = result2829;
-            auto result2830 = buffer.readString();
-            packet->jj22 = result2830;
-            auto result2831 = buffer.readString();
-            packet->jj23 = result2831;
-            auto result2832 = buffer.readString();
-            packet->jj24 = result2832;
-            auto result2833 = buffer.readString();
-            packet->jj25 = result2833;
-            auto result2834 = buffer.readString();
-            packet->jj26 = result2834;
-            auto result2835 = buffer.readString();
-            packet->jj27 = result2835;
-            auto result2836 = buffer.readString();
-            packet->jj28 = result2836;
-            auto result2837 = buffer.readString();
-            packet->jj29 = result2837;
-            auto result2838 = buffer.readString();
-            packet->jj3 = result2838;
-            auto result2839 = buffer.readString();
-            packet->jj30 = result2839;
-            auto result2840 = buffer.readString();
-            packet->jj31 = result2840;
-            auto result2841 = buffer.readString();
-            packet->jj32 = result2841;
-            auto result2842 = buffer.readString();
-            packet->jj33 = result2842;
-            auto result2843 = buffer.readString();
-            packet->jj34 = result2843;
-            auto result2844 = buffer.readString();
-            packet->jj35 = result2844;
-            auto result2845 = buffer.readString();
-            packet->jj36 = result2845;
-            auto result2846 = buffer.readString();
-            packet->jj37 = result2846;
-            auto result2847 = buffer.readString();
-            packet->jj38 = result2847;
-            auto result2848 = buffer.readString();
-            packet->jj39 = result2848;
-            auto result2849 = buffer.readString();
-            packet->jj4 = result2849;
-            auto result2850 = buffer.readString();
-            packet->jj40 = result2850;
-            auto result2851 = buffer.readString();
-            packet->jj41 = result2851;
-            auto result2852 = buffer.readString();
-            packet->jj42 = result2852;
-            auto result2853 = buffer.readString();
-            packet->jj43 = result2853;
-            auto result2854 = buffer.readString();
-            packet->jj44 = result2854;
-            auto result2855 = buffer.readString();
-            packet->jj45 = result2855;
-            auto result2856 = buffer.readString();
-            packet->jj46 = result2856;
-            auto result2857 = buffer.readString();
-            packet->jj47 = result2857;
-            auto result2858 = buffer.readString();
-            packet->jj48 = result2858;
-            auto result2859 = buffer.readString();
-            packet->jj49 = result2859;
-            auto result2860 = buffer.readString();
-            packet->jj5 = result2860;
-            auto result2861 = buffer.readString();
-            packet->jj50 = result2861;
-            auto result2862 = buffer.readString();
-            packet->jj51 = result2862;
-            auto result2863 = buffer.readString();
-            packet->jj52 = result2863;
-            auto result2864 = buffer.readString();
-            packet->jj53 = result2864;
-            auto result2865 = buffer.readString();
-            packet->jj54 = result2865;
-            auto result2866 = buffer.readString();
-            packet->jj55 = result2866;
-            auto result2867 = buffer.readString();
-            packet->jj56 = result2867;
-            auto result2868 = buffer.readString();
-            packet->jj57 = result2868;
-            auto result2869 = buffer.readString();
-            packet->jj58 = result2869;
-            auto result2870 = buffer.readString();
-            packet->jj59 = result2870;
-            auto result2871 = buffer.readString();
-            packet->jj6 = result2871;
-            auto result2872 = buffer.readString();
-            packet->jj60 = result2872;
-            auto result2873 = buffer.readString();
-            packet->jj61 = result2873;
-            auto result2874 = buffer.readString();
-            packet->jj62 = result2874;
-            auto result2875 = buffer.readString();
-            packet->jj63 = result2875;
-            auto result2876 = buffer.readString();
-            packet->jj64 = result2876;
-            auto result2877 = buffer.readString();
-            packet->jj65 = result2877;
-            auto result2878 = buffer.readString();
-            packet->jj66 = result2878;
-            auto result2879 = buffer.readString();
-            packet->jj67 = result2879;
-            auto result2880 = buffer.readString();
-            packet->jj68 = result2880;
-            auto result2881 = buffer.readString();
-            packet->jj69 = result2881;
-            auto result2882 = buffer.readString();
-            packet->jj7 = result2882;
-            auto result2883 = buffer.readString();
-            packet->jj70 = result2883;
-            auto result2884 = buffer.readString();
-            packet->jj71 = result2884;
-            auto result2885 = buffer.readString();
-            packet->jj72 = result2885;
-            auto result2886 = buffer.readString();
-            packet->jj73 = result2886;
-            auto result2887 = buffer.readString();
-            packet->jj74 = result2887;
-            auto result2888 = buffer.readString();
-            packet->jj75 = result2888;
-            auto result2889 = buffer.readString();
-            packet->jj76 = result2889;
-            auto result2890 = buffer.readString();
-            packet->jj77 = result2890;
-            auto result2891 = buffer.readString();
-            packet->jj78 = result2891;
-            auto result2892 = buffer.readString();
-            packet->jj79 = result2892;
-            auto result2893 = buffer.readString();
-            packet->jj8 = result2893;
-            auto result2894 = buffer.readString();
-            packet->jj80 = result2894;
-            auto result2895 = buffer.readString();
-            packet->jj81 = result2895;
-            auto result2896 = buffer.readString();
-            packet->jj82 = result2896;
-            auto result2897 = buffer.readString();
-            packet->jj83 = result2897;
-            auto result2898 = buffer.readString();
-            packet->jj84 = result2898;
-            auto result2899 = buffer.readString();
-            packet->jj85 = result2899;
-            auto result2900 = buffer.readString();
-            packet->jj86 = result2900;
-            auto result2901 = buffer.readString();
-            packet->jj87 = result2901;
-            auto result2902 = buffer.readString();
-            packet->jj88 = result2902;
-            auto result2903 = buffer.readString();
-            packet->jj9 = result2903;
-            auto array2904 = buffer.readStringArray();
-            packet->jjj1 = array2904;
-            auto array2905 = buffer.readStringArray();
-            packet->jjj10 = array2905;
-            auto array2906 = buffer.readStringArray();
-            packet->jjj11 = array2906;
-            auto array2907 = buffer.readStringArray();
-            packet->jjj12 = array2907;
-            auto array2908 = buffer.readStringArray();
-            packet->jjj13 = array2908;
-            auto array2909 = buffer.readStringArray();
-            packet->jjj14 = array2909;
-            auto array2910 = buffer.readStringArray();
-            packet->jjj15 = array2910;
-            auto array2911 = buffer.readStringArray();
-            packet->jjj16 = array2911;
-            auto array2912 = buffer.readStringArray();
-            packet->jjj17 = array2912;
-            auto array2913 = buffer.readStringArray();
-            packet->jjj18 = array2913;
-            auto array2914 = buffer.readStringArray();
-            packet->jjj19 = array2914;
-            auto array2915 = buffer.readStringArray();
-            packet->jjj2 = array2915;
-            auto array2916 = buffer.readStringArray();
-            packet->jjj20 = array2916;
-            auto array2917 = buffer.readStringArray();
-            packet->jjj21 = array2917;
-            auto array2918 = buffer.readStringArray();
-            packet->jjj22 = array2918;
-            auto array2919 = buffer.readStringArray();
-            packet->jjj23 = array2919;
-            auto array2920 = buffer.readStringArray();
-            packet->jjj24 = array2920;
-            auto array2921 = buffer.readStringArray();
-            packet->jjj25 = array2921;
-            auto array2922 = buffer.readStringArray();
-            packet->jjj26 = array2922;
-            auto array2923 = buffer.readStringArray();
-            packet->jjj27 = array2923;
-            auto array2924 = buffer.readStringArray();
-            packet->jjj28 = array2924;
-            auto array2925 = buffer.readStringArray();
-            packet->jjj29 = array2925;
-            auto array2926 = buffer.readStringArray();
-            packet->jjj3 = array2926;
-            auto array2927 = buffer.readStringArray();
-            packet->jjj30 = array2927;
-            auto array2928 = buffer.readStringArray();
-            packet->jjj31 = array2928;
-            auto array2929 = buffer.readStringArray();
-            packet->jjj32 = array2929;
-            auto array2930 = buffer.readStringArray();
-            packet->jjj33 = array2930;
-            auto array2931 = buffer.readStringArray();
-            packet->jjj34 = array2931;
-            auto array2932 = buffer.readStringArray();
-            packet->jjj35 = array2932;
-            auto array2933 = buffer.readStringArray();
-            packet->jjj36 = array2933;
-            auto array2934 = buffer.readStringArray();
-            packet->jjj37 = array2934;
-            auto array2935 = buffer.readStringArray();
-            packet->jjj38 = array2935;
-            auto array2936 = buffer.readStringArray();
-            packet->jjj39 = array2936;
-            auto array2937 = buffer.readStringArray();
-            packet->jjj4 = array2937;
-            auto array2938 = buffer.readStringArray();
-            packet->jjj40 = array2938;
-            auto array2939 = buffer.readStringArray();
-            packet->jjj41 = array2939;
-            auto array2940 = buffer.readStringArray();
-            packet->jjj42 = array2940;
-            auto array2941 = buffer.readStringArray();
-            packet->jjj43 = array2941;
-            auto array2942 = buffer.readStringArray();
-            packet->jjj44 = array2942;
-            auto array2943 = buffer.readStringArray();
-            packet->jjj45 = array2943;
-            auto array2944 = buffer.readStringArray();
-            packet->jjj46 = array2944;
-            auto array2945 = buffer.readStringArray();
-            packet->jjj47 = array2945;
-            auto array2946 = buffer.readStringArray();
-            packet->jjj48 = array2946;
-            auto array2947 = buffer.readStringArray();
-            packet->jjj49 = array2947;
-            auto array2948 = buffer.readStringArray();
-            packet->jjj5 = array2948;
-            auto array2949 = buffer.readStringArray();
-            packet->jjj50 = array2949;
-            auto array2950 = buffer.readStringArray();
-            packet->jjj51 = array2950;
-            auto array2951 = buffer.readStringArray();
-            packet->jjj52 = array2951;
-            auto array2952 = buffer.readStringArray();
-            packet->jjj53 = array2952;
-            auto array2953 = buffer.readStringArray();
-            packet->jjj54 = array2953;
-            auto array2954 = buffer.readStringArray();
-            packet->jjj55 = array2954;
-            auto array2955 = buffer.readStringArray();
-            packet->jjj56 = array2955;
-            auto array2956 = buffer.readStringArray();
-            packet->jjj57 = array2956;
-            auto array2957 = buffer.readStringArray();
-            packet->jjj58 = array2957;
-            auto array2958 = buffer.readStringArray();
-            packet->jjj59 = array2958;
-            auto array2959 = buffer.readStringArray();
-            packet->jjj6 = array2959;
-            auto array2960 = buffer.readStringArray();
-            packet->jjj60 = array2960;
-            auto array2961 = buffer.readStringArray();
-            packet->jjj61 = array2961;
-            auto array2962 = buffer.readStringArray();
-            packet->jjj62 = array2962;
-            auto array2963 = buffer.readStringArray();
-            packet->jjj63 = array2963;
-            auto array2964 = buffer.readStringArray();
-            packet->jjj64 = array2964;
-            auto array2965 = buffer.readStringArray();
-            packet->jjj65 = array2965;
-            auto array2966 = buffer.readStringArray();
-            packet->jjj66 = array2966;
-            auto array2967 = buffer.readStringArray();
-            packet->jjj67 = array2967;
-            auto array2968 = buffer.readStringArray();
-            packet->jjj68 = array2968;
-            auto array2969 = buffer.readStringArray();
-            packet->jjj69 = array2969;
-            auto array2970 = buffer.readStringArray();
-            packet->jjj7 = array2970;
-            auto array2971 = buffer.readStringArray();
-            packet->jjj70 = array2971;
-            auto array2972 = buffer.readStringArray();
-            packet->jjj71 = array2972;
-            auto array2973 = buffer.readStringArray();
-            packet->jjj72 = array2973;
-            auto array2974 = buffer.readStringArray();
-            packet->jjj73 = array2974;
-            auto array2975 = buffer.readStringArray();
-            packet->jjj74 = array2975;
-            auto array2976 = buffer.readStringArray();
-            packet->jjj75 = array2976;
-            auto array2977 = buffer.readStringArray();
-            packet->jjj76 = array2977;
-            auto array2978 = buffer.readStringArray();
-            packet->jjj77 = array2978;
-            auto array2979 = buffer.readStringArray();
-            packet->jjj78 = array2979;
-            auto array2980 = buffer.readStringArray();
-            packet->jjj79 = array2980;
-            auto array2981 = buffer.readStringArray();
-            packet->jjj8 = array2981;
-            auto array2982 = buffer.readStringArray();
-            packet->jjj80 = array2982;
-            auto array2983 = buffer.readStringArray();
-            packet->jjj81 = array2983;
-            auto array2984 = buffer.readStringArray();
-            packet->jjj82 = array2984;
-            auto array2985 = buffer.readStringArray();
-            packet->jjj83 = array2985;
-            auto array2986 = buffer.readStringArray();
-            packet->jjj84 = array2986;
-            auto array2987 = buffer.readStringArray();
-            packet->jjj85 = array2987;
-            auto array2988 = buffer.readStringArray();
-            packet->jjj86 = array2988;
-            auto array2989 = buffer.readStringArray();
-            packet->jjj87 = array2989;
-            auto array2990 = buffer.readStringArray();
-            packet->jjj88 = array2990;
-            auto array2991 = buffer.readStringArray();
-            packet->jjj9 = array2991;
-            auto result2992 = buffer.readPacket(102);
-            auto *result2993 = (ObjectA *) result2992.get();
-            packet->kk1 = *result2993;
-            auto result2994 = buffer.readPacket(102);
-            auto *result2995 = (ObjectA *) result2994.get();
-            packet->kk10 = *result2995;
-            auto result2996 = buffer.readPacket(102);
-            auto *result2997 = (ObjectA *) result2996.get();
-            packet->kk11 = *result2997;
-            auto result2998 = buffer.readPacket(102);
-            auto *result2999 = (ObjectA *) result2998.get();
-            packet->kk12 = *result2999;
-            auto result3000 = buffer.readPacket(102);
-            auto *result3001 = (ObjectA *) result3000.get();
-            packet->kk13 = *result3001;
-            auto result3002 = buffer.readPacket(102);
-            auto *result3003 = (ObjectA *) result3002.get();
-            packet->kk14 = *result3003;
-            auto result3004 = buffer.readPacket(102);
-            auto *result3005 = (ObjectA *) result3004.get();
-            packet->kk15 = *result3005;
-            auto result3006 = buffer.readPacket(102);
-            auto *result3007 = (ObjectA *) result3006.get();
-            packet->kk16 = *result3007;
-            auto result3008 = buffer.readPacket(102);
-            auto *result3009 = (ObjectA *) result3008.get();
-            packet->kk17 = *result3009;
-            auto result3010 = buffer.readPacket(102);
-            auto *result3011 = (ObjectA *) result3010.get();
-            packet->kk18 = *result3011;
-            auto result3012 = buffer.readPacket(102);
-            auto *result3013 = (ObjectA *) result3012.get();
-            packet->kk19 = *result3013;
-            auto result3014 = buffer.readPacket(102);
-            auto *result3015 = (ObjectA *) result3014.get();
-            packet->kk2 = *result3015;
-            auto result3016 = buffer.readPacket(102);
-            auto *result3017 = (ObjectA *) result3016.get();
-            packet->kk20 = *result3017;
-            auto result3018 = buffer.readPacket(102);
-            auto *result3019 = (ObjectA *) result3018.get();
-            packet->kk21 = *result3019;
-            auto result3020 = buffer.readPacket(102);
-            auto *result3021 = (ObjectA *) result3020.get();
-            packet->kk22 = *result3021;
-            auto result3022 = buffer.readPacket(102);
-            auto *result3023 = (ObjectA *) result3022.get();
-            packet->kk23 = *result3023;
-            auto result3024 = buffer.readPacket(102);
-            auto *result3025 = (ObjectA *) result3024.get();
-            packet->kk24 = *result3025;
-            auto result3026 = buffer.readPacket(102);
-            auto *result3027 = (ObjectA *) result3026.get();
-            packet->kk25 = *result3027;
-            auto result3028 = buffer.readPacket(102);
-            auto *result3029 = (ObjectA *) result3028.get();
-            packet->kk26 = *result3029;
-            auto result3030 = buffer.readPacket(102);
-            auto *result3031 = (ObjectA *) result3030.get();
-            packet->kk27 = *result3031;
-            auto result3032 = buffer.readPacket(102);
-            auto *result3033 = (ObjectA *) result3032.get();
-            packet->kk28 = *result3033;
-            auto result3034 = buffer.readPacket(102);
-            auto *result3035 = (ObjectA *) result3034.get();
-            packet->kk29 = *result3035;
-            auto result3036 = buffer.readPacket(102);
-            auto *result3037 = (ObjectA *) result3036.get();
-            packet->kk3 = *result3037;
-            auto result3038 = buffer.readPacket(102);
-            auto *result3039 = (ObjectA *) result3038.get();
-            packet->kk30 = *result3039;
-            auto result3040 = buffer.readPacket(102);
-            auto *result3041 = (ObjectA *) result3040.get();
-            packet->kk31 = *result3041;
-            auto result3042 = buffer.readPacket(102);
-            auto *result3043 = (ObjectA *) result3042.get();
-            packet->kk32 = *result3043;
-            auto result3044 = buffer.readPacket(102);
-            auto *result3045 = (ObjectA *) result3044.get();
-            packet->kk33 = *result3045;
-            auto result3046 = buffer.readPacket(102);
-            auto *result3047 = (ObjectA *) result3046.get();
-            packet->kk34 = *result3047;
-            auto result3048 = buffer.readPacket(102);
-            auto *result3049 = (ObjectA *) result3048.get();
-            packet->kk35 = *result3049;
-            auto result3050 = buffer.readPacket(102);
-            auto *result3051 = (ObjectA *) result3050.get();
-            packet->kk36 = *result3051;
-            auto result3052 = buffer.readPacket(102);
-            auto *result3053 = (ObjectA *) result3052.get();
-            packet->kk37 = *result3053;
-            auto result3054 = buffer.readPacket(102);
-            auto *result3055 = (ObjectA *) result3054.get();
-            packet->kk38 = *result3055;
-            auto result3056 = buffer.readPacket(102);
-            auto *result3057 = (ObjectA *) result3056.get();
-            packet->kk39 = *result3057;
-            auto result3058 = buffer.readPacket(102);
-            auto *result3059 = (ObjectA *) result3058.get();
-            packet->kk4 = *result3059;
-            auto result3060 = buffer.readPacket(102);
-            auto *result3061 = (ObjectA *) result3060.get();
-            packet->kk40 = *result3061;
-            auto result3062 = buffer.readPacket(102);
-            auto *result3063 = (ObjectA *) result3062.get();
-            packet->kk41 = *result3063;
-            auto result3064 = buffer.readPacket(102);
-            auto *result3065 = (ObjectA *) result3064.get();
-            packet->kk42 = *result3065;
-            auto result3066 = buffer.readPacket(102);
-            auto *result3067 = (ObjectA *) result3066.get();
-            packet->kk43 = *result3067;
-            auto result3068 = buffer.readPacket(102);
-            auto *result3069 = (ObjectA *) result3068.get();
-            packet->kk44 = *result3069;
-            auto result3070 = buffer.readPacket(102);
-            auto *result3071 = (ObjectA *) result3070.get();
-            packet->kk45 = *result3071;
-            auto result3072 = buffer.readPacket(102);
-            auto *result3073 = (ObjectA *) result3072.get();
-            packet->kk46 = *result3073;
-            auto result3074 = buffer.readPacket(102);
-            auto *result3075 = (ObjectA *) result3074.get();
-            packet->kk47 = *result3075;
-            auto result3076 = buffer.readPacket(102);
-            auto *result3077 = (ObjectA *) result3076.get();
-            packet->kk48 = *result3077;
-            auto result3078 = buffer.readPacket(102);
-            auto *result3079 = (ObjectA *) result3078.get();
-            packet->kk49 = *result3079;
-            auto result3080 = buffer.readPacket(102);
-            auto *result3081 = (ObjectA *) result3080.get();
-            packet->kk5 = *result3081;
-            auto result3082 = buffer.readPacket(102);
-            auto *result3083 = (ObjectA *) result3082.get();
-            packet->kk50 = *result3083;
-            auto result3084 = buffer.readPacket(102);
-            auto *result3085 = (ObjectA *) result3084.get();
-            packet->kk51 = *result3085;
-            auto result3086 = buffer.readPacket(102);
-            auto *result3087 = (ObjectA *) result3086.get();
-            packet->kk52 = *result3087;
-            auto result3088 = buffer.readPacket(102);
-            auto *result3089 = (ObjectA *) result3088.get();
-            packet->kk53 = *result3089;
-            auto result3090 = buffer.readPacket(102);
-            auto *result3091 = (ObjectA *) result3090.get();
-            packet->kk54 = *result3091;
-            auto result3092 = buffer.readPacket(102);
-            auto *result3093 = (ObjectA *) result3092.get();
-            packet->kk55 = *result3093;
-            auto result3094 = buffer.readPacket(102);
-            auto *result3095 = (ObjectA *) result3094.get();
-            packet->kk56 = *result3095;
-            auto result3096 = buffer.readPacket(102);
-            auto *result3097 = (ObjectA *) result3096.get();
-            packet->kk57 = *result3097;
-            auto result3098 = buffer.readPacket(102);
-            auto *result3099 = (ObjectA *) result3098.get();
-            packet->kk58 = *result3099;
-            auto result3100 = buffer.readPacket(102);
-            auto *result3101 = (ObjectA *) result3100.get();
-            packet->kk59 = *result3101;
-            auto result3102 = buffer.readPacket(102);
-            auto *result3103 = (ObjectA *) result3102.get();
-            packet->kk6 = *result3103;
-            auto result3104 = buffer.readPacket(102);
-            auto *result3105 = (ObjectA *) result3104.get();
-            packet->kk60 = *result3105;
-            auto result3106 = buffer.readPacket(102);
-            auto *result3107 = (ObjectA *) result3106.get();
-            packet->kk61 = *result3107;
-            auto result3108 = buffer.readPacket(102);
-            auto *result3109 = (ObjectA *) result3108.get();
-            packet->kk62 = *result3109;
-            auto result3110 = buffer.readPacket(102);
-            auto *result3111 = (ObjectA *) result3110.get();
-            packet->kk63 = *result3111;
-            auto result3112 = buffer.readPacket(102);
-            auto *result3113 = (ObjectA *) result3112.get();
-            packet->kk64 = *result3113;
-            auto result3114 = buffer.readPacket(102);
-            auto *result3115 = (ObjectA *) result3114.get();
-            packet->kk65 = *result3115;
-            auto result3116 = buffer.readPacket(102);
-            auto *result3117 = (ObjectA *) result3116.get();
-            packet->kk66 = *result3117;
-            auto result3118 = buffer.readPacket(102);
-            auto *result3119 = (ObjectA *) result3118.get();
-            packet->kk67 = *result3119;
-            auto result3120 = buffer.readPacket(102);
-            auto *result3121 = (ObjectA *) result3120.get();
-            packet->kk68 = *result3121;
-            auto result3122 = buffer.readPacket(102);
-            auto *result3123 = (ObjectA *) result3122.get();
-            packet->kk69 = *result3123;
-            auto result3124 = buffer.readPacket(102);
-            auto *result3125 = (ObjectA *) result3124.get();
-            packet->kk7 = *result3125;
-            auto result3126 = buffer.readPacket(102);
-            auto *result3127 = (ObjectA *) result3126.get();
-            packet->kk70 = *result3127;
-            auto result3128 = buffer.readPacket(102);
-            auto *result3129 = (ObjectA *) result3128.get();
-            packet->kk71 = *result3129;
-            auto result3130 = buffer.readPacket(102);
-            auto *result3131 = (ObjectA *) result3130.get();
-            packet->kk72 = *result3131;
-            auto result3132 = buffer.readPacket(102);
-            auto *result3133 = (ObjectA *) result3132.get();
-            packet->kk73 = *result3133;
-            auto result3134 = buffer.readPacket(102);
-            auto *result3135 = (ObjectA *) result3134.get();
-            packet->kk74 = *result3135;
-            auto result3136 = buffer.readPacket(102);
-            auto *result3137 = (ObjectA *) result3136.get();
-            packet->kk75 = *result3137;
-            auto result3138 = buffer.readPacket(102);
-            auto *result3139 = (ObjectA *) result3138.get();
-            packet->kk76 = *result3139;
-            auto result3140 = buffer.readPacket(102);
-            auto *result3141 = (ObjectA *) result3140.get();
-            packet->kk77 = *result3141;
-            auto result3142 = buffer.readPacket(102);
-            auto *result3143 = (ObjectA *) result3142.get();
-            packet->kk78 = *result3143;
-            auto result3144 = buffer.readPacket(102);
-            auto *result3145 = (ObjectA *) result3144.get();
-            packet->kk79 = *result3145;
-            auto result3146 = buffer.readPacket(102);
-            auto *result3147 = (ObjectA *) result3146.get();
-            packet->kk8 = *result3147;
-            auto result3148 = buffer.readPacket(102);
-            auto *result3149 = (ObjectA *) result3148.get();
-            packet->kk80 = *result3149;
-            auto result3150 = buffer.readPacket(102);
-            auto *result3151 = (ObjectA *) result3150.get();
-            packet->kk81 = *result3151;
-            auto result3152 = buffer.readPacket(102);
-            auto *result3153 = (ObjectA *) result3152.get();
-            packet->kk82 = *result3153;
-            auto result3154 = buffer.readPacket(102);
-            auto *result3155 = (ObjectA *) result3154.get();
-            packet->kk83 = *result3155;
-            auto result3156 = buffer.readPacket(102);
-            auto *result3157 = (ObjectA *) result3156.get();
-            packet->kk84 = *result3157;
-            auto result3158 = buffer.readPacket(102);
-            auto *result3159 = (ObjectA *) result3158.get();
-            packet->kk85 = *result3159;
-            auto result3160 = buffer.readPacket(102);
-            auto *result3161 = (ObjectA *) result3160.get();
-            packet->kk86 = *result3161;
-            auto result3162 = buffer.readPacket(102);
-            auto *result3163 = (ObjectA *) result3162.get();
-            packet->kk87 = *result3163;
-            auto result3164 = buffer.readPacket(102);
-            auto *result3165 = (ObjectA *) result3164.get();
-            packet->kk88 = *result3165;
-            auto result3166 = buffer.readPacket(102);
-            auto *result3167 = (ObjectA *) result3166.get();
-            packet->kk9 = *result3167;
-            auto array3168 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk1 = array3168;
-            auto array3169 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk10 = array3169;
-            auto array3170 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk11 = array3170;
-            auto array3171 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk12 = array3171;
-            auto array3172 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk13 = array3172;
-            auto array3173 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk14 = array3173;
-            auto array3174 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk15 = array3174;
-            auto array3175 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk16 = array3175;
-            auto array3176 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk17 = array3176;
-            auto array3177 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk18 = array3177;
-            auto array3178 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk19 = array3178;
-            auto array3179 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk2 = array3179;
-            auto array3180 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk20 = array3180;
-            auto array3181 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk21 = array3181;
-            auto array3182 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk22 = array3182;
-            auto array3183 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk23 = array3183;
-            auto array3184 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk24 = array3184;
-            auto array3185 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk25 = array3185;
-            auto array3186 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk26 = array3186;
-            auto array3187 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk27 = array3187;
-            auto array3188 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk28 = array3188;
-            auto array3189 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk29 = array3189;
-            auto array3190 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk3 = array3190;
-            auto array3191 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk30 = array3191;
-            auto array3192 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk31 = array3192;
-            auto array3193 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk32 = array3193;
-            auto array3194 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk33 = array3194;
-            auto array3195 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk34 = array3195;
-            auto array3196 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk35 = array3196;
-            auto array3197 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk36 = array3197;
-            auto array3198 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk37 = array3198;
-            auto array3199 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk38 = array3199;
-            auto array3200 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk39 = array3200;
-            auto array3201 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk4 = array3201;
-            auto array3202 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk40 = array3202;
-            auto array3203 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk41 = array3203;
-            auto array3204 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk42 = array3204;
-            auto array3205 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk43 = array3205;
-            auto array3206 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk44 = array3206;
-            auto array3207 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk45 = array3207;
-            auto array3208 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk46 = array3208;
-            auto array3209 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk47 = array3209;
-            auto array3210 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk48 = array3210;
-            auto array3211 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk49 = array3211;
-            auto array3212 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk5 = array3212;
-            auto array3213 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk50 = array3213;
-            auto array3214 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk51 = array3214;
-            auto array3215 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk52 = array3215;
-            auto array3216 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk53 = array3216;
-            auto array3217 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk54 = array3217;
-            auto array3218 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk55 = array3218;
-            auto array3219 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk56 = array3219;
-            auto array3220 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk57 = array3220;
-            auto array3221 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk58 = array3221;
-            auto array3222 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk59 = array3222;
-            auto array3223 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk6 = array3223;
-            auto array3224 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk60 = array3224;
-            auto array3225 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk61 = array3225;
-            auto array3226 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk62 = array3226;
-            auto array3227 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk63 = array3227;
-            auto array3228 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk64 = array3228;
-            auto array3229 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk65 = array3229;
-            auto array3230 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk66 = array3230;
-            auto array3231 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk67 = array3231;
-            auto array3232 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk68 = array3232;
-            auto array3233 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk69 = array3233;
-            auto array3234 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk7 = array3234;
-            auto array3235 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk70 = array3235;
-            auto array3236 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk71 = array3236;
-            auto array3237 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk72 = array3237;
-            auto array3238 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk73 = array3238;
-            auto array3239 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk74 = array3239;
-            auto array3240 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk75 = array3240;
-            auto array3241 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk76 = array3241;
-            auto array3242 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk77 = array3242;
-            auto array3243 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk78 = array3243;
-            auto array3244 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk79 = array3244;
-            auto array3245 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk8 = array3245;
-            auto array3246 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk80 = array3246;
-            auto array3247 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk81 = array3247;
-            auto array3248 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk82 = array3248;
-            auto array3249 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk83 = array3249;
-            auto array3250 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk84 = array3250;
-            auto array3251 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk85 = array3251;
-            auto array3252 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk86 = array3252;
-            auto array3253 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk87 = array3253;
-            auto array3254 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk88 = array3254;
-            auto array3255 = buffer.readPacketArray<ObjectA>(102);
-            packet->kkk9 = array3255;
-            auto list3256 = buffer.readIntList();
-            packet->l1 = list3256;
-            auto list3257 = buffer.readIntList();
-            packet->l10 = list3257;
-            auto list3258 = buffer.readIntList();
-            packet->l11 = list3258;
-            auto list3259 = buffer.readIntList();
-            packet->l12 = list3259;
-            auto list3260 = buffer.readIntList();
-            packet->l13 = list3260;
-            auto list3261 = buffer.readIntList();
-            packet->l14 = list3261;
-            auto list3262 = buffer.readIntList();
-            packet->l15 = list3262;
-            auto list3263 = buffer.readIntList();
-            packet->l16 = list3263;
-            auto list3264 = buffer.readIntList();
-            packet->l17 = list3264;
-            auto list3265 = buffer.readIntList();
-            packet->l18 = list3265;
-            auto list3266 = buffer.readIntList();
-            packet->l19 = list3266;
-            auto list3267 = buffer.readIntList();
-            packet->l2 = list3267;
-            auto list3268 = buffer.readIntList();
-            packet->l20 = list3268;
-            auto list3269 = buffer.readIntList();
-            packet->l21 = list3269;
-            auto list3270 = buffer.readIntList();
-            packet->l22 = list3270;
-            auto list3271 = buffer.readIntList();
-            packet->l23 = list3271;
-            auto list3272 = buffer.readIntList();
-            packet->l24 = list3272;
-            auto list3273 = buffer.readIntList();
-            packet->l25 = list3273;
-            auto list3274 = buffer.readIntList();
-            packet->l26 = list3274;
-            auto list3275 = buffer.readIntList();
-            packet->l27 = list3275;
-            auto list3276 = buffer.readIntList();
-            packet->l28 = list3276;
-            auto list3277 = buffer.readIntList();
-            packet->l29 = list3277;
-            auto list3278 = buffer.readIntList();
-            packet->l3 = list3278;
-            auto list3279 = buffer.readIntList();
-            packet->l30 = list3279;
-            auto list3280 = buffer.readIntList();
-            packet->l31 = list3280;
-            auto list3281 = buffer.readIntList();
-            packet->l32 = list3281;
-            auto list3282 = buffer.readIntList();
-            packet->l33 = list3282;
-            auto list3283 = buffer.readIntList();
-            packet->l34 = list3283;
-            auto list3284 = buffer.readIntList();
-            packet->l35 = list3284;
-            auto list3285 = buffer.readIntList();
-            packet->l36 = list3285;
-            auto list3286 = buffer.readIntList();
-            packet->l37 = list3286;
-            auto list3287 = buffer.readIntList();
-            packet->l38 = list3287;
-            auto list3288 = buffer.readIntList();
-            packet->l39 = list3288;
-            auto list3289 = buffer.readIntList();
-            packet->l4 = list3289;
-            auto list3290 = buffer.readIntList();
-            packet->l40 = list3290;
-            auto list3291 = buffer.readIntList();
-            packet->l41 = list3291;
-            auto list3292 = buffer.readIntList();
-            packet->l42 = list3292;
-            auto list3293 = buffer.readIntList();
-            packet->l43 = list3293;
-            auto list3294 = buffer.readIntList();
-            packet->l44 = list3294;
-            auto list3295 = buffer.readIntList();
-            packet->l45 = list3295;
-            auto list3296 = buffer.readIntList();
-            packet->l46 = list3296;
-            auto list3297 = buffer.readIntList();
-            packet->l47 = list3297;
-            auto list3298 = buffer.readIntList();
-            packet->l48 = list3298;
-            auto list3299 = buffer.readIntList();
-            packet->l49 = list3299;
-            auto list3300 = buffer.readIntList();
-            packet->l5 = list3300;
-            auto list3301 = buffer.readIntList();
-            packet->l50 = list3301;
-            auto list3302 = buffer.readIntList();
-            packet->l51 = list3302;
-            auto list3303 = buffer.readIntList();
-            packet->l52 = list3303;
-            auto list3304 = buffer.readIntList();
-            packet->l53 = list3304;
-            auto list3305 = buffer.readIntList();
-            packet->l54 = list3305;
-            auto list3306 = buffer.readIntList();
-            packet->l55 = list3306;
-            auto list3307 = buffer.readIntList();
-            packet->l56 = list3307;
-            auto list3308 = buffer.readIntList();
-            packet->l57 = list3308;
-            auto list3309 = buffer.readIntList();
-            packet->l58 = list3309;
-            auto list3310 = buffer.readIntList();
-            packet->l59 = list3310;
-            auto list3311 = buffer.readIntList();
-            packet->l6 = list3311;
-            auto list3312 = buffer.readIntList();
-            packet->l60 = list3312;
-            auto list3313 = buffer.readIntList();
-            packet->l61 = list3313;
-            auto list3314 = buffer.readIntList();
-            packet->l62 = list3314;
-            auto list3315 = buffer.readIntList();
-            packet->l63 = list3315;
-            auto list3316 = buffer.readIntList();
-            packet->l64 = list3316;
-            auto list3317 = buffer.readIntList();
-            packet->l65 = list3317;
-            auto list3318 = buffer.readIntList();
-            packet->l66 = list3318;
-            auto list3319 = buffer.readIntList();
-            packet->l67 = list3319;
-            auto list3320 = buffer.readIntList();
-            packet->l68 = list3320;
-            auto list3321 = buffer.readIntList();
-            packet->l69 = list3321;
-            auto list3322 = buffer.readIntList();
-            packet->l7 = list3322;
-            auto list3323 = buffer.readIntList();
-            packet->l70 = list3323;
-            auto list3324 = buffer.readIntList();
-            packet->l71 = list3324;
-            auto list3325 = buffer.readIntList();
-            packet->l72 = list3325;
-            auto list3326 = buffer.readIntList();
-            packet->l73 = list3326;
-            auto list3327 = buffer.readIntList();
-            packet->l74 = list3327;
-            auto list3328 = buffer.readIntList();
-            packet->l75 = list3328;
-            auto list3329 = buffer.readIntList();
-            packet->l76 = list3329;
-            auto list3330 = buffer.readIntList();
-            packet->l77 = list3330;
-            auto list3331 = buffer.readIntList();
-            packet->l78 = list3331;
-            auto list3332 = buffer.readIntList();
-            packet->l79 = list3332;
-            auto list3333 = buffer.readIntList();
-            packet->l8 = list3333;
-            auto list3334 = buffer.readIntList();
-            packet->l80 = list3334;
-            auto list3335 = buffer.readIntList();
-            packet->l81 = list3335;
-            auto list3336 = buffer.readIntList();
-            packet->l82 = list3336;
-            auto list3337 = buffer.readIntList();
-            packet->l83 = list3337;
-            auto list3338 = buffer.readIntList();
-            packet->l84 = list3338;
-            auto list3339 = buffer.readIntList();
-            packet->l85 = list3339;
-            auto list3340 = buffer.readIntList();
-            packet->l86 = list3340;
-            auto list3341 = buffer.readIntList();
-            packet->l87 = list3341;
-            auto list3342 = buffer.readIntList();
-            packet->l88 = list3342;
-            auto list3343 = buffer.readIntList();
-            packet->l9 = list3343;
-            auto list3344 = buffer.readStringList();
-            packet->llll1 = list3344;
-            auto list3345 = buffer.readStringList();
-            packet->llll10 = list3345;
-            auto list3346 = buffer.readStringList();
-            packet->llll11 = list3346;
-            auto list3347 = buffer.readStringList();
-            packet->llll12 = list3347;
-            auto list3348 = buffer.readStringList();
-            packet->llll13 = list3348;
-            auto list3349 = buffer.readStringList();
-            packet->llll14 = list3349;
-            auto list3350 = buffer.readStringList();
-            packet->llll15 = list3350;
-            auto list3351 = buffer.readStringList();
-            packet->llll16 = list3351;
-            auto list3352 = buffer.readStringList();
-            packet->llll17 = list3352;
-            auto list3353 = buffer.readStringList();
-            packet->llll18 = list3353;
-            auto list3354 = buffer.readStringList();
-            packet->llll19 = list3354;
-            auto list3355 = buffer.readStringList();
-            packet->llll2 = list3355;
-            auto list3356 = buffer.readStringList();
-            packet->llll20 = list3356;
-            auto list3357 = buffer.readStringList();
-            packet->llll21 = list3357;
-            auto list3358 = buffer.readStringList();
-            packet->llll22 = list3358;
-            auto list3359 = buffer.readStringList();
-            packet->llll23 = list3359;
-            auto list3360 = buffer.readStringList();
-            packet->llll24 = list3360;
-            auto list3361 = buffer.readStringList();
-            packet->llll25 = list3361;
-            auto list3362 = buffer.readStringList();
-            packet->llll26 = list3362;
-            auto list3363 = buffer.readStringList();
-            packet->llll27 = list3363;
-            auto list3364 = buffer.readStringList();
-            packet->llll28 = list3364;
-            auto list3365 = buffer.readStringList();
-            packet->llll29 = list3365;
-            auto list3366 = buffer.readStringList();
-            packet->llll3 = list3366;
-            auto list3367 = buffer.readStringList();
-            packet->llll30 = list3367;
-            auto list3368 = buffer.readStringList();
-            packet->llll31 = list3368;
-            auto list3369 = buffer.readStringList();
-            packet->llll32 = list3369;
-            auto list3370 = buffer.readStringList();
-            packet->llll33 = list3370;
-            auto list3371 = buffer.readStringList();
-            packet->llll34 = list3371;
-            auto list3372 = buffer.readStringList();
-            packet->llll35 = list3372;
-            auto list3373 = buffer.readStringList();
-            packet->llll36 = list3373;
-            auto list3374 = buffer.readStringList();
-            packet->llll37 = list3374;
-            auto list3375 = buffer.readStringList();
-            packet->llll38 = list3375;
-            auto list3376 = buffer.readStringList();
-            packet->llll39 = list3376;
-            auto list3377 = buffer.readStringList();
-            packet->llll4 = list3377;
-            auto list3378 = buffer.readStringList();
-            packet->llll40 = list3378;
-            auto list3379 = buffer.readStringList();
-            packet->llll41 = list3379;
-            auto list3380 = buffer.readStringList();
-            packet->llll42 = list3380;
-            auto list3381 = buffer.readStringList();
-            packet->llll43 = list3381;
-            auto list3382 = buffer.readStringList();
-            packet->llll44 = list3382;
-            auto list3383 = buffer.readStringList();
-            packet->llll45 = list3383;
-            auto list3384 = buffer.readStringList();
-            packet->llll46 = list3384;
-            auto list3385 = buffer.readStringList();
-            packet->llll47 = list3385;
-            auto list3386 = buffer.readStringList();
-            packet->llll48 = list3386;
-            auto list3387 = buffer.readStringList();
-            packet->llll49 = list3387;
-            auto list3388 = buffer.readStringList();
-            packet->llll5 = list3388;
-            auto list3389 = buffer.readStringList();
-            packet->llll50 = list3389;
-            auto list3390 = buffer.readStringList();
-            packet->llll51 = list3390;
-            auto list3391 = buffer.readStringList();
-            packet->llll52 = list3391;
-            auto list3392 = buffer.readStringList();
-            packet->llll53 = list3392;
-            auto list3393 = buffer.readStringList();
-            packet->llll54 = list3393;
-            auto list3394 = buffer.readStringList();
-            packet->llll55 = list3394;
-            auto list3395 = buffer.readStringList();
-            packet->llll56 = list3395;
-            auto list3396 = buffer.readStringList();
-            packet->llll57 = list3396;
-            auto list3397 = buffer.readStringList();
-            packet->llll58 = list3397;
-            auto list3398 = buffer.readStringList();
-            packet->llll59 = list3398;
-            auto list3399 = buffer.readStringList();
-            packet->llll6 = list3399;
-            auto list3400 = buffer.readStringList();
-            packet->llll60 = list3400;
-            auto list3401 = buffer.readStringList();
-            packet->llll61 = list3401;
-            auto list3402 = buffer.readStringList();
-            packet->llll62 = list3402;
-            auto list3403 = buffer.readStringList();
-            packet->llll63 = list3403;
-            auto list3404 = buffer.readStringList();
-            packet->llll64 = list3404;
-            auto list3405 = buffer.readStringList();
-            packet->llll65 = list3405;
-            auto list3406 = buffer.readStringList();
-            packet->llll66 = list3406;
-            auto list3407 = buffer.readStringList();
-            packet->llll67 = list3407;
-            auto list3408 = buffer.readStringList();
-            packet->llll68 = list3408;
-            auto list3409 = buffer.readStringList();
-            packet->llll69 = list3409;
-            auto list3410 = buffer.readStringList();
-            packet->llll7 = list3410;
-            auto list3411 = buffer.readStringList();
-            packet->llll70 = list3411;
-            auto list3412 = buffer.readStringList();
-            packet->llll71 = list3412;
-            auto list3413 = buffer.readStringList();
-            packet->llll72 = list3413;
-            auto list3414 = buffer.readStringList();
-            packet->llll73 = list3414;
-            auto list3415 = buffer.readStringList();
-            packet->llll74 = list3415;
-            auto list3416 = buffer.readStringList();
-            packet->llll75 = list3416;
-            auto list3417 = buffer.readStringList();
-            packet->llll76 = list3417;
-            auto list3418 = buffer.readStringList();
-            packet->llll77 = list3418;
-            auto list3419 = buffer.readStringList();
-            packet->llll78 = list3419;
-            auto list3420 = buffer.readStringList();
-            packet->llll79 = list3420;
-            auto list3421 = buffer.readStringList();
-            packet->llll8 = list3421;
-            auto list3422 = buffer.readStringList();
-            packet->llll80 = list3422;
-            auto list3423 = buffer.readStringList();
-            packet->llll81 = list3423;
-            auto list3424 = buffer.readStringList();
-            packet->llll82 = list3424;
-            auto list3425 = buffer.readStringList();
-            packet->llll83 = list3425;
-            auto list3426 = buffer.readStringList();
-            packet->llll84 = list3426;
-            auto list3427 = buffer.readStringList();
-            packet->llll85 = list3427;
-            auto list3428 = buffer.readStringList();
-            packet->llll86 = list3428;
-            auto list3429 = buffer.readStringList();
-            packet->llll87 = list3429;
-            auto list3430 = buffer.readStringList();
-            packet->llll88 = list3430;
-            auto list3431 = buffer.readStringList();
-            packet->llll9 = list3431;
-            auto map3432 = buffer.readIntStringMap();
-            packet->m1 = map3432;
-            auto map3433 = buffer.readIntStringMap();
-            packet->m10 = map3433;
-            auto map3434 = buffer.readIntStringMap();
-            packet->m11 = map3434;
-            auto map3435 = buffer.readIntStringMap();
-            packet->m12 = map3435;
-            auto map3436 = buffer.readIntStringMap();
-            packet->m13 = map3436;
-            auto map3437 = buffer.readIntStringMap();
-            packet->m14 = map3437;
-            auto map3438 = buffer.readIntStringMap();
-            packet->m15 = map3438;
-            auto map3439 = buffer.readIntStringMap();
-            packet->m16 = map3439;
-            auto map3440 = buffer.readIntStringMap();
-            packet->m17 = map3440;
-            auto map3441 = buffer.readIntStringMap();
-            packet->m18 = map3441;
-            auto map3442 = buffer.readIntStringMap();
-            packet->m19 = map3442;
-            auto map3443 = buffer.readIntStringMap();
-            packet->m2 = map3443;
-            auto map3444 = buffer.readIntStringMap();
-            packet->m20 = map3444;
-            auto map3445 = buffer.readIntStringMap();
-            packet->m21 = map3445;
-            auto map3446 = buffer.readIntStringMap();
-            packet->m22 = map3446;
-            auto map3447 = buffer.readIntStringMap();
-            packet->m23 = map3447;
-            auto map3448 = buffer.readIntStringMap();
-            packet->m24 = map3448;
-            auto map3449 = buffer.readIntStringMap();
-            packet->m25 = map3449;
-            auto map3450 = buffer.readIntStringMap();
-            packet->m26 = map3450;
-            auto map3451 = buffer.readIntStringMap();
-            packet->m27 = map3451;
-            auto map3452 = buffer.readIntStringMap();
-            packet->m28 = map3452;
-            auto map3453 = buffer.readIntStringMap();
-            packet->m29 = map3453;
-            auto map3454 = buffer.readIntStringMap();
-            packet->m3 = map3454;
-            auto map3455 = buffer.readIntStringMap();
-            packet->m30 = map3455;
-            auto map3456 = buffer.readIntStringMap();
-            packet->m31 = map3456;
-            auto map3457 = buffer.readIntStringMap();
-            packet->m32 = map3457;
-            auto map3458 = buffer.readIntStringMap();
-            packet->m33 = map3458;
-            auto map3459 = buffer.readIntStringMap();
-            packet->m34 = map3459;
-            auto map3460 = buffer.readIntStringMap();
-            packet->m35 = map3460;
-            auto map3461 = buffer.readIntStringMap();
-            packet->m36 = map3461;
-            auto map3462 = buffer.readIntStringMap();
-            packet->m37 = map3462;
-            auto map3463 = buffer.readIntStringMap();
-            packet->m38 = map3463;
-            auto map3464 = buffer.readIntStringMap();
-            packet->m39 = map3464;
-            auto map3465 = buffer.readIntStringMap();
-            packet->m4 = map3465;
-            auto map3466 = buffer.readIntStringMap();
-            packet->m40 = map3466;
-            auto map3467 = buffer.readIntStringMap();
-            packet->m41 = map3467;
-            auto map3468 = buffer.readIntStringMap();
-            packet->m42 = map3468;
-            auto map3469 = buffer.readIntStringMap();
-            packet->m43 = map3469;
-            auto map3470 = buffer.readIntStringMap();
-            packet->m44 = map3470;
-            auto map3471 = buffer.readIntStringMap();
-            packet->m45 = map3471;
-            auto map3472 = buffer.readIntStringMap();
-            packet->m46 = map3472;
-            auto map3473 = buffer.readIntStringMap();
-            packet->m47 = map3473;
-            auto map3474 = buffer.readIntStringMap();
-            packet->m48 = map3474;
-            auto map3475 = buffer.readIntStringMap();
-            packet->m49 = map3475;
-            auto map3476 = buffer.readIntStringMap();
-            packet->m5 = map3476;
-            auto map3477 = buffer.readIntStringMap();
-            packet->m50 = map3477;
-            auto map3478 = buffer.readIntStringMap();
-            packet->m51 = map3478;
-            auto map3479 = buffer.readIntStringMap();
-            packet->m52 = map3479;
-            auto map3480 = buffer.readIntStringMap();
-            packet->m53 = map3480;
-            auto map3481 = buffer.readIntStringMap();
-            packet->m54 = map3481;
-            auto map3482 = buffer.readIntStringMap();
-            packet->m55 = map3482;
-            auto map3483 = buffer.readIntStringMap();
-            packet->m56 = map3483;
-            auto map3484 = buffer.readIntStringMap();
-            packet->m57 = map3484;
-            auto map3485 = buffer.readIntStringMap();
-            packet->m58 = map3485;
-            auto map3486 = buffer.readIntStringMap();
-            packet->m59 = map3486;
-            auto map3487 = buffer.readIntStringMap();
-            packet->m6 = map3487;
-            auto map3488 = buffer.readIntStringMap();
-            packet->m60 = map3488;
-            auto map3489 = buffer.readIntStringMap();
-            packet->m61 = map3489;
-            auto map3490 = buffer.readIntStringMap();
-            packet->m62 = map3490;
-            auto map3491 = buffer.readIntStringMap();
-            packet->m63 = map3491;
-            auto map3492 = buffer.readIntStringMap();
-            packet->m64 = map3492;
-            auto map3493 = buffer.readIntStringMap();
-            packet->m65 = map3493;
-            auto map3494 = buffer.readIntStringMap();
-            packet->m66 = map3494;
-            auto map3495 = buffer.readIntStringMap();
-            packet->m67 = map3495;
-            auto map3496 = buffer.readIntStringMap();
-            packet->m68 = map3496;
-            auto map3497 = buffer.readIntStringMap();
-            packet->m69 = map3497;
-            auto map3498 = buffer.readIntStringMap();
-            packet->m7 = map3498;
-            auto map3499 = buffer.readIntStringMap();
-            packet->m70 = map3499;
-            auto map3500 = buffer.readIntStringMap();
-            packet->m71 = map3500;
-            auto map3501 = buffer.readIntStringMap();
-            packet->m72 = map3501;
-            auto map3502 = buffer.readIntStringMap();
-            packet->m73 = map3502;
-            auto map3503 = buffer.readIntStringMap();
-            packet->m74 = map3503;
-            auto map3504 = buffer.readIntStringMap();
-            packet->m75 = map3504;
-            auto map3505 = buffer.readIntStringMap();
-            packet->m76 = map3505;
-            auto map3506 = buffer.readIntStringMap();
-            packet->m77 = map3506;
-            auto map3507 = buffer.readIntStringMap();
-            packet->m78 = map3507;
-            auto map3508 = buffer.readIntStringMap();
-            packet->m79 = map3508;
-            auto map3509 = buffer.readIntStringMap();
-            packet->m8 = map3509;
-            auto map3510 = buffer.readIntStringMap();
-            packet->m80 = map3510;
-            auto map3511 = buffer.readIntStringMap();
-            packet->m81 = map3511;
-            auto map3512 = buffer.readIntStringMap();
-            packet->m82 = map3512;
-            auto map3513 = buffer.readIntStringMap();
-            packet->m83 = map3513;
-            auto map3514 = buffer.readIntStringMap();
-            packet->m84 = map3514;
-            auto map3515 = buffer.readIntStringMap();
-            packet->m85 = map3515;
-            auto map3516 = buffer.readIntStringMap();
-            packet->m86 = map3516;
-            auto map3517 = buffer.readIntStringMap();
-            packet->m87 = map3517;
-            auto map3518 = buffer.readIntStringMap();
-            packet->m88 = map3518;
-            auto map3519 = buffer.readIntStringMap();
-            packet->m9 = map3519;
-            auto map3520 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm1 = map3520;
-            auto map3521 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm10 = map3521;
-            auto map3522 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm11 = map3522;
-            auto map3523 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm12 = map3523;
-            auto map3524 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm13 = map3524;
-            auto map3525 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm14 = map3525;
-            auto map3526 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm15 = map3526;
-            auto map3527 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm16 = map3527;
-            auto map3528 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm17 = map3528;
-            auto map3529 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm18 = map3529;
-            auto map3530 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm19 = map3530;
-            auto map3531 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm2 = map3531;
-            auto map3532 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm20 = map3532;
-            auto map3533 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm21 = map3533;
-            auto map3534 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm22 = map3534;
-            auto map3535 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm23 = map3535;
-            auto map3536 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm24 = map3536;
-            auto map3537 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm25 = map3537;
-            auto map3538 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm26 = map3538;
-            auto map3539 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm27 = map3539;
-            auto map3540 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm28 = map3540;
-            auto map3541 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm29 = map3541;
-            auto map3542 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm3 = map3542;
-            auto map3543 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm30 = map3543;
-            auto map3544 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm31 = map3544;
-            auto map3545 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm32 = map3545;
-            auto map3546 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm33 = map3546;
-            auto map3547 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm34 = map3547;
-            auto map3548 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm35 = map3548;
-            auto map3549 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm36 = map3549;
-            auto map3550 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm37 = map3550;
-            auto map3551 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm38 = map3551;
-            auto map3552 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm39 = map3552;
-            auto map3553 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm4 = map3553;
-            auto map3554 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm40 = map3554;
-            auto map3555 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm41 = map3555;
-            auto map3556 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm42 = map3556;
-            auto map3557 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm43 = map3557;
-            auto map3558 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm44 = map3558;
-            auto map3559 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm45 = map3559;
-            auto map3560 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm46 = map3560;
-            auto map3561 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm47 = map3561;
-            auto map3562 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm48 = map3562;
-            auto map3563 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm49 = map3563;
-            auto map3564 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm5 = map3564;
-            auto map3565 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm50 = map3565;
-            auto map3566 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm51 = map3566;
-            auto map3567 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm52 = map3567;
-            auto map3568 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm53 = map3568;
-            auto map3569 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm54 = map3569;
-            auto map3570 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm55 = map3570;
-            auto map3571 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm56 = map3571;
-            auto map3572 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm57 = map3572;
-            auto map3573 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm58 = map3573;
-            auto map3574 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm59 = map3574;
-            auto map3575 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm6 = map3575;
-            auto map3576 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm60 = map3576;
-            auto map3577 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm61 = map3577;
-            auto map3578 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm62 = map3578;
-            auto map3579 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm63 = map3579;
-            auto map3580 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm64 = map3580;
-            auto map3581 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm65 = map3581;
-            auto map3582 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm66 = map3582;
-            auto map3583 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm67 = map3583;
-            auto map3584 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm68 = map3584;
-            auto map3585 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm69 = map3585;
-            auto map3586 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm7 = map3586;
-            auto map3587 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm70 = map3587;
-            auto map3588 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm71 = map3588;
-            auto map3589 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm72 = map3589;
-            auto map3590 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm73 = map3590;
-            auto map3591 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm74 = map3591;
-            auto map3592 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm75 = map3592;
-            auto map3593 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm76 = map3593;
-            auto map3594 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm77 = map3594;
-            auto map3595 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm78 = map3595;
-            auto map3596 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm79 = map3596;
-            auto map3597 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm8 = map3597;
-            auto map3598 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm80 = map3598;
-            auto map3599 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm81 = map3599;
-            auto map3600 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm82 = map3600;
-            auto map3601 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm83 = map3601;
-            auto map3602 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm84 = map3602;
-            auto map3603 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm85 = map3603;
-            auto map3604 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm86 = map3604;
-            auto map3605 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm87 = map3605;
-            auto map3606 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm88 = map3606;
-            auto map3607 = buffer.readIntPacketMap<ObjectA>(102);
-            packet->mm9 = map3607;
-            auto set3608 = buffer.readIntSet();
-            packet->s1 = set3608;
-            auto set3609 = buffer.readIntSet();
-            packet->s10 = set3609;
-            auto set3610 = buffer.readIntSet();
-            packet->s11 = set3610;
-            auto set3611 = buffer.readIntSet();
-            packet->s12 = set3611;
-            auto set3612 = buffer.readIntSet();
-            packet->s13 = set3612;
-            auto set3613 = buffer.readIntSet();
-            packet->s14 = set3613;
-            auto set3614 = buffer.readIntSet();
-            packet->s15 = set3614;
-            auto set3615 = buffer.readIntSet();
-            packet->s16 = set3615;
-            auto set3616 = buffer.readIntSet();
-            packet->s17 = set3616;
-            auto set3617 = buffer.readIntSet();
-            packet->s18 = set3617;
-            auto set3618 = buffer.readIntSet();
-            packet->s19 = set3618;
-            auto set3619 = buffer.readIntSet();
-            packet->s2 = set3619;
-            auto set3620 = buffer.readIntSet();
-            packet->s20 = set3620;
-            auto set3621 = buffer.readIntSet();
-            packet->s21 = set3621;
-            auto set3622 = buffer.readIntSet();
-            packet->s22 = set3622;
-            auto set3623 = buffer.readIntSet();
-            packet->s23 = set3623;
-            auto set3624 = buffer.readIntSet();
-            packet->s24 = set3624;
-            auto set3625 = buffer.readIntSet();
-            packet->s25 = set3625;
-            auto set3626 = buffer.readIntSet();
-            packet->s26 = set3626;
-            auto set3627 = buffer.readIntSet();
-            packet->s27 = set3627;
-            auto set3628 = buffer.readIntSet();
-            packet->s28 = set3628;
-            auto set3629 = buffer.readIntSet();
-            packet->s29 = set3629;
-            auto set3630 = buffer.readIntSet();
-            packet->s3 = set3630;
-            auto set3631 = buffer.readIntSet();
-            packet->s30 = set3631;
-            auto set3632 = buffer.readIntSet();
-            packet->s31 = set3632;
-            auto set3633 = buffer.readIntSet();
-            packet->s32 = set3633;
-            auto set3634 = buffer.readIntSet();
-            packet->s33 = set3634;
-            auto set3635 = buffer.readIntSet();
-            packet->s34 = set3635;
-            auto set3636 = buffer.readIntSet();
-            packet->s35 = set3636;
-            auto set3637 = buffer.readIntSet();
-            packet->s36 = set3637;
-            auto set3638 = buffer.readIntSet();
-            packet->s37 = set3638;
-            auto set3639 = buffer.readIntSet();
-            packet->s38 = set3639;
-            auto set3640 = buffer.readIntSet();
-            packet->s39 = set3640;
-            auto set3641 = buffer.readIntSet();
-            packet->s4 = set3641;
-            auto set3642 = buffer.readIntSet();
-            packet->s40 = set3642;
-            auto set3643 = buffer.readIntSet();
-            packet->s41 = set3643;
-            auto set3644 = buffer.readIntSet();
-            packet->s42 = set3644;
-            auto set3645 = buffer.readIntSet();
-            packet->s43 = set3645;
-            auto set3646 = buffer.readIntSet();
-            packet->s44 = set3646;
-            auto set3647 = buffer.readIntSet();
-            packet->s45 = set3647;
-            auto set3648 = buffer.readIntSet();
-            packet->s46 = set3648;
-            auto set3649 = buffer.readIntSet();
-            packet->s47 = set3649;
-            auto set3650 = buffer.readIntSet();
-            packet->s48 = set3650;
-            auto set3651 = buffer.readIntSet();
-            packet->s49 = set3651;
-            auto set3652 = buffer.readIntSet();
-            packet->s5 = set3652;
-            auto set3653 = buffer.readIntSet();
-            packet->s50 = set3653;
-            auto set3654 = buffer.readIntSet();
-            packet->s51 = set3654;
-            auto set3655 = buffer.readIntSet();
-            packet->s52 = set3655;
-            auto set3656 = buffer.readIntSet();
-            packet->s53 = set3656;
-            auto set3657 = buffer.readIntSet();
-            packet->s54 = set3657;
-            auto set3658 = buffer.readIntSet();
-            packet->s55 = set3658;
-            auto set3659 = buffer.readIntSet();
-            packet->s56 = set3659;
-            auto set3660 = buffer.readIntSet();
-            packet->s57 = set3660;
-            auto set3661 = buffer.readIntSet();
-            packet->s58 = set3661;
-            auto set3662 = buffer.readIntSet();
-            packet->s59 = set3662;
-            auto set3663 = buffer.readIntSet();
-            packet->s6 = set3663;
-            auto set3664 = buffer.readIntSet();
-            packet->s60 = set3664;
-            auto set3665 = buffer.readIntSet();
-            packet->s61 = set3665;
-            auto set3666 = buffer.readIntSet();
-            packet->s62 = set3666;
-            auto set3667 = buffer.readIntSet();
-            packet->s63 = set3667;
-            auto set3668 = buffer.readIntSet();
-            packet->s64 = set3668;
-            auto set3669 = buffer.readIntSet();
-            packet->s65 = set3669;
-            auto set3670 = buffer.readIntSet();
-            packet->s66 = set3670;
-            auto set3671 = buffer.readIntSet();
-            packet->s67 = set3671;
-            auto set3672 = buffer.readIntSet();
-            packet->s68 = set3672;
-            auto set3673 = buffer.readIntSet();
-            packet->s69 = set3673;
-            auto set3674 = buffer.readIntSet();
-            packet->s7 = set3674;
-            auto set3675 = buffer.readIntSet();
-            packet->s70 = set3675;
-            auto set3676 = buffer.readIntSet();
-            packet->s71 = set3676;
-            auto set3677 = buffer.readIntSet();
-            packet->s72 = set3677;
-            auto set3678 = buffer.readIntSet();
-            packet->s73 = set3678;
-            auto set3679 = buffer.readIntSet();
-            packet->s74 = set3679;
-            auto set3680 = buffer.readIntSet();
-            packet->s75 = set3680;
-            auto set3681 = buffer.readIntSet();
-            packet->s76 = set3681;
-            auto set3682 = buffer.readIntSet();
-            packet->s77 = set3682;
-            auto set3683 = buffer.readIntSet();
-            packet->s78 = set3683;
-            auto set3684 = buffer.readIntSet();
-            packet->s79 = set3684;
-            auto set3685 = buffer.readIntSet();
-            packet->s8 = set3685;
-            auto set3686 = buffer.readIntSet();
-            packet->s80 = set3686;
-            auto set3687 = buffer.readIntSet();
-            packet->s81 = set3687;
-            auto set3688 = buffer.readIntSet();
-            packet->s82 = set3688;
-            auto set3689 = buffer.readIntSet();
-            packet->s83 = set3689;
-            auto set3690 = buffer.readIntSet();
-            packet->s84 = set3690;
-            auto set3691 = buffer.readIntSet();
-            packet->s85 = set3691;
-            auto set3692 = buffer.readIntSet();
-            packet->s86 = set3692;
-            auto set3693 = buffer.readIntSet();
-            packet->s87 = set3693;
-            auto set3694 = buffer.readIntSet();
-            packet->s88 = set3694;
-            auto set3695 = buffer.readIntSet();
-            packet->s9 = set3695;
-            auto set3696 = buffer.readStringSet();
-            packet->ssss1 = set3696;
-            auto set3697 = buffer.readStringSet();
-            packet->ssss10 = set3697;
-            auto set3698 = buffer.readStringSet();
-            packet->ssss11 = set3698;
-            auto set3699 = buffer.readStringSet();
-            packet->ssss12 = set3699;
-            auto set3700 = buffer.readStringSet();
-            packet->ssss13 = set3700;
-            auto set3701 = buffer.readStringSet();
-            packet->ssss14 = set3701;
-            auto set3702 = buffer.readStringSet();
-            packet->ssss15 = set3702;
-            auto set3703 = buffer.readStringSet();
-            packet->ssss16 = set3703;
-            auto set3704 = buffer.readStringSet();
-            packet->ssss17 = set3704;
-            auto set3705 = buffer.readStringSet();
-            packet->ssss18 = set3705;
-            auto set3706 = buffer.readStringSet();
-            packet->ssss19 = set3706;
-            auto set3707 = buffer.readStringSet();
-            packet->ssss2 = set3707;
-            auto set3708 = buffer.readStringSet();
-            packet->ssss20 = set3708;
-            auto set3709 = buffer.readStringSet();
-            packet->ssss21 = set3709;
-            auto set3710 = buffer.readStringSet();
-            packet->ssss22 = set3710;
-            auto set3711 = buffer.readStringSet();
-            packet->ssss23 = set3711;
-            auto set3712 = buffer.readStringSet();
-            packet->ssss24 = set3712;
-            auto set3713 = buffer.readStringSet();
-            packet->ssss25 = set3713;
-            auto set3714 = buffer.readStringSet();
-            packet->ssss26 = set3714;
-            auto set3715 = buffer.readStringSet();
-            packet->ssss27 = set3715;
-            auto set3716 = buffer.readStringSet();
-            packet->ssss28 = set3716;
-            auto set3717 = buffer.readStringSet();
-            packet->ssss29 = set3717;
-            auto set3718 = buffer.readStringSet();
-            packet->ssss3 = set3718;
-            auto set3719 = buffer.readStringSet();
-            packet->ssss30 = set3719;
-            auto set3720 = buffer.readStringSet();
-            packet->ssss31 = set3720;
-            auto set3721 = buffer.readStringSet();
-            packet->ssss32 = set3721;
-            auto set3722 = buffer.readStringSet();
-            packet->ssss33 = set3722;
-            auto set3723 = buffer.readStringSet();
-            packet->ssss34 = set3723;
-            auto set3724 = buffer.readStringSet();
-            packet->ssss35 = set3724;
-            auto set3725 = buffer.readStringSet();
-            packet->ssss36 = set3725;
-            auto set3726 = buffer.readStringSet();
-            packet->ssss37 = set3726;
-            auto set3727 = buffer.readStringSet();
-            packet->ssss38 = set3727;
-            auto set3728 = buffer.readStringSet();
-            packet->ssss39 = set3728;
-            auto set3729 = buffer.readStringSet();
-            packet->ssss4 = set3729;
-            auto set3730 = buffer.readStringSet();
-            packet->ssss40 = set3730;
-            auto set3731 = buffer.readStringSet();
-            packet->ssss41 = set3731;
-            auto set3732 = buffer.readStringSet();
-            packet->ssss42 = set3732;
-            auto set3733 = buffer.readStringSet();
-            packet->ssss43 = set3733;
-            auto set3734 = buffer.readStringSet();
-            packet->ssss44 = set3734;
-            auto set3735 = buffer.readStringSet();
-            packet->ssss45 = set3735;
-            auto set3736 = buffer.readStringSet();
-            packet->ssss46 = set3736;
-            auto set3737 = buffer.readStringSet();
-            packet->ssss47 = set3737;
-            auto set3738 = buffer.readStringSet();
-            packet->ssss48 = set3738;
-            auto set3739 = buffer.readStringSet();
-            packet->ssss49 = set3739;
-            auto set3740 = buffer.readStringSet();
-            packet->ssss5 = set3740;
-            auto set3741 = buffer.readStringSet();
-            packet->ssss50 = set3741;
-            auto set3742 = buffer.readStringSet();
-            packet->ssss51 = set3742;
-            auto set3743 = buffer.readStringSet();
-            packet->ssss52 = set3743;
-            auto set3744 = buffer.readStringSet();
-            packet->ssss53 = set3744;
-            auto set3745 = buffer.readStringSet();
-            packet->ssss54 = set3745;
-            auto set3746 = buffer.readStringSet();
-            packet->ssss55 = set3746;
-            auto set3747 = buffer.readStringSet();
-            packet->ssss56 = set3747;
-            auto set3748 = buffer.readStringSet();
-            packet->ssss57 = set3748;
-            auto set3749 = buffer.readStringSet();
-            packet->ssss58 = set3749;
-            auto set3750 = buffer.readStringSet();
-            packet->ssss59 = set3750;
-            auto set3751 = buffer.readStringSet();
-            packet->ssss6 = set3751;
-            auto set3752 = buffer.readStringSet();
-            packet->ssss60 = set3752;
-            auto set3753 = buffer.readStringSet();
-            packet->ssss61 = set3753;
-            auto set3754 = buffer.readStringSet();
-            packet->ssss62 = set3754;
-            auto set3755 = buffer.readStringSet();
-            packet->ssss63 = set3755;
-            auto set3756 = buffer.readStringSet();
-            packet->ssss64 = set3756;
-            auto set3757 = buffer.readStringSet();
-            packet->ssss65 = set3757;
-            auto set3758 = buffer.readStringSet();
-            packet->ssss66 = set3758;
-            auto set3759 = buffer.readStringSet();
-            packet->ssss67 = set3759;
-            auto set3760 = buffer.readStringSet();
-            packet->ssss68 = set3760;
-            auto set3761 = buffer.readStringSet();
-            packet->ssss69 = set3761;
-            auto set3762 = buffer.readStringSet();
-            packet->ssss7 = set3762;
-            auto set3763 = buffer.readStringSet();
-            packet->ssss70 = set3763;
-            auto set3764 = buffer.readStringSet();
-            packet->ssss71 = set3764;
-            auto set3765 = buffer.readStringSet();
-            packet->ssss72 = set3765;
-            auto set3766 = buffer.readStringSet();
-            packet->ssss73 = set3766;
-            auto set3767 = buffer.readStringSet();
-            packet->ssss74 = set3767;
-            auto set3768 = buffer.readStringSet();
-            packet->ssss75 = set3768;
-            auto set3769 = buffer.readStringSet();
-            packet->ssss76 = set3769;
-            auto set3770 = buffer.readStringSet();
-            packet->ssss77 = set3770;
-            auto set3771 = buffer.readStringSet();
-            packet->ssss78 = set3771;
-            auto set3772 = buffer.readStringSet();
-            packet->ssss79 = set3772;
-            auto set3773 = buffer.readStringSet();
-            packet->ssss8 = set3773;
-            auto set3774 = buffer.readStringSet();
-            packet->ssss80 = set3774;
-            auto set3775 = buffer.readStringSet();
-            packet->ssss81 = set3775;
-            auto set3776 = buffer.readStringSet();
-            packet->ssss82 = set3776;
-            auto set3777 = buffer.readStringSet();
-            packet->ssss83 = set3777;
-            auto set3778 = buffer.readStringSet();
-            packet->ssss84 = set3778;
-            auto set3779 = buffer.readStringSet();
-            packet->ssss85 = set3779;
-            auto set3780 = buffer.readStringSet();
-            packet->ssss86 = set3780;
-            auto set3781 = buffer.readStringSet();
-            packet->ssss87 = set3781;
-            auto set3782 = buffer.readStringSet();
-            packet->ssss88 = set3782;
-            auto set3783 = buffer.readStringSet();
-            packet->ssss9 = set3783;
+            auto result2464 = buffer.readString();
+            packet->jj1 = result2464;
+            auto result2465 = buffer.readString();
+            packet->jj10 = result2465;
+            auto result2466 = buffer.readString();
+            packet->jj11 = result2466;
+            auto result2467 = buffer.readString();
+            packet->jj12 = result2467;
+            auto result2468 = buffer.readString();
+            packet->jj13 = result2468;
+            auto result2469 = buffer.readString();
+            packet->jj14 = result2469;
+            auto result2470 = buffer.readString();
+            packet->jj15 = result2470;
+            auto result2471 = buffer.readString();
+            packet->jj16 = result2471;
+            auto result2472 = buffer.readString();
+            packet->jj17 = result2472;
+            auto result2473 = buffer.readString();
+            packet->jj18 = result2473;
+            auto result2474 = buffer.readString();
+            packet->jj19 = result2474;
+            auto result2475 = buffer.readString();
+            packet->jj2 = result2475;
+            auto result2476 = buffer.readString();
+            packet->jj20 = result2476;
+            auto result2477 = buffer.readString();
+            packet->jj21 = result2477;
+            auto result2478 = buffer.readString();
+            packet->jj22 = result2478;
+            auto result2479 = buffer.readString();
+            packet->jj23 = result2479;
+            auto result2480 = buffer.readString();
+            packet->jj24 = result2480;
+            auto result2481 = buffer.readString();
+            packet->jj25 = result2481;
+            auto result2482 = buffer.readString();
+            packet->jj26 = result2482;
+            auto result2483 = buffer.readString();
+            packet->jj27 = result2483;
+            auto result2484 = buffer.readString();
+            packet->jj28 = result2484;
+            auto result2485 = buffer.readString();
+            packet->jj29 = result2485;
+            auto result2486 = buffer.readString();
+            packet->jj3 = result2486;
+            auto result2487 = buffer.readString();
+            packet->jj30 = result2487;
+            auto result2488 = buffer.readString();
+            packet->jj31 = result2488;
+            auto result2489 = buffer.readString();
+            packet->jj32 = result2489;
+            auto result2490 = buffer.readString();
+            packet->jj33 = result2490;
+            auto result2491 = buffer.readString();
+            packet->jj34 = result2491;
+            auto result2492 = buffer.readString();
+            packet->jj35 = result2492;
+            auto result2493 = buffer.readString();
+            packet->jj36 = result2493;
+            auto result2494 = buffer.readString();
+            packet->jj37 = result2494;
+            auto result2495 = buffer.readString();
+            packet->jj38 = result2495;
+            auto result2496 = buffer.readString();
+            packet->jj39 = result2496;
+            auto result2497 = buffer.readString();
+            packet->jj4 = result2497;
+            auto result2498 = buffer.readString();
+            packet->jj40 = result2498;
+            auto result2499 = buffer.readString();
+            packet->jj41 = result2499;
+            auto result2500 = buffer.readString();
+            packet->jj42 = result2500;
+            auto result2501 = buffer.readString();
+            packet->jj43 = result2501;
+            auto result2502 = buffer.readString();
+            packet->jj44 = result2502;
+            auto result2503 = buffer.readString();
+            packet->jj45 = result2503;
+            auto result2504 = buffer.readString();
+            packet->jj46 = result2504;
+            auto result2505 = buffer.readString();
+            packet->jj47 = result2505;
+            auto result2506 = buffer.readString();
+            packet->jj48 = result2506;
+            auto result2507 = buffer.readString();
+            packet->jj49 = result2507;
+            auto result2508 = buffer.readString();
+            packet->jj5 = result2508;
+            auto result2509 = buffer.readString();
+            packet->jj50 = result2509;
+            auto result2510 = buffer.readString();
+            packet->jj51 = result2510;
+            auto result2511 = buffer.readString();
+            packet->jj52 = result2511;
+            auto result2512 = buffer.readString();
+            packet->jj53 = result2512;
+            auto result2513 = buffer.readString();
+            packet->jj54 = result2513;
+            auto result2514 = buffer.readString();
+            packet->jj55 = result2514;
+            auto result2515 = buffer.readString();
+            packet->jj56 = result2515;
+            auto result2516 = buffer.readString();
+            packet->jj57 = result2516;
+            auto result2517 = buffer.readString();
+            packet->jj58 = result2517;
+            auto result2518 = buffer.readString();
+            packet->jj59 = result2518;
+            auto result2519 = buffer.readString();
+            packet->jj6 = result2519;
+            auto result2520 = buffer.readString();
+            packet->jj60 = result2520;
+            auto result2521 = buffer.readString();
+            packet->jj61 = result2521;
+            auto result2522 = buffer.readString();
+            packet->jj62 = result2522;
+            auto result2523 = buffer.readString();
+            packet->jj63 = result2523;
+            auto result2524 = buffer.readString();
+            packet->jj64 = result2524;
+            auto result2525 = buffer.readString();
+            packet->jj65 = result2525;
+            auto result2526 = buffer.readString();
+            packet->jj66 = result2526;
+            auto result2527 = buffer.readString();
+            packet->jj67 = result2527;
+            auto result2528 = buffer.readString();
+            packet->jj68 = result2528;
+            auto result2529 = buffer.readString();
+            packet->jj69 = result2529;
+            auto result2530 = buffer.readString();
+            packet->jj7 = result2530;
+            auto result2531 = buffer.readString();
+            packet->jj70 = result2531;
+            auto result2532 = buffer.readString();
+            packet->jj71 = result2532;
+            auto result2533 = buffer.readString();
+            packet->jj72 = result2533;
+            auto result2534 = buffer.readString();
+            packet->jj73 = result2534;
+            auto result2535 = buffer.readString();
+            packet->jj74 = result2535;
+            auto result2536 = buffer.readString();
+            packet->jj75 = result2536;
+            auto result2537 = buffer.readString();
+            packet->jj76 = result2537;
+            auto result2538 = buffer.readString();
+            packet->jj77 = result2538;
+            auto result2539 = buffer.readString();
+            packet->jj78 = result2539;
+            auto result2540 = buffer.readString();
+            packet->jj79 = result2540;
+            auto result2541 = buffer.readString();
+            packet->jj8 = result2541;
+            auto result2542 = buffer.readString();
+            packet->jj80 = result2542;
+            auto result2543 = buffer.readString();
+            packet->jj81 = result2543;
+            auto result2544 = buffer.readString();
+            packet->jj82 = result2544;
+            auto result2545 = buffer.readString();
+            packet->jj83 = result2545;
+            auto result2546 = buffer.readString();
+            packet->jj84 = result2546;
+            auto result2547 = buffer.readString();
+            packet->jj85 = result2547;
+            auto result2548 = buffer.readString();
+            packet->jj86 = result2548;
+            auto result2549 = buffer.readString();
+            packet->jj87 = result2549;
+            auto result2550 = buffer.readString();
+            packet->jj88 = result2550;
+            auto result2551 = buffer.readString();
+            packet->jj9 = result2551;
+            auto array2552 = buffer.readStringArray();
+            packet->jjj1 = array2552;
+            auto array2553 = buffer.readStringArray();
+            packet->jjj10 = array2553;
+            auto array2554 = buffer.readStringArray();
+            packet->jjj11 = array2554;
+            auto array2555 = buffer.readStringArray();
+            packet->jjj12 = array2555;
+            auto array2556 = buffer.readStringArray();
+            packet->jjj13 = array2556;
+            auto array2557 = buffer.readStringArray();
+            packet->jjj14 = array2557;
+            auto array2558 = buffer.readStringArray();
+            packet->jjj15 = array2558;
+            auto array2559 = buffer.readStringArray();
+            packet->jjj16 = array2559;
+            auto array2560 = buffer.readStringArray();
+            packet->jjj17 = array2560;
+            auto array2561 = buffer.readStringArray();
+            packet->jjj18 = array2561;
+            auto array2562 = buffer.readStringArray();
+            packet->jjj19 = array2562;
+            auto array2563 = buffer.readStringArray();
+            packet->jjj2 = array2563;
+            auto array2564 = buffer.readStringArray();
+            packet->jjj20 = array2564;
+            auto array2565 = buffer.readStringArray();
+            packet->jjj21 = array2565;
+            auto array2566 = buffer.readStringArray();
+            packet->jjj22 = array2566;
+            auto array2567 = buffer.readStringArray();
+            packet->jjj23 = array2567;
+            auto array2568 = buffer.readStringArray();
+            packet->jjj24 = array2568;
+            auto array2569 = buffer.readStringArray();
+            packet->jjj25 = array2569;
+            auto array2570 = buffer.readStringArray();
+            packet->jjj26 = array2570;
+            auto array2571 = buffer.readStringArray();
+            packet->jjj27 = array2571;
+            auto array2572 = buffer.readStringArray();
+            packet->jjj28 = array2572;
+            auto array2573 = buffer.readStringArray();
+            packet->jjj29 = array2573;
+            auto array2574 = buffer.readStringArray();
+            packet->jjj3 = array2574;
+            auto array2575 = buffer.readStringArray();
+            packet->jjj30 = array2575;
+            auto array2576 = buffer.readStringArray();
+            packet->jjj31 = array2576;
+            auto array2577 = buffer.readStringArray();
+            packet->jjj32 = array2577;
+            auto array2578 = buffer.readStringArray();
+            packet->jjj33 = array2578;
+            auto array2579 = buffer.readStringArray();
+            packet->jjj34 = array2579;
+            auto array2580 = buffer.readStringArray();
+            packet->jjj35 = array2580;
+            auto array2581 = buffer.readStringArray();
+            packet->jjj36 = array2581;
+            auto array2582 = buffer.readStringArray();
+            packet->jjj37 = array2582;
+            auto array2583 = buffer.readStringArray();
+            packet->jjj38 = array2583;
+            auto array2584 = buffer.readStringArray();
+            packet->jjj39 = array2584;
+            auto array2585 = buffer.readStringArray();
+            packet->jjj4 = array2585;
+            auto array2586 = buffer.readStringArray();
+            packet->jjj40 = array2586;
+            auto array2587 = buffer.readStringArray();
+            packet->jjj41 = array2587;
+            auto array2588 = buffer.readStringArray();
+            packet->jjj42 = array2588;
+            auto array2589 = buffer.readStringArray();
+            packet->jjj43 = array2589;
+            auto array2590 = buffer.readStringArray();
+            packet->jjj44 = array2590;
+            auto array2591 = buffer.readStringArray();
+            packet->jjj45 = array2591;
+            auto array2592 = buffer.readStringArray();
+            packet->jjj46 = array2592;
+            auto array2593 = buffer.readStringArray();
+            packet->jjj47 = array2593;
+            auto array2594 = buffer.readStringArray();
+            packet->jjj48 = array2594;
+            auto array2595 = buffer.readStringArray();
+            packet->jjj49 = array2595;
+            auto array2596 = buffer.readStringArray();
+            packet->jjj5 = array2596;
+            auto array2597 = buffer.readStringArray();
+            packet->jjj50 = array2597;
+            auto array2598 = buffer.readStringArray();
+            packet->jjj51 = array2598;
+            auto array2599 = buffer.readStringArray();
+            packet->jjj52 = array2599;
+            auto array2600 = buffer.readStringArray();
+            packet->jjj53 = array2600;
+            auto array2601 = buffer.readStringArray();
+            packet->jjj54 = array2601;
+            auto array2602 = buffer.readStringArray();
+            packet->jjj55 = array2602;
+            auto array2603 = buffer.readStringArray();
+            packet->jjj56 = array2603;
+            auto array2604 = buffer.readStringArray();
+            packet->jjj57 = array2604;
+            auto array2605 = buffer.readStringArray();
+            packet->jjj58 = array2605;
+            auto array2606 = buffer.readStringArray();
+            packet->jjj59 = array2606;
+            auto array2607 = buffer.readStringArray();
+            packet->jjj6 = array2607;
+            auto array2608 = buffer.readStringArray();
+            packet->jjj60 = array2608;
+            auto array2609 = buffer.readStringArray();
+            packet->jjj61 = array2609;
+            auto array2610 = buffer.readStringArray();
+            packet->jjj62 = array2610;
+            auto array2611 = buffer.readStringArray();
+            packet->jjj63 = array2611;
+            auto array2612 = buffer.readStringArray();
+            packet->jjj64 = array2612;
+            auto array2613 = buffer.readStringArray();
+            packet->jjj65 = array2613;
+            auto array2614 = buffer.readStringArray();
+            packet->jjj66 = array2614;
+            auto array2615 = buffer.readStringArray();
+            packet->jjj67 = array2615;
+            auto array2616 = buffer.readStringArray();
+            packet->jjj68 = array2616;
+            auto array2617 = buffer.readStringArray();
+            packet->jjj69 = array2617;
+            auto array2618 = buffer.readStringArray();
+            packet->jjj7 = array2618;
+            auto array2619 = buffer.readStringArray();
+            packet->jjj70 = array2619;
+            auto array2620 = buffer.readStringArray();
+            packet->jjj71 = array2620;
+            auto array2621 = buffer.readStringArray();
+            packet->jjj72 = array2621;
+            auto array2622 = buffer.readStringArray();
+            packet->jjj73 = array2622;
+            auto array2623 = buffer.readStringArray();
+            packet->jjj74 = array2623;
+            auto array2624 = buffer.readStringArray();
+            packet->jjj75 = array2624;
+            auto array2625 = buffer.readStringArray();
+            packet->jjj76 = array2625;
+            auto array2626 = buffer.readStringArray();
+            packet->jjj77 = array2626;
+            auto array2627 = buffer.readStringArray();
+            packet->jjj78 = array2627;
+            auto array2628 = buffer.readStringArray();
+            packet->jjj79 = array2628;
+            auto array2629 = buffer.readStringArray();
+            packet->jjj8 = array2629;
+            auto array2630 = buffer.readStringArray();
+            packet->jjj80 = array2630;
+            auto array2631 = buffer.readStringArray();
+            packet->jjj81 = array2631;
+            auto array2632 = buffer.readStringArray();
+            packet->jjj82 = array2632;
+            auto array2633 = buffer.readStringArray();
+            packet->jjj83 = array2633;
+            auto array2634 = buffer.readStringArray();
+            packet->jjj84 = array2634;
+            auto array2635 = buffer.readStringArray();
+            packet->jjj85 = array2635;
+            auto array2636 = buffer.readStringArray();
+            packet->jjj86 = array2636;
+            auto array2637 = buffer.readStringArray();
+            packet->jjj87 = array2637;
+            auto array2638 = buffer.readStringArray();
+            packet->jjj88 = array2638;
+            auto array2639 = buffer.readStringArray();
+            packet->jjj9 = array2639;
+            auto result2640 = buffer.readPacket(102);
+            auto *result2641 = (ObjectA *) result2640.get();
+            packet->kk1 = *result2641;
+            auto result2642 = buffer.readPacket(102);
+            auto *result2643 = (ObjectA *) result2642.get();
+            packet->kk10 = *result2643;
+            auto result2644 = buffer.readPacket(102);
+            auto *result2645 = (ObjectA *) result2644.get();
+            packet->kk11 = *result2645;
+            auto result2646 = buffer.readPacket(102);
+            auto *result2647 = (ObjectA *) result2646.get();
+            packet->kk12 = *result2647;
+            auto result2648 = buffer.readPacket(102);
+            auto *result2649 = (ObjectA *) result2648.get();
+            packet->kk13 = *result2649;
+            auto result2650 = buffer.readPacket(102);
+            auto *result2651 = (ObjectA *) result2650.get();
+            packet->kk14 = *result2651;
+            auto result2652 = buffer.readPacket(102);
+            auto *result2653 = (ObjectA *) result2652.get();
+            packet->kk15 = *result2653;
+            auto result2654 = buffer.readPacket(102);
+            auto *result2655 = (ObjectA *) result2654.get();
+            packet->kk16 = *result2655;
+            auto result2656 = buffer.readPacket(102);
+            auto *result2657 = (ObjectA *) result2656.get();
+            packet->kk17 = *result2657;
+            auto result2658 = buffer.readPacket(102);
+            auto *result2659 = (ObjectA *) result2658.get();
+            packet->kk18 = *result2659;
+            auto result2660 = buffer.readPacket(102);
+            auto *result2661 = (ObjectA *) result2660.get();
+            packet->kk19 = *result2661;
+            auto result2662 = buffer.readPacket(102);
+            auto *result2663 = (ObjectA *) result2662.get();
+            packet->kk2 = *result2663;
+            auto result2664 = buffer.readPacket(102);
+            auto *result2665 = (ObjectA *) result2664.get();
+            packet->kk20 = *result2665;
+            auto result2666 = buffer.readPacket(102);
+            auto *result2667 = (ObjectA *) result2666.get();
+            packet->kk21 = *result2667;
+            auto result2668 = buffer.readPacket(102);
+            auto *result2669 = (ObjectA *) result2668.get();
+            packet->kk22 = *result2669;
+            auto result2670 = buffer.readPacket(102);
+            auto *result2671 = (ObjectA *) result2670.get();
+            packet->kk23 = *result2671;
+            auto result2672 = buffer.readPacket(102);
+            auto *result2673 = (ObjectA *) result2672.get();
+            packet->kk24 = *result2673;
+            auto result2674 = buffer.readPacket(102);
+            auto *result2675 = (ObjectA *) result2674.get();
+            packet->kk25 = *result2675;
+            auto result2676 = buffer.readPacket(102);
+            auto *result2677 = (ObjectA *) result2676.get();
+            packet->kk26 = *result2677;
+            auto result2678 = buffer.readPacket(102);
+            auto *result2679 = (ObjectA *) result2678.get();
+            packet->kk27 = *result2679;
+            auto result2680 = buffer.readPacket(102);
+            auto *result2681 = (ObjectA *) result2680.get();
+            packet->kk28 = *result2681;
+            auto result2682 = buffer.readPacket(102);
+            auto *result2683 = (ObjectA *) result2682.get();
+            packet->kk29 = *result2683;
+            auto result2684 = buffer.readPacket(102);
+            auto *result2685 = (ObjectA *) result2684.get();
+            packet->kk3 = *result2685;
+            auto result2686 = buffer.readPacket(102);
+            auto *result2687 = (ObjectA *) result2686.get();
+            packet->kk30 = *result2687;
+            auto result2688 = buffer.readPacket(102);
+            auto *result2689 = (ObjectA *) result2688.get();
+            packet->kk31 = *result2689;
+            auto result2690 = buffer.readPacket(102);
+            auto *result2691 = (ObjectA *) result2690.get();
+            packet->kk32 = *result2691;
+            auto result2692 = buffer.readPacket(102);
+            auto *result2693 = (ObjectA *) result2692.get();
+            packet->kk33 = *result2693;
+            auto result2694 = buffer.readPacket(102);
+            auto *result2695 = (ObjectA *) result2694.get();
+            packet->kk34 = *result2695;
+            auto result2696 = buffer.readPacket(102);
+            auto *result2697 = (ObjectA *) result2696.get();
+            packet->kk35 = *result2697;
+            auto result2698 = buffer.readPacket(102);
+            auto *result2699 = (ObjectA *) result2698.get();
+            packet->kk36 = *result2699;
+            auto result2700 = buffer.readPacket(102);
+            auto *result2701 = (ObjectA *) result2700.get();
+            packet->kk37 = *result2701;
+            auto result2702 = buffer.readPacket(102);
+            auto *result2703 = (ObjectA *) result2702.get();
+            packet->kk38 = *result2703;
+            auto result2704 = buffer.readPacket(102);
+            auto *result2705 = (ObjectA *) result2704.get();
+            packet->kk39 = *result2705;
+            auto result2706 = buffer.readPacket(102);
+            auto *result2707 = (ObjectA *) result2706.get();
+            packet->kk4 = *result2707;
+            auto result2708 = buffer.readPacket(102);
+            auto *result2709 = (ObjectA *) result2708.get();
+            packet->kk40 = *result2709;
+            auto result2710 = buffer.readPacket(102);
+            auto *result2711 = (ObjectA *) result2710.get();
+            packet->kk41 = *result2711;
+            auto result2712 = buffer.readPacket(102);
+            auto *result2713 = (ObjectA *) result2712.get();
+            packet->kk42 = *result2713;
+            auto result2714 = buffer.readPacket(102);
+            auto *result2715 = (ObjectA *) result2714.get();
+            packet->kk43 = *result2715;
+            auto result2716 = buffer.readPacket(102);
+            auto *result2717 = (ObjectA *) result2716.get();
+            packet->kk44 = *result2717;
+            auto result2718 = buffer.readPacket(102);
+            auto *result2719 = (ObjectA *) result2718.get();
+            packet->kk45 = *result2719;
+            auto result2720 = buffer.readPacket(102);
+            auto *result2721 = (ObjectA *) result2720.get();
+            packet->kk46 = *result2721;
+            auto result2722 = buffer.readPacket(102);
+            auto *result2723 = (ObjectA *) result2722.get();
+            packet->kk47 = *result2723;
+            auto result2724 = buffer.readPacket(102);
+            auto *result2725 = (ObjectA *) result2724.get();
+            packet->kk48 = *result2725;
+            auto result2726 = buffer.readPacket(102);
+            auto *result2727 = (ObjectA *) result2726.get();
+            packet->kk49 = *result2727;
+            auto result2728 = buffer.readPacket(102);
+            auto *result2729 = (ObjectA *) result2728.get();
+            packet->kk5 = *result2729;
+            auto result2730 = buffer.readPacket(102);
+            auto *result2731 = (ObjectA *) result2730.get();
+            packet->kk50 = *result2731;
+            auto result2732 = buffer.readPacket(102);
+            auto *result2733 = (ObjectA *) result2732.get();
+            packet->kk51 = *result2733;
+            auto result2734 = buffer.readPacket(102);
+            auto *result2735 = (ObjectA *) result2734.get();
+            packet->kk52 = *result2735;
+            auto result2736 = buffer.readPacket(102);
+            auto *result2737 = (ObjectA *) result2736.get();
+            packet->kk53 = *result2737;
+            auto result2738 = buffer.readPacket(102);
+            auto *result2739 = (ObjectA *) result2738.get();
+            packet->kk54 = *result2739;
+            auto result2740 = buffer.readPacket(102);
+            auto *result2741 = (ObjectA *) result2740.get();
+            packet->kk55 = *result2741;
+            auto result2742 = buffer.readPacket(102);
+            auto *result2743 = (ObjectA *) result2742.get();
+            packet->kk56 = *result2743;
+            auto result2744 = buffer.readPacket(102);
+            auto *result2745 = (ObjectA *) result2744.get();
+            packet->kk57 = *result2745;
+            auto result2746 = buffer.readPacket(102);
+            auto *result2747 = (ObjectA *) result2746.get();
+            packet->kk58 = *result2747;
+            auto result2748 = buffer.readPacket(102);
+            auto *result2749 = (ObjectA *) result2748.get();
+            packet->kk59 = *result2749;
+            auto result2750 = buffer.readPacket(102);
+            auto *result2751 = (ObjectA *) result2750.get();
+            packet->kk6 = *result2751;
+            auto result2752 = buffer.readPacket(102);
+            auto *result2753 = (ObjectA *) result2752.get();
+            packet->kk60 = *result2753;
+            auto result2754 = buffer.readPacket(102);
+            auto *result2755 = (ObjectA *) result2754.get();
+            packet->kk61 = *result2755;
+            auto result2756 = buffer.readPacket(102);
+            auto *result2757 = (ObjectA *) result2756.get();
+            packet->kk62 = *result2757;
+            auto result2758 = buffer.readPacket(102);
+            auto *result2759 = (ObjectA *) result2758.get();
+            packet->kk63 = *result2759;
+            auto result2760 = buffer.readPacket(102);
+            auto *result2761 = (ObjectA *) result2760.get();
+            packet->kk64 = *result2761;
+            auto result2762 = buffer.readPacket(102);
+            auto *result2763 = (ObjectA *) result2762.get();
+            packet->kk65 = *result2763;
+            auto result2764 = buffer.readPacket(102);
+            auto *result2765 = (ObjectA *) result2764.get();
+            packet->kk66 = *result2765;
+            auto result2766 = buffer.readPacket(102);
+            auto *result2767 = (ObjectA *) result2766.get();
+            packet->kk67 = *result2767;
+            auto result2768 = buffer.readPacket(102);
+            auto *result2769 = (ObjectA *) result2768.get();
+            packet->kk68 = *result2769;
+            auto result2770 = buffer.readPacket(102);
+            auto *result2771 = (ObjectA *) result2770.get();
+            packet->kk69 = *result2771;
+            auto result2772 = buffer.readPacket(102);
+            auto *result2773 = (ObjectA *) result2772.get();
+            packet->kk7 = *result2773;
+            auto result2774 = buffer.readPacket(102);
+            auto *result2775 = (ObjectA *) result2774.get();
+            packet->kk70 = *result2775;
+            auto result2776 = buffer.readPacket(102);
+            auto *result2777 = (ObjectA *) result2776.get();
+            packet->kk71 = *result2777;
+            auto result2778 = buffer.readPacket(102);
+            auto *result2779 = (ObjectA *) result2778.get();
+            packet->kk72 = *result2779;
+            auto result2780 = buffer.readPacket(102);
+            auto *result2781 = (ObjectA *) result2780.get();
+            packet->kk73 = *result2781;
+            auto result2782 = buffer.readPacket(102);
+            auto *result2783 = (ObjectA *) result2782.get();
+            packet->kk74 = *result2783;
+            auto result2784 = buffer.readPacket(102);
+            auto *result2785 = (ObjectA *) result2784.get();
+            packet->kk75 = *result2785;
+            auto result2786 = buffer.readPacket(102);
+            auto *result2787 = (ObjectA *) result2786.get();
+            packet->kk76 = *result2787;
+            auto result2788 = buffer.readPacket(102);
+            auto *result2789 = (ObjectA *) result2788.get();
+            packet->kk77 = *result2789;
+            auto result2790 = buffer.readPacket(102);
+            auto *result2791 = (ObjectA *) result2790.get();
+            packet->kk78 = *result2791;
+            auto result2792 = buffer.readPacket(102);
+            auto *result2793 = (ObjectA *) result2792.get();
+            packet->kk79 = *result2793;
+            auto result2794 = buffer.readPacket(102);
+            auto *result2795 = (ObjectA *) result2794.get();
+            packet->kk8 = *result2795;
+            auto result2796 = buffer.readPacket(102);
+            auto *result2797 = (ObjectA *) result2796.get();
+            packet->kk80 = *result2797;
+            auto result2798 = buffer.readPacket(102);
+            auto *result2799 = (ObjectA *) result2798.get();
+            packet->kk81 = *result2799;
+            auto result2800 = buffer.readPacket(102);
+            auto *result2801 = (ObjectA *) result2800.get();
+            packet->kk82 = *result2801;
+            auto result2802 = buffer.readPacket(102);
+            auto *result2803 = (ObjectA *) result2802.get();
+            packet->kk83 = *result2803;
+            auto result2804 = buffer.readPacket(102);
+            auto *result2805 = (ObjectA *) result2804.get();
+            packet->kk84 = *result2805;
+            auto result2806 = buffer.readPacket(102);
+            auto *result2807 = (ObjectA *) result2806.get();
+            packet->kk85 = *result2807;
+            auto result2808 = buffer.readPacket(102);
+            auto *result2809 = (ObjectA *) result2808.get();
+            packet->kk86 = *result2809;
+            auto result2810 = buffer.readPacket(102);
+            auto *result2811 = (ObjectA *) result2810.get();
+            packet->kk87 = *result2811;
+            auto result2812 = buffer.readPacket(102);
+            auto *result2813 = (ObjectA *) result2812.get();
+            packet->kk88 = *result2813;
+            auto result2814 = buffer.readPacket(102);
+            auto *result2815 = (ObjectA *) result2814.get();
+            packet->kk9 = *result2815;
+            auto array2816 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk1 = array2816;
+            auto array2817 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk10 = array2817;
+            auto array2818 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk11 = array2818;
+            auto array2819 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk12 = array2819;
+            auto array2820 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk13 = array2820;
+            auto array2821 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk14 = array2821;
+            auto array2822 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk15 = array2822;
+            auto array2823 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk16 = array2823;
+            auto array2824 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk17 = array2824;
+            auto array2825 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk18 = array2825;
+            auto array2826 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk19 = array2826;
+            auto array2827 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk2 = array2827;
+            auto array2828 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk20 = array2828;
+            auto array2829 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk21 = array2829;
+            auto array2830 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk22 = array2830;
+            auto array2831 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk23 = array2831;
+            auto array2832 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk24 = array2832;
+            auto array2833 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk25 = array2833;
+            auto array2834 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk26 = array2834;
+            auto array2835 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk27 = array2835;
+            auto array2836 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk28 = array2836;
+            auto array2837 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk29 = array2837;
+            auto array2838 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk3 = array2838;
+            auto array2839 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk30 = array2839;
+            auto array2840 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk31 = array2840;
+            auto array2841 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk32 = array2841;
+            auto array2842 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk33 = array2842;
+            auto array2843 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk34 = array2843;
+            auto array2844 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk35 = array2844;
+            auto array2845 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk36 = array2845;
+            auto array2846 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk37 = array2846;
+            auto array2847 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk38 = array2847;
+            auto array2848 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk39 = array2848;
+            auto array2849 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk4 = array2849;
+            auto array2850 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk40 = array2850;
+            auto array2851 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk41 = array2851;
+            auto array2852 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk42 = array2852;
+            auto array2853 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk43 = array2853;
+            auto array2854 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk44 = array2854;
+            auto array2855 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk45 = array2855;
+            auto array2856 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk46 = array2856;
+            auto array2857 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk47 = array2857;
+            auto array2858 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk48 = array2858;
+            auto array2859 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk49 = array2859;
+            auto array2860 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk5 = array2860;
+            auto array2861 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk50 = array2861;
+            auto array2862 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk51 = array2862;
+            auto array2863 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk52 = array2863;
+            auto array2864 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk53 = array2864;
+            auto array2865 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk54 = array2865;
+            auto array2866 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk55 = array2866;
+            auto array2867 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk56 = array2867;
+            auto array2868 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk57 = array2868;
+            auto array2869 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk58 = array2869;
+            auto array2870 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk59 = array2870;
+            auto array2871 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk6 = array2871;
+            auto array2872 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk60 = array2872;
+            auto array2873 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk61 = array2873;
+            auto array2874 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk62 = array2874;
+            auto array2875 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk63 = array2875;
+            auto array2876 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk64 = array2876;
+            auto array2877 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk65 = array2877;
+            auto array2878 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk66 = array2878;
+            auto array2879 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk67 = array2879;
+            auto array2880 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk68 = array2880;
+            auto array2881 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk69 = array2881;
+            auto array2882 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk7 = array2882;
+            auto array2883 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk70 = array2883;
+            auto array2884 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk71 = array2884;
+            auto array2885 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk72 = array2885;
+            auto array2886 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk73 = array2886;
+            auto array2887 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk74 = array2887;
+            auto array2888 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk75 = array2888;
+            auto array2889 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk76 = array2889;
+            auto array2890 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk77 = array2890;
+            auto array2891 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk78 = array2891;
+            auto array2892 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk79 = array2892;
+            auto array2893 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk8 = array2893;
+            auto array2894 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk80 = array2894;
+            auto array2895 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk81 = array2895;
+            auto array2896 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk82 = array2896;
+            auto array2897 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk83 = array2897;
+            auto array2898 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk84 = array2898;
+            auto array2899 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk85 = array2899;
+            auto array2900 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk86 = array2900;
+            auto array2901 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk87 = array2901;
+            auto array2902 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk88 = array2902;
+            auto array2903 = buffer.readPacketArray<ObjectA>(102);
+            packet->kkk9 = array2903;
+            auto list2904 = buffer.readIntList();
+            packet->l1 = list2904;
+            auto list2905 = buffer.readIntList();
+            packet->l10 = list2905;
+            auto list2906 = buffer.readIntList();
+            packet->l11 = list2906;
+            auto list2907 = buffer.readIntList();
+            packet->l12 = list2907;
+            auto list2908 = buffer.readIntList();
+            packet->l13 = list2908;
+            auto list2909 = buffer.readIntList();
+            packet->l14 = list2909;
+            auto list2910 = buffer.readIntList();
+            packet->l15 = list2910;
+            auto list2911 = buffer.readIntList();
+            packet->l16 = list2911;
+            auto list2912 = buffer.readIntList();
+            packet->l17 = list2912;
+            auto list2913 = buffer.readIntList();
+            packet->l18 = list2913;
+            auto list2914 = buffer.readIntList();
+            packet->l19 = list2914;
+            auto list2915 = buffer.readIntList();
+            packet->l2 = list2915;
+            auto list2916 = buffer.readIntList();
+            packet->l20 = list2916;
+            auto list2917 = buffer.readIntList();
+            packet->l21 = list2917;
+            auto list2918 = buffer.readIntList();
+            packet->l22 = list2918;
+            auto list2919 = buffer.readIntList();
+            packet->l23 = list2919;
+            auto list2920 = buffer.readIntList();
+            packet->l24 = list2920;
+            auto list2921 = buffer.readIntList();
+            packet->l25 = list2921;
+            auto list2922 = buffer.readIntList();
+            packet->l26 = list2922;
+            auto list2923 = buffer.readIntList();
+            packet->l27 = list2923;
+            auto list2924 = buffer.readIntList();
+            packet->l28 = list2924;
+            auto list2925 = buffer.readIntList();
+            packet->l29 = list2925;
+            auto list2926 = buffer.readIntList();
+            packet->l3 = list2926;
+            auto list2927 = buffer.readIntList();
+            packet->l30 = list2927;
+            auto list2928 = buffer.readIntList();
+            packet->l31 = list2928;
+            auto list2929 = buffer.readIntList();
+            packet->l32 = list2929;
+            auto list2930 = buffer.readIntList();
+            packet->l33 = list2930;
+            auto list2931 = buffer.readIntList();
+            packet->l34 = list2931;
+            auto list2932 = buffer.readIntList();
+            packet->l35 = list2932;
+            auto list2933 = buffer.readIntList();
+            packet->l36 = list2933;
+            auto list2934 = buffer.readIntList();
+            packet->l37 = list2934;
+            auto list2935 = buffer.readIntList();
+            packet->l38 = list2935;
+            auto list2936 = buffer.readIntList();
+            packet->l39 = list2936;
+            auto list2937 = buffer.readIntList();
+            packet->l4 = list2937;
+            auto list2938 = buffer.readIntList();
+            packet->l40 = list2938;
+            auto list2939 = buffer.readIntList();
+            packet->l41 = list2939;
+            auto list2940 = buffer.readIntList();
+            packet->l42 = list2940;
+            auto list2941 = buffer.readIntList();
+            packet->l43 = list2941;
+            auto list2942 = buffer.readIntList();
+            packet->l44 = list2942;
+            auto list2943 = buffer.readIntList();
+            packet->l45 = list2943;
+            auto list2944 = buffer.readIntList();
+            packet->l46 = list2944;
+            auto list2945 = buffer.readIntList();
+            packet->l47 = list2945;
+            auto list2946 = buffer.readIntList();
+            packet->l48 = list2946;
+            auto list2947 = buffer.readIntList();
+            packet->l49 = list2947;
+            auto list2948 = buffer.readIntList();
+            packet->l5 = list2948;
+            auto list2949 = buffer.readIntList();
+            packet->l50 = list2949;
+            auto list2950 = buffer.readIntList();
+            packet->l51 = list2950;
+            auto list2951 = buffer.readIntList();
+            packet->l52 = list2951;
+            auto list2952 = buffer.readIntList();
+            packet->l53 = list2952;
+            auto list2953 = buffer.readIntList();
+            packet->l54 = list2953;
+            auto list2954 = buffer.readIntList();
+            packet->l55 = list2954;
+            auto list2955 = buffer.readIntList();
+            packet->l56 = list2955;
+            auto list2956 = buffer.readIntList();
+            packet->l57 = list2956;
+            auto list2957 = buffer.readIntList();
+            packet->l58 = list2957;
+            auto list2958 = buffer.readIntList();
+            packet->l59 = list2958;
+            auto list2959 = buffer.readIntList();
+            packet->l6 = list2959;
+            auto list2960 = buffer.readIntList();
+            packet->l60 = list2960;
+            auto list2961 = buffer.readIntList();
+            packet->l61 = list2961;
+            auto list2962 = buffer.readIntList();
+            packet->l62 = list2962;
+            auto list2963 = buffer.readIntList();
+            packet->l63 = list2963;
+            auto list2964 = buffer.readIntList();
+            packet->l64 = list2964;
+            auto list2965 = buffer.readIntList();
+            packet->l65 = list2965;
+            auto list2966 = buffer.readIntList();
+            packet->l66 = list2966;
+            auto list2967 = buffer.readIntList();
+            packet->l67 = list2967;
+            auto list2968 = buffer.readIntList();
+            packet->l68 = list2968;
+            auto list2969 = buffer.readIntList();
+            packet->l69 = list2969;
+            auto list2970 = buffer.readIntList();
+            packet->l7 = list2970;
+            auto list2971 = buffer.readIntList();
+            packet->l70 = list2971;
+            auto list2972 = buffer.readIntList();
+            packet->l71 = list2972;
+            auto list2973 = buffer.readIntList();
+            packet->l72 = list2973;
+            auto list2974 = buffer.readIntList();
+            packet->l73 = list2974;
+            auto list2975 = buffer.readIntList();
+            packet->l74 = list2975;
+            auto list2976 = buffer.readIntList();
+            packet->l75 = list2976;
+            auto list2977 = buffer.readIntList();
+            packet->l76 = list2977;
+            auto list2978 = buffer.readIntList();
+            packet->l77 = list2978;
+            auto list2979 = buffer.readIntList();
+            packet->l78 = list2979;
+            auto list2980 = buffer.readIntList();
+            packet->l79 = list2980;
+            auto list2981 = buffer.readIntList();
+            packet->l8 = list2981;
+            auto list2982 = buffer.readIntList();
+            packet->l80 = list2982;
+            auto list2983 = buffer.readIntList();
+            packet->l81 = list2983;
+            auto list2984 = buffer.readIntList();
+            packet->l82 = list2984;
+            auto list2985 = buffer.readIntList();
+            packet->l83 = list2985;
+            auto list2986 = buffer.readIntList();
+            packet->l84 = list2986;
+            auto list2987 = buffer.readIntList();
+            packet->l85 = list2987;
+            auto list2988 = buffer.readIntList();
+            packet->l86 = list2988;
+            auto list2989 = buffer.readIntList();
+            packet->l87 = list2989;
+            auto list2990 = buffer.readIntList();
+            packet->l88 = list2990;
+            auto list2991 = buffer.readIntList();
+            packet->l9 = list2991;
+            auto list2992 = buffer.readStringList();
+            packet->llll1 = list2992;
+            auto list2993 = buffer.readStringList();
+            packet->llll10 = list2993;
+            auto list2994 = buffer.readStringList();
+            packet->llll11 = list2994;
+            auto list2995 = buffer.readStringList();
+            packet->llll12 = list2995;
+            auto list2996 = buffer.readStringList();
+            packet->llll13 = list2996;
+            auto list2997 = buffer.readStringList();
+            packet->llll14 = list2997;
+            auto list2998 = buffer.readStringList();
+            packet->llll15 = list2998;
+            auto list2999 = buffer.readStringList();
+            packet->llll16 = list2999;
+            auto list3000 = buffer.readStringList();
+            packet->llll17 = list3000;
+            auto list3001 = buffer.readStringList();
+            packet->llll18 = list3001;
+            auto list3002 = buffer.readStringList();
+            packet->llll19 = list3002;
+            auto list3003 = buffer.readStringList();
+            packet->llll2 = list3003;
+            auto list3004 = buffer.readStringList();
+            packet->llll20 = list3004;
+            auto list3005 = buffer.readStringList();
+            packet->llll21 = list3005;
+            auto list3006 = buffer.readStringList();
+            packet->llll22 = list3006;
+            auto list3007 = buffer.readStringList();
+            packet->llll23 = list3007;
+            auto list3008 = buffer.readStringList();
+            packet->llll24 = list3008;
+            auto list3009 = buffer.readStringList();
+            packet->llll25 = list3009;
+            auto list3010 = buffer.readStringList();
+            packet->llll26 = list3010;
+            auto list3011 = buffer.readStringList();
+            packet->llll27 = list3011;
+            auto list3012 = buffer.readStringList();
+            packet->llll28 = list3012;
+            auto list3013 = buffer.readStringList();
+            packet->llll29 = list3013;
+            auto list3014 = buffer.readStringList();
+            packet->llll3 = list3014;
+            auto list3015 = buffer.readStringList();
+            packet->llll30 = list3015;
+            auto list3016 = buffer.readStringList();
+            packet->llll31 = list3016;
+            auto list3017 = buffer.readStringList();
+            packet->llll32 = list3017;
+            auto list3018 = buffer.readStringList();
+            packet->llll33 = list3018;
+            auto list3019 = buffer.readStringList();
+            packet->llll34 = list3019;
+            auto list3020 = buffer.readStringList();
+            packet->llll35 = list3020;
+            auto list3021 = buffer.readStringList();
+            packet->llll36 = list3021;
+            auto list3022 = buffer.readStringList();
+            packet->llll37 = list3022;
+            auto list3023 = buffer.readStringList();
+            packet->llll38 = list3023;
+            auto list3024 = buffer.readStringList();
+            packet->llll39 = list3024;
+            auto list3025 = buffer.readStringList();
+            packet->llll4 = list3025;
+            auto list3026 = buffer.readStringList();
+            packet->llll40 = list3026;
+            auto list3027 = buffer.readStringList();
+            packet->llll41 = list3027;
+            auto list3028 = buffer.readStringList();
+            packet->llll42 = list3028;
+            auto list3029 = buffer.readStringList();
+            packet->llll43 = list3029;
+            auto list3030 = buffer.readStringList();
+            packet->llll44 = list3030;
+            auto list3031 = buffer.readStringList();
+            packet->llll45 = list3031;
+            auto list3032 = buffer.readStringList();
+            packet->llll46 = list3032;
+            auto list3033 = buffer.readStringList();
+            packet->llll47 = list3033;
+            auto list3034 = buffer.readStringList();
+            packet->llll48 = list3034;
+            auto list3035 = buffer.readStringList();
+            packet->llll49 = list3035;
+            auto list3036 = buffer.readStringList();
+            packet->llll5 = list3036;
+            auto list3037 = buffer.readStringList();
+            packet->llll50 = list3037;
+            auto list3038 = buffer.readStringList();
+            packet->llll51 = list3038;
+            auto list3039 = buffer.readStringList();
+            packet->llll52 = list3039;
+            auto list3040 = buffer.readStringList();
+            packet->llll53 = list3040;
+            auto list3041 = buffer.readStringList();
+            packet->llll54 = list3041;
+            auto list3042 = buffer.readStringList();
+            packet->llll55 = list3042;
+            auto list3043 = buffer.readStringList();
+            packet->llll56 = list3043;
+            auto list3044 = buffer.readStringList();
+            packet->llll57 = list3044;
+            auto list3045 = buffer.readStringList();
+            packet->llll58 = list3045;
+            auto list3046 = buffer.readStringList();
+            packet->llll59 = list3046;
+            auto list3047 = buffer.readStringList();
+            packet->llll6 = list3047;
+            auto list3048 = buffer.readStringList();
+            packet->llll60 = list3048;
+            auto list3049 = buffer.readStringList();
+            packet->llll61 = list3049;
+            auto list3050 = buffer.readStringList();
+            packet->llll62 = list3050;
+            auto list3051 = buffer.readStringList();
+            packet->llll63 = list3051;
+            auto list3052 = buffer.readStringList();
+            packet->llll64 = list3052;
+            auto list3053 = buffer.readStringList();
+            packet->llll65 = list3053;
+            auto list3054 = buffer.readStringList();
+            packet->llll66 = list3054;
+            auto list3055 = buffer.readStringList();
+            packet->llll67 = list3055;
+            auto list3056 = buffer.readStringList();
+            packet->llll68 = list3056;
+            auto list3057 = buffer.readStringList();
+            packet->llll69 = list3057;
+            auto list3058 = buffer.readStringList();
+            packet->llll7 = list3058;
+            auto list3059 = buffer.readStringList();
+            packet->llll70 = list3059;
+            auto list3060 = buffer.readStringList();
+            packet->llll71 = list3060;
+            auto list3061 = buffer.readStringList();
+            packet->llll72 = list3061;
+            auto list3062 = buffer.readStringList();
+            packet->llll73 = list3062;
+            auto list3063 = buffer.readStringList();
+            packet->llll74 = list3063;
+            auto list3064 = buffer.readStringList();
+            packet->llll75 = list3064;
+            auto list3065 = buffer.readStringList();
+            packet->llll76 = list3065;
+            auto list3066 = buffer.readStringList();
+            packet->llll77 = list3066;
+            auto list3067 = buffer.readStringList();
+            packet->llll78 = list3067;
+            auto list3068 = buffer.readStringList();
+            packet->llll79 = list3068;
+            auto list3069 = buffer.readStringList();
+            packet->llll8 = list3069;
+            auto list3070 = buffer.readStringList();
+            packet->llll80 = list3070;
+            auto list3071 = buffer.readStringList();
+            packet->llll81 = list3071;
+            auto list3072 = buffer.readStringList();
+            packet->llll82 = list3072;
+            auto list3073 = buffer.readStringList();
+            packet->llll83 = list3073;
+            auto list3074 = buffer.readStringList();
+            packet->llll84 = list3074;
+            auto list3075 = buffer.readStringList();
+            packet->llll85 = list3075;
+            auto list3076 = buffer.readStringList();
+            packet->llll86 = list3076;
+            auto list3077 = buffer.readStringList();
+            packet->llll87 = list3077;
+            auto list3078 = buffer.readStringList();
+            packet->llll88 = list3078;
+            auto list3079 = buffer.readStringList();
+            packet->llll9 = list3079;
+            auto map3080 = buffer.readIntStringMap();
+            packet->m1 = map3080;
+            auto map3081 = buffer.readIntStringMap();
+            packet->m10 = map3081;
+            auto map3082 = buffer.readIntStringMap();
+            packet->m11 = map3082;
+            auto map3083 = buffer.readIntStringMap();
+            packet->m12 = map3083;
+            auto map3084 = buffer.readIntStringMap();
+            packet->m13 = map3084;
+            auto map3085 = buffer.readIntStringMap();
+            packet->m14 = map3085;
+            auto map3086 = buffer.readIntStringMap();
+            packet->m15 = map3086;
+            auto map3087 = buffer.readIntStringMap();
+            packet->m16 = map3087;
+            auto map3088 = buffer.readIntStringMap();
+            packet->m17 = map3088;
+            auto map3089 = buffer.readIntStringMap();
+            packet->m18 = map3089;
+            auto map3090 = buffer.readIntStringMap();
+            packet->m19 = map3090;
+            auto map3091 = buffer.readIntStringMap();
+            packet->m2 = map3091;
+            auto map3092 = buffer.readIntStringMap();
+            packet->m20 = map3092;
+            auto map3093 = buffer.readIntStringMap();
+            packet->m21 = map3093;
+            auto map3094 = buffer.readIntStringMap();
+            packet->m22 = map3094;
+            auto map3095 = buffer.readIntStringMap();
+            packet->m23 = map3095;
+            auto map3096 = buffer.readIntStringMap();
+            packet->m24 = map3096;
+            auto map3097 = buffer.readIntStringMap();
+            packet->m25 = map3097;
+            auto map3098 = buffer.readIntStringMap();
+            packet->m26 = map3098;
+            auto map3099 = buffer.readIntStringMap();
+            packet->m27 = map3099;
+            auto map3100 = buffer.readIntStringMap();
+            packet->m28 = map3100;
+            auto map3101 = buffer.readIntStringMap();
+            packet->m29 = map3101;
+            auto map3102 = buffer.readIntStringMap();
+            packet->m3 = map3102;
+            auto map3103 = buffer.readIntStringMap();
+            packet->m30 = map3103;
+            auto map3104 = buffer.readIntStringMap();
+            packet->m31 = map3104;
+            auto map3105 = buffer.readIntStringMap();
+            packet->m32 = map3105;
+            auto map3106 = buffer.readIntStringMap();
+            packet->m33 = map3106;
+            auto map3107 = buffer.readIntStringMap();
+            packet->m34 = map3107;
+            auto map3108 = buffer.readIntStringMap();
+            packet->m35 = map3108;
+            auto map3109 = buffer.readIntStringMap();
+            packet->m36 = map3109;
+            auto map3110 = buffer.readIntStringMap();
+            packet->m37 = map3110;
+            auto map3111 = buffer.readIntStringMap();
+            packet->m38 = map3111;
+            auto map3112 = buffer.readIntStringMap();
+            packet->m39 = map3112;
+            auto map3113 = buffer.readIntStringMap();
+            packet->m4 = map3113;
+            auto map3114 = buffer.readIntStringMap();
+            packet->m40 = map3114;
+            auto map3115 = buffer.readIntStringMap();
+            packet->m41 = map3115;
+            auto map3116 = buffer.readIntStringMap();
+            packet->m42 = map3116;
+            auto map3117 = buffer.readIntStringMap();
+            packet->m43 = map3117;
+            auto map3118 = buffer.readIntStringMap();
+            packet->m44 = map3118;
+            auto map3119 = buffer.readIntStringMap();
+            packet->m45 = map3119;
+            auto map3120 = buffer.readIntStringMap();
+            packet->m46 = map3120;
+            auto map3121 = buffer.readIntStringMap();
+            packet->m47 = map3121;
+            auto map3122 = buffer.readIntStringMap();
+            packet->m48 = map3122;
+            auto map3123 = buffer.readIntStringMap();
+            packet->m49 = map3123;
+            auto map3124 = buffer.readIntStringMap();
+            packet->m5 = map3124;
+            auto map3125 = buffer.readIntStringMap();
+            packet->m50 = map3125;
+            auto map3126 = buffer.readIntStringMap();
+            packet->m51 = map3126;
+            auto map3127 = buffer.readIntStringMap();
+            packet->m52 = map3127;
+            auto map3128 = buffer.readIntStringMap();
+            packet->m53 = map3128;
+            auto map3129 = buffer.readIntStringMap();
+            packet->m54 = map3129;
+            auto map3130 = buffer.readIntStringMap();
+            packet->m55 = map3130;
+            auto map3131 = buffer.readIntStringMap();
+            packet->m56 = map3131;
+            auto map3132 = buffer.readIntStringMap();
+            packet->m57 = map3132;
+            auto map3133 = buffer.readIntStringMap();
+            packet->m58 = map3133;
+            auto map3134 = buffer.readIntStringMap();
+            packet->m59 = map3134;
+            auto map3135 = buffer.readIntStringMap();
+            packet->m6 = map3135;
+            auto map3136 = buffer.readIntStringMap();
+            packet->m60 = map3136;
+            auto map3137 = buffer.readIntStringMap();
+            packet->m61 = map3137;
+            auto map3138 = buffer.readIntStringMap();
+            packet->m62 = map3138;
+            auto map3139 = buffer.readIntStringMap();
+            packet->m63 = map3139;
+            auto map3140 = buffer.readIntStringMap();
+            packet->m64 = map3140;
+            auto map3141 = buffer.readIntStringMap();
+            packet->m65 = map3141;
+            auto map3142 = buffer.readIntStringMap();
+            packet->m66 = map3142;
+            auto map3143 = buffer.readIntStringMap();
+            packet->m67 = map3143;
+            auto map3144 = buffer.readIntStringMap();
+            packet->m68 = map3144;
+            auto map3145 = buffer.readIntStringMap();
+            packet->m69 = map3145;
+            auto map3146 = buffer.readIntStringMap();
+            packet->m7 = map3146;
+            auto map3147 = buffer.readIntStringMap();
+            packet->m70 = map3147;
+            auto map3148 = buffer.readIntStringMap();
+            packet->m71 = map3148;
+            auto map3149 = buffer.readIntStringMap();
+            packet->m72 = map3149;
+            auto map3150 = buffer.readIntStringMap();
+            packet->m73 = map3150;
+            auto map3151 = buffer.readIntStringMap();
+            packet->m74 = map3151;
+            auto map3152 = buffer.readIntStringMap();
+            packet->m75 = map3152;
+            auto map3153 = buffer.readIntStringMap();
+            packet->m76 = map3153;
+            auto map3154 = buffer.readIntStringMap();
+            packet->m77 = map3154;
+            auto map3155 = buffer.readIntStringMap();
+            packet->m78 = map3155;
+            auto map3156 = buffer.readIntStringMap();
+            packet->m79 = map3156;
+            auto map3157 = buffer.readIntStringMap();
+            packet->m8 = map3157;
+            auto map3158 = buffer.readIntStringMap();
+            packet->m80 = map3158;
+            auto map3159 = buffer.readIntStringMap();
+            packet->m81 = map3159;
+            auto map3160 = buffer.readIntStringMap();
+            packet->m82 = map3160;
+            auto map3161 = buffer.readIntStringMap();
+            packet->m83 = map3161;
+            auto map3162 = buffer.readIntStringMap();
+            packet->m84 = map3162;
+            auto map3163 = buffer.readIntStringMap();
+            packet->m85 = map3163;
+            auto map3164 = buffer.readIntStringMap();
+            packet->m86 = map3164;
+            auto map3165 = buffer.readIntStringMap();
+            packet->m87 = map3165;
+            auto map3166 = buffer.readIntStringMap();
+            packet->m88 = map3166;
+            auto map3167 = buffer.readIntStringMap();
+            packet->m9 = map3167;
+            auto map3168 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm1 = map3168;
+            auto map3169 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm10 = map3169;
+            auto map3170 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm11 = map3170;
+            auto map3171 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm12 = map3171;
+            auto map3172 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm13 = map3172;
+            auto map3173 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm14 = map3173;
+            auto map3174 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm15 = map3174;
+            auto map3175 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm16 = map3175;
+            auto map3176 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm17 = map3176;
+            auto map3177 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm18 = map3177;
+            auto map3178 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm19 = map3178;
+            auto map3179 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm2 = map3179;
+            auto map3180 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm20 = map3180;
+            auto map3181 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm21 = map3181;
+            auto map3182 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm22 = map3182;
+            auto map3183 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm23 = map3183;
+            auto map3184 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm24 = map3184;
+            auto map3185 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm25 = map3185;
+            auto map3186 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm26 = map3186;
+            auto map3187 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm27 = map3187;
+            auto map3188 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm28 = map3188;
+            auto map3189 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm29 = map3189;
+            auto map3190 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm3 = map3190;
+            auto map3191 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm30 = map3191;
+            auto map3192 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm31 = map3192;
+            auto map3193 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm32 = map3193;
+            auto map3194 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm33 = map3194;
+            auto map3195 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm34 = map3195;
+            auto map3196 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm35 = map3196;
+            auto map3197 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm36 = map3197;
+            auto map3198 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm37 = map3198;
+            auto map3199 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm38 = map3199;
+            auto map3200 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm39 = map3200;
+            auto map3201 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm4 = map3201;
+            auto map3202 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm40 = map3202;
+            auto map3203 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm41 = map3203;
+            auto map3204 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm42 = map3204;
+            auto map3205 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm43 = map3205;
+            auto map3206 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm44 = map3206;
+            auto map3207 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm45 = map3207;
+            auto map3208 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm46 = map3208;
+            auto map3209 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm47 = map3209;
+            auto map3210 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm48 = map3210;
+            auto map3211 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm49 = map3211;
+            auto map3212 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm5 = map3212;
+            auto map3213 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm50 = map3213;
+            auto map3214 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm51 = map3214;
+            auto map3215 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm52 = map3215;
+            auto map3216 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm53 = map3216;
+            auto map3217 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm54 = map3217;
+            auto map3218 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm55 = map3218;
+            auto map3219 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm56 = map3219;
+            auto map3220 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm57 = map3220;
+            auto map3221 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm58 = map3221;
+            auto map3222 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm59 = map3222;
+            auto map3223 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm6 = map3223;
+            auto map3224 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm60 = map3224;
+            auto map3225 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm61 = map3225;
+            auto map3226 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm62 = map3226;
+            auto map3227 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm63 = map3227;
+            auto map3228 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm64 = map3228;
+            auto map3229 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm65 = map3229;
+            auto map3230 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm66 = map3230;
+            auto map3231 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm67 = map3231;
+            auto map3232 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm68 = map3232;
+            auto map3233 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm69 = map3233;
+            auto map3234 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm7 = map3234;
+            auto map3235 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm70 = map3235;
+            auto map3236 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm71 = map3236;
+            auto map3237 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm72 = map3237;
+            auto map3238 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm73 = map3238;
+            auto map3239 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm74 = map3239;
+            auto map3240 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm75 = map3240;
+            auto map3241 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm76 = map3241;
+            auto map3242 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm77 = map3242;
+            auto map3243 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm78 = map3243;
+            auto map3244 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm79 = map3244;
+            auto map3245 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm8 = map3245;
+            auto map3246 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm80 = map3246;
+            auto map3247 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm81 = map3247;
+            auto map3248 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm82 = map3248;
+            auto map3249 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm83 = map3249;
+            auto map3250 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm84 = map3250;
+            auto map3251 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm85 = map3251;
+            auto map3252 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm86 = map3252;
+            auto map3253 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm87 = map3253;
+            auto map3254 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm88 = map3254;
+            auto map3255 = buffer.readIntPacketMap<ObjectA>(102);
+            packet->mm9 = map3255;
+            auto set3256 = buffer.readIntSet();
+            packet->s1 = set3256;
+            auto set3257 = buffer.readIntSet();
+            packet->s10 = set3257;
+            auto set3258 = buffer.readIntSet();
+            packet->s11 = set3258;
+            auto set3259 = buffer.readIntSet();
+            packet->s12 = set3259;
+            auto set3260 = buffer.readIntSet();
+            packet->s13 = set3260;
+            auto set3261 = buffer.readIntSet();
+            packet->s14 = set3261;
+            auto set3262 = buffer.readIntSet();
+            packet->s15 = set3262;
+            auto set3263 = buffer.readIntSet();
+            packet->s16 = set3263;
+            auto set3264 = buffer.readIntSet();
+            packet->s17 = set3264;
+            auto set3265 = buffer.readIntSet();
+            packet->s18 = set3265;
+            auto set3266 = buffer.readIntSet();
+            packet->s19 = set3266;
+            auto set3267 = buffer.readIntSet();
+            packet->s2 = set3267;
+            auto set3268 = buffer.readIntSet();
+            packet->s20 = set3268;
+            auto set3269 = buffer.readIntSet();
+            packet->s21 = set3269;
+            auto set3270 = buffer.readIntSet();
+            packet->s22 = set3270;
+            auto set3271 = buffer.readIntSet();
+            packet->s23 = set3271;
+            auto set3272 = buffer.readIntSet();
+            packet->s24 = set3272;
+            auto set3273 = buffer.readIntSet();
+            packet->s25 = set3273;
+            auto set3274 = buffer.readIntSet();
+            packet->s26 = set3274;
+            auto set3275 = buffer.readIntSet();
+            packet->s27 = set3275;
+            auto set3276 = buffer.readIntSet();
+            packet->s28 = set3276;
+            auto set3277 = buffer.readIntSet();
+            packet->s29 = set3277;
+            auto set3278 = buffer.readIntSet();
+            packet->s3 = set3278;
+            auto set3279 = buffer.readIntSet();
+            packet->s30 = set3279;
+            auto set3280 = buffer.readIntSet();
+            packet->s31 = set3280;
+            auto set3281 = buffer.readIntSet();
+            packet->s32 = set3281;
+            auto set3282 = buffer.readIntSet();
+            packet->s33 = set3282;
+            auto set3283 = buffer.readIntSet();
+            packet->s34 = set3283;
+            auto set3284 = buffer.readIntSet();
+            packet->s35 = set3284;
+            auto set3285 = buffer.readIntSet();
+            packet->s36 = set3285;
+            auto set3286 = buffer.readIntSet();
+            packet->s37 = set3286;
+            auto set3287 = buffer.readIntSet();
+            packet->s38 = set3287;
+            auto set3288 = buffer.readIntSet();
+            packet->s39 = set3288;
+            auto set3289 = buffer.readIntSet();
+            packet->s4 = set3289;
+            auto set3290 = buffer.readIntSet();
+            packet->s40 = set3290;
+            auto set3291 = buffer.readIntSet();
+            packet->s41 = set3291;
+            auto set3292 = buffer.readIntSet();
+            packet->s42 = set3292;
+            auto set3293 = buffer.readIntSet();
+            packet->s43 = set3293;
+            auto set3294 = buffer.readIntSet();
+            packet->s44 = set3294;
+            auto set3295 = buffer.readIntSet();
+            packet->s45 = set3295;
+            auto set3296 = buffer.readIntSet();
+            packet->s46 = set3296;
+            auto set3297 = buffer.readIntSet();
+            packet->s47 = set3297;
+            auto set3298 = buffer.readIntSet();
+            packet->s48 = set3298;
+            auto set3299 = buffer.readIntSet();
+            packet->s49 = set3299;
+            auto set3300 = buffer.readIntSet();
+            packet->s5 = set3300;
+            auto set3301 = buffer.readIntSet();
+            packet->s50 = set3301;
+            auto set3302 = buffer.readIntSet();
+            packet->s51 = set3302;
+            auto set3303 = buffer.readIntSet();
+            packet->s52 = set3303;
+            auto set3304 = buffer.readIntSet();
+            packet->s53 = set3304;
+            auto set3305 = buffer.readIntSet();
+            packet->s54 = set3305;
+            auto set3306 = buffer.readIntSet();
+            packet->s55 = set3306;
+            auto set3307 = buffer.readIntSet();
+            packet->s56 = set3307;
+            auto set3308 = buffer.readIntSet();
+            packet->s57 = set3308;
+            auto set3309 = buffer.readIntSet();
+            packet->s58 = set3309;
+            auto set3310 = buffer.readIntSet();
+            packet->s59 = set3310;
+            auto set3311 = buffer.readIntSet();
+            packet->s6 = set3311;
+            auto set3312 = buffer.readIntSet();
+            packet->s60 = set3312;
+            auto set3313 = buffer.readIntSet();
+            packet->s61 = set3313;
+            auto set3314 = buffer.readIntSet();
+            packet->s62 = set3314;
+            auto set3315 = buffer.readIntSet();
+            packet->s63 = set3315;
+            auto set3316 = buffer.readIntSet();
+            packet->s64 = set3316;
+            auto set3317 = buffer.readIntSet();
+            packet->s65 = set3317;
+            auto set3318 = buffer.readIntSet();
+            packet->s66 = set3318;
+            auto set3319 = buffer.readIntSet();
+            packet->s67 = set3319;
+            auto set3320 = buffer.readIntSet();
+            packet->s68 = set3320;
+            auto set3321 = buffer.readIntSet();
+            packet->s69 = set3321;
+            auto set3322 = buffer.readIntSet();
+            packet->s7 = set3322;
+            auto set3323 = buffer.readIntSet();
+            packet->s70 = set3323;
+            auto set3324 = buffer.readIntSet();
+            packet->s71 = set3324;
+            auto set3325 = buffer.readIntSet();
+            packet->s72 = set3325;
+            auto set3326 = buffer.readIntSet();
+            packet->s73 = set3326;
+            auto set3327 = buffer.readIntSet();
+            packet->s74 = set3327;
+            auto set3328 = buffer.readIntSet();
+            packet->s75 = set3328;
+            auto set3329 = buffer.readIntSet();
+            packet->s76 = set3329;
+            auto set3330 = buffer.readIntSet();
+            packet->s77 = set3330;
+            auto set3331 = buffer.readIntSet();
+            packet->s78 = set3331;
+            auto set3332 = buffer.readIntSet();
+            packet->s79 = set3332;
+            auto set3333 = buffer.readIntSet();
+            packet->s8 = set3333;
+            auto set3334 = buffer.readIntSet();
+            packet->s80 = set3334;
+            auto set3335 = buffer.readIntSet();
+            packet->s81 = set3335;
+            auto set3336 = buffer.readIntSet();
+            packet->s82 = set3336;
+            auto set3337 = buffer.readIntSet();
+            packet->s83 = set3337;
+            auto set3338 = buffer.readIntSet();
+            packet->s84 = set3338;
+            auto set3339 = buffer.readIntSet();
+            packet->s85 = set3339;
+            auto set3340 = buffer.readIntSet();
+            packet->s86 = set3340;
+            auto set3341 = buffer.readIntSet();
+            packet->s87 = set3341;
+            auto set3342 = buffer.readIntSet();
+            packet->s88 = set3342;
+            auto set3343 = buffer.readIntSet();
+            packet->s9 = set3343;
+            auto set3344 = buffer.readStringSet();
+            packet->ssss1 = set3344;
+            auto set3345 = buffer.readStringSet();
+            packet->ssss10 = set3345;
+            auto set3346 = buffer.readStringSet();
+            packet->ssss11 = set3346;
+            auto set3347 = buffer.readStringSet();
+            packet->ssss12 = set3347;
+            auto set3348 = buffer.readStringSet();
+            packet->ssss13 = set3348;
+            auto set3349 = buffer.readStringSet();
+            packet->ssss14 = set3349;
+            auto set3350 = buffer.readStringSet();
+            packet->ssss15 = set3350;
+            auto set3351 = buffer.readStringSet();
+            packet->ssss16 = set3351;
+            auto set3352 = buffer.readStringSet();
+            packet->ssss17 = set3352;
+            auto set3353 = buffer.readStringSet();
+            packet->ssss18 = set3353;
+            auto set3354 = buffer.readStringSet();
+            packet->ssss19 = set3354;
+            auto set3355 = buffer.readStringSet();
+            packet->ssss2 = set3355;
+            auto set3356 = buffer.readStringSet();
+            packet->ssss20 = set3356;
+            auto set3357 = buffer.readStringSet();
+            packet->ssss21 = set3357;
+            auto set3358 = buffer.readStringSet();
+            packet->ssss22 = set3358;
+            auto set3359 = buffer.readStringSet();
+            packet->ssss23 = set3359;
+            auto set3360 = buffer.readStringSet();
+            packet->ssss24 = set3360;
+            auto set3361 = buffer.readStringSet();
+            packet->ssss25 = set3361;
+            auto set3362 = buffer.readStringSet();
+            packet->ssss26 = set3362;
+            auto set3363 = buffer.readStringSet();
+            packet->ssss27 = set3363;
+            auto set3364 = buffer.readStringSet();
+            packet->ssss28 = set3364;
+            auto set3365 = buffer.readStringSet();
+            packet->ssss29 = set3365;
+            auto set3366 = buffer.readStringSet();
+            packet->ssss3 = set3366;
+            auto set3367 = buffer.readStringSet();
+            packet->ssss30 = set3367;
+            auto set3368 = buffer.readStringSet();
+            packet->ssss31 = set3368;
+            auto set3369 = buffer.readStringSet();
+            packet->ssss32 = set3369;
+            auto set3370 = buffer.readStringSet();
+            packet->ssss33 = set3370;
+            auto set3371 = buffer.readStringSet();
+            packet->ssss34 = set3371;
+            auto set3372 = buffer.readStringSet();
+            packet->ssss35 = set3372;
+            auto set3373 = buffer.readStringSet();
+            packet->ssss36 = set3373;
+            auto set3374 = buffer.readStringSet();
+            packet->ssss37 = set3374;
+            auto set3375 = buffer.readStringSet();
+            packet->ssss38 = set3375;
+            auto set3376 = buffer.readStringSet();
+            packet->ssss39 = set3376;
+            auto set3377 = buffer.readStringSet();
+            packet->ssss4 = set3377;
+            auto set3378 = buffer.readStringSet();
+            packet->ssss40 = set3378;
+            auto set3379 = buffer.readStringSet();
+            packet->ssss41 = set3379;
+            auto set3380 = buffer.readStringSet();
+            packet->ssss42 = set3380;
+            auto set3381 = buffer.readStringSet();
+            packet->ssss43 = set3381;
+            auto set3382 = buffer.readStringSet();
+            packet->ssss44 = set3382;
+            auto set3383 = buffer.readStringSet();
+            packet->ssss45 = set3383;
+            auto set3384 = buffer.readStringSet();
+            packet->ssss46 = set3384;
+            auto set3385 = buffer.readStringSet();
+            packet->ssss47 = set3385;
+            auto set3386 = buffer.readStringSet();
+            packet->ssss48 = set3386;
+            auto set3387 = buffer.readStringSet();
+            packet->ssss49 = set3387;
+            auto set3388 = buffer.readStringSet();
+            packet->ssss5 = set3388;
+            auto set3389 = buffer.readStringSet();
+            packet->ssss50 = set3389;
+            auto set3390 = buffer.readStringSet();
+            packet->ssss51 = set3390;
+            auto set3391 = buffer.readStringSet();
+            packet->ssss52 = set3391;
+            auto set3392 = buffer.readStringSet();
+            packet->ssss53 = set3392;
+            auto set3393 = buffer.readStringSet();
+            packet->ssss54 = set3393;
+            auto set3394 = buffer.readStringSet();
+            packet->ssss55 = set3394;
+            auto set3395 = buffer.readStringSet();
+            packet->ssss56 = set3395;
+            auto set3396 = buffer.readStringSet();
+            packet->ssss57 = set3396;
+            auto set3397 = buffer.readStringSet();
+            packet->ssss58 = set3397;
+            auto set3398 = buffer.readStringSet();
+            packet->ssss59 = set3398;
+            auto set3399 = buffer.readStringSet();
+            packet->ssss6 = set3399;
+            auto set3400 = buffer.readStringSet();
+            packet->ssss60 = set3400;
+            auto set3401 = buffer.readStringSet();
+            packet->ssss61 = set3401;
+            auto set3402 = buffer.readStringSet();
+            packet->ssss62 = set3402;
+            auto set3403 = buffer.readStringSet();
+            packet->ssss63 = set3403;
+            auto set3404 = buffer.readStringSet();
+            packet->ssss64 = set3404;
+            auto set3405 = buffer.readStringSet();
+            packet->ssss65 = set3405;
+            auto set3406 = buffer.readStringSet();
+            packet->ssss66 = set3406;
+            auto set3407 = buffer.readStringSet();
+            packet->ssss67 = set3407;
+            auto set3408 = buffer.readStringSet();
+            packet->ssss68 = set3408;
+            auto set3409 = buffer.readStringSet();
+            packet->ssss69 = set3409;
+            auto set3410 = buffer.readStringSet();
+            packet->ssss7 = set3410;
+            auto set3411 = buffer.readStringSet();
+            packet->ssss70 = set3411;
+            auto set3412 = buffer.readStringSet();
+            packet->ssss71 = set3412;
+            auto set3413 = buffer.readStringSet();
+            packet->ssss72 = set3413;
+            auto set3414 = buffer.readStringSet();
+            packet->ssss73 = set3414;
+            auto set3415 = buffer.readStringSet();
+            packet->ssss74 = set3415;
+            auto set3416 = buffer.readStringSet();
+            packet->ssss75 = set3416;
+            auto set3417 = buffer.readStringSet();
+            packet->ssss76 = set3417;
+            auto set3418 = buffer.readStringSet();
+            packet->ssss77 = set3418;
+            auto set3419 = buffer.readStringSet();
+            packet->ssss78 = set3419;
+            auto set3420 = buffer.readStringSet();
+            packet->ssss79 = set3420;
+            auto set3421 = buffer.readStringSet();
+            packet->ssss8 = set3421;
+            auto set3422 = buffer.readStringSet();
+            packet->ssss80 = set3422;
+            auto set3423 = buffer.readStringSet();
+            packet->ssss81 = set3423;
+            auto set3424 = buffer.readStringSet();
+            packet->ssss82 = set3424;
+            auto set3425 = buffer.readStringSet();
+            packet->ssss83 = set3425;
+            auto set3426 = buffer.readStringSet();
+            packet->ssss84 = set3426;
+            auto set3427 = buffer.readStringSet();
+            packet->ssss85 = set3427;
+            auto set3428 = buffer.readStringSet();
+            packet->ssss86 = set3428;
+            auto set3429 = buffer.readStringSet();
+            packet->ssss87 = set3429;
+            auto set3430 = buffer.readStringSet();
+            packet->ssss88 = set3430;
+            auto set3431 = buffer.readStringSet();
+            packet->ssss9 = set3431;
+            if (length > 0) {
+                buffer.readerIndex(beforeReadIndex + length);
+            }
             return packet;
         }
     };

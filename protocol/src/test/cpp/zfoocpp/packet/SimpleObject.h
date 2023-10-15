@@ -1,7 +1,7 @@
 #ifndef ZFOO_SIMPLEOBJECT_H
 #define ZFOO_SIMPLEOBJECT_H
 
-#include "cppProtocol/ByteBuffer.h"
+#include "zfoocpp/ByteBuffer.h"
 
 namespace zfoo {
 
@@ -41,23 +41,30 @@ namespace zfoo {
         }
 
         void write(ByteBuffer &buffer, IProtocol *packet) override {
-            if (buffer.writePacketFlag(packet)) {
+            if (packet == nullptr) {
+                buffer.writeInt(0);
                 return;
             }
             auto *message = (SimpleObject *) packet;
+            buffer.writeInt(-1);
             buffer.writeInt(message->c);
             buffer.writeBool(message->g);
         }
 
         IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new SimpleObject();
-            if (!buffer.readBool()) {
+            auto length = buffer.readInt();
+            if (length == 0) {
                 return packet;
             }
+            auto beforeReadIndex = buffer.readerIndex();
             int32_t result0 = buffer.readInt();
             packet->c = result0;
             bool result1 = buffer.readBool();
             packet->g = result1;
+            if (length > 0) {
+                buffer.readerIndex(beforeReadIndex + length);
+            }
             return packet;
         }
     };

@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "cppProtocol/ByteBuffer.h"
+#include "zfoocpp/ByteBuffer.h"
 
 namespace byte_buffer_test {
 

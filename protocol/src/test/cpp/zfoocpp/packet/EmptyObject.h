@@ -1,7 +1,7 @@
 #ifndef ZFOO_EMPTYOBJECT_H
 #define ZFOO_EMPTYOBJECT_H
 
-#include "cppProtocol/ByteBuffer.h"
+#include "zfoocpp/ByteBuffer.h"
 
 namespace zfoo {
 
@@ -36,19 +36,25 @@ namespace zfoo {
         }
 
         void write(ByteBuffer &buffer, IProtocol *packet) override {
-            if (buffer.writePacketFlag(packet)) {
+            if (packet == nullptr) {
+                buffer.writeInt(0);
                 return;
             }
             auto *message = (EmptyObject *) packet;
-            
+            buffer.writeInt(-1);
         }
 
         IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new EmptyObject();
-            if (!buffer.readBool()) {
+            auto length = buffer.readInt();
+            if (length == 0) {
                 return packet;
             }
+            auto beforeReadIndex = buffer.readerIndex();
             
+            if (length > 0) {
+                buffer.readerIndex(beforeReadIndex + length);
+            }
             return packet;
         }
     };

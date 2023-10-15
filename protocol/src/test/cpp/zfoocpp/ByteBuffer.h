@@ -77,6 +77,29 @@ namespace zfoo {
 
         ByteBuffer &operator=(const ByteBuffer &buffer) = delete;
 
+        void adjustPadding(int32_t predictionLength, int32_t beforeWriteIndex) {
+            int32_t currentWriteIndex = writerIndex();
+            int32_t predictionCount = writeIntCount(predictionLength);
+            int32_t length = currentWriteIndex - beforeWriteIndex - predictionCount;
+            int32_t lengthCount = writeIntCount(length);
+            int32_t padding = lengthCount - predictionCount;
+            if (padding == 0) {
+                writerIndex(beforeWriteIndex);
+                writeInt(length);
+                writerIndex(currentWriteIndex);
+            } else {
+                int8_t *targetPtr = (int8_t *) calloc(length, sizeof(int8_t));
+                memcpy(targetPtr, &m_buffer[currentWriteIndex - length],  length);
+                writerIndex(beforeWriteIndex);
+                writeInt(length);
+                writeBytes(targetPtr, length);
+                free(targetPtr);
+            }
+        }
+
+        bool compatibleRead(int32_t beforeReadIndex, int32_t length) {
+            return length != -1 && readerIndex() < length + beforeReadIndex;
+        }
 
         void clear() {
             m_writerIndex = 0;
@@ -226,6 +249,23 @@ namespace zfoo {
             setByte(writeIndex++, (int8_t) (a | 0x80));
             setByte(writeIndex++, (int8_t) b);
             writerIndex(writeIndex);
+        }
+
+        inline int32_t writeIntCount(const int32_t &intValue) {
+            uint32_t value = (uint32_t) ((intValue << 1) ^ (intValue >> 31));
+            if (value >> 7 == 0) {
+                return 1;
+            }
+            if (value >> 14 == 0) {
+                return 2;
+            }
+            if (value >> 21 == 0) {
+                return 3;
+            }
+            if (value >> 28 == 0) {
+                return 4;
+            }
+            return 5;
         }
 
         inline int32_t readInt() {
@@ -382,23 +422,6 @@ namespace zfoo {
             auto bytes = readBytes(length);
             string str(reinterpret_cast<const char *>(bytes), length);
             return str;
-        }
-
-        // 很多脚本语言没有char，所以这里使用string代替
-        inline void writeChar(const char &value) {
-            string str;
-            str.push_back(value);
-            writeString(str);
-        }
-
-        inline char readChar() {
-            return readString()[0];
-        }
-
-        inline bool writePacketFlag(const IProtocol *packet) {
-            bool flag = packet == nullptr;
-            writeBool(!flag);
-            return flag;
         }
 
         inline void writePacket(IProtocol *packet, const int16_t &protocolId) {
@@ -859,70 +882,6 @@ namespace zfoo {
             set<double> set;
             for (auto i = 0; i < length; i++) {
                 set.emplace(readDouble());
-            }
-            return set;
-        }
-
-        //---------------------------------char--------------------------------------
-        inline void writeCharArray(const vector<char> &array) {
-            if (array.empty()) {
-                writeByte(0);
-                return;
-            }
-            int32_t length = array.size();
-            writeInt(length);
-            for (auto value : array) {
-                writeChar(value);
-            }
-        }
-
-        inline vector<char> readCharArray() {
-            int32_t length = readInt();
-            vector<char> array;
-            for (auto i = 0; i < length; i++) {
-                array.emplace_back(readChar());
-            }
-            return array;
-        }
-
-        inline void writeCharList(const list<char> &list) {
-            if (list.empty()) {
-                writeByte(0);
-                return;
-            }
-            int32_t length = list.size();
-            writeInt(length);
-            for (auto value : list) {
-                writeChar(value);
-            }
-        }
-
-        inline list<char> readCharList() {
-            int32_t length = readInt();
-            list<char> list;
-            for (auto i = 0; i < length; i++) {
-                list.emplace_back(readChar());
-            }
-            return list;
-        }
-
-        inline void writeCharSet(const set<char> &set) {
-            if (set.empty()) {
-                writeByte(0);
-                return;
-            }
-            int32_t length = set.size();
-            writeInt(length);
-            for (auto value : set) {
-                writeChar(value);
-            }
-        }
-
-        inline set<char> readCharSet() {
-            int32_t length = readInt();
-            set<char> set;
-            for (auto i = 0; i < length; i++) {
-                set.emplace(readChar());
             }
             return set;
         }

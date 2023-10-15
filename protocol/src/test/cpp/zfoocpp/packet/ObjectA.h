@@ -1,8 +1,8 @@
 #ifndef ZFOO_OBJECTA_H
 #define ZFOO_OBJECTA_H
 
-#include "cppProtocol/ByteBuffer.h"
-#include "cppProtocol/Packet/ObjectB.h"
+#include "zfoocpp/ByteBuffer.h"
+#include "zfoocpp/Packet/ObjectB.h"
 
 namespace zfoo {
 
@@ -12,14 +12,16 @@ namespace zfoo {
         int32_t a;
         map<int32_t, string> m;
         ObjectB objectB;
+        int32_t innerCompatibleValue;
 
         ~ObjectA() override = default;
 
-        static ObjectA valueOf(int32_t a, map<int32_t, string> m, ObjectB objectB) {
+        static ObjectA valueOf(int32_t a, map<int32_t, string> m, ObjectB objectB, int32_t innerCompatibleValue) {
             auto packet = ObjectA();
             packet.a = a;
             packet.m = m;
             packet.objectB = objectB;
+            packet.innerCompatibleValue = innerCompatibleValue;
             return packet;
         }
 
@@ -34,6 +36,8 @@ namespace zfoo {
             if (_.m < m) { return false; }
             if (objectB < _.objectB) { return true; }
             if (_.objectB < objectB) { return false; }
+            if (innerCompatibleValue < _.innerCompatibleValue) { return true; }
+            if (_.innerCompatibleValue < innerCompatibleValue) { return false; }
             return false;
         }
     };
@@ -46,20 +50,27 @@ namespace zfoo {
         }
 
         void write(ByteBuffer &buffer, IProtocol *packet) override {
-            if (buffer.writePacketFlag(packet)) {
+            if (packet == nullptr) {
+                buffer.writeInt(0);
                 return;
             }
             auto *message = (ObjectA *) packet;
+            auto beforeWriteIndex = buffer.writerIndex();
+            buffer.writeInt(201);
             buffer.writeInt(message->a);
             buffer.writeIntStringMap(message->m);
             buffer.writePacket(&message->objectB, 103);
+            buffer.writeInt(message->innerCompatibleValue);
+            buffer.adjustPadding(201, beforeWriteIndex);
         }
 
         IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new ObjectA();
-            if (!buffer.readBool()) {
+            auto length = buffer.readInt();
+            if (length == 0) {
                 return packet;
             }
+            auto beforeReadIndex = buffer.readerIndex();
             int32_t result0 = buffer.readInt();
             packet->a = result0;
             auto map1 = buffer.readIntStringMap();
@@ -67,6 +78,13 @@ namespace zfoo {
             auto result2 = buffer.readPacket(103);
             auto *result3 = (ObjectB *) result2.get();
             packet->objectB = *result3;
+            if (buffer.compatibleRead(beforeReadIndex, length)) {
+                int32_t result4 = buffer.readInt();
+                packet->innerCompatibleValue = result4;
+            }
+            if (length > 0) {
+                buffer.readerIndex(beforeReadIndex + length);
+            }
             return packet;
         }
     };

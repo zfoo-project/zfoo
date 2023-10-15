@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(PROJECT_MAIN cpp)
 
 # main
-file(GLOB_RECURSE MAIN_SOURCES cppProtocol/*.c**)
-file(GLOB_RECURSE MAIN_HEADERS cppProtocol/*.h**)
+file(GLOB_RECURSE MAIN_SOURCES zfoocpp/*.c**)
+file(GLOB_RECURSE MAIN_HEADERS zfoocpp/*.h**)
 
 # test
 file(GLOB_RECURSE TEST_SOURCES test/*.c**)

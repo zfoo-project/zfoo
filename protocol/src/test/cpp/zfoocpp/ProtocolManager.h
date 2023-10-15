@@ -2,13 +2,13 @@
 #define ZFOO_PROTOCOLMANAGER_H
 
 #include "ByteBuffer.h"
-#include "cppProtocol/packet/EmptyObject.h"
-#include "cppProtocol/packet/VeryBigObject.h"
-#include "cppProtocol/packet/ComplexObject.h"
-#include "cppProtocol/packet/NormalObject.h"
-#include "cppProtocol/packet/ObjectA.h"
-#include "cppProtocol/packet/ObjectB.h"
-#include "cppProtocol/packet/SimpleObject.h"
+#include "zfoocpp/packet/EmptyObject.h"
+#include "zfoocpp/packet/VeryBigObject.h"
+#include "zfoocpp/packet/ComplexObject.h"
+#include "zfoocpp/packet/NormalObject.h"
+#include "zfoocpp/packet/ObjectA.h"
+#include "zfoocpp/packet/ObjectB.h"
+#include "zfoocpp/packet/SimpleObject.h"
 
 namespace zfoo {
 
