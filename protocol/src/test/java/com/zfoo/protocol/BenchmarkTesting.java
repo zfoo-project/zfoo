@@ -50,8 +50,8 @@ public class BenchmarkTesting {
      * <p>
      * 包体大小：
      * 简单对象，zfoo包体大小8，kryo包体大小5，protobuf包体大小8
-     * 常规对象，zfoo包体大小430，kryo包体大小483，protobuf包体大小793
-     * 复杂对象，zfoo包体大小2216，kryo包体大小2528，protobuf包体大小5091
+     * 常规对象，zfoo包体大小430，kryo包体大小516，protobuf包体大小793
+     * 复杂对象，zfoo包体大小2191，kryo包体大小2611，protobuf包体大小5083
      */
     @Test
     public void singleThreadBenchmarks() {
