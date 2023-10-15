@@ -18,6 +18,26 @@ type ByteBuffer struct {
 	readIndex  int
 }
 
+func (byteBuffer *ByteBuffer) AdjustPadding(predictionLength int, beforeWriteIndex int) {
+	// 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+	var currentWriteIndex = byteBuffer.WriteOffset()
+	var predictionCount = byteBuffer.WriteIntCount(int32(predictionLength))
+	var length = currentWriteIndex - beforeWriteIndex - predictionCount
+	var lengthCount = byteBuffer.WriteIntCount(int32(length))
+	var padding = lengthCount - predictionCount
+	if padding == 0 {
+		byteBuffer.SetWriteOffset(beforeWriteIndex)
+		byteBuffer.WriteInt(length)
+		byteBuffer.SetWriteOffset(currentWriteIndex)
+	} else {
+		byteBuffer.SetWriteOffset(currentWriteIndex - length)
+		var byteArray = byteBuffer.ReadUBytes(length)
+		byteBuffer.SetWriteOffset(beforeWriteIndex)
+		byteBuffer.WriteInt(length)
+		byteBuffer.WriteUBytes(byteArray)
+	}
+}
+
 // -------------------------------------------------get/set-------------------------------------------------
 func (byteBuffer *ByteBuffer) WriteOffset() int {
 	return byteBuffer.writeIndex
@@ -163,12 +183,11 @@ func (byteBuffer *ByteBuffer) ReadShort() int16 {
 	return value
 }
 
-func (byteBuffer *ByteBuffer) WriteRawInt32(value int32) {
-	byteBuffer.EnsureCapacity(4)
-	var bytesBuffer = bytes.NewBuffer([]byte{})
-	binary.Write(bytesBuffer, binary.BigEndian, value)
-	var byteArray = bytesBuffer.Bytes()
-	byteBuffer.WriteUBytes(byteArray)
+func (byteBuffer *ByteBuffer) WriteRawInt32(intValue int32) {
+	byteBuffer.WriteUByte(byte(intValue >> 24))
+	byteBuffer.WriteUByte(byte(intValue >> 16))
+	byteBuffer.WriteUByte(byte(intValue >> 8))
+	byteBuffer.WriteUByte(byte(intValue))
 }
 
 func (byteBuffer *ByteBuffer) ReadRawInt32() int32 {
@@ -188,6 +207,24 @@ func (byteBuffer *ByteBuffer) WriteInt(intValue int) {
 
 func (byteBuffer *ByteBuffer) ReadInt() int {
 	return int(byteBuffer.ReadInt32())
+}
+
+func (byteBuffer *ByteBuffer) WriteIntCount(intValue int32) int {
+	var value uint32 = uint32(((intValue << 1) ^ (intValue >> 31)))
+	// 右移操作>>是带符号右移
+	if value>>7 == 0 {
+		return 1
+	}
+	if value>>14 == 0 {
+		return 2
+	}
+	if value>>21 == 0 {
+		return 3
+	}
+	if value>>28 == 0 {
+		return 4
+	}
+	return 5
 }
 
 func (byteBuffer *ByteBuffer) WriteInt32(intValue int32) {
@@ -449,7 +486,7 @@ func (byteBuffer *ByteBuffer) ReadPacket(protocolId int16) any {
 
 // -------------------------------------------------IProtocolRegistration-------------------------------------------------
 type IProtocolRegistration interface {
-	ProtocolId() int16
+	protocolId() int16
 
 	write(buffer *ByteBuffer, packet any)
 
@@ -464,7 +501,7 @@ func GetProtocol(protocolId int16) IProtocolRegistration {
 }
 
 func Write(buffer *ByteBuffer, packet any) {
-	var protocolId = packet.(IProtocolRegistration).ProtocolId()
+	var protocolId = packet.(IProtocolRegistration).protocolId()
 	buffer.WriteShort(protocolId)
 	var protocolRegistration = GetProtocol(protocolId)
 	protocolRegistration.write(buffer, packet)

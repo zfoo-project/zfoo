@@ -44,7 +44,9 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateGoUtils {
 
-    private static String protocolOutputRootPath = "goProtocol/";
+    // custom configuration
+    public static String protocolOutputRootPath = "zfoogo";
+    public static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, IGoSerializer> goSerializerMap;
 
@@ -53,10 +55,13 @@ public abstract class GenerateGoUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
-
-        FileUtils.deleteFile(new File(protocolOutputRootPath));
-        FileUtils.createDirectory(protocolOutputRootPath);
+        // if not specify output path, then use current default path
+        if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
+            protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+        } else {
+            protocolOutputPath = generateOperation.getProtocolPath();
+        }
+        FileUtils.deleteFile(new File(protocolOutputPath));
 
         goSerializerMap = new HashMap<>();
         goSerializerMap.put(BooleanSerializer.INSTANCE, new GoBooleanSerializer());
@@ -77,6 +82,7 @@ public abstract class GenerateGoUtils {
     public static void clear() {
         goSerializerMap = null;
         protocolOutputRootPath = null;
+        protocolOutputPath = null;
     }
 
     /**
