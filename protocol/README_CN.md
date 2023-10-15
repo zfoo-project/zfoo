@@ -129,6 +129,21 @@ cpu： i9900k
       
       }
       ```
+      
+    - 第三种使用：通过ProtocolManagerinitProtocol(xmlProtocols)去注册协议，把协议号写在protocol.xml文件
+      ```
+      <protocols>
+          <module id="1" name="common">
+              <protocol id="100" location="com.zfoo.protocol.packet.ComplexObject"/>
+              <protocol id="101" location="com.zfoo.protocol.packet.NormalObject"/>
+              <protocol id="102" location="com.zfoo.protocol.packet.ObjectA"/>
+              <protocol id="103" location="com.zfoo.protocol.packet.ObjectB"/>
+              <protocol id="104" location="com.zfoo.protocol.packet.SimpleObject"/>
+              <protocol id="105" location="com.zfoo.protocol.packet.VeryBigObject"/>
+              <protocol id="106" location="com.zfoo.protocol.packet.EmptyObject"/>
+          </module>
+      </protocols>
+      ```
 
 - 如果为了版本兼容，增加字段，需要加上Compatible注解，order需要自然增大，这样就可以保证新老协议可以互相兼容
 - 正式环境为了版本兼容，避免修改字段名称，内部默认使用字段的名称按照字符串的自然顺序来依次读写的（也可以自定义），所以会导致序列化出现异常

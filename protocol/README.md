@@ -141,7 +141,6 @@ your protocol number a little more compactly, so that your protocol number will 
       }
       ```
 
-
     - The second use: Register the agreement through Protocol Manager.initProtocolAuto() without writing the protocol
       number
       ```
@@ -153,6 +152,21 @@ your protocol number a little more compactly, so that your protocol number will 
       
       }
       ```
+      
+  - The third use: Register the protocol through ProtocolManager.initProtocol(xmlProtocols) in the protocol.xml file
+    ```
+    <protocols>
+        <module id="1" name="common">
+            <protocol id="100" location="com.zfoo.protocol.packet.ComplexObject"/>
+            <protocol id="101" location="com.zfoo.protocol.packet.NormalObject"/>
+            <protocol id="102" location="com.zfoo.protocol.packet.ObjectA"/>
+            <protocol id="103" location="com.zfoo.protocol.packet.ObjectB"/>
+            <protocol id="104" location="com.zfoo.protocol.packet.SimpleObject"/>
+            <protocol id="105" location="com.zfoo.protocol.packet.VeryBigObject"/>
+            <protocol id="106" location="com.zfoo.protocol.packet.EmptyObject"/>
+        </module>
+    </protocols>
+    ```      
 
 - If you add a field for version compatibility, you need to add a Compatible annotation, and the order needs to be
   naturally increased, so as to ensure that the old and new protocols can be compatible with each other
