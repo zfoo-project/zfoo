@@ -25,11 +25,14 @@ func adjustPadding(predictionLength: int, beforeWriteIndex: int) -> void:
 		setWriteOffset(currentWriteIndex)
 	else:
 		buffer.seek(currentWriteIndex - length)
-		var retainedByteBuf = buffer.get_partial_data(length)
-		buffer.seek(beforeWriteIndex)
+		var retainedByteBuf = buffer.get_partial_data(length)[1]
+		setWriteOffset(beforeWriteIndex)
 		writeInt(length)
+		buffer.seek(beforeWriteIndex + lengthCount)
 		buffer.put_partial_data(retainedByteBuf)
-		setWriteOffset(getWriteOffset() + length)
+		var count = beforeWriteIndex + lengthCount + length
+		buffer.seek(count)
+		setWriteOffset(count)
 	pass
 
 func compatibleRead(beforeReadIndex: int, length: int) -> bool:
