@@ -205,7 +205,6 @@ public abstract class GenerateTsUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-
                 tsBuilder.append(TAB + TAB).append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
                 var compatibleReadObject = tsSerializer(fieldRegistration.serializer()).readObject(tsBuilder, 3, field, fieldRegistration);
                 tsBuilder.append(TAB + TAB+ TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);

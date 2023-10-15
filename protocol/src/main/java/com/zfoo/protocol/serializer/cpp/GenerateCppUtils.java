@@ -245,8 +245,13 @@ public abstract class GenerateCppUtils {
     private static String writeObject(ProtocolRegistration registration) {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
-
         var cppBuilder = new StringBuilder();
+        if (registration.isCompatible()) {
+            cppBuilder.append(TAB + TAB + TAB).append("auto beforeWriteIndex = buffer.writerIndex();").append(LS);
+            cppBuilder.append(TAB + TAB + TAB).append(StringUtils.format("buffer.writeInt({});", registration.getPredictionLength())).append(LS);
+        } else {
+            cppBuilder.append(TAB + TAB + TAB).append("buffer.writeInt(-1);").append(LS);
+        }
         for (int i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
@@ -272,6 +277,17 @@ public abstract class GenerateCppUtils {
 
             if (field.isAnnotationPresent(Compatible.class)) {
                 cppBuilder.append(TAB + TAB + TAB).append(StringUtils.format("if (!buffer.isReadable()) { return packet; }")).append(LS);
+            }
+            if (field.isAnnotationPresent(Compatible.class)) {
+                cppBuilder.append(TAB + TAB + TAB).append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
+                var compatibleReadObject = cppSerializer(fieldRegistration.serializer()).readObject(cppBuilder, 4, field, fieldRegistration);
+                cppBuilder.append(TAB + TAB + TAB);
+                if (ProtocolManager.isProtocolClass(field.getType())) {
+                    cppBuilder.append(StringUtils.format("packet->{} = *{};", field.getName(), compatibleReadObject));
+                } else {
+                    cppBuilder.append(StringUtils.format("packet->{} = {};", field.getName(), compatibleReadObject));
+                }
+                continue;
             }
 
             var readObject = cppSerializer(fieldRegistration.serializer()).readObject(cppBuilder, 3, field, fieldRegistration);
