@@ -131,6 +131,7 @@ func writeIntCount(value: int) -> int:
 	if !(minInt <= value && value <= maxInt):
 		printerr("value must range between minInt:-2147483648 and maxInt:2147483647")
 		return 0
+	value = (value << 1) ^ (value >> 63)
 	if value >> 7 == 0:
 		return 1
 	if value >> 14 == 0:

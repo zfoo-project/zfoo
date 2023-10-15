@@ -25,11 +25,14 @@ func adjustPadding(predictionLength: int, beforeWriteIndex: int) -> void:
 		setWriteOffset(currentWriteIndex)
 	else:
 		buffer.seek(currentWriteIndex - length)
-		var retainedByteBuf = buffer.get_partial_data(length)
-		buffer.seek(beforeWriteIndex)
+		var retainedByteBuf = buffer.get_partial_data(length)[1]
+		setWriteOffset(beforeWriteIndex)
 		writeInt(length)
+		buffer.seek(beforeWriteIndex + lengthCount)
 		buffer.put_partial_data(retainedByteBuf)
-		setWriteOffset(getWriteOffset() + length)
+		var count = beforeWriteIndex + lengthCount + length
+		buffer.seek(count)
+		setWriteOffset(count)
 	pass
 
 func compatibleRead(beforeReadIndex: int, length: int) -> bool:
@@ -131,6 +134,7 @@ func writeIntCount(value: int) -> int:
 	if !(minInt <= value && value <= maxInt):
 		printerr("value must range between minInt:-2147483648 and maxInt:2147483647")
 		return 0
+	value = (value << 1) ^ (value >> 63)
 	if value >> 7 == 0:
 		return 1
 	if value >> 14 == 0:
