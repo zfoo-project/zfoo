@@ -23,8 +23,8 @@ namespace zfoo {
 
     // Returns true if the current machine is little endian
     static inline bool is_little_endian() {
-        static std::int32_t test = 1;
-        return (*reinterpret_cast<std::int8_t *>(&test) == 1);
+        static int32_t test = 1;
+        return (*reinterpret_cast<int8_t *>(&test) == 1);
     }
 
     // Default size of the buffer
@@ -147,8 +147,8 @@ namespace zfoo {
                 int32_t newSize = m_max_capacity * 2;
                 int8_t *pBuf = (int8_t *) realloc(m_buffer, newSize);
                 if (!pBuf) {
-                    std::cout << "relloc failed!" << std::endl;
-                    exit(1);
+                    string errorMessage = "relloc failed!";
+                    throw errorMessage;
                 }
                 m_buffer = pBuf;
                 m_max_capacity = newSize;
@@ -1319,7 +1319,7 @@ namespace zfoo {
             // MSDN: The htons function converts a u_short from host to TCP/IP network byte order (which is big-endian).
             // ** This mean the network byte order is big-endian **
             if (IS_LITTLE_ENDIAN) {
-                swap_bytes<sizeof(T)>(reinterpret_cast<std::int8_t *>(&value));
+                swap_bytes<sizeof(T)>(reinterpret_cast<int8_t *>(&value));
             }
             memcpy(&m_buffer[m_writerIndex], (int8_t *) &value, sizeof(T));
             m_writerIndex += sizeof(T);
