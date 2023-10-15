@@ -46,10 +46,15 @@ namespace zfoo {
 
         IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new {}();
-            if (!buffer.readBool()) {
+            auto length = buffer.readInt();
+            if (length == 0) {
                 return packet;
             }
+            auto beforeReadIndex = buffer.readerIndex();
             {}
+            if (length > 0) {
+                buffer.readerIndex(beforeReadIndex + length);
+            }
             return packet;
         }
     };

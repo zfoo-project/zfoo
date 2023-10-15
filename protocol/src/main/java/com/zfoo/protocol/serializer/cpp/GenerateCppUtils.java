@@ -262,6 +262,9 @@ public abstract class GenerateCppUtils {
                 serializer.writeObject(cppBuilder, "message->" + field.getName(), 3, field, fieldRegistration);
             }
         }
+        if (registration.isCompatible()) {
+            cppBuilder.append(TAB + TAB + TAB).append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex);", registration.getPredictionLength())).append(LS);
+        }
         return cppBuilder.toString();
     }
 
@@ -276,17 +279,15 @@ public abstract class GenerateCppUtils {
             var fieldRegistration = fieldRegistrations[i];
 
             if (field.isAnnotationPresent(Compatible.class)) {
-                cppBuilder.append(TAB + TAB + TAB).append(StringUtils.format("if (!buffer.isReadable()) { return packet; }")).append(LS);
-            }
-            if (field.isAnnotationPresent(Compatible.class)) {
                 cppBuilder.append(TAB + TAB + TAB).append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
                 var compatibleReadObject = cppSerializer(fieldRegistration.serializer()).readObject(cppBuilder, 4, field, fieldRegistration);
-                cppBuilder.append(TAB + TAB + TAB);
+                cppBuilder.append(TAB + TAB + TAB + TAB);
                 if (ProtocolManager.isProtocolClass(field.getType())) {
                     cppBuilder.append(StringUtils.format("packet->{} = *{};", field.getName(), compatibleReadObject));
                 } else {
                     cppBuilder.append(StringUtils.format("packet->{} = {};", field.getName(), compatibleReadObject));
                 }
+                cppBuilder.append(LS).append(TAB + TAB + TAB).append("}").append(LS);
                 continue;
             }
 
