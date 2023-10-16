@@ -235,6 +235,7 @@ const ByteBuffer = function() {
         if (!(minInt <= value && value <= maxInt)) {
             throw new Error('value must range between minInt:-2147483648 and maxInt:2147483647');
         }
+        value = encodeZigzagInt(value);
         if (value >>> 7 === 0) {
             return 1;
         }

@@ -19,7 +19,6 @@ const NormalObject = function() {
     this.s = new Set(); // Set<number>
     this.ssss = new Set(); // Set<string>
     this.outCompatibleValue = 0; // number
-    this.outCompatibleValue2 = 0; // number
 };
 
 NormalObject.prototype.protocolId = function() {
@@ -32,7 +31,7 @@ NormalObject.write = function(buffer, packet) {
         return;
     }
     const beforeWriteIndex = buffer.getWriteOffset();
-    buffer.writeInt(857);
+    buffer.writeInt(854);
     buffer.writeByte(packet.a);
     buffer.writeByteArray(packet.aaa);
     buffer.writeShort(packet.b);
@@ -52,8 +51,7 @@ NormalObject.write = function(buffer, packet) {
     buffer.writeIntSet(packet.s);
     buffer.writeStringSet(packet.ssss);
     buffer.writeInt(packet.outCompatibleValue);
-    buffer.writeInt(packet.outCompatibleValue2);
-    buffer.adjustPadding(857, beforeWriteIndex);
+    buffer.adjustPadding(854, beforeWriteIndex);
 };
 
 NormalObject.read = function(buffer) {
@@ -102,10 +100,6 @@ NormalObject.read = function(buffer) {
     if (buffer.compatibleRead(beforeReadIndex, length)) {
         const result18 = buffer.readInt();
         packet.outCompatibleValue = result18;
-    }
-    if (buffer.compatibleRead(beforeReadIndex, length)) {
-        const result19 = buffer.readInt();
-        packet.outCompatibleValue2 = result19;
     }
     if (length > 0) {
         buffer.setReadOffset(beforeReadIndex + length);

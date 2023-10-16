@@ -1,4 +1,5 @@
 import EmptyObject from './packet/EmptyObject.js';
+import VeryBigObject from './packet/VeryBigObject.js';
 import ComplexObject from './packet/ComplexObject.js';
 import NormalObject from './packet/NormalObject.js';
 import ObjectA from './packet/ObjectA.js';
@@ -11,6 +12,7 @@ const ProtocolManager = {};
 
 // initProtocol
 protocols.set(0, EmptyObject);
+protocols.set(1, VeryBigObject);
 protocols.set(100, ComplexObject);
 protocols.set(101, NormalObject);
 protocols.set(102, ObjectA);

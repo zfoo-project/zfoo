@@ -8,11 +8,11 @@ function assert(flag) {
     }
 }
 
-// const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes');
+const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes');
 // const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes');
 // const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes');
 // const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes');
-const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes');
+// const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes');
 
 const arrayBytes = new Uint8Array(data.length);
 data.copy(arrayBytes, 0, 0, data.length);
@@ -28,6 +28,8 @@ ProtocolManager.write(newByteBuffer, packet);
 
 const newPacket = ProtocolManager.read(newByteBuffer);
 console.log(newPacket);
+console.log("source size " + byteBuffer.getWriteOffset());
+console.log("target size " + newByteBuffer.getWriteOffset());
 
 // set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
 // assert(byteBuffer.readOffset == newByteBuffer.writeOffset)
