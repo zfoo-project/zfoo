@@ -22,7 +22,6 @@ class NormalObject {
     s: Set<number> = new Set();
     ssss: Set<string> = new Set();
     outCompatibleValue: number = 0;
-    outCompatibleValue2: number = 0;
 
     static PROTOCOL_ID: number = 101;
 
@@ -36,7 +35,7 @@ class NormalObject {
             return;
         }
         const beforeWriteIndex = buffer.getWriteOffset();
-        buffer.writeInt(857);
+        buffer.writeInt(854);
         buffer.writeByte(packet.a);
         buffer.writeByteArray(packet.aaa);
         buffer.writeShort(packet.b);
@@ -56,8 +55,7 @@ class NormalObject {
         buffer.writeIntSet(packet.s);
         buffer.writeStringSet(packet.ssss);
         buffer.writeInt(packet.outCompatibleValue);
-        buffer.writeInt(packet.outCompatibleValue2);
-        buffer.adjustPadding(857, beforeWriteIndex);
+        buffer.adjustPadding(854, beforeWriteIndex);
     }
 
     static read(buffer: any): NormalObject | null {
@@ -106,10 +104,6 @@ class NormalObject {
         if (buffer.compatibleRead(beforeReadIndex, length)) {
             const result18 = buffer.readInt();
             packet.outCompatibleValue = result18;
-        }
-        if (buffer.compatibleRead(beforeReadIndex, length)) {
-            const result19 = buffer.readInt();
-            packet.outCompatibleValue2 = result19;
         }
         if (length > 0) {
             buffer.setReadOffset(beforeReadIndex + length);

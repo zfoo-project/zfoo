@@ -13,11 +13,13 @@ const maxInt = 2147483647;
 const minInt = -2147483648;
 
 // UTF-8编码与解码
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
 // nodejs的测试环境需要用以下方式特殊处理
-const util = require('util');
-const encoder = new util.TextEncoder('utf-8');
-const decoder = new util.TextDecoder('utf-8');
+// const util = require('util');
+// const encoder = new util.TextEncoder('utf-8');
+// const decoder = new util.TextDecoder('utf-8');
 
 // 在js中long可以支持的最大值
 // const maxLong = 9007199254740992;
@@ -71,6 +73,10 @@ class ByteBuffer {
             this.writeInt(length);
             this.writeBytes(retainedByteBuf);
         }
+    }
+
+    compatibleRead(beforeReadIndex: number, length: number): boolean {
+        return length !== -1 && this.getReadOffset() < length + beforeReadIndex;
     }
 
     setWriteOffset(writeOffset: number): void {
@@ -237,6 +243,7 @@ class ByteBuffer {
         if (!(minInt <= value && value <= maxInt)) {
             throw new Error('value must range between minInt:-2147483648 and maxInt:2147483647');
         }
+        value = encodeZigzagInt(value);
         if (value >>> 7 === 0) {
             return 1;
         }
