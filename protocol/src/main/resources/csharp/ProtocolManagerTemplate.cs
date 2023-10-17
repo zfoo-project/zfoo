@@ -30,7 +30,7 @@ namespace zfoocs
 
         public static void Write(ByteBuffer buffer, object packet)
         {
-            var protocolId = packet.ProtocolId();
+            var protocolId = protocolIdMap[packet.GetType()];
             // 写入协议号
             buffer.WriteShort(protocolId);
 

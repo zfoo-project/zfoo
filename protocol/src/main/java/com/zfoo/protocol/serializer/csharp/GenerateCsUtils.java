@@ -189,10 +189,19 @@ public abstract class GenerateCsUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var csBuilder = new StringBuilder();
+        if (registration.isCompatible()) {
+            csBuilder.append("int beforeWriteIndex = buffer.WriteOffset();").append(LS);
+            csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("buffer.WriteInt({});", registration.getPredictionLength())).append(LS);
+        } else {
+            csBuilder.append(TAB + TAB + TAB).append("buffer.WriteInt(-1);").append(LS);
+        }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             csSerializer(fieldRegistration.serializer()).writeObject(csBuilder, "message." + field.getName(), 3, field, fieldRegistration);
+        }
+        if (registration.isCompatible()) {
+            csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("buffer.AdjustPadding({}, beforeWriteIndex);", registration.getPredictionLength())).append(LS);
         }
         return csBuilder.toString();
     }
@@ -205,11 +214,13 @@ public abstract class GenerateCsUtils {
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
+
             if (field.isAnnotationPresent(Compatible.class)) {
-                csBuilder.append(TAB + TAB + TAB).append("if (!buffer.IsReadable())").append(LS);
-                csBuilder.append(TAB + TAB + TAB).append("{").append(LS);
-                csBuilder.append(TAB + TAB + TAB + TAB).append("return packet;").append(LS);
+                csBuilder.append(TAB + TAB + TAB).append("if (buffer.CompatibleRead(beforeReadIndex, length)) {").append(LS);
+                var compatibleReadObject = csSerializer(fieldRegistration.serializer()).readObject(csBuilder, 4, field, fieldRegistration);
+                csBuilder.append(TAB + TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
                 csBuilder.append(TAB + TAB + TAB).append("}").append(LS);
+                continue;
             }
             var readObject = csSerializer(fieldRegistration.serializer()).readObject(csBuilder, 3, field, fieldRegistration);
             csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
