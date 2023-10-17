@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using CsProtocol.Buffer;
 
-namespace CsProtocol
+namespace zfoocs
 {
     public class ProtocolManager
     {
@@ -10,33 +9,12 @@ namespace CsProtocol
 
 
         private static readonly IProtocolRegistration[] protocolList = new IProtocolRegistration[MAX_PROTOCOL_NUM];
+        private static readonly Dictionary<Type, short> protocolIdMap = new Dictionary<Type, short>();
 
 
         public static void InitProtocol()
         {
-            var protocolRegistrationTypeList = new List<Type>();
-
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                if (assembly.Equals(typeof(ProtocolManager).Assembly))
-                {
-                    var results = new List<Type>();
-                    results.AddRange(assembly.GetTypes());
-                    foreach (var type in results)
-                    {
-                        if (type.IsClass && !type.IsAbstract && typeof(IProtocolRegistration).IsAssignableFrom(type))
-                        {
-                            protocolRegistrationTypeList.Add(type);
-                        }
-                    }
-                }
-            }
-
-            foreach (var protocolRegistrationType in protocolRegistrationTypeList)
-            {
-                var protocolRegistration = (IProtocolRegistration) Activator.CreateInstance(protocolRegistrationType);
-                protocolList[protocolRegistration.ProtocolId()] = protocolRegistration;
-            }
+            {}
         }
 
         public static IProtocolRegistration GetProtocol(short protocolId)
@@ -44,7 +22,7 @@ namespace CsProtocol
             var protocol = protocolList[protocolId];
             if (protocol == null)
             {
-                throw new Exception("[protocolId:" + protocolId + "]协议不存在");
+                throw new Exception("[protocolId:" + protocolId + "] not exist");
             }
 
             return protocol;

@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using CsProtocol.Buffer;
 
-namespace CsProtocol
+namespace zfoocs
 {
     {}
-    public class {} : IProtocol
+    public class {}
     {
         {}
 
@@ -14,12 +13,6 @@ namespace CsProtocol
             var packet = new {}();
             {}
             return packet;
-        }
-
-
-        public short ProtocolId()
-        {
-            return {};
         }
     }
 

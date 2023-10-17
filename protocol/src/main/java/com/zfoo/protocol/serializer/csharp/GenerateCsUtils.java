@@ -43,7 +43,9 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateCsUtils {
 
-    private static String protocolOutputRootPath = "CsProtocol/";
+    // custom configuration
+    public static String protocolOutputRootPath = "zfoocs";
+    public static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, ICsSerializer> csSerializerMap;
 
@@ -52,10 +54,13 @@ public abstract class GenerateCsUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
-
-        FileUtils.deleteFile(new File(protocolOutputRootPath));
-        FileUtils.createDirectory(protocolOutputRootPath);
+        // if not specify output path, then use current default path
+        if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
+            protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+        } else {
+            protocolOutputPath = generateOperation.getProtocolPath();
+        }
+        FileUtils.deleteFile(new File(protocolOutputPath));
 
         csSerializerMap = new HashMap<>();
         csSerializerMap.put(BooleanSerializer.INSTANCE, new CsBooleanSerializer());
@@ -76,6 +81,7 @@ public abstract class GenerateCsUtils {
     public static void clear() {
         csSerializerMap = null;
         protocolOutputRootPath = null;
+        protocolOutputPath = null;
     }
 
     /**
@@ -84,14 +90,13 @@ public abstract class GenerateCsUtils {
     public static void createProtocolManager() throws IOException {
         var list = List.of("csharp/ProtocolManager.cs"
                 , "csharp/IProtocolRegistration.cs"
-                , "csharp/IProtocol.cs"
                 , "csharp/Buffer/ByteBuffer.cs"
                 , "csharp/Buffer/LittleEndianByteBuffer.cs"
                 , "csharp/Buffer/BigEndianByteBuffer.cs");
 
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "csharp/")));
+            var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "csharp/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
     }

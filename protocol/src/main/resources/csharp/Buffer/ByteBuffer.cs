@@ -4,7 +4,7 @@ using System.Text;
 
 // CSharp字节保存在内存的低地址中是根据操作系统来的，所以有可能是大端模式，也有可能是小端模式
 // 右移操作>>是带符号右移
-namespace CsProtocol.Buffer
+namespace zfoocs
 {
     public abstract class ByteBuffer
     {
@@ -49,6 +49,30 @@ namespace CsProtocol.Buffer
                 readOffset = 0;
             }
         }
+        
+        public void AdjustPadding(int predictionLength, int beforeWriteIndex) {
+            // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+            var currentWriteIndex = WriteOffset();
+            var predictionCount = WriteIntCount(predictionLength);
+            var length = currentWriteIndex - beforeWriteIndex - predictionCount;
+            var lengthCount = WriteIntCount(length);
+            var padding = lengthCount - predictionCount;
+            if (padding == 0) {
+                SetWriteOffset(beforeWriteIndex);
+                WriteInt(length);
+                SetWriteOffset(currentWriteIndex);
+            } else {
+                var bytes = new byte[length];
+                Array.Copy(buffer, currentWriteIndex - length, bytes, 0, length);
+                SetWriteOffset(beforeWriteIndex);
+                WriteInt(length);
+                WriteBytes(bytes);
+            }
+        }
+        
+        public bool CompatibleRead(int beforeReadIndex, int length) {
+            return length != -1 && ReadOffset() < length + beforeReadIndex;
+        }
 
         // -------------------------------------------------get/set-------------------------------------------------
         public int WriteOffset()
@@ -67,6 +91,11 @@ namespace CsProtocol.Buffer
             }
 
             writeOffset = writeIndex;
+        }
+
+        public int ReadOffset()
+        {
+            return readOffset;
         }
 
         public void SetReadOffset(int readIndex)
@@ -235,6 +264,31 @@ namespace CsProtocol.Buffer
 
             return (int) (value >> 1) ^ -((int) (value) & 1);
         }
+        
+        public int WriteIntCount(int intValue)
+        {
+            // 用Zigzag算法压缩int和long的值
+            // 再用Varint紧凑算法表示数字的有效位
+            uint value = (uint) ((intValue << 1) ^ (intValue >> 31));
+
+            if (value >> 7 == 0)
+            {
+                return 1;
+            }
+            if (value >> 14 == 0)
+            {
+                return 2;
+            }
+            if (value >> 21 == 0)
+            {
+                return 3;
+            }
+            if (value >> 28 == 0)
+            {
+                return 4;
+            }
+            return 5;
+        }
 
         // 写入没有压缩的int
         public abstract void WriteRawInt(int value);
@@ -390,20 +444,6 @@ namespace CsProtocol.Buffer
         // *******************************************double***************************************************
         public abstract void WriteDouble(double value);
         public abstract double ReadDouble();
-
-        // *******************************************char***************************************************
-        public char ReadChar()
-        {
-            // need check
-            var str = ReadString();
-            return string.IsNullOrEmpty(str) ? char.MinValue : str[0];
-        }
-
-        public void WriteChar(char value)
-        {
-            // need check
-            WriteString(new string(value, 1));
-        }
 
         // *******************************************String***************************************************
 
@@ -794,38 +834,6 @@ namespace CsProtocol.Buffer
             return array;
         }
 
-        public void WriteCharArray(char[] array)
-        {
-            if ((array == null) || (array.Length == 0))
-            {
-                WriteInt(0);
-            }
-            else
-            {
-                WriteInt(array.Length);
-                int length = array.Length;
-                for (int index = 0; index < length; index++)
-                {
-                    WriteChar(array[index]);
-                }
-            }
-        }
-
-        public char[] ReadCharArray()
-        {
-            int size = ReadInt();
-            char[] array = new char[size];
-            if (size > 0)
-            {
-                for (int index = 0; index < size; index++)
-                {
-                    array[index] = ReadChar();
-                }
-            }
-
-            return array;
-        }
-
         public void WriteStringArray(string[] array)
         {
             if ((array == null) || (array.Length == 0))
@@ -1116,38 +1124,6 @@ namespace CsProtocol.Buffer
             return list;
         }
 
-        public void WriteCharList(List<char> list)
-        {
-            if ((list == null) || (list.Count == 0))
-            {
-                WriteInt(0);
-            }
-            else
-            {
-                WriteInt(list.Count);
-                int length = list.Count;
-                for (int index = 0; index < length; index++)
-                {
-                    WriteDouble(list[index]);
-                }
-            }
-        }
-
-        public List<char> ReadCharList()
-        {
-            int size = ReadInt();
-            List<char> list = new List<char>(size);
-            if (size > 0)
-            {
-                for (int index = 0; index < size; index++)
-                {
-                    list.Add(ReadChar());
-                }
-            }
-
-            return list;
-        }
-
         public void WriteStringList(List<string> list)
         {
             if ((list == null) || (list.Count == 0))
@@ -1394,37 +1370,6 @@ namespace CsProtocol.Buffer
                 for (int index = 0; index < size; index++)
                 {
                     set.Add(ReadDouble());
-                }
-            }
-
-            return set;
-        }
-
-        public void WriteCharSet(HashSet<char> set)
-        {
-            if ((set == null) || (set.Count == 0))
-            {
-                WriteInt(0);
-            }
-            else
-            {
-                WriteInt(set.Count);
-                foreach (var element in set)
-                {
-                    WriteChar(element);
-                }
-            }
-        }
-
-        public HashSet<char> ReadCharSet()
-        {
-            int size = ReadInt();
-            HashSet<char> set = new HashSet<char>();
-            if (size > 0)
-            {
-                for (int index = 0; index < size; index++)
-                {
-                    set.Add(ReadChar());
                 }
             }
 

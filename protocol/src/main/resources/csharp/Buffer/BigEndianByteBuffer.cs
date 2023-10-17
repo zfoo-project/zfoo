@@ -1,4 +1,4 @@
-﻿namespace CsProtocol.Buffer
+﻿namespace zfoocs
 {
     public class BigEndianByteBuffer : ByteBuffer
     {

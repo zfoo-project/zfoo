@@ -1,6 +1,6 @@
 using System;
 
-namespace CsProtocol.Buffer
+namespace zfoocs
 {
     public class LittleEndianByteBuffer : ByteBuffer
     {
