@@ -603,13 +603,6 @@ namespace zfoocs
             return Encoding.UTF8.GetString(value, 0, value.Length);
         }
 
-        public bool WritePacketFlag(IProtocol packet)
-        {
-            bool flag = packet == null;
-            WriteBool(!flag);
-            return flag;
-        }
-
         public void WriteBooleanArray(bool[] array)
         {
             if ((array == null) || (array.Length == 0))
@@ -879,7 +872,7 @@ namespace zfoocs
                 int length = array.Length;
                 for (int index = 0; index < length; index++)
                 {
-                    protocolRegistration.Write(this, (IProtocol) array[index]);
+                    protocolRegistration.Write(this, array[index]);
                 }
             }
         }
@@ -1169,7 +1162,7 @@ namespace zfoocs
                 int length = list.Count;
                 for (int index = 0; index < length; index++)
                 {
-                    protocolRegistration.Write(this, (IProtocol) list[index]);
+                    protocolRegistration.Write(this, list[index]);
                 }
             }
         }
@@ -1419,7 +1412,7 @@ namespace zfoocs
                 WriteInt(set.Count);
                 foreach (var element in set)
                 {
-                    protocolRegistration.Write(this, (IProtocol) element);
+                    protocolRegistration.Write(this, element);
                 }
             }
         }
@@ -1556,7 +1549,7 @@ namespace zfoocs
                 foreach (var element in map)
                 {
                     WriteInt(element.Key);
-                    protocolRegistration.Write(this, (IProtocol) element.Value);
+                    protocolRegistration.Write(this, element.Value);
                 }
             }
         }
@@ -1695,7 +1688,7 @@ namespace zfoocs
                 foreach (var element in map)
                 {
                     WriteLong(element.Key);
-                    protocolRegistration.Write(this, (IProtocol) element.Value);
+                    protocolRegistration.Write(this, element.Value);
                 }
             }
         }
@@ -1834,7 +1827,7 @@ namespace zfoocs
                 foreach (var element in map)
                 {
                     WriteString(element.Key);
-                    protocolRegistration.Write(this, (IProtocol) element.Value);
+                    protocolRegistration.Write(this, element.Value);
                 }
             }
         }
@@ -1860,7 +1853,7 @@ namespace zfoocs
         public void WritePacket<T>(T packet, short protocolId)
         {
             IProtocolRegistration protocolRegistration = ProtocolManager.GetProtocol(protocolId);
-            protocolRegistration.Write(this, (IProtocol) packet);
+            protocolRegistration.Write(this, packet);
         }
 
         public T ReadPacket<T>(short protocolId)

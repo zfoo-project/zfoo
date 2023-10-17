@@ -91,16 +91,16 @@ public abstract class GenerateLuaUtils {
         var protocolBuilder = new StringBuilder();
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
-            var name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
+            var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
             var path = GenerateProtocolPath.getCapitalizeProtocolPath(protocolId);
             if (StringUtils.isBlank(path)) {
-                fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"LuaProtocol.{}\")", name, name)).append(LS);
+                fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"LuaProtocol.{}\")", protocolName, protocolName)).append(LS);
             } else {
                 fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"LuaProtocol.{}.{}\")"
-                        , name, path.replaceAll(StringUtils.SLASH, StringUtils.PERIOD), name)).append(LS);
+                        , protocolName, path.replaceAll(StringUtils.SLASH, StringUtils.PERIOD), protocolName)).append(LS);
             }
 
-            protocolBuilder.append(TAB).append(StringUtils.format("protocols[{}] = {}", protocolId, name)).append(LS);
+            protocolBuilder.append(TAB).append(StringUtils.format("protocols[{}] = {}", protocolId, protocolName)).append(LS);
         }
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, StringUtils.EMPTY_JSON, StringUtils.EMPTY_JSON, fieldBuilder.toString().trim(), protocolBuilder.toString().trim());
         FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua")), protocolManagerTemplate, true);

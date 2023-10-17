@@ -24,24 +24,30 @@ namespace zfoocs
             return {};
         }
 
-        public void Write(ByteBuffer buffer, IProtocol packet)
+        public void Write(ByteBuffer buffer, object packet)
         {
-            if (buffer.WritePacketFlag(packet))
+            if (packet == null)
             {
+                buffer.WriteInt(0);
                 return;
             }
             {} message = ({}) packet;
             {}
         }
 
-        public IProtocol Read(ByteBuffer buffer)
+        public object Read(ByteBuffer buffer)
         {
-            if (!buffer.ReadBool())
+            int length = buffer.ReadInt();
+            if (length == 0)
             {
                 return null;
             }
+            int beforeReadIndex = buffer.ReadOffset();
             {} packet = new {}();
             {}
+            if (length > 0) {
+                buffer.SetReadOffset(beforeReadIndex + length);
+            }
             return packet;
         }
     }

@@ -19,6 +19,7 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
+import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
@@ -37,6 +38,7 @@ import java.util.Map;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
+import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
 
 /**
  * @author godotg
@@ -87,9 +89,8 @@ public abstract class GenerateCsUtils {
     /**
      * 生成协议依赖的工具类
      */
-    public static void createProtocolManager() throws IOException {
-        var list = List.of("csharp/ProtocolManager.cs"
-                , "csharp/IProtocolRegistration.cs"
+    public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
+        var list = List.of("csharp/IProtocolRegistration.cs"
                 , "csharp/Buffer/ByteBuffer.cs"
                 , "csharp/Buffer/LittleEndianByteBuffer.cs"
                 , "csharp/Buffer/BigEndianByteBuffer.cs");
@@ -99,6 +100,20 @@ public abstract class GenerateCsUtils {
             var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "csharp/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
+
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolManagerTemplate.cs");
+        var csBuilder = new StringBuilder();
+        var initList = new ArrayList<String>();
+        for (var protocol : protocolList) {
+            var protocolId = protocol.protocolId();
+            var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
+            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.GdScript);
+            csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("protocols[{}] = new {}Registration();", protocolId, protocolName, path)).append(LS);
+            csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("protocolIdMap[typeof({})] = {};", protocolName, protocolId, path)).append(LS);
+        }
+        var initProtocols = StringUtils.joinWith(StringUtils.COMMA + LS, initList.toArray());
+        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, csBuilder.toString().trim(), initProtocols);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.cs")), protocolManagerTemplate, true);
     }
 
     /**
@@ -120,7 +135,7 @@ public abstract class GenerateCsUtils {
         var readObject = readObject(registration);
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, fieldDefinition.trim()
                 , protocolClazzName, valueOfMethod.getKey().trim(), protocolClazzName, valueOfMethod.getValue().trim()
-                , protocolId, protocolClazzName, protocolId, protocolClazzName, protocolClazzName, writeObject.trim()
+                , protocolClazzName, protocolId, protocolClazzName, protocolClazzName, writeObject.trim()
                 , protocolClazzName, protocolClazzName, readObject.trim());
 
         var outputPath = StringUtils.format("{}/{}/{}.cs"

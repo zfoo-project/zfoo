@@ -133,7 +133,7 @@ public abstract class GenerateProtocolFile {
         // 生成C#协议
         if (generateLanguages.contains(CodeLanguage.CSharp)) {
             GenerateCsUtils.init(generateOperation);
-            GenerateCsUtils.createProtocolManager();
+            GenerateCsUtils.createProtocolManager(allSortedGenerateProtocols);
             for (var protocolRegistration : allSortedGenerateProtocols) {
                 GenerateCsUtils.createCsProtocolFile((ProtocolRegistration) protocolRegistration);
             }
