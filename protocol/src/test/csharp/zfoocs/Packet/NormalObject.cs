@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using CsProtocol.Buffer;
 
-namespace CsProtocol
+namespace zfoocs
 {
     
-    public class NormalObject : IProtocol
+    public class NormalObject
     {
         public byte a;
         public byte[] aaa;
@@ -25,8 +24,9 @@ namespace CsProtocol
         public Dictionary<int, ObjectA> mm;
         public HashSet<int> s;
         public HashSet<string> ssss;
+        public int outCompatibleValue;
 
-        public static NormalObject ValueOf(byte a, byte[] aaa, short b, int c, long d, float e, double f, bool g, string jj, ObjectA kk, List<int> l, List<long> ll, List<ObjectA> lll, List<string> llll, Dictionary<int, string> m, Dictionary<int, ObjectA> mm, HashSet<int> s, HashSet<string> ssss)
+        public static NormalObject ValueOf(byte a, byte[] aaa, short b, int c, long d, float e, double f, bool g, string jj, ObjectA kk, List<int> l, List<long> ll, List<ObjectA> lll, List<string> llll, Dictionary<int, string> m, Dictionary<int, ObjectA> mm, HashSet<int> s, HashSet<string> ssss, int outCompatibleValue)
         {
             var packet = new NormalObject();
             packet.a = a;
@@ -47,13 +47,8 @@ namespace CsProtocol
             packet.mm = mm;
             packet.s = s;
             packet.ssss = ssss;
+            packet.outCompatibleValue = outCompatibleValue;
             return packet;
-        }
-
-
-        public short ProtocolId()
-        {
-            return 101;
         }
     }
 
@@ -65,13 +60,16 @@ namespace CsProtocol
             return 101;
         }
 
-        public void Write(ByteBuffer buffer, IProtocol packet)
+        public void Write(ByteBuffer buffer, object packet)
         {
-            if (buffer.WritePacketFlag(packet))
+            if (packet == null)
             {
+                buffer.WriteInt(0);
                 return;
             }
             NormalObject message = (NormalObject) packet;
+            int beforeWriteIndex = buffer.WriteOffset();
+            buffer.WriteInt(854);
             buffer.WriteByte(message.a);
             buffer.WriteByteArray(message.aaa);
             buffer.WriteShort(message.b);
@@ -90,14 +88,18 @@ namespace CsProtocol
             buffer.WriteIntPacketMap(message.mm, 102);
             buffer.WriteIntSet(message.s);
             buffer.WriteStringSet(message.ssss);
+            buffer.WriteInt(message.outCompatibleValue);
+            buffer.AdjustPadding(854, beforeWriteIndex);
         }
 
-        public IProtocol Read(ByteBuffer buffer)
+        public object Read(ByteBuffer buffer)
         {
-            if (!buffer.ReadBool())
+            int length = buffer.ReadInt();
+            if (length == 0)
             {
                 return null;
             }
+            int beforeReadIndex = buffer.ReadOffset();
             NormalObject packet = new NormalObject();
             byte result0 = buffer.ReadByte();
             packet.a = result0;
@@ -135,6 +137,13 @@ namespace CsProtocol
             packet.s = set16;
             var set17 = buffer.ReadStringSet();
             packet.ssss = set17;
+            if (buffer.CompatibleRead(beforeReadIndex, length)) {
+                int result18 = buffer.ReadInt();
+                packet.outCompatibleValue = result18;
+            }
+            if (length > 0) {
+                buffer.SetReadOffset(beforeReadIndex + length);
+            }
             return packet;
         }
     }

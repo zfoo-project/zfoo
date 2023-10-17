@@ -1,19 +1,41 @@
 ﻿using System;
 using System.IO;
-using CsProtocol;
-using CsProtocol.Buffer;
 
-namespace csharp
+namespace zfoocs
 {
     class Program
     {
         static void Main(string[] args)
         {
-            ByteBufferTest();
-            
             ProtocolManager.InitProtocol();
+            ByteBufferTest();
+            complexObjectTest();
+            compatibleTest();
+        }
+        
+        public static void compatibleTest()
+        {
+            // var bytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes");
+            // var bytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes");
+            // var bytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes");
+            // var bytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes");
+            var bytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes");
+            var buffer = ByteBuffer.ValueOf();
+            buffer.WriteBytes(bytes);
+            var packet = ProtocolManager.Read(buffer);
+
+            var newBuffer = ByteBuffer.ValueOf();
+            ProtocolManager.Write(newBuffer, packet);
+            var newBytes = newBuffer.ToBytes();
+
+            Console.Out.WriteLine("source size " + bytes.Length);
+            Console.Out.WriteLine("target size " + newBytes.Length);
+        }
+
+        public static void complexObjectTest()
+        {
             // 获取复杂对象的字节流
-            var complexObjectBytes = File.ReadAllBytes("../resources/ComplexObject.bytes");
+            var complexObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\complexObject.bytes");
             var buffer = ByteBuffer.ValueOf();
             buffer.WriteBytes(complexObjectBytes);
             var packet = ProtocolManager.Read(buffer);
@@ -34,7 +56,6 @@ namespace csharp
             longTest();
             floatTest();
             doubleTest();
-            charTest();
             stringTest();
         }
 
@@ -127,19 +148,6 @@ namespace csharp
             ByteBuffer readerByteBuffer = ByteBuffer.ValueOf();
             readerByteBuffer.WriteBytes(bytes);
             double readValue = readerByteBuffer.ReadDouble();
-            AssertEquals(value, readValue);
-        }
-
-        public static void charTest()
-        {
-            char value = 'a';
-            ByteBuffer writerByteBuffer = ByteBuffer.ValueOf();
-            writerByteBuffer.WriteChar(value);
-            byte[] bytes = writerByteBuffer.ToBytes();
-
-            ByteBuffer readerByteBuffer = ByteBuffer.ValueOf();
-            readerByteBuffer.WriteBytes(bytes);
-            char readValue = readerByteBuffer.ReadChar();
             AssertEquals(value, readValue);
         }
 

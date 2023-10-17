@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using CsProtocol.Buffer;
 
-namespace CsProtocol
+namespace zfoocs
 {
     
-    public class SimpleObject : IProtocol
+    public class SimpleObject
     {
         public int c;
         public bool g;
@@ -17,12 +16,6 @@ namespace CsProtocol
             packet.g = g;
             return packet;
         }
-
-
-        public short ProtocolId()
-        {
-            return 104;
-        }
     }
 
 
@@ -33,28 +26,35 @@ namespace CsProtocol
             return 104;
         }
 
-        public void Write(ByteBuffer buffer, IProtocol packet)
+        public void Write(ByteBuffer buffer, object packet)
         {
-            if (buffer.WritePacketFlag(packet))
+            if (packet == null)
             {
+                buffer.WriteInt(0);
                 return;
             }
             SimpleObject message = (SimpleObject) packet;
+            buffer.WriteInt(-1);
             buffer.WriteInt(message.c);
             buffer.WriteBool(message.g);
         }
 
-        public IProtocol Read(ByteBuffer buffer)
+        public object Read(ByteBuffer buffer)
         {
-            if (!buffer.ReadBool())
+            int length = buffer.ReadInt();
+            if (length == 0)
             {
                 return null;
             }
+            int beforeReadIndex = buffer.ReadOffset();
             SimpleObject packet = new SimpleObject();
             int result0 = buffer.ReadInt();
             packet.c = result0;
             bool result1 = buffer.ReadBool();
             packet.g = result1;
+            if (length > 0) {
+                buffer.SetReadOffset(beforeReadIndex + length);
+            }
             return packet;
         }
     }
