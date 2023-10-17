@@ -56,10 +56,6 @@
         <protocol id="1152" location="com.zfoo.net.packet.tcp.AsyncMessAsk" enhance="false"/>
         <protocol id="1153" location="com.zfoo.net.packet.tcp.AsyncMessAnswer" enhance="false"/>
 
-        <protocol id="1165" location="com.zfoo.net.packet.csharp.CM_CSharpRequest" enhance="false"/>
-        <protocol id="1166" location="com.zfoo.net.packet.csharp.CSharpObjectA" enhance="false"/>
-        <protocol id="1167" location="com.zfoo.net.packet.csharp.CSharpObjectB" enhance="false"/>
-
         <protocol id="1200" location="com.zfoo.net.packet.udp.UdpHelloRequest"/>
         <protocol id="1201" location="com.zfoo.net.packet.udp.UdpHelloResponse"/>
 

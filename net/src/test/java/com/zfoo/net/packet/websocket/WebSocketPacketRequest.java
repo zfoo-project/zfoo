@@ -53,9 +53,6 @@ public class WebSocketPacketRequest {
     private double[] fff;
     private Double[] ffff;
 
-    private char g;
-    private char[] gg;
-    private List<Character> ggg;
 
     private String jj;
     private String[] jjj;
@@ -254,30 +251,6 @@ public class WebSocketPacketRequest {
 
     public void setFfff(Double[] ffff) {
         this.ffff = ffff;
-    }
-
-    public char getG() {
-        return g;
-    }
-
-    public void setG(char g) {
-        this.g = g;
-    }
-
-    public char[] getGg() {
-        return gg;
-    }
-
-    public void setGg(char[] gg) {
-        this.gg = gg;
-    }
-
-    public List<Character> getGgg() {
-        return ggg;
-    }
-
-    public void setGgg(List<Character> ggg) {
-        this.ggg = ggg;
     }
 
     public String getJj() {

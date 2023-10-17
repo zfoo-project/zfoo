@@ -33,7 +33,6 @@ public class CM_Int {
 
     private long d;
 
-    private char e;
 
     private String f;
 
@@ -55,14 +54,6 @@ public class CM_Int {
 
     public byte getA() {
         return a;
-    }
-
-    public char getE() {
-        return e;
-    }
-
-    public void setE(char e) {
-        this.e = e;
     }
 
     public void setA(byte a) {
@@ -104,12 +95,11 @@ public class CM_Int {
                 b == cm_int.b &&
                 c == cm_int.c &&
                 d == cm_int.d &&
-                e == cm_int.e &&
                 f.equals(cm_int.f);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(flag, a, b, c, d, e, f);
+        return Objects.hash(flag, a, b, c, d, f);
     }
 }

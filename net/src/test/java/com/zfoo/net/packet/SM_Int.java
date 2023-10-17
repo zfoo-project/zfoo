@@ -33,8 +33,6 @@ public class SM_Int {
 
     private Long d;
 
-    private char e;
-
     private String f;
 
     public Boolean getFlag() {
@@ -77,14 +75,6 @@ public class SM_Int {
         this.d = d;
     }
 
-    public char getE() {
-        return e;
-    }
-
-    public void setE(char e) {
-        this.e = e;
-    }
-
     public String getF() {
         return f;
     }
@@ -98,8 +88,7 @@ public class SM_Int {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SM_Int sm_int = (SM_Int) o;
-        return e == sm_int.e &&
-                flag.equals(sm_int.flag) &&
+        return flag.equals(sm_int.flag) &&
                 a.equals(sm_int.a) &&
                 b.equals(sm_int.b) &&
                 c.equals(sm_int.c) &&
@@ -109,7 +98,7 @@ public class SM_Int {
 
     @Override
     public int hashCode() {
-        return Objects.hash(flag, a, b, c, d, e, f);
+        return Objects.hash(flag, a, b, c, d, f);
     }
 }
 
