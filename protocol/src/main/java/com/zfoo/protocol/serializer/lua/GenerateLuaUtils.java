@@ -100,10 +100,10 @@ public abstract class GenerateLuaUtils {
             var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
             var path = GenerateProtocolPath.getProtocolPath(protocolId);
             if (StringUtils.isBlank(path)) {
-                fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"{}\")", protocolName, protocolName)).append(LS);
+                fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"{}.{}\")", protocolName, protocolOutputRootPath, protocolName)).append(LS);
             } else {
-                fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"{}.{}\")"
-                        , protocolName, path.replaceAll(StringUtils.SLASH, StringUtils.PERIOD), protocolName)).append(LS);
+                fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"{}.{}.{}\")"
+                        , protocolName,protocolOutputRootPath, path.replaceAll(StringUtils.SLASH, StringUtils.PERIOD), protocolName)).append(LS);
             }
 
             protocolBuilder.append(TAB).append(StringUtils.format("protocols[{}] = {}", protocolId, protocolName)).append(LS);
@@ -167,7 +167,7 @@ public abstract class GenerateLuaUtils {
         var fieldRegistrations = registration.getFieldRegistrations();
         var luaBuilder = new StringBuilder();
         if (registration.isCompatible()) {
-            luaBuilder.append("local beforeWriteIndex = buffer:getWriteOffset(;").append(LS);
+            luaBuilder.append("local beforeWriteIndex = buffer:getWriteOffset()").append(LS);
             luaBuilder.append(TAB).append(StringUtils.format("buffer:writeInt({})", registration.getPredictionLength())).append(LS);
         } else {
             luaBuilder.append(TAB).append("buffer:writeInt(-1)").append(LS);

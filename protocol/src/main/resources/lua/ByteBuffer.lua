@@ -5,7 +5,7 @@
 --右移操作>>是无符号右移
 --local Long = require("Long")
 
-local ProtocolManager = require("ProtocolManager")
+local ProtocolManager = require("zfoolua.ProtocolManager")
 
 local maxInt = 2147483647
 local minInt = -2147483648
@@ -99,9 +99,9 @@ function ByteBuffer:adjustPadding(predictionLength, beforeWriteIndex)
         self:setWriteOffset(currentWriteIndex)
     else
         local bytes = self:getBytes(currentWriteIndex - length, currentWriteIndex - 1)
-        self:setWriteOffset(currentWriteIndex - length)
+        self:setWriteOffset(beforeWriteIndex)
         self:writeInt(length)
-        self:writeRawByteStr(bytes)
+        self:writeBuffer(bytes)
     end
 end
 
@@ -232,8 +232,8 @@ function ByteBuffer:writeIntCount(intValue)
     end
 
     --lua中的右移为无符号右移，要特殊处理
-    local mask = longValue >> 63
-    local value = longValue << 1
+    local mask = intValue >> 63
+    local value = intValue << 1
     if (mask == 1) then
         value = value ~ 0xFFFFFFFFFFFFFFFF
     end
