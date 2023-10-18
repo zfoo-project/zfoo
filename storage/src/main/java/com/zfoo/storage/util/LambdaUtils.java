@@ -14,8 +14,8 @@ import java.lang.reflect.Proxy;
  * @author veione
  * @version 1.0
  */
-public final class LambdaUtils {
-    private static final ConcurrentReferenceHashMap<Class, LambdaMeta> CACHE = new ConcurrentReferenceHashMap<>(64, 0.75F, 16, ConcurrentReferenceHashMap.ReferenceType.SOFT);
+public abstract class LambdaUtils {
+    private static final ConcurrentReferenceHashMap<Class<?>, LambdaMeta> CACHE = new ConcurrentReferenceHashMap<>(64, 0.75F, 16, ConcurrentReferenceHashMap.ReferenceType.SOFT);
 
     /**
      * 该缓存可能会在任意不定的时间被清除
