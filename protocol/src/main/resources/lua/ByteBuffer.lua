@@ -5,7 +5,7 @@
 --右移操作>>是无符号右移
 --local Long = require("Long")
 
-local ProtocolManager = require("LuaProtocol.ProtocolManager")
+local ProtocolManager = require("ProtocolManager")
 
 local maxInt = 2147483647
 local minInt = -2147483648

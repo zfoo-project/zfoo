@@ -84,7 +84,7 @@ public abstract class GenerateLuaUtils {
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
-        var list = List.of("lua/Buffer/ByteBuffer.lua", "lua/Buffer/Long.lua");
+        var list = List.of("lua/ByteBuffer.lua", "lua/Long.lua");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
             var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "lua/")));
@@ -98,11 +98,11 @@ public abstract class GenerateLuaUtils {
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
             var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
-            var path = GenerateProtocolPath.getCapitalizeProtocolPath(protocolId);
+            var path = GenerateProtocolPath.getProtocolPath(protocolId);
             if (StringUtils.isBlank(path)) {
-                fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"LuaProtocol.{}\")", protocolName, protocolName)).append(LS);
+                fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"{}\")", protocolName, protocolName)).append(LS);
             } else {
-                fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"LuaProtocol.{}.{}\")"
+                fieldBuilder.append(TAB).append(StringUtils.format("local {} = require(\"{}.{}\")"
                         , protocolName, path.replaceAll(StringUtils.SLASH, StringUtils.PERIOD), protocolName)).append(LS);
             }
 
@@ -131,7 +131,7 @@ public abstract class GenerateLuaUtils {
                 , protocolClazzName, writePacket.trim(), protocolClazzName, protocolClazzName, readPacket.trim(), protocolClazzName);
 
         var outputPath = StringUtils.format("{}/{}/{}.lua"
-                , protocolOutputRootPath, GenerateProtocolPath.getCapitalizeProtocolPath(protocolId), protocolClazzName);
+                , protocolOutputRootPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
     }
 
