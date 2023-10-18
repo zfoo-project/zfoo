@@ -408,21 +408,6 @@ function ByteBuffer:readString()
     return self:readBuffer(length)
 end
 
---char
-function ByteBuffer:writeChar(charValue)
-    if charValue == nil or #charValue == 0 then
-        self:writeString("")
-        return
-    end
-    local str = utf8sub(charValue, 1, 1)
-    self:writeString(str)
-    return self
-end
-
-function ByteBuffer:readChar()
-    return self:readString()
-end
-
 --- Write a encoded char array into buf
 function ByteBuffer:writeBuffer(str)
     for i = 1, #str do
@@ -636,29 +621,6 @@ function ByteBuffer:readDoubleArray()
     if size > 0 then
         for index = 1, size do
             table.insert(array, self:readDouble())
-        end
-    end
-    return array
-end
-
-function ByteBuffer:writeCharArray(array)
-    if array == null then
-        self:writeInt(0)
-    else
-        self:writeInt(#array);
-        for index, element in pairs(array) do
-            self:writeChar(element)
-        end
-    end
-    return self
-end
-
-function ByteBuffer:readCharArray()
-    local array = {}
-    local size = self:readInt()
-    if size > 0 then
-        for index = 1, size do
-            table.insert(array, self:readChar())
         end
     end
     return array
