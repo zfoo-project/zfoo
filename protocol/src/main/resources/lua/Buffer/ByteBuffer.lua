@@ -87,6 +87,27 @@ local function utf8sub(str, startChar, numChars)
     return str:sub(startIndex, currentIndex - 1)
 end
 
+function ByteBuffer:adjustPadding(predictionLength, beforeWriteIndex)
+    local currentWriteIndex = self.writeOffset
+    local predictionCount = self:writeIntCount(predictionLength)
+    local length = currentWriteIndex - beforeWriteIndex - predictionCount
+    local lengthCount = self:writeIntCount(length)
+    local padding = lengthCount - predictionCount
+    if padding == 0 then
+        self:setWriteOffset(beforeWriteIndex)
+        self:writeInt(length)
+        self:setWriteOffset(currentWriteIndex)
+    else
+        local bytes = self:getBytes(currentWriteIndex - length, currentWriteIndex - 1)
+        self:setWriteOffset(currentWriteIndex - length)
+        self:writeInt(length)
+        self:writeRawByteStr(bytes)
+    end
+end
+
+function ByteBuffer:compatibleRead(beforeReadIndex, length)
+    return length ~= -1 and self:getReadOffset() < length + beforeReadIndex
+end
 
 -------------------------------------get和set-------------------------------------
 function ByteBuffer:getWriteOffset()
@@ -200,6 +221,40 @@ end
 
 function ByteBuffer:readInt()
     return self:readLong()
+end
+
+function ByteBuffer:writeIntCount(intValue)
+    if (math.type(intValue) ~= "integer") then
+        error("intValue must be integer")
+    end
+    if ((minInt > intValue) or (intValue > maxInt)) then
+        error("intValue must range between minInt:-2147483648 and maxInt:2147483647")
+    end
+
+    --lua中的右移为无符号右移，要特殊处理
+    local mask = longValue >> 63
+    local value = longValue << 1
+    if (mask == 1) then
+        value = value ~ 0xFFFFFFFFFFFFFFFF
+    end
+
+    if (value >> 7) == 0 then
+        return 1
+    end
+
+    if (value >> 14) == 0 then
+        return 2
+    end
+
+    if (value >> 21) == 0 then
+        return 3
+    end
+
+    if (value >> 28) == 0 then
+        return 4
+    end
+    
+    return 5
 end
 
 -- int
@@ -469,7 +524,7 @@ function ByteBuffer:writeBooleanArray(array)
     if array == null then
         self:writeInt(0)
     else
-        self:writeInt(#array);
+        self:writeInt(#array)
         for index, element in pairs(array) do
             self:writeBoolean(element)
         end
@@ -492,7 +547,7 @@ function ByteBuffer:writeByteArray(array)
     if array == null then
         self:writeInt(0)
     else
-        self:writeInt(#array);
+        self:writeInt(#array)
         for index, element in pairs(array) do
             self:writeByte(element)
         end
@@ -515,7 +570,7 @@ function ByteBuffer:writeShortArray(array)
     if array == null then
         self:writeInt(0)
     else
-        self:writeInt(#array);
+        self:writeInt(#array)
         for index, element in pairs(array) do
             self:writeShort(element)
         end
@@ -538,7 +593,7 @@ function ByteBuffer:writeIntArray(array)
     if array == null then
         self:writeInt(0)
     else
-        self:writeInt(#array);
+        self:writeInt(#array)
         for index, element in pairs(array) do
             self:writeInt(element)
         end
@@ -561,7 +616,7 @@ function ByteBuffer:writeLongArray(array)
     if array == null then
         self:writeInt(0)
     else
-        self:writeInt(#array);
+        self:writeInt(#array)
         for index, element in pairs(array) do
             self:writeLong(element)
         end
@@ -584,7 +639,7 @@ function ByteBuffer:writeFloatArray(array)
     if array == null then
         self:writeInt(0)
     else
-        self:writeInt(#array);
+        self:writeInt(#array)
         for index, element in pairs(array) do
             self:writeFloat(element)
         end
@@ -607,7 +662,7 @@ function ByteBuffer:writeDoubleArray(array)
     if array == null then
         self:writeInt(0)
     else
-        self:writeInt(#array);
+        self:writeInt(#array)
         for index, element in pairs(array) do
             self:writeDouble(element)
         end
@@ -630,7 +685,7 @@ function ByteBuffer:writeStringArray(array)
     if array == null then
         self:writeInt(0)
     else
-        self:writeInt(#array);
+        self:writeInt(#array)
         for index, element in pairs(array) do
             self:writeString(element)
         end
@@ -654,7 +709,7 @@ function ByteBuffer:writePacketArray(array, protocolId)
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
-        self:writeInt(#array);
+        self:writeInt(#array)
         for index, element in pairs(array) do
             protocolRegistration:write(self, element)
         end
@@ -678,7 +733,7 @@ function ByteBuffer:writeIntIntMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeInt(key)
             self:writeInt(value)
@@ -704,7 +759,7 @@ function ByteBuffer:writeIntLongMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeInt(key)
             self:writeLong(value)
@@ -730,7 +785,7 @@ function ByteBuffer:writeIntStringMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeInt(key)
             self:writeString(value)
@@ -757,7 +812,7 @@ function ByteBuffer:writeIntPacketMap(map, protocolId)
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeInt(key)
             protocolRegistration:write(self, value)
@@ -784,7 +839,7 @@ function ByteBuffer:writeLongIntMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeLong(key)
             self:writeInt(value)
@@ -810,7 +865,7 @@ function ByteBuffer:writeLongLongMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeLong(key)
             self:writeLong(value)
@@ -836,7 +891,7 @@ function ByteBuffer:writeLongStringMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeLong(key)
             self:writeString(value)
@@ -863,7 +918,7 @@ function ByteBuffer:writeLongPacketMap(map, protocolId)
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeLong(key)
             protocolRegistration:write(self, value)
@@ -890,7 +945,7 @@ function ByteBuffer:writeStringIntMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeString(key)
             self:writeInt(value)
@@ -916,7 +971,7 @@ function ByteBuffer:writeStringLongMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeString(key)
             self:writeLong(value)
@@ -942,7 +997,7 @@ function ByteBuffer:writeStringStringMap(map)
     if map == null then
         self:writeInt(0)
     else
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeString(key)
             self:writeString(value)
@@ -969,7 +1024,7 @@ function ByteBuffer:writeStringPacketMap(map, protocolId)
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
-        self:writeInt(table.mapSize(map));
+        self:writeInt(table.mapSize(map))
         for key, value in pairs(map) do
             self:writeString(key)
             protocolRegistration:write(self, value)

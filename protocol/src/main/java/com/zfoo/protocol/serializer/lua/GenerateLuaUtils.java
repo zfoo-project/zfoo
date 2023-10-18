@@ -42,7 +42,9 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  */
 public abstract class GenerateLuaUtils {
 
-    private static String protocolOutputRootPath = "LuaProtocol/";
+    // custom configuration
+    public static String protocolOutputRootPath = "zfoolua";
+    public static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, ILuaSerializer> luaSerializerMap;
 
@@ -51,10 +53,13 @@ public abstract class GenerateLuaUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        protocolOutputRootPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
-
-        FileUtils.deleteFile(new File(protocolOutputRootPath));
-        FileUtils.createDirectory(protocolOutputRootPath);
+        // if not specify output path, then use current default path
+        if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
+            protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
+        } else {
+            protocolOutputPath = generateOperation.getProtocolPath();
+        }
+        FileUtils.deleteFile(new File(protocolOutputPath));
 
         luaSerializerMap = new HashMap<>();
         luaSerializerMap.put(BooleanSerializer.INSTANCE, new LuaBooleanSerializer());
@@ -75,6 +80,7 @@ public abstract class GenerateLuaUtils {
     public static void clear() {
         luaSerializerMap = null;
         protocolOutputRootPath = null;
+        protocolOutputPath = null;
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
