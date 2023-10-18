@@ -15,18 +15,24 @@ function {}:protocolId()
 end
 
 function {}:write(buffer, packet)
-    if buffer:writePacketFlag(packet) then
+    if packet == nil then
+        buffer:writeInt(0)
         return
     end
     {}
 end
 
 function {}:read(buffer)
-    if not(buffer:readBoolean()) then
+    local length = buffer:readInt()
+    if length == 0 then
         return nil
     end
+    local beforeReadIndex = buffer:getReadOffset()
     local packet = {}:new()
     {}
+    if length > 0 then
+        buffer:setReadOffset(beforeReadIndex + length)
+    end
     return packet
 end
 

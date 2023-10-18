@@ -166,11 +166,20 @@ public abstract class GenerateLuaUtils {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var luaBuilder = new StringBuilder();
+        if (registration.isCompatible()) {
+            luaBuilder.append("local beforeWriteIndex = buffer:getWriteOffset(;").append(LS);
+            luaBuilder.append(TAB).append(StringUtils.format("buffer:writeInt({})", registration.getPredictionLength())).append(LS);
+        } else {
+            luaBuilder.append(TAB).append("buffer:writeInt(-1)").append(LS);
+        }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
 
             luaSerializer(fieldRegistration.serializer()).writeObject(luaBuilder, "packet." + field.getName(), 1, field, fieldRegistration);
+        }
+        if (registration.isCompatible()) {
+            luaBuilder.append(TAB).append(StringUtils.format("buffer:adjustPadding({}, beforeWriteIndex)", registration.getPredictionLength())).append(LS);
         }
         return luaBuilder.toString();
     }
@@ -183,9 +192,11 @@ public abstract class GenerateLuaUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                luaBuilder.append(TAB).append("if not(buffer:isReadable()) then").append(LS);
-                luaBuilder.append(TAB + TAB).append("return packet").append(LS);
+                luaBuilder.append(TAB).append("if buffer:compatibleRead(beforeReadIndex, length) then").append(LS);
+                var compatibleReadObject = luaSerializer(fieldRegistration.serializer()).readObject(luaBuilder, 2, field, fieldRegistration);
+                luaBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {}", field.getName(), compatibleReadObject)).append(LS);
                 luaBuilder.append(TAB).append("end").append(LS);
+                continue;
             }
             var readObject = luaSerializer(fieldRegistration.serializer()).readObject(luaBuilder, 1, field, fieldRegistration);
             luaBuilder.append(TAB).append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);

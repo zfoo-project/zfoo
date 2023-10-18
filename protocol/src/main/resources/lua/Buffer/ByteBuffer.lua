@@ -503,12 +503,6 @@ function ByteBuffer:getBytes(startIndex, endIndex)
     return table.concat(self.buffer, "", startIndex, endIndex)
 end
 
-function ByteBuffer:writePacketFlag(value)
-    local flag = (value == null)
-    self:writeBoolean(not flag)
-    return flag
-end
-
 function ByteBuffer:writePacket(value, protocolId)
     local protocolRegistration = ProtocolManager.getProtocol(protocolId)
     protocolRegistration:write(self, value)
@@ -521,7 +515,7 @@ function ByteBuffer:readPacket(protocolId)
 end
 
 function ByteBuffer:writeBooleanArray(array)
-    if array == null then
+    if array == nil then
         self:writeInt(0)
     else
         self:writeInt(#array)
@@ -544,7 +538,7 @@ function ByteBuffer:readBooleanArray()
 end
 
 function ByteBuffer:writeByteArray(array)
-    if array == null then
+    if array == nil then
         self:writeInt(0)
     else
         self:writeInt(#array)
@@ -567,7 +561,7 @@ function ByteBuffer:readByteArray()
 end
 
 function ByteBuffer:writeShortArray(array)
-    if array == null then
+    if array == nil then
         self:writeInt(0)
     else
         self:writeInt(#array)
@@ -590,7 +584,7 @@ function ByteBuffer:readShortArray()
 end
 
 function ByteBuffer:writeIntArray(array)
-    if array == null then
+    if array == nil then
         self:writeInt(0)
     else
         self:writeInt(#array)
@@ -613,7 +607,7 @@ function ByteBuffer:readIntArray()
 end
 
 function ByteBuffer:writeLongArray(array)
-    if array == null then
+    if array == nil then
         self:writeInt(0)
     else
         self:writeInt(#array)
@@ -636,7 +630,7 @@ function ByteBuffer:readLongArray()
 end
 
 function ByteBuffer:writeFloatArray(array)
-    if array == null then
+    if array == nil then
         self:writeInt(0)
     else
         self:writeInt(#array)
@@ -659,7 +653,7 @@ function ByteBuffer:readFloatArray()
 end
 
 function ByteBuffer:writeDoubleArray(array)
-    if array == null then
+    if array == nil then
         self:writeInt(0)
     else
         self:writeInt(#array)
@@ -682,7 +676,7 @@ function ByteBuffer:readDoubleArray()
 end
 
 function ByteBuffer:writeStringArray(array)
-    if array == null then
+    if array == nil then
         self:writeInt(0)
     else
         self:writeInt(#array)
@@ -705,7 +699,7 @@ function ByteBuffer:readStringArray()
 end
 
 function ByteBuffer:writePacketArray(array, protocolId)
-    if array == null then
+    if array == nil then
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
@@ -730,7 +724,7 @@ function ByteBuffer:readPacketArray(protocolId)
 end
 
 function ByteBuffer:writeIntIntMap(map)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         self:writeInt(table.mapSize(map))
@@ -756,7 +750,7 @@ function ByteBuffer:readIntIntMap()
 end
 
 function ByteBuffer:writeIntLongMap(map)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         self:writeInt(table.mapSize(map))
@@ -782,7 +776,7 @@ function ByteBuffer:readIntLongMap()
 end
 
 function ByteBuffer:writeIntStringMap(map)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         self:writeInt(table.mapSize(map))
@@ -808,7 +802,7 @@ function ByteBuffer:readIntStringMap()
 end
 
 function ByteBuffer:writeIntPacketMap(map, protocolId)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
@@ -836,7 +830,7 @@ function ByteBuffer:readIntPacketMap(protocolId)
 end
 
 function ByteBuffer:writeLongIntMap(map)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         self:writeInt(table.mapSize(map))
@@ -862,7 +856,7 @@ function ByteBuffer:readLongIntMap()
 end
 
 function ByteBuffer:writeLongLongMap(map)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         self:writeInt(table.mapSize(map))
@@ -888,7 +882,7 @@ function ByteBuffer:readLongLongMap()
 end
 
 function ByteBuffer:writeLongStringMap(map)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         self:writeInt(table.mapSize(map))
@@ -914,7 +908,7 @@ function ByteBuffer:readLongStringMap()
 end
 
 function ByteBuffer:writeLongPacketMap(map, protocolId)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
@@ -942,7 +936,7 @@ function ByteBuffer:readLongPacketMap(protocolId)
 end
 
 function ByteBuffer:writeStringIntMap(map)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         self:writeInt(table.mapSize(map))
@@ -968,7 +962,7 @@ function ByteBuffer:readStringIntMap()
 end
 
 function ByteBuffer:writeStringLongMap(map)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         self:writeInt(table.mapSize(map))
@@ -994,7 +988,7 @@ function ByteBuffer:readStringLongMap()
 end
 
 function ByteBuffer:writeStringStringMap(map)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         self:writeInt(table.mapSize(map))
@@ -1020,7 +1014,7 @@ function ByteBuffer:readStringStringMap()
 end
 
 function ByteBuffer:writeStringPacketMap(map, protocolId)
-    if map == null then
+    if map == nil then
         self:writeInt(0)
     else
         local protocolRegistration = ProtocolManager.getProtocol(protocolId)
