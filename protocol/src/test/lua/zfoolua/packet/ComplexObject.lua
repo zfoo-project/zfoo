@@ -1,70 +1,61 @@
--- 复杂的对象
--- 包括了各种复杂的结构，数组，List，Set，Map
---
--- @author godotg
-
+-- 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
 local ComplexObject = {}
 
-function ComplexObject:new(a, aa, aaa, aaaa, b, bb, bbb, bbbb, c, cc, ccc, cccc, d, dd, ddd, dddd, e, ee, eee, eeee, f, ff, fff, ffff, g, gg, ggg, gggg, h, hh, hhh, hhhh, jj, jjj, kk, kkk, l, ll, lll, llll, lllll, m, mm, mmm, mmmm, mmmmm, s, ss, sss, ssss, sssss, myCompatible, myObject)
+function ComplexObject:new()
     local obj = {
         -- byte类型，最简单的整形
-        a = a, -- byte
-        -- byte的包装类型
-        -- 优先使用基础类型，包装类型会有装箱拆箱
-        aa = aa, -- java.lang.Byte
+        a = 0, -- byte
+        -- byte的包装类型，优先使用基础类型，包装类型会有装箱拆箱
+        aa = 0, -- byte
         -- 数组类型
-        aaa = aaa, -- byte[]
-        aaaa = aaaa, -- java.lang.Byte[]
-        b = b, -- short
-        bb = bb, -- java.lang.Short
-        bbb = bbb, -- short[]
-        bbbb = bbbb, -- java.lang.Short[]
-        c = c, -- int
-        cc = cc, -- java.lang.Integer
-        ccc = ccc, -- int[]
-        cccc = cccc, -- java.lang.Integer[]
-        d = d, -- long
-        dd = dd, -- java.lang.Long
-        ddd = ddd, -- long[]
-        dddd = dddd, -- java.lang.Long[]
-        e = e, -- float
-        ee = ee, -- java.lang.Float
-        eee = eee, -- float[]
-        eeee = eeee, -- java.lang.Float[]
-        f = f, -- double
-        ff = ff, -- java.lang.Double
-        fff = fff, -- double[]
-        ffff = ffff, -- java.lang.Double[]
-        g = g, -- boolean
-        gg = gg, -- java.lang.Boolean
-        ggg = ggg, -- boolean[]
-        gggg = gggg, -- java.lang.Boolean[]
-        h = h, -- char
-        hh = hh, -- java.lang.Character
-        hhh = hhh, -- char[]
-        hhhh = hhhh, -- java.lang.Character[]
-        jj = jj, -- java.lang.String
-        jjj = jjj, -- java.lang.String[]
-        kk = kk, -- com.zfoo.protocol.packet.ObjectA
-        kkk = kkk, -- com.zfoo.protocol.packet.ObjectA[]
-        l = l, -- java.util.List<java.lang.Integer>
-        ll = ll, -- java.util.List<java.util.List<java.util.List<java.lang.Integer>>>
-        lll = lll, -- java.util.List<java.util.List<com.zfoo.protocol.packet.ObjectA>>
-        llll = llll, -- java.util.List<java.lang.String>
-        lllll = lllll, -- java.util.List<java.util.Map<java.lang.Integer, java.lang.String>>
-        m = m, -- java.util.Map<java.lang.Integer, java.lang.String>
-        mm = mm, -- java.util.Map<java.lang.Integer, com.zfoo.protocol.packet.ObjectA>
-        mmm = mmm, -- java.util.Map<com.zfoo.protocol.packet.ObjectA, java.util.List<java.lang.Integer>>
-        mmmm = mmmm, -- java.util.Map<java.util.List<java.util.List<com.zfoo.protocol.packet.ObjectA>>, java.util.List<java.util.List<java.util.List<java.lang.Integer>>>>
-        mmmmm = mmmmm, -- java.util.Map<java.util.List<java.util.Map<java.lang.Integer, java.lang.String>>, java.util.Set<java.util.Map<java.lang.Integer, java.lang.String>>>
-        s = s, -- java.util.Set<java.lang.Integer>
-        ss = ss, -- java.util.Set<java.util.Set<java.util.List<java.lang.Integer>>>
-        sss = sss, -- java.util.Set<java.util.Set<com.zfoo.protocol.packet.ObjectA>>
-        ssss = ssss, -- java.util.Set<java.lang.String>
-        sssss = sssss, -- java.util.Set<java.util.Map<java.lang.Integer, java.lang.String>>
+        aaa = {}, -- byte[]
+        aaaa = {}, -- byte[]
+        b = 0, -- short
+        bb = 0, -- short
+        bbb = {}, -- short[]
+        bbbb = {}, -- short[]
+        c = 0, -- int
+        cc = 0, -- int
+        ccc = {}, -- int[]
+        cccc = {}, -- int[]
+        d = 0, -- long
+        dd = 0, -- long
+        ddd = {}, -- long[]
+        dddd = {}, -- long[]
+        e = 0, -- float
+        ee = 0, -- float
+        eee = {}, -- float[]
+        eeee = {}, -- float[]
+        f = 0, -- double
+        ff = 0, -- double
+        fff = {}, -- double[]
+        ffff = {}, -- double[]
+        g = false, -- bool
+        gg = false, -- bool
+        ggg = {}, -- bool[]
+        gggg = {}, -- bool[]
+        jj = "", -- string
+        jjj = {}, -- string[]
+        kk = nil, -- ObjectA
+        kkk = {}, -- ObjectA[]
+        l = {}, -- List<int>
+        ll = {}, -- List<List<List<int>>>
+        lll = {}, -- List<List<ObjectA>>
+        llll = {}, -- List<string>
+        lllll = {}, -- List<Dictionary<int, string>>
+        m = {}, -- Dictionary<int, string>
+        mm = {}, -- Dictionary<int, ObjectA>
+        mmm = {}, -- Dictionary<ObjectA, List<int>>
+        mmmm = {}, -- Dictionary<List<List<ObjectA>>, List<List<List<int>>>>
+        mmmmm = {}, -- Dictionary<List<Dictionary<int, string>>, HashSet<Dictionary<int, string>>>
+        s = {}, -- HashSet<int>
+        ss = {}, -- HashSet<HashSet<List<int>>>
+        sss = {}, -- HashSet<HashSet<ObjectA>>
+        ssss = {}, -- HashSet<string>
+        sssss = {}, -- HashSet<Dictionary<int, string>>
         -- 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
-        myCompatible = myCompatible, -- int
-        myObject = myObject -- com.zfoo.protocol.packet.ObjectA
+        myCompatible = 0, -- int
+        myObject = nil -- ObjectA
     }
     setmetatable(obj, self)
     self.__index = self
@@ -76,9 +67,12 @@ function ComplexObject:protocolId()
 end
 
 function ComplexObject:write(buffer, packet)
-    if buffer:writePacketFlag(packet) then
+    if packet == nil then
+        buffer:writeInt(0)
         return
     end
+    local beforeWriteIndex = buffer:getWriteOffset()
+    buffer:writeInt(36962)
     buffer:writeByte(packet.a)
     buffer:writeByte(packet.aa)
     buffer:writeByteArray(packet.aaa)
@@ -107,10 +101,6 @@ function ComplexObject:write(buffer, packet)
     buffer:writeBoolean(packet.gg)
     buffer:writeBooleanArray(packet.ggg)
     buffer:writeBooleanArray(packet.gggg)
-    buffer:writeChar(packet.h)
-    buffer:writeChar(packet.hh)
-    buffer:writeCharArray(packet.hhh)
-    buffer:writeCharArray(packet.hhhh)
     buffer:writeString(packet.jj)
     buffer:writeStringArray(packet.jjj)
     buffer:writePacket(packet.kk, 102)
@@ -247,12 +237,15 @@ function ComplexObject:write(buffer, packet)
     end
     buffer:writeInt(packet.myCompatible)
     buffer:writePacket(packet.myObject, 102)
+    buffer:adjustPadding(36962, beforeWriteIndex)
 end
 
 function ComplexObject:read(buffer)
-    if not(buffer:readBoolean()) then
+    local length = buffer:readInt()
+    if length == 0 then
         return nil
     end
+    local beforeReadIndex = buffer:getReadOffset()
     local packet = ComplexObject:new()
     local result32 = buffer:readByte()
     packet.a = result32
@@ -310,109 +303,109 @@ function ComplexObject:read(buffer)
     packet.ggg = array58
     local array59 = buffer:readBooleanArray()
     packet.gggg = array59
-    local result60 = buffer:readChar()
-    packet.h = result60
-    local result61 = buffer:readChar()
-    packet.hh = result61
-    local array62 = buffer:readCharArray()
-    packet.hhh = array62
-    local array63 = buffer:readCharArray()
-    packet.hhhh = array63
-    local result64 = buffer:readString()
-    packet.jj = result64
-    local array65 = buffer:readStringArray()
-    packet.jjj = array65
-    local result66 = buffer:readPacket(102)
-    packet.kk = result66
-    local array67 = buffer:readPacketArray(102)
-    packet.kkk = array67
-    local list68 = buffer:readIntArray()
-    packet.l = list68
-    local result69 = {}
-    local size70 = buffer:readInt()
-    if size70 > 0 then
-        for index71 = 1, size70 do
-            local result72 = {}
-            local size73 = buffer:readInt()
-            if size73 > 0 then
-                for index74 = 1, size73 do
-                    local list75 = buffer:readIntArray()
-                    table.insert(result72, list75)
+    local result60 = buffer:readString()
+    packet.jj = result60
+    local array61 = buffer:readStringArray()
+    packet.jjj = array61
+    local result62 = buffer:readPacket(102)
+    packet.kk = result62
+    local array63 = buffer:readPacketArray(102)
+    packet.kkk = array63
+    local list64 = buffer:readIntArray()
+    packet.l = list64
+    local result65 = {}
+    local size66 = buffer:readInt()
+    if size66 > 0 then
+        for index67 = 1, size66 do
+            local result68 = {}
+            local size69 = buffer:readInt()
+            if size69 > 0 then
+                for index70 = 1, size69 do
+                    local list71 = buffer:readIntArray()
+                    table.insert(result68, list71)
                 end
             end
-            table.insert(result69, result72)
+            table.insert(result65, result68)
         end
     end
-    packet.ll = result69
-    local result76 = {}
-    local size77 = buffer:readInt()
-    if size77 > 0 then
-        for index78 = 1, size77 do
-            local list79 = buffer:readPacketArray(102)
-            table.insert(result76, list79)
+    packet.ll = result65
+    local result72 = {}
+    local size73 = buffer:readInt()
+    if size73 > 0 then
+        for index74 = 1, size73 do
+            local list75 = buffer:readPacketArray(102)
+            table.insert(result72, list75)
         end
     end
-    packet.lll = result76
-    local list80 = buffer:readStringArray()
-    packet.llll = list80
-    local result81 = {}
-    local size82 = buffer:readInt()
-    if size82 > 0 then
-        for index83 = 1, size82 do
-            local map84 = buffer:readIntStringMap()
-            table.insert(result81, map84)
+    packet.lll = result72
+    local list76 = buffer:readStringArray()
+    packet.llll = list76
+    local result77 = {}
+    local size78 = buffer:readInt()
+    if size78 > 0 then
+        for index79 = 1, size78 do
+            local map80 = buffer:readIntStringMap()
+            table.insert(result77, map80)
         end
     end
-    packet.lllll = result81
-    local map85 = buffer:readIntStringMap()
-    packet.m = map85
-    local map86 = buffer:readIntPacketMap(102)
-    packet.mm = map86
-    local result87 = {}
-    local size88 = buffer:readInt()
-    if size88 > 0 then
-        for index89 = 1, size88 do
-            local result90 = buffer:readPacket(102)
-            local list91 = buffer:readIntArray()
-            result87[result90] = list91
+    packet.lllll = result77
+    local map81 = buffer:readIntStringMap()
+    packet.m = map81
+    local map82 = buffer:readIntPacketMap(102)
+    packet.mm = map82
+    local result83 = {}
+    local size84 = buffer:readInt()
+    if size84 > 0 then
+        for index85 = 1, size84 do
+            local result86 = buffer:readPacket(102)
+            local list87 = buffer:readIntArray()
+            result83[result86] = list87
         end
     end
-    packet.mmm = result87
-    local result92 = {}
-    local size93 = buffer:readInt()
-    if size93 > 0 then
-        for index94 = 1, size93 do
+    packet.mmm = result83
+    local result88 = {}
+    local size89 = buffer:readInt()
+    if size89 > 0 then
+        for index90 = 1, size89 do
+            local result91 = {}
+            local size92 = buffer:readInt()
+            if size92 > 0 then
+                for index93 = 1, size92 do
+                    local list94 = buffer:readPacketArray(102)
+                    table.insert(result91, list94)
+                end
+            end
             local result95 = {}
             local size96 = buffer:readInt()
             if size96 > 0 then
                 for index97 = 1, size96 do
-                    local list98 = buffer:readPacketArray(102)
-                    table.insert(result95, list98)
-                end
-            end
-            local result99 = {}
-            local size100 = buffer:readInt()
-            if size100 > 0 then
-                for index101 = 1, size100 do
-                    local result102 = {}
-                    local size103 = buffer:readInt()
-                    if size103 > 0 then
-                        for index104 = 1, size103 do
-                            local list105 = buffer:readIntArray()
-                            table.insert(result102, list105)
+                    local result98 = {}
+                    local size99 = buffer:readInt()
+                    if size99 > 0 then
+                        for index100 = 1, size99 do
+                            local list101 = buffer:readIntArray()
+                            table.insert(result98, list101)
                         end
                     end
-                    table.insert(result99, result102)
+                    table.insert(result95, result98)
                 end
             end
-            result92[result95] = result99
+            result88[result91] = result95
         end
     end
-    packet.mmmm = result92
-    local result106 = {}
-    local size107 = buffer:readInt()
-    if size107 > 0 then
-        for index108 = 1, size107 do
+    packet.mmmm = result88
+    local result102 = {}
+    local size103 = buffer:readInt()
+    if size103 > 0 then
+        for index104 = 1, size103 do
+            local result105 = {}
+            local size106 = buffer:readInt()
+            if size106 > 0 then
+                for index107 = 1, size106 do
+                    local map108 = buffer:readIntStringMap()
+                    table.insert(result105, map108)
+                end
+            end
             local result109 = {}
             local size110 = buffer:readInt()
             if size110 > 0 then
@@ -421,66 +414,59 @@ function ComplexObject:read(buffer)
                     table.insert(result109, map112)
                 end
             end
-            local result113 = {}
-            local size114 = buffer:readInt()
-            if size114 > 0 then
-                for index115 = 1, size114 do
-                    local map116 = buffer:readIntStringMap()
-                    table.insert(result113, map116)
+            result102[result105] = result109
+        end
+    end
+    packet.mmmmm = result102
+    local set113 = buffer:readIntArray()
+    packet.s = set113
+    local result114 = {}
+    local size115 = buffer:readInt()
+    if size115 > 0 then
+        for index116 = 1, size115 do
+            local result117 = {}
+            local size118 = buffer:readInt()
+            if size118 > 0 then
+                for index119 = 1, size118 do
+                    local list120 = buffer:readIntArray()
+                    table.insert(result117, list120)
                 end
             end
-            result106[result109] = result113
+            table.insert(result114, result117)
         end
     end
-    packet.mmmmm = result106
-    local set117 = buffer:readIntArray()
-    packet.s = set117
-    local result118 = {}
-    local size119 = buffer:readInt()
-    if size119 > 0 then
-        for index120 = 1, size119 do
-            local result121 = {}
-            local size122 = buffer:readInt()
-            if size122 > 0 then
-                for index123 = 1, size122 do
-                    local list124 = buffer:readIntArray()
-                    table.insert(result121, list124)
-                end
-            end
-            table.insert(result118, result121)
+    packet.ss = result114
+    local result121 = {}
+    local size122 = buffer:readInt()
+    if size122 > 0 then
+        for index123 = 1, size122 do
+            local set124 = buffer:readPacketArray(102)
+            table.insert(result121, set124)
         end
     end
-    packet.ss = result118
-    local result125 = {}
-    local size126 = buffer:readInt()
-    if size126 > 0 then
-        for index127 = 1, size126 do
-            local set128 = buffer:readPacketArray(102)
-            table.insert(result125, set128)
+    packet.sss = result121
+    local set125 = buffer:readStringArray()
+    packet.ssss = set125
+    local result126 = {}
+    local size127 = buffer:readInt()
+    if size127 > 0 then
+        for index128 = 1, size127 do
+            local map129 = buffer:readIntStringMap()
+            table.insert(result126, map129)
         end
     end
-    packet.sss = result125
-    local set129 = buffer:readStringArray()
-    packet.ssss = set129
-    local result130 = {}
-    local size131 = buffer:readInt()
-    if size131 > 0 then
-        for index132 = 1, size131 do
-            local map133 = buffer:readIntStringMap()
-            table.insert(result130, map133)
-        end
+    packet.sssss = result126
+    if buffer:compatibleRead(beforeReadIndex, length) then
+        local result130 = buffer:readInt()
+        packet.myCompatible = result130
     end
-    packet.sssss = result130
-    if not(buffer:isReadable()) then
-        return packet
+    if buffer:compatibleRead(beforeReadIndex, length) then
+        local result131 = buffer:readPacket(102)
+        packet.myObject = result131
     end
-    local result134 = buffer:readInt()
-    packet.myCompatible = result134
-    if not(buffer:isReadable()) then
-        return packet
+    if length > 0 then
+        buffer:setReadOffset(beforeReadIndex + length)
     end
-    local result135 = buffer:readPacket(102)
-    packet.myObject = result135
     return packet
 end
 

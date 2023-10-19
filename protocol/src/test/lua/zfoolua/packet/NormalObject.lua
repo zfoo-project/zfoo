@@ -1,27 +1,27 @@
--- @author godotg
 
 local NormalObject = {}
 
-function NormalObject:new(a, aaa, b, c, d, e, f, g, jj, kk, l, ll, lll, llll, m, mm, s, ssss)
+function NormalObject:new()
     local obj = {
-        a = a, -- byte
-        aaa = aaa, -- byte[]
-        b = b, -- short
-        c = c, -- int
-        d = d, -- long
-        e = e, -- float
-        f = f, -- double
-        g = g, -- boolean
-        jj = jj, -- java.lang.String
-        kk = kk, -- com.zfoo.protocol.packet.ObjectA
-        l = l, -- java.util.List<java.lang.Integer>
-        ll = ll, -- java.util.List<java.lang.Long>
-        lll = lll, -- java.util.List<com.zfoo.protocol.packet.ObjectA>
-        llll = llll, -- java.util.List<java.lang.String>
-        m = m, -- java.util.Map<java.lang.Integer, java.lang.String>
-        mm = mm, -- java.util.Map<java.lang.Integer, com.zfoo.protocol.packet.ObjectA>
-        s = s, -- java.util.Set<java.lang.Integer>
-        ssss = ssss -- java.util.Set<java.lang.String>
+        a = 0, -- byte
+        aaa = {}, -- byte[]
+        b = 0, -- short
+        c = 0, -- int
+        d = 0, -- long
+        e = 0, -- float
+        f = 0, -- double
+        g = false, -- bool
+        jj = "", -- string
+        kk = nil, -- ObjectA
+        l = {}, -- List<int>
+        ll = {}, -- List<long>
+        lll = {}, -- List<ObjectA>
+        llll = {}, -- List<string>
+        m = {}, -- Dictionary<int, string>
+        mm = {}, -- Dictionary<int, ObjectA>
+        s = {}, -- HashSet<int>
+        ssss = {}, -- HashSet<string>
+        outCompatibleValue = 0 -- int
     }
     setmetatable(obj, self)
     self.__index = self
@@ -33,9 +33,12 @@ function NormalObject:protocolId()
 end
 
 function NormalObject:write(buffer, packet)
-    if buffer:writePacketFlag(packet) then
+    if packet == nil then
+        buffer:writeInt(0)
         return
     end
+    local beforeWriteIndex = buffer:getWriteOffset()
+    buffer:writeInt(854)
     buffer:writeByte(packet.a)
     buffer:writeByteArray(packet.aaa)
     buffer:writeShort(packet.b)
@@ -54,12 +57,16 @@ function NormalObject:write(buffer, packet)
     buffer:writeIntPacketMap(packet.mm, 102)
     buffer:writeIntArray(packet.s)
     buffer:writeStringArray(packet.ssss)
+    buffer:writeInt(packet.outCompatibleValue)
+    buffer:adjustPadding(854, beforeWriteIndex)
 end
 
 function NormalObject:read(buffer)
-    if not(buffer:readBoolean()) then
+    local length = buffer:readInt()
+    if length == 0 then
         return nil
     end
+    local beforeReadIndex = buffer:getReadOffset()
     local packet = NormalObject:new()
     local result0 = buffer:readByte()
     packet.a = result0
@@ -97,6 +104,13 @@ function NormalObject:read(buffer)
     packet.s = set16
     local set17 = buffer:readStringArray()
     packet.ssss = set17
+    if buffer:compatibleRead(beforeReadIndex, length) then
+        local result18 = buffer:readInt()
+        packet.outCompatibleValue = result18
+    end
+    if length > 0 then
+        buffer:setReadOffset(beforeReadIndex + length)
+    end
     return packet
 end
 

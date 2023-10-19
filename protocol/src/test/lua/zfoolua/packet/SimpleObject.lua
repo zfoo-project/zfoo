@@ -1,11 +1,10 @@
--- @author godotg
 
 local SimpleObject = {}
 
-function SimpleObject:new(c, g)
+function SimpleObject:new()
     local obj = {
-        c = c, -- int
-        g = g -- boolean
+        c = 0, -- int
+        g = false -- bool
     }
     setmetatable(obj, self)
     self.__index = self
@@ -17,22 +16,29 @@ function SimpleObject:protocolId()
 end
 
 function SimpleObject:write(buffer, packet)
-    if buffer:writePacketFlag(packet) then
+    if packet == nil then
+        buffer:writeInt(0)
         return
     end
+    buffer:writeInt(-1)
     buffer:writeInt(packet.c)
     buffer:writeBoolean(packet.g)
 end
 
 function SimpleObject:read(buffer)
-    if not(buffer:readBoolean()) then
+    local length = buffer:readInt()
+    if length == 0 then
         return nil
     end
+    local beforeReadIndex = buffer:getReadOffset()
     local packet = SimpleObject:new()
     local result0 = buffer:readInt()
     packet.c = result0
     local result1 = buffer:readBoolean()
     packet.g = result1
+    if length > 0 then
+        buffer:setReadOffset(beforeReadIndex + length)
+    end
     return packet
 end
 

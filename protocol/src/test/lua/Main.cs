@@ -1,48 +1,59 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using NUnit.Framework;
-using Spring.Util;
+using UnityEngine;
 using XLua;
+using zfoocs;
 
-namespace Test.Editor.LuaTest
+public class Main : MonoBehaviour
 {
-    public class LuaProtocolTest
+    
+    public static readonly string TEST_PATH = "Assets/";
+    
+    private void Start()
     {
-        public static readonly string TEST_PATH = "Assets/Test/Editor/LuaTest/";
+        var luaEnv = new LuaEnv();
+        luaEnv.DoString("CS.UnityEngine.Debug.Log('hello world')");
+        
+        var luaDebugBuilder = new StringBuilder();
+        // Rider的断点调试
+        // luaDebugBuilder.Append("package.cpath = package.cpath .. ';C:/Users/Administrator/AppData/Roaming/JetBrains/Rider2022.3/plugins/EmmyLua/debugger/emmy/windows/x64/?.dll'").Append(System.Environment.NewLine);
+        // luaDebugBuilder.Append("local dbg = require('emmy_core')").Append(System.Environment.NewLine);
+        // luaDebugBuilder.Append("dbg.tcpConnect('localhost', 9966)").Append(System.Environment.NewLine);
 
-        [Test]
-        public void ComplexObjectTest()
-        {
-            // 获取复杂对象的字节流
-            var complexObjectBytes = File.ReadAllBytes("D:\\zfoo\\protocol\\src\\test\\resources\\ComplexObject.bytes");
+        luaEnv.DoString(luaDebugBuilder.ToString());
 
-            var luaEnv = new LuaEnv();
-            var luaDebugBuilder = new StringBuilder();
-            // Rider的断点调试
-            // luaDebugBuilder.Append("package.cpath = package.cpath .. ';C:/Users/godotg/AppData/Roaming/JetBrains/Rider2021.1/plugins/EmmyLua/classes/debugger/emmy/windows/x64/?.dll'").Append(FileUtils.LS);
-            // luaDebugBuilder.Append("local dbg = require('emmy_core')").Append(FileUtils.LS);
-            // luaDebugBuilder.Append("dbg.tcpListen('localhost', 9966)").Append(FileUtils.LS);
-            // luaDebugBuilder.Append("dbg.waitIDE()").Append(FileUtils.LS);
+        luaEnv.AddLoader(CustomLoader);
 
-            luaEnv.DoString(luaDebugBuilder.ToString());
+        var luaProtocolTestStr = File.ReadAllText( "Assets/main.lua");
+        luaEnv.DoString(luaProtocolTestStr, "main");
 
-            luaEnv.AddLoader(CustomLoader);
+        LuaFunction byteBufferTestFunction = luaEnv.Global.Get<LuaFunction>("byteBufferTest");
+        byteBufferTestFunction.Call();
 
-            var luaProtocolTestStr = File.ReadAllText(TEST_PATH + "main.lua");
-            luaEnv.DoString(luaProtocolTestStr, "main");
+        
+        // 获取复杂对象的字节流
+        var complexObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\complexObject.bytes");
+        LuaFunction complexObjectTestFuction = luaEnv.Global.Get<LuaFunction>("complexObjectTest");
+        complexObjectTestFuction.Call(complexObjectBytes);
+        
+        // 获取普通对象的字节流
+        // var normalObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes");
+        // var normalObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes");
+        // var normalObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes");
+        // var normalObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes");
+        var normalObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes");
+        LuaFunction normalObjectTestFuction = luaEnv.Global.Get<LuaFunction>("normalObjectTest");
+        normalObjectTestFuction.Call(normalObjectBytes);
+    }
 
-            LuaFunction byteBufferTestFunction = luaEnv.Global.Get<LuaFunction>("byteBufferTest");
-            byteBufferTestFunction.Call();
 
-            LuaFunction complexObjectTestFuction = luaEnv.Global.Get<LuaFunction>("complexObjectTest");
-            complexObjectTestFuction.Call(complexObjectBytes);
-        }
+    public static byte[] CustomLoader(ref string filepath)
+    {
+        filepath = filepath.Replace(".", "/") + ".lua";
 
-        public static byte[] CustomLoader(ref string filepath)
-        {
-            filepath = filepath.Replace(".", "/") + ".lua";
-
-            return File.ReadAllBytes(TEST_PATH + filepath);
-        }
+        return File.ReadAllBytes(TEST_PATH + filepath);
     }
 }

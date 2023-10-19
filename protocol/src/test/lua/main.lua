@@ -1,17 +1,16 @@
-local ByteBuffer = require("LuaProtocol.Buffer.ByteBuffer")
-local ProtocolManager = require("LuaProtocol.ProtocolManager")
+local ByteBuffer = require("zfoolua.ByteBuffer")
+local ProtocolManager = require("zfoolua.ProtocolManager")
 
 
 -------------------------------------ProtocolManager的测试-------------------------------------
 function complexObjectTest(bytes)
+    print("complex size ", #bytes)
     ProtocolManager.initProtocol()
 
     local byteBuffer = ByteBuffer:new()
     byteBuffer:writeBuffer(bytes)
     local packet = ProtocolManager.read(byteBuffer)
 
-    -- complexObjec是老的协议，所以序列化回来myCompatible是nil，所以要重新赋值
-    packet.myCompatible = 0
     local newByteBuffer = ByteBuffer:new()
     ProtocolManager.write(newByteBuffer, packet)
     assert(#byteBuffer.buffer <= #newByteBuffer.buffer)
@@ -26,6 +25,27 @@ function complexObjectTest(bytes)
     return packet
 end
 
+function normalObjectTest(bytes)
+    ProtocolManager.initProtocol()
+
+    local byteBuffer = ByteBuffer:new()
+    byteBuffer:writeBuffer(bytes)
+    local packet = ProtocolManager.read(byteBuffer)
+
+    local newByteBuffer = ByteBuffer:new()
+    ProtocolManager.write(newByteBuffer, packet)
+
+    -- set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
+    --for i = 1, #byteBuffer.buffer do
+    --    print(i)
+    --    assert(byteBuffer.buffer[i] == newByteBuffer.buffer[i], i)
+    --end
+
+    local newPacket = ProtocolManager.read(newByteBuffer)
+    print("normal source size ", #bytes)
+    print("normal target size ", newByteBuffer:getLen())
+    return packet
+end
 
 
 -------------------------------------ByteBuffer的测试-------------------------------------
@@ -129,8 +149,6 @@ function byteBufferTest()
     byteBuffer:writeString(s)
     assert(byteBuffer:readString() == s)
 
-    byteBuffer:writeChar(s)
-    assert(byteBuffer:readChar() == "你")
     byteBuffer:setWriteOffset(0)
     byteBuffer:setReadOffset(0)
 

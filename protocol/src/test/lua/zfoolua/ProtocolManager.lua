@@ -33,11 +33,13 @@ function ProtocolManager.read(buffer)
 end
 
 function initProtocol()
-    local ComplexObject = require("LuaProtocol.Packet.ComplexObject")
-    local NormalObject = require("LuaProtocol.Packet.NormalObject")
-    local ObjectA = require("LuaProtocol.Packet.ObjectA")
-    local ObjectB = require("LuaProtocol.Packet.ObjectB")
-    local SimpleObject = require("LuaProtocol.Packet.SimpleObject")
+    local EmptyObject = require("zfoolua.packet.EmptyObject")
+    local ComplexObject = require("zfoolua.packet.ComplexObject")
+    local NormalObject = require("zfoolua.packet.NormalObject")
+    local ObjectA = require("zfoolua.packet.ObjectA")
+    local ObjectB = require("zfoolua.packet.ObjectB")
+    local SimpleObject = require("zfoolua.packet.SimpleObject")
+    protocols[0] = EmptyObject
     protocols[100] = ComplexObject
     protocols[101] = NormalObject
     protocols[102] = ObjectA
