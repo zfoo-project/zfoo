@@ -2,7 +2,7 @@ English | [简体中文](./README_CN.md)
 
 ### Ⅰ. Introduction
 
-- A decentralized network serialization library for the metaverse, secure, private, and compatible, allowing everyone to have a unique set of protocols
+- A decentralized serialization library, secure, private, reliable, and compatible, allowing everyone to have a unique set of protocols
 - The protocol is currently natively supported **C++ Java Javascript TypeScript C# Go Lua GDScript Python**，It's easy to do cross-platform
 - The protocol can customize the private protocol format to make your protocol more secure, and supports adding fields
   and being compatible with previous and subsequent protocols

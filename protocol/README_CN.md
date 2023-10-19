@@ -2,9 +2,8 @@
 
 ### Ⅰ. 简介
 
-- 为元宇宙而生的去中心化网络序列化库，安全私有，可前后兼容，让每个人都拥有一套独一无二的协议
+- 去中心化网络序列化库，安全可靠，自定义私有协议格式，可前后兼容，让每个人都拥有一套独一无二的协议
 - 协议目前原生支持 **C++ Java JavaScript TypeScript C# Go Lua GDScript Python**，可以轻易实现跨平台
-- 协议可以自定义私有协议格式，让你的协议更加安全，支持增加字段和兼容前后版本协议
 - 兼容protobuf，支持生成protobuf协议文件，提供从pojo到proto的生成方式
 - proto文件到生成pojo的方式已经有不少jetbrains插件可以做到，可以在idea的plugin中搜索proto
 
