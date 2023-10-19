@@ -28,6 +28,10 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class LuaFloatSerializer implements ILuaSerializer {
 
     @Override
+    public String fieldDefaultValue(Field field, IFieldRegistration fieldRegistration) {
+        return "0";
+    }
+    @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("buffer:writeFloat({})", objectStr)).append(LS);

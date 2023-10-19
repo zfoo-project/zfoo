@@ -22,6 +22,8 @@ import java.lang.reflect.Field;
  */
 public interface ILuaSerializer {
 
+    String fieldDefaultValue(Field field, IFieldRegistration fieldRegistration);
+
     void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration);
 
     String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration);

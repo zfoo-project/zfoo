@@ -30,6 +30,10 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class LuaMapSerializer implements ILuaSerializer {
 
     @Override
+    public String fieldDefaultValue(Field field, IFieldRegistration fieldRegistration) {
+        return "{}";
+    }
+    @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
         if (CutDownMapSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Lua)) {

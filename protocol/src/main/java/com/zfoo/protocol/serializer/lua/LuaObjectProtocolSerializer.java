@@ -27,6 +27,11 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class LuaObjectProtocolSerializer implements ILuaSerializer {
 
     @Override
+    public String fieldDefaultValue(Field field, IFieldRegistration fieldRegistration) {
+        return "nil";
+    }
+
+    @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         GenerateProtocolFile.addTab(builder, deep);

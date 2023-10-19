@@ -1,7 +1,7 @@
 {}
 local {} = {}
 
-function {}:new({})
+function {}:new()
     local obj = {
         {}
     }

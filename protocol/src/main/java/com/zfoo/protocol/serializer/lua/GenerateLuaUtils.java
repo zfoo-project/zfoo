@@ -22,6 +22,7 @@ import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -127,7 +128,7 @@ public abstract class GenerateLuaUtils {
         var readPacket = readPacket(registration);
 
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, StringUtils.EMPTY_JSON, protocolClazzName
-                , valueOfMethod.getKey().trim(), valueOfMethod.getValue().trim(), protocolClazzName, protocolId
+                , valueOfMethod.trim(), protocolClazzName, protocolId
                 , protocolClazzName, writePacket.trim(), protocolClazzName, protocolClazzName, readPacket.trim(), protocolClazzName);
 
         var outputPath = StringUtils.format("{}/{}/{}.lua"
@@ -135,31 +136,32 @@ public abstract class GenerateLuaUtils {
         FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
     }
 
-    private static Pair<String, String> valueOfMethod(ProtocolRegistration registration) {
+    private static String valueOfMethod(ProtocolRegistration registration) {
         var protocolId = registration.getId();
         var fields = registration.getFields();
-
-        var valueOfParams = StringUtils.joinWith(", ", Arrays.stream(fields).map(it -> it.getName()).toList().toArray());
+        var fieldRegistrations = registration.getFieldRegistrations();
         var luaBuilder = new StringBuilder();
 
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
+            var fieldRegistration = fieldRegistrations[i];
             var fieldName = field.getName();
             // 生成注释
             var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Lua);
             if (StringUtils.isNotBlank(fieldNote)) {
                 luaBuilder.append(TAB + TAB).append(fieldNote).append(LS);
             }
-
+            var fieldDefaultValue = luaSerializer(fieldRegistration.serializer()).fieldDefaultValue(field, fieldRegistration);
             if (i == fields.length - 1) {
-                luaBuilder.append(TAB + TAB).append(StringUtils.format("{} = {}", fieldName, fieldName));
+                luaBuilder.append(TAB + TAB).append(StringUtils.format("{} = {}", fieldName, fieldDefaultValue));
             } else {
-                luaBuilder.append(TAB + TAB).append(StringUtils.format("{} = {},", fieldName, fieldName));
+                luaBuilder.append(TAB + TAB).append(StringUtils.format("{} = {},", fieldName, fieldDefaultValue));
             }
+            var typeNote = GenerateCsUtils.toCsClassName(field.getGenericType().getTypeName());
             // 生成类型的注释
-            luaBuilder.append(" -- ").append(field.getGenericType().getTypeName()).append(LS);
+            luaBuilder.append(" -- ").append(typeNote).append(LS);
         }
-        return new Pair<>(valueOfParams, luaBuilder.toString());
+        return luaBuilder.toString();
     }
 
     private static String writePacket(ProtocolRegistration registration) {

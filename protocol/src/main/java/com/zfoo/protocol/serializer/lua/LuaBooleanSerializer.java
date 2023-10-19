@@ -28,6 +28,11 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class LuaBooleanSerializer implements ILuaSerializer {
 
     @Override
+    public String fieldDefaultValue(Field field, IFieldRegistration fieldRegistration) {
+        return "false";
+    }
+
+    @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("buffer:writeBoolean({})", objectStr)).append(LS);
