@@ -5,7 +5,7 @@
 -----------
 
 - **极致性能，天生异步，Actor设计思想，无锁化设计，万能RPC框架，native GraalVM支持**
-- **极致序列化 [zfoo protocol](protocol/README.md)**，协议原生支持 C++ C# Java Go Javascript TypeScript Lua GDScript
+- **去中心化极致序列化框架 [zfoo protocol](protocol/README.md)**，协议原生支持 C++ C# Java Go Javascript TypeScript Lua GDScript
   Python
 - **高可拓展性**，单台服务器部署，微服务部署，注册中心加集群部署，网关加集群部署，随意搭配
 - **上能做游戏服务器框架，下能做应用网站服务器框架**

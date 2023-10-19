@@ -5,7 +5,7 @@ English | [简体中文](./README_CN.md)
 -----------
 
 - **Extremely fast, asynchronous, actor design pattern, lock free, RPC framework, native GraalVM support**
-- **Ultimate performance serialization and deserialization [zfoo protocol](protocol/README.md)**，supports C++ C# Go Java
+- **Decentralized and ultimate serialization and deserialization [zfoo protocol](protocol/README.md)**，supports C++ C# Go Java
   Javascript TypeScript Lua GDScript Python
 - **High scalability**，Single server deployment, microservice deployment, cluster deployment, gateway deployment
 - **Can be used as a game server framework or website server framework.**
