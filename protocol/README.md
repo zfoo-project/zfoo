@@ -2,8 +2,10 @@ English | [简体中文](./README_CN.md)
 
 ### Ⅰ. Introduction
 
-- A decentralized serialization library, secure, private, reliable, and compatible, allowing everyone to have a unique set of protocols
-- The protocol is currently natively supported **C++ Java Javascript TypeScript C# Go Lua GDScript Python**，It's easy to do cross-platform
+- A decentralized serialization library, secure, private, reliable, and compatible, allowing everyone to have a unique
+  set of protocols
+- The protocol is currently natively supported **C++ Java Javascript TypeScript C# Go Lua GDScript Python**，It's easy to
+  do cross-platform
 - The protocol can customize the private protocol format to make your protocol more secure, and supports adding fields
   and being compatible with previous and subsequent protocols
 - Compatible with Protobuf, it supports the generation of Protobuf protocol files, and provides a generation method from
@@ -66,6 +68,8 @@ cpu： i9900k
   as List<Set<Map<>>>; Comparing kryo and protobuf data structure nesting results in a performance penalty
 - There is no risk of vulnerability injection, only bytecode enhancement will be performed during initialization, and no
   bytecode operations will be performed in the later stage
+- Taking advantage of the principle of program locality, the serializer is placed in the short[] array, and the object
+  serialization and deserialization will only look for the serializer once
 
 ```
 The data compression volume is small, and the compression volume is smaller than that of Kryo and Protobuf; Smaller than kryo because kryo needs to write the registration number of each object
@@ -95,7 +99,8 @@ For complex objects, ZFOO package size 2216, KRYO package size 2528, and Protobu
 - Default data format support eliminates the need for users to register
   manually.[参考类定义](src/test/java/com/zfoo/protocol/packet/ComplexObject.java)
     - boolean，byte，short，int，long，float，double，String
-    - Boolean，Byte，Short，Integer，Long，Float，Double，String，If it is null during serialization, a default value will be given
+    - Boolean，Byte，Short，Integer，Long，Float，Double，String，If it is null during serialization, a default value will be
+      given
     - int[]，Integer[]，If it is null, it is parsed as an array of length 0
         - Native generic List, Set, Map, deserialization return type Hash Set, Array List, Hash Map, and null pointer
           safe (returns a collection of size 0)
@@ -151,21 +156,21 @@ your protocol number a little more compactly, so that your protocol number will 
       
       }
       ```
-      
-  - The third use: Register the protocol through ProtocolManager.initProtocol(xmlProtocols) in the protocol.xml file
-    ```
-    <protocols>
-        <module id="1" name="common">
-            <protocol id="100" location="com.zfoo.protocol.packet.ComplexObject"/>
-            <protocol id="101" location="com.zfoo.protocol.packet.NormalObject"/>
-            <protocol id="102" location="com.zfoo.protocol.packet.ObjectA"/>
-            <protocol id="103" location="com.zfoo.protocol.packet.ObjectB"/>
-            <protocol id="104" location="com.zfoo.protocol.packet.SimpleObject"/>
-            <protocol id="105" location="com.zfoo.protocol.packet.VeryBigObject"/>
-            <protocol id="106" location="com.zfoo.protocol.packet.EmptyObject"/>
-        </module>
-    </protocols>
-    ```      
+
+    - The third use: Register the protocol through ProtocolManager.initProtocol(xmlProtocols) in the protocol.xml file
+      ```
+      <protocols>
+          <module id="1" name="common">
+              <protocol id="100" location="com.zfoo.protocol.packet.ComplexObject"/>
+              <protocol id="101" location="com.zfoo.protocol.packet.NormalObject"/>
+              <protocol id="102" location="com.zfoo.protocol.packet.ObjectA"/>
+              <protocol id="103" location="com.zfoo.protocol.packet.ObjectB"/>
+              <protocol id="104" location="com.zfoo.protocol.packet.SimpleObject"/>
+              <protocol id="105" location="com.zfoo.protocol.packet.VeryBigObject"/>
+              <protocol id="106" location="com.zfoo.protocol.packet.EmptyObject"/>
+          </module>
+      </protocols>
+      ```      
 
 - If you add a field for version compatibility, you need to add a Compatible annotation, and the order needs to be
   naturally increased, so as to ensure that the old and new protocols can be compatible with each other
