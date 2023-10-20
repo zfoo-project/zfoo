@@ -21,6 +21,7 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
+import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
@@ -126,8 +127,8 @@ public abstract class GenerateProtobufUtils {
     public static void createProtocols(List<IProtocolRegistration> allGenerateProtocols) {
         var packageMap = new HashMap<String, List<IProtocolRegistration>>();
         for (var protocolRegistration : allGenerateProtocols) {
-            var clazz = protocolRegistration.protocolConstructor().getDeclaringClass();
-            String packageName = clazz.getPackageName();
+            var protocolId = protocolRegistration.protocolId();
+            String packageName = GenerateProtocolPath.getProtocolPath(protocolId);
             var packagList = packageMap.computeIfAbsent(packageName, k -> new ArrayList<>());
             packagList.add(protocolRegistration);
         }
