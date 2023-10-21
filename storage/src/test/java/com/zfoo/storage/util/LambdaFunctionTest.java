@@ -12,9 +12,10 @@
 
 package com.zfoo.storage.util;
 
+import com.zfoo.storage.resource.StudentResource;
 import com.zfoo.storage.resource.TeacherResource;
 import com.zfoo.storage.util.function.Func1;
-import com.zfoo.storage.util.lambda.LambdaMeta;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.Serializable;
@@ -24,6 +25,8 @@ import java.lang.reflect.Method;
  * @author veione
  */
 public class LambdaFunctionTest {
+
+
     // https://blog.csdn.net/iteye_19045/article/details/119299015
     @Test
     public void testFuncSerialization() throws Exception {
@@ -35,13 +38,18 @@ public class LambdaFunctionTest {
         Method writeReplace = clazz.getDeclaredMethod("writeReplace");
         System.out.println(writeReplace);
 
-        LambdaMeta meta = LambdaUtils.extract(func);
-        System.out.println(meta);
-
 //        Function<StudentResource, String> func2 = StudentResource::name;
 //        Method method = func2.getClass().getDeclaredMethod("writeReplace");
 //        object = method.invoke(func2);
 //        System.out.println(object);
+    }
+
+
+    @Test
+    public void testFunctionCache() {
+        Func1<StudentResource, Object> nameFunc1 = StudentResource::getName;
+        Func1<StudentResource, Object> nameFunc2 = StudentResource::getName;
+        Assert.assertNotEquals(nameFunc1, nameFunc2);
     }
 
     private static Object getObject(Serializable func) throws Exception {

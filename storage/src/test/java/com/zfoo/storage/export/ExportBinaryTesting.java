@@ -16,7 +16,6 @@ import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.util.FieldUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.storage.anno.AliasFieldName;
@@ -27,8 +26,6 @@ import com.zfoo.storage.config.StorageConfig;
 import com.zfoo.storage.manager.StorageInt;
 import com.zfoo.storage.manager.StorageManager;
 import com.zfoo.storage.util.ExportUtils;
-import com.zfoo.storage.util.LambdaUtils;
-import com.zfoo.storage.util.function.Func1;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
 import org.junit.Ignore;
@@ -111,13 +108,6 @@ public class ExportBinaryTesting {
         ProtocolManager.write(buffer, resourceData);
         var bytes = ByteBufUtils.readAllBytes(buffer);
         FileUtils.writeInputStreamToFile(new File("D:/github/godot-bird/binary_data.cfg"), new ByteArrayInputStream(bytes));
-
-        Func1<StudentResource, Integer> ageFunc = StudentResource::age;
-        String methodName = LambdaUtils.extract(ageFunc).getImplMethodName();
-        String fieldName = FieldUtils.methodToProperty(methodName);
-        System.out.println(methodName);
-        System.out.println(fieldName);
-
 
         //获取storage对象
         var storage = storageManager.getStorage(StudentResource.class);

@@ -13,25 +13,28 @@
 package com.zfoo.storage.manager;
 
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.*;
 import com.zfoo.storage.interpreter.ResourceInterpreter;
 import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.model.IdDef;
 import com.zfoo.storage.model.IndexDef;
-import com.zfoo.storage.util.LambdaUtils;
 import com.zfoo.storage.util.function.Func1;
+import com.zfoo.storage.util.lambda.*;
 import org.springframework.lang.Nullable;
+import org.springframework.util.ConcurrentReferenceHashMap;
 
 import java.io.InputStream;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.*;
 
 /**
  * @author godotg
  */
 public class StorageObject<K, V> implements IStorage<K, V> {
+    // all storage data
     private Map<K, V> dataMap;
     // 非唯一索引
     protected Map<String, Map<Object, List<V>>> indexMap = new HashMap<>();
@@ -41,9 +44,11 @@ public class StorageObject<K, V> implements IStorage<K, V> {
     protected Class<?> clazz;
     protected IdDef idDef;
     protected Map<String, IndexDef> indexDefMap;
-    // 当前配置表是否在当前项目中使用，没有被使用的会清除data数据，以达到节省内存的目的
+    // EN: unused configuration tables will clear data to save memory.
+    // CN: 没有被使用的配置表会清除data数据，以达到节省内存的目的
     protected boolean recycle = true;
 
+    private ConcurrentReferenceHashMap<Func1<V, ?>, String> funcCaches = new ConcurrentReferenceHashMap<>();
 
     public static StorageObject<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
         var idDef = IdDef.valueOf(resourceClazz);
@@ -162,7 +167,7 @@ public class StorageObject<K, V> implements IStorage<K, V> {
 
     @Override
     public <INDEX> List<V> getIndexes(Func1<V, INDEX> func, INDEX index) {
-        String indexName = LambdaUtils.getFieldName(func);
+        String indexName = getMethodToField(func);
         var indexValues = indexMap.get(indexName);
         AssertionUtils.notNull(indexValues, "The index of [indexName:{}] does not exist in the static resource [resource:{}]", indexName, clazz.getSimpleName());
         var values = indexValues.get(index);
@@ -175,7 +180,7 @@ public class StorageObject<K, V> implements IStorage<K, V> {
     @Nullable
     @Override
     public <INDEX> V getUniqueIndex(Func1<V, INDEX> func, INDEX index) {
-        String uniqueIndexName = LambdaUtils.getFieldName(func);
+        String uniqueIndexName = getMethodToField(func);
         var indexValueMap = uniqueIndexMap.get(uniqueIndexName);
         AssertionUtils.notNull(indexValueMap, "There is no a unique index for [uniqueIndexName:{}] in the static resource [resource:{}]", uniqueIndexName, clazz.getSimpleName());
         var value = indexValueMap.get(index);
@@ -212,4 +217,69 @@ public class StorageObject<K, V> implements IStorage<K, V> {
         return dataMap.size();
     }
 
+    private <INDEX> String getMethodToField(Func1<V, INDEX> func) {
+        var indexName = funcCaches.get(func);
+        if (indexName != null) {
+            return indexName;
+        }
+
+        // 1. IDEA 调试模式下 lambda 表达式是一个代理
+        if (func instanceof Proxy) {
+            try {
+                var lambda = new IdeaProxyLambdaMeta((Proxy) func);
+                indexName = FieldUtils.getMethodToField(clazz, lambda.getImplMethodName());
+            } catch (Exception e) {
+            }
+        }
+
+        // 2. 反射读取
+        if (indexName == null) {
+            try {
+                var method = func.getClass().getDeclaredMethod("writeReplace");
+                ReflectionUtils.makeAccessible(method);
+                var lambda = new ReflectLambdaMeta((java.lang.invoke.SerializedLambda) method.invoke(func));
+                indexName = FieldUtils.getMethodToField(clazz, lambda.getImplMethodName());
+            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            }
+        }
+
+        // 3. 反射失败使用序列化的方式读取
+        if (indexName == null) {
+            try {
+                var lambda = new ShadowLambdaMeta(SerializedLambda.extract(func));
+                indexName = FieldUtils.getMethodToField(clazz, lambda.getImplMethodName());
+            } catch (Exception e) {
+            }
+        }
+
+        // 4. 通过将func带入到dataMap中求解，适合GraalVM环境中
+        if (indexName == null) {
+            try {
+                var fields = clazz.getDeclaredFields();
+                Arrays.stream(fields).forEach(ReflectionUtils::makeAccessible);
+                for (var value : dataMap.values()) {
+                    var r = func.call(value);
+                    var valueFields = Arrays.stream(fields)
+                            .map(it -> ReflectionUtils.getField(it, value))
+                            .filter(it -> it.equals(r) && it.getClass() == r.getClass())
+                            .toList();
+                    // 如果只有一个能匹配到func的返回值则就是这个方法
+                    if (valueFields.size() == 1) {
+                        for (var field : fields) {
+                            if (!ReflectionUtils.getField(field, value).equals(r)) {
+                                continue;
+                            }
+                            indexName = field.getName();
+                            break;
+                        }
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+            }
+        }
+
+        funcCaches.put(func, indexName);
+        return indexName;
+    }
 }

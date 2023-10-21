@@ -3,6 +3,7 @@ package com.zfoo.protocol.util;
 import com.zfoo.protocol.exception.RunException;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Locale;
 
 /**
@@ -69,29 +70,54 @@ public abstract class FieldUtils {
         }
     }
 
-    public static String methodToProperty(String name) {
-        if (name.startsWith("is")) {
-            name = name.substring(2);
-        } else if (name.startsWith("get") || name.startsWith("set")) {
-            name = name.substring(3);
+    public static String getMethodToField(Class<?> clazz, String methodName) {
+        try {
+            // 查看clazz时候真的有methodName方法
+            clazz.getDeclaredMethod(methodName);
+        } catch (NoSuchMethodException e) {
+            throw new RunException("clazz:[{}] has no getMethod:[{}]", clazz.getSimpleName(), methodName);
         }
 
-        if (name.length() == 1 || name.length() > 1 && !Character.isUpperCase(name.charAt(1))) {
-            name = name.substring(0, 1).toLowerCase(Locale.ENGLISH) + name.substring(1);
+        var fieldName = methodName;
+        if (clazz.isRecord()) {
+            try {
+                clazz.getDeclaredField(fieldName);
+                return fieldName;
+            } catch (NoSuchFieldException e) {
+                throw new RunException("record clazz:[{}] has no field:[{}]", clazz.getSimpleName(), fieldName);
+            }
         }
 
-        return name;
+        // get method
+        fieldName = StringUtils.substringAfterFirst(methodName, "get");
+        try {
+            clazz.getDeclaredField(fieldName);
+            return fieldName;
+        } catch (NoSuchFieldException e) {
+        }
+
+        fieldName = StringUtils.uncapitalize(fieldName);
+        try {
+            clazz.getDeclaredField(fieldName);
+            return fieldName;
+        } catch (NoSuchFieldException e) {
+        }
+
+        // is method
+        fieldName = StringUtils.substringAfterFirst(methodName, "is");
+        try {
+            clazz.getDeclaredField(fieldName);
+            return fieldName;
+        } catch (NoSuchFieldException e) {
+        }
+
+        fieldName = StringUtils.uncapitalize(fieldName);
+        try {
+            clazz.getDeclaredField(fieldName);
+            return fieldName;
+        } catch (NoSuchFieldException e) {
+            throw new RunException("clazz:[{}] has no field for getMethod:[{}]", clazz.getSimpleName(), methodName);
+        }
     }
 
-    public static boolean isProperty(String name) {
-        return isGetter(name) || isSetter(name);
-    }
-
-    public static boolean isGetter(String name) {
-        return name.startsWith("get") && name.length() > 3 || name.startsWith("is") && name.length() > 2;
-    }
-
-    public static boolean isSetter(String name) {
-        return name.startsWith("set") && name.length() > 3;
-    }
 }
