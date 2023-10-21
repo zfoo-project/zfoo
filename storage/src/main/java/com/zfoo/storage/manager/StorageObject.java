@@ -73,11 +73,11 @@ public class StorageObject<K, V> implements IStorage<K, V> {
     }
 
     public StorageObject(Class<?> clazz, IdDef idDef, Map<String, IndexDef> indexDefMap, List<?> values) {
-        this.dataMap  = new HashMap<>(CollectionUtils.capacity(values.size()));
+        this.dataMap = new HashMap<>(CollectionUtils.capacity(values.size()));
         this.clazz = clazz;
         this.idDef = idDef;
         this.indexDefMap = indexDefMap;
-        for (var value: values) {
+        for (var value : values) {
             @SuppressWarnings("unchecked")
             var id = (K) ReflectionUtils.getField(idDef.getField(), value);
 
@@ -151,44 +151,13 @@ public class StorageObject<K, V> implements IStorage<K, V> {
     }
 
     @Override
-    public void recycleStorage() {
-        recycle = true;
-        dataMap = null;
-        indexMap = null;
-        uniqueIndexMap = null;
-        idDef = null;
-        indexDefMap = null;
-    }
-
-    @Override
-    public boolean isRecycle() {
-        return recycle;
-    }
-
-    @Override
-    public void setRecycle(boolean recycle) {
-        this.recycle = recycle;
-    }
-
-    @Override
     public Collection<V> getAll() {
         return dataMap.values();
     }
 
     @Override
-    public List<V> getList() {
-        Collection<V> all = getAll();
-        return all.stream().toList();
-    }
-
-    @Override
     public Map<K, V> getData() {
         return Collections.unmodifiableMap(dataMap);
-    }
-
-    @Override
-    public IdDef getIdDef() {
-        return idDef;
     }
 
     @Override
@@ -211,6 +180,31 @@ public class StorageObject<K, V> implements IStorage<K, V> {
         AssertionUtils.notNull(indexValueMap, "There is no a unique index for [uniqueIndexName:{}] in the static resource [resource:{}]", uniqueIndexName, clazz.getSimpleName());
         var value = indexValueMap.get(index);
         return value;
+    }
+
+    @Override
+    public void recycleStorage() {
+        recycle = true;
+        dataMap = null;
+        indexMap = null;
+        uniqueIndexMap = null;
+        idDef = null;
+        indexDefMap = null;
+    }
+
+    @Override
+    public boolean isRecycle() {
+        return recycle;
+    }
+
+    @Override
+    public void setRecycle(boolean recycle) {
+        this.recycle = recycle;
+    }
+
+    @Override
+    public IdDef getIdDef() {
+        return idDef;
     }
 
     @Override

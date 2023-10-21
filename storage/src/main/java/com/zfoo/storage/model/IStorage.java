@@ -36,19 +36,9 @@ public interface IStorage<K, V> {
 
     V get(long id);
 
-    void recycleStorage();
-
-    boolean isRecycle();
-
-    void setRecycle(boolean recycle);
-
     Collection<V> getAll();
 
-    List<V> getList();
-
     Map<K, V> getData();
-
-    IdDef getIdDef();
 
     <INDEX> List<V> getIndexes(Func1<V, INDEX> func, INDEX index);
 
@@ -56,4 +46,13 @@ public interface IStorage<K, V> {
     <INDEX> V getUniqueIndex(Func1<V, INDEX> func, INDEX uindex);
 
     int size();
+
+    void recycleStorage();
+
+    boolean isRecycle();
+
+    void setRecycle(boolean recycle);
+
+    IdDef getIdDef();
+
 }

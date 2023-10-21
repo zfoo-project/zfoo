@@ -56,10 +56,6 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
         return instance.storageManager.getStorage(clazz).get(id);
     }
 
-    public static <V> List<V> getList(Class<V> clazz) {
-        return instance.storageManager.getStorage(clazz).getList();
-    }
-
     public static <INDEX, V> List<V> getIndexes(Class<V> clazz, Func1<V, INDEX> func, INDEX index) {
         return instance.storageManager.getStorage(clazz).getIndexes(func, index);
     }

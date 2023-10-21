@@ -51,8 +51,6 @@ public class ApplicationTest {
 
         IStorage<Integer, StudentResource> storage1 = StorageContext.getStorageManager().getStorage(StudentResource.class);
 
-        //获取所有数据
-        List<StudentResource> list = StorageContext.getList(StudentResource.class);
         //根据主键获取数据
         StudentResource studentResource = StorageContext.get(StudentResource.class, 1001);
         TeacherResource teacherResource = StorageContext.get(TeacherResource.class, 1001);

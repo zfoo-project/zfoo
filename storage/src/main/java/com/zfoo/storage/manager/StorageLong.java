@@ -73,17 +73,6 @@ public class StorageLong<K, V> extends StorageObject<K, V> {
     }
 
     @Override
-    public int size() {
-        return dataMap.size();
-    }
-
-    @Override
-    public void recycleStorage() {
-        super.recycleStorage();
-        dataMap = null;
-    }
-
-    @Override
     public Collection<V> getAll() {
         return dataMap.values().stream().toList();
     }
@@ -93,6 +82,17 @@ public class StorageLong<K, V> extends StorageObject<K, V> {
         @SuppressWarnings("unchecked")
         var map = (Map<K, V>) Collections.unmodifiableMap(dataMap);
         return map;
+    }
+
+    @Override
+    public int size() {
+        return dataMap.size();
+    }
+
+    @Override
+    public void recycleStorage() {
+        super.recycleStorage();
+        dataMap = null;
     }
 
 }
