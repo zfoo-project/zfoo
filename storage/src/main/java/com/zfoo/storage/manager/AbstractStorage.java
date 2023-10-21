@@ -28,7 +28,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 import java.util.*;
 
@@ -168,7 +167,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
             try {
                 var lambda = new IdeaProxyLambdaMeta((Proxy) func);
                 indexName = FieldUtils.getMethodToField(clazz, lambda.getImplMethodName());
-            } catch (Exception e) {
+            } catch (Throwable t) {
             }
         }
 
@@ -179,7 +178,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
                 ReflectionUtils.makeAccessible(method);
                 var lambda = new ReflectLambdaMeta((java.lang.invoke.SerializedLambda) method.invoke(func));
                 indexName = FieldUtils.getMethodToField(clazz, lambda.getImplMethodName());
-            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            } catch (Throwable t) {
             }
         }
 
@@ -188,7 +187,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
             try {
                 var lambda = new ShadowLambdaMeta(SerializedLambda.extract(func));
                 indexName = FieldUtils.getMethodToField(clazz, lambda.getImplMethodName());
-            } catch (Exception e) {
+            } catch (Throwable t) {
             }
         }
 

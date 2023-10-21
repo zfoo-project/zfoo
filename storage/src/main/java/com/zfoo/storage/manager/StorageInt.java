@@ -14,7 +14,6 @@ package com.zfoo.storage.manager;
 
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.model.IdDef;
 import com.zfoo.storage.model.IndexDef;
 import io.netty.util.collection.IntObjectHashMap;
