@@ -135,7 +135,7 @@ public class StorageManager implements IStorageManager {
                 var clazz = definition.getClazz();
                 var resource = definition.getResource();
                 var fileExtName = FileUtils.fileExtName(resource.getFilename());
-                var storage = StorageObject.parse(resource.getInputStream(), clazz, fileExtName);
+                var storage = AbstractStorage.parse(resource.getInputStream(), clazz, fileExtName);
                 storageMap.putIfAbsent(clazz, storage);
             }
         } catch (Exception e) {

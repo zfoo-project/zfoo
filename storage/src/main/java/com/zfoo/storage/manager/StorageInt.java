@@ -13,32 +13,37 @@
 package com.zfoo.storage.manager;
 
 import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
+import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.storage.model.IdDef;
+import com.zfoo.storage.model.IndexDef;
 import io.netty.util.collection.IntObjectHashMap;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author godotg
  */
-public class StorageInt<K, V> extends StorageObject<K, V> {
+public class StorageInt<K, V> extends AbstractStorage<K, V> {
 
     private IntObjectHashMap<V> dataMap;
 
-    public StorageInt(StorageObject<K, V> storage) {
-        this.dataMap = new IntObjectHashMap<V>(storage.size());
-        @SuppressWarnings("unchecked")
-        var map = (Map<? extends Integer, ? extends V>) storage.getData();
-        this.dataMap.putAll(map);
-        super.indexMap = storage.indexMap;
-        super.uniqueIndexMap = storage.uniqueIndexMap;
-        super.clazz = storage.clazz;
-        super.idDef = storage.idDef;
-        super.indexDefMap = storage.indexDefMap;
-        super.recycle = storage.recycle;
-        storage.recycleStorage();
+    public StorageInt(Class<?> clazz, IdDef idDef, Map<String, IndexDef> indexDefMap, List<?> values) {
+        super(clazz, idDef, indexDefMap, values);
+
+        this.dataMap = new IntObjectHashMap<>(values.size());
+        for (var value : values) {
+            @SuppressWarnings("unchecked")
+            var id = (K) ReflectionUtils.getField(idDef.getField(), value);
+            @SuppressWarnings("unchecked")
+            var v = (V) value;
+            dataMap.put((Integer) id, v);
+        }
     }
+
 
     @Override
     public boolean contain(K id) {
