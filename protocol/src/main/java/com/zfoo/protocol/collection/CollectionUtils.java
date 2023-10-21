@@ -115,6 +115,14 @@ public abstract class CollectionUtils {
                 : (capacity < 32 ? 64 : Math.min(capacity << 1, IOUtils.BYTES_PER_MB));
     }
 
+    public static int capacity(int expectedSize) {
+        if (expectedSize < 3) {
+            return expectedSize + 1;
+        }
+        return (int) ((float) expectedSize / 0.75F + 1.0F);
+    }
+
+
     // ----------------------------------归并排序----------------------------------
 
     /**
