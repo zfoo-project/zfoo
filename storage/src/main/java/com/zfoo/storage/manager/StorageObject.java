@@ -24,9 +24,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
 import java.io.InputStream;
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
 
@@ -258,7 +256,7 @@ public class StorageObject<K, V> implements IStorage<K, V> {
                 var fields = clazz.getDeclaredFields();
                 Arrays.stream(fields).forEach(ReflectionUtils::makeAccessible);
                 for (var value : dataMap.values()) {
-                    var r = func.call(value);
+                    var r = func.apply(value);
                     var valueFields = Arrays.stream(fields)
                             .map(it -> ReflectionUtils.getField(it, value))
                             .filter(it -> it.equals(r) && it.getClass() == r.getClass())

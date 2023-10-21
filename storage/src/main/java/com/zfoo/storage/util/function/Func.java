@@ -24,6 +24,6 @@ public interface Func<P, R> extends Serializable {
 	 * @throws Exception 自定义异常
 	 */
 	@SuppressWarnings("unchecked")
-	R call(P... parameters) throws Exception;
+	R apply(P... parameters) throws Exception;
 
 }

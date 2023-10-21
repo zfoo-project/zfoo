@@ -21,6 +21,6 @@ public interface Func0<R> extends Serializable {
 	 * @return 函数执行结果
 	 * @throws Exception 自定义异常
 	 */
-	R call() throws Exception;
+	R apply() throws Exception;
 
 }
