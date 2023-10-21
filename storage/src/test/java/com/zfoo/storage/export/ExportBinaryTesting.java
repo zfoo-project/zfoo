@@ -135,7 +135,7 @@ public class ExportBinaryTesting {
             System.out.println(JsonUtils.object2String(resource));
         }
         //获取所有列表对象
-        List<StudentResource> list = storage.getList();
+        var list = storage.getAll();
         for (StudentResource resource : list) {
             System.out.println(JsonUtils.object2String(resource));
         }
