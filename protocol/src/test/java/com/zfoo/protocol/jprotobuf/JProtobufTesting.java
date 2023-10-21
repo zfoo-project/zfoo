@@ -69,15 +69,4 @@ public class JProtobufTesting {
         var newObj = simpleTypeCodec.decode(bytes);
         System.out.println(JsonUtils.object2String(newObj));
     }
-
-    @Test
-    public void generateTest() throws IOException {
-        var op = GenerateOperation.NO_OPERATION;
-        op.getGenerateLanguages().add(CodeLanguage.Protobuf);
-        op.setFoldProtocol(true);
-//        op.setProtocolParam("protobuf=protobuf.xml");
-
-        ProtocolManager.initProtocol(Set.of(ObjectA.class, ObjectB.class, ObjectC.class), op);
-    }
-
 }
