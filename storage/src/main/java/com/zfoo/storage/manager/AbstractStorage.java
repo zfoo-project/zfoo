@@ -14,6 +14,7 @@ package com.zfoo.storage.manager;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.*;
+import com.zfoo.storage.anno.Index;
 import com.zfoo.storage.interpreter.ResourceInterpreter;
 import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.model.IdDef;
@@ -194,23 +195,21 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
         // 4. 通过将func带入到dataMap中求解，适合GraalVM环境中
         if (indexName == null) {
             try {
-                var fields = clazz.getDeclaredFields();
-                Arrays.stream(fields).forEach(ReflectionUtils::makeAccessible);
+                var fields = Arrays.stream(clazz.getDeclaredFields())
+                        .filter(it -> it.isAnnotationPresent(Index.class))
+                        .peek(ReflectionUtils::makeAccessible)
+                        .toList();
+
                 for (var value : getAll()) {
                     var r = func.apply(value);
-                    // 如果只有一个能匹配到func的返回值则就是这个方法
-                    var count = 0;
-                    var fieldName = StringUtils.EMPTY;
+                    if (r == null) {
+                        continue;
+                    }
                     for (var field : fields) {
                         var fieldValue = ReflectionUtils.getField(field, value);
-                        if (Objects.equals(r, fieldValue)) {
-                            count++;
-                            fieldName = field.getName();
+                        if (Objects.equals(r, fieldValue) && r.getClass() == fieldValue.getClass()) {
+                            indexName = field.getName();
                         }
-                    }
-                    if (count == 1) {
-                        indexName = fieldName;
-                        break;
                     }
                 }
             } catch (Exception e) {
