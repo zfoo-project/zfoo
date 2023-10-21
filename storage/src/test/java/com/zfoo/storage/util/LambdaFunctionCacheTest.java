@@ -19,7 +19,7 @@ import org.junit.Test;
 /**
  * @author veione
  */
-public class TestLambdaFunctionCache {
+public class LambdaFunctionCacheTest {
 
     @Test
     public void testFunctionCache() {

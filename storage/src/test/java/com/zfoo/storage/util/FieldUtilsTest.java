@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author veione
  */
-public class TestFieldUtils {
+public class FieldUtilsTest {
 
     @Test
     public void testPropertyName() {
