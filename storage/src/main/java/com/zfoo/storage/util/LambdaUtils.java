@@ -28,6 +28,7 @@ public abstract class LambdaUtils {
         if (func instanceof Proxy) {
             return new IdeaProxyLambdaMeta((Proxy) func);
         }
+
         // 2. 反射读取
         try {
             Class<? extends Serializable> clazz = func.getClass();
@@ -35,9 +36,10 @@ public abstract class LambdaUtils {
             ReflectionUtils.makeAccessible(method);
             return new ReflectLambdaMeta((java.lang.invoke.SerializedLambda) method.invoke(func));
         } catch (Throwable e) {
-            // 3. 反射失败使用序列化的方式读取
-            return new ShadowLambdaMeta(SerializedLambda.extract(func));
         }
+
+        // 3. 反射失败使用序列化的方式读取
+        return new ShadowLambdaMeta(SerializedLambda.extract(func));
     }
 
 

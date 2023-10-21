@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
  * @author veione
  */
 public class LambdaFunctionTest {
-    //https://blog.csdn.net/iteye_19045/article/details/119299015
+    // https://blog.csdn.net/iteye_19045/article/details/119299015
     @Test
     public void testFuncSerialization() throws Exception {
         Func1<TeacherResource, String> func = TeacherResource::name;

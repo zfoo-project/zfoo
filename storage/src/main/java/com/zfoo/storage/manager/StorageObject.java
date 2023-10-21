@@ -32,11 +32,11 @@ import java.util.*;
  * @author godotg
  */
 public class StorageObject<K, V> implements IStorage<K, V> {
-    private Map<K, V> dataMap = new HashMap<>(64);
+    private Map<K, V> dataMap;
     // 非唯一索引
-    protected Map<String, Map<Object, List<V>>> indexMap = new HashMap<>(16);
+    protected Map<String, Map<Object, List<V>>> indexMap = new HashMap<>();
     // 唯一索引
-    protected Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>(16);
+    protected Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>();
 
     protected Class<?> clazz;
     protected IdDef idDef;
@@ -46,28 +46,67 @@ public class StorageObject<K, V> implements IStorage<K, V> {
 
 
     public static StorageObject<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
-        var storage = new StorageObject<>();
-        storage.clazz = resourceClazz;
         var idDef = IdDef.valueOf(resourceClazz);
-        storage.idDef = idDef;
-        storage.indexDefMap = Collections.unmodifiableMap(IndexDef.createResourceIndexes(resourceClazz));
+        var indexDefMap = Collections.unmodifiableMap(IndexDef.createResourceIndexes(resourceClazz));
 
         try {
             var list = ResourceInterpreter.read(inputStream, resourceClazz, suffix);
-            storage.putAll(list);
+            var storage = new StorageObject<>(resourceClazz, idDef, indexDefMap, list);
+
+            var idType = idDef.getField().getType();
+            if (idType == int.class || idType == Integer.class) {
+                return new StorageInt<>(storage);
+            } else if (idType == long.class || idType == Long.class) {
+                return new StorageLong<>(storage);
+            } else {
+                return storage;
+            }
+
         } catch (Throwable e) {
             throw new RuntimeException(e.getMessage(), e);
         } finally {
             IOUtils.closeIO(inputStream);
         }
+    }
 
-        var idType = idDef.getField().getType();
-        if (idType == int.class || idType == Integer.class) {
-            return new StorageInt<>(storage);
-        } else if (idType == long.class || idType == Long.class) {
-            return new StorageLong<>(storage);
-        } else {
-            return storage;
+    protected StorageObject() {
+    }
+
+    public StorageObject(Class<?> clazz, IdDef idDef, Map<String, IndexDef> indexDefMap, List<?> values) {
+        this.dataMap  = new HashMap<>(CollectionUtils.capacity(values.size()));
+        this.clazz = clazz;
+        this.idDef = idDef;
+        this.indexDefMap = indexDefMap;
+        for (var value: values) {
+            @SuppressWarnings("unchecked")
+            var id = (K) ReflectionUtils.getField(idDef.getField(), value);
+
+            if (id == null) {
+                throw new RuntimeException("There is an item with an unconfigured id in the static resource");
+            }
+            if (dataMap.containsKey(id)) {
+                throw new RuntimeException(StringUtils.format("Duplicate [id:{}] of static resource [resource:{}]", id, clazz.getSimpleName()));
+            }
+            // 添加资源
+            @SuppressWarnings("unchecked")
+            var v = (V) value;
+            dataMap.put(id, v);
+            // 添加索引
+            for (var def : indexDefMap.values()) {
+                // 使用field的名称作为索引的名称
+                var indexKey = def.getField().getName();
+                var indexValue = ReflectionUtils.getField(def.getField(), v);
+                if (def.isUnique()) {
+                    var uniqueIndex = uniqueIndexMap.computeIfAbsent(indexKey, it -> new HashMap<>(values.size()));
+                    if (uniqueIndex.put(indexValue, v) != null) {
+                        throw new RuntimeException(StringUtils.format("Duplicate unique index [index:{}][value:{}] of static resource [class:{}]", indexKey, indexValue, clazz.getName()));
+                    }
+                } else {
+                    var index = indexMap.computeIfAbsent(indexKey, it -> new HashMap<>(values.size()));
+                    var list = index.computeIfAbsent(indexValue, it -> new ArrayList<V>());
+                    list.add(v);
+                }
+            }
         }
     }
 
@@ -177,40 +216,6 @@ public class StorageObject<K, V> implements IStorage<K, V> {
     @Override
     public int size() {
         return dataMap.size();
-    }
-
-    public void putAll(List<?> values) {
-        for (var value: values) {
-            @SuppressWarnings("unchecked")
-            var id = (K) ReflectionUtils.getField(idDef.getField(), value);
-
-            if (id == null) {
-                throw new RuntimeException("There is an item with an unconfigured id in the static resource");
-            }
-            if (dataMap.containsKey(id)) {
-                throw new RuntimeException(StringUtils.format("Duplicate [id:{}] of static resource [resource:{}]", id, clazz.getSimpleName()));
-            }
-            // 添加资源
-            @SuppressWarnings("unchecked")
-            var v = (V) value;
-            dataMap.put(id, v);
-            // 添加索引
-            for (var def : indexDefMap.values()) {
-                // 使用field的名称作为索引的名称
-                var indexKey = def.getField().getName();
-                var indexValue = ReflectionUtils.getField(def.getField(), v);
-                if (def.isUnique()) {
-                    var uniqueIndex = uniqueIndexMap.computeIfAbsent(indexKey, it -> new HashMap<>(values.size()));
-                    if (uniqueIndex.put(indexValue, v) != null) {
-                        throw new RuntimeException(StringUtils.format("Duplicate unique index [index:{}][value:{}] of static resource [class:{}]", indexKey, indexValue, clazz.getName()));
-                    }
-                } else {
-                    var index = indexMap.computeIfAbsent(indexKey, it -> new HashMap<>(values.size()));
-                    var list = index.computeIfAbsent(indexValue, it -> new ArrayList<V>());
-                    list.add(v);
-                }
-            }
-        }
     }
 
 }
