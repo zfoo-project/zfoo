@@ -19,7 +19,10 @@ import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.model.IdDef;
 import com.zfoo.storage.model.IndexDef;
 import com.zfoo.storage.util.function.Func1;
-import com.zfoo.storage.util.lambda.*;
+import com.zfoo.storage.util.lambda.IdeaProxyLambdaMeta;
+import com.zfoo.storage.util.lambda.ReflectLambdaMeta;
+import com.zfoo.storage.util.lambda.SerializedLambda;
+import com.zfoo.storage.util.lambda.ShadowLambdaMeta;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
@@ -195,19 +198,18 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
                 Arrays.stream(fields).forEach(ReflectionUtils::makeAccessible);
                 for (var value : getAll()) {
                     var r = func.apply(value);
-                    var valueFields = Arrays.stream(fields)
-                            .map(it -> ReflectionUtils.getField(it, value))
-                            .filter(it -> it.equals(r) && it.getClass() == r.getClass())
-                            .toList();
                     // 如果只有一个能匹配到func的返回值则就是这个方法
-                    if (valueFields.size() == 1) {
-                        for (var field : fields) {
-                            if (!ReflectionUtils.getField(field, value).equals(r)) {
-                                continue;
-                            }
-                            indexName = field.getName();
-                            break;
+                    var count = 0;
+                    var fieldName = StringUtils.EMPTY;
+                    for (var field : fields) {
+                        var fieldValue = ReflectionUtils.getField(field, value);
+                        if (Objects.equals(r, fieldValue)) {
+                            count++;
+                            fieldName = field.getName();
                         }
+                    }
+                    if (count == 1) {
+                        indexName = fieldName;
                         break;
                     }
                 }
