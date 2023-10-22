@@ -32,7 +32,7 @@ public class TcpSyncController {
 
     private static final Logger logger = LoggerFactory.getLogger(TcpSyncController.class);
 
-    @PacketReceiver(Task.VirtualThread)
+    @PacketReceiver
     public void atSyncMessAsk(Session session, SyncMessAsk ask, SignalAttachment attachment) {
         logger.info("receive [packet:{}] from client", JsonUtils.object2String(ask));
 
