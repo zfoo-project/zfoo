@@ -35,9 +35,11 @@ import java.util.*;
  * @author godotg
  */
 public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
-    // 非唯一索引
+    // func index of caches
+    private ConcurrentReferenceHashMap<Func1<V, ?>, String> funcCaches = new ConcurrentReferenceHashMap<>();
+    // non-unique index (非唯一索引)
     protected Map<String, Map<Object, List<V>>> indexMap = new HashMap<>();
-    // 唯一索引
+    // unique index (唯一索引)
     protected Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>();
 
     protected Class<?> clazz;
@@ -46,8 +48,6 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
     // EN: unused configuration tables will clear data to save memory.
     // CN: 没有被使用的配置表会清除data数据，以达到节省内存的目的
     protected boolean recycle = true;
-
-    private ConcurrentReferenceHashMap<Func1<V, ?>, String> funcCaches = new ConcurrentReferenceHashMap<>();
 
     public static AbstractStorage<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
         var idDef = IdDef.valueOf(resourceClazz);
@@ -134,11 +134,13 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
 
     @Override
     public void recycleStorage() {
-        recycle = true;
+        funcCaches = null;
         indexMap = null;
         uniqueIndexMap = null;
+        clazz = null;
         idDef = null;
         indexDefMap = null;
+        recycle = true;
     }
 
     @Override
@@ -204,11 +206,16 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
                     if (r == null) {
                         continue;
                     }
+                    var count = 0;
                     for (var field : fields) {
                         var fieldValue = ReflectionUtils.getField(field, value);
                         if (Objects.equals(r, fieldValue) && r.getClass() == fieldValue.getClass()) {
                             indexName = field.getName();
+                            count++;
                         }
+                    }
+                    if (count == 1) {
+                        break;
                     }
                 }
             } catch (Exception e) {
