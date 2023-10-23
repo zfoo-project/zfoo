@@ -35,11 +35,10 @@ public class StorageInt<K, V> extends AbstractStorage<K, V> {
 
         this.dataMap = new IntObjectHashMap<>(values.size());
         for (var value : values) {
-            @SuppressWarnings("unchecked")
-            var id = (K) ReflectionUtils.getField(idDef.getField(), value);
+            var id = (Integer) ReflectionUtils.getField(idDef.getField(), value);
             @SuppressWarnings("unchecked")
             var v = (V) value;
-            dataMap.put((Integer) id, v);
+            dataMap.put(id, v);
         }
     }
 

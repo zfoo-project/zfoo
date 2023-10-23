@@ -35,11 +35,10 @@ public class StorageLong<K, V> extends AbstractStorage<K, V> {
 
         this.dataMap = new LongObjectHashMap<>(values.size());
         for (var value : values) {
-            @SuppressWarnings("unchecked")
-            var id = (K) ReflectionUtils.getField(idDef.getField(), value);
+            var id = (Long) ReflectionUtils.getField(idDef.getField(), value);
             @SuppressWarnings("unchecked")
             var v = (V) value;
-            dataMap.put((Long) id, v);
+            dataMap.put(id, v);
         }
     }
 

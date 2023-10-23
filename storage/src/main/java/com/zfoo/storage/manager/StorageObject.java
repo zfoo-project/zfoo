@@ -35,7 +35,7 @@ public class StorageObject<K, V> extends AbstractStorage<K, V> {
             var id = (K) ReflectionUtils.getField(idDef.getField(), value);
             @SuppressWarnings("unchecked")
             var v = (V) value;
-            dataMap.put((K) id, v);
+            dataMap.put(id, v);
         }
     }
 
