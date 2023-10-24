@@ -35,7 +35,7 @@ public class TcpServerController {
         logger.info("receive [packet:{}] from client", JsonUtils.object2String(request));
 
         var response = new TcpHelloResponse();
-        response.setMessage("Hello, this is the tcp server!");
+        response.setMessage("Hello, this is the tcp server! -> " + request.getMessage());
 
         NetContext.getRouter().send(session, response);
     }

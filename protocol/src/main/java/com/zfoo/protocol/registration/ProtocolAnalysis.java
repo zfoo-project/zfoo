@@ -69,7 +69,8 @@ public class ProtocolAnalysis {
             , "IProtocol", "IProtocolRegistration", "ProtocolManager", "IFieldRegistration"
             , "ByteBufUtils", "ArrayUtils", "CollectionUtils"
             , "Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double", "String", "Character", "Object"
-            , "Collections", "Iterator", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet");
+            , "Collections", "Iterator", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet"
+            , "DecodedPacketInfo", "EncodedPacketInfo");
 
     /**
      * EN: Temp field, unsupported type
