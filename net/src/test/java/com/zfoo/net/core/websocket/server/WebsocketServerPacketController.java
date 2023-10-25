@@ -35,7 +35,7 @@ public class WebsocketServerPacketController {
         logger.info("receive [packet:{}] from browser", JsonUtils.object2String(request));
 
         var response = new WebsocketHelloResponse();
-        response.setMessage("Hello, this is the websocket server!");
+        response.setMessage("Hello, this is the websocket server! -> " + request.getMessage());
 
         NetContext.getRouter().send(session, response);
     }
