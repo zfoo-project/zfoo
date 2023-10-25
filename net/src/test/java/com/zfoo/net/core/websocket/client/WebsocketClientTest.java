@@ -42,7 +42,7 @@ public class WebsocketClientTest {
         var context = new ClassPathXmlApplicationContext("config.xml");
 
         var webSocketClientProtocolConfig = WebSocketClientProtocolConfig.newBuilder()
-                .webSocketUri("http://127.0.0.1:9000/websocket")
+                .webSocketUri("ws://127.0.0.1:9000/websocket")
                 .build();
 
         var client = new WebsocketClient(HostAndPort.valueOf("127.0.0.1:9000"), webSocketClientProtocolConfig);

@@ -30,7 +30,7 @@ public class WebsocketServerTest {
     public void startServer() {
         var context = new ClassPathXmlApplicationContext("config.xml");
 
-        var server = new WebsocketServer(HostAndPort.valueOf("127.0.0.1:9000"));
+        var server = new WebsocketServer(HostAndPort.valueOf("0.0.0.0:9000"));
         server.start();
 
         ThreadUtils.sleep(Long.MAX_VALUE);
