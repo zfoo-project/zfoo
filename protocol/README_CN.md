@@ -11,8 +11,6 @@
 
 - 环境要求**JDK 17+**，支持**OpenJDK**, **Oracle JDK**, **native GraalVM**
 
-- protocol是独立项目，不依赖其它项目，可以直接打开，本地install到自己的本地maven仓库，即可单独使用
-
 ```
 // zfoo协议注册，只能初始化一次
 ProtocolManager.initProtocol(Set.of(ComplexObject.class, ObjectA.class, ObjectB.class));

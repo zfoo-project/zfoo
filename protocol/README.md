@@ -17,9 +17,6 @@ English | [简体中文](./README_CN.md)
 
 - Environment requirement **JDK 17+**, support **OpenJDK**, **Oracle JDK** and **native GraalVM**
 
-- Protocol is an independent project, does not depend on other projects, can be directly opened, locally installed to
-  its own local maven repository, can be used alone
-
 ```
 // The zfoo protocol is registered and can only be initialized once
 ProtocolManager.initProtocol(Set.of(ComplexObject.class, ObjectA.class, ObjectB.class));
