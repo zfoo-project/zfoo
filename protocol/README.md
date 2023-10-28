@@ -91,7 +91,7 @@ For complex objects, ZFOO package size 2216, KRYO package size 2528, and Protobu
 ### Ⅵ. Data type
 
 - Default data format support eliminates the need for users to register
-  manually.[参考类定义](src/test/java/com/zfoo/protocol/packet/ComplexObject.java)
+  manually.[Reference class definition](src/test/java/com/zfoo/protocol/packet/ComplexObject.java)
     - boolean，byte，short，int，long，float，double，String
     - Boolean，Byte，Short，Integer，Long，Float，Double，String，If it is null during serialization, a default value will be
       given
