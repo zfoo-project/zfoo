@@ -53,13 +53,11 @@ memory：64g
 
 - Use Javassist bytecode to enhance the dynamic generation of serialization and deserialization functions for sequential
   execution, and sequential functions can be easily JIT compiled to achieve extreme performance
-- Natively integrated with netty's high-performance Byte Buf
+- Natively integrated with netty's high-performance ByteBuf, support Zero Copy
 - With primitive type collection, there is no boxing and unboxing, invalid GCs are avoided, and the performance is fast
   enough
-- Inherently thread-safe and lock-free; kryo forces each thread to have its own instance of Kryo, which is a heavy
-  design, especially in scenarios with many threads
-- No reflections, no unsafe operation; The use of objenesis in Kryo resulted in a lot of unsafe, and warnings when
-  running in Java 11
+- thread-safe and lock-free, without any performance loss in multi-threaded environment
+- No reflection, no unsafe operations, support GraalVM
 - Flattening the call depth of the method stack, and there is no performance penalty for nesting data structures, such
   as List<Set<Map<>>>; Comparing kryo and protobuf data structure nesting results in a performance penalty
 - There is no risk of vulnerability injection, only bytecode enhancement will be performed during initialization, and no
