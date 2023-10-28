@@ -33,18 +33,14 @@ var packet = ProtocolManager.read(buffer);
 
 ### Ⅲ. Performance testing
 
-- Single-threaded environment, 50% faster than Protobuf and 100% faster than Kryo without any JVM parameter
-  tuning,[参见性能测试](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
-- Thread safety, the performance of zfoo and Protobuf is not affected in any way, kryo will lose some performance
-  because of thread insecurity,[参见性能测试](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
-
+- [Benchmark Test](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
 
 - Test the environment
 
 ```
 system：win10
 cpu： i9900k
-内存：64g
+memory：64g
 ```
 
 - Single-threaded test with abscissa as the number of objects serialized and deserialized and time spent in milliseconds
@@ -195,6 +191,54 @@ your protocol number a little more compactly, so that your protocol number will 
 
 - You can also customize your own build method,
   [Use code custom generation to proto](https://github.com/zfoo-project/tank-game-server/tree/main/common/src/main/java/com/zfoo/tank/common/generate)
+
+
+### Ⅸ. The difference between zfoo and Protobuf
+
+- Abandoning the deletion field of protobuf can also be compatible with the protocol, improving the performance by 1 times and reducing the cost by 1 times.
+
+- zfoo takes the intersection of type declarations in all languages, instead of protobuf taking the union, simplifying the type implementation of protobuf
+    - protobuf
+      ```
+      double
+      float
+      int32
+      int64
+      uint32
+      uint64
+      sint32
+      sint64
+      fixed32
+      fixed64
+      sfixed32
+      sfixed64
+      bool
+      string
+      bytes
+      bytes
+      ```
+    - zfoo
+      ```
+      float
+      double
+      byte
+      int16
+      int32
+      int64
+      bool
+      string
+      ```
+
+- zfoo takes the intersection of the grammars of all languages, instead of the intersection of protobuf, and adds the grammar implementation of protobuf
+    - protobuf
+      ```
+      Collection nesting syntax is not supported
+      ```
+    - zfoo
+      ```
+      Supports nested collection syntax
+      ```
+
 
 
 

@@ -69,8 +69,8 @@ public class BenchmarkTesting {
 
             zfooTest();
             furyTest();
-            protobufTest();
             kryoTest();
+            protobufTest();
 
             // 递归执行，多跑几遍
             benchmark = benchmark * 2;
@@ -91,8 +91,8 @@ public class BenchmarkTesting {
 
             zfooMultipleThreadTest();
             furyMultipleThreadTest();
-            protobufMultipleThreadTest();
             kryoMultipleThreadTest();
+            protobufMultipleThreadTest();
 
             benchmark = benchmark * 2;
             multipleThreadBenchmarks();

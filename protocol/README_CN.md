@@ -26,9 +26,7 @@ var packet = ProtocolManager.read(buffer);
 
 ### Ⅲ. 性能测试
 
-- 单线程环境，在没有任何JVM参数调优的情况下速度比Protobuf快50%，比Kryo快100%，[参见性能测试](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
-
-- 线程安全，zfoo和Protobuf的性能不受任何影响，kryo因为线程不安全性能会有所损失，[参见性能测试](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
+- [性能测试](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
 
 
 - 测试环境
@@ -128,7 +126,7 @@ cpu： i9900k
       
       }
       ```
-      
+
     - 第三种使用：通过ProtocolManagerinitProtocol(xmlProtocols)去注册协议，把协议号写在protocol.xml文件
       ```
       <protocols>
@@ -160,5 +158,48 @@ cpu： i9900k
 - 也可以自定义自己的生成方式，
   [使用代码自定义生成proto](https://github.com/zfoo-project/tank-game-server/tree/main/common/src/main/java/com/zfoo/tank/common/generate)
 
+### Ⅸ. zfoo和Protobuf的区别
 
+- 舍弃protobuf的删除字段也可以兼容协议的方式，提升1倍的性能，减小1倍的
 
+- zfoo取所有语言的类型声明的交集，而不是protobuf取并集，简化protobuf的类型实现
+    - protobuf
+      ```
+      double
+      float
+      int32
+      int64
+      uint32
+      uint64
+      sint32
+      sint64
+      fixed32
+      fixed64
+      sfixed32
+      sfixed64
+      bool
+      string
+      bytes
+      bytes
+      ```
+    - zfoo
+      ```
+      float
+      double
+      byte
+      int16
+      int32
+      int64
+      bool
+      string
+      ```
+
+- zfoo取所有语言的语法的交集，而不是protobuf的交集，增加protobuf的语法实现
+    - protobuf
+      ```
+      不支持集合嵌套语法
+      ```
+    - zfoo
+      ```
+      支持集合嵌套语法
+      ```
