@@ -201,3 +201,5 @@ cpu： i9900k
       ```
       支持集合嵌套语法
       ```
+
+- 简化protobuf的语法，没有枚举，没有oneof，没有optional

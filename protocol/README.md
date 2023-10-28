@@ -234,6 +234,4 @@ your protocol number a little more compactly, so that your protocol number will 
       Supports nested collection syntax
       ```
 
-
-
-
+- Simplified protobuf syntax, no enumeration, no oneof, no optional
