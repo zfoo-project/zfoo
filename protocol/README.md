@@ -190,7 +190,7 @@ your protocol number a little more compactly, so that your protocol number will 
 
 ### Ⅸ. The difference between zfoo and Protobuf
 
-- Abandoning the deletion field of protobuf can also be compatible with the protocol, improving the performance by 1 times and reducing the cost by 1 times.
+- Abandoning the deletion field of protobuf can also be compatible with the protocol, improving the performance by 1 times and reducing the size by 1 times.
 
 - zfoo takes the intersection of type declarations in all languages, instead of protobuf taking the union, simplifying the type implementation of protobuf
     - protobuf
@@ -224,7 +224,7 @@ your protocol number a little more compactly, so that your protocol number will 
       string
       ```
 
-- zfoo takes the intersection of the grammars of all languages, instead of the intersection of protobuf, and adds the grammar implementation of protobuf
+- zfoo takes the intersection of the grammars of all languages, instead of the union of protobuf, and adds the grammar implementation of protobuf
     - protobuf
       ```
       Collection nesting syntax is not supported

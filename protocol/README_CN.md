@@ -158,7 +158,7 @@ cpu： i9900k
 
 ### Ⅸ. zfoo和Protobuf的区别
 
-- 舍弃protobuf的删除字段也可以兼容协议的方式，提升1倍的性能，减小1倍的
+- 舍弃protobuf的删除字段也可以兼容协议的方式，提升1倍的性能，减小1倍的体积
 
 - zfoo取所有语言的类型声明的交集，而不是protobuf取并集，简化protobuf的类型实现
     - protobuf
@@ -192,7 +192,7 @@ cpu： i9900k
       string
       ```
 
-- zfoo取所有语言的语法的交集，而不是protobuf的交集，增加protobuf的语法实现
+- zfoo取所有语言的语法的交集，而不是protobuf的并集，增加protobuf的语法实现
     - protobuf
       ```
       不支持集合嵌套语法
