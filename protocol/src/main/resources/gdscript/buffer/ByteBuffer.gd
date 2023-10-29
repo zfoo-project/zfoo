@@ -291,7 +291,6 @@ func readString() -> String:
 		return EMPTY
 	buffer.seek(readOffset)
 	var value: String = buffer.get_utf8_string(length)
-	var strBytes: PackedByteArray = value.to_utf8_buffer()
 	readOffset += length
 	return value
 
