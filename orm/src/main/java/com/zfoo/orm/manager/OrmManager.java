@@ -467,7 +467,7 @@ public class OrmManager implements IOrmManager {
             } else if (fieldType.isArray()) {
                 // 是一个数组
                 Class<?> arrayClazz = fieldType.getComponentType();
-                checkSubEntity(clazz, arrayClazz);
+                AssertionUtils.isTrue(arrayClazz == byte.class, "ORM[class:{}]的数组类型只支持byte[]", clazz.getCanonicalName());
             } else if (Set.class.isAssignableFrom(fieldType)) {
                 AssertionUtils.isTrue(fieldType.equals(Set.class), "ORM[class:{}]类型声明不正确，必须是Set接口类型", clazz.getCanonicalName());
 
