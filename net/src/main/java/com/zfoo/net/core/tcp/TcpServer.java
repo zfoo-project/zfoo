@@ -16,7 +16,7 @@ package com.zfoo.net.core.tcp;
 import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.handler.ServerRouteHandler;
-import com.zfoo.net.handler.codec.tcp.TcpCodecServerHandler;
+import com.zfoo.net.handler.codec.tcp.TcpCodecHandler;
 import com.zfoo.net.handler.idle.ServerIdleHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
@@ -34,7 +34,7 @@ public class TcpServer extends AbstractServer<SocketChannel> {
     protected void initChannel(SocketChannel channel) throws Exception {
         channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
         channel.pipeline().addLast(new ServerIdleHandler());
-        channel.pipeline().addLast(new TcpCodecServerHandler());
+        channel.pipeline().addLast(new TcpCodecHandler());
         channel.pipeline().addLast(new ServerRouteHandler());
     }
 }
