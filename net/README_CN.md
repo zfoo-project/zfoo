@@ -2,13 +2,12 @@
 
 ### Ⅰ. 简介
 
-- [net](https://github.com/zfoo-project/zfoo/blob/main/net/README.md) 天生异步，Actor设计思想，无锁化设计，基于Spring的MVC式用法的万能RPC框架
+- [net](https://github.com/zfoo-project/zfoo/blob/main/net/README.md) 天生异步，Actor设计思想，无锁化设计，基于Spring的MVC式用法的全场景RPC框架
 
 1. 优雅的同步和异步请求，速度更快，支持 tcp udp websocket
 2. 服务注册和发现，配置中心使用的是zookeeper，可扩展成其它注册中心
 3. 自带高性能网关，自定义转发策略
 4. 服务可伸缩，负载均衡，集群监控，应有尽有
-4. 基于Java17，所有的依赖包都是最新的jar包
 
 ### Ⅱ. 相关模块
 
