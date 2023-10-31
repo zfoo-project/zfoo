@@ -599,7 +599,8 @@ public class ProtocolAnalysis {
                 // 不支持多维数组或集合嵌套数组类型，仅支持一维数组
                 throw new RunException("Multi-dimensional array  or set nested arrays [type:{}] types are not supported, only one-dimensional arrays are supported", type);
             } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
-                throw new RunException("不支持数组和集合联合使用[type:{}]类型", type);
+                // 不支持数组和集合联合使用类型
+                throw new RunException("The combination of arrays and collections with the [type:{}] type is not supported", type);
             } else {
                 checkUnsupportedType(clazz);
                 // 是一个协议引用变量
@@ -617,14 +618,16 @@ public class ProtocolAnalysis {
 
 
     /**
-     * 此方法仅在生成协议的时候调用，一旦运行，不能调用
+     * EN: This method is only called when the protocol is generated, and cannot be called once it is run
+     * CN: 此方法仅在生成协议的时候调用，一旦运行，不能调用
      */
     public static Set<Short> getFirstSubProtocolIds(short protocolId) {
         return subProtocolIdMap.get(protocolId);
     }
 
     /**
-     * 此方法仅在生成协议的时候调用，一旦运行，不能调用
+     * EN: This method is only called when the protocol is generated, and cannot be called once it is run
+     * CN: 此方法仅在生成协议的时候调用，一旦运行，不能调用
      */
     public static Set<Short> getAllSubProtocolIds(short protocolId) {
         // 初始化完成过后不能调用getAllSubProtocolIds
