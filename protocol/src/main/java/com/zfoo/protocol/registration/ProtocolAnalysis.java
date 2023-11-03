@@ -183,7 +183,7 @@ public class ProtocolAnalysis {
     }
 
     private static void enhanceProtocolRegistration(List<IProtocolRegistration> enhanceList) throws NoSuchMethodException, IllegalAccessException, InstantiationException, CannotCompileException, NotFoundException, InvocationTargetException, NoSuchFieldException {
-        // 字节码增强
+        // 字节码增强(生成协议解析对象)
         for (var registration : enhanceList) {
             protocols[registration.protocolId()] = EnhanceUtils.createProtocolRegistration((ProtocolRegistration) registration);
         }

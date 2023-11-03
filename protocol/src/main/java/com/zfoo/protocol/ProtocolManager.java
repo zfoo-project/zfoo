@@ -58,7 +58,9 @@ public class ProtocolManager {
     }
 
     public static IPacket read(ByteBuf buffer) {
-        return (IPacket) protocols[ByteBufUtils.readShort(buffer)].read(buffer);
+        short id = ByteBufUtils.readShort(buffer);
+        IProtocolRegistration protocol = protocols[id];
+        return (IPacket) protocol.read(buffer);
     }
 
     public static IProtocolRegistration getProtocol(short protocolId) {
@@ -93,7 +95,7 @@ public class ProtocolManager {
     }
 
     public static void initProtocol(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
-        ProtocolAnalysis.analyze(protocolClassSet,  generateOperation);
+        ProtocolAnalysis.analyze(protocolClassSet, generateOperation);
     }
 
     public static void initProtocol(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {

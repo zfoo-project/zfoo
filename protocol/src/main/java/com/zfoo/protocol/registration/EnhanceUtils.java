@@ -114,6 +114,8 @@ public abstract class EnhanceUtils {
     }
 
     /**
+     * 反射生成IProtocolRegistration实例
+     *
      * @param registration 需要增强的类
      * @return 返回类的名称格式：EnhanceUtilsProtocolRegistration1
      */

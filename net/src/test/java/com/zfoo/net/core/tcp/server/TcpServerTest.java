@@ -28,9 +28,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class TcpServerTest {
 
     /**
-     * 单机服务器教程，启动成功过后在com.zfoo.net.core.tcp.client.TcpClientTest中运行startClientTest
-     * <p>
-     * startClientTest连接服务器成功过后，会不断的发消息给服务器
+     * 单机服务器教程，
+     * 服务端启动成功过后，启动客户端：{@link  com.zfoo.net.core.tcp.client.TcpClientTest#startClient()}
      */
     @Test
     public void startServer() {
