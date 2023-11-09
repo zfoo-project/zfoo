@@ -93,6 +93,9 @@ public class FastTreeMapIntLong {
 
         var size = keys.length;
         // 目标数小于或等于数组的第一个元素
+        if(key < 0){
+            key = Math.abs(key);
+        }
         if (key <= keys[0]) {
             return 0;
         }
