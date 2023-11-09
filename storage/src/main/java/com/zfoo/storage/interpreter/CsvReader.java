@@ -23,9 +23,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author meiwei666
@@ -37,16 +35,16 @@ public abstract class CsvReader {
         var records = parseCsv(input, fileName);
         var iterator = records.iterator();
         var headers = getHeaders(iterator, fileName);
-        var rows = new ArrayList<List<String>>();
+        var rows = new ArrayList<Map<Integer,String>>();
         while (iterator.hasNext()) {
             var record = iterator.next();
-            var data = new ArrayList<String>();
+            var data = new HashMap<Integer, String>();
             for (var header : headers) {
                 var value = record.get(header.getIndex());
                 if (StringUtils.isBlank(value)) {
                     value = StringUtils.EMPTY;
                 }
-                data.add(value);
+                data.put(header.getIndex(),value);
             }
             rows.add(data);
         }

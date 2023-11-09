@@ -40,7 +40,7 @@ public abstract class ExcelReader {
         //设置所有列
         var headers = getHeaders(iterator, resourceClassName);
 
-        var rows = new ArrayList<List<String>>();
+        var rows = new ArrayList<Map<Integer,String>>();
         while (iterator.hasNext()) {
             var row = iterator.next();
 
@@ -49,11 +49,11 @@ public abstract class ExcelReader {
                 continue;
             }
 
-            var columns = new ArrayList<String>();
+            var columns = new HashMap<Integer,String>();
             for (var header : headers) {
                 var cell = row.getCell(header.getIndex());
                 var content = CellUtils.getCellStringValue(cell);
-                columns.add(content);
+                columns.put(header.getIndex(),content);
             }
             rows.add(columns);
         }

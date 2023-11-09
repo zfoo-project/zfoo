@@ -72,8 +72,9 @@ public class ResourceInterpreter {
 
         var iterator = resource.getRows().iterator();
         // 从ROW_SERVER这行开始读取数据
-        while (iterator.hasNext()) {
-            var columns = iterator.next();
+
+
+        for (Map<Integer, String> columns : resource.getRows()) {
             var instance = ReflectionUtils.newInstance(clazz);
 
             for (var fieldInfo : fieldInfos) {
@@ -84,6 +85,7 @@ public class ResourceInterpreter {
             }
             result.add(instance);
         }
+
         return result;
     }
 

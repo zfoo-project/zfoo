@@ -59,7 +59,7 @@ public abstract class ExportUtils {
             builder.append(headers.stream().map(it -> wrapCsvData(it.getName())).collect(Collectors.joining(StringUtils.COMMA))).append(FileUtils.LS);
             builder.append(headers.stream().map(it -> wrapCsvData(it.getType())).collect(Collectors.joining(StringUtils.COMMA))).append(FileUtils.LS);
             for (var row : rows) {
-                builder.append(row.stream().map(it -> wrapCsvData(it)).collect(Collectors.joining(StringUtils.COMMA))).append(FileUtils.LS);
+                builder.append(row.values().stream().map(it -> wrapCsvData(it)).collect(Collectors.joining(StringUtils.COMMA))).append(FileUtils.LS);
             }
             var outputFilePath = FileUtils.joinPath(outputDir, StringUtils.format("{}.csv", excelSimpleName));
             FileUtils.deleteFile(new File(outputFilePath));
