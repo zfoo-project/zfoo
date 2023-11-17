@@ -25,6 +25,7 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 import static com.zfoo.protocol.BenchmarkTesting.complexObject;
@@ -44,7 +45,7 @@ public class CompatibleTesting {
      */
     @Test
     public void compatibleTest() throws IOException {
-        ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), GenerateOperation.NO_OPERATION);
+        ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), GenerateOperation.NO_OPERATION);
 
         var bytes = IOUtils.toByteArray(ClassUtils.getFileFromClassPath("ComplexObject.bytes"));
         var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
@@ -128,7 +129,7 @@ public class CompatibleTesting {
 
     @Test
     public void normalReadTest() throws IOException {
-        ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), GenerateOperation.NO_OPERATION);
+        ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), GenerateOperation.NO_OPERATION);
 
 //        var bytes = IOUtils.toByteArray(ClassUtils.getFileFromClassPath("compatible/normal-no-compatible.bytes"));
 //        var bytes = IOUtils.toByteArray(ClassUtils.getFileFromClassPath("compatible/normal-out-compatible.bytes"));

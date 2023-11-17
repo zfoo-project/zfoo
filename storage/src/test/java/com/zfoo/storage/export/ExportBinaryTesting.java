@@ -33,6 +33,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +95,7 @@ public class ExportBinaryTesting {
         storageManager.initAfter();
 
         // 生成协议
-        var protocols = new HashSet<Class<?>>();
+        List protocols = new ArrayList<>();
         protocols.add(ResourceData.class);
         protocols.addAll(storageManager.storageMap().keySet());
         var operation = new GenerateOperation();
