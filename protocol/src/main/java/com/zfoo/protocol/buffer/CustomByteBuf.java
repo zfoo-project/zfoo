@@ -12,10 +12,13 @@
 
 package com.zfoo.protocol.buffer;
 
+import com.zfoo.protocol.collection.ArrayListInt;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import io.netty.buffer.ByteBuf;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
  * 自定义协议格式，可以针对某些特定场景对做特定优化
@@ -55,7 +58,7 @@ public abstract class CustomByteBuf {
     }
 
     // 针对于int数组提高性能的复杂方式
-    public static void writeIntArrayComplex(ByteBuf byteBuf, int[] array) {
+    public static void writeIntArrayMemoryCopy(ByteBuf byteBuf, int[] array) {
         if (array == null) {
             byteBuf.writeByte(0);
             return;
@@ -69,7 +72,7 @@ public abstract class CustomByteBuf {
         byteBuf.writeBytes(byteBuffer);
     }
 
-    public static int[] readIntArrayComplex(ByteBuf byteBuf) {
+    public static int[] readIntArrayMemoryCopy(ByteBuf byteBuf) {
         var length = ByteBufUtils.readInt(byteBuf);
         var byteBuffer = ByteBuffer.allocate(length * 4);
         byteBuf.readBytes(byteBuffer);
@@ -80,4 +83,16 @@ public abstract class CustomByteBuf {
         return ints;
     }
 
+    public static void writeIntListMemoryCopy(ByteBuf byteBuf, List<Integer> list) {
+        if (list == null) {
+            byteBuf.writeByte(0);
+            return;
+        }
+        var array = ArrayUtils.intToArray(list);
+        writeIntArrayMemoryCopy(byteBuf, array);
+    }
+
+    public static List<Integer> readIntListMemoryCopy(ByteBuf byteBuf) {
+        return new ArrayListInt(readIntArrayMemoryCopy(byteBuf));
+    }
 }
