@@ -18,6 +18,7 @@ import com.zfoo.protocol.serializer.CodeLanguage;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,7 +45,7 @@ public class GenerateTesting {
         generateLanguages.add(CodeLanguage.Python);
 
         // Initialize and then generate the protocol
-        ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), op);
+        ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), op);
     }
 
 }

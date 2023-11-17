@@ -139,8 +139,8 @@ public class ProtocolManager {
      * EN:Register protocol and automatically generates a protocol ID if the subprotocol does not specify a protocol ID
      * CN:子协议会自动注册协议号protocolId，如果子协议没有指定protocolId则自动生成protocolId
      */
-    public static void initProtocolAuto(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
-        ProtocolAnalysis.analyzeAuto(protocolClassSet, generateOperation);
+    public static void initProtocolAuto(List<Class<?>> protocolClassList, GenerateOperation generateOperation) {
+        ProtocolAnalysis.analyzeAuto(protocolClassList, generateOperation);
     }
 
 }

@@ -357,7 +357,7 @@ public class BenchmarkTesting {
 
     static {
         // zfoo协议注册(其实就是：将Set里面的协议号和对应的类注册好，这样子就可以根据协议号知道是反序列化为哪个类)
-        ProtocolManager.initProtocolAuto(Set.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class),  GenerateOperation.NO_OPERATION);
+        ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class),  GenerateOperation.NO_OPERATION);
 
         for (int i = 0; i < executors.length; i++) {
             executors[i] = Executors.newSingleThreadExecutor();

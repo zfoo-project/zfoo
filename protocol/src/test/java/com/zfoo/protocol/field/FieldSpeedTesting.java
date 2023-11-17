@@ -728,7 +728,7 @@ public class FieldSpeedTesting {
         System.setProperty("io.netty.buffer.checkAccessible", "false");
         System.setProperty("io.netty.buffer.checkBounds", "false");
         var op = GenerateOperation.NO_OPERATION;
-        ProtocolManager.initProtocolAuto(Set.of(IntObject.class, IntegerObject.class, FloatObject.class, BytesObject.class, StringObject.class, ListIntegerObject.class, SetObject.class, MapObject.class, InnerObjectObject.class), op);
+        ProtocolManager.initProtocolAuto(List.of(IntObject.class, IntegerObject.class, FloatObject.class, BytesObject.class, StringObject.class, ListIntegerObject.class, SetObject.class, MapObject.class, InnerObjectObject.class), op);
     }
 
     public static final ThreadLocal<Kryo> kryos = new ThreadLocal<>() {
