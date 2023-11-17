@@ -14,6 +14,16 @@ function {}:protocolId()
     return {}
 end
 
+function {}:protocolName()
+    return {}
+end
+
+function {}:__tostring()
+    local jsonTemplate = "{}"
+    local result = string.format(jsonTemplate, {})
+    return result
+end
+
 function {}:write(buffer, packet)
     if packet == nil then
         buffer:writeInt(0)
