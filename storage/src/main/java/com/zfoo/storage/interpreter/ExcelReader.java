@@ -36,8 +36,8 @@ public abstract class ExcelReader {
         // 默认取到第一个sheet页
         var sheet = wb.getSheetAt(0);
         var iterator = sheet.iterator();
-        //设置所有列
-        var headers = getHeaders(iterator, resourceClassName);
+        // 设置所有列
+        var excelHeaders = getHeaders(iterator, resourceClassName);
 
         var rows = new ArrayList<List<String>>();
         while (iterator.hasNext()) {
@@ -49,12 +49,19 @@ public abstract class ExcelReader {
             }
 
             var columns = new ArrayList<String>();
-            for (var header : headers) {
+            for (var header : excelHeaders) {
                 var cell = row.getCell(header.getIndex());
                 var content = CellUtils.getCellStringValue(cell);
                 columns.add(content);
             }
             rows.add(columns);
+        }
+
+        // excel某些格子空的引起的列偏移
+        var headers = new ArrayList<StorageHeader>();
+        for (var i = 0; i < excelHeaders.size(); i++) {
+            var excelHeader = excelHeaders.get(i);
+            headers.add(StorageHeader.valueOf(excelHeader.getName(), excelHeader.getType(), i));
         }
         return StorageData.valueOf(resourceClassName, headers, rows);
     }
