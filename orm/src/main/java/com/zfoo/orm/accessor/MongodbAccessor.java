@@ -25,8 +25,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.in;
 
 /**
  * @author godotg
@@ -107,14 +105,14 @@ public class MongodbAccessor implements IAccessor {
         @SuppressWarnings("unchecked")
         var entityClazz = (Class<E>) entity.getClass();
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
-        var result = collection.deleteOne(eq("_id", entity.id()));
+        var result = collection.deleteOne(Filters.eq("_id", entity.id()));
         return result.getDeletedCount() > 0;
     }
 
     @Override
     public <E extends IEntity<?>> boolean delete(Object pk, Class<E> entityClazz) {
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
-        var result = collection.deleteOne(eq("_id", pk));
+        var result = collection.deleteOne(Filters.eq("_id", pk));
         return result.getDeletedCount() > 0;
     }
 
@@ -127,20 +125,20 @@ public class MongodbAccessor implements IAccessor {
         var entityClazz = (Class<E>) entities.get(0).getClass();
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
         var ids = entities.stream().map(it -> (it).id()).toList();
-        collection.deleteMany(in("_id", ids));
+        collection.deleteMany(Filters.in("_id", ids));
     }
 
     @Override
     public <E extends IEntity<?>> void batchDelete(List<?> pks, Class<E> entityClazz) {
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
-        collection.deleteMany(in("_id", pks));
+        collection.deleteMany(Filters.in("_id", pks));
     }
 
     @Override
     public <E extends IEntity<?>> E load(Object pk, Class<E> entityClazz) {
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
         var result = new ArrayList<E>(1);
-        collection.find(eq("_id", pk)).forEach(document -> result.add(document));
+        collection.find(Filters.eq("_id", pk)).forEach(document -> result.add(document));
         if (CollectionUtils.isEmpty(result)) {
             return null;
         }
