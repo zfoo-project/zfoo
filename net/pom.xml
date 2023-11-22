@@ -30,6 +30,7 @@
         <!-- Office document parsing -->
         <poi.version>5.2.3</poi.version>
         <csv.version>1.10.0</csv.version>
+        <jprotobuf.version>2.4.19</jprotobuf.version>
         <!-- maven core plugin -->
         <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
@@ -139,7 +140,17 @@
             <version>${spring.boot.version}</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.baidu</groupId>
+            <artifactId>jprotobuf</artifactId>
+            <version>${jprotobuf.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
