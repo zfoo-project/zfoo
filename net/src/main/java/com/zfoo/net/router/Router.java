@@ -182,7 +182,7 @@ public class Router implements IRouter {
      * cpu的cache越大命中率就越高，性能提高就越明显。
      * <p>
      * 单线程热点问题，在负载足够大的情况下，比如5000人同时在线的8核服务器，因为样本足够大每个核心分配的人数差距并不会太大。
-     * 概率论告诉我们样本大的话分布是均匀的，小概率事件的单线程问题可以忽略，实在不行就加线程。
+     * 概率论告诉我们样本大的话分布是均匀的，小概率事件的单线程热点问题可以忽略，实在不行就加线程。
      */
     public void dispatchBySession(PacketReceiverTask task) {
         var session = task.getSession();
