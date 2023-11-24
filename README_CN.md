@@ -54,7 +54,13 @@
 
 - 有问题，先看 [FAQ](./doc/FAQ.md) 能否解决你的问题
 - 依然有问题，参考每个工程目录的test文件夹下的标准demo展示和注释说明，可以直接运行
-    - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
+  - [问题讨论群QQ: 876280300](https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=uSo2FnXz50i5UZ1LYZS1sPsVWW9A34v-&jump_from=webapi"><img src="https://img.shields.io/badge/qq%E8%AE%A8%E8%AE%BA%E7%BE%A4-876280300-green"/></a>
+
+- [zfoo sdk of csharp and lua for unity and godot](https://github.com/zfoo-project/zfoo-sdk-csharp-lua-unity-godot)
+
+- [zfoo sdk typescript javascript cocos web h5](https://github.com/zfoo-project/zfoo-sdk-typescript-javascript-cocos-web-h5)
+
+- [zfoo sdk gdscript for godot](https://github.com/zfoo-project/zfoo-sdk-gdscript-godot)
 
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of
   Tanks）》，新手友好，难度2星
