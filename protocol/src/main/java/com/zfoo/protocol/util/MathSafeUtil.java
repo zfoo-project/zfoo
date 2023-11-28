@@ -3,9 +3,7 @@ package com.zfoo.protocol.util;
 /**
  * @author Boone Jack
  */
-public class MathSafeUtil {
-    private MathSafeUtil() {
-    }
+public abstract class MathSafeUtil {
 
     public static int findNextPositivePowerOfTwo(int value) {
         assert value > Integer.MIN_VALUE && value < IOUtils.BYTES_PER_MB;
