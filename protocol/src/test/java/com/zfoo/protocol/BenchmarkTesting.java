@@ -48,7 +48,7 @@ import java.util.concurrent.Executors;
 public class BenchmarkTesting {
 
     public static int benchmark = 10_0000;
-    
+
     /**
      * 单线程性能测试
      * <p>
@@ -194,7 +194,7 @@ public class BenchmarkTesting {
                 var bytes = JSONB.toBytes(simpleObject);
                 var mess = JSONB.parseObject(bytes, SimpleObject.class);
 
-                // 次方式速度奇慢
+                // 这种通过流写入的方式速度奇慢
                 // JSONB.writeTo(output, normalObject);
                 // var mess = JSONB.parseObject(input, NormalObject.class);
             }
