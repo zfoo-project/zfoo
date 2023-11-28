@@ -14,6 +14,7 @@
 package com.zfoo.protocol;
 
 
+import com.alibaba.fastjson2.JSONB;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -68,6 +69,7 @@ public class BenchmarkTesting {
             System.out.println(StringUtils.format("[单线程性能测试-->[benchmark:{}]]", benchmark));
 
             zfooTest();
+            jsonbTest();
             furyTest();
             kryoTest();
             protobufTest();
@@ -176,6 +178,49 @@ public class BenchmarkTesting {
             var obj = fury.deserialize(buffer);
         }
         System.out.println(StringUtils.format("[fury]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+    }
+
+    @Test
+    public void jsonbTest() {
+        try {
+            var output = new Output(1024 * 8);
+            var input = new Input(output.getBuffer());
+
+            // 序列化和反序列化简单对象
+            long startTime = System.currentTimeMillis();
+            for (int i = 0; i < benchmark; i++) {
+                input.reset();
+                output.reset();
+                var bytes = JSONB.toBytes(simpleObject);
+                var mess = JSONB.parseObject(bytes, SimpleObject.class);
+            }
+
+            System.out.println(StringUtils.format("[fastjsonb]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+
+            // 序列化和反序列化常规对象
+            startTime = System.currentTimeMillis();
+            for (int i = 0; i < benchmark; i++) {
+                input.reset();
+                output.reset();
+                var bytes = JSONB.toBytes(normalObject);
+                var mess = JSONB.parseObject(bytes, NormalObject.class);
+            }
+
+            System.out.println(StringUtils.format("[fastjsonb]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+
+            // 序列化和反序列化复杂对象
+            startTime = System.currentTimeMillis();
+            for (int i = 0; i < benchmark; i++) {
+                input.reset();
+                output.reset();
+
+                var bytes = JSONB.toBytes(complexObject);
+                var mess = JSONB.parseObject(bytes, ComplexObject.class);
+            }
+            System.out.println(StringUtils.format("[fastjsonb]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @Test
@@ -357,7 +402,7 @@ public class BenchmarkTesting {
 
     static {
         // zfoo协议注册(其实就是：将Set里面的协议号和对应的类注册好，这样子就可以根据协议号知道是反序列化为哪个类)
-        ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class),  GenerateOperation.NO_OPERATION);
+        ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), GenerateOperation.NO_OPERATION);
 
         for (int i = 0; i < executors.length; i++) {
             executors[i] = Executors.newSingleThreadExecutor();
@@ -405,9 +450,9 @@ public class BenchmarkTesting {
     public static final Map<Integer, String> mapWithInteger = new HashMap<>(Map.of(Integer.MIN_VALUE, "a", -99, "b", 0, "c", 99, "d", Integer.MAX_VALUE, "e"));
 
     public static final ObjectB objectB = new ObjectB(true);
-//    public static final ObjectB objectB = new ObjectB(true, 44);
+    //    public static final ObjectB objectB = new ObjectB(true, 44);
     public static final ObjectA objectA = new ObjectA(Integer.MAX_VALUE, mapWithInteger, objectB);
-//    public static final ObjectA objectA = new ObjectA(Integer.MAX_VALUE, mapWithInteger, objectB, 66);
+    //    public static final ObjectA objectA = new ObjectA(Integer.MAX_VALUE, mapWithInteger, objectB, 66);
     public static final List<Integer> listWithInteger = new ArrayList<>(ArrayUtils.toList(intArray));
     public static final List<Integer> listWithInteger1 = new ArrayList<>(ArrayUtils.toList(intArray1));
     public static final List<Integer> listWithInteger2 = new ArrayList<>(ArrayUtils.toList(intArray2));
