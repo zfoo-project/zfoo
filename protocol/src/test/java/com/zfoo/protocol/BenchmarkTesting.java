@@ -189,8 +189,6 @@ public class BenchmarkTesting {
             // 序列化和反序列化简单对象
             long startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
-                input.reset();
-                output.reset();
                 var bytes = JSONB.toBytes(simpleObject);
                 var mess = JSONB.parseObject(bytes, SimpleObject.class);
 
@@ -204,8 +202,6 @@ public class BenchmarkTesting {
             // 序列化和反序列化常规对象
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
-                input.reset();
-                output.reset();
                 var bytes = JSONB.toBytes(normalObject);
                 var mess = JSONB.parseObject(bytes, NormalObject.class);
             }
@@ -215,9 +211,6 @@ public class BenchmarkTesting {
             // 序列化和反序列化复杂对象
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
-                input.reset();
-                output.reset();
-
                 var bytes = JSONB.toBytes(complexObject);
                 var mess = JSONB.parseObject(bytes, ComplexObject.class);
             }
@@ -413,7 +406,7 @@ public class BenchmarkTesting {
         }
     }
 
-    private static ThreadSafeFury fury;
+    public static ThreadSafeFury fury;
 
     static {
         fury = new ThreadLocalFury(classLoader -> {
