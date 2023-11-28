@@ -193,9 +193,13 @@ public class BenchmarkTesting {
                 output.reset();
                 var bytes = JSONB.toBytes(simpleObject);
                 var mess = JSONB.parseObject(bytes, SimpleObject.class);
+
+                // 次方式速度奇慢
+                // JSONB.writeTo(output, normalObject);
+                // var mess = JSONB.parseObject(input, NormalObject.class);
             }
 
-            System.out.println(StringUtils.format("[fastjsonb]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[fastjsonb]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSONB.toBytes(simpleObject).length, System.currentTimeMillis() - startTime));
 
             // 序列化和反序列化常规对象
             startTime = System.currentTimeMillis();
@@ -206,7 +210,7 @@ public class BenchmarkTesting {
                 var mess = JSONB.parseObject(bytes, NormalObject.class);
             }
 
-            System.out.println(StringUtils.format("[fastjsonb]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[fastjsonb]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSONB.toBytes(normalObject).length, System.currentTimeMillis() - startTime));
 
             // 序列化和反序列化复杂对象
             startTime = System.currentTimeMillis();
@@ -217,7 +221,7 @@ public class BenchmarkTesting {
                 var bytes = JSONB.toBytes(complexObject);
                 var mess = JSONB.parseObject(bytes, ComplexObject.class);
             }
-            System.out.println(StringUtils.format("[fastjsonb]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[fastjsonb]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSONB.toBytes(complexObject).length, System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
