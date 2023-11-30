@@ -93,25 +93,35 @@ public abstract class GenerateLuaUtils {
 
         // 生成Protocol.lua文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("lua-one/ProtocolManagerTemplate.lua");
-        var importProtocols = StringUtils.format("local Protocols = require(\"{}.Protocols\")", protocolOutputRootPath);
-        var importRegistrations = StringUtils.format("local Registrations = require(\"{}.Registrations\")", protocolOutputRootPath);
+        var builderImports = new StringBuilder();
+        builderImports.append(TAB).append(StringUtils.format("local Protocols = require(\"{}.Protocols\")", protocolOutputRootPath)).append(LS);
+        builderImports.append(TAB).append(StringUtils.format("local ProtocolBase = require(\"{}.ProtocolBase\")", protocolOutputRootPath)).append(LS);
+        builderImports.append(TAB).append(StringUtils.format("local ProtocolWriter = require(\"{}.ProtocolWriter\")", protocolOutputRootPath)).append(LS);
+        builderImports.append(TAB).append(StringUtils.format("local ProtocolReader = require(\"{}.ProtocolReader\")", protocolOutputRootPath)).append(LS);
         var protocolBuilder = new StringBuilder();
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
             var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
             protocolBuilder.append(TAB).append(StringUtils.format("protocols[{}] = Protocols.{}", protocolId, protocolName)).append(LS);
         }
-        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, StringUtils.EMPTY_JSON, StringUtils.EMPTY_JSON, importProtocols, importRegistrations, protocolBuilder.toString().trim());
+        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, StringUtils.EMPTY_JSON, StringUtils.EMPTY_JSON, builderImports.toString().trim(), protocolBuilder.toString().trim());
         FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua")), protocolManagerTemplate, true);
     }
 
     public static void createLuaProtocolsInOneFile(List<IProtocolRegistration> registrations) {
-        var protocolTemplate1 = ClassUtils.getFileFromClassPathToString("lua-one/ProtocolTemplate1.lua");
-        var protocolTemplate2 = ClassUtils.getFileFromClassPathToString("lua-one/ProtocolTemplate2.lua");
-        var builder1 = new StringBuilder();
-        var builder2 = new StringBuilder();
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("lua-one/ProtocolTemplate.lua");
+        var protocolBaseTemplate = ClassUtils.getFileFromClassPathToString("lua-one/ProtocolBaseTemplate.lua");
+        var protocolWriterTemplate = ClassUtils.getFileFromClassPathToString("lua-one/ProtocolWriterTemplate.lua");
+        var protocolReaderTemplate = ClassUtils.getFileFromClassPathToString("lua-one/ProtocolReaderTemplate.lua");
+        var builderProtocol = new StringBuilder();
+        var builderProtocolBase = new StringBuilder();
+        var builderProtocolWriter = new StringBuilder();
+        var builderProtocolReader = new StringBuilder();
 
-        builder2.append(StringUtils.format("local Protocols = require(\"{}.Protocols\")", protocolOutputRootPath)).append(LS + LS);
+        var requireProtocols = StringUtils.format("local Protocols = require(\"{}.Protocols\")", protocolOutputRootPath);
+        builderProtocolBase.append(requireProtocols).append(LS).append(LS);
+        builderProtocolWriter.append(requireProtocols).append(LS).append(LS);
+        builderProtocolReader.append(requireProtocols).append(LS).append(LS);
 
         for (var protocolRegistration : registrations) {
             var registration = (ProtocolRegistration) protocolRegistration;
@@ -127,25 +137,29 @@ public abstract class GenerateLuaUtils {
             var writePacket = writePacket(registration);
             var readPacket = readPacket(registration);
 
-            var body1 = StringUtils.format(protocolTemplate1, classNote, protocolClazzName, StringUtils.EMPTY_JSON, protocolClazzName, valueOfMethod.trim());
-            var body2 = StringUtils.format(protocolTemplate2, protocolClazzName, protocolId, protocolClazzName, protocolClazzName
-                    , protocolClazzName, toStringJsonTemplate, toStringParams
-                    , protocolClazzName, writePacket.trim(), protocolClazzName, protocolClazzName, readPacket.trim());
-            builder1.append(body1).append(LS);
-            builder2.append(body2).append(LS);
+            var protocol = StringUtils.format(protocolTemplate, classNote, protocolClazzName, StringUtils.EMPTY_JSON, protocolClazzName, valueOfMethod.trim());
+            var protocolBase = StringUtils.format(protocolBaseTemplate, protocolClazzName, protocolId, protocolClazzName, protocolClazzName, protocolClazzName, toStringJsonTemplate, toStringParams);
+            var protocolWriter = StringUtils.format(protocolWriterTemplate, protocolClazzName, writePacket.trim(), protocolClazzName);
+            var protocolReader = StringUtils.format(protocolReaderTemplate, protocolClazzName, readPacket.trim());
+
+            builderProtocol.append(protocol).append(LS);
+            builderProtocolBase.append(protocolBase).append(LS).append(LS);
+            builderProtocolWriter.append(protocolWriter).append(LS).append(LS);
+            builderProtocolReader.append(protocolReader).append(LS).append(LS);
         }
 
-        builder1.append(LS).append("local Protocols = {}").append(LS);
+        builderProtocol.append(LS).append("local Protocols = {}").append(LS);
         for (var protocolRegistration : registrations) {
             var registration = (ProtocolRegistration) protocolRegistration;
             var registrationConstructor = registration.getConstructor();
             var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
-            builder1.append(StringUtils.format("Protocols.{} = {}", protocolClazzName, protocolClazzName)).append(LS);
+            builderProtocol.append(StringUtils.format("Protocols.{} = {}", protocolClazzName, protocolClazzName)).append(LS);
         }
-        builder1.append("return Protocols");
-
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "Protocols.lua")), builder1.toString(), true);
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "Registrations.lua")), builder2.toString(), true);
+        builderProtocol.append("return Protocols");
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "Protocols.lua")), builderProtocol.toString(), true);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolBase.lua")), builderProtocolBase.toString(), true);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolWriter.lua")), builderProtocolWriter.toString(), true);
+        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolReader.lua")), builderProtocolReader.toString(), true);
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {

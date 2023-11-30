@@ -71,7 +71,8 @@ public class ProtocolAnalysis {
             , "ByteBufUtils", "ArrayUtils", "CollectionUtils"
             , "Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double", "String", "Character", "Object"
             , "Collections", "Iterator", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet"
-            , "DecodedPacketInfo", "EncodedPacketInfo");
+            , "DecodedPacketInfo", "EncodedPacketInfo"
+            , "Protocols", "ProtocolBase", "ProtocolWriter", "ProtocolReader");
 
     /**
      * EN: Temp field, unsupported type
@@ -133,24 +134,24 @@ public class ProtocolAnalysis {
         LinkedHashSet<Class> tempProtocolClassSet = new LinkedHashSet<>(protocolClassList);
         //去重
         protocolClassList = new ArrayList<>();
-        for(Class clazz : tempProtocolClassSet){
+        for (Class clazz : tempProtocolClassSet) {
             protocolClassList.add(clazz);
         }
         Set<Class> relevantClassList = new LinkedHashSet<>(protocolClassList);
         for (var clazz : protocolClassList) {
-            Set<Class<?>>  classSet =  ClassUtils.relevantClass(clazz);
-            for(Class cls :classSet){
-                if(  !relevantClassList.contains(cls)){
+            Set<Class<?>> classSet = ClassUtils.relevantClass(clazz);
+            for (Class cls : classSet) {
+                if (!relevantClassList.contains(cls)) {
                     int protocolId = getProtocolIdAndCheckClass(cls);
-                    if(protocolId >= 0){
+                    if (protocolId >= 0) {
                         relevantClassList.add(cls);
-                    }else{
+                    } else {
                         throw new AssertException("[class:{}]类型必须声明", cls.getCanonicalName());
                     }
                 }
             }
         }
-       //var relevantClassList = relevantClassSet;
+        //var relevantClassList = relevantClassSet;
        /*  var relevantClassList = relevantClassSet.stream()
                 .sorted((a, b) -> a.getCanonicalName().compareTo(b.getCanonicalName()))
                 .toList();*/

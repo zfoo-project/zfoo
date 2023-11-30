@@ -35,7 +35,6 @@ end
 function initProtocol()
     {}
     {}
-    {}
 end
 
 ProtocolManager.initProtocol = initProtocol
