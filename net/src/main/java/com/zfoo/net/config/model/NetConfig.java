@@ -24,9 +24,12 @@ import java.util.Objects;
 public class NetConfig {
     private String id;
     private String protocolLocation;
-
     /**
-     * 协议生成属性变量对应于{@link GenerateOperation}
+     * {@link GenerateOperation}
+     */
+    private boolean oneProtocol;
+    /**
+     * {@link GenerateOperation}
      */
     private boolean foldProtocol;
     private String protocolPath;
@@ -76,6 +79,14 @@ public class NetConfig {
 
     public void setProtocolLocation(String protocolLocation) {
         this.protocolLocation = protocolLocation;
+    }
+
+    public boolean isOneProtocol() {
+        return oneProtocol;
+    }
+
+    public void setOneProtocol(boolean oneProtocol) {
+        this.oneProtocol = oneProtocol;
     }
 
     public boolean isFoldProtocol() {

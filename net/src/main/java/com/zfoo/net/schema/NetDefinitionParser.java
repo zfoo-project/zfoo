@@ -101,6 +101,8 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         // 协议protocol.xml文件的位置。 注意：直接写protocol.xml 则是从resources目录下读
         resolvePlaceholder("protocol-location", "protocolLocation", builder, element, parserContext);
 
+        // 协议文件是否生成在同一个协议文件中
+        resolvePlaceholder("one-protocol", "oneProtocol", builder, element, parserContext);
         // 文件是否折叠
         resolvePlaceholder("fold-protocol", "foldProtocol", builder, element, parserContext);
         // 生成各种语言的协议列表

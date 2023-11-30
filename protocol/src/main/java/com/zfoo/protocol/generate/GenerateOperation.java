@@ -34,6 +34,12 @@ public class GenerateOperation {
     public static final GenerateOperation NO_OPERATION = new GenerateOperation();
 
     /**
+     * EN: All protocol files are generated in a single protocol file.
+     * CN: 所有的协议文件生成在一个协议文件里
+     */
+    private boolean oneProtocol;
+
+    /**
      * EN: Fold the protocol. The generated protocol file will maintain the same directory structure as the Java source file.
      * It will not be folded by default.
      * <p>
@@ -64,6 +70,14 @@ public class GenerateOperation {
 
     public void setProtocolPath(String protocolPath) {
         this.protocolPath = protocolPath;
+    }
+
+    public boolean isOneProtocol() {
+        return oneProtocol;
+    }
+
+    public void setOneProtocol(boolean oneProtocol) {
+        this.oneProtocol = oneProtocol;
     }
 
     public boolean isFoldProtocol() {
