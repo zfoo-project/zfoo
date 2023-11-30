@@ -3,7 +3,7 @@ function Protocols.{}:protocolId()
 end
 
 function Protocols.{}:protocolName()
-    return {}
+    return Protocols.{}
 end
 
 function Protocols.{}:__tostring()
@@ -26,7 +26,7 @@ function Protocols.{}:read(buffer)
         return nil
     end
     local beforeReadIndex = buffer:getReadOffset()
-    local packet = {}:new()
+    local packet = Protocols.{}:new()
     {}
     if length > 0 then
         buffer:setReadOffset(beforeReadIndex + length)
