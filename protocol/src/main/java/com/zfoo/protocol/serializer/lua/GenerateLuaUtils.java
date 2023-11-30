@@ -139,8 +139,8 @@ public abstract class GenerateLuaUtils {
 
             var protocol = StringUtils.format(protocolTemplate, classNote, protocolClazzName, StringUtils.EMPTY_JSON, protocolClazzName, valueOfMethod.trim());
             var protocolBase = StringUtils.format(protocolBaseTemplate, protocolClazzName, protocolId, protocolClazzName, protocolClazzName, protocolClazzName, toStringJsonTemplate, toStringParams);
-            var protocolWriter = StringUtils.format(protocolWriterTemplate, protocolClazzName, writePacket.trim(), protocolClazzName);
-            var protocolReader = StringUtils.format(protocolReaderTemplate, protocolClazzName, readPacket.trim());
+            var protocolWriter = StringUtils.format(protocolWriterTemplate, protocolClazzName, writePacket.trim());
+            var protocolReader = StringUtils.format(protocolReaderTemplate, protocolClazzName, protocolClazzName, readPacket.trim());
 
             builderProtocol.append(protocol).append(LS);
             builderProtocolBase.append(protocolBase).append(LS).append(LS);
