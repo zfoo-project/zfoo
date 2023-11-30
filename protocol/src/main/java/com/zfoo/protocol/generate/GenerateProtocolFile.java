@@ -159,9 +159,14 @@ public abstract class GenerateProtocolFile {
         // 生成Lua协议
         if (generateLanguages.contains(CodeLanguage.Lua)) {
             GenerateLuaUtils.init(generateOperation);
-            GenerateLuaUtils.createProtocolManager(allSortedGenerateProtocols);
-            for (var protocolRegistration : allSortedGenerateProtocols) {
-                GenerateLuaUtils.createLuaProtocolFile((ProtocolRegistration) protocolRegistration);
+            if (generateOperation.isOneProtocol()) {
+                GenerateLuaUtils.createProtocolManagerInOneFile(allSortedGenerateProtocols);
+                GenerateLuaUtils.createLuaProtocolsInOneFile(allSortedGenerateProtocols);
+            } else {
+                GenerateLuaUtils.createProtocolManager(allSortedGenerateProtocols);
+                for (var protocolRegistration : allSortedGenerateProtocols) {
+                    GenerateLuaUtils.createLuaProtocolFile((ProtocolRegistration) protocolRegistration);
+                }
             }
         }
 
