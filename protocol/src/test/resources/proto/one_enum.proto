@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+
+package test.message;
+
+option java_package = "io.edap.protobuf.test.message.v3";
+
+message OneEnum {
+  Corpus corpus = 1;
+}
+
+
+enum Corpus {
+  UNIVERSAL = 0;
+  WEB = 1;
+  IMAGES = 2;
+  LOCAL = 3;
+  NEWS = 4;
+  PRODUCTS = 5;
+  VIDEO = 6;
+}

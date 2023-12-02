@@ -420,7 +420,7 @@ public abstract class FileUtils {
 
 
     public static String readFileToString(final File file) {
-        return StringUtils.joinWith(StringUtils.EMPTY, readFileToStringList(file).toArray());
+        return StringUtils.joinWith(LS, readFileToStringList(file).toArray());
     }
 
     public static List<String> readFileToStringList(final File file) {

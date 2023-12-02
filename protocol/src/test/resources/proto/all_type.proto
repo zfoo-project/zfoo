@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+
+package test.message;
+
+import "one_enum.proto";
+import "one_map.proto";
+import "one_message.proto";
+option java_package = "io.edap.protobuf.test.message.v3";
+//option java_outer_classname = "MessageOuter";
+
+message AllType {
+  bool     field1 = 1;
+  bytes    field2 = 2;
+  double   field3 = 3;
+  Corpus   field4 = 4;
+  fixed32  field5 = 5;
+  fixed64  field6 = 6;
+  float    field7 = 7;
+  int32    field8 = 8;
+  int64    field9 = 9;
+  map<string, Project> field10 = 10;
+  Proj     field11 = 11;
+  sfixed32 field12 = 12;
+  sfixed64 field13 = 13;
+  sint32   field14 = 14;
+  sint64   field15 = 15;
+  string   field16 = 16;
+  uint32   field17 = 17;
+  uint64   field18 = 18;
+}
