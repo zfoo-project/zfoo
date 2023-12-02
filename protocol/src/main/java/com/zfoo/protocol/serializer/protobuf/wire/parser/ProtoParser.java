@@ -30,6 +30,13 @@ import static com.zfoo.protocol.serializer.protobuf.wire.WireFormat.isValidTag;
  * @date : 2019/12/2
  */
 public class ProtoParser {
+
+    private static final List<String> fieldCardinalities = List.of("repeated", "optional", "required");
+    private static final String VALUE_END_ERROR = " value not end with \";\"";
+    private static final String ROW_MSG = "row [";
+    private static final String START_MSG = " start...";
+
+
     /**
      * 需要解析的字符数组
      */
@@ -45,78 +52,18 @@ public class ProtoParser {
     /**
      * 每行开始对应的游标
      */
-    protected Map<Integer, Integer> rowsPos;
+    protected Map<Integer, Integer> rowsPos = new HashMap<>();
     /**
      * 解析时临时存放解析的注释信息
      */
-    protected List<Comment> comments;
-    protected static List<String> fieldCardinalities = new ArrayList<>();
-
-    private static final String VALUE_END_ERROR = " value not end with \";\"";
-    private static final String ROW_MSG = "row [";
-    private static final String START_MSG = " start...";
+    protected List<Comment> comments = new ArrayList<>();
 
 
     public ProtoParser(String data) {
         this.row = 1;
         this.pos = 0;
-        this.rowsPos = new HashMap<>();
-        rowsPos.put(1, 0);
-
-        this.comments = new ArrayList<>();
-
-        fieldCardinalities.add("repeated");
-        fieldCardinalities.add("optional");
-        fieldCardinalities.add("required");
-
+        this.rowsPos.put(1, 0);
         this.data = data.toCharArray();
-    }
-
-    private void setSyntax(Proto proto, ProtoValue syntaxValue) {
-        String syntax = null;
-        if (syntaxValue != null) {
-            syntax = syntaxValue.getValue();
-        }
-        if (syntax != null && !syntax.isEmpty()) {
-            proto.setSyntax(Syntax.fromValue(syntax));
-        }
-    }
-
-    private void setProtoPackage(Proto proto, ProtoValue packValue) {
-        if (packValue.getValue() != null && !packValue.getValue().isEmpty()) {
-            proto.setProtoPackage(packValue.getValue());
-        }
-    }
-
-    private void addImport(Proto proto, ProtoValue impValue) {
-        if (impValue != null && impValue.getValue() != null) {
-            proto.addImport(impValue.getValue());
-        }
-    }
-
-    private void addCommentLine(Comment.CommentType type, String line) {
-        addCommentLines(type, Arrays.asList(line));
-    }
-
-    private void addCommentLines(Comment.CommentType type, List<String> lines) {
-        Comment c;
-        if (comments.isEmpty()) {
-            comments.add(buildComment(type, lines));
-            return;
-        }
-        c = comments.get(comments.size() - 1);
-        if (c.getType() == type) {
-            c.getLines().addAll(lines);
-        } else {
-            comments.add(buildComment(type, lines));
-        }
-    }
-
-    private Comment buildComment(Comment.CommentType type, List<String> lines) {
-        Comment c = new Comment();
-        c.setType(type);
-        c.setLines(lines);
-        return c;
     }
 
     public Proto parse() {
@@ -144,14 +91,13 @@ public class ProtoParser {
                 case "syntax":
                     addCommentsToProto(proto);
                     readValueSeparator('=');
-                    ProtoValue syntaxValue = readValue();
-                    setSyntax(proto, syntaxValue);
+                    readValueUtilSemicolon();
                     break;
                 case "package":
                     addCommentsToProto(proto);
                     readValueSeparator(' ');
-                    ProtoValue packValue = readValue();
-                    setProtoPackage(proto, packValue);
+                    ProtoValue packValue = readValueUtilSemicolon();
+                    proto.setProtoPackage(packValue.getValue());
                     comments.clear();
                     break;
                 case "option":
@@ -159,7 +105,7 @@ public class ProtoParser {
                     trim();
                     String optionLabel = readToken();
                     readValueSeparator('=');
-                    ProtoValue pv = readValue();
+                    ProtoValue pv = readValueUtilSemicolon();
                     String optionValue = pv.getValue();
                     Option option = new Option();
                     option.setName(optionLabel).setValue(optionValue);
@@ -169,8 +115,8 @@ public class ProtoParser {
                 case "import":
                     addCommentsToProto(proto);
                     readValueSeparator(' ');
-                    ProtoValue impValue = readValue();
-                    addImport(proto, impValue);
+                    ProtoValue impValue = readValueUtilSemicolon();
+                    proto.addImport(impValue.getValue());
                     comments.clear();
                     break;
                 case "message":
@@ -195,8 +141,58 @@ public class ProtoParser {
             }
             token = readToken();
         }
-
         return proto;
+    }
+
+    private ProtoMessage parseMessage() throws RuntimeException {
+        ProtoMessage msg = new ProtoMessage();
+        trim();
+        String name = readToken();
+        if (name.length() == 0) {
+            throw new RuntimeException(ROW_MSG + row + "] message name not set");
+        }
+        msg.setName(name);
+        if (!comments.isEmpty()) {
+            msg.setComment(comments.get(comments.size() - 1));
+            comments.clear();
+        }
+        System.out.println("message " + name + START_MSG);
+        blockStarted("message");
+        String token = readToken();
+        while (token.length() > 0) {
+            if ("//".equals(token)) {
+                var singleLine = readSingleLineComment();
+                addCommentLines(CommentType.INLINE, List.of(singleLine));
+                nextLine();
+            } else if ("enum".equals(token)) {
+                notSupportEnum();
+            } else if ("extend".equals(token)) {
+                notSupportExtend();
+            } else if ("oneof".equals(token)) {
+                notSupportOneof();
+            } else if ("reserved".equals(token)) {
+                notSupportReserved();
+            } else if ("message".equals(token)) {
+                // 为了让用法简单，屏蔽内部类的消息定义
+                // msg.addMessage(parseMessage());
+                notSupportInnerMessage();
+            } else if (fieldCardinalities.contains(token)) {
+                Field field = parseField(Cardinality.valueOf(token.toUpperCase(Locale.ENGLISH)), null);
+                msg.addField(field);
+            } else {
+                Field field = parseField(Cardinality.OPTIONAL, token);
+                msg.addField(field);
+            }
+            boolean isEnd = blockEnd();
+            if (isEnd) {
+                System.out.println("message " + name + " end");
+                fieldEnd();
+                return msg;
+            }
+            trimLines();
+            token = readToken();
+        }
+        return msg;
     }
 
     private void notSupportEnum() {
@@ -219,6 +215,26 @@ public class ProtoParser {
         throw new RuntimeException(StringUtils.format("zfoo not support reserved syntax in message:[{}]", name));
     }
 
+    private void notSupportInnerMessage() {
+        var name = readToken();
+        throw new RuntimeException(StringUtils.format("zfoo not support inner message:[{}]", name));
+    }
+
+    // --------------------------------------------------------------------------------------------------------------
+    private void addCommentLines(Comment.CommentType type, List<String> lines) {
+        Comment c;
+        if (CollectionUtils.isEmpty(comments)) {
+            comments.add(Comment.valueOf(type, lines));
+            return;
+        }
+        c = comments.get(comments.size() - 1);
+        if (c.getType() == type) {
+            c.getLines().addAll(lines);
+        } else {
+            comments.add(Comment.valueOf(type, lines));
+        }
+    }
+
     private void addCommentsToProto(Proto proto) {
         if (CollectionUtils.isEmpty(comments)) {
             return;
@@ -238,8 +254,7 @@ public class ProtoParser {
                 return true;
             }
         }
-        throw new RuntimeException(ROW_MSG + row + "] colum ["
-                + (pos - rowsPos.get(row)) + "] not \"" + separatorChar + "\"");
+        throw new RuntimeException(ROW_MSG + row + "] colum [" + (pos - rowsPos.get(row)) + "] not \"" + separatorChar + "\"");
     }
 
     public static int parseInt(String number) throws RuntimeException {
@@ -390,54 +405,6 @@ public class ProtoParser {
                 || (c == ')');
     }
 
-    private ProtoMessage parseMessage() throws RuntimeException {
-        ProtoMessage msg = new ProtoMessage();
-        trim();
-        String name = readToken();
-        if (name.length() == 0) {
-            throw new RuntimeException(ROW_MSG + row + "] message name not set");
-        }
-        msg.setName(name);
-        if (!comments.isEmpty()) {
-            msg.setComment(comments.get(comments.size() - 1));
-            comments.clear();
-        }
-        System.out.println("message " + name + START_MSG);
-        blockStarted("message");
-        String token = readToken();
-        while (token.length() > 0) {
-            if ("//".equals(token)) {
-                addCommentLine(CommentType.INLINE, readSingleLineComment());
-                nextLine();
-            } else if (fieldCardinalities.contains(token)) {
-                Field field = parseField(Cardinality.valueOf(token.toUpperCase(Locale.ENGLISH)), null);
-                msg.addField(field);
-            } else if ("enum".equals(token)) {
-                notSupportEnum();
-            } else if ("extend".equals(token)) {
-                notSupportExtend();
-            } else if ("oneof".equals(token)) {
-                notSupportOneof();
-            } else if ("reserved".equals(token)) {
-                notSupportReserved();
-            } else if ("message".equals(token)) {
-                msg.addMessage(parseMessage());
-            } else {
-                Field field = parseField(Cardinality.OPTIONAL, token);
-                msg.addField(field);
-            }
-            boolean isEnd = blockEnd();
-            if (isEnd) {
-                System.out.println("message " + name + " end");
-                fieldEnd();
-                return msg;
-            }
-            trimLines();
-            token = readToken();
-        }
-        return msg;
-    }
-
     private void trimLines() {
         trim();
         boolean next = nextLine();
@@ -461,7 +428,7 @@ public class ProtoParser {
         trim();
         readValueSeparator('=');
         trim();
-        ProtoValue pv = readValue();
+        ProtoValue pv = readValueUtilSemicolon();
         int tag = validTag(pv.getValue());
         trim();
         Comment comment = new Comment();
@@ -703,12 +670,9 @@ public class ProtoParser {
     }
 
     /**
-     * 读取proto描述文件中的值
-     *
-     * @return
-     * @throws RuntimeException
+     * 读取proto描述文件中的值，知道分号结束
      */
-    private ProtoValue readValue() throws RuntimeException {
+    private ProtoValue readValueUtilSemicolon() throws RuntimeException {
         char c;
         c = data[pos];
         if (c == '\'' || c == '"') {
@@ -862,8 +826,7 @@ public class ProtoParser {
         while (pos < data.length) {
             c = data[pos];
             if (c == '\n') {
-                throw new RuntimeException("row " + row
-                        + " value not end with \"" + quote + "\"");
+                throw new RuntimeException("row " + row + " value not end with \"" + quote + "\"");
             } else if (c == quote) {
                 if (v.length() > 0 && v.charAt(v.length() - 1) == '\\') {
                     v.deleteCharAt(v.length() - 1);
@@ -872,8 +835,7 @@ public class ProtoParser {
                     pos++;
                     trim();
                     if (data[pos] != ';' && data[pos] != ']' && data[pos] != ',') {
-                        throw new RuntimeException("row " + row
-                                + VALUE_END_ERROR);
+                        throw new RuntimeException("row " + row + VALUE_END_ERROR);
                     } else {
                         if (data[pos] != ']') {
                             pos++;
@@ -887,8 +849,7 @@ public class ProtoParser {
             }
             pos++;
         }
-        throw new RuntimeException("row " + row
-                + " value not end with \"\\" + quote + "\"");
+        throw new RuntimeException("row " + row + " value not end with \"\\" + quote + "\"");
     }
 
     private List<Option> readFieldOptions() throws RuntimeException {

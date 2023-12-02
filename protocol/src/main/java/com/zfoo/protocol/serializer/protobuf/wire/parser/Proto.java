@@ -34,7 +34,7 @@ public class Proto {
      */
     private List<Option> options = new ArrayList<>();
     /**
-     * 文档版本没有指定默认为proto2
+     * 文档版本没有指定默认为proto3
      */
     private Syntax syntax = Syntax.PROTO_3;
     /**

@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class Comment {
 
-
     public enum CommentType {
         /**
          * 以"//"开头的注释类型
@@ -38,10 +37,6 @@ public class Comment {
     }
 
     /**
-     * 注释内容文本行列表
-     */
-    private List<String> lines;
-    /**
      * 注释的类型
      */
     private CommentType type = CommentType.INLINE;
@@ -49,26 +44,21 @@ public class Comment {
     /**
      * 注释内容文本行列表
      */
+    private List<String> lines = new ArrayList<>();
+
+    public static Comment valueOf(CommentType type, List<String> lines) {
+        var comment = new Comment();
+        comment.type = type;
+        comment.lines.addAll(lines);
+        return comment;
+    }
+
     public List<String> getLines() {
-        if (lines == null) {
-            lines = new ArrayList<>();
-        }
         return lines;
     }
-
     public void setLines(List<String> lines) {
-        if (lines instanceof ArrayList) {
-            this.lines = lines;
-        } else {
-            getLines();
-            this.lines.addAll(lines);
-        }
-
+        this.lines = lines;
     }
-
-    /**
-     * 注释的类型
-     */
     public CommentType getType() {
         return type;
     }
