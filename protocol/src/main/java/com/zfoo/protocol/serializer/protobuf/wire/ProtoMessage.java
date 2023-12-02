@@ -38,10 +38,6 @@ public class ProtoMessage {
     private List<Reserved> reserveds;
 
     /**
-     * 消息内置的枚举类型
-     */
-    private List<ProtoEnum> enums;
-    /**
      * 消息的备注信息
      */
     private Comment comment;
@@ -59,14 +55,6 @@ public class ProtoMessage {
             return this;
         }
         getFields().add(field);
-        return this;
-    }
-
-    public ProtoMessage addEnum(ProtoEnum protoEnum) {
-        if (protoEnum == null) {
-            return this;
-        }
-        getEnums().add(protoEnum);
         return this;
     }
 
@@ -174,33 +162,6 @@ public class ProtoMessage {
         } else {
             this.reserveds = new ArrayList<>();
             this.reserveds.addAll(reserveds);
-        }
-        return this;
-    }
-
-
-    /**
-     * 消息内置的枚举类型
-     *
-     * @return the enums
-     */
-    public List<ProtoEnum> getEnums() {
-        if (enums == null) {
-            enums = new ArrayList<>();
-        }
-        return enums;
-    }
-
-    /**
-     * 消息内置的枚举类型
-     *
-     * @param enums the enums to set
-     */
-    public ProtoMessage setEnums(List<ProtoEnum> enums) {
-        if (enums instanceof ArrayList) {
-            this.enums = enums;
-        } else {
-            getEnums().addAll(enums);
         }
         return this;
     }

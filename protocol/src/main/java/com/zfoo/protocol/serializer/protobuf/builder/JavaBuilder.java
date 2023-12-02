@@ -245,7 +245,6 @@ public class JavaBuilder {
         }
 
         nestMessageMessage(proto, cb, msg.getMessages(), defineMsgs, level, protos);
-        nestMessageEnum(cb, msg.getEnums(), level);
 
         cb.t(level - 1).c("}");
         return cb.toString();
