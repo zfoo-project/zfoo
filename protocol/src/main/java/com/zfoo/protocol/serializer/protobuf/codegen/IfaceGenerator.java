@@ -17,7 +17,6 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.PbBuildOption;
 import com.zfoo.protocol.serializer.protobuf.builder.JavaBuilder;
 import com.zfoo.protocol.serializer.protobuf.wire.Option;
-import com.zfoo.protocol.serializer.protobuf.wire.ProtoEnum;
 import com.zfoo.protocol.serializer.protobuf.wire.ProtoMessage;
 import com.zfoo.protocol.serializer.protobuf.wire.parser.Proto;
 import com.zfoo.protocol.util.FileUtils;

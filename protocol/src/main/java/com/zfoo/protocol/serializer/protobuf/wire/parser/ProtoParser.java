@@ -53,7 +53,6 @@ public class ProtoParser {
     protected static List<String> fieldCardinalities = new ArrayList<>();
 
     private static final String VALUE_END_ERROR = " value not end with \";\"";
-    private static final String ONEOF_MSG = "oneof ";
     private static final String ROW_MSG = "row [";
     private static final String START_MSG = " start...";
 
@@ -411,9 +410,7 @@ public class ProtoParser {
                 addCommentLine(CommentType.INLINE, readSingleLineComment());
                 nextLine();
             } else if (fieldCardinalities.contains(token)) {
-                Field field = parseField(
-                        Cardinality.valueOf(token.toUpperCase(Locale.ENGLISH)),
-                        null);
+                Field field = parseField(Cardinality.valueOf(token.toUpperCase(Locale.ENGLISH)), null);
                 msg.addField(field);
             } else if ("enum".equals(token)) {
                 notSupportEnum();

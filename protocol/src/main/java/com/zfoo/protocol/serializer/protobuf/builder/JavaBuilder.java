@@ -18,7 +18,6 @@ import com.zfoo.protocol.serializer.protobuf.PbBuildOption;
 import com.zfoo.protocol.serializer.protobuf.internal.CodeBuilder;
 import com.zfoo.protocol.serializer.protobuf.wire.*;
 import com.zfoo.protocol.serializer.protobuf.wire.Field.Type;
-import com.zfoo.protocol.serializer.protobuf.wire.ProtoEnum.EnumEntry;
 import com.zfoo.protocol.serializer.protobuf.wire.WireFormat.JavaType;
 import com.zfoo.protocol.serializer.protobuf.wire.parser.Proto;
 import com.zfoo.protocol.util.StringUtils;
@@ -276,90 +275,6 @@ public class JavaBuilder {
                 .forEach(e -> cb.c(buildMessage(proto, e, level + 1, defineMsgs, nestedOps, protos)));
     }
 
-    private void nestMessageEnum(CodeBuilder cb, List<ProtoEnum> enums, int indent) {
-        if (enums == null || enums.isEmpty()) {
-            return;
-        }
-        cb.ln();
-        PbBuildOption nestedOps = new PbBuildOption();
-        nestedOps.setIsNested(true);
-        enums.stream()
-                .sorted(Comparator.comparing(ProtoEnum::getName))
-                .forEach(e -> cb.c(buildEnum(e, indent + 1, nestedOps)).ln(2));
 
-    }
 
-    private String getFillSpaces(int count) {
-        if (count <= 0) {
-            return StringUtils.EMPTY;
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < count; i++) {
-            sb.append(" ");
-        }
-        return sb.toString();
-    }
-
-    public String buildEnum(ProtoEnum protoEnum, final int indent, PbBuildOption buildOps) {
-        int level = (indent < 1) ? 1 : indent;
-        CodeBuilder cb = new CodeBuilder();
-
-        cb.t(level - 1).e("public enum $name$ {").arg(protoEnum.getName()).ln();
-        List<EnumEntry> entries = protoEnum.getEntries();
-        if (entries != null && !entries.isEmpty()) {
-            Optional<EnumEntry> maxLen = entries.stream()
-                    .max(Comparator.comparingInt(e -> e.getLabel().length()));
-            int len = maxLen.isPresent() ? maxLen.get().getLabel().length() : 1;
-
-            List<EnumEntry> es = new ArrayList<>();
-            entries.stream()
-                    .sorted(Comparator.comparingInt(EnumEntry::getValue))
-                    .forEach(es::add);
-            CodeBuilder vsb = new CodeBuilder();
-            CodeBuilder psb = new CodeBuilder();
-            for (int i = 0; i < es.size(); i++) {
-                EnumEntry o = es.get(i);
-                String sep = (i != es.size() - 1) ? "," : ";";
-                String spaces = getFillSpaces(len - o.getLabel().length());
-                String[] args = new String[]{o.getLabel(), spaces,
-                        String.valueOf(o.getValue()), sep};
-                cb.t(level).e("$label$$spaces$($value$)$;$").arg(args).ln();
-
-                psb.t(level).e("public static final int $lable$_VALUE = $value$;")
-                        .arg(o.getLabel(), String.valueOf(o.getValue())).ln();
-
-                vsb.t(level + 2).e("case $value$:").arg(String.valueOf(o.getValue())).ln();
-                vsb.t(level + 3).e("return $name$.$label$;")
-                        .arg(protoEnum.getName(), o.getLabel()).ln();
-            }
-            cb.ln();
-
-            cb.c(psb.toString()).ln();
-
-            cb.t(level).c("private final int value;").ln(2);
-
-            cb.t(level).e("private $label$(int value) {").arg(protoEnum.getName()).ln();
-            cb.t(level + 1).c("this.value = value;").ln();
-            cb.t(level).c("}").ln();
-
-            cb.t(level).c("public int getValue() {").ln();
-            cb.t(level + 1).c("return this.value;").ln();
-            cb.t(level).c("}").ln(2);
-
-            cb.t(level).e("public static $name$ valueOf(int value) {")
-                    .arg(protoEnum.getName()).ln();
-            cb.t(level + 1).c("switch (value) {").ln();
-            cb.c(vsb.toString());
-            cb.t(level + 2).c("default:").ln();
-            cb.t(level + 3).e("throw new IllegalArgumentException("
-                            + "\"no enum value $value$ \" + value);")
-                    .arg(protoEnum.getName()).ln();
-
-            cb.t(level + 1).c("}").ln();
-            cb.t(level).c("}").ln();
-        }
-        cb.t(level - 1).c("}");
-
-        return cb.toString();
-    }
 }
