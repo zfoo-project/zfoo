@@ -18,7 +18,7 @@ import com.zfoo.protocol.serializer.protobuf.wire.*;
 import com.zfoo.protocol.serializer.protobuf.wire.Comment.CommentType;
 import com.zfoo.protocol.serializer.protobuf.wire.Field.Cardinality;
 import com.zfoo.protocol.serializer.protobuf.wire.Field.Type;
-import com.zfoo.protocol.serializer.protobuf.wire.ProtoEnum.EnumEntry;
+import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
 
@@ -181,15 +181,10 @@ public class ProtoParser {
                     comments.clear();
                     break;
                 case "enum":
-                    addCommentsToProto(proto);
-                    ProtoEnum protoEnum = parseEnum();
-                    proto.addEnum(protoEnum);
-                    comments.clear();
+                    notSupportEnum();
                     break;
                 case "extend":
-                    addCommentsToProto(proto);
-                    proto.addExtend(parseExtend());
-                    comments.clear();
+                    notSupportExtend();
                     break;
                 default:
                     break;
@@ -203,6 +198,21 @@ public class ProtoParser {
         }
 
         return proto;
+    }
+
+    private void notSupportEnum() {
+        var name = readToken();
+        throw new RuntimeException(StringUtils.format("zfoo not support enum definition in message:[{}]", name));
+    }
+
+    private void notSupportExtend() {
+        var name = readToken();
+        throw new RuntimeException(StringUtils.format("zfoo not support extend syntax in message:[{}]", name));
+    }
+
+    private void notSupportOneof() {
+        var name = readToken();
+        throw new RuntimeException(StringUtils.format("zfoo not support oneof field in message:[{}]", name));
     }
 
     private void addCommentsToProto(Proto proto) {
@@ -226,56 +236,6 @@ public class ProtoParser {
         }
         throw new RuntimeException(ROW_MSG + row + "] colum ["
                 + (pos - rowsPos.get(row)) + "] not \"" + separatorChar + "\"");
-    }
-
-    public int enumValue(String number) {
-        int v = parseInt(number);
-        if (v < 0) {
-            throw new RuntimeException("Enum value can't is [" + v + "]");
-        }
-        return v;
-    }
-
-    public Extend parseExtend() throws RuntimeException {
-        trim();
-        String name = readToken();
-        if (name.length() == 0) {
-            throw new RuntimeException(ROW_MSG + row + "] extend name not set");
-        }
-        Extend ext = new Extend();
-        if (!comments.isEmpty()) {
-            ext.setComment(comments.get(comments.size() - 1));
-            comments.clear();
-        }
-        ext.setName(name);
-        System.out.println("extend " + name + START_MSG);
-        blockStarted("extend");
-        String token = readToken();
-        while (token.length() > 0) {
-            if ("//".equals(token)) {
-                String comment = readSingleLineComment();
-                addCommentLines(CommentType.INLINE, Arrays.asList(comment));
-                nextLine();
-            } else if (fieldCardinalities.contains(token)) {
-                Field field = parseField(
-                        Cardinality.valueOf(token.toUpperCase(Locale.ENGLISH)),
-                        null);
-                ext.addField(field);
-            } else {
-                Field field = parseField(Cardinality.OPTIONAL, token);
-                ext.addField(field);
-            }
-            boolean isEnd = blockEnd();
-            if (isEnd) {
-                fieldEnd();
-                return ext;
-            }
-            trim();
-            trimLines();
-            token = readToken();
-        }
-
-        throw new RuntimeException(ROW_MSG + row + "] extend not end");
     }
 
     public static int parseInt(String number) throws RuntimeException {
@@ -330,9 +290,9 @@ public class ProtoParser {
      * @throws RuntimeException
      */
     private String readToken() throws RuntimeException {
+        trim();
         StringBuilder token = new StringBuilder();
         char c;
-        trim();
         while (pos < data.length) {
             c = data[pos];
             if (c == '/' && token.length() == 0) {
@@ -426,86 +386,6 @@ public class ProtoParser {
                 || (c == ')');
     }
 
-    private ProtoEnum parseEnum() throws RuntimeException {
-        trim();
-        String name = readToken();
-        if (name.length() == 0) {
-            throw new RuntimeException(ROW_MSG + row + "] Enum name not set");
-        }
-        ProtoEnum protoEnum = new ProtoEnum();
-        protoEnum.setName(name);
-        System.out.println("Enum " + name + START_MSG);
-        blockStarted("enum");
-        nextLine();
-        trim();
-        List<EnumEntry> entries = new ArrayList<>();
-        String token = readToken();
-        while (token.length() > 0) {
-            if ("//".equals(token)) {
-                addCommentLine(CommentType.INLINE, readSingleLineComment());
-                nextLine();
-            } else if ("option".equals(token)) {
-                trim();
-                String optionLabel = readToken();
-                readValueSeparator('=');
-                ProtoValue pv = readValue();
-                String optionValue = pv.getValue();
-                Option option = new Option();
-                option.setName(optionLabel).setValue(optionValue);
-                protoEnum.setOptions(Arrays.asList(option));
-            } else {
-                EnumEntry entry = new EnumEntry();
-                entry.setLabel(token);
-                trim();
-                parseEnumItemValue(entry);
-                entries.add(entry);
-            }
-            boolean isEnd = blockEnd();
-            if (isEnd) {
-                fieldEnd();
-                System.out.println("Enum " + name + " end");
-                protoEnum.setEntries(entries);
-                return protoEnum;
-            }
-            trim();
-            token = readToken();
-        }
-        throw new RuntimeException("Enum has't end with '}'");
-    }
-
-    private void parseEnumItemValue(EnumEntry entry) throws RuntimeException {
-        try {
-            readValueSeparator('=');
-        } catch (Exception e) {
-            throw new RuntimeException("EnumEntry has't char '='", e);
-        }
-        String token;
-        ProtoValue pv = readValue();
-        int value = enumValue(pv.getValue());
-        entry.setValue(value);
-        if (pv.getOptions() != null) {
-            entry.setOptions(pv.getOptions());
-        }
-        trim();
-        String comment = "";
-        token = readToken();
-        if ("//".equals(token)) {
-            comment = readSingleLineComment();
-        }
-        nextLine();
-        if (comment != null && comment.length() > 0) {
-            List<String> cs = new ArrayList<>();
-            cs.add(comment);
-            addCommentLines(CommentType.INLINE, cs);
-        }
-        Comment cmt = null;
-        if (!comments.isEmpty()) {
-            cmt = comments.get(comments.size() - 1);
-        }
-        entry.setComment(cmt);
-        comments.clear();
-    }
-
     private ProtoMessage parseMessage() throws RuntimeException {
         ProtoMessage msg = new ProtoMessage();
         trim();
@@ -531,19 +411,16 @@ public class ProtoParser {
                         null);
                 msg.addField(field);
             } else if ("enum".equals(token)) {
-                ProtoEnum protoEnum = parseEnum();
-                msg.addEnum(protoEnum);
+                notSupportEnum();
+            } else if ("extend".equals(token)) {
+                notSupportExtend();
+            } else if ("oneof".equals(token)) {
+                notSupportOneof();
             } else if ("message".equals(token)) {
                 msg.addMessage(parseMessage());
-            } else if ("extensions".equals(token)) {
-                String sextensions = parseExtensions();
-                Extensions extensions = Extensions.parseExtensions(sextensions);
-                msg.addExtensions(extensions);
             } else if ("reserved".equals(token)) {
                 String reserved = parseReserved();
                 msg.addReserved(Reserved.parseReserved(reserved, comments));
-            } else if ("oneof".equals(token)) {
-                msg.addOneof(parseOneof());
             } else {
                 Field field = parseField(Cardinality.OPTIONAL, token);
                 msg.addField(field);
@@ -567,48 +444,6 @@ public class ProtoParser {
             trim();
             next = nextLine();
         }
-    }
-
-    private Oneof parseOneof() throws RuntimeException {
-        trim();
-        String name = readToken();
-        if (name.length() == 0) {
-            throw new RuntimeException(ROW_MSG + row + "] oneof name not set");
-        }
-
-        Oneof oneof = new Oneof();
-        if (!comments.isEmpty()) {
-            oneof.setComment(comments.get(comments.size() - 1));
-            comments.clear();
-        }
-        oneof.setName(name);
-        System.out.println(ONEOF_MSG + name + START_MSG);
-        blockStarted("oneof");
-        String token = readToken();
-        while (token.length() > 0) {
-            if ("//".equals(token)) {
-                String comment = readSingleLineComment();
-                addCommentLines(CommentType.INLINE, Arrays.asList(comment));
-                nextLine();
-            } else if (fieldCardinalities.contains(token)) {
-                Field field = parseField(
-                        Cardinality.valueOf(token.toUpperCase(Locale.ENGLISH)),
-                        null);
-                oneof.addField(field);
-            } else {
-                Field field = parseField(Cardinality.OPTIONAL, token);
-                oneof.addField(field);
-            }
-            boolean isEnd = blockEnd();
-            if (isEnd) {
-                System.out.println(ONEOF_MSG + name + " end");
-                fieldEnd();
-                return oneof;
-            }
-            trim();
-            token = readToken();
-        }
-        throw new RuntimeException("oneof not end");
     }
 
     private String parseReserved() throws RuntimeException {
@@ -636,10 +471,6 @@ public class ProtoParser {
         }
         throw new RuntimeException(ROW_MSG + row +
                 "] expression not end with char ';'");
-    }
-
-    private String parseExtensions() throws RuntimeException {
-        return readExpression();
     }
 
     private Field parseField(Cardinality cardinality, String fieldType) throws RuntimeException {

@@ -112,17 +112,12 @@ public class JavaBuilder {
         }
     }
 
-    public String getAnnotationType(Field field, Proto proto, Map<String, ProtoEnum> protoEnums) {
+    public String getAnnotationType(Field field) {
         String type = field.getTypeString();
         if (BASE_TYPES.contains(type.toLowerCase(Locale.ENGLISH))) {
             return "Type." + Type.valueOf(type.toUpperCase(Locale.ENGLISH));
         } else {
-            String name = getJavaPackage(proto) + "." + type;
-            if (protoEnums.containsKey(name)) {
-                return "Type." + Type.ENUM;
-            } else {
-                return "Type." + Type.MESSAGE;
-            }
+            return "Type." + Type.MESSAGE;
         }
     }
 
@@ -132,14 +127,6 @@ public class JavaBuilder {
             msg.getFields().forEach(e -> {
                 getJavaType(e, imps, buildOps);
                 tmp.add(e);
-            });
-        }
-        List<Oneof> oneofs = msg.getOneofs();
-        if (oneofs != null) {
-            oneofs.forEach(o -> {
-                if (o.getFields() != null) {
-                    o.getFields().forEach(tmp::add);
-                }
             });
         }
 
@@ -162,33 +149,6 @@ public class JavaBuilder {
         cb.t(level).c(" */").ln();
     }
 
-    private Map<String, ProtoEnum> getAllProtoEnum(Proto proto, Map<String, Proto> protos) {
-        Map<String, ProtoEnum> allEnums = new HashMap<>();
-        List<ProtoEnum> protoEnums = proto.getEnums();
-        if (protoEnums != null && !protoEnums.isEmpty()) {
-            for (ProtoEnum protoEnum : protoEnums) {
-                String packName = proto.getProtoPackage();
-                String javaPack = getJavaPackage(proto);
-                if (javaPack != null && javaPack.trim().length() > 0) {
-                    packName = javaPack;
-                }
-                allEnums.put(packName + "." + protoEnum.getName(), protoEnum);
-            }
-        }
-        List<String> impProtos = proto.getImports();
-        if (impProtos == null || impProtos.isEmpty()) {
-            return allEnums;
-        }
-        for (String protoName : impProtos) {
-            Proto impProto = protos.get(protoName);
-            if (impProto == null) {
-                continue;
-            }
-            allEnums.putAll(getAllProtoEnum(impProto, protos));
-        }
-        return allEnums;
-    }
-
     private String getJavaPackage(Proto proto) {
         if (CollectionUtils.isEmpty(proto.getOptions())) {
             return StringUtils.EMPTY;
@@ -202,7 +162,6 @@ public class JavaBuilder {
     }
 
     public String buildMessage(Proto proto, ProtoMessage msg, int indent, Map<String, String> defineMsgs, PbBuildOption buildOps, Map<String, Proto> protos) {
-        Map<String, ProtoEnum> protoEnums = getAllProtoEnum(proto, protos);
         int level = Math.max(indent, 1);
         final CodeBuilder cb = new CodeBuilder();
         List<Field> tmp = new ArrayList<>();
@@ -235,7 +194,7 @@ public class JavaBuilder {
             getCode = new CodeBuilder();
             setCode = new CodeBuilder();
 
-            String typeName = getAnnotationType(f, proto, protoEnums);
+            String typeName = getAnnotationType(f);
             if (msg.getName().equals("Type")) {
                 typeName = Proto.class.getPackage().getName() + ".wire.Field." + typeName;
             }

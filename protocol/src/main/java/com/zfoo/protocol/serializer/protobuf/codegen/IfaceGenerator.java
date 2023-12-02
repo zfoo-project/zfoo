@@ -65,17 +65,6 @@ public class IfaceGenerator {
         JavaBuilder builder = new JavaBuilder();
 
         Map<String, String> msgComments = new HashMap<>();
-        List<ProtoEnum> enums = proto.getEnums();
-        if (CollectionUtils.isNotEmpty(enums)) {
-            String enumPath = srcPath + File.separator;
-            enums.stream().sorted(Comparator.comparing(ProtoEnum::getName))
-                    .forEach(it -> {
-                                var code = builder.buildEnum(it, 1, buildOps);
-                                var filePath = enumPath + File.separator + it.getName() + ".java";
-                                FileUtils.writeStringToFile(new File(filePath), code, false);
-                            }
-                    );
-        }
 
         List<ProtoMessage> msgs = proto.getMessages();
         if (CollectionUtils.isNotEmpty(msgs)) {

@@ -54,14 +54,6 @@ public class Proto {
      */
     private String comment;
     /**
-     * 消息内置的枚举类型
-     */
-    private List<ProtoEnum> enums = new ArrayList<>();
-    /**
-     * 消息内嵌的扩展的消息列表
-     */
-    private List<Extend> protoExtends = new ArrayList<>();
-    /**
      * proto文件的单行注释列表
      */
     private List<String> comments = new ArrayList<>();
@@ -87,19 +79,6 @@ public class Proto {
 
     public Proto addMsg(ProtoMessage msg) {
         getMessages().add(msg);
-        return this;
-    }
-
-    public Proto addEnum(ProtoEnum protoEnum) {
-        getEnums().add(protoEnum);
-        return this;
-    }
-
-    public Proto addExtend(Extend extend) {
-        if (extend == null) {
-            return this;
-        }
-        getProtoExtends().add(extend);
         return this;
     }
 
@@ -197,24 +176,6 @@ public class Proto {
     public Proto setComment(String comment) {
         this.comment = comment;
         return this;
-    }
-
-    /**
-     * 消息内置的枚举类型
-     *
-     * @return the enums
-     */
-    public List<ProtoEnum> getEnums() {
-        return enums;
-    }
-
-    /**
-     * 消息内嵌的扩展的消息列表
-     *
-     * @return the protoExtends
-     */
-    public List<Extend> getProtoExtends() {
-        return protoExtends;
     }
 
     /**
