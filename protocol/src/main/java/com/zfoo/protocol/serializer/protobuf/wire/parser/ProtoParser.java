@@ -215,6 +215,11 @@ public class ProtoParser {
         throw new RuntimeException(StringUtils.format("zfoo not support oneof field in message:[{}]", name));
     }
 
+    private void notSupportReserved() {
+        var name = readToken();
+        throw new RuntimeException(StringUtils.format("zfoo not support reserved syntax in message:[{}]", name));
+    }
+
     private void addCommentsToProto(Proto proto) {
         if (CollectionUtils.isEmpty(comments)) {
             return;
@@ -416,11 +421,10 @@ public class ProtoParser {
                 notSupportExtend();
             } else if ("oneof".equals(token)) {
                 notSupportOneof();
+            } else if ("reserved".equals(token)) {
+                notSupportReserved();
             } else if ("message".equals(token)) {
                 msg.addMessage(parseMessage());
-            } else if ("reserved".equals(token)) {
-                String reserved = parseReserved();
-                msg.addReserved(Reserved.parseReserved(reserved, comments));
             } else {
                 Field field = parseField(Cardinality.OPTIONAL, token);
                 msg.addField(field);
@@ -444,33 +448,6 @@ public class ProtoParser {
             trim();
             next = nextLine();
         }
-    }
-
-    private String parseReserved() throws RuntimeException {
-        return readExpression();
-    }
-
-    private String readExpression() throws RuntimeException {
-        StringBuilder exp = new StringBuilder();
-        trim();
-        char c;
-        while (pos < data.length) {
-            c = data[pos];
-            switch (c) {
-                case '\n':
-                    throw new RuntimeException(ROW_MSG + row +
-                            "] expression not end with char ';'");
-                case ';':
-                    pos++;
-                    trim();
-                    return exp.toString();
-                default:
-                    exp.append(c);
-            }
-            pos++;
-        }
-        throw new RuntimeException(ROW_MSG + row +
-                "] expression not end with char ';'");
     }
 
     private Field parseField(Cardinality cardinality, String fieldType) throws RuntimeException {

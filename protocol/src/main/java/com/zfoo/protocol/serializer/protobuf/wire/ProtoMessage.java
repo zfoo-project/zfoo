@@ -33,11 +33,6 @@ public class ProtoMessage {
      */
     private List<ProtoMessage> protoMessages;
     /**
-     * 保留字段的设置
-     */
-    private List<Reserved> reserveds;
-
-    /**
      * 消息的备注信息
      */
     private Comment comment;
@@ -55,14 +50,6 @@ public class ProtoMessage {
             return this;
         }
         getFields().add(field);
-        return this;
-    }
-
-    public ProtoMessage addReserved(Reserved reserved) {
-        if (reserved == null) {
-            return this;
-        }
-        getReserveds().add(reserved);
         return this;
     }
 
@@ -135,33 +122,6 @@ public class ProtoMessage {
         } else {
             this.protoMessages = new ArrayList<>();
             this.protoMessages.addAll(protoMessages);
-        }
-        return this;
-    }
-
-    /**
-     * 保留字段的设置
-     *
-     * @return the reserveds
-     */
-    public List<Reserved> getReserveds() {
-        if (reserveds == null) {
-            reserveds = new ArrayList<>();
-        }
-        return reserveds;
-    }
-
-    /**
-     * 保留字段的设置
-     *
-     * @param reserveds the reserveds to set
-     */
-    public ProtoMessage setReserveds(List<Reserved> reserveds) {
-        if (reserveds instanceof ArrayList) {
-            this.reserveds = reserveds;
-        } else {
-            this.reserveds = new ArrayList<>();
-            this.reserveds.addAll(reserveds);
         }
         return this;
     }
