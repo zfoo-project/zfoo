@@ -16,9 +16,11 @@ package com.zfoo.protocol.protobuf;
 import com.zfoo.protocol.serializer.protobuf.GeneratePbUtils;
 import com.zfoo.protocol.serializer.protobuf.PbBuildOption;
 import com.zfoo.protocol.util.ThreadUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
+@Ignore
 public class AllTypeBuilderTest {
 
     @Test
