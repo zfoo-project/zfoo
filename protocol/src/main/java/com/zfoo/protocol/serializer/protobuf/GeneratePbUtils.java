@@ -13,6 +13,8 @@
 
 package com.zfoo.protocol.serializer.protobuf;
 
+import com.zfoo.protocol.anno.Note;
+import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.parser.Proto;
 import com.zfoo.protocol.serializer.protobuf.parser.ProtoParser;
@@ -93,6 +95,11 @@ public abstract class GeneratePbUtils {
             type = StringUtils.format("Map<{}, {}>", getBoxJavaType(mapField.getKey().value()), getBoxJavaType(mapField.getValue()));
             return type;
         }
+        if (pbField.getCardinality() == PbField.Cardinality.REPEATED) {
+            var boxedTypeName = getBoxJavaType(pbField);
+            type = StringUtils.format("List<?>", boxedTypeName);
+            return type;
+        }
         return getJavaType(type);
     }
 
@@ -120,14 +127,23 @@ public abstract class GeneratePbUtils {
 
     private static Set<String> buildMessageImports(PbGenerateOperation buildOption, List<Proto> protos, Proto proto, PbMessage pbMessage) {
         var imports = new HashSet<String>();
+        imports.add(Protocol.class.getName());
+
         var pbFields = pbMessage.getFields();
         if (CollectionUtils.isEmpty(pbFields)) {
             return imports;
         }
 
         for (var pbField : pbFields) {
+            if (CollectionUtils.isNotEmpty(pbField.getComments())) {
+                imports.add(Note.class.getName());
+            }
+
             if (pbField instanceof PbMapField) {
                 imports.add(Map.class.getName());
+                var pbMapField = (PbMapField) pbField;
+                buildImports(buildOption, protos, proto, pbMapField.getKey().value(), imports);
+                buildImports(buildOption, protos, proto, pbMapField.getValue(), imports);
                 continue;
             }
 
@@ -169,20 +185,40 @@ public abstract class GeneratePbUtils {
         throw new RuntimeException(StringUtils.format("not found type:[{}] in proto:[{}]", fieldType, proto.getName()));
     }
 
-    private static void buildDocComment(StringBuilder builder, PbMessage msg) {
+    private static String buildDocumentComment(PbMessage msg) {
         if (CollectionUtils.isEmpty(msg.getComments())) {
-            return;
+            return StringUtils.EMPTY;
         }
+        var builder = new StringBuilder();
         builder.append("/**").append(LS);
         msg.getComments().forEach(it -> builder.append(StringUtils.format(" * {}", it)).append(LS));
         builder.append(" */").append(LS);
+        return builder.toString();
     }
 
-    private static void buildFieldComment(StringBuilder builder, PbField pbField) {
-        if (CollectionUtils.isEmpty(pbField.getComments())) {
-            return;
+    private static String buildFieldComment(PbField pbField) {
+        var comments = pbField.getComments();
+        if (CollectionUtils.isEmpty(comments)) {
+            return StringUtils.EMPTY;
         }
-        pbField.getComments().forEach(it -> builder.append(TAB).append(StringUtils.format("// {}", it)).append(LS));
+        var builder = new StringBuilder();
+        if (comments.size() == 1) {
+            builder.append(TAB).append(StringUtils.format("@Note(\"{}\")", comments.get(0))).append(LS);
+        } else {
+            builder.append(TAB).append("@Note(").append(LS);
+            for (int i = 0; i < comments.size(); i++) {
+                var comment = comments.get(i);
+                if (i == comments.size() - 1) {
+                    builder.append(TAB + TAB);
+                    builder.append(StringUtils.format("\"{}\")", comment));
+                } else {
+                    builder.append(TAB + TAB);
+                    builder.append(StringUtils.format("\"{}\\n\" + ", comment, LS));
+                }
+                builder.append(LS);
+            }
+        }
+        return builder.toString();
     }
 
     public static String buildMessage(PbGenerateOperation buildOption, List<Proto> protos, Proto proto, PbMessage pbMessage) {
@@ -194,7 +230,10 @@ public abstract class GeneratePbUtils {
                 .sorted(Comparator.naturalOrder())
                 .forEach(it -> builder.append(StringUtils.format("import {};", it)).append(LS));
 
-        buildDocComment(builder, pbMessage);
+        // document
+        var documentComment = buildDocumentComment(pbMessage);
+        builder.append(documentComment);
+
         builder.append(StringUtils.format("public class {} {", pbMessage.getName())).append(LS);
 
         var pbFields = pbMessage.getFields()
@@ -204,14 +243,11 @@ public abstract class GeneratePbUtils {
 
         var builderMethod = new StringBuilder();
         for (var pbField : pbFields) {
-            buildFieldComment(builder, pbField);
-            String type = getJavaType(pbField);
-            String name = pbField.getName();
-            if (pbField.getCardinality() == PbField.Cardinality.REPEATED) {
-                String boxedTypeName = getBoxJavaType(pbField);
-                type = "List<" + boxedTypeName + ">";
-            }
+            var type = getJavaType(pbField);
+            var name = pbField.getName();
 
+            var fieldComment = buildFieldComment(pbField);
+            builder.append(fieldComment);
             builder.append(TAB).append(StringUtils.format("private {} {};", type, name)).append(LS);
 
             String getMethod;

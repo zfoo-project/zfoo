@@ -15,6 +15,7 @@ message SimpleObject {
 
 // 测试pb协议1
 message Proj {
+  // 这是属性的注释
   int64 id = 1;
   string name = 2;
   string repoPath = 3;
