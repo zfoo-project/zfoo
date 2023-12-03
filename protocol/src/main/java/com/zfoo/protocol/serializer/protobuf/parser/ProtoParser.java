@@ -20,15 +20,12 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
 
-
 /**
  * proto文件的解析器
  *
  * @date : 2019/12/2
  */
 public class ProtoParser {
-
-
     /**
      * 需要解析的字符数组
      */
@@ -99,22 +96,22 @@ public class ProtoParser {
                     readValueSeparator('=');
                     ProtoValue pv = readValueUtilSemicolon();
                     String optionValue = pv.getValue();
-                    PbOption option = new PbOption();
-                    option.setName(optionLabel);
-                    option.setValue(optionValue);
-                    proto.addOption(option);
+                    PbOption pbOption = new PbOption();
+                    pbOption.setName(optionLabel);
+                    pbOption.setValue(optionValue);
+                    proto.getOptions().add(pbOption);
                     comments.clear();
                     break;
                 case "import":
                     addCommentsToProto(proto);
                     readValueSeparator(' ');
                     ProtoValue impValue = readValueUtilSemicolon();
-                    proto.addImport(impValue.getValue());
+                    proto.getImports().add(impValue.getValue());
                     comments.clear();
                     break;
                 case "message":
                     PbMessage msg = parseMessage();
-                    proto.addMsg(msg);
+                    proto.getPbMessages().add(msg);
                     comments.clear();
                     break;
                 case "enum":

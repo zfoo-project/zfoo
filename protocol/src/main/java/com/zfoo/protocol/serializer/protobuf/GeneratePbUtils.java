@@ -77,7 +77,7 @@ public class GeneratePbUtils {
             if (options != null) {
                 options.forEach(o -> protoOptions.put(o.getName(), o.getValue()));
             }
-            if (CollectionUtils.isEmpty(proto.getMessages())) {
+            if (CollectionUtils.isEmpty(proto.getPbMessages())) {
                 continue;
             }
 
@@ -91,7 +91,7 @@ public class GeneratePbUtils {
 
         Map<String, String> msgComments = new HashMap<>();
 
-        List<PbMessage> msgs = proto.getMessages();
+        List<PbMessage> msgs = proto.getPbMessages();
         for (var msg : msgs) {
             StringBuilder mc = new StringBuilder();
             if (CollectionUtils.isNotEmpty(msg.getComments())) {

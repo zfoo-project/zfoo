@@ -55,105 +55,59 @@ public class Proto {
      */
     private List<String> comments = new ArrayList<>();
 
-    public Proto setSyntax(Syntax syntax) {
-        this.syntax = syntax;
-        return this;
-    }
-
-    public Proto addOption(PbOption option) {
-        getOptions().add(option);
-        return this;
-    }
-
-    public Proto addImport(String value) {
-        getImports().add(value);
-        return this;
-    }
-
-    public Proto addMsg(PbMessage msg) {
-        getMessages().add(msg);
-        return this;
-    }
-
-    /**
-     * Proto描述文件的名称
-     *
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Proto描述文件的名称
-     *
-     * @param name the name to set
-     * @return
-     */
-    public Proto setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
-    /**
-     * Proto的可选信息
-     *
-     * @return the options
-     */
     public List<PbOption> getOptions() {
         return options;
     }
 
-    /**
-     * 文档版本没有指定默认为proto2
-     *
-     * @return the syntax
-     */
+    public void setOptions(List<PbOption> options) {
+        this.options = options;
+    }
+
     public Syntax getSyntax() {
         return syntax;
     }
 
-    /**
-     * proto文件的包名
-     *
-     * @return the protoPackage
-     */
+    public void setSyntax(Syntax syntax) {
+        this.syntax = syntax;
+    }
+
     public String getProtoPackage() {
         return protoPackage;
     }
 
-    /**
-     * proto文件的包名
-     *
-     * @param protoPackage the protoPackage to set
-     * @return
-     */
-    public Proto setProtoPackage(String protoPackage) {
+    public void setProtoPackage(String protoPackage) {
         this.protoPackage = protoPackage;
-        return this;
     }
 
-    /**
-     * 定义的消息列表
-     *
-     * @return the messages
-     */
-    public List<PbMessage> getMessages() {
+    public List<PbMessage> getPbMessages() {
         return pbMessages;
     }
 
-    /**
-     * 文档导入的文件的路径列表
-     *
-     * @return the imports
-     */
+    public void setPbMessages(List<PbMessage> pbMessages) {
+        this.pbMessages = pbMessages;
+    }
+
     public List<String> getImports() {
         return imports;
     }
 
+    public void setImports(List<String> imports) {
+        this.imports = imports;
+    }
 
     public List<String> getComments() {
         return comments;
     }
 
+    public void setComments(List<String> comments) {
+        this.comments = comments;
+    }
 }
