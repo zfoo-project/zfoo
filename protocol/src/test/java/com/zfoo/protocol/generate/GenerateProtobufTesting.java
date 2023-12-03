@@ -25,7 +25,7 @@ public class GenerateProtobufTesting {
     public void testAllTypeTest() {
         var buildOption = new PbGenerateOperation();
         buildOption.setProtoPath("D:\\github\\zfoo\\protocol\\src\\test\\resources\\proto");
-        buildOption.setOutputPath("D:\\github\\zfoo\\protocol\\src\\test\\tmpsrc/");
+        buildOption.setOutputPath("D:\\github\\zfoo\\protocol\\src\\test\\zfoopb");
         buildOption.setJavaPackage("com.zfoo.protocol.generate.test");
 
         GeneratePbUtils.create(buildOption);
