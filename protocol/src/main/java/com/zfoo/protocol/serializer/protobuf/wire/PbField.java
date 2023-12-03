@@ -89,84 +89,36 @@ public class PbField {
     private List<String> comments = new ArrayList<>();
 
 
-    /**
-     * 消息属性的规则
-     *
-     * @return the cardinality
-     */
     public Cardinality getCardinality() {
         return cardinality;
     }
 
-    /**
-     * 消息属性的规则
-     *
-     * @param cardinality the cardinality to set
-     * @return
-     */
-    public PbField setCardinality(Cardinality cardinality) {
+    public void setCardinality(Cardinality cardinality) {
         this.cardinality = cardinality;
-        return this;
     }
 
-    /**
-     * 消息属性名称
-     *
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * 消息属性名称
-     *
-     * @param name the name to set
-     * @return
-     */
-    public PbField setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
-    /**
-     * 消息属性值的类型
-     *
-     * @return the type
-     */
     public String getType() {
         return type;
     }
 
-    /**
-     * 消息属性值的类型
-     *
-     * @param type the type to set
-     * @return
-     */
-    public PbField setType(String type) {
+    public void setType(String type) {
         this.type = type;
-        return this;
     }
 
-    /**
-     * 属性的顺序标记一个消息内不允许重复
-     *
-     * @return the tag
-     */
     public int getTag() {
         return tag;
     }
 
-    /**
-     * 属性的顺序标记一个消息内不允许重复
-     *
-     * @param tag the tag to set
-     * @return
-     */
-    public PbField setTag(int tag) {
+    public void setTag(int tag) {
         this.tag = tag;
-        return this;
     }
 
     public List<String> getComments() {

@@ -37,77 +37,29 @@ public class ProtoMessage {
      */
     private List<String> comments = new ArrayList<>();
 
-    public ProtoMessage addMessage(ProtoMessage child) {
-        if (child == null) {
-            return this;
-        }
-        getMessages().add(child);
-        return this;
-    }
 
-    public ProtoMessage addField(PbField field) {
-        if (field == null) {
-            return this;
-        }
-        getFields().add(field);
-        return this;
-    }
-
-    /**
-     * 消息的名称
-     *
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * 消息的名称
-     *
-     * @param name the name to set
-     */
-    public ProtoMessage setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
-    /**
-     * 消息包含的Fields列表
-     *
-     * @return the fields
-     */
     public List<PbField> getFields() {
         return fields;
     }
 
-    /**
-     * 消息包含的Fields列表
-     *
-     * @param fields the fields to set
-     */
-    public ProtoMessage setFields(List<PbField> fields) {
+    public void setFields(List<PbField> fields) {
         this.fields = fields;
-        return this;
     }
 
-    /**
-     * 消息内嵌的Message列表
-     *
-     * @return the messages
-     */
-    public List<ProtoMessage> getMessages() {
+    public List<ProtoMessage> getProtoMessages() {
         return protoMessages;
     }
 
-    /**
-     * 消息内嵌的Message列表
-     *
-     * @param protoMessages the messages to set
-     */
-    public ProtoMessage setMessages(List<ProtoMessage> protoMessages) {
+    public void setProtoMessages(List<ProtoMessage> protoMessages) {
         this.protoMessages = protoMessages;
-        return this;
     }
 
     public List<String> getComments() {

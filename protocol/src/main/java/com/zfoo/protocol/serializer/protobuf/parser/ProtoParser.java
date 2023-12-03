@@ -107,7 +107,8 @@ public class ProtoParser {
                     ProtoValue pv = readValueUtilSemicolon();
                     String optionValue = pv.getValue();
                     Option option = new Option();
-                    option.setName(optionLabel).setValue(optionValue);
+                    option.setName(optionLabel);
+                    option.setValue(optionValue);
                     proto.addOption(option);
                     comments.clear();
                     break;
@@ -176,10 +177,10 @@ public class ProtoParser {
                 notSupportInnerMessage();
             } else if (Cardinality.cardinalityOf(token) != null) {
                 PbField field = parseField(Cardinality.cardinalityOf(token), null);
-                msg.addField(field);
+                msg.getFields().add(field);
             } else {
                 PbField field = parseField(Cardinality.OPTIONAL, token);
-                msg.addField(field);
+                msg.getFields().add(field);
             }
             boolean isEnd = blockEnd();
             if (isEnd) {
@@ -405,14 +406,17 @@ public class ProtoParser {
         PbField field;
         if (gType != null) {
             TypeProtobuf type = TypeProtobuf.valueOf(gType.getKeyType().toUpperCase(Locale.ENGLISH));
-            field = new MapField().setKey(type).setValue(gType.getValueType());
+            var mapField = new MapField();
+            mapField.setKey(type);
+            mapField.setValue(gType.getValueType());
+            field = mapField;
         } else {
             field = new PbField();
         }
-        field.setCardinality(cardinality)
-                .setName(fieldName)
-                .setTag(tag)
-                .setType(fieldType);
+        field.setCardinality(cardinality);
+        field.setName(fieldName);
+        field.setTag(tag);
+        field.setType(fieldType);
         field.getComments().addAll(comments);
         comments.clear();
         return field;
@@ -798,7 +802,8 @@ public class ProtoParser {
             readValueSeparator('=');
             String value = readOptionValue();
             Option option = new Option();
-            option.setName(name).setValue(value);
+            option.setName(name);
+            option.setValue(value);
             options.add(option);
             trim();
         }

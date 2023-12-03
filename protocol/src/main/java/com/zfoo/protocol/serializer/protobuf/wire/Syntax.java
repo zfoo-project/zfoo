@@ -31,14 +31,4 @@ public enum Syntax {
         return value;
     }
 
-    public static Syntax fromValue(String value) {
-        switch (value) {
-            case "proto2":
-                return Syntax.PROTO_2;
-            case "proto3":
-                return Syntax.PROTO_3;
-            default:
-                throw new IllegalArgumentException("no enum value Syntax " + value);
-        }
-    }
 }

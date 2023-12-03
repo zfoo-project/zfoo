@@ -23,35 +23,19 @@ public class MapField extends PbField {
     private TypeProtobuf key;
     private String value;
 
-    /**
-     * @return the key
-     */
     public TypeProtobuf getKey() {
         return key;
     }
 
-    /**
-     * @param key the key to set
-     * @return
-     */
-    public MapField setKey(TypeProtobuf key) {
+    public void setKey(TypeProtobuf key) {
         this.key = key;
-        return this;
     }
 
-    /**
-     * @return the value
-     */
     public String getValue() {
         return value;
     }
 
-    /**
-     * @param value the value to set
-     * @return
-     */
-    public MapField setValue(String value) {
+    public void setValue(String value) {
         this.value = value;
-        return this;
     }
 }

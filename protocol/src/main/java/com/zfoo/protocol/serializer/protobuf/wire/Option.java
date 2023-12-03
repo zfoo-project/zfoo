@@ -27,28 +27,19 @@ public class Option {
      */
     private String value;
 
-    public Option setValue(String value) {
-        this.value = value;
-        return this;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getValue() {
         return value;
     }
 
-    public Option setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public static boolean getBoolean(String value) {
-        if (value == null || value.isEmpty()) {
-            return false;
-        }
-        return "true".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value);
+    public void setValue(String value) {
+        this.value = value;
     }
 }
