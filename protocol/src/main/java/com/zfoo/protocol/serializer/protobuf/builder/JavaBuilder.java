@@ -14,9 +14,9 @@
 package com.zfoo.protocol.serializer.protobuf.builder;
 
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.serializer.protobuf.parser.JavaType;
+import com.zfoo.protocol.serializer.protobuf.parser.TypeJava;
+import com.zfoo.protocol.serializer.protobuf.parser.TypeProtobuf;
 import com.zfoo.protocol.serializer.protobuf.wire.*;
-import com.zfoo.protocol.serializer.protobuf.wire.PbField.Type;
 import com.zfoo.protocol.serializer.protobuf.parser.Proto;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -43,7 +43,7 @@ public class JavaBuilder {
         if (!BASE_TYPES.contains(type.toLowerCase(Locale.ENGLISH))) {
             return type;
         }
-        JavaType javaType = Type.valueOf(type.toUpperCase(Locale.ENGLISH)).javaType();
+        TypeJava javaType = TypeProtobuf.valueOf(type.toUpperCase(Locale.ENGLISH)).javaType();
         return javaType.getTypeString();
     }
 
@@ -58,7 +58,7 @@ public class JavaBuilder {
 
     public String getJavaType(String type) {
         if (BASE_TYPES.contains(type.toLowerCase(Locale.ENGLISH))) {
-            return Type.valueOf(type.toUpperCase(Locale.ENGLISH)).javaType().getTypeString();
+            return TypeProtobuf.valueOf(type.toUpperCase(Locale.ENGLISH)).javaType().getTypeString();
         } else {
             return type;
         }
@@ -67,9 +67,9 @@ public class JavaBuilder {
     public String getAnnotationType(PbField field) {
         String type = field.getTypeString();
         if (BASE_TYPES.contains(type.toLowerCase(Locale.ENGLISH))) {
-            return "Type." + Type.valueOf(type.toUpperCase(Locale.ENGLISH));
+            return "Type." + TypeProtobuf.valueOf(type.toUpperCase(Locale.ENGLISH));
         } else {
-            return "Type." + Type.MESSAGE;
+            return "Type." + TypeProtobuf.MESSAGE;
         }
     }
 
@@ -206,8 +206,8 @@ public class JavaBuilder {
     private String getBoxedTypeName(PbField f) {
         String type = getJavaType(f);
         if (BASE_TYPES.contains(f.getTypeString())) {
-            JavaType javaType = null;
-            javaType = Type.valueOf(f.getTypeString().toUpperCase(Locale.ENGLISH)).javaType();
+            TypeJava javaType = null;
+            javaType = TypeProtobuf.valueOf(f.getTypeString().toUpperCase(Locale.ENGLISH)).javaType();
             if (javaType != null && javaType.getTypeString() != null) {
                 type = javaType.getBoxedType();
             }

@@ -13,12 +13,14 @@
 
 package com.zfoo.protocol.serializer.protobuf.wire;
 
+import com.zfoo.protocol.serializer.protobuf.parser.TypeProtobuf;
+
 /**
  * protocol buffer中Map的Field的结构体定义
  */
 public class MapField extends PbField {
 
-    private Type key;
+    private TypeProtobuf key;
     private String value;
 
     @Override
@@ -36,7 +38,7 @@ public class MapField extends PbField {
     /**
      * @return the key
      */
-    public Type getKey() {
+    public TypeProtobuf getKey() {
         return key;
     }
 
@@ -44,7 +46,7 @@ public class MapField extends PbField {
      * @param key the key to set
      * @return
      */
-    public MapField setKey(Type key) {
+    public MapField setKey(TypeProtobuf key) {
         this.key = key;
         return this;
     }

@@ -13,7 +13,6 @@
 
 package com.zfoo.protocol.serializer.protobuf.wire;
 
-import com.zfoo.protocol.serializer.protobuf.parser.JavaType;
 
 /**
  * protocol buffer协议消息体属性数据类型定义
@@ -49,48 +48,6 @@ public class PbField {
         Cardinality(String value) {
             this.value = value;
         }
-    }
-
-    public enum Type {
-
-        FLOAT("float", JavaType.FLOAT),
-        DOUBLE("double", JavaType.DOUBLE),
-        INT32("int32", JavaType.INT),
-        INT64("int64", JavaType.LONG),
-        UINT32("uint32", JavaType.INT),
-        UINT64("uint64", JavaType.LONG),
-        SINT32("sint32", JavaType.INT),
-        SINT64("sint64", JavaType.LONG),
-        FIXED32("fixed32", JavaType.INT),
-        FIXED64("fixed64", JavaType.LONG),
-        SFIXED32("sfixed32", JavaType.INT),
-        SFIXED64("sfixed64", JavaType.LONG),
-        BOOL("bool", JavaType.BOOLEAN),
-        ENUM("enum", JavaType.ENUM),
-        STRING("string", JavaType.STRING),
-        BYTES("bytes", JavaType.BYTES),
-        MESSAGE("", JavaType.MESSAGE),
-        OBJECT("OBJECT", JavaType.OBJECT),
-        GROUP("group", JavaType.MESSAGE),
-        MAP("", JavaType.MAP);
-
-        private final String value;
-        private final JavaType javaType;
-
-        Type(String value,JavaType javaType) {
-            this.value = value;
-            this.javaType = javaType;
-        }
-
-        public JavaType javaType() {
-            return javaType;
-        }
-
-
-        public String value() {
-            return this.value;
-        }
-
     }
 
     /**

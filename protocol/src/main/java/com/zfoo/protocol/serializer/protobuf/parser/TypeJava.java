@@ -21,7 +21,7 @@ import com.zfoo.protocol.collection.ArrayUtils;
 /**
  * java的数据类型和protocol buffer的数据类型的对应关系以及默认值
  */
-public enum JavaType {
+public enum TypeJava {
     INT("int", "Integer", 0),
     LONG("long", "Long", 0L),
     FLOAT("float", "Float", 0F),
@@ -34,7 +34,7 @@ public enum JavaType {
     OBJECT("Object", "Object", null),
     MAP("Map", "Map", null);
 
-    JavaType(final String typeString, final String boxedType, final Object defaultValue) {
+    TypeJava(final String typeString, final String boxedType, final Object defaultValue) {
         this.typeString = typeString;
         this.boxedType = boxedType;
         this.defaultValue = defaultValue;

@@ -16,7 +16,6 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.wire.*;
 import com.zfoo.protocol.serializer.protobuf.wire.Comment.CommentType;
 import com.zfoo.protocol.serializer.protobuf.wire.PbField.Cardinality;
-import com.zfoo.protocol.serializer.protobuf.wire.PbField.Type;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
@@ -286,9 +285,6 @@ public class ProtoParser {
 
     /**
      * 读取一个标识符
-     *
-     * @return
-     * @throws RuntimeException
      */
     private String readToken() throws RuntimeException {
         trim();
@@ -426,7 +422,7 @@ public class ProtoParser {
         nextLine();
         PbField field;
         if (gType != null) {
-            Type type = Type.valueOf(gType.getKeyType().toUpperCase(Locale.ENGLISH));
+            TypeProtobuf type = TypeProtobuf.valueOf(gType.getKeyType().toUpperCase(Locale.ENGLISH));
             field = new MapField().setKey(type).setValue(gType.getValueType());
         } else {
             field = new PbField();
