@@ -88,9 +88,6 @@ public class PbField {
      */
     private List<String> comments = new ArrayList<>();
 
-    public String getTypeString() {
-        return this.getType();
-    }
 
     /**
      * 消息属性的规则

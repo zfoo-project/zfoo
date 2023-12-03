@@ -9,6 +9,10 @@ message OneMessage {
   Proj value = 1;
 }
 
+message SimpleObject {
+  int64 aa = 1;
+}
+
 // 测试pb协议1
 message Proj {
   int64 id = 1;
@@ -16,4 +20,7 @@ message Proj {
   string repoPath = 3;
   //zzzzzzz
   repeated int32 a = 4;//rrrrrrrrrrrrrrrrrrrrrrr
+  map<int32, int64> b = 5;
+  map<int32, string> c = 6;
+  map<int32, SimpleObject> d = 7;
 }

@@ -23,18 +23,6 @@ public class MapField extends PbField {
     private TypeProtobuf key;
     private String value;
 
-    @Override
-    public String getTypeString() {
-        StringBuilder sb = new StringBuilder();
-        String keyStr = "";
-        if (getKey() != null) {
-            keyStr = getKey().value();
-        }
-        sb.append("map<").append(keyStr).append(", ");
-        sb.append(getValue()).append(">");
-        return sb.toString();
-    }
-
     /**
      * @return the key
      */

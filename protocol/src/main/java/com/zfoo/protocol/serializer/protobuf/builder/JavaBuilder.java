@@ -29,28 +29,37 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
 
 public class JavaBuilder {
-    private static final List<String> BASE_TYPES;
-
-    static {
-        BASE_TYPES = new ArrayList<>();
-        String[] types = ("double,float,int32,int64,uint32,uint64,sint32,sint64,"
-                + "fixed32,fixed64,sfixed32,sfixed64,bool,string,bytes").split(",");
-        BASE_TYPES.addAll(Arrays.asList(types));
-    }
-
 
     public String getJavaType(PbField field) {
-        String type = field.getTypeString();
+        String type = field.getType();
         if (field instanceof MapField) {
-            MapField mf = (MapField) field;
-            type = "Map<" + getJavaType(mf.getKey().value()) + ", " + getJavaType(mf.getValue()) + ">";
+            var mapField = (MapField) field;
+            type = StringUtils.format("Map<{}, {}>", getBoxJavaType(mapField.getKey().value()), getBoxJavaType(mapField.getValue()));
             return type;
         }
-        if (!BASE_TYPES.contains(type.toLowerCase(Locale.ENGLISH))) {
+        return getJavaType(type);
+    }
+
+    public String getJavaType(String type) {
+        var typeProtobuf = TypeProtobuf.typeOfProtobuf(type);
+        if (typeProtobuf == null) {
             return type;
         }
-        TypeJava javaType = TypeProtobuf.valueOf(type.toUpperCase(Locale.ENGLISH)).javaType();
+        var javaType = typeProtobuf.javaType();
         return javaType.getTypeString();
+    }
+
+    private String getBoxJavaType(PbField field) {
+        return getBoxJavaType(field.getType());
+    }
+
+    private String getBoxJavaType(String type) {
+        var typeProtobuf = TypeProtobuf.typeOfProtobuf(type);
+        if (typeProtobuf == null) {
+            return type;
+        }
+        var javaType = typeProtobuf.javaType();
+        return javaType.getBoxedType();
     }
 
     private void addImport(List<String> imps, String imp) {
@@ -62,13 +71,6 @@ public class JavaBuilder {
         }
     }
 
-    public String getJavaType(String type) {
-        if (BASE_TYPES.contains(type.toLowerCase(Locale.ENGLISH))) {
-            return TypeProtobuf.valueOf(type.toUpperCase(Locale.ENGLISH)).javaType().getTypeString();
-        } else {
-            return type;
-        }
-    }
 
     private void buildMsgImps(ProtoMessage msg, List<PbField> tmp, List<String> imps) {
         var fields = msg.getFields();
@@ -144,7 +146,7 @@ public class JavaBuilder {
             String type = getJavaType(f);
             String name = f.getName();
             if (f.getCardinality() == PbField.Cardinality.REPEATED) {
-                String boxedTypeName = getBoxedTypeName(f);
+                String boxedTypeName = getBoxJavaType(f);
                 type = "List<" + boxedTypeName + ">";
             }
 
@@ -170,18 +172,6 @@ public class JavaBuilder {
         builder.append(LS).append(builderMethod);
         builder.append("}");
         return builder.toString();
-    }
-
-    private String getBoxedTypeName(PbField f) {
-        String type = getJavaType(f);
-        if (BASE_TYPES.contains(f.getTypeString())) {
-            TypeJava javaType = null;
-            javaType = TypeProtobuf.valueOf(f.getTypeString().toUpperCase(Locale.ENGLISH)).javaType();
-            if (javaType != null && javaType.getTypeString() != null) {
-                type = javaType.getBoxedType();
-            }
-        }
-        return type;
     }
 
 }

@@ -12,6 +12,9 @@
 
 package com.zfoo.protocol.serializer.protobuf.parser;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author godotg
  */
@@ -40,6 +43,14 @@ public enum TypeProtobuf {
     private final String value;
     private final TypeJava javaType;
 
+    private static final Map<String, TypeProtobuf> map = new HashMap<>();
+
+    static {
+        for (var ele : TypeProtobuf.values()) {
+            map.put(ele.value, ele);
+        }
+    }
+
     TypeProtobuf(String value, TypeJava javaType) {
         this.value = value;
         this.javaType = javaType;
@@ -52,5 +63,9 @@ public enum TypeProtobuf {
 
     public String value() {
         return this.value;
+    }
+
+    public static TypeProtobuf typeOfProtobuf(String str) {
+        return map.get(str);
     }
 }
