@@ -454,9 +454,6 @@ public class ProtoParser {
                 .setTag(tag)
                 .setType(fieldType);
         field.setComment(comment);
-        if (pv.getOptions() != null && !pv.getOptions().isEmpty()) {
-            field.setOptions(pv.getOptions());
-        }
         comments.clear();
         return field;
     }

@@ -147,10 +147,6 @@ public class Field {
      */
     private String type;
     /**
-     * 消息属性值类型的字符串
-     */
-    protected String typeString;
-    /**
      * 属性的顺序标记一个消息内不允许重复
      */
     private int tag;
@@ -158,14 +154,6 @@ public class Field {
      * 消息属性默认值
      */
     private String defaultValue;
-    /**
-     * repeated的属性是否对包含的对象列表打包
-     */
-    private List<Option> options;
-    /**
-     * 属性是否已经被标示为过时的
-     */
-    private Boolean deprecated;
     /**
      * 消息属性的注释信息
      */
@@ -284,62 +272,6 @@ public class Field {
      */
     public Field setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
-        return this;
-    }
-
-    /**
-     * repeated的属性是否对包含的对象列表打包
-     *
-     * @return the options
-     */
-    public List<Option> getOptions() {
-        if (options == null) {
-            options = new ArrayList<>();
-        }
-        return options;
-    }
-
-    /**
-     * repeated的属性是否对包含的对象列表打包
-     *
-     * @param options the options to set
-     * @return
-     */
-    public Field setOptions(List<Option> options) {
-        if (options instanceof ArrayList) {
-            this.options = options;
-        } else {
-            getOptions().addAll(options);
-        }
-        return this;
-    }
-
-    /**
-     * 属性是否已经被标示为过时的
-     *
-     * @return the deprecated
-     */
-    public Boolean getDeprecated() {
-        if (deprecated == null) {
-            for (Option option : getOptions()) {
-                if ("deprecated".equals(option.getName())) {
-                    return Option.getBoolean(option.getValue());
-                }
-            }
-            return false;
-        } else {
-            return deprecated;
-        }
-    }
-
-    /**
-     * 属性是否已经被标示为过时的
-     *
-     * @param deprecated the deprecated to set
-     * @return
-     */
-    public Field setDeprecated(Boolean deprecated) {
-        this.deprecated = deprecated;
         return this;
     }
 

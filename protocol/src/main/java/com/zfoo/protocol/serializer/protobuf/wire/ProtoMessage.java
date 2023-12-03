@@ -27,11 +27,11 @@ public class ProtoMessage {
     /**
      * 消息包含的Fields列表
      */
-    private List<Field> fields;
+    private List<Field> fields = new ArrayList<>();
     /**
      * 消息内嵌的Message列表
      */
-    private List<ProtoMessage> protoMessages;
+    private List<ProtoMessage> protoMessages = new ArrayList<>();
     /**
      * 消息的备注信息
      */
@@ -78,9 +78,6 @@ public class ProtoMessage {
      * @return the fields
      */
     public List<Field> getFields() {
-        if (fields == null) {
-            fields = new ArrayList<>();
-        }
         return fields;
     }
 
@@ -90,12 +87,7 @@ public class ProtoMessage {
      * @param fields the fields to set
      */
     public ProtoMessage setFields(List<Field> fields) {
-        if (fields instanceof ArrayList) {
-            this.fields = fields;
-        } else {
-            this.fields = new ArrayList<>();
-            this.fields.addAll(fields);
-        }
+        this.fields = fields;
         return this;
     }
 
@@ -105,9 +97,6 @@ public class ProtoMessage {
      * @return the messages
      */
     public List<ProtoMessage> getMessages() {
-        if (protoMessages == null) {
-            protoMessages = new ArrayList<>();
-        }
         return protoMessages;
     }
 
@@ -117,12 +106,7 @@ public class ProtoMessage {
      * @param protoMessages the messages to set
      */
     public ProtoMessage setMessages(List<ProtoMessage> protoMessages) {
-        if (protoMessages instanceof ArrayList) {
-            this.protoMessages = protoMessages;
-        } else {
-            this.protoMessages = new ArrayList<>();
-            this.protoMessages.addAll(protoMessages);
-        }
+        this.protoMessages = protoMessages;
         return this;
     }
 

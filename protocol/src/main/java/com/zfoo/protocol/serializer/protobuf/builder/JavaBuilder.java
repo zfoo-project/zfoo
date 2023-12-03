@@ -33,18 +33,6 @@ public class JavaBuilder {
     }
 
 
-    private String getOptionJavaType(List<Option> options) {
-        String jType = "";
-        if (options != null && !options.isEmpty()) {
-            for (Option option : options) {
-                if ("java_type".equals(option.getName())) {
-                    jType = option.getValue();
-                }
-            }
-        }
-        return jType;
-    }
-
     public String getJavaType(Field field, List<String> imps) {
         String type = field.getTypeString();
         if (field instanceof MapField) {
@@ -53,43 +41,11 @@ public class JavaBuilder {
                     + getJavaType(mf.getValue()) + ">";
             return type;
         }
-        String jType = getOptionJavaType(field.getOptions());
         if (!BASE_TYPES.contains(type.toLowerCase(Locale.ENGLISH))) {
             return type;
         }
-        JavaType javaType = null;
-        javaType = Type.valueOf(type.toUpperCase(Locale.ENGLISH)).javaType();
-        if (javaType != null && javaType.getTypeString() != null) {
-            String optionJavaType = getOptionJavaType(field.getOptions());
-            if (optionJavaType == null || optionJavaType.isEmpty()) {
-                type = javaType.getTypeString();
-            } else {
-                int lastDot = optionJavaType.lastIndexOf(".");
-                if (lastDot == -1) {
-                    type = optionJavaType;
-                } else {
-                    if (!imps.contains(optionJavaType)) {
-                        imps.add(optionJavaType);
-                    }
-                    type = optionJavaType.substring(lastDot + 1);
-                }
-            }
-        }
-        if ("int64".equals(field.getType()) && jType != null) {
-            switch (jType) {
-                case "LocalDateTime":
-                    addImport(imps, "java.time.LocalDateTime");
-                    type = jType;
-                    break;
-                case "LocalDate":
-                    type = jType;
-                    addImport(imps, "java.time.LocalDate");
-                    break;
-                default:
-                    break;
-            }
-        }
-        return type;
+        JavaType javaType = Type.valueOf(type.toUpperCase(Locale.ENGLISH)).javaType();
+        return javaType.getTypeString();
     }
 
     private void addImport(List<String> imps, String imp) {
@@ -119,11 +75,12 @@ public class JavaBuilder {
     }
 
     private void buildMsgImps(ProtoMessage msg, List<Field> tmp, List<String> imps) {
-        if (msg.getFields() != null) {
-            msg.getFields().forEach(e -> {
-                getJavaType(e, imps);
-                tmp.add(e);
-            });
+        var fields = msg.getFields();
+        if (CollectionUtils.isNotEmpty(fields)) {
+            for (var field : fields) {
+                getJavaType(field, imps);
+                tmp.add(field);
+            }
         }
 
         for (int i = 0; i < tmp.size(); i++) {
@@ -158,10 +115,13 @@ public class JavaBuilder {
     }
 
     public String buildMessage(Proto proto, ProtoMessage msg, int indent, Map<String, String> defineMsgs, Map<String, Proto> protos) {
-        int level = Math.max(indent, 1);
-        final CodeBuilder cb = new CodeBuilder();
-        List<Field> tmp = new ArrayList<>();
-        List<String> imps = new ArrayList<>();
+        var level = Math.max(indent, 1);
+        var tmp = new ArrayList<Field>();
+        var imps = new ArrayList<String>();
+        var builder = new StringBuilder();
+
+        var cb = new CodeBuilder();
+
         buildMsgImps(msg, tmp, imps);
 
         List<Field> fields = new ArrayList<>();
@@ -240,7 +200,6 @@ public class JavaBuilder {
             cb.ln().c(setCodes.get(i));
         }
 
-        nestMessageMessage(proto, cb, msg.getMessages(), defineMsgs, level, protos);
 
         cb.t(level - 1).c("}");
         return cb.toString();
@@ -257,19 +216,5 @@ public class JavaBuilder {
         }
         return type;
     }
-
-
-    private void nestMessageMessage(Proto proto, CodeBuilder cb,
-                                    List<ProtoMessage> msgs, Map<String, String> defineMsgs,
-                                    int level, Map<String, Proto> protos) {
-        if (msgs == null || msgs.isEmpty()) {
-            return;
-        }
-        cb.ln();
-        msgs.stream().sorted(Comparator.comparing(ProtoMessage::getName))
-                .forEach(e -> cb.c(buildMessage(proto, e, level + 1, defineMsgs, protos)));
-    }
-
-
 
 }
