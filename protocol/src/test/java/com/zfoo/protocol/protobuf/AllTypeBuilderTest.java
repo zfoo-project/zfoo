@@ -14,8 +14,7 @@
 package com.zfoo.protocol.protobuf;
 
 import com.zfoo.protocol.serializer.protobuf.GeneratePbUtils;
-import com.zfoo.protocol.serializer.protobuf.PbBuildOption;
-import com.zfoo.protocol.util.ThreadUtils;
+import com.zfoo.protocol.serializer.protobuf.PbGenerateOperation;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -25,7 +24,7 @@ public class AllTypeBuilderTest {
 
     @Test
     public void testAllTypeTest() {
-        var buildOption = new PbBuildOption();
+        var buildOption = new PbGenerateOperation();
         buildOption.setProtoPath("D:\\github\\zfoo\\protocol\\src\\test\\resources\\proto");
 //        buildOption.setProtoPath("D:\\github\\zoo\\app\\zgame\\zgame-common\\src\\main\\resources\\proto");
         buildOption.setOutputPath("D:\\github\\zfoo\\protocol\\src\\test\\tmpsrc/");

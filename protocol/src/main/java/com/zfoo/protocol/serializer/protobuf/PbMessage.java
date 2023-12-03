@@ -1,6 +1,5 @@
 /*
- * Copyright 2021 The edap Project
- *
+ * Copyright (C) 2020 The zfoo Authors
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.protobuf.wire;
+package com.zfoo.protocol.serializer.protobuf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.List;
 /**
  * protocol buffer消息体的结构定义
  */
-public class ProtoMessage {
+public class PbMessage {
     /**
      * 消息的名称
      */
@@ -31,7 +30,7 @@ public class ProtoMessage {
     /**
      * 消息内嵌的Message列表
      */
-    private List<ProtoMessage> protoMessages = new ArrayList<>();
+    private List<PbMessage> pbMessages = new ArrayList<>();
     /**
      * 消息的备注信息
      */
@@ -54,12 +53,12 @@ public class ProtoMessage {
         this.fields = fields;
     }
 
-    public List<ProtoMessage> getProtoMessages() {
-        return protoMessages;
+    public List<PbMessage> getProtoMessages() {
+        return pbMessages;
     }
 
-    public void setProtoMessages(List<ProtoMessage> protoMessages) {
-        this.protoMessages = protoMessages;
+    public void setProtoMessages(List<PbMessage> pbMessages) {
+        this.pbMessages = pbMessages;
     }
 
     public List<String> getComments() {

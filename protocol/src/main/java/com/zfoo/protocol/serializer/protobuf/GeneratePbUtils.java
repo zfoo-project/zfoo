@@ -15,10 +15,6 @@ package com.zfoo.protocol.serializer.protobuf;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.parser.TypeProtobuf;
-import com.zfoo.protocol.serializer.protobuf.wire.MapField;
-import com.zfoo.protocol.serializer.protobuf.wire.Option;
-import com.zfoo.protocol.serializer.protobuf.wire.PbField;
-import com.zfoo.protocol.serializer.protobuf.wire.ProtoMessage;
 import com.zfoo.protocol.serializer.protobuf.parser.Proto;
 import com.zfoo.protocol.serializer.protobuf.parser.ProtoParser;
 import com.zfoo.protocol.util.FileUtils;
@@ -32,7 +28,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
 
 public class GeneratePbUtils {
 
-    public static void create(PbBuildOption buildOption) {
+    public static void create(PbGenerateOperation buildOption) {
         var protoPathFile = new File(buildOption.getProtoPath());
         if (!protoPathFile.exists()) {
             throw new RuntimeException(StringUtils.format("proto path:[{}] not exist", buildOption.getProtoPath()));
@@ -71,14 +67,14 @@ public class GeneratePbUtils {
     }
 
 
-    public static void generate(PbBuildOption buildOption, List<Proto> protos) {
+    public static void generate(PbGenerateOperation buildOption, List<Proto> protos) {
         Map<String, Proto> allProtos = new HashMap<>();
         for (Proto proto : protos) {
             allProtos.put(proto.getName(), proto);
         }
 
         for (var proto : protos) {
-            List<Option> options = proto.getOptions();
+            List<PbOption> options = proto.getOptions();
             Map<String, String> protoOptions = new HashMap<>();
             if (options != null) {
                 options.forEach(o -> protoOptions.put(o.getName(), o.getValue()));
@@ -92,12 +88,12 @@ public class GeneratePbUtils {
     }
 
 
-    private static void generateDtoMessage(PbBuildOption buildOption, Proto proto, Map<String, Proto> protos) {
+    private static void generateDtoMessage(PbGenerateOperation buildOption, Proto proto, Map<String, Proto> protos) {
         String msgPath = buildOption.getOutputPath() + File.separator;
 
         Map<String, String> msgComments = new HashMap<>();
 
-        List<ProtoMessage> msgs = proto.getMessages();
+        List<PbMessage> msgs = proto.getMessages();
         for (var msg : msgs) {
             StringBuilder mc = new StringBuilder();
             if (CollectionUtils.isNotEmpty(msg.getComments())) {
@@ -113,8 +109,8 @@ public class GeneratePbUtils {
     // -------------------------------------------------------------------------------------------------------------
     public static String getJavaType(PbField field) {
         String type = field.getType();
-        if (field instanceof MapField) {
-            var mapField = (MapField) field;
+        if (field instanceof PbMapField) {
+            var mapField = (PbMapField) field;
             type = StringUtils.format("Map<{}, {}>", getBoxJavaType(mapField.getKey().value()), getBoxJavaType(mapField.getValue()));
             return type;
         }
@@ -153,7 +149,7 @@ public class GeneratePbUtils {
     }
 
 
-    private static void buildMsgImps(ProtoMessage msg, List<PbField> tmp, List<String> imps) {
+    private static void buildMsgImps(PbMessage msg, List<PbField> tmp, List<String> imps) {
         var fields = msg.getFields();
         if (CollectionUtils.isNotEmpty(fields)) {
             for (var field : fields) {
@@ -163,7 +159,7 @@ public class GeneratePbUtils {
         }
 
         for (int i = 0; i < tmp.size(); i++) {
-            if (tmp.get(i) instanceof MapField) {
+            if (tmp.get(i) instanceof PbMapField) {
                 addImport(imps, Map.class.getName());
             } else if (tmp.get(i).getCardinality() == PbField.Cardinality.REPEATED) {
                 addImport(imps, List.class.getName());
@@ -171,7 +167,7 @@ public class GeneratePbUtils {
         }
     }
 
-    private static void buildDocComment(StringBuilder builder, ProtoMessage msg) {
+    private static void buildDocComment(StringBuilder builder, PbMessage msg) {
         if (CollectionUtils.isEmpty(msg.getComments())) {
             return;
         }
@@ -191,7 +187,7 @@ public class GeneratePbUtils {
         if (CollectionUtils.isEmpty(proto.getOptions())) {
             return StringUtils.EMPTY;
         }
-        for (Option option : proto.getOptions()) {
+        for (PbOption option : proto.getOptions()) {
             if ("java_package".equalsIgnoreCase(option.getName())) {
                 return option.getValue();
             }
@@ -199,7 +195,7 @@ public class GeneratePbUtils {
         return StringUtils.EMPTY;
     }
 
-    public static String buildMessage(Proto proto, ProtoMessage msg, int indent, Map<String, String> defineMsgs, Map<String, Proto> protos) {
+    public static String buildMessage(Proto proto, PbMessage msg, int indent, Map<String, String> defineMsgs, Map<String, Proto> protos) {
         var level = Math.max(indent, 1);
         var tmp = new ArrayList<PbField>();
         var imps = new ArrayList<String>();

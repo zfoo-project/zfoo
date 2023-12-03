@@ -13,8 +13,9 @@
 
 package com.zfoo.protocol.serializer.protobuf.parser;
 
-import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.serializer.protobuf.wire.*;
+import com.zfoo.protocol.serializer.protobuf.PbMessage;
+import com.zfoo.protocol.serializer.protobuf.PbOption;
+import com.zfoo.protocol.serializer.protobuf.Syntax;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class Proto {
     /**
      * Proto的可选信息
      */
-    private List<Option> options = new ArrayList<>();
+    private List<PbOption> options = new ArrayList<>();
     /**
      * 文档版本没有指定默认为proto3
      */
@@ -44,7 +45,7 @@ public class Proto {
     /**
      * 定义的消息列表
      */
-    private List<ProtoMessage> protoMessages = new ArrayList<>();
+    private List<PbMessage> pbMessages = new ArrayList<>();
     /**
      * 文档导入的文件的路径列表
      */
@@ -63,7 +64,7 @@ public class Proto {
         return this;
     }
 
-    public Proto addOption(Option option) {
+    public Proto addOption(PbOption option) {
         getOptions().add(option);
         return this;
     }
@@ -73,7 +74,7 @@ public class Proto {
         return this;
     }
 
-    public Proto addMsg(ProtoMessage msg) {
+    public Proto addMsg(PbMessage msg) {
         getMessages().add(msg);
         return this;
     }
@@ -103,7 +104,7 @@ public class Proto {
      *
      * @return the options
      */
-    public List<Option> getOptions() {
+    public List<PbOption> getOptions() {
         return options;
     }
 
@@ -141,8 +142,8 @@ public class Proto {
      *
      * @return the messages
      */
-    public List<ProtoMessage> getMessages() {
-        return protoMessages;
+    public List<PbMessage> getMessages() {
+        return pbMessages;
     }
 
     /**

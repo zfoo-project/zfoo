@@ -13,7 +13,7 @@
 
 package com.zfoo.protocol.serializer.protobuf;
 
-public class PbBuildOption {
+public class PbGenerateOperation {
 
     private String protoPath;
     private String outputPath;
@@ -39,7 +39,7 @@ public class PbBuildOption {
         return isNested;
     }
 
-    public PbBuildOption setIsNested(boolean isNested) {
+    public PbGenerateOperation setIsNested(boolean isNested) {
         this.isNested = isNested;
         return this;
     }

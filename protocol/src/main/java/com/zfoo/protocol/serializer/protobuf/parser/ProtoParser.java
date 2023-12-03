@@ -14,11 +14,11 @@
 package com.zfoo.protocol.serializer.protobuf.parser;
 
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.serializer.protobuf.wire.MapField;
-import com.zfoo.protocol.serializer.protobuf.wire.Option;
-import com.zfoo.protocol.serializer.protobuf.wire.PbField;
-import com.zfoo.protocol.serializer.protobuf.wire.PbField.Cardinality;
-import com.zfoo.protocol.serializer.protobuf.wire.ProtoMessage;
+import com.zfoo.protocol.serializer.protobuf.PbMapField;
+import com.zfoo.protocol.serializer.protobuf.PbOption;
+import com.zfoo.protocol.serializer.protobuf.PbField;
+import com.zfoo.protocol.serializer.protobuf.PbField.Cardinality;
+import com.zfoo.protocol.serializer.protobuf.PbMessage;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
@@ -106,7 +106,7 @@ public class ProtoParser {
                     readValueSeparator('=');
                     ProtoValue pv = readValueUtilSemicolon();
                     String optionValue = pv.getValue();
-                    Option option = new Option();
+                    PbOption option = new PbOption();
                     option.setName(optionLabel);
                     option.setValue(optionValue);
                     proto.addOption(option);
@@ -120,7 +120,7 @@ public class ProtoParser {
                     comments.clear();
                     break;
                 case "message":
-                    ProtoMessage msg = parseMessage();
+                    PbMessage msg = parseMessage();
                     proto.addMsg(msg);
                     comments.clear();
                     break;
@@ -143,8 +143,8 @@ public class ProtoParser {
         return proto;
     }
 
-    private ProtoMessage parseMessage() throws RuntimeException {
-        ProtoMessage msg = new ProtoMessage();
+    private PbMessage parseMessage() throws RuntimeException {
+        PbMessage msg = new PbMessage();
         trim();
         String name = readToken();
         if (name.length() == 0) {
@@ -406,7 +406,7 @@ public class ProtoParser {
         PbField field;
         if (gType != null) {
             TypeProtobuf type = TypeProtobuf.valueOf(gType.getKeyType().toUpperCase(Locale.ENGLISH));
-            var mapField = new MapField();
+            var mapField = new PbMapField();
             mapField.setKey(type);
             mapField.setValue(gType.getValueType());
             field = mapField;
@@ -571,7 +571,7 @@ public class ProtoParser {
 
     class ProtoValue {
         private String value;
-        private List<Option> options;
+        private List<PbOption> options;
 
         /**
          * @return the value
@@ -591,14 +591,14 @@ public class ProtoParser {
         /**
          * @return the options
          */
-        public List<Option> getOptions() {
+        public List<PbOption> getOptions() {
             return options;
         }
 
         /**
          * @param options the options to set
          */
-        public ProtoValue setOptions(List<Option> options) {
+        public ProtoValue setOptions(List<PbOption> options) {
             this.options = options;
             return this;
         }
@@ -627,7 +627,7 @@ public class ProtoParser {
                 case ' ':
                     trim();
                     if (data[pos] == '[') {
-                        List<Option> options = readFieldOptions();
+                        List<PbOption> options = readFieldOptions();
                         pv.setValue(v.toString()).setOptions(options);
                         return pv;
                     }
@@ -638,7 +638,7 @@ public class ProtoParser {
                         return pv;
                     }
                 case '[':
-                    List<Option> options = readFieldOptions();
+                    List<PbOption> options = readFieldOptions();
                     pv.setValue(v.toString()).setOptions(options);
                     return pv;
                 case '\n':
@@ -788,8 +788,8 @@ public class ProtoParser {
         throw new RuntimeException("row " + row + " value not end with \"\\" + quote + "\"");
     }
 
-    private List<Option> readFieldOptions() throws RuntimeException {
-        List<Option> options = new ArrayList<>();
+    private List<PbOption> readFieldOptions() throws RuntimeException {
+        List<PbOption> options = new ArrayList<>();
         pos++;
         while (data[pos] != ']') {
             if (data[pos] == ';') {
@@ -801,7 +801,7 @@ public class ProtoParser {
 
             readValueSeparator('=');
             String value = readOptionValue();
-            Option option = new Option();
+            PbOption option = new PbOption();
             option.setName(name);
             option.setValue(value);
             options.add(option);
