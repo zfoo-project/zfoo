@@ -54,6 +54,10 @@ public class Proto {
      * proto文件的单行注释列表
      */
     private List<String> comments = new ArrayList<>();
+    /**
+     * 协议的起始Id
+     */
+    private short startProtocolId;
 
     public String getName() {
         return name;
@@ -109,5 +113,13 @@ public class Proto {
 
     public void setComments(List<String> comments) {
         this.comments = comments;
+    }
+
+    public short getStartProtocolId() {
+        return startProtocolId;
+    }
+
+    public void setStartProtocolId(short startProtocolId) {
+        this.startProtocolId = startProtocolId;
     }
 }

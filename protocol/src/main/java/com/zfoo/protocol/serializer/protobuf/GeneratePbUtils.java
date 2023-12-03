@@ -234,7 +234,12 @@ public abstract class GeneratePbUtils {
         var documentComment = buildDocumentComment(pbMessage);
         builder.append(documentComment);
 
+        // message
+        var startProtocolId = proto.getStartProtocolId();
+        builder.append(StringUtils.format("@Protocol(id = {})", startProtocolId)).append(LS);
         builder.append(StringUtils.format("public class {} {", pbMessage.getName())).append(LS);
+        startProtocolId++;
+        proto.setStartProtocolId(startProtocolId);
 
         var pbFields = pbMessage.getFields()
                 .stream()

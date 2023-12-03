@@ -16,6 +16,7 @@ package com.zfoo.protocol.serializer.protobuf.parser;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.*;
 import com.zfoo.protocol.serializer.protobuf.PbField.Cardinality;
+import com.zfoo.protocol.util.NumberUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
@@ -64,7 +65,19 @@ public class ProtoParser {
             switch (token) {
                 case "//":
                     String line = readSingleLineComment();
-                    comments.add(line);
+                    // 解析协议开始的start_protocol_id
+                    line = StringUtils.trim(line);
+                    if (line.startsWith("start_protocol_id")) {
+                        var splits = line.split("=");
+                        for (var s : splits) {
+                            s = s.trim();
+                            if (NumberUtils.isInteger(s)) {
+                                proto.setStartProtocolId(Short.parseShort(s));
+                            }
+                        }
+                    } else {
+                        comments.add(line);
+                    }
                     nextLine();
                     break;
                 case "/*":
