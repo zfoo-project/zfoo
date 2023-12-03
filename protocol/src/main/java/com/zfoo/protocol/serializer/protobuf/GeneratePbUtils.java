@@ -17,8 +17,8 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.builder.JavaBuilder;
 import com.zfoo.protocol.serializer.protobuf.wire.Option;
 import com.zfoo.protocol.serializer.protobuf.wire.ProtoMessage;
-import com.zfoo.protocol.serializer.protobuf.wire.parser.Proto;
-import com.zfoo.protocol.serializer.protobuf.wire.parser.ProtoParser;
+import com.zfoo.protocol.serializer.protobuf.parser.Proto;
+import com.zfoo.protocol.serializer.protobuf.parser.ProtoParser;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
 

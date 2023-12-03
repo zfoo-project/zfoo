@@ -1,6 +1,5 @@
 /*
- * Copyright 2021 The edap Project
- *
+ * Copyright (C) 2020 The zfoo Authors
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.protobuf.wire.parser;
+package com.zfoo.protocol.serializer.protobuf.parser;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.wire.*;
@@ -22,7 +21,6 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
 
-import static com.zfoo.protocol.serializer.protobuf.wire.WireFormat.isValidTag;
 
 /**
  * proto文件的解析器
@@ -287,22 +285,6 @@ public class ProtoParser {
     }
 
     /**
-     * 读取proto Field的数字tag值
-     *
-     * @param stag
-     * @return
-     * @throws RuntimeException
-     */
-    public static int validTag(String stag) throws RuntimeException {
-        int tag = parseInt(stag);
-        if (!isValidTag(tag)) {
-            throw new RuntimeException("tag [" + tag + "] not enabled");
-        } else {
-            return tag;
-        }
-    }
-
-    /**
      * 读取一个标识符
      *
      * @return
@@ -429,7 +411,7 @@ public class ProtoParser {
         readValueSeparator('=');
         trim();
         ProtoValue pv = readValueUtilSemicolon();
-        int tag = validTag(pv.getValue());
+        int tag = parseInt(pv.getValue());
         trim();
         Comment comment = new Comment();
         if (!comments.isEmpty()) {
@@ -919,4 +901,5 @@ public class ProtoParser {
         }
         return false;
     }
+
 }

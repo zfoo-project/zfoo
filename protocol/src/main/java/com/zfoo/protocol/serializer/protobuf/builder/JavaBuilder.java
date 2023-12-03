@@ -14,10 +14,10 @@
 package com.zfoo.protocol.serializer.protobuf.builder;
 
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.serializer.protobuf.parser.JavaType;
 import com.zfoo.protocol.serializer.protobuf.wire.*;
 import com.zfoo.protocol.serializer.protobuf.wire.PbField.Type;
-import com.zfoo.protocol.serializer.protobuf.wire.WireFormat.JavaType;
-import com.zfoo.protocol.serializer.protobuf.wire.parser.Proto;
+import com.zfoo.protocol.serializer.protobuf.parser.Proto;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;

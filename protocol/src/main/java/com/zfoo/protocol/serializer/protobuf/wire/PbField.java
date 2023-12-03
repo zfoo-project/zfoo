@@ -13,6 +13,8 @@
 
 package com.zfoo.protocol.serializer.protobuf.wire;
 
+import com.zfoo.protocol.serializer.protobuf.parser.JavaType;
+
 /**
  * protocol buffer协议消息体属性数据类型定义
  */
@@ -51,36 +53,36 @@ public class PbField {
 
     public enum Type {
 
-        FLOAT("float", WireFormat.JavaType.FLOAT),
-        DOUBLE("double", WireFormat.JavaType.DOUBLE),
-        INT32("int32", WireFormat.JavaType.INT),
-        INT64("int64", WireFormat.JavaType.LONG),
-        UINT32("uint32", WireFormat.JavaType.INT),
-        UINT64("uint64", WireFormat.JavaType.LONG),
-        SINT32("sint32", WireFormat.JavaType.INT),
-        SINT64("sint64", WireFormat.JavaType.LONG),
-        FIXED32("fixed32", WireFormat.JavaType.INT),
-        FIXED64("fixed64", WireFormat.JavaType.LONG),
-        SFIXED32("sfixed32", WireFormat.JavaType.INT),
-        SFIXED64("sfixed64", WireFormat.JavaType.LONG),
-        BOOL("bool", WireFormat.JavaType.BOOLEAN),
-        ENUM("enum", WireFormat.JavaType.ENUM),
-        STRING("string", WireFormat.JavaType.STRING),
-        BYTES("bytes", WireFormat.JavaType.BYTES),
-        MESSAGE("", WireFormat.JavaType.MESSAGE),
-        OBJECT("OBJECT", WireFormat.JavaType.OBJECT),
-        GROUP("group", WireFormat.JavaType.MESSAGE),
-        MAP("", WireFormat.JavaType.MAP);
+        FLOAT("float", JavaType.FLOAT),
+        DOUBLE("double", JavaType.DOUBLE),
+        INT32("int32", JavaType.INT),
+        INT64("int64", JavaType.LONG),
+        UINT32("uint32", JavaType.INT),
+        UINT64("uint64", JavaType.LONG),
+        SINT32("sint32", JavaType.INT),
+        SINT64("sint64", JavaType.LONG),
+        FIXED32("fixed32", JavaType.INT),
+        FIXED64("fixed64", JavaType.LONG),
+        SFIXED32("sfixed32", JavaType.INT),
+        SFIXED64("sfixed64", JavaType.LONG),
+        BOOL("bool", JavaType.BOOLEAN),
+        ENUM("enum", JavaType.ENUM),
+        STRING("string", JavaType.STRING),
+        BYTES("bytes", JavaType.BYTES),
+        MESSAGE("", JavaType.MESSAGE),
+        OBJECT("OBJECT", JavaType.OBJECT),
+        GROUP("group", JavaType.MESSAGE),
+        MAP("", JavaType.MAP);
 
         private final String value;
-        private final WireFormat.JavaType javaType;
+        private final JavaType javaType;
 
-        Type(String value, WireFormat.JavaType javaType) {
+        Type(String value,JavaType javaType) {
             this.value = value;
             this.javaType = javaType;
         }
 
-        public WireFormat.JavaType javaType() {
+        public JavaType javaType() {
             return javaType;
         }
 
