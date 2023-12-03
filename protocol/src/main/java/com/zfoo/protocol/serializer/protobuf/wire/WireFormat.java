@@ -97,16 +97,6 @@ public class WireFormat {
         return tag >>> TAG_TYPE_BITS;
     }
 
-    /**
-     * 根据属性的Tag值，以及数据类型，获取一个编码后的int值
-     *
-     * @param tagNum   tag的编号
-     * @param wireType 数据类型
-     * @return
-     */
-    public static int makeTag(final int tagNum, final WireType wireType) {
-        return (tagNum << TAG_TYPE_BITS) | wireType.getValue();
-    }
 
     /**
      * java的数据类型和protocol buffer的数据类型的对应关系以及默认值

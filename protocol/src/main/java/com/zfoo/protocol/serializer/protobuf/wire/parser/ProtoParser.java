@@ -16,8 +16,8 @@ package com.zfoo.protocol.serializer.protobuf.wire.parser;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.wire.*;
 import com.zfoo.protocol.serializer.protobuf.wire.Comment.CommentType;
-import com.zfoo.protocol.serializer.protobuf.wire.Field.Cardinality;
-import com.zfoo.protocol.serializer.protobuf.wire.Field.Type;
+import com.zfoo.protocol.serializer.protobuf.wire.PbField.Cardinality;
+import com.zfoo.protocol.serializer.protobuf.wire.PbField.Type;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
@@ -177,10 +177,10 @@ public class ProtoParser {
                 // msg.addMessage(parseMessage());
                 notSupportInnerMessage();
             } else if (fieldCardinalities.contains(token)) {
-                Field field = parseField(Cardinality.valueOf(token.toUpperCase(Locale.ENGLISH)), null);
+                PbField field = parseField(Cardinality.valueOf(token.toUpperCase(Locale.ENGLISH)), null);
                 msg.addField(field);
             } else {
-                Field field = parseField(Cardinality.OPTIONAL, token);
+                PbField field = parseField(Cardinality.OPTIONAL, token);
                 msg.addField(field);
             }
             boolean isEnd = blockEnd();
@@ -414,7 +414,7 @@ public class ProtoParser {
         }
     }
 
-    private Field parseField(Cardinality cardinality, String fieldType) throws RuntimeException {
+    private PbField parseField(Cardinality cardinality, String fieldType) throws RuntimeException {
         trim();
         if (fieldType == null) {
             fieldType = readToken();
@@ -442,12 +442,12 @@ public class ProtoParser {
             comment.getLines().add(readSingleLineComment());
         }
         nextLine();
-        Field field;
+        PbField field;
         if (gType != null) {
             Type type = Type.valueOf(gType.getKeyType().toUpperCase(Locale.ENGLISH));
             field = new MapField().setKey(type).setValue(gType.getValueType());
         } else {
-            field = new Field();
+            field = new PbField();
         }
         field.setCardinality(cardinality)
                 .setName(fieldName)

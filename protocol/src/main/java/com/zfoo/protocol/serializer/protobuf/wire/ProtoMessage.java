@@ -27,7 +27,7 @@ public class ProtoMessage {
     /**
      * 消息包含的Fields列表
      */
-    private List<Field> fields = new ArrayList<>();
+    private List<PbField> fields = new ArrayList<>();
     /**
      * 消息内嵌的Message列表
      */
@@ -45,7 +45,7 @@ public class ProtoMessage {
         return this;
     }
 
-    public ProtoMessage addField(Field field) {
+    public ProtoMessage addField(PbField field) {
         if (field == null) {
             return this;
         }
@@ -77,7 +77,7 @@ public class ProtoMessage {
      *
      * @return the fields
      */
-    public List<Field> getFields() {
+    public List<PbField> getFields() {
         return fields;
     }
 
@@ -86,7 +86,7 @@ public class ProtoMessage {
      *
      * @param fields the fields to set
      */
-    public ProtoMessage setFields(List<Field> fields) {
+    public ProtoMessage setFields(List<PbField> fields) {
         this.fields = fields;
         return this;
     }

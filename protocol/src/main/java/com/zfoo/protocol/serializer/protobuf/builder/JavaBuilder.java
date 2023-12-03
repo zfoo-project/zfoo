@@ -15,7 +15,7 @@ package com.zfoo.protocol.serializer.protobuf.builder;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.wire.*;
-import com.zfoo.protocol.serializer.protobuf.wire.Field.Type;
+import com.zfoo.protocol.serializer.protobuf.wire.PbField.Type;
 import com.zfoo.protocol.serializer.protobuf.wire.WireFormat.JavaType;
 import com.zfoo.protocol.serializer.protobuf.wire.parser.Proto;
 import com.zfoo.protocol.util.StringUtils;
@@ -33,7 +33,7 @@ public class JavaBuilder {
     }
 
 
-    public String getJavaType(Field field) {
+    public String getJavaType(PbField field) {
         String type = field.getTypeString();
         if (field instanceof MapField) {
             MapField mf = (MapField) field;
@@ -64,7 +64,7 @@ public class JavaBuilder {
         }
     }
 
-    public String getAnnotationType(Field field) {
+    public String getAnnotationType(PbField field) {
         String type = field.getTypeString();
         if (BASE_TYPES.contains(type.toLowerCase(Locale.ENGLISH))) {
             return "Type." + Type.valueOf(type.toUpperCase(Locale.ENGLISH));
@@ -73,7 +73,7 @@ public class JavaBuilder {
         }
     }
 
-    private void buildMsgImps(ProtoMessage msg, List<Field> tmp, List<String> imps) {
+    private void buildMsgImps(ProtoMessage msg, List<PbField> tmp, List<String> imps) {
         var fields = msg.getFields();
         if (CollectionUtils.isNotEmpty(fields)) {
             for (var field : fields) {
@@ -85,7 +85,7 @@ public class JavaBuilder {
         for (int i = 0; i < tmp.size(); i++) {
             if (tmp.get(i) instanceof MapField) {
                 addImport(imps, Map.class.getName());
-            } else if (tmp.get(i).getCardinality() == Field.Cardinality.REPEATED) {
+            } else if (tmp.get(i).getCardinality() == PbField.Cardinality.REPEATED) {
                 addImport(imps, List.class.getName());
             }
         }
@@ -114,7 +114,7 @@ public class JavaBuilder {
 
     public String buildMessage(Proto proto, ProtoMessage msg, int indent, Map<String, String> defineMsgs, Map<String, Proto> protos) {
         var level = Math.max(indent, 1);
-        var tmp = new ArrayList<Field>();
+        var tmp = new ArrayList<PbField>();
         var imps = new ArrayList<String>();
         var builder = new StringBuilder();
 
@@ -122,8 +122,8 @@ public class JavaBuilder {
 
         buildMsgImps(msg, tmp, imps);
 
-        List<Field> fields = new ArrayList<>();
-        tmp.stream().sorted(Comparator.comparingInt(Field::getTag))
+        List<PbField> fields = new ArrayList<>();
+        tmp.stream().sorted(Comparator.comparingInt(PbField::getTag))
                 .forEach(fields::add);
 
         // not nested
@@ -144,7 +144,7 @@ public class JavaBuilder {
 
         CodeBuilder cons = new CodeBuilder();
         for (int i = 0; i < size; i++) {
-            Field f = fields.get(i);
+            PbField f = fields.get(i);
             getCode = new CodeBuilder();
             setCode = new CodeBuilder();
 
@@ -155,7 +155,7 @@ public class JavaBuilder {
             buildDocComment(cb, f.getComment(), level);
             String type = getJavaType(f);
             String name = f.getName();
-            if (f.getCardinality() == Field.Cardinality.REPEATED) {
+            if (f.getCardinality() == PbField.Cardinality.REPEATED) {
                 String boxedTypeName = getBoxedTypeName(f);
                 type = "List<" + boxedTypeName + ">";
             }
@@ -203,7 +203,7 @@ public class JavaBuilder {
         return cb.toString();
     }
 
-    private String getBoxedTypeName(Field f) {
+    private String getBoxedTypeName(PbField f) {
         String type = getJavaType(f);
         if (BASE_TYPES.contains(f.getTypeString())) {
             JavaType javaType = null;

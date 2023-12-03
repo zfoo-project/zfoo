@@ -16,7 +16,7 @@ package com.zfoo.protocol.serializer.protobuf.wire;
 /**
  * protocol buffer中Map的Field的结构体定义
  */
-public class MapField extends Field {
+public class MapField extends PbField {
 
     private Type key;
     private String value;

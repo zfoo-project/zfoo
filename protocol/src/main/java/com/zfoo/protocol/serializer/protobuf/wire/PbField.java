@@ -13,14 +13,10 @@
 
 package com.zfoo.protocol.serializer.protobuf.wire;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 /**
  * protocol buffer协议消息体属性数据类型定义
  */
-public class Field {
+public class PbField {
     /**
      * 属性是否赋值类型
      */
@@ -55,81 +51,42 @@ public class Field {
 
     public enum Type {
 
-        FLOAT("float", WireFormat.JavaType.FLOAT, WireType.FIXED32),
-        DOUBLE("double", WireFormat.JavaType.DOUBLE, WireType.FIXED64),
-        INT32("int32", WireFormat.JavaType.INT, WireType.VARINT),
-        INT64("int64", WireFormat.JavaType.LONG, WireType.VARINT),
-        UINT32("uint32", WireFormat.JavaType.INT, WireType.VARINT),
-        UINT64("uint64", WireFormat.JavaType.LONG, WireType.VARINT),
-        SINT32("sint32", WireFormat.JavaType.INT, WireType.VARINT),
-        SINT64("sint64", WireFormat.JavaType.LONG, WireType.VARINT),
-        FIXED32("fixed32", WireFormat.JavaType.INT, WireType.FIXED32),
-        FIXED64("fixed64", WireFormat.JavaType.LONG, WireType.FIXED64),
-        SFIXED32("sfixed32", WireFormat.JavaType.INT, WireType.FIXED32),
-        SFIXED64("sfixed64", WireFormat.JavaType.LONG, WireType.FIXED64),
-        BOOL("bool", WireFormat.JavaType.BOOLEAN, WireType.VARINT),
-        ENUM("enum", WireFormat.JavaType.ENUM, WireType.VARINT),
-        STRING("string", WireFormat.JavaType.STRING, WireType.LENGTH_DELIMITED) {
-            @Override
-            public boolean packable() {
-                return false;
-            }
-        },
-        BYTES("bytes", WireFormat.JavaType.BYTES, WireType.LENGTH_DELIMITED) {
-            @Override
-            public boolean packable() {
-                return false;
-            }
-        },
-        MESSAGE("", WireFormat.JavaType.MESSAGE, WireType.LENGTH_DELIMITED) {
-            @Override
-            public boolean packable() {
-                return false;
-            }
-        },
-        OBJECT("OBJECT", WireFormat.JavaType.OBJECT, WireType.LENGTH_DELIMITED) {
-            @Override
-            public boolean packable() {
-                return false;
-            }
-        },
-        GROUP("group", WireFormat.JavaType.MESSAGE, WireType.START_GROUP) {
-            @Override
-            public boolean packable() {
-                return false;
-            }
-        },
-        MAP("", WireFormat.JavaType.MAP, WireType.LENGTH_DELIMITED) {
-            @Override
-            public boolean packable() {
-                return false;
-            }
-        };
+        FLOAT("float", WireFormat.JavaType.FLOAT),
+        DOUBLE("double", WireFormat.JavaType.DOUBLE),
+        INT32("int32", WireFormat.JavaType.INT),
+        INT64("int64", WireFormat.JavaType.LONG),
+        UINT32("uint32", WireFormat.JavaType.INT),
+        UINT64("uint64", WireFormat.JavaType.LONG),
+        SINT32("sint32", WireFormat.JavaType.INT),
+        SINT64("sint64", WireFormat.JavaType.LONG),
+        FIXED32("fixed32", WireFormat.JavaType.INT),
+        FIXED64("fixed64", WireFormat.JavaType.LONG),
+        SFIXED32("sfixed32", WireFormat.JavaType.INT),
+        SFIXED64("sfixed64", WireFormat.JavaType.LONG),
+        BOOL("bool", WireFormat.JavaType.BOOLEAN),
+        ENUM("enum", WireFormat.JavaType.ENUM),
+        STRING("string", WireFormat.JavaType.STRING),
+        BYTES("bytes", WireFormat.JavaType.BYTES),
+        MESSAGE("", WireFormat.JavaType.MESSAGE),
+        OBJECT("OBJECT", WireFormat.JavaType.OBJECT),
+        GROUP("group", WireFormat.JavaType.MESSAGE),
+        MAP("", WireFormat.JavaType.MAP);
 
         private final String value;
         private final WireFormat.JavaType javaType;
-        private final WireType wireType;
 
-        Type(String value, WireFormat.JavaType javaType, WireType wireType) {
+        Type(String value, WireFormat.JavaType javaType) {
             this.value = value;
             this.javaType = javaType;
-            this.wireType = wireType;
         }
 
         public WireFormat.JavaType javaType() {
             return javaType;
         }
 
-        public WireType wireType() {
-            return wireType;
-        }
 
         public String value() {
             return this.value;
-        }
-
-        public boolean packable() {
-            return true;
         }
 
     }
@@ -174,7 +131,7 @@ public class Field {
      * @param cardinality the cardinality to set
      * @return
      */
-    public Field setCardinality(Cardinality cardinality) {
+    public PbField setCardinality(Cardinality cardinality) {
         this.cardinality = cardinality;
         return this;
     }
@@ -194,7 +151,7 @@ public class Field {
      * @param name the name to set
      * @return
      */
-    public Field setName(String name) {
+    public PbField setName(String name) {
         this.name = name;
         return this;
     }
@@ -214,7 +171,7 @@ public class Field {
      * @param type the type to set
      * @return
      */
-    public Field setType(String type) {
+    public PbField setType(String type) {
         this.type = type;
         return this;
     }
@@ -234,7 +191,7 @@ public class Field {
      * @param tag the tag to set
      * @return
      */
-    public Field setTag(int tag) {
+    public PbField setTag(int tag) {
         this.tag = tag;
         return this;
     }
@@ -254,7 +211,7 @@ public class Field {
      * @param comment the comment to set
      * @return
      */
-    public Field setComment(Comment comment) {
+    public PbField setComment(Comment comment) {
         this.comment = comment;
         return this;
     }
