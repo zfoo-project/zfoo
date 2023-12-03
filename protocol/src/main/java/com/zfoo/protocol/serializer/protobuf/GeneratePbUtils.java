@@ -59,7 +59,6 @@ public class GeneratePbUtils {
             }
             ProtoParser parser = new ProtoParser(protoString);
             Proto proto = parser.parse();
-            proto.setFile(protoFile);
             protos.add(proto);
         }
         return protos;
@@ -82,12 +81,12 @@ public class GeneratePbUtils {
                 continue;
             }
 
-            generateDtoMessage(buildOption, proto, allProtos);
+            generateMessage(buildOption, proto, allProtos);
         }
     }
 
 
-    private static void generateDtoMessage(PbGenerateOperation buildOption, Proto proto, Map<String, Proto> protos) {
+    private static void generateMessage(PbGenerateOperation buildOption, Proto proto, Map<String, Proto> protos) {
         String msgPath = buildOption.getOutputPath() + File.separator;
 
         Map<String, String> msgComments = new HashMap<>();

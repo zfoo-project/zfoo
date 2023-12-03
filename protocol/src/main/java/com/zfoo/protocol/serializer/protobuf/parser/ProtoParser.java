@@ -28,10 +28,6 @@ import java.util.*;
  */
 public class ProtoParser {
 
-    private static final String VALUE_END_ERROR = " value not end with \";\"";
-    private static final String ROW_MSG = "row [";
-    private static final String START_MSG = " start...";
-
 
     /**
      * 需要解析的字符数组
@@ -144,15 +140,14 @@ public class ProtoParser {
         PbMessage msg = new PbMessage();
         trim();
         String name = readToken();
-        if (name.length() == 0) {
-            throw new RuntimeException(ROW_MSG + row + "] message name not set");
+        if (StringUtils.isBlank(name)) {
+            throw new RuntimeException(StringUtils.format("row [{}] message name not set", name));
         }
         msg.setName(name);
         if (CollectionUtils.isNotEmpty(comments)) {
             msg.getComments().addAll(comments);
             comments.clear();
         }
-        System.out.println("message " + name + START_MSG);
         blockStarted("message");
         String token = readToken();
         while (token.length() > 0) {
@@ -181,7 +176,6 @@ public class ProtoParser {
             }
             boolean isEnd = blockEnd();
             if (isEnd) {
-                System.out.println("message " + name + " end");
                 fieldEnd();
                 return msg;
             }
@@ -237,7 +231,7 @@ public class ProtoParser {
                 return true;
             }
         }
-        throw new RuntimeException(ROW_MSG + row + "] colum [" + (pos - rowsPos.get(row)) + "] not \"" + separatorChar + "\"");
+        throw new RuntimeException(StringUtils.format("row [{}] colum [{}] not [{}]", row, pos - rowsPos.get(row), separatorChar));
     }
 
     public static int parseInt(String number) throws RuntimeException {
@@ -438,7 +432,7 @@ public class ProtoParser {
                 next = nextLine();
             }
         } else {
-            throw new RuntimeException(ROW_MSG + row + "] " + structName + " not start char '{'");
+            throw new RuntimeException(StringUtils.format("[{}] {} not start char '{'", structName));
         }
     }
 
@@ -629,7 +623,7 @@ public class ProtoParser {
                         return pv;
                     }
                     if (data[pos] != ';') {
-                        throw new RuntimeException("row " + row + VALUE_END_ERROR);
+                        throw new RuntimeException(StringUtils.format("row [{}] value not end with ';'", row));
                     } else {
                         pv.setValue(v.toString());
                         return pv;
@@ -639,7 +633,7 @@ public class ProtoParser {
                     pv.setValue(v.toString()).setOptions(options);
                     return pv;
                 case '\n':
-                    throw new RuntimeException("row " + row + VALUE_END_ERROR);
+                    throw new RuntimeException(StringUtils.format("row [{}] value not end with ';'", row));
                 default:
                     v.append(c);
             }
@@ -679,8 +673,7 @@ public class ProtoParser {
                     trim();
                     return v.toString();
                 case '\n':
-                    throw new RuntimeException("row " + row
-                            + VALUE_END_ERROR);
+                    throw new RuntimeException(StringUtils.format("row [{}] value not end with ';'", row));
                 default:
                     v.append(c);
             }
@@ -713,33 +706,19 @@ public class ProtoParser {
         private String keyType;
         private String valueType;
 
-        /**
-         * @return the keyType
-         */
         public String getKeyType() {
             return keyType;
         }
 
-        /**
-         * @param keyType the keyType to set
-         * @return
-         */
         public MapGenericType setKeyType(String keyType) {
             this.keyType = keyType;
             return this;
         }
 
-        /**
-         * @return the valueType
-         */
         public String getValueType() {
             return valueType;
         }
 
-        /**
-         * @param valueType the valueType to set
-         * @return
-         */
         public MapGenericType setValueType(String valueType) {
             this.valueType = valueType;
             return this;
@@ -747,11 +726,6 @@ public class ProtoParser {
 
     }
 
-    /**
-     * @param quote
-     * @return
-     * @throws RuntimeException
-     */
     private ProtoValue readQuoteValue(final char quote) throws RuntimeException {
         char c;
         StringBuilder v = new StringBuilder();
@@ -768,7 +742,7 @@ public class ProtoParser {
                     pos++;
                     trim();
                     if (data[pos] != ';' && data[pos] != ']' && data[pos] != ',') {
-                        throw new RuntimeException("row " + row + VALUE_END_ERROR);
+                        throw new RuntimeException(StringUtils.format("row [{}] value not end with ';'", row));
                     } else {
                         if (data[pos] != ']') {
                             pos++;
@@ -807,8 +781,7 @@ public class ProtoParser {
         pos++;
         trim();
         if (data[pos] != ';') {
-            throw new RuntimeException("row " + row
-                    + VALUE_END_ERROR);
+            throw new RuntimeException(StringUtils.format("row [{}] value not end with ';'", row));
         } else {
             pos++;
             trim();
@@ -841,8 +814,6 @@ public class ProtoParser {
 
     /**
      * 判断是否当前字符为换行符，如果是换行符则进行换行
-     *
-     * @return
      */
     private boolean nextLine() {
         if (pos < data.length && data[pos] == '\r') {

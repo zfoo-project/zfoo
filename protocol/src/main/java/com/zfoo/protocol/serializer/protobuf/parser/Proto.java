@@ -54,10 +54,6 @@ public class Proto {
      * proto文件的单行注释列表
      */
     private List<String> comments = new ArrayList<>();
-    /**
-     * 该文件的来源的File对象
-     */
-    private File file;
 
     public Proto setSyntax(Syntax syntax) {
         this.syntax = syntax;
@@ -158,20 +154,6 @@ public class Proto {
 
     public List<String> getComments() {
         return comments;
-    }
-
-    /**
-     * @return the file
-     */
-    public File getFile() {
-        return file;
-    }
-
-    /**
-     * @param file the file to set
-     */
-    public void setFile(File file) {
-        this.file = file;
     }
 
 }
