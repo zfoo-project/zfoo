@@ -78,6 +78,9 @@ public class GeneratePbUtils {
             if (options != null) {
                 options.forEach(o -> protoOptions.put(o.getName(), o.getValue()));
             }
+            if (CollectionUtils.isEmpty(proto.getMessages())) {
+                continue;
+            }
 
             generateDtoMessage(buildOption, proto, allProtos);
         }
@@ -86,29 +89,24 @@ public class GeneratePbUtils {
 
     private static void generateDtoMessage(PbBuildOption buildOption, Proto proto, Map<String, Proto> protos) {
         JavaBuilder builder = new JavaBuilder();
+        String msgPath = buildOption.getOutputPath() + File.separator;
 
         Map<String, String> msgComments = new HashMap<>();
 
         List<ProtoMessage> msgs = proto.getMessages();
-        if (CollectionUtils.isNotEmpty(msgs)) {
-            String msgPath = buildOption.getOutputPath() + File.separator;
-            msgs.stream()
-                    .sorted(Comparator.comparing(ProtoMessage::getName))
-                    .forEach(it -> {
-                        StringBuilder mc = new StringBuilder();
-                        if (it.getComment() != null) {
-                            mc.append(it.getComment());
-                        } else {
-                            if (it.getComment() != null && it.getComment().getLines() != null) {
-                                it.getComment().getLines().forEach(c -> mc.append(c));
-                            }
-                        }
-                        msgComments.put(it.getName(), mc.toString());
-                        var code = builder.buildMessage(proto, it, 1, null, protos);
-                        var filePath = msgPath + File.separator + it.getName() + ".java";
-                        FileUtils.writeStringToFile(new File(filePath), code, false);
-                    });
-
+        for (var msg : msgs) {
+            StringBuilder mc = new StringBuilder();
+            if (msg.getComment() != null) {
+                mc.append(msg.getComment());
+            } else {
+                if (msg.getComment() != null && msg.getComment().getLines() != null) {
+                    msg.getComment().getLines().forEach(c -> mc.append(c));
+                }
+            }
+            msgComments.put(msg.getName(), mc.toString());
+            var code = builder.buildMessage(proto, msg, 1, null, protos);
+            var filePath = msgPath + File.separator + msg.getName() + ".java";
+            FileUtils.writeStringToFile(new File(filePath), code, false);
         }
     }
 

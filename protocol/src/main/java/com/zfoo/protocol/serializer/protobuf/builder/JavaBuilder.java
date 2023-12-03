@@ -14,8 +14,6 @@
 package com.zfoo.protocol.serializer.protobuf.builder;
 
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.serializer.protobuf.PbBuildOption;
-import com.zfoo.protocol.serializer.protobuf.internal.CodeBuilder;
 import com.zfoo.protocol.serializer.protobuf.wire.*;
 import com.zfoo.protocol.serializer.protobuf.wire.Field.Type;
 import com.zfoo.protocol.serializer.protobuf.wire.WireFormat.JavaType;
