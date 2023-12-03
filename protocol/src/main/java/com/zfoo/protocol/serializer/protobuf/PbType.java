@@ -32,10 +32,8 @@ public enum PbType {
     ENUM("enum", PbTypeJava.ENUM),
     STRING("string", PbTypeJava.STRING),
     BYTES("bytes", PbTypeJava.BYTES),
-    MESSAGE("", PbTypeJava.MESSAGE),
-    OBJECT("OBJECT", PbTypeJava.OBJECT),
-    GROUP("group", PbTypeJava.MESSAGE),
-    MAP("", PbTypeJava.MAP);
+    MAP("map", PbTypeJava.MAP),
+    ;
 
     private final String value;
     private final PbTypeJava javaType;

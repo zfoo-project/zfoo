@@ -67,11 +67,6 @@ public abstract class GeneratePbUtils {
 
 
     public static void generate(PbGenerateOperation buildOption, List<Proto> protos) {
-        var allProtos = new HashMap<String, Proto>();
-        for (var proto : protos) {
-            allProtos.put(proto.getName(), proto);
-        }
-
         var messageOutputPath = buildOption.getOutputPath() + File.separator;
         if (StringUtils.isNotEmpty(buildOption.getJavaPackage())) {
             messageOutputPath = messageOutputPath + buildOption.getJavaPackage().replaceAll(StringUtils.PERIOD_REGEX, "/");
@@ -83,7 +78,7 @@ public abstract class GeneratePbUtils {
                 continue;
             }
             for (var pbMessage : pbMessages) {
-                var code = buildMessage(proto, pbMessage, 1, null);
+                var code = buildMessage(buildOption, protos, proto, pbMessage);
                 var filePath = StringUtils.format("{}/{}/{}.java", messageOutputPath, proto.getName(), pbMessage.getName());
                 FileUtils.writeStringToFile(new File(filePath), code, false);
             }
@@ -91,10 +86,10 @@ public abstract class GeneratePbUtils {
     }
 
     // -------------------------------------------------------------------------------------------------------------
-    public static String getJavaType(PbField field) {
-        String type = field.getType();
-        if (field instanceof PbMapField) {
-            var mapField = (PbMapField) field;
+    public static String getJavaType(PbField pbField) {
+        String type = pbField.getType();
+        if (pbField instanceof PbMapField) {
+            var mapField = (PbMapField) pbField;
             type = StringUtils.format("Map<{}, {}>", getBoxJavaType(mapField.getKey().value()), getBoxJavaType(mapField.getValue()));
             return type;
         }
@@ -110,8 +105,8 @@ public abstract class GeneratePbUtils {
         return javaType.getTypeString();
     }
 
-    private static String getBoxJavaType(PbField field) {
-        return getBoxJavaType(field.getType());
+    private static String getBoxJavaType(PbField pbField) {
+        return getBoxJavaType(pbField.getType());
     }
 
     private static String getBoxJavaType(String type) {
@@ -123,22 +118,55 @@ public abstract class GeneratePbUtils {
         return javaType.getBoxedType();
     }
 
-    private static void buildMsgImps(PbMessage msg, List<PbField> tmp, Set<String> imps) {
-        var fields = msg.getFields();
-        if (CollectionUtils.isNotEmpty(fields)) {
-            for (var field : fields) {
-                getJavaType(field);
-                tmp.add(field);
+    private static Set<String> buildMessageImports(PbGenerateOperation buildOption, List<Proto> protos, Proto proto, PbMessage pbMessage) {
+        var imports = new HashSet<String>();
+        var pbFields = pbMessage.getFields();
+        if (CollectionUtils.isEmpty(pbFields)) {
+            return imports;
+        }
+
+        for (var pbField : pbFields) {
+            if (pbField instanceof PbMapField) {
+                imports.add(Map.class.getName());
+                continue;
+            }
+
+            if (pbField.getCardinality() == PbField.Cardinality.REPEATED) {
+                imports.add(List.class.getName());
+            }
+
+            buildImports(buildOption, protos, proto, pbField.getType(), imports);
+        }
+        return imports;
+    }
+
+    private static void buildImports(PbGenerateOperation buildOption, List<Proto> protos, Proto proto, String fieldType, Set<String> imports) {
+        // 基本数据类型不需要导入
+        var typeProtobuf = PbType.typeOfProtobuf(fieldType);
+        if (typeProtobuf != null) {
+            return;
+        }
+
+        // 属于同一个包不需要导入
+        if (proto.getPbMessages().stream().anyMatch(it -> it.getName().equals(fieldType))) {
+            return;
+        }
+
+        // 遍历其它的proto找到需要导入的类
+        for (var pt : protos) {
+            for (var msg : pt.getPbMessages()) {
+                if (msg.getName().equals(fieldType)) {
+                    if (StringUtils.isBlank(buildOption.getJavaPackage())) {
+                        imports.add(StringUtils.format("{}.{}", pt.getName(), fieldType));
+                    } else {
+                        imports.add(StringUtils.format("{}.{}.{}", buildOption.getJavaPackage(), pt.getName(), fieldType));
+                    }
+                    return;
+                }
             }
         }
 
-        for (int i = 0; i < tmp.size(); i++) {
-            if (tmp.get(i) instanceof PbMapField) {
-                imps.add(Map.class.getName());
-            } else if (tmp.get(i).getCardinality() == PbField.Cardinality.REPEATED) {
-                imps.add(List.class.getName());
-            }
-        }
+        throw new RuntimeException(StringUtils.format("not found type:[{}] in proto:[{}]", fieldType, proto.getName()));
     }
 
     private static void buildDocComment(StringBuilder builder, PbMessage msg) {
@@ -157,65 +185,49 @@ public abstract class GeneratePbUtils {
         pbField.getComments().forEach(it -> builder.append(TAB).append(StringUtils.format("// {}", it)).append(LS));
     }
 
-    private static String getJavaPackage(Proto proto) {
-        if (CollectionUtils.isEmpty(proto.getOptions())) {
-            return StringUtils.EMPTY;
-        }
-        for (PbOption option : proto.getOptions()) {
-            if ("java_package".equalsIgnoreCase(option.getName())) {
-                return option.getValue();
-            }
-        }
-        return StringUtils.EMPTY;
-    }
-
-    public static String buildMessage(Proto proto, PbMessage msg, int indent, Map<String, String> defineMsgs) {
-        var tmp = new ArrayList<PbField>();
-        var imports = new HashSet<String>();
+    public static String buildMessage(PbGenerateOperation buildOption, List<Proto> protos, Proto proto, PbMessage pbMessage) {
         var builder = new StringBuilder();
 
-        buildMsgImps(msg, tmp, imports);
-
-        List<PbField> fields = new ArrayList<>();
-        tmp.stream().sorted(Comparator.comparingInt(PbField::getTag))
-                .forEach(fields::add);
-
-        imports.stream().sorted(Comparator.naturalOrder())
+        // import other class
+        var imports = buildMessageImports(buildOption, protos, proto, pbMessage);
+        imports.stream()
+                .sorted(Comparator.naturalOrder())
                 .forEach(it -> builder.append(StringUtils.format("import {};", it)).append(LS));
 
-        buildDocComment(builder, msg);
-        builder.append(StringUtils.format("public class {} {", msg.getName())).append(LS);
+        buildDocComment(builder, pbMessage);
+        builder.append(StringUtils.format("public class {} {", pbMessage.getName())).append(LS);
 
-        int size = fields.size();
+        var pbFields = pbMessage.getFields()
+                .stream()
+                .sorted((a, b) -> a.getTag() - b.getTag())
+                .toList();
 
         var builderMethod = new StringBuilder();
-        for (int i = 0; i < size; i++) {
-            PbField f = fields.get(i);
-
-            buildFieldComment(builder, f);
-            String type = getJavaType(f);
-            String name = f.getName();
-            if (f.getCardinality() == PbField.Cardinality.REPEATED) {
-                String boxedTypeName = getBoxJavaType(f);
+        for (var pbField : pbFields) {
+            buildFieldComment(builder, pbField);
+            String type = getJavaType(pbField);
+            String name = pbField.getName();
+            if (pbField.getCardinality() == PbField.Cardinality.REPEATED) {
+                String boxedTypeName = getBoxJavaType(pbField);
                 type = "List<" + boxedTypeName + ">";
             }
 
             builder.append(TAB).append(StringUtils.format("private {} {};", type, name)).append(LS);
 
             String getMethod;
-            if (!"bool".equalsIgnoreCase(f.getType())) {
-                getMethod = StringUtils.format("get{}", StringUtils.capitalize(f.getName()));
+            if (!"bool".equalsIgnoreCase(pbField.getType())) {
+                getMethod = StringUtils.format("get{}", StringUtils.capitalize(pbField.getName()));
             } else {
-                getMethod = StringUtils.format("is{}", StringUtils.capitalize(f.getName()));
+                getMethod = StringUtils.format("is{}", StringUtils.capitalize(pbField.getName()));
             }
 
             builderMethod.append(TAB).append(StringUtils.format("public {} {}() {", type, getMethod)).append(LS);
-            builderMethod.append(TAB + TAB).append(StringUtils.format("return {};", f.getName())).append(LS);
+            builderMethod.append(TAB + TAB).append(StringUtils.format("return {};", pbField.getName())).append(LS);
             builderMethod.append(TAB).append("}").append(LS);
 
-            String setMethod = StringUtils.format("set{}", StringUtils.capitalize(f.getName()));
-            builderMethod.append(TAB).append(StringUtils.format("public void {}({} {}) {", setMethod, type, f.getName())).append(LS);
-            builderMethod.append(TAB + TAB).append(StringUtils.format("this.{} = {};", f.getName(), f.getName())).append(LS);
+            String setMethod = StringUtils.format("set{}", StringUtils.capitalize(pbField.getName()));
+            builderMethod.append(TAB).append(StringUtils.format("public void {}({} {}) {", setMethod, type, pbField.getName())).append(LS);
+            builderMethod.append(TAB + TAB).append(StringUtils.format("this.{} = {};", pbField.getName(), pbField.getName())).append(LS);
             builderMethod.append(TAB).append("}").append(LS);
         }
 
