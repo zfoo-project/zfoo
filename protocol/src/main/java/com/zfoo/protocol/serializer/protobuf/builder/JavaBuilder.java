@@ -14,13 +14,19 @@
 package com.zfoo.protocol.serializer.protobuf.builder;
 
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.serializer.protobuf.parser.Proto;
 import com.zfoo.protocol.serializer.protobuf.parser.TypeJava;
 import com.zfoo.protocol.serializer.protobuf.parser.TypeProtobuf;
-import com.zfoo.protocol.serializer.protobuf.wire.*;
-import com.zfoo.protocol.serializer.protobuf.parser.Proto;
+import com.zfoo.protocol.serializer.protobuf.wire.MapField;
+import com.zfoo.protocol.serializer.protobuf.wire.Option;
+import com.zfoo.protocol.serializer.protobuf.wire.PbField;
+import com.zfoo.protocol.serializer.protobuf.wire.ProtoMessage;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
+
+import static com.zfoo.protocol.util.FileUtils.LS;
+import static com.zfoo.protocol.util.StringUtils.TAB;
 
 public class JavaBuilder {
     private static final List<String> BASE_TYPES;
@@ -64,15 +70,6 @@ public class JavaBuilder {
         }
     }
 
-    public String getAnnotationType(PbField field) {
-        String type = field.getTypeString();
-        if (BASE_TYPES.contains(type.toLowerCase(Locale.ENGLISH))) {
-            return "Type." + TypeProtobuf.valueOf(type.toUpperCase(Locale.ENGLISH));
-        } else {
-            return "Type." + TypeProtobuf.MESSAGE;
-        }
-    }
-
     private void buildMsgImps(ProtoMessage msg, List<PbField> tmp, List<String> imps) {
         var fields = msg.getFields();
         if (CollectionUtils.isNotEmpty(fields)) {
@@ -91,20 +88,20 @@ public class JavaBuilder {
         }
     }
 
-    private void buildDocComment(CodeBuilder cb, ProtoMessage msg) {
+    private void buildDocComment(StringBuilder builder, ProtoMessage msg) {
         if (CollectionUtils.isEmpty(msg.getComments())) {
             return;
         }
-        cb.t(0).c("/**").ln();
-        msg.getComments().forEach(c -> cb.t(0).c(" * ").c(c).ln());
-        cb.t(0).c(" */").ln();
+        builder.append("/**").append(LS);
+        msg.getComments().forEach(it -> builder.append(StringUtils.format(" * {}", it)).append(LS));
+        builder.append(" */").append(LS);
     }
 
-    private void buildFieldComment(CodeBuilder cb, PbField pbField) {
+    private void buildFieldComment(StringBuilder builder, PbField pbField) {
         if (CollectionUtils.isEmpty(pbField.getComments())) {
             return;
         }
-        pbField.getComments().forEach(c -> cb.t(1).c("// ").c(c).ln());
+        pbField.getComments().forEach(it -> builder.append(TAB).append(StringUtils.format("// {}", it)).append(LS));
     }
 
     private String getJavaPackage(Proto proto) {
@@ -125,41 +122,25 @@ public class JavaBuilder {
         var imps = new ArrayList<String>();
         var builder = new StringBuilder();
 
-        var cb = new CodeBuilder();
-
         buildMsgImps(msg, tmp, imps);
 
         List<PbField> fields = new ArrayList<>();
         tmp.stream().sorted(Comparator.comparingInt(PbField::getTag))
                 .forEach(fields::add);
 
-        // not nested
         imps.stream().sorted(Comparator.naturalOrder())
-                .forEach(e -> cb.t(level - 1).e("import $cls$;").arg(e).ln());
+                .forEach(it -> builder.append(StringUtils.format("import {};", it)).append(LS));
 
-        cb.ln();
-        buildDocComment(cb,  msg);
-        cb.t(level - 1).e("public class $name$ {").arg(msg.getName()).ln(2);
-
-        CodeBuilder getCode;
-        CodeBuilder setCode;
+        buildDocComment(builder, msg);
+        builder.append(StringUtils.format("public class {} {", msg.getName())).append(LS);
 
         int size = fields.size();
 
-        List<String> getCodes = new ArrayList<>(size);
-        List<String> setCodes = new ArrayList<>(size);
-
-        CodeBuilder cons = new CodeBuilder();
+        var builderMethod = new StringBuilder();
         for (int i = 0; i < size; i++) {
             PbField f = fields.get(i);
-            getCode = new CodeBuilder();
-            setCode = new CodeBuilder();
 
-            String typeName = getAnnotationType(f);
-            if (msg.getName().equals("Type")) {
-                typeName = Proto.class.getPackage().getName() + ".wire.Field." + typeName;
-            }
-            buildFieldComment(cb, f);
+            buildFieldComment(builder, f);
             String type = getJavaType(f);
             String name = f.getName();
             if (f.getCardinality() == PbField.Cardinality.REPEATED) {
@@ -167,47 +148,28 @@ public class JavaBuilder {
                 type = "List<" + boxedTypeName + ">";
             }
 
-            cb.t(level).e("private $type$ $name$;")
-                    .arg(type, name).ln();
+            builder.append(TAB).append(StringUtils.format("private {} {};", type, name)).append(LS);
 
             String getMethod;
             if (!"bool".equalsIgnoreCase(f.getType())) {
-                getMethod = "get" +
-                        f.getName().substring(0, 1).toUpperCase(Locale.ENGLISH) +
-                        f.getName().substring(1);
+                getMethod = StringUtils.format("get{}", StringUtils.capitalize(f.getName()));
             } else {
-                getMethod = "is" +
-                        f.getName().substring(0, 1).toUpperCase(Locale.ENGLISH) +
-                        f.getName().substring(1);
+                getMethod = StringUtils.format("is{}", StringUtils.capitalize(f.getName()));
             }
-            getCode.t(level).e("public $type$ $getMethod$() {")
-                    .arg(type, getMethod).ln();
-            getCode.t(level + 1).e("return $name$;").arg(f.getName()).ln();
-            getCode.t(level).c("}").ln();
-            getCodes.add(getCode.toString());
 
-            String retType = "void";
-            String setMethod = "set" +
-                    f.getName().substring(0, 1).toUpperCase(Locale.ENGLISH) +
-                    f.getName().substring(1);
-            setCode.t(level).e("public $retType$ $setMethod$($type$ $name$) {")
-                    .arg(retType, setMethod, type, name).ln();
-            setCode.t(level + 1).e("this.$name$ = $name$;")
-                    .arg(f.getName(), f.getName()).ln();
-            setCode.t(level).c("}").ln();
-            setCodes.add(setCode.toString());
+            builderMethod.append(TAB).append(StringUtils.format("public {} {}() {", type, getMethod)).append(LS);
+            builderMethod.append(TAB + TAB).append(StringUtils.format("return {};", f.getName())).append(LS);
+            builderMethod.append(TAB).append("}").append(LS);
+
+            String setMethod = StringUtils.format("set{}", StringUtils.capitalize(f.getName()));
+            builderMethod.append(TAB).append(StringUtils.format("public void {}({} {}) {", setMethod, type, f.getName())).append(LS);
+            builderMethod.append(TAB + TAB).append(StringUtils.format("this.{} = {};", f.getName(), f.getName())).append(LS);
+            builderMethod.append(TAB).append("}").append(LS);
         }
 
-        cb.ln().c(cons.toString());
-
-        for (int i = 0; i < size; i++) {
-            cb.ln().c(getCodes.get(i));
-            cb.ln().c(setCodes.get(i));
-        }
-
-
-        cb.t(level - 1).c("}");
-        return cb.toString();
+        builder.append(LS).append(builderMethod);
+        builder.append("}");
+        return builder.toString();
     }
 
     private String getBoxedTypeName(PbField f) {
