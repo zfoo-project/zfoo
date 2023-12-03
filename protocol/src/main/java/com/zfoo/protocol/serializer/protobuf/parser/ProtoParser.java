@@ -521,54 +521,31 @@ public class ProtoParser {
     }
 
     public List<String> readMultiLineComment() {
-        List<String> lines = new ArrayList<>();
-        StringBuilder comment = new StringBuilder();
-        char c;
-        int start = pos;
-        boolean commentStart = true;
-        boolean isFirst = true;
-        while (pos < data.length) {
-            c = data[pos];
-            if (!commentStart) {
-                if (c != '*') {
-                    pos++;
-                    continue;
-                }
-                commentStart = true;
-                //如果"*"后为空格则跳过空格
-                if (isMultiLineCommentFinish()) {
-                    return lines;
-                }
-                start = pos + 1;
-            }
-            if (c == '\n') {
+        trim();
 
-                comment.append(data, start, pos - start);
-                String cmt = trimLnr(comment.toString());
-                if (isFirst) {
-                    if (cmt.length() > 0) {
-                        lines.add(cmt);
-                    }
-                } else {
-                    lines.add(cmt);
+        List<String> lines = new ArrayList<>();
+        StringBuilder builder = new StringBuilder();
+        while (pos < data.length) {
+            var c = data[pos];
+            builder.append(c);
+
+            if (isMultiLineCommentFinish()) {
+                return lines;
+            }
+
+            if (c == '\n') {
+                var str = builder.toString().trim();
+                builder.setLength(0);
+                if (StringUtils.isNotEmpty(str)) {
+                    lines.add(str);
                 }
-                isFirst = false;
-                comment.delete(0, comment.length());
-                commentStart = false;
                 nextLine();
-                start = pos;
                 continue;
             }
+
             pos++;
         }
         return lines;
-    }
-
-    private String trimLnr(String s) {
-        if (!s.endsWith("\r")) {
-            return s;
-        }
-        return s.substring(0, s.length() - 2);
     }
 
     private boolean isMultiLineCommentFinish() {
