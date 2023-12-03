@@ -14,6 +14,9 @@
 package com.zfoo.protocol.serializer.protobuf.wire;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * protocol buffer协议消息体属性数据类型定义
  */
@@ -69,7 +72,7 @@ public class PbField {
     /**
      * 消息属性的注释信息
      */
-    private Comment comment;
+    private List<String> comments = new ArrayList<>();
 
     public String getTypeString() {
         return this.getType();
@@ -155,23 +158,11 @@ public class PbField {
         return this;
     }
 
-    /**
-     * 消息属性的注释信息
-     *
-     * @return the comment
-     */
-    public Comment getComment() {
-        return comment;
+    public List<String> getComments() {
+        return comments;
     }
 
-    /**
-     * 消息属性的注释信息
-     *
-     * @param comment the comment to set
-     * @return
-     */
-    public PbField setComment(Comment comment) {
-        this.comment = comment;
-        return this;
+    public void setComments(List<String> comments) {
+        this.comments = comments;
     }
 }

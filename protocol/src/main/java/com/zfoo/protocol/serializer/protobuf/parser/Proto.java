@@ -49,10 +49,6 @@ public class Proto {
      */
     private List<String> imports = new ArrayList<>();
     /**
-     * 文档的注释
-     */
-    private String comment;
-    /**
      * proto文件的单行注释列表
      */
     private List<String> comments = new ArrayList<>();
@@ -157,38 +153,10 @@ public class Proto {
         return imports;
     }
 
-    /**
-     * 文档的注释
-     *
-     * @return the comment
-     */
-    public String getComment() {
-        return comment;
-    }
 
-    /**
-     * 文档的注释
-     *
-     * @param comment the comment to set
-     * @return
-     */
-    public Proto setComment(String comment) {
-        this.comment = comment;
-        return this;
+    public List<String> getComments() {
+        return comments;
     }
-
-    /**
-     * proto文件的单行注释列表
-     *
-     * @param comments the comments to set
-     */
-    public void addComments(List<String> comments) {
-        if (CollectionUtils.isEmpty(comments)) {
-            return;
-        }
-        this.comments.addAll(comments);
-    }
-
 
     /**
      * @return the file

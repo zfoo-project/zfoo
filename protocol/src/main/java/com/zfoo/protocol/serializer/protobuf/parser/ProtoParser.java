@@ -14,7 +14,6 @@ package com.zfoo.protocol.serializer.protobuf.parser;
 
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.wire.*;
-import com.zfoo.protocol.serializer.protobuf.wire.Comment.CommentType;
 import com.zfoo.protocol.serializer.protobuf.wire.PbField.Cardinality;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -53,7 +52,7 @@ public class ProtoParser {
     /**
      * 解析时临时存放解析的注释信息
      */
-    protected List<Comment> comments = new ArrayList<>();
+    protected List<String> comments = new ArrayList<>();
 
 
     public ProtoParser(String data) {
@@ -72,17 +71,17 @@ public class ProtoParser {
             switch (token) {
                 case "//":
                     String line = readSingleLineComment();
-                    addCommentLines(CommentType.INLINE, Arrays.asList(line));
+                    comments.add(line);
                     nextLine();
                     break;
                 case "/*":
                     lines = readMultiLineComment();
-                    addCommentLines(CommentType.MULTILINE, lines);
+                    comments.addAll(lines);
                     nextLine();
                     break;
                 case "/**":
                     lines = readMultiLineComment();
-                    addCommentLines(CommentType.DOCUMENT, lines);
+                    comments.addAll(lines);
                     nextLine();
                     break;
                 case "syntax":
@@ -149,8 +148,8 @@ public class ProtoParser {
             throw new RuntimeException(ROW_MSG + row + "] message name not set");
         }
         msg.setName(name);
-        if (!comments.isEmpty()) {
-            msg.setComment(comments.get(comments.size() - 1));
+        if (CollectionUtils.isNotEmpty(comments)) {
+            msg.getComments().addAll(comments);
             comments.clear();
         }
         System.out.println("message " + name + START_MSG);
@@ -159,7 +158,7 @@ public class ProtoParser {
         while (token.length() > 0) {
             if ("//".equals(token)) {
                 var singleLine = readSingleLineComment();
-                addCommentLines(CommentType.INLINE, List.of(singleLine));
+                comments.add(singleLine);
                 nextLine();
             } else if ("enum".equals(token)) {
                 notSupportEnum();
@@ -218,25 +217,12 @@ public class ProtoParser {
     }
 
     // --------------------------------------------------------------------------------------------------------------
-    private void addCommentLines(Comment.CommentType type, List<String> lines) {
-        Comment c;
-        if (CollectionUtils.isEmpty(comments)) {
-            comments.add(Comment.valueOf(type, lines));
-            return;
-        }
-        c = comments.get(comments.size() - 1);
-        if (c.getType() == type) {
-            c.getLines().addAll(lines);
-        } else {
-            comments.add(Comment.valueOf(type, lines));
-        }
-    }
 
     private void addCommentsToProto(Proto proto) {
         if (CollectionUtils.isEmpty(comments)) {
             return;
         }
-        comments.forEach(c -> proto.addComments(c.getLines()));
+        proto.getComments().addAll(comments);
         comments.clear();
     }
 
@@ -409,15 +395,9 @@ public class ProtoParser {
         ProtoValue pv = readValueUtilSemicolon();
         int tag = parseInt(pv.getValue());
         trim();
-        Comment comment = new Comment();
-        if (!comments.isEmpty()) {
-            var lastComment = comments.get(comments.size() - 1);
-            comment.getLines().addAll(lastComment.getLines());
-        }
-
         String token = readToken();
         if ("//".equals(token)) {
-            comment.getLines().add(readSingleLineComment());
+            comments.add(readSingleLineComment());
         }
         nextLine();
         PbField field;
@@ -431,15 +411,13 @@ public class ProtoParser {
                 .setName(fieldName)
                 .setTag(tag)
                 .setType(fieldType);
-        field.setComment(comment);
+        field.getComments().addAll(comments);
         comments.clear();
         return field;
     }
 
     /**
      * 解析判断语句块是否开始,去掉空格和空行后第一个字符为"{"的返回语句块开始
-     *
-     * @throws RuntimeException
      */
     private void blockStarted(String structName) throws RuntimeException {
         trim();

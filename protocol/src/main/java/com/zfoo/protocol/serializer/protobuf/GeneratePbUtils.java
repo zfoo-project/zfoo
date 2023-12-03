@@ -96,12 +96,8 @@ public class GeneratePbUtils {
         List<ProtoMessage> msgs = proto.getMessages();
         for (var msg : msgs) {
             StringBuilder mc = new StringBuilder();
-            if (msg.getComment() != null) {
-                mc.append(msg.getComment());
-            } else {
-                if (msg.getComment() != null && msg.getComment().getLines() != null) {
-                    msg.getComment().getLines().forEach(c -> mc.append(c));
-                }
+            if (CollectionUtils.isNotEmpty(msg.getComments())) {
+                msg.getComments().forEach(c -> mc.append(c));
             }
             msgComments.put(msg.getName(), mc.toString());
             var code = builder.buildMessage(proto, msg, 1, null, protos);

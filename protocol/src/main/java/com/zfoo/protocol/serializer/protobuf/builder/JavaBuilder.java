@@ -91,13 +91,20 @@ public class JavaBuilder {
         }
     }
 
-    private void buildDocComment(CodeBuilder cb, Comment comment, int level) {
-        if (comment == null || comment.getLines() == null || comment.getLines().isEmpty()) {
+    private void buildDocComment(CodeBuilder cb, ProtoMessage msg) {
+        if (CollectionUtils.isEmpty(msg.getComments())) {
             return;
         }
-        cb.t(level).c("/**").ln();
-        comment.getLines().forEach(c -> cb.t(level).c(" * ").c(c).ln());
-        cb.t(level).c(" */").ln();
+        cb.t(1).c("/**").ln();
+        msg.getComments().forEach(c -> cb.t(1).c(" * ").c(c).ln());
+        cb.t(1).c(" */").ln();
+    }
+
+    private void buildFieldComment(CodeBuilder cb, PbField pbField) {
+        if (CollectionUtils.isEmpty(pbField.getComments())) {
+            return;
+        }
+        pbField.getComments().forEach(c -> cb.t(1).c("// ").c(c).ln());
     }
 
     private String getJavaPackage(Proto proto) {
@@ -131,7 +138,7 @@ public class JavaBuilder {
                 .forEach(e -> cb.t(level - 1).e("import $cls$;").arg(e).ln());
 
         cb.ln();
-        buildDocComment(cb, msg.getComment(), level - 1);
+        buildDocComment(cb,  msg);
         cb.t(level - 1).e("public class $name$ {").arg(msg.getName()).ln(2);
 
         CodeBuilder getCode;
@@ -152,7 +159,7 @@ public class JavaBuilder {
             if (msg.getName().equals("Type")) {
                 typeName = Proto.class.getPackage().getName() + ".wire.Field." + typeName;
             }
-            buildDocComment(cb, f.getComment(), level);
+            buildFieldComment(cb, f);
             String type = getJavaType(f);
             String name = f.getName();
             if (f.getCardinality() == PbField.Cardinality.REPEATED) {

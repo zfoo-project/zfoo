@@ -35,7 +35,7 @@ public class ProtoMessage {
     /**
      * 消息的备注信息
      */
-    private Comment comment;
+    private List<String> comments = new ArrayList<>();
 
     public ProtoMessage addMessage(ProtoMessage child) {
         if (child == null) {
@@ -110,22 +110,11 @@ public class ProtoMessage {
         return this;
     }
 
-    /**
-     * 消息的备注信息
-     *
-     * @return the comment
-     */
-    public Comment getComment() {
-        return comment;
+    public List<String> getComments() {
+        return comments;
     }
 
-    /**
-     * 消息的备注信息
-     *
-     * @param comment the comment to set
-     */
-    public ProtoMessage setComment(Comment comment) {
-        this.comment = comment;
-        return this;
+    public void setComments(List<String> comments) {
+        this.comments = comments;
     }
 }
