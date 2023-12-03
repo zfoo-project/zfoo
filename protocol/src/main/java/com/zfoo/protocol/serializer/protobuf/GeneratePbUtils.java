@@ -14,7 +14,6 @@
 package com.zfoo.protocol.serializer.protobuf;
 
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.serializer.protobuf.parser.TypeProtobuf;
 import com.zfoo.protocol.serializer.protobuf.parser.Proto;
 import com.zfoo.protocol.serializer.protobuf.parser.ProtoParser;
 import com.zfoo.protocol.util.FileUtils;
@@ -118,7 +117,7 @@ public class GeneratePbUtils {
     }
 
     public static String getJavaType(String type) {
-        var typeProtobuf = TypeProtobuf.typeOfProtobuf(type);
+        var typeProtobuf = PbType.typeOfProtobuf(type);
         if (typeProtobuf == null) {
             return type;
         }
@@ -131,7 +130,7 @@ public class GeneratePbUtils {
     }
 
     private static String getBoxJavaType(String type) {
-        var typeProtobuf = TypeProtobuf.typeOfProtobuf(type);
+        var typeProtobuf = PbType.typeOfProtobuf(type);
         if (typeProtobuf == null) {
             return type;
         }

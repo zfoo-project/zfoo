@@ -14,11 +14,8 @@
 package com.zfoo.protocol.serializer.protobuf.parser;
 
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.serializer.protobuf.PbMapField;
-import com.zfoo.protocol.serializer.protobuf.PbOption;
-import com.zfoo.protocol.serializer.protobuf.PbField;
+import com.zfoo.protocol.serializer.protobuf.*;
 import com.zfoo.protocol.serializer.protobuf.PbField.Cardinality;
-import com.zfoo.protocol.serializer.protobuf.PbMessage;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
@@ -405,7 +402,7 @@ public class ProtoParser {
         nextLine();
         PbField field;
         if (gType != null) {
-            TypeProtobuf type = TypeProtobuf.valueOf(gType.getKeyType().toUpperCase(Locale.ENGLISH));
+            PbType type = PbType.valueOf(gType.getKeyType().toUpperCase(Locale.ENGLISH));
             var mapField = new PbMapField();
             mapField.setKey(type);
             mapField.setValue(gType.getValueType());

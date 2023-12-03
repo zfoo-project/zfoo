@@ -1,6 +1,5 @@
 /*
- * Copyright 2021 The edap Project
- *
+ * Copyright (C) 2020 The zfoo Authors
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -11,13 +10,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.protobuf.parser;
+package com.zfoo.protocol.serializer.protobuf;
 import com.zfoo.protocol.collection.ArrayUtils;
 
 /**
  * java的数据类型和protocol buffer的数据类型的对应关系以及默认值
  */
-public enum TypeJava {
+public enum PbTypeJava {
     INT("int", "Integer", 0),
     LONG("long", "Long", 0L),
     FLOAT("float", "Float", 0F),
@@ -30,7 +29,7 @@ public enum TypeJava {
     OBJECT("Object", "Object", null),
     MAP("Map", "Map", null);
 
-    TypeJava(final String typeString, final String boxedType, final Object defaultValue) {
+    PbTypeJava(final String typeString, final String boxedType, final Object defaultValue) {
         this.typeString = typeString;
         this.boxedType = boxedType;
         this.defaultValue = defaultValue;

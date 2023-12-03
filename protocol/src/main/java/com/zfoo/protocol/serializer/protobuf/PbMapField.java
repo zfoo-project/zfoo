@@ -12,21 +12,19 @@
 
 package com.zfoo.protocol.serializer.protobuf;
 
-import com.zfoo.protocol.serializer.protobuf.parser.TypeProtobuf;
-
 /**
  * protocol buffer中Map的Field的结构体定义
  */
 public class PbMapField extends PbField {
 
-    private TypeProtobuf key;
+    private PbType key;
     private String value;
 
-    public TypeProtobuf getKey() {
+    public PbType getKey() {
         return key;
     }
 
-    public void setKey(TypeProtobuf key) {
+    public void setKey(PbType key) {
         this.key = key;
     }
 
