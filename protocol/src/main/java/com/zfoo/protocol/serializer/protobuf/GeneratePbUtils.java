@@ -14,15 +14,16 @@
 package com.zfoo.protocol.serializer.protobuf;
 
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.serializer.protobuf.codegen.IfaceGenerator;
+import com.zfoo.protocol.serializer.protobuf.builder.JavaBuilder;
+import com.zfoo.protocol.serializer.protobuf.wire.Option;
+import com.zfoo.protocol.serializer.protobuf.wire.ProtoMessage;
 import com.zfoo.protocol.serializer.protobuf.wire.parser.Proto;
 import com.zfoo.protocol.serializer.protobuf.wire.parser.ProtoParser;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class GeneratePbUtils {
 
@@ -41,11 +42,8 @@ public class GeneratePbUtils {
             throw new RuntimeException(StringUtils.format("There are no proto files to build in proto path:[{}]", buildOption.getProtoPath()));
         }
 
-        var srcPath = new File(buildOption.getOutputPath());
-
         var protos = parseProtoFile(protoFiles);
-        IfaceGenerator ifaceGenerator = new IfaceGenerator(srcPath, protos);
-        ifaceGenerator.generate();
+        generate(buildOption, protos);
     }
 
     public static List<Proto> parseProtoFile(List<File> protoFiles) {
@@ -65,6 +63,53 @@ public class GeneratePbUtils {
             protos.add(proto);
         }
         return protos;
+    }
+
+
+    public static void generate(PbBuildOption buildOption, List<Proto> protos) {
+        Map<String, Proto> allProtos = new HashMap<>();
+        for (Proto proto : protos) {
+            allProtos.put(proto.getName(), proto);
+        }
+
+        for (var proto : protos) {
+            List<Option> options = proto.getOptions();
+            Map<String, String> protoOptions = new HashMap<>();
+            if (options != null) {
+                options.forEach(o -> protoOptions.put(o.getName(), o.getValue()));
+            }
+
+            generateDtoMessage(buildOption, proto, allProtos);
+        }
+    }
+
+
+    private static void generateDtoMessage(PbBuildOption buildOption, Proto proto, Map<String, Proto> protos) {
+        JavaBuilder builder = new JavaBuilder();
+
+        Map<String, String> msgComments = new HashMap<>();
+
+        List<ProtoMessage> msgs = proto.getMessages();
+        if (CollectionUtils.isNotEmpty(msgs)) {
+            String msgPath = buildOption.getOutputPath() + File.separator;
+            msgs.stream()
+                    .sorted(Comparator.comparing(ProtoMessage::getName))
+                    .forEach(it -> {
+                        StringBuilder mc = new StringBuilder();
+                        if (it.getComment() != null) {
+                            mc.append(it.getComment());
+                        } else {
+                            if (it.getComment() != null && it.getComment().getLines() != null) {
+                                it.getComment().getLines().forEach(c -> mc.append(c));
+                            }
+                        }
+                        msgComments.put(it.getName(), mc.toString());
+                        var code = builder.buildMessage(proto, it, 1, null, protos);
+                        var filePath = msgPath + File.separator + it.getName() + ".java";
+                        FileUtils.writeStringToFile(new File(filePath), code, false);
+                    });
+
+        }
     }
 
 }

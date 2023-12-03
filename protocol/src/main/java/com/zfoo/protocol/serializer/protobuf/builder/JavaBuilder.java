@@ -47,7 +47,7 @@ public class JavaBuilder {
         return jType;
     }
 
-    public String getJavaType(Field field, List<String> imps, PbBuildOption buildOps) {
+    public String getJavaType(Field field, List<String> imps) {
         String type = field.getTypeString();
         if (field instanceof MapField) {
             MapField mf = (MapField) field;
@@ -120,11 +120,10 @@ public class JavaBuilder {
         }
     }
 
-    private void buildMsgImps(ProtoMessage msg, List<Field> tmp, List<String> imps,
-                              PbBuildOption buildOps) {
+    private void buildMsgImps(ProtoMessage msg, List<Field> tmp, List<String> imps) {
         if (msg.getFields() != null) {
             msg.getFields().forEach(e -> {
-                getJavaType(e, imps, buildOps);
+                getJavaType(e, imps);
                 tmp.add(e);
             });
         }
@@ -160,21 +159,21 @@ public class JavaBuilder {
         return StringUtils.EMPTY;
     }
 
-    public String buildMessage(Proto proto, ProtoMessage msg, int indent, Map<String, String> defineMsgs, PbBuildOption buildOps, Map<String, Proto> protos) {
+    public String buildMessage(Proto proto, ProtoMessage msg, int indent, Map<String, String> defineMsgs, Map<String, Proto> protos) {
         int level = Math.max(indent, 1);
         final CodeBuilder cb = new CodeBuilder();
         List<Field> tmp = new ArrayList<>();
         List<String> imps = new ArrayList<>();
-        buildMsgImps(msg, tmp, imps, buildOps);
+        buildMsgImps(msg, tmp, imps);
 
         List<Field> fields = new ArrayList<>();
         tmp.stream().sorted(Comparator.comparingInt(Field::getTag))
                 .forEach(fields::add);
 
-        if (!buildOps.isIsNested()) {
-            imps.stream().sorted(Comparator.naturalOrder())
-                    .forEach(e -> cb.t(level - 1).e("import $cls$;").arg(e).ln());
-        }
+        // not nested
+        imps.stream().sorted(Comparator.naturalOrder())
+                .forEach(e -> cb.t(level - 1).e("import $cls$;").arg(e).ln());
+
         cb.ln();
         buildDocComment(cb, msg.getComment(), level - 1);
         cb.t(level - 1).e("public class $name$ {").arg(msg.getName()).ln(2);
@@ -198,10 +197,10 @@ public class JavaBuilder {
                 typeName = Proto.class.getPackage().getName() + ".wire.Field." + typeName;
             }
             buildDocComment(cb, f.getComment(), level);
-            String type = getJavaType(f, imps, buildOps);
+            String type = getJavaType(f, imps);
             String name = f.getName();
             if (f.getCardinality() == Field.Cardinality.REPEATED) {
-                String boxedTypeName = getBoxedTypeName(f, buildOps);
+                String boxedTypeName = getBoxedTypeName(f);
                 type = "List<" + boxedTypeName + ">";
             }
 
@@ -249,8 +248,8 @@ public class JavaBuilder {
         return cb.toString();
     }
 
-    private String getBoxedTypeName(Field f, PbBuildOption buildOps) {
-        String type = getJavaType(f, null, buildOps);
+    private String getBoxedTypeName(Field f) {
+        String type = getJavaType(f, null);
         if (BASE_TYPES.contains(f.getTypeString())) {
             JavaType javaType = null;
             javaType = Type.valueOf(f.getTypeString().toUpperCase(Locale.ENGLISH)).javaType();
@@ -269,10 +268,8 @@ public class JavaBuilder {
             return;
         }
         cb.ln();
-        PbBuildOption nestedOps = new PbBuildOption();
-        nestedOps.setIsNested(true);
         msgs.stream().sorted(Comparator.comparing(ProtoMessage::getName))
-                .forEach(e -> cb.c(buildMessage(proto, e, level + 1, defineMsgs, nestedOps, protos)));
+                .forEach(e -> cb.c(buildMessage(proto, e, level + 1, defineMsgs, protos)));
     }
 
 
