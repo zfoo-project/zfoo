@@ -25,7 +25,7 @@ import java.util.*;
 import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
 
-public class GeneratePbUtils {
+public abstract class GeneratePbUtils {
 
     public static void create(PbGenerateOperation buildOption) {
         var protoPathFile = new File(buildOption.getProtoPath());
@@ -137,17 +137,7 @@ public class GeneratePbUtils {
         return javaType.getBoxedType();
     }
 
-    private static void addImport(List<String> imps, String imp) {
-        if (imps == null) {
-            return;
-        }
-        if (!imps.contains(imp)) {
-            imps.add(imp);
-        }
-    }
-
-
-    private static void buildMsgImps(PbMessage msg, List<PbField> tmp, List<String> imps) {
+    private static void buildMsgImps(PbMessage msg, List<PbField> tmp, Set<String> imps) {
         var fields = msg.getFields();
         if (CollectionUtils.isNotEmpty(fields)) {
             for (var field : fields) {
@@ -158,9 +148,9 @@ public class GeneratePbUtils {
 
         for (int i = 0; i < tmp.size(); i++) {
             if (tmp.get(i) instanceof PbMapField) {
-                addImport(imps, Map.class.getName());
+                imps.add(Map.class.getName());
             } else if (tmp.get(i).getCardinality() == PbField.Cardinality.REPEATED) {
-                addImport(imps, List.class.getName());
+                imps.add(List.class.getName());
             }
         }
     }
@@ -194,18 +184,17 @@ public class GeneratePbUtils {
     }
 
     public static String buildMessage(Proto proto, PbMessage msg, int indent, Map<String, String> defineMsgs, Map<String, Proto> protos) {
-        var level = Math.max(indent, 1);
         var tmp = new ArrayList<PbField>();
-        var imps = new ArrayList<String>();
+        var imports = new HashSet<String>();
         var builder = new StringBuilder();
 
-        buildMsgImps(msg, tmp, imps);
+        buildMsgImps(msg, tmp, imports);
 
         List<PbField> fields = new ArrayList<>();
         tmp.stream().sorted(Comparator.comparingInt(PbField::getTag))
                 .forEach(fields::add);
 
-        imps.stream().sorted(Comparator.naturalOrder())
+        imports.stream().sorted(Comparator.naturalOrder())
                 .forEach(it -> builder.append(StringUtils.format("import {};", it)).append(LS));
 
         buildDocComment(builder, msg);
