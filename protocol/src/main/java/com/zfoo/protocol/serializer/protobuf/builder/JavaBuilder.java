@@ -95,9 +95,9 @@ public class JavaBuilder {
         if (CollectionUtils.isEmpty(msg.getComments())) {
             return;
         }
-        cb.t(1).c("/**").ln();
-        msg.getComments().forEach(c -> cb.t(1).c(" * ").c(c).ln());
-        cb.t(1).c(" */").ln();
+        cb.t(0).c("/**").ln();
+        msg.getComments().forEach(c -> cb.t(0).c(" * ").c(c).ln());
+        cb.t(0).c(" */").ln();
     }
 
     private void buildFieldComment(CodeBuilder cb, PbField pbField) {

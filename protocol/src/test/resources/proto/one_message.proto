@@ -9,6 +9,7 @@ message OneMessage {
   Proj value = 1;
 }
 
+// 测试pb协议
 message Proj {
   int64 id = 1;
   string name = 2;

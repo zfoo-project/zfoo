@@ -31,6 +31,5 @@ public class AllTypeBuilderTest {
         buildOption.setOutputPath("D:\\github\\zfoo\\protocol\\src\\test\\tmpsrc/");
 
         GeneratePbUtils.create(buildOption);
-        ThreadUtils.sleep(1000);
     }
 }

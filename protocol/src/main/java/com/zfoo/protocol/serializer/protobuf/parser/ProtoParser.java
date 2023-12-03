@@ -13,8 +13,11 @@
 package com.zfoo.protocol.serializer.protobuf.parser;
 
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.serializer.protobuf.wire.*;
+import com.zfoo.protocol.serializer.protobuf.wire.MapField;
+import com.zfoo.protocol.serializer.protobuf.wire.Option;
+import com.zfoo.protocol.serializer.protobuf.wire.PbField;
 import com.zfoo.protocol.serializer.protobuf.wire.PbField.Cardinality;
+import com.zfoo.protocol.serializer.protobuf.wire.ProtoMessage;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
@@ -27,7 +30,6 @@ import java.util.*;
  */
 public class ProtoParser {
 
-    private static final List<String> fieldCardinalities = List.of("repeated", "optional", "required");
     private static final String VALUE_END_ERROR = " value not end with \";\"";
     private static final String ROW_MSG = "row [";
     private static final String START_MSG = " start...";
@@ -116,7 +118,6 @@ public class ProtoParser {
                     comments.clear();
                     break;
                 case "message":
-                    addCommentsToProto(proto);
                     ProtoMessage msg = parseMessage();
                     proto.addMsg(msg);
                     comments.clear();
@@ -172,8 +173,8 @@ public class ProtoParser {
                 // 为了让用法简单，屏蔽内部类的消息定义
                 // msg.addMessage(parseMessage());
                 notSupportInnerMessage();
-            } else if (fieldCardinalities.contains(token)) {
-                PbField field = parseField(Cardinality.valueOf(token.toUpperCase(Locale.ENGLISH)), null);
+            } else if (Cardinality.cardinalityOf(token) != null) {
+                PbField field = parseField(Cardinality.cardinalityOf(token), null);
                 msg.addField(field);
             } else {
                 PbField field = parseField(Cardinality.OPTIONAL, token);

@@ -15,7 +15,9 @@ package com.zfoo.protocol.serializer.protobuf.wire;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * protocol buffer协议消息体属性数据类型定义
@@ -50,6 +52,18 @@ public class PbField {
 
         Cardinality(String value) {
             this.value = value;
+        }
+
+        private static final Map<String, Cardinality> map = new HashMap<>();
+
+        static {
+            for (var ele : Cardinality.values()) {
+                map.put(ele.value, ele);
+            }
+        }
+
+        public static Cardinality cardinalityOf(String str) {
+            return map.get(str);
         }
     }
 
