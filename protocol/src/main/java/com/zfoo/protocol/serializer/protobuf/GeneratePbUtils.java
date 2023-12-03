@@ -59,6 +59,7 @@ public abstract class GeneratePbUtils {
             }
             ProtoParser parser = new ProtoParser(protoString);
             Proto proto = parser.parse();
+            proto.setName(FileUtils.fileSimpleName(protoFile.getName()));
             protos.add(proto);
         }
         return protos;
@@ -66,41 +67,26 @@ public abstract class GeneratePbUtils {
 
 
     public static void generate(PbGenerateOperation buildOption, List<Proto> protos) {
-        Map<String, Proto> allProtos = new HashMap<>();
-        for (Proto proto : protos) {
+        var allProtos = new HashMap<String, Proto>();
+        for (var proto : protos) {
             allProtos.put(proto.getName(), proto);
         }
 
+        var messageOutputPath = buildOption.getOutputPath() + File.separator;
+        if (StringUtils.isNotEmpty(buildOption.getJavaPackage())) {
+            messageOutputPath = messageOutputPath + buildOption.getJavaPackage().replaceAll(StringUtils.PERIOD_REGEX, "/");
+        }
+
         for (var proto : protos) {
-            List<PbOption> options = proto.getOptions();
-            Map<String, String> protoOptions = new HashMap<>();
-            if (options != null) {
-                options.forEach(o -> protoOptions.put(o.getName(), o.getValue()));
-            }
-            if (CollectionUtils.isEmpty(proto.getPbMessages())) {
+            var pbMessages = proto.getPbMessages();
+            if (CollectionUtils.isEmpty(pbMessages)) {
                 continue;
             }
-
-            generateMessage(buildOption, proto, allProtos);
-        }
-    }
-
-
-    private static void generateMessage(PbGenerateOperation buildOption, Proto proto, Map<String, Proto> protos) {
-        String msgPath = buildOption.getOutputPath() + File.separator;
-
-        Map<String, String> msgComments = new HashMap<>();
-
-        List<PbMessage> msgs = proto.getPbMessages();
-        for (var msg : msgs) {
-            StringBuilder mc = new StringBuilder();
-            if (CollectionUtils.isNotEmpty(msg.getComments())) {
-                msg.getComments().forEach(c -> mc.append(c));
+            for (var pbMessage : pbMessages) {
+                var code = buildMessage(proto, pbMessage, 1, null);
+                var filePath = StringUtils.format("{}/{}/{}.java", messageOutputPath, proto.getName(), pbMessage.getName());
+                FileUtils.writeStringToFile(new File(filePath), code, false);
             }
-            msgComments.put(msg.getName(), mc.toString());
-            var code = buildMessage(proto, msg, 1, null, protos);
-            var filePath = msgPath + File.separator + msg.getName() + ".java";
-            FileUtils.writeStringToFile(new File(filePath), code, false);
         }
     }
 
@@ -183,7 +169,7 @@ public abstract class GeneratePbUtils {
         return StringUtils.EMPTY;
     }
 
-    public static String buildMessage(Proto proto, PbMessage msg, int indent, Map<String, String> defineMsgs, Map<String, Proto> protos) {
+    public static String buildMessage(Proto proto, PbMessage msg, int indent, Map<String, String> defineMsgs) {
         var tmp = new ArrayList<PbField>();
         var imports = new HashSet<String>();
         var builder = new StringBuilder();

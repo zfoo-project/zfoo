@@ -28,6 +28,7 @@ public class AllTypeBuilderTest {
         buildOption.setProtoPath("D:\\github\\zfoo\\protocol\\src\\test\\resources\\proto");
 //        buildOption.setProtoPath("D:\\github\\zoo\\app\\zgame\\zgame-common\\src\\main\\resources\\proto");
         buildOption.setOutputPath("D:\\github\\zfoo\\protocol\\src\\test\\tmpsrc/");
+        buildOption.setJavaPackage("com.zfoo.protocol.common");
 
         GeneratePbUtils.create(buildOption);
     }

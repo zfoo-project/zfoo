@@ -17,7 +17,7 @@ public class PbGenerateOperation {
 
     private String protoPath;
     private String outputPath;
-    private boolean isNested;
+    private String javaPackage;
 
     public String getProtoPath() {
         return protoPath;
@@ -35,13 +35,11 @@ public class PbGenerateOperation {
         this.outputPath = outputPath;
     }
 
-    public boolean isIsNested() {
-        return isNested;
+    public String getJavaPackage() {
+        return javaPackage;
     }
 
-    public PbGenerateOperation setIsNested(boolean isNested) {
-        this.isNested = isNested;
-        return this;
+    public void setJavaPackage(String javaPackage) {
+        this.javaPackage = javaPackage;
     }
-
 }
