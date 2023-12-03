@@ -151,10 +151,6 @@ public class Field {
      */
     private int tag;
     /**
-     * 消息属性默认值
-     */
-    private String defaultValue;
-    /**
      * 消息属性的注释信息
      */
     private Comment comment;
@@ -240,38 +236,6 @@ public class Field {
      */
     public Field setTag(int tag) {
         this.tag = tag;
-        return this;
-    }
-
-    /**
-     * 消息属性默认值
-     *
-     * @return the defaultValue
-     */
-    public String getDefaultValue() {
-        if (defaultValue == null) {
-            try {
-                Type fieldType = Type.valueOf(type.toUpperCase(Locale.ENGLISH));
-                if (fieldType.javaType() != null && fieldType.javaType().defaultValue() != null) {
-                    return String.valueOf(fieldType.javaType().defaultValue());
-                }
-            } catch (Exception e) {
-
-            }
-        } else {
-            return defaultValue;
-        }
-        return null;
-    }
-
-    /**
-     * 消息属性默认值
-     *
-     * @param defaultValue the defaultValue to set
-     * @return
-     */
-    public Field setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
         return this;
     }
 

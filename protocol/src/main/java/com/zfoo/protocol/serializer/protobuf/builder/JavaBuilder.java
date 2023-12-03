@@ -33,12 +33,11 @@ public class JavaBuilder {
     }
 
 
-    public String getJavaType(Field field, List<String> imps) {
+    public String getJavaType(Field field) {
         String type = field.getTypeString();
         if (field instanceof MapField) {
             MapField mf = (MapField) field;
-            type = "Map<" + getJavaType(mf.getKey().value()) + ", "
-                    + getJavaType(mf.getValue()) + ">";
+            type = "Map<" + getJavaType(mf.getKey().value()) + ", " + getJavaType(mf.getValue()) + ">";
             return type;
         }
         if (!BASE_TYPES.contains(type.toLowerCase(Locale.ENGLISH))) {
@@ -78,17 +77,16 @@ public class JavaBuilder {
         var fields = msg.getFields();
         if (CollectionUtils.isNotEmpty(fields)) {
             for (var field : fields) {
-                getJavaType(field, imps);
+                getJavaType(field);
                 tmp.add(field);
             }
         }
 
         for (int i = 0; i < tmp.size(); i++) {
             if (tmp.get(i) instanceof MapField) {
-                addImport(imps, "java.util.Map");
+                addImport(imps, Map.class.getName());
             } else if (tmp.get(i).getCardinality() == Field.Cardinality.REPEATED) {
-                addImport(imps, "java.util.List");
-                addImport(imps, "java.util.ArrayList");
+                addImport(imps, List.class.getName());
             }
         }
     }
@@ -155,7 +153,7 @@ public class JavaBuilder {
                 typeName = Proto.class.getPackage().getName() + ".wire.Field." + typeName;
             }
             buildDocComment(cb, f.getComment(), level);
-            String type = getJavaType(f, imps);
+            String type = getJavaType(f);
             String name = f.getName();
             if (f.getCardinality() == Field.Cardinality.REPEATED) {
                 String boxedTypeName = getBoxedTypeName(f);
@@ -206,7 +204,7 @@ public class JavaBuilder {
     }
 
     private String getBoxedTypeName(Field f) {
-        String type = getJavaType(f, null);
+        String type = getJavaType(f);
         if (BASE_TYPES.contains(f.getTypeString())) {
             JavaType javaType = null;
             javaType = Type.valueOf(f.getTypeString().toUpperCase(Locale.ENGLISH)).javaType();
