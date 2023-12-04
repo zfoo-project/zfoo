@@ -25,13 +25,13 @@ public class PbMessage {
      */
     private String name;
     /**
+     * 协议Id
+     */
+    private short protocolId;
+    /**
      * 消息包含的Fields列表
      */
     private List<PbField> fields = new ArrayList<>();
-    /**
-     * 消息内嵌的Message列表
-     */
-    private List<PbMessage> pbMessages = new ArrayList<>();
     /**
      * 消息的备注信息
      */
@@ -41,31 +41,24 @@ public class PbMessage {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
+    public short getProtocolId() {
+        return protocolId;
+    }
+    public void setProtocolId(short protocolId) {
+        this.protocolId = protocolId;
+    }
     public List<PbField> getFields() {
         return fields;
     }
-
     public void setFields(List<PbField> fields) {
         this.fields = fields;
     }
-
-    public List<PbMessage> getProtoMessages() {
-        return pbMessages;
-    }
-
-    public void setProtoMessages(List<PbMessage> pbMessages) {
-        this.pbMessages = pbMessages;
-    }
-
     public List<String> getComments() {
         return comments;
     }
-
     public void setComments(List<String> comments) {
         this.comments = comments;
     }

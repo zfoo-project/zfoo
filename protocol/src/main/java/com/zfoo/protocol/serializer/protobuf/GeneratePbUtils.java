@@ -16,6 +16,7 @@ package com.zfoo.protocol.serializer.protobuf;
 import com.zfoo.protocol.anno.Note;
 import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.serializer.protobuf.parser.Proto;
 import com.zfoo.protocol.serializer.protobuf.parser.ProtoParser;
 import com.zfoo.protocol.util.FileUtils;
@@ -59,10 +60,40 @@ public abstract class GeneratePbUtils {
             if (StringUtils.isBlank(protoString)) {
                 continue;
             }
+
+            // parse protobuf proto
             ProtoParser parser = new ProtoParser(protoString);
             Proto proto = parser.parse();
             proto.setName(FileUtils.fileSimpleName(protoFile.getName()));
             protos.add(proto);
+
+            // auto generate protocolId
+            var startProtocolId = proto.getStartProtocolId();
+            for (var pbMessage : proto.getPbMessages()) {
+                pbMessage.setProtocolId(startProtocolId++);
+            }
+        }
+
+        // check duplicate protocolId and protocolName
+        var protocolIdMap = new HashMap<Short, Pair<Proto, PbMessage>>();
+        var protocolNameMap = new HashMap<String, Pair<Proto, PbMessage>>();
+        for (var proto : protos) {
+            for (var pbMessage : proto.getPbMessages()) {
+                var protocolId = pbMessage.getProtocolId();
+                var protocolName = pbMessage.getName();
+                if (protocolIdMap.containsKey(protocolId)) {
+                    var pair = protocolIdMap.get(protocolId);
+                    throw new RuntimeException(StringUtils.format("duplicate protocolId:[{}] in [{}]:[{}] and [{}]:[{}], consider proto start_protocol_id is too close"
+                            , protocolId, pair.getKey().getName(), pair.getValue().getName(), proto.getName(), protocolName));
+                }
+                if (protocolNameMap.containsKey(protocolName)) {
+                    var pair = protocolIdMap.get(protocolId);
+                    throw new RuntimeException(StringUtils.format("duplicate protocol name in [{}]:[{}] and [{}]:[{}]"
+                            , pair.getKey().getName(), pair.getValue().getName(), proto.getName(), protocolName));
+                }
+                protocolIdMap.put(protocolId, new Pair<>(proto, pbMessage));
+                protocolNameMap.put(protocolName, new Pair<>(proto, pbMessage));
+            }
         }
         return protos;
     }
@@ -235,11 +266,8 @@ public abstract class GeneratePbUtils {
         builder.append(documentComment);
 
         // message
-        var startProtocolId = proto.getStartProtocolId();
-        builder.append(StringUtils.format("@Protocol(id = {})", startProtocolId)).append(LS);
+        builder.append(StringUtils.format("@Protocol(id = {})", pbMessage.getProtocolId())).append(LS);
         builder.append(StringUtils.format("public class {} {", pbMessage.getName())).append(LS);
-        startProtocolId++;
-        proto.setStartProtocolId(startProtocolId);
 
         var pbFields = pbMessage.getFields()
                 .stream()
