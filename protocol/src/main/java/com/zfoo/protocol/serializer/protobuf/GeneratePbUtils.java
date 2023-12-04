@@ -87,7 +87,7 @@ public abstract class GeneratePbUtils {
                             , protocolId, pair.getKey().getName(), pair.getValue().getName(), proto.getName(), protocolName));
                 }
                 if (protocolNameMap.containsKey(protocolName)) {
-                    var pair = protocolIdMap.get(protocolId);
+                    var pair = protocolNameMap.get(protocolName);
                     throw new RuntimeException(StringUtils.format("duplicate protocol name in [{}]:[{}] and [{}]:[{}]"
                             , pair.getKey().getName(), pair.getValue().getName(), proto.getName(), protocolName));
                 }
