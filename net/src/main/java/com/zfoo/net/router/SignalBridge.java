@@ -38,6 +38,10 @@ public class SignalBridge {
      * key：signalId
      */
     private static final Map<Integer, SignalAttachment> signalAttachmentMap = new ConcurrentHashMap<>(1000);
+    /**
+     * EN:Ring buffer data structure, which is cache-friendly, can reduce cache contention and improve memory access efficiency
+     * CN:环形缓冲区数据结构，该数据结构具有良好的缓存友好性，可以充分利用 CPU 缓存，减少缓存竞争，提高内存访问效率
+     */
     private static final AtomicReferenceArray<SignalAttachment> signalAttachmentArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
 
     public static void addSignalAttachment(SignalAttachment signalAttachment) {
