@@ -13,7 +13,6 @@
 
 package com.zfoo.net.packet.common;
 
-import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.anno.Protocol;
 
@@ -22,7 +21,6 @@ import com.zfoo.protocol.anno.Protocol;
  *
  * @author godotg
  */
-@ProtobufClass
 @Protocol(id = 100)
 public class Message {
 

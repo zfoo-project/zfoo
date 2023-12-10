@@ -175,18 +175,9 @@ your protocol number a little more compactly, so that your protocol number will 
 
 ### Ⅷ. Use Protobuf in zfoo
 
-- zfoo only provides protobuf in the way of pojo like jprotobuf, but it can generate proto files for clients to use
-  through pojo objects
+- zfoo provides a proto file parsing tool to convert the proto file of protobuf into a pojo object for use by zfoo
 
-- [jprotobuf](https://github.com/jhunters/jprotobuf) you can directly use simple pojo objects without having to
-  understand proto file operations and syntax
-
-- Generate a proto file for the client to use through the pojo
-  object, [Generate a proto configuration](src/test/resources/protobuf.xml)
-
-- You can also customize your own build method,
-  [Use code custom generation to proto](https://github.com/zfoo-project/tank-game-server/tree/main/common/src/main/java/com/zfoo/tank/common/generate)
-
+- Generate pojo objects through proto files for client use, [Parse proto configuration](https://github.com/zfoo-project/zfoo/blob/main/protocol/src/test/java/com/zfoo/protocol/generate/GenerateProtobufTesting.java)
 
 ### Ⅸ. The difference between zfoo and Protobuf
 

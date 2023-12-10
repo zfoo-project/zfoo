@@ -13,21 +13,17 @@
 
 package com.zfoo.net.packet.common;
 
-import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
-import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  */
-@ProtobufClass
 @Protocol(id = 104)
 public class Pong {
 
     /**
      * 服务器当前的时间戳
      */
-    @Protobuf(order = 1)
     private long time;
 
     public static Pong valueOf(long time) {

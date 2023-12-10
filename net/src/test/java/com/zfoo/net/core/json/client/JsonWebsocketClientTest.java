@@ -15,7 +15,6 @@ package com.zfoo.net.core.json.client;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.HostAndPort;
-import com.zfoo.net.core.jprotobuf.server.JProtobufTcpController;
 import com.zfoo.net.core.json.JsonWebsocketClient;
 import com.zfoo.net.packet.json.JsonHelloRequest;
 import com.zfoo.net.packet.json.JsonHelloResponse;

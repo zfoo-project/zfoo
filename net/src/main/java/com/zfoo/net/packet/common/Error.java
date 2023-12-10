@@ -13,8 +13,6 @@
 
 package com.zfoo.net.packet.common;
 
-import com.baidu.bjf.remoting.protobuf.annotation.Protobuf;
-import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.anno.Protocol;
 import org.slf4j.helpers.FormattingTuple;
@@ -23,15 +21,11 @@ import org.slf4j.helpers.MessageFormatter;
 /**
  * @author godotg
  */
-@ProtobufClass
 @Protocol(id = 101)
 public class Error {
 
-    @Protobuf(order = 1)
     private int module;
-    @Protobuf(order = 2)
     private int errorCode;
-    @Protobuf(order = 3)
     private String errorMessage;
 
     @Override

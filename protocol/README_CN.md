@@ -147,14 +147,10 @@ cpu： i9900k
 
 ### Ⅷ. 在zfoo中使用Protobuf
 
-- zfoo只提供了jprotobuf那种pojo的方式使用protobuf，但是可以通过pojo对象生成proto文件给客户端使用
+- zfoo提供了proto文件解析工具，将protobuf的proto文件转换为pojo对象给zfoo使用
 
-- [jprotobuf](https://github.com/jhunters/jprotobuf) 针对Java程序开发一套简易类库，可以直接使用简单的pojo对象无需再去了解proto文件操作与语法
+- 通过proto文件生成pojo对象给客户端使用，[解析proto配置](https://github.com/zfoo-project/zfoo/blob/main/protocol/src/test/java/com/zfoo/protocol/generate/GenerateProtobufTesting.java)
 
-- 通过pojo对象生成proto文件给客户端使用，[生成proto配置](src/test/resources/protobuf.xml)
-
-- 也可以自定义自己的生成方式，
-  [使用代码自定义生成proto](https://github.com/zfoo-project/tank-game-server/tree/main/common/src/main/java/com/zfoo/tank/common/generate)
 
 ### Ⅸ. zfoo和Protobuf的区别
 

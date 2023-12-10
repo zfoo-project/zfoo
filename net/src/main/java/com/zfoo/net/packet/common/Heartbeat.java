@@ -13,13 +13,11 @@
 
 package com.zfoo.net.packet.common;
 
-import com.baidu.bjf.remoting.protobuf.annotation.ProtobufClass;
 import com.zfoo.protocol.anno.Protocol;
 
 /**
  * @author godotg
  */
-@ProtobufClass
 @Protocol(id = 102)
 public class Heartbeat {
 

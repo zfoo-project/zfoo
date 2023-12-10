@@ -1,6 +1,6 @@
 ### protocol
 
-- 考虑用javassist的方式支持protobuf，放弃使用jprotobuf（可以省略很多不必要的注解，代码更加简洁），用约定大于配置的方式，还可以原生的和pojo对象结合起来
+- 考虑用javassist的方式支持protobuf，用约定大于配置的方式，还可以原生的和pojo对象结合起来
 - 通过protobuf的proto文件生成java的pojo源代码，通过动态编译java源代码的方式生成其它语言的源代码
 
 

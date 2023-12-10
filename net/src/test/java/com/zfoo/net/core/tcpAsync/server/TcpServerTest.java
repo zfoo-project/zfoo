@@ -55,8 +55,6 @@ public class TcpServerTest {
 /*
 serverPacketController
 gatewayProviderController
-JProtobufTcpClientController
-JProtobufTcpController
 providerController
 tcpClientController
 tcpServerController

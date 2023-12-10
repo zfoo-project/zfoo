@@ -65,9 +65,6 @@
         <protocol id="1400" location="com.zfoo.net.packet.websocket.WebsocketHelloRequest"/>
         <protocol id="1401" location="com.zfoo.net.packet.websocket.WebsocketHelloResponse"/>
 
-        <protocol id="1500" location="com.zfoo.net.packet.jprotobuf.JProtobufHelloRequest"/>
-        <protocol id="1501" location="com.zfoo.net.packet.jprotobuf.JProtobufHelloResponse"/>
-
         <protocol id="1600" location="com.zfoo.net.packet.json.JsonHelloRequest"/>
         <protocol id="1601" location="com.zfoo.net.packet.json.JsonHelloResponse"/>
 
