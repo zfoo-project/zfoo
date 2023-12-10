@@ -14,7 +14,6 @@ package com.zfoo.protocol.buffer;
 
 import com.zfoo.protocol.collection.ArrayListInt;
 import com.zfoo.protocol.collection.ArrayUtils;
-import com.zfoo.protocol.collection.CollectionUtils;
 import io.netty.buffer.ByteBuf;
 
 import java.nio.ByteBuffer;
@@ -47,7 +46,7 @@ public abstract class CustomByteBuf {
 
     public static int[] readIntArraySimple(ByteBuf byteBuf) {
         var length = ByteBufUtils.readInt(byteBuf);
-        var ints = new int[CollectionUtils.comfortableLength(length)];
+        var ints = new int[length];
         var readIndex = byteBuf.readerIndex();
         for (var i = 0; i < length; i++) {
             ints[i] = byteBuf.getInt(readIndex);

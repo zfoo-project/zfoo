@@ -714,7 +714,7 @@ public abstract class ByteBufUtils {
 
     public static boolean[] readBooleanArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var bytes = new byte[CollectionUtils.comfortableLength(length)];
+        var bytes = new byte[CollectionUtils.comfortableByteLength(length)];
         var array = new boolean[length];
         byteBuf.readBytes(bytes);
         for (var i = 0; i < length; i++) {
@@ -736,7 +736,7 @@ public abstract class ByteBufUtils {
 
     public static Boolean[] readBooleanBoxArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var array = new Boolean[CollectionUtils.comfortableLength(length)];
+        var array = new Boolean[CollectionUtils.comfortableByteLength(length)];
         for (var i = 0; i < length; i++) {
             array[i] = readBooleanBox(byteBuf);
         }
@@ -791,7 +791,7 @@ public abstract class ByteBufUtils {
             return ArrayUtils.EMPTY_BYTE_ARRAY;
         }
 
-        var bytes = new byte[CollectionUtils.comfortableLength(length)];
+        var bytes = new byte[CollectionUtils.comfortableByteLength(length)];
         byteBuf.readBytes(bytes);
         return bytes;
     }
@@ -809,7 +809,7 @@ public abstract class ByteBufUtils {
 
     public static Byte[] readByteBoxArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var bytesBox = new Byte[CollectionUtils.comfortableLength(length)];
+        var bytesBox = new Byte[CollectionUtils.comfortableByteLength(length)];
         for (var i = 0; i < length; i++) {
             bytesBox[i] = readByteBox(byteBuf);
         }
@@ -1253,7 +1253,7 @@ public abstract class ByteBufUtils {
 
     public static String[] readStringArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var strings = new String[CollectionUtils.comfortableLongLength(length)];
+        var strings = new String[CollectionUtils.comfortableObjectLength(length)];
         for (var i = 0; i < length; i++) {
             strings[i] = readString(byteBuf);
         }

@@ -14,7 +14,6 @@ package com.zfoo.protocol.collection;
 
 
 import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.protocol.util.MathSafeUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
@@ -84,7 +83,7 @@ public abstract class CollectionUtils {
     }
 
     public static <T> List<T> newList(int size) {
-        return size <= 0 ? new ArrayList<>() : new ArrayList<>(comfortableLength(size));
+        return size <= 0 ? new ArrayList<>() : new ArrayList<>(comfortableObjectLength(size));
     }
 
     public static <T> Set<T> newSet(int size) {
@@ -99,39 +98,49 @@ public abstract class CollectionUtils {
      * EN: The safety limit of the array initialization length prevents deserialization exceptions from causing a sudden increase in memory
      * CN: 数组初始化长度的安全上限限制，防止反序列化异常导致内存突然升高
      */
-    public static int comfortableLength(int length) {
-        if (length >= MathSafeUtils.MAX_LENGTH) {
-            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the set safety range [{}]"
-                    , length, MathSafeUtils.MAX_LENGTH));
+    public static final long MAX_BYTE_LENGTH_ARRAY = 64 * IOUtils.BYTES_PER_MB;
+    public static final long MAX_LENGTH_SHORT_ARRAY = IOUtils.BYTES_PER_MB / 2;
+    public static final long MAX_LENGTH_INT_ARRAY = IOUtils.BYTES_PER_MB / 4;
+    public static final long MAX_LENGTH_LONG_ARRAY = IOUtils.BYTES_PER_MB / 8;
+    public static final long MAX_LENGTH_OBJECT_ARRAY = IOUtils.BYTES_PER_MB / 16;
+    public static final long MAX_SIZE_MAP = IOUtils.BYTES_PER_MB / 32;
+
+    public static int comfortableByteLength(int length) {
+        if (length >= MAX_BYTE_LENGTH_ARRAY) {
+            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the safety range [{}]"
+                    , length, MAX_BYTE_LENGTH_ARRAY));
         }
         return length;
     }
+
     public static int comfortableShortLength(int length) {
-        if (length >= MathSafeUtils.MAX_LENGTH_SHORT_ARRAY) {
-            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the set safety range [{}]"
-                    , length, MathSafeUtils.MAX_LENGTH_SHORT_ARRAY));
+        if (length >= MAX_LENGTH_SHORT_ARRAY) {
+            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the safety range [{}]"
+                    , length, MAX_LENGTH_SHORT_ARRAY));
         }
         return length;
     }
+
     public static int comfortableIntLength(int length) {
-        if (length >= MathSafeUtils.MAX_LENGTH_INT_ARRAY) {
-            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the set safety range [{}]"
-                    , length, MathSafeUtils.MAX_LENGTH_INT_ARRAY));
+        if (length >= MAX_LENGTH_INT_ARRAY) {
+            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the safety range [{}]"
+                    , length, MAX_LENGTH_INT_ARRAY));
         }
         return length;
     }
+
     public static int comfortableLongLength(int length) {
-        if (length >= MathSafeUtils.MAX_LENGTH_LONG_ARRAY) {
-            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the set safety range [{}]"
-                    , length, MathSafeUtils.MAX_LENGTH_LONG_ARRAY));
+        if (length >= MAX_LENGTH_LONG_ARRAY) {
+            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the safety range [{}]"
+                    , length, MAX_LENGTH_LONG_ARRAY));
         }
         return length;
     }
 
     public static int comfortableObjectLength(int length) {
-        if (length >= MathSafeUtils.MAX_LENGTH_OBJECT_ARRAY) {
-            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the set safety range [{}]"
-                    , length, MathSafeUtils.MAX_LENGTH_OBJECT_ARRAY));
+        if (length >= MAX_LENGTH_OBJECT_ARRAY) {
+            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the safety range [{}]"
+                    , length, MAX_LENGTH_OBJECT_ARRAY));
         }
         return length;
     }
@@ -143,7 +152,11 @@ public abstract class CollectionUtils {
      * CN: 计算HashMap初始化合适的大小，为了安全必须给初始化的集合一个最大上限，防止反序列化一个不合法的包导致内存突然升高
      */
     public static int comfortableCapacity(int capacity) {
-        return MathSafeUtils.safeFindNextPositivePowerOfTwo(capacity);
+        if (capacity >= MAX_SIZE_MAP) {
+            throw new ArrayStoreException(StringUtils.format("The length of the newly created map [{}] exceeds the safety range [{}]"
+                    , capacity, MAX_SIZE_MAP));
+        }
+        return capacity;
     }
 
     public static int capacity(int expectedSize) {
