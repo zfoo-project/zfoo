@@ -13,10 +13,8 @@
 package com.zfoo.protocol.collection;
 
 
-import com.zfoo.protocol.model.Pair;
-import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.protocol.util.MathSafeUtil;
+import com.zfoo.protocol.util.MathSafeUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
@@ -116,7 +114,7 @@ public abstract class CollectionUtils {
      * CN: 计算HashMap初始化合适的大小，为了安全必须给初始化的集合一个最大上限，防止反序列化一个不合法的包导致内存突然升高
      */
     public static int comfortableCapacity(int capacity) {
-        return MathSafeUtil.safeFindNextPositivePowerOfTwo(capacity);
+        return MathSafeUtils.safeFindNextPositivePowerOfTwo(capacity);
     }
 
     public static int capacity(int expectedSize) {
