@@ -100,9 +100,38 @@ public abstract class CollectionUtils {
      * CN: 数组初始化长度的安全上限限制，防止反序列化异常导致内存突然升高
      */
     public static int comfortableLength(int length) {
-        if (length >= IOUtils.BYTES_PER_MB) {
+        if (length >= MathSafeUtils.MAX_LENGTH) {
             throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the set safety range [{}]"
-                    , length, IOUtils.BYTES_PER_MB));
+                    , length, MathSafeUtils.MAX_LENGTH));
+        }
+        return length;
+    }
+    public static int comfortableShortLength(int length) {
+        if (length >= MathSafeUtils.MAX_LENGTH_SHORT_ARRAY) {
+            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the set safety range [{}]"
+                    , length, MathSafeUtils.MAX_LENGTH_SHORT_ARRAY));
+        }
+        return length;
+    }
+    public static int comfortableIntLength(int length) {
+        if (length >= MathSafeUtils.MAX_LENGTH_INT_ARRAY) {
+            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the set safety range [{}]"
+                    , length, MathSafeUtils.MAX_LENGTH_INT_ARRAY));
+        }
+        return length;
+    }
+    public static int comfortableLongLength(int length) {
+        if (length >= MathSafeUtils.MAX_LENGTH_LONG_ARRAY) {
+            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the set safety range [{}]"
+                    , length, MathSafeUtils.MAX_LENGTH_LONG_ARRAY));
+        }
+        return length;
+    }
+
+    public static int comfortableObjectLength(int length) {
+        if (length >= MathSafeUtils.MAX_LENGTH_OBJECT_ARRAY) {
+            throw new ArrayStoreException(StringUtils.format("The length of the newly created array [{}] exceeds the set safety range [{}]"
+                    , length, MathSafeUtils.MAX_LENGTH_OBJECT_ARRAY));
         }
         return length;
     }

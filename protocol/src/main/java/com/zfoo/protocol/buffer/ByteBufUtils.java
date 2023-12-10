@@ -867,7 +867,7 @@ public abstract class ByteBufUtils {
 
     public static short[] readShortArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var shorts = new short[CollectionUtils.comfortableLength(length)];
+        var shorts = new short[CollectionUtils.comfortableShortLength(length)];
         var readIndex = byteBuf.readerIndex();
         for (var i = 0; i < length; i++) {
             shorts[i] = byteBuf.getShort(readIndex);
@@ -890,7 +890,7 @@ public abstract class ByteBufUtils {
 
     public static Short[] readShortBoxArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var shorts = new Short[CollectionUtils.comfortableLength(length)];
+        var shorts = new Short[CollectionUtils.comfortableShortLength(length)];
         for (var i = 0; i < length; i++) {
             shorts[i] = readShortBox(byteBuf);
         }
@@ -944,7 +944,7 @@ public abstract class ByteBufUtils {
 
     public static int[] readIntArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var ints = new int[CollectionUtils.comfortableLength(length)];
+        var ints = new int[CollectionUtils.comfortableIntLength(length)];
         for (var i = 0; i < length; i++) {
             ints[i] = readInt(byteBuf);
         }
@@ -964,7 +964,7 @@ public abstract class ByteBufUtils {
 
     public static Integer[] readIntBoxArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var ints = new Integer[CollectionUtils.comfortableLength(length)];
+        var ints = new Integer[CollectionUtils.comfortableIntLength(length)];
         for (var i = 0; i < length; i++) {
             ints[i] = readIntBox(byteBuf);
         }
@@ -1018,7 +1018,7 @@ public abstract class ByteBufUtils {
 
     public static long[] readLongArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var longs = new long[CollectionUtils.comfortableLength(length)];
+        var longs = new long[CollectionUtils.comfortableLongLength(length)];
         for (var i = 0; i < length; i++) {
             longs[i] = readLong(byteBuf);
         }
@@ -1038,7 +1038,7 @@ public abstract class ByteBufUtils {
 
     public static Long[] readLongBoxArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var longs = new Long[CollectionUtils.comfortableLength(length)];
+        var longs = new Long[CollectionUtils.comfortableLongLength(length)];
         for (var i = 0; i < length; i++) {
             longs[i] = readLongBox(byteBuf);
         }
@@ -1096,7 +1096,7 @@ public abstract class ByteBufUtils {
 
     public static float[] readFloatArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var floats = new float[CollectionUtils.comfortableLength(length)];
+        var floats = new float[CollectionUtils.comfortableIntLength(length)];
         var readIndex = byteBuf.readerIndex();
         for (var i = 0; i < length; i++) {
             floats[i] = byteBuf.getFloat(readIndex);
@@ -1119,7 +1119,7 @@ public abstract class ByteBufUtils {
 
     public static Float[] readFloatBoxArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var floats = new Float[CollectionUtils.comfortableLength(length)];
+        var floats = new Float[CollectionUtils.comfortableIntLength(length)];
         for (var i = 0; i < length; i++) {
             floats[i] = readFloatBox(byteBuf);
         }
@@ -1177,7 +1177,7 @@ public abstract class ByteBufUtils {
 
     public static double[] readDoubleArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var doubles = new double[CollectionUtils.comfortableLength(length)];
+        var doubles = new double[CollectionUtils.comfortableLongLength(length)];
         var readIndex = byteBuf.readerIndex();
         for (var i = 0; i < length; i++) {
             doubles[i] = byteBuf.getDouble(readIndex);
@@ -1200,7 +1200,7 @@ public abstract class ByteBufUtils {
 
     public static Double[] readDoubleBoxArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var doubles = new Double[CollectionUtils.comfortableLength(length)];
+        var doubles = new Double[CollectionUtils.comfortableLongLength(length)];
         for (var i = 0; i < length; i++) {
             doubles[i] = readDoubleBox(byteBuf);
         }
@@ -1253,7 +1253,7 @@ public abstract class ByteBufUtils {
 
     public static String[] readStringArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
-        var strings = new String[CollectionUtils.comfortableLength(length)];
+        var strings = new String[CollectionUtils.comfortableLongLength(length)];
         for (var i = 0; i < length; i++) {
             strings[i] = readString(byteBuf);
         }
