@@ -13,6 +13,7 @@
 
 package com.zfoo.protocol.serializer.protobuf;
 
+import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.anno.Note;
 import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.protocol.collection.CollectionUtils;
@@ -29,6 +30,12 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
 
 public abstract class GeneratePbUtils {
+
+    /**
+     * EN: If the tag of a protobuf field exceeds this value, this field is considered to be a compatible protocol field
+     * CN: 如果protobuf的字段的tag超过这个值，则视这个字段为需要兼容的协议字段
+     */
+    public static final int COMPATIBLE_FIELD_TAG = 1000;
 
     public static void create(PbGenerateOperation buildOption) {
         var protoPathFile = new File(buildOption.getProtoPath());
@@ -170,6 +177,10 @@ public abstract class GeneratePbUtils {
                 imports.add(Note.class.getName());
             }
 
+            if (pbField.getTag() >= COMPATIBLE_FIELD_TAG) {
+                imports.add(Compatible.class.getName());
+            }
+
             if (pbField instanceof PbMapField) {
                 imports.add(Map.class.getName());
                 var pbMapField = (PbMapField) pbField;
@@ -281,6 +292,10 @@ public abstract class GeneratePbUtils {
 
             var fieldComment = buildFieldComment(pbField);
             builder.append(fieldComment);
+            if (pbField.getTag() >= COMPATIBLE_FIELD_TAG) {
+                var tag = pbField.getTag() - COMPATIBLE_FIELD_TAG;
+                builder.append(TAB).append(StringUtils.format("@Compatible({})", tag)).append(LS);
+            }
             builder.append(TAB).append(StringUtils.format("private {} {};", type, name)).append(LS);
 
             String getMethod;

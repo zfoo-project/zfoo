@@ -24,6 +24,6 @@ message Proj {
   //zzzzzzz
   repeated int32 a = 4;//rrrrrrrrrrrrrrrrrrrrrrr
   map<int32, int64> b = 5;
-  map<int32, string> c = 6;
-  map<int32, SimpleObject> d = 7;
+  map<int32, string> c = 1000;
+  map<int32, SimpleObject> d = 1001;
 }
