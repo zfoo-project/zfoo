@@ -219,16 +219,16 @@ public class ConcurrentTesting {
     // -----------------------------------------------------------------------------------------------------------------
     @Test
     public void primitiveMapTest() {
-        var map = new LongObjectHashMap<>();
+        var map = new LongObjectHashMap<Integer>();
         var startTime = System.currentTimeMillis();
 
         for (int count = 0; count < maxCount; count++) {
             for (int j = 0; j < num; j++) {
                 map.put(j, j);
             }
-            for (var entry : map.entries()) {
-                var key = entry.key();
-                var value = entry.value();
+            for (var entry : map.entrySet()) {
+                var key = entry.getKey();
+                var value = entry.getValue();
             }
             for (int j = 0; j < num; j++) {
                 var value = (int) map.get((long) j);
