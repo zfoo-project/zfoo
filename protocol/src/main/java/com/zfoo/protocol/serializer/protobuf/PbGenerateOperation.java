@@ -19,7 +19,7 @@ public class PbGenerateOperation {
     private String outputPath;
     private String javaPackage;
     /**
-     * 生成的类是否是record
+     * Whether generated class is record
      */
     private boolean recordClass = false;
 
