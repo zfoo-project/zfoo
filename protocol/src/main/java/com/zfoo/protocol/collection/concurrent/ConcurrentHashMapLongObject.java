@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 
 /**
  * EN: It is suitable for scenarios where there are more reads and fewer writes
- * CN: 适用于读多写少的场景
+ * CN: 适用于读多写少的场景，数据量10w以下性能会有不错的提升，不适用于大数据量的场景
  * @author godotg
  */
 public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
