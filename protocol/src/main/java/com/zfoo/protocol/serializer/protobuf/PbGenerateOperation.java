@@ -18,6 +18,7 @@ public class PbGenerateOperation {
     private String protoPath;
     private String outputPath;
     private String javaPackage;
+    private boolean recordClass = false;
 
     public String getProtoPath() {
         return protoPath;
@@ -41,5 +42,13 @@ public class PbGenerateOperation {
 
     public void setJavaPackage(String javaPackage) {
         this.javaPackage = javaPackage;
+    }
+
+    public boolean isRecordClass() {
+        return recordClass;
+    }
+
+    public void setRecordClass(boolean recordClass) {
+        this.recordClass = recordClass;
     }
 }
