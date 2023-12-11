@@ -14,13 +14,14 @@ package com.zfoo.protocol.collection;
 
 import com.zfoo.protocol.collection.concurrent.ConcurrentHashMapLongObject;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
+import io.netty.util.collection.LongObjectHashMap;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
-import java.util.function.BiConsumer;
 
 /**
  * @author godotg
@@ -209,6 +210,58 @@ public class ConcurrentTesting {
             }
             countDownLatch4.await();
             Assert.assertTrue(map.isEmpty());
+        }
+
+        System.out.println(System.currentTimeMillis() - startTime);
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void primitiveMapTest() {
+        var map = new LongObjectHashMap<>();
+        var startTime = System.currentTimeMillis();
+
+        for (int count = 0; count < maxCount; count++) {
+            for (int j = 0; j < num; j++) {
+                map.put(j, j);
+            }
+            for (var entry : map.entries()) {
+                var key = entry.key();
+                var value = entry.value();
+            }
+            for (int j = 0; j < num; j++) {
+                var value = (int) map.get((long) j);
+                Assert.assertEquals(value, j);
+            }
+            for (int j = 0; j < num; j++) {
+                map.remove((long) j);
+            }
+        }
+
+        System.out.println(System.currentTimeMillis() - startTime);
+    }
+
+    @Test
+    public void mapTest() {
+        var map = new HashMap<Long, Integer>();
+        var startTime = System.currentTimeMillis();
+
+        for (int count = 0; count < maxCount; count++) {
+            for (int j = 0; j < num; j++) {
+                map.put((long) j, j);
+            }
+            for (var entry : map.entrySet()) {
+                var key = entry.getKey();
+                var value = entry.getValue();
+            }
+            for (int j = 0; j < num; j++) {
+                var value = (int) map.get((long) j);
+                Assert.assertEquals(value, j);
+            }
+            for (int j = 0; j < num; j++) {
+                map.remove((long) j);
+            }
         }
 
         System.out.println(System.currentTimeMillis() - startTime);
