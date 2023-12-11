@@ -22,6 +22,8 @@ import java.util.function.Consumer;
 
 
 /**
+ * EN: It is suitable for scenarios where there are more reads and fewer writes
+ * CN: 适用于读多写少的场景
  * @author godotg
  */
 public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
