@@ -22,11 +22,12 @@ import org.junit.Test;
 public class GenerateProtobufTesting {
 
     @Test
-    public void testAllTypeTest() {
+    public void generateClassFromProto() {
         var buildOption = new PbGenerateOperation();
         buildOption.setProtoPath("D:\\github\\zfoo\\protocol\\src\\test\\protobuf");
         buildOption.setOutputPath("D:\\github\\zfoo\\protocol\\src\\test\\zfoopb");
         buildOption.setJavaPackage("com.zfoo.protocol.generate.test");
+//        buildOption.setRecordClass(true);
 
         GeneratePbUtils.create(buildOption);
     }
