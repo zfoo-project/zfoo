@@ -18,6 +18,9 @@ public class PbGenerateOperation {
     private String protoPath;
     private String outputPath;
     private String javaPackage;
+    /**
+     * 生成的类是否是record
+     */
     private boolean recordClass = false;
 
     public String getProtoPath() {
