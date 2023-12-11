@@ -28,7 +28,7 @@ public class GenerateProtobufTesting {
         buildOption.setOutputPath("D:\\github\\zfoo\\protocol\\src\\test\\zfoopb");
         buildOption.setJavaPackage("com.zfoo.protocol.generate.test");
 //        buildOption.setRecordClass(true);
-
+//        buildOption.setOneProtocol(true);
         GeneratePbUtils.create(buildOption);
     }
 }

@@ -26,6 +26,8 @@ import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
 import com.zfoo.protocol.serializer.python.GeneratePyUtils;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
+import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.protocol.util.StringUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -59,6 +61,22 @@ public abstract class GenerateProtocolFile {
     public static StringBuilder addTabAscii(StringBuilder builder, int deep) {
         builder.append(TAB_ASCII.repeat(Math.max(0, deep)));
         return builder;
+    }
+
+    /**
+     * 给每行新增若干Tab
+     */
+    public static String addTabs(String str, int deep) {
+        if (StringUtils.isEmpty(str)) {
+            return str;
+        }
+        var splits = str.split(FileUtils.LS_REGEX);
+        var builder = new StringBuilder();
+        for (var split : splits) {
+            builder.append(TAB.repeat(Math.max(0, deep)));
+            builder.append(split).append(FileUtils.LS);
+        }
+        return builder.toString();
     }
 
     public static void clear() {

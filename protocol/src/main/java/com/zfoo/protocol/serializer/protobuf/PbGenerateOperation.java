@@ -21,7 +21,11 @@ public class PbGenerateOperation {
     /**
      * Whether generated class is record
      */
-    private boolean recordClass = false;
+    private boolean recordClass;
+    /**
+     * All protocol files are generated in a single protocol file.
+     */
+    private boolean oneProtocol;
 
     public String getProtoPath() {
         return protoPath;
@@ -53,5 +57,13 @@ public class PbGenerateOperation {
 
     public void setRecordClass(boolean recordClass) {
         this.recordClass = recordClass;
+    }
+
+    public boolean isOneProtocol() {
+        return oneProtocol;
+    }
+
+    public void setOneProtocol(boolean oneProtocol) {
+        this.oneProtocol = oneProtocol;
     }
 }

@@ -17,6 +17,7 @@ import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.anno.Note;
 import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.serializer.protobuf.parser.Proto;
 import com.zfoo.protocol.serializer.protobuf.parser.ProtoParser;
@@ -117,10 +118,40 @@ public abstract class GeneratePbUtils {
             if (CollectionUtils.isEmpty(pbMessages)) {
                 continue;
             }
-            for (var pbMessage : pbMessages) {
-                var code = buildMessage(pbGenerateOperation, protos, proto, pbMessage);
-                var filePath = StringUtils.format("{}/{}/{}.java", messageOutputPath, proto.getName(), pbMessage.getName());
-                FileUtils.writeStringToFile(new File(filePath), code, false);
+            if (pbGenerateOperation.isOneProtocol()) {
+                var builder = new StringBuilder();
+                var outClassName = toOutClassName(proto);
+                // import other class
+                var imports = buildOneProtocolMessageImports(pbGenerateOperation, protos, proto);
+                builder.append(imports);
+                // out class builder
+                var protoComment = buildProtoComment(proto);
+                builder.append(protoComment);
+                builder.append(StringUtils.format("public class {} {", outClassName)).append(LS);
+                // inner class builder
+                for (var pbMessage : pbMessages) {
+                    // document
+                    var documentComment = buildDocumentComment(pbMessage);
+                    builder.append(GenerateProtocolFile.addTabs(documentComment, 1));
+                    // message
+                    if (pbGenerateOperation.isRecordClass()) {
+                        var recordBody = buildRecordBody(pbMessage);
+                        builder.append(GenerateProtocolFile.addTabs(recordBody, 1));
+                    } else {
+                        var classBody = buildClassBody(pbMessage);
+                        classBody = classBody.replaceFirst("public class ", "public static class ");
+                        builder.append(GenerateProtocolFile.addTabs(classBody, 1));
+                    }
+                }
+                builder.append("}");
+                var filePath = StringUtils.format("{}/{}.java", messageOutputPath, outClassName);
+                FileUtils.writeStringToFile(new File(filePath), builder.toString(), false);
+            } else {
+                for (var pbMessage : pbMessages) {
+                    var code = buildMessage(pbGenerateOperation, protos, proto, pbMessage);
+                    var filePath = StringUtils.format("{}/{}/{}.java", messageOutputPath, proto.getName(), pbMessage.getName());
+                    FileUtils.writeStringToFile(new File(filePath), code, false);
+                }
             }
         }
     }
@@ -165,6 +196,10 @@ public abstract class GeneratePbUtils {
 
 
     // -----------------------------------------------------------------------------------------------------------------
+    private static boolean isCompatiblePbField(PbField pbField) {
+        return pbField.getTag() >= COMPATIBLE_FIELD_TAG;
+    }
+
     public static String buildMessage(PbGenerateOperation pbGenerateOperation, List<Proto> protos, Proto proto, PbMessage pbMessage) {
         var builder = new StringBuilder();
 
@@ -202,7 +237,7 @@ public abstract class GeneratePbUtils {
                 imports.add(Note.class.getName());
             }
 
-            if (pbField.getTag() >= COMPATIBLE_FIELD_TAG) {
+            if (isCompatiblePbField(pbField)) {
                 imports.add(Compatible.class.getName());
             }
 
@@ -257,6 +292,16 @@ public abstract class GeneratePbUtils {
         throw new RuntimeException(StringUtils.format("not found type:[{}] in proto:[{}]", fieldType, proto.getName()));
     }
 
+    private static String buildProtoComment(Proto proto) {
+        if (CollectionUtils.isEmpty(proto.getComments())) {
+            return StringUtils.EMPTY;
+        }
+        var builder = new StringBuilder();
+        builder.append("/**").append(LS);
+        proto.getComments().forEach(it -> builder.append(StringUtils.format(" * {}", it)).append(LS));
+        builder.append(" */").append(LS);
+        return builder.toString();
+    }
 
     private static String buildDocumentComment(PbMessage msg) {
         if (CollectionUtils.isEmpty(msg.getComments())) {
@@ -311,7 +356,7 @@ public abstract class GeneratePbUtils {
 
             var fieldComment = buildFieldComment(pbField);
             builder.append(fieldComment);
-            if (pbField.getTag() >= COMPATIBLE_FIELD_TAG) {
+            if (isCompatiblePbField(pbField)) {
                 var tag = pbField.getTag() - COMPATIBLE_FIELD_TAG;
                 builder.append(TAB).append(StringUtils.format("@Compatible({})", tag)).append(LS);
             }
@@ -343,7 +388,7 @@ public abstract class GeneratePbUtils {
 
             var fieldComment = buildFieldComment(pbField);
             builder.append(fieldComment);
-            if (pbField.getTag() >= COMPATIBLE_FIELD_TAG) {
+            if (isCompatiblePbField(pbField)) {
                 var tag = pbField.getTag() - COMPATIBLE_FIELD_TAG;
                 builder.append(TAB).append(StringUtils.format("@Compatible({})", tag)).append(LS);
             }
@@ -369,5 +414,97 @@ public abstract class GeneratePbUtils {
         builder.append(LS).append(builderMethod);
         builder.append("}");
         return builder.toString();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private static String toOutClassName(Proto proto) {
+        var protoName = proto.getName();
+        var splits = protoName.split("[-_]");
+        var builder = new StringBuilder();
+        for (var split : splits) {
+            if (StringUtils.isBlank(split)) {
+                continue;
+            }
+            // 首字母大写
+            builder.append(StringUtils.capitalize(split.trim()));
+        }
+        var outClassName = builder.toString();
+        for (var pbMessage : proto.getPbMessages()) {
+            if (pbMessage.getName().equals(outClassName)) {
+                builder.append("s");
+            }
+        }
+        return builder.toString();
+    }
+
+    private static String buildOneProtocolMessageImports(PbGenerateOperation pbGenerateOperation, List<Proto> protos, Proto proto) {
+        var imports = new HashSet<String>();
+        imports.add(Protocol.class.getName());
+
+        for (var pbMessage : proto.getPbMessages()) {
+            var pbFields = pbMessage.getFields();
+            if (CollectionUtils.isEmpty(pbFields)) {
+                return StringUtils.EMPTY;
+            }
+
+            for (var pbField : pbFields) {
+                if (CollectionUtils.isNotEmpty(pbField.getComments())) {
+                    imports.add(Note.class.getName());
+                }
+
+                if (isCompatiblePbField(pbField)) {
+                    imports.add(Compatible.class.getName());
+                }
+
+                if (pbField instanceof PbMapField) {
+                    imports.add(Map.class.getName());
+                    var pbMapField = (PbMapField) pbField;
+                    buildOneProtocolImports(pbGenerateOperation, protos, proto, pbMapField.getKey().value(), imports);
+                    buildOneProtocolImports(pbGenerateOperation, protos, proto, pbMapField.getValue(), imports);
+                    continue;
+                }
+
+                if (pbField.getCardinality() == PbField.Cardinality.REPEATED) {
+                    imports.add(List.class.getName());
+                }
+
+                buildOneProtocolImports(pbGenerateOperation, protos, proto, pbField.getType(), imports);
+            }
+        }
+
+        var builder = new StringBuilder();
+        imports.stream()
+                .sorted(Comparator.naturalOrder())
+                .forEach(it -> builder.append(StringUtils.format("import {};", it)).append(LS));
+        return builder.toString();
+    }
+
+    private static void buildOneProtocolImports(PbGenerateOperation pbGenerateOperation, List<Proto> protos, Proto proto, String fieldType, Set<String> imports) {
+        // 基本数据类型不需要导入
+        var typeProtobuf = PbType.typeOfProtobuf(fieldType);
+        if (typeProtobuf != null) {
+            return;
+        }
+
+        // 属于同一个包不需要导入
+        if (proto.getPbMessages().stream().anyMatch(it -> it.getName().equals(fieldType))) {
+            return;
+        }
+
+        // 遍历其它的proto找到需要导入的类
+        for (var pt : protos) {
+            for (var msg : pt.getPbMessages()) {
+                if (msg.getName().equals(fieldType)) {
+                    if (StringUtils.isBlank(pbGenerateOperation.getJavaPackage())) {
+                        imports.add(StringUtils.format("static {}.*", toOutClassName(pt)));
+                    } else {
+                        imports.add(StringUtils.format("static {}.{}.*", pbGenerateOperation.getJavaPackage(), toOutClassName(pt)));
+                    }
+                    return;
+                }
+            }
+        }
+
+        throw new RuntimeException(StringUtils.format("not found type:[{}] in proto:[{}]", fieldType, proto.getName()));
     }
 }

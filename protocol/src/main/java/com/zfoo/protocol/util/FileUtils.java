@@ -48,6 +48,7 @@ public abstract class FileUtils {
      * </pre>
      */
     public static final String LS = System.lineSeparator();
+    public static final String LS_REGEX = "\\r?\\n";
     public static final String UNIX_LS = "\\n";
     public static final String WINDOWS_LS = "\\r\\n";
     // The file copy buffer size (30 MB)
