@@ -174,7 +174,7 @@ public abstract class GeneratePbUtils {
         }
         if (pbField.getCardinality() == PbField.Cardinality.REPEATED) {
             var boxedTypeName = getBoxJavaType(pbField);
-            type = StringUtils.format("List<?>", boxedTypeName);
+            type = StringUtils.format("List<{}>", boxedTypeName);
             return type;
         }
         return getJavaType(type);
