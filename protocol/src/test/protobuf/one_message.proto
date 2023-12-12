@@ -13,7 +13,7 @@ message SimpleObject {
   int64 aa = 1;
 }
 
-// 测试pb协议1
+// 测试协议1
 message Proj {
   // 这是属性的注释
   int64 id = 1;

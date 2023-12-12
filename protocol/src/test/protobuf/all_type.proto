@@ -8,7 +8,7 @@ import "one_message.proto";
 option java_package = "start";
 
 
-// 如果protobuf的字段的tag超过1000，则视这个字段为需要兼容的协议字段
+// 如果字段的tag超过1000，则视这个字段为需要兼容的协议字段
 message AllType {
   bool     field1 = 1;
   bytes    field2 = 2;
