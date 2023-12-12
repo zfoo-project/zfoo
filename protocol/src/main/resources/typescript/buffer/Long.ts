@@ -13,6 +13,7 @@ type WasmExports = {
 let wasm: WasmExports;
 
 try {
+  // nodejs环境无法使用
   wasm = new WebAssembly.Instance(
     new WebAssembly.Module(
       new Uint8Array([
