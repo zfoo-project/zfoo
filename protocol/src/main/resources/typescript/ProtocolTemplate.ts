@@ -10,7 +10,7 @@ class {} {
         return {}.PROTOCOL_ID;
     }
 
-    static write(buffer: any, packet: {} | null) {
+    static write(buffer: IByteBuffer, packet: {} | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -18,7 +18,7 @@ class {} {
         {}
     }
 
-    static read(buffer: any): {} | null {
+    static read(buffer: IByteBuffer): {} | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;

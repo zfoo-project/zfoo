@@ -87,7 +87,7 @@ public abstract class GenerateTsUtils {
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
-        var list = List.of("typescript/buffer/ByteBuffer.ts", "typescript/buffer/Long.ts", "typescript/buffer/Longbits.ts");
+        var list = List.of("typescript/IByteBuffer.ts", "typescript/buffer/ByteBuffer.ts", "typescript/buffer/Long.ts", "typescript/buffer/Longbits.ts");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
             var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "typescript/")));
@@ -105,7 +105,6 @@ public abstract class GenerateTsUtils {
             var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.TypeScript);
             importBuilder.append(StringUtils.format("import {} from './{}';", protocolName, path)).append(LS);
             initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, protocolName)).append(LS);
-
         }
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), initProtocolBuilder.toString().trim());
@@ -138,11 +137,19 @@ public abstract class GenerateTsUtils {
     private static String importSubProtocol(ProtocolRegistration registration) {
         var protocolId = registration.getId();
         var subProtocols = ProtocolAnalysis.getFirstSubProtocolIds(protocolId);
-
-        if (CollectionUtils.isEmpty(subProtocols)) {
-            return StringUtils.EMPTY;
-        }
+        // import IByteBuffer first
         var importBuilder = new StringBuilder();
+        var protocolPath = GenerateProtocolPath.getProtocolPath(protocolId);
+        if (StringUtils.isEmpty(protocolPath) ) {
+            importBuilder.append(StringUtils.format("import IByteBuffer from './IByteBuffer';")).append(LS);
+        } else {
+            var splits = protocolPath.split(StringUtils.PERIOD_REGEX);
+            importBuilder.append(StringUtils.format("import IByteBuffer from '{}IByteBuffer';", "../".repeat(splits.length))).append(LS);
+        }
+        if (CollectionUtils.isEmpty(subProtocols)) {
+            return importBuilder.toString();
+        }
+        // import other sub protocols
         for (var subProtocolId : subProtocols) {
             var protocolClassName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
             var path = GenerateProtocolPath.getRelativePath(protocolId, subProtocolId);
