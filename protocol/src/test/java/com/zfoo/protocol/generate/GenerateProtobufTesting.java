@@ -25,7 +25,7 @@ public class GenerateProtobufTesting {
     public void generateClassFromProto() {
         var buildOption = new PbGenerateOperation();
         buildOption.setProtoPath("src\\test\\protobuf");
-        buildOption.setOutputPath("src\\test\\zfoopb");
+        buildOption.setOutputPath("zfoopb");
         buildOption.setJavaPackage("com.zfoo.protocol.generate.test");
 //        buildOption.setRecordClass(true);
 //        buildOption.setOneProtocol(true);
