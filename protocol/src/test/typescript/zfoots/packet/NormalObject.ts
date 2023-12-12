@@ -1,3 +1,4 @@
+import IByteBuffer from '../IByteBuffer';
 import ObjectA from './ObjectA';
 
 
@@ -21,7 +22,6 @@ class NormalObject {
     mm: Map<number, ObjectA> = new Map();
     s: Set<number> = new Set();
     ssss: Set<string> = new Set();
-    outCompatibleValue: number = 0;
 
     static PROTOCOL_ID: number = 101;
 
@@ -29,13 +29,12 @@ class NormalObject {
         return NormalObject.PROTOCOL_ID;
     }
 
-    static write(buffer: any, packet: NormalObject | null) {
+    static write(buffer: IByteBuffer, packet: NormalObject | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
         }
-        const beforeWriteIndex = buffer.getWriteOffset();
-        buffer.writeInt(854);
+        buffer.writeInt(-1);
         buffer.writeByte(packet.a);
         buffer.writeByteArray(packet.aaa);
         buffer.writeShort(packet.b);
@@ -54,11 +53,9 @@ class NormalObject {
         buffer.writeIntPacketMap(packet.mm, 102);
         buffer.writeIntSet(packet.s);
         buffer.writeStringSet(packet.ssss);
-        buffer.writeInt(packet.outCompatibleValue);
-        buffer.adjustPadding(854, beforeWriteIndex);
     }
 
-    static read(buffer: any): NormalObject | null {
+    static read(buffer: IByteBuffer): NormalObject | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
@@ -101,10 +98,6 @@ class NormalObject {
         packet.s = set16;
         const set17 = buffer.readStringSet();
         packet.ssss = set17;
-        if (buffer.compatibleRead(beforeReadIndex, length)) {
-            const result18 = buffer.readInt();
-            packet.outCompatibleValue = result18;
-        }
         if (length > 0) {
             buffer.setReadOffset(beforeReadIndex + length);
         }

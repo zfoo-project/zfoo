@@ -1,9 +1,9 @@
+import IByteBuffer from '../IByteBuffer';
 
 
 class ObjectB {
 
     flag: boolean = false;
-    innerCompatibleValue: number = 0;
 
     static PROTOCOL_ID: number = 103;
 
@@ -11,19 +11,16 @@ class ObjectB {
         return ObjectB.PROTOCOL_ID;
     }
 
-    static write(buffer: any, packet: ObjectB | null) {
+    static write(buffer: IByteBuffer, packet: ObjectB | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
         }
-        const beforeWriteIndex = buffer.getWriteOffset();
-        buffer.writeInt(4);
+        buffer.writeInt(-1);
         buffer.writeBoolean(packet.flag);
-        buffer.writeInt(packet.innerCompatibleValue);
-        buffer.adjustPadding(4, beforeWriteIndex);
     }
 
-    static read(buffer: any): ObjectB | null {
+    static read(buffer: IByteBuffer): ObjectB | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
@@ -32,10 +29,6 @@ class ObjectB {
         const packet = new ObjectB();
         const result0 = buffer.readBoolean(); 
         packet.flag = result0;
-        if (buffer.compatibleRead(beforeReadIndex, length)) {
-            const result1 = buffer.readInt();
-            packet.innerCompatibleValue = result1;
-        }
         if (length > 0) {
             buffer.setReadOffset(beforeReadIndex + length);
         }

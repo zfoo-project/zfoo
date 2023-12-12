@@ -1,3 +1,4 @@
+import IByteBuffer from '../IByteBuffer';
 import ObjectA from './ObjectA';
 
 
@@ -3354,7 +3355,7 @@ class VeryBigObject {
         return VeryBigObject.PROTOCOL_ID;
     }
 
-    static write(buffer: any, packet: VeryBigObject | null) {
+    static write(buffer: IByteBuffer, packet: VeryBigObject | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -6706,7 +6707,7 @@ class VeryBigObject {
         buffer.writeStringSet(packet.ssss9);
     }
 
-    static read(buffer: any): VeryBigObject | null {
+    static read(buffer: IByteBuffer): VeryBigObject | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;

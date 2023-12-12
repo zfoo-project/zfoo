@@ -66,8 +66,8 @@ public class ProtocolAnalysis {
      * EN: Temp field, name reserved keywords, The name of the protocol cannot be named with the following name
      * CN: 临时变量，启动完成就会销毁，协议名称保留字符，即协议的名称不能用以下名称命名
      */
-    private static Set<String> protocolReserved = Set.of("Buffer", "ByteBuf", "ByteBuffer", "LittleEndianByteBuffer", "NormalByteBuffer"
-            , "IProtocol", "IProtocolRegistration", "ProtocolManager", "IFieldRegistration"
+    private static Set<String> protocolReserved = Set.of("IProtocol", "IProtocolRegistration", "ProtocolManager", "IFieldRegistration"
+            , "Buffer", "ByteBuf", "IByteBuffer", "ByteBuffer", "LittleEndianByteBuffer", "NormalByteBuffer"
             , "ByteBufUtils", "ArrayUtils", "CollectionUtils"
             , "Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double", "String", "Character", "Object"
             , "Collections", "Iterator", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet"

@@ -1,3 +1,4 @@
+import IByteBuffer from "../IByteBuffer";
 import ProtocolManager from "../ProtocolManager";
 
 import {writeInt64, readInt64} from "./Longbits";
@@ -44,7 +45,7 @@ function decodeZigzagInt(n: number) {
 }
 
 
-class ByteBuffer {
+class ByteBuffer implements IByteBuffer{
     writeOffset: number;
     readOffset: number;
     buffer: ArrayBuffer;
@@ -388,21 +389,15 @@ class ByteBuffer {
         return value;
     }
 
-    writePacketFlag(value: any): boolean {
-        const flag = (value === null) || (value === undefined);
-        this.writeBoolean(!flag);
-        return flag;
-    };
-
-    writePacket(packet: any, protocolId: number) {
+    writePacket(packet: any, protocolId: number): void {
         const protocolRegistration = ProtocolManager.getProtocol(protocolId);
         protocolRegistration.write(this, packet);
-    };
+    }
 
     readPacket(protocolId: number): any {
         const protocolRegistration = ProtocolManager.getProtocol(protocolId);
         return protocolRegistration.read(this);
-    };
+    }
 
     writeBooleanArray(array: Array<boolean> | null) {
         if (array === null) {
@@ -413,9 +408,9 @@ class ByteBuffer {
                 this.writeBoolean(element);
             });
         }
-    };
+    }
 
-    readBooleanArray(): any {
+    readBooleanArray(): Array<boolean> {
         const array: boolean[] = [];
         const length = this.readInt();
         if (length > 0) {
@@ -424,9 +419,9 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
-    writeByteArray(array: Array<number> | null) {
+    writeByteArray(array: Array<number> | null): void {
         if (array === null) {
             this.writeInt(0);
         } else {
@@ -435,9 +430,9 @@ class ByteBuffer {
                 this.writeByte(element);
             });
         }
-    };
+    }
 
-    readByteArray(): any {
+    readByteArray(): Array<number> {
         const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
@@ -446,9 +441,9 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
-    writeShortArray(array: Array<number> | null) {
+    writeShortArray(array: Array<number> | null): void {
         if (array === null) {
             this.writeInt(0);
         } else {
@@ -457,9 +452,9 @@ class ByteBuffer {
                 this.writeShort(element);
             });
         }
-    };
+    }
 
-    readShortArray(): any {
+    readShortArray(): number[] {
         const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
@@ -468,9 +463,9 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
-    writeIntArray(array: Array<number> | null) {
+    writeIntArray(array: Array<number> | null): void {
         if (array === null) {
             this.writeInt(0);
         } else {
@@ -479,9 +474,9 @@ class ByteBuffer {
                 this.writeInt(element);
             });
         }
-    };
+    }
 
-    readIntArray(): any {
+    readIntArray(): number[] {
         const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
@@ -490,9 +485,9 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
-    writeLongArray(array: Array<number> | null) {
+    writeLongArray(array: Array<number> | null): void {
         if (array === null) {
             this.writeInt(0);
         } else {
@@ -501,9 +496,9 @@ class ByteBuffer {
                 this.writeLong(element);
             });
         }
-    };
+    }
 
-    readLongArray(): any {
+    readLongArray(): number[] {
         const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
@@ -512,9 +507,9 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
-    writeFloatArray(array: Array<number> | null) {
+    writeFloatArray(array: Array<number> | null): void {
         if (array === null) {
             this.writeInt(0);
         } else {
@@ -523,9 +518,9 @@ class ByteBuffer {
                 this.writeFloat(element);
             });
         }
-    };
+    }
 
-    readFloatArray(): any {
+    readFloatArray(): number[] {
         const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
@@ -534,9 +529,9 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
-    writeDoubleArray(array: Array<number> | null) {
+    writeDoubleArray(array: Array<number> | null): void {
         if (array === null) {
             this.writeInt(0);
         } else {
@@ -545,9 +540,9 @@ class ByteBuffer {
                 this.writeDouble(element);
             });
         }
-    };
+    }
 
-    readDoubleArray(): any {
+    readDoubleArray(): number[] {
         const array: number[] = [];
         const length = this.readInt();
         if (length > 0) {
@@ -556,9 +551,9 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
-    writeStringArray(array: Array<string> | null) {
+    writeStringArray(array: Array<string> | null): void {
         if (array === null) {
             this.writeInt(0);
         } else {
@@ -567,9 +562,9 @@ class ByteBuffer {
                 this.writeString(element);
             });
         }
-    };
+    }
 
-    readStringArray(): any {
+    readStringArray(): string[] {
         const array: string[] = [];
         const length = this.readInt();
         if (length > 0) {
@@ -578,9 +573,9 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
-    writePacketArray(array: Array<any> | null, protocolId: number) {
+    writePacketArray(array: Array<any> | null, protocolId: number): void {
         if (array === null) {
             this.writeInt(0);
         } else {
@@ -590,9 +585,9 @@ class ByteBuffer {
                 protocolRegistration.write(this, element);
             });
         }
-    };
+    }
 
-    readPacketArray(protocolId: number): any {
+    readPacketArray(protocolId: number): any[] {
         const array: any[] = [];
         const length = this.readInt();
         if (length > 0) {
@@ -602,83 +597,83 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
     // ---------------------------------------------list-------------------------------------------
-    writeBooleanList(list: any) {
+    writeBooleanList(list: Array<boolean> | null): void {
         this.writeBooleanArray(list);
-    };
+    }
 
-    readBooleanList(): any {
+    readBooleanList(): boolean[] {
         return this.readBooleanArray();
-    };
+    }
 
-    writeByteList(list: any) {
+    writeByteList(list: Array<number> | null): void {
         this.writeByteArray(list);
-    };
+    }
 
-    readByteList(): any {
+    readByteList(): number[] {
         return this.readByteArray();
-    };
+    }
 
-    writeShortList(list: any) {
+    writeShortList(list: Array<number> | null): void {
         this.writeShortArray(list);
-    };
+    }
 
-    readShortList(): any {
+    readShortList(): number[] {
         return this.readShortArray();
-    };
+    }
 
-    writeIntList(list: any) {
+    writeIntList(list: Array<number> | null): void {
         this.writeIntArray(list);
-    };
+    }
 
-    readIntList(): any {
+    readIntList(): number[] {
         return this.readIntArray();
-    };
+    }
 
-    writeLongList(list: any) {
+    writeLongList(list: Array<number> | null): void {
         this.writeLongArray(list);
-    };
+    }
 
-    readLongList(): any {
+    readLongList(): number[] {
         return this.readLongArray();
-    };
+    }
 
-    writeFloatList(list: any) {
+    writeFloatList(list: Array<number> | null): void {
         this.writeFloatArray(list);
-    };
+    }
 
-    readFloatList(): any {
+    readFloatList(): number[] {
         return this.readFloatArray();
-    };
+    }
 
-    writeDoubleList(list: any) {
+    writeDoubleList(list: Array<number> | null): void {
         this.writeDoubleArray(list);
-    };
+    }
 
-    readDoubleList(): any {
+    readDoubleList(): number[] {
         return this.readDoubleArray();
-    };
+    }
 
-    writeStringList(list: any) {
+    writeStringList(list: Array<string> | null): void {
         this.writeStringArray(list);
-    };
+    }
 
-    readStringList(): any {
+    readStringList(): string[] {
         return this.readStringArray();
-    };
+    }
 
-    writePacketList(list: any, protocolId: number) {
+    writePacketList(list: Array<any> | null, protocolId: number): void {
         this.writePacketArray(list, protocolId);
-    };
+    }
 
-    readPacketList(protocolId: number): any {
+    readPacketList(protocolId: number): any[] {
         return this.readPacketArray(protocolId);
-    };
+    }
 
     // ---------------------------------------------set-------------------------------------------
-    writeBooleanSet(set: Set<boolean> | null) {
+    writeBooleanSet(set: Set<boolean> | null): void {
         if (set === null) {
             this.writeInt(0);
         } else {
@@ -687,13 +682,13 @@ class ByteBuffer {
                 this.writeBoolean(element);
             });
         }
-    };
+    }
 
-    readBooleanSet(): any {
+    readBooleanSet(): Set<boolean> {
         return new Set(this.readBooleanArray());
-    };
+    }
 
-    writeByteSet(set: Set<number> | null) {
+    writeByteSet(set: Set<number> | null): void {
         if (set === null) {
             this.writeInt(0);
         } else {
@@ -702,13 +697,13 @@ class ByteBuffer {
                 this.writeByte(element);
             });
         }
-    };
+    }
 
-    readByteSet(): any {
+    readByteSet(): Set<number> {
         return new Set(this.readByteArray());
-    };
+    }
 
-    writeShortSet(set: Set<number> | null) {
+    writeShortSet(set: Set<number> | null): void {
         if (set === null) {
             this.writeInt(0);
         } else {
@@ -717,13 +712,13 @@ class ByteBuffer {
                 this.writeShort(element);
             });
         }
-    };
+    }
 
-    readShortSet(): any {
+    readShortSet(): Set<number> {
         return new Set(this.readShortArray());
-    };
+    }
 
-    writeIntSet(set: Set<number> | null) {
+    writeIntSet(set: Set<number> | null): void {
         if (set === null) {
             this.writeInt(0);
         } else {
@@ -732,13 +727,13 @@ class ByteBuffer {
                 this.writeInt(element);
             });
         }
-    };
+    }
 
-    readIntSet(): any {
+    readIntSet(): Set<number> {
         return new Set(this.readIntArray());
-    };
+    }
 
-    writeLongSet(set: Set<number> | null) {
+    writeLongSet(set: Set<number> | null): void {
         if (set === null) {
             this.writeInt(0);
         } else {
@@ -747,13 +742,13 @@ class ByteBuffer {
                 this.writeLong(element);
             });
         }
-    };
+    }
 
-    readLongSet(): any {
+    readLongSet(): Set<number> {
         return new Set(this.readLongArray());
-    };
+    }
 
-    writeFloatSet(set: Set<number> | null) {
+    writeFloatSet(set: Set<number> | null): void {
         if (set === null) {
             this.writeInt(0);
         } else {
@@ -762,13 +757,13 @@ class ByteBuffer {
                 this.writeFloat(element);
             });
         }
-    };
+    }
 
-    readFloatSet(): any {
+    readFloatSet(): Set<number> {
         return new Set(this.readFloatArray());
-    };
+    }
 
-    writeDoubleSet(set: Set<number> | null) {
+    writeDoubleSet(set: Set<number> | null): void {
         if (set === null) {
             this.writeInt(0);
         } else {
@@ -777,13 +772,13 @@ class ByteBuffer {
                 this.writeDouble(element);
             });
         }
-    };
+    }
 
-    readDoubleSet(): any {
+    readDoubleSet(): Set<number> {
         return new Set(this.readDoubleArray());
-    };
+    }
 
-    writeStringSet(set: Set<string> | null) {
+    writeStringSet(set: Set<string> | null): void {
         if (set === null) {
             this.writeInt(0);
         } else {
@@ -792,13 +787,13 @@ class ByteBuffer {
                 this.writeString(element);
             });
         }
-    };
+    }
 
-    readStringSet(): any {
+    readStringSet(): Set<string> {
         return new Set(this.readStringArray());
-    };
+    }
 
-    writePacketSet(set: Set<any> | null, protocolId: number) {
+    writePacketSet(set: Set<any> | null, protocolId: number): void {
         if (set === null) {
             this.writeInt(0);
         } else {
@@ -808,14 +803,14 @@ class ByteBuffer {
                 protocolRegistration.write(this, element);
             });
         }
-    };
+    }
 
-    readPacketSet(protocolId: number): any {
+    readPacketSet(protocolId: number): Set<any> {
         return new Set(this.readPacketArray(protocolId));
-    };
+    }
 
     // ---------------------------------------------map-------------------------------------------
-    writeIntIntMap(map: Map<number, number> | null) {
+    writeIntIntMap(map: Map<number, number> | null): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -825,10 +820,10 @@ class ByteBuffer {
                 this.writeInt(value);
             });
         }
-    };
+    }
 
-    readIntIntMap(): any {
-        const map = new Map();
+    readIntIntMap(): Map<number, number> {
+        const map = new Map<number, number>();
         const size = this.readInt();
         if (size > 0) {
             for (let index = 0; index < size; index++) {
@@ -838,9 +833,9 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
-    writeIntLongMap(map: Map<number, number> | null) {
+    writeIntLongMap(map: Map<number, number> | null): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -850,10 +845,10 @@ class ByteBuffer {
                 this.writeLong(value);
             });
         }
-    };
+    }
 
-    readIntLongMap(): any {
-        const map = new Map();
+    readIntLongMap(): Map<number, number> {
+        const map = new Map<number, number>();
         const size = this.readInt();
         if (size > 0) {
             for (let index = 0; index < size; index++) {
@@ -863,9 +858,9 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
-    writeIntStringMap(map: Map<number, string> | null) {
+    writeIntStringMap(map: Map<number, string> | null): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -875,10 +870,10 @@ class ByteBuffer {
                 this.writeString(value);
             });
         }
-    };
+    }
 
-    readIntStringMap(): any {
-        const map = new Map();
+    readIntStringMap(): Map<number, string> {
+        const map = new Map<number, string>();
         const size = this.readInt();
         if (size > 0) {
             for (let index = 0; index < size; index++) {
@@ -888,9 +883,9 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
-    writeIntPacketMap(map: Map<number, any> | null, protocolId: number) {
+    writeIntPacketMap(map: Map<number, any> | null, protocolId: number): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -901,10 +896,10 @@ class ByteBuffer {
                 protocolRegistration.write(this, value);
             });
         }
-    };
+    }
 
-    readIntPacketMap(protocolId: number): any {
-        const map = new Map();
+    readIntPacketMap(protocolId: number): Map<number, any> {
+        const map = new Map<number, any>();
         const size = this.readInt();
         if (size > 0) {
             const protocolRegistration = ProtocolManager.getProtocol(protocolId);
@@ -915,9 +910,9 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
-    writeLongIntMap(map: Map<number, number> | null) {
+    writeLongIntMap(map: Map<number, number> | null): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -927,10 +922,10 @@ class ByteBuffer {
                 this.writeInt(value);
             });
         }
-    };
+    }
 
-    readLongIntMap(): any {
-        const map = new Map();
+    readLongIntMap(): Map<number, number> {
+        const map = new Map<number, number>();
         const size = this.readInt();
         if (size > 0) {
             for (let index = 0; index < size; index++) {
@@ -940,9 +935,9 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
-    writeLongLongMap(map: Map<number, number> | null) {
+    writeLongLongMap(map: Map<number, number> | null): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -952,10 +947,10 @@ class ByteBuffer {
                 this.writeLong(value);
             });
         }
-    };
+    }
 
-    readLongLongMap(): any {
-        const map = new Map();
+    readLongLongMap(): Map<number, number> {
+        const map = new Map<number, number>();
         const size = this.readInt();
         if (size > 0) {
             for (let index = 0; index < size; index++) {
@@ -965,9 +960,9 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
-    writeLongStringMap(map: Map<number, string> | null) {
+    writeLongStringMap(map: Map<number, string> | null): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -977,10 +972,10 @@ class ByteBuffer {
                 this.writeString(value);
             });
         }
-    };
+    }
 
-    readLongStringMap(): any {
-        const map = new Map();
+    readLongStringMap(): Map<number, string> {
+        const map = new Map<number, string>();
         const size = this.readInt();
         if (size > 0) {
             for (let index = 0; index < size; index++) {
@@ -990,7 +985,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeLongPacketMap(map: Map<number, any> | null, protocolId: number): any {
         if (map === null) {
@@ -1003,10 +998,10 @@ class ByteBuffer {
                 protocolRegistration.write(this, value);
             });
         }
-    };
+    }
 
-    readLongPacketMap(protocolId: number): any {
-        const map = new Map();
+    readLongPacketMap(protocolId: number): Map<number, any> {
+        const map = new Map<number, any>();
         const size = this.readInt();
         if (size > 0) {
             const protocolRegistration = ProtocolManager.getProtocol(protocolId);
@@ -1017,9 +1012,9 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
-    writeStringIntMap(map: Map<string, number> | null) {
+    writeStringIntMap(map: Map<string, number> | null): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -1029,10 +1024,10 @@ class ByteBuffer {
                 this.writeInt(value);
             });
         }
-    };
+    }
 
-    readStringIntMap(): any {
-        const map = new Map();
+    readStringIntMap(): Map<string, number> {
+        const map = new Map<string, number>();
         const size = this.readInt();
         if (size > 0) {
             for (let index = 0; index < size; index++) {
@@ -1042,9 +1037,9 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
-    writeStringLongMap(map: Map<string, number> | null) {
+    writeStringLongMap(map: Map<string, number> | null): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -1054,10 +1049,10 @@ class ByteBuffer {
                 this.writeLong(value);
             });
         }
-    };
+    }
 
-    readStringLongMap(): any {
-        const map = new Map();
+    readStringLongMap(): Map<string, number> {
+        const map = new Map<string, number>();
         const size = this.readInt();
         if (size > 0) {
             for (let index = 0; index < size; index++) {
@@ -1067,9 +1062,9 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
-    writeStringStringMap(map: Map<string, string> | null) {
+    writeStringStringMap(map: Map<string, string> | null): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -1079,10 +1074,10 @@ class ByteBuffer {
                 this.writeString(value);
             });
         }
-    };
+    }
 
-    readStringStringMap(): any {
-        const map = new Map();
+    readStringStringMap(): Map<string, string> {
+        const map = new Map<string, string>();
         const size = this.readInt();
         if (size > 0) {
             for (let index = 0; index < size; index++) {
@@ -1092,9 +1087,9 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
-    writeStringPacketMap(map: Map<string, any> | null, protocolId: number) {
+    writeStringPacketMap(map: Map<string, any> | null, protocolId: number): void {
         if (map === null) {
             this.writeInt(0);
         } else {
@@ -1105,10 +1100,10 @@ class ByteBuffer {
                 protocolRegistration.write(this, value);
             });
         }
-    };
+    }
 
-    readStringPacketMap(protocolId: number): any {
-        const map = new Map();
+    readStringPacketMap(protocolId: number): Map<string, any> {
+        const map = new Map<string, any>();
         const size = this.readInt();
         if (size > 0) {
             const protocolRegistration = ProtocolManager.getProtocol(protocolId);
@@ -1119,7 +1114,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 }
 
 export default ByteBuffer;

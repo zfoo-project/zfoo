@@ -1,3 +1,4 @@
+import IByteBuffer from '../IByteBuffer';
 import ObjectA from './ObjectA';
 
 // 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
@@ -63,7 +64,7 @@ class ComplexObject {
         return ComplexObject.PROTOCOL_ID;
     }
 
-    static write(buffer: any, packet: ComplexObject | null) {
+    static write(buffer: IByteBuffer, packet: ComplexObject | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -237,7 +238,7 @@ class ComplexObject {
         buffer.adjustPadding(36962, beforeWriteIndex);
     }
 
-    static read(buffer: any): ComplexObject | null {
+    static read(buffer: IByteBuffer): ComplexObject | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;

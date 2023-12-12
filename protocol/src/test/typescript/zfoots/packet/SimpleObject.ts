@@ -1,3 +1,4 @@
+import IByteBuffer from '../IByteBuffer';
 
 
 class SimpleObject {
@@ -11,7 +12,7 @@ class SimpleObject {
         return SimpleObject.PROTOCOL_ID;
     }
 
-    static write(buffer: any, packet: SimpleObject | null) {
+    static write(buffer: IByteBuffer, packet: SimpleObject | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -21,7 +22,7 @@ class SimpleObject {
         buffer.writeBoolean(packet.g);
     }
 
-    static read(buffer: any): SimpleObject | null {
+    static read(buffer: IByteBuffer): SimpleObject | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
