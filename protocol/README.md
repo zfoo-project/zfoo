@@ -8,10 +8,8 @@ English | [简体中文](./README_CN.md)
   do cross-platform
 - The protocol can customize the private protocol format to make your protocol more secure, and supports adding fields
   and being compatible with previous and subsequent protocols
-- Compatible with Protobuf, it supports the generation of Protobuf protocol files, and provides a generation method from
-  POJO to PROTO
-- There are already quite a few JetBrains plugins that can do it in the way to generate POJOs, and you can search for
-  Proto in the plugin of Idea
+- Support to generate ProtoBuf's Proto file to Pojo protocol file, and the generated protocol can be converted to other
+  protocols and used by Java
 
 ### Ⅱ. Quick use
 
@@ -177,13 +175,16 @@ your protocol number a little more compactly, so that your protocol number will 
 
 - zfoo provides a proto file parsing tool to convert the proto file of protobuf into a pojo object for use by zfoo
 
-- Generate pojo objects through proto files for client use, [Parse proto configuration](https://github.com/zfoo-project/zfoo/blob/main/protocol/src/test/java/com/zfoo/protocol/generate/GenerateProtobufTesting.java)
+- Generate pojo objects through proto files for client
+  use, [Parse proto configuration](https://github.com/zfoo-project/zfoo/blob/main/protocol/src/test/java/com/zfoo/protocol/generate/GenerateProtobufTesting.java)
 
 ### Ⅸ. The difference between zfoo and Protobuf
 
-- Abandoning the deletion field of protobuf can also be compatible with the protocol, improving the performance by 1 times and reducing the size by 1 times.
+- Abandoning the deletion field of protobuf can also be compatible with the protocol, improving the performance by 1
+  times and reducing the size by 1 times.
 
-- zfoo takes the intersection of type declarations in all languages, instead of protobuf taking the union, simplifying the type implementation of protobuf
+- zfoo takes the intersection of type declarations in all languages, instead of protobuf taking the union, simplifying
+  the type implementation of protobuf
     - protobuf
       ```
       double
@@ -215,7 +216,8 @@ your protocol number a little more compactly, so that your protocol number will 
       string
       ```
 
-- zfoo takes the intersection of the grammars of all languages, instead of the union of protobuf, and adds the grammar implementation of protobuf
+- zfoo takes the intersection of the grammars of all languages, instead of the union of protobuf, and adds the grammar
+  implementation of protobuf
     - protobuf
       ```
       Collection nesting syntax is not supported

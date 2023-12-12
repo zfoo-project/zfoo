@@ -1,9 +1,6 @@
 syntax = "proto3";
 
-
 package test.message;
-
-option java_package = "io.edap.protobuf.test.message.v3";
 
 // start_protocol_id = 200
 

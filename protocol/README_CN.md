@@ -4,8 +4,7 @@
 
 - 去中心化网络序列化库，安全可靠，自定义私有协议格式，可前后兼容，让每个人都拥有一套独一无二的协议
 - 协议目前原生支持 **C++ Java JavaScript TypeScript C# Go Lua GDScript Python**，可以轻易实现跨平台
-- 兼容protobuf，支持生成protobuf协议文件，提供从pojo到proto的生成方式
-- proto文件到生成pojo的方式已经有不少jetbrains插件可以做到，可以在idea的plugin中搜索proto
+- 支持将protobuf的proto文件到生成到pojo协议文件，生成完成的协议不仅可以被转为其它协议也可以被java使用
 
 ### Ⅱ. 快速使用
 

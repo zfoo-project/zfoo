@@ -3,8 +3,6 @@ syntax = "proto3";
 
 package test.message;
 
-option java_package = "io.edap.protobuf.test.message.v3";
-
 // start_protocol_id = 300
 
 message OneMessage {
@@ -22,7 +20,7 @@ message Proj {
   string name = 2;
   string repoPath = 3;
   //zzzzzzz
-  repeated int32 a = 4;//rrrrrrrrrrrrrrrrrrrrrrr
+  repeated int32 a = 4;
   map<int32, int64> b = 5;
   map<int32, string> c = 1000;
   map<int32, SimpleObject> d = 1001;
