@@ -1,8 +1,7 @@
 syntax = "proto3";
-
 package test.message;
-
 // start_protocol_id = 200
+
 
 message OneMap {
   map<string, Project> value = 1;

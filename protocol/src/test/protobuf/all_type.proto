@@ -1,11 +1,8 @@
 syntax = "proto3";
-// start_protocol_id = 100
-
 package test.message;
-// 这个是整个proto的注释
 import "one_map.proto";
 import "one_message.proto";
-option java_package = "start";
+// start_protocol_id = 100
 
 
 // 如果字段的tag超过1000，则视这个字段为需要兼容的协议字段

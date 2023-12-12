@@ -1,9 +1,8 @@
 syntax = "proto3";
-
-
 package test.message;
-
 // start_protocol_id = 300
+// 上面这个起始id表示整个文件的协议号从哪个开始
+
 
 message OneMessage {
   Proj value = 1;
@@ -13,7 +12,7 @@ message SimpleObject {
   int64 aa = 1;
 }
 
-// 测试协议1
+// 如果字段的tag超过1000，则视这个字段为需要兼容的协议字段
 message Proj {
   // 这是属性的注释
   int64 id = 1;
