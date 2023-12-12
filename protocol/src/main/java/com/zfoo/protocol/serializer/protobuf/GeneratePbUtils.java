@@ -36,6 +36,10 @@ public abstract class GeneratePbUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(GeneratePbUtils.class);
 
+    // custom configuration
+    public static String protocolOutputRootPath = "zfoopb";
+    public static String protocolOutputPath = StringUtils.EMPTY;
+
     /**
      * EN: If the tag of a protobuf field exceeds this value, this field is considered to be a compatible protocol field
      * CN: 如果protobuf的字段的tag超过这个值，则视这个字段为需要兼容的协议字段
@@ -43,6 +47,17 @@ public abstract class GeneratePbUtils {
     public static final int COMPATIBLE_FIELD_TAG = 1000;
 
     public static void create(PbGenerateOperation pbGenerateOperation) {
+        // if not specify output path, then use current default path
+        if (StringUtils.isEmpty(pbGenerateOperation.getOutputPath())) {
+            protocolOutputPath = FileUtils.joinPath(pbGenerateOperation.getOutputPath(), protocolOutputRootPath);
+        } else {
+            protocolOutputPath = pbGenerateOperation.getOutputPath();
+        }
+        // java package path
+        if (StringUtils.isNotEmpty(pbGenerateOperation.getJavaPackage())) {
+            protocolOutputPath = protocolOutputPath + File.separator+ pbGenerateOperation.getJavaPackage().replaceAll(StringUtils.PERIOD_REGEX, "/");
+        }
+
         var protoPathFile = new File(pbGenerateOperation.getProtoPath());
         if (!protoPathFile.exists()) {
             throw new RuntimeException(StringUtils.format("proto path:[{}] not exist", pbGenerateOperation.getProtoPath()));
@@ -112,11 +127,6 @@ public abstract class GeneratePbUtils {
 
 
     public static void generate(PbGenerateOperation pbGenerateOperation, List<Proto> protos) {
-        var messageOutputPath = pbGenerateOperation.getOutputPath() + File.separator;
-        if (StringUtils.isNotEmpty(pbGenerateOperation.getJavaPackage())) {
-            messageOutputPath = messageOutputPath + pbGenerateOperation.getJavaPackage().replaceAll(StringUtils.PERIOD_REGEX, "/");
-        }
-
         for (var proto : protos) {
             var pbMessages = proto.getPbMessages();
             if (CollectionUtils.isEmpty(pbMessages)) {
@@ -148,14 +158,14 @@ public abstract class GeneratePbUtils {
                     }
                 }
                 builder.append("}");
-                var filePath = StringUtils.format("{}/{}.java", messageOutputPath, outClassName);
+                var filePath = StringUtils.format("{}/{}.java", protocolOutputPath, outClassName);
                 var file = new File(filePath);
                 FileUtils.writeStringToFile(file, builder.toString(), false);
                 logger.info("Generated java protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
             } else {
                 for (var pbMessage : pbMessages) {
                     var code = buildMessage(pbGenerateOperation, protos, proto, pbMessage);
-                    var filePath = StringUtils.format("{}/{}/{}.java", messageOutputPath, proto.getName(), pbMessage.getName());
+                    var filePath = StringUtils.format("{}/{}/{}.java", protocolOutputPath, proto.getName(), pbMessage.getName());
                     var file = new File(filePath);
                     FileUtils.writeStringToFile(file, code, false);
                     logger.info("Generated java protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
