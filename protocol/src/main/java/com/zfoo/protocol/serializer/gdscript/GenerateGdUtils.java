@@ -31,6 +31,8 @@ import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,16 +40,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
-import static com.zfoo.protocol.util.StringUtils.TAB;
 import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
 
 /**
  * @author godotg
  */
 public abstract class GenerateGdUtils {
+    private static final Logger logger = LoggerFactory.getLogger(GenerateGdUtils.class);
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoogd";
@@ -107,7 +108,9 @@ public abstract class GenerateGdUtils {
         }
         var initProtocols = StringUtils.joinWith(StringUtils.COMMA + LS, initList.toArray());
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), initProtocols);
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.gd")), protocolManagerTemplate, true);
+        var file = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.gd"));
+        FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
+        logger.info("Generated GdScript protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     public static void createGdProtocolFile(ProtocolRegistration registration) throws IOException {
@@ -131,7 +134,9 @@ public abstract class GenerateGdUtils {
                 toStringJsonTemplate, toStringParams, StringUtils.EMPTY_JSON, writeObject.trim(), readObject.trim());
 
         var outputPath = StringUtils.format("{}/{}/{}.gd", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
+        var file = new File(outputPath);
+        FileUtils.writeStringToFile(file, protocolTemplate, true);
+        logger.info("Generated GdScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     private static String includeSubProtocol(ProtocolRegistration registration) {

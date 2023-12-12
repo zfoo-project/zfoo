@@ -20,7 +20,6 @@ import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
 import com.zfoo.protocol.serializer.reflect.*;
@@ -28,6 +27,8 @@ import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +43,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  * @author godotg
  */
 public abstract class GeneratePyUtils {
+    private static final Logger logger = LoggerFactory.getLogger(GeneratePyUtils.class);
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoopy";
@@ -108,7 +110,9 @@ public abstract class GeneratePyUtils {
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), StringUtils.EMPTY_JSON, initProtocolBuilder.toString().trim());
         var outputPath = StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.py");
-        FileUtils.writeStringToFile(new File(outputPath), protocolManagerTemplate, true);
+        var file = new File(outputPath);
+        FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
+        logger.info("Generated Python protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     public static void createPyProtocolFile(ProtocolRegistration registration) {
@@ -128,7 +132,9 @@ public abstract class GeneratePyUtils {
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName
                 , fieldDefinition.trim(), protocolId, writeObject.trim(), protocolClazzName, readObject.trim());
         var outputPath = StringUtils.format("{}/{}/{}.py", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
+        var file = new File(outputPath);
+        FileUtils.writeStringToFile(file, protocolTemplate, true);
+        logger.info("Generated Python protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     private static String fieldDefinition(ProtocolRegistration registration) {

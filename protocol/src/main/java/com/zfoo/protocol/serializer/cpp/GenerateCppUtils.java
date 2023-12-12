@@ -32,6 +32,8 @@ import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +49,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  * @author godotg
  */
 public abstract class GenerateCppUtils {
+    private static final Logger logger = LoggerFactory.getLogger(GenerateCppUtils.class);
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoocpp";
@@ -111,7 +114,9 @@ public abstract class GenerateCppUtils {
             initProtocolBuilder.append(TAB).append(TAB).append(StringUtils.format("protocols[{}] = new {}Registration();", protocolId, protocol.protocolConstructor().getDeclaringClass().getSimpleName())).append(LS);
         }
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, headerBuilder.toString(), initProtocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.h")), protocolManagerTemplate, true);
+        var file = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.h"));
+        FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
+        logger.info("Generated C++ protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     /**
@@ -145,7 +150,9 @@ public abstract class GenerateCppUtils {
                 , protocolOutputPath
                 , GenerateProtocolPath.getProtocolPath(protocolId)
                 , protocolClazzName);
-        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
+        var file = new File(outputPath);
+        FileUtils.writeStringToFile(file, protocolTemplate, true);
+        logger.info("Generated C++ protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
 

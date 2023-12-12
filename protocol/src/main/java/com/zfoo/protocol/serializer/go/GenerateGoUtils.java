@@ -18,17 +18,17 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
-import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +44,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  * @author godotg
  */
 public abstract class GenerateGoUtils {
-
+    private static final Logger logger = LoggerFactory.getLogger(GenerateGoUtils.class);
     // custom configuration
     public static String protocolOutputRootPath = "zfoogo";
     public static String protocolOutputPath = StringUtils.EMPTY;
@@ -105,7 +105,9 @@ public abstract class GenerateGoUtils {
 
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("go/ProtocolManagerTemplate.go");
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, initProtocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.go")), protocolManagerTemplate, true);
+        var file = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.go"));
+        FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
+        logger.info("Generated Golang protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     public static void createGoProtocolFile(ProtocolRegistration registration) throws IOException {
@@ -135,7 +137,9 @@ public abstract class GenerateGoUtils {
         }
 
         var outputPath = StringUtils.format("{}/{}.go", protocolOutputPath, protocolClazzName);
-        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
+        var file = new File(outputPath);
+        FileUtils.writeStringToFile(file, protocolTemplate, true);
+        logger.info("Generated Golang protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     private static String fieldDefinition(ProtocolRegistration registration) {

@@ -22,7 +22,6 @@ import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
@@ -30,6 +29,8 @@ import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +45,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  * @author godotg
  */
 public abstract class GenerateTsUtils {
+    private static final Logger logger = LoggerFactory.getLogger(GenerateTsUtils.class);
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoots";
@@ -109,10 +111,12 @@ public abstract class GenerateTsUtils {
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), initProtocolBuilder.toString().trim());
         var outputPath = StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.ts");
-        FileUtils.writeStringToFile(new File(outputPath), protocolManagerTemplate, true);
+        var file = new File(outputPath);
+        FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
+        logger.info("Generated TypeScript protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
-    public static void createTsProtocolFile(ProtocolRegistration registration) throws IOException {
+    public static void createTsProtocolFile(ProtocolRegistration registration) {
         // 初始化index
         GenerateProtocolFile.index.set(0);
 
@@ -131,7 +135,9 @@ public abstract class GenerateTsUtils {
         protocolTemplate = StringUtils.format(protocolTemplate, importSubProtocol, classNote, protocolClazzName, fieldDefinition.trim()
                 , protocolId, protocolClazzName, protocolClazzName, writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
         var outputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
+        var file = new File(outputPath);
+        FileUtils.writeStringToFile(file, protocolTemplate, true);
+        logger.info("Generated TypeScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     private static String importSubProtocol(ProtocolRegistration registration) {

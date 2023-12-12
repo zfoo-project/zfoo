@@ -23,6 +23,8 @@ import com.zfoo.protocol.serializer.protobuf.parser.Proto;
 import com.zfoo.protocol.serializer.protobuf.parser.ProtoParser;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.*;
@@ -31,6 +33,8 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
 
 public abstract class GeneratePbUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(GeneratePbUtils.class);
 
     /**
      * EN: If the tag of a protobuf field exceeds this value, this field is considered to be a compatible protocol field
@@ -145,12 +149,16 @@ public abstract class GeneratePbUtils {
                 }
                 builder.append("}");
                 var filePath = StringUtils.format("{}/{}.java", messageOutputPath, outClassName);
-                FileUtils.writeStringToFile(new File(filePath), builder.toString(), false);
+                var file = new File(filePath);
+                FileUtils.writeStringToFile(file, builder.toString(), false);
+                logger.info("Generated java protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
             } else {
                 for (var pbMessage : pbMessages) {
                     var code = buildMessage(pbGenerateOperation, protos, proto, pbMessage);
                     var filePath = StringUtils.format("{}/{}/{}.java", messageOutputPath, proto.getName(), pbMessage.getName());
-                    FileUtils.writeStringToFile(new File(filePath), code, false);
+                    var file = new File(filePath);
+                    FileUtils.writeStringToFile(file, code, false);
+                    logger.info("Generated java protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
                 }
             }
         }

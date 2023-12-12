@@ -20,17 +20,17 @@ import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +42,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  * @author godotg
  */
 public abstract class GenerateJsUtils {
-
+    private static final Logger logger = LoggerFactory.getLogger(GenerateJsUtils.class);
     // custom configuration
     public static String protocolOutputRootPath = "zfoojs";
     public static String protocolOutputPath = StringUtils.EMPTY;
@@ -108,7 +108,9 @@ public abstract class GenerateJsUtils {
         }
 
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), StringUtils.EMPTY_JSON, initProtocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.js")), protocolManagerTemplate, true);
+        var file = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.js"));
+        FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
+        logger.info("Generated JavaScript protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     public static void createJsProtocolFile(ProtocolRegistration registration) throws IOException {
@@ -130,7 +132,9 @@ public abstract class GenerateJsUtils {
                 , fieldDefinition.trim(), protocolClazzName, protocolId, protocolClazzName
                 , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
         var outputPath = StringUtils.format("{}/{}/{}.js", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
+        var file = new File(outputPath);
+        FileUtils.writeStringToFile(file, protocolTemplate, true);
+        logger.info("Generated JavaScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     private static String fieldDefinition(ProtocolRegistration registration) {

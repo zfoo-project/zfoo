@@ -28,6 +28,8 @@ import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,12 +40,12 @@ import java.util.Map;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
-import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
 
 /**
  * @author godotg
  */
 public abstract class GenerateCsUtils {
+    private static final Logger logger = LoggerFactory.getLogger(GenerateCsUtils.class);
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoocs";
@@ -113,7 +115,9 @@ public abstract class GenerateCsUtils {
         }
         var initProtocols = StringUtils.joinWith(StringUtils.COMMA + LS, initList.toArray());
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, csBuilder.toString().trim(), initProtocols);
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.cs")), protocolManagerTemplate, true);
+        var file = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.cs"));
+        FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
+        logger.info("Generated C# protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     /**
@@ -142,7 +146,9 @@ public abstract class GenerateCsUtils {
                 , protocolOutputRootPath
                 , GenerateProtocolPath.getCapitalizeProtocolPath(protocolId)
                 , protocolClazzName);
-        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
+        var file = new File(outputPath);
+        FileUtils.writeStringToFile(file, protocolTemplate, true);
+        logger.info("Generated C# protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     private static String fieldDefinition(ProtocolRegistration registration) {

@@ -28,10 +28,15 @@ import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
@@ -40,7 +45,7 @@ import static com.zfoo.protocol.util.StringUtils.TAB;
  * @author godotg
  */
 public abstract class GenerateLuaUtils {
-
+    private static final Logger logger = LoggerFactory.getLogger(GenerateLuaUtils.class);
     // custom configuration
     public static String protocolOutputRootPath = "zfoolua";
     public static String protocolOutputPath = StringUtils.EMPTY;
@@ -105,7 +110,9 @@ public abstract class GenerateLuaUtils {
             protocolBuilder.append(TAB).append(StringUtils.format("protocols[{}] = Protocols.{}", protocolId, protocolName)).append(LS);
         }
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, StringUtils.EMPTY_JSON, StringUtils.EMPTY_JSON, builderImports.toString().trim(), protocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua")), protocolManagerTemplate, true);
+        var file = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua"));
+        FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
+        logger.info("Generated Lua protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     public static void createLuaProtocolsInOneFile(List<IProtocolRegistration> registrations) {
@@ -156,10 +163,18 @@ public abstract class GenerateLuaUtils {
             builderProtocol.append(StringUtils.format("Protocols.{} = {}", protocolClazzName, protocolClazzName)).append(LS);
         }
         builderProtocol.append("return Protocols");
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "Protocols.lua")), builderProtocol.toString(), true);
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolBase.lua")), builderProtocolBase.toString(), true);
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolWriter.lua")), builderProtocolWriter.toString(), true);
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolReader.lua")), builderProtocolReader.toString(), true);
+        var protocolsFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "Protocols.lua"));
+        var protocolBaseFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolBase.lua"));
+        var protocolWriterFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolWriter.lua"));
+        var protocolReaderFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolWriter.lua"));
+        FileUtils.writeStringToFile(protocolsFile, builderProtocol.toString(), true);
+        FileUtils.writeStringToFile(protocolBaseFile, builderProtocolBase.toString(), true);
+        FileUtils.writeStringToFile(protocolWriterFile, builderProtocolWriter.toString(), true);
+        FileUtils.writeStringToFile(protocolReaderFile, builderProtocolReader.toString(), true);
+        logger.info("Generated Lua protocols file:[{}] is in path:[{}]", protocolsFile.getName(), protocolsFile.getAbsolutePath());
+        logger.info("Generated Lua protocol base file:[{}] is in path:[{}]", protocolBaseFile.getName(), protocolBaseFile.getAbsolutePath());
+        logger.info("Generated Lua protocol writer file:[{}] is in path:[{}]", protocolWriterFile.getName(), protocolWriterFile.getAbsolutePath());
+        logger.info("Generated Lua protocol reader file:[{}] is in path:[{}]", protocolReaderFile.getName(), protocolReaderFile.getAbsolutePath());
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
@@ -188,7 +203,9 @@ public abstract class GenerateLuaUtils {
             protocolBuilder.append(TAB).append(StringUtils.format("protocols[{}] = {}", protocolId, protocolName)).append(LS);
         }
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, StringUtils.EMPTY_JSON, StringUtils.EMPTY_JSON, fieldBuilder.toString().trim(), protocolBuilder.toString().trim());
-        FileUtils.writeStringToFile(new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua")), protocolManagerTemplate, true);
+        var file = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua"));
+        FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
+        logger.info("Generated Lua protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     public static void createLuaProtocolFile(ProtocolRegistration registration) {
@@ -214,7 +231,9 @@ public abstract class GenerateLuaUtils {
 
         var outputPath = StringUtils.format("{}/{}/{}.lua"
                 , protocolOutputRootPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
-        FileUtils.writeStringToFile(new File(outputPath), protocolTemplate, true);
+        var file = new File(outputPath);
+        FileUtils.writeStringToFile(file, protocolTemplate, true);
+        logger.info("Generated Lua protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     private static String valueOfMethod(ProtocolRegistration registration) {
