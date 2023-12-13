@@ -5,6 +5,7 @@ import NormalObject from './packet/NormalObject';
 import ObjectA from './packet/ObjectA';
 import ObjectB from './packet/ObjectB';
 import SimpleObject from './packet/SimpleObject';
+import IByteBuffer from "./IByteBuffer";
 
 const protocols = new Map<number, any>();
 
@@ -26,14 +27,14 @@ class ProtocolManager {
         return protocol;
     }
 
-    static write(buffer: any, packet: any): void {
+    static write(buffer: IByteBuffer, packet: any): void {
         const protocolId = packet.protocolId();
         buffer.writeShort(protocolId);
         const protocol = ProtocolManager.getProtocol(protocolId);
         protocol.write(buffer, packet);
     }
 
-    static read(buffer: any): any {
+    static read(buffer: IByteBuffer): any {
         const protocolId = buffer.readShort();
         const protocol = ProtocolManager.getProtocol(protocolId);
         const packet = protocol.read(buffer);
