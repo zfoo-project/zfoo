@@ -25,8 +25,8 @@ import java.util.List;
 import static com.zfoo.net.packet.PacketService.PACKET_HEAD_LENGTH;
 
 /**
- * header(4byte) + protocolId(2byte) + packet
- * header = body(bytes.length) + protocolId.length(2byte)
+ * header(4byte) + json string
+ * header = json body(json.length)
  *
  * @author godotg
  */
