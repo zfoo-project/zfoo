@@ -11,10 +11,8 @@
  *
  */
 
-package com.zfoo.net.core.json.server;
+package com.zfoo.net.core.json.client;
 
-import com.zfoo.net.NetContext;
-import com.zfoo.net.packet.json.JsonHelloRequest;
 import com.zfoo.net.packet.json.JsonHelloResponse;
 import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.session.Session;
@@ -27,18 +25,13 @@ import org.springframework.stereotype.Component;
  * @author godotg
  */
 @Component
-public class JsonWsServerController {
+public class JsonClientController {
 
-    private static final Logger logger = LoggerFactory.getLogger(JsonWsServerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(JsonClientController.class);
 
     @PacketReceiver
-    public void atJsonHelloRequest(Session session, JsonHelloRequest request) {
-        logger.info("receive [packet:{}] from client", JsonUtils.object2String(request));
-
-        var response = new JsonHelloResponse();
-        response.setMessage("Hello, this is the json server!");
-
-        NetContext.getRouter().send(session, response);
+    public void atJsonHelloResponse(Session session, JsonHelloResponse response) {
+        logger.info("json client receive [packet:{}] from server", JsonUtils.object2String(response));
     }
 
 }
