@@ -13,10 +13,8 @@
 
 package com.zfoo.net.handler.codec.json;
 
-import com.zfoo.net.packet.DecodedPacketInfo;
 import com.zfoo.net.packet.EncodedPacketInfo;
 import com.zfoo.protocol.ProtocolManager;
-import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,37 +32,14 @@ public class JsonWebSocketCodecHandler extends MessageToMessageCodec<WebSocketFr
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, WebSocketFrame webSocketFrame, List<Object> list) {
         var byteBuf = webSocketFrame.content();
-        var bytes = ByteBufUtils.readAllBytes(byteBuf);
-        var jsonStr = StringUtils.bytesToString(bytes);
-        var jsonMap = JsonUtils.getJsonMap(jsonStr);
-        var protocolId = Short.parseShort(jsonMap.get("protocolId"));
-        var packetStr = jsonMap.get("packet");
-        var attachmentStr = jsonMap.get("attachmentId");
-        Object attachment = null;
-        if (StringUtils.isNotEmpty(attachmentStr)) {
-            var attachmentId = Short.parseShort(attachmentStr);
-            if (attachmentId >= 0) {
-                var attachmentClass = ProtocolManager.getProtocol(attachmentId).protocolConstructor().getDeclaringClass();
-                attachment = JsonUtils.string2Object(jsonMap.get("attachment"), attachmentClass);
-            }
-        }
-
-        var protocolClass = ProtocolManager.getProtocol(protocolId).protocolConstructor().getDeclaringClass();
-        var packet = JsonUtils.string2Object(packetStr, protocolClass);
-        list.add(DecodedPacketInfo.valueOf(packet, attachment));
+        var decodedPacketInfo = JsonPacket.readDecodedPacketInfo(byteBuf);
+        list.add(decodedPacketInfo);
     }
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
         var byteBuf = channelHandlerContext.alloc().ioBuffer();
-
-        var packet = out.getPacket();
-        var attachment = out.getAttachment();
-        var attachmentId = attachment == null ? -1 : ProtocolManager.protocolId(attachment.getClass());
-        var jsonPacket = JsonPacket.valueOf(ProtocolManager.protocolId(packet.getClass()), packet, attachmentId, attachment);
-        var bytes = StringUtils.bytes(JsonUtils.object2String(jsonPacket));
-        byteBuf.writeBytes(bytes);
-
+        JsonPacket.writeEncodedPacketInfo(byteBuf, out);
         list.add(new BinaryWebSocketFrame(byteBuf));
     }
 
