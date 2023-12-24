@@ -12,13 +12,15 @@
 
 package com.zfoo.monitor.cppack;
 
-import com.zfoo.monitor.util.OSUtils;
+import com.sun.jna.Platform;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author godotg
@@ -26,49 +28,42 @@ import java.io.File;
 @Ignore
 public class Gcc {
 
-    public static final String mainCpp = "main";
+    public static final String sourcePath = "D:\\github\\cutil";
+    public static final List<String> excludePaths = List.of(
+            "D:\\github\\cutil\\thirdparty"
+            , "D:\\github\\cutil\\test");
+    public static final String mainCpp = "main.cpp";
+    public static final String appName = "myapp";
 
+    // https://blog.csdn.net/m0_37605642/article/details/127170731
     @Test
     public void test() {
-        FileUtils.createDirectory("bin");
+        System.out.println(StringUtils.format("source = [{}]", sourcePath));
 
-        FileUtils.deleteFile(new File((StringUtils.format("bin/{}.exe", mainCpp))));
+        var excludeFiles = excludePaths.stream()
+                .map(it -> new File(it))
+                .filter(it -> it.exists())
+                .map(it -> it.getAbsolutePath())
+                .toList();
 
-        var proPath = new File(FileUtils.getProAbsPath()).getAbsolutePath();
-        System.out.println(StringUtils.format("proPath = [{}]", proPath));
-
-
-        var files = FileUtils.getAllReadableFiles(new File(proPath))
+        var cppFiles = FileUtils.getAllReadableFiles(new File(sourcePath))
                 .stream()
                 .filter(it -> it.getName().endsWith(".h") || it.getName().endsWith(".cpp"))
-                .map(it -> StringUtils.substringAfterFirst(it.getAbsolutePath(), proPath))
-                .map(it -> {
-                    if (it.startsWith("/")) {
-                        return StringUtils.substringAfterFirst(it, "/");
-                    }
-                    if (it.startsWith("\\")) {
-                        return StringUtils.substringAfterFirst(it, "\\");
-                    }
-                    return it;
-                })
-                .filter(it -> it.contains("/") || it.contains("\\"))
-                .filter(it -> !it.startsWith("cmake-build-debug"))
-                .toArray();
+                .map(it -> it.getAbsolutePath())
+                .filter(it -> !it.contains("cmake-build-debug"))
+                .filter(it -> excludeFiles.stream().noneMatch(it0 -> it.startsWith(it0)))
+                .map(it -> StringUtils.substringAfterFirst(it, sourcePath))
+                .collect(Collectors.joining(StringUtils.SPACE));
 
-        var cppFiles = StringUtils.joinWith(StringUtils.SPACE, files);
-        var gppCommand = StringUtils.format("g++ -I ./ {}.cpp {} -o bin/{}", mainCpp, cppFiles, mainCpp);
 
-        System.out.println(StringUtils.format("[{}]", gppCommand));
-        System.out.println("------------------------------------------------------");
+        // 链接windows的网络库
+        var libraryLink = new StringBuilder();
+        if (Platform.isWindows()) {
+            libraryLink.append("-lws2_32");
+        }
 
-        var result = OSUtils.execCommand(gppCommand);
-        System.out.println(result);
-        System.out.println("------------------------------------------------------");
-
-        result = OSUtils.execCommand(StringUtils.format("bin/{}.exe", mainCpp));
-        System.out.println(result);
-
-        System.exit(0);
+        var gppCommand = StringUtils.format("g++ -std=c++20 {} -o {} {}", mainCpp, appName, libraryLink.toString());
+        System.out.println(gppCommand);
     }
 
 }
