@@ -7,7 +7,7 @@
     <groupId>com.zfoo</groupId>
     <artifactId>zfoo</artifactId>
     <packaging>pom</packaging>
-    <version>3.2.0</version>
+    <version>3.2.0.a</version>
 
 
     <name>zfoo</name>
@@ -126,7 +126,7 @@
     </modules>
 
     <properties>
-        <zfoo.version>3.2.0</zfoo.version>
+        <zfoo.version>3.2.0.a</zfoo.version>
         <!-- spring and spring boot -->
         <spring.version>6.0.11</spring.version>
         <spring.boot.version>3.1.3</spring.boot.version>
