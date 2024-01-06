@@ -2,7 +2,11 @@ package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.session.Session;
+import org.apache.curator.shaded.com.google.common.collect.Lists;
 import org.apache.curator.shaded.com.google.common.util.concurrent.AtomicLongMap;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 记忆化一致性hash
@@ -45,5 +49,9 @@ public class ConsistentHashOfMemoryConsumerLoadBalancer extends ConsistentHashCo
             uid2sidMap.put((Long) argument, loadBalancer.getSid());
         }
         return loadBalancer;
+    }
+
+    public static Map<Long, Long> getUid2sidMap(){
+        return uid2sidMap.asMap();
     }
 }
