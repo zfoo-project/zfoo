@@ -27,7 +27,7 @@ import java.util.concurrent.CountDownLatch;
 @Ignore
 public class SignalBridgeTest {
 
-    private final int executorSize = EventBus.EXECUTORS_SIZE;
+    private final int executorSize = Runtime.getRuntime().availableProcessors() * 2;
     private final int count = 100_0000;
     private final int totalIndex = 10;
 

@@ -44,7 +44,7 @@ public final class TaskBus {
 
     // EN: The size of the thread pool can also be specified through the provider thread configuration
     // CN: 线程池的大小，也可以通过provider thread配置指定
-    public static final int EXECUTOR_SIZE;
+    private static final int EXECUTOR_SIZE;
 
     /**
      * EN: Use different thread pools to achieve isolation between thread pools without affecting each other
