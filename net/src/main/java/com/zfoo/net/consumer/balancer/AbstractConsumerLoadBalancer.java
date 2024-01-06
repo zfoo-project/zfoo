@@ -39,6 +39,9 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
             case "consistent-hash":
                 balancer = ConsistentHashConsumerLoadBalancer.getInstance();
                 break;
+            case "consistent-hash-of-memory":
+                balancer = ConsistentHashOfMemoryConsumerLoadBalancer.getInstance();
+                break;
             default:
                 throw new RuntimeException(StringUtils.format("Load balancer is not recognized[{}]", loadBalancer));
         }
