@@ -17,6 +17,7 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.util.ConsistentHash;
 import com.zfoo.net.util.FastTreeMapIntLong;
+import com.zfoo.net.util.HashUtils;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
@@ -42,7 +43,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
     private static final AtomicReferenceArray<FastTreeMapIntLong> consistentHashMap = new AtomicReferenceArray<>(ProtocolManager.MAX_MODULE_NUM);
     private static final int VIRTUAL_NODE_NUMS = 200;
 
-    private ConsistentHashConsumerLoadBalancer() {
+    public ConsistentHashConsumerLoadBalancer() {
     }
 
     public static ConsistentHashConsumerLoadBalancer getInstance() {
@@ -62,6 +63,29 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
             return RandomConsumerLoadBalancer.getInstance().loadBalancer(packet, argument);
         }
 
+        updateConsistentHashMap();
+
+        var module = ProtocolManager.moduleByProtocol(packet.getClass());
+        var fastTreeMap = consistentHashMap.get(module.getId());
+        if (fastTreeMap == null) {
+            fastTreeMap = updateModuleToConsistentHash(module);
+        }
+        if (fastTreeMap == null) {
+            throw new RunException("ConsistentHashLoadBalancer [protocol:{}][argument:{}], no service provides the [module:{}]", packet.getClass(), argument, module);
+        }
+        var nearestIndex = fastTreeMap.indexOfNearestCeilingKey(HashUtils.fnvHash(argument));
+        if (nearestIndex < 0) {
+            throw new RunException("no service provides the [module:{}]", module);
+        }
+        var sid = fastTreeMap.getByIndex(nearestIndex);
+        var session = NetContext.getSessionManager().getClientSession(sid);
+        if (session == null) {
+            throw new RunException("unknown no service provides the [module:{}]", module);
+        }
+        return session;
+    }
+
+    private void updateConsistentHashMap() {
         // 如果更新时间不匹配，则更新到最新的服务提供者
         var currentClientSessionChangeId = NetContext.getSessionManager().getClientSessionChangeId();
         if (currentClientSessionChangeId != lastClientSessionChangeId) {
@@ -75,25 +99,6 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
             }
             lastClientSessionChangeId = currentClientSessionChangeId;
         }
-
-        var module = ProtocolManager.moduleByProtocol(packet.getClass());
-        var fastTreeMap = consistentHashMap.get(module.getId());
-        if (fastTreeMap == null) {
-            fastTreeMap = updateModuleToConsistentHash(module);
-        }
-        if (fastTreeMap == null) {
-            throw new RunException("ConsistentHashLoadBalancer [protocol:{}][argument:{}], no service provides the [module:{}]", packet.getClass(), argument, module);
-        }
-        var nearestIndex = fastTreeMap.indexOfNearestCeilingKey(argument.hashCode());
-        if (nearestIndex < 0) {
-            throw new RunException("no service provides the [module:{}]", module);
-        }
-        var sid = fastTreeMap.getByIndex(nearestIndex);
-        var session = NetContext.getSessionManager().getClientSession(sid);
-        if (session == null) {
-            throw new RunException("unknown no service provides the [module:{}]", module);
-        }
-        return session;
     }
 
 
