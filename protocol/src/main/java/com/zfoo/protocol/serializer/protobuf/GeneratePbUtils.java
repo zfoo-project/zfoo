@@ -232,7 +232,7 @@ public abstract class GeneratePbUtils {
         var builder = new StringBuilder();
 
         // package definition
-        builder.append(StringUtils.format("package {};", pbGenerateOperation.getJavaPackage())).append(LS).append(LS);
+        builder.append(StringUtils.format("package {}.{};", pbGenerateOperation.getJavaPackage(), proto.getName())).append(LS).append(LS);
 
         // import other class
         var imports = buildMessageImports(pbGenerateOperation, protos, proto, pbMessage);
@@ -259,10 +259,6 @@ public abstract class GeneratePbUtils {
         imports.add(Protocol.class.getName());
 
         var pbFields = pbMessage.getFields();
-        if (CollectionUtils.isEmpty(pbFields)) {
-            return StringUtils.EMPTY;
-        }
-
         for (var pbField : pbFields) {
             if (CollectionUtils.isNotEmpty(pbField.getComments())) {
                 imports.add(Note.class.getName());

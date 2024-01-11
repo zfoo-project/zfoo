@@ -27,6 +27,10 @@ import java.util.List;
 public class Proto {
 
     /**
+     * 协议的起始Id
+     */
+    private short startProtocolId;
+    /**
      * Proto描述文件的名称
      */
     private String name;
@@ -54,10 +58,15 @@ public class Proto {
      * proto文件的单行注释列表
      */
     private List<String> comments = new ArrayList<>();
-    /**
-     * 协议的起始Id
-     */
-    private short startProtocolId;
+
+
+    public short getStartProtocolId() {
+        return startProtocolId;
+    }
+
+    public void setStartProtocolId(short startProtocolId) {
+        this.startProtocolId = startProtocolId;
+    }
 
     public String getName() {
         return name;
@@ -115,11 +124,4 @@ public class Proto {
         this.comments = comments;
     }
 
-    public short getStartProtocolId() {
-        return startProtocolId;
-    }
-
-    public void setStartProtocolId(short startProtocolId) {
-        this.startProtocolId = startProtocolId;
-    }
 }
