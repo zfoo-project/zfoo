@@ -231,6 +231,9 @@ public abstract class GeneratePbUtils {
     public static String buildMessage(PbGenerateOperation pbGenerateOperation, List<Proto> protos, Proto proto, PbMessage pbMessage) {
         var builder = new StringBuilder();
 
+        // package definition
+        builder.append(StringUtils.format("package {};", pbGenerateOperation.getJavaPackage())).append(LS).append(LS);
+
         // import other class
         var imports = buildMessageImports(pbGenerateOperation, protos, proto, pbMessage);
         builder.append(imports);
