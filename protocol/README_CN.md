@@ -127,6 +127,7 @@ cpu： i9900k
     - 第三种使用：通过ProtocolManagerinitProtocol(xmlProtocols)去注册协议，把协议号写在protocol.xml文件
       ```
       <protocols>
+          <!-- 使用类路径 -->
           <module id="1" name="common">
               <protocol id="100" location="com.zfoo.protocol.packet.ComplexObject"/>
               <protocol id="101" location="com.zfoo.protocol.packet.NormalObject"/>
@@ -136,24 +137,47 @@ cpu： i9900k
               <protocol id="105" location="com.zfoo.protocol.packet.VeryBigObject"/>
               <protocol id="106" location="com.zfoo.protocol.packet.EmptyObject"/>
           </module>
+          <!-- 使用包名会扫描该包路径下的所有协议类 -->
+          <module id="2" name="native">
+              <protocol location="com.zfoo.net.packet.common"/>
+              <protocol location="com.zfoo.tank.common.protocol.common"/>
+          </module>
       </protocols>
       ```
 
-- 如果为了版本兼容，增加字段，需要加上Compatible注解，order需要自然增大，这样就可以保证新老协议可以互相兼容
+    - 第四种使用：通过定义proto文件去生成带协议号的协议，这样就能轻松注册协议
+      ```
+      syntax = "proto3";
+      package test.message;
+      // start_protocol_id = 500
+      // 上面这个起始id表示整个文件的协议号从哪个开始
+      
+      message SimpleObject {
+          int64 aa = 1;
+      }
+      
+      // 如果字段的tag超过1000，则视这个字段为需要兼容的协议字段
+      message OneMessage {
+          // 这是属性的注释
+          int64 id = 1;
+          // 等于给这个字段加上了 @Compatible 注解
+          string name = 1001;
+      }
+      ```
+
+- 如果为了版本兼容，增加字段，需要加上Compatible注解，order需要自然增大，这样就可以保证新老协议可以互相兼容，协议嵌套也依然能够兼容
 - 正式环境为了版本兼容，避免修改字段名称，内部默认使用字段的名称按照字符串的自然顺序来依次读写的（也可以自定义），所以会导致序列化出现异常
 - 正式环境为了版本兼容，避免减少字段，没必要一定要删除一个不需要的字段，所以不考虑支持这种减少字段兼容协议的情况
 - 设计模式六大原则中的开闭原则是对扩展开放，对修改关闭。协议的设计涉及到功能应该也要遵守这个原则，优先增加新的协议而不是修改现有协议
 
-### Ⅷ. 在zfoo中使用Protobuf
 
-- zfoo提供了proto文件解析工具，将protobuf的proto文件转换为pojo对象给zfoo使用
+### Ⅷ. zfoo和Protobuf的区别
 
-- 通过proto文件生成pojo对象给客户端使用，[解析proto配置](https://github.com/zfoo-project/zfoo/blob/main/protocol/src/test/java/com/zfoo/protocol/generate/GenerateProtobufTesting.java)
-
-
-### Ⅸ. zfoo和Protobuf的区别
-
-- 舍弃protobuf的删除字段也可以兼容协议的方式，提升1倍的性能，减小1倍的体积
+- protobuf可以删除字段，zfoo不支持删除字段，以此为代价提升1倍的性能和减小1倍的体积
+```
+实际正式上线的项目几乎没遇到谁会去删字段，删除了这个字段，服务器要改代码不去引用这个删除字段，客户端要改代码不去引用这个删除字段，双倍工作量。
+如果其中任何一端忘了修改代码就会直接报错，所以实际项目中给这个字段加一个废弃字段 @Deprecated 注释就能避免很多不必要的麻烦。
+```
 
 - zfoo取所有语言的类型声明的交集，而不是protobuf取并集，简化protobuf的类型实现
     - protobuf

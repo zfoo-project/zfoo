@@ -149,6 +149,7 @@ your protocol number a little more compactly, so that your protocol number will 
     - The third use: Register the protocol through ProtocolManager.initProtocol(xmlProtocols) in the protocol.xml file
       ```
       <protocols>
+          <!-- Use class path -->
           <module id="1" name="common">
               <protocol id="100" location="com.zfoo.protocol.packet.ComplexObject"/>
               <protocol id="101" location="com.zfoo.protocol.packet.NormalObject"/>
@@ -158,11 +159,38 @@ your protocol number a little more compactly, so that your protocol number will 
               <protocol id="105" location="com.zfoo.protocol.packet.VeryBigObject"/>
               <protocol id="106" location="com.zfoo.protocol.packet.EmptyObject"/>
           </module>
+          <!-- Use a package name scans all protocol classes under the package path -->
+          <module id="2" name="native">
+              <protocol location="com.zfoo.net.packet.common"/>
+              <protocol location="com.zfoo.tank.common.protocol.common"/>
+          </module>
       </protocols>
-      ```      
+      ```   
+
+    - The fourth use: generate a protocol with a protocol number by defining a proto file, so that the protocol can be
+      easily registered
+      ```
+      syntax = "proto3";
+      package test.message;
+      // start_protocol_id = 500
+      // The above starting ID indicates which protocol number of the entire file starts with
+    
+      message SimpleObject {
+          int64 aa = 1;
+      }
+    
+      // If the tag of a field exceeds 1000, the field is considered to be a compatible protocol field
+      message OneMessage {
+          // This is a comment on the field
+          int64 id = 1;
+          // This is equivalent to adding a @Compatible annotation to this field
+          string name = 1001;
+      }
+      ```
 
 - If you add a field for version compatibility, you need to add a Compatible annotation, and the order needs to be
-  naturally increased, so as to ensure that the old and new protocols can be compatible with each other
+  naturally increased, so as to ensure that the old and new protocols can be compatible with each other, Protocol
+  nesting is also still compatible
 - In order to be compatible with versions and avoid modifying field names, default uses field names to read and write
   in the natural order of strings (can also be customized), so it will cause exceptions in serialization
 - The official environment does not necessarily have to delete an unwanted field in order to be version compatible and
@@ -171,17 +199,18 @@ your protocol number a little more compactly, so that your protocol number will 
   modification. The design of the protocol should also adhere to this principle when it comes to functionality,
   prioritizing the addition of new protocols over modifying existing ones
 
-### Ⅷ. Use Protobuf in zfoo
+### Ⅷ. The difference between zfoo and Protobuf
 
-- zfoo provides a proto file parsing tool to convert the proto file of protobuf into a pojo object for use by zfoo
+- Protobuf can delete fields, but ZFOO does not support deleting fields, which improves performance by 1x and reduces
+  the size by 1x at the expense
 
-- Generate pojo objects through proto files for client
-  use, [Parse proto configuration](https://github.com/zfoo-project/zfoo/blob/main/protocol/src/test/java/com/zfoo/protocol/generate/GenerateProtobufTesting.java)
-
-### Ⅸ. The difference between zfoo and Protobuf
-
-- Abandoning the deletion field of protobuf can also be compatible with the protocol, improving the performance by 1
-  times and reducing the size by 1 times.
+```
+In fact, the officially launched project almost did not encounter anyone who would delete the field, 
+and if this field was deleted, the server had to change the code not to reference the deleted field, 
+and the client had to change the code not to reference the deleted field, which doubled the workload. 
+If either of them forgets to modify the code, it will directly report an error, 
+so adding a discarded field @Deprecated comment to this field in the actual project can avoid a lot of unnecessary trouble.
+```
 
 - zfoo takes the intersection of type declarations in all languages, instead of protobuf taking the union, simplifying
   the type implementation of protobuf
