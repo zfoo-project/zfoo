@@ -65,19 +65,8 @@ public class ProtoParser {
             switch (token) {
                 case "//":
                     String line = readSingleLineComment();
-                    // 解析协议开始的start_protocol_id
                     line = StringUtils.trim(line);
-                    if (line.startsWith("start_protocol_id")) {
-                        var splits = line.split("=");
-                        for (var s : splits) {
-                            s = s.trim();
-                            if (NumberUtils.isInteger(s)) {
-                                proto.setStartProtocolId(Short.parseShort(s));
-                            }
-                        }
-                    } else {
-                        comments.add(line);
-                    }
+                    comments.add(line);
                     nextLine();
                     break;
                 case "/*":

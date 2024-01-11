@@ -22,6 +22,7 @@ import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.serializer.protobuf.parser.Proto;
 import com.zfoo.protocol.serializer.protobuf.parser.ProtoParser;
 import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.protocol.util.NumberUtils;
 import com.zfoo.protocol.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public abstract class GeneratePbUtils {
         }
         // java package path
         if (StringUtils.isNotEmpty(pbGenerateOperation.getJavaPackage())) {
-            protocolOutputPath = protocolOutputPath + File.separator+ pbGenerateOperation.getJavaPackage().replaceAll(StringUtils.PERIOD_REGEX, "/");
+            protocolOutputPath = protocolOutputPath + File.separator + pbGenerateOperation.getJavaPackage().replaceAll(StringUtils.PERIOD_REGEX, "/");
         }
 
         var protoPathFile = new File(pbGenerateOperation.getProtoPath());
@@ -91,11 +92,20 @@ public abstract class GeneratePbUtils {
             // parse protobuf proto
             ProtoParser parser = new ProtoParser(protoString);
             Proto proto = parser.parse();
-            proto.setName(FileUtils.fileSimpleName(protoFile.getName()));
+            var protoSimpleName = FileUtils.fileSimpleName(protoFile.getName());
+
+            var protoName = StringUtils.substringAfterFirst(protoSimpleName, "_");
+            var startProtocolIdStr = StringUtils.substringBeforeFirst(protoSimpleName, "_");
+            if (!NumberUtils.isNumeric(startProtocolIdStr)) {
+                throw new RuntimeException(StringUtils.format("proto:[{}] name format is number_xxx.proto", protoName));
+            }
+
+            var startProtocolId = Short.parseShort(startProtocolIdStr);
+            proto.setName(protoName);
+            proto.setStartProtocolId(startProtocolId);
             protos.add(proto);
 
             // auto generate protocolId
-            var startProtocolId = proto.getStartProtocolId();
             for (var pbMessage : proto.getPbMessages()) {
                 pbMessage.setProtocolId(startProtocolId++);
             }
@@ -110,7 +120,7 @@ public abstract class GeneratePbUtils {
                 var protocolName = pbMessage.getName();
                 if (protocolIdMap.containsKey(protocolId)) {
                     var pair = protocolIdMap.get(protocolId);
-                    throw new RuntimeException(StringUtils.format("duplicate protocolId:[{}] in [{}]:[{}] and [{}]:[{}], consider proto start_protocol_id is too close"
+                    throw new RuntimeException(StringUtils.format("duplicate protocolId:[{}] in [{}]:[{}] and [{}]:[{}], consider proto start protocol id is too close"
                             , protocolId, pair.getKey().getName(), pair.getValue().getName(), proto.getName(), protocolName));
                 }
                 if (protocolNameMap.containsKey(protocolName)) {

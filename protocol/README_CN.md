@@ -149,8 +149,6 @@ cpu： i9900k
       ```
       syntax = "proto3";
       package test.message;
-      // start_protocol_id = 500
-      // 上面这个起始id表示整个文件的协议号从哪个开始
       
       message SimpleObject {
           int64 aa = 1;

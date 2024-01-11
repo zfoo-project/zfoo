@@ -172,8 +172,6 @@ your protocol number a little more compactly, so that your protocol number will 
       ```
       syntax = "proto3";
       package test.message;
-      // start_protocol_id = 500
-      // The above starting ID indicates which protocol number of the entire file starts with
     
       message SimpleObject {
           int64 aa = 1;

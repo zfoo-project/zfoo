@@ -1,8 +1,7 @@
 syntax = "proto3";
 package test.message;
-import "one_map.proto";
-import "one_message.proto";
-// start_protocol_id = 300
+import "400_one_map.proto";
+import "500_one_message.proto";
 
 
 // 如果字段的tag超过1000，则视这个字段为需要兼容的协议字段
