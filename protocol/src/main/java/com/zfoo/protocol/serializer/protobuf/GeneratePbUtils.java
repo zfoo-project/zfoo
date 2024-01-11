@@ -61,7 +61,7 @@ public abstract class GeneratePbUtils {
 
         var protoPathFile = new File(pbGenerateOperation.getProtoPath());
         if (!protoPathFile.exists()) {
-            throw new RuntimeException(StringUtils.format("proto path:[{}] not exist", pbGenerateOperation.getProtoPath()));
+            throw new RuntimeException(StringUtils.format("proto path:[{}] not exist, absolute path is [{}]", pbGenerateOperation.getProtoPath(), protoPathFile.getAbsolutePath()));
         }
 
         var protoFiles = FileUtils.getAllReadableFiles(protoPathFile)
