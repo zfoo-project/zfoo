@@ -166,7 +166,7 @@ public abstract class GenerateLuaUtils {
         var protocolsFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "Protocols.lua"));
         var protocolBaseFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolBase.lua"));
         var protocolWriterFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolWriter.lua"));
-        var protocolReaderFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolWriter.lua"));
+        var protocolReaderFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolReader.lua"));
         FileUtils.writeStringToFile(protocolsFile, builderProtocol.toString(), true);
         FileUtils.writeStringToFile(protocolBaseFile, builderProtocolBase.toString(), true);
         FileUtils.writeStringToFile(protocolWriterFile, builderProtocolWriter.toString(), true);
