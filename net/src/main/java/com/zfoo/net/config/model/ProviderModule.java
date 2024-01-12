@@ -24,21 +24,25 @@ public class ProviderModule {
     /**
      * 模块id和模块名
      */
-    private ProtocolModule protocolModule;
+    private String protocolModule;
 
     /**
      * 提供者名字
      */
     private String provider;
 
-    public ProviderModule(ProtocolModule protocolModule, String provider) {
+
+    public ProviderModule(String protocolModule, String provider) {
         this.protocolModule = protocolModule;
         this.provider = provider;
     }
 
-    public ProviderModule(String protocolModule, String provider) {
-        this.protocolModule = new ProtocolModule((byte) 0, protocolModule);
-        this.provider = provider;
+    public String getProtocolModule() {
+        return protocolModule;
+    }
+
+    public void setProtocolModule(String protocolModule) {
+        this.protocolModule = protocolModule;
     }
 
     public String getProvider() {
@@ -47,14 +51,6 @@ public class ProviderModule {
 
     public void setProvider(String provider) {
         this.provider = provider;
-    }
-
-    public ProtocolModule getProtocolModule() {
-        return protocolModule;
-    }
-
-    public void setProtocolModule(ProtocolModule protocolModule) {
-        this.protocolModule = protocolModule;
     }
 
     @Override

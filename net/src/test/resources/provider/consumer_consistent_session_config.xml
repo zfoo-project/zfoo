@@ -25,7 +25,7 @@
         </net:registry>
 
         <net:consumers>
-            <net:consumer protocol-module="providerTest" load-balancer="consistent-hash" consumer="myProvider1"/>
+            <net:consumer load-balancer="consistent-hash" consumer="myProvider1"/>
         </net:consumers>
     </net:config>
 

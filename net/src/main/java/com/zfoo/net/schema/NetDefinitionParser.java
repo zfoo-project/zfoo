@@ -218,7 +218,6 @@ public class NetDefinitionParser implements BeanDefinitionParser {
             var clazz = ConsumerModule.class;
             var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
-            builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("protocol-module")));
             builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("load-balancer")));
             builder.addConstructorArgValue(environment.resolvePlaceholders(addressElement.getAttribute("consumer")));
 

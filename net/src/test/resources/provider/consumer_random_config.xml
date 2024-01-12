@@ -24,7 +24,7 @@
         </net:registry>
 
         <net:consumers>
-            <net:consumer protocol-module="providerTest" load-balancer="random" consumer="myProvider1"/>
+            <net:consumer load-balancer="random" consumer="myProvider1"/>
         </net:consumers>
     </net:config>
 

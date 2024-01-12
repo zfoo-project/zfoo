@@ -58,20 +58,15 @@ public class ConfigManager implements IConfigManager {
     public void initRegistry() {
         // 通过protocol，写入provider的module的id和version
         var providerConfig = localConfig.getProvider();
-        if (Objects.nonNull(providerConfig) && CollectionUtils.isNotEmpty(providerConfig.getProviders())) {
+        if (providerConfig != null && CollectionUtils.isNotEmpty(providerConfig.getProviders())) {
             // 服务提供者名字Set列表
             var providerSet = new HashSet<String>();
             // 检查并且替换配置文件中的ProtocolModule
             for (var providerModule : providerConfig.getProviders()) {
                 var provider = providerModule.getProvider();
-                var protocolModuleName = providerModule.getProtocolModule().getName();
-
-                // 从protocol中读值
-                var protocolModule = ProtocolManager.moduleByModuleName(protocolModuleName);
-                AssertionUtils.isTrue(protocolModule != null, "服务提供者[name:{}]在协议文件中不存在", protocolModuleName);
-                providerModule.setProtocolModule(protocolModule);
-                var providerName = StringUtils.joinWith(StringUtils.HYPHEN, protocolModuleName, provider);
-                AssertionUtils.isTrue(providerSet.add(providerName), "服务提供者[name:{}]重复消费协议模块[provider:{}]", protocolModuleName, provider);
+                var protocolModule = ProtocolManager.moduleByModuleName(provider);
+                AssertionUtils.isTrue(protocolModule != null, "provider:[{}] does not exist in the protocol manager", provider);
+                AssertionUtils.isTrue(providerSet.add(provider), "provider:[{}] plicate Consumption Agreement module [provider:{}]", protocolModuleName, provider);
             }
         }
 
@@ -79,17 +74,10 @@ public class ConfigManager implements IConfigManager {
         if (Objects.nonNull(consumerConfig) && CollectionUtils.isNotEmpty(consumerConfig.getConsumers())) {
             // 服务消费者名字Set列表
             var consumerSet = new HashSet<String>();
-            var protocolModuleSet = new HashSet<String>();
             for (var consumerModule : consumerConfig.getConsumers()) {
                 // 提供的接口实现 提供者名
                 var consumer = consumerModule.getConsumer();
-                var protocolModuleName = consumerModule.getProtocolModule().getName();
-                var protocolModule = ProtocolManager.moduleByModuleName(protocolModuleName);
-                AssertionUtils.isTrue(protocolModule != null, "服务消费者[name:{}]在协议文件中不存在", protocolModuleName);
-                consumerModule.setProtocolModule(protocolModule);
-                AssertionUtils.isTrue(protocolModuleSet.add(protocolModuleName), "服务消费者[name:{}]重复消费了协议模块", protocolModuleName);
-                var consumerName = StringUtils.joinWith(StringUtils.HYPHEN, protocolModuleName, consumer);
-                AssertionUtils.isTrue(consumerSet.add(consumerName), "服务消费者[name:{}]重复消费了协议模块[consumer:{}]", protocolModuleName, consumer);
+                AssertionUtils.isTrue(consumerSet.add(consumer), "服务消费者[name:{}]重复消费了协议模块[consumer:{}]", protocolModuleName, consumer);
             }
         }
 

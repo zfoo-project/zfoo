@@ -52,7 +52,7 @@ public class RegisterVO {
             return false;
         }
         for (var provider : providerVO.getProviderConfig().getProviders()) {
-            if (consumerVO.getConsumerConfig().getConsumers().stream().anyMatch(it -> it.matchProvider(provider))) {
+            if (consumerVO.getConsumerConfig().getConsumers().stream().anyMatch(it -> it.getConsumer().equals(provider.getProvider()))) {
                 return true;
             }
         }
@@ -119,7 +119,7 @@ public class RegisterVO {
         var modules = Arrays.stream(moduleSplits)
                 .map(it -> it.trim())
                 .map(it -> it.split(StringUtils.HYPHEN))
-                .map(it -> new ConsumerModule(new ProtocolModule(Byte.parseByte(it[0]), it[1]), it[2], it[3]))
+                .map(it -> new ConsumerModule(it[0], it[1]))
                 .toList();
         return modules;
     }
@@ -166,7 +166,7 @@ public class RegisterVO {
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
 
             var consumerModules = consumerConfig.getConsumers().stream()
-                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule().getId(), it.getProtocolModule().getName(), it.getLoadBalancer(), it.getConsumer()))
+                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getLoadBalancer(), it.getConsumer()))
                     .toList();
 
             // 服务消费者模块信息列表
