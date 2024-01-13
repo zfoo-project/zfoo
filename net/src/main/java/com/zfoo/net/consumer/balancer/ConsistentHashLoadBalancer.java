@@ -36,18 +36,18 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  *
  * @author godotg
  */
-public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBalancer {
+public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
 
-    public static final ConsistentHashConsumerLoadBalancer INSTANCE = new ConsistentHashConsumerLoadBalancer();
+    public static final ConsistentHashLoadBalancer INSTANCE = new ConsistentHashLoadBalancer();
 
     private volatile int lastClientSessionChangeId = 0;
     private static final AtomicReferenceArray<FastTreeMapIntLong> consistentHashMap = new AtomicReferenceArray<>(ProtocolManager.MAX_MODULE_NUM);
     private static final int VIRTUAL_NODE_NUMS = 200;
 
-    public ConsistentHashConsumerLoadBalancer() {
+    public ConsistentHashLoadBalancer() {
     }
 
-    public static ConsistentHashConsumerLoadBalancer getInstance() {
+    public static ConsistentHashLoadBalancer getInstance() {
         return INSTANCE;
     }
 
@@ -61,7 +61,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
     @Override
     public Session selectProvider(List<Session> providers, Object packet, Object argument) {
         if (argument == null) {
-            return RandomConsumerLoadBalancer.getInstance().selectProvider(providers, packet, argument);
+            return RandomLoadBalancer.getInstance().selectProvider(providers, packet, argument);
         }
 
         updateConsistentHashMap(providers);

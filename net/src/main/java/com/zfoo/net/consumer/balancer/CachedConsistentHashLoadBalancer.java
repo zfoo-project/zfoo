@@ -13,19 +13,19 @@ import java.util.Map;
  * @author qmr
  * @date 2024/1/6
  */
-public class ConsistentHashOfMemoryConsumerLoadBalancer extends ConsistentHashConsumerLoadBalancer {
+public class CachedConsistentHashLoadBalancer extends ConsistentHashLoadBalancer {
 
-    public static final ConsistentHashOfMemoryConsumerLoadBalancer INSTANCE = new ConsistentHashOfMemoryConsumerLoadBalancer();
+    public static final CachedConsistentHashLoadBalancer INSTANCE = new CachedConsistentHashLoadBalancer();
 
     /**
      * 存储已经负载后的sid
      */
     private static final AtomicLongMap<Long> uid2sidMap = AtomicLongMap.create();
 
-    private ConsistentHashOfMemoryConsumerLoadBalancer() {
+    private CachedConsistentHashLoadBalancer() {
     }
 
-    public static ConsistentHashOfMemoryConsumerLoadBalancer getInstance() {
+    public static CachedConsistentHashLoadBalancer getInstance() {
         return INSTANCE;
     }
 

@@ -23,14 +23,14 @@ import java.util.List;
  *
  * @author godotg
  */
-public class RandomConsumerLoadBalancer extends AbstractConsumerLoadBalancer {
+public class RandomLoadBalancer extends AbstractConsumerLoadBalancer {
 
-    private static final RandomConsumerLoadBalancer INSTANCE = new RandomConsumerLoadBalancer();
+    private static final RandomLoadBalancer INSTANCE = new RandomLoadBalancer();
 
-    private RandomConsumerLoadBalancer() {
+    private RandomLoadBalancer() {
     }
 
-    public static RandomConsumerLoadBalancer getInstance() {
+    public static RandomLoadBalancer getInstance() {
         return INSTANCE;
     }
 

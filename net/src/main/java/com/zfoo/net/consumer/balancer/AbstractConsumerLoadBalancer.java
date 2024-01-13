@@ -24,13 +24,13 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
         AbstractConsumerLoadBalancer balancer;
         switch (loadBalancer) {
             case "random":
-                balancer = RandomConsumerLoadBalancer.getInstance();
+                balancer = RandomLoadBalancer.getInstance();
                 break;
             case "consistent-hash":
-                balancer = ConsistentHashConsumerLoadBalancer.getInstance();
+                balancer = ConsistentHashLoadBalancer.getInstance();
                 break;
-            case "consistent-hash-of-memory":
-                balancer = ConsistentHashOfMemoryConsumerLoadBalancer.getInstance();
+            case "cached-consistent-hash":
+                balancer = CachedConsistentHashLoadBalancer.getInstance();
                 break;
             default:
                 throw new RuntimeException(StringUtils.format("Load balancer is not recognized[{}]", loadBalancer));
