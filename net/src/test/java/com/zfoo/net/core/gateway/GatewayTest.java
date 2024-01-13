@@ -29,7 +29,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 /**
  * 这是客户端连接网关，网关转发到服务提供者的测试用例
@@ -75,7 +74,7 @@ public class GatewayTest {
      */
     @Test
     public void startGateway() {
-        var context = new ClassPathXmlApplicationContext("gateway/gateway_consistent_session_config.xml");
+        var context = new ClassPathXmlApplicationContext("gateway/gateway_config.xml");
         SessionUtils.printSessionInfo();
 
         // 注意：这里创建的是GatewayServer里面是GatewayRouteHandler(而不是BaseRouteHandler),里面会通过ConsumerSession把消息转发到Provider
