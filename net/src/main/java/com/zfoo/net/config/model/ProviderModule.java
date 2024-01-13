@@ -12,6 +12,8 @@
 
 package com.zfoo.net.config.model;
 
+import com.zfoo.protocol.util.StringUtils;
+
 import java.util.Objects;
 
 /**
@@ -66,5 +68,10 @@ public class ProviderModule {
     @Override
     public int hashCode() {
         return Objects.hash(protocolModule, provider);
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format("[{}-{}]", protocolModule, provider);
     }
 }

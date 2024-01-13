@@ -25,7 +25,7 @@
         </net:registry>
 
         <net:consumers>
-            <net:consumer load-balancer="consistent-hash" consumer="myProvider1"/>
+            <net:consumer load-balancer="cached-consistent-hash" consumer="provider1"/>
         </net:consumers>
     </net:config>
 

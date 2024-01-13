@@ -366,7 +366,7 @@ public class ZookeeperRegistry implements IRegistry {
             var localProviderPath = PROVIDER_ROOT_PATH + StringUtils.SLASH + localProviderVoStr;
 
             // /zfoo/provider
-            // applicationNameTest | 192.168.1.104:12400 | provider:[providerTest-myProvider1, providerTest-myProvider2]
+            // applicationNameTest | 192.168.1.104:12400 | provider:[myProviderModule-provider1, myProviderModule-provider2]
             var localProviderStat = curator.checkExists().forPath(localProviderPath);
             if (Objects.isNull(localProviderStat)) {
                 curator.create()
@@ -383,7 +383,7 @@ public class ZookeeperRegistry implements IRegistry {
                             .deletingChildrenIfNeeded()
                             .withVersion(localProviderStat.getVersion())
                             .forPath(localProviderPath);
-                    throw new RuntimeException(StringUtils.format("session of curator[sessionId:{}] and providerNode[sessionId:{}] can not match"
+                    throw new RuntimeException(StringUtils.format("session of curator[sessionId:{}] and providerNode[sessionId:{}] can not match, delete old old session data"
                             , curatorSessionId, providerNodeSessionId));
                 }
             }
@@ -397,7 +397,7 @@ public class ZookeeperRegistry implements IRegistry {
      * @throws Exception
      */
     private void initConsumerCache() throws Exception {
-        // applicationNameTest | 192.168.1.104:12400 | provider:[providerTest-myProvider1, providerTest-myProvider2]
+        // /zfoo/provider/applicationNameTest | 192.168.1.104:12400 | provider:[myProviderModule-provider1, myProviderModule-provider2]
         var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
         // 初始化providerCacheSet
         // 遍历provider下注册的所有节点

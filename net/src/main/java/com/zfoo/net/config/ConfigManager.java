@@ -18,7 +18,6 @@ import com.zfoo.net.consumer.registry.ZookeeperRegistry;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +64,7 @@ public class ConfigManager implements IConfigManager {
             for (var provider : providerConfig.getProviders()) {
                 var protocolModule = provider.getProtocolModule();
                 var providerName = provider.getProvider();
-                AssertionUtils.isTrue(ProtocolManager.moduleByModuleName(protocolModule) != null, "provider:[{}] does not exist in the protocol manager", provider);
+                AssertionUtils.isTrue(ProtocolManager.moduleByModuleName(protocolModule) != null, "protocol module [{}] does not exist in the protocol manager", provider);
                 AssertionUtils.isTrue(providerSet.add(providerName), "provider:[{}] has duplicate provider name module [provider:{}]", provider, protocolModule);
             }
         }

@@ -78,7 +78,7 @@
         <protocol id="2072" location="com.zfoo.net.packet.websocket.WebSocketObjectB" enhance="false"/>
     </module>
 
-    <module id="5" name="providerTest">
+    <module id="5" name="myProviderModule">
         <protocol id="4000" location="com.zfoo.net.packet.provider.ProviderMessAsk" enhance="false"/>
         <protocol id="4001" location="com.zfoo.net.packet.provider.ProviderMessAnswer" enhance="false"/>
 

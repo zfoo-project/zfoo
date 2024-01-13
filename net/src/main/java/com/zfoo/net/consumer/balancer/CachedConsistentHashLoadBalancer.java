@@ -48,8 +48,8 @@ public class CachedConsistentHashLoadBalancer extends AbstractConsumerLoadBalanc
 
         var arg = (Number) argument;
         var protocolModuleId = (long) ProtocolManager.moduleByProtocol(packet.getClass()).getId();
-        // 8 Byte cachedKey = 1 byte of protocolModuleId + 7 byte of argument
-        var cachedKey = (protocolModuleId << (7 * 8)) | (0X00FFFFFF_FFFFFFFFL & arg.longValue());
+        // 8 Byte cachedKey = 7 byte of argument + 1 byte of protocolModuleId
+        var cachedKey = arg.longValue() << 8 | protocolModuleId;
         var sid = cache.getIfPresent(cachedKey);
         if (sid == null) {
             var providerSession = ConsistentHashLoadBalancer.getInstance().selectProvider(providers, packet, argument);
