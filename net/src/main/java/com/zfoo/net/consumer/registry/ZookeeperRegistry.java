@@ -365,7 +365,8 @@ public class ZookeeperRegistry implements IRegistry {
             var localProviderVoStr = localRegisterVO.toProviderString();
             var localProviderPath = PROVIDER_ROOT_PATH + StringUtils.SLASH + localProviderVoStr;
 
-            // /zfoo/provider/tankHome | 192.168.3.2:12400 | provider:[3-tankHome-tankHomeProvider] | consumer:[4-tankCache-consistent-hash-tankCacheProvider]
+            // /zfoo/provider
+            // applicationNameTest | 192.168.1.104:12400 | provider:[providerTest-myProvider1, providerTest-myProvider2]
             var localProviderStat = curator.checkExists().forPath(localProviderPath);
             if (Objects.isNull(localProviderStat)) {
                 curator.create()
@@ -396,7 +397,7 @@ public class ZookeeperRegistry implements IRegistry {
      * @throws Exception
      */
     private void initConsumerCache() throws Exception {
-        // tankHome | 192.168.3.2:12400 | provider:[3-tankHome-tankHomeProvider] | consumer:[4-tankCache-consistent-hash-tankCacheProvider]
+        // applicationNameTest | 192.168.1.104:12400 | provider:[providerTest-myProvider1, providerTest-myProvider2]
         var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
         // 初始化providerCacheSet
         // 遍历provider下注册的所有节点

@@ -62,11 +62,11 @@ public class ConfigManager implements IConfigManager {
             // 服务提供者名字Set列表
             var providerSet = new HashSet<String>();
             // 检查并且替换配置文件中的ProtocolModule
-            for (var providerModule : providerConfig.getProviders()) {
-                var provider = providerModule.getProvider();
-                var protocolModule = ProtocolManager.moduleByModuleName(provider);
-                AssertionUtils.isTrue(protocolModule != null, "provider:[{}] does not exist in the protocol manager", provider);
-                AssertionUtils.isTrue(providerSet.add(provider), "provider:[{}] has duplicate provider name module [provider:{}]", provider, protocolModule);
+            for (var provider : providerConfig.getProviders()) {
+                var protocolModule = provider.getProtocolModule();
+                var providerName = provider.getProvider();
+                AssertionUtils.isTrue(ProtocolManager.moduleByModuleName(protocolModule) != null, "provider:[{}] does not exist in the protocol manager", provider);
+                AssertionUtils.isTrue(providerSet.add(providerName), "provider:[{}] has duplicate provider name module [provider:{}]", provider, protocolModule);
             }
         }
 
