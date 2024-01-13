@@ -13,17 +13,7 @@
 
 package com.zfoo.net.consumer.balancer;
 
-import com.zfoo.net.NetContext;
-import com.zfoo.net.consumer.registry.RegisterVO;
-import com.zfoo.net.session.Session;
-import com.zfoo.protocol.ProtocolManager;
-import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  * @author godotg
@@ -48,35 +38,4 @@ public abstract class AbstractConsumerLoadBalancer implements IConsumerLoadBalan
         return balancer;
     }
 
-    public List<Session> getSessionsByModule(ProtocolModule module) {
-        var list = new ArrayList<Session>();
-        NetContext.getSessionManager().forEachClientSession(new Consumer<Session>() {
-            @Override
-            public void accept(Session session) {
-                if (session.getConsumerAttribute() == null || session.getConsumerAttribute().getProviderConfig() == null) {
-                    return;
-                }
-                var providerConfig = session.getConsumerAttribute().getProviderConfig();
-                if (providerConfig.getProviders().stream().anyMatch(it -> it.getProtocolModule().equals(module))) {
-                    list.add(session);
-                }
-            }
-        });
-        return list;
-    }
-
-    public boolean sessionHasModule(Session session, Object packet) {
-        var consumerAttribute = session.getConsumerAttribute();
-        if (Objects.isNull(consumerAttribute)) {
-            return false;
-        }
-
-        var registerVO = (RegisterVO) consumerAttribute;
-        if (Objects.isNull(registerVO.getProviderConfig())) {
-            return false;
-        }
-
-        var module = ProtocolManager.moduleByProtocol(packet.getClass());
-        return registerVO.getProviderConfig().getProviders().contains(module);
-    }
 }

@@ -14,9 +14,9 @@
 package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.session.Session;
-import com.zfoo.protocol.ProtocolManager;
-import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.RandomUtils;
+
+import java.util.List;
 
 /**
  * 随机负载均衡器，任选服务提供者的其中之一
@@ -35,15 +35,8 @@ public class RandomConsumerLoadBalancer extends AbstractConsumerLoadBalancer {
     }
 
     @Override
-    public Session loadBalancer(Object packet, Object argument) {
-        var module = ProtocolManager.moduleByProtocol(packet.getClass());
-        var sessions = getSessionsByModule(module);
-
-        if (sessions.isEmpty()) {
-            throw new RunException("RandomConsumerLoadBalancer [protocol:{}][argument:{}], no service provides the [module:{}]", packet.getClass(), argument, module);
-        }
-
-        return RandomUtils.randomEle(sessions);
+    public Session selectProvider(List<Session> providers, Object packet, Object argument) {
+        return RandomUtils.randomEle(providers);
     }
 
 }

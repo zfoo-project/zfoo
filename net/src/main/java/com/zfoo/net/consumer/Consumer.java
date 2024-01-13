@@ -18,6 +18,7 @@ import com.zfoo.net.consumer.balancer.AbstractConsumerLoadBalancer;
 import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
 import com.zfoo.net.packet.common.Error;
 import com.zfoo.net.router.Router;
+import com.zfoo.net.router.SignalBridge;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
 import com.zfoo.net.router.attachment.NoAnswerAttachment;
@@ -25,12 +26,11 @@ import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
-import com.zfoo.net.router.SignalBridge;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.task.TaskBus;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.registration.ProtocolModule;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +53,7 @@ public class Consumer implements IConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
+    // consumer|provider -> LoadBalancer
     private final Map<String, IConsumerLoadBalancer> consumerLoadBalancerMap = new HashMap<>();
 
     @Override
@@ -69,50 +70,74 @@ public class Consumer implements IConsumer {
     }
 
 
-    public List<Session> getSessionsByModule(ProtocolModule module) {
+    // find all session that can process interface/packet of protocolModule
+    @Override
+    public List<Session> findProviders(Object packet) {
+        var protocolModule = ProtocolManager.moduleByProtocol(packet.getClass());
         var list = new ArrayList<Session>();
-        NetContext.getSessionManager().forEachClientSession(new java.util.function.Consumer<Session>() {
-            @Override
-            public void accept(Session session) {
-                if (session.getConsumerAttribute() == null || session.getConsumerAttribute().getProviderConfig() == null) {
-                    return;
-                }
-                var providerConfig = session.getConsumerAttribute().getProviderConfig();
-                if (providerConfig.getProviders().stream().anyMatch(it -> it.getProtocolModule().equals(module))) {
-                    list.add(session);
-                }
+        NetContext.getSessionManager().forEachClientSession(session -> {
+            var consumerAttribute = session.getConsumerAttribute();
+            if (consumerAttribute == null) {
+                return;
             }
+            var providerConfig = consumerAttribute.getProviderConfig();
+            if (providerConfig == null) {
+                return;
+            }
+            var providers = providerConfig.getProviders();
+            if (providers == null) {
+                return;
+            }
+            if (providers.stream().noneMatch(it -> it.getProtocolModule().equals(protocolModule.getName()))) {
+                return;
+            }
+            list.add(session);
         });
+        if (CollectionUtils.isEmpty(list)) {
+            throw new RunException("[protocol:{}] has no service that provides the [module:{}]", packet.getClass().getSimpleName(), protocolModule);
+        }
         return list;
     }
 
-    public void getProvider(Object packet) {
-        var protocolMModule = ProtocolManager.moduleByProtocol(packet.getClass());
-
-    }
-
+    // Select a consumer loadBalancer
     @Override
-    public IConsumerLoadBalancer loadBalancer(ProtocolModule protocolModule) {
-        return consumerLoadBalancerMap.get(protocolModule);
+    public IConsumerLoadBalancer selectLoadBalancer(List<Session> providers, Object packet) {
+        // select first consumer loadBalancer
+        // 不同的服务提供者可能会提供同一个接口，消费者可能同时消费了这些提供了同一个接口的服务提供者，取第一个消费者的loadBalancer
+        IConsumerLoadBalancer loadBalancer = null;
+        for (var providerSession : providers) {
+            for (var provider : providerSession.getConsumerAttribute().getProviderConfig().getProviders()) {
+                if (consumerLoadBalancerMap.containsKey(provider.getProvider())) {
+                    loadBalancer = consumerLoadBalancerMap.get(provider.getProvider());
+                    break;
+                }
+            }
+            if (loadBalancer != null) {
+                break;
+            }
+        }
+        if (loadBalancer == null) {
+            var protocolModule = ProtocolManager.moduleByProtocol(packet.getClass());
+            throw new RunException("[protocol:{}] can not find any loadBalancer for the [module:{}]", packet.getClass().getSimpleName(), protocolModule);
+        }
+        return loadBalancer;
     }
+
 
     @Override
     public void send(Object packet, Object argument) {
-        try {
-            var loadBalancer = loadBalancer(ProtocolManager.moduleByProtocol(packet.getClass()));
-            var session = loadBalancer.loadBalancer(packet, argument);
-            var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
-            NetContext.getRouter().send(session, packet, NoAnswerAttachment.valueOf(taskExecutorHash));
-        } catch (Throwable t) {
-            logger.error("consumer unknown exception", t);
-        }
+        var providers = findProviders(packet);
+        var loadBalancer = selectLoadBalancer(providers, packet);
+        var session = loadBalancer.selectProvider(providers, packet, argument);
+        var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
+        NetContext.getRouter().send(session, packet, NoAnswerAttachment.valueOf(taskExecutorHash));
     }
 
     @Override
     public <T> SyncAnswer<T> syncAsk(Object packet, Class<T> answerClass, Object argument) throws Exception {
-        var loadBalancer = loadBalancer(ProtocolManager.moduleByProtocol(packet.getClass()));
-        var session = loadBalancer.loadBalancer(packet, argument);
-
+        var providers = findProviders(packet);
+        var loadBalancer = selectLoadBalancer(providers, packet);
+        var session = loadBalancer.selectProvider(providers, packet, argument);
 
         // 下面的代码逻辑同Router的syncAsk，如果修改的话，记得一起修改
         var clientSignalAttachment = new SignalAttachment();
@@ -150,8 +175,10 @@ public class Consumer implements IConsumer {
 
     @Override
     public <T> AsyncAnswer<T> asyncAsk(Object packet, Class<T> answerClass, Object argument) {
-        var loadBalancer = loadBalancer(ProtocolManager.moduleByProtocol(packet.getClass()));
-        var session = loadBalancer.loadBalancer(packet, argument);
+        var providers = findProviders(packet);
+        var loadBalancer = selectLoadBalancer(providers, packet);
+        var session = loadBalancer.selectProvider(providers, packet, argument);
+
         var asyncAnswer = NetContext.getRouter().asyncAsk(session, packet, answerClass, argument);
 
         // load balancer之前调用

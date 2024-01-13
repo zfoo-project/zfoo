@@ -16,8 +16,10 @@ package com.zfoo.net.consumer;
 import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
 import com.zfoo.net.router.answer.AsyncAnswer;
 import com.zfoo.net.router.answer.SyncAnswer;
-import com.zfoo.protocol.registration.ProtocolModule;
+import com.zfoo.net.session.Session;
 import org.springframework.lang.Nullable;
+
+import java.util.List;
 
 /**
  * @author godotg
@@ -26,7 +28,9 @@ public interface IConsumer {
 
     void init();
 
-    IConsumerLoadBalancer loadBalancer(ProtocolModule protocolModule);
+    List<Session> findProviders(Object packet);
+
+    IConsumerLoadBalancer selectLoadBalancer(List<Session> providers, Object packet);
 
     /**
      * 直接发送，不需要任何返回值

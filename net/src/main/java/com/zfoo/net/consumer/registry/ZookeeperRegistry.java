@@ -432,7 +432,7 @@ public class ZookeeperRegistry implements IRegistry {
             return;
         }
 
-        executor.execute(() -> doCheckConsumer());
+        executor.execute(ThreadUtils.safeRunnable(() -> doCheckConsumer()));
     }
 
     /**
@@ -450,17 +450,17 @@ public class ZookeeperRegistry implements IRegistry {
 
         for (var providerCache : providerHashConsumerSet) {
             // 先排除已经启动的consumer
-            // getClientSessionMap
             var consumerClientList = new ArrayList<Session>();
             NetContext.getSessionManager().forEachClientSession(new Consumer<Session>() {
-                        @Override
-                        public void accept(Session session) {
-                            if (session.getConsumerAttribute() != null && session.getConsumerAttribute().equals(providerCache)) {
-                                consumerClientList.add(session);
-                            }
-                        }
-                    });
+                @Override
+                public void accept(Session session) {
+                    if (session.getConsumerAttribute() != null && session.getConsumerAttribute().equals(providerCache)) {
+                        consumerClientList.add(session);
+                    }
+                }
+            });
 
+            // consumerClientList大于等于1，说明消费者连接成功了
             if (consumerClientList.size() == 1) {
                 var consumer = consumerClientList.get(0);
                 if (SessionUtils.isActive(consumer)) {
@@ -476,41 +476,44 @@ public class ZookeeperRegistry implements IRegistry {
                 continue;
             }
 
-            // 自己作为消费者，要创建一个TcpClient去连接服务提供者
-            var client = new TcpClient(HostAndPort.valueOf(providerCache.getProviderConfig().getAddress()));
-            var session = client.start();
+            try {
+                // 自己作为消费者，要创建一个TcpClient去连接服务提供者
+                var client = new TcpClient(HostAndPort.valueOf(providerCache.getProviderConfig().getAddress()));
+                var session = client.start();
+                if (session == null) {
+                    recheckFlag = true;
+                    continue;
+                }
 
-            // 自己作为消费者，使用TcpClient连接服务提供者不成功
-            if (Objects.isNull(session)) {
-                logger.error("[consumer:{}] failed to start, wait [{}] seconds to recheck consumer", providerCache, RETRY_SECONDS);
-                recheckFlag = true;
-            } else {
-                // 连接上了服务提供者
                 session.setConsumerAttribute(providerCache);
                 EventBus.post(ConsumerStartEvent.valueOf(providerCache, session));
-
-                try {
-                    var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
-                    var path = CONSUMER_ROOT_PATH + StringUtils.SLASH + localRegisterVO.toConsumerString();
-                    var stat = curator.checkExists().forPath(path);
-                    if (Objects.isNull(stat)) {
-                        curator.create()
-                                .withMode(CreateMode.EPHEMERAL)
-                                .forPath(path);
-                    } else {
-                        curator.setData().forPath(path);
-                    }
-
-                } catch (Exception e) {
-                    // 因为并不关心consumer的状态，这种失败只需要记录一个错误日志就可以了
-                    logger.error("consumer writing to Zookeeper failed", e);
-                }
+            } catch (Throwable t) {
+                logger.error("[consumer:{}] failed to start, wait [{}] seconds to recheck consumer", providerCache, RETRY_SECONDS, t);
+                recheckFlag = true;
             }
+        }
+
+        // 将自己的消费者消息写到 /consumer 的临时节点下
+        var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
+        var path = CONSUMER_ROOT_PATH + StringUtils.SLASH + localRegisterVO.toConsumerString();
+        try {
+            var stat = curator.checkExists().forPath(path);
+            if (Objects.isNull(stat)) {
+                curator.create()
+                        .withMode(CreateMode.EPHEMERAL)
+                        .forPath(path);
+            } else {
+                curator.setData().forPath(path);
+            }
+        } catch (Exception e) {
+            logger.error("consumer:[{}] writing to Zookeeper failed", path, e);
+            recheckFlag = true;
         }
 
         if (recheckFlag) {
             SchedulerBus.schedule(() -> checkConsumer(), RETRY_SECONDS, TimeUnit.SECONDS);
         }
+
     }
 
     /**

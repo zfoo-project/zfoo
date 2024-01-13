@@ -2,7 +2,6 @@ package com.zfoo.net.consumer.balancer;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.session.Session;
-import org.apache.curator.shaded.com.google.common.collect.Lists;
 import org.apache.curator.shaded.com.google.common.util.concurrent.AtomicLongMap;
 
 import java.util.List;
@@ -31,20 +30,20 @@ public class ConsistentHashOfMemoryConsumerLoadBalancer extends ConsistentHashCo
     }
 
     @Override
-    public Session loadBalancer(Object packet, Object argument) {
+    public Session selectProvider(List<Session> providers, Object packet, Object argument) {
 
         if (argument instanceof Long) {
             long sid = uid2sidMap.get((Long) argument);
             if (sid > 0L) {
                 Session memorySession = NetContext.getSessionManager().getClientSession(sid);
-                if (null != memorySession){
+                if (null != memorySession) {
                     return memorySession;
-                }else {
+                } else {
                     uid2sidMap.remove((Long) argument);
                 }
             }
         }
-        Session loadBalancer = super.loadBalancer(packet, argument);
+        Session loadBalancer = super.selectProvider(providers, packet, argument);
         if (argument instanceof Long){
             uid2sidMap.put((Long) argument, loadBalancer.getSid());
         }

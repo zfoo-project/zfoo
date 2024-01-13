@@ -15,8 +15,6 @@ package com.zfoo.net.handler;
 
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
-import com.zfoo.net.consumer.balancer.ConsistentHashConsumerLoadBalancer;
-import com.zfoo.net.consumer.balancer.IConsumerLoadBalancer;
 import com.zfoo.net.core.gateway.IGatewayLoadBalancer;
 import com.zfoo.net.core.gateway.model.GatewaySessionInactiveEvent;
 import com.zfoo.net.packet.DecodedPacketInfo;
@@ -27,7 +25,6 @@ import com.zfoo.net.router.attachment.GatewayAttachment;
 import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
-import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.scheduler.util.TimeUtils;
@@ -117,10 +114,10 @@ public class GatewayRouteHandler extends ServerRouteHandler {
     private void forwardingPacket(Object packet, Object attachment, Object argument) {
         try {
             // 网关统一用 moduleid uid 获取 session
-            var loadBalancer = NetContext.getConsumer().loadBalancer(ProtocolManager.moduleByProtocol(packet.getClass()));
-            Session consumerSession = loadBalancer.loadBalancer(packet, argument);
-//            var consumerSession = ConsistentHashConsumerLoadBalancer.getInstance().loadBalancer(packet, argument);
-            NetContext.getRouter().send(consumerSession, packet, attachment);
+            var providers = NetContext.getConsumer().findProviders(packet);
+            var loadBalancer = NetContext.getConsumer().selectLoadBalancer(providers, packet);
+            var providerSession = loadBalancer.selectProvider(providers, packet, argument);
+            NetContext.getRouter().send(providerSession, packet, attachment);
         } catch (Exception e) {
             logger.error("An exception occurred at the gateway", e);
         } catch (Throwable t) {

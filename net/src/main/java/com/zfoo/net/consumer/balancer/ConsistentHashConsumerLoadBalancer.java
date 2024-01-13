@@ -25,6 +25,7 @@ import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolModule;
 import org.springframework.lang.Nullable;
 
+import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
@@ -58,17 +59,17 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
      * @return 调用的session
      */
     @Override
-    public Session loadBalancer(Object packet, Object argument) {
+    public Session selectProvider(List<Session> providers, Object packet, Object argument) {
         if (argument == null) {
-            return RandomConsumerLoadBalancer.getInstance().loadBalancer(packet, argument);
+            return RandomConsumerLoadBalancer.getInstance().selectProvider(providers, packet, argument);
         }
 
-        updateConsistentHashMap();
+        updateConsistentHashMap(providers);
 
         var module = ProtocolManager.moduleByProtocol(packet.getClass());
         var fastTreeMap = consistentHashMap.get(module.getId());
         if (fastTreeMap == null) {
-            fastTreeMap = updateModuleToConsistentHash(module);
+            fastTreeMap = updateModuleToConsistentHash(providers, module);
         }
         if (fastTreeMap == null) {
             throw new RunException("ConsistentHashLoadBalancer [protocol:{}][argument:{}], no service provides the [module:{}]", packet.getClass(), argument, module);
@@ -85,7 +86,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
         return session;
     }
 
-    private void updateConsistentHashMap() {
+    private void updateConsistentHashMap(List<Session> providers) {
         // 如果更新时间不匹配，则更新到最新的服务提供者
         var currentClientSessionChangeId = NetContext.getSessionManager().getClientSessionChangeId();
         if (currentClientSessionChangeId != lastClientSessionChangeId) {
@@ -95,7 +96,7 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
                     continue;
                 }
                 var module = ProtocolManager.moduleByModuleId(i);
-                updateModuleToConsistentHash(module);
+                updateModuleToConsistentHash(providers, module);
             }
             lastClientSessionChangeId = currentClientSessionChangeId;
         }
@@ -103,8 +104,8 @@ public class ConsistentHashConsumerLoadBalancer extends AbstractConsumerLoadBala
 
 
     @Nullable
-    private FastTreeMapIntLong updateModuleToConsistentHash(ProtocolModule module) {
-        var sessionStringList = getSessionsByModule(module).stream()
+    private FastTreeMapIntLong updateModuleToConsistentHash(List<Session> providers, ProtocolModule module) {
+        var sessionStringList = providers.stream()
                 .map(session -> new Pair<>(session.getConsumerAttribute().toString(), session.getSid()))
                 .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
                 .toList();
