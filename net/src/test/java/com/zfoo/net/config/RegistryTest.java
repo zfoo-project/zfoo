@@ -34,8 +34,8 @@ public class RegistryTest {
     @Test
     public void registerVoTest() {
         // 定义2个模块：可以为服务提供者用，也可以为服务消费者用，这个仅仅是模块信息
-        var protocolModule1 = new ProtocolModule((byte) 100, "aaa");
-        var protocolModule2 = new ProtocolModule((byte) 120, "bbb");
+        var protocolModule1 = "aaa";
+        var protocolModule2 ="bbb";
 
         // 服务提供者模块列表和服务提供者配置
         // 定义2个服务提供者模块
@@ -44,7 +44,7 @@ public class RegistryTest {
         var providerConfig = ProviderConfig.valueOf(HostAndPort.valueOf("127.0.0.1", 80).toHostAndPortStr(), providerModules);
 
         // 服务消费者模块和服务消费者配置(服务消费者模块多一个负载均衡属性)
-        var consumerModules = List.of(new ConsumerModule(protocolModule1, "random", "a"), new ConsumerModule(protocolModule2, "random", "b"));
+        var consumerModules = List.of(new ConsumerModule("random", "a"), new ConsumerModule("random", "b"));
         // 服务消费者配置：这个是没Ip的
         var consumerConfig = ConsumerConfig.valueOf(consumerModules);
 

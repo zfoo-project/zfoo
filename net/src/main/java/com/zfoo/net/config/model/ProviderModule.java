@@ -12,8 +12,6 @@
 
 package com.zfoo.net.config.model;
 
-import com.zfoo.protocol.registration.ProtocolModule;
-
 import java.util.Objects;
 
 /**

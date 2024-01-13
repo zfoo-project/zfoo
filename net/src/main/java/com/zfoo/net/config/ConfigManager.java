@@ -66,7 +66,7 @@ public class ConfigManager implements IConfigManager {
                 var provider = providerModule.getProvider();
                 var protocolModule = ProtocolManager.moduleByModuleName(provider);
                 AssertionUtils.isTrue(protocolModule != null, "provider:[{}] does not exist in the protocol manager", provider);
-                AssertionUtils.isTrue(providerSet.add(provider), "provider:[{}] plicate Consumption Agreement module [provider:{}]", protocolModuleName, provider);
+                AssertionUtils.isTrue(providerSet.add(provider), "provider:[{}] has duplicate provider name module [provider:{}]", provider, protocolModule);
             }
         }
 
@@ -77,7 +77,7 @@ public class ConfigManager implements IConfigManager {
             for (var consumerModule : consumerConfig.getConsumers()) {
                 // 提供的接口实现 提供者名
                 var consumer = consumerModule.getConsumer();
-                AssertionUtils.isTrue(consumerSet.add(consumer), "服务消费者[name:{}]重复消费了协议模块[consumer:{}]", protocolModuleName, consumer);
+                AssertionUtils.isTrue(consumerSet.add(consumer), "consumer:[{}] has duplicate consumer module", consumer);
             }
         }
 

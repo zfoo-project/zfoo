@@ -26,6 +26,7 @@ import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
 import com.zfoo.net.router.SignalBridge;
+import com.zfoo.net.session.Session;
 import com.zfoo.net.task.TaskBus;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.CollectionUtils;
@@ -34,7 +35,9 @@ import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -50,7 +53,7 @@ public class Consumer implements IConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
-    private final Map<ProtocolModule, IConsumerLoadBalancer> consumerLoadBalancerMap = new HashMap<>();
+    private final Map<String, IConsumerLoadBalancer> consumerLoadBalancerMap = new HashMap<>();
 
     @Override
     public void init() {
@@ -60,8 +63,32 @@ public class Consumer implements IConsumer {
         }
         var consumers = consumerConfig.getConsumers();
         for (var consumer : consumers) {
-            consumerLoadBalancerMap.put(consumer.getProtocolModule(), AbstractConsumerLoadBalancer.valueOf(consumer.getLoadBalancer()));
+            var loadBalancer = AbstractConsumerLoadBalancer.valueOf(consumer.getLoadBalancer());
+            consumerLoadBalancerMap.put(consumer.getConsumer(), loadBalancer);
         }
+    }
+
+
+    public List<Session> getSessionsByModule(ProtocolModule module) {
+        var list = new ArrayList<Session>();
+        NetContext.getSessionManager().forEachClientSession(new java.util.function.Consumer<Session>() {
+            @Override
+            public void accept(Session session) {
+                if (session.getConsumerAttribute() == null || session.getConsumerAttribute().getProviderConfig() == null) {
+                    return;
+                }
+                var providerConfig = session.getConsumerAttribute().getProviderConfig();
+                if (providerConfig.getProviders().stream().anyMatch(it -> it.getProtocolModule().equals(module))) {
+                    list.add(session);
+                }
+            }
+        });
+        return list;
+    }
+
+    public void getProvider(Object packet) {
+        var protocolMModule = ProtocolManager.moduleByProtocol(packet.getClass());
+
     }
 
     @Override
@@ -77,7 +104,7 @@ public class Consumer implements IConsumer {
             var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
             NetContext.getRouter().send(session, packet, NoAnswerAttachment.valueOf(taskExecutorHash));
         } catch (Throwable t) {
-            logger.error("consumer发送未知异常", t);
+            logger.error("consumer unknown exception", t);
         }
     }
 

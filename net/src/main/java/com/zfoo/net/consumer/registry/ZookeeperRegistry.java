@@ -357,9 +357,7 @@ public class ZookeeperRegistry implements IRegistry {
     }
 
     /**
-     * 如果自己是服务提供者，就讲自己注册上去
-     *
-     * @throws Exception
+     * 如果自己是服务提供者，就把自己注册上去
      */
     private void initLocalProvider() throws Exception {
         var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();

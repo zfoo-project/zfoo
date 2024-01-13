@@ -99,14 +99,13 @@ public class RegisterVO {
 
 
     private static List<ProviderModule> parseProviderModules(String str) {
-        var moduleSplits = StringUtils.substringBeforeLast(
-                StringUtils.substringAfterFirst(str, StringUtils.LEFT_SQUARE_BRACKET)
-                , StringUtils.RIGHT_SQUARE_BRACKET).split(StringUtils.COMMA);
-
+        str = StringUtils.substringAfterFirst(str, StringUtils.LEFT_SQUARE_BRACKET);
+        str = StringUtils.substringBeforeLast(str, StringUtils.RIGHT_SQUARE_BRACKET);
+        var moduleSplits = str.split(StringUtils.COMMA);
         var modules = Arrays.stream(moduleSplits)
                 .map(it -> it.trim())
                 .map(it -> it.split(StringUtils.HYPHEN))
-                .map(it -> new ProviderModule(new ProtocolModule(Byte.parseByte(it[0]), it[1]), it[2]))
+                .map(it -> new ProviderModule(it[0], it[1]))
                 .toList();
         return modules;
     }
@@ -129,9 +128,7 @@ public class RegisterVO {
     }
 
     public String toConsumerString() {
-        return this +
-                StringUtils.SPACE + StringUtils.VERTICAL_BAR + StringUtils.SPACE +
-                uuid;
+        return this + StringUtils.SPACE + StringUtils.VERTICAL_BAR + StringUtils.SPACE + uuid;
     }
 
     @Override
@@ -145,7 +142,7 @@ public class RegisterVO {
         if (Objects.nonNull(providerConfig)) {
             var providerAddress = providerConfig.getAddress();
             if (StringUtils.isBlank(providerAddress)) {
-                throw new RuntimeException(StringUtils.format("providerConfig的address不能为空"));
+                throw new RuntimeException(StringUtils.format("The address of provider Config cannot be empty"));
             }
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
             // 服务提供者地址
@@ -153,7 +150,7 @@ public class RegisterVO {
 
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
             var providerModules = providerConfig.getProviders().stream()
-                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule().getId(), it.getProtocolModule().getName(), it.getProvider()))
+                    .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule(), it.getProvider()))
                     .toList();
 
             // 服务提供者模块信息列表
