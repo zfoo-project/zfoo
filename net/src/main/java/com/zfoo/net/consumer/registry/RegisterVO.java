@@ -19,7 +19,6 @@ import com.zfoo.net.config.model.ProviderConfig;
 import com.zfoo.net.config.model.ProviderModule;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
-import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.UuidUtils;
 import org.slf4j.Logger;
@@ -37,7 +36,7 @@ public class RegisterVO {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterVO.class);
 
-    private static final String uuid = UuidUtils.getUUID();
+    private static final String LOCAL_UUID = UuidUtils.getUUID();
 
     private String id;
 
@@ -128,7 +127,7 @@ public class RegisterVO {
     }
 
     public String toConsumerString() {
-        return this + StringUtils.SPACE + StringUtils.VERTICAL_BAR + StringUtils.SPACE + uuid;
+        return this + StringUtils.SPACE + StringUtils.VERTICAL_BAR + StringUtils.SPACE + LOCAL_UUID;
     }
 
     @Override
