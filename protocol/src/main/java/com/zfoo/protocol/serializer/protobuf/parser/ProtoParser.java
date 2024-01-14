@@ -23,8 +23,6 @@ import java.util.*;
 
 /**
  * proto文件的解析器
- *
- * @date : 2019/12/2
  */
 public class ProtoParser {
     /**
