@@ -7,7 +7,7 @@
     <groupId>com.zfoo</groupId>
     <artifactId>monitor</artifactId>
     <packaging>jar</packaging>
-    <version>3.2.0</version>
+    <version>3.3.0</version>
 
     <properties>
         <zfoo.version>3.2.0</zfoo.version>
