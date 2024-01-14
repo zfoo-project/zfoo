@@ -10,16 +10,16 @@
     <version>3.3.0</version>
 
     <properties>
-        <zfoo.version>3.2.0</zfoo.version>
+        <zfoo.version>3.3.0</zfoo.version>
         <!-- spring and spring boot -->
-        <spring.version>6.0.11</spring.version>
-        <spring.boot.version>3.1.3</spring.boot.version>
+        <spring.version>6.1.2</spring.version>
+        <spring.boot.version>3.2.1</spring.boot.version>
         <junit.version>4.13.2</junit.version>
         <!-- bytecode enhancement -->
         <javassist.version>3.29.2-GA</javassist.version>
         <bytebuddy.version>1.14.6</bytebuddy.version>
         <!-- network framework -->
-        <netty.version>4.1.97.Final</netty.version>
+        <netty.version>4.1.104.Final</netty.version>
         <!-- zookeeper -->
         <curator.version>5.5.0</curator.version>
         <!-- hardware detection -->
@@ -74,12 +74,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-afterburner</artifactId>
-            <version>2.15.2</version>
+            <version>2.15.3</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
-            <version>2.15.2</version>
+            <version>2.15.3</version>
         </dependency>
 
         <dependency>
