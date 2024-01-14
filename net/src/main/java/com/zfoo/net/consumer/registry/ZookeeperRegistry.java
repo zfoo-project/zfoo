@@ -464,15 +464,15 @@ public class ZookeeperRegistry implements IRegistry {
             // consumerClientList大于等于1，说明消费者连接成功了
             if (consumerClientList.size() == 1) {
                 var consumer = consumerClientList.get(0);
-                if (SessionUtils.isActive(consumer)) {
-                    continue;
-                } else {
+                if (!SessionUtils.isActive(consumer)) {
                     recheckFlag = true;
                     NetContext.getSessionManager().removeClientSession(consumer);
                     logger.error("[consumer:{}] lost connection, removed from ClientSession", consumer);
-                    continue;
                 }
-            } else if (consumerClientList.size() > 1) {
+                continue;
+            }
+
+            if (consumerClientList.size() > 1) {
                 logger.error("[consumerClientList:{}] are multiple duplicate [RegisterVO:{}]", consumerClientList, providerCache);
                 continue;
             }
