@@ -22,6 +22,7 @@ import com.zfoo.net.core.tcp.TcpServer;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.collection.ArrayUtils;
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.collection.concurrent.ConcurrentArrayList;
 import com.zfoo.protocol.collection.concurrent.ConcurrentHashSet;
 import com.zfoo.protocol.exception.ExceptionUtils;
@@ -494,20 +495,23 @@ public class ZookeeperRegistry implements IRegistry {
         }
 
         // 将自己的消费者消息写到 /consumer 的临时节点下
-        var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
-        var path = CONSUMER_ROOT_PATH + StringUtils.SLASH + localRegisterVO.toConsumerString();
-        try {
-            var stat = curator.checkExists().forPath(path);
-            if (Objects.isNull(stat)) {
-                curator.create()
-                        .withMode(CreateMode.EPHEMERAL)
-                        .forPath(path);
-            } else {
-                curator.setData().forPath(path);
+        var consumerConfig = NetContext.getConfigManager().getLocalConfig().getConsumer();
+        if (consumerConfig != null && CollectionUtils.isNotEmpty(consumerConfig.getConsumers())) {
+            var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO();
+            var path = CONSUMER_ROOT_PATH + StringUtils.SLASH + localRegisterVO.toConsumerString();
+            try {
+                var stat = curator.checkExists().forPath(path);
+                if (Objects.isNull(stat)) {
+                    curator.create()
+                            .withMode(CreateMode.EPHEMERAL)
+                            .forPath(path);
+                } else {
+                    curator.setData().forPath(path);
+                }
+            } catch (Exception e) {
+                logger.error("consumer:[{}] writing to Zookeeper failed", path, e);
+                recheckFlag = true;
             }
-        } catch (Exception e) {
-            logger.error("consumer:[{}] writing to Zookeeper failed", path, e);
-            recheckFlag = true;
         }
 
         if (recheckFlag) {
