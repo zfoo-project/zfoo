@@ -58,7 +58,7 @@ public abstract class GenerateLuaUtils {
 
     public static void init(GenerateOperation generateOperation) {
         // if not specify output path, then use current default path
-        if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
+        if (StringUtils.isNotEmpty(generateOperation.getProtocolPath())) {
             protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         } else {
             protocolOutputPath = generateOperation.getProtocolPath();
@@ -105,7 +105,7 @@ public abstract class GenerateLuaUtils {
             protocolBuilder.append(TAB).append(StringUtils.format("protocols[{}] = Protocols.{}", protocolId, protocolName)).append(LS);
         }
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, StringUtils.EMPTY_JSON, StringUtils.EMPTY_JSON, builderImports.toString().trim(), protocolBuilder.toString().trim());
-        var file = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua"));
+        var file = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.lua"));
         FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
         logger.info("Generated Lua protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
@@ -158,10 +158,10 @@ public abstract class GenerateLuaUtils {
             builderProtocol.append(StringUtils.format("Protocols.{} = {}", protocolClazzName, protocolClazzName)).append(LS);
         }
         builderProtocol.append("return Protocols");
-        var protocolsFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "Protocols.lua"));
-        var protocolBaseFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolBase.lua"));
-        var protocolWriterFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolWriter.lua"));
-        var protocolReaderFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolReader.lua"));
+        var protocolsFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "Protocols.lua"));
+        var protocolBaseFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolBase.lua"));
+        var protocolWriterFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolWriter.lua"));
+        var protocolReaderFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolReader.lua"));
         FileUtils.writeStringToFile(protocolsFile, builderProtocol.toString(), true);
         FileUtils.writeStringToFile(protocolBaseFile, builderProtocolBase.toString(), true);
         FileUtils.writeStringToFile(protocolWriterFile, builderProtocolWriter.toString(), true);
@@ -193,7 +193,7 @@ public abstract class GenerateLuaUtils {
             protocolBuilder.append(TAB).append(StringUtils.format("protocols[{}] = {}", protocolId, protocolName)).append(LS);
         }
         protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, StringUtils.EMPTY_JSON, StringUtils.EMPTY_JSON, fieldBuilder.toString().trim(), protocolBuilder.toString().trim());
-        var file = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua"));
+        var file = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.lua"));
         FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
         logger.info("Generated Lua protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
@@ -202,13 +202,13 @@ public abstract class GenerateLuaUtils {
         var list = List.of("lua/Long.lua");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "lua/")));
+            var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "lua/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
         var byteBufferFileName = "lua/ByteBuffer.lua";
         var byteBufferTemplate = ClassUtils.getFileFromClassPathToString(byteBufferFileName);
-        var byteBufferFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(byteBufferFileName, "lua/")));
+        var byteBufferFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(byteBufferFileName, "lua/")));
         FileUtils.writeStringToFile(byteBufferFile, StringUtils.format(byteBufferTemplate, protocolOutputRootPath), false);
     }
 
@@ -234,7 +234,7 @@ public abstract class GenerateLuaUtils {
                 , protocolClazzName, writePacket.trim(), protocolClazzName, protocolClazzName, readPacket.trim(), protocolClazzName);
 
         var outputPath = StringUtils.format("{}/{}/{}.lua"
-                , protocolOutputRootPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
+                , protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         var file = new File(outputPath);
         FileUtils.writeStringToFile(file, protocolTemplate, true);
         logger.info("Generated Lua protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());

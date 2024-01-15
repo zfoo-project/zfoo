@@ -58,7 +58,7 @@ public abstract class GeneratePyUtils {
 
     public static void init(GenerateOperation generateOperation) {
         // if not specify output path, then use current default path
-        if (StringUtils.isEmpty(generateOperation.getProtocolPath())) {
+        if (StringUtils.isNotEmpty(generateOperation.getProtocolPath())) {
             protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         } else {
             protocolOutputPath = generateOperation.getProtocolPath();
