@@ -56,9 +56,6 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
         classes.add(UdpAttachment.class);
         classes.add(HttpAttachment.class);
         classes.add(NoAnswerAttachment.class);
-        classes.add(AuthUidToGatewayCheck.class);
-        classes.add(AuthUidToGatewayConfirm.class);
-        classes.add(AuthUidAsk.class);
         classes.add(GatewaySessionInactiveAsk.class);
         classes.add(GatewaySynchronizeSidAsk.class);
 

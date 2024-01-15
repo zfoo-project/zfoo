@@ -18,9 +18,6 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.anno.Task;
 import com.zfoo.net.core.event.ServerExceptionEvent;
-import com.zfoo.net.core.gateway.model.AuthUidToGatewayCheck;
-import com.zfoo.net.core.gateway.model.AuthUidToGatewayConfirm;
-import com.zfoo.net.core.gateway.model.AuthUidToGatewayEvent;
 import com.zfoo.net.packet.EncodedPacketInfo;
 import com.zfoo.net.packet.PacketService;
 import com.zfoo.net.packet.common.Error;
@@ -133,21 +130,6 @@ public class Router implements IRouter {
                 var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
                 if (gatewaySession == null) {
                     logger.warn("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
-                    return;
-                }
-
-                // 网关授权，授权完成直接返回
-                // 注意：这个 AuthUidToGatewayCheck 是在home的LoginController中处理完登录后，把消息发给网关进行授权
-                if (AuthUidToGatewayCheck.class == packet.getClass()) {
-                    var uid = ((AuthUidToGatewayCheck) packet).getUid();
-                    if (uid <= 0) {
-                        logger.error("错误的网关授权信息，uid必须大于0");
-                        return;
-                    }
-                    gatewaySession.setUid(uid);
-                    EventBus.post(AuthUidToGatewayEvent.valueOf(gatewaySession.getSid(), uid));
-
-                    NetContext.getRouter().send(session, AuthUidToGatewayConfirm.valueOf(uid), new GatewayAttachment(gatewaySession));
                     return;
                 }
                 send(gatewaySession, packet, gatewayAttachment.getSignalAttachment());
