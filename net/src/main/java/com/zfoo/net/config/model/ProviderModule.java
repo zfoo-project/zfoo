@@ -32,6 +32,9 @@ public class ProviderModule {
     private String provider;
 
 
+    public ProviderModule() {
+    }
+
     public ProviderModule(String protocolModule, String provider) {
         this.protocolModule = protocolModule;
         this.provider = provider;

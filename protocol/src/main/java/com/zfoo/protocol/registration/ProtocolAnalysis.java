@@ -623,7 +623,7 @@ public class ProtocolAnalysis {
                 checkUnsupportedType(clazz);
                 // 是一个协议引用变量
                 if (!protocolIdMap.containsKey(clazz)) {
-                    throw new RunException("sub protocol:[{}] needs to register in protocol:[{}]", clazz.getCanonicalName(), currentProtocolClass.getCanonicalName());
+                    throw new RunException("sub protocol:[{}] needs to register in protocol:[{}]", clazz.getSimpleName(), currentProtocolClass.getCanonicalName());
                 }
                 var protocolId = ProtocolManager.protocolId(currentProtocolClass);
                 var subProtocolId = ProtocolManager.protocolId(clazz);
