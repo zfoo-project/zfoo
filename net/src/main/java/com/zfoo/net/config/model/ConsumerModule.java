@@ -27,6 +27,9 @@ public class ConsumerModule {
     // 消费哪个provider
     private String consumer;
 
+    public ConsumerModule() {
+    }
+
     public ConsumerModule(String loadBalancer, String consumer) {
         this.consumer = consumer;
         this.loadBalancer = loadBalancer;
