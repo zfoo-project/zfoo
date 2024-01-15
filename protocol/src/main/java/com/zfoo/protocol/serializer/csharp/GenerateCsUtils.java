@@ -49,7 +49,7 @@ public abstract class GenerateCsUtils {
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoocs";
-    public static String protocolOutputPath = StringUtils.EMPTY;
+    private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, ICsSerializer> csSerializerMap;
 

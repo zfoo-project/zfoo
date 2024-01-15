@@ -39,7 +39,7 @@ public abstract class GeneratePbUtils {
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoopb";
-    public static String protocolOutputPath = StringUtils.EMPTY;
+    private static String protocolOutputPath = StringUtils.EMPTY;
 
     /**
      * EN: If the tag of a protobuf field exceeds this value, this field is considered to be a compatible protocol field

@@ -49,7 +49,7 @@ public abstract class GenerateTsUtils {
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoots";
-    public static String protocolOutputPath = StringUtils.EMPTY;
+    private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, ITsSerializer> tsSerializerMap;
 

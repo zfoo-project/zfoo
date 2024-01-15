@@ -48,7 +48,7 @@ public abstract class GenerateLuaUtils {
     private static final Logger logger = LoggerFactory.getLogger(GenerateLuaUtils.class);
     // custom configuration
     public static String protocolOutputRootPath = "zfoolua";
-    public static String protocolOutputPath = StringUtils.EMPTY;
+    private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, ILuaSerializer> luaSerializerMap;
 

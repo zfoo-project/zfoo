@@ -45,7 +45,7 @@ public abstract class GenerateJsUtils {
     private static final Logger logger = LoggerFactory.getLogger(GenerateJsUtils.class);
     // custom configuration
     public static String protocolOutputRootPath = "zfoojs";
-    public static String protocolOutputPath = StringUtils.EMPTY;
+    private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, IJsSerializer> jsSerializerMap;
 

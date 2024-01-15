@@ -52,7 +52,7 @@ public abstract class GenerateGdUtils {
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoogd";
-    public static String protocolOutputPath = StringUtils.EMPTY;
+    private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, IGdSerializer> gdSerializerMap;
 

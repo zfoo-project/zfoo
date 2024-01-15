@@ -47,7 +47,7 @@ public abstract class GenerateGoUtils {
     private static final Logger logger = LoggerFactory.getLogger(GenerateGoUtils.class);
     // custom configuration
     public static String protocolOutputRootPath = "zfoogo";
-    public static String protocolOutputPath = StringUtils.EMPTY;
+    private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, IGoSerializer> goSerializerMap;
 

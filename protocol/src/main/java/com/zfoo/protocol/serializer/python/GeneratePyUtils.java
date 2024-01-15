@@ -47,7 +47,7 @@ public abstract class GeneratePyUtils {
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoopy";
-    public static String protocolOutputPath = StringUtils.EMPTY;
+    private static String protocolOutputPath = StringUtils.EMPTY;
 
     private static Map<ISerializer, IPySerializer> pySerializerMap;
 
