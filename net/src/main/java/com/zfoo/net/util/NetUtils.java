@@ -478,4 +478,24 @@ public class NetUtils {
         }
     }
 
+    /**
+     * 是否在一个ip网段下
+     */
+    public static boolean isInRange(String ip, String cidr) {
+        var ips = ip.split(StringUtils.PERIOD_REGEX);
+        var ipAddr = (Integer.parseInt(ips[0]) << 24)
+                | (Integer.parseInt(ips[1]) << 16)
+                | (Integer.parseInt(ips[2]) << 8) | Integer.parseInt(ips[3]);
+        var type = Integer.parseInt(cidr.replaceAll(".*/", ""));
+        var mask = 0xFFFFFFFF << (32 - type);
+        var cidrIp = cidr.replaceAll("/.*", "");
+        var cidrIps = cidrIp.split(StringUtils.PERIOD_REGEX);
+
+        var cidrIpaddr = (Integer.parseInt(cidrIps[0]) << 24)
+                | (Integer.parseInt(cidrIps[1]) << 16)
+                | (Integer.parseInt(cidrIps[2]) << 8)
+                | Integer.parseInt(cidrIps[3]);
+
+        return (ipAddr & mask) == (cidrIpaddr & mask);
+    }
 }
