@@ -48,12 +48,7 @@ public abstract class GeneratePbUtils {
     public static final int COMPATIBLE_FIELD_TAG = 1000;
 
     public static void create(PbGenerateOperation pbGenerateOperation) {
-        // if not specify output path, then use current default path
-        if (StringUtils.isEmpty(pbGenerateOperation.getOutputPath())) {
-            protocolOutputPath = FileUtils.joinPath(pbGenerateOperation.getOutputPath(), protocolOutputRootPath);
-        } else {
-            protocolOutputPath = pbGenerateOperation.getOutputPath();
-        }
+        protocolOutputPath = FileUtils.joinPath(pbGenerateOperation.getOutputPath(), protocolOutputRootPath);
         // java package path
         if (StringUtils.isNotEmpty(pbGenerateOperation.getJavaPackage())) {
             protocolOutputPath = protocolOutputPath + File.separator + pbGenerateOperation.getJavaPackage().replaceAll(StringUtils.PERIOD_REGEX, "/");

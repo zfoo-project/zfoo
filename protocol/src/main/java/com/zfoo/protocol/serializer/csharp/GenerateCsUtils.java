@@ -58,12 +58,7 @@ public abstract class GenerateCsUtils {
     }
 
     public static void init(GenerateOperation generateOperation) {
-        // if not specify output path, then use current default path
-        if (StringUtils.isNotEmpty(generateOperation.getProtocolPath())) {
-            protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
-        } else {
-            protocolOutputPath = generateOperation.getProtocolPath();
-        }
+        protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
         csSerializerMap = new HashMap<>();
