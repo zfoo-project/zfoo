@@ -482,6 +482,12 @@ public class NetUtils {
      * 是否在一个ip网段下
      */
     public static boolean isInRange(String ip, String cidr) {
+        if (StringUtils.isBlank(ip)) {
+            return false;
+        }
+        if (StringUtils.isBlank(cidr)) {
+            return false;
+        }
         var ips = ip.split(StringUtils.PERIOD_REGEX);
         var ipAddr = (Integer.parseInt(ips[0]) << 24)
                 | (Integer.parseInt(ips[1]) << 16)
