@@ -89,12 +89,7 @@ public abstract class GenerateLuaUtils {
 
     // All protocol files are generated in a single protocol file.
     public static void createProtocolManagerInOneFile(List<IProtocolRegistration> protocolList) throws IOException {
-        var list = List.of("lua/ByteBuffer.lua", "lua/Long.lua");
-        for (var fileName : list) {
-            var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "lua/")));
-            FileUtils.writeInputStreamToFile(createFile, fileInputStream);
-        }
+        createTemplateFile();
 
         // 生成Protocol.lua文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("lua-one/ProtocolManagerTemplate.lua");
@@ -178,12 +173,7 @@ public abstract class GenerateLuaUtils {
     }
 
     public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
-        var list = List.of("lua/ByteBuffer.lua", "lua/Long.lua");
-        for (var fileName : list) {
-            var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "lua/")));
-            FileUtils.writeInputStreamToFile(createFile, fileInputStream);
-        }
+        createTemplateFile();
 
         // 生成Protocol.lua文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolManagerTemplate.lua");
@@ -206,6 +196,20 @@ public abstract class GenerateLuaUtils {
         var file = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.lua"));
         FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
         logger.info("Generated Lua protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+    }
+
+    private static void createTemplateFile() throws IOException {
+        var list = List.of("lua/Long.lua");
+        for (var fileName : list) {
+            var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
+            var createFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(fileName, "lua/")));
+            FileUtils.writeInputStreamToFile(createFile, fileInputStream);
+        }
+
+        var byteBufferFileName = "lua/ByteBuffer.lua";
+        var byteBufferTemplate = ClassUtils.getFileFromClassPathToString(byteBufferFileName);
+        var byteBufferFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, StringUtils.substringAfterFirst(byteBufferFileName, "lua/")));
+        FileUtils.writeStringToFile(byteBufferFile, StringUtils.format(byteBufferTemplate, protocolOutputRootPath), false);
     }
 
     public static void createLuaProtocolFile(ProtocolRegistration registration) {
