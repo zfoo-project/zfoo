@@ -185,6 +185,10 @@ public class ProtocolAnalysis {
         enhance(generateOperation, enhanceList);
     }
 
+    /**
+     * EN: If the path of the package contains a classpath, the moduleId of the classpath is preferred, which means that the priority of the classpath will be higher.
+     * CN: 可以同时在一个protocol.xml文件中使用包路径和类路径。如果包的路径包含了类路径，则优先使用类路径的moduleId，也就是说类路径的优先级会更加的高。
+     */
     public static synchronized void analyze(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
         AssertionUtils.notNull(subProtocolIdMap, "[{}] initialization has already been completed, please do not repeat the initialization", ProtocolManager.class.getSimpleName());
 
@@ -281,12 +285,8 @@ public class ProtocolAnalysis {
                 }
 
                 for (Class<?> protocolClass : packetClazzList) {
-                    // 如果location已经指定过了，则检测格式
+                    // 如果location已经指定过了，则优先使用class的绝对路径定义的moduleId
                     if (classModuleDefinitionMap.containsKey(protocolClass)) {
-                        var xmlProtocolModuleId = classModuleDefinitionMap.get(protocolClass);
-                        if (xmlProtocolModuleId != moduleId) {
-                            throw new RunException("[class:{}] defined two different [module:[{}][{}]]", protocolClass.getName(), xmlProtocolModuleId, module.getId());
-                        }
                         continue;
                     }
                     var protocolId = getProtocolIdAndCheckClass(protocolClass);
