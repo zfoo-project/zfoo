@@ -7,13 +7,6 @@ namespace zfoocs
     public class {}
     {
         {}
-
-        public static {} ValueOf({})
-        {
-            var packet = new {}();
-            {}
-            return packet;
-        }
     }
 
 

@@ -129,11 +129,9 @@ public abstract class GenerateCsUtils {
 
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.CSharp);
         var fieldDefinition = fieldDefinition(registration);
-        var valueOfMethod = valueOfMethod(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, fieldDefinition.trim()
-                , protocolClazzName, valueOfMethod.getKey().trim(), protocolClazzName, valueOfMethod.getValue().trim()
                 , protocolClazzName, protocolId, protocolClazzName, protocolClazzName, writeObject.trim()
                 , protocolClazzName, protocolClazzName, readObject.trim());
 
