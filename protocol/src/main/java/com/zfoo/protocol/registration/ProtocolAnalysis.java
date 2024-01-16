@@ -292,8 +292,8 @@ public class ProtocolAnalysis {
                     var protocolId = getProtocolIdAndCheckClass(protocolClass);
                     initProtocolClass(protocolId, protocolClass);
                     protocolModuleSet.add(protocolClass);
-                    classModuleDefinitionMap.put(clazz, moduleId);
-                    protocolXmlEnhanceMap.compute(clazz, (key, value) -> Boolean.TRUE.equals(value) || enhance);
+                    classModuleDefinitionMap.put(protocolClass, moduleId);
+                    protocolXmlEnhanceMap.compute(protocolClass, (key, value) -> Boolean.TRUE.equals(value) || enhance);
                 }
             }
         }
