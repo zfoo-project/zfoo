@@ -13,18 +13,18 @@
 
 package com.zfoo.net.packet.common;
 
-import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.anno.Protocol;
+import com.zfoo.protocol.util.StringUtils;
 
 /**
- * 通用的返回，既可以用在远程调用，又可以嵌套在其它协议里
+ *
+ * EN: Generic returns can be used both remotely and nested in other protocols
+ * CN: 通用的返回，既可以用在远程调用，又可以嵌套在其它协议里
  *
  * @author godotg
  */
 @Protocol(id = 100)
 public class Message {
-
-    private byte module;
 
     /**
      * 1是成功，其它的均视为失败的请求
@@ -32,6 +32,11 @@ public class Message {
     private int code;
 
     private String message;
+
+    @Override
+    public String toString() {
+        return StringUtils.format("code:[{}] message:[{}]", code, message);
+    }
 
     public boolean success() {
         return code == 1;
@@ -41,17 +46,6 @@ public class Message {
         return code == 0;
     }
 
-    public static Message valueOf(Object packet, int code, String message) {
-        var mess = new Message();
-        mess.module = ProtocolManager.moduleByProtocol(packet.getClass()).getId();
-        mess.code = code;
-        mess.message = message;
-        return mess;
-    }
-
-    public static Message valueOf(Object packet, int code) {
-        return Message.valueOf(packet, code, null);
-    }
 
     public static Message valueError(String message) {
         var mess = new Message();
@@ -74,20 +68,6 @@ public class Message {
         return mess;
     }
 
-    public static Message valueWarning(String message) {
-        var mess = new Message();
-        mess.code = 3;
-        mess.message = message;
-        return mess;
-    }
-
-    public byte getModule() {
-        return module;
-    }
-
-    public void setModule(byte module) {
-        this.module = module;
-    }
 
     public int getCode() {
         return code;
