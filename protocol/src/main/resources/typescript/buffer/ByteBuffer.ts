@@ -22,6 +22,10 @@ const decoder = new TextDecoder();
 // const encoder = new util.TextEncoder('utf-8');
 // const decoder = new util.TextDecoder('utf-8');
 
+// 现在所有主流浏览器都支持TextDecoder，只有微信小程序不支持TextDecoder（微信浏览器也支持，微信的小程序和浏览器不是同一个js环境）
+// https://developers.weixin.qq.com/community/develop/doc/000ca85023ce78c8484e0d1d256400
+// 如果在微信小程序中使用，需要按照上面的链接全局引入TextEncoder相关依赖
+
 // 在js中long可以支持的最大值
 // const maxLong = 9007199254740992;
 // const minLong = -9007199254740992;
