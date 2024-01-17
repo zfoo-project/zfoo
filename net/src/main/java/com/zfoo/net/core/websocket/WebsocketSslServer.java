@@ -38,6 +38,18 @@ public class WebsocketSslServer extends AbstractServer<SocketChannel> {
 
     private SslContext sslContext;
 
+    /**
+     * 阿里云证书转换：
+     * 进入阿里云证书下载页面，要下载两份，一个是nginx的，一个是tomcat的。
+     * 1.下载的nginx格式的证书，里面包含pem和key两种格式的文件。其中pem格式我们可以直接用，key格式的Java无法直接使用。
+     * <p>
+     * 2.下载的tomcat格式的证书，我们使用OpenSSL将前面下载tomcat格式证书pfx文件转换一个可以使用的key文件出来:
+     * openssl pkcs12 -in xxx.pfx -nocerts -nodes -out new_xxx.key
+     * openssl会让输入密码，密码是tomcat下载文件里的pfx-password.txt
+     * Linux系统一般自带openssl工具，把证书上传到一台Linux服务器去转换一下就可以了。
+     * <p>
+     * 3.第一步获得的pem证书和第二步获得的key证书就是下面这个构造方法要使用的
+     */
     public WebsocketSslServer(HostAndPort host, InputStream pem, InputStream key) {
         super(host);
         try {
