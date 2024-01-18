@@ -22,22 +22,22 @@ import com.zfoo.net.session.Session;
  */
 public class ConsumerStartEvent implements IEvent {
 
-    private RegisterVO registerVO;
+    private RegisterVO providerRegisterVO;
     private Session session;
 
-    public static ConsumerStartEvent valueOf(RegisterVO registerVO, Session session) {
+    public static ConsumerStartEvent valueOf(RegisterVO providerRegisterVO, Session session) {
         var event = new ConsumerStartEvent();
-        event.registerVO = registerVO;
+        event.providerRegisterVO = providerRegisterVO;
         event.session = session;
         return event;
     }
 
-    public RegisterVO getRegisterVO() {
-        return registerVO;
+    public RegisterVO getProviderRegisterVO() {
+        return providerRegisterVO;
     }
 
-    public void setRegisterVO(RegisterVO registerVO) {
-        this.registerVO = registerVO;
+    public void setProviderRegisterVO(RegisterVO providerRegisterVO) {
+        this.providerRegisterVO = providerRegisterVO;
     }
 
     public Session getSession() {
