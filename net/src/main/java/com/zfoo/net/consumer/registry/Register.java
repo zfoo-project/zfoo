@@ -32,9 +32,9 @@ import java.util.Objects;
 /**
  * @author godotg
  */
-public class RegisterVO {
+public class Register {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegisterVO.class);
+    private static final Logger logger = LoggerFactory.getLogger(Register.class);
 
     private static final String LOCAL_UUID = UuidUtils.getUUID();
 
@@ -45,34 +45,34 @@ public class RegisterVO {
     // 服务消费者配置
     private ConsumerConfig consumerConfig;
 
-    public static boolean providerHasConsumer(RegisterVO providerVO, RegisterVO consumerVO) {
-        if (Objects.isNull(providerVO) || Objects.isNull(providerVO.providerConfig) || CollectionUtils.isEmpty(providerVO.providerConfig.getProviders())
-                || Objects.isNull(consumerVO) || Objects.isNull(consumerVO.consumerConfig) || CollectionUtils.isEmpty(consumerVO.consumerConfig.getConsumers())) {
+    public static boolean providerHasConsumer(Register providerRegister, Register consumerRegister) {
+        if (Objects.isNull(providerRegister) || Objects.isNull(providerRegister.providerConfig) || CollectionUtils.isEmpty(providerRegister.providerConfig.getProviders())
+                || Objects.isNull(consumerRegister) || Objects.isNull(consumerRegister.consumerConfig) || CollectionUtils.isEmpty(consumerRegister.consumerConfig.getConsumers())) {
             return false;
         }
-        for (var provider : providerVO.getProviderConfig().getProviders()) {
-            if (consumerVO.getConsumerConfig().getConsumers().stream().anyMatch(it -> it.getConsumer().equals(provider.getProvider()))) {
+        for (var provider : providerRegister.getProviderConfig().getProviders()) {
+            if (consumerRegister.getConsumerConfig().getConsumers().stream().anyMatch(it -> it.getConsumer().equals(provider.getProvider()))) {
                 return true;
             }
         }
         return false;
     }
 
-    public static RegisterVO valueOf(String id, ProviderConfig providerConfig, ConsumerConfig consumerConfig) {
-        RegisterVO config = new RegisterVO();
-        config.id = id;
-        config.providerConfig = providerConfig;
-        config.consumerConfig = consumerConfig;
-        return config;
+    public static Register valueOf(String id, ProviderConfig providerConfig, ConsumerConfig consumerConfig) {
+        Register register = new Register();
+        register.id = id;
+        register.providerConfig = providerConfig;
+        register.consumerConfig = consumerConfig;
+        return register;
     }
 
     @Nullable
-    public static RegisterVO parseString(String str) {
+    public static Register parseString(String str) {
         try {
-            var vo = new RegisterVO();
+            var register = new Register();
             var splits = str.split("\\|");
 
-            vo.id = splits[0].trim();
+            register.id = splits[0].trim();
 
             String providerAddress = null;
 
@@ -80,16 +80,16 @@ public class RegisterVO {
                 var s = splits[i].trim();
                 if (s.startsWith("provider")) {
                     var providerModules = parseProviderModules(s);
-                    vo.providerConfig = ProviderConfig.valueOf(providerAddress, providerModules);
+                    register.providerConfig = ProviderConfig.valueOf(providerAddress, providerModules);
                 } else if (s.startsWith("consumer")) {
                     var consumerModules = parseConsumerModules(s);
-                    vo.consumerConfig = ConsumerConfig.valueOf(consumerModules);
+                    register.consumerConfig = ConsumerConfig.valueOf(consumerModules);
                 } else {
                     providerAddress = s;
                 }
             }
 
-            return vo;
+            return register;
         } catch (Exception e) {
             logger.error(ExceptionUtils.getMessage(e));
             return null;
@@ -194,7 +194,7 @@ public class RegisterVO {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RegisterVO that = (RegisterVO) o;
+        Register that = (Register) o;
         return Objects.equals(id, that.id) && Objects.equals(providerConfig, that.providerConfig)
                 && Objects.equals(consumerConfig, that.consumerConfig);
     }

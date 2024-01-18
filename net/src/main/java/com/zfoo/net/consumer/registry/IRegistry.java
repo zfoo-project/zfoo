@@ -40,7 +40,7 @@ public interface IRegistry {
 
     List<String> children(String path);
 
-    Set<RegisterVO> remoteProviderRegisterSet();
+    Set<Register> remoteProviderRegisterSet();
 
     /**
      * 监听path路径下的更新

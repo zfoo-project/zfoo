@@ -12,7 +12,7 @@
 
 package com.zfoo.net.session;
 
-import com.zfoo.net.consumer.registry.RegisterVO;
+import com.zfoo.net.consumer.registry.Register;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.channel.Channel;
 
@@ -45,7 +45,7 @@ public class Session implements Closeable {
      * EN:Session extra parameters
      * CN:Session附带的属性参数，消费者的属性
      */
-    private RegisterVO consumerAttribute = null;
+    private Register consumerRegister = null;
 
     public Session(Channel channel) {
         if (channel == null) {
@@ -98,11 +98,11 @@ public class Session implements Closeable {
         this.uid = uid;
     }
 
-    public RegisterVO getConsumerAttribute() {
-        return consumerAttribute;
+    public Register getConsumerRegister() {
+        return consumerRegister;
     }
 
-    public void setConsumerAttribute(RegisterVO consumerAttribute) {
-        this.consumerAttribute = consumerAttribute;
+    public void setConsumerRegister(Register consumerRegister) {
+        this.consumerRegister = consumerRegister;
     }
 }

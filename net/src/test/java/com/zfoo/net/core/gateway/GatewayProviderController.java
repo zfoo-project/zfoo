@@ -40,7 +40,7 @@ public class GatewayProviderController {
         logger.info("provider receive [packet:{}] from client", JsonUtils.object2String(request));
 
         var response = new GatewayToProviderResponse();
-        response.setMessage(StringUtils.format("Hello, this is the [provider:{}] response!", NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString()));
+        response.setMessage(StringUtils.format("Hello, this is the [provider:{}] response!", NetContext.getConfigManager().getLocalConfig().toLocalRegister().toString()));
 
         NetContext.getRouter().send(session, response, gatewayAttachment);
     }

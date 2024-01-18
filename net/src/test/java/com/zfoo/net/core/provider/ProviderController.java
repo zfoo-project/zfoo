@@ -36,7 +36,7 @@ public class ProviderController {
         logger.info("provider receive [packet:{}] from consumer", JsonUtils.object2String(ask));
 
         var response = new ProviderMessAnswer();
-        response.setMessage(StringUtils.format("Hello, this is the [provider:{}] answer!", NetContext.getConfigManager().getLocalConfig().toLocalRegisterVO().toString()));
+        response.setMessage(StringUtils.format("Hello, this is the [provider:{}] answer!", NetContext.getConfigManager().getLocalConfig().toLocalRegister().toString()));
 
         NetContext.getRouter().send(session, response);
     }

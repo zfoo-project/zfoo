@@ -76,7 +76,7 @@ public class Consumer implements IConsumer {
         var protocolModule = ProtocolManager.moduleByProtocol(packet.getClass());
         var list = new ArrayList<Session>();
         NetContext.getSessionManager().forEachClientSession(session -> {
-            var consumerAttribute = session.getConsumerAttribute();
+            var consumerAttribute = session.getConsumerRegister();
             if (consumerAttribute == null) {
                 return;
             }
@@ -106,7 +106,7 @@ public class Consumer implements IConsumer {
         // 不同的服务提供者可能会提供同一个接口，消费者可能同时消费了这些提供了同一个接口的服务提供者，取第一个消费者的loadBalancer
         IConsumerLoadBalancer loadBalancer = null;
         for (var providerSession : providers) {
-            for (var provider : providerSession.getConsumerAttribute().getProviderConfig().getProviders()) {
+            for (var provider : providerSession.getConsumerRegister().getProviderConfig().getProviders()) {
                 if (consumerLoadBalancerMap.containsKey(provider.getProvider())) {
                     loadBalancer = consumerLoadBalancerMap.get(provider.getProvider());
                     break;

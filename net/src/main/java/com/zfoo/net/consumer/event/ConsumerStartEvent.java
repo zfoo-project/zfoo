@@ -14,7 +14,7 @@
 package com.zfoo.net.consumer.event;
 
 import com.zfoo.event.model.IEvent;
-import com.zfoo.net.consumer.registry.RegisterVO;
+import com.zfoo.net.consumer.registry.Register;
 import com.zfoo.net.session.Session;
 
 /**
@@ -22,22 +22,22 @@ import com.zfoo.net.session.Session;
  */
 public class ConsumerStartEvent implements IEvent {
 
-    private RegisterVO providerRegisterVO;
+    private Register providerRegister;
     private Session session;
 
-    public static ConsumerStartEvent valueOf(RegisterVO providerRegisterVO, Session session) {
+    public static ConsumerStartEvent valueOf(Register providerRegister, Session session) {
         var event = new ConsumerStartEvent();
-        event.providerRegisterVO = providerRegisterVO;
+        event.providerRegister = providerRegister;
         event.session = session;
         return event;
     }
 
-    public RegisterVO getProviderRegisterVO() {
-        return providerRegisterVO;
+    public Register getProviderRegister() {
+        return providerRegister;
     }
 
-    public void setProviderRegisterVO(RegisterVO providerRegisterVO) {
-        this.providerRegisterVO = providerRegisterVO;
+    public void setProviderRegister(Register providerRegister) {
+        this.providerRegister = providerRegister;
     }
 
     public Session getSession() {

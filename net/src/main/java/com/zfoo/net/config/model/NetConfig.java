@@ -13,7 +13,7 @@
 
 package com.zfoo.net.config.model;
 
-import com.zfoo.net.consumer.registry.RegisterVO;
+import com.zfoo.net.consumer.registry.Register;
 import com.zfoo.protocol.generate.GenerateOperation;
 
 import java.util.Objects;
@@ -61,8 +61,8 @@ public class NetConfig {
     private ConsumerConfig consumer;
 
 
-    public RegisterVO toLocalRegisterVO() {
-        return RegisterVO.valueOf(id, provider, consumer);
+    public Register toLocalRegister() {
+        return Register.valueOf(id, provider, consumer);
     }
 
     public String getId() {

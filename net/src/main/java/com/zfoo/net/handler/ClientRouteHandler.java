@@ -54,7 +54,7 @@ public class ClientRouteHandler extends BaseRouteHandler {
         EventBus.post(ClientSessionInactiveEvent.valueOf(session));
 
         // 如果是消费者inactive，还需要触发客户端消费者检查事件，以便重新连接
-        if (session.getConsumerAttribute() != null) {
+        if (session.getConsumerRegister() != null) {
             NetContext.getConfigManager().getRegistry().checkConsumer();
         }
 

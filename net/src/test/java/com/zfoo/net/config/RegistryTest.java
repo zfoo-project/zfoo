@@ -17,9 +17,8 @@ import com.zfoo.net.config.model.ConsumerConfig;
 import com.zfoo.net.config.model.ConsumerModule;
 import com.zfoo.net.config.model.ProviderConfig;
 import com.zfoo.net.config.model.ProviderModule;
-import com.zfoo.net.consumer.registry.RegisterVO;
+import com.zfoo.net.consumer.registry.Register;
 import com.zfoo.net.core.HostAndPort;
-import com.zfoo.protocol.registration.ProtocolModule;
 import io.netty.util.NetUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -48,14 +47,14 @@ public class RegistryTest {
         // 服务消费者配置：这个是没Ip的
         var consumerConfig = ConsumerConfig.valueOf(consumerModules);
 
-        var vo = RegisterVO.valueOf("test", providerConfig, consumerConfig);
-        var voStr = vo.toString();
+        var register = Register.valueOf("test", providerConfig, consumerConfig);
+        var voStr = register.toString();
 
         // test | 127.0.0.1:80 | provider:[100-aaa-a, 120-bbb-b] | consumer:[100-aaa-random-a, 120-bbb-random-b]
         System.out.println(voStr);
 
-        var newVo = RegisterVO.parseString(voStr);
-        Assert.assertEquals(vo, newVo);
+        var newRegister = Register.parseString(voStr);
+        Assert.assertEquals(register, newRegister);
 
         // /127.0.0.1
         System.out.println(NetUtil.LOCALHOST);

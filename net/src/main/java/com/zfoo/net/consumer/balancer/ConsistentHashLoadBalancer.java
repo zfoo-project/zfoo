@@ -106,7 +106,7 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
     @Nullable
     private FastTreeMapIntLong updateModuleToConsistentHash(List<Session> providers, ProtocolModule module) {
         var sessionStringList = providers.stream()
-                .map(session -> new Pair<>(session.getConsumerAttribute().toString(), session.getSid()))
+                .map(session -> new Pair<>(session.getConsumerRegister().toString(), session.getSid()))
                 .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
                 .toList();
 
