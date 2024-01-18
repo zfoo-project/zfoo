@@ -22,7 +22,7 @@ public class CachedConsistentHashLoadBalancer extends AbstractConsumerLoadBalanc
     private static final long MAX_CACHE_SIZE = 10_0000;
 
     /**
-     * cache the sid after load balancer，key:[protocolModuleId + argument] -> value:[sid]
+     * cache the sid after load balancer，key:[argument + protocolModuleId] -> value:[sid]
      */
     private Cache<Long, Long> cache = Caffeine.newBuilder()
             .expireAfterAccess(EXPIRED_ACCESS_DURATION, TimeUnit.MILLISECONDS)
