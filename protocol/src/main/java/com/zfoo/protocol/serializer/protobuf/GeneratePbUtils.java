@@ -409,10 +409,10 @@ public abstract class GeneratePbUtils {
                 .toList();
 
         var fieldBuilder = new StringBuilder();
-        var valueOfBuilder = new StringBuilder();
+        var valueOfDefinitions = new ArrayList<String>();
+        var valueOfFieldBuilder = new StringBuilder();
         var methodBuilder = new StringBuilder();
 
-        valueOfBuilder.append(TAB).append(StringUtils.format("public {} {", pbMessage.getName())).append(LS);
         for (var pbField : pbFields) {
             var type = getJavaType(pbField);
             var name = pbField.getName();
@@ -425,8 +425,10 @@ public abstract class GeneratePbUtils {
             }
             fieldBuilder.append(TAB).append(StringUtils.format("private {} {};", type, name)).append(LS);
 
-            // valueOf
-            valueOfBuilder.append(TAB + TAB).append(StringUtils.format("this.{} = {};", name, name)).append(LS);
+            // valueOf definition
+            valueOfDefinitions.add(StringUtils.format("{} {}", type, name));
+            // valueOf field
+            valueOfFieldBuilder.append(TAB + TAB).append(StringUtils.format("this.{} = {};", name, name)).append(LS);
 
             // method
             String getMethod;
@@ -445,16 +447,19 @@ public abstract class GeneratePbUtils {
             methodBuilder.append(TAB + TAB).append(StringUtils.format("this.{} = {};", pbField.getName(), pbField.getName())).append(LS);
             methodBuilder.append(TAB).append("}").append(LS);
         }
-        valueOfBuilder.append(TAB).append("}").append(LS);
 
         builder.append(LS).append(fieldBuilder);
 
         if (pbGenerateOperation.isAllArgsConstructor() && CollectionUtils.isNotEmpty(pbFields)) {
+            builder.append(LS);
             // no args constructor
-            builder.append(TAB).append(StringUtils.format("public {} {", pbMessage.getName())).append(LS)
+            builder.append(TAB).append(StringUtils.format("public {}() {", pbMessage.getName())).append(LS)
                     .append(TAB).append("}").append(LS);
             // all args constructor
-            builder.append(valueOfBuilder);
+            var valueOfDefinitionStr = StringUtils.joinWith(", ", valueOfDefinitions.toArray());
+            builder.append(TAB).append(StringUtils.format("public {}({}) {", pbMessage.getName(), valueOfDefinitionStr)).append(LS)
+                    .append(valueOfFieldBuilder)
+                    .append(TAB).append("}").append(LS);
         }
 
         builder.append(LS).append(methodBuilder);
