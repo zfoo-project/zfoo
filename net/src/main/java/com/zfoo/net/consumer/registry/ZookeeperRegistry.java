@@ -333,7 +333,7 @@ public class ZookeeperRegistry implements IRegistry {
 
             @Override
             public void initialized() {
-                initZookeeper();
+                SchedulerBus.schedule(() -> initZookeeper(), 3, TimeUnit.SECONDS);
             }
         }, executor);
 
@@ -445,8 +445,6 @@ public class ZookeeperRegistry implements IRegistry {
             return;
         }
 
-        logger.info("start using providerHashConsumerSet:{} to check [consumer:{}]", providerRegisterSet, NetContext.getSessionManager().clientSessionSize());
-
         var recheckFlag = false;
 
         for (var providerCache : providerRegisterSet) {
@@ -487,6 +485,7 @@ public class ZookeeperRegistry implements IRegistry {
                 }
 
                 session.setConsumerRegister(providerCache);
+                logger.info("Consumer starts consuming the provider:[{}]", providerCache);
                 EventBus.post(ConsumerStartEvent.valueOf(providerCache, session));
             } catch (Throwable t) {
                 logger.error("[consumer:{}] failed to start, wait [{}] seconds to recheck consumer", providerCache, RETRY_SECONDS, t);
