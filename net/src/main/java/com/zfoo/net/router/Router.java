@@ -78,7 +78,7 @@ public class Router implements IRouter {
     @Override
     public void receive(Session session, Object packet, @Nullable Object attachment) {
         if (packet.getClass() == Heartbeat.class) {
-            logger.info("heartbeat server receiver [sid:{}]", session.getSid());
+            logger.info("server receive heartbeat from [sid:{}]", session.getSid());
             return;
         }
 

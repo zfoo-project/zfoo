@@ -39,7 +39,7 @@ public class ClientIdleHandler extends ChannelDuplexHandler {
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.ALL_IDLE) {
-                logger.info("heartbeat client send to [sid:{}]", SessionUtils.getSession(ctx).getSid());
+                logger.info("client send heartbeat to [sid:{}]", SessionUtils.getSession(ctx).getSid());
                 ctx.channel().writeAndFlush(heartbeatPacket);
             }
         }
