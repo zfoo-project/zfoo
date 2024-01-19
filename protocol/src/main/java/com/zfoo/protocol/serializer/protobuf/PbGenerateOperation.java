@@ -22,6 +22,10 @@ public class PbGenerateOperation {
     private String outputPath;
     private String javaPackage;
     /**
+     * Generates an all-args constructor. If no field in the class, no constructor will be generated.
+     */
+    private boolean allArgsConstructor;
+    /**
      * Whether generated class is record
      */
     private boolean recordClass;
@@ -65,8 +69,20 @@ public class PbGenerateOperation {
         this.javaPackage = javaPackage;
     }
 
+    public boolean isAllArgsConstructor() {
+        return allArgsConstructor;
+    }
+
+    public void setAllArgsConstructor(boolean allArgsConstructor) {
+        this.allArgsConstructor = allArgsConstructor;
+    }
+
     public boolean isRecordClass() {
         return recordClass;
+    }
+
+    public void setRecordClass(boolean recordClass) {
+        this.recordClass = recordClass;
     }
 
     public List<String> getRecordExcludes() {
@@ -75,10 +91,6 @@ public class PbGenerateOperation {
 
     public void setRecordExcludes(List<String> recordExcludes) {
         this.recordExcludes = recordExcludes;
-    }
-
-    public void setRecordClass(boolean recordClass) {
-        this.recordClass = recordClass;
     }
 
     public boolean isOneProtocol() {

@@ -162,7 +162,7 @@ public abstract class GeneratePbUtils {
                         var recordBody = buildRecordBody(pbMessage);
                         builder.append(GenerateProtocolFile.addTabs(recordBody, 1));
                     } else {
-                        var classBody = buildClassBody(pbMessage);
+                        var classBody = buildClassBody(pbGenerateOperation, pbMessage);
                         classBody = classBody.replaceFirst("public class ", "public static class ");
                         builder.append(GenerateProtocolFile.addTabs(classBody, 1));
                     }
@@ -247,7 +247,7 @@ public abstract class GeneratePbUtils {
             var recordBody = buildRecordBody(pbMessage);
             builder.append(recordBody);
         } else {
-            var classBody = buildClassBody(pbMessage);
+            var classBody = buildClassBody(pbGenerateOperation, pbMessage);
             builder.append(classBody);
         }
         return builder.toString();
@@ -398,7 +398,7 @@ public abstract class GeneratePbUtils {
         return builder.toString();
     }
 
-    private static String buildClassBody(PbMessage pbMessage) {
+    private static String buildClassBody(PbGenerateOperation pbGenerateOperation, PbMessage pbMessage) {
         var builder = new StringBuilder();
         builder.append(StringUtils.format("@Protocol(id = {})", pbMessage.getProtocolId())).append(LS);
         builder.append(StringUtils.format("public class {} {", pbMessage.getName())).append(LS);
@@ -408,19 +408,27 @@ public abstract class GeneratePbUtils {
                 .sorted((a, b) -> a.getTag() - b.getTag())
                 .toList();
 
-        var builderMethod = new StringBuilder();
+        var fieldBuilder = new StringBuilder();
+        var valueOfBuilder = new StringBuilder();
+        var methodBuilder = new StringBuilder();
+
+        valueOfBuilder.append(TAB).append(StringUtils.format("public {} {", pbMessage.getName())).append(LS);
         for (var pbField : pbFields) {
             var type = getJavaType(pbField);
             var name = pbField.getName();
 
             var fieldComment = buildFieldComment(pbField);
-            builder.append(fieldComment);
+            fieldBuilder.append(fieldComment);
             if (isCompatiblePbField(pbField)) {
                 var tag = pbField.getTag() - COMPATIBLE_FIELD_TAG;
-                builder.append(TAB).append(StringUtils.format("@Compatible({})", tag)).append(LS);
+                fieldBuilder.append(TAB).append(StringUtils.format("@Compatible({})", tag)).append(LS);
             }
-            builder.append(TAB).append(StringUtils.format("private {} {};", type, name)).append(LS);
+            fieldBuilder.append(TAB).append(StringUtils.format("private {} {};", type, name)).append(LS);
 
+            // valueOf
+            valueOfBuilder.append(TAB + TAB).append(StringUtils.format("this.{} = {};", name, name)).append(LS);
+
+            // method
             String getMethod;
             if (!"bool".equalsIgnoreCase(pbField.getType())) {
                 getMethod = StringUtils.format("get{}", StringUtils.capitalize(pbField.getName()));
@@ -428,17 +436,28 @@ public abstract class GeneratePbUtils {
                 getMethod = StringUtils.format("is{}", StringUtils.capitalize(pbField.getName()));
             }
 
-            builderMethod.append(TAB).append(StringUtils.format("public {} {}() {", type, getMethod)).append(LS);
-            builderMethod.append(TAB + TAB).append(StringUtils.format("return {};", pbField.getName())).append(LS);
-            builderMethod.append(TAB).append("}").append(LS);
+            methodBuilder.append(TAB).append(StringUtils.format("public {} {}() {", type, getMethod)).append(LS);
+            methodBuilder.append(TAB + TAB).append(StringUtils.format("return {};", pbField.getName())).append(LS);
+            methodBuilder.append(TAB).append("}").append(LS);
 
             String setMethod = StringUtils.format("set{}", StringUtils.capitalize(pbField.getName()));
-            builderMethod.append(TAB).append(StringUtils.format("public void {}({} {}) {", setMethod, type, pbField.getName())).append(LS);
-            builderMethod.append(TAB + TAB).append(StringUtils.format("this.{} = {};", pbField.getName(), pbField.getName())).append(LS);
-            builderMethod.append(TAB).append("}").append(LS);
+            methodBuilder.append(TAB).append(StringUtils.format("public void {}({} {}) {", setMethod, type, pbField.getName())).append(LS);
+            methodBuilder.append(TAB + TAB).append(StringUtils.format("this.{} = {};", pbField.getName(), pbField.getName())).append(LS);
+            methodBuilder.append(TAB).append("}").append(LS);
+        }
+        valueOfBuilder.append(TAB).append("}").append(LS);
+
+        builder.append(LS).append(fieldBuilder);
+
+        if (pbGenerateOperation.isAllArgsConstructor() && CollectionUtils.isNotEmpty(pbFields)) {
+            // no args constructor
+            builder.append(TAB).append(StringUtils.format("public {} {", pbMessage.getName())).append(LS)
+                    .append(TAB).append("}").append(LS);
+            // all args constructor
+            builder.append(valueOfBuilder);
         }
 
-        builder.append(LS).append(builderMethod);
+        builder.append(LS).append(methodBuilder);
         builder.append("}");
         return builder.toString();
     }
