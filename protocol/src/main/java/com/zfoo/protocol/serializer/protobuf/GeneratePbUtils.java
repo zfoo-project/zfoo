@@ -158,7 +158,7 @@ public abstract class GeneratePbUtils {
                     var documentComment = buildDocumentComment(pbMessage);
                     builder.append(GenerateProtocolFile.addTabs(documentComment, 1));
                     // message
-                    if (pbGenerateOperation.isRecordClass()) {
+                    if (pbGenerateOperation.generateRecordClass(pbMessage.getName())) {
                         var recordBody = buildRecordBody(pbMessage);
                         builder.append(GenerateProtocolFile.addTabs(recordBody, 1));
                     } else {
@@ -243,7 +243,7 @@ public abstract class GeneratePbUtils {
         builder.append(documentComment);
 
         // message
-        if (pbGenerateOperation.isRecordClass()) {
+        if (pbGenerateOperation.generateRecordClass(pbMessage.getName())) {
             var recordBody = buildRecordBody(pbMessage);
             builder.append(recordBody);
         } else {

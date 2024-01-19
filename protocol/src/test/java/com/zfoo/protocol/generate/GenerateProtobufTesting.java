@@ -28,6 +28,7 @@ public class GenerateProtobufTesting {
         buildOption.setOutputPath("zfoopb");
         buildOption.setJavaPackage("com.zfoo.protocol.generate.test");
 //        buildOption.setRecordClass(true);
+//        buildOption.getRecordExcludes().add("SimpleObject");
 //        buildOption.setOneProtocol(true);
         GeneratePbUtils.create(buildOption);
     }
