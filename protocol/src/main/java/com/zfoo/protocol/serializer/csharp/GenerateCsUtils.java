@@ -136,7 +136,7 @@ public abstract class GenerateCsUtils {
                 , protocolClazzName, protocolClazzName, readObject.trim());
 
         var outputPath = StringUtils.format("{}/{}/{}.cs"
-                , protocolOutputRootPath
+                , protocolOutputPath
                 , GenerateProtocolPath.getCapitalizeProtocolPath(protocolId)
                 , protocolClazzName);
         var file = new File(outputPath);
