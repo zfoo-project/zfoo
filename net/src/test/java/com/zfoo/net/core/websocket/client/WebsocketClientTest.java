@@ -48,18 +48,19 @@ public class WebsocketClientTest {
         var client = new WebsocketClient(HostAndPort.valueOf("127.0.0.1:9000"), webSocketClientProtocolConfig);
         var session = client.start();
 
+        // Websocket在建立tcp连接过后不能立刻通讯，还需要使用Http协议去握手升级成Websocket协议
+        // WebSocket握手是在客户端和服务器之间建立WebSocket连接的过程。它是通过HTTP/HTTPS协议完成的，后续将升级为WebSocket协议。
+        ThreadUtils.sleep(1000);
+
         var request = new WebsocketHelloRequest();
         request.setMessage("Hello, this is the websocket client!");
 
         for (int i = 0; i < 1000; i++) {
-            ThreadUtils.sleep(1000);
             NetContext.getRouter().send(session, request);
-
 
             ThreadUtils.sleep(1000);
             var response = NetContext.getRouter().syncAsk(session, request, WebsocketHelloResponse.class, null).packet();
             logger.info("sync client receive [packet:{}] from server", JsonUtils.object2String(response));
-
 
             NetContext.getRouter().asyncAsk(session, request, WebsocketHelloResponse.class, null)
                     .whenComplete(new Consumer<WebsocketHelloResponse>() {
