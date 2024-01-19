@@ -17,12 +17,14 @@ import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.handler.ServerRouteHandler;
 import com.zfoo.net.handler.codec.websocket.WebSocketCodecHandler;
+import com.zfoo.net.handler.idle.ServerIdleHandler;
 import com.zfoo.protocol.util.IOUtils;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * @author godotg
@@ -35,6 +37,8 @@ public class WebsocketServer extends AbstractServer<SocketChannel> {
 
     @Override
     public void initChannel(SocketChannel channel) {
+        channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
+        channel.pipeline().addLast(new ServerIdleHandler());
         // 编解码 http 请求
         channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
         // 聚合解码 HttpRequest/HttpContent/LastHttpContent 到 FullHttpRequest

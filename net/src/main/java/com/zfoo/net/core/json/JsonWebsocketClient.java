@@ -17,6 +17,7 @@ import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.handler.codec.json.JsonWebSocketCodecHandler;
+import com.zfoo.net.handler.idle.ClientIdleHandler;
 import com.zfoo.protocol.util.IOUtils;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
@@ -24,6 +25,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolConfig;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * @author godotg
@@ -39,6 +41,8 @@ public class JsonWebsocketClient extends AbstractClient<SocketChannel> {
 
     @Override
     public void initChannel(SocketChannel channel) {
+        channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
+        channel.pipeline().addLast(new ClientIdleHandler());
         channel.pipeline().addLast(new HttpClientCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
         channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
         channel.pipeline().addLast(new WebSocketClientProtocolHandler(webSocketClientProtocolConfig));
