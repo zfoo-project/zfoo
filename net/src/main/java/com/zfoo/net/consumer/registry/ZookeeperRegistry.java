@@ -373,7 +373,7 @@ public class ZookeeperRegistry implements IRegistry {
                 curator.create()
                         .withMode(CreateMode.EPHEMERAL)
                         .forPath(localProviderPath, StringUtils.EMPTY.getBytes());
-                logger.info("Registration for the provider successful [{}]", localProviderVoStr);
+                logger.info("Provider register successful at [{}]", localProviderVoStr);
             } else {
                 // 如果服务提供者已经有节点了，防止这个节点是是上次来不及删除的临时节点
                 var curatorSessionId = curator.getZookeeperClient().getZooKeeper().getSessionId();
