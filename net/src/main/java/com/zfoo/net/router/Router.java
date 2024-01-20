@@ -374,9 +374,11 @@ public class Router implements IRouter {
             receiver.invoke(session, packet, attachment);
         } catch (Exception e) {
             EventBus.post(ServerExceptionEvent.valueOf(session, packet, attachment, e));
-            logger.error(StringUtils.format("e[uid:{}][sid:{}] unknown exception", session.getUid(), session.getSid(), e.getMessage()), e);
+            logger.error(StringUtils.format("at{} e[uid:{}][sid:{}] invoke exception"
+                    , StringUtils.capitalize(packet.getClass().getSimpleName()),session.getUid(), session.getSid()), e);
         } catch (Throwable t) {
-            logger.error(StringUtils.format("e[uid:{}][sid:{}] unknown error", session.getUid(), session.getSid(), t.getMessage()), t);
+            logger.error(StringUtils.format("at{} e[uid:{}][sid:{}] invoke error"
+                    , StringUtils.capitalize(packet.getClass().getSimpleName()),session.getUid(), session.getSid()), t);
         } finally {
             // 如果有服务器在处理同步或者异步消息的时候由于错误没有返回给客户端消息，则可能会残留serverAttachment，所以先移除
             if (threadLocalAttachment) {
