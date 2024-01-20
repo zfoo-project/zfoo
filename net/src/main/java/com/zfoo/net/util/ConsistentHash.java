@@ -41,18 +41,13 @@ public class ConsistentHash<K, V> {
         this.realNodes.addAll(realNodes);
         this.virtualNodes = virtualNodes;
 
-        // 初始化
         // 再添加虚拟节点，遍历LinkedList使用foreach循环效率会比较高
         for (var realNode : realNodes) {
-            addNode(realNode);
-        }
-    }
-
-    public void addNode(Pair<K, V> realNode) {
-        for (var i = 0; i < this.virtualNodes; i++) {
-            var virtualNode = realNode.getKey().toString() + "&&VN" + i;
-            var hash = HashUtils.fnvHash(virtualNode);
-            virtualNodeTreeMap.put(hash, realNode);
+            for (var i = 0; i < this.virtualNodes; i++) {
+                var virtualNode = realNode.getKey().toString() + "&&VN" + i;
+                var hash = HashUtils.fnvHash(virtualNode);
+                virtualNodeTreeMap.put(hash, realNode);
+            }
         }
     }
 

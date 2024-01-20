@@ -27,8 +27,6 @@ public class SessionManager implements ISessionManager {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionManager.class);
 
-    private static final AtomicInteger CLIENT_ATOMIC = new AtomicInteger(0);
-
     /**
      * EN: As a server, the Session is connected by other clients
      * CN: 作为服务器，被别的客户端连接的Session
@@ -38,16 +36,12 @@ public class SessionManager implements ISessionManager {
      */
     private final ConcurrentHashMapLongObject<Session> serverSessionMap = new ConcurrentHashMapLongObject<>(128);
 
-
     /**
      * EN: As a client, connect to another server and save Sessions
      * CN: 作为客户端，连接别的服务器上后，保存下来的Session
      * 如：自己配置了Consumer，说明自己作为消费者将要消费远程接口，就会创建一个TcpClient去连接Provider，那么连接上后，就会保存下来到这个Map中
      */
     private final ConcurrentHashMapLongObject<Session> clientSessionMap = new ConcurrentHashMapLongObject<>(8);
-
-    private volatile int clientSessionChangeId = CLIENT_ATOMIC.incrementAndGet();
-
 
     @Override
     public void addServerSession(Session session) {
@@ -91,7 +85,6 @@ public class SessionManager implements ISessionManager {
             return;
         }
         clientSessionMap.put(session.getSid(), session);
-        clientSessionChangeId = CLIENT_ATOMIC.incrementAndGet();
     }
 
     @Override
@@ -103,7 +96,6 @@ public class SessionManager implements ISessionManager {
         try (session) {
             clientSessionMap.remove(session.getSid());
         }
-        clientSessionChangeId = CLIENT_ATOMIC.incrementAndGet();
     }
 
     @Override
@@ -119,11 +111,6 @@ public class SessionManager implements ISessionManager {
     @Override
     public int clientSessionSize() {
         return clientSessionMap.size();
-    }
-
-    @Override
-    public int getClientSessionChangeId() {
-        return clientSessionChangeId;
     }
 
 }

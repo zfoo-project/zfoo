@@ -19,7 +19,7 @@ import com.zfoo.net.util.ConsistentHash;
 import com.zfoo.net.util.FastTreeMapIntLong;
 import com.zfoo.net.util.HashUtils;
 import com.zfoo.protocol.ProtocolManager;
-import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.collection.HashSetLong;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolModule;
@@ -40,9 +40,18 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
 
     public static final ConsistentHashLoadBalancer INSTANCE = new ConsistentHashLoadBalancer();
 
-    private volatile int lastClientSessionChangeId = 0;
-    private static final AtomicReferenceArray<FastTreeMapIntLong> consistentHashMap = new AtomicReferenceArray<>(ProtocolManager.MAX_MODULE_NUM);
+    private static final AtomicReferenceArray<ConsistentCache> consistentHashMap = new AtomicReferenceArray<>(ProtocolManager.MAX_MODULE_NUM);
     private static final int VIRTUAL_NODE_NUMS = 200;
+
+    public static class ConsistentCache {
+        public HashSetLong providerSids;
+        public FastTreeMapIntLong treeMap;
+
+        public ConsistentCache(HashSetLong providerSids, FastTreeMapIntLong treeMap) {
+            this.providerSids = providerSids;
+            this.treeMap = treeMap;
+        }
+    }
 
     public ConsistentHashLoadBalancer() {
     }
@@ -64,21 +73,22 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
             return RandomLoadBalancer.getInstance().selectProvider(providers, packet, argument);
         }
 
-        updateConsistentHashMap(providers);
-
         var module = ProtocolManager.moduleByProtocol(packet.getClass());
-        var fastTreeMap = consistentHashMap.get(module.getId());
-        if (fastTreeMap == null) {
-            fastTreeMap = updateModuleToConsistentHash(providers, module);
+        var consistentCache = consistentHashMap.get(module.getId());
+        if (consistentCache == null) {
+            consistentCache = updateModuleToConsistentHash(providers, module);
         }
-        if (fastTreeMap == null) {
-            throw new RunException("ConsistentHashLoadBalancer [protocol:{}][argument:{}], no service provides the [module:{}]", packet.getClass(), argument, module);
+        var providerSids = consistentCache.providerSids;
+        // 一致性hash缓存不一致同样进行更新操作
+        if (providerSids.size() != providers.size() || providers.stream().anyMatch(it -> !providerSids.contains(it.getSid()))) {
+            consistentCache = updateModuleToConsistentHash(providers, module);
         }
-        var nearestIndex = fastTreeMap.indexOfNearestCeilingKey(HashUtils.fnvHash(argument));
+        var treeMap = consistentCache.treeMap;
+        var nearestIndex = treeMap.indexOfNearestCeilingKey(HashUtils.fnvHash(argument));
         if (nearestIndex < 0) {
             throw new RunException("no service provides the [module:{}]", module);
         }
-        var sid = fastTreeMap.getByIndex(nearestIndex);
+        var sid = treeMap.getByIndex(nearestIndex);
         var session = NetContext.getSessionManager().getClientSession(sid);
         if (session == null) {
             throw new RunException("unknown no service provides the [module:{}]", module);
@@ -86,25 +96,8 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
         return session;
     }
 
-    private void updateConsistentHashMap(List<Session> providers) {
-        // 如果更新时间不匹配，则更新到最新的服务提供者
-        var currentClientSessionChangeId = NetContext.getSessionManager().getClientSessionChangeId();
-        if (currentClientSessionChangeId != lastClientSessionChangeId) {
-            for (byte i = 0; i < ProtocolManager.MAX_MODULE_NUM; i++) {
-                var consistentHash = consistentHashMap.get(i);
-                if (consistentHash == null) {
-                    continue;
-                }
-                var module = ProtocolManager.moduleByModuleId(i);
-                updateModuleToConsistentHash(providers, module);
-            }
-            lastClientSessionChangeId = currentClientSessionChangeId;
-        }
-    }
-
-
     @Nullable
-    private FastTreeMapIntLong updateModuleToConsistentHash(List<Session> providers, ProtocolModule module) {
+    private ConsistentCache updateModuleToConsistentHash(List<Session> providers, ProtocolModule module) {
         var sessionStringList = providers.stream()
                 .map(session -> new Pair<>(session.getConsumerRegister().toString(), session.getSid()))
                 .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
@@ -112,18 +105,21 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
 
         var consistentHash = new ConsistentHash<>(sessionStringList, VIRTUAL_NODE_NUMS);
         var virtualNodeTreeMap = consistentHash.getVirtualNodeTreeMap();
-        if (CollectionUtils.isEmpty(virtualNodeTreeMap)) {
-            consistentHashMap.set(module.getId(), null);
-            return null;
-        }
+
         var virtualTreeMap = new TreeMap<Integer, Long>();
         for (var entry : virtualNodeTreeMap.entrySet()) {
             virtualTreeMap.put(entry.getKey(), entry.getValue().getValue());
         }
+
+        // 缓存服务提供者的sid
+        var sidSet = new HashSetLong(16);
+        providers.forEach(it -> sidSet.add(it.getSid()));
         // 使用更高性能的tree map
         var fastTreeMap = new FastTreeMapIntLong(virtualTreeMap);
-        consistentHashMap.set(module.getId(), fastTreeMap);
-        return fastTreeMap;
+
+        var consistentCache = new ConsistentCache(sidSet, fastTreeMap);
+        consistentHashMap.set(module.getId(), consistentCache);
+        return consistentCache;
     }
 
 }

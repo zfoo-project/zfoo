@@ -53,6 +53,10 @@ public class HashSetLong extends AbstractSet<Long> {
         return map.containsKey(o);
     }
 
+    public boolean contains(long key) {
+        return map.containsKey(key);
+    }
+
     @Override
     public boolean add(Long e) {
         return map.put(e, Boolean.TRUE) == null;
