@@ -164,30 +164,35 @@ public class PacketService implements IPacketService {
             logger.error("packet is null and can not be sent.");
             return;
         }
+        try {
+            // 预留写入包的长度，一个int字节大小
+            buffer.writeInt(PACKET_HEAD_LENGTH);
 
-        // 预留写入包的长度，一个int字节大小
-        buffer.writeInt(PACKET_HEAD_LENGTH);
+            // 写入包packet
+            ProtocolManager.write(buffer, packet);
 
-        // 写入包packet
-        ProtocolManager.write(buffer, packet);
-
-        // 写入包的附加包attachment
-        if (attachment == null) {
-            ByteBufUtils.writeBoolean(buffer, false);
-        } else {
-            ByteBufUtils.writeBoolean(buffer, true);
             // 写入包的附加包attachment
-            ProtocolManager.write(buffer, attachment);
+            if (attachment == null) {
+                ByteBufUtils.writeBoolean(buffer, false);
+            } else {
+                ByteBufUtils.writeBoolean(buffer, true);
+                // 写入包的附加包attachment
+                ProtocolManager.write(buffer, attachment);
+            }
+
+            int length = buffer.readableBytes();
+
+            int packetLength = length - PACKET_HEAD_LENGTH;
+
+            buffer.writerIndex(0);
+
+            buffer.writeInt(packetLength);
+
+            buffer.writerIndex(length);
+        } catch (Exception e) {
+            logger.error("write packet exception", e);
+        } catch (Throwable t) {
+            logger.error("write packet error", t);
         }
-
-        int length = buffer.readableBytes();
-
-        int packetLength = length - PACKET_HEAD_LENGTH;
-
-        buffer.writerIndex(0);
-
-        buffer.writeInt(packetLength);
-
-        buffer.writerIndex(length);
     }
 }
