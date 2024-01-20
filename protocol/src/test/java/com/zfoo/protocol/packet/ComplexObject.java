@@ -89,7 +89,7 @@ public class ComplexObject {
     private Set<String> ssss;
     private Set<Map<Integer, String>> sssss;
 
-    @Note("如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order")
+    @Note("如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增")
     @Compatible(1)
     private int myCompatible;
     @Compatible(2)
