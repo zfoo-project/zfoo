@@ -322,12 +322,12 @@ public abstract class OSUtils {
 
             // 返回编译是否成功
             if (exitValue != 0) {
-                throw new Exception("执行命令错误，返回码：" + exitValue);
+                throw new RuntimeException("error executing command, return code:" + exitValue);
             }
 
             return result;
         } catch (Exception e) {
-            logger.error("命令执行未知异常", e);
+            logger.error("unknown exception in command execution", e);
         } finally {
             if (process != null) {
                 process.destroy();
