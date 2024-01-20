@@ -13,7 +13,6 @@
 
 package com.zfoo.net.consumer.balancer;
 
-import com.zfoo.net.NetContext;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.util.ConsistentHash;
 import com.zfoo.net.util.FastTreeMapIntLong;
@@ -23,6 +22,8 @@ import com.zfoo.protocol.collection.HashSetLong;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.ProtocolModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
@@ -38,8 +39,11 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  */
 public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
 
+    private static final Logger logger = LoggerFactory.getLogger(ConsistentHashLoadBalancer.class);
+
     public static final ConsistentHashLoadBalancer INSTANCE = new ConsistentHashLoadBalancer();
 
+    // 数组下标为ProtocolModule的id
     private static final AtomicReferenceArray<ConsistentCache> consistentHashMap = new AtomicReferenceArray<>(ProtocolManager.MAX_MODULE_NUM);
     private static final int VIRTUAL_NODE_NUMS = 200;
 
@@ -70,6 +74,7 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
     @Override
     public Session selectProvider(List<Session> providers, Object packet, Object argument) {
         if (argument == null) {
+            logger.warn("selectProvider:[{}] argument is null and use random load balancer", packet.getClass().getSimpleName());
             return RandomLoadBalancer.getInstance().selectProvider(providers, packet, argument);
         }
 
@@ -79,7 +84,7 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
             consistentCache = updateModuleToConsistentHash(providers, module);
         }
         var providerSids = consistentCache.providerSids;
-        // 一致性hash缓存不一致同样进行更新操作
+        // providers和consistentHashMap的服务提供者不一致同样进行更新操作
         if (providerSids.size() != providers.size() || providers.stream().anyMatch(it -> !providerSids.contains(it.getSid()))) {
             consistentCache = updateModuleToConsistentHash(providers, module);
         }
@@ -89,11 +94,8 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
             throw new RunException("no service provides the [module:{}]", module);
         }
         var sid = treeMap.getByIndex(nearestIndex);
-        var session = NetContext.getSessionManager().getClientSession(sid);
-        if (session == null) {
-            throw new RunException("unknown no service provides the [module:{}]", module);
-        }
-        return session;
+        // 因为每次都会对比sid，一定会从providers获得session
+        return providers.stream().filter(it -> it.getSid() == sid).findFirst().get();
     }
 
     @Nullable
