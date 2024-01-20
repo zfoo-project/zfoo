@@ -39,9 +39,7 @@ public interface IRouter {
     void registerPacketReceiverDefinition(Object bean);
 
     /**
-     * attention：syncAsk和asyncAsk只能客户端调用
-     * 同一个客户端可以同时发送多条同步或者异步消息。
-     * 服务器对每个请求消息也只能回复一条消息，不能在处理一条不同或者异步消息的时候回复多条消息。
+     * 服务器对每个syncAsk和asyncAsk请求消息也只能回复一条消息，不能在处理一条不同或者异步消息的时候回复多条消息。
      *
      * @param session     一个网络通信的会话
      * @param packet      一个网络通信包，消息体
