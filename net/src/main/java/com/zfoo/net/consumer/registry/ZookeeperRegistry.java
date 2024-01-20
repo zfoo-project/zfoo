@@ -16,6 +16,7 @@ package com.zfoo.net.consumer.registry;
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.consumer.event.ConsumerStartEvent;
+import com.zfoo.net.consumer.event.ProviderStartEvent;
 import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.core.tcp.TcpClient;
 import com.zfoo.net.core.tcp.TcpServer;
@@ -150,8 +151,10 @@ public class ZookeeperRegistry implements IRegistry {
 
         // 服务提供者也仅仅是一个TcpServer
         // 这里可以看出并没有指定接口，是找一个可用的端口
-        var providerServer = new TcpServer(providerConfig.localHostAndPortOrDefault());
+        var providerHostAndPort = providerConfig.localHostAndPortOrDefault();
+        var providerServer = new TcpServer(providerHostAndPort);
         providerServer.start();
+        EventBus.post(ProviderStartEvent.valueOf(providerHostAndPort));
     }
 
     /**

@@ -45,7 +45,9 @@ public class ProviderConfig {
 
     public HostAndPort localHostAndPortOrDefault() {
         if (StringUtils.isBlank(address)) {
-            var defaultHostAndPort = HostAndPort.valueOf(NetUtils.getLocalhostStr(), NetUtils.getAvailablePort(ProviderConfig.DEFAULT_PORT));
+            var host = NetUtils.getLocalhostStr();
+            var availablePort = NetUtils.getAvailablePort(ProviderConfig.DEFAULT_PORT);
+            var defaultHostAndPort = HostAndPort.valueOf(host, availablePort);
             this.address = defaultHostAndPort.toHostAndPortStr();
             return defaultHostAndPort;
         }
