@@ -141,8 +141,10 @@ public abstract class SchedulerBus {
                 // 到达触发时间，则执行runnable方法
                 try {
                     scheduler.getScheduler().invoke();
+                } catch (Exception e) {
+                    logger.error("scheduler invoke exception", e);
                 } catch (Throwable t) {
-                    logger.error("scheduler任务调度未知异常", t);
+                    logger.error("scheduler invoke error", t);
                 }
                 // 重新设置下一次的触发时间戳
                 triggerTimestamp = TimeUtils.nextTimestampByCronExpression(scheduler.getCronExpression(), timestampZonedDataTime);
@@ -175,7 +177,7 @@ public abstract class SchedulerBus {
      */
     public static ScheduledFuture<?> schedule(Runnable runnable, long delay, TimeUnit unit) {
 
-       return executor.schedule(ThreadUtils.safeRunnable(runnable), delay, unit);
+        return executor.schedule(ThreadUtils.safeRunnable(runnable), delay, unit);
     }
 
     /**
