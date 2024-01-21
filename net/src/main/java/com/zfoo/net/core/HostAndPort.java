@@ -112,6 +112,6 @@ public class HostAndPort {
 
     @Override
     public String toString() {
-        return StringUtils.format("[{}]", toHostAndPortStr());
+        return toHostAndPortStr();
     }
 }
