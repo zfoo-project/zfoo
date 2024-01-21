@@ -91,7 +91,7 @@ public class Register {
 
             return register;
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getMessage(e));
+            logger.error("parse register error", e);
             return null;
         }
     }

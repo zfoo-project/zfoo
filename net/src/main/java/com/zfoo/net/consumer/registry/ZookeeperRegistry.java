@@ -601,14 +601,15 @@ public class ZookeeperRegistry implements IRegistry {
     @Override
     public List<String> children(String path) {
         try {
-            var children = curator.getChildren().forPath(path).stream()
+            var children = curator.getChildren().forPath(path)
+                    .stream()
                     .filter(it -> StringUtils.isNotBlank(it) && !"null".equals(it))
                     .toList();
             return children;
         } catch (Exception e) {
-            logger.error("unknown exception", e);
+            logger.error("query children unknown exception", e);
         } catch (Throwable t) {
-            logger.error("unknown error", t);
+            logger.error("query children unknown error", t);
         }
         return Collections.emptyList();
     }
@@ -619,20 +620,20 @@ public class ZookeeperRegistry implements IRegistry {
      * @return
      */
     @Override
-    public Set<Register> remoteProviderRegisterSet() {
+    public List<Register> remoteProviderRegisters() {
         try {
-            var remoteProviderSet = curator.getChildren().forPath(PROVIDER_ROOT_PATH).stream()
-                    .filter(it -> StringUtils.isNotBlank(it) && !"null".equals(it))
-                    .map(it -> Register.parseString(it))
-                    .filter(it -> Objects.nonNull(it))
-                    .collect(Collectors.toSet());
-            return remoteProviderSet;
+            var remoteProviders = children(PROVIDER_ROOT_PATH)
+                    .stream()
+                    .map(Register::parseString)
+                    .filter(Objects::nonNull)
+                    .toList();
+            return remoteProviders;
         } catch (Exception e) {
-            logger.error("unknown exception", e);
+            logger.error("remoteProviderRegisters unknown exception", e);
         } catch (Throwable t) {
-            logger.error("unknown error", t);
+            logger.error("remoteProviderRegisters unknown error", t);
         }
-        return Collections.emptySet();
+        return Collections.emptyList();
     }
 
     /**
