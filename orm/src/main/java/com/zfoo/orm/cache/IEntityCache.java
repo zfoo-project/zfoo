@@ -33,6 +33,11 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
     void update(E entity);
 
     /**
+     * 更新缓存中的数据，立刻写入到数据库
+     */
+    void updateNow(E entity);
+
+    /**
      * 不会删除数据库中的数据，只会删除缓存数据
      *
      * @param pk 组要删除的主键

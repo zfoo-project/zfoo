@@ -169,6 +169,16 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     }
 
     @Override
+    public void updateNow(E entity) {
+        update(entity);
+        OrmContext.getAccessor().update(entity);
+        var currentPnode = cache.getIfPresent(entity.id());
+        var now = TimeUtils.now();
+        currentPnode.setModifiedTime(now);
+        currentPnode.setWriteToDbTime(now);
+    }
+
+    @Override
     public void invalidate(PK pk) {
         // 游戏业务中，操作最频繁的是update，不是insert，delete，query
         // 所以这边并不考虑
