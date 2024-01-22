@@ -490,28 +490,10 @@ public class ZookeeperRegistry implements IRegistry {
                 session.setConsumerRegister(providerCache);
                 logger.info("Consumer starts consuming the provider:[{}]", providerCache);
                 EventBus.post(ConsumerStartEvent.valueOf(providerCache, session));
+                // 将自己的消费者消息写到 /consumer 的临时节点下
+                updateConsumerData();
             } catch (Throwable t) {
                 logger.error("[consumer:{}] failed to start, wait [{}] seconds to recheck consumer", providerCache, RETRY_SECONDS, t);
-                recheckFlag = true;
-            }
-        }
-
-        // 将自己的消费者消息写到 /consumer 的临时节点下
-        var consumerConfig = NetContext.getConfigManager().getLocalConfig().getConsumer();
-        if (consumerConfig != null && CollectionUtils.isNotEmpty(consumerConfig.getConsumers())) {
-            var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegister();
-            var path = CONSUMER_ROOT_PATH + StringUtils.SLASH + localRegisterVO.toConsumerString();
-            try {
-                var stat = curator.checkExists().forPath(path);
-                if (Objects.isNull(stat)) {
-                    curator.create()
-                            .withMode(CreateMode.EPHEMERAL)
-                            .forPath(path);
-                } else {
-                    curator.setData().forPath(path);
-                }
-            } catch (Exception e) {
-                logger.error("consumer:[{}] writing to Zookeeper failed", path, e);
                 recheckFlag = true;
             }
         }
@@ -519,7 +501,25 @@ public class ZookeeperRegistry implements IRegistry {
         if (recheckFlag) {
             SchedulerBus.schedule(() -> checkConsumer(), RETRY_SECONDS, TimeUnit.SECONDS);
         }
+    }
 
+    private void updateConsumerData() {
+        // 将自己的消费者消息写到 /consumer 的临时节点下
+        var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegister();
+        var path = CONSUMER_ROOT_PATH + StringUtils.SLASH + localRegisterVO.toConsumerString();
+        var list = new ArrayList<String>();
+        NetContext.getSessionManager().forEachClientSession(session -> {
+            var consumerAttribute = session.getConsumerRegister();
+            if (consumerAttribute == null) {
+                return;
+            }
+            var providerConfig = consumerAttribute.getProviderConfig();
+            if (providerConfig == null) {
+                return;
+            }
+            list.add(consumerAttribute.toProviderSimple());
+        });
+        addData(path, StringUtils.bytes(JsonUtils.object2String(list)), CreateMode.EPHEMERAL);
     }
 
     /**
@@ -532,9 +532,9 @@ public class ZookeeperRegistry implements IRegistry {
     @Override
     public void addData(String path, byte[] bytes, CreateMode mode) {
         try {
-            var providerStat = curator.checkExists().forPath(path);
+            var stat = curator.checkExists().forPath(path);
 
-            if (Objects.isNull(providerStat)) {
+            if (Objects.isNull(stat)) {
                 curator.create()
                         .creatingParentsIfNeeded()
                         .withMode(mode)

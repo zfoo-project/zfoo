@@ -123,15 +123,6 @@ public class Register {
     }
 
     public String toProviderString() {
-        return toString();
-    }
-
-    public String toConsumerString() {
-        return this + StringUtils.SPACE + StringUtils.VERTICAL_BAR + StringUtils.SPACE + LOCAL_UUID;
-    }
-
-    @Override
-    public String toString() {
         var builder = new StringBuilder();
 
         // 模块模块名
@@ -171,6 +162,34 @@ public class Register {
         }
 
         return builder.toString();
+    }
+
+    public String toProviderSimple() {
+        var builder = new StringBuilder();
+
+        // 模块模块名
+        builder.append(id);
+
+        // 服务提供者相关配置信息
+        if (Objects.nonNull(providerConfig)) {
+            var providerAddress = providerConfig.getAddress();
+            if (StringUtils.isBlank(providerAddress)) {
+                throw new RuntimeException(StringUtils.format("The address of provider Config cannot be empty"));
+            }
+            builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
+            // 服务提供者地址
+            builder.append(providerAddress);
+        }
+        return builder.toString();
+    }
+
+    public String toConsumerString() {
+        return this + StringUtils.SPACE + StringUtils.VERTICAL_BAR + StringUtils.SPACE + LOCAL_UUID;
+    }
+
+    @Override
+    public String toString() {
+        return toProviderString();
     }
 
 
