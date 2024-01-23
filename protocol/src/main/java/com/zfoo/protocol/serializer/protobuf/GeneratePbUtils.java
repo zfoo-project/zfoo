@@ -252,6 +252,10 @@ public abstract class GeneratePbUtils {
         var imports = new HashSet<String>();
         imports.add(Protocol.class.getName());
 
+        if (CollectionUtils.isNotEmpty(pbMessage.getComments())) {
+            imports.add(Note.class.getName());
+        }
+
         var pbFields = pbMessage.getFields();
         for (var pbField : pbFields) {
             if (CollectionUtils.isNotEmpty(pbField.getComments())) {
