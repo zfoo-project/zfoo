@@ -154,9 +154,6 @@ public abstract class GeneratePbUtils {
                 builder.append(StringUtils.format("public class {} {", outClassName)).append(LS);
                 // inner class builder
                 for (var pbMessage : pbMessages) {
-                    // document
-                    var documentComment = buildDocumentComment(pbMessage);
-                    builder.append(GenerateProtocolFile.addTabs(documentComment, 1));
                     // message
                     if (pbGenerateOperation.generateRecordClass(pbMessage.getName())) {
                         var recordBody = buildRecordBody(pbMessage);
@@ -166,6 +163,7 @@ public abstract class GeneratePbUtils {
                         classBody = classBody.replaceFirst("public class ", "public static class ");
                         builder.append(GenerateProtocolFile.addTabs(classBody, 1));
                     }
+                    builder.append(LS);
                 }
                 builder.append("}");
                 var filePath = StringUtils.format("{}/{}.java", protocolOutputPath, outClassName);
@@ -237,10 +235,6 @@ public abstract class GeneratePbUtils {
         // import other class
         var imports = buildMessageImports(pbGenerateOperation, protos, proto, pbMessage);
         builder.append(imports);
-
-        // document
-        var documentComment = buildDocumentComment(pbMessage);
-        builder.append(documentComment);
 
         // message
         if (pbGenerateOperation.generateRecordClass(pbMessage.getName())) {
@@ -330,18 +324,32 @@ public abstract class GeneratePbUtils {
         return builder.toString();
     }
 
-    private static String buildDocumentComment(PbMessage msg) {
-        if (CollectionUtils.isEmpty(msg.getComments())) {
+    private static String buildClassNote(PbMessage pbMessage) {
+        if (CollectionUtils.isEmpty(pbMessage.getComments())) {
             return StringUtils.EMPTY;
         }
+        var comments = pbMessage.getComments();
         var builder = new StringBuilder();
-        builder.append("/**").append(LS);
-        msg.getComments().forEach(it -> builder.append(StringUtils.format(" * {}", it)).append(LS));
-        builder.append(" */").append(LS);
+        if (comments.size() == 1) {
+            builder.append(StringUtils.format("@Note(\"{}\")", comments.get(0))).append(LS);
+        } else {
+            builder.append("@Note(").append(LS);
+            for (int i = 0; i < comments.size(); i++) {
+                var comment = comments.get(i);
+                if (i == comments.size() - 1) {
+                    builder.append(TAB);
+                    builder.append(StringUtils.format("\"{}\")", comment));
+                } else {
+                    builder.append(TAB);
+                    builder.append(StringUtils.format("\"{}\\n\" + ", comment, LS));
+                }
+                builder.append(LS);
+            }
+        }
         return builder.toString();
     }
 
-    private static String buildFieldComment(PbField pbField) {
+    private static String buildFieldNote(PbField pbField) {
         var comments = pbField.getComments();
         if (CollectionUtils.isEmpty(comments)) {
             return StringUtils.EMPTY;
@@ -368,7 +376,12 @@ public abstract class GeneratePbUtils {
 
     private static String buildRecordBody(PbMessage pbMessage) {
         var builder = new StringBuilder();
+        // protocol id
         builder.append(StringUtils.format("@Protocol(id = {})", pbMessage.getProtocolId())).append(LS);
+        // note
+        var documentComment = buildClassNote(pbMessage);
+        builder.append(documentComment);
+        // class body
         builder.append(StringUtils.format("public record {} (", pbMessage.getName())).append(LS);
 
         var pbFields = pbMessage.getFields()
@@ -381,7 +394,7 @@ public abstract class GeneratePbUtils {
             var type = getJavaType(pbField);
             var name = pbField.getName();
 
-            var fieldComment = buildFieldComment(pbField);
+            var fieldComment = buildFieldNote(pbField);
             builder.append(fieldComment);
             if (isCompatiblePbField(pbField)) {
                 var tag = pbField.getTag() - COMPATIBLE_FIELD_TAG;
@@ -400,7 +413,12 @@ public abstract class GeneratePbUtils {
 
     private static String buildClassBody(PbGenerateOperation pbGenerateOperation, PbMessage pbMessage) {
         var builder = new StringBuilder();
+        // protocol id
         builder.append(StringUtils.format("@Protocol(id = {})", pbMessage.getProtocolId())).append(LS);
+        // note
+        var documentComment = buildClassNote(pbMessage);
+        builder.append(documentComment);
+        // class body
         builder.append(StringUtils.format("public class {} {", pbMessage.getName())).append(LS);
 
         var pbFields = pbMessage.getFields()
@@ -417,7 +435,7 @@ public abstract class GeneratePbUtils {
             var type = getJavaType(pbField);
             var name = pbField.getName();
 
-            var fieldComment = buildFieldComment(pbField);
+            var fieldComment = buildFieldNote(pbField);
             fieldBuilder.append(fieldComment);
             if (isCompatiblePbField(pbField)) {
                 var tag = pbField.getTag() - COMPATIBLE_FIELD_TAG;
@@ -491,6 +509,10 @@ public abstract class GeneratePbUtils {
     private static String buildOneProtocolMessageImports(PbGenerateOperation pbGenerateOperation, List<Proto> protos, Proto proto) {
         var imports = new HashSet<String>();
         imports.add(Protocol.class.getName());
+
+        if (CollectionUtils.isNotEmpty(proto.getComments())) {
+            imports.add(Note.class.getName());
+        }
 
         for (var pbMessage : proto.getPbMessages()) {
             var pbFields = pbMessage.getFields();
