@@ -10,10 +10,16 @@ namespace zfoocs
 
         private static readonly IProtocolRegistration[] protocols = new IProtocolRegistration[MAX_PROTOCOL_NUM];
         private static readonly Dictionary<Type, short> protocolIdMap = new Dictionary<Type, short>();
+        private static bool initialized = false;
 
 
         public static void InitProtocol()
         {
+            if (initialized)
+            {
+                return;
+            }
+            initialized = true;
             {}
         }
 
