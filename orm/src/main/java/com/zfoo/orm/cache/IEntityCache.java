@@ -47,7 +47,7 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
     /**
      * 同updateNow()，不会校验更新的线程是否一致
      */
-    void updateUnsafeNow(E entity);
+    void updateNowUnsafe(E entity);
 
     /**
      * 不会删除数据库中的数据，只会删除缓存数据
