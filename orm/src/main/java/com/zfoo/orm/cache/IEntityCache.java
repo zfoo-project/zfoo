@@ -29,6 +29,8 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
 
     /**
      * 更新缓存中的数据，只更新缓存的时间戳，并通过一定策略写入到数据库
+     * <p>
+     * 第一次update()会记录线程号表面当前哪个线程在更新这个entity，后面如果发现update()线程号和第一次不一致会给出线程安全的警告
      */
     void update(E entity);
 
