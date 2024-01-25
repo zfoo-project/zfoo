@@ -3,7 +3,7 @@ function Protocols.{}:protocolId()
 end
 
 function Protocols.{}:protocolName()
-    return Protocols.{}
+    return "{}"
 end
 
 function Protocols.{}:__tostring()

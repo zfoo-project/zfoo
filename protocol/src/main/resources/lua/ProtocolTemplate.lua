@@ -15,7 +15,7 @@ function {}:protocolId()
 end
 
 function {}:protocolName()
-    return {}
+    return "{}"
 end
 
 function {}:__tostring()
