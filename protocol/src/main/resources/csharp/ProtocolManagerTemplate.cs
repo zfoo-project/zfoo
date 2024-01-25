@@ -41,9 +41,9 @@ namespace zfoocs
         public static void Write(ByteBuffer buffer, object packet)
         {
             var protocolId = protocolIdMap[packet.GetType()];
-            // 写入协议号
+            // write protocol id to buffer
             buffer.WriteShort(protocolId);
-            // 写入包体
+            // write packet
             GetProtocol(protocolId).Write(buffer, packet);
         }
 
