@@ -23,6 +23,11 @@ namespace zfoocs
             {}
         }
 
+        public static short GetProtocolId(Type type)
+        {
+            return protocolIdMap[type];
+        }
+
         public static IProtocolRegistration GetProtocol(short protocolId)
         {
             var protocol = protocols[protocolId];
@@ -30,7 +35,6 @@ namespace zfoocs
             {
                 throw new Exception("[protocolId:" + protocolId + "] not exist");
             }
-
             return protocol;
         }
 
@@ -39,7 +43,6 @@ namespace zfoocs
             var protocolId = protocolIdMap[packet.GetType()];
             // 写入协议号
             buffer.WriteShort(protocolId);
-
             // 写入包体
             GetProtocol(protocolId).Write(buffer, packet);
         }
