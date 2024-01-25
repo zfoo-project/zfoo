@@ -33,6 +33,11 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
     void update(E entity);
 
     /**
+     * 同update()，不会校验更新的线程是否一致
+     */
+    void updateUnsafe(E entity);
+
+    /**
      * 更新缓存中的数据，立刻写入到数据库
      */
     void updateNow(E entity);

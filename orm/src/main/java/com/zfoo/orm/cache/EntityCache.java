@@ -139,10 +139,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     @Override
     public void update(E entity) {
-        AssertionUtils.notNull(entity);
-
         var currentPnode = cache.getIfPresent(entity.id());
-
         if (currentPnode == null) {
             currentPnode = new PNode<>(entity);
             cache.put(entity.id(), currentPnode);
@@ -165,6 +162,16 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         }
 
         // 加100以防止，立刻加载并且立刻修改数据的情况发生时，服务器取到的时间戳相同
+        currentPnode.setModifiedTime(TimeUtils.now() + 100);
+    }
+
+    @Override
+    public void updateUnsafe(E entity) {
+        var currentPnode = cache.getIfPresent(entity.id());
+        if (currentPnode == null) {
+            currentPnode = new PNode<>(entity);
+            cache.put(entity.id(), currentPnode);
+        }
         currentPnode.setModifiedTime(TimeUtils.now() + 100);
     }
 
