@@ -19,9 +19,7 @@ function {}:protocolName()
 end
 
 function {}:__tostring()
-    local jsonTemplate = "{}"
-    local result = string.format(jsonTemplate, {})
-    return result
+    return table.serializeTableToJson(self)
 end
 
 function {}:write(buffer, packet)

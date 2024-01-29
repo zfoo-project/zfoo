@@ -7,7 +7,5 @@ function Protocols.{}:protocolName()
 end
 
 function Protocols.{}:__tostring()
-    local jsonTemplate = "{}"
-    local result = string.format(jsonTemplate, {})
-    return result
+    return table.serializeTableToJson(self)
 end

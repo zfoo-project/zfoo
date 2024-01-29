@@ -17,23 +17,22 @@ local ByteBuffer = {}
 local trueBooleanStrValue = string.char(1)
 local falseBooleanStrValue = string.char(0)
 
-function table.arrayToString(array)
-    local items = {}
-    for index, element in pairs(array) do
-        table.insert(items, tostring(element))
+function serializeTableToJson(tbl)
+    local res = {}
+    for k, v in pairs(tbl) do
+        local key = tostring(k)
+        if type(v) == "number" then
+            res[#res + 1] = key .. ":" .. v
+        elseif type(v) == "string" then
+            res[#res + 1] = key .. ':"' .. v .. '"'
+        elseif type(v) == "table" then
+            res[#res + 1] = key .. ":" .. serializeTableToJson(v)
+        end
     end
-    local result = table.concat(items, ", ")
-    return "[" .. result .. "]";
+    return "{" .. table.concat(res, ",") .. "}"
 end
 
-function table.mapToString(map)
-    local items = {}
-    for key, value in pairs(map) do
-        table.insert(items, key .. ":" .. value)
-    end
-    local result = table.concat(items, ", ")
-    return "{" .. result .. "}";
-end
+table.serializeTableToJson = serializeTableToJson;
 
 -------------------------------------构造器-------------------------------------
 function ByteBuffer:new()

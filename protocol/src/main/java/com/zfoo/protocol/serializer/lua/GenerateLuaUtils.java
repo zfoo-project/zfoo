@@ -14,29 +14,23 @@
 package com.zfoo.protocol.serializer.lua;
 
 import com.zfoo.protocol.anno.Compatible;
-import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.registration.field.ArrayField;
-import com.zfoo.protocol.registration.field.ListField;
-import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,13 +126,11 @@ public abstract class GenerateLuaUtils {
 
             var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Lua);
             var valueOfMethod = valueOfMethod(registration);
-            var toStringJsonTemplate = toStringJsonTemplate(registration);
-            var toStringParams = toStringParams(registration);
             var writePacket = writePacket(registration);
             var readPacket = readPacket(registration);
 
             var protocol = StringUtils.format(protocolTemplate, classNote, protocolClazzName, StringUtils.EMPTY_JSON, protocolClazzName, valueOfMethod.trim());
-            var protocolBase = StringUtils.format(protocolBaseTemplate, protocolClazzName, protocolId, protocolClazzName, protocolClazzName, protocolClazzName, toStringJsonTemplate, toStringParams);
+            var protocolBase = StringUtils.format(protocolBaseTemplate, protocolClazzName, protocolId, protocolClazzName, protocolClazzName, protocolClazzName);
             var protocolWriter = StringUtils.format(protocolWriterTemplate, protocolClazzName, writePacket.trim());
             var protocolReader = StringUtils.format(protocolReaderTemplate, protocolClazzName, protocolClazzName, readPacket.trim());
 
@@ -221,15 +213,12 @@ public abstract class GenerateLuaUtils {
 
         var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Lua);
         var valueOfMethod = valueOfMethod(registration);
-        var toStringJsonTemplate = toStringJsonTemplate(registration);
-        var toStringParams = toStringParams(registration);
         var writePacket = writePacket(registration);
         var readPacket = readPacket(registration);
 
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, StringUtils.EMPTY_JSON, protocolClazzName
                 , valueOfMethod.trim(), protocolClazzName, protocolId, protocolClazzName, protocolClazzName
-                , protocolClazzName, toStringJsonTemplate, toStringParams
-                , protocolClazzName, writePacket.trim(), protocolClazzName, protocolClazzName, readPacket.trim(), protocolClazzName);
+                , protocolClazzName, protocolClazzName, writePacket.trim(), protocolClazzName, protocolClazzName, readPacket.trim(), protocolClazzName);
 
         var outputPath = StringUtils.format("{}/{}/{}.lua"
                 , protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
@@ -263,48 +252,6 @@ public abstract class GenerateLuaUtils {
             // 生成类型的注释
             luaBuilder.append(" -- ").append(typeNote).append(LS);
         }
-        return luaBuilder.toString();
-    }
-
-    private static String toStringJsonTemplate(ProtocolRegistration registration) {
-        var fields = registration.getFields();
-        var fieldRegistrations = registration.getFieldRegistrations();
-        var luaBuilder = new StringBuilder();
-        luaBuilder.append("{");
-        // when generate source code fields, use origin fields sort
-        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
-        var params = new ArrayList<String>();
-        for (var field : sequencedFields) {
-            var fieldName = field.getName();
-            params.add(StringUtils.format("{}:%s", fieldName));
-        }
-        luaBuilder.append(StringUtils.joinWith(", ", params.toArray()));
-        luaBuilder.append("}");
-        return luaBuilder.toString();
-    }
-
-    private static String toStringParams(ProtocolRegistration registration) {
-        var fields = registration.getFields();
-        if (ArrayUtils.isEmpty(fields)) {
-            return StringUtils.EMPTY_JSON;
-        }
-        var fieldRegistrations = registration.getFieldRegistrations();
-        var luaBuilder = new StringBuilder();
-        // when generate source code fields, use origin fields sort
-        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
-        var params = new ArrayList<String>();
-        for (var field : sequencedFields) {
-            var fieldName = field.getName();
-            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
-            if ((fieldRegistration instanceof ArrayField) || (fieldRegistration instanceof ListField)) {
-                params.add(StringUtils.format("table.arrayToString(self.{})", fieldName));
-            } else if (fieldRegistration instanceof MapField) {
-                params.add(StringUtils.format("table.mapToString(self.{})", fieldName));
-            } else {
-                params.add(StringUtils.format("self.{}", fieldName));
-            }
-        }
-        luaBuilder.append(StringUtils.joinWith(", ", params.toArray()));
         return luaBuilder.toString();
     }
 
