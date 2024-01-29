@@ -276,14 +276,7 @@ public abstract class GenerateLuaUtils {
         var params = new ArrayList<String>();
         for (var field : sequencedFields) {
             var fieldName = field.getName();
-            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
-            if ((fieldRegistration instanceof ArrayField) || (fieldRegistration instanceof ListField)) {
-                params.add(StringUtils.format("{}:[%s]", fieldName));
-            } else if (fieldRegistration instanceof MapField) {
-                params.add(StringUtils.format("{}:{%s}", fieldName));
-            } else {
-                params.add(StringUtils.format("{}:%s", fieldName));
-            }
+            params.add(StringUtils.format("{}:%s", fieldName));
         }
         luaBuilder.append(StringUtils.joinWith(", ", params.toArray()));
         luaBuilder.append("}");
@@ -303,8 +296,10 @@ public abstract class GenerateLuaUtils {
         for (var field : sequencedFields) {
             var fieldName = field.getName();
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
-            if ((fieldRegistration instanceof ArrayField) || (fieldRegistration instanceof ListField) || (fieldRegistration instanceof MapField)) {
-                params.add(StringUtils.format("table.concat(self.{}, \", \")", fieldName));
+            if ((fieldRegistration instanceof ArrayField) || (fieldRegistration instanceof ListField)) {
+                params.add(StringUtils.format("table.arrayToString(self.{})", fieldName));
+            } else if (fieldRegistration instanceof MapField) {
+                params.add(StringUtils.format("table.mapToString(self.{})", fieldName));
             } else {
                 params.add(StringUtils.format("self.{}", fieldName));
             }

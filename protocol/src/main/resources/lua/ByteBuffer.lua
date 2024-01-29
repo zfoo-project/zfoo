@@ -17,6 +17,24 @@ local ByteBuffer = {}
 local trueBooleanStrValue = string.char(1)
 local falseBooleanStrValue = string.char(0)
 
+function table.arrayToString(array)
+    local items = {}
+    for index, element in pairs(array) do
+        table.insert(items, tostring(element))
+    end
+    local result = table.concat(items, ", ")
+    return "[" .. result .. "]";
+end
+
+function table.mapToString(map)
+    local items = {}
+    for key, value in pairs(map) do
+        table.insert(items, key .. ":" .. value)
+    end
+    local result = table.concat(items, ", ")
+    return "{" .. result .. "}";
+end
+
 -------------------------------------构造器-------------------------------------
 function ByteBuffer:new()
     --buffer里的每一个元素为一个长度为1的字符串
