@@ -21,6 +21,9 @@ import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
+import com.zfoo.protocol.registration.field.ArrayField;
+import com.zfoo.protocol.registration.field.ListField;
+import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
 import com.zfoo.protocol.serializer.reflect.*;
@@ -266,19 +269,25 @@ public abstract class GenerateLuaUtils {
     private static String toStringJsonTemplate(ProtocolRegistration registration) {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
-        var gdBuilder = new StringBuilder();
-        gdBuilder.append("{");
+        var luaBuilder = new StringBuilder();
+        luaBuilder.append("{");
         // when generate source code fields, use origin fields sort
         var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
         var params = new ArrayList<String>();
         for (var field : sequencedFields) {
-            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            params.add(StringUtils.format("{}:%s", fieldName));
+            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
+            if ((fieldRegistration instanceof ArrayField) || (fieldRegistration instanceof ListField)) {
+                params.add(StringUtils.format("{}:[%s]", fieldName));
+            } else if (fieldRegistration instanceof MapField) {
+                params.add(StringUtils.format("{}:{%s}", fieldName));
+            } else {
+                params.add(StringUtils.format("{}:%s", fieldName));
+            }
         }
-        gdBuilder.append(StringUtils.joinWith(", ", params.toArray()));
-        gdBuilder.append("}");
-        return gdBuilder.toString();
+        luaBuilder.append(StringUtils.joinWith(", ", params.toArray()));
+        luaBuilder.append("}");
+        return luaBuilder.toString();
     }
 
     private static String toStringParams(ProtocolRegistration registration) {
@@ -287,17 +296,21 @@ public abstract class GenerateLuaUtils {
             return StringUtils.EMPTY_JSON;
         }
         var fieldRegistrations = registration.getFieldRegistrations();
-        var gdBuilder = new StringBuilder();
+        var luaBuilder = new StringBuilder();
         // when generate source code fields, use origin fields sort
         var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
         var params = new ArrayList<String>();
         for (var field : sequencedFields) {
-            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            params.add(StringUtils.format("self.{}", field.getName()));
+            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
+            if ((fieldRegistration instanceof ArrayField) || (fieldRegistration instanceof ListField) || (fieldRegistration instanceof MapField)) {
+                params.add(StringUtils.format("table.concat(self.{}, \", \")", fieldName));
+            } else {
+                params.add(StringUtils.format("self.{}", fieldName));
+            }
         }
-        gdBuilder.append(StringUtils.joinWith(", ", params.toArray()));
-        return gdBuilder.toString();
+        luaBuilder.append(StringUtils.joinWith(", ", params.toArray()));
+        return luaBuilder.toString();
     }
 
     private static String writePacket(ProtocolRegistration registration) {
