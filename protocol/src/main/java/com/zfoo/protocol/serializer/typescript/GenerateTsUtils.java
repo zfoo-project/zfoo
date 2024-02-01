@@ -122,7 +122,7 @@ public abstract class GenerateTsUtils {
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolTemplate.ts");
 
         var importSubProtocol = importSubProtocol(registration);
-        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.TypeScript);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.TypeScript, TAB, 0);
         var fieldDefinition = fieldDefinition(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
@@ -141,7 +141,7 @@ public abstract class GenerateTsUtils {
         // import IByteBuffer first
         var importBuilder = new StringBuilder();
         var protocolPath = GenerateProtocolPath.getProtocolPath(protocolId);
-        if (StringUtils.isEmpty(protocolPath) ) {
+        if (StringUtils.isEmpty(protocolPath)) {
             importBuilder.append(StringUtils.format("import IByteBuffer from './IByteBuffer';")).append(LS);
         } else {
             var splits = protocolPath.split(StringUtils.PERIOD_REGEX);
@@ -175,7 +175,7 @@ public abstract class GenerateTsUtils {
             var fieldName = field.getName();
             // 生成注释
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.TypeScript);
-            for(var fieldNote : fieldNotes) {
+            for (var fieldNote : fieldNotes) {
                 fieldDefinitionBuilder.append(TAB).append(fieldNote).append(LS);
             }
             var triple = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
@@ -215,7 +215,7 @@ public abstract class GenerateTsUtils {
             if (field.isAnnotationPresent(Compatible.class)) {
                 tsBuilder.append(TAB + TAB).append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
                 var compatibleReadObject = tsSerializer(fieldRegistration.serializer()).readObject(tsBuilder, 3, field, fieldRegistration);
-                tsBuilder.append(TAB + TAB+ TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
+                tsBuilder.append(TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
                 tsBuilder.append(TAB + TAB).append("}").append(LS);
                 continue;
             }

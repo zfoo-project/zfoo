@@ -117,7 +117,7 @@ public abstract class GenerateGoUtils {
                 : ClassUtils.getFileFromClassPathToString("go/ProtocolTemplate.go");
 
 
-        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Go);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Go, TAB, 0);
         var fieldDefinition = fieldDefinition(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);

@@ -25,6 +25,8 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
 
+import static com.zfoo.protocol.util.StringUtils.TAB;
+
 /**
  * EN: When generating the protocol, the document comments and field comments of the protocol will use this class
  * CN: 生成协议的时候，协议的文档注释和字段注释会使用这个类
@@ -55,15 +57,19 @@ public abstract class GenerateProtocolNote {
         protocolNoteMap = null;
     }
 
-    public static String classNote(short protocolId, CodeLanguage language) {
+    public static String classNote(short protocolId, CodeLanguage language, String tab, int deep) {
         var protocolNote = protocolNoteMap.get(protocolId);
         var classNote = protocolNote.getKey();
         if (StringUtils.isBlank(classNote)) {
             return StringUtils.EMPTY;
         }
-
-        classNote = formatNote(language, classNote);
-        return classNote;
+        var multipleLineNotes = classNote.split(FileUtils.LS_REGEX);
+        var notes = new ArrayList<String>();
+        for(var oneLineNote : multipleLineNotes) {
+            var formatFieldNote = formatNote(language, oneLineNote);
+            notes.add(tab.repeat(Math.max(0, deep)) + formatFieldNote);
+        }
+        return StringUtils.joinWith(FileUtils.LS, notes.toArray());
     }
 
     public static List<String> fieldNotes(short protocolId, String fieldName, CodeLanguage language) {

@@ -118,7 +118,7 @@ public abstract class GenerateJsUtils {
 
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolTemplate.js");
 
-        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.JavaScript);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.JavaScript, TAB, 0);
         var fieldDefinition = fieldDefinition(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);

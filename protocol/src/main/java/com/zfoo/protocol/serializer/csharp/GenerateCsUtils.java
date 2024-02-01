@@ -118,7 +118,7 @@ public abstract class GenerateCsUtils {
     /**
      * 生成协议类
      */
-    public static void createCsProtocolFile(ProtocolRegistration registration) throws IOException {
+    public static void createCsProtocolFile(ProtocolRegistration registration) {
         GenerateProtocolFile.index.set(0);
 
         var protocolId = registration.protocolId();
@@ -127,7 +127,7 @@ public abstract class GenerateCsUtils {
 
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolTemplate.cs");
 
-        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.CSharp);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.CSharp, TAB, 1);
         var fieldDefinition = fieldDefinition(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);

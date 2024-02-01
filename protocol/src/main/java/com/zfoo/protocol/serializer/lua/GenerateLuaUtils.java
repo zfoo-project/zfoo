@@ -124,7 +124,7 @@ public abstract class GenerateLuaUtils {
             var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
             GenerateProtocolFile.index.set(0);
 
-            var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Lua);
+            var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Lua, TAB, 0);
             var valueOfMethod = valueOfMethod(registration);
             var writePacket = writePacket(registration);
             var readPacket = readPacket(registration);
@@ -211,7 +211,7 @@ public abstract class GenerateLuaUtils {
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolTemplate.lua");
 
-        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Lua);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Lua, TAB, 0);
         var valueOfMethod = valueOfMethod(registration);
         var writePacket = writePacket(registration);
         var readPacket = readPacket(registration);

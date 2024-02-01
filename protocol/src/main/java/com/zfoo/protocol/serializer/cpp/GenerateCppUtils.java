@@ -129,7 +129,7 @@ public abstract class GenerateCppUtils {
         // protocol object
         var defineProtocolName = protocolClazzName.toUpperCase();
         var includeHeaders = includeSubProtocol(registration);
-        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Cpp);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Cpp, TAB, 1);
         var fieldDefinition = fieldDefinition(registration);
         var valueOfMethod = valueOfMethod(registration);
         var operator = operator(registration);

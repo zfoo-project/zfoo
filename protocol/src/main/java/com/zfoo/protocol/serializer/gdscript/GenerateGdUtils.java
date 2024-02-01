@@ -117,7 +117,7 @@ public abstract class GenerateGdUtils {
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
 
         var includeSubProtocol = includeSubProtocol(registration);
-        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.GdScript);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.GdScript, TAB_ASCII, 0);
         var fieldDefinition = fieldDefinition(registration);
         var toStringJsonTemplate = toStringJsonTemplate(registration);
         var toStringParams = toStringParams(registration);

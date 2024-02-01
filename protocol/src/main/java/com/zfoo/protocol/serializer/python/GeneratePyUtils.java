@@ -119,7 +119,7 @@ public abstract class GeneratePyUtils {
 
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("python/ProtocolTemplate.py");
 
-        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Python);
+        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.Python, TAB, 0);
         var fieldDefinition = fieldDefinition(registration);
         var writeObject = writeObject(registration);
         var readObject = readObject(registration);
