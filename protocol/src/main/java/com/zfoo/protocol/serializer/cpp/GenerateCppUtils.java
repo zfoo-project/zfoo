@@ -189,9 +189,9 @@ public abstract class GenerateCppUtils {
 
             var propertyFullName = StringUtils.format("{} {};", propertyType, propertyName);
             // 生成注释
-            var filedNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Cpp);
-            if (StringUtils.isNotBlank(filedNote)) {
-                cppBuilder.append(TAB + TAB).append(filedNote).append(LS);
+            var fieldNotes = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Cpp);
+            for(var fieldNote : fieldNotes) {
+                cppBuilder.append(TAB + TAB).append(fieldNote).append(LS);
             }
             cppBuilder.append(TAB + TAB).append(propertyFullName).append(LS);
         }

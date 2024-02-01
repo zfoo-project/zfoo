@@ -238,8 +238,8 @@ public abstract class GenerateLuaUtils {
             var fieldRegistration = fieldRegistrations[i];
             var fieldName = field.getName();
             // 生成注释
-            var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Lua);
-            if (StringUtils.isNotBlank(fieldNote)) {
+            var fieldNotes = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Lua);
+            for(var fieldNote : fieldNotes) {
                 luaBuilder.append(TAB + TAB).append(fieldNote).append(LS);
             }
             var fieldDefaultValue = luaSerializer(fieldRegistration.serializer()).fieldDefaultValue(field, fieldRegistration);

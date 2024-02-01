@@ -21,11 +21,10 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * EN: When generating the protocol, the document comments and field comments of the protocol will use this class
@@ -68,15 +67,20 @@ public abstract class GenerateProtocolNote {
         return classNote;
     }
 
-    public static String fieldNote(short protocolId, String fieldName, CodeLanguage language) {
+    public static List<String> fieldNote(short protocolId, String fieldName, CodeLanguage language) {
         var protocolNote = protocolNoteMap.get(protocolId);
         var fieldNoteMap = protocolNote.getValue();
         var fieldNote = fieldNoteMap.get(fieldName);
         if (StringUtils.isBlank(fieldNote)) {
-            return StringUtils.EMPTY;
+            return Collections.emptyList();
         }
-        fieldNote = formatNote(language, fieldNote);
-        return fieldNote;
+        var multipleLineNotes = fieldNote.split(FileUtils.LS_REGEX);
+        var notes = new ArrayList<String>();
+        for(var oneLineNote : multipleLineNotes) {
+            var formatFieldNote = formatNote(language, oneLineNote);
+            notes.add(formatFieldNote);
+        }
+        return notes;
     }
 
     private static String formatNote(CodeLanguage language, String fieldNote) {
@@ -87,14 +91,14 @@ public abstract class GenerateProtocolNote {
             case TypeScript:
             case CSharp:
             case Protobuf:
-                fieldNote = StringUtils.format("// {}", fieldNote).replace("\n", "\n// ");
+                fieldNote = StringUtils.format("// {}", fieldNote);
                 break;
             case Lua:
-                fieldNote = StringUtils.format("-- {}", fieldNote).replace("\n", "\n-- ");
+                fieldNote = StringUtils.format("-- {}", fieldNote);
                 break;
             case Python:
             case GdScript:
-                fieldNote = StringUtils.format("# {}", fieldNote).replace("\n", "\n# ");
+                fieldNote = StringUtils.format("# {}", fieldNote);
                 break;
             case Enhance:
             default:

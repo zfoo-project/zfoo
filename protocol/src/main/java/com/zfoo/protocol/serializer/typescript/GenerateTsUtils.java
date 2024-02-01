@@ -174,8 +174,8 @@ public abstract class GenerateTsUtils {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
             // 生成注释
-            var fieldNote = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.TypeScript);
-            if (StringUtils.isNotBlank(fieldNote)) {
+            var fieldNotes = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.TypeScript);
+            for(var fieldNote : fieldNotes) {
                 fieldDefinitionBuilder.append(TAB).append(fieldNote).append(LS);
             }
             var triple = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
