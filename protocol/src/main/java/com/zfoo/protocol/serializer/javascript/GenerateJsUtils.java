@@ -143,7 +143,7 @@ public abstract class GenerateJsUtils {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
             // 生成注释
-            var fieldNotes = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.JavaScript);
+            var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.JavaScript);
             for(var fieldNote : fieldNotes) {
                 fieldDefinitionBuilder.append(TAB).append(fieldNote).append(LS);
             }

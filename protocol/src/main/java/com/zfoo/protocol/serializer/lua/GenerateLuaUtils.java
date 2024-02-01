@@ -238,7 +238,7 @@ public abstract class GenerateLuaUtils {
             var fieldRegistration = fieldRegistrations[i];
             var fieldName = field.getName();
             // 生成注释
-            var fieldNotes = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Lua);
+            var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Lua);
             for(var fieldNote : fieldNotes) {
                 luaBuilder.append(TAB + TAB).append(fieldNote).append(LS);
             }

@@ -14,7 +14,6 @@
 package com.zfoo.protocol.generate;
 
 import com.zfoo.protocol.anno.Note;
-import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
@@ -67,7 +66,7 @@ public abstract class GenerateProtocolNote {
         return classNote;
     }
 
-    public static List<String> fieldNote(short protocolId, String fieldName, CodeLanguage language) {
+    public static List<String> fieldNotes(short protocolId, String fieldName, CodeLanguage language) {
         var protocolNote = protocolNoteMap.get(protocolId);
         var fieldNoteMap = protocolNote.getValue();
         var fieldNote = fieldNoteMap.get(fieldName);

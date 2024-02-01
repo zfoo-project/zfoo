@@ -174,7 +174,7 @@ public abstract class GenerateTsUtils {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
             // 生成注释
-            var fieldNotes = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.TypeScript);
+            var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.TypeScript);
             for(var fieldNote : fieldNotes) {
                 fieldDefinitionBuilder.append(TAB).append(fieldNote).append(LS);
             }

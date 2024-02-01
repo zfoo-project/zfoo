@@ -189,7 +189,7 @@ public abstract class GenerateCppUtils {
 
             var propertyFullName = StringUtils.format("{} {};", propertyType, propertyName);
             // 生成注释
-            var fieldNotes = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Cpp);
+            var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Cpp);
             for(var fieldNote : fieldNotes) {
                 cppBuilder.append(TAB + TAB).append(fieldNote).append(LS);
             }

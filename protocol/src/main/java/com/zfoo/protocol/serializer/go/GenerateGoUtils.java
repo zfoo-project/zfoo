@@ -151,7 +151,7 @@ public abstract class GenerateGoUtils {
 
             var propertyFullName = StringUtils.format("{} {}", fieldName, fieldType);
             // 生成注释
-            var fieldNotes = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Go);
+            var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Go);
             for(var fieldNote : fieldNotes) {
                 goBuilder.append(TAB).append(fieldNote).append(LS);
             }

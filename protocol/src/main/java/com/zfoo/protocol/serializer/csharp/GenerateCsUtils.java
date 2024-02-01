@@ -157,7 +157,7 @@ public abstract class GenerateCsUtils {
             var propertyType = toCsClassName(field.getGenericType().getTypeName());
             var propertyFullName = StringUtils.format("public {} {};", propertyType, fieldName);
             // 生成注释
-            var fieldNotes = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.CSharp);
+            var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.CSharp);
             for(var fieldNote : fieldNotes) {
                 csBuilder.append(TAB + TAB).append(fieldNote).append(LS);
             }

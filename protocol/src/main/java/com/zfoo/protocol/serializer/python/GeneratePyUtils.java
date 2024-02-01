@@ -143,7 +143,7 @@ public abstract class GeneratePyUtils {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
             // 生成注释
-            var fieldNotes = GenerateProtocolNote.fieldNote(protocolId, fieldName, CodeLanguage.Python);
+            var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Python);
             for(var fieldNote : fieldNotes) {
                 pyBuilder.append(TAB).append(fieldNote).append(LS);
             }
