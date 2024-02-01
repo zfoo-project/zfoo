@@ -129,7 +129,7 @@ public class Router implements IRouter {
                 // 这里是：别的服务提供者提供授权给网关，比如：在玩家登录后，home服查到了玩家uid，然后发给Gateway服
                 var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
                 if (gatewaySession == null) {
-                    logger.warn("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
+                    logger.error("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
                     return;
                 }
                 send(gatewaySession, packet, gatewayAttachment.getSignalAttachment());
