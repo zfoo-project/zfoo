@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace zfoocs
 {
-    {}
+{}
     public class {}
     {
         {}
