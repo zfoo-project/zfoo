@@ -43,7 +43,7 @@ public class FastTreeMapIntLongTest {
         Assert.assertEquals(fastTreeMap.getValueByCeilingKey(1), 2);
         Assert.assertEquals(fastTreeMap.getValueByCeilingKey(45), 46);
         Assert.assertEquals(fastTreeMap.getValueByCeilingKey(97), 98);
-        Assert.assertEquals(fastTreeMap.getValueByCeilingKey(100), 0);
+        Assert.assertEquals(fastTreeMap.indexOfNearestCeilingKey(100), treeMap.size() - 1);
         Assert.assertEquals(fastTreeMap.indexOfNearestCeilingKey(-1), 0);
         Assert.assertEquals(fastTreeMap.indexOfNearestCeilingKey(0), 0);
         Assert.assertEquals(fastTreeMap.indexOfNearestCeilingKey(1), 1);

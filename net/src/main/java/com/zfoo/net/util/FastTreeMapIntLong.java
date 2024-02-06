@@ -61,6 +61,7 @@ public class FastTreeMapIntLong {
 
     /**
      * 在一个从小到大的升序数组中，使用二分查找算法搜索给定的key
+     *
      * @param key 需要搜索的值
      * @return 返回搜索到值的数组下标索引，如果没有查找到返回-1
      */
@@ -81,9 +82,9 @@ public class FastTreeMapIntLong {
     }
 
     /**
-     * Gets the index of entry corresponding to the specified key;
+     * returns the index of entry for the least key greater than the specified key;
+     * if key greater than the max key, returns the last index of entry;
      * if no such entry exists, returns the index of entry for the least key greater than the specified key;
-     * if no such entry exists, returns 0.
      * if no such entry exists, returns -1.
      */
     public int indexOfNearestCeilingKey(int key) {
@@ -93,15 +94,12 @@ public class FastTreeMapIntLong {
 
         var size = keys.length;
         // 目标数小于或等于数组的第一个元素
-        if(key < 0){
-            key = Math.abs(key);
-        }
         if (key <= keys[0]) {
             return 0;
         }
-        // 目标数大于数组的第一个元素
+        // 目标数大于数组的最后元素
         if (key > keys[size - 1]) {
-            return 0;
+            return size - 1;
         }
 
         // 二分查找目标数
