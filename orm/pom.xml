@@ -4,177 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.zfoo</groupId>
+    <parent>
+        <groupId>com.zfoo</groupId>
+        <artifactId>parent</artifactId>
+        <version>3.3.0</version>
+        <relativePath>../maven/parent/pom.xml</relativePath>
+    </parent>
+
     <artifactId>orm</artifactId>
     <packaging>jar</packaging>
-    <version>3.3.0</version>
-
-    <properties>
-        <zfoo.version>3.3.0</zfoo.version>
-        <!-- spring and spring boot -->
-        <spring.version>6.1.2</spring.version>
-        <spring.boot.version>3.2.1</spring.boot.version>
-        <junit.version>4.13.2</junit.version>
-        <!-- bytecode enhancement -->
-        <javassist.version>3.29.2-GA</javassist.version>
-        <bytebuddy.version>1.14.6</bytebuddy.version>
-        <!-- network framework -->
-        <netty.version>4.1.104.Final</netty.version>
-        <!-- zookeeper -->
-        <curator.version>5.5.0</curator.version>
-        <!-- hardware detection -->
-        <oshi.version>6.4.5</oshi.version>
-        <!-- database and cache -->
-        <mongodb-driver-sync.version>4.10.2</mongodb-driver-sync.version>
-        <caffeine.version>3.1.8</caffeine.version>
-        <!-- Office document parsing -->
-        <poi.version>5.2.3</poi.version>
-        <csv.version>1.10.0</csv.version>
-        <!-- maven core plugin -->
-        <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
-        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
-        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-        <maven-shade-plugin.version>3.5.0</maven-shade-plugin.version>
-        <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
-        <!-- deploy maven repository -->
-        <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
-        <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
-        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
-        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
-        <versions-maven-plugin.version>2.16.0</versions-maven-plugin.version>
-        <!-- encoding and java version -->
-        <project.build.sourceEncoding>${file.encoding}</project.build.sourceEncoding>
-        <maven.compiler.encoding>${file.encoding}</maven.compiler.encoding>
-        <java.version>17</java.version>
-        <file.encoding>UTF-8</file.encoding>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.zfoo</groupId>
-            <artifactId>event</artifactId>
-            <version>${zfoo.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.zfoo</groupId>
-            <artifactId>scheduler</artifactId>
-            <version>${zfoo.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-            <version>${mongodb-driver-sync.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-            <version>${caffeine.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>${javassist.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-            <version>${spring.boot.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <testSourceDirectory>src/test/java</testSourceDirectory>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>${maven-clean-plugin.version}</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${file.encoding}</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>${maven-resources-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <encoding>${file.encoding}</encoding>
-                            <outputDirectory>${project.build.directory}/resource</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources/</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <threadCount>8</threadCount>
-                    <argLine>-Dfile.encoding=${file.encoding}</argLine>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>${maven-deploy-plugin.version}</version>
-            </plugin>
-        </plugins>
-    </build>
 
 
     <!-- deploy to maven repository should specify these tag.(部署到maven中央仓库必须指定下面的标签) -->
@@ -182,101 +20,51 @@
     <description>zfoo orm is MongoDB orm framework</description>
     <url>https://github.com/zfoo-project/zfoo</url>
 
-    <developers>
-        <developer>
-            <name>all contributors</name>
-            <email>all@zfoo.com</email>
-            <url>https://github.com/zfoo-project/zfoo</url>
-        </developer>
-    </developers>
+    <properties>
+        <test.skip>false</test.skip>
+    </properties>
 
-    <organization>
-        <name>zfoo</name>
-        <url>https://github.com/zfoo-project/zfoo</url>
-    </organization>
+    <dependencies>
+        <dependency>
+            <groupId>com.zfoo</groupId>
+            <artifactId>event</artifactId>
+        </dependency>
 
-    <licenses>
-        <license>
-            <name>Apache License 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
+        <dependency>
+            <groupId>com.zfoo</groupId>
+            <artifactId>scheduler</artifactId>
+        </dependency>
 
-    <scm>
-        <connection>https://github.com/zfoo-project/zfoo.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:zfoo-project/zfoo.git</developerConnection>
-        <url>https://github.com/zfoo-project/zfoo</url>
-    </scm>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+        </dependency>
 
-    <profiles>
-        <profile>
-            <id>ossrh</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>${nexus-staging-maven-plugin.version}</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
 
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+        </dependency>
 
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
 
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven-gpg-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-                </plugins>
-            </build>
-
-            <distributionManagement>
-                <repository>
-                    <id>ossrh</id>
-                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-    </profiles>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
