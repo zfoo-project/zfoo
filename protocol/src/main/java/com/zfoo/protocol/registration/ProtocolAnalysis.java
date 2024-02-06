@@ -682,12 +682,16 @@ public class ProtocolAnalysis {
     // 协议智能语法分析，错误的协议定义将无法启动程序并给出错误警告
     //-----------------------------------------------------------------------
     private static void initProtocolClass(short protocolId, Class<?> clazz) {
+        // 协议号重复定义
+        if (protocolIdMap.containsKey(clazz)) {
+            throw new RunException("duplicate protocol:[{}] protocolId:[{}] and [protocolId:{}]", clazz.getSimpleName(), protocolIdMap.get(clazz), protocolId);
+        }
         protocolIdMap.put(clazz, protocolId);
         protocolIdPrimitiveMap.putPrimitive(clazz.hashCode(), protocolId);
-        var previous = protocolClassMap.put(protocolId, clazz);
+        var previousProtocolClass = protocolClassMap.put(protocolId, clazz);
         // 协议号重复
-        if (previous != null) {
-            throw new RunException("[{}][{}] protocol number [protocolId:{}] is repeated", clazz.getCanonicalName(), previous.getCanonicalName(), protocolId);
+        if (previousProtocolClass != null) {
+            throw new RunException("[{}][{}] protocol number [protocolId:{}] is repeated", clazz.getCanonicalName(), previousProtocolClass.getCanonicalName(), protocolId);
         }
     }
 
