@@ -43,7 +43,6 @@ import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.*;
 import io.netty.util.collection.ShortObjectHashMap;
-import io.netty.util.concurrent.FastThreadLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
@@ -70,7 +69,7 @@ public class Router implements IRouter {
      * atReceiver会设置attachment，但是在方法调用完成会取消，不需要过多关注。
      * asyncAsk会再次设置attachment，需要重点关注。
      */
-    private final FastThreadLocal<Object> serverReceiverAttachmentThreadLocal = new FastThreadLocal<>();
+    private final FastThreadLocalAdapter<Object> serverReceiverAttachmentThreadLocal = new FastThreadLocalAdapter<>();
 
     /**
      * 在服务端收到数据后，会调用这个方法. 这个方法在BaseRouteHandler.java的channelRead中被调用
@@ -359,31 +358,24 @@ public class Router implements IRouter {
 
         // The routing of the message
         var receiver = receiverMap.get(ProtocolManager.protocolId(packet.getClass()));
-        var threadLocalAttachment = attachment != null && receiver.task() != Task.VirtualThread;
         try {
-
             // 接收者（服务器）同步和异步消息的接收
-            if (threadLocalAttachment) {
-                serverReceiverAttachmentThreadLocal.set(attachment);
-            }
+            serverReceiverAttachmentThreadLocal.set(attachment);
 
+            // 虚拟线程赋值给ThreadLocal会出错，这里给使用者一个提示
             if (receiver.task() == Task.VirtualThread && receiver.attachment() == null) {
-                logger.warn("virtual thread task can not set Attachment, may cause some sync and async timeout exception, please use attachment in receiver method signature and use attachment in sync and async request");
+                logger.warn("virtual thread task can not set Attachment to ThreadLocal, may cause some sync and async timeout exception, please use attachment in receiver method signature and use attachment in sync and async request");
             }
 
             receiver.invoke(session, packet, attachment);
         } catch (Exception e) {
             EventBus.post(ServerExceptionEvent.valueOf(session, packet, attachment, e));
-            logger.error(StringUtils.format("at{} e[uid:{}][sid:{}] invoke exception"
-                    , StringUtils.capitalize(packet.getClass().getSimpleName()),session.getUid(), session.getSid()), e);
+            logger.error("at{} e[uid:{}][sid:{}] invoke exception", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), e);
         } catch (Throwable t) {
-            logger.error(StringUtils.format("at{} e[uid:{}][sid:{}] invoke error"
-                    , StringUtils.capitalize(packet.getClass().getSimpleName()),session.getUid(), session.getSid()), t);
+            logger.error("at{} e[uid:{}][sid:{}] invoke error", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), t);
         } finally {
             // 如果有服务器在处理同步或者异步消息的时候由于错误没有返回给客户端消息，则可能会残留serverAttachment，所以先移除
-            if (threadLocalAttachment) {
-                serverReceiverAttachmentThreadLocal.set(null);
-            }
+            serverReceiverAttachmentThreadLocal.set(null);
         }
     }
 
