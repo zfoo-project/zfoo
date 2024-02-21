@@ -13,6 +13,10 @@ public class FastThreadLocalAdapter<T> {
 
     private Supplier<T> supplier;
 
+    public FastThreadLocalAdapter() {
+        this.fastThreadLocal = new FastThreadLocal<>();
+    }
+
     public FastThreadLocalAdapter(Supplier<T> supplier) {
         this.supplier = supplier;
         this.fastThreadLocal = new FastThreadLocal<>() {
@@ -27,4 +31,9 @@ public class FastThreadLocalAdapter<T> {
 //        return Thread.currentThread().isVirtual() ? supplier.get() : fastThreadLocal.get();
         return fastThreadLocal.get();
     }
+
+    public void set(T value) {
+        fastThreadLocal.set(value);
+    }
+
 }
