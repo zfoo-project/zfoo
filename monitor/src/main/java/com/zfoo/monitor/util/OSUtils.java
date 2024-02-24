@@ -15,6 +15,7 @@ package com.zfoo.monitor.util;
 
 import com.zfoo.monitor.*;
 import com.zfoo.net.util.NetUtils;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.UuidUtils;
@@ -322,7 +323,7 @@ public abstract class OSUtils {
 
             // 返回编译是否成功
             if (exitValue != 0) {
-                throw new RuntimeException("error executing command, return code:" + exitValue);
+                throw new RunException("error executing command exitValue:[{}] result:[{}]", exitValue, result);
             }
 
             return result;
