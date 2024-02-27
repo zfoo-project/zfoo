@@ -13,6 +13,7 @@
 package com.zfoo.storage.manager;
 
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.*;
 import com.zfoo.storage.anno.Index;
 import com.zfoo.storage.interpreter.ResourceInterpreter;
@@ -220,6 +221,11 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
                 }
             } catch (Exception e) {
             }
+        }
+
+        // 所有的方法都取不到Func对应的属性名称则抛出异常
+        if (indexName == null) {
+            throw new RunException("can not get indexName from func:[{}]", func);
         }
 
         funcCaches.put(func, indexName);
