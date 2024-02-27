@@ -13,6 +13,7 @@
 package com.zfoo.storage.anno;
 
 import org.springframework.aot.hint.annotation.Reflective;
+import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
@@ -32,6 +33,7 @@ public @interface GraalvmNativeStorage {
     /**
      * graalvm build must specify resource path
      */
+    @AliasFor(annotation=Component.class)
     String value();
 
 }
