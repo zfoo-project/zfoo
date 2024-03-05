@@ -38,7 +38,8 @@ namespace zfoocs
             int beforeReadIndex = buffer.ReadOffset();
             {} packet = new {}();
             {}
-            if (length > 0) {
+            if (length > 0)
+            {
                 buffer.SetReadOffset(beforeReadIndex + length);
             }
             return packet;
