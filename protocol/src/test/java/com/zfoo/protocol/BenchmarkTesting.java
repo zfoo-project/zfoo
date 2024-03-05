@@ -14,6 +14,7 @@
 package com.zfoo.protocol;
 
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONB;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -70,6 +71,7 @@ public class BenchmarkTesting {
 
             zfooTest();
             jsonbTest();
+            fastJson2Test();
             furyTest();
             kryoTest();
             protobufTest();
@@ -215,6 +217,43 @@ public class BenchmarkTesting {
                 var mess = JSONB.parseObject(bytes, ComplexObject.class);
             }
             System.out.println(StringUtils.format("[fastjsonb]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSONB.toBytes(complexObject).length, System.currentTimeMillis() - startTime));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void fastJson2Test() {
+        try {
+            // 序列化和反序列化简单对象
+            long startTime = System.currentTimeMillis();
+            for (int i = 0; i < benchmark; i++) {
+                var str = JSON.toJSONString(simpleObject);
+                var mess = JSON.parseObject(str, SimpleObject.class);
+
+                // 这种通过流写入的方式速度奇慢
+                // JSONB.writeTo(output, normalObject);
+                // var mess = JSONB.parseObject(input, NormalObject.class);
+            }
+
+            System.out.println(StringUtils.format("[fastjson2]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSON.toJSONString(simpleObject).getBytes().length, System.currentTimeMillis() - startTime));
+
+            // 序列化和反序列化常规对象
+            startTime = System.currentTimeMillis();
+            for (int i = 0; i < benchmark; i++) {
+                var str = JSON.toJSONString(normalObject);
+                var mess = JSON.parseObject(str, NormalObject.class);
+            }
+
+            System.out.println(StringUtils.format("[fastjson2]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(),JSON.toJSONString(normalObject).getBytes().length,System.currentTimeMillis() - startTime));
+
+            // 序列化和反序列化复杂对象
+            startTime = System.currentTimeMillis();
+            for (int i = 0; i < benchmark; i++) {
+                var str = JSON.toJSONString(complexObject);
+                var mess = JSON.parseObject(str, ComplexObject.class);
+            }
+            System.out.println(StringUtils.format("[fastjson2]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSON.toJSONString(complexObject).getBytes().length, System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
