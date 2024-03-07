@@ -17,6 +17,11 @@ import java.io.IOException;
 import java.lang.instrument.ClassDefinition;
 
 /**
+ * Hotswap java class
+ * <p>
+ * EN: Prefer using simple Javassist for hot updates, followed by Byte Buddy hot updates
+ * CN: 优先使用简单的Javassist做热更新，因为Byte Buddy使用了更为复杂的ASM，spring boot web项目中会优先使用Byte Buddy热更新
+ *
  * @author godotg
  */
 public abstract class HotSwapUtils {
@@ -24,12 +29,12 @@ public abstract class HotSwapUtils {
     private static final Logger logger = LoggerFactory.getLogger(HotSwapUtils.class);
 
     /**
-     * 热更新java文件
-     * JVM的启动参数，jdk11过后默认JVM不允许连接自己，需要加上JVM启动参数: -Djdk.attach.allowAttachSelf=true
+     * need to add JVM startup parameters: -Djdk.attach.allowAttachSelf=true
      * <p>
-     * 优先使用简单的Javassist做热更新，因为Byte Buddy使用了更为复杂的ASM，spring boot web项目中会优先使用Byte Buddy热更新
+     * JVM的启动参数，jdk11过后默认JVM不允许连接自己，所以需要自己添加 -Djdk.attach.allowAttachSelf=true 启动参数
      * <p>
      * note: 需要配置 JAVA_HOME 环境变量，如果没有配置这个环境变量可能会导致未知异常
+     * note: 使用 -cp 或者 -Djava.ext.dirs 参数可能会导致热更新未知异常，推荐使用maven-shade-plugin或者spring-boot-maven-plugin将工程打包进一个jar里。
      *
      * @param bytes .class结尾的字节码文件
      */
