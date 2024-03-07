@@ -35,6 +35,7 @@ public abstract class HotSwapUtils {
      * <p>
      * note: 需要配置 JAVA_HOME 环境变量，如果没有配置这个环境变量可能会导致未知异常
      * note: 使用 -cp 或者 -Djava.ext.dirs 参数可能会导致热更新未知异常，推荐使用maven-shade-plugin或者spring-boot-maven-plugin将工程打包进一个jar里。
+     * note: 使用 -cp热更时会有概率出现java.lang.NoClassDefFoundError，其中多现于Lambda表达式和静态Enum的类中
      *
      * @param bytes .class结尾的字节码文件
      */
