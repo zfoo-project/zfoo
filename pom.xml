@@ -140,8 +140,7 @@
         <curator.version>5.5.0</curator.version>
         <!-- hardware detection -->
         <oshi.version>6.4.5</oshi.version>
-        <!-- database and cache -->
-        <mongodb-driver-sync.version>4.10.2</mongodb-driver-sync.version>
+        <!-- cache -->
         <caffeine.version>3.1.8</caffeine.version>
         <!-- Office document parsing -->
         <poi.version>5.2.3</poi.version>
