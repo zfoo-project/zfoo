@@ -33,6 +33,10 @@ import java.util.*;
 import static com.zfoo.protocol.util.FileUtils.LS;
 import static com.zfoo.protocol.util.StringUtils.TAB;
 
+/**
+ * from:
+ * https://github.com/edap-io/edap/
+ */
 public abstract class GeneratePbUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(GeneratePbUtils.class);
