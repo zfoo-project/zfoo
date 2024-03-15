@@ -131,16 +131,15 @@ public class ProtocolAnalysis {
     public static synchronized void analyzeAuto(List<Class<?>> protocolClassList, GenerateOperation generateOperation) {
         AssertionUtils.notNull(subProtocolIdMap, "[{}] initialization has already been completed, please do not repeat the initialization", ProtocolManager.class.getSimpleName());
         // 获取所有协议类
-        LinkedHashSet<Class> tempProtocolClassSet = new LinkedHashSet<>(protocolClassList);
+        var tempProtocolClassSet = new LinkedHashSet<Class<?>>(protocolClassList);
         //去重
         protocolClassList = new ArrayList<>();
-        for (Class clazz : tempProtocolClassSet) {
-            protocolClassList.add(clazz);
-        }
-        Set<Class> relevantClassList = new LinkedHashSet<>(protocolClassList);
+        protocolClassList.addAll(tempProtocolClassSet);
+
+        var relevantClassList = new LinkedHashSet<Class<?>>(protocolClassList);
         for (var clazz : protocolClassList) {
-            Set<Class<?>> classSet = ClassUtils.relevantClass(clazz);
-            for (Class cls : classSet) {
+            var classSet = ClassUtils.relevantClass(clazz);
+            for (var cls : classSet) {
                 if (!relevantClassList.contains(cls)) {
                     int protocolId = getProtocolIdAndCheckClass(cls);
                     if (protocolId >= 0) {
@@ -175,7 +174,7 @@ public class ProtocolAnalysis {
         }
 
         // 协议id和协议信息对应起来
-        for (Class protocolClass : relevantClassList) {
+        for (var protocolClass : relevantClassList) {
             var registration = parseProtocolRegistration(protocolClass, ProtocolModule.DEFAULT_PROTOCOL_MODULE);
             protocols[registration.protocolId()] = registration;
         }
@@ -478,7 +477,7 @@ public class ProtocolAnalysis {
                 registrationList.add(toRegistration(clazz, field));
             }
 
-            Constructor constructor;
+            Constructor<?> constructor;
             if (isRecord) {
                 constructor = ReflectionUtils.getConstructor(clazz, declaredFields.stream().map(p -> p.getType()).toList().toArray(new Class[]{}));
             } else {
