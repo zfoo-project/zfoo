@@ -53,7 +53,7 @@
 # @author godotg
 
 ## java command path
-JAVA_HOME="/usr/local/java/bin"
+JAVA_HOME="/usr/local/java"
 JAVA_JVM_OPTIONS="-Dspring.profiles.active=pro -XX:InitialHeapSize=1g -XX:MaxHeapSize=1g -XX:AutoBoxCacheMax=20000 -XX:+UseStringDeduplication -XX:+HeapDumpOnOutOfMemoryError -Djdk.attach.allowAttachSelf=true -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8"
 
 if [ $# -lt 1 ]; then
@@ -70,7 +70,7 @@ source /etc/profile
 function waitAllProcessesExit() {
     while true; do
         local runningProcesses
-        runningProcesses=$(${JAVA_HOME}/jps -lvm | grep ${1})
+        runningProcesses=$(${JAVA_HOME}/bin/jps -lvm | grep ${1})
 
         if [ -n "${runningProcesses}" ]; then
             echo "The following Java processes are being shut down ${1}："
@@ -146,7 +146,7 @@ function waitLogFile() {
 function stop() {
     echo "######################################################################################################################### Ⅰ stop #########################################################################################################################"
     local pids
-    pids=$(${JAVA_HOME}/jps | grep ${1} | awk '{print $1}' | paste -d " " -s)
+    pids=$(${JAVA_HOME}/bin/jps | grep ${1} | awk '{print $1}' | paste -d " " -s)
 
     if [ -z "${pids}" ]; then
         echo "Did not find any Java process containing the ${1} keyword"
@@ -177,7 +177,7 @@ function stop() {
     echo "*************************************  jmap  *************************************"
     for pid in ${pids}; do
         echo "${pid}->Information about the top 20 class instances of the process"
-        ${JAVA_HOME}/jmap -histo ${pid} | head -n 5
+        ${JAVA_HOME}/bin/jmap -histo ${pid} | head -n 5
         echo -e "\n"
     done
 
@@ -250,8 +250,8 @@ function start() {
 
     # -XX:+AlwaysPreTouch，并置零内存页面，可能令得启动时慢上一点，但后面访问时会更流畅，比如页面会连续分配
     # 输出到文件  >> output.log 2>&1 &
-    echo "${JAVA_HOME}/java ${JAVA_JVM_OPTIONS} -jar ${jarPath} >/dev/null 2>&1 &"
-    nohup ${JAVA_HOME}/java ${JAVA_JVM_OPTIONS} -jar ${jarPath} >/dev/null 2>&1 &
+    echo "${JAVA_HOME}/bin/java ${JAVA_JVM_OPTIONS} -jar ${jarPath} >/dev/null 2>&1 &"
+    nohup ${JAVA_HOME}/bin/java ${JAVA_JVM_OPTIONS} -jar ${jarPath} >/dev/null 2>&1 &
 
     # If there is no info log, keep waiting
     waitLogFile
