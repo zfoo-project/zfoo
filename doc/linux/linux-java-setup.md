@@ -40,9 +40,8 @@ rm -rf JDK的安装路径
 
 ```
 JAVA_HOME=/usr/local/java
-JRE_HOME=$JAVA_HOME/lib
 PATH=$JAVA_HOME/bin:$PATH
-export JAVA_HOME JRE_HOME PATH
+export JAVA_HOME PATH
 ```
 
 - source /etc/profile，加载环境变量
