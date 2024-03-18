@@ -24,6 +24,7 @@ import com.zfoo.orm.model.EntityDef;
 import com.zfoo.orm.model.IEntity;
 import com.zfoo.orm.query.Page;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
@@ -137,62 +138,66 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         return entity;
     }
 
-    @Override
-    public void update(E entity) {
-        var currentPnode = cache.getIfPresent(entity.id());
+    /**
+     * 校验需要更新的entity和缓存的entity是否为同一个entity
+     */
+    private PNode<E> fetchCachePNode(E entity, boolean safe) {
+        var id = entity.id();
+        var currentPnode = cache.getIfPresent(id);
         if (currentPnode == null) {
             currentPnode = new PNode<>(entity);
             cache.put(entity.id(), currentPnode);
         }
 
-        var pnodeThreadId = currentPnode.getThreadId();
-        var currentThreadId = Thread.currentThread().getId();
-        if (pnodeThreadId != currentThreadId) {
-            if (pnodeThreadId == 0) {
-                currentPnode.setThreadId(currentThreadId);
-            } else {
-                var pnodeThread = ThreadUtils.findThread(pnodeThreadId);
-                if (pnodeThread == null) {
-                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[threadId:{}]，第2次更新的线程[threadId:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId);
+        // 比较地址是否相等
+        if (entity != currentPnode.getEntity()) {
+            throw new RunException("cache entity not equal with update entity [id:{}]", id);
+        }
+
+        if (safe) {
+            var pnodeThreadId = currentPnode.getThreadId();
+            var currentThreadId = Thread.currentThread().getId();
+            if (pnodeThreadId != currentThreadId) {
+                if (pnodeThreadId == 0) {
+                    currentPnode.setThreadId(currentThreadId);
                 } else {
-                    logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[threadId:{}][threadName:{}]，第2次更新的线程[threadId:{}][threadName:{}]"
-                            , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, pnodeThread.getName(), currentThreadId, Thread.currentThread().getName());
+                    var pnodeThread = ThreadUtils.findThread(pnodeThreadId);
+                    if (pnodeThread == null) {
+                        logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[threadId:{}]，第2次更新的线程[threadId:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId);
+                    } else {
+                        logger.warn("[{}][id:{}]有并发写风险，第一次更新的线程[threadId:{}][threadName:{}]，第2次更新的线程[threadId:{}][threadName:{}]"
+                                , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, pnodeThread.getName(), currentThreadId, Thread.currentThread().getName());
+                    }
                 }
             }
         }
 
+        return currentPnode;
+    }
+
+    @Override
+    public void update(E entity) {
+        var currentPnode = fetchCachePNode(entity, true);
         // 加100以防止，立刻加载并且立刻修改数据的情况发生时，服务器取到的时间戳相同
         currentPnode.setModifiedTime(TimeUtils.now() + 100);
     }
 
     @Override
     public void updateUnsafe(E entity) {
-        var currentPnode = cache.getIfPresent(entity.id());
-        if (currentPnode == null) {
-            currentPnode = new PNode<>(entity);
-            cache.put(entity.id(), currentPnode);
-        }
+        var currentPnode = fetchCachePNode(entity, false);
         currentPnode.setModifiedTime(TimeUtils.now() + 100);
     }
 
     @Override
     public void updateNow(E entity) {
-        update(entity);
-        OrmContext.getAccessor().update(entity);
-        var currentPnode = cache.getIfPresent(entity.id());
-        var now = TimeUtils.now();
-        currentPnode.setModifiedTime(now);
-        currentPnode.setWriteToDbTime(now);
+        var currentPnode = fetchCachePNode(entity, true);
+        OrmContext.getAccessor().update(currentPnode.getEntity());
     }
 
     @Override
     public void updateNowUnsafe(E entity) {
-        updateUnsafe(entity);
-        OrmContext.getAccessor().update(entity);
-        var currentPnode = cache.getIfPresent(entity.id());
-        var now = TimeUtils.now();
-        currentPnode.setModifiedTime(now);
-        currentPnode.setWriteToDbTime(now);
+        var currentPnode = fetchCachePNode(entity, false);
+        OrmContext.getAccessor().update(currentPnode.getEntity());
     }
 
     @Override
