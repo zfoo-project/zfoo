@@ -141,25 +141,25 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     /**
      * 校验需要更新的entity和缓存的entity是否为同一个entity
      */
-    private PNode<E> fetchCachePNode(E entity, boolean safe) {
+    private PNode<E> fetchCachePnode(E entity, boolean safe) {
         var id = entity.id();
-        var currentPnode = cache.getIfPresent(id);
-        if (currentPnode == null) {
-            currentPnode = new PNode<>(entity);
-            cache.put(entity.id(), currentPnode);
+        var cachePnode = cache.getIfPresent(id);
+        if (cachePnode == null) {
+            cachePnode = new PNode<>(entity);
+            cache.put(entity.id(), cachePnode);
         }
 
         // 比较地址是否相等
-        if (entity != currentPnode.getEntity()) {
-            throw new RunException("cache entity not equal with update entity [id:{}]", id);
+        if (entity != cachePnode.getEntity()) {
+            throw new RunException("cache entity [id:{}] not equal with update entity [id:{}]", cachePnode.getEntity().id(), id);
         }
 
         if (safe) {
-            var pnodeThreadId = currentPnode.getThreadId();
+            var pnodeThreadId = cachePnode.getThreadId();
             var currentThreadId = Thread.currentThread().getId();
             if (pnodeThreadId != currentThreadId) {
                 if (pnodeThreadId == 0) {
-                    currentPnode.setThreadId(currentThreadId);
+                    cachePnode.setThreadId(currentThreadId);
                 } else {
                     var pnodeThread = ThreadUtils.findThread(pnodeThreadId);
                     if (pnodeThread == null) {
@@ -172,32 +172,32 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             }
         }
 
-        return currentPnode;
+        return cachePnode;
     }
 
     @Override
     public void update(E entity) {
-        var currentPnode = fetchCachePNode(entity, true);
+        var cachePnode = fetchCachePnode(entity, true);
         // 加100以防止，立刻加载并且立刻修改数据的情况发生时，服务器取到的时间戳相同
-        currentPnode.setModifiedTime(TimeUtils.now() + 100);
+        cachePnode.setModifiedTime(TimeUtils.now() + 100);
     }
 
     @Override
     public void updateUnsafe(E entity) {
-        var currentPnode = fetchCachePNode(entity, false);
-        currentPnode.setModifiedTime(TimeUtils.now() + 100);
+        var cachePnode = fetchCachePnode(entity, false);
+        cachePnode.setModifiedTime(TimeUtils.now() + 100);
     }
 
     @Override
     public void updateNow(E entity) {
-        var currentPnode = fetchCachePNode(entity, true);
-        OrmContext.getAccessor().update(currentPnode.getEntity());
+        var cachePnode = fetchCachePnode(entity, true);
+        OrmContext.getAccessor().update(cachePnode.getEntity());
     }
 
     @Override
     public void updateNowUnsafe(E entity) {
-        var currentPnode = fetchCachePNode(entity, false);
-        OrmContext.getAccessor().update(currentPnode.getEntity());
+        var cachePnode = fetchCachePnode(entity, false);
+        OrmContext.getAccessor().update(cachePnode.getEntity());
     }
 
     @Override
