@@ -13,6 +13,7 @@
 package com.zfoo.orm.cache;
 
 import com.zfoo.orm.model.IEntity;
+import org.springframework.lang.NonNull;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -23,8 +24,10 @@ import java.util.function.BiConsumer;
 public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> {
 
     /**
-     * 从数据库中加载数据到缓存，如果数据库不存在则返回一个id为空的默认值，并且将这个默认值加入缓存
+     * EN: Load data from the database to the cache and return a default value with an empty ID if the database does not exist
+     * CN: 从数据库中加载数据到缓存，如果数据库不存在则返回一个id为空的默认值
      */
+    @NonNull
     E load(PK pk);
 
     /**
