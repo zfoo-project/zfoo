@@ -221,11 +221,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 pnode.setWriteToDbTime(currentTime);
                 pnode.setModifiedTime(currentTime);
                 updateList.add(entity);
-                continue;
-            }
-
-            if (currentTime - pnode.getModifiedTime() >= entityDef.getExpireMillisecond()) {
-                invalidate(pnode.getEntity().id());
             }
         }
 
@@ -287,36 +282,37 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             var dbList = OrmContext.getQuery(entityClass).in("_id", ids).queryAll();
             var dbMap = dbList.stream().collect(Collectors.toMap(key -> key.id(), value -> value));
             for (var entity : updateList) {
-                var dbEntity = dbMap.get(entity.id());
+                var id = entity.id();
+                var dbEntity = dbMap.get(id);
 
                 if (dbEntity == null) {
                     cache.invalidate(entity.id());
+                    logger.warn("[database:{}] not found entity [id:{}]", entityClass.getSimpleName(), id);
                     continue;
                 }
 
-                // 如果没有版本号，则写入数据库并清除缓存
+                // 如果没有版本号，则直接更新数据库
                 if (entity.gvs() <= 0) {
                     OrmContext.getAccessor().update(entity);
-                    cache.invalidate(entity.id());
                     continue;
                 }
 
                 // 如果版本号相同，说明已经更新到
                 if (dbEntity.gvs() == entity.gvs()) {
-                    cache.invalidate(entity.id());
-                    continue;
-                }
-
-                // 如果数据库版本号较大，说明缓存的数据不是最新的，直接清除缓存，下次重新加载
-                if (dbEntity.gvs() > entity.gvs()) {
-                    cache.invalidate(entity.id());
                     continue;
                 }
 
                 // 如果数据库版本号较小，说明缓存的数据是最新的，直接写入数据库
                 if (dbEntity.gvs() < entity.gvs()) {
                     OrmContext.getAccessor().update(entity);
-                    cache.invalidate(entity.id());
+                    continue;
+                }
+
+                // 如果数据库版本号较大，说明缓存的数据不是最新的，直接清除缓存，下次重新加载
+                if (dbEntity.gvs() > entity.gvs()) {
+                    cache.invalidate(id);
+                    load(id);
+                    logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}]", entityClass.getSimpleName(), id, dbEntity.gvs(), entity.gvs());
                     continue;
                 }
             }
