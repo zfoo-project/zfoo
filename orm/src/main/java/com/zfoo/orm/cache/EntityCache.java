@@ -83,6 +83,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                                 : Filters.eq("_id", entity.id());
                         var result = collection.replaceOne(filter, entity);
                         if (result.getModifiedCount() <= 0) {
+                            // 移除缓存时，更新数据库中的实体文档异常
                             logger.error("onRemoval(): update entity to db failed when remove [{}] [pk:{}] by [removalCause:{}]", entityClass.getSimpleName(), entity.id(), removalCause);
                         }
                     }
@@ -129,6 +130,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             logger.error("load(): [{}] load [pk:{}] error", entityDef.getClazz().getSimpleName(), pk, t);
         }
 
+        // 数据库无法加载缓存，返回默认值
         logger.warn("[{}] can not load [pk:{}] and use default entity to replace it", entityDef.getClazz().getSimpleName(), pk);
         @SuppressWarnings("unchecked")
         var entity = (E) entityDef.newEntity(pk);
@@ -161,6 +163,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     cachePnode.setThreadId(currentThreadId);
                 } else {
                     var pnodeThread = ThreadUtils.findThread(pnodeThreadId);
+                    // 有并发写风险，第一次更新文档的线程和第2次更新更新文档的线程不相等
                     if (pnodeThread == null) {
                         logger.warn("[{}][id:{}] concurrent write warning, first update [threadId:{}], second update [threadId:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId);
                     } else {
