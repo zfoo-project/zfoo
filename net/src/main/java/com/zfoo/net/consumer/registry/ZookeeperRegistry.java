@@ -130,7 +130,7 @@ public class ZookeeperRegistry implements IRegistry {
         }
 
         if (StringUtils.isNotBlank(registryConfig.getPath())) {
-            rootPath = registryConfig.getPath();
+            rootPath = StringUtils.trim(registryConfig.getPath());
             providerRootPath = rootPath + "/provider";
             consumerRootPath = rootPath + "/consumer";
         }
