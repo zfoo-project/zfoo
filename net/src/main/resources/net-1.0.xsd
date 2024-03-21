@@ -19,6 +19,7 @@
             <xsd:element name="address" maxOccurs="unbounded" type="addressAttributeType"/>
         </xsd:sequence>
         <xsd:attribute name="center" type="xsd:string" use="required"/>
+        <xsd:attribute name="path" type="xsd:string" use="optional"/>
         <xsd:attribute name="user" type="xsd:string" use="required"/>
         <xsd:attribute name="password" type="xsd:string" use="required"/>
     </xsd:complexType>

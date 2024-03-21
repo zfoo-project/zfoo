@@ -66,10 +66,6 @@ import java.util.stream.Collectors;
 public class ZookeeperRegistry implements IRegistry {
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperRegistry.class);
 
-    private static final String ROOT_PATH = "/zfoo";
-    private static final String PROVIDER_ROOT_PATH = ROOT_PATH + "/provider";
-    private static final String CONSUMER_ROOT_PATH = ROOT_PATH + "/consumer";
-
     private static final long RETRY_SECONDS = 5;
 
     private static final ExecutorService executor = Executors.newSingleThreadExecutor(new ConfigThreadFactory());
@@ -121,12 +117,22 @@ public class ZookeeperRegistry implements IRegistry {
      * ClientSessionMap  // 自己作为消费者去连接服务提供者连上后，存的session
      * ServerSessionMap  // 自己作为服务器角色，很多客户端连接自己，连上来后，保存到这
      */
+
+    private String rootPath = "/zfoo";
+    private String providerRootPath = "/zfoo/provider";
+    private String consumerRootPath = "/zfoo/consumer";
     @Override
     public void start() {
         var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
         if (Objects.isNull(registryConfig)) {
             logger.info("Stand alone startup of singleton");
             return;
+        }
+
+        if (StringUtils.isNotBlank(registryConfig.getPath())) {
+            rootPath = registryConfig.getPath();
+            providerRootPath = rootPath + "/provider";
+            consumerRootPath = rootPath + "/consumer";
         }
 
         // 先启动本地服务提供者（服务提供者仅仅是一个TcpServer）
@@ -224,7 +230,7 @@ public class ZookeeperRegistry implements IRegistry {
             try {
                 // /zfoo
                 // 创建zookeeper的根路径
-                var rootStat = curator.checkExists().forPath(ROOT_PATH);
+                var rootStat = curator.checkExists().forPath(rootPath);
                 // 根节点不存在
                 if (Objects.isNull(rootStat)) {
                     var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
@@ -239,30 +245,30 @@ public class ZookeeperRegistry implements IRegistry {
                     // 根节点是持久化节点
                     builder.withMode(CreateMode.PERSISTENT);
                     // 真正创建根节点
-                    builder.forPath(ROOT_PATH, StringUtils.bytes(registryConfig.getCenter()));
+                    builder.forPath(rootPath, StringUtils.bytes(registryConfig.getCenter()));
                 } else {
                     var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
                     // 读取根节点上的数据
-                    var bytes = curator.getData().storingStatIn(new Stat()).forPath(ROOT_PATH);
+                    var bytes = curator.getData().storingStatIn(new Stat()).forPath(rootPath);
                     // 把根节点数据从二进制转string字符串
                     var rootPathData = StringUtils.bytesToString(bytes);
 
                     // 检查zookeeper根节点的内容
                     if (!rootPathData.equals(registryConfig.getCenter())) {
-                        throw new RuntimeException(StringUtils.format("zookeeper rootPath[{}] misconfigured [{}]，expected [{}], check the relevant nodes and restart", ROOT_PATH, rootPathData, registryConfig.getCenter()));
+                        throw new RuntimeException(StringUtils.format("zookeeper rootPath[{}] misconfigured [{}]，expected [{}], check the relevant nodes and restart", rootPath, rootPathData, registryConfig.getCenter()));
                     }
 
                     // 检查zookeeper根节点的权限
                     if (registryConfig.hasZookeeperAuthor()) {
                         try {
-                            var providerRootPathAclList = curator.getACL().forPath(ROOT_PATH);
+                            var providerRootPathAclList = curator.getACL().forPath(rootPath);
                             AssertionUtils.notEmpty(providerRootPathAclList);
                             AssertionUtils.isTrue(providerRootPathAclList.size() == 1);
                             var zookeeperAuthorStr = registryConfig.toZookeeperAuthor();
                             var aclList = List.of(new ACL(ZooDefs.Perms.ALL, new Id("digest", DigestAuthenticationProvider.generateDigest(zookeeperAuthorStr))));
                             AssertionUtils.isTrue(providerRootPathAclList.get(0).equals(aclList.get(0)));
                         } catch (Exception e) {
-                            throw new RuntimeException(StringUtils.format("zookeeper rootPath[{}] permissions are misconfigured [{}]", ROOT_PATH, ExceptionUtils.getMessage(e)));
+                            throw new RuntimeException(StringUtils.format("zookeeper rootPath[{}] permissions are misconfigured [{}]", rootPath, ExceptionUtils.getMessage(e)));
                         }
                     }
 
@@ -270,20 +276,20 @@ public class ZookeeperRegistry implements IRegistry {
 
                 // /zfoo/provider
                 // 检查服务提供者节点，不存在则创建
-                var providerStat = curator.checkExists().forPath(PROVIDER_ROOT_PATH);
+                var providerStat = curator.checkExists().forPath(providerRootPath);
                 if (Objects.isNull(providerStat)) {
                     curator.create()
                             .withMode(CreateMode.PERSISTENT)
-                            .forPath(PROVIDER_ROOT_PATH, ArrayUtils.EMPTY_BYTE_ARRAY);
+                            .forPath(providerRootPath, ArrayUtils.EMPTY_BYTE_ARRAY);
                 }
 
                 // /zfoo/consumer
                 // 检查消费者节点，不存在则创建
-                var consumerStat = curator.checkExists().forPath(CONSUMER_ROOT_PATH);
+                var consumerStat = curator.checkExists().forPath(consumerRootPath);
                 if (Objects.isNull(consumerStat)) {
                     curator.create()
                             .withMode(CreateMode.PERSISTENT)
-                            .forPath(CONSUMER_ROOT_PATH, ArrayUtils.EMPTY_BYTE_ARRAY);
+                            .forPath(consumerRootPath, ArrayUtils.EMPTY_BYTE_ARRAY);
                 }
 
                 // 如果自己是服务提供者，则注册自己
@@ -298,7 +304,7 @@ public class ZookeeperRegistry implements IRegistry {
 
     private void startProviderCache() {
         // 初始化providerCache
-        providerCuratorCache = CuratorCache.builder(curator, PROVIDER_ROOT_PATH)
+        providerCuratorCache = CuratorCache.builder(curator, providerRootPath)
                 .withExceptionHandler(e -> {
                     logger.error("providerCuratorCache unknown exception", e);
                     initZookeeper();
@@ -314,7 +320,7 @@ public class ZookeeperRegistry implements IRegistry {
                         initZookeeper();
                         break;
                     case NODE_CREATED: // 意味着有可能来了自己作为消费者需要关心的服务提供者
-                        var providerStr = StringUtils.substringAfterFirst(newData.getPath(), PROVIDER_ROOT_PATH + StringUtils.SLASH);
+                        var providerStr = StringUtils.substringAfterFirst(newData.getPath(), providerRootPath + StringUtils.SLASH);
                         var providerRegister = Register.parseString(providerStr);
                         var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegister();
                         // 如果启动的Consumer是自己关心的Consumer，那么就会接下来尝试连接他们
@@ -326,7 +332,7 @@ public class ZookeeperRegistry implements IRegistry {
                         }
                         break;
                     case NODE_DELETED:
-                        var oldProviderStr = StringUtils.substringAfterFirst(oldData.getPath(), PROVIDER_ROOT_PATH + StringUtils.SLASH);
+                        var oldProviderStr = StringUtils.substringAfterFirst(oldData.getPath(), providerRootPath + StringUtils.SLASH);
                         var oldProvider = Register.parseString(oldProviderStr);
                         if (providerRegisterSet.contains(oldProvider)) {
                             providerRegisterSet.remove(oldProvider);
@@ -370,7 +376,7 @@ public class ZookeeperRegistry implements IRegistry {
         var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegister();
         if (Objects.nonNull(localRegisterVO.getProviderConfig())) {
             var localProviderVoStr = localRegisterVO.toProviderString();
-            var localProviderPath = PROVIDER_ROOT_PATH + StringUtils.SLASH + localProviderVoStr;
+            var localProviderPath = providerRootPath + StringUtils.SLASH + localProviderVoStr;
 
             // /zfoo/provider
             // applicationNameTest | 192.168.1.104:12400 | provider:[myProviderModule-provider1, myProviderModule-provider2]
@@ -408,7 +414,7 @@ public class ZookeeperRegistry implements IRegistry {
         var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegister();
         // 初始化providerCacheSet
         // 遍历provider下注册的所有节点
-        var remoteProviderSet = curator.getChildren().forPath(PROVIDER_ROOT_PATH).stream()
+        var remoteProviderSet = curator.getChildren().forPath(providerRootPath).stream()
                 .filter(it -> StringUtils.isNotBlank(it) && !"null".equals(it))
                 .map(it -> Register.parseString(it))
                 .filter(it -> Objects.nonNull(it))
@@ -527,7 +533,7 @@ public class ZookeeperRegistry implements IRegistry {
 
         // 将自己的消费者消息写到 /consumer 的临时节点下
         var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegister();
-        var path = CONSUMER_ROOT_PATH + StringUtils.SLASH + localRegisterVO.toConsumerString();
+        var path = consumerRootPath + StringUtils.SLASH + localRegisterVO.toConsumerString();
         addData(path, StringUtils.bytes(JsonUtils.object2String(list)), CreateMode.EPHEMERAL);
     }
 
@@ -631,7 +637,7 @@ public class ZookeeperRegistry implements IRegistry {
     @Override
     public List<Register> remoteProviderRegisters() {
         try {
-            var remoteProviders = children(PROVIDER_ROOT_PATH)
+            var remoteProviders = children(providerRootPath)
                     .stream()
                     .map(Register::parseString)
                     .filter(Objects::nonNull)
@@ -707,7 +713,7 @@ public class ZookeeperRegistry implements IRegistry {
             if (curator.getState() == CuratorFrameworkState.STARTED) {
                 // 删除服务提供者的临时节点
                 if (Objects.nonNull(localRegisterVO.getProviderConfig())) {
-                    var localProviderPath = PROVIDER_ROOT_PATH + StringUtils.SLASH + localRegisterVO.toProviderString();
+                    var localProviderPath = providerRootPath + StringUtils.SLASH + localRegisterVO.toProviderString();
                     var localProviderStat = curator.checkExists().forPath(localProviderPath);
                     if (Objects.nonNull(localProviderStat)) {
                         curator.delete().guaranteed().deletingChildrenIfNeeded().forPath(localProviderPath);
@@ -716,7 +722,7 @@ public class ZookeeperRegistry implements IRegistry {
 
                 // 删除服务消费者的临时节点
                 if (Objects.nonNull(localRegisterVO.getConsumerConfig())) {
-                    var localConsumerPath = CONSUMER_ROOT_PATH + StringUtils.SLASH + localRegisterVO.toConsumerString();
+                    var localConsumerPath = consumerRootPath + StringUtils.SLASH + localRegisterVO.toConsumerString();
                     var localConsumerStat = curator.checkExists().forPath(localConsumerPath);
                     if (Objects.nonNull(localConsumerStat)) {
                         curator.delete().guaranteed().deletingChildrenIfNeeded().forPath(localConsumerPath);

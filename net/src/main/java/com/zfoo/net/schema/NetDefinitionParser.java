@@ -149,6 +149,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
         resolvePlaceholder("center", "center", builder, element, parserContext);
+        resolvePlaceholder("path", "path", builder, element, parserContext);
         resolvePlaceholder("user", "user", builder, element, parserContext);
         resolvePlaceholder("password", "password", builder, element, parserContext);
         var addressMap = parseAddress(element, parserContext);
