@@ -2,7 +2,6 @@ English | [简体中文](./README_CN.md)
 <a href="https://github.com/zfoo-project/zfoo"><img src="/doc/image/logo.jpg" width="30%"></a>
 
 ## Ⅰ. Introduction of zfoo🚩
------------
 
 - **Extremely fast, asynchronous, actor design, lock free, universal RPC framework, native GraalVM support**
 - **Decentralized serialization [zfoo protocol](protocol/README.md)**, supports C++ C# Go Java Javascript TypeScript Lua GDScript Python
@@ -21,17 +20,15 @@ Perfect work development process, complete online solution
 - **Cpu, memory, hard disk, network monitoring built into the program** no code and extra tools
   required [monitor](monitor/src/test/java/com/zfoo/monitor/ApplicationTest.java)
 
-## Ⅱ. Who use this project
----------------
+## Ⅱ. Who uses this project
 
 
-- Projects with extremely high performance requirements, such as website and game server frameworks, single server, global server, live chat, IM system, real-time push
+- Projects with extremely high-performance requirements, such as website and game server frameworks, single server, global server, live chat, IM system, real-time push
 - Projects such as saving, development, deployment, operation and maintenance costs
 - As a backend infrastructure for **Godot, Unity, Cocos，Webgl, H5**, Network protocol supports tcp udp websocket http
 - [Keep it Simple and Stupid](https://baike.baidu.com/item/KISS原则/3242383), simple configuration, lightweight code
 
 ## Ⅲ. Maven dependency✨
----------------
 
 
 - Environment requirement **JDK 17+**, support **OpenJDK**, **Oracle JDK** and **native GraalVM**
@@ -44,7 +41,7 @@ Perfect work development process, complete online solution
 </dependency>
 ```
 
-- If you don't want to depend all zfoo modules, you only need to choose to depend on one of them
+- If you don't want to depend on all zfoo modules, you only need to choose to depend on one of them
 
 ```
 <dependency>
@@ -55,13 +52,12 @@ Perfect work development process, complete online solution
 ```
 
 ## Ⅳ. Tutorials
----------------
 
 
 - [zfoo sdk of csharp and lua for unity and godot](https://github.com/zfoo-project/zfoo-sdk-csharp-lua-unity-godot)
 - [zfoo sdk typescript javascript cocos web h5](https://github.com/zfoo-project/zfoo-sdk-typescript-javascript-cocos-web-h5)
 - [zfoo sdk gdscript for godot](https://github.com/zfoo-project/zfoo-sdk-gdscript-godot)
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》，novice friendly,
+- [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》, novice friendly,
   difficulty 2 stars
 - [godot-bird](https://github.com/zfoo-project/godot-bird) bird and bird，powered by godot
 - [cocos-fivechess](https://github.com/zfoo-project/fivechess) five chess，use cocos as client
@@ -69,7 +65,6 @@ Perfect work development process, complete online solution
   which can be run directly
 
 ## Ⅴ. Usage⭐
----------------
 
 
 #### 1. [protocol](protocol/README.md) ultimate performance serialization and deserialization
@@ -163,15 +158,13 @@ public class StudentResource {
 ```
 
 ## Ⅵ. Commit specification👏
-----------
 
 - People who like this project are welcome to maintain this project together, and pay attention to the following
   specifications when submitting code
-- The code formats uses the default formatting of IntelliJ Idea
+- The code formats use the default formatting of IntelliJ Idea
 - [conventional-changelog-metahub](https://github.com/pvdlg/conventional-changelog-metahub#commit-types)
 
 ## Ⅶ. License
------------
 
 zfoo use [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
