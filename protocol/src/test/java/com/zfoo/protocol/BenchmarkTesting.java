@@ -41,6 +41,7 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author godotg
@@ -350,49 +351,69 @@ public class BenchmarkTesting {
     @Test
     public void zfooMultipleThreadTest() throws InterruptedException {
         var countdown = new CountDownLatch(threadNum);
+        var atomic = new AtomicLong();
         for (var i = 0; i < threadNum; i++) {
             executors[i].execute(() -> {
+                var startTime = System.currentTimeMillis();
                 zfooTest();
+                var endTime = System.currentTimeMillis();
+                atomic.addAndGet(endTime - startTime);
                 countdown.countDown();
             });
         }
         countdown.await();
+        System.out.println(StringUtils.format("----------------------------------------------------->zfoo total [time:{}]", atomic));
     }
 
     @Test
     public void furyMultipleThreadTest() throws InterruptedException {
         var countdown = new CountDownLatch(threadNum);
+        var atomic = new AtomicLong();
         for (var i = 0; i < threadNum; i++) {
             executors[i].execute(() -> {
+                var startTime = System.currentTimeMillis();
                 furyTest();
+                var endTime = System.currentTimeMillis();
+                atomic.addAndGet(endTime - startTime);
                 countdown.countDown();
             });
         }
         countdown.await();
+        System.out.println(StringUtils.format("----------------------------------------------------->fury total [time:{}]", atomic));
     }
 
     @Test
     public void kryoMultipleThreadTest() throws InterruptedException {
         var countdown = new CountDownLatch(threadNum);
+        var atomic = new AtomicLong();
         for (var i = 0; i < threadNum; i++) {
             executors[i].execute(() -> {
+                var startTime = System.currentTimeMillis();
                 kryoTest();
+                var endTime = System.currentTimeMillis();
+                atomic.addAndGet(endTime - startTime);
                 countdown.countDown();
             });
         }
         countdown.await();
+        System.out.println(StringUtils.format("----------------------------------------------------->kryo total [time:{}]", atomic));
     }
 
     @Test
     public void protobufMultipleThreadTest() throws InterruptedException {
         var countdown = new CountDownLatch(threadNum);
+        var atomic = new AtomicLong();
         for (var i = 0; i < threadNum; i++) {
             executors[i].execute(() -> {
+                var startTime = System.currentTimeMillis();
                 protobufTest();
+                var endTime = System.currentTimeMillis();
+                atomic.addAndGet(endTime - startTime);
                 countdown.countDown();
             });
         }
         countdown.await();
+        System.out.println(StringUtils.format("----------------------------------------------------->protobuf total [time:{}]", atomic));
     }
 
     public static final int threadNum = Runtime.getRuntime().availableProcessors() / 2;
