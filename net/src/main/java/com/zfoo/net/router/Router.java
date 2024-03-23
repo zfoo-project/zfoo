@@ -125,7 +125,7 @@ public class Router implements IRouter {
                 gatewayAttachment.setClient(false);
                 dispatchByTaskExecutorHash(gatewayAttachment.taskExecutorHash(), task);
             } else {
-                // 这里是：别的服务提供者提供授权给网关，比如：在玩家登录后，home服查到了玩家uid，然后发给Gateway服
+                // 这里是：别的服务提供者提供授权给网关，比如：在用户或玩家登录后，home服查到了玩家uid，然后发给Gateway服
                 var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
                 if (gatewaySession == null) {
                     logger.error("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
@@ -159,7 +159,7 @@ public class Router implements IRouter {
      * 在zfoo这套线程模型中，保证了服务器所接收到的Packet（最终被包装成PacketReceiverTask任务），永远只会在同一条线程处理，
      * TaskBus通过AbstractTaskDispatch去派发PacketReceiverTask任务，具体在哪个线程处理通过IAttachment的taskExecutorHash计算。
      * <p>
-     * 这种流水线做法对cpu缓存非常友好，java线程能大部分时间跑在一个cpu核心，而玩家又和线程一一对应，这样就可以最大限度提高cpu缓存命中率。
+     * 这种流水线做法对cpu缓存非常友好，java线程能大部分时间跑在一个cpu核心，而用户逻辑又和线程一一对应，这样就可以最大限度提高cpu缓存命中率。
      * cpu的cache越大命中率就越高，性能提高就越明显。
      * <p>
      * 单线程热点问题，在负载足够大的情况下，比如5000人同时在线的8核服务器，因为样本足够大每个核心分配的人数差距并不会太大。
