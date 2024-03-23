@@ -15,6 +15,8 @@ package com.zfoo.event.enhance;
 import com.zfoo.event.anno.Bus;
 import com.zfoo.event.model.IEvent;
 
+import java.lang.reflect.Method;
+
 /**
  * @author godotg
  */
@@ -22,4 +24,8 @@ public interface IEventReceiver {
     Bus bus();
 
     void invoke(IEvent event);
+
+     Object getBean();
+
+     Method getMethod();
 }

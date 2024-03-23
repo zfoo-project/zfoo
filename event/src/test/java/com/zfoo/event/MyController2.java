@@ -15,14 +15,14 @@ package com.zfoo.event;
 
 import com.zfoo.event.anno.Bus;
 import com.zfoo.event.anno.EventReceiver;
+import com.zfoo.event.anno.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * @author godotg
  */
-@Component
+@EventService
 public class MyController2 {
 
     private static final Logger logger = LoggerFactory.getLogger(MyController2.class);

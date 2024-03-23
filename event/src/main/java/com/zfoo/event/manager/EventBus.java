@@ -12,6 +12,8 @@
  */
 package com.zfoo.event.manager;
 
+import com.zfoo.event.EventExceptionContext;
+import com.zfoo.event.EventExceptionHandler;
 import com.zfoo.event.enhance.IEventReceiver;
 import com.zfoo.event.model.IEvent;
 import com.zfoo.protocol.collection.CollectionUtils;
@@ -54,6 +56,10 @@ public abstract class EventBus {
      * event mapping
      */
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
+    /**
+     * event exception handler
+     */
+    private static EventExceptionHandler exceptionHandler = EventExceptionHandler.LoggingEventExceptionHandler.INSTANCE;
 
     static {
         for (int i = 0; i < executors.length; i++) {
@@ -88,7 +94,18 @@ public abstract class EventBus {
     }
 
     /**
+     * 设置异常处理器
+     *
+     * @param handler 异常处理器
+     */
+    public static void setExceptionHandler(EventExceptionHandler handler) {
+        exceptionHandler = handler;
+    }
+
+    /**
      * Publish the event
+     *
+     * @param event Event object
      */
     public static void post(IEvent event) {
         if (event == null) {
@@ -97,6 +114,7 @@ public abstract class EventBus {
         var clazz = event.getClass();
         var receivers = receiverMap.get(clazz);
         if (CollectionUtils.isEmpty(receivers)) {
+            logger.warn("This event [" + clazz.getName() + "] has not registered any valid event handler");
             return;
         }
         for (var receiver : receivers) {
@@ -111,13 +129,10 @@ public abstract class EventBus {
     private static void doReceiver(IEventReceiver receiver, IEvent event) {
         try {
             receiver.invoke(event);
-        } catch (Exception e) {
-            logger.error("eventBus {} [{}] unknown exception", receiver.bus(), event.getClass().getSimpleName(), e);
         } catch (Throwable t) {
-            logger.error("eventBus {} [{}] unknown error", receiver.bus(), event.getClass().getSimpleName(), t);
+            exceptionHandler.handleException(t.getCause(), new EventExceptionContext(event, receiver.getBean(), receiver.getMethod()));
         }
     }
-
 
     public static void asyncExecute(Runnable runnable) {
         execute(RandomUtils.randomInt(), runnable);
