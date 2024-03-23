@@ -60,7 +60,6 @@ Perfect work development process, complete online solution
 - [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》, novice friendly,
   difficulty 2 stars
 - [godot-bird](https://github.com/zfoo-project/godot-bird) bird and bird，powered by godot
-- [cocos-fivechess](https://github.com/zfoo-project/fivechess) five chess，use cocos as client
 - [FAQ](./doc/FAQ.md)，There are standard demo display and instructions in the test folder of each project directory,
   which can be run directly
 
