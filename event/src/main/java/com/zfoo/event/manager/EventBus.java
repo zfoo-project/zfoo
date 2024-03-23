@@ -12,8 +12,6 @@
  */
 package com.zfoo.event.manager;
 
-import com.zfoo.event.EventExceptionContext;
-import com.zfoo.event.EventExceptionHandler;
 import com.zfoo.event.enhance.IEventReceiver;
 import com.zfoo.event.model.IEvent;
 import com.zfoo.protocol.collection.CollectionUtils;
@@ -35,6 +33,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * @author godotg
@@ -59,7 +59,8 @@ public abstract class EventBus {
     /**
      * event exception handler
      */
-    private static EventExceptionHandler exceptionHandler = EventExceptionHandler.LoggingEventExceptionHandler.INSTANCE;
+    public static BiConsumer<IEventReceiver, IEvent> exceptionHandler = null;
+    public static Consumer<IEvent> noEventReceiverHandler = null;
 
     static {
         for (int i = 0; i < executors.length; i++) {
@@ -94,15 +95,6 @@ public abstract class EventBus {
     }
 
     /**
-     * 设置异常处理器
-     *
-     * @param handler 异常处理器
-     */
-    public static void setExceptionHandler(EventExceptionHandler handler) {
-        exceptionHandler = handler;
-    }
-
-    /**
      * Publish the event
      *
      * @param event Event object
@@ -114,7 +106,9 @@ public abstract class EventBus {
         var clazz = event.getClass();
         var receivers = receiverMap.get(clazz);
         if (CollectionUtils.isEmpty(receivers)) {
-            logger.warn("This event [" + clazz.getName() + "] has not registered any valid event handler");
+            if (noEventReceiverHandler != null) {
+                noEventReceiverHandler.accept(event);
+            }
             return;
         }
         for (var receiver : receivers) {
@@ -130,7 +124,10 @@ public abstract class EventBus {
         try {
             receiver.invoke(event);
         } catch (Throwable t) {
-            exceptionHandler.handleException(t.getCause(), new EventExceptionContext(event, receiver.getBean(), receiver.getMethod()));
+            logger.error("eventBus {} [{}] unknown error", receiver.bus(), event.getClass().getSimpleName(), t);
+            if (exceptionHandler != null) {
+                exceptionHandler.accept(receiver, event);
+            }
         }
     }
 

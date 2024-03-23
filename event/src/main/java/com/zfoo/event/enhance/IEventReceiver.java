@@ -26,6 +26,4 @@ public interface IEventReceiver {
     void invoke(IEvent event);
 
      Object getBean();
-
-     Method getMethod();
 }

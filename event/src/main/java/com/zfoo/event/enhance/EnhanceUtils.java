@@ -63,17 +63,11 @@ public abstract class EnhanceUtils {
         field.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
         enhanceClazz.addField(field);
 
-        // 定义类中的一个成员method
-        CtClass methodClass = classPool.get(method.getClass().getName());
-        CtField methodField = new CtField(methodClass, "method", enhanceClazz);
-        methodField.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
-        enhanceClazz.addField(methodField);
-
         // 定义类的构造器
         // 创建构造函数参数数组
-        CtClass[] parameterTypes = {beanClass, methodClass};
+        CtClass[] parameterTypes = {beanClass};
         CtConstructor constructor = new CtConstructor(parameterTypes, enhanceClazz);
-        constructor.setBody("{this.bean=$1; this.method=$2;}");
+        constructor.setBody("{this.bean=$1;}");
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
@@ -98,18 +92,11 @@ public abstract class EnhanceUtils {
         beanMethod.setBody(beanMethodBody);
         enhanceClazz.addMethod(beanMethod);
 
-        // 定义类实现的接口方法getMethod
-        CtMethod getMethod = new CtMethod(classPool.get(Method.class.getName()), "getMethod", null, enhanceClazz);
-        getMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String getMethodBody = "{ return this.method; }";
-        getMethod.setBody(getMethodBody);
-        enhanceClazz.addMethod(getMethod);
-
         // 释放缓存
         enhanceClazz.detach();
 
         Class<?> resultClazz = enhanceClazz.toClass(IEventReceiver.class);
-        Constructor<?> resultConstructor = resultClazz.getConstructor(bean.getClass(), method.getClass());
-        return (IEventReceiver) resultConstructor.newInstance(bean, method);
+        Constructor<?> resultConstructor = resultClazz.getConstructor(bean.getClass());
+        return (IEventReceiver) resultConstructor.newInstance(bean);
     }
 }

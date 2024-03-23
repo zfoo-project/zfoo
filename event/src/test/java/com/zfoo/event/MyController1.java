@@ -14,14 +14,14 @@
 package com.zfoo.event;
 
 import com.zfoo.event.anno.EventReceiver;
-import com.zfoo.event.anno.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * @author godotg
  */
-@EventService
+@Component
 public class MyController1 {
 
     private static final Logger logger = LoggerFactory.getLogger(MyController1.class);
@@ -30,7 +30,6 @@ public class MyController1 {
     @EventReceiver
     public void onMyNoticeEvent(MyNoticeEvent event) {
         logger.info("方法1同步执行事件：" + event.getMessage());
-        throw new NullPointerException();
     }
 
 }
