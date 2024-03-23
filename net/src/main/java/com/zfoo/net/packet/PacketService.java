@@ -166,7 +166,8 @@ public class PacketService implements IPacketService {
         }
         try {
             // 预留写入包的长度，一个int字节大小
-            buffer.writeInt(PACKET_HEAD_LENGTH);
+            buffer.ensureWritable(7);
+            buffer.writerIndex(PACKET_HEAD_LENGTH);
 
             // 写入包packet
             ProtocolManager.write(buffer, packet);
@@ -180,7 +181,7 @@ public class PacketService implements IPacketService {
                 ProtocolManager.write(buffer, attachment);
             }
 
-            int length = buffer.readableBytes();
+            int length = buffer.writerIndex();
 
             int packetLength = length - PACKET_HEAD_LENGTH;
 
