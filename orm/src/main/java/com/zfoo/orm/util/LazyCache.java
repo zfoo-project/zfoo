@@ -1,5 +1,6 @@
 package com.zfoo.orm.util;
 
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.scheduler.util.TimeUtils;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,22 +15,49 @@ import java.util.function.BiConsumer;
  */
 public class LazyCache<K, V> {
 
-    private static class ValueCache<V> {
+    private static class CacheValue<V> {
         public volatile V value;
         public volatile long expireTime;
     }
 
+    public static enum RemovalCause {
+        /**
+         * The entry was manually removed by the user. This can result from the user invoking any of the
+         * following methods on the cache or map view.
+         * remove()
+         */
+        EXPLICIT,
 
-    private AtomicLong expireCheckTimeAtomic;
-    private volatile long minExpireTime;
+        /**
+         * The entry itself was not actually removed, but its value was replaced by the user. This can
+         * result from the user invoking any of the following methods on the cache or map view.
+         * put()
+         */
+        REPLACED,
+
+
+        /**
+         * The entry's expiration timestamp has passed.
+         */
+        EXPIRED,
+
+        /**
+         * The entry was evicted due to size constraints.
+         */
+        SIZE;
+    }
+
+
+    private int maximumSize;
     private long expireAfterAccessMillis;
     private long expireCheckInterval;
-    private int maximumSize;
-    private ConcurrentMap<K, ValueCache<V>> cacheMap;
-    private BiConsumer<K, V> removeCallback = (k, v) -> {
+    private AtomicLong expireCheckTimeAtomic;
+    private volatile long minExpireTime;
+    private ConcurrentMap<K, CacheValue<V>> cacheMap;
+    private BiConsumer<Pair<K, V>, RemovalCause> removeCallback = (pair, removalCause) -> {
     };
 
-    public LazyCache(int maximumSize, long expireAfterAccessMillis, long expireCheckIntervalMillis, BiConsumer<K, V> removeCallback) {
+    public LazyCache(int maximumSize, long expireAfterAccessMillis, long expireCheckIntervalMillis, BiConsumer<Pair<K, V>, RemovalCause> removeCallback) {
         this.maximumSize = maximumSize;
         this.expireAfterAccessMillis = expireAfterAccessMillis;
         this.expireCheckInterval = expireCheckIntervalMillis;
@@ -44,10 +72,13 @@ public class LazyCache<K, V> {
      * If the cache previously contained a value associated with the key, the old value is replaced by the new value.
      */
     public void put(K key, V value) {
-        var valueCache = new ValueCache<V>();
-        valueCache.value = value;
-        valueCache.expireTime = TimeUtils.now();
-        cacheMap.put(key, valueCache);
+        var cacheValue = new CacheValue<V>();
+        cacheValue.value = value;
+        cacheValue.expireTime = TimeUtils.now();
+        var oldCacheValue = cacheMap.put(key, cacheValue);
+        if (oldCacheValue != null) {
+            removeCallback.accept(new Pair<>(key, oldCacheValue.value), RemovalCause.REPLACED);
+        }
         checkMaximumSize();
         checkExpire();
     }
@@ -55,27 +86,41 @@ public class LazyCache<K, V> {
     public V get(K key) {
         checkExpire();
 
-        var valueCache = cacheMap.get(key);
-        if (valueCache == null) {
+        var cacheValue = cacheMap.get(key);
+        if (cacheValue == null) {
             return null;
         }
-        if (valueCache.expireTime < TimeUtils.now()) {
-            remove(key);
+        if (cacheValue.expireTime < TimeUtils.now()) {
+            remove(key, RemovalCause.EXPIRED);
             return null;
         }
-        valueCache.expireTime = TimeUtils.now() + expireAfterAccessMillis;
-        return valueCache.value;
+        cacheValue.expireTime = TimeUtils.now() + expireAfterAccessMillis;
+        return cacheValue.value;
     }
 
 
     public void remove(K key) {
+        remove(key, RemovalCause.EXPLICIT);
+    }
+
+    public void remove(K key, RemovalCause removalCause) {
         if (key == null) {
             return;
         }
-        var valueCache = cacheMap.remove(key);
-        if (valueCache != null) {
-            removeCallback.accept(key, valueCache.value);
+        var cacheValue = cacheMap.remove(key);
+        if (cacheValue != null) {
+            removeCallback.accept(new Pair<>(key, cacheValue.value), removalCause);
         }
+    }
+
+    public void forEach(BiConsumer<K, V> biConsumer) {
+        for (var entry : cacheMap.entrySet()) {
+            biConsumer.accept(entry.getKey(), entry.getValue().value);
+        }
+    }
+
+    public int size() {
+        return cacheMap.size();
     }
 
 
@@ -93,7 +138,7 @@ public class LazyCache<K, V> {
             }
         }
         this.minExpireTime = minTimestamp;
-        remove(minKey);
+        remove(minKey, RemovalCause.SIZE);
         checkMaximumSize();
     }
 
@@ -107,7 +152,7 @@ public class LazyCache<K, V> {
                     for (var entry : cacheMap.entrySet()) {
                         var expireTime = entry.getValue().expireTime;
                         if (expireTime < now) {
-                            remove(entry.getKey());
+                            remove(entry.getKey(), RemovalCause.EXPIRED);
                         }
                         if (expireTime < minTimestamp) {
                             minTimestamp = expireTime;

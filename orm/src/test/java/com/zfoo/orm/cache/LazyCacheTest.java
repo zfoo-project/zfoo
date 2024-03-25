@@ -1,6 +1,7 @@
 package com.zfoo.orm.cache;
 
 import com.zfoo.orm.util.LazyCache;
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.scheduler.util.TimeUtils;
@@ -15,10 +16,10 @@ import java.util.function.BiConsumer;
 @Ignore
 public class LazyCacheTest {
 
-    private static final BiConsumer<Integer, String> myRemoveCallback = new BiConsumer<Integer, String>() {
+    private static final BiConsumer<Pair<Integer, String>, LazyCache.RemovalCause> myRemoveCallback = new BiConsumer<Pair<Integer, String>, LazyCache.RemovalCause>() {
         @Override
-        public void accept(Integer key, String value) {
-            System.out.println(StringUtils.format("remove key:[{}] value:[{}]", key, value));
+        public void accept(Pair<Integer, String> pair, LazyCache.RemovalCause removalCause) {
+            System.out.println(StringUtils.format("remove key:[{}] value:[{}] removalCause:[{}]", pair.getKey(), pair.getValue(), removalCause));
         }
     };
 
