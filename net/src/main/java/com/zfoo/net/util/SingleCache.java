@@ -16,8 +16,7 @@ package com.zfoo.net.util;
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.scheduler.util.TimeUtils;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
 /**
@@ -33,8 +32,8 @@ public class SingleCache<V> {
 
 
     private volatile V cache;
-    private volatile long refreshTime;
-    private final Lock lock = new ReentrantLock();
+
+    private AtomicLong refreshTimeAtomic;
 
 
     /**
@@ -47,23 +46,18 @@ public class SingleCache<V> {
         cache.refreshDuration = refreshDuration;
         cache.supplier = supplier;
         cache.cache = supplier.get();
-        cache.refreshTime = TimeUtils.now() + refreshDuration;
+        cache.refreshTimeAtomic = new AtomicLong(TimeUtils.now() + refreshDuration);
         return cache;
     }
 
 
     public V get() {
         var now = TimeUtils.now();
+        var refreshTime = refreshTimeAtomic.get();
         // 使用双重检测锁的方式
         if (now > refreshTime) {
-            lock.lock();
-            try {
-                if (now > refreshTime) {
-                    refreshTime = now + refreshDuration;
-                    EventBus.asyncExecute(() -> cache = supplier.get());
-                }
-            } finally {
-                lock.unlock();
+            if (refreshTimeAtomic.compareAndSet(refreshTime, now + refreshDuration)) {
+                EventBus.asyncExecute(() -> cache = supplier.get());
             }
         }
         return cache;
