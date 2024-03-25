@@ -3,6 +3,7 @@ package com.zfoo.orm.util;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.scheduler.util.TimeUtils;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -149,15 +150,17 @@ public class LazyCache<K, V> {
             if (expireCheckTimeAtomic.compareAndSet(expireCheckTime, now + expireCheckInterval)) {
                 if (now > this.minExpireTime) {
                     var minTimestamp = Long.MAX_VALUE;
+                    var removeList = new ArrayList<K>();
                     for (var entry : cacheMap.entrySet()) {
                         var expireTime = entry.getValue().expireTime;
                         if (expireTime < now) {
-                            remove(entry.getKey(), RemovalCause.EXPIRED);
+                            removeList.add(entry.getKey());
                         }
                         if (expireTime < minTimestamp) {
                             minTimestamp = expireTime;
                         }
                     }
+                    removeList.forEach(it -> remove(it, RemovalCause.EXPIRED));
                     this.minExpireTime = minTimestamp;
                 }
             }
