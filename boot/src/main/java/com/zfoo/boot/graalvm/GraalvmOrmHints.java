@@ -14,7 +14,6 @@ package com.zfoo.boot.graalvm;
 
 import com.zfoo.orm.anno.GraalvmNativeEntityCache;
 import com.zfoo.orm.config.OrmConfig;
-import com.zfoo.protocol.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.BindingReflectionHintsRegistrar;
@@ -42,9 +41,6 @@ public class GraalvmOrmHints implements RuntimeHintsRegistrar {
 
         var classes = new ArrayList<Class<?>>();
         classes.add(OrmConfig.class);
-        // SSLMSA
-        classes.add(ClassUtils.forName("com.github.benmanes.caffeine.cache.SSLMSA"));
-        classes.add(ClassUtils.forName("com.github.benmanes.caffeine.cache.PSAMS"));
 
         var filterClasses = HintUtils.filterAllClass(List.of(GraalvmNativeEntityCache.class), Collections.emptyList());
         classes.addAll(filterClasses);
