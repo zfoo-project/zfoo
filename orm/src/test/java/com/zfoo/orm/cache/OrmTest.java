@@ -13,7 +13,6 @@
 
 package com.zfoo.orm.cache;
 
-import com.zfoo.orm.OrmContext;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,8 +37,6 @@ public class OrmTest {
             entity.setC(i);
             userEntityCaches.update(entity);
         }
-
-        OrmContext.getOrmManager().getAllEntityCaches().forEach(it -> System.out.println(it.recordStatus()));
 
         ThreadUtils.sleep(Long.MAX_VALUE);
     }

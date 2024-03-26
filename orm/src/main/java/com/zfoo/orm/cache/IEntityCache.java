@@ -15,7 +15,6 @@ package com.zfoo.orm.cache;
 import com.zfoo.orm.model.IEntity;
 import org.springframework.lang.NonNull;
 
-import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
@@ -64,18 +63,8 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
      */
     void persistAll();
 
-    /**
-     * 获取所有存在的缓存对象
-     */
-    List<E> allPresentCaches();
-
     void forEach(BiConsumer<PK, E> biConsumer);
 
     long size();
-
-    /**
-     * 统计缓存命中率
-     */
-    String recordStatus();
 
 }
