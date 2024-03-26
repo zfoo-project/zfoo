@@ -72,7 +72,6 @@ java的线程池，SingleThreadScheduledExecutor，SingleThreadExecutor
 ```
 Mysql中的数据库，表，一条数据，在Mongodb分别叫做，数据库，集合，文档
 Elastic Search的全文搜索引擎
-Java的缓存框架guava cache，还有它的升级版本caffeine
 mongodb的map reduce操作
 分布式唯一Id，Java自带的UUID，雪花算法（SnowFlake），Redis分布式唯一Id实现，Mongodb分布式唯一Id实现，Zookeeper分布式唯一Id实现
 ```

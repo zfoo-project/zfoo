@@ -106,7 +106,7 @@ NetContext.getCosumer()
 HotSwapUtils.hotswapClass(bytes);
 ```
 
-#### 4. [orm](orm/README.md) automatic mapping framework based on mongodb, The secondary cache is designed using [caffeine](https://github.com/ben-manes/caffeine) to fully release the database pressure
+#### 4. [orm](orm/README.md) automatic mapping framework based on mongodb
 
 ```
 // You don't need to write sql and any configuration yourself, define a table in the database directly through annotation definitions

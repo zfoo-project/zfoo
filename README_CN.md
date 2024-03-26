@@ -112,7 +112,7 @@ NetContext.getCosumer()
 HotSwapUtils.hotswapClass(bytes);
 ```
 
-#### 4. [orm](orm/README.md) 基于mongodb的自动映射框架，使用 [caffeine](https://github.com/ben-manes/caffeine) 设计了二级缓存，充分释放数据库压力
+#### 4. [orm](orm/README.md) 基于mongodb的自动映射框架
 
 ```
 // 无需自己写sql和任何配置，直接通过注解定义在数据库中定义一张表

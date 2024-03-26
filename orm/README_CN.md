@@ -4,7 +4,6 @@
 
 - [orm](https://github.com/zfoo-project/zfoo/blob/main/orm/README.md) 基于MongoDB的orm框架，提供POJO对象和MongoDB数据库之间的映射
 - mongodb是分布式数据库，可以单机使用，也可以分布式使用
-- 基于 [caffeine](https://github.com/ben-manes/caffeine) 的高性能数据库实体对象Entity缓存
 
 ### Ⅱ. 使用
 
