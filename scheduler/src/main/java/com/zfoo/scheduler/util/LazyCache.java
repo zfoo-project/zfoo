@@ -1,7 +1,6 @@
-package com.zfoo.orm.util;
+package com.zfoo.scheduler.util;
 
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.scheduler.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,10 +1,8 @@
-package com.zfoo.orm.cache;
+package com.zfoo.scheduler.util;
 
-import com.zfoo.orm.util.LazyCache;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
-import com.zfoo.scheduler.util.TimeUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
