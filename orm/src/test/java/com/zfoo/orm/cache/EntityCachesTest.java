@@ -17,6 +17,7 @@ import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.entity.UserEntity;
 import com.zfoo.protocol.util.ThreadUtils;
+import com.zfoo.scheduler.util.TimeUtils;
 import org.bson.Document;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -45,7 +46,9 @@ public class EntityCachesTest {
             userEntityCaches.update(entity);
         }
 
-        ThreadUtils.sleep(Long.MAX_VALUE);
+        ThreadUtils.sleep(60 * TimeUtils.MILLIS_PER_SECOND);
+
+        userEntityCaches.load(1L);
     }
 
 
