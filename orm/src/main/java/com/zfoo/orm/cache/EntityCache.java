@@ -16,6 +16,7 @@ import com.mongodb.WriteConcern;
 import com.mongodb.client.model.BulkWriteOptions;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOneModel;
+import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.cache.persister.IOrmPersister;
 import com.zfoo.orm.cache.persister.PNode;
@@ -68,23 +69,29 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 var entity = pnode.getEntity();
                 @SuppressWarnings("unchecked")
                 var entityClass = (Class<E>) entityDef.getClazz();
-                var collection = OrmContext.getOrmManager().getCollection(entityClass);
+                EventBus.execute(entityClass.hashCode(), new Runnable() {
+                    @Override
+                    public void run() {
+                        var collection = OrmContext.getOrmManager().getCollection(entityClass);
 
-                var version = entity.gvs();
-                entity.svs(version + 1);
+                        var version = entity.gvs();
+                        entity.svs(version + 1);
 
-                var filter = entity.gvs() > 0
-                        ? Filters.and(Filters.eq("_id", entity.id()), Filters.eq("vs", version))
-                        : Filters.eq("_id", entity.id());
-                var result = collection.replaceOne(filter, entity);
-                if (result.getModifiedCount() <= 0) {
-                    // 移除缓存时，更新数据库中的实体文档异常
-                    logger.error("onRemoval(): update entity to db failed when remove [{}] [pk:{}] by [removalCause:{}]", entityClass.getSimpleName(), entity.id(), removalCause);
-                }
+                        var filter = entity.gvs() > 0
+                                ? Filters.and(Filters.eq("_id", entity.id()), Filters.eq("vs", version))
+                                : Filters.eq("_id", entity.id());
+                        var result = collection.replaceOne(filter, entity);
+                        if (result.getModifiedCount() <= 0) {
+                            // 移除缓存时，更新数据库中的实体文档异常
+                            logger.error("onRemoval(): update entity to db failed when remove [{}] [pk:{}] by [removalCause:{}]", entityClass.getSimpleName(), entity.id(), removalCause);
+                        }
+                    }
+                });
             }
         };
+        var expireCheckIntervalMillis = Math.max(3 * TimeUtils.MILLIS_PER_SECOND, entityDef.getExpireMillisecond() / 10);
         this.entityDef = entityDef;
-        this.cache = new LazyCache<>(entityDef.getCacheSize(), entityDef.getExpireMillisecond(), 1 * TimeUtils.MILLIS_PER_SECOND, removeCallback);
+        this.cache = new LazyCache<>(entityDef.getCacheSize(), entityDef.getExpireMillisecond(), expireCheckIntervalMillis, removeCallback);
 
         if (CollectionUtils.isNotEmpty(entityDef.getIndexDefMap())) {
             // indexMap
