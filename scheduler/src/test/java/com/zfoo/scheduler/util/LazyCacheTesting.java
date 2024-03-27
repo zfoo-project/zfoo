@@ -15,9 +15,9 @@ import java.util.function.BiConsumer;
  * @author godotg
  */
 @Ignore
-public class LazyCacheTest {
+public class LazyCacheTesting {
 
-    private static final Logger logger = LoggerFactory.getLogger(LazyCacheTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(LazyCacheTesting.class);
 
     private static final BiConsumer<Pair<Integer, String>, LazyCache.RemovalCause> myRemoveCallback = new BiConsumer<Pair<Integer, String>, LazyCache.RemovalCause>() {
         @Override
