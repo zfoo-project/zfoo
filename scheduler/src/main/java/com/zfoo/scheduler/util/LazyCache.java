@@ -15,6 +15,8 @@ import java.util.function.BiConsumer;
  */
 public class LazyCache<K, V> {
 
+    private static final float DEFAULT_BACK_PRESSURE_FACTOR = 0.11f;
+
     private static class CacheValue<V> {
         public volatile V value;
         public volatile long expireTime;
@@ -49,6 +51,7 @@ public class LazyCache<K, V> {
 
 
     private int maximumSize;
+    private int backPressureSize;
     private long expireAfterAccessMillis;
     private long expireCheckIntervalMillis;
     private volatile long minExpireTime;
@@ -59,6 +62,7 @@ public class LazyCache<K, V> {
 
     public LazyCache(int maximumSize, long expireAfterAccessMillis, long expireCheckIntervalMillis, BiConsumer<Pair<K, V>, RemovalCause> removeListener) {
         this.maximumSize = maximumSize;
+        this.backPressureSize = maximumSize + (int) (maximumSize * DEFAULT_BACK_PRESSURE_FACTOR);
         this.expireAfterAccessMillis = expireAfterAccessMillis;
         this.expireCheckIntervalMillis = expireCheckIntervalMillis;
         this.minExpireTime = TimeUtils.now();
@@ -126,18 +130,15 @@ public class LazyCache<K, V> {
 
     // -----------------------------------------------------------------------------------------------------------------
     private void checkMaximumSize() {
-        if (cacheMap.size() <= maximumSize) {
+        if (cacheMap.size() <= backPressureSize) {
             return;
         }
-        K minKey = null;
-        var minTimestamp = Long.MAX_VALUE;
-        for (var entry : cacheMap.entrySet()) {
-            if (entry.getValue().expireTime < minTimestamp) {
-                minKey = entry.getKey();
-                minTimestamp = entry.getValue().expireTime;
-            }
-        }
-        removeForCause(minKey, RemovalCause.SIZE);
+        var exceedList = cacheMap.entrySet()
+                .stream()
+                .sorted((a, b) -> Long.compare(a.getValue().expireTime, b.getValue().expireTime))
+                .limit(cacheMap.size() - maximumSize)
+                .toList();
+        exceedList.forEach(it -> removeForCause(it.getKey(), RemovalCause.SIZE));
     }
 
     private void checkExpire() {
