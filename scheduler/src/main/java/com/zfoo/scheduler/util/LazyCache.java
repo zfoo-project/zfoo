@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
  */
 public class LazyCache<K, V> {
 
-    private static final float DEFAULT_BACK_PRESSURE_FACTOR = 0.11f;
+    private static final float DEFAULT_BACK_PRESSURE_FACTOR = 0.13f;
 
     private static class CacheValue<V> {
         public volatile V value;
@@ -63,7 +63,7 @@ public class LazyCache<K, V> {
 
     public LazyCache(int maximumSize, long expireAfterAccessMillis, long expireCheckIntervalMillis, BiConsumer<Pair<K, V>, RemovalCause> removeListener) {
         this.maximumSize = maximumSize;
-        this.backPressureSize = maximumSize + (int) (maximumSize * DEFAULT_BACK_PRESSURE_FACTOR);
+        this.backPressureSize = Math.max(maximumSize, maximumSize + (int) (maximumSize * DEFAULT_BACK_PRESSURE_FACTOR));
         this.expireAfterAccessMillis = expireAfterAccessMillis;
         this.expireCheckIntervalMillis = expireCheckIntervalMillis;
         this.minExpireTime = TimeUtils.now();
