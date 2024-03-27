@@ -2,6 +2,7 @@ package com.zfoo.scheduler.util;
 
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.model.PairLong;
+import com.zfoo.protocol.util.AssertionUtils;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,12 +63,15 @@ public class LazyCache<K, V> {
     };
 
     public LazyCache(int maximumSize, long expireAfterAccessMillis, long expireCheckIntervalMillis, BiConsumer<Pair<K, V>, RemovalCause> removeListener) {
+        AssertionUtils.ge1(maximumSize);
+        AssertionUtils.ge0(expireAfterAccessMillis);
+        AssertionUtils.ge0(expireCheckIntervalMillis);
         this.maximumSize = maximumSize;
         this.backPressureSize = Math.max(maximumSize, maximumSize + (int) (maximumSize * DEFAULT_BACK_PRESSURE_FACTOR));
         this.expireAfterAccessMillis = expireAfterAccessMillis;
-        this.expireCheckIntervalMillis = expireCheckIntervalMillis;
+        this.expireCheckIntervalMillis = Math.max(1, expireCheckIntervalMillis);
         this.minExpireTime = TimeUtils.now();
-        this.expireCheckTimeAtomic = new AtomicLong(TimeUtils.now() + expireCheckIntervalMillis);
+        this.expireCheckTimeAtomic = new AtomicLong(TimeUtils.now());
         this.cacheMap = new ConcurrentHashMap<>(Math.max(maximumSize / 16, 512));
         if (removeListener != null) {
             this.removeListener = removeListener;

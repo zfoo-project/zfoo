@@ -129,6 +129,65 @@ public class LazyCacheTest {
         }
     }
 
+    // check interval test
+    @Test
+    public void multipleThreadCheckIntervalTest() {
+        int threadNum = Runtime.getRuntime().availableProcessors() + 1;
+        ExecutorService[] executors = new ExecutorService[threadNum];
+        for (int i = 0; i < executors.length; i++) {
+            executors[i] = Executors.newSingleThreadExecutor();
+        }
+        var lazyCache = new LazyCache<Integer, String>(1_0000, 10000000 * TimeUtils.MILLIS_PER_SECOND, 0, myRemoveCallback);
+        for (int i = 0; i < executors.length; i++) {
+
+            var executor = executors[i];
+            int i1 = i;
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    var startIndex = i1 * 1_0000;
+                    for (int j = i1 * 1_0000; j < startIndex + 1_0000; j++) {
+                        lazyCache.put(j, String.valueOf(j));
+                    }
+                }
+            });
+        }
+        for (int i = 0; i < 10000; i++) {
+            logger.info("cache size:[{}]", lazyCache.size());
+            ThreadUtils.sleep(1000);
+        }
+    }
+
+    // expire after access test
+    @Test
+    public void multipleThreadExpireAfterAccessTest() {
+        int threadNum = Runtime.getRuntime().availableProcessors() + 1;
+        ExecutorService[] executors = new ExecutorService[threadNum];
+        for (int i = 0; i < executors.length; i++) {
+            executors[i] = Executors.newSingleThreadExecutor();
+        }
+        var lazyCache = new LazyCache<Integer, String>(1_0000, 0, 0, null);
+        for (int i = 0; i < executors.length; i++) {
+
+            var executor = executors[i];
+            int i1 = i;
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    var startIndex = i1 * 1_0000;
+                    for (int j = i1 * 1_0000; j < startIndex + 1_0000; j++) {
+                        lazyCache.put(j, String.valueOf(j));
+                    }
+                }
+            });
+        }
+        for (int i = 0; i < 10000; i++) {
+            lazyCache.get(-1);
+            logger.info("cache size:[{}]", lazyCache.size());
+            ThreadUtils.sleep(100);
+        }
+    }
+
     // not expired test
     @Test
     public void multipleThreadNotExpiredTest() {
