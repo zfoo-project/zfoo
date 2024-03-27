@@ -80,7 +80,7 @@ public class LazyCache<K, V> {
     public void put(K key, V value) {
         var cacheValue = new CacheValue<V>();
         cacheValue.value = value;
-        cacheValue.expireTime = TimeUtils.now();
+        cacheValue.expireTime = TimeUtils.now() + expireAfterAccessMillis;
         var oldCacheValue = cacheMap.put(key, cacheValue);
         if (oldCacheValue != null) {
             removeListener.accept(new Pair<>(key, oldCacheValue.value), RemovalCause.REPLACED);
