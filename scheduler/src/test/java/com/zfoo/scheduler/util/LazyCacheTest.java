@@ -1,7 +1,6 @@
 package com.zfoo.scheduler.util;
 
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -102,7 +101,7 @@ public class LazyCacheTest {
 
 
     @Test
-    public void multiple1ThreadTest() {
+    public void multipleThreadTest() {
         int threadNum = Runtime.getRuntime().availableProcessors() + 1;
         ExecutorService[] executors = new ExecutorService[threadNum];
         for (int i = 0; i < executors.length; i++) {
@@ -133,14 +132,15 @@ public class LazyCacheTest {
         }
     }
 
+    // not expired test
     @Test
-    public void multiple2ThreadTest() {
+    public void multipleThreadNotExpiredTest() {
         int threadNum = Runtime.getRuntime().availableProcessors() + 1;
         ExecutorService[] executors = new ExecutorService[threadNum];
         for (int i = 0; i < executors.length; i++) {
             executors[i] = Executors.newSingleThreadExecutor();
         }
-        var lazyCache = new LazyCache<Integer, String>(1_0000, 1000 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
+        var lazyCache = new LazyCache<Integer, String>(1_0000, 100000 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
         for (int i = 0; i < executors.length; i++) {
 
             var executor = executors[i];
@@ -165,4 +165,70 @@ public class LazyCacheTest {
         }
     }
 
+    // remove reason for expire test
+    @Test
+    public void multipleThreadExpireTest() {
+        int threadNum = Runtime.getRuntime().availableProcessors() + 1;
+        ExecutorService[] executors = new ExecutorService[threadNum];
+        for (int i = 0; i < executors.length; i++) {
+            executors[i] = Executors.newSingleThreadExecutor();
+        }
+        var lazyCache = new LazyCache<Integer, String>(1_0000, 20 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
+        for (int i = 0; i < executors.length; i++) {
+
+            var executor = executors[i];
+            int i1 = i;
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    var startIndex = i1 * 1_0000;
+                    for (int j = i1 * 1_0000; j < startIndex + 1_0000; j++) {
+                        lazyCache.put(j, String.valueOf(j));
+                    }
+                    while (true) {
+                        lazyCache.get(-1);
+                        ThreadUtils.sleep(1);
+                    }
+                }
+            });
+        }
+        for (int i = 0; i < 10000; i++) {
+            logger.info("cache size:[{}]", lazyCache.size());
+            ThreadUtils.sleep(1000);
+        }
+    }
+
+    // remove reason for replace test
+    @Test
+    public void multipleThreadReplaceTest() {
+        int threadNum = Runtime.getRuntime().availableProcessors() + 1;
+        ExecutorService[] executors = new ExecutorService[threadNum];
+        for (int i = 0; i < executors.length; i++) {
+            executors[i] = Executors.newSingleThreadExecutor();
+        }
+        var lazyCache = new LazyCache<Integer, String>(1_0000, 10 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
+        for (int i = 0; i < executors.length; i++) {
+
+            var executor = executors[i];
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    for (int k = 0; k < 10; k++) {
+                        for (int j = 0; j < 1_0000; j++) {
+                            lazyCache.put(j, String.valueOf(j));
+                        }
+                    }
+
+                    while (true) {
+                        lazyCache.get(-1);
+                        ThreadUtils.sleep(1);
+                    }
+                }
+            });
+        }
+        for (int i = 0; i < 10000; i++) {
+            logger.info("cache size:[{}]", lazyCache.size());
+            ThreadUtils.sleep(1000);
+        }
+    }
 }
