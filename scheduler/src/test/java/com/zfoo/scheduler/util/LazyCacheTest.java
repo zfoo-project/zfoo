@@ -100,14 +100,15 @@ public class LazyCacheTest {
     }
 
 
+    // max size test
     @Test
-    public void multipleThreadTest() {
+    public void multipleThreadMaxSizeTest() {
         int threadNum = Runtime.getRuntime().availableProcessors() + 1;
         ExecutorService[] executors = new ExecutorService[threadNum];
         for (int i = 0; i < executors.length; i++) {
             executors[i] = Executors.newSingleThreadExecutor();
         }
-        var lazyCache = new LazyCache<Integer, String>(1_0000, 10 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
+        var lazyCache = new LazyCache<Integer, String>(1_00, 10000000 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
         for (int i = 0; i < executors.length; i++) {
 
             var executor = executors[i];
@@ -118,10 +119,6 @@ public class LazyCacheTest {
                     var startIndex = i1 * 1_0000;
                     for (int j = i1 * 1_0000; j < startIndex + 1_0000; j++) {
                         lazyCache.put(j, String.valueOf(j));
-                    }
-                    for (int j = 0; j < 10000; j++) {
-                        lazyCache.get(j);
-                        ThreadUtils.sleep(1);
                     }
                 }
             });
