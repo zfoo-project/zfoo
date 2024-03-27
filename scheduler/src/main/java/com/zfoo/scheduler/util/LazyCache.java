@@ -16,6 +16,7 @@ import java.util.function.BiConsumer;
 public class LazyCache<K, V> {
 
     private static final float DEFAULT_BACK_PRESSURE_FACTOR = 0.11f;
+    private static final long MILLIS_MAX_SIZE_CHECK_INTERVAL = 300;
 
     private static class CacheValue<V> {
         public volatile V value;
@@ -56,6 +57,7 @@ public class LazyCache<K, V> {
     private long expireCheckIntervalMillis;
     private volatile long minExpireTime;
     private AtomicLong expireCheckTimeAtomic;
+    private AtomicLong sizeCheckTimeAtomic;
     private ConcurrentMap<K, CacheValue<V>> cacheMap;
     private BiConsumer<Pair<K, V>, RemovalCause> removeListener = (pair, removalCause) -> {
     };
@@ -67,6 +69,7 @@ public class LazyCache<K, V> {
         this.expireCheckIntervalMillis = expireCheckIntervalMillis;
         this.minExpireTime = TimeUtils.now();
         this.expireCheckTimeAtomic = new AtomicLong(TimeUtils.now() + expireCheckIntervalMillis);
+        this.sizeCheckTimeAtomic = new AtomicLong(TimeUtils.now());
         this.cacheMap = new ConcurrentHashMap<>(Math.max(maximumSize / 16, 512));
         if (removeListener != null) {
             this.removeListener = removeListener;
@@ -130,15 +133,21 @@ public class LazyCache<K, V> {
 
     // -----------------------------------------------------------------------------------------------------------------
     private void checkMaximumSize() {
-        if (cacheMap.size() <= backPressureSize) {
+        if (cacheMap.size() < backPressureSize) {
             return;
         }
-        var exceedList = cacheMap.entrySet()
-                .stream()
-                .sorted((a, b) -> Long.compare(a.getValue().expireTime, b.getValue().expireTime))
-                .limit(cacheMap.size() - maximumSize)
-                .toList();
-        exceedList.forEach(it -> removeForCause(it.getKey(), RemovalCause.SIZE));
+        var now = TimeUtils.now();
+        var sizeCheckTime = sizeCheckTimeAtomic.get();
+        if (now > sizeCheckTime) {
+            if (sizeCheckTimeAtomic.compareAndSet(sizeCheckTime, now + MILLIS_MAX_SIZE_CHECK_INTERVAL)) {
+                var exceedList = cacheMap.entrySet()
+                        .stream()
+                        .sorted((a, b) -> Long.compare(a.getValue().expireTime, b.getValue().expireTime))
+                        .limit(Math.max(0, cacheMap.size() - maximumSize))
+                        .toList();
+                exceedList.forEach(it -> removeForCause(it.getKey(), RemovalCause.SIZE));
+            }
+        }
     }
 
     private void checkExpire() {
