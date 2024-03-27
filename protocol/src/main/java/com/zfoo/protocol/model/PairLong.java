@@ -18,16 +18,15 @@ import java.util.Objects;
 /**
  * 键值对对象，只能在构造时传入键值
  *
- * @param <K> 键类型
  * @param <V> 值类型
  * @author godotg
  */
-public class Pair<K, V> {
+public class PairLong<V> {
 
-    private K key;
+    private long key;
     private V value;
 
-    public Pair() {
+    public PairLong() {
 
     }
 
@@ -37,7 +36,7 @@ public class Pair<K, V> {
      * @param key   键
      * @param value 值
      */
-    public Pair(K key, V value) {
+    public PairLong(long key, V value) {
         this.key = key;
         this.value = value;
     }
@@ -47,7 +46,7 @@ public class Pair<K, V> {
      *
      * @return 键
      */
-    public K getKey() {
+    public long getKey() {
         return this.key;
     }
 
@@ -62,19 +61,15 @@ public class Pair<K, V> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Pair<?, ?> pair = (Pair<?, ?>) o;
-        return Objects.equals(key, pair.key) && Objects.equals(value, pair.value);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PairLong<?> pairLong = (PairLong<?>) o;
+        return key == pairLong.key && Objects.equals(value, pairLong.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(key);
+        return Long.hashCode(key);
     }
 
     @Override

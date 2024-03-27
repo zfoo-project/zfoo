@@ -5,7 +5,11 @@ import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
 /**
@@ -14,25 +18,36 @@ import java.util.function.BiConsumer;
 @Ignore
 public class LazyCacheTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(LazyCacheTest.class);
+
     private static final BiConsumer<Pair<Integer, String>, LazyCache.RemovalCause> myRemoveCallback = new BiConsumer<Pair<Integer, String>, LazyCache.RemovalCause>() {
         @Override
         public void accept(Pair<Integer, String> pair, LazyCache.RemovalCause removalCause) {
-            System.out.println(StringUtils.format("remove key:[{}] value:[{}] removalCause:[{}]", pair.getKey(), pair.getValue(), removalCause));
+            logger.info("remove key:[{}] value:[{}] removalCause:[{}]", pair.getKey(), pair.getValue(), removalCause);
         }
     };
 
     @Test
     public void putTest() {
-        var lazyCache = new LazyCache<Integer, String>(3, 10 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
+        var lazyCache = new LazyCache<Integer, String>(10, 10 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
 
         lazyCache.put(1, "a");
         lazyCache.put(2, "b");
-        ThreadUtils.sleep(1000);
         lazyCache.put(3, "c");
-        ThreadUtils.sleep(1000);
         lazyCache.put(4, "d");
-        ThreadUtils.sleep(1000);
         lazyCache.put(5, "e");
+        lazyCache.put(6, "f");
+        lazyCache.put(7, "g");
+        lazyCache.put(8, "h");
+        lazyCache.put(9, "i");
+        lazyCache.put(10, "j");
+        lazyCache.put(11, "k");
+        lazyCache.put(12, "l");
+        ThreadUtils.sleep(1000);
+        lazyCache.put(13, "m");
+        ThreadUtils.sleep(1000);
+        lazyCache.put(14, "n");
+        ThreadUtils.sleep(1000);
     }
 
     @Test
@@ -84,4 +99,35 @@ public class LazyCacheTest {
             }
         }
     }
+
+
+    @Test
+    public void multipleThreadTest() {
+        int threadNum = Runtime.getRuntime().availableProcessors() + 1;
+        ExecutorService[] executors = new ExecutorService[threadNum];
+        for (int i = 0; i < executors.length; i++) {
+            executors[i] = Executors.newSingleThreadExecutor();
+        }
+        var lazyCache = new LazyCache<Integer, String>(1_0000, 10 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
+        for (int i = 0; i < executors.length; i++) {
+
+            var executor = executors[i];
+            int i1 = i;
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    var startIndex = i1 * 1_0000;
+                    for (int j = i1 * 1_0000; j < startIndex + 1_0000; j++) {
+                        lazyCache.put(j, String.valueOf(j));
+                    }
+                    for (int j = 0; j < 10000; j++) {
+                        lazyCache.get(j);
+                        ThreadUtils.sleep(1);
+                    }
+                }
+            });
+        }
+        ThreadUtils.sleep(Long.MAX_VALUE);
+    }
+
 }
