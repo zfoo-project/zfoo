@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
 public class LazyCache<K, V> {
 
     private static final float DEFAULT_BACK_PRESSURE_FACTOR = 0.11f;
-    private static final long MILLIS_MAX_SIZE_CHECK_INTERVAL = 300;
+    private static final long MILLIS_MAX_SIZE_CHECK_INTERVAL = 13;
 
     private static class CacheValue<V> {
         public volatile V value;
@@ -134,7 +134,7 @@ public class LazyCache<K, V> {
     // -----------------------------------------------------------------------------------------------------------------
     private void checkMaximumSize() {
         if (cacheMap.size() > backPressureSize) {
-            var now = TimeUtils.now();
+            var now = TimeUtils.currentTimeMillis();
             var sizeCheckTime = sizeCheckTimeAtomic.get();
             if (now > sizeCheckTime) {
                 if (sizeCheckTimeAtomic.compareAndSet(sizeCheckTime, now + MILLIS_MAX_SIZE_CHECK_INTERVAL)) {
