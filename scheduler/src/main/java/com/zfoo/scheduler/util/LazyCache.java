@@ -17,7 +17,6 @@ import java.util.function.BiConsumer;
 public class LazyCache<K, V> {
 
     private static final float DEFAULT_BACK_PRESSURE_FACTOR = 0.11f;
-    private static final long MILLIS_MAX_SIZE_CHECK_INTERVAL = 3;
 
     private static class CacheValue<V> {
         public volatile V value;
@@ -58,7 +57,6 @@ public class LazyCache<K, V> {
     private long expireCheckIntervalMillis;
     private volatile long minExpireTime;
     private AtomicLong expireCheckTimeAtomic;
-    private AtomicLong sizeCheckTimeAtomic;
     private ConcurrentMap<K, CacheValue<V>> cacheMap;
     private BiConsumer<Pair<K, V>, RemovalCause> removeListener = (pair, removalCause) -> {
     };
@@ -70,7 +68,6 @@ public class LazyCache<K, V> {
         this.expireCheckIntervalMillis = expireCheckIntervalMillis;
         this.minExpireTime = TimeUtils.now();
         this.expireCheckTimeAtomic = new AtomicLong(TimeUtils.now() + expireCheckIntervalMillis);
-        this.sizeCheckTimeAtomic = new AtomicLong(TimeUtils.now());
         this.cacheMap = new ConcurrentHashMap<>(Math.max(maximumSize / 16, 512));
         if (removeListener != null) {
             this.removeListener = removeListener;
@@ -136,19 +133,12 @@ public class LazyCache<K, V> {
     // -----------------------------------------------------------------------------------------------------------------
     private void checkMaximumSize() {
         if (cacheMap.size() > backPressureSize) {
-            var currentTimeMillis = TimeUtils.currentTimeMillis();
-            var sizeCheckTime = sizeCheckTimeAtomic.get();
-            if (currentTimeMillis > sizeCheckTime) {
-                if (sizeCheckTimeAtomic.compareAndSet(sizeCheckTime, currentTimeMillis + MILLIS_MAX_SIZE_CHECK_INTERVAL)) {
-                    var exceedList = cacheMap.entrySet()
-                            .stream()
-                            .map(it -> new PairLong<>(it.getValue().expireTime, it.getKey()))
-                            .sorted((a, b) -> Long.compare(a.getKey(), b.getKey()))
-                            .limit(Math.max(0, cacheMap.size() - maximumSize))
-                            .toList();
-                    exceedList.forEach(it -> removeForCause(it.getValue(), RemovalCause.SIZE));
-                }
-            }
+            cacheMap.entrySet()
+                    .stream()
+                    .map(it -> new PairLong<>(it.getValue().expireTime, it.getKey()))
+                    .sorted((a, b) -> Long.compare(a.getKey(), b.getKey()))
+                    .limit(Math.max(0, cacheMap.size() - maximumSize))
+                    .forEach(it -> removeForCause(it.getValue(), RemovalCause.SIZE));
         }
     }
 

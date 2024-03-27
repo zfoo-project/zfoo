@@ -127,7 +127,10 @@ public class LazyCacheTest {
                 }
             });
         }
-        ThreadUtils.sleep(Long.MAX_VALUE);
+        for (int i = 0; i < 10000; i++) {
+            logger.info("cache size:[{}]", lazyCache.size());
+            ThreadUtils.sleep(1000);
+        }
     }
 
 }
