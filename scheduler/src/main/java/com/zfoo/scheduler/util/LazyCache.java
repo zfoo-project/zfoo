@@ -133,19 +133,18 @@ public class LazyCache<K, V> {
 
     // -----------------------------------------------------------------------------------------------------------------
     private void checkMaximumSize() {
-        if (cacheMap.size() < backPressureSize) {
-            return;
-        }
-        var now = TimeUtils.now();
-        var sizeCheckTime = sizeCheckTimeAtomic.get();
-        if (now > sizeCheckTime) {
-            if (sizeCheckTimeAtomic.compareAndSet(sizeCheckTime, now + MILLIS_MAX_SIZE_CHECK_INTERVAL)) {
-                var exceedList = cacheMap.entrySet()
-                        .stream()
-                        .sorted((a, b) -> Long.compare(a.getValue().expireTime, b.getValue().expireTime))
-                        .limit(Math.max(0, cacheMap.size() - maximumSize))
-                        .toList();
-                exceedList.forEach(it -> removeForCause(it.getKey(), RemovalCause.SIZE));
+        if (cacheMap.size() > backPressureSize) {
+            var now = TimeUtils.now();
+            var sizeCheckTime = sizeCheckTimeAtomic.get();
+            if (now > sizeCheckTime) {
+                if (sizeCheckTimeAtomic.compareAndSet(sizeCheckTime, now + MILLIS_MAX_SIZE_CHECK_INTERVAL)) {
+                    var exceedList = cacheMap.entrySet()
+                            .stream()
+                            .sorted((a, b) -> Long.compare(a.getValue().expireTime, b.getValue().expireTime))
+                            .limit(Math.max(0, cacheMap.size() - maximumSize))
+                            .toList();
+                    exceedList.forEach(it -> removeForCause(it.getKey(), RemovalCause.SIZE));
+                }
             }
         }
     }
