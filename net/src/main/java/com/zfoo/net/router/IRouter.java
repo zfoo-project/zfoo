@@ -34,6 +34,12 @@ public interface IRouter {
      */
     void send(Session session, IPacket packet, @Nullable IAttachment attachment);
 
+    /**
+     * 2.接受到消息（路由分发：由Netty的Worker线程 线程提交到 自定的线程）
+     * @param session
+     * @param packet
+     * @param attachment
+     */
     void receive(Session session, IPacket packet, @Nullable IAttachment attachment);
 
     void atReceiver(Session session, IPacket packet, @Nullable IAttachment attachment);

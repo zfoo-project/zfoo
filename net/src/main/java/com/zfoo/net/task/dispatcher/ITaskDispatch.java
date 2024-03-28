@@ -23,6 +23,11 @@ import java.util.concurrent.ExecutorService;
  */
 public interface ITaskDispatch {
 
+    /**
+     * 获取执行任务的线程池（策略）
+     * @param packetReceiverTask
+     * @return
+     */
     ExecutorService getExecutor(PacketReceiverTask packetReceiverTask);
 
 }

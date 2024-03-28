@@ -31,6 +31,11 @@ public class JProtobufTcpController {
 
     private static final Logger logger = LoggerFactory.getLogger(JProtobufTcpController.class);
 
+    /**
+     * 反射调用(用户代码：处理接受到的包 在Actor线程中执行)，一个Session的任务永远在同一个Actor线程中执行
+     * @param session
+     * @param ask
+     */
     @PacketReceiver
     public void atJProtobufHelloRequest(Session session, JProtobufHelloRequest ask) {
         logger.info("receive [packet:{}] from client", JsonUtils.object2String(ask));
