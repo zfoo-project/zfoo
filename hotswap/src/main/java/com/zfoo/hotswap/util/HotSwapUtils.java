@@ -98,9 +98,9 @@ public abstract class HotSwapUtils {
             // Byte Buddy hot update
             var instrumentation = ByteBuddyAgent.install();
             instrumentation.redefineClasses(new ClassDefinition(clazz, bytes));
-            logger.info("ByteBuddy hot update [{}] succeeded", clazz);
+            logger.info("ByteBuddy hot update class:[{}] succeeded", clazz.getName());
         } catch (Throwable t) {
-            logger.error("ByteBuddy hot update [{}] failed", clazz);
+            logger.error("ByteBuddy hot update class:[{}] failed", clazz.getName());
         }
     }
 
