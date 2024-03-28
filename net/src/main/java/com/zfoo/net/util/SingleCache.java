@@ -13,7 +13,6 @@
 
 package com.zfoo.net.util;
 
-import com.zfoo.event.manager.EventBus;
 import com.zfoo.scheduler.util.TimeUtils;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -57,7 +56,7 @@ public class SingleCache<V> {
         // 使用双重检测锁的方式
         if (now > refreshTime) {
             if (refreshTimeAtomic.compareAndSet(refreshTime, now + refreshDuration)) {
-                EventBus.asyncExecute(() -> cache = supplier.get());
+                cache = supplier.get();
             }
         }
         return cache;
