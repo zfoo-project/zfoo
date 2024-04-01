@@ -755,4 +755,8 @@ public class ZookeeperRegistry implements IRegistry {
         return StringUtils.format("[path:{}] [stat:{}] [dataSize:{}]", childData.getPath(), childData.getStat(), childData.getData().length);
     }
 
+    @Override
+    public String getRootPath() {
+        return rootPath;
+    }
 }

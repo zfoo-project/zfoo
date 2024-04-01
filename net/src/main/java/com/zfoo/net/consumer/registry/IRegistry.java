@@ -55,4 +55,5 @@ public interface IRegistry {
 
     void shutdown();
 
+    String getRootPath();
 }
