@@ -18,10 +18,12 @@ import io.netty.util.collection.LongObjectHashMap;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.rules.Stopwatch;
 
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author godotg
@@ -67,12 +69,12 @@ public class ConcurrentTesting {
     }
 
     public static final int num = 1_0000;
-    public static final int maxCount = 10000;
+    public static final int maxCount = 100;
 
     @Test
     public void concurrentPrimitiveTest() throws InterruptedException {
         var map = new ConcurrentHashMapLongObject<Integer>(128);
-        var startTime = System.currentTimeMillis();
+        var atomicCount = new AtomicLong(0);
 
         for (int count = 0; count < maxCount; count++) {
             var countDownLatch = new CountDownLatch(EXECUTOR_SIZE);
@@ -80,10 +82,12 @@ public class ConcurrentTesting {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        var startTime = System.currentTimeMillis();
                         for (int j = 0; j < num; j++) {
                             map.put(j, j);
                         }
                         map.forEachPrimitive(it -> it.value());
+                        atomicCount.addAndGet(System.currentTimeMillis() - startTime);
                         countDownLatch.countDown();
                     }
                 }).start();
@@ -96,11 +100,13 @@ public class ConcurrentTesting {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        var startTime = System.currentTimeMillis();
                         for (int j = 0; j < num; j++) {
                             var value = (int) map.get((long) j);
                             Assert.assertEquals(value, j);
                         }
                         map.forEachPrimitive(it -> it.value());
+                        atomicCount.addAndGet(System.currentTimeMillis() - startTime);
                         countDownLatch2.countDown();
                     }
                 }).start();
@@ -112,10 +118,12 @@ public class ConcurrentTesting {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        var startTime = System.currentTimeMillis();
                         for (int j = 0; j < num; j++) {
                             map.put(j, j);
                         }
                         map.forEachPrimitive(it -> it.value());
+                        atomicCount.addAndGet(System.currentTimeMillis() - startTime);
                         countDownLatch3.countDown();
                     }
                 }).start();
@@ -127,10 +135,12 @@ public class ConcurrentTesting {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        var startTime = System.currentTimeMillis();
                         for (int j = 0; j < num; j++) {
                             map.remove((long) j);
                         }
                         map.forEachPrimitive(it -> it.value());
+                        atomicCount.addAndGet(System.currentTimeMillis() - startTime);
                         countDownLatch4.countDown();
                     }
                 }).start();
@@ -139,13 +149,13 @@ public class ConcurrentTesting {
             Assert.assertTrue(map.isEmpty());
         }
 
-        System.out.println(System.currentTimeMillis() - startTime);
+        System.out.println(atomicCount.get());
     }
 
     @Test
     public void concurrentTest() throws InterruptedException {
         var map = new ConcurrentHashMap<Long, Integer>();
-        var startTime = System.currentTimeMillis();
+        var atomicCount = new AtomicLong(0);
 
         for (int count = 0; count < maxCount; count++) {
             var countDownLatch = new CountDownLatch(EXECUTOR_SIZE);
@@ -153,10 +163,12 @@ public class ConcurrentTesting {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        var startTime = System.currentTimeMillis();
                         for (int j = 0; j < num; j++) {
                             map.put((long) j, j);
                         }
                         map.forEach((key, value) -> value++);
+                        atomicCount.addAndGet(System.currentTimeMillis() - startTime);
                         countDownLatch.countDown();
                     }
                 }).start();
@@ -169,11 +181,13 @@ public class ConcurrentTesting {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        var startTime = System.currentTimeMillis();
                         for (int j = 0; j < num; j++) {
                             var value = (int) map.get((long) j);
                             Assert.assertEquals(value, j);
                         }
                         map.forEach((key, value) -> value++);
+                        atomicCount.addAndGet(System.currentTimeMillis() - startTime);
                         countDownLatch2.countDown();
                     }
                 }).start();
@@ -185,10 +199,12 @@ public class ConcurrentTesting {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        var startTime = System.currentTimeMillis();
                         for (int j = 0; j < num; j++) {
                             map.put((long) j, j);
                         }
                         map.forEach((key, value) -> value++);
+                        atomicCount.addAndGet(System.currentTimeMillis() - startTime);
                         countDownLatch3.countDown();
                     }
                 }).start();
@@ -200,10 +216,12 @@ public class ConcurrentTesting {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        var startTime = System.currentTimeMillis();
                         for (int j = 0; j < num; j++) {
                             map.remove((long) j);
                         }
                         map.forEach((key, value) -> value++);
+                        atomicCount.addAndGet(System.currentTimeMillis() - startTime);
                         countDownLatch4.countDown();
                     }
                 }).start();
@@ -212,7 +230,7 @@ public class ConcurrentTesting {
             Assert.assertTrue(map.isEmpty());
         }
 
-        System.out.println(System.currentTimeMillis() - startTime);
+        System.out.println(atomicCount.get());
     }
 
 
