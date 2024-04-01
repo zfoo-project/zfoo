@@ -29,6 +29,9 @@ public interface IRegistry {
 
     void checkConsumer();
 
+    /**
+     * Set the data for path
+     */
     void addData(String path, byte[] bytes, CreateMode mode);
 
     void removeData(String path);
@@ -39,8 +42,11 @@ public interface IRegistry {
 
     List<String> children(String path);
 
+    String rootPath();
+
     /**
-     * 获取所有服务提供者的注册信息
+     * EN: Get registration information for all service providers
+     * CN: 获取所有服务提供者的注册信息
      */
     List<Register> remoteProviderRegisters();
 
@@ -55,5 +61,4 @@ public interface IRegistry {
 
     void shutdown();
 
-    String getRootPath();
 }

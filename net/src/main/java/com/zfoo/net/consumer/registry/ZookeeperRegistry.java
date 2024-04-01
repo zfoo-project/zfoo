@@ -121,6 +121,7 @@ public class ZookeeperRegistry implements IRegistry {
     private String rootPath = "/zfoo";
     private String providerRootPath = "/zfoo/provider";
     private String consumerRootPath = "/zfoo/consumer";
+
     @Override
     public void start() {
         var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
@@ -406,8 +407,6 @@ public class ZookeeperRegistry implements IRegistry {
     /**
      * 遍历zk中的provider信息，从而找到所有自己关心的Provider，从而去连接他们
      * 注意：自己作为Provider那自己启动下就行了比较简单。 但是作为Consumer，那么会尝试连接所有已经注册到zk上来的服务器信息
-     *
-     * @throws Exception
      */
     private void initConsumerCache() throws Exception {
         // /zfoo/provider/applicationNameTest | 192.168.1.104:12400 | provider:[myProviderModule-provider1, myProviderModule-provider2]
@@ -537,13 +536,6 @@ public class ZookeeperRegistry implements IRegistry {
         addData(path, StringUtils.bytes(JsonUtils.object2String(list)), CreateMode.EPHEMERAL);
     }
 
-    /**
-     * 为某个路径下设置数据
-     *
-     * @param path
-     * @param bytes
-     * @param mode
-     */
     @Override
     public void addData(String path, byte[] bytes, CreateMode mode) {
         try {
@@ -594,9 +586,6 @@ public class ZookeeperRegistry implements IRegistry {
 
     /**
      * 是否有某个路径
-     *
-     * @param path
-     * @return
      */
     @Override
     public boolean haveNode(String path) {
@@ -609,9 +598,6 @@ public class ZookeeperRegistry implements IRegistry {
 
     /**
      * 查询某个路径下的所有子路径
-     *
-     * @param path
-     * @return
      */
     @Override
     public List<String> children(String path) {
@@ -629,10 +615,13 @@ public class ZookeeperRegistry implements IRegistry {
         return Collections.emptyList();
     }
 
+    @Override
+    public String rootPath() {
+        return rootPath;
+    }
+
     /**
      * 查询所有服务信息(提供者+消费者信息)
-     *
-     * @return
      */
     @Override
     public List<Register> remoteProviderRegisters() {
@@ -755,8 +744,4 @@ public class ZookeeperRegistry implements IRegistry {
         return StringUtils.format("[path:{}] [stat:{}] [dataSize:{}]", childData.getPath(), childData.getStat(), childData.getData().length);
     }
 
-    @Override
-    public String getRootPath() {
-        return rootPath;
-    }
 }
