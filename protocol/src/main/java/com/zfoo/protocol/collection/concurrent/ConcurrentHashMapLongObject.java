@@ -22,8 +22,8 @@ import java.util.function.Consumer;
 
 
 /**
- * EN: It is suitable for scenarios where there are more reads and fewer writes
- * CN: 适用于读多写少的场景，数据量10w以下性能会有不错的提升，不适用于大数据量的场景
+ * EN: The performance is much lower than ConcurrentHashMap of the JDK, and the purpose is to reduce the memory footprint of the Long wrapper type
+ * CN: 性能远低于JDK自带的ConcurrentHashMap，主要就是减少Long包装类型的内存占用
  *
  * @author godotg
  */
