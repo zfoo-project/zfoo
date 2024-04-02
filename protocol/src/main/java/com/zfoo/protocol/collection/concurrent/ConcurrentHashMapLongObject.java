@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 /**
  * EN: It is suitable for scenarios where there are more reads and fewer writes
  * CN: 适用于读多写少的场景，数据量10w以下性能会有不错的提升，不适用于大数据量的场景
+ *
  * @author godotg
  */
 public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
@@ -32,16 +33,20 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
 
     // 分段锁
     private int buckets;
+    private int mask;
     private ReadWriteLock[] locks;
     // bucket对应的分段map
     private List<LongObjectHashMap<V>> maps;
 
     public ConcurrentHashMapLongObject(int buckets) {
-        this.buckets = buckets;
-        this.locks = new ReadWriteLock[buckets];
-        this.maps = new ArrayList<>(buckets);
+        var shift = Integer.numberOfLeadingZeros(buckets);
+        this.mask = 0XFFFF_FFFF >>> shift;
 
-        for (var i = 0; i < buckets; i++) {
+        this.buckets = this.mask + 1;
+        this.locks = new ReadWriteLock[this.buckets];
+        this.maps = new ArrayList<>(this.buckets);
+
+        for (var i = 0; i < this.buckets; i++) {
             locks[i] = new ReentrantReadWriteLock();
             maps.add(new LongObjectHashMap<>());
         }
@@ -52,7 +57,7 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
     }
 
     private int getBucket(long key) {
-        return Math.abs((int) key) % buckets;
+        return ((int) key) & mask;
     }
 
     @Override
