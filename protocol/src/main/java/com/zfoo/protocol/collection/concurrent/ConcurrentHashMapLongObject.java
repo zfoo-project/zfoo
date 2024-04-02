@@ -56,7 +56,7 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
         this(DEFAULT_BUCKET_SIZE);
     }
 
-    private int getBucket(long key) {
+    private int bucketOf(long key) {
         return ((int) key) & mask;
     }
 
@@ -80,7 +80,7 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
     }
 
     public boolean containsKey(long key) {
-        var bucket = getBucket(key);
+        var bucket = bucketOf(key);
         var readLock = locks[bucket].readLock();
         readLock.lock();
         try {
@@ -113,7 +113,7 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
     }
 
     public V get(long key) {
-        var bucket = getBucket(key);
+        var bucket = bucketOf(key);
         var readLock = locks[bucket].readLock();
         readLock.lock();
         try {
@@ -129,7 +129,7 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
     }
 
     public V put(long key, V value) {
-        var bucket = getBucket(key);
+        var bucket = bucketOf(key);
         var writeLock = locks[bucket].writeLock();
         writeLock.lock();
         try {
@@ -145,7 +145,7 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
     }
 
     public V remove(long key) {
-        var bucket = getBucket(key);
+        var bucket = bucketOf(key);
         var writeLock = locks[bucket].writeLock();
         writeLock.lock();
         try {
