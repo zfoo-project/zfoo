@@ -122,7 +122,7 @@ It is difficult for a project's protocol body class to exceed 3 w, and there wil
 your protocol number a little more compactly, so that your protocol number will not exceed 3 w
 ```
 
-- There are three ways to indicate that the protocol class
+- There are four ways to indicate that the protocol class
     - The first uses annotations: @Protocol(id = protocolId)
       ```
       @Protocol(id = 104)
