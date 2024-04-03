@@ -237,46 +237,6 @@ public abstract class FileUtils {
     }
 
     // ------------------------------------------------复制文件------------------------------------------------
-
-    /**
-     * Copies a file to a new location preserving the file date.
-     * <p>
-     * This method copies the contents of the specified source file to the
-     * specified destination file. The directory holding the destination file is
-     * created if it does not exist. If the destination file exists, then this
-     * method will overwrite it.
-     * <p>
-     * <strong>Note:</strong> This method tries to preserve the file's last
-     * modified date/times using {@link File#setLastModified(long)}, however
-     * it is not guaranteed that the operation will succeed.
-     * If the modification operation fails, no indication is provided.
-     *
-     * @param srcFile  an existing file to copy, must not be null
-     * @param destFile the new file, must not be null
-     * @throws IOException if source or destination is invalid
-     * @throws IOException if an IO error occurs during copying
-     * @throws IOException if the output file length is not the same as the input file length after the copy completes
-     */
-    public static void copyFile(final File srcFile, final File destFile) throws IOException {
-        copyFile(srcFile, destFile, true);
-    }
-
-    public static void copyFileToDirectory(final File srcFile, final File destDir) throws IOException {
-        copyFileToDirectory(srcFile, destDir, true);
-    }
-
-    public static void copyFileToDirectory(final File srcFile, final File destDir, final boolean preserveFileDate)
-            throws IOException {
-        if (destDir == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (destDir.exists() && !destDir.isDirectory()) {
-            throw new IllegalArgumentException(StringUtils.format("Destination [destDir:{}] is not a directory", destDir));
-        }
-        final File destFile = new File(destDir, srcFile.getName());
-        copyFile(srcFile, destFile, preserveFileDate);
-    }
-
     /**
      * Copies a file to a new location.
      * <p>
@@ -293,14 +253,12 @@ public abstract class FileUtils {
      *
      * @param srcFile          an existing file to copy, must not be {@code null}
      * @param destFile         the new file, must not be {@code null}
-     * @param preserveFileDate true if the file date of the copy
      *                         should be the same as the original
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
      * @throws IOException if the output file length is not the same as the input file length after the copy completes
      */
-    public static void copyFile(final File srcFile, final File destFile,
-                                final boolean preserveFileDate) throws IOException {
+    public static void copyFile(final File srcFile, final File destFile) throws IOException {
         checkFileRequirements(srcFile, destFile);
         if (srcFile.isDirectory()) {
             throw new IOException(StringUtils.format("Source [srcFile:{}] exists but is a directory", srcFile));
@@ -317,7 +275,29 @@ public abstract class FileUtils {
         if (destFile.exists() && !destFile.canWrite()) {
             throw new IOException(StringUtils.format("Destination [destFile:{}] exists but is read-only", destFile));
         }
-        doCopyFile(srcFile, destFile, preserveFileDate);
+        doCopyFile(srcFile, destFile);
+    }
+
+    public static void copyFileToDirectory(final File srcFile, final File destDir) throws IOException {
+        if (destDir == null) {
+            throw new NullPointerException("Destination must not be null");
+        }
+        if (destDir.exists() && !destDir.isDirectory()) {
+            throw new IllegalArgumentException(StringUtils.format("Destination [destDir:{}] is not a directory", destDir));
+        }
+        final File destFile = new File(destDir, srcFile.getName());
+        copyFile(srcFile, destFile);
+    }
+
+    public static void copyDirectory(final File srcDir, final File destDir) throws IOException {
+        checkFileRequirements(srcDir, destDir);
+        if (!srcDir.isDirectory()) {
+            throw new IOException(StringUtils.format("Source [{}] exists but is not a directory", srcDir));
+        }
+        if (srcDir.getCanonicalPath().equals(destDir.getCanonicalPath())) {
+            throw new IOException(StringUtils.format("Source [{}] and destination '" + destDir + "' are the same", srcDir));
+        }
+        doCopyDirectory(srcDir, destDir);
     }
 
     /**
@@ -349,15 +329,13 @@ public abstract class FileUtils {
      *
      * @param srcFile          the validated source file, must not be {@code null}
      * @param destFile         the validated destination file, must not be {@code null}
-     * @param preserveFileDate whether to preserve the file date
      * @throws IOException              if an error occurs
      * @throws IOException              if the output file length is not the same as the input file length after the
      *                                  copy completes
      * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the
      *                                  position
      */
-    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
-            throws IOException {
+    private static void doCopyFile(final File srcFile, final File destFile) throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
             throw new IOException(StringUtils.format("Destination [destFile:{}] exists but is a directory", destFile));
         }
@@ -393,8 +371,33 @@ public abstract class FileUtils {
             throw new IOException(StringUtils.format("Failed to copy full contents from [srcFile:{}] to [destFile:{}] Expected length:[srcLen:{}] Actual [dstLen:{}]"
                     , srcFile, destFile, srcLen, dstLen));
         }
-        if (preserveFileDate) {
-            destFile.setLastModified(srcFile.lastModified());
+    }
+
+    private static void doCopyDirectory(final File srcDir, final File destDir) throws IOException {
+        // recurse
+        final File[] srcFiles = srcDir.listFiles();
+        if (srcFiles == null) {  // null if abstract pathname does not denote a directory, or if an I/O error occurs
+            throw new IOException("Failed to list contents of " + srcDir);
+        }
+        if (destDir.exists()) {
+            if (!destDir.isDirectory()) {
+                throw new IOException(StringUtils.format("Destination [{}] exists but is not a directory", destDir));
+            }
+        } else {
+            if (!destDir.mkdirs() && !destDir.isDirectory()) {
+                throw new IOException(StringUtils.format("Destination [{}] directory cannot be created", destDir));
+            }
+        }
+        if (!destDir.canWrite()) {
+            throw new IOException(StringUtils.format("Destination [{}] cannot be written to", destDir));
+        }
+        for (final File srcFile : srcFiles) {
+            final File dstFile = new File(destDir, srcFile.getName());
+            if (srcFile.isDirectory()) {
+                doCopyDirectory(srcFile, dstFile);
+            } else {
+                doCopyFile(srcFile, dstFile);
+            }
         }
     }
 

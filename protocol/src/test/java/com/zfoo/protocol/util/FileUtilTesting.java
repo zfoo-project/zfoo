@@ -79,4 +79,23 @@ public class FileUtilTesting {
         System.out.println(FileUtils.searchFileInProject("User"));
     }
 
+    @Test
+    public void copyFileTest() throws IOException {
+        var srcFile = new File("C:\\Users\\Administrator\\Desktop\\aaa\\aaa.txt");
+        var destFile = new File("C:\\Users\\Administrator\\Desktop\\bbb\\bbb");
+        FileUtils.copyFile(srcFile, destFile);
+    }
+
+    @Test
+    public void copyFileToDirectoryTest() throws IOException {
+        var srcFile = new File("C:\\Users\\Administrator\\Desktop\\aaa\\aaa.txt");
+        var destFile = new File("C:\\Users\\Administrator\\Desktop\\bbb\\");
+        FileUtils.copyFileToDirectory(srcFile, destFile);
+    }
+    @Test
+    public void copyDirectoryTest() throws IOException {
+        var srcFile = new File("C:\\Users\\Administrator\\Desktop\\aaa");
+        var destFile = new File("C:\\Users\\Administrator\\Desktop\\bbb");
+        FileUtils.copyDirectory(srcFile, destFile);
+    }
 }
