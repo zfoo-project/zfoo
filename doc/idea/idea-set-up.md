@@ -60,6 +60,11 @@ ranslate.google.com
 查看nodejs是否安装成功：node --version；
 ```
 
+- nodejs设置代理
+```
+npm config set proxy http://127.0.0.1:10809
+```
+
 - npm install -g yarn
 
 - 在package.json文件右键,npm install安装依赖包
