@@ -1,6 +1,5 @@
 package com.zfoo.event.manager;
 
-import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
@@ -8,7 +7,6 @@ import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -28,8 +26,6 @@ public abstract class EventExecutors {
     private static final int EXECUTORS_SIZE = Math.max(Runtime.getRuntime().availableProcessors(), 4) * 2 + 1;
 
     private static final ExecutorService[] executors = new ExecutorService[EXECUTORS_SIZE];
-
-    private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>(EXECUTORS_SIZE);
 
 
     static {
@@ -59,7 +55,7 @@ public abstract class EventExecutors {
             thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
             var executor = executors[poolNumber];
             AssertionUtils.notNull(executor);
-            threadMap.put(thread.getId(), executor);
+            EventBus.threadMap.put(thread.getId(), executor);
             return thread;
         }
     }
@@ -71,7 +67,4 @@ public abstract class EventExecutors {
         executors[Math.abs(executorHash % EXECUTORS_SIZE)].execute(ThreadUtils.safeRunnable(runnable));
     }
 
-    public static Executor threadExecutor(long currentThreadId) {
-        return threadMap.getPrimitive(currentThreadId);
-    }
 }

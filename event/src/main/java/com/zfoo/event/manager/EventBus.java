@@ -15,6 +15,7 @@ package com.zfoo.event.manager;
 import com.zfoo.event.enhance.IEventReceiver;
 import com.zfoo.event.model.IEvent;
 import com.zfoo.protocol.collection.CollectionUtils;
+import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.RandomUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.slf4j.Logger;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -107,6 +110,12 @@ public abstract class EventBus {
         receiverMap.computeIfAbsent(eventType, it -> new ArrayList<>(1)).add(receiver);
     }
 
+
+    // ------------------------------------------------------------------------------------------------------------------
+    static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>();
+    public static Executor threadExecutor(long currentThreadId) {
+        return threadMap.getPrimitive(currentThreadId);
+    }
 }
 
 

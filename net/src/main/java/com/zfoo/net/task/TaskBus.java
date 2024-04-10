@@ -13,7 +13,7 @@
 
 package com.zfoo.net.task;
 
-import com.zfoo.event.manager.EventExecutors;
+import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
@@ -126,7 +126,7 @@ public final class TaskBus {
             return taskExecutor;
         }
 
-        var eventExecutor = EventExecutors.threadExecutor(threadId);
+        var eventExecutor = EventBus.threadExecutor(threadId);
         if (eventExecutor != null) {
             return eventExecutor;
         }
