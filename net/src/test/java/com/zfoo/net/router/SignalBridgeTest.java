@@ -45,7 +45,7 @@ public class SignalBridgeTest {
 
         var countDownLatch = new CountDownLatch(executorSize);
         for (var i = 0; i < executorSize; i++) {
-            EventBus.execute(i, new Runnable() {
+            EventBus.asyncExecute(i, new Runnable() {
                 @Override
                 public void run() {
                     addAndRemoveArray();
