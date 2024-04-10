@@ -56,6 +56,12 @@ public abstract class EventBus {
      * event mapping
      */
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
+
+    /**
+     * custom thread event receiver
+     */
+    public static BiConsumer<IEventReceiver, IEvent> manualThreadHandler = EventBus::doReceiver;
+
     /**
      * event exception handler
      */
@@ -116,6 +122,7 @@ public abstract class EventBus {
                 case CurrentThread -> doReceiver(receiver, event);
                 case AsyncThread -> execute(event.executorHash(), () -> doReceiver(receiver, event));
 //                case VirtualThread -> Thread.ofVirtual().name("virtual-on" + clazz.getSimpleName()).start(() -> doReceiver(receiver, event));
+                case ManualThread -> manualThreadHandler.accept(receiver, event);
             }
         }
     }
