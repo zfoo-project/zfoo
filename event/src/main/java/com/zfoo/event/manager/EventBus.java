@@ -114,7 +114,7 @@ public abstract class EventBus {
         for (var receiver : receivers) {
             switch (receiver.bus()) {
                 case CurrentThread -> doReceiver(receiver, event);
-                case AsyncThread -> execute(event.executorHash(), () -> doReceiver(receiver, event));
+                case AsyncThread -> asyncExecute(event.executorHash(), () -> doReceiver(receiver, event));
 //                case VirtualThread -> Thread.ofVirtual().name("virtual-on" + clazz.getSimpleName()).start(() -> doReceiver(receiver, event));
             }
         }
@@ -132,13 +132,13 @@ public abstract class EventBus {
     }
 
     public static void asyncExecute(Runnable runnable) {
-        execute(RandomUtils.randomInt(), runnable);
+        asyncExecute(RandomUtils.randomInt(), runnable);
     }
 
     /**
      * Use the event thread specified by the hashcode to execute the task
      */
-    public static void execute(int executorHash, Runnable runnable) {
+    public static void asyncExecute(int executorHash, Runnable runnable) {
         executors[Math.abs(executorHash % EXECUTORS_SIZE)].execute(ThreadUtils.safeRunnable(runnable));
     }
 
