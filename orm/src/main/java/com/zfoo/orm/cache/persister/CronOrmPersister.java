@@ -75,7 +75,7 @@ public class CronOrmPersister extends AbstractOrmPersister {
         if (!OrmContext.isStop()) {
             SchedulerBus.schedule(() -> {
                 if (!OrmContext.isStop()) {
-                    EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> {
+                    EventBus.execute(entityDef.getClazz().hashCode(), () -> {
                         entityCaches.persistAll();
                         schedulePersist();
                     });

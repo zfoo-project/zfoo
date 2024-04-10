@@ -16,8 +16,11 @@ import com.zfoo.event.enhance.IEventReceiver;
 import com.zfoo.event.model.IEvent;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
+import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.RandomUtils;
+import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
+import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -38,21 +44,55 @@ public abstract class EventBus {
     private static final Logger logger = LoggerFactory.getLogger(EventBus.class);
 
     /**
+     * EN: The size of the thread pool. Event's thread pool is often used to do time-consuming operations, so set it a little bigger
+     * CN: 线程池的大小. event的线程池经常用来做一些耗时的操作，所以要设置大一点
+     */
+    private static final int EXECUTORS_SIZE = Math.max(Runtime.getRuntime().availableProcessors(), 4) * 2 + 1;
+
+    private static final ExecutorService[] executors = new ExecutorService[EXECUTORS_SIZE];
+
+    private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>(EXECUTORS_SIZE);
+    /**
      * event mapping
      */
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
-
-    /**
-     * custom thread event receiver
-     */
-    public static BiConsumer<IEventReceiver, IEvent> manualThreadHandler = EventBus::doReceiver;
-
     /**
      * event exception handler
      */
     public static BiConsumer<IEventReceiver, IEvent> exceptionHandler = null;
     public static Consumer<IEvent> noEventReceiverHandler = null;
 
+    static {
+        for (int i = 0; i < executors.length; i++) {
+            var namedThreadFactory = new EventThreadFactory(i);
+            var executor = Executors.newSingleThreadExecutor(namedThreadFactory);
+            executors[i] = executor;
+        }
+    }
+
+    public static class EventThreadFactory implements ThreadFactory {
+        private final int poolNumber;
+        private final AtomicInteger threadNumber = new AtomicInteger(1);
+        private final ThreadGroup group;
+
+        public EventThreadFactory(int poolNumber) {
+            this.group = Thread.currentThread().getThreadGroup();
+            this.poolNumber = poolNumber;
+        }
+
+        @Override
+        public Thread newThread(Runnable runnable) {
+            var threadName = StringUtils.format("event-p{}-t{}", poolNumber + 1, threadNumber.getAndIncrement());
+            var thread = new FastThreadLocalThread(group, runnable, threadName);
+            thread.setDaemon(false);
+            thread.setPriority(Thread.NORM_PRIORITY);
+            thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
+            var executor = executors[poolNumber];
+            AssertionUtils.notNull(executor);
+            threadMap.put(thread.getId(), executor);
+            return thread;
+        }
+    }
 
     /**
      * Publish the event
@@ -74,9 +114,8 @@ public abstract class EventBus {
         for (var receiver : receivers) {
             switch (receiver.bus()) {
                 case CurrentThread -> doReceiver(receiver, event);
-                case AsyncThread -> asyncExecute(event.executorHash(), () -> doReceiver(receiver, event));
+                case AsyncThread -> execute(event.executorHash(), () -> doReceiver(receiver, event));
 //                case VirtualThread -> Thread.ofVirtual().name("virtual-on" + clazz.getSimpleName()).start(() -> doReceiver(receiver, event));
-                case ManualThread -> manualThreadHandler.accept(receiver, event);
             }
         }
     }
@@ -93,14 +132,14 @@ public abstract class EventBus {
     }
 
     public static void asyncExecute(Runnable runnable) {
-        asyncExecute(RandomUtils.randomInt(), runnable);
+        execute(RandomUtils.randomInt(), runnable);
     }
 
     /**
      * Use the event thread specified by the hashcode to execute the task
      */
-    public static void asyncExecute(int executorHash, Runnable runnable) {
-        EventExecutors.execute(executorHash, ThreadUtils.safeRunnable(runnable));
+    public static void execute(int executorHash, Runnable runnable) {
+        executors[Math.abs(executorHash % EXECUTORS_SIZE)].execute(ThreadUtils.safeRunnable(runnable));
     }
 
     /**
@@ -110,9 +149,6 @@ public abstract class EventBus {
         receiverMap.computeIfAbsent(eventType, it -> new ArrayList<>(1)).add(receiver);
     }
 
-
-    // ------------------------------------------------------------------------------------------------------------------
-    static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>();
     public static Executor threadExecutor(long currentThreadId) {
         return threadMap.getPrimitive(currentThreadId);
     }

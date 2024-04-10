@@ -69,7 +69,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 var entity = pnode.getEntity();
                 @SuppressWarnings("unchecked")
                 var entityClass = (Class<E>) entityDef.getClazz();
-                EventBus.asyncExecute(entityClass.hashCode(), new Runnable() {
+                EventBus.execute(entityClass.hashCode(), new Runnable() {
                     @Override
                     public void run() {
                         var collection = OrmContext.getOrmManager().getCollection(entityClass);

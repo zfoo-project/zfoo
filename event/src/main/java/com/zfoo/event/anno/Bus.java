@@ -22,9 +22,6 @@ public enum Bus {
 
     AsyncThread,
 
-    VirtualThread,
-
-    ManualThread
-    ;
+    VirtualThread;
 
 }
