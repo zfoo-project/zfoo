@@ -647,8 +647,8 @@ db.setProfilingLevel(1)
 - mongodump导出数据库中全部的内容，使用-q参数增加查询条件，注意-q参数值的标点符号，否则会报错 too many positional arguments
 
 ```
-mongodump --uri mongodb://localhost:27017/robot --username=root --password=123456 --authenticationDatabase=admin -d test -o /home
-mongodump --uri mongodb://localhost:27017/robot -u "root" -p "123456" --authenticationDatabase=admin -d test -c user -q "{name:'joe'}" -o /home
+mongodump --uri mongodb://localhost:27017/robot --username=root --password=123456 --authenticationDatabase=admin -o /home
+mongodump --uri mongodb://localhost:27017/robot -u "root" -p "123456" --authenticationDatabase=admin -c user -q "{name:'joe'}" -o /home
 ```
 
 - mongorestore使用的数据文件就是mongodump备份的数据文件
