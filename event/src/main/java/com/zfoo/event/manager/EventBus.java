@@ -59,8 +59,8 @@ public abstract class EventBus {
     /**
      * event exception handler
      */
-    public static BiConsumer<IEventReceiver, IEvent> exceptionHandler = null;
-    public static Consumer<IEvent> noEventReceiverHandler = null;
+    public static BiConsumer<IEventReceiver, IEvent> exceptionFunction = (receiver, event) -> {};
+    public static Consumer<IEvent> noReceiverFunction = event -> {};
 
     static {
         for (int i = 0; i < executors.length; i++) {
@@ -106,9 +106,7 @@ public abstract class EventBus {
         var clazz = event.getClass();
         var receivers = receiverMap.get(clazz);
         if (CollectionUtils.isEmpty(receivers)) {
-            if (noEventReceiverHandler != null) {
-                noEventReceiverHandler.accept(event);
-            }
+            noReceiverFunction.accept(event);
             return;
         }
         for (var receiver : receivers) {
@@ -125,9 +123,7 @@ public abstract class EventBus {
             receiver.invoke(event);
         } catch (Throwable t) {
             logger.error("eventBus {} [{}] unknown error", receiver.bus(), event.getClass().getSimpleName(), t);
-            if (exceptionHandler != null) {
-                exceptionHandler.accept(receiver, event);
-            }
+            exceptionFunction.accept(receiver, event);
         }
     }
 
