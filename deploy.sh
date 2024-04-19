@@ -52,9 +52,13 @@
 ####################################################################################################################################################################################
 # @author godotg
 
-## java command path
+## java config
 JAVA_HOME="/usr/local/java"
 JAVA_JVM_OPTIONS="-Dspring.profiles.active=pro -XX:InitialHeapSize=1g -XX:MaxHeapSize=1g -XX:AutoBoxCacheMax=20000 -XX:+UseStringDeduplication -XX:+HeapDumpOnOutOfMemoryError -Djdk.attach.allowAttachSelf=true -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8"
+## log config
+WAIT_LOG=true
+LOG_FILE="spring.log"
+
 
 if [ $# -lt 1 ]; then
     echo "deploy.sh script use error, command parameter is illegal"
@@ -86,23 +90,23 @@ function waitAllProcessesExit() {
 function waitLogFile() {
     local logfile
     while true; do
-        logfile=$(ls ./ | grep spring.log)
+        logfile=$(ls ./ | grep ${LOG_FILE})
         if [ -z "${logfile}" ]; then
-            echo "Waiting for spring.log to be created..."
+            echo "Waiting for ${LOG_FILE} to be created..."
             sleep 1
         else
             return
         fi
 
         if [ -z "${logfile}" ]; then
-            echo "Waiting for spring.log to be created..."
+            echo "Waiting for ${LOG_FILE} to be created..."
             sleep 2
         else
             return
         fi
 
         if [ -z "${logfile}" ]; then
-            echo "Waiting for spring.log to be created..."
+            echo "Waiting for ${LOG_FILE} to be created..."
             sleep 3
         else
             return
@@ -140,6 +144,8 @@ function waitLogFile() {
             return
         fi
     done
+
+    tail -f ${LOG_FILE}
 }
 
 # 停止所有进程,不包括login
@@ -254,8 +260,9 @@ function start() {
     nohup ${JAVA_HOME}/bin/java ${JAVA_JVM_OPTIONS} -jar ${jarPath} >/dev/null 2>&1 &
 
     # If there is no info log, keep waiting
-    waitLogFile
-    tail -f spring.log
+    if $WAIT_LOG; then
+        waitLogFile
+    fi
 }
 
 
