@@ -20,6 +20,7 @@ import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
+import com.zfoo.protocol.serializer.es.GenerateEsUtils;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
@@ -163,6 +164,15 @@ public abstract class GenerateProtocolFile {
                 GenerateJsUtils.createJsProtocolFile((ProtocolRegistration) protocolRegistration);
             }
             GenerateJsUtils.createProtocolManager(allSortedGenerateProtocols);
+        }
+
+        // 生成Javascript协议
+        if (generateLanguages.contains(CodeLanguage.ES)) {
+            GenerateEsUtils.init(generateOperation);
+            for (var protocolRegistration : allSortedGenerateProtocols) {
+                GenerateEsUtils.createJsProtocolFile((ProtocolRegistration) protocolRegistration);
+            }
+            GenerateEsUtils.createProtocolManager(allSortedGenerateProtocols);
         }
 
         // 生成TypeScript协议

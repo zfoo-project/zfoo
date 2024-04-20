@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 The zfoo Authors
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
@@ -10,42 +11,25 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer;
+package com.zfoo.protocol.serializer.es;
+
+import com.zfoo.protocol.model.Triple;
+import com.zfoo.protocol.registration.field.IFieldRegistration;
+
+import java.lang.reflect.Field;
 
 /**
  * @author godotg
  */
-public enum CodeLanguage {
+public interface IEsSerializer {
 
     /**
-     * Javassist字节码增强
+     * 获取属性的类型，名称，默认值
      */
-    Enhance(1),
+    Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration);
 
-    Cpp(1 << 1),
+    void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration);
 
-    Go(1 << 2),
-
-    JavaScript(1 << 3),
-
-    ES(1 << 4),
-
-    TypeScript(1 << 5),
-
-    Lua(1 << 10),
-
-    CSharp(1 << 11),
-
-    GdScript(1 << 12),
-
-    Python(1 << 13),
-
-    Protobuf(1 << 30);
-
-    public final int id;
-
-    private CodeLanguage(int id) {
-        this.id = id;
-    }
+    String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration);
 
 }
