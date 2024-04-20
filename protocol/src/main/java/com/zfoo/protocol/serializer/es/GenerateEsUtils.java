@@ -98,7 +98,7 @@ public abstract class GenerateEsUtils {
             var protocolId = protocol.protocolId();
             var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
             var path = GenerateProtocolPath.protocolAbsolutePath(protocol.protocolId(), CodeLanguage.ES);
-            importBuilder.append(StringUtils.format("import {} from './{}';", protocolName, path)).append(LS);
+            importBuilder.append(StringUtils.format("import {} from './{}.mjs';", protocolName, path)).append(LS);
             initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, protocolName)).append(LS);
         }
 

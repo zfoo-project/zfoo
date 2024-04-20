@@ -38,6 +38,7 @@ public class GenerateTesting {
         generateLanguages.add(CodeLanguage.Cpp);
         generateLanguages.add(CodeLanguage.Go);
         generateLanguages.add(CodeLanguage.JavaScript);
+        generateLanguages.add(CodeLanguage.ES);
         generateLanguages.add(CodeLanguage.TypeScript);
         generateLanguages.add(CodeLanguage.Lua);
         generateLanguages.add(CodeLanguage.CSharp);

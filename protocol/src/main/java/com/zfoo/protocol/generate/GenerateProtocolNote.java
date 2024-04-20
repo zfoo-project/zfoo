@@ -93,6 +93,7 @@ public abstract class GenerateProtocolNote {
             case Cpp:
             case Go:
             case JavaScript:
+            case ES:
             case TypeScript:
             case CSharp:
             case Protobuf:

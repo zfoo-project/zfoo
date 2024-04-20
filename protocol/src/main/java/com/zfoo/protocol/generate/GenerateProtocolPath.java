@@ -59,6 +59,8 @@ public abstract class GenerateProtocolPath {
                 break;
             case JavaScript:
                 break;
+            case ES:
+                break;
             case TypeScript:
                 break;
             case CSharp:
