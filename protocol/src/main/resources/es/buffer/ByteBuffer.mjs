@@ -1,5 +1,5 @@
-import { readInt64, writeInt64 } from './longbits';
-import ProtocolManager from '../ProtocolManager';
+import { readInt64, writeInt64 } from './longbits.mjs';
+import ProtocolManager from '../ProtocolManager.mjs';
 
 const empty_str = '';
 const initSize = 128;

@@ -1,5 +1,5 @@
 // from protobuf
-import Long from './long';
+import Long from './long.mjs';
 
 /**
  * Constructs new long bits.
