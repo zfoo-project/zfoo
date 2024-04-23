@@ -1,0 +1,10 @@
+{
+    "name": "zfoo-ecmascript",
+    "version": "1.0.0",
+    "description": "",
+    "main": "main.js",
+    "type": "module",
+    "devDependencies": {
+        "express": "^4.18.2"
+    }
+}
