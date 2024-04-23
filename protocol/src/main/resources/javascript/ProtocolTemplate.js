@@ -3,8 +3,10 @@ const {} = function() {
     {}
 };
 
+{}.PROTOCOL_ID = {};
+
 {}.prototype.protocolId = function() {
-    return {};
+    return {}.PROTOCOL_ID;
 };
 
 {}.write = function(buffer, packet) {

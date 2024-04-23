@@ -124,7 +124,7 @@ public abstract class GenerateJsUtils {
         var readObject = readObject(registration);
 
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName
-                , fieldDefinition.trim(), protocolClazzName, protocolId, protocolClazzName
+                , fieldDefinition.trim(), protocolClazzName, protocolId, protocolClazzName, protocolClazzName, protocolClazzName
                 , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
         var outputPath = StringUtils.format("{}/{}/{}.js", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         var file = new File(outputPath);
@@ -144,7 +144,7 @@ public abstract class GenerateJsUtils {
             var fieldName = field.getName();
             // 生成注释
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.JavaScript);
-            for(var fieldNote : fieldNotes) {
+            for (var fieldNote : fieldNotes) {
                 fieldDefinitionBuilder.append(TAB).append(fieldNote).append(LS);
             }
             var triple = jsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);

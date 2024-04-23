@@ -50,13 +50,15 @@ const ComplexObject = function() {
     this.sss = new Set(); // Set<Set<ObjectA>>
     this.ssss = new Set(); // Set<string>
     this.sssss = new Set(); // Set<Map<number, string>>
-    // 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
+    // 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
     this.myCompatible = 0; // number
     this.myObject = null; // ObjectA | null
 };
 
+ComplexObject.PROTOCOL_ID = 100;
+
 ComplexObject.prototype.protocolId = function() {
-    return 100;
+    return ComplexObject.PROTOCOL_ID;
 };
 
 ComplexObject.write = function(buffer, packet) {

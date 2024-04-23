@@ -3346,8 +3346,10 @@ const VeryBigObject = function() {
     this.ssss88 = new Set(); // Set<string>
 };
 
+VeryBigObject.PROTOCOL_ID = 1;
+
 VeryBigObject.prototype.protocolId = function() {
-    return 1;
+    return VeryBigObject.PROTOCOL_ID;
 };
 
 VeryBigObject.write = function(buffer, packet) {

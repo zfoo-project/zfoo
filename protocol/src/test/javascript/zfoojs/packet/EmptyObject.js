@@ -3,8 +3,10 @@ const EmptyObject = function() {
     
 };
 
+EmptyObject.PROTOCOL_ID = 0;
+
 EmptyObject.prototype.protocolId = function() {
-    return 0;
+    return EmptyObject.PROTOCOL_ID;
 };
 
 EmptyObject.write = function(buffer, packet) {

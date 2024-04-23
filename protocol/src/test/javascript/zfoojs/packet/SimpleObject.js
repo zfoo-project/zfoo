@@ -4,8 +4,10 @@ const SimpleObject = function() {
     this.g = false; // boolean
 };
 
+SimpleObject.PROTOCOL_ID = 104;
+
 SimpleObject.prototype.protocolId = function() {
-    return 104;
+    return SimpleObject.PROTOCOL_ID;
 };
 
 SimpleObject.write = function(buffer, packet) {
