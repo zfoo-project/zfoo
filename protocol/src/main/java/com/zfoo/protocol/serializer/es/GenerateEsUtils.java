@@ -162,9 +162,9 @@ public abstract class GenerateEsUtils {
         var jsBuilder = new StringBuilder();
         if (registration.isCompatible()) {
             jsBuilder.append("const beforeWriteIndex = buffer.getWriteOffset();").append(LS);
-            jsBuilder.append(TAB).append(StringUtils.format("buffer.writeInt({});", registration.getPredictionLength())).append(LS);
+            jsBuilder.append(TAB + TAB).append(StringUtils.format("buffer.writeInt({});", registration.getPredictionLength())).append(LS);
         } else {
-            jsBuilder.append(TAB).append("buffer.writeInt(-1);").append(LS);
+            jsBuilder.append(TAB + TAB).append("buffer.writeInt(-1);").append(LS);
         }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
