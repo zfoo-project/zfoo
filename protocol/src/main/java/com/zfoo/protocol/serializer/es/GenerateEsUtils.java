@@ -89,7 +89,7 @@ public abstract class GenerateEsUtils {
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
-        // 生成ProtocolManager.js文件
+        // 生成ProtocolManager.mjs文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("es/ProtocolManagerTemplate.mjs");
 
         var importBuilder = new StringBuilder();
