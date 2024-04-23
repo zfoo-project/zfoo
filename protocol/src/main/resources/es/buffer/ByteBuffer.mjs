@@ -86,7 +86,7 @@ class ByteBuffer {
             '(expected: 0 <= readerIndex <= writerIndex <= capacity:' + this.buffer.byteLength);
         }
         this.writeOffset = writeOffset;
-    };
+    }
 
     getReadOffset() {
         return this.readOffset;
@@ -99,11 +99,11 @@ class ByteBuffer {
                 '(expected: 0 <= readerIndex <= writerIndex <= capacity:' + this.buffer.byteLength);
         }
         this.readOffset = readOffset;
-    };
+    }
 
     getCapacity() {
         return this.buffer.byteLength - this.writeOffset;
-    };
+    }
 
     ensureCapacity(minCapacity) {
         while (minCapacity - this.getCapacity() > 0) {
@@ -114,11 +114,11 @@ class ByteBuffer {
             this.buffer = copy(this.buffer, newSize);
             this.bufferView = new DataView(this.buffer, 0, this.buffer.byteLength);
         }
-    };
+    }
 
     isReadable() {
         return this.writeOffset > this.readOffset;
-    };
+    }
 
     writeBoolean(value) {
         if (!(value === true || value === false)) {
@@ -131,38 +131,38 @@ class ByteBuffer {
             this.bufferView.setInt8(this.writeOffset, 0);
         }
         this.writeOffset++;
-    };
+    }
 
     readBoolean() {
         const value = this.bufferView.getInt8(this.readOffset);
         this.readOffset++;
         return (value === 1);
-    };
+    }
 
     writeBytes(byteArray) {
         const length = byteArray.byteLength;
         this.ensureCapacity(length);
         new Uint8Array(this.buffer).set(new Uint8Array(byteArray), this.writeOffset);
         this.writeOffset += length;
-    };
+    }
 
     toBytes() {
         const result = new ArrayBuffer(this.writeOffset);
         new Uint8Array(result).set(new Uint8Array(this.buffer.slice(0, this.writeOffset)));
         return result;
-    };
+    }
 
     writeByte(value) {
         this.ensureCapacity(1);
         this.bufferView.setInt8(this.writeOffset, value);
         this.writeOffset++;
-    };
+    }
 
     readByte() {
         const value = this.bufferView.getInt8(this.readOffset);
         this.readOffset++;
         return value;
-    };
+    }
 
     writeShort(value) {
         if (!(minShort <= value && value <= maxShort)) {
@@ -171,13 +171,13 @@ class ByteBuffer {
         this.ensureCapacity(2);
         this.bufferView.setInt16(this.writeOffset, value);
         this.writeOffset += 2;
-    };
+    }
 
     readShort() {
         const value = this.bufferView.getInt16(this.readOffset);
         this.readOffset += 2;
         return value;
-    };
+    }
 
     writeRawInt(value) {
         if (!(minInt <= value && value <= maxInt)) {
@@ -186,13 +186,13 @@ class ByteBuffer {
         this.ensureCapacity(4);
         this.bufferView.setInt32(this.writeOffset, value);
         this.writeOffset += 4;
-    };
+    }
 
     readRawInt() {
         const value = this.bufferView.getInt32(this.readOffset);
         this.readOffset += 4;
         return value;
-    };
+    }
 
     writeInt(value) {
         if (!(minInt <= value && value <= maxInt)) {
@@ -233,7 +233,7 @@ class ByteBuffer {
         this.writeByte((value >>> 14 | 0x80));
         this.writeByte((value >>> 21 | 0x80));
         this.writeByte(value >>> 28);
-    };
+    }
 
     writeIntCount(value) {
         if (!(minInt <= value && value <= maxInt)) {
@@ -276,7 +276,7 @@ class ByteBuffer {
         }
 
         return decodeZigzagInt(value);
-    };
+    }
 
     writeLong(value) {
         if (value === null || value === undefined) {
@@ -285,7 +285,7 @@ class ByteBuffer {
         this.ensureCapacity(9);
 
         writeInt64(this, value);
-    };
+    }
 
     readLong() {
         const buffer = new ArrayBuffer(9);
@@ -327,7 +327,7 @@ class ByteBuffer {
             }
         }
         return readInt64(new Uint8Array(buffer.slice(0, count))).toNumber();
-    };
+    }
 
     writeFloat(value) {
         if (value === null || value === undefined) {
@@ -336,13 +336,13 @@ class ByteBuffer {
         this.ensureCapacity(4);
         this.bufferView.setFloat32(this.writeOffset, value);
         this.writeOffset += 4;
-    };
+    }
 
     readFloat() {
         const value = this.bufferView.getFloat32(this.readOffset);
         this.readOffset += 4;
         return value;
-    };
+    }
 
     writeDouble(value) {
         if (value === null || value === undefined) {
@@ -351,13 +351,13 @@ class ByteBuffer {
         this.ensureCapacity(8);
         this.bufferView.setFloat64(this.writeOffset, value);
         this.writeOffset += 8;
-    };
+    }
 
     readDouble() {
         const value = this.bufferView.getFloat64(this.readOffset);
         this.readOffset += 8;
         return value;
-    };
+    }
 
     writeString(value) {
         if (value === null || value === undefined || value.trim().length === 0) {
@@ -371,7 +371,7 @@ class ByteBuffer {
 
         this.writeInt(uint8Array.length);
         uint8Array.forEach((value) => this.writeByte(value));
-    };
+    }
 
     readString() {
         const length = this.readInt();
@@ -382,23 +382,23 @@ class ByteBuffer {
         const value = decoder.decode(uint8Array);
         this.readOffset += length;
         return value;
-    };
+    }
 
     writePacketFlag(value) {
         const flag = (value === null) || (value === undefined);
         this.writeBoolean(!flag);
         return flag;
-    };
+    }
 
     writePacket(packet, protocolId) {
         const protocolRegistration = ProtocolManager.getProtocol(protocolId);
         protocolRegistration.write(this, packet);
-    };
+    }
 
     readPacket(protocolId) {
         const protocolRegistration = ProtocolManager.getProtocol(protocolId);
         return protocolRegistration.read(this);
-    };
+    }
 
     writeBooleanArray(array) {
         if (array === null) {
@@ -409,7 +409,7 @@ class ByteBuffer {
                 this.writeBoolean(element);
             });
         }
-    };
+    }
 
     readBooleanArray() {
         const array = [];
@@ -420,7 +420,7 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
     writeByteArray(array) {
         if (array === null) {
@@ -431,7 +431,7 @@ class ByteBuffer {
                 this.writeByte(element);
             });
         }
-    };
+    }
 
     readByteArray() {
         const array = [];
@@ -442,7 +442,7 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
     writeShortArray(array) {
         if (array === null) {
@@ -453,7 +453,7 @@ class ByteBuffer {
                 this.writeShort(element);
             });
         }
-    };
+    }
 
     readShortArray() {
         const array = [];
@@ -464,7 +464,7 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
     writeIntArray(array) {
         if (array === null) {
@@ -475,7 +475,7 @@ class ByteBuffer {
                 this.writeInt(element);
             });
         }
-    };
+    }
 
     readIntArray() {
         const array = [];
@@ -486,7 +486,7 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
     writeLongArray(array) {
         if (array === null) {
@@ -497,7 +497,7 @@ class ByteBuffer {
                 this.writeLong(element);
             });
         }
-    };
+    }
 
     readLongArray() {
         const array = [];
@@ -508,7 +508,7 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
     writeFloatArray(array) {
         if (array === null) {
@@ -519,7 +519,7 @@ class ByteBuffer {
                 this.writeFloat(element);
             });
         }
-    };
+    }
 
     readFloatArray() {
         const array = [];
@@ -530,7 +530,7 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
     writeDoubleArray(array) {
         if (array === null) {
@@ -541,7 +541,7 @@ class ByteBuffer {
                 this.writeDouble(element);
             });
         }
-    };
+    }
 
     readDoubleArray() {
         const array = [];
@@ -552,7 +552,7 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
     writeStringArray(array) {
         if (array === null) {
@@ -563,7 +563,7 @@ class ByteBuffer {
                 this.writeString(element);
             });
         }
-    };
+    }
 
     readStringArray() {
         const array = [];
@@ -574,7 +574,7 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
     writePacketArray(array, protocolId) {
         if (array === null) {
@@ -586,7 +586,7 @@ class ByteBuffer {
                 protocolRegistration.write(this, element);
             });
         }
-    };
+    }
 
     readPacketArray(protocolId) {
         const array = [];
@@ -598,80 +598,80 @@ class ByteBuffer {
             }
         }
         return array;
-    };
+    }
 
     // ---------------------------------------------list-------------------------------------------
     writeBooleanList(list) {
         this.writeBooleanArray(list);
-    };
+    }
 
     readBooleanList() {
         return this.readBooleanArray();
-    };
+    }
 
     writeByteList(list) {
         this.writeByteArray(list);
-    };
+    }
 
     readByteList() {
         return this.readByteArray();
-    };
+    }
 
     writeShortList(list) {
         this.writeShortArray(list);
-    };
+    }
 
     readShortList() {
         return this.readShortArray();
-    };
+    }
 
     writeIntList(list) {
         this.writeIntArray(list);
-    };
+    }
 
     readIntList() {
         return this.readIntArray();
-    };
+    }
 
     writeLongList(list) {
         this.writeLongArray(list);
-    };
+    }
 
     readLongList() {
         return this.readLongArray();
-    };
+    }
 
     writeFloatList(list) {
         this.writeFloatArray(list);
-    };
+    }
 
     readFloatList() {
         return this.readFloatArray();
-    };
+    }
 
     writeDoubleList(list) {
         this.writeDoubleArray(list);
-    };
+    }
 
     readDoubleList() {
         return this.readDoubleArray();
-    };
+    }
 
     writeStringList(list) {
         this.writeStringArray(list);
-    };
+    }
 
     readStringList() {
         return this.readStringArray();
-    };
+    }
 
     writePacketList(list, protocolId) {
         this.writePacketArray(list, protocolId);
-    };
+    }
 
     readPacketList(protocolId) {
         return this.readPacketArray(protocolId);
-    };
+    }
 
     // ---------------------------------------------set-------------------------------------------
     writeBooleanSet(set) {
@@ -683,11 +683,11 @@ class ByteBuffer {
                 this.writeBoolean(element);
             });
         }
-    };
+    }
 
     readBooleanSet() {
         return new Set(this.readBooleanArray());
-    };
+    }
 
     writeByteSet(set) {
         if (set === null) {
@@ -698,11 +698,11 @@ class ByteBuffer {
                 this.writeByte(element);
             });
         }
-    };
+    }
 
     readByteSet() {
         return new Set(this.readByteArray());
-    };
+    }
 
     writeShortSet(set) {
         if (set === null) {
@@ -713,11 +713,11 @@ class ByteBuffer {
                 this.writeShort(element);
             });
         }
-    };
+    }
 
     readShortSet() {
         return new Set(this.readShortArray());
-    };
+    }
 
     writeIntSet(set) {
         if (set === null) {
@@ -728,11 +728,11 @@ class ByteBuffer {
                 this.writeInt(element);
             });
         }
-    };
+    }
 
     readIntSet() {
         return new Set(this.readIntArray());
-    };
+    }
 
     writeLongSet(set) {
         if (set === null) {
@@ -743,11 +743,11 @@ class ByteBuffer {
                 this.writeLong(element);
             });
         }
-    };
+    }
 
     readLongSet() {
         return new Set(this.readLongArray());
-    };
+    }
 
     writeFloatSet(set) {
         if (set === null) {
@@ -758,11 +758,11 @@ class ByteBuffer {
                 this.writeFloat(element);
             });
         }
-    };
+    }
 
     readFloatSet() {
         return new Set(this.readFloatArray());
-    };
+    }
 
     writeDoubleSet(set) {
         if (set === null) {
@@ -773,11 +773,11 @@ class ByteBuffer {
                 this.writeDouble(element);
             });
         }
-    };
+    }
 
     readDoubleSet() {
         return new Set(this.readDoubleArray());
-    };
+    }
 
     writeStringSet(set) {
         if (set === null) {
@@ -788,11 +788,11 @@ class ByteBuffer {
                 this.writeString(element);
             });
         }
-    };
+    }
 
     readStringSet() {
         return new Set(this.readStringArray());
-    };
+    }
 
     writePacketSet(set, protocolId) {
         if (set === null) {
@@ -804,11 +804,11 @@ class ByteBuffer {
                 protocolRegistration.write(this, element);
             });
         }
-    };
+    }
 
     readPacketSet(protocolId) {
         return new Set(this.readPacketArray(protocolId));
-    };
+    }
 
     // ---------------------------------------------map-------------------------------------------
     writeIntIntMap(map) {
@@ -821,7 +821,7 @@ class ByteBuffer {
                 this.writeInt(value);
             });
         }
-    };
+    }
 
     readIntIntMap() {
         const map = new Map();
@@ -834,7 +834,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeIntLongMap(map) {
         if (map === null) {
@@ -846,7 +846,7 @@ class ByteBuffer {
                 this.writeLong(value);
             });
         }
-    };
+    }
 
     readIntLongMap() {
         const map = new Map();
@@ -859,7 +859,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeIntStringMap(map) {
         if (map === null) {
@@ -871,7 +871,7 @@ class ByteBuffer {
                 this.writeString(value);
             });
         }
-    };
+    }
 
     readIntStringMap() {
         const map = new Map();
@@ -884,7 +884,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeIntPacketMap(map, protocolId) {
         if (map === null) {
@@ -897,7 +897,7 @@ class ByteBuffer {
                 protocolRegistration.write(this, value);
             });
         }
-    };
+    }
 
     readIntPacketMap(protocolId) {
         const map = new Map();
@@ -911,7 +911,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeLongIntMap(map) {
         if (map === null) {
@@ -923,7 +923,7 @@ class ByteBuffer {
                 this.writeInt(value);
             });
         }
-    };
+    }
 
     readLongIntMap() {
         const map = new Map();
@@ -936,7 +936,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeLongLongMap(map) {
         if (map === null) {
@@ -948,7 +948,7 @@ class ByteBuffer {
                 this.writeLong(value);
             });
         }
-    };
+    }
 
     readLongLongMap() {
         const map = new Map();
@@ -961,7 +961,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeLongStringMap(map) {
         if (map === null) {
@@ -973,7 +973,7 @@ class ByteBuffer {
                 this.writeString(value);
             });
         }
-    };
+    }
 
     readLongStringMap() {
         const map = new Map();
@@ -986,7 +986,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeLongPacketMap(map, protocolId) {
         if (map === null) {
@@ -999,7 +999,7 @@ class ByteBuffer {
                 protocolRegistration.write(this, value);
             });
         }
-    };
+    }
 
     readLongPacketMap(protocolId) {
         const map = new Map();
@@ -1013,7 +1013,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeStringIntMap(map) {
         if (map === null) {
@@ -1025,7 +1025,7 @@ class ByteBuffer {
                 this.writeInt(value);
             });
         }
-    };
+    }
 
     readStringIntMap() {
         const map = new Map();
@@ -1038,7 +1038,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeStringLongMap(map) {
         if (map === null) {
@@ -1050,7 +1050,7 @@ class ByteBuffer {
                 this.writeLong(value);
             });
         }
-    };
+    }
 
     readStringLongMap() {
         const map = new Map();
@@ -1063,7 +1063,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeStringStringMap(map) {
         if (map === null) {
@@ -1075,7 +1075,7 @@ class ByteBuffer {
                 this.writeString(value);
             });
         }
-    };
+    }
 
     readStringStringMap() {
         const map = new Map();
@@ -1088,7 +1088,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
+    }
 
     writeStringPacketMap(map, protocolId) {
         if (map === null) {
@@ -1101,7 +1101,7 @@ class ByteBuffer {
                 protocolRegistration.write(this, value);
             });
         }
-    };
+    }
 
     readStringPacketMap(protocolId) {
         const map = new Map();
@@ -1115,7 +1115,7 @@ class ByteBuffer {
             }
         }
         return map;
-    };
-};
+    }
+}
 
 export default ByteBuffer;

@@ -102,13 +102,13 @@ public abstract class GenerateEsUtils {
             initProtocolBuilder.append(StringUtils.format("protocols.set({}, {});", protocolId, protocolName)).append(LS);
         }
 
-        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), StringUtils.EMPTY_JSON, initProtocolBuilder.toString().trim());
+        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, importBuilder.toString().trim(), initProtocolBuilder.toString().trim());
         var file = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.mjs"));
         FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
         logger.info("Generated ES protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
-    public static void createJsProtocolFile(ProtocolRegistration registration) throws IOException {
+    public static void createEsProtocolFile(ProtocolRegistration registration) throws IOException {
         // 初始化index
         GenerateProtocolFile.index.set(0);
 
@@ -124,8 +124,8 @@ public abstract class GenerateEsUtils {
         var readObject = readObject(registration);
 
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName
-                , fieldDefinition.trim(), protocolClazzName, protocolId, protocolClazzName
-                , writeObject.trim(), protocolClazzName, protocolClazzName, readObject.trim(), protocolClazzName);
+                , fieldDefinition.trim(), protocolId, protocolClazzName
+                , writeObject.trim(), protocolClazzName, readObject.trim(), protocolClazzName);
         var outputPath = StringUtils.format("{}/{}/{}.mjs", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
         var file = new File(outputPath);
         FileUtils.writeStringToFile(file, protocolTemplate, true);
@@ -144,12 +144,12 @@ public abstract class GenerateEsUtils {
             var fieldName = field.getName();
             // 生成注释
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.ES);
-            for(var fieldNote : fieldNotes) {
+            for (var fieldNote : fieldNotes) {
                 fieldDefinitionBuilder.append(TAB).append(fieldNote).append(LS);
             }
             var triple = esSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
             fieldDefinitionBuilder.append(TAB)
-                    .append(StringUtils.format("this.{} = {}; // {}", fieldName, triple.getRight(), triple.getLeft()))
+                    .append(StringUtils.format("{} = {}; // {}", fieldName, triple.getRight(), triple.getLeft()))
                     .append(LS);
 
         }
@@ -169,10 +169,10 @@ public abstract class GenerateEsUtils {
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            esSerializer(fieldRegistration.serializer()).writeObject(jsBuilder, "packet." + field.getName(), 1, field, fieldRegistration);
+            esSerializer(fieldRegistration.serializer()).writeObject(jsBuilder, "packet." + field.getName(), 2, field, fieldRegistration);
         }
         if (registration.isCompatible()) {
-            jsBuilder.append(TAB).append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex);", registration.getPredictionLength())).append(LS);
+            jsBuilder.append(TAB + TAB).append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex);", registration.getPredictionLength())).append(LS);
         }
         return jsBuilder.toString();
     }
@@ -185,14 +185,14 @@ public abstract class GenerateEsUtils {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                jsBuilder.append(TAB).append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
-                var compatibleReadObject = esSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 2, field, fieldRegistration);
-                jsBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
-                jsBuilder.append(TAB).append("}").append(LS);
+                jsBuilder.append(TAB + TAB).append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
+                var compatibleReadObject = esSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 3, field, fieldRegistration);
+                jsBuilder.append(TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
+                jsBuilder.append(TAB + TAB).append("}").append(LS);
                 continue;
             }
-            var readObject = esSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 1, field, fieldRegistration);
-            jsBuilder.append(TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
+            var readObject = esSerializer(fieldRegistration.serializer()).readObject(jsBuilder, 2, field, fieldRegistration);
+            jsBuilder.append(TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
         }
         return jsBuilder.toString();
     }

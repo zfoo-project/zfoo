@@ -1,32 +1,34 @@
 {}
-const {} = function() {
+class {} {
     {}
-};
 
-{}.prototype.protocolId = function() {
-    return {};
-};
+    static PROTOCOL_ID = {};
 
-{}.write = function(buffer, packet) {
-    if (packet === null) {
-        buffer.writeInt(0);
-        return;
+    protocolId() {
+        return {}.PROTOCOL_ID;
     }
-    {}
-};
 
-{}.read = function(buffer) {
-    const length = buffer.readInt();
-    if (length === 0) {
-        return null;
+    static write(buffer, packet) {
+        if (packet === null) {
+            buffer.writeInt(0);
+            return;
+        }
+        {}
     }
-    const beforeReadIndex = buffer.getReadOffset();
-    const packet = new {}();
-    {}
-    if (length > 0) {
-        buffer.setReadOffset(beforeReadIndex + length);
-    }
-    return packet;
-};
 
+    static read(buffer) {
+        const length = buffer.readInt();
+        if (length === 0) {
+            return null;
+        }
+        const beforeReadIndex = buffer.getReadOffset();
+        const packet = new {}();
+        {}
+        if (length > 0) {
+            buffer.setReadOffset(beforeReadIndex + length);
+        }
+        return packet;
+    }
+
+}
 export default {};

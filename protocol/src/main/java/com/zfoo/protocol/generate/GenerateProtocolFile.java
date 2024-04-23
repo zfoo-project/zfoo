@@ -170,7 +170,7 @@ public abstract class GenerateProtocolFile {
         if (generateLanguages.contains(CodeLanguage.ES)) {
             GenerateEsUtils.init(generateOperation);
             for (var protocolRegistration : allSortedGenerateProtocols) {
-                GenerateEsUtils.createJsProtocolFile((ProtocolRegistration) protocolRegistration);
+                GenerateEsUtils.createEsProtocolFile((ProtocolRegistration) protocolRegistration);
             }
             GenerateEsUtils.createProtocolManager(allSortedGenerateProtocols);
         }
