@@ -322,7 +322,7 @@ const ByteBuffer = function() {
                 }
             }
         }
-        return readInt64(new Uint8Array(buffer.slice(0, count)));
+        return readInt64(new Uint8Array(buffer.slice(0, count))).toNumber();
     };
 
     this.writeFloat = function(value) {
