@@ -16,6 +16,7 @@ package com.zfoo.monitor.util;
 import com.zfoo.monitor.*;
 import com.zfoo.net.util.NetUtils;
 import com.zfoo.protocol.exception.RunException;
+import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.UuidUtils;
@@ -27,6 +28,7 @@ import oshi.hardware.HardwareAbstractionLayer;
 import oshi.hardware.NetworkIF;
 import oshi.software.os.OperatingSystem;
 
+import java.io.File;
 import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -304,11 +306,21 @@ public abstract class OSUtils {
     }
 
     public static String execCommand(String command) {
+        return execCommand(command, null);
+    }
+
+    public static String execCommand(String command, String workingDirectory) {
         Process process = null;
         InputStream inputStream = null;
+        File wd = null;
+        if (StringUtils.isNotBlank(workingDirectory)) {
+            FileUtils.createDirectory(workingDirectory);
+            wd = new File(workingDirectory);
+        }
         try {
             process = new ProcessBuilder(command.split(" "))
                     .redirectErrorStream(true)
+                    .directory(wd)
                     .start();
 
             //取得命令结果的输出流
