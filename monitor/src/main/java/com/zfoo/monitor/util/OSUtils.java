@@ -316,6 +316,9 @@ public abstract class OSUtils {
         if (StringUtils.isNotBlank(workingDirectory)) {
             FileUtils.createDirectory(workingDirectory);
             wd = new File(workingDirectory);
+            logger.info("execCommand:[{}] workingDirectory:[{}]", command, workingDirectory);
+        } else {
+            logger.info("execCommand:[{}]", command);
         }
         try {
             process = new ProcessBuilder(command.split(" "))
