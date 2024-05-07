@@ -275,7 +275,8 @@ public abstract class OSUtils {
         Process process = null;
         InputStream inputStream = null;
         try {
-            process = new ProcessBuilder(command.split(" "))
+            var commandSplits = command.split(StringUtils.SPACE_REGEX);
+            process = new ProcessBuilder(commandSplits)
                     .redirectErrorStream(true)
                     .directory(wd)
                     .start();
