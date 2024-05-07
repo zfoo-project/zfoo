@@ -14,6 +14,7 @@
 package com.zfoo.monitor;
 
 import com.zfoo.monitor.util.JvmUtils;
+import com.zfoo.monitor.util.MonitorUtils;
 import com.zfoo.monitor.util.OSUtils;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ThreadUtils;
@@ -97,12 +98,12 @@ public class ApplicationTest {
 
     @Test
     public void monitorTest() {
-        var monitor = OSUtils.monitor();
+        var monitor = MonitorUtils.monitor();
         System.out.println(monitor);
         ThreadUtils.sleep(1000);
-        monitor = OSUtils.monitor();
+        monitor = MonitorUtils.monitor();
         System.out.println(monitor);
-        monitor = OSUtils.maxMonitor();
+        monitor = MonitorUtils.maxMonitor();
         System.out.println(monitor);
     }
 

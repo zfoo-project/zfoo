@@ -249,65 +249,19 @@ public abstract class OSUtils {
         return sars;
     }
 
-    private static Uptime maxUptime;
-    private static Map<String, DiskFileSystem> maxDfMap;
-    private static Memory maxFree;
-    private static Map<String, Sar> maxSarMap;
-
-    static {
-        initMonitor();
+    // -----------------------------------------------------------------------------------------------------------------
+    public static SystemInfo os() {
+        var processor = hardware.getProcessor();
+        var cpuLogicCore = processor.getLogicalProcessorCount();
+        var cpuName = processor.getProcessorIdentifier().getName();
+        return SystemInfo.valueOf(NetUtils.getLocalhostStr(), os.toString(), os.toString(), cpuLogicCore, cpuName);
     }
 
-    public static void initMonitor() {
-        maxUptime = uptime();
-        maxDfMap = new ConcurrentHashMap<>(df().stream().collect(Collectors.toMap(key -> key.getName(), value -> value)));
-        maxFree = free();
-        maxSarMap = new ConcurrentHashMap<>(sar().stream().collect(Collectors.toMap(key -> key.getName(), value -> value)));
-    }
-
-    public static Monitor maxMonitor() {
-        var uuid = UuidUtils.getUUID();
-        var monitor = Monitor.valueOf(uuid, maxUptime, new ArrayList<>(maxDfMap.values()), maxFree, new ArrayList<>(maxSarMap.values()));
-
-        initMonitor();
-        return monitor;
-    }
-
-    public static Monitor monitor() {
-        var uuid = UuidUtils.getUUID();
-        var uptime = uptime();
-        var df = df();
-        var free = free();
-        var sar = sar();
-
-        if (uptime.compareTo(maxUptime) > 0) {
-            maxUptime = uptime;
-        }
-
-        for (var fileSystem : df) {
-            var maxFileSystem = maxDfMap.get(fileSystem.getName());
-            if (maxFileSystem != null && fileSystem.compareTo(maxFileSystem) > 0) {
-                maxDfMap.put(fileSystem.getName(), fileSystem);
-            }
-        }
-
-        if (free.compareTo(maxFree) > 0) {
-            maxFree = free;
-        }
-
-        for (var networkIF : sar) {
-            var maxNetworkIF = maxSarMap.get(networkIF.getName());
-            if (maxNetworkIF != null && networkIF.compareTo(maxNetworkIF) > 0) {
-                maxSarMap.put(maxNetworkIF.getName(), networkIF);
-            }
-        }
-
-        return Monitor.valueOf(uuid, uptime, df, free, sar);
-    }
-
+    // -----------------------------------------------------------------------------------------------------------------
     public static String execCommand(String command) {
         return execCommand(command, null);
     }
+
 
     public static String execCommand(String command, String workingDirectory) {
         Process process = null;
@@ -354,10 +308,4 @@ public abstract class OSUtils {
         return StringUtils.EMPTY;
     }
 
-    public static SystemInfo os() {
-        var processor = hardware.getProcessor();
-        var cpuLogicCore = processor.getLogicalProcessorCount();
-        var cpuName = processor.getProcessorIdentifier().getName();
-        return SystemInfo.valueOf(NetUtils.getLocalhostStr(), os.toString(), os.toString(), cpuLogicCore, cpuName);
-    }
 }
