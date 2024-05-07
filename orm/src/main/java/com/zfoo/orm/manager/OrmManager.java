@@ -118,7 +118,10 @@ public class OrmManager implements IOrmManager {
 
         // 设置数据库账号密码
         if (StringUtils.isNotBlank(hostConfig.getUser()) && StringUtils.isNotBlank(hostConfig.getPassword())) {
-            mongoBuilder.credential(MongoCredential.createCredential(hostConfig.getUser(), "admin", hostConfig.getPassword().toCharArray()));
+            var authSource = "admin";
+            if (hostConfig.getAuthSource() != null)
+                authSource = hostConfig.getAuthSource();
+            mongoBuilder.credential(MongoCredential.createCredential(hostConfig.getUser(), authSource, hostConfig.getPassword().toCharArray()));
         }
 
         // 设置连接池的大小
