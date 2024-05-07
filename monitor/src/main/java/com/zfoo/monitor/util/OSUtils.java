@@ -259,21 +259,21 @@ public abstract class OSUtils {
 
     // -----------------------------------------------------------------------------------------------------------------
     public static String execCommand(String command) {
-        return execCommand(command, null);
+        logger.info("execCommand [{}]", command);
+        return doExecCommand(command, null);
     }
 
 
     public static String execCommand(String command, String workingDirectory) {
+        logger.info("execCommand [{}] workingDirectory:[{}]", command, workingDirectory);
+        FileUtils.createDirectory(workingDirectory);
+        var wd = new File(workingDirectory);
+        return doExecCommand(command, wd);
+    }
+
+    public static String doExecCommand(String command, File wd) {
         Process process = null;
         InputStream inputStream = null;
-        File wd = null;
-        if (StringUtils.isNotBlank(workingDirectory)) {
-            FileUtils.createDirectory(workingDirectory);
-            wd = new File(workingDirectory);
-            logger.info("execCommand:[{}] workingDirectory:[{}]", command, workingDirectory);
-        } else {
-            logger.info("execCommand:[{}]", command);
-        }
         try {
             process = new ProcessBuilder(command.split(" "))
                     .redirectErrorStream(true)
@@ -307,5 +307,4 @@ public abstract class OSUtils {
 
         return StringUtils.EMPTY;
     }
-
 }
