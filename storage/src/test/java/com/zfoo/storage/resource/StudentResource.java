@@ -17,69 +17,67 @@ import com.zfoo.storage.anno.AliasFieldName;
 import com.zfoo.storage.anno.Id;
 import com.zfoo.storage.anno.Index;
 import com.zfoo.storage.anno.Storage;
+import com.zfoo.storage.utils.json.ArrayValue;
+import com.zfoo.storage.utils.json.ObjectValue;
+import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author godotg
  */
 @Storage
+@Getter
 public class StudentResource {
 
+    @Getter
     @Id
     private int id;
 
     /**
      * 索引，默认为可重复的索引
      */
+    @Getter
     @Index
     private String name;
+    @Getter
     @Index
     @AliasFieldName("年龄")
     private int age;
+    @Getter
     private float score;
+    @Getter
     private String[] courses;
+    @Getter
     private User[] users;
+    @Getter
     private List<User> userList;
+    @Getter
     private User user;
+    @Getter
+    private ArrayValue arrayValue;
+    private ObjectValue objectValue;
     /**
      * 不想映射的字段必须加上transient关键字，这样就不会从Excel中去找对应的列
      */
+    @Getter
     private transient String notMapContent;
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public float getScore() {
-        return score;
-    }
-
-    public String[] getCourses() {
-        return courses;
-    }
-
-    public User[] getUsers() {
-        return users;
-    }
-
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getNotMapContent() {
-        return notMapContent;
+    @Override
+    public String toString() {
+        return "StudentResource{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", score=" + score +
+                ", courses=" + Arrays.toString(courses) +
+                ", users=" + Arrays.toString(users) +
+                ", userList=" + userList +
+                ", user=" + user +
+                ", arrayValue=" + arrayValue +
+                ", objectValue=" + objectValue +
+                ", notMapContent='" + notMapContent + '\'' +
+                '}';
     }
 }

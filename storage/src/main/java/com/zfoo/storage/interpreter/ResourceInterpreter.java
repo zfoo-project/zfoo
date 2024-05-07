@@ -47,6 +47,8 @@ public class ResourceInterpreter {
         converters.add(new StringToClassConverter());
         converters.add(new StringToDateConverter());
         converters.add(new StringToMapConverter());
+        converters.add(new JsonPlusConverter());
+
         conversionServiceFactoryBean.setConverters(converters);
         conversionServiceFactoryBean.afterPropertiesSet();
     }

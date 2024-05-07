@@ -47,7 +47,11 @@ public class JsonToObjectConverter implements ConditionalGenericConverter {
             return false;
         }
 
-        return ReflectionUtils.isPojoClass(targetType.getType());
+        try {
+            return ReflectionUtils.isPojoClass(targetType.getType());
+        } catch (Exception ignore) {
+            return false;
+        }
     }
 
     @Override

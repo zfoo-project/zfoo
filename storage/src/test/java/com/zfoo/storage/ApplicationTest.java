@@ -50,6 +50,7 @@ public class ApplicationTest {
         // 参考StudentManager中的标准用法
 
         IStorage<Integer, StudentResource> storage1 = StorageContext.getStorageManager().getStorage(StudentResource.class);
+        storage1.getData().values().forEach(System.out::println);
 
         //根据主键获取数据
         StudentResource studentResource = StorageContext.get(StudentResource.class, 1001);

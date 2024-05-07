@@ -27,6 +27,7 @@ import com.zfoo.storage.interpreter.data.StorageEnum;
 import com.zfoo.storage.model.IStorage;
 import com.zfoo.storage.model.StorageDefinition;
 import com.zfoo.storage.util.function.Func1;
+import com.zfoo.storage.utils.json.TreeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -104,7 +105,7 @@ public class StorageManager implements IStorageManager {
             var allRelevantClass = new HashSet<Class<?>>();
             resourceDefinitionMap.values().forEach(it -> allRelevantClass.addAll(ClassUtils.relevantClass(it.getClazz())));
             for (var clazz : allRelevantClass) {
-                if (clazz.isRecord()) {
+                if (clazz.isRecord() || TreeValue.class.isAssignableFrom(clazz)) {
                     continue;
                 }
                 ReflectionUtils.assertIsPojoClass(clazz);
