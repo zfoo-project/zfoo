@@ -16,7 +16,10 @@ package com.zfoo.storage.strategy;
 import com.zfoo.protocol.util.JsonUtils;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
+import org.springframework.lang.NonNull;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -38,16 +41,20 @@ public class JsonToListConverter implements ConditionalGenericConverter {
     }
 
     @Override
-    public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
+    public Object convert(Object source, @NonNull TypeDescriptor sourceType, TypeDescriptor targetType) {
         // String content = (String) source;
         // return targetType.isPrimitive() ? JsonUtil.string2Object(content, targetType.getObjectType())
         //         : JsonUtil.string2Array(content, targetType.getType());
         Class<?> clazz = null;
 
         String content = (String) source;
-        for (var v : targetType.getResolvableType().getGenerics()){
-            clazz = (Class<?>) v.getType();
+        Type type = targetType.getResolvableType().getGeneric(0).getType();
+        if (type instanceof Class) {
+            clazz = (Class<?>) type;
+        } else if (type instanceof ParameterizedType parameterizedType) {
+            clazz = (Class<?>) parameterizedType.getRawType();
         }
+
         return Collections.unmodifiableList(JsonUtils.string2List(content, clazz));
     }
 }
