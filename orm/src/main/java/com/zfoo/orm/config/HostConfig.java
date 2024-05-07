@@ -23,13 +23,15 @@ public class HostConfig {
     private String user;
     private String password;
     private Map<String, String> address;
+    private String authSource;
 
-    public static HostConfig valueOf(String database, String user, String password, Map<String, String> addressMap) {
+    public static HostConfig valueOf(String database, String user, String password, Map<String, String> addressMap, String authSource) {
         HostConfig config = new HostConfig();
         config.database = database;
         config.user = user;
         config.password = password;
         config.address = addressMap;
+        config.authSource = authSource;
         return config;
     }
 
@@ -63,5 +65,13 @@ public class HostConfig {
 
     public void setAddress(Map<String, String> address) {
         this.address = address;
+    }
+
+    public String getAuthSource() {
+        return authSource;
+    }
+
+    public void setAuthSource(String authSource) {
+        this.authSource = authSource;
     }
 }

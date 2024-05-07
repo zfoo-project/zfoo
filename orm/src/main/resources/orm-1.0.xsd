@@ -32,6 +32,7 @@
             <xsd:element name="address" maxOccurs="unbounded" type="addressAttributeType"/>
         </xsd:sequence>
         <xsd:attribute name="database" type="xsd:string" use="required"/>
+        <xsd:attribute name="authSource" type="xsd:string"/>
         <xsd:attribute name="user" type="xsd:string" use="required"/>
         <xsd:attribute name="password" type="xsd:string" use="required"/>
     </xsd:complexType>
