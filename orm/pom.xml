@@ -7,23 +7,23 @@
     <groupId>com.zfoo</groupId>
     <artifactId>orm</artifactId>
     <packaging>jar</packaging>
-    <version>3.3.1</version>
+    <version>3.3.2</version>
 
     <properties>
-        <zfoo.version>3.3.1</zfoo.version>
+        <zfoo.version>3.3.2</zfoo.version>
         <!-- spring and spring boot -->
-        <spring.version>6.1.2</spring.version>
-        <spring.boot.version>3.2.1</spring.boot.version>
+        <spring.version>6.1.6</spring.version>
+        <spring.boot.version>3.2.5</spring.boot.version>
         <junit.version>4.13.2</junit.version>
         <!-- bytecode enhancement -->
-        <javassist.version>3.29.2-GA</javassist.version>
-        <bytebuddy.version>1.14.6</bytebuddy.version>
+        <javassist.version>3.30.2-GA</javassist.version>
+        <bytebuddy.version>1.14.14</bytebuddy.version>
         <!-- network framework -->
-        <netty.version>4.1.104.Final</netty.version>
+        <netty.version>4.1.109.Final</netty.version>
         <!-- zookeeper -->
-        <curator.version>5.5.0</curator.version>
+        <curator.version>5.6.0</curator.version>
         <!-- hardware detection -->
-        <oshi.version>6.4.5</oshi.version>
+        <oshi.version>6.6.0</oshi.version>
         <!-- Office document parsing -->
         <poi.version>5.2.3</poi.version>
         <csv.version>1.10.0</csv.version>
