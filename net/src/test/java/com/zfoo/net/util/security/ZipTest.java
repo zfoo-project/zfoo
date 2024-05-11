@@ -15,6 +15,8 @@ package com.zfoo.net.util.security;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 /**
  * @author godotg
  */
@@ -43,4 +45,8 @@ public class ZipTest {
         Assert.assertEquals(new String(bytes), str);
     }
 
+    @Test
+    public void unzipTest() throws IOException {
+        ZipUtils.unzip("D:\\Project\\aaa\\ai-simulator.zip", "D:\\Project\\aaa\\bbb");
+    }
 }
