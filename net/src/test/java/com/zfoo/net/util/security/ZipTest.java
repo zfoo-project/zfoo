@@ -45,8 +45,16 @@ public class ZipTest {
         Assert.assertEquals(new String(bytes), str);
     }
 
+
     @Test
-    public void unzipTest() throws IOException {
+    public void zipTest() {
+        var sourceFiles = new String[]{"D:\\Project\\aaa\\alibaba.mjs", "D:\\Project\\aaa\\baidu.mjs"
+                , "D:\\Project\\aaa\\google.mjs", "D:\\Project\\aaa\\openai.mjs", "D:\\Project\\aaa\\tencent.mjs"};
+        ZipUtils.zip(sourceFiles, "D:\\Project\\aaa\\ai-simulator.zip");
+    }
+
+    @Test
+    public void unzipTest() {
         ZipUtils.unzip("D:\\Project\\aaa\\ai-simulator.zip", "D:\\Project\\aaa\\bbb");
     }
 }

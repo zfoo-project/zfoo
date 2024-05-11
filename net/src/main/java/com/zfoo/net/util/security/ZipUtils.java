@@ -66,6 +66,33 @@ public abstract class ZipUtils {
         return baos.toByteArray();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+
+    public static void zip(String[] sourceFilesPath, String zipFilePath) {
+        FileOutputStream fos = null;
+        ZipOutputStream zipOut = null;
+        try {
+            fos = new FileOutputStream(zipFilePath);
+            zipOut = new ZipOutputStream(fos);
+            for (var sourceFile : sourceFilesPath) {
+                var fileToZip = new File(sourceFile);
+                if (fileToZip.isHidden()) {
+                    continue;
+                }
+                var fis = new FileInputStream(fileToZip);
+                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+                zipOut.putNextEntry(zipEntry);
+                IOUtils.copy(fis, zipOut);
+                IOUtils.closeIO(fis);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            IOUtils.closeIO(zipOut, fos);
+        }
+    }
+
+
     public static void unzip(String zipFilePath, String destDirectory) {
         FileUtils.createDirectory(destDirectory);
         FileInputStream fileInputStream = null;
