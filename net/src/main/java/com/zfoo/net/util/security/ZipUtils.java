@@ -68,14 +68,14 @@ public abstract class ZipUtils {
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    public static void zip(String[] sourceFilesPath, String zipFilePath) {
+    public static void zip(String[] sourceFilePaths, String zipFilePath) {
         FileOutputStream fos = null;
         ZipOutputStream zipOut = null;
         try {
             fos = new FileOutputStream(zipFilePath);
             zipOut = new ZipOutputStream(fos);
-            for (var sourceFile : sourceFilesPath) {
-                var fileToZip = new File(sourceFile);
+            for (var sourceFilePath : sourceFilePaths) {
+                var fileToZip = new File(sourceFilePath);
                 if (fileToZip.isHidden()) {
                     continue;
                 }
