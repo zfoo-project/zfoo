@@ -16,6 +16,7 @@ import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.IOUtils;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.zip.*;
 
 /**
@@ -94,29 +95,34 @@ public abstract class ZipUtils {
 
 
     public static void unzip(String zipFilePath, String destDirectory) {
-        FileUtils.createDirectory(destDirectory);
-        FileInputStream fileInputStream = null;
         try {
-            fileInputStream = new FileInputStream(zipFilePath);
-            var zipIn = new ZipInputStream(fileInputStream);
-            var entry = zipIn.getNextEntry();
-            // 遍历ZIP文件中的所有条目
-            while (entry != null) {
-                var filePath = destDirectory + File.separator + entry.getName();
-                if (!entry.isDirectory()) {
-                    // 如果条目是文件，则解压该文件
-                    FileUtils.writeInputStreamToFile(new File(filePath), zipIn);
-                } else {
-                    // 如果条目是目录，则创建目录
-                    FileUtils.createDirectory(filePath);
-                }
-                zipIn.closeEntry();
-                entry = zipIn.getNextEntry();
-            }
-            zipIn.close();
-        } catch (Exception e) {
-            IOUtils.closeIO(fileInputStream);
+            unzip(FileUtils.openInputStream(new File(zipFilePath)), destDirectory);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
+
+    public static void unzip(InputStream zipFileInputStream, String destDirectory) throws IOException {
+        FileUtils.createDirectory(destDirectory);
+        var zipIn = new ZipInputStream(zipFileInputStream);
+        var entry = zipIn.getNextEntry();
+        // 遍历ZIP文件中的所有条目
+        while (entry != null) {
+            var filePath = destDirectory + File.separator + entry.getName();
+            if (!entry.isDirectory()) {
+                // 如果条目是文件，则解压该文件
+                var fileOutputStream = FileUtils.openOutputStream(new File(filePath), false);
+                IOUtils.copy(zipIn, fileOutputStream);
+                IOUtils.closeIO(fileOutputStream);
+            } else {
+                // 如果条目是目录，则创建目录
+                FileUtils.createDirectory(filePath);
+            }
+            zipIn.closeEntry();
+            entry = zipIn.getNextEntry();
+        }
+        zipIn.close();
+    }
+
 
 }

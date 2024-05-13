@@ -48,9 +48,8 @@ public class ZipTest {
 
     @Test
     public void zipTest() {
-        var sourceFiles = new String[]{"D:\\Project\\aaa\\alibaba.mjs", "D:\\Project\\aaa\\baidu.mjs"
-                , "D:\\Project\\aaa\\google.mjs", "D:\\Project\\aaa\\openai.mjs", "D:\\Project\\aaa\\tencent.mjs"};
-        ZipUtils.zip(sourceFiles, "D:\\Project\\aaa\\ai-simulator.zip");
+        var sourceFiles = new String[]{"./README.md","./README_CN.md"};
+        ZipUtils.zip(sourceFiles, "./ai-simulator.zip");
     }
 
     @Test
