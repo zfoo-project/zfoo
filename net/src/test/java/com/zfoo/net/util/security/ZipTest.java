@@ -15,8 +15,6 @@ package com.zfoo.net.util.security;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
-
 /**
  * @author godotg
  */
@@ -48,8 +46,8 @@ public class ZipTest {
 
     @Test
     public void zipTest() {
-        var sourceFiles = new String[]{"./README.md","./README_CN.md"};
-        ZipUtils.zip(sourceFiles, "./ai-simulator.zip");
+        var sourceFiles = new String[]{"./src","./README.md"};
+        ZipUtils.zip(sourceFiles, "./my-source.zip");
     }
 
     @Test
