@@ -13,14 +13,11 @@
 
 package com.zfoo.orm;
 
-import com.mongodb.client.MongoClient;
 import com.zfoo.orm.accessor.IAccessor;
 import com.zfoo.orm.manager.IOrmManager;
-import com.zfoo.orm.manager.OrmManager;
 import com.zfoo.orm.model.IEntity;
 import com.zfoo.orm.query.IQuery;
 import com.zfoo.orm.query.IQueryBuilder;
-import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.scheduler.SchedulerContext;
 import com.zfoo.scheduler.util.StopWatch;
 import org.slf4j.Logger;
@@ -92,9 +89,7 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
 
             logger.info("Orm started successfully and cost [{}] seconds", stopWatch.costSeconds());
         } else if (event instanceof ContextClosedEvent) {
-            shutdownBefore();
-            shutdownBetween();
-            shutdownAfter();
+            shutdown();
         }
     }
 
@@ -103,34 +98,20 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
         return 1;
     }
 
-    public static synchronized void shutdownBefore() {
-        SchedulerContext.shutdown();
-    }
-
-    public static synchronized void shutdownBetween() {
+    public static synchronized void shutdown() {
+        if (isStop()) {
+            return;
+        }
         instance.stop = true;
+        SchedulerContext.shutdown();
         try {
             instance.ormManager
                     .getAllEntityCaches()
                     .forEach(it -> it.persistAll());
+            instance.ormManager.mongoClient().close();
         } catch (Exception e) {
-            logger.error("关闭服务器时，持久化缓存数据异常", e);
-        } finally {
-            instance.stop = true;
+            logger.error("Failed to close the MongoClient database connection", e);
         }
-    }
-
-    public static synchronized void shutdownAfter() {
-        try {
-            var field = OrmManager.class.getDeclaredField("mongoClient");
-            ReflectionUtils.makeAccessible(field);
-            var mongoClient = (MongoClient) ReflectionUtils.getField(field, instance.ormManager);
-            mongoClient.close();
-        } catch (Exception e) {
-            logger.error("关闭MongoClient数据库连接失败", e);
-            return;
-        }
-
         logger.info("Orm shutdown gracefully.");
     }
 
