@@ -232,6 +232,11 @@ public class OrmManager implements IOrmManager {
     }
 
     @Override
+    public MongoDatabase mongoDatabase() {
+        return mongodbDatabase;
+    }
+
+    @Override
     public <E extends IEntity<?>> IEntityCache<?, E> getEntityCaches(Class<E> clazz) {
         var usable = allEntityCachesUsableMap.get(clazz);
         if (usable == null) {
