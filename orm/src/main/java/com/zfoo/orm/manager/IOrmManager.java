@@ -38,7 +38,6 @@ public interface IOrmManager {
      * CN:获取MongoClient，通过MongoClient可以获取到其它数据库或者做一些其它的复杂操作
      */
     MongoClient mongoClient();
-    MongoDatabase mongoDatabase();
 
     <E extends IEntity<?>> IEntityCache<?, E> getEntityCaches(Class<E> clazz);
 
