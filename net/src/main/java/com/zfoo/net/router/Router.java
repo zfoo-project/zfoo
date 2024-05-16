@@ -370,14 +370,27 @@ public class Router implements IRouter {
 
             receiver.invoke(session, packet, attachment);
         } catch (Exception e) {
-            EventBus.post(ServerExceptionEvent.valueOf(session, packet, attachment, e));
-            logger.error("at{} e[uid:{}][sid:{}] invoke exception", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), e);
+            exceptionHandler(e, packetReceiverTask);
         } catch (Throwable t) {
-            logger.error("at{} e[uid:{}][sid:{}] invoke error", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), t);
+            throwableHandler(t, packetReceiverTask);
         } finally {
             // 如果有服务器在处理同步或者异步消息的时候由于错误没有返回给客户端消息，则可能会残留serverAttachment，所以先移除
             serverReceiverAttachmentThreadLocal.set(null);
         }
+    }
+
+    protected void exceptionHandler(Exception e, PacketReceiverTask packetReceiverTask){
+        var session = packetReceiverTask.getSession();
+        var packet = packetReceiverTask.getPacket();
+        var attachment = packetReceiverTask.getAttachment();
+        EventBus.post(ServerExceptionEvent.valueOf(session, packet, attachment, e));
+        logger.error("at{} e[uid:{}][sid:{}] invoke exception", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), e);
+    }
+
+    protected void throwableHandler(Throwable t, PacketReceiverTask packetReceiverTask){
+        var session = packetReceiverTask.getSession();
+        var packet = packetReceiverTask.getPacket();
+        logger.error("at{} e[uid:{}][sid:{}] invoke error", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), t);
     }
 
 
