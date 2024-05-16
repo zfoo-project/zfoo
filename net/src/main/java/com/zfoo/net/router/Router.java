@@ -62,14 +62,14 @@ public class Router implements IRouter {
 
     public static final long DEFAULT_TIMEOUT = 3000;
 
-    private final ShortObjectHashMap<IPacketReceiver> receiverMap = new ShortObjectHashMap<>();
+    protected final ShortObjectHashMap<IPacketReceiver> receiverMap = new ShortObjectHashMap<>();
 
     /**
      * 作为服务器接收方，会把receive收到的attachment存储在这个地方，只针对task线程。
      * atReceiver会设置attachment，但是在方法调用完成会取消，不需要过多关注。
      * asyncAsk会再次设置attachment，需要重点关注。
      */
-    private final FastThreadLocalAdapter<Object> serverReceiverAttachmentThreadLocal = new FastThreadLocalAdapter<>();
+    protected final FastThreadLocalAdapter<Object> serverReceiverAttachmentThreadLocal = new FastThreadLocalAdapter<>();
 
     /**
      * 在服务端收到数据后，会调用这个方法. 这个方法在BaseRouteHandler.java的channelRead中被调用
