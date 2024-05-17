@@ -62,14 +62,14 @@ public class Router implements IRouter {
 
     public static final long DEFAULT_TIMEOUT = 3000;
 
-    private final ShortObjectHashMap<IPacketReceiver> receiverMap = new ShortObjectHashMap<>();
+    protected final ShortObjectHashMap<IPacketReceiver> receiverMap = new ShortObjectHashMap<>();
 
     /**
      * 作为服务器接收方，会把receive收到的attachment存储在这个地方，只针对task线程。
      * atReceiver会设置attachment，但是在方法调用完成会取消，不需要过多关注。
      * asyncAsk会再次设置attachment，需要重点关注。
      */
-    private final FastThreadLocalAdapter<Object> serverReceiverAttachmentThreadLocal = new FastThreadLocalAdapter<>();
+    protected final FastThreadLocalAdapter<Object> serverReceiverAttachmentThreadLocal = new FastThreadLocalAdapter<>();
 
     /**
      * 在服务端收到数据后，会调用这个方法. 这个方法在BaseRouteHandler.java的channelRead中被调用
@@ -370,14 +370,27 @@ public class Router implements IRouter {
 
             receiver.invoke(session, packet, attachment);
         } catch (Exception e) {
-            EventBus.post(ServerExceptionEvent.valueOf(session, packet, attachment, e));
-            logger.error("at{} e[uid:{}][sid:{}] invoke exception", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), e);
+            exceptionHandler(e, packetReceiverTask);
         } catch (Throwable t) {
-            logger.error("at{} e[uid:{}][sid:{}] invoke error", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), t);
+            throwableHandler(t, packetReceiverTask);
         } finally {
             // 如果有服务器在处理同步或者异步消息的时候由于错误没有返回给客户端消息，则可能会残留serverAttachment，所以先移除
             serverReceiverAttachmentThreadLocal.set(null);
         }
+    }
+
+    protected void exceptionHandler(Exception e, PacketReceiverTask packetReceiverTask){
+        var session = packetReceiverTask.getSession();
+        var packet = packetReceiverTask.getPacket();
+        var attachment = packetReceiverTask.getAttachment();
+        EventBus.post(ServerExceptionEvent.valueOf(session, packet, attachment, e));
+        logger.error("at{} e[uid:{}][sid:{}] invoke exception", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), e);
+    }
+
+    protected void throwableHandler(Throwable t, PacketReceiverTask packetReceiverTask){
+        var session = packetReceiverTask.getSession();
+        var packet = packetReceiverTask.getPacket();
+        logger.error("at{} e[uid:{}][sid:{}] invoke error", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), t);
     }
 
 
