@@ -61,6 +61,7 @@ ranslate.google.com
 ```
 
 - nodejs设置代理
+
 ```
 npm config set proxy http://127.0.0.1:10809
 ```
@@ -78,28 +79,16 @@ npm config set proxy http://127.0.0.1:10809
 
 ## 4. mongodb
 
-### mongo 4.0
-
-1. 直接安装MongoDB，用custom自定义安装目录，一般用默认的安装目录即可，不要勾选mongoDB compass
+1. 直接安装MongoDB，用custom自定义安装目录，一般用默认的安装目录即可，不要勾选mongoDB compas
 2. 将C:\Program Files\MongoDB\Server\4.2\bin配置到环境变量中，便于全局使用
-3. mongo -version # 查看安装的版本
+3. 直接安装MongoSh，将安装目录定位到MongoDB的bin目录
+4. mongo -version # 查看安装的版本
 
-### mongo 6.0
-
-1. 直接安装MongoDB，用custom自定义安装目录，一般用默认的安装目录即可，不要勾选mongoDB compass
-2. 直接安装MongoSh，将安装目录定位到MongoDB的bin目录
-
-## 5. idea，mongodb，postman
-
-## 6. 中间件安装
+## 5. 中间件安装
 
 - zookeeper安装，解压过后，直接运行zkServer.md，zookeeper运行需要依赖JAVA_HOME环境变量
 
-## 7. rider安装
-
-## 8. unity安装
-
-## 9. 办公软件
+## 6. 办公软件
 
 ```
 Google浏览器
@@ -111,12 +100,6 @@ adobe ps , premiere
 obs studio
 steam
 迅雷迷你版
-```
-
-## 10. 聊天软件
-
-```
-qq，微信，钉钉，discord
 ```
 
 # Ⅱ. IntelliJ相关设置
@@ -196,6 +179,8 @@ See the License for the specific language governing permissions and limitations 
   ![Image text](../image/idea/idea-proxy-maven.jpg)
 
 - 设置自动下载源代码，将上图的sources，documentation，annotations勾上
+
+- mvn clean install -U ，强制检查maven库
 
 ## 6 使用Idea默认的快捷键设置
 
