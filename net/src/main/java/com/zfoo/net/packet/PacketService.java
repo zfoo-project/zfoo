@@ -92,7 +92,7 @@ public class PacketService implements IPacketService {
         var protocolLocation = netConfig.getProtocolLocation();
 
         var generateOperation = new GenerateOperation();
-        generateOperation.setMergeProtocol(netConfig.isMergerProtocol());
+        generateOperation.setMergeProtocol(netConfig.isMergeProtocol());
         generateOperation.setFoldProtocol(netConfig.isFoldProtocol());
         generateOperation.setProtocolPath(netConfig.getProtocolPath());
         generateOperation.setProtocolParam(netConfig.getProtocolParam());
