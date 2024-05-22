@@ -21,7 +21,7 @@ import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
+import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -248,7 +248,7 @@ public abstract class GenerateLuaUtils {
             } else {
                 luaBuilder.append(TAB + TAB).append(StringUtils.format("{} = {},", fieldName, fieldDefaultValue));
             }
-            var typeNote = GenerateCsUtils.toCsClassName(field.getGenericType().getTypeName());
+            var typeNote = CodeGenerateCsharp.toCsClassName(field.getGenericType().getTypeName());
             // 生成类型的注释
             luaBuilder.append(" -- ").append(typeNote).append(LS);
         }

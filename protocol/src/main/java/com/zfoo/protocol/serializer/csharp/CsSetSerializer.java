@@ -60,7 +60,7 @@ public class CsSetSerializer implements ICsSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
 
-        GenerateCsUtils.csSerializer(setField.getSetElementRegistration().serializer())
+        CodeGenerateCsharp.csSerializer(setField.getSetElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
 
         GenerateProtocolFile.addTab(builder, deep + 1);
@@ -80,7 +80,7 @@ public class CsSetSerializer implements ICsSerializer {
         SetField setField = (SetField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        var typeName = GenerateCsUtils.toCsClassName(setField.getType().toString());
+        var typeName = CodeGenerateCsharp.toCsClassName(setField.getType().toString());
 
         var i = "index" + GenerateProtocolFile.index.getAndIncrement();
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();
@@ -100,7 +100,7 @@ public class CsSetSerializer implements ICsSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
 
-        var readObject = GenerateCsUtils.csSerializer(setField.getSetElementRegistration().serializer())
+        var readObject = CodeGenerateCsharp.csSerializer(setField.getSetElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.Add({});", result, readObject)).append(LS);

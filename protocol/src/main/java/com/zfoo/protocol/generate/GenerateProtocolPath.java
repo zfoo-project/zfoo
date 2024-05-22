@@ -134,16 +134,22 @@ public abstract class GenerateProtocolPath {
         return builder.toString();
     }
 
+    public static Map<String, Set<Short>> getOneProtocolPathMap() {
+        var oneProtocolMap = new HashMap<String, Set<Short>>();
+        for(var entry : protocolPathMap.entrySet()) {
+            var protocolId = entry.getKey();
+            var path = entry.getValue();
+            oneProtocolMap.computeIfAbsent(path, it -> new HashSet<>()).add(protocolId);
+        }
+        return oneProtocolMap;
+    }
+
     /**
      * 解析协议的路径
      *
      * @param protocolRegistrations 需要解析的路径
      */
     public static void initProtocolPath(List<IProtocolRegistration> protocolRegistrations) {
-        AssertionUtils.notNull(protocolPathMap
-                , "[{}]The initialization has been completed. Get Protocol Path cannot be called after the initialization is completed."
-                , GenerateProtocolPath.class.getSimpleName());
-
         // 将需要生成的协议的路径添加到多叉树中
         var protocolPathTree = new GeneralTree<IProtocolRegistration>();
         protocolRegistrations.forEach(it -> protocolPathTree.addNode(it.protocolConstructor().getDeclaringClass().getCanonicalName(), it));
@@ -156,23 +162,23 @@ public abstract class GenerateProtocolPath {
 
         var queue = new LinkedList<>(rootTreeNode.getChildren());
         while (!queue.isEmpty()) {
-            var childTreeNode = queue.poll();
-            var childChildren = childTreeNode.getChildren();
+            var treeNode = queue.poll();
+            var childChildren = treeNode.getChildren();
             // 如果子节点为空，则以当前节点为路径
             if (CollectionUtils.isEmpty(childChildren)) {
-                toProtocolPath(childTreeNode);
+                toProtocolPath(treeNode);
                 continue;
             }
 
             // 如果子节点的协议数据有一个不为空的，则以当前节点为路径
             if (childChildren.stream().anyMatch(it -> it.getData() != null)) {
-                toProtocolPath(childTreeNode);
+                toProtocolPath(treeNode);
                 continue;
             }
 
             // 继续深度便利子节点的路径
-            for (var subClassId : childTreeNode.getChildren()) {
-                queue.offer(subClassId);
+            for (var child : childChildren) {
+                queue.offer(child);
             }
         }
     }

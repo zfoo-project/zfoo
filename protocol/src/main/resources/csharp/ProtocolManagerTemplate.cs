@@ -20,7 +20,7 @@ namespace zfoocs
                 return;
             }
             initialized = true;
-            {}
+            ${protocol_manager_registrations}
         }
 
         public static short GetProtocolId(Type type)

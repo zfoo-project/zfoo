@@ -26,7 +26,6 @@ import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.field.*;
 import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
-import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
@@ -403,7 +402,6 @@ public class ProtocolAnalysis {
         GenerateProtocolFile.clear();
         GenerateCppUtils.clear();
         GenerateGoUtils.clear();
-        GenerateCsUtils.clear();
         GenerateJsUtils.clear();
         GenerateTsUtils.clear();
         GenerateLuaUtils.clear();

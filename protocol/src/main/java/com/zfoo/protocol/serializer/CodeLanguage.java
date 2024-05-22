@@ -12,6 +12,8 @@
 
 package com.zfoo.protocol.serializer;
 
+import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
+
 /**
  * @author godotg
  */
@@ -20,32 +22,34 @@ public enum CodeLanguage {
     /**
      * Javassist字节码增强
      */
-    Enhance(1),
+    Enhance(1, null),
 
-    Cpp(1 << 1),
+    Cpp(1 << 1, null),
 
-    Go(1 << 2),
+    Go(1 << 2, null),
 
-    JavaScript(1 << 3),
+    JavaScript(1 << 3, null),
 
-    ES(1 << 4),
+    ES(1 << 4, null),
 
-    TypeScript(1 << 5),
+    TypeScript(1 << 5, null),
 
-    Lua(1 << 10),
+    Lua(1 << 10, null),
 
-    CSharp(1 << 11),
+    CSharp(1 << 11, CodeGenerateCsharp.class),
 
-    GdScript(1 << 12),
+    GdScript(1 << 12, null),
 
-    Python(1 << 13),
+    Python(1 << 13, null),
 
-    Protobuf(1 << 30);
+    Protobuf(1 << 30, null);
 
     public final int id;
+    public final Class<? extends ICodeGenerate> codeGenerateClass;
 
-    private CodeLanguage(int id) {
+    private CodeLanguage(int id, Class<? extends ICodeGenerate> codeGenerateClass) {
         this.id = id;
+        this.codeGenerateClass = codeGenerateClass;
     }
 
 }

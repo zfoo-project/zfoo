@@ -67,7 +67,7 @@ public class CsListSerializer implements ICsSerializer {
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("var {} = {}[{}];", element, objectStr, i)).append(LS);
 
-        GenerateCsUtils.csSerializer(listField.getListElementRegistration().serializer())
+        CodeGenerateCsharp.csSerializer(listField.getListElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, listField.getListElementRegistration());
 
         GenerateProtocolFile.addTab(builder, deep + 1);
@@ -87,7 +87,7 @@ public class CsListSerializer implements ICsSerializer {
         var listField = (ListField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        var typeName = GenerateCsUtils.toCsClassName(listField.getType().toString());
+        var typeName = CodeGenerateCsharp.toCsClassName(listField.getType().toString());
 
         var i = "index" + GenerateProtocolFile.index.getAndIncrement();
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();
@@ -105,7 +105,7 @@ public class CsListSerializer implements ICsSerializer {
         builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++)", i, i, size, i)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
-        var readObject = GenerateCsUtils.csSerializer(listField.getListElementRegistration().serializer())
+        var readObject = CodeGenerateCsharp.csSerializer(listField.getListElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, listField.getListElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.Add({});", result, readObject)).append(LS);

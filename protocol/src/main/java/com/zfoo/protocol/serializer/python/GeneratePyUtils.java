@@ -21,7 +21,7 @@ import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.csharp.GenerateCsUtils;
+import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -150,7 +150,7 @@ public abstract class GeneratePyUtils {
             var fieldDefaultValue = pySerializer(fieldRegistration.serializer()).fieldDefaultValue(field, fieldRegistration);
             // 生成类型的注释
             pyBuilder.append(StringUtils.format("{}{} = {}", TAB, fieldName, fieldDefaultValue));
-            pyBuilder.append(StringUtils.format("  # {}", GenerateCsUtils.toCsClassName(field.getGenericType().getTypeName())));
+            pyBuilder.append(StringUtils.format("  # {}", CodeGenerateCsharp.toCsClassName(field.getGenericType().getTypeName())));
             pyBuilder.append(LS);
         }
         return pyBuilder.toString();

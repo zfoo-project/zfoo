@@ -64,9 +64,9 @@ public class CsArraySerializer implements ICsSerializer {
 
         GenerateProtocolFile.addTab(builder, deep + 2);
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
-        builder.append(StringUtils.format("{} {} = {}[{}];", GenerateCsUtils.toCsClassName(arrayField.getType().getSimpleName()), element, objectStr, i)).append(LS);
+        builder.append(StringUtils.format("{} {} = {}[{}];", CodeGenerateCsharp.toCsClassName(arrayField.getType().getSimpleName()), element, objectStr, i)).append(LS);
 
-        GenerateCsUtils.csSerializer(arrayField.getArrayElementRegistration().serializer())
+        CodeGenerateCsharp.csSerializer(arrayField.getArrayElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
 
         GenerateProtocolFile.addTab(builder, deep + 1);
@@ -87,7 +87,7 @@ public class CsArraySerializer implements ICsSerializer {
         var arrayField = (ArrayField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        var typeName = GenerateCsUtils.toCsClassName(arrayField.getType().getSimpleName());
+        var typeName = CodeGenerateCsharp.toCsClassName(arrayField.getType().getSimpleName());
 
         var i = "index" + GenerateProtocolFile.index.getAndIncrement();
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();
@@ -105,7 +105,7 @@ public class CsArraySerializer implements ICsSerializer {
         builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++)", i, i, size, i)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
-        var readObject = GenerateCsUtils.csSerializer(arrayField.getArrayElementRegistration().serializer())
+        var readObject = CodeGenerateCsharp.csSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}[{}] = {};", result, i, readObject));

@@ -13,16 +13,18 @@
 
 package com.zfoo.protocol.serializer.csharp;
 
+import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.serializer.CodeTemplatePlaceholder;
+import com.zfoo.protocol.serializer.ICodeGenerate;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -33,35 +35,34 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
-import static com.zfoo.protocol.util.StringUtils.TAB;
+
 
 /**
  * @author godotg
  */
-public abstract class GenerateCsUtils {
-    private static final Logger logger = LoggerFactory.getLogger(GenerateCsUtils.class);
+public class CodeGenerateCsharp implements ICodeGenerate {
+    private static final Logger logger = LoggerFactory.getLogger(CodeGenerateCsharp.class);
 
     // custom configuration
     public static String protocolOutputRootPath = "zfoocs";
     private static String protocolOutputPath = StringUtils.EMPTY;
 
-    private static Map<ISerializer, ICsSerializer> csSerializerMap;
+    private static final Map<ISerializer, ICsSerializer> csSerializerMap = new HashMap<>();
 
     public static ICsSerializer csSerializer(ISerializer serializer) {
         return csSerializerMap.get(serializer);
     }
 
-    public static void init(GenerateOperation generateOperation) {
+    @Override
+    public void init(GenerateOperation generateOperation) {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        csSerializerMap = new HashMap<>();
         csSerializerMap.put(BooleanSerializer.INSTANCE, new CsBooleanSerializer());
         csSerializerMap.put(ByteSerializer.INSTANCE, new CsByteSerializer());
         csSerializerMap.put(ShortSerializer.INSTANCE, new CsShortSerializer());
@@ -77,16 +78,82 @@ public abstract class GenerateCsUtils {
         csSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new CsObjectProtocolSerializer());
     }
 
-    public static void clear() {
-        csSerializerMap = null;
-        protocolOutputRootPath = null;
-        protocolOutputPath = null;
+    @Override
+    public void mergerProtocol(List<IProtocolRegistration> registrations) throws IOException {
+        createProtocolManagerFile(registrations);
+        var oneProtocolPathMap = GenerateProtocolPath.getOneProtocolPathMap();
+        for (var entry : oneProtocolPathMap.entrySet()) {
+            var path = entry.getKey();
+            var protocolIds = entry.getValue().stream().sorted().toList();
+            var protocolBuilder = new StringBuilder();
+            var protocolRegistrationBuilder = new StringBuilder();
+            for (var protocolId : protocolIds) {
+                GenerateProtocolFile.index.set(0);
+                var registration = (ProtocolRegistration) ProtocolManager.getProtocol(protocolId);
+                var protocolClazzName = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+
+                // protocol
+                var protocolClassTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolClassTemplate.cs");
+                var placeholderMap = Map.of(
+                        CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocolId, CodeLanguage.CSharp)
+                        , CodeTemplatePlaceholder.protocol_name, protocolClazzName
+                        , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocolId)
+                        , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
+                        , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
+                        , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
+                );
+                var formatProtocolClassTemplate = CodeTemplatePlaceholder.formatTemplate(protocolClassTemplate, placeholderMap);
+                protocolBuilder.append(formatProtocolClassTemplate).append(LS);
+
+                // registration
+                var protocolRegistrationTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolRegistrationTemplate.cs");
+                var formatProtocolRegistrationTemplate = CodeTemplatePlaceholder.formatTemplate(protocolRegistrationTemplate, placeholderMap);
+                protocolRegistrationBuilder.append(formatProtocolRegistrationTemplate);
+
+            }
+
+            var protocolTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolTemplate.cs");
+            var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                    CodeTemplatePlaceholder.protocol_class, protocolBuilder.toString()
+                    , CodeTemplatePlaceholder.protocol_registration, protocolRegistrationBuilder.toString()
+            ));
+            var outputPath = StringUtils.format("{}/{}.cs", protocolOutputPath, StringUtils.capitalize(path));
+            var file = new File(outputPath);
+            FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
+            logger.info("Generated C# protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+        }
     }
 
-    /**
-     * 生成协议依赖的工具类
-     */
-    public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
+    @Override
+    public void foldProtocol(List<IProtocolRegistration> registrations) throws IOException {
+        createProtocolManagerFile(registrations);
+
+        for (var registration : registrations) {
+            var protocolId = registration.protocolId();
+            var protocolClazzName = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            var formatProtocolTemplate = protocolTemplate((ProtocolRegistration) registration);
+            var outputPath = StringUtils.format("{}/{}/{}.cs", protocolOutputPath, GenerateProtocolPath.getCapitalizeProtocolPath(protocolId), protocolClazzName);
+            var file = new File(outputPath);
+            FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
+            logger.info("Generated C# protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+        }
+    }
+
+    @Override
+    public void defaultProtocol(List<IProtocolRegistration> registrations) throws IOException {
+        createProtocolManagerFile(registrations);
+
+        for (var registration : registrations) {
+            var protocolClazzName = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            var formatProtocolTemplate = protocolTemplate((ProtocolRegistration) registration);
+            var outputPath = StringUtils.format("{}/{}.cs", protocolOutputPath, protocolClazzName);
+            var file = new File(outputPath);
+            FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
+            logger.info("Generated C# protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+        }
+    }
+
+    private void createProtocolManagerFile(List<IProtocolRegistration> registrations) throws IOException {
         var list = List.of("csharp/IProtocolRegistration.cs"
                 , "csharp/Buffer/ByteBuffer.cs"
                 , "csharp/Buffer/LittleEndianByteBuffer.cs"
@@ -98,53 +165,56 @@ public abstract class GenerateCsUtils {
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
 
-        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolManagerTemplate.cs");
-        var csBuilder = new StringBuilder();
-        var initList = new ArrayList<String>();
-        for (var protocol : protocolList) {
-            var protocolId = protocol.protocolId();
-            var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
-            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.GdScript);
-            csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("protocols[{}] = new {}Registration();", protocolId, protocolName, path)).append(LS);
-            csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("protocolIdMap[typeof({})] = {};", protocolName, protocolId, path)).append(LS);
-        }
-        var initProtocols = StringUtils.joinWith(StringUtils.COMMA + LS, initList.toArray());
-        protocolManagerTemplate = StringUtils.format(protocolManagerTemplate, csBuilder.toString().trim(), initProtocols);
+        var template = ClassUtils.getFileFromClassPathToString("csharp/ProtocolManagerTemplate.cs");
+        var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations(registrations));
+        var formatTemplate = CodeTemplatePlaceholder.formatTemplate(template, placeholderMap);
+
         var file = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.cs"));
-        FileUtils.writeStringToFile(file, protocolManagerTemplate, true);
+        FileUtils.writeStringToFile(file, formatTemplate, true);
         logger.info("Generated C# protocol manager file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
-    /**
-     * 生成协议类
-     */
-    public static void createCsProtocolFile(ProtocolRegistration registration) {
+
+    private String protocolTemplate(ProtocolRegistration registration) {
         GenerateProtocolFile.index.set(0);
 
         var protocolId = registration.protocolId();
-        var registrationConstructor = registration.getConstructor();
-        var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
+        var protocolClazzName = registration.getConstructor().getDeclaringClass().getSimpleName();
 
+        var protocolClassTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolClassTemplate.cs");
+        var protocolRegistrationTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolRegistrationTemplate.cs");
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolTemplate.cs");
-
-        var classNote = GenerateProtocolNote.classNote(protocolId, CodeLanguage.CSharp, TAB, 1);
-        var fieldDefinition = fieldDefinition(registration);
-        var writeObject = writeObject(registration);
-        var readObject = readObject(registration);
-        protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName, fieldDefinition.trim()
-                , protocolClazzName, protocolId, protocolClazzName, protocolClazzName, writeObject.trim()
-                , protocolClazzName, protocolClazzName, readObject.trim());
-
-        var outputPath = StringUtils.format("{}/{}/{}.cs"
-                , protocolOutputPath
-                , GenerateProtocolPath.getCapitalizeProtocolPath(protocolId)
-                , protocolClazzName);
-        var file = new File(outputPath);
-        FileUtils.writeStringToFile(file, protocolTemplate, true);
-        logger.info("Generated C# protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+        var placeholderMap = Map.of(
+                CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocolId, CodeLanguage.CSharp)
+                , CodeTemplatePlaceholder.protocol_name, protocolClazzName
+                , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocolId)
+                , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
+                , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
+                , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
+        );
+        var formatProtocolClassTemplate = CodeTemplatePlaceholder.formatTemplate(protocolClassTemplate, placeholderMap);
+        var formatProtocolRegistrationTemplate = CodeTemplatePlaceholder.formatTemplate(protocolRegistrationTemplate, placeholderMap);
+        var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                CodeTemplatePlaceholder.protocol_class, formatProtocolClassTemplate
+                , CodeTemplatePlaceholder.protocol_registration, formatProtocolRegistrationTemplate
+        ));
+        return formatProtocolTemplate;
     }
 
-    private static String fieldDefinition(ProtocolRegistration registration) {
+
+    private String protocol_manager_registrations(List<IProtocolRegistration> protocolList) {
+        var csBuilder = new StringBuilder();
+        for (var protocol : protocolList) {
+            var protocolId = protocol.protocolId();
+            var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
+            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.CSharp);
+            csBuilder.append(StringUtils.format("protocols[{}] = new {}Registration();", protocolId, protocolName, path)).append(LS);
+            csBuilder.append(StringUtils.format("protocolIdMap[typeof({})] = {};", protocolName, protocolId, path)).append(LS);
+        }
+        return csBuilder.toString();
+    }
+
+    private String protocol_field_definition(ProtocolRegistration registration) {
         var protocolId = registration.getId();
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
@@ -158,55 +228,38 @@ public abstract class GenerateCsUtils {
             var propertyFullName = StringUtils.format("public {} {};", propertyType, fieldName);
             // 生成注释
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.CSharp);
-            for(var fieldNote : fieldNotes) {
-                csBuilder.append(TAB + TAB).append(fieldNote).append(LS);
+            for (var fieldNote : fieldNotes) {
+                csBuilder.append(fieldNote).append(LS);
             }
-            csBuilder.append(TAB + TAB).append(propertyFullName).append(LS);
+            csBuilder.append(propertyFullName).append(LS);
         }
         return csBuilder.toString();
     }
 
-    private static Pair<String, String> valueOfMethod(ProtocolRegistration registration) {
-        var fields = registration.getFields();
-        var filedList = new ArrayList<Pair<String, String>>();
-        for (var field : fields) {
-            var propertyType = toCsClassName(field.getGenericType().getTypeName());
-            var propertyName = field.getName();
-            filedList.add(new Pair<>(propertyType, propertyName));
-        }
 
-        // ValueOf()方法
-        var valueOfParams = filedList.stream().map(it -> StringUtils.format("{} {}", it.getKey(), it.getValue())).toList();
-        var valueOfParamsStr = StringUtils.joinWith(StringUtils.COMMA + " ", valueOfParams.toArray());
-
-        var csBuilder = new StringBuilder();
-        filedList.forEach(it -> csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", it.getValue(), it.getValue())).append(LS));
-        return new Pair<>(valueOfParamsStr, csBuilder.toString());
-    }
-
-    private static String writeObject(ProtocolRegistration registration) {
+    private String protocol_write_serialization(ProtocolRegistration registration) {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var csBuilder = new StringBuilder();
         if (registration.isCompatible()) {
             csBuilder.append("int beforeWriteIndex = buffer.WriteOffset();").append(LS);
-            csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("buffer.WriteInt({});", registration.getPredictionLength())).append(LS);
+            csBuilder.append(StringUtils.format("buffer.WriteInt({});", registration.getPredictionLength())).append(LS);
         } else {
-            csBuilder.append(TAB + TAB + TAB).append("buffer.WriteInt(-1);").append(LS);
+            csBuilder.append("buffer.WriteInt(-1);").append(LS);
         }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            csSerializer(fieldRegistration.serializer()).writeObject(csBuilder, "message." + field.getName(), 3, field, fieldRegistration);
+            csSerializer(fieldRegistration.serializer()).writeObject(csBuilder, "message." + field.getName(), 0, field, fieldRegistration);
         }
         if (registration.isCompatible()) {
-            csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("buffer.AdjustPadding({}, beforeWriteIndex);", registration.getPredictionLength())).append(LS);
+            csBuilder.append(StringUtils.format("buffer.AdjustPadding({}, beforeWriteIndex);", registration.getPredictionLength())).append(LS);
         }
         return csBuilder.toString();
     }
 
 
-    private static String readObject(ProtocolRegistration registration) {
+    private String protocol_read_deserialization(ProtocolRegistration registration) {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var csBuilder = new StringBuilder();
@@ -215,14 +268,14 @@ public abstract class GenerateCsUtils {
             var fieldRegistration = fieldRegistrations[i];
 
             if (field.isAnnotationPresent(Compatible.class)) {
-                csBuilder.append(TAB + TAB + TAB).append("if (buffer.CompatibleRead(beforeReadIndex, length)) {").append(LS);
-                var compatibleReadObject = csSerializer(fieldRegistration.serializer()).readObject(csBuilder, 4, field, fieldRegistration);
-                csBuilder.append(TAB + TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
-                csBuilder.append(TAB + TAB + TAB).append("}").append(LS);
+                csBuilder.append("if (buffer.CompatibleRead(beforeReadIndex, length)) {").append(LS);
+                var compatibleReadObject = csSerializer(fieldRegistration.serializer()).readObject(csBuilder, 1, field, fieldRegistration);
+                csBuilder.append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
+                csBuilder.append("}").append(LS);
                 continue;
             }
-            var readObject = csSerializer(fieldRegistration.serializer()).readObject(csBuilder, 3, field, fieldRegistration);
-            csBuilder.append(TAB + TAB + TAB).append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
+            var readObject = csSerializer(fieldRegistration.serializer()).readObject(csBuilder, 0, field, fieldRegistration);
+            csBuilder.append(StringUtils.format("packet.{} = {};", field.getName(), readObject)).append(LS);
         }
         return csBuilder.toString();
     }
@@ -331,4 +384,5 @@ public abstract class GenerateCsUtils {
 
         return typeName;
     }
+
 }
