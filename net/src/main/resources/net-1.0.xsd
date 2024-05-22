@@ -65,7 +65,7 @@
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:string" use="required"/>
         <xsd:attribute name="protocol-location" type="xsd:string" use="required"/>
-        <xsd:attribute name="one-protocol" type="xsd:boolean" default="false"/>
+        <xsd:attribute name="merger-protocol" type="xsd:boolean" default="false"/>
         <xsd:attribute name="fold-protocol" type="xsd:boolean" default="false"/>
         <xsd:attribute name="code-languages" type="xsd:string"/>
         <xsd:attribute name="protocol-path" type="xsd:string"/>

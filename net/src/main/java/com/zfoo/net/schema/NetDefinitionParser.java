@@ -102,7 +102,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("protocol-location", "protocolLocation", builder, element, parserContext);
 
         // 协议文件是否生成在同一个协议文件中
-        resolvePlaceholder("one-protocol", "oneProtocol", builder, element, parserContext);
+        resolvePlaceholder("merger-protocol", "mergerProtocol", builder, element, parserContext);
         // 文件是否折叠
         resolvePlaceholder("fold-protocol", "foldProtocol", builder, element, parserContext);
         // 生成各种语言的协议列表

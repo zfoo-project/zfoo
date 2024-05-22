@@ -27,7 +27,7 @@ public class NetConfig {
     /**
      * {@link GenerateOperation}
      */
-    private boolean oneProtocol;
+    private boolean mergerProtocol;
     /**
      * {@link GenerateOperation}
      */
@@ -81,12 +81,12 @@ public class NetConfig {
         this.protocolLocation = protocolLocation;
     }
 
-    public boolean isOneProtocol() {
-        return oneProtocol;
+    public boolean isMergerProtocol() {
+        return mergerProtocol;
     }
 
-    public void setOneProtocol(boolean oneProtocol) {
-        this.oneProtocol = oneProtocol;
+    public void setMergerProtocol(boolean mergerProtocol) {
+        this.mergerProtocol = mergerProtocol;
     }
 
     public boolean isFoldProtocol() {
