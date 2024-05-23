@@ -56,7 +56,7 @@ public interface IEntity<PK extends Comparable<PK>> {
         if (idValue == null) {
             return true;
         }
-        // id在启动的时候做过校验，只能是int long float double String几种类型
+        // id在启动的时候做过校验，只能是int long float double String ObjectId几种类型
         if (idValue instanceof Number) {
             return ((Number) idValue).doubleValue() == 0D;
         } else {
