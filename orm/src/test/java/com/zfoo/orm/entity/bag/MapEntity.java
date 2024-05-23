@@ -36,6 +36,11 @@ public class MapEntity implements IEntity<Long> {
         return id;
     }
 
+    @Override
+    public void setId(Long id) {
+        this.id=id;
+    }
+
     public long getId() {
         return id;
     }

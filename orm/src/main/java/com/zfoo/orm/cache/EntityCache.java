@@ -129,6 +129,29 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         return entity;
     }
 
+    @Override
+    public E loadOrInit(PK pk) {
+        AssertionUtils.notNull(pk);
+        var pnode = cache.get(pk);
+        if (pnode != null) {
+            return pnode.getEntity();
+        }
+
+        @SuppressWarnings("unchecked")
+        var entity = (E) OrmContext.getAccessor().load(pk, (Class<IEntity<?>>) entityDef.getClazz());
+
+        // 如果数据库中不存在则给一个默认值
+        if (entity == null) {
+            // 数据库无法加载缓存，返回默认值
+            entity = (E) entityDef.newEntity(pk);
+            entity.setId(pk);
+            OrmContext.getAccessor().insert(entity);
+        }
+        pnode = new PNode<>(entity);
+        cache.put(pk, pnode);
+        return entity;
+    }
+
     /**
      * 校验需要更新的entity和缓存的entity是否为同一个entity
      */
