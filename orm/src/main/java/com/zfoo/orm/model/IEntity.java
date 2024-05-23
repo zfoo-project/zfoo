@@ -60,7 +60,7 @@ public interface IEntity<PK extends Comparable<PK>> {
         if (idValue instanceof Number) {
             return ((Number) idValue).doubleValue() == 0D;
         } else {
-            return StringUtils.isEmpty((CharSequence) idValue);
+            return StringUtils.isEmpty(idValue.toString());
         }
     }
 
