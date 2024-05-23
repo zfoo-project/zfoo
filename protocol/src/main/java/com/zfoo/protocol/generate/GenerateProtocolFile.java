@@ -191,6 +191,9 @@ public abstract class GenerateProtocolFile {
         }
 
         for (var language : generateOperation.getGenerateLanguages()) {
+            if (language.codeGenerateClass == null) {
+                continue;
+            }
             var codeGenerate = ReflectionUtils.newInstance(language.codeGenerateClass);
             codeGenerate.init(generateOperation);
             if (generateOperation.isMergeProtocol()) {
