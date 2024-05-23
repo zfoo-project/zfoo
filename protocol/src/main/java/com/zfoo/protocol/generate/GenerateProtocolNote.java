@@ -25,8 +25,6 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
 
-import static com.zfoo.protocol.util.StringUtils.TAB;
-
 /**
  * EN: When generating the protocol, the document comments and field comments of the protocol will use this class
  * CN: 生成协议的时候，协议的文档注释和字段注释会使用这个类

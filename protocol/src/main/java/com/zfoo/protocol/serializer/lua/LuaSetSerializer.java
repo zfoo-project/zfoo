@@ -56,7 +56,7 @@ public class LuaSetSerializer implements ILuaSerializer {
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {}, {} in pairs({}) do", index, element, objectStr)).append(LS);
-        GenerateLuaUtils.luaSerializer(setField.getSetElementRegistration().serializer())
+        CodeGenerateLua.luaSerializer(setField.getSetElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("end").append(LS);
@@ -86,7 +86,7 @@ public class LuaSetSerializer implements ILuaSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         String i = "index" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("for {} = 1, {} do", i, size)).append(LS);
-        String readObject = GenerateLuaUtils.luaSerializer(setField.getSetElementRegistration().serializer())
+        String readObject = CodeGenerateLua.luaSerializer(setField.getSetElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("table.insert({}, {})", result, readObject)).append(LS);

@@ -29,7 +29,7 @@ import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
-import com.zfoo.protocol.serializer.lua.GenerateLuaUtils;
+import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
 import com.zfoo.protocol.serializer.python.GeneratePyUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
@@ -71,7 +71,7 @@ public class ProtocolAnalysis {
             , "Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double", "String", "Character", "Object"
             , "Collections", "Iterator", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet"
             , "DecodedPacketInfo", "EncodedPacketInfo"
-            , "Protocols", "ProtocolBase", "ProtocolWriter", "ProtocolReader");
+            , "Protocols");
 
     /**
      * EN: Temp field, unsupported type
@@ -404,7 +404,6 @@ public class ProtocolAnalysis {
         GenerateGoUtils.clear();
         GenerateJsUtils.clear();
         GenerateTsUtils.clear();
-        GenerateLuaUtils.clear();
         GenerateGdUtils.clear();
         GeneratePyUtils.clear();
     }

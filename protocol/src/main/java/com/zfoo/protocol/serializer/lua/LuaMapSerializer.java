@@ -56,9 +56,9 @@ public class LuaMapSerializer implements ILuaSerializer {
 
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {}, {} in pairs({}) do", key, value, objectStr)).append(LS);
-        GenerateLuaUtils.luaSerializer(mapField.getMapKeyRegistration().serializer())
+        CodeGenerateLua.luaSerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
-        GenerateLuaUtils.luaSerializer(mapField.getMapValueRegistration().serializer())
+        CodeGenerateLua.luaSerializer(mapField.getMapValueRegistration().serializer())
                 .writeObject(builder, value, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("end").append(LS);
@@ -89,11 +89,11 @@ public class LuaMapSerializer implements ILuaSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} = 1, {} do", i, size, i)).append(LS);
 
-        String keyObject = GenerateLuaUtils.luaSerializer(mapField.getMapKeyRegistration().serializer())
+        String keyObject = CodeGenerateLua.luaSerializer(mapField.getMapKeyRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapKeyRegistration());
 
 
-        String valueObject = GenerateLuaUtils.luaSerializer(mapField.getMapValueRegistration().serializer())
+        String valueObject = CodeGenerateLua.luaSerializer(mapField.getMapValueRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
 

@@ -56,7 +56,7 @@ public class LuaArraySerializer implements ILuaSerializer {
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {}, {} in pairs({}) do", index, element, objectStr)).append(LS);
-        GenerateLuaUtils.luaSerializer(arrayField.getArrayElementRegistration().serializer())
+        CodeGenerateLua.luaSerializer(arrayField.getArrayElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("end").append(LS);
@@ -86,7 +86,7 @@ public class LuaArraySerializer implements ILuaSerializer {
         builder.append(StringUtils.format("if {} > 0 then", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} = 1, {} do", i, size)).append(LS);
-        String readObject = GenerateLuaUtils.luaSerializer(arrayField.getArrayElementRegistration().serializer())
+        String readObject = CodeGenerateLua.luaSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("table.insert({}, {})", result, readObject)).append(LS);

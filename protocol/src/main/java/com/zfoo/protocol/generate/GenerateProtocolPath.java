@@ -88,6 +88,10 @@ public abstract class GenerateProtocolPath {
     /**
      * 获取协议生成的路径
      */
+    public static String protocolPath(short protocolId) {
+        return protocolPathMap.get(protocolId);
+    }
+
     public static String getProtocolPath(short protocolId) {
         AssertionUtils.notNull(protocolPathMap
                 , "[{}]The initialization has been completed. Get Protocol Path cannot be called after the initialization is completed."
@@ -134,7 +138,7 @@ public abstract class GenerateProtocolPath {
         return builder.toString();
     }
 
-    public static Map<String, Set<Short>> getOneProtocolPathMap() {
+    public static Map<String, Set<Short>> mergerProtocolPathMap() {
         var oneProtocolMap = new HashMap<String, Set<Short>>();
         for(var entry : protocolPathMap.entrySet()) {
             var protocolId = entry.getKey();

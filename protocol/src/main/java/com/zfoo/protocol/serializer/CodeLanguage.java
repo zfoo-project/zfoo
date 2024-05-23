@@ -13,6 +13,7 @@
 package com.zfoo.protocol.serializer;
 
 import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
+import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
 
 /**
  * @author godotg
@@ -34,7 +35,7 @@ public enum CodeLanguage {
 
     TypeScript(1 << 5, null),
 
-    Lua(1 << 10, null),
+    Lua(1 << 10, CodeGenerateLua.class),
 
     CSharp(1 << 11, CodeGenerateCsharp.class),
 

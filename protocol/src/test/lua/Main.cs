@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using XLua;
-using zfoocs;
 
 public class Main : MonoBehaviour
 {
