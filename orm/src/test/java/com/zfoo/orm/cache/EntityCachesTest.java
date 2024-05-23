@@ -15,6 +15,7 @@ package com.zfoo.orm.cache;
 
 import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
+import com.zfoo.orm.entity.MailEntity;
 import com.zfoo.orm.entity.UserEntity;
 import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.scheduler.util.TimeUtils;
@@ -51,6 +52,24 @@ public class EntityCachesTest {
         userEntityCaches.load(1L);
     }
 
+    @Test
+    public void testLoadOrInsert() {
+        var context = new ClassPathXmlApplicationContext("application.xml");
+
+        // 动态去拿到UserEntity的EntityCaches
+        @SuppressWarnings("unchecked")
+        var mailEntityCaches = (IEntityCache<String, MailEntity>) OrmContext.getOrmManager().getEntityCaches(MailEntity.class);
+
+        for (var i = 1; i <= 10; i++) {
+            var entity = mailEntityCaches.loadOrInit(String.valueOf(i));
+            entity.setContent("msg:" + i);
+            mailEntityCaches.update(entity);
+        }
+
+        ThreadUtils.sleep(60 * TimeUtils.MILLIS_PER_SECOND);
+
+        mailEntityCaches.load("1");
+    }
 
     @Test
     public void collectionTest() {
