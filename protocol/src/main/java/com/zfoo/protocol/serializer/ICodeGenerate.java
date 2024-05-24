@@ -11,10 +11,14 @@ import java.util.List;
  * 1.测试Java的老协议和新协议的兼容性，NormalObject/ObjectA/ObjectB有几个兼容字段
  * 2.测试Java在字节码增强，CutDown，反射三种情况下的代码下的协议解析的准确性
  * 3.测试resource/compatible中有5种协议兼容情况需要测试
- * 4.1和2总共有2*3*5=30种情况
+ * 4.1/2/3总共有2*3*5=30种情况
  * <p>
  * 协议生成修改后的测试流程：
- * 同上，除了反射，总共有2*2*5=20种情况
+ * 1.测试老协议和新协议的兼容性，NormalObject/ObjectA/ObjectB有几个兼容字段
+ * 2.测试普通生成，CutDown两种种情况下的代码下的协议解析的准确性
+ * 3.测试resource/compatible中有5种协议兼容情况需要测试
+ * 4.测试merge，fold，default三种种生成方式
+ * 4.1/2/3/4总共2*2*5*3=60种情况
  *
  * @author godotg
  */
