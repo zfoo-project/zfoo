@@ -120,11 +120,11 @@ public abstract class GenerateProtocolNote {
         return note;
     }
 
-    public static void initProtocolNote(List<IProtocolRegistration> protocolRegistrations) {
+    public static void initProtocolNote(List<ProtocolRegistration> protocolRegistrations) {
         AssertionUtils.notNull(protocolNoteMap, "[{}] duplicate initialization", GenerateProtocolNote.class.getSimpleName());
 
-        for (var protocolRegistration : protocolRegistrations) {
-            var protocolClazz = protocolRegistration.protocolConstructor().getDeclaringClass();
+        for (var registration : protocolRegistrations) {
+            var protocolClazz = registration.protocolConstructor().getDeclaringClass();
             var classNote = StringUtils.EMPTY;
             var protocolClass = protocolClazz.getDeclaredAnnotation(Note.class);
             if (protocolClass != null && StringUtils.isNotEmpty(protocolClass.value())) {
@@ -132,7 +132,6 @@ public abstract class GenerateProtocolNote {
             }
 
             var fieldNoteMap = new HashMap<String, String>();
-            var registration = (ProtocolRegistration) protocolRegistration;
             for (var field : registration.getFields()) {
                 var noteDescription = field.getDeclaredAnnotation(Note.class);
                 if (noteDescription == null || StringUtils.isEmpty(noteDescription.value())) {
@@ -143,7 +142,7 @@ public abstract class GenerateProtocolNote {
                 fieldNoteMap.put(fieldName, StringUtils.trim(fieldNote));
             }
 
-            protocolNoteMap.put(protocolRegistration.protocolId(), new Pair<>(classNote, fieldNoteMap));
+            protocolNoteMap.put(registration.protocolId(), new Pair<>(classNote, fieldNoteMap));
         }
     }
 

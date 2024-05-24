@@ -76,15 +76,15 @@ public class CodeGenerateLua implements ICodeGenerate {
     }
 
     @Override
-    public void mergerProtocol(List<IProtocolRegistration> registrations) throws IOException {
+    public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
         var protocol_manager_registrations = new StringBuilder();
         protocol_manager_registrations.append(StringUtils.format("local Protocols = require(\"{}.Protocols\")", protocolOutputRootPath)).append(LS);
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = Protocols.{}", protocol_id, protocol_class_name)).append(LS);
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = Protocols.{}", protocol_id, protocol_name)).append(LS);
         }
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolManagerTemplate.lua");
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -99,19 +99,18 @@ public class CodeGenerateLua implements ICodeGenerate {
         for (var registration : registrations) {
             GenerateProtocolFile.index.set(0);
             var protocol_id = registration.protocolId();
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
 
             // protocol
-            protocol_class.append(protocol_class((ProtocolRegistration) registration)).append(LS);
+            protocol_class.append(protocol_class(registration)).append(LS);
 
             // registration
-            protocol_registration.append(protocol_registration((ProtocolRegistration) registration)).append(LS);
+            protocol_registration.append(protocol_registration(registration)).append(LS);
         }
 
         protocol_registration.append(LS);
         for (var registration : registrations) {
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_registration.append(StringUtils.format("Protocols.{} = {}", protocol_class_name, protocol_class_name)).append(LS);
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            protocol_registration.append(StringUtils.format("Protocols.{} = {}", protocol_name, protocol_name)).append(LS);
         }
 
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolsTemplate.lua");
@@ -122,22 +121,22 @@ public class CodeGenerateLua implements ICodeGenerate {
         var outputPath = StringUtils.format("{}/Protocols.lua", protocolOutputPath);
         var file = new File(outputPath);
         FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
-        logger.info("Generated C# protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+        logger.info("Generated Lua protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
 
     }
 
     @Override
-    public void foldProtocol(List<IProtocolRegistration> registrations) throws IOException {
+    public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
         var protocolManagerRequireBuilder = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             var path = GenerateProtocolPath.protocolPath(protocol_id);
-            protocolManagerRequireBuilder.append(StringUtils.format("local {} = require(\"{}.{}.{}\")", protocol_class_name, protocolOutputRootPath, path.replace(StringUtils.SLASH, StringUtils.PERIOD), protocol_class_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}", protocol_id, protocol_class_name)).append(LS);
+            protocolManagerRequireBuilder.append(StringUtils.format("local {} = require(\"{}.{}.{}\")", protocol_name, protocolOutputRootPath, path.replace(StringUtils.SLASH, StringUtils.PERIOD), protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}", protocol_id, protocol_name)).append(LS);
         }
 
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolManagerTemplate.lua");
@@ -150,9 +149,9 @@ public class CodeGenerateLua implements ICodeGenerate {
 
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var formatProtocolTemplate = formatProtocolTemplate((ProtocolRegistration) registration);
-            var outputPath = StringUtils.format("{}/{}/{}.lua", protocolOutputPath, GenerateProtocolPath.protocolPath(protocol_id), protocol_class_name);
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            var formatProtocolTemplate = formatProtocolTemplate(registration);
+            var outputPath = StringUtils.format("{}/{}/{}.lua", protocolOutputPath, GenerateProtocolPath.protocolPath(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated Lua protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
@@ -160,16 +159,16 @@ public class CodeGenerateLua implements ICodeGenerate {
     }
 
     @Override
-    public void defaultProtocol(List<IProtocolRegistration> registrations) throws IOException {
+    public void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
         var protocolManagerRequireBuilder = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocolManagerRequireBuilder.append(StringUtils.format("local {} = require(\"{}.{}\")", protocol_class_name, protocolOutputRootPath, protocol_class_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}", protocol_id, protocol_class_name)).append(LS);
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            protocolManagerRequireBuilder.append(StringUtils.format("local {} = require(\"{}.{}\")", protocol_name, protocolOutputRootPath, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}", protocol_id, protocol_name)).append(LS);
         }
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolManagerTemplate.lua");
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_manager_registrations, protocolManagerRequireBuilder.toString() + protocol_manager_registrations);
@@ -180,9 +179,9 @@ public class CodeGenerateLua implements ICodeGenerate {
 
 
         for (var registration : registrations) {
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var formatProtocolTemplate = formatProtocolTemplate((ProtocolRegistration) registration);
-            var outputPath = StringUtils.format("{}/{}.lua", protocolOutputPath, protocol_class_name);
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            var formatProtocolTemplate = formatProtocolTemplate(registration);
+            var outputPath = StringUtils.format("{}/{}.lua", protocolOutputPath, protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated Lua protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
@@ -207,24 +206,24 @@ public class CodeGenerateLua implements ICodeGenerate {
         // 初始化index
         GenerateProtocolFile.index.set(0);
 
-        var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+        var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolTemplate.lua");
 
         return CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                 , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
-                , CodeTemplatePlaceholder.protocol_name, protocol_class_name
+                , CodeTemplatePlaceholder.protocol_name, protocol_name
         ));
     }
 
     private String protocol_class(ProtocolRegistration registration) {
         var protocol_id = registration.protocolId();
-        var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+        var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
 
         var protocolClassTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolClassTemplate.lua");
         var placeholderMap = Map.of(
                 CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Lua)
-                , CodeTemplatePlaceholder.protocol_name, protocol_class_name
+                , CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
                 , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
@@ -235,12 +234,12 @@ public class CodeGenerateLua implements ICodeGenerate {
 
     private String protocol_registration(ProtocolRegistration registration) {
         var protocol_id = registration.protocolId();
-        var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+        var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
 
         var protocolRegistrationTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolRegistrationTemplate.lua");
         var placeholderMap = Map.of(
                 CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Lua)
-                , CodeTemplatePlaceholder.protocol_name, protocol_class_name
+                , CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
                 , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)

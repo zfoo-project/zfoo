@@ -86,7 +86,7 @@ public abstract class GenerateGdUtils {
         protocolOutputPath = null;
     }
 
-    public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
+    public static void createProtocolManager(List<ProtocolRegistration> protocolList) throws IOException {
         var byteBufferFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ByteBuffer.gd"));
         var byteBufferTemplate = ClassUtils.getFileFromClassPathToString("gdscript/buffer/ByteBuffer.gd");
         FileUtils.writeStringToFile(byteBufferFile, StringUtils.format(byteBufferTemplate, protocolOutputRootPath), false);

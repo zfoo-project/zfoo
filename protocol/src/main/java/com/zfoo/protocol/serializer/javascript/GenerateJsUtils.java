@@ -80,7 +80,7 @@ public abstract class GenerateJsUtils {
         jsSerializerMap = null;
     }
 
-    public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
+    public static void createProtocolManager(List<ProtocolRegistration> protocolList) throws IOException {
         var list = List.of("javascript/buffer/ByteBuffer.js", "javascript/buffer/long.js", "javascript/buffer/longbits.js");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);

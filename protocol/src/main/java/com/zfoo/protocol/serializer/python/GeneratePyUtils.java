@@ -82,7 +82,7 @@ public abstract class GeneratePyUtils {
         pySerializerMap = null;
     }
 
-    public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
+    public static void createProtocolManager(List<ProtocolRegistration> protocolList) throws IOException {
         var list = List.of("python/ByteBuffer.py");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);

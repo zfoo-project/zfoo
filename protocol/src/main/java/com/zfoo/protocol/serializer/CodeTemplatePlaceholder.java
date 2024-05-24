@@ -24,6 +24,9 @@ import java.util.Map;
  */
 public enum CodeTemplatePlaceholder {
 
+    protocol_root_path("${protocol_root_path}"),
+    protocol_imports("${protocol_imports}"),
+
     protocol_class("${protocol_class}"),
 
     protocol_registration("${protocol_registration}"),
@@ -74,7 +77,7 @@ public enum CodeTemplatePlaceholder {
 
             for (var codeTemplatePlaceholder : CodeTemplatePlaceholder.values()) {
                 if (formatLine.contains(codeTemplatePlaceholder.placeholder)) {
-                    formatLine = formatLine.replace(codeTemplatePlaceholder.placeholder, placeholderMap.get(codeTemplatePlaceholder));
+                     formatLine = formatLine.replace(codeTemplatePlaceholder.placeholder, placeholderMap.get(codeTemplatePlaceholder));
                 }
             }
 

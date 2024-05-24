@@ -83,7 +83,7 @@ public abstract class GenerateTsUtils {
         tsSerializerMap = null;
     }
 
-    public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
+    public static void createProtocolManager(List<ProtocolRegistration> protocolList) throws IOException {
         var list = List.of("typescript/IByteBuffer.ts", "typescript/buffer/ByteBuffer.ts", "typescript/buffer/Long.ts", "typescript/buffer/Longbits.ts");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);

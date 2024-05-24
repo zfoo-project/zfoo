@@ -33,7 +33,7 @@ public class CppArraySerializer implements ICppSerializer {
 
     @Override
     public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        var type = GenerateCppUtils.toCppClassName(field.getType().getComponentType().getSimpleName());
+        var type = CodeGenerateCpp.toCppClassName(field.getType().getComponentType().getSimpleName());
         return new Pair<>(StringUtils.format("vector<{}>", type), field.getName());
     }
 
@@ -56,9 +56,9 @@ public class CppArraySerializer implements ICppSerializer {
         builder.append(StringUtils.format("for (auto {} = 0; {} < {}; {}++) {", i, i, length, i)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         String element = "element" + GenerateProtocolFile.index.getAndIncrement();
-        builder.append(StringUtils.format("{} {} = {}[{}];", GenerateCppUtils.toCppClassName(arrayField.getType().getSimpleName()), element, objectStr, i)).append(LS);
+        builder.append(StringUtils.format("{} {} = {}[{}];", CodeGenerateCpp.toCppClassName(arrayField.getType().getSimpleName()), element, objectStr, i)).append(LS);
 
-        GenerateCppUtils.cppSerializer(arrayField.getArrayElementRegistration().serializer())
+        CodeGenerateCpp.cppSerializer(arrayField.getArrayElementRegistration().serializer())
                 .writeObject(builder, element, deep + 1, field, arrayField.getArrayElementRegistration());
 
         GenerateProtocolFile.addTab(builder, deep);
@@ -77,7 +77,7 @@ public class CppArraySerializer implements ICppSerializer {
         var arrayField = (ArrayField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        var typeName = GenerateCppUtils.toCppClassName(arrayField.getType().getSimpleName());
+        var typeName = CodeGenerateCpp.toCppClassName(arrayField.getType().getSimpleName());
 
         var i = "index" + GenerateProtocolFile.index.getAndIncrement();
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();
@@ -88,7 +88,7 @@ public class CppArraySerializer implements ICppSerializer {
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
-        var readObject = GenerateCppUtils.cppSerializer(arrayField.getArrayElementRegistration().serializer())
+        var readObject = CodeGenerateCpp.cppSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
 
         var point = StringUtils.EMPTY;

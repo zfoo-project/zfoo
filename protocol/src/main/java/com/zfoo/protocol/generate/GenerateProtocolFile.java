@@ -13,17 +13,16 @@
 package com.zfoo.protocol.generate;
 
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.UnknownException;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.cpp.GenerateCppUtils;
 import com.zfoo.protocol.serializer.es.GenerateEsUtils;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
-import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
 import com.zfoo.protocol.serializer.python.GeneratePyUtils;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -32,9 +31,7 @@ import com.zfoo.protocol.util.StringUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
@@ -80,10 +77,6 @@ public abstract class GenerateProtocolFile {
         return builder.toString();
     }
 
-    public static void clear() {
-        generateProtocolFilter = null;
-        index = null;
-    }
 
     /**
      * EN: Generate protocol files to various languages
@@ -118,6 +111,7 @@ public abstract class GenerateProtocolFile {
         // 通过协议号，从小到大排序
         var generateProtocols = allGenerateProtocols.stream()
                 .sorted((a, b) -> a.protocolId() - b.protocolId())
+                .map(it -> (ProtocolRegistration) it)
                 .toList();
 
         // 解析协议的文档注释
@@ -127,13 +121,6 @@ public abstract class GenerateProtocolFile {
 
         // 生成C++协议
         var generateLanguages = generateOperation.getGenerateLanguages();
-        if (generateLanguages.contains(CodeLanguage.Cpp)) {
-            GenerateCppUtils.init(generateOperation);
-            GenerateCppUtils.createProtocolManager(generateProtocols);
-            for (var protocolRegistration : generateProtocols) {
-                GenerateCppUtils.createCppProtocolFile((ProtocolRegistration) protocolRegistration);
-            }
-        }
 
         // 生成Golang协议
         if (generateLanguages.contains(CodeLanguage.Go)) {
@@ -217,6 +204,28 @@ public abstract class GenerateProtocolFile {
             }
         }
         throw new UnknownException();
+    }
+
+    // 子协议优先生成
+    public static List<ProtocolRegistration> subProtocolFirst(List<ProtocolRegistration> registrations) {
+        var registrations1 = new ArrayList<ProtocolRegistration>(registrations);
+        var subFirstRegistrations = new ArrayList<ProtocolRegistration>();
+        var set = new HashSet<Short>();
+        while (!registrations1.isEmpty()) {
+            for (var i = 0; i < registrations1.size(); i++) {
+                var registration = registrations1.get(i);
+                var protocolId = registration.protocolId();
+                var subProtocols = ProtocolAnalysis.getAllSubProtocolIds(protocolId);
+                subProtocols.removeAll(set);
+                if (CollectionUtils.isEmpty(subProtocols)) {
+                    subFirstRegistrations.add(registration);
+                    set.add(protocolId);
+                    registrations1.remove(registration);
+                    break;
+                }
+            }
+        }
+        return subFirstRegistrations;
     }
 
 }

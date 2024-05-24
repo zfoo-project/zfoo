@@ -80,7 +80,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
     }
 
     @Override
-    public void mergerProtocol(List<IProtocolRegistration> registrations) throws IOException {
+    public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createProtocolManagerFile(registrations);
         var mergerProtocolPathMap = GenerateProtocolPath.mergerProtocolPathMap();
         for (var entry : mergerProtocolPathMap.entrySet()) {
@@ -112,13 +112,13 @@ public class CodeGenerateCsharp implements ICodeGenerate {
     }
 
     @Override
-    public void foldProtocol(List<IProtocolRegistration> registrations) throws IOException {
+    public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createProtocolManagerFile(registrations);
 
         for (var registration : registrations) {
             var protocolId = registration.protocolId();
             var protocolClazzName = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var formatProtocolTemplate = formatProtocolTemplate((ProtocolRegistration) registration);
+            var formatProtocolTemplate = formatProtocolTemplate(registration);
             var outputPath = StringUtils.format("{}/{}/{}.cs", protocolOutputPath, GenerateProtocolPath.getCapitalizeProtocolPath(protocolId), protocolClazzName);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
@@ -127,20 +127,20 @@ public class CodeGenerateCsharp implements ICodeGenerate {
     }
 
     @Override
-    public void defaultProtocol(List<IProtocolRegistration> registrations) throws IOException {
+    public void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createProtocolManagerFile(registrations);
 
         for (var registration : registrations) {
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var formatProtocolTemplate = formatProtocolTemplate((ProtocolRegistration) registration);
-            var outputPath = StringUtils.format("{}/{}.cs", protocolOutputPath, protocol_class_name);
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            var formatProtocolTemplate = formatProtocolTemplate(registration);
+            var outputPath = StringUtils.format("{}/{}.cs", protocolOutputPath, protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated C# protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
         }
     }
 
-    private void createProtocolManagerFile(List<IProtocolRegistration> registrations) throws IOException {
+    private void createProtocolManagerFile(List<ProtocolRegistration> registrations) throws IOException {
         var list = List.of("csharp/IProtocolRegistration.cs"
                 , "csharp/Buffer/ByteBuffer.cs"
                 , "csharp/Buffer/LittleEndianByteBuffer.cs"
@@ -174,12 +174,12 @@ public class CodeGenerateCsharp implements ICodeGenerate {
 
     private String protocol_class(ProtocolRegistration registration) {
         var protocol_id = registration.protocolId();
-        var protocol_class_name = registration.getConstructor().getDeclaringClass().getSimpleName();
+        var protocol_name = registration.getConstructor().getDeclaringClass().getSimpleName();
 
         var protocolClassTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolClassTemplate.cs");
         var placeholderMap = Map.of(
                 CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.CSharp)
-                , CodeTemplatePlaceholder.protocol_name, protocol_class_name
+                , CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
                 , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
@@ -190,12 +190,12 @@ public class CodeGenerateCsharp implements ICodeGenerate {
 
     private String protocol_registration(ProtocolRegistration registration) {
         var protocol_id = registration.protocolId();
-        var protocol_class_name = registration.getConstructor().getDeclaringClass().getSimpleName();
+        var protocol_name = registration.getConstructor().getDeclaringClass().getSimpleName();
 
         var protocolRegistrationTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolRegistrationTemplate.cs");
         var placeholderMap = Map.of(
                 CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.CSharp)
-                , CodeTemplatePlaceholder.protocol_name, protocol_class_name
+                , CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
                 , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
@@ -204,7 +204,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
         return CodeTemplatePlaceholder.formatTemplate(protocolRegistrationTemplate, placeholderMap);
     }
 
-    private String protocol_manager_registrations(List<IProtocolRegistration> protocolList) {
+    private String protocol_manager_registrations(List<ProtocolRegistration> protocolList) {
         var csBuilder = new StringBuilder();
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();

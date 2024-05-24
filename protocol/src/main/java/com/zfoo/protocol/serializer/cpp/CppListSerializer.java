@@ -33,7 +33,7 @@ public class CppListSerializer implements ICppSerializer {
 
     @Override
     public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        var type = GenerateCppUtils.toCppClassName(field.getGenericType().toString());
+        var type = CodeGenerateCpp.toCppClassName(field.getGenericType().toString());
         return new Pair<>(type, field.getName());
     }
 
@@ -53,7 +53,7 @@ public class CppListSerializer implements ICppSerializer {
         String i = "i" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("for (auto {} : {}) {", i, objectStr)).append(LS);
 
-        GenerateCppUtils.cppSerializer(listField.getListElementRegistration().serializer())
+        CodeGenerateCpp.cppSerializer(listField.getListElementRegistration().serializer())
                 .writeObject(builder, i, deep + 1, field, listField.getListElementRegistration());
 
         GenerateProtocolFile.addTab(builder, deep);
@@ -71,7 +71,7 @@ public class CppListSerializer implements ICppSerializer {
         var listField = (ListField) fieldRegistration;
 
         var result = "result" + GenerateProtocolFile.index.getAndIncrement();
-        var typeName = GenerateCppUtils.toCppClassName(listField.getType().toString());
+        var typeName = CodeGenerateCpp.toCppClassName(listField.getType().toString());
 
         var i = "index" + GenerateProtocolFile.index.getAndIncrement();
         var size = "size" + GenerateProtocolFile.index.getAndIncrement();
@@ -83,7 +83,7 @@ public class CppListSerializer implements ICppSerializer {
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
-        var readObject = GenerateCppUtils.cppSerializer(listField.getListElementRegistration().serializer())
+        var readObject = CodeGenerateCpp.cppSerializer(listField.getListElementRegistration().serializer())
                 .readObject(builder, deep + 1, field, listField.getListElementRegistration());
 
         var point = StringUtils.EMPTY;

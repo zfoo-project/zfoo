@@ -12,6 +12,7 @@
 
 package com.zfoo.protocol.serializer;
 
+import com.zfoo.protocol.serializer.cpp.CodeGenerateCpp;
 import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
 import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
 
@@ -25,7 +26,7 @@ public enum CodeLanguage {
      */
     Enhance(1, null),
 
-    Cpp(1 << 1, null),
+    Cpp(1 << 1, CodeGenerateCpp.class),
 
     Go(1 << 2, null),
 

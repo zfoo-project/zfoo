@@ -16,6 +16,7 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.collection.tree.GeneralTree;
 import com.zfoo.protocol.collection.tree.TreeNode;
 import com.zfoo.protocol.registration.IProtocolRegistration;
+import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.AssertionUtils;
@@ -153,9 +154,9 @@ public abstract class GenerateProtocolPath {
      *
      * @param protocolRegistrations 需要解析的路径
      */
-    public static void initProtocolPath(List<IProtocolRegistration> protocolRegistrations) {
+    public static void initProtocolPath(List<ProtocolRegistration> protocolRegistrations) {
         // 将需要生成的协议的路径添加到多叉树中
-        var protocolPathTree = new GeneralTree<IProtocolRegistration>();
+        var protocolPathTree = new GeneralTree<ProtocolRegistration>();
         protocolRegistrations.forEach(it -> protocolPathTree.addNode(it.protocolConstructor().getDeclaringClass().getCanonicalName(), it));
 
         var rootTreeNode = protocolPathTree.getRootNode();
@@ -187,7 +188,7 @@ public abstract class GenerateProtocolPath {
         }
     }
 
-    private static void toProtocolPath(TreeNode<IProtocolRegistration> protocolTreeNode) {
+    private static void toProtocolPath(TreeNode<ProtocolRegistration> protocolTreeNode) {
         var allChildren = protocolTreeNode.flatTreeNodes()
                 .stream()
                 .filter(it -> it.getData() != null)

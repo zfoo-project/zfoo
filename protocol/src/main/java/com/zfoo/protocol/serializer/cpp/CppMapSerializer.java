@@ -33,7 +33,7 @@ public class CppMapSerializer implements ICppSerializer {
 
     @Override
     public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        var type = GenerateCppUtils.toCppClassName(field.getGenericType().toString());
+        var type = CodeGenerateCpp.toCppClassName(field.getGenericType().toString());
         return new Pair<>(type, field.getName());
     }
 
@@ -55,9 +55,9 @@ public class CppMapSerializer implements ICppSerializer {
 
         var mapKeyRegistration = mapField.getMapKeyRegistration();
         var mapValueRegistration = mapField.getMapValueRegistration();
-        GenerateCppUtils.cppSerializer(mapField.getMapKeyRegistration().serializer())
+        CodeGenerateCpp.cppSerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 1, field, mapField.getMapKeyRegistration());
-        GenerateCppUtils.cppSerializer(mapField.getMapValueRegistration().serializer())
+        CodeGenerateCpp.cppSerializer(mapField.getMapValueRegistration().serializer())
                 .writeObject(builder, value, deep + 1, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
@@ -75,7 +75,7 @@ public class CppMapSerializer implements ICppSerializer {
         MapField mapField = (MapField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.index.getAndIncrement();
 
-        var typeName = GenerateCppUtils.toCppClassName(mapField.getType().toString());
+        var typeName = CodeGenerateCpp.toCppClassName(mapField.getType().toString());
 
         String size = "size" + GenerateProtocolFile.index.getAndIncrement();
         builder.append(StringUtils.format("int32_t {} = buffer.readInt();", size)).append(LS);
@@ -88,10 +88,10 @@ public class CppMapSerializer implements ICppSerializer {
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("for (auto {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
 
-        String keyObject = GenerateCppUtils.cppSerializer(mapField.getMapKeyRegistration().serializer())
+        String keyObject = CodeGenerateCpp.cppSerializer(mapField.getMapKeyRegistration().serializer())
                 .readObject(builder, deep + 1, field, mapField.getMapKeyRegistration());
 
-        String valueObject = GenerateCppUtils.cppSerializer(mapField.getMapValueRegistration().serializer())
+        String valueObject = CodeGenerateCpp.cppSerializer(mapField.getMapValueRegistration().serializer())
                 .readObject(builder, deep + 1, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
 

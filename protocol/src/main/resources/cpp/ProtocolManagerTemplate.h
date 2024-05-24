@@ -2,14 +2,14 @@
 #define ZFOO_PROTOCOLMANAGER_H
 
 #include "ByteBuffer.h"
-{}
+${protocol_imports}
 namespace zfoo {
 
     const int16_t MAX_PROTOCOL_NUM = 32767;
     const IProtocolRegistration *protocols[MAX_PROTOCOL_NUM];
 
     void initProtocol() {
-        {}
+        ${protocol_manager_registrations}
     }
 
     inline IProtocolRegistration *getProtocol(int16_t protocolId) {

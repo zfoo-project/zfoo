@@ -80,7 +80,7 @@ public abstract class GenerateEsUtils {
         esSerializerMap = null;
     }
 
-    public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
+    public static void createProtocolManager(List<ProtocolRegistration> protocolList) throws IOException {
         var list = List.of("es/buffer/ByteBuffer.mjs", "es/buffer/long.mjs", "es/buffer/longbits.mjs");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);

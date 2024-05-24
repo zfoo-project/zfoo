@@ -84,7 +84,7 @@ public abstract class GenerateGoUtils {
     /**
      * 生成协议依赖的工具类
      */
-    public static void createProtocolManager(List<IProtocolRegistration> protocolList) throws IOException {
+    public static void createProtocolManager(List<ProtocolRegistration> protocolList) throws IOException {
         var list = List.of("go/ByteBuffer.go");
 
         for (var fileName : list) {
