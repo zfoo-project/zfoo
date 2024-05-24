@@ -18,7 +18,7 @@ import java.util.List;
  * 2.测试普通生成，CutDown两种种情况下的代码下的协议解析的准确性
  * 3.测试resource/compatible中有5种协议兼容情况需要测试
  * 4.测试merge，fold，default三种种生成方式
- * 4.1/2/3/4总共2*2*5*3=60种情况
+ * 5.1/2/3/4总共2*2*5*3=60种情况
  *
  * @author godotg
  */
