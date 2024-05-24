@@ -16,9 +16,10 @@ import java.util.List;
  * 协议生成修改后的测试流程：
  * 1.测试老协议和新协议的兼容性，NormalObject/ObjectA/ObjectB有几个兼容字段
  * 2.测试普通生成，CutDown两种种情况下的代码下的协议解析的准确性
- * 3.测试resource/compatible中有5种协议兼容情况需要测试
- * 4.测试merge，fold，default三种种生成方式
- * 5.1/2/3/4总共2*2*5*3=60种情况
+ * 3.测试merge，fold，default三种种生成方式
+ * 4.测试resource/compatible中有5种协议兼容情况需要测试
+ * 5.1/2/3/4总共2*2*3*5=60种情况
+ * 6.简单的测试流程，NormalObject/ObjectA打开兼容字段，因为生成都是走的同一个方法直接测试非CutDown的fold
  *
  * @author godotg
  */
