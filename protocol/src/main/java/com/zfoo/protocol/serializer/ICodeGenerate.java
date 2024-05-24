@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * 协议修改过后的测试流程：
- * 1.测试Java的老协议和新协议的兼容性
+ * 1.测试Java的老协议和新协议的兼容性，NormalObject/ObjectA/ObjectB有几个兼容字段
  * 2.测试Java在字节码增强，CutDown，反射三种情况下的代码下的协议解析的准确性
  * 3.测试resource/compatible中有5种协议兼容情况需要测试
  * 4.1和2总共有2*3*5=30种情况
