@@ -33,6 +33,7 @@ function ProtocolManager.read(buffer)
 end
 
 function ProtocolManager.initProtocol()
+    ${protocol_imports}
     ${protocol_manager_registrations}
 end
 
