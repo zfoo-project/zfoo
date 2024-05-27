@@ -99,6 +99,5 @@ class NormalObject {
         }
         return packet;
     }
-
 }
 export default NormalObject;

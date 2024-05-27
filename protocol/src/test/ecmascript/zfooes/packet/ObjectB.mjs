@@ -31,6 +31,5 @@ class ObjectB {
         }
         return packet;
     }
-
 }
 export default ObjectB;

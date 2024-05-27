@@ -29,6 +29,5 @@ class EmptyObject {
         }
         return packet;
     }
-
 }
 export default EmptyObject;

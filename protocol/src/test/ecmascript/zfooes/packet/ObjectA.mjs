@@ -39,6 +39,5 @@ class ObjectA {
         }
         return packet;
     }
-
 }
 export default ObjectA;

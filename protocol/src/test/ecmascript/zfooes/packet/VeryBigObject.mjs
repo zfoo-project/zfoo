@@ -13403,6 +13403,5 @@ class VeryBigObject {
         }
         return packet;
     }
-
 }
 export default VeryBigObject;

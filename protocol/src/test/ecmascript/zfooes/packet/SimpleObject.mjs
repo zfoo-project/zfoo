@@ -35,6 +35,5 @@ class SimpleObject {
         }
         return packet;
     }
-
 }
 export default SimpleObject;
