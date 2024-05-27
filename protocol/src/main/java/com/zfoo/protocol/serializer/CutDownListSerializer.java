@@ -311,7 +311,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration, CodeLanguage language) {
         var listField = (ListField) fieldRegistration;
-        var list = "list" + GenerateProtocolFile.index.getAndIncrement();
+        var list = "list" + GenerateProtocolFile.localVariableId++;
         var flag = true;
 
         var listName = getListClassName(listField);
@@ -613,7 +613,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
         if (flag) {
             return list;
         } else {
-            GenerateProtocolFile.index.getAndDecrement();
+            GenerateProtocolFile.localVariableId--;
             return null;
         }
     }

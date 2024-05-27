@@ -55,7 +55,7 @@ public class GdListSerializer implements IGdSerializer {
         GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("buffer.writeInt({}.size())", objectStr)).append(LS);
 
-        String element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("for {} in {}:", element, objectStr)).append(LS);
         GenerateGdUtils.gdSerializer(listField.getListElementRegistration().serializer())
@@ -71,12 +71,12 @@ public class GdListSerializer implements IGdSerializer {
         }
 
         ListField listField = (ListField) fieldRegistration;
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
 
         builder.append(StringUtils.format("var {} = []", result)).append(LS);
 
-        String i = "index" + GenerateProtocolFile.index.getAndIncrement();
-        String size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "index" + GenerateProtocolFile.localVariableId++;
+        String size = "size" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTabAscii(builder, deep);
         builder.append(StringUtils.format("var {} = buffer.readInt()", size)).append(LS);

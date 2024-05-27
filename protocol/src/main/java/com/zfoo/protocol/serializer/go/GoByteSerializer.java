@@ -14,7 +14,6 @@
 package com.zfoo.protocol.serializer.go;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -40,7 +39,7 @@ public class GoByteSerializer implements IGoSerializer {
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("var {} = buffer.ReadByte()", result)).append(LS);

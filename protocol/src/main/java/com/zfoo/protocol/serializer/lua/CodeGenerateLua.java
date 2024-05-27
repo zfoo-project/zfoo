@@ -18,7 +18,6 @@ import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
-import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.CodeTemplatePlaceholder;
@@ -97,7 +96,6 @@ public class CodeGenerateLua implements ICodeGenerate {
         var protocol_class = new StringBuilder();
         var protocol_registration = new StringBuilder();
         for (var registration : registrations) {
-            GenerateProtocolFile.index.set(0);
             var protocol_id = registration.protocolId();
 
             // protocol
@@ -203,9 +201,6 @@ public class CodeGenerateLua implements ICodeGenerate {
     }
 
     public String formatProtocolTemplate(ProtocolRegistration registration) {
-        // 初始化index
-        GenerateProtocolFile.index.set(0);
-
         var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolTemplate.lua");
 
@@ -238,8 +233,7 @@ public class CodeGenerateLua implements ICodeGenerate {
 
         var protocolRegistrationTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolRegistrationTemplate.lua");
         var placeholderMap = Map.of(
-                CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Lua)
-                , CodeTemplatePlaceholder.protocol_name, protocol_name
+                 CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
                 , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
@@ -278,6 +272,7 @@ public class CodeGenerateLua implements ICodeGenerate {
     }
 
     private String protocol_write_serialization(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var luaBuilder = new StringBuilder();
@@ -300,6 +295,7 @@ public class CodeGenerateLua implements ICodeGenerate {
     }
 
     private String protocol_read_deserialization(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var luaBuilder = new StringBuilder();

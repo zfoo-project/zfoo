@@ -54,7 +54,7 @@ public class TsListSerializer implements ITsSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.writeInt({}.length);", objectStr)).append(LS);
 
-        String element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach({} => {", objectStr, element)).append(LS);
         GenerateTsUtils.tsSerializer(listField.getListElementRegistration().serializer())
@@ -74,19 +74,19 @@ public class TsListSerializer implements ITsSerializer {
         }
 
         ListField listField = (ListField) fieldRegistration;
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
         var typeName = GenerateTsUtils.toTsClassName(listField.getType().toString());
         builder.append(StringUtils.format("const {} = new {}();", result, typeName)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
-        String size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        String size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("const {} = buffer.readInt();", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep + 1);
-        String i = "index" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "index" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
         String readObject = GenerateTsUtils.tsSerializer(listField.getListElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, listField.getListElementRegistration());

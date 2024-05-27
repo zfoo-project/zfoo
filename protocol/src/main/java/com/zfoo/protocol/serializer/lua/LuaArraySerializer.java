@@ -52,8 +52,8 @@ public class LuaArraySerializer implements ILuaSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer:writeInt(#{});", objectStr)).append(LS);
 
-        String index = "index" + GenerateProtocolFile.index.getAndIncrement();
-        String element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        String index = "index" + GenerateProtocolFile.localVariableId++;
+        String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {}, {} in pairs({}) do", index, element, objectStr)).append(LS);
         CodeGenerateLua.luaSerializer(arrayField.getArrayElementRegistration().serializer())
@@ -73,11 +73,11 @@ public class LuaArraySerializer implements ILuaSerializer {
         }
 
         var arrayField = (ArrayField) fieldRegistration;
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("local {} = {}", result)).append(LS);
 
-        var i = "index" + GenerateProtocolFile.index.getAndIncrement();
-        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "index" + GenerateProtocolFile.localVariableId++;
+        var size = "size" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("local {} = buffer:readInt()", size)).append(LS);

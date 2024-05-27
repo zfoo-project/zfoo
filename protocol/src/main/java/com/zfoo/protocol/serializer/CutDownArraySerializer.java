@@ -508,7 +508,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
         var arrayField = (ArrayField) fieldRegistration;
         var arrayName = getArrayClassName(arrayField);
 
-        var array = "array" + GenerateProtocolFile.index.getAndIncrement();
+        var array = "array" + GenerateProtocolFile.localVariableId++;
 
         var flag = true;
         switch (arrayName) {
@@ -1031,7 +1031,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
         if (flag) {
             return array;
         } else {
-            GenerateProtocolFile.index.getAndDecrement();
+            GenerateProtocolFile.localVariableId--;
             return null;
         }
     }

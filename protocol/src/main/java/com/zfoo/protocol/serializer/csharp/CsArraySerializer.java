@@ -53,17 +53,17 @@ public class CsArraySerializer implements ICsSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.WriteInt({}.Length);", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
-        String length = "length" + GenerateProtocolFile.index.getAndIncrement();
+        String length = "length" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int {} = {}.Length;", length, objectStr)).append(LS);
 
-        String i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "i" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++)", i, i, length, i)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("{").append(LS);
 
         GenerateProtocolFile.addTab(builder, deep + 2);
-        String element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        String element = "element" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("{} {} = {}[{}];", CodeGenerateCsharp.toCsClassName(arrayField.getType().getSimpleName()), element, objectStr, i)).append(LS);
 
         CodeGenerateCsharp.csSerializer(arrayField.getArrayElementRegistration().serializer())
@@ -85,12 +85,12 @@ public class CsArraySerializer implements ICsSerializer {
 
 
         var arrayField = (ArrayField) fieldRegistration;
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
 
         var typeName = CodeGenerateCsharp.toCsClassName(arrayField.getType().getSimpleName());
 
-        var i = "index" + GenerateProtocolFile.index.getAndIncrement();
-        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "index" + GenerateProtocolFile.localVariableId++;
+        var size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int {} = buffer.ReadInt();", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);

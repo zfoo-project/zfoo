@@ -327,7 +327,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration, CodeLanguage language) {
         var setField = (SetField) fieldRegistration;
-        var set = "set" + GenerateProtocolFile.index.getAndIncrement();
+        var set = "set" + GenerateProtocolFile.localVariableId++;
         var flag = true;
         var setName = getSetClassName(setField);
 
@@ -629,7 +629,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
         if (flag) {
             return set;
         } else {
-            GenerateProtocolFile.index.getAndDecrement();
+            GenerateProtocolFile.localVariableId--;
             return null;
         }
     }

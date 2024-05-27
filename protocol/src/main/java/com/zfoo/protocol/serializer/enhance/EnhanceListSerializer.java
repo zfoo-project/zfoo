@@ -36,16 +36,16 @@ public class EnhanceListSerializer implements IEnhanceSerializer {
 
         var listField = (ListField) fieldRegistration;
 
-        var list = "list" + GenerateProtocolFile.index.getAndIncrement();
+        var list = "list" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("List {} = (List){};", list, objectStr));
 
         builder.append(StringUtils.format("{}.writeInt($1, CollectionUtils.size({}));", EnhanceUtils.byteBufUtils, list));
 
-        var iterator = "iterator" + GenerateProtocolFile.index.getAndIncrement();
+        var iterator = "iterator" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Iterator {} = CollectionUtils.iterator({});", iterator, list));
         builder.append(StringUtils.format("while({}.hasNext()){", iterator));
 
-        var element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        var element = "element" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Object {}={}.next();", element, iterator));
         EnhanceUtils.enhanceSerializer(listField.getListElementRegistration().serializer())
                 .writeObject(builder, element, field, listField.getListElementRegistration());
@@ -61,14 +61,14 @@ public class EnhanceListSerializer implements IEnhanceSerializer {
         }
 
         var listField = (ListField) fieldRegistration;
-        var list = "list" + GenerateProtocolFile.index.getAndIncrement();
+        var list = "list" + GenerateProtocolFile.localVariableId++;
 
-        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        var size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int {}={}.readInt($1);", size, EnhanceUtils.byteBufUtils));
 
         builder.append(StringUtils.format("List {} = CollectionUtils.newList({});", list, size));
 
-        var i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "i" + GenerateProtocolFile.localVariableId++;
 
         builder.append(StringUtils.format("for(int {}=0; {}<{}; {}++){", i, i, size, i));
         var readObject = EnhanceUtils.enhanceSerializer(listField.getListElementRegistration().serializer()).readObject(builder, field, listField.getListElementRegistration());
@@ -79,7 +79,7 @@ public class EnhanceListSerializer implements IEnhanceSerializer {
     @Override
     public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var listField = (ListField) fieldRegistration;
-        var list = "list" + GenerateProtocolFile.index.getAndIncrement();
+        var list = "list" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("List {} = CollectionUtils.newList(0);", list));
         return list;
     }

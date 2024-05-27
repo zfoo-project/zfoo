@@ -47,7 +47,7 @@ public class TsObjectProtocolSerializer implements ITsSerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("const {} = buffer.readPacket({});", result, objectProtocolField.getProtocolId())).append(LS);
         return result;

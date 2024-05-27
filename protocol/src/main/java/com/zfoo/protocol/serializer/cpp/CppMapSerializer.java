@@ -47,8 +47,8 @@ public class CppMapSerializer implements ICppSerializer {
         MapField mapField = (MapField) fieldRegistration;
         builder.append(StringUtils.format("buffer.writeInt({}.size());", objectStr)).append(LS);
 
-        String key = "keyElement" + GenerateProtocolFile.index.getAndIncrement();
-        String value = "valueElement" + GenerateProtocolFile.index.getAndIncrement();
+        String key = "keyElement" + GenerateProtocolFile.localVariableId++;
+        String value = "valueElement" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("for (auto&[{}, {}] : {}) {", key, value, objectStr)).append(LS);
@@ -73,18 +73,18 @@ public class CppMapSerializer implements ICppSerializer {
         }
 
         MapField mapField = (MapField) fieldRegistration;
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
 
         var typeName = CodeGenerateCpp.toCppClassName(mapField.getType().toString());
 
-        String size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        String size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int32_t {} = buffer.readInt();", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("{} {};", typeName, result)).append(LS);
 
 
-        String i = "index" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "index" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("for (auto {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
 

@@ -14,10 +14,8 @@
 package com.zfoo.protocol.serializer.go;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.CutDownArraySerializer;
 import com.zfoo.protocol.util.StringUtils;
@@ -57,15 +55,15 @@ public class GoArraySerializer implements IGoSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.WriteInt(len({}))", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
-        String length = "length" + GenerateProtocolFile.index.getAndIncrement();
+        String length = "length" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("var {} = len({})", length, objectStr)).append(LS);
 
-        String i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "i" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} := 0; {} < {}; {}++ {", i, i, length, i)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep + 2);
-        String element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        String element = "element" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("var {} = {}[{}]", element, objectStr, i)).append(LS);
 
         GenerateGoUtils.goSerializer(arrayField.getArrayElementRegistration().serializer())
@@ -87,12 +85,12 @@ public class GoArraySerializer implements IGoSerializer {
 
 
         var arrayField = (ArrayField) fieldRegistration;
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
 
         var typeName = fieldType(field, fieldRegistration);
 
-        var i = "index" + GenerateProtocolFile.index.getAndIncrement();
-        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "index" + GenerateProtocolFile.localVariableId++;
+        var size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("var {} = buffer.ReadInt()", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);

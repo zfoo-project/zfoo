@@ -107,7 +107,7 @@ public abstract class EnhanceUtils {
      * @return 返回类的名称格式：EnhanceUtilsProtocolRegistration1
      */
     public static IProtocolRegistration createProtocolRegistration(ProtocolRegistration registration) throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        GenerateProtocolFile.index.set(0);
+        GenerateProtocolFile.localVariableId = 0;
 
         var classPool = ClassPool.getDefault();
         var protocolId = registration.getId();

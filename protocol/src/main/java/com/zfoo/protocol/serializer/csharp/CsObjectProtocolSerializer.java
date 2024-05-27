@@ -40,7 +40,7 @@ public class CsObjectProtocolSerializer implements ICsSerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
 
         var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
 

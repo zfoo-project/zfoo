@@ -19,7 +19,6 @@ import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
-import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
@@ -89,8 +88,6 @@ public class CodeGenerateCsharp implements ICodeGenerate {
             var protocol_class = new StringBuilder();
             var protocol_registration = new StringBuilder();
             for (var protocol_id : protocolIds) {
-                GenerateProtocolFile.index.set(0);
-
                 var registration = (ProtocolRegistration) ProtocolManager.getProtocol(protocol_id);
                 // protocol
                 protocol_class.append(protocol_class(registration)).append(LS);
@@ -163,8 +160,6 @@ public class CodeGenerateCsharp implements ICodeGenerate {
 
 
     private String formatProtocolTemplate(ProtocolRegistration registration) {
-        GenerateProtocolFile.index.set(0);
-
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolTemplate.cs");
         return CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
@@ -240,6 +235,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
 
 
     private String protocol_write_serialization(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var csBuilder = new StringBuilder();
@@ -262,6 +258,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
 
 
     private String protocol_read_deserialization(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var csBuilder = new StringBuilder();

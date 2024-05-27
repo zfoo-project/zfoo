@@ -52,8 +52,8 @@ public class GdMapSerializer implements IGdSerializer {
         GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("buffer.writeInt({}.size())", objectStr)).append(LS);
 
-        String key = "key" + GenerateProtocolFile.index.getAndIncrement();
-        String value = "value" + GenerateProtocolFile.index.getAndIncrement();
+        String key = "key" + GenerateProtocolFile.localVariableId++;
+        String value = "value" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("for {} in {}:", key, objectStr)).append(LS);
@@ -74,18 +74,18 @@ public class GdMapSerializer implements IGdSerializer {
         }
 
         MapField mapField = (MapField) fieldRegistration;
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
 
         builder.append(StringUtils.format("var {} = {}", result)).append(LS);
 
         GenerateProtocolFile.addTabAscii(builder, deep);
-        String size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        String size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("var {} = buffer.readInt()", size)).append(LS);
 
         GenerateProtocolFile.addTabAscii(builder, deep);
         builder.append(StringUtils.format("if ({} > 0):", size)).append(LS);
 
-        String i = "index" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "index" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("for {} in range({}):", i, size)).append(LS);
 

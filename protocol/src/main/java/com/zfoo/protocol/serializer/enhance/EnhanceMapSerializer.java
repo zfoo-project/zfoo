@@ -41,21 +41,21 @@ public class EnhanceMapSerializer implements IEnhanceSerializer {
         var keySerializer = keyRegistration.serializer();
         var valueSerializer = valueRegistration.serializer();
 
-        var map = "map" + GenerateProtocolFile.index.getAndIncrement();
+        var map = "map" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Map {} = (Map){};", map, objectStr));
         builder.append(StringUtils.format("{}.writeInt($1, CollectionUtils.size({}));", EnhanceUtils.byteBufUtils, map));
 
-        var iterator = "iterator" + GenerateProtocolFile.index.getAndIncrement();
+        var iterator = "iterator" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Iterator {} = CollectionUtils.iterator({});", iterator, map));
         builder.append(StringUtils.format("while({}.hasNext()) {", iterator));
 
-        var entry = "entry" + GenerateProtocolFile.index.getAndIncrement();
+        var entry = "entry" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("{} {}=({}){}.next();", Map.Entry.class.getCanonicalName(), entry, Map.Entry.class.getCanonicalName(), iterator));
 
-        var key = "key" + GenerateProtocolFile.index.getAndIncrement();
+        var key = "key" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Object {} = {}.getKey();", key, entry));
 
-        var value = "value" + GenerateProtocolFile.index.getAndIncrement();
+        var value = "value" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Object {} = {}.getValue();", value, entry));
 
         EnhanceUtils.enhanceSerializer(keyRegistration.serializer()).writeObject(builder, key, field, keyRegistration);
@@ -75,13 +75,13 @@ public class EnhanceMapSerializer implements IEnhanceSerializer {
         var keyRegistration = mapField.getMapKeyRegistration();
         var valueRegistration = mapField.getMapValueRegistration();
 
-        var map = "map" + GenerateProtocolFile.index.getAndIncrement();
+        var map = "map" + GenerateProtocolFile.localVariableId++;
 
-        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        var size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int {}={}.readInt($1);", size, EnhanceUtils.byteBufUtils));
         builder.append(StringUtils.format("Map {} = CollectionUtils.newMap({});", map, size));
 
-        var i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "i" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for(int {}=0; {}<{}; {}++){", i, i, size, i));
 
         var keyObject = EnhanceUtils.enhanceSerializer(keyRegistration.serializer()).readObject(builder, field, keyRegistration);
@@ -94,7 +94,7 @@ public class EnhanceMapSerializer implements IEnhanceSerializer {
     @Override
     public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var mapField = (MapField) fieldRegistration;
-        var map = "map" + GenerateProtocolFile.index.getAndIncrement();
+        var map = "map" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Map {} = CollectionUtils.newMap(0);", map));
         return map;
     }

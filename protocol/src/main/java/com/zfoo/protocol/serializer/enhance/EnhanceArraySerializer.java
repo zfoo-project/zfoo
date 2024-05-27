@@ -37,16 +37,16 @@ public class EnhanceArraySerializer implements IEnhanceSerializer {
         var arrayField = (ArrayField) fieldRegistration;
         var arrayName = CutDownArraySerializer.getInstance().getArrayClassName(arrayField);
 
-        var array = "array" + GenerateProtocolFile.index.getAndIncrement();
-        var length = "length" + GenerateProtocolFile.index.getAndIncrement();
+        var array = "array" + GenerateProtocolFile.localVariableId++;
+        var length = "length" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("{}[] {} = {};", arrayName, array, objectStr));
         builder.append(StringUtils.format("int {} = ArrayUtils.length({});", length, array));
         builder.append(StringUtils.format("{}.writeInt($1,{});", EnhanceUtils.byteBufUtils, length));
 
-        var i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "i" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for(int {}=0; {}<{}; {}++){", i, i, length, i));
 
-        var element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        var element = "element" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("{} {} = {}[{}];", arrayName, element, array, i));
 
         EnhanceUtils.enhanceSerializer(arrayField.getArrayElementRegistration().serializer())
@@ -65,13 +65,13 @@ public class EnhanceArraySerializer implements IEnhanceSerializer {
         var arrayField = (ArrayField) fieldRegistration;
         var arrayName = CutDownArraySerializer.getInstance().getArrayClassName(arrayField);
 
-        var array = "array" + GenerateProtocolFile.index.getAndIncrement();
-        var length = "length" + GenerateProtocolFile.index.getAndIncrement();
+        var array = "array" + GenerateProtocolFile.localVariableId++;
+        var length = "length" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int {} = {}.readInt($1);", length, EnhanceUtils.byteBufUtils));
 
         builder.append(StringUtils.format("{}[] {} = new {}[{}];", arrayName, array, arrayName, length));
 
-        var i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "i" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for(int {}=0; {} < {}; {}++){", i, i, length, i));
         var readObject = EnhanceUtils.enhanceSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, field, arrayField.getArrayElementRegistration());
@@ -83,7 +83,7 @@ public class EnhanceArraySerializer implements IEnhanceSerializer {
     public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var arrayField = (ArrayField) fieldRegistration;
         var arrayName = CutDownArraySerializer.getInstance().getArrayClassName(arrayField);
-        var array = "array" + GenerateProtocolFile.index.getAndIncrement();
+        var array = "array" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("{}[] {} = new {}[0];", arrayName, array, arrayName));
         return array;
     }

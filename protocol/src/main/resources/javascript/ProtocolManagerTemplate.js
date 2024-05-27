@@ -1,16 +1,16 @@
-{}
+${protocol_imports}
 
 const protocols = new Map();
 
 const ProtocolManager = {};
 
 // initProtocol
-{}
+${protocol_manager_registrations}
 
 ProtocolManager.getProtocol = function getProtocol(protocolId) {
     const protocol = protocols.get(protocolId);
     if (protocol === null) {
-        throw new Error('[protocolId:' + protocolId + ']协议不存在');
+        throw new Error('[protocolId:' + protocolId + '] not exist');
     }
     return protocol;
 };

@@ -36,7 +36,7 @@ public class EnhanceDoubleSerializer implements IEnhanceSerializer {
 
     @Override
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
         if (isPrimitiveField(field)) {
             builder.append(StringUtils.format("double {} = {}.readDouble($1);", result, EnhanceUtils.byteBufUtils));
         } else {
@@ -47,7 +47,7 @@ public class EnhanceDoubleSerializer implements IEnhanceSerializer {
 
     @Override
     public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
         if (isPrimitiveField(field)) {
             builder.append(StringUtils.format("double {} = 0D;", result));
         } else {

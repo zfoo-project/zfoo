@@ -62,12 +62,12 @@ public class GoMapSerializer implements IGoSerializer {
         builder.append(StringUtils.format("buffer.WriteInt(len({}))", objectStr)).append(LS);
 
 
-        String i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "i" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep + 1);
 
-        String key = "keyElement" + GenerateProtocolFile.index.getAndIncrement();
-        String value = "valueElement" + GenerateProtocolFile.index.getAndIncrement();
+        String key = "keyElement" + GenerateProtocolFile.localVariableId++;
+        String value = "valueElement" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for {}, {} := range {} {", key, value, objectStr)).append(LS);
 
         GenerateGoUtils.goSerializer(mapField.getMapKeyRegistration().serializer())
@@ -90,11 +90,11 @@ public class GoMapSerializer implements IGoSerializer {
         }
 
         MapField mapField = (MapField) fieldRegistration;
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
 
         var typeName = fieldType(field, fieldRegistration);
 
-        String size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        String size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("var {} = buffer.ReadInt()", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
@@ -104,7 +104,7 @@ public class GoMapSerializer implements IGoSerializer {
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if {} > 0 {", size)).append(LS);
 
-        String i = "index" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "index" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} := 0; {} < {}; {}++ {", i, i, size, i)).append(LS);
 

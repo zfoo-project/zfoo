@@ -54,7 +54,7 @@ public class CsSetSerializer implements ICsSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.WriteInt({}.Count);", objectStr)).append(LS);
 
-        String element = "i" + GenerateProtocolFile.index.getAndIncrement();
+        String element = "i" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("foreach (var {} in {})", element, objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
@@ -78,12 +78,12 @@ public class CsSetSerializer implements ICsSerializer {
         }
 
         SetField setField = (SetField) fieldRegistration;
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
 
         var typeName = CodeGenerateCsharp.toCsClassName(setField.getType().toString());
 
-        var i = "index" + GenerateProtocolFile.index.getAndIncrement();
-        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "index" + GenerateProtocolFile.localVariableId++;
+        var size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int {} = buffer.ReadInt();", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         // unity里不支持HashSet的初始化大小

@@ -48,7 +48,7 @@ public class CppSetSerializer implements ICppSerializer {
 
         builder.append(StringUtils.format("buffer.writeInt({}.size());", objectStr)).append(LS);
 
-        String element = "i" + GenerateProtocolFile.index.getAndIncrement();
+        String element = "i" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("for (auto {} : {}) {", element, objectStr)).append(LS);
 
@@ -68,12 +68,12 @@ public class CppSetSerializer implements ICppSerializer {
         }
 
         SetField setField = (SetField) fieldRegistration;
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
 
         var typeName = CodeGenerateCpp.toCppClassName(setField.getType().toString());
 
-        var i = "index" + GenerateProtocolFile.index.getAndIncrement();
-        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "index" + GenerateProtocolFile.localVariableId++;
+        var size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int32_t {} = buffer.readInt();", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         // unity里不支持HashSet的初始化大小

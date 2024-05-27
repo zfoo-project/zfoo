@@ -16,7 +16,6 @@ package com.zfoo.protocol.serializer.python;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
-
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -42,7 +41,7 @@ public class PyObjectProtocolSerializer implements IPySerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("{} = buffer.readPacket({})", result, objectProtocolField.getProtocolId())).append(LS);
         return result;

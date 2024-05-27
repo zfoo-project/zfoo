@@ -369,7 +369,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
         var keySerializer = keyRegistration.serializer();
         var valueSerializer = valueRegistration.serializer();
 
-        var map = "map" + GenerateProtocolFile.index.getAndIncrement();
+        var map = "map" + GenerateProtocolFile.localVariableId++;
 
         if (keyRegistration instanceof BaseField) {
             if (keySerializer == IntSerializer.INSTANCE) {
@@ -730,7 +730,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                 }
             }
         }
-        GenerateProtocolFile.index.getAndDecrement();
+        GenerateProtocolFile.localVariableId--;
         return null;
     }
 }

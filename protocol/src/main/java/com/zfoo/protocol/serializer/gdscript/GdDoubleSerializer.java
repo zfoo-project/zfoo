@@ -40,7 +40,7 @@ public class GdDoubleSerializer implements IGdSerializer {
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTabAscii(builder, deep);
         builder.append(StringUtils.format("var {} = buffer.readDouble()", result)).append(LS);

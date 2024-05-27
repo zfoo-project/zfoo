@@ -40,7 +40,7 @@ public class CppDoubleSerializer implements ICppSerializer {
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("double {} = buffer.readDouble();", result)).append(LS);

@@ -56,15 +56,15 @@ public class GoListSerializer implements IGoSerializer {
         builder.append(StringUtils.format("buffer.WriteInt(len({}))", objectStr)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep + 1);
-        String length = "length" + GenerateProtocolFile.index.getAndIncrement();
+        String length = "length" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("var {} = len({})", length, objectStr)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep + 1);
-        String i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "i" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for {} := 0; {} < {}; {}++ {", i, i, length, i)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep + 2);
-        String element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        String element = "element" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("var {} = {}[{}]", element, objectStr, i)).append(LS);
 
         GenerateGoUtils.goSerializer(listField.getListElementRegistration().serializer())
@@ -85,12 +85,12 @@ public class GoListSerializer implements IGoSerializer {
         }
 
         var listField = (ListField) fieldRegistration;
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
 
         var typeName = fieldType(field, fieldRegistration);
 
-        var i = "index" + GenerateProtocolFile.index.getAndIncrement();
-        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "index" + GenerateProtocolFile.localVariableId++;
+        var size = "size" + GenerateProtocolFile.localVariableId++;
 
         builder.append(StringUtils.format("var {} = buffer.ReadInt()", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);

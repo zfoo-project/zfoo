@@ -44,7 +44,7 @@ public class GdObjectProtocolSerializer implements IGdSerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTabAscii(builder, deep);
         builder.append(StringUtils.format("var {} = buffer.readPacket({})", result, objectProtocolField.getProtocolId())).append(LS);
         return result;

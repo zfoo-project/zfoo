@@ -19,7 +19,6 @@ import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
-import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
@@ -109,9 +108,6 @@ public abstract class GenerateGdUtils {
     }
 
     public static void createGdProtocolFile(ProtocolRegistration registration) throws IOException {
-        // 初始化index
-        GenerateProtocolFile.index.set(0);
-
         var protocolId = registration.protocolId();
         var registrationConstructor = registration.getConstructor();
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
@@ -225,6 +221,7 @@ public abstract class GenerateGdUtils {
     }
 
     private static String writeObject(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var gdBuilder = new StringBuilder();
@@ -246,6 +243,7 @@ public abstract class GenerateGdUtils {
     }
 
     private static String readObject(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var gdBuilder = new StringBuilder();

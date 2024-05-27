@@ -55,8 +55,8 @@ public class CppObjectProtocolSerializer implements ICppSerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        String uniquePtr = "result" + GenerateProtocolFile.index.getAndIncrement();
-        String ptr = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String uniquePtr = "result" + GenerateProtocolFile.localVariableId++;
+        String ptr = "result" + GenerateProtocolFile.localVariableId++;
 
         var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
 

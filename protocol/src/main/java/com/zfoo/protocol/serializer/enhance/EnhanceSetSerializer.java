@@ -35,16 +35,16 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
         }
 
         var setField = (SetField) fieldRegistration;
-        var set = "set" + GenerateProtocolFile.index.getAndIncrement();
+        var set = "set" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Set {} = (Set){};", set, objectStr));
 
         builder.append(StringUtils.format("{}.writeInt($1, CollectionUtils.size({}));", EnhanceUtils.byteBufUtils, set));
 
-        var iterator = "iterator" + GenerateProtocolFile.index.getAndIncrement();
+        var iterator = "iterator" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Iterator {} = CollectionUtils.iterator({});", iterator, set));
         builder.append(StringUtils.format("while({}.hasNext()) {", iterator));
 
-        var element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        var element = "element" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Object {}={}.next();", element, iterator));
         EnhanceUtils.enhanceSerializer(setField.getSetElementRegistration().serializer())
                 .writeObject(builder, element, field, setField.getSetElementRegistration());
@@ -60,13 +60,13 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
         }
 
         var setField = (SetField) fieldRegistration;
-        var set = "set" + GenerateProtocolFile.index.getAndIncrement();
+        var set = "set" + GenerateProtocolFile.localVariableId++;
 
-        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        var size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int {} = {}.readInt($1);", size, EnhanceUtils.byteBufUtils));
         builder.append(StringUtils.format("Set {} = CollectionUtils.newSet({});", set, size));
 
-        var i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "i" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for(int {}=0; {}<{}; {}++){", i, i, size, i));
 
         var readObject = EnhanceUtils.enhanceSerializer(setField.getSetElementRegistration().serializer()).readObject(builder, field, setField.getSetElementRegistration());
@@ -77,7 +77,7 @@ public class EnhanceSetSerializer implements IEnhanceSerializer {
     @Override
     public String defaultValue(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var setField = (SetField) fieldRegistration;
-        var set = "set" + GenerateProtocolFile.index.getAndIncrement();
+        var set = "set" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("Set {} = CollectionUtils.newSet(0);", set));
         return set;
     }

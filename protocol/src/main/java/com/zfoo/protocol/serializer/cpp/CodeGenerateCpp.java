@@ -103,7 +103,6 @@ public class CodeGenerateCpp implements ICodeGenerate {
         var protocol_class = new StringBuilder();
         var protocol_registration = new StringBuilder();
         for (var registration : GenerateProtocolFile.subProtocolFirst(registrations)) {
-            GenerateProtocolFile.index.set(0);
             var protocol_id = registration.protocolId();
 
             // protocol
@@ -116,7 +115,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolsTemplate.h");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_root_path, protocolOutputRootPath
-                ,CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
+                , CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
                 , CodeTemplatePlaceholder.protocol_registration, protocol_registration.toString()
         ));
         var outputPath = StringUtils.format("{}/Protocols.h", protocolOutputPath);
@@ -153,7 +152,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolTemplate.h");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_root_path, protocolOutputRootPath
-                    ,CodeTemplatePlaceholder.protocol_name, protocol_name
+                    , CodeTemplatePlaceholder.protocol_name, protocol_name
                     , CodeTemplatePlaceholder.protocol_imports, protocol_imports_fold(registration)
                     , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
@@ -192,7 +191,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolTemplate.h");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_root_path, protocolOutputRootPath
-                    ,CodeTemplatePlaceholder.protocol_name, protocol_name
+                    , CodeTemplatePlaceholder.protocol_name, protocol_name
                     , CodeTemplatePlaceholder.protocol_imports, protocol_imports_default(registration)
                     , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
@@ -236,8 +235,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
 
         var protocolRegistrationTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolRegistrationTemplate.h");
         var placeholderMap = Map.of(
-                CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Cpp)
-                , CodeTemplatePlaceholder.protocol_name, protocol_class_name
+                CodeTemplatePlaceholder.protocol_name, protocol_class_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
                 , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
@@ -298,6 +296,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
     }
 
     private String protocol_write_serialization(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var cppBuilder = new StringBuilder();
@@ -325,6 +324,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
 
 
     private String protocol_read_deserialization(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
 

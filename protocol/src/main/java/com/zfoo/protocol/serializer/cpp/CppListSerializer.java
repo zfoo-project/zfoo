@@ -50,7 +50,7 @@ public class CppListSerializer implements ICppSerializer {
 
 
         GenerateProtocolFile.addTab(builder, deep);
-        String i = "i" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "i" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for (auto {} : {}) {", i, objectStr)).append(LS);
 
         CodeGenerateCpp.cppSerializer(listField.getListElementRegistration().serializer())
@@ -70,11 +70,11 @@ public class CppListSerializer implements ICppSerializer {
 
         var listField = (ListField) fieldRegistration;
 
-        var result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        var result = "result" + GenerateProtocolFile.localVariableId++;
         var typeName = CodeGenerateCpp.toCppClassName(listField.getType().toString());
 
-        var i = "index" + GenerateProtocolFile.index.getAndIncrement();
-        var size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        var i = "index" + GenerateProtocolFile.localVariableId++;
+        var size = "size" + GenerateProtocolFile.localVariableId++;
 
         builder.append(StringUtils.format("int32_t {} = buffer.readInt();", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);

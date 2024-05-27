@@ -51,8 +51,8 @@ public class LuaMapSerializer implements ILuaSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer:writeInt(table.mapSize({}))", objectStr)).append(LS);
 
-        String key = "key" + GenerateProtocolFile.index.getAndIncrement();
-        String value = "value" + GenerateProtocolFile.index.getAndIncrement();
+        String key = "key" + GenerateProtocolFile.localVariableId++;
+        String value = "value" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {}, {} in pairs({}) do", key, value, objectStr)).append(LS);
@@ -75,17 +75,17 @@ public class LuaMapSerializer implements ILuaSerializer {
         }
 
         MapField mapField = (MapField) fieldRegistration;
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("local {} = {}", result)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
-        String size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        String size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("local {} = buffer:readInt()", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if {} > 0 then", size)).append(LS);
 
-        String i = "index" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "index" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} = 1, {} do", i, size, i)).append(LS);
 

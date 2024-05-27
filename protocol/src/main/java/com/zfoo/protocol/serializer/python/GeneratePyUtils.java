@@ -18,7 +18,6 @@ import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
-import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
@@ -111,8 +110,6 @@ public abstract class GeneratePyUtils {
     }
 
     public static void createPyProtocolFile(ProtocolRegistration registration) {
-        GenerateProtocolFile.index.set(0);
-
         var protocolId = registration.protocolId();
         var registrationConstructor = registration.getConstructor();
         var protocolClazzName = registrationConstructor.getDeclaringClass().getSimpleName();
@@ -157,6 +154,7 @@ public abstract class GeneratePyUtils {
     }
 
     private static String writeObject(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var pyBuilder = new StringBuilder();
@@ -178,6 +176,7 @@ public abstract class GeneratePyUtils {
     }
 
     private static String readObject(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var pyBuilder = new StringBuilder();

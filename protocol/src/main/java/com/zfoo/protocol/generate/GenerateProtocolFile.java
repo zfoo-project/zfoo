@@ -22,7 +22,6 @@ import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.es.GenerateEsUtils;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
-import com.zfoo.protocol.serializer.javascript.GenerateJsUtils;
 import com.zfoo.protocol.serializer.python.GeneratePyUtils;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -32,7 +31,6 @@ import com.zfoo.protocol.util.StringUtils;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import static com.zfoo.protocol.util.StringUtils.TAB;
@@ -49,7 +47,7 @@ public abstract class GenerateProtocolFile {
      */
     public static Predicate<IProtocolRegistration> generateProtocolFilter = registration -> true;
 
-    public static AtomicInteger index = new AtomicInteger();
+    public static int localVariableId = 0;
 
     public static StringBuilder addTab(StringBuilder builder, int deep) {
         builder.append(TAB.repeat(Math.max(0, deep)));
@@ -129,16 +127,6 @@ public abstract class GenerateProtocolFile {
             for (var protocolRegistration : generateProtocols) {
                 GenerateGoUtils.createGoProtocolFile((ProtocolRegistration) protocolRegistration);
             }
-        }
-
-
-        // 生成Javascript协议
-        if (generateLanguages.contains(CodeLanguage.JavaScript)) {
-            GenerateJsUtils.init(generateOperation);
-            for (var protocolRegistration : generateProtocols) {
-                GenerateJsUtils.createJsProtocolFile((ProtocolRegistration) protocolRegistration);
-            }
-            GenerateJsUtils.createProtocolManager(generateProtocols);
         }
 
         // 生成Javascript协议

@@ -54,7 +54,7 @@ public class TsArraySerializer implements ITsSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.writeInt({}.length);", objectStr)).append(LS);
 
-        String element = "element" + GenerateProtocolFile.index.getAndIncrement();
+        String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach({} => {", objectStr, element)).append(LS);
         GenerateTsUtils.tsSerializer(arrayField.getArrayElementRegistration().serializer())
@@ -74,12 +74,12 @@ public class TsArraySerializer implements ITsSerializer {
         }
 
         ArrayField arrayField = (ArrayField) fieldRegistration;
-        String result = "result" + GenerateProtocolFile.index.getAndIncrement();
+        String result = "result" + GenerateProtocolFile.localVariableId++;
         var typeName =  StringUtils.format("Array<{}>", GenerateTsUtils.toTsClassName(arrayField.getType().getSimpleName()));
         builder.append(StringUtils.format("const {} = new {};", result, typeName)).append(LS);
 
-        String i = "index" + GenerateProtocolFile.index.getAndIncrement();
-        String size = "size" + GenerateProtocolFile.index.getAndIncrement();
+        String i = "index" + GenerateProtocolFile.localVariableId++;
+        String size = "size" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("const {} = buffer.readInt();", size)).append(LS);
