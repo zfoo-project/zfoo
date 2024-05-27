@@ -71,7 +71,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeIntIntMap({});", objectStr)).append(LS);
                             return true;
@@ -96,7 +96,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeIntLongMap({});", objectStr)).append(LS);
                             return true;
@@ -121,7 +121,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeIntStringMap({});", objectStr)).append(LS);
                             return true;
@@ -143,7 +143,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
@@ -173,7 +173,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeLongIntMap({});", objectStr)).append(LS);
                             return true;
@@ -198,7 +198,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeLongLongMap({});", objectStr)).append(LS);
                             return true;
@@ -223,7 +223,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeLongStringMap({});", objectStr)).append(LS);
                             return true;
@@ -245,7 +245,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
@@ -275,7 +275,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeStringIntMap({});", objectStr)).append(LS);
                             return true;
@@ -300,7 +300,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeStringLongMap({});", objectStr)).append(LS);
                             return true;
@@ -325,7 +325,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeStringStringMap({});", objectStr)).append(LS);
                             return true;
@@ -347,7 +347,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Cpp:
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
@@ -397,7 +397,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readIntIntMap();", map)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntIntMap();", map)).append(LS);
                             return map;
@@ -426,7 +426,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readIntLongMap();", map)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntLongMap();", map)).append(LS);
                             return map;
@@ -455,7 +455,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readIntStringMap();", map)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntStringMap();", map)).append(LS);
                             return map;
@@ -482,7 +482,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readIntPacketMap<{}>({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntPacketMap({});", map, protocolId)).append(LS);
                             return map;
@@ -515,7 +515,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readLongIntMap();", map)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongIntMap();", map)).append(LS);
                             return map;
@@ -544,7 +544,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readLongLongMap();", map)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongLongMap();", map)).append(LS);
                             return map;
@@ -573,7 +573,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readLongStringMap();", map)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongStringMap();", map)).append(LS);
                             return map;
@@ -600,7 +600,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readLongPacketMap<{}>({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongPacketMap({});", map, protocolId)).append(LS);
                             return map;
@@ -634,7 +634,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readStringIntMap();", map)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringIntMap();", map)).append(LS);
                             return map;
@@ -663,7 +663,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readStringLongMap();", map)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringLongMap();", map)).append(LS);
                             return map;
@@ -692,7 +692,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readStringStringMap();", map)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringStringMap();", map)).append(LS);
                             return map;
@@ -719,7 +719,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readStringPacketMap<{}>({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
                             return map;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringPacketMap({});", map, protocolId)).append(LS);
                             return map;

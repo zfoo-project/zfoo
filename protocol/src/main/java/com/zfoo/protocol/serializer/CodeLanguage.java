@@ -14,7 +14,8 @@ package com.zfoo.protocol.serializer;
 
 import com.zfoo.protocol.serializer.cpp.CodeGenerateCpp;
 import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
-import com.zfoo.protocol.serializer.javascript.CodeGenerateJavascript;
+import com.zfoo.protocol.serializer.ecmascript.CodeGenerateEcmaScript;
+import com.zfoo.protocol.serializer.javascript.CodeGenerateJavaScript;
 import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
 
 /**
@@ -31,9 +32,9 @@ public enum CodeLanguage {
 
     Go(1 << 2, null),
 
-    JavaScript(1 << 3, CodeGenerateJavascript.class),
+    JavaScript(1 << 3, CodeGenerateJavaScript.class),
 
-    ES(1 << 4, null),
+    EcmaScript(1 << 4, CodeGenerateEcmaScript.class),
 
     TypeScript(1 << 5, null),
 

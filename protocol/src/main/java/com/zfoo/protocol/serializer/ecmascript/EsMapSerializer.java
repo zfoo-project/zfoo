@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.es;
+package com.zfoo.protocol.serializer.ecmascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.model.Triple;
-import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
+import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.CutDownArraySerializer;
+import com.zfoo.protocol.serializer.CutDownMapSerializer;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -29,36 +29,39 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class EsArraySerializer implements IEsSerializer {
+public class EsMapSerializer implements IEsSerializer {
     @Override
     public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        var type = StringUtils.format("Array<{}>", GenerateTsUtils.toTsClassName(field.getType().getComponentType().getSimpleName()));
-        return new Triple<>(type, field.getName(), "[]");
+        return new Triple<>(GenerateTsUtils.toTsClassName(field.getGenericType().toString()), field.getName(), "new Map()");
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        if (CutDownArraySerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.ES)) {
+        if (CutDownMapSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.EcmaScript)) {
             return;
         }
 
-        ArrayField arrayField = (ArrayField) fieldRegistration;
-
+        MapField mapField = (MapField) fieldRegistration;
         builder.append(StringUtils.format("if ({} === null) {", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("buffer.writeInt(0);").append(LS);
+
         GenerateProtocolFile.addTab(builder, deep);
-
         builder.append("} else {").append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("buffer.writeInt({}.length);", objectStr)).append(LS);
 
-        String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("{}.forEach({} => {", objectStr, element)).append(LS);
-        GenerateEsUtils.esSerializer(arrayField.getArrayElementRegistration().serializer())
-                .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
+        builder.append(StringUtils.format("buffer.writeInt({}.size);", objectStr)).append(LS);
+
+        String key = "key" + GenerateProtocolFile.localVariableId++;
+        String value = "value" + GenerateProtocolFile.localVariableId++;
+
+        GenerateProtocolFile.addTab(builder, deep + 1);
+        builder.append(StringUtils.format("{}.forEach(({}, {}) => {", objectStr, value, key)).append(LS);
+        CodeGenerateEcmaScript.esSerializer(mapField.getMapKeyRegistration().serializer())
+                .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
+        CodeGenerateEcmaScript.esSerializer(mapField.getMapValueRegistration().serializer())
+                .writeObject(builder, value, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("});").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
@@ -68,30 +71,36 @@ public class EsArraySerializer implements IEsSerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        var cutDown = CutDownArraySerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.ES);
+        var cutDown = CutDownMapSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.EcmaScript);
         if (cutDown != null) {
             return cutDown;
         }
 
-        ArrayField arrayField = (ArrayField) fieldRegistration;
+        MapField mapField = (MapField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
-        builder.append(StringUtils.format("const {} = [];", result)).append(LS);
-
-        String i = "index" + GenerateProtocolFile.localVariableId++;
-        String size = "size" + GenerateProtocolFile.localVariableId++;
+        builder.append(StringUtils.format("const {} = new Map();", result)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
+        String size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("const {} = buffer.readInt();", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
+
+        String i = "index" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
-        String readObject = GenerateEsUtils.esSerializer(arrayField.getArrayElementRegistration().serializer())
-                .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
+
+        String keyObject = CodeGenerateEcmaScript.esSerializer(mapField.getMapKeyRegistration().serializer())
+                .readObject(builder, deep + 2, field, mapField.getMapKeyRegistration());
+
+
+        String valueObject = CodeGenerateEcmaScript.esSerializer(mapField.getMapValueRegistration().serializer())
+                .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
-        builder.append(StringUtils.format("{}.push({});", result, readObject)).append(LS);
+
+        builder.append(StringUtils.format("{}.set({}, {});", result, keyObject, valueObject)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
         GenerateProtocolFile.addTab(builder, deep);

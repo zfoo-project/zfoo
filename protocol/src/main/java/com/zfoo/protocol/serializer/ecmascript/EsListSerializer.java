@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.es;
+package com.zfoo.protocol.serializer.ecmascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.model.Triple;
@@ -38,7 +38,7 @@ public class EsListSerializer implements IEsSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        if (CutDownListSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.ES)) {
+        if (CutDownListSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.EcmaScript)) {
             return;
         }
 
@@ -56,7 +56,7 @@ public class EsListSerializer implements IEsSerializer {
         String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach({} => {", objectStr, element)).append(LS);
-        GenerateEsUtils.esSerializer(listField.getListElementRegistration().serializer())
+        CodeGenerateEcmaScript.esSerializer(listField.getListElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, listField.getListElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("});").append(LS);
@@ -67,7 +67,7 @@ public class EsListSerializer implements IEsSerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        var cutDown = CutDownListSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.ES);
+        var cutDown = CutDownListSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.EcmaScript);
         if (cutDown != null) {
             return cutDown;
         }
@@ -87,7 +87,7 @@ public class EsListSerializer implements IEsSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         String i = "index" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
-        String readObject = GenerateEsUtils.esSerializer(listField.getListElementRegistration().serializer())
+        String readObject = CodeGenerateEcmaScript.esSerializer(listField.getListElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, listField.getListElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.push({});", result, readObject)).append(LS);

@@ -58,9 +58,9 @@ public class JsMapSerializer implements IJsSerializer {
 
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach(({}, {}) => {", objectStr, value, key)).append(LS);
-        CodeGenerateJavascript.jsSerializer(mapField.getMapKeyRegistration().serializer())
+        CodeGenerateJavaScript.jsSerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
-        CodeGenerateJavascript.jsSerializer(mapField.getMapValueRegistration().serializer())
+        CodeGenerateJavaScript.jsSerializer(mapField.getMapValueRegistration().serializer())
                 .writeObject(builder, value, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("});").append(LS);
@@ -92,11 +92,11 @@ public class JsMapSerializer implements IJsSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
 
-        String keyObject = CodeGenerateJavascript.jsSerializer(mapField.getMapKeyRegistration().serializer())
+        String keyObject = CodeGenerateJavaScript.jsSerializer(mapField.getMapKeyRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapKeyRegistration());
 
 
-        String valueObject = CodeGenerateJavascript.jsSerializer(mapField.getMapValueRegistration().serializer())
+        String valueObject = CodeGenerateJavaScript.jsSerializer(mapField.getMapValueRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
 

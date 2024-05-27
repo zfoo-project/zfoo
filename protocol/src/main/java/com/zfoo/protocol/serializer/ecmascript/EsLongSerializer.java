@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.es;
+package com.zfoo.protocol.serializer.ecmascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.model.Triple;
@@ -25,7 +25,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class EsByteSerializer implements IEsSerializer {
+public class EsLongSerializer implements IEsSerializer {
     @Override
     public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
         return new Triple<>("number", field.getName(), "0");
@@ -34,14 +34,14 @@ public class EsByteSerializer implements IEsSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeByte({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeLong({});", objectStr)).append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         String result = "result" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("const {} = buffer.readByte();", result)).append(LS);
+        builder.append(StringUtils.format("const {} = buffer.readLong();", result)).append(LS);
         return result;
     }
 }

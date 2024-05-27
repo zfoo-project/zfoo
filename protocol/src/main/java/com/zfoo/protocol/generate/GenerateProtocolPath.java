@@ -15,7 +15,6 @@ package com.zfoo.protocol.generate;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.collection.tree.GeneralTree;
 import com.zfoo.protocol.collection.tree.TreeNode;
-import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
@@ -60,7 +59,7 @@ public abstract class GenerateProtocolPath {
                 break;
             case JavaScript:
                 break;
-            case ES:
+            case EcmaScript:
                 break;
             case TypeScript:
                 break;

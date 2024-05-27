@@ -19,7 +19,6 @@ import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.es.GenerateEsUtils;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.python.GeneratePyUtils;
@@ -117,7 +116,6 @@ public abstract class GenerateProtocolFile {
         // 计算协议生成的路径
         GenerateProtocolPath.initProtocolPath(generateProtocols);
 
-        // 生成C++协议
         var generateLanguages = generateOperation.getGenerateLanguages();
 
         // 生成Golang协议
@@ -127,15 +125,6 @@ public abstract class GenerateProtocolFile {
             for (var protocolRegistration : generateProtocols) {
                 GenerateGoUtils.createGoProtocolFile((ProtocolRegistration) protocolRegistration);
             }
-        }
-
-        // 生成Javascript协议
-        if (generateLanguages.contains(CodeLanguage.ES)) {
-            GenerateEsUtils.init(generateOperation);
-            for (var protocolRegistration : generateProtocols) {
-                GenerateEsUtils.createEsProtocolFile((ProtocolRegistration) protocolRegistration);
-            }
-            GenerateEsUtils.createProtocolManager(generateProtocols);
         }
 
         // 生成TypeScript协议

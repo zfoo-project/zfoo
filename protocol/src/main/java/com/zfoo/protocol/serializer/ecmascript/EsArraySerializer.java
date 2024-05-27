@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.es;
+package com.zfoo.protocol.serializer.ecmascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.model.Triple;
+import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.registration.field.SetField;
 import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.CutDownSetSerializer;
+import com.zfoo.protocol.serializer.CutDownArraySerializer;
 import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -29,20 +29,21 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class EsSetSerializer implements IEsSerializer {
+public class EsArraySerializer implements IEsSerializer {
     @Override
     public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Triple<>(GenerateTsUtils.toTsClassName(field.getGenericType().toString()), field.getName(), "new Set()");
+        var type = StringUtils.format("Array<{}>", GenerateTsUtils.toTsClassName(field.getType().getComponentType().getSimpleName()));
+        return new Triple<>(type, field.getName(), "[]");
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        if (CutDownSetSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.ES)) {
+        if (CutDownArraySerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.EcmaScript)) {
             return;
         }
 
-        SetField setField = (SetField) fieldRegistration;
+        ArrayField arrayField = (ArrayField) fieldRegistration;
 
         builder.append(StringUtils.format("if ({} === null) {", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
@@ -50,15 +51,14 @@ public class EsSetSerializer implements IEsSerializer {
         GenerateProtocolFile.addTab(builder, deep);
 
         builder.append("} else {").append(LS);
-
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("buffer.writeInt({}.size);", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeInt({}.length);", objectStr)).append(LS);
 
         String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach({} => {", objectStr, element)).append(LS);
-        GenerateEsUtils.esSerializer(setField.getSetElementRegistration().serializer())
-                .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
+        CodeGenerateEcmaScript.esSerializer(arrayField.getArrayElementRegistration().serializer())
+                .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("});").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
@@ -68,30 +68,30 @@ public class EsSetSerializer implements IEsSerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        var cutDown = CutDownSetSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.ES);
+        var cutDown = CutDownArraySerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.EcmaScript);
         if (cutDown != null) {
             return cutDown;
         }
 
-        SetField setField = (SetField) fieldRegistration;
+        ArrayField arrayField = (ArrayField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
-        builder.append(StringUtils.format("const {} = new Set();", result)).append(LS);
+        builder.append(StringUtils.format("const {} = [];", result)).append(LS);
+
+        String i = "index" + GenerateProtocolFile.localVariableId++;
+        String size = "size" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        String size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("const {} = buffer.readInt();", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
-
         GenerateProtocolFile.addTab(builder, deep + 1);
-        String i = "index" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
-        String readObject = GenerateEsUtils.esSerializer(setField.getSetElementRegistration().serializer())
-                .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
+        String readObject = CodeGenerateEcmaScript.esSerializer(arrayField.getArrayElementRegistration().serializer())
+                .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
-        builder.append(StringUtils.format("{}.add({});", result, readObject)).append(LS);
+        builder.append(StringUtils.format("{}.push({});", result, readObject)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
         GenerateProtocolFile.addTab(builder, deep);

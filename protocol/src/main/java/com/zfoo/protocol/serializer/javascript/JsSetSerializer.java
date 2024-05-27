@@ -57,7 +57,7 @@ public class JsSetSerializer implements IJsSerializer {
         String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach({} => {", objectStr, element)).append(LS);
-        CodeGenerateJavascript.jsSerializer(setField.getSetElementRegistration().serializer())
+        CodeGenerateJavaScript.jsSerializer(setField.getSetElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("});").append(LS);
@@ -88,7 +88,7 @@ public class JsSetSerializer implements IJsSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         String i = "index" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
-        String readObject = CodeGenerateJavascript.jsSerializer(setField.getSetElementRegistration().serializer())
+        String readObject = CodeGenerateJavaScript.jsSerializer(setField.getSetElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.add({});", result, readObject)).append(LS);

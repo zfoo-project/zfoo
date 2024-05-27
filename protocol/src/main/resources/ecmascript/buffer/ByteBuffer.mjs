@@ -1,4 +1,4 @@
-import { readInt64, writeInt64 } from './longbits.mjs';
+import {readInt64, writeInt64} from './longbits.mjs';
 import ProtocolManager from '../ProtocolManager.mjs';
 
 const empty_str = '';

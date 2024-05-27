@@ -65,7 +65,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeBooleanArray({});", objectStr)).append(LS);
                         break;
@@ -93,7 +93,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeBooleanArray({});", objectStr)).append(LS);
                         break;
@@ -121,7 +121,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({});", objectStr)).append(LS);
                         break;
@@ -149,7 +149,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({});", objectStr)).append(LS);
                         break;
@@ -177,7 +177,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({});", objectStr)).append(LS);
                         break;
@@ -205,7 +205,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({});", objectStr)).append(LS);
                         break;
@@ -233,7 +233,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({});", objectStr)).append(LS);
                         break;
@@ -261,7 +261,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({});", objectStr)).append(LS);
                         break;
@@ -289,7 +289,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({});", objectStr)).append(LS);
                         break;
@@ -317,7 +317,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({});", objectStr)).append(LS);
                         break;
@@ -345,7 +345,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({});", objectStr)).append(LS);
                         break;
@@ -373,7 +373,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({});", objectStr)).append(LS);
                         break;
@@ -401,7 +401,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({});", objectStr)).append(LS);
                         break;
@@ -429,7 +429,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({});", objectStr)).append(LS);
                         break;
@@ -457,7 +457,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Cpp:
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("buffer.writeStringArray({});", objectStr)).append(LS);
                         break;
@@ -486,7 +486,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("buffer.writePacketArray<{}>({}, {});", EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), objectStr, protocolId)).append(LS);
                             break;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {});", objectStr, protocolId)).append(LS);
                             break;
@@ -536,7 +536,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readBooleanArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readBooleanArray();", array)).append(LS);
                         break;
@@ -568,7 +568,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readBooleanArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readBooleanArray();", array)).append(LS);
                         break;
@@ -600,7 +600,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readByteArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readByteArray();", array)).append(LS);
                         break;
@@ -632,7 +632,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readByteArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readByteArray();", array)).append(LS);
                         break;
@@ -664,7 +664,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readShortArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readShortArray();", array)).append(LS);
                         break;
@@ -696,7 +696,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readShortArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readShortArray();", array)).append(LS);
                         break;
@@ -728,7 +728,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readIntArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readIntArray();", array)).append(LS);
                         break;
@@ -760,7 +760,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readIntArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readIntArray();", array)).append(LS);
                         break;
@@ -792,7 +792,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readLongArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readLongArray();", array)).append(LS);
                         break;
@@ -824,7 +824,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readLongArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readLongArray();", array)).append(LS);
                         break;
@@ -856,7 +856,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readFloatArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readFloatArray();", array)).append(LS);
                         break;
@@ -888,7 +888,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readFloatArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readFloatArray();", array)).append(LS);
                         break;
@@ -920,7 +920,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readDoubleArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readDoubleArray();", array)).append(LS);
                         break;
@@ -952,7 +952,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readDoubleArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readDoubleArray();", array)).append(LS);
                         break;
@@ -984,7 +984,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("auto {} = buffer.readStringArray();", array)).append(LS);
                         break;
                     case JavaScript:
-                    case ES:
+                    case EcmaScript:
                     case TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readStringArray();", array)).append(LS);
                         break;
@@ -1013,7 +1013,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("auto {} = buffer.readPacketArray<{}>({});", array, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
                             break;
                         case JavaScript:
-                        case ES:
+                        case EcmaScript:
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readPacketArray({});", array, protocolId)).append(LS);
                             break;

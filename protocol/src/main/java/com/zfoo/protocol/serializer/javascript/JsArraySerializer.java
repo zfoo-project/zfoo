@@ -57,7 +57,7 @@ public class JsArraySerializer implements IJsSerializer {
         String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach({} => {", objectStr, element)).append(LS);
-        CodeGenerateJavascript.jsSerializer(arrayField.getArrayElementRegistration().serializer())
+        CodeGenerateJavaScript.jsSerializer(arrayField.getArrayElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("});").append(LS);
@@ -88,7 +88,7 @@ public class JsArraySerializer implements IJsSerializer {
         builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
-        String readObject = CodeGenerateJavascript.jsSerializer(arrayField.getArrayElementRegistration().serializer())
+        String readObject = CodeGenerateJavaScript.jsSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.push({});", result, readObject)).append(LS);

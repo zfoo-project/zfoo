@@ -1,9 +1,9 @@
-{}
+${protocol_imports}
 
 const protocols = new Map();
 
 // initProtocol
-{}
+${protocol_manager_registrations}
 
 class ProtocolManager {
     static getProtocol(protocolId) {

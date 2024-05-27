@@ -16,7 +16,6 @@ package com.zfoo.protocol.generate;
 import com.zfoo.protocol.anno.Note;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.AssertionUtils;
@@ -100,7 +99,7 @@ public abstract class GenerateProtocolNote {
             case Cpp:
             case Go:
             case JavaScript:
-            case ES:
+            case EcmaScript:
             case TypeScript:
             case CSharp:
             case Protobuf:
