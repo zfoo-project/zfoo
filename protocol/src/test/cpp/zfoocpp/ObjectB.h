@@ -1,45 +1,28 @@
-#ifndef ZFOO_OBJECTB_H
-#define ZFOO_OBJECTB_H
+#ifndef ZFOO_ObjectB
+#define ZFOO_ObjectB
 
 #include "zfoocpp/ByteBuffer.h"
 
 namespace zfoo {
-
     
     class ObjectB : public IProtocol {
     public:
         bool flag;
         int32_t innerCompatibleValue;
-
+    
         ~ObjectB() override = default;
-
-        static ObjectB valueOf(bool flag, int32_t innerCompatibleValue) {
-            auto packet = ObjectB();
-            packet.flag = flag;
-            packet.innerCompatibleValue = innerCompatibleValue;
-            return packet;
-        }
-
+    
         int16_t protocolId() override {
             return 103;
         }
-
-        bool operator<(const ObjectB &_) const {
-            if (flag < _.flag) { return true; }
-            if (_.flag < flag) { return false; }
-            if (innerCompatibleValue < _.innerCompatibleValue) { return true; }
-            if (_.innerCompatibleValue < innerCompatibleValue) { return false; }
-            return false;
-        }
     };
-
 
     class ObjectBRegistration : public IProtocolRegistration {
     public:
         int16_t protocolId() override {
             return 103;
         }
-
+    
         void write(ByteBuffer &buffer, IProtocol *packet) override {
             if (packet == nullptr) {
                 buffer.writeInt(0);
@@ -52,7 +35,7 @@ namespace zfoo {
             buffer.writeInt(message->innerCompatibleValue);
             buffer.adjustPadding(4, beforeWriteIndex);
         }
-
+    
         IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new ObjectB();
             auto length = buffer.readInt();

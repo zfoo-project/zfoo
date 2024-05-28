@@ -2,14 +2,11 @@
 #define ZFOO_PROTOCOLMANAGER_H
 
 #include "ByteBuffer.h"
-#include "zfoocpp/packet/EmptyObject.h"
-#include "zfoocpp/packet/VeryBigObject.h"
-#include "zfoocpp/packet/ComplexObject.h"
-#include "zfoocpp/packet/NormalObject.h"
-#include "zfoocpp/packet/ObjectA.h"
-#include "zfoocpp/packet/ObjectB.h"
-#include "zfoocpp/packet/SimpleObject.h"
-
+#include "zfoocpp/EmptyObject.h"
+#include "zfoocpp/NormalObject.h"
+#include "zfoocpp/ObjectA.h"
+#include "zfoocpp/ObjectB.h"
+#include "zfoocpp/SimpleObject.h"
 namespace zfoo {
 
     const int16_t MAX_PROTOCOL_NUM = 32767;
@@ -17,8 +14,6 @@ namespace zfoo {
 
     void initProtocol() {
         protocols[0] = new EmptyObjectRegistration();
-        protocols[1] = new VeryBigObjectRegistration();
-        protocols[100] = new ComplexObjectRegistration();
         protocols[101] = new NormalObjectRegistration();
         protocols[102] = new ObjectARegistration();
         protocols[103] = new ObjectBRegistration();

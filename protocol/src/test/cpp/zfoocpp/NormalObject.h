@@ -1,12 +1,10 @@
-#ifndef ZFOO_NORMALOBJECT_H
-#define ZFOO_NORMALOBJECT_H
+#ifndef ZFOO_NormalObject
+#define ZFOO_NormalObject
 
 #include "zfoocpp/ByteBuffer.h"
-#include "zfoocpp/Packet/ObjectA.h"
-#include "zfoocpp/Packet/ObjectB.h"
-
+#include "zfoocpp/ObjectA.h"
+#include "zfoocpp/ObjectB.h"
 namespace zfoo {
-
     
     class NormalObject : public IProtocol {
     public:
@@ -30,90 +28,20 @@ namespace zfoo {
         set<string> ssss;
         int32_t outCompatibleValue;
         int32_t outCompatibleValue2;
-
+    
         ~NormalObject() override = default;
-
-        static NormalObject valueOf(int8_t a, vector<int8_t> aaa, int16_t b, int32_t c, int64_t d, float e, double f, bool g, string jj, ObjectA kk, list<int32_t> l, list<int64_t> ll, list<ObjectA> lll, list<string> llll, map<int32_t, string> m, map<int32_t, ObjectA> mm, set<int32_t> s, set<string> ssss, int32_t outCompatibleValue, int32_t outCompatibleValue2) {
-            auto packet = NormalObject();
-            packet.a = a;
-            packet.aaa = aaa;
-            packet.b = b;
-            packet.c = c;
-            packet.d = d;
-            packet.e = e;
-            packet.f = f;
-            packet.g = g;
-            packet.jj = jj;
-            packet.kk = kk;
-            packet.l = l;
-            packet.ll = ll;
-            packet.lll = lll;
-            packet.llll = llll;
-            packet.m = m;
-            packet.mm = mm;
-            packet.s = s;
-            packet.ssss = ssss;
-            packet.outCompatibleValue = outCompatibleValue;
-            packet.outCompatibleValue2 = outCompatibleValue2;
-            return packet;
-        }
-
+    
         int16_t protocolId() override {
             return 101;
         }
-
-        bool operator<(const NormalObject &_) const {
-            if (a < _.a) { return true; }
-            if (_.a < a) { return false; }
-            if (aaa < _.aaa) { return true; }
-            if (_.aaa < aaa) { return false; }
-            if (b < _.b) { return true; }
-            if (_.b < b) { return false; }
-            if (c < _.c) { return true; }
-            if (_.c < c) { return false; }
-            if (d < _.d) { return true; }
-            if (_.d < d) { return false; }
-            if (e < _.e) { return true; }
-            if (_.e < e) { return false; }
-            if (f < _.f) { return true; }
-            if (_.f < f) { return false; }
-            if (g < _.g) { return true; }
-            if (_.g < g) { return false; }
-            if (jj < _.jj) { return true; }
-            if (_.jj < jj) { return false; }
-            if (kk < _.kk) { return true; }
-            if (_.kk < kk) { return false; }
-            if (l < _.l) { return true; }
-            if (_.l < l) { return false; }
-            if (ll < _.ll) { return true; }
-            if (_.ll < ll) { return false; }
-            if (lll < _.lll) { return true; }
-            if (_.lll < lll) { return false; }
-            if (llll < _.llll) { return true; }
-            if (_.llll < llll) { return false; }
-            if (m < _.m) { return true; }
-            if (_.m < m) { return false; }
-            if (mm < _.mm) { return true; }
-            if (_.mm < mm) { return false; }
-            if (s < _.s) { return true; }
-            if (_.s < s) { return false; }
-            if (ssss < _.ssss) { return true; }
-            if (_.ssss < ssss) { return false; }
-            if (outCompatibleValue < _.outCompatibleValue) { return true; }
-            if (_.outCompatibleValue < outCompatibleValue) { return false; }
-            if (outCompatibleValue2 < _.outCompatibleValue2) { return true; }
-            if (_.outCompatibleValue2 < outCompatibleValue2) { return false; }
-            return false;
-        }
     };
-
 
     class NormalObjectRegistration : public IProtocolRegistration {
     public:
         int16_t protocolId() override {
             return 101;
         }
-
+    
         void write(ByteBuffer &buffer, IProtocol *packet) override {
             if (packet == nullptr) {
                 buffer.writeInt(0);
@@ -144,7 +72,7 @@ namespace zfoo {
             buffer.writeInt(message->outCompatibleValue2);
             buffer.adjustPadding(857, beforeWriteIndex);
         }
-
+    
         IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new NormalObject();
             auto length = buffer.readInt();

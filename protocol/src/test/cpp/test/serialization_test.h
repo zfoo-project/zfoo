@@ -73,33 +73,13 @@ namespace serialization_test {
     }
 
 
-    void complexObjectTest() {
-        // 读取二进制文件
-        ifstream file("D:\\github\\zfoo\\protocol\\src\\test\\resources\\complexObject.bytes", ios::out | ios::binary);
-        unsigned char carray[10000];
-        int length = 0;
-        while (file.read((char *) &carray[length], sizeof(unsigned char))) {
-            length++;
-        }
-        file.close();
-
-        ByteBuffer buffer;
-        buffer.writeBytes(reinterpret_cast<const int8_t *>(carray), length);
-        ComplexObject obj = *((ComplexObject *) read(buffer));
-
-        ByteBuffer newBuffer;
-        write(newBuffer, &obj);
-        obj = *((ComplexObject *) read(newBuffer));
-        cout << "complexObjectTest" << endl;
-    }
-
     void compatibleTest() {
         // 读取二进制文件
-//        ifstream file("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes", ios::out | ios::binary);
-//        ifstream file("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes", ios::out | ios::binary);
-//        ifstream file("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes", ios::out | ios::binary);
-//        ifstream file("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes", ios::out | ios::binary);
-        ifstream file("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes", ios::out | ios::binary);
+//        ifstream file("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes", ios::out | ios::binary);
+//        ifstream file("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes", ios::out | ios::binary);
+//        ifstream file("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes", ios::out | ios::binary);
+        ifstream file("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes", ios::out | ios::binary);
+//        ifstream file("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes", ios::out | ios::binary);
         unsigned char carray[10000];
         int length = 0;
         while (file.read((char *) &carray[length], sizeof(unsigned char))) {
@@ -123,10 +103,6 @@ namespace serialization_test {
 
     void protocol_all_test() {
         initProtocol();
-        objectBTest();
-        objectATest();
-        normalObjectTest();
-        complexObjectTest();
         compatibleTest();
     }
 

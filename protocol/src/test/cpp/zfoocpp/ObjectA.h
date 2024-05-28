@@ -1,11 +1,9 @@
-#ifndef ZFOO_OBJECTA_H
-#define ZFOO_OBJECTA_H
+#ifndef ZFOO_ObjectA
+#define ZFOO_ObjectA
 
 #include "zfoocpp/ByteBuffer.h"
-#include "zfoocpp/Packet/ObjectB.h"
-
+#include "zfoocpp/ObjectB.h"
 namespace zfoo {
-
     
     class ObjectA : public IProtocol {
     public:
@@ -13,42 +11,20 @@ namespace zfoo {
         map<int32_t, string> m;
         ObjectB objectB;
         int32_t innerCompatibleValue;
-
+    
         ~ObjectA() override = default;
-
-        static ObjectA valueOf(int32_t a, map<int32_t, string> m, ObjectB objectB, int32_t innerCompatibleValue) {
-            auto packet = ObjectA();
-            packet.a = a;
-            packet.m = m;
-            packet.objectB = objectB;
-            packet.innerCompatibleValue = innerCompatibleValue;
-            return packet;
-        }
-
+    
         int16_t protocolId() override {
             return 102;
         }
-
-        bool operator<(const ObjectA &_) const {
-            if (a < _.a) { return true; }
-            if (_.a < a) { return false; }
-            if (m < _.m) { return true; }
-            if (_.m < m) { return false; }
-            if (objectB < _.objectB) { return true; }
-            if (_.objectB < objectB) { return false; }
-            if (innerCompatibleValue < _.innerCompatibleValue) { return true; }
-            if (_.innerCompatibleValue < innerCompatibleValue) { return false; }
-            return false;
-        }
     };
-
 
     class ObjectARegistration : public IProtocolRegistration {
     public:
         int16_t protocolId() override {
             return 102;
         }
-
+    
         void write(ByteBuffer &buffer, IProtocol *packet) override {
             if (packet == nullptr) {
                 buffer.writeInt(0);
@@ -63,7 +39,7 @@ namespace zfoo {
             buffer.writeInt(message->innerCompatibleValue);
             buffer.adjustPadding(201, beforeWriteIndex);
         }
-
+    
         IProtocol *read(ByteBuffer &buffer) override {
             auto *packet = new ObjectA();
             auto length = buffer.readInt();
