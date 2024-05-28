@@ -19,7 +19,7 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.CutDownMapSerializer;
-import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
+import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -32,7 +32,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class JsMapSerializer implements IJsSerializer {
     @Override
     public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Triple<>(GenerateTsUtils.toTsClassName(field.getGenericType().toString()), field.getName(), "new Map()");
+        return new Triple<>(CodeGenerateTypeScript.toTsClassName(field.getGenericType().toString()), field.getName(), "new Map()");
     }
 
     @Override

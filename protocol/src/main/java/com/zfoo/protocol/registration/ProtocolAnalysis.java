@@ -29,7 +29,6 @@ import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.python.GeneratePyUtils;
 import com.zfoo.protocol.serializer.reflect.*;
-import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
 import com.zfoo.protocol.util.*;
 import com.zfoo.protocol.xml.XmlProtocols;
 import javassist.CannotCompileException;
@@ -397,7 +396,6 @@ public class ProtocolAnalysis {
         GenerateProtocolNote.clear();
         GenerateProtocolPath.clear();
         GenerateGoUtils.clear();
-        GenerateTsUtils.clear();
         GenerateGdUtils.clear();
         GeneratePyUtils.clear();
     }
@@ -630,7 +628,7 @@ public class ProtocolAnalysis {
      * CN: 此方法仅在生成协议的时候调用，一旦运行，不能调用
      */
     public static Set<Short> getFirstSubProtocolIds(short protocolId) {
-        return subProtocolIdMap.get(protocolId);
+        return subProtocolIdMap.getOrDefault(protocolId, Collections.emptySet());
     }
 
     /**

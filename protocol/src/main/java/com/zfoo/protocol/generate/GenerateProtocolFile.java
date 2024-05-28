@@ -22,7 +22,7 @@ import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.python.GeneratePyUtils;
-import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
+import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -125,15 +125,6 @@ public abstract class GenerateProtocolFile {
             for (var protocolRegistration : generateProtocols) {
                 GenerateGoUtils.createGoProtocolFile((ProtocolRegistration) protocolRegistration);
             }
-        }
-
-        // 生成TypeScript协议
-        if (generateLanguages.contains(CodeLanguage.TypeScript)) {
-            GenerateTsUtils.init(generateOperation);
-            for (var protocolRegistration : generateProtocols) {
-                GenerateTsUtils.createTsProtocolFile((ProtocolRegistration) protocolRegistration);
-            }
-            GenerateTsUtils.createProtocolManager(generateProtocols);
         }
 
         // 生成GdScript协议

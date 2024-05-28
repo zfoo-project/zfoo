@@ -19,7 +19,7 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.SetField;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.CutDownSetSerializer;
-import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
+import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -32,7 +32,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class JsSetSerializer implements IJsSerializer {
     @Override
     public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Triple<>(GenerateTsUtils.toTsClassName(field.getGenericType().toString()), field.getName(), "new Set()");
+        return new Triple<>(CodeGenerateTypeScript.toTsClassName(field.getGenericType().toString()), field.getName(), "new Set()");
     }
 
     @Override

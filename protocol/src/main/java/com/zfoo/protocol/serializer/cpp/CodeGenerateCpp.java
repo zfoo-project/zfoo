@@ -89,8 +89,8 @@ public class CodeGenerateCpp implements ICodeGenerate {
         protocol_imports.append(StringUtils.format("#include \"{}/Protocols.h\"", protocolOutputRootPath)).append(LS);
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = new {}Registration();", protocol_id, protocol_class_name)).append(LS);
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = new {}Registration();", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -133,9 +133,9 @@ public class CodeGenerateCpp implements ICodeGenerate {
         var protocol_manager_registrations = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("#include \"{}/{}.h\"", protocolOutputRootPath, GenerateProtocolPath.protocolAbsolutePath(protocol_id, CodeLanguage.Cpp))).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = new {}Registration();", protocol_id, protocol_class_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = new {}Registration();", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -174,9 +174,9 @@ public class CodeGenerateCpp implements ICodeGenerate {
         var protocol_manager_registrations = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("#include \"{}/{}.h\"", protocolOutputRootPath, protocol_class_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = new {}Registration();", protocol_id, protocol_class_name)).append(LS);
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            protocol_imports.append(StringUtils.format("#include \"{}/{}.h\"", protocolOutputRootPath, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = new {}Registration();", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -217,12 +217,12 @@ public class CodeGenerateCpp implements ICodeGenerate {
 
     private String protocol_class(ProtocolRegistration registration) {
         var protocol_id = registration.protocolId();
-        var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+        var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
 
         var protocolClassTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolClassTemplate.h");
         var placeholderMap = Map.of(
                 CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Cpp)
-                , CodeTemplatePlaceholder.protocol_name, protocol_class_name
+                , CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
         );
@@ -231,11 +231,11 @@ public class CodeGenerateCpp implements ICodeGenerate {
 
     private String protocol_registration(ProtocolRegistration registration) {
         var protocol_id = registration.protocolId();
-        var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+        var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
 
         var protocolRegistrationTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolRegistrationTemplate.h");
         var placeholderMap = Map.of(
-                CodeTemplatePlaceholder.protocol_name, protocol_class_name
+                CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
                 , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)

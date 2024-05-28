@@ -19,7 +19,7 @@ import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.CutDownArraySerializer;
-import com.zfoo.protocol.serializer.typescript.GenerateTsUtils;
+import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -32,7 +32,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class EsArraySerializer implements IEsSerializer {
     @Override
     public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        var type = StringUtils.format("Array<{}>", GenerateTsUtils.toTsClassName(field.getType().getComponentType().getSimpleName()));
+        var type = StringUtils.format("Array<{}>", CodeGenerateTypeScript.toTsClassName(field.getType().getComponentType().getSimpleName()));
         return new Triple<>(type, field.getName(), "[]");
     }
 

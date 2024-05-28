@@ -17,6 +17,7 @@ import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
 import com.zfoo.protocol.serializer.ecmascript.CodeGenerateEcmaScript;
 import com.zfoo.protocol.serializer.javascript.CodeGenerateJavaScript;
 import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
+import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
 
 /**
  * @author godotg
@@ -36,7 +37,7 @@ public enum CodeLanguage {
 
     EcmaScript(1 << 4, CodeGenerateEcmaScript.class),
 
-    TypeScript(1 << 5, null),
+    TypeScript(1 << 5, CodeGenerateTypeScript.class),
 
     Lua(1 << 10, CodeGenerateLua.class),
 

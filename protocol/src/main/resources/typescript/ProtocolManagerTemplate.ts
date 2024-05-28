@@ -1,11 +1,10 @@
-{
-}
+${protocol_imports}
 import IByteBuffer from "./IByteBuffer";
 
 const protocols = new Map<number, any>();
 
 // initProtocol
-{}
+${protocol_manager_registrations}
 
 class ProtocolManager {
     static getProtocol(protocolId: number): any {

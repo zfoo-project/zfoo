@@ -85,8 +85,8 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         protocol_imports.append("import Protocols from './Protocols.mjs';").append(LS);
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
-            var protocol_class_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, Protocols.{});", protocol_id, protocol_class_name)).append(LS);
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, Protocols.{});", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -99,13 +99,10 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         var protocol_registration = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+
             // protocol
             protocol_class.append(formatProtocolClassTemplate(registration)).append(LS);
-        }
-
-        protocol_registration.append(LS);
-        for (var registration : registrations) {
-            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_registration.append(StringUtils.format("Protocols.{} = {}", protocol_name, protocol_name)).append(LS);
         }
 
@@ -130,9 +127,9 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         var protocol_manager_registrations = new StringBuilder();
         for (var protocol : registrations) {
             var protocol_id = protocol.protocolId();
-            var protocol_class_name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("import {} from './{}.mjs';", protocol_class_name,  GenerateProtocolPath.protocolAbsolutePath(protocol.protocolId(), CodeLanguage.EcmaScript))).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, {});", protocol_id, protocol_class_name)).append(LS);
+            var protocol_name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
+            protocol_imports.append(StringUtils.format("import {} from './{}.mjs';", protocol_name,  GenerateProtocolPath.protocolAbsolutePath(protocol.protocolId(), CodeLanguage.EcmaScript))).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, {});", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -162,9 +159,9 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         var protocol_manager_registrations = new StringBuilder();
         for (var protocol : registrations) {
             var protocol_id = protocol.protocolId();
-            var protocol_class_name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("import {} from './{}.mjs';", protocol_class_name,  protocol_class_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, {});", protocol_id, protocol_class_name)).append(LS);
+            var protocol_name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
+            protocol_imports.append(StringUtils.format("import {} from './{}.mjs';", protocol_name,  protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, {});", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());

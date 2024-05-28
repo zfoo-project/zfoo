@@ -1,4 +1,3 @@
-${protocol_imports}
 ${protocol_note}
 class ${protocol_name} {
     ${protocol_field_definition}
@@ -31,5 +30,3 @@ class ${protocol_name} {
         return packet;
     }
 }
-
-export default ${protocol_name};

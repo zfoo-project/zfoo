@@ -32,7 +32,7 @@ public class TsArraySerializer implements ITsSerializer {
 
     @Override
     public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        var type = StringUtils.format(": Array<{}>", GenerateTsUtils.toTsClassName(field.getType().getComponentType().getSimpleName()));
+        var type = StringUtils.format(": Array<{}>", CodeGenerateTypeScript.toTsClassName(field.getType().getComponentType().getSimpleName()));
         return new Triple<>(type, field.getName(), "[]");
     }
 
@@ -57,7 +57,7 @@ public class TsArraySerializer implements ITsSerializer {
         String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("{}.forEach({} => {", objectStr, element)).append(LS);
-        GenerateTsUtils.tsSerializer(arrayField.getArrayElementRegistration().serializer())
+        CodeGenerateTypeScript.tsSerializer(arrayField.getArrayElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("});").append(LS);
@@ -75,7 +75,7 @@ public class TsArraySerializer implements ITsSerializer {
 
         ArrayField arrayField = (ArrayField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.localVariableId++;
-        var typeName =  StringUtils.format("Array<{}>", GenerateTsUtils.toTsClassName(arrayField.getType().getSimpleName()));
+        var typeName =  StringUtils.format("Array<{}>", CodeGenerateTypeScript.toTsClassName(arrayField.getType().getSimpleName()));
         builder.append(StringUtils.format("const {} = new {};", result, typeName)).append(LS);
 
         String i = "index" + GenerateProtocolFile.localVariableId++;
@@ -88,7 +88,7 @@ public class TsArraySerializer implements ITsSerializer {
         builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for (let {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
-        String readObject = GenerateTsUtils.tsSerializer(arrayField.getArrayElementRegistration().serializer())
+        String readObject = CodeGenerateTypeScript.tsSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.push({});", result, readObject)).append(LS);
