@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-
 namespace zfoocs
 {
     
@@ -8,16 +7,7 @@ namespace zfoocs
     {
         public bool flag;
         public int innerCompatibleValue;
-
-        public static ObjectB ValueOf(bool flag, int innerCompatibleValue)
-        {
-            var packet = new ObjectB();
-            packet.flag = flag;
-            packet.innerCompatibleValue = innerCompatibleValue;
-            return packet;
-        }
     }
-
 
     public class ObjectBRegistration : IProtocolRegistration
     {
@@ -25,7 +15,7 @@ namespace zfoocs
         {
             return 103;
         }
-
+    
         public void Write(ByteBuffer buffer, object packet)
         {
             if (packet == null)
@@ -40,7 +30,7 @@ namespace zfoocs
             buffer.WriteInt(message.innerCompatibleValue);
             buffer.AdjustPadding(4, beforeWriteIndex);
         }
-
+    
         public object Read(ByteBuffer buffer)
         {
             int length = buffer.ReadInt();
@@ -56,7 +46,8 @@ namespace zfoocs
                 int result1 = buffer.ReadInt();
                 packet.innerCompatibleValue = result1;
             }
-            if (length > 0) {
+            if (length > 0)
+            {
                 buffer.SetReadOffset(beforeReadIndex + length);
             }
             return packet;

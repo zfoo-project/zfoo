@@ -10,10 +10,16 @@ namespace zfoocs
 
         private static readonly IProtocolRegistration[] protocols = new IProtocolRegistration[MAX_PROTOCOL_NUM];
         private static readonly Dictionary<Type, short> protocolIdMap = new Dictionary<Type, short>();
+        private static bool initialized = false;
 
 
         public static void InitProtocol()
         {
+            if (initialized)
+            {
+                return;
+            }
+            initialized = true;
             protocols[0] = new EmptyObjectRegistration();
             protocolIdMap[typeof(EmptyObject)] = 0;
             protocols[1] = new VeryBigObjectRegistration();
@@ -30,6 +36,11 @@ namespace zfoocs
             protocolIdMap[typeof(SimpleObject)] = 104;
         }
 
+        public static short GetProtocolId(Type type)
+        {
+            return protocolIdMap[type];
+        }
+
         public static IProtocolRegistration GetProtocol(short protocolId)
         {
             var protocol = protocols[protocolId];
@@ -37,17 +48,15 @@ namespace zfoocs
             {
                 throw new Exception("[protocolId:" + protocolId + "] not exist");
             }
-
             return protocol;
         }
 
         public static void Write(ByteBuffer buffer, object packet)
         {
             var protocolId = protocolIdMap[packet.GetType()];
-            // 写入协议号
+            // write protocol id to buffer
             buffer.WriteShort(protocolId);
-
-            // 写入包体
+            // write packet
             GetProtocol(protocolId).Write(buffer, packet);
         }
 

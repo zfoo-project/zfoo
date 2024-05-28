@@ -1,21 +1,12 @@
 using System;
 using System.Collections.Generic;
-
 namespace zfoocs
 {
     
     public class EmptyObject
     {
         
-
-        public static EmptyObject ValueOf()
-        {
-            var packet = new EmptyObject();
-            
-            return packet;
-        }
     }
-
 
     public class EmptyObjectRegistration : IProtocolRegistration
     {
@@ -23,7 +14,7 @@ namespace zfoocs
         {
             return 0;
         }
-
+    
         public void Write(ByteBuffer buffer, object packet)
         {
             if (packet == null)
@@ -34,7 +25,7 @@ namespace zfoocs
             EmptyObject message = (EmptyObject) packet;
             buffer.WriteInt(-1);
         }
-
+    
         public object Read(ByteBuffer buffer)
         {
             int length = buffer.ReadInt();
@@ -45,7 +36,8 @@ namespace zfoocs
             int beforeReadIndex = buffer.ReadOffset();
             EmptyObject packet = new EmptyObject();
             
-            if (length > 0) {
+            if (length > 0)
+            {
                 buffer.SetReadOffset(beforeReadIndex + length);
             }
             return packet;

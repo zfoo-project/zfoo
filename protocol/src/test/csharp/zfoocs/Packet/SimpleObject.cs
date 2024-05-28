@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-
 namespace zfoocs
 {
     
@@ -8,16 +7,7 @@ namespace zfoocs
     {
         public int c;
         public bool g;
-
-        public static SimpleObject ValueOf(int c, bool g)
-        {
-            var packet = new SimpleObject();
-            packet.c = c;
-            packet.g = g;
-            return packet;
-        }
     }
-
 
     public class SimpleObjectRegistration : IProtocolRegistration
     {
@@ -25,7 +15,7 @@ namespace zfoocs
         {
             return 104;
         }
-
+    
         public void Write(ByteBuffer buffer, object packet)
         {
             if (packet == null)
@@ -38,7 +28,7 @@ namespace zfoocs
             buffer.WriteInt(message.c);
             buffer.WriteBool(message.g);
         }
-
+    
         public object Read(ByteBuffer buffer)
         {
             int length = buffer.ReadInt();
@@ -52,7 +42,8 @@ namespace zfoocs
             packet.c = result0;
             bool result1 = buffer.ReadBool();
             packet.g = result1;
-            if (length > 0) {
+            if (length > 0)
+            {
                 buffer.SetReadOffset(beforeReadIndex + length);
             }
             return packet;

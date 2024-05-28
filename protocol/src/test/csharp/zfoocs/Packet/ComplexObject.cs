@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-
 namespace zfoocs
 {
     // 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
@@ -56,66 +55,10 @@ namespace zfoocs
         public HashSet<HashSet<ObjectA>> sss;
         public HashSet<string> ssss;
         public HashSet<Dictionary<int, string>> sssss;
-        // 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
+        // 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
         public int myCompatible;
         public ObjectA myObject;
-
-        public static ComplexObject ValueOf(byte a, byte aa, byte[] aaa, byte[] aaaa, short b, short bb, short[] bbb, short[] bbbb, int c, int cc, int[] ccc, int[] cccc, long d, long dd, long[] ddd, long[] dddd, float e, float ee, float[] eee, float[] eeee, double f, double ff, double[] fff, double[] ffff, bool g, bool gg, bool[] ggg, bool[] gggg, string jj, string[] jjj, ObjectA kk, ObjectA[] kkk, List<int> l, List<List<List<int>>> ll, List<List<ObjectA>> lll, List<string> llll, List<Dictionary<int, string>> lllll, Dictionary<int, string> m, Dictionary<int, ObjectA> mm, Dictionary<ObjectA, List<int>> mmm, Dictionary<List<List<ObjectA>>, List<List<List<int>>>> mmmm, Dictionary<List<Dictionary<int, string>>, HashSet<Dictionary<int, string>>> mmmmm, HashSet<int> s, HashSet<HashSet<List<int>>> ss, HashSet<HashSet<ObjectA>> sss, HashSet<string> ssss, HashSet<Dictionary<int, string>> sssss, int myCompatible, ObjectA myObject)
-        {
-            var packet = new ComplexObject();
-            packet.a = a;
-            packet.aa = aa;
-            packet.aaa = aaa;
-            packet.aaaa = aaaa;
-            packet.b = b;
-            packet.bb = bb;
-            packet.bbb = bbb;
-            packet.bbbb = bbbb;
-            packet.c = c;
-            packet.cc = cc;
-            packet.ccc = ccc;
-            packet.cccc = cccc;
-            packet.d = d;
-            packet.dd = dd;
-            packet.ddd = ddd;
-            packet.dddd = dddd;
-            packet.e = e;
-            packet.ee = ee;
-            packet.eee = eee;
-            packet.eeee = eeee;
-            packet.f = f;
-            packet.ff = ff;
-            packet.fff = fff;
-            packet.ffff = ffff;
-            packet.g = g;
-            packet.gg = gg;
-            packet.ggg = ggg;
-            packet.gggg = gggg;
-            packet.jj = jj;
-            packet.jjj = jjj;
-            packet.kk = kk;
-            packet.kkk = kkk;
-            packet.l = l;
-            packet.ll = ll;
-            packet.lll = lll;
-            packet.llll = llll;
-            packet.lllll = lllll;
-            packet.m = m;
-            packet.mm = mm;
-            packet.mmm = mmm;
-            packet.mmmm = mmmm;
-            packet.mmmmm = mmmmm;
-            packet.s = s;
-            packet.ss = ss;
-            packet.sss = sss;
-            packet.ssss = ssss;
-            packet.sssss = sssss;
-            packet.myCompatible = myCompatible;
-            packet.myObject = myObject;
-            return packet;
-        }
     }
-
 
     public class ComplexObjectRegistration : IProtocolRegistration
     {
@@ -123,7 +66,7 @@ namespace zfoocs
         {
             return 100;
         }
-
+    
         public void Write(ByteBuffer buffer, object packet)
         {
             if (packet == null)
@@ -386,7 +329,7 @@ namespace zfoocs
             buffer.WritePacket(message.myObject, 102);
             buffer.AdjustPadding(36962, beforeWriteIndex);
         }
-
+    
         public object Read(ByteBuffer buffer)
         {
             int length = buffer.ReadInt();
@@ -396,256 +339,257 @@ namespace zfoocs
             }
             int beforeReadIndex = buffer.ReadOffset();
             ComplexObject packet = new ComplexObject();
-            byte result38 = buffer.ReadByte();
-            packet.a = result38;
-            byte result39 = buffer.ReadByte();
-            packet.aa = result39;
-            var array40 = buffer.ReadByteArray();
-            packet.aaa = array40;
-            var array41 = buffer.ReadByteArray();
-            packet.aaaa = array41;
-            short result42 = buffer.ReadShort();
-            packet.b = result42;
-            short result43 = buffer.ReadShort();
-            packet.bb = result43;
-            var array44 = buffer.ReadShortArray();
-            packet.bbb = array44;
-            var array45 = buffer.ReadShortArray();
-            packet.bbbb = array45;
-            int result46 = buffer.ReadInt();
-            packet.c = result46;
-            int result47 = buffer.ReadInt();
-            packet.cc = result47;
-            var array48 = buffer.ReadIntArray();
-            packet.ccc = array48;
-            var array49 = buffer.ReadIntArray();
-            packet.cccc = array49;
-            long result50 = buffer.ReadLong();
-            packet.d = result50;
-            long result51 = buffer.ReadLong();
-            packet.dd = result51;
-            var array52 = buffer.ReadLongArray();
-            packet.ddd = array52;
-            var array53 = buffer.ReadLongArray();
-            packet.dddd = array53;
-            float result54 = buffer.ReadFloat();
-            packet.e = result54;
-            float result55 = buffer.ReadFloat();
-            packet.ee = result55;
-            var array56 = buffer.ReadFloatArray();
-            packet.eee = array56;
-            var array57 = buffer.ReadFloatArray();
-            packet.eeee = array57;
-            double result58 = buffer.ReadDouble();
-            packet.f = result58;
-            double result59 = buffer.ReadDouble();
-            packet.ff = result59;
-            var array60 = buffer.ReadDoubleArray();
-            packet.fff = array60;
-            var array61 = buffer.ReadDoubleArray();
-            packet.ffff = array61;
-            bool result62 = buffer.ReadBool();
-            packet.g = result62;
-            bool result63 = buffer.ReadBool();
-            packet.gg = result63;
-            var array64 = buffer.ReadBooleanArray();
-            packet.ggg = array64;
-            var array65 = buffer.ReadBooleanArray();
-            packet.gggg = array65;
-            string result66 = buffer.ReadString();
-            packet.jj = result66;
-            var array67 = buffer.ReadStringArray();
-            packet.jjj = array67;
-            ObjectA result68 = buffer.ReadPacket<ObjectA>(102);
-            packet.kk = result68;
-            var array69 = buffer.ReadPacketArray<ObjectA>(102);
-            packet.kkk = array69;
-            var list70 = buffer.ReadIntList();
-            packet.l = list70;
-            int size73 = buffer.ReadInt();
-            var result71 = new List<List<List<int>>>(size73);
-            if (size73 > 0)
+            byte result0 = buffer.ReadByte();
+            packet.a = result0;
+            byte result1 = buffer.ReadByte();
+            packet.aa = result1;
+            var array2 = buffer.ReadByteArray();
+            packet.aaa = array2;
+            var array3 = buffer.ReadByteArray();
+            packet.aaaa = array3;
+            short result4 = buffer.ReadShort();
+            packet.b = result4;
+            short result5 = buffer.ReadShort();
+            packet.bb = result5;
+            var array6 = buffer.ReadShortArray();
+            packet.bbb = array6;
+            var array7 = buffer.ReadShortArray();
+            packet.bbbb = array7;
+            int result8 = buffer.ReadInt();
+            packet.c = result8;
+            int result9 = buffer.ReadInt();
+            packet.cc = result9;
+            var array10 = buffer.ReadIntArray();
+            packet.ccc = array10;
+            var array11 = buffer.ReadIntArray();
+            packet.cccc = array11;
+            long result12 = buffer.ReadLong();
+            packet.d = result12;
+            long result13 = buffer.ReadLong();
+            packet.dd = result13;
+            var array14 = buffer.ReadLongArray();
+            packet.ddd = array14;
+            var array15 = buffer.ReadLongArray();
+            packet.dddd = array15;
+            float result16 = buffer.ReadFloat();
+            packet.e = result16;
+            float result17 = buffer.ReadFloat();
+            packet.ee = result17;
+            var array18 = buffer.ReadFloatArray();
+            packet.eee = array18;
+            var array19 = buffer.ReadFloatArray();
+            packet.eeee = array19;
+            double result20 = buffer.ReadDouble();
+            packet.f = result20;
+            double result21 = buffer.ReadDouble();
+            packet.ff = result21;
+            var array22 = buffer.ReadDoubleArray();
+            packet.fff = array22;
+            var array23 = buffer.ReadDoubleArray();
+            packet.ffff = array23;
+            bool result24 = buffer.ReadBool();
+            packet.g = result24;
+            bool result25 = buffer.ReadBool();
+            packet.gg = result25;
+            var array26 = buffer.ReadBooleanArray();
+            packet.ggg = array26;
+            var array27 = buffer.ReadBooleanArray();
+            packet.gggg = array27;
+            string result28 = buffer.ReadString();
+            packet.jj = result28;
+            var array29 = buffer.ReadStringArray();
+            packet.jjj = array29;
+            ObjectA result30 = buffer.ReadPacket<ObjectA>(102);
+            packet.kk = result30;
+            var array31 = buffer.ReadPacketArray<ObjectA>(102);
+            packet.kkk = array31;
+            var list32 = buffer.ReadIntList();
+            packet.l = list32;
+            int size35 = buffer.ReadInt();
+            var result33 = new List<List<List<int>>>(size35);
+            if (size35 > 0)
             {
-                for (int index72 = 0; index72 < size73; index72++)
+                for (int index34 = 0; index34 < size35; index34++)
                 {
-                    int size76 = buffer.ReadInt();
-                    var result74 = new List<List<int>>(size76);
-                    if (size76 > 0)
+                    int size38 = buffer.ReadInt();
+                    var result36 = new List<List<int>>(size38);
+                    if (size38 > 0)
                     {
-                        for (int index75 = 0; index75 < size76; index75++)
+                        for (int index37 = 0; index37 < size38; index37++)
                         {
-                            var list77 = buffer.ReadIntList();
-                            result74.Add(list77);
+                            var list39 = buffer.ReadIntList();
+                            result36.Add(list39);
                         }
                     }
-                    result71.Add(result74);
+                    result33.Add(result36);
                 }
             }
-            packet.ll = result71;
-            int size80 = buffer.ReadInt();
-            var result78 = new List<List<ObjectA>>(size80);
-            if (size80 > 0)
+            packet.ll = result33;
+            int size42 = buffer.ReadInt();
+            var result40 = new List<List<ObjectA>>(size42);
+            if (size42 > 0)
             {
-                for (int index79 = 0; index79 < size80; index79++)
+                for (int index41 = 0; index41 < size42; index41++)
                 {
-                    var list81 = buffer.ReadPacketList<ObjectA>(102);
-                    result78.Add(list81);
+                    var list43 = buffer.ReadPacketList<ObjectA>(102);
+                    result40.Add(list43);
                 }
             }
-            packet.lll = result78;
-            var list82 = buffer.ReadStringList();
-            packet.llll = list82;
-            int size85 = buffer.ReadInt();
-            var result83 = new List<Dictionary<int, string>>(size85);
-            if (size85 > 0)
+            packet.lll = result40;
+            var list44 = buffer.ReadStringList();
+            packet.llll = list44;
+            int size47 = buffer.ReadInt();
+            var result45 = new List<Dictionary<int, string>>(size47);
+            if (size47 > 0)
             {
-                for (int index84 = 0; index84 < size85; index84++)
+                for (int index46 = 0; index46 < size47; index46++)
                 {
-                    var map86 = buffer.ReadIntStringMap();
-                    result83.Add(map86);
+                    var map48 = buffer.ReadIntStringMap();
+                    result45.Add(map48);
                 }
             }
-            packet.lllll = result83;
-            var map87 = buffer.ReadIntStringMap();
-            packet.m = map87;
-            var map88 = buffer.ReadIntPacketMap<ObjectA>(102);
-            packet.mm = map88;
-            int size90 = buffer.ReadInt();
-            var result89 = new Dictionary<ObjectA, List<int>>(size90);
-            if (size90 > 0)
+            packet.lllll = result45;
+            var map49 = buffer.ReadIntStringMap();
+            packet.m = map49;
+            var map50 = buffer.ReadIntPacketMap<ObjectA>(102);
+            packet.mm = map50;
+            int size52 = buffer.ReadInt();
+            var result51 = new Dictionary<ObjectA, List<int>>(size52);
+            if (size52 > 0)
             {
-                for (var index91 = 0; index91 < size90; index91++)
+                for (var index53 = 0; index53 < size52; index53++)
                 {
-                    ObjectA result92 = buffer.ReadPacket<ObjectA>(102);
-                    var list93 = buffer.ReadIntList();
-                    result89[result92] = list93;
+                    ObjectA result54 = buffer.ReadPacket<ObjectA>(102);
+                    var list55 = buffer.ReadIntList();
+                    result51[result54] = list55;
                 }
             }
-            packet.mmm = result89;
-            int size95 = buffer.ReadInt();
-            var result94 = new Dictionary<List<List<ObjectA>>, List<List<List<int>>>>(size95);
-            if (size95 > 0)
+            packet.mmm = result51;
+            int size57 = buffer.ReadInt();
+            var result56 = new Dictionary<List<List<ObjectA>>, List<List<List<int>>>>(size57);
+            if (size57 > 0)
             {
-                for (var index96 = 0; index96 < size95; index96++)
+                for (var index58 = 0; index58 < size57; index58++)
                 {
-                    int size99 = buffer.ReadInt();
-                    var result97 = new List<List<ObjectA>>(size99);
-                    if (size99 > 0)
+                    int size61 = buffer.ReadInt();
+                    var result59 = new List<List<ObjectA>>(size61);
+                    if (size61 > 0)
                     {
-                        for (int index98 = 0; index98 < size99; index98++)
+                        for (int index60 = 0; index60 < size61; index60++)
                         {
-                            var list100 = buffer.ReadPacketList<ObjectA>(102);
-                            result97.Add(list100);
+                            var list62 = buffer.ReadPacketList<ObjectA>(102);
+                            result59.Add(list62);
                         }
                     }
-                    int size103 = buffer.ReadInt();
-                    var result101 = new List<List<List<int>>>(size103);
-                    if (size103 > 0)
+                    int size65 = buffer.ReadInt();
+                    var result63 = new List<List<List<int>>>(size65);
+                    if (size65 > 0)
                     {
-                        for (int index102 = 0; index102 < size103; index102++)
+                        for (int index64 = 0; index64 < size65; index64++)
                         {
-                            int size106 = buffer.ReadInt();
-                            var result104 = new List<List<int>>(size106);
-                            if (size106 > 0)
+                            int size68 = buffer.ReadInt();
+                            var result66 = new List<List<int>>(size68);
+                            if (size68 > 0)
                             {
-                                for (int index105 = 0; index105 < size106; index105++)
+                                for (int index67 = 0; index67 < size68; index67++)
                                 {
-                                    var list107 = buffer.ReadIntList();
-                                    result104.Add(list107);
+                                    var list69 = buffer.ReadIntList();
+                                    result66.Add(list69);
                                 }
                             }
-                            result101.Add(result104);
+                            result63.Add(result66);
                         }
                     }
-                    result94[result97] = result101;
+                    result56[result59] = result63;
                 }
             }
-            packet.mmmm = result94;
-            int size109 = buffer.ReadInt();
-            var result108 = new Dictionary<List<Dictionary<int, string>>, HashSet<Dictionary<int, string>>>(size109);
-            if (size109 > 0)
+            packet.mmmm = result56;
+            int size71 = buffer.ReadInt();
+            var result70 = new Dictionary<List<Dictionary<int, string>>, HashSet<Dictionary<int, string>>>(size71);
+            if (size71 > 0)
             {
-                for (var index110 = 0; index110 < size109; index110++)
+                for (var index72 = 0; index72 < size71; index72++)
                 {
-                    int size113 = buffer.ReadInt();
-                    var result111 = new List<Dictionary<int, string>>(size113);
-                    if (size113 > 0)
+                    int size75 = buffer.ReadInt();
+                    var result73 = new List<Dictionary<int, string>>(size75);
+                    if (size75 > 0)
                     {
-                        for (int index112 = 0; index112 < size113; index112++)
+                        for (int index74 = 0; index74 < size75; index74++)
                         {
-                            var map114 = buffer.ReadIntStringMap();
-                            result111.Add(map114);
+                            var map76 = buffer.ReadIntStringMap();
+                            result73.Add(map76);
                         }
                     }
-                    int size117 = buffer.ReadInt();
-                    var result115 = new HashSet<Dictionary<int, string>>();
-                    if (size117 > 0)
+                    int size79 = buffer.ReadInt();
+                    var result77 = new HashSet<Dictionary<int, string>>();
+                    if (size79 > 0)
                     {
-                        for (int index116 = 0; index116 < size117; index116++)
+                        for (int index78 = 0; index78 < size79; index78++)
                         {
-                            var map118 = buffer.ReadIntStringMap();
-                            result115.Add(map118);
+                            var map80 = buffer.ReadIntStringMap();
+                            result77.Add(map80);
                         }
                     }
-                    result108[result111] = result115;
+                    result70[result73] = result77;
                 }
             }
-            packet.mmmmm = result108;
-            var set119 = buffer.ReadIntSet();
-            packet.s = set119;
-            int size122 = buffer.ReadInt();
-            var result120 = new HashSet<HashSet<List<int>>>();
-            if (size122 > 0)
+            packet.mmmmm = result70;
+            var set81 = buffer.ReadIntSet();
+            packet.s = set81;
+            int size84 = buffer.ReadInt();
+            var result82 = new HashSet<HashSet<List<int>>>();
+            if (size84 > 0)
             {
-                for (int index121 = 0; index121 < size122; index121++)
+                for (int index83 = 0; index83 < size84; index83++)
                 {
-                    int size125 = buffer.ReadInt();
-                    var result123 = new HashSet<List<int>>();
-                    if (size125 > 0)
+                    int size87 = buffer.ReadInt();
+                    var result85 = new HashSet<List<int>>();
+                    if (size87 > 0)
                     {
-                        for (int index124 = 0; index124 < size125; index124++)
+                        for (int index86 = 0; index86 < size87; index86++)
                         {
-                            var list126 = buffer.ReadIntList();
-                            result123.Add(list126);
+                            var list88 = buffer.ReadIntList();
+                            result85.Add(list88);
                         }
                     }
-                    result120.Add(result123);
+                    result82.Add(result85);
                 }
             }
-            packet.ss = result120;
-            int size129 = buffer.ReadInt();
-            var result127 = new HashSet<HashSet<ObjectA>>();
-            if (size129 > 0)
+            packet.ss = result82;
+            int size91 = buffer.ReadInt();
+            var result89 = new HashSet<HashSet<ObjectA>>();
+            if (size91 > 0)
             {
-                for (int index128 = 0; index128 < size129; index128++)
+                for (int index90 = 0; index90 < size91; index90++)
                 {
-                    var set130 = buffer.ReadPacketSet<ObjectA>(102);
-                    result127.Add(set130);
+                    var set92 = buffer.ReadPacketSet<ObjectA>(102);
+                    result89.Add(set92);
                 }
             }
-            packet.sss = result127;
-            var set131 = buffer.ReadStringSet();
-            packet.ssss = set131;
-            int size134 = buffer.ReadInt();
-            var result132 = new HashSet<Dictionary<int, string>>();
-            if (size134 > 0)
+            packet.sss = result89;
+            var set93 = buffer.ReadStringSet();
+            packet.ssss = set93;
+            int size96 = buffer.ReadInt();
+            var result94 = new HashSet<Dictionary<int, string>>();
+            if (size96 > 0)
             {
-                for (int index133 = 0; index133 < size134; index133++)
+                for (int index95 = 0; index95 < size96; index95++)
                 {
-                    var map135 = buffer.ReadIntStringMap();
-                    result132.Add(map135);
+                    var map97 = buffer.ReadIntStringMap();
+                    result94.Add(map97);
                 }
             }
-            packet.sssss = result132;
+            packet.sssss = result94;
             if (buffer.CompatibleRead(beforeReadIndex, length)) {
-                int result136 = buffer.ReadInt();
-                packet.myCompatible = result136;
+                int result98 = buffer.ReadInt();
+                packet.myCompatible = result98;
             }
             if (buffer.CompatibleRead(beforeReadIndex, length)) {
-                ObjectA result137 = buffer.ReadPacket<ObjectA>(102);
-                packet.myObject = result137;
+                ObjectA result99 = buffer.ReadPacket<ObjectA>(102);
+                packet.myObject = result99;
             }
-            if (length > 0) {
+            if (length > 0)
+            {
                 buffer.SetReadOffset(beforeReadIndex + length);
             }
             return packet;

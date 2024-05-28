@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-
 namespace zfoocs
 {
     
@@ -25,33 +24,8 @@ namespace zfoocs
         public HashSet<int> s;
         public HashSet<string> ssss;
         public int outCompatibleValue;
-
-        public static NormalObject ValueOf(byte a, byte[] aaa, short b, int c, long d, float e, double f, bool g, string jj, ObjectA kk, List<int> l, List<long> ll, List<ObjectA> lll, List<string> llll, Dictionary<int, string> m, Dictionary<int, ObjectA> mm, HashSet<int> s, HashSet<string> ssss, int outCompatibleValue)
-        {
-            var packet = new NormalObject();
-            packet.a = a;
-            packet.aaa = aaa;
-            packet.b = b;
-            packet.c = c;
-            packet.d = d;
-            packet.e = e;
-            packet.f = f;
-            packet.g = g;
-            packet.jj = jj;
-            packet.kk = kk;
-            packet.l = l;
-            packet.ll = ll;
-            packet.lll = lll;
-            packet.llll = llll;
-            packet.m = m;
-            packet.mm = mm;
-            packet.s = s;
-            packet.ssss = ssss;
-            packet.outCompatibleValue = outCompatibleValue;
-            return packet;
-        }
+        public int outCompatibleValue2;
     }
-
 
     public class NormalObjectRegistration : IProtocolRegistration
     {
@@ -59,7 +33,7 @@ namespace zfoocs
         {
             return 101;
         }
-
+    
         public void Write(ByteBuffer buffer, object packet)
         {
             if (packet == null)
@@ -69,7 +43,7 @@ namespace zfoocs
             }
             NormalObject message = (NormalObject) packet;
             int beforeWriteIndex = buffer.WriteOffset();
-            buffer.WriteInt(854);
+            buffer.WriteInt(857);
             buffer.WriteByte(message.a);
             buffer.WriteByteArray(message.aaa);
             buffer.WriteShort(message.b);
@@ -89,9 +63,10 @@ namespace zfoocs
             buffer.WriteIntSet(message.s);
             buffer.WriteStringSet(message.ssss);
             buffer.WriteInt(message.outCompatibleValue);
-            buffer.AdjustPadding(854, beforeWriteIndex);
+            buffer.WriteInt(message.outCompatibleValue2);
+            buffer.AdjustPadding(857, beforeWriteIndex);
         }
-
+    
         public object Read(ByteBuffer buffer)
         {
             int length = buffer.ReadInt();
@@ -141,7 +116,12 @@ namespace zfoocs
                 int result18 = buffer.ReadInt();
                 packet.outCompatibleValue = result18;
             }
-            if (length > 0) {
+            if (buffer.CompatibleRead(beforeReadIndex, length)) {
+                int result19 = buffer.ReadInt();
+                packet.outCompatibleValue2 = result19;
+            }
+            if (length > 0)
+            {
                 buffer.SetReadOffset(beforeReadIndex + length);
             }
             return packet;
