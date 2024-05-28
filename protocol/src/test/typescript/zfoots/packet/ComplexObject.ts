@@ -1,9 +1,7 @@
 import IByteBuffer from '../IByteBuffer';
 import ObjectA from './ObjectA';
-
 // 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
 class ComplexObject {
-
     // byte类型，最简单的整形
     a: number = 0;
     // byte的包装类型，优先使用基础类型，包装类型会有装箱拆箱
@@ -54,7 +52,7 @@ class ComplexObject {
     sss: Set<Set<ObjectA>> = new Set();
     ssss: Set<string> = new Set();
     sssss: Set<Map<number, string>> = new Set();
-    // 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
+    // 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
     myCompatible: number = 0;
     myObject: ObjectA | null = null;
 
@@ -245,222 +243,222 @@ class ComplexObject {
         }
         const beforeReadIndex = buffer.getReadOffset();
         const packet = new ComplexObject();
-        const result19 = buffer.readByte();
-        packet.a = result19;
-        const result20 = buffer.readByte();
-        packet.aa = result20;
-        const array21 = buffer.readByteArray();
-        packet.aaa = array21;
-        const array22 = buffer.readByteArray();
-        packet.aaaa = array22;
-        const result23 = buffer.readShort();
-        packet.b = result23;
-        const result24 = buffer.readShort();
-        packet.bb = result24;
-        const array25 = buffer.readShortArray();
-        packet.bbb = array25;
-        const array26 = buffer.readShortArray();
-        packet.bbbb = array26;
-        const result27 = buffer.readInt();
-        packet.c = result27;
-        const result28 = buffer.readInt();
-        packet.cc = result28;
-        const array29 = buffer.readIntArray();
-        packet.ccc = array29;
-        const array30 = buffer.readIntArray();
-        packet.cccc = array30;
-        const result31 = buffer.readLong();
-        packet.d = result31;
-        const result32 = buffer.readLong();
-        packet.dd = result32;
-        const array33 = buffer.readLongArray();
-        packet.ddd = array33;
-        const array34 = buffer.readLongArray();
-        packet.dddd = array34;
-        const result35 = buffer.readFloat();
-        packet.e = result35;
-        const result36 = buffer.readFloat();
-        packet.ee = result36;
-        const array37 = buffer.readFloatArray();
-        packet.eee = array37;
-        const array38 = buffer.readFloatArray();
-        packet.eeee = array38;
-        const result39 = buffer.readDouble();
-        packet.f = result39;
-        const result40 = buffer.readDouble();
-        packet.ff = result40;
-        const array41 = buffer.readDoubleArray();
-        packet.fff = array41;
-        const array42 = buffer.readDoubleArray();
-        packet.ffff = array42;
-        const result43 = buffer.readBoolean(); 
-        packet.g = result43;
-        const result44 = buffer.readBoolean(); 
-        packet.gg = result44;
-        const array45 = buffer.readBooleanArray();
-        packet.ggg = array45;
-        const array46 = buffer.readBooleanArray();
-        packet.gggg = array46;
-        const result47 = buffer.readString();
-        packet.jj = result47;
-        const array48 = buffer.readStringArray();
-        packet.jjj = array48;
-        const result49 = buffer.readPacket(102);
-        packet.kk = result49;
-        const array50 = buffer.readPacketArray(102);
-        packet.kkk = array50;
-        const list51 = buffer.readIntList();
-        packet.l = list51;
-        const result52 = new Array<Array<Array<number>>>();
-        const size53 = buffer.readInt();
-        if (size53 > 0) {
-            for (let index54 = 0; index54 < size53; index54++) {
-                const result55 = new Array<Array<number>>();
-                const size56 = buffer.readInt();
-                if (size56 > 0) {
-                    for (let index57 = 0; index57 < size56; index57++) {
-                        const list58 = buffer.readIntList();
-                        result55.push(list58);
+        const result0 = buffer.readByte();
+        packet.a = result0;
+        const result1 = buffer.readByte();
+        packet.aa = result1;
+        const array2 = buffer.readByteArray();
+        packet.aaa = array2;
+        const array3 = buffer.readByteArray();
+        packet.aaaa = array3;
+        const result4 = buffer.readShort();
+        packet.b = result4;
+        const result5 = buffer.readShort();
+        packet.bb = result5;
+        const array6 = buffer.readShortArray();
+        packet.bbb = array6;
+        const array7 = buffer.readShortArray();
+        packet.bbbb = array7;
+        const result8 = buffer.readInt();
+        packet.c = result8;
+        const result9 = buffer.readInt();
+        packet.cc = result9;
+        const array10 = buffer.readIntArray();
+        packet.ccc = array10;
+        const array11 = buffer.readIntArray();
+        packet.cccc = array11;
+        const result12 = buffer.readLong();
+        packet.d = result12;
+        const result13 = buffer.readLong();
+        packet.dd = result13;
+        const array14 = buffer.readLongArray();
+        packet.ddd = array14;
+        const array15 = buffer.readLongArray();
+        packet.dddd = array15;
+        const result16 = buffer.readFloat();
+        packet.e = result16;
+        const result17 = buffer.readFloat();
+        packet.ee = result17;
+        const array18 = buffer.readFloatArray();
+        packet.eee = array18;
+        const array19 = buffer.readFloatArray();
+        packet.eeee = array19;
+        const result20 = buffer.readDouble();
+        packet.f = result20;
+        const result21 = buffer.readDouble();
+        packet.ff = result21;
+        const array22 = buffer.readDoubleArray();
+        packet.fff = array22;
+        const array23 = buffer.readDoubleArray();
+        packet.ffff = array23;
+        const result24 = buffer.readBoolean(); 
+        packet.g = result24;
+        const result25 = buffer.readBoolean(); 
+        packet.gg = result25;
+        const array26 = buffer.readBooleanArray();
+        packet.ggg = array26;
+        const array27 = buffer.readBooleanArray();
+        packet.gggg = array27;
+        const result28 = buffer.readString();
+        packet.jj = result28;
+        const array29 = buffer.readStringArray();
+        packet.jjj = array29;
+        const result30 = buffer.readPacket(102);
+        packet.kk = result30;
+        const array31 = buffer.readPacketArray(102);
+        packet.kkk = array31;
+        const list32 = buffer.readIntList();
+        packet.l = list32;
+        const result33 = new Array<Array<Array<number>>>();
+        const size34 = buffer.readInt();
+        if (size34 > 0) {
+            for (let index35 = 0; index35 < size34; index35++) {
+                const result36 = new Array<Array<number>>();
+                const size37 = buffer.readInt();
+                if (size37 > 0) {
+                    for (let index38 = 0; index38 < size37; index38++) {
+                        const list39 = buffer.readIntList();
+                        result36.push(list39);
                     }
                 }
-                result52.push(result55);
+                result33.push(result36);
             }
         }
-        packet.ll = result52;
-        const result59 = new Array<Array<ObjectA>>();
-        const size60 = buffer.readInt();
-        if (size60 > 0) {
-            for (let index61 = 0; index61 < size60; index61++) {
-                const list62 = buffer.readPacketList(102);
-                result59.push(list62);
+        packet.ll = result33;
+        const result40 = new Array<Array<ObjectA>>();
+        const size41 = buffer.readInt();
+        if (size41 > 0) {
+            for (let index42 = 0; index42 < size41; index42++) {
+                const list43 = buffer.readPacketList(102);
+                result40.push(list43);
             }
         }
-        packet.lll = result59;
-        const list63 = buffer.readStringList();
-        packet.llll = list63;
-        const result64 = new Array<Map<number, string>>();
-        const size65 = buffer.readInt();
-        if (size65 > 0) {
-            for (let index66 = 0; index66 < size65; index66++) {
-                const map67 = buffer.readIntStringMap();
-                result64.push(map67);
+        packet.lll = result40;
+        const list44 = buffer.readStringList();
+        packet.llll = list44;
+        const result45 = new Array<Map<number, string>>();
+        const size46 = buffer.readInt();
+        if (size46 > 0) {
+            for (let index47 = 0; index47 < size46; index47++) {
+                const map48 = buffer.readIntStringMap();
+                result45.push(map48);
             }
         }
-        packet.lllll = result64;
-        const map68 = buffer.readIntStringMap();
-        packet.m = map68;
-        const map69 = buffer.readIntPacketMap(102);
-        packet.mm = map69;
-        const result70 = new Map<ObjectA, Array<number>>();
+        packet.lllll = result45;
+        const map49 = buffer.readIntStringMap();
+        packet.m = map49;
+        const map50 = buffer.readIntPacketMap(102);
+        packet.mm = map50;
+        const result51 = new Map<ObjectA, Array<number>>();
+        const size52 = buffer.readInt();
+        if (size52 > 0) {
+            for (let index53 = 0; index53 < size52; index53++) {
+                const result54 = buffer.readPacket(102);
+                const list55 = buffer.readIntList();
+                result51.set(result54, list55);
+            }
+        }
+        packet.mmm = result51;
+        const result56 = new Map<Array<Array<ObjectA>>, Array<Array<Array<number>>>>();
+        const size57 = buffer.readInt();
+        if (size57 > 0) {
+            for (let index58 = 0; index58 < size57; index58++) {
+                const result59 = new Array<Array<ObjectA>>();
+                const size60 = buffer.readInt();
+                if (size60 > 0) {
+                    for (let index61 = 0; index61 < size60; index61++) {
+                        const list62 = buffer.readPacketList(102);
+                        result59.push(list62);
+                    }
+                }
+                const result63 = new Array<Array<Array<number>>>();
+                const size64 = buffer.readInt();
+                if (size64 > 0) {
+                    for (let index65 = 0; index65 < size64; index65++) {
+                        const result66 = new Array<Array<number>>();
+                        const size67 = buffer.readInt();
+                        if (size67 > 0) {
+                            for (let index68 = 0; index68 < size67; index68++) {
+                                const list69 = buffer.readIntList();
+                                result66.push(list69);
+                            }
+                        }
+                        result63.push(result66);
+                    }
+                }
+                result56.set(result59, result63);
+            }
+        }
+        packet.mmmm = result56;
+        const result70 = new Map<Array<Map<number, string>>, Set<Map<number, string>>>();
         const size71 = buffer.readInt();
         if (size71 > 0) {
             for (let index72 = 0; index72 < size71; index72++) {
-                const result73 = buffer.readPacket(102);
-                const list74 = buffer.readIntList();
-                result70.set(result73, list74);
-            }
-        }
-        packet.mmm = result70;
-        const result75 = new Map<Array<Array<ObjectA>>, Array<Array<Array<number>>>>();
-        const size76 = buffer.readInt();
-        if (size76 > 0) {
-            for (let index77 = 0; index77 < size76; index77++) {
-                const result78 = new Array<Array<ObjectA>>();
-                const size79 = buffer.readInt();
-                if (size79 > 0) {
-                    for (let index80 = 0; index80 < size79; index80++) {
-                        const list81 = buffer.readPacketList(102);
-                        result78.push(list81);
+                const result73 = new Array<Map<number, string>>();
+                const size74 = buffer.readInt();
+                if (size74 > 0) {
+                    for (let index75 = 0; index75 < size74; index75++) {
+                        const map76 = buffer.readIntStringMap();
+                        result73.push(map76);
                     }
                 }
-                const result82 = new Array<Array<Array<number>>>();
-                const size83 = buffer.readInt();
-                if (size83 > 0) {
-                    for (let index84 = 0; index84 < size83; index84++) {
-                        const result85 = new Array<Array<number>>();
-                        const size86 = buffer.readInt();
-                        if (size86 > 0) {
-                            for (let index87 = 0; index87 < size86; index87++) {
-                                const list88 = buffer.readIntList();
-                                result85.push(list88);
-                            }
-                        }
-                        result82.push(result85);
+                const result77 = new Set<Map<number, string>>();
+                const size78 = buffer.readInt();
+                if (size78 > 0) {
+                    for (let index79 = 0; index79 < size78; index79++) {
+                        const map80 = buffer.readIntStringMap();
+                        result77.add(map80);
                     }
                 }
-                result75.set(result78, result82);
+                result70.set(result73, result77);
             }
         }
-        packet.mmmm = result75;
-        const result89 = new Map<Array<Map<number, string>>, Set<Map<number, string>>>();
+        packet.mmmmm = result70;
+        const set81 = buffer.readIntSet();
+        packet.s = set81;
+        const result82 = new Set<Set<Array<number>>>();
+        const size83 = buffer.readInt();
+        if (size83 > 0) {
+            for (let index84 = 0; index84 < size83; index84++) {
+                const result85 = new Set<Array<number>>();
+                const size86 = buffer.readInt();
+                if (size86 > 0) {
+                    for (let index87 = 0; index87 < size86; index87++) {
+                        const list88 = buffer.readIntList();
+                        result85.add(list88);
+                    }
+                }
+                result82.add(result85);
+            }
+        }
+        packet.ss = result82;
+        const result89 = new Set<Set<ObjectA>>();
         const size90 = buffer.readInt();
         if (size90 > 0) {
             for (let index91 = 0; index91 < size90; index91++) {
-                const result92 = new Array<Map<number, string>>();
-                const size93 = buffer.readInt();
-                if (size93 > 0) {
-                    for (let index94 = 0; index94 < size93; index94++) {
-                        const map95 = buffer.readIntStringMap();
-                        result92.push(map95);
-                    }
-                }
-                const result96 = new Set<Map<number, string>>();
-                const size97 = buffer.readInt();
-                if (size97 > 0) {
-                    for (let index98 = 0; index98 < size97; index98++) {
-                        const map99 = buffer.readIntStringMap();
-                        result96.add(map99);
-                    }
-                }
-                result89.set(result92, result96);
+                const set92 = buffer.readPacketSet(102);
+                result89.add(set92);
             }
         }
-        packet.mmmmm = result89;
-        const set100 = buffer.readIntSet();
-        packet.s = set100;
-        const result101 = new Set<Set<Array<number>>>();
-        const size102 = buffer.readInt();
-        if (size102 > 0) {
-            for (let index103 = 0; index103 < size102; index103++) {
-                const result104 = new Set<Array<number>>();
-                const size105 = buffer.readInt();
-                if (size105 > 0) {
-                    for (let index106 = 0; index106 < size105; index106++) {
-                        const list107 = buffer.readIntList();
-                        result104.add(list107);
-                    }
-                }
-                result101.add(result104);
+        packet.sss = result89;
+        const set93 = buffer.readStringSet();
+        packet.ssss = set93;
+        const result94 = new Set<Map<number, string>>();
+        const size95 = buffer.readInt();
+        if (size95 > 0) {
+            for (let index96 = 0; index96 < size95; index96++) {
+                const map97 = buffer.readIntStringMap();
+                result94.add(map97);
             }
         }
-        packet.ss = result101;
-        const result108 = new Set<Set<ObjectA>>();
-        const size109 = buffer.readInt();
-        if (size109 > 0) {
-            for (let index110 = 0; index110 < size109; index110++) {
-                const set111 = buffer.readPacketSet(102);
-                result108.add(set111);
-            }
-        }
-        packet.sss = result108;
-        const set112 = buffer.readStringSet();
-        packet.ssss = set112;
-        const result113 = new Set<Map<number, string>>();
-        const size114 = buffer.readInt();
-        if (size114 > 0) {
-            for (let index115 = 0; index115 < size114; index115++) {
-                const map116 = buffer.readIntStringMap();
-                result113.add(map116);
-            }
-        }
-        packet.sssss = result113;
+        packet.sssss = result94;
         if (buffer.compatibleRead(beforeReadIndex, length)) {
-            const result117 = buffer.readInt();
-            packet.myCompatible = result117;
+            const result98 = buffer.readInt();
+            packet.myCompatible = result98;
         }
         if (buffer.compatibleRead(beforeReadIndex, length)) {
-            const result118 = buffer.readPacket(102);
-            packet.myObject = result118;
+            const result99 = buffer.readPacket(102);
+            packet.myObject = result99;
         }
         if (length > 0) {
             buffer.setReadOffset(beforeReadIndex + length);

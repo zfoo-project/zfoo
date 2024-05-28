@@ -1,8 +1,6 @@
 import IByteBuffer from '../IByteBuffer';
 
-
 class EmptyObject {
-
     
 
     static PROTOCOL_ID: number = 0;

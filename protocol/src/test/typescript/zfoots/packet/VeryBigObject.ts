@@ -1,9 +1,7 @@
 import IByteBuffer from '../IByteBuffer';
 import ObjectA from './ObjectA';
 
-
 class VeryBigObject {
-
     a1: number = 0;
     aa1: number = 0;
     aaa1: Array<number> = [];

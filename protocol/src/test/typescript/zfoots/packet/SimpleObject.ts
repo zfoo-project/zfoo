@@ -1,8 +1,6 @@
 import IByteBuffer from '../IByteBuffer';
 
-
 class SimpleObject {
-
     c: number = 0;
     g: boolean = false;
 
