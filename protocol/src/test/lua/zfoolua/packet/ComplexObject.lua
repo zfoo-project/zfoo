@@ -53,7 +53,7 @@ function ComplexObject:new()
         sss = {}, -- HashSet<HashSet<ObjectA>>
         ssss = {}, -- HashSet<string>
         sssss = {}, -- HashSet<Dictionary<int, string>>
-        -- 如果要修改协议并且兼容老协议，需要加上Compatible注解，按照增加的顺序添加order
+        -- 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
         myCompatible = 0, -- int
         myObject = nil -- ObjectA
     }
@@ -64,6 +64,14 @@ end
 
 function ComplexObject:protocolId()
     return 100
+end
+
+function ComplexObject:protocolName()
+    return "ComplexObject"
+end
+
+function ComplexObject:__tostring()
+    return table.serializeTableToJson(self)
 end
 
 function ComplexObject:write(buffer, packet)
@@ -247,222 +255,222 @@ function ComplexObject:read(buffer)
     end
     local beforeReadIndex = buffer:getReadOffset()
     local packet = ComplexObject:new()
-    local result32 = buffer:readByte()
-    packet.a = result32
-    local result33 = buffer:readByte()
-    packet.aa = result33
-    local array34 = buffer:readByteArray()
-    packet.aaa = array34
-    local array35 = buffer:readByteArray()
-    packet.aaaa = array35
-    local result36 = buffer:readShort()
-    packet.b = result36
-    local result37 = buffer:readShort()
-    packet.bb = result37
-    local array38 = buffer:readShortArray()
-    packet.bbb = array38
-    local array39 = buffer:readShortArray()
-    packet.bbbb = array39
-    local result40 = buffer:readInt()
-    packet.c = result40
-    local result41 = buffer:readInt()
-    packet.cc = result41
-    local array42 = buffer:readIntArray()
-    packet.ccc = array42
-    local array43 = buffer:readIntArray()
-    packet.cccc = array43
-    local result44 = buffer:readLong()
-    packet.d = result44
-    local result45 = buffer:readLong()
-    packet.dd = result45
-    local array46 = buffer:readLongArray()
-    packet.ddd = array46
-    local array47 = buffer:readLongArray()
-    packet.dddd = array47
-    local result48 = buffer:readFloat()
-    packet.e = result48
-    local result49 = buffer:readFloat()
-    packet.ee = result49
-    local array50 = buffer:readFloatArray()
-    packet.eee = array50
-    local array51 = buffer:readFloatArray()
-    packet.eeee = array51
-    local result52 = buffer:readDouble()
-    packet.f = result52
-    local result53 = buffer:readDouble()
-    packet.ff = result53
-    local array54 = buffer:readDoubleArray()
-    packet.fff = array54
-    local array55 = buffer:readDoubleArray()
-    packet.ffff = array55
-    local result56 = buffer:readBoolean()
-    packet.g = result56
-    local result57 = buffer:readBoolean()
-    packet.gg = result57
-    local array58 = buffer:readBooleanArray()
-    packet.ggg = array58
-    local array59 = buffer:readBooleanArray()
-    packet.gggg = array59
-    local result60 = buffer:readString()
-    packet.jj = result60
-    local array61 = buffer:readStringArray()
-    packet.jjj = array61
-    local result62 = buffer:readPacket(102)
-    packet.kk = result62
-    local array63 = buffer:readPacketArray(102)
-    packet.kkk = array63
-    local list64 = buffer:readIntArray()
-    packet.l = list64
-    local result65 = {}
-    local size66 = buffer:readInt()
-    if size66 > 0 then
-        for index67 = 1, size66 do
-            local result68 = {}
-            local size69 = buffer:readInt()
-            if size69 > 0 then
-                for index70 = 1, size69 do
-                    local list71 = buffer:readIntArray()
-                    table.insert(result68, list71)
+    local result0 = buffer:readByte()
+    packet.a = result0
+    local result1 = buffer:readByte()
+    packet.aa = result1
+    local array2 = buffer:readByteArray()
+    packet.aaa = array2
+    local array3 = buffer:readByteArray()
+    packet.aaaa = array3
+    local result4 = buffer:readShort()
+    packet.b = result4
+    local result5 = buffer:readShort()
+    packet.bb = result5
+    local array6 = buffer:readShortArray()
+    packet.bbb = array6
+    local array7 = buffer:readShortArray()
+    packet.bbbb = array7
+    local result8 = buffer:readInt()
+    packet.c = result8
+    local result9 = buffer:readInt()
+    packet.cc = result9
+    local array10 = buffer:readIntArray()
+    packet.ccc = array10
+    local array11 = buffer:readIntArray()
+    packet.cccc = array11
+    local result12 = buffer:readLong()
+    packet.d = result12
+    local result13 = buffer:readLong()
+    packet.dd = result13
+    local array14 = buffer:readLongArray()
+    packet.ddd = array14
+    local array15 = buffer:readLongArray()
+    packet.dddd = array15
+    local result16 = buffer:readFloat()
+    packet.e = result16
+    local result17 = buffer:readFloat()
+    packet.ee = result17
+    local array18 = buffer:readFloatArray()
+    packet.eee = array18
+    local array19 = buffer:readFloatArray()
+    packet.eeee = array19
+    local result20 = buffer:readDouble()
+    packet.f = result20
+    local result21 = buffer:readDouble()
+    packet.ff = result21
+    local array22 = buffer:readDoubleArray()
+    packet.fff = array22
+    local array23 = buffer:readDoubleArray()
+    packet.ffff = array23
+    local result24 = buffer:readBoolean()
+    packet.g = result24
+    local result25 = buffer:readBoolean()
+    packet.gg = result25
+    local array26 = buffer:readBooleanArray()
+    packet.ggg = array26
+    local array27 = buffer:readBooleanArray()
+    packet.gggg = array27
+    local result28 = buffer:readString()
+    packet.jj = result28
+    local array29 = buffer:readStringArray()
+    packet.jjj = array29
+    local result30 = buffer:readPacket(102)
+    packet.kk = result30
+    local array31 = buffer:readPacketArray(102)
+    packet.kkk = array31
+    local list32 = buffer:readIntArray()
+    packet.l = list32
+    local result33 = {}
+    local size34 = buffer:readInt()
+    if size34 > 0 then
+        for index35 = 1, size34 do
+            local result36 = {}
+            local size37 = buffer:readInt()
+            if size37 > 0 then
+                for index38 = 1, size37 do
+                    local list39 = buffer:readIntArray()
+                    table.insert(result36, list39)
                 end
             end
-            table.insert(result65, result68)
+            table.insert(result33, result36)
         end
     end
-    packet.ll = result65
-    local result72 = {}
-    local size73 = buffer:readInt()
-    if size73 > 0 then
-        for index74 = 1, size73 do
-            local list75 = buffer:readPacketArray(102)
-            table.insert(result72, list75)
+    packet.ll = result33
+    local result40 = {}
+    local size41 = buffer:readInt()
+    if size41 > 0 then
+        for index42 = 1, size41 do
+            local list43 = buffer:readPacketArray(102)
+            table.insert(result40, list43)
         end
     end
-    packet.lll = result72
-    local list76 = buffer:readStringArray()
-    packet.llll = list76
-    local result77 = {}
-    local size78 = buffer:readInt()
-    if size78 > 0 then
-        for index79 = 1, size78 do
-            local map80 = buffer:readIntStringMap()
-            table.insert(result77, map80)
+    packet.lll = result40
+    local list44 = buffer:readStringArray()
+    packet.llll = list44
+    local result45 = {}
+    local size46 = buffer:readInt()
+    if size46 > 0 then
+        for index47 = 1, size46 do
+            local map48 = buffer:readIntStringMap()
+            table.insert(result45, map48)
         end
     end
-    packet.lllll = result77
-    local map81 = buffer:readIntStringMap()
-    packet.m = map81
-    local map82 = buffer:readIntPacketMap(102)
-    packet.mm = map82
-    local result83 = {}
-    local size84 = buffer:readInt()
-    if size84 > 0 then
-        for index85 = 1, size84 do
-            local result86 = buffer:readPacket(102)
-            local list87 = buffer:readIntArray()
-            result83[result86] = list87
+    packet.lllll = result45
+    local map49 = buffer:readIntStringMap()
+    packet.m = map49
+    local map50 = buffer:readIntPacketMap(102)
+    packet.mm = map50
+    local result51 = {}
+    local size52 = buffer:readInt()
+    if size52 > 0 then
+        for index53 = 1, size52 do
+            local result54 = buffer:readPacket(102)
+            local list55 = buffer:readIntArray()
+            result51[result54] = list55
         end
     end
-    packet.mmm = result83
-    local result88 = {}
-    local size89 = buffer:readInt()
-    if size89 > 0 then
-        for index90 = 1, size89 do
-            local result91 = {}
-            local size92 = buffer:readInt()
-            if size92 > 0 then
-                for index93 = 1, size92 do
-                    local list94 = buffer:readPacketArray(102)
-                    table.insert(result91, list94)
+    packet.mmm = result51
+    local result56 = {}
+    local size57 = buffer:readInt()
+    if size57 > 0 then
+        for index58 = 1, size57 do
+            local result59 = {}
+            local size60 = buffer:readInt()
+            if size60 > 0 then
+                for index61 = 1, size60 do
+                    local list62 = buffer:readPacketArray(102)
+                    table.insert(result59, list62)
                 end
             end
-            local result95 = {}
-            local size96 = buffer:readInt()
-            if size96 > 0 then
-                for index97 = 1, size96 do
-                    local result98 = {}
-                    local size99 = buffer:readInt()
-                    if size99 > 0 then
-                        for index100 = 1, size99 do
-                            local list101 = buffer:readIntArray()
-                            table.insert(result98, list101)
+            local result63 = {}
+            local size64 = buffer:readInt()
+            if size64 > 0 then
+                for index65 = 1, size64 do
+                    local result66 = {}
+                    local size67 = buffer:readInt()
+                    if size67 > 0 then
+                        for index68 = 1, size67 do
+                            local list69 = buffer:readIntArray()
+                            table.insert(result66, list69)
                         end
                     end
-                    table.insert(result95, result98)
+                    table.insert(result63, result66)
                 end
             end
-            result88[result91] = result95
+            result56[result59] = result63
         end
     end
-    packet.mmmm = result88
-    local result102 = {}
-    local size103 = buffer:readInt()
-    if size103 > 0 then
-        for index104 = 1, size103 do
-            local result105 = {}
-            local size106 = buffer:readInt()
-            if size106 > 0 then
-                for index107 = 1, size106 do
-                    local map108 = buffer:readIntStringMap()
-                    table.insert(result105, map108)
+    packet.mmmm = result56
+    local result70 = {}
+    local size71 = buffer:readInt()
+    if size71 > 0 then
+        for index72 = 1, size71 do
+            local result73 = {}
+            local size74 = buffer:readInt()
+            if size74 > 0 then
+                for index75 = 1, size74 do
+                    local map76 = buffer:readIntStringMap()
+                    table.insert(result73, map76)
                 end
             end
-            local result109 = {}
-            local size110 = buffer:readInt()
-            if size110 > 0 then
-                for index111 = 1, size110 do
-                    local map112 = buffer:readIntStringMap()
-                    table.insert(result109, map112)
+            local result77 = {}
+            local size78 = buffer:readInt()
+            if size78 > 0 then
+                for index79 = 1, size78 do
+                    local map80 = buffer:readIntStringMap()
+                    table.insert(result77, map80)
                 end
             end
-            result102[result105] = result109
+            result70[result73] = result77
         end
     end
-    packet.mmmmm = result102
-    local set113 = buffer:readIntArray()
-    packet.s = set113
-    local result114 = {}
-    local size115 = buffer:readInt()
-    if size115 > 0 then
-        for index116 = 1, size115 do
-            local result117 = {}
-            local size118 = buffer:readInt()
-            if size118 > 0 then
-                for index119 = 1, size118 do
-                    local list120 = buffer:readIntArray()
-                    table.insert(result117, list120)
+    packet.mmmmm = result70
+    local set81 = buffer:readIntArray()
+    packet.s = set81
+    local result82 = {}
+    local size83 = buffer:readInt()
+    if size83 > 0 then
+        for index84 = 1, size83 do
+            local result85 = {}
+            local size86 = buffer:readInt()
+            if size86 > 0 then
+                for index87 = 1, size86 do
+                    local list88 = buffer:readIntArray()
+                    table.insert(result85, list88)
                 end
             end
-            table.insert(result114, result117)
+            table.insert(result82, result85)
         end
     end
-    packet.ss = result114
-    local result121 = {}
-    local size122 = buffer:readInt()
-    if size122 > 0 then
-        for index123 = 1, size122 do
-            local set124 = buffer:readPacketArray(102)
-            table.insert(result121, set124)
+    packet.ss = result82
+    local result89 = {}
+    local size90 = buffer:readInt()
+    if size90 > 0 then
+        for index91 = 1, size90 do
+            local set92 = buffer:readPacketArray(102)
+            table.insert(result89, set92)
         end
     end
-    packet.sss = result121
-    local set125 = buffer:readStringArray()
-    packet.ssss = set125
-    local result126 = {}
-    local size127 = buffer:readInt()
-    if size127 > 0 then
-        for index128 = 1, size127 do
-            local map129 = buffer:readIntStringMap()
-            table.insert(result126, map129)
+    packet.sss = result89
+    local set93 = buffer:readStringArray()
+    packet.ssss = set93
+    local result94 = {}
+    local size95 = buffer:readInt()
+    if size95 > 0 then
+        for index96 = 1, size95 do
+            local map97 = buffer:readIntStringMap()
+            table.insert(result94, map97)
         end
     end
-    packet.sssss = result126
+    packet.sssss = result94
     if buffer:compatibleRead(beforeReadIndex, length) then
-        local result130 = buffer:readInt()
-        packet.myCompatible = result130
+        local result98 = buffer:readInt()
+        packet.myCompatible = result98
     end
     if buffer:compatibleRead(beforeReadIndex, length) then
-        local result131 = buffer:readPacket(102)
-        packet.myObject = result131
+        local result99 = buffer:readPacket(102)
+        packet.myObject = result99
     end
     if length > 0 then
         buffer:setReadOffset(beforeReadIndex + length)

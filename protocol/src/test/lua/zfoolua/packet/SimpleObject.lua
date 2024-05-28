@@ -15,6 +15,14 @@ function SimpleObject:protocolId()
     return 104
 end
 
+function SimpleObject:protocolName()
+    return "SimpleObject"
+end
+
+function SimpleObject:__tostring()
+    return table.serializeTableToJson(self)
+end
+
 function SimpleObject:write(buffer, packet)
     if packet == nil then
         buffer:writeInt(0)

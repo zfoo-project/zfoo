@@ -3,8 +3,7 @@ local ObjectB = {}
 
 function ObjectB:new()
     local obj = {
-        flag = false, -- bool
-        innerCompatibleValue = 0 -- int
+        flag = false -- bool
     }
     setmetatable(obj, self)
     self.__index = self
@@ -15,16 +14,21 @@ function ObjectB:protocolId()
     return 103
 end
 
+function ObjectB:protocolName()
+    return "ObjectB"
+end
+
+function ObjectB:__tostring()
+    return table.serializeTableToJson(self)
+end
+
 function ObjectB:write(buffer, packet)
     if packet == nil then
         buffer:writeInt(0)
         return
     end
-    local beforeWriteIndex = buffer:getWriteOffset()
-    buffer:writeInt(4)
+    buffer:writeInt(-1)
     buffer:writeBoolean(packet.flag)
-    buffer:writeInt(packet.innerCompatibleValue)
-    buffer:adjustPadding(4, beforeWriteIndex)
 end
 
 function ObjectB:read(buffer)
@@ -36,10 +40,6 @@ function ObjectB:read(buffer)
     local packet = ObjectB:new()
     local result0 = buffer:readBoolean()
     packet.flag = result0
-    if buffer:compatibleRead(beforeReadIndex, length) then
-        local result1 = buffer:readInt()
-        packet.innerCompatibleValue = result1
-    end
     if length > 0 then
         buffer:setReadOffset(beforeReadIndex + length)
     end

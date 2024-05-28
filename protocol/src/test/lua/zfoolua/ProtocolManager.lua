@@ -1,6 +1,6 @@
-protocols = {}
+local protocols = {}
 
-ProtocolManager = {}
+local ProtocolManager = {}
 
 -- table扩展方法，map的大小
 function table.mapSize(map)
@@ -14,7 +14,7 @@ end
 function ProtocolManager.getProtocol(protocolId)
     local protocol = protocols[protocolId]
     if protocol == nil then
-        error("[protocolId:" + protocolId + "]协议不存在")
+        error("[protocolId:" + protocolId + "] not exist")
     end
     return protocol
 end
@@ -32,7 +32,7 @@ function ProtocolManager.read(buffer)
     return ProtocolManager.getProtocol(protocolId):read(buffer)
 end
 
-function initProtocol()
+function ProtocolManager.initProtocol()
     local EmptyObject = require("zfoolua.packet.EmptyObject")
     local ComplexObject = require("zfoolua.packet.ComplexObject")
     local NormalObject = require("zfoolua.packet.NormalObject")
@@ -47,5 +47,4 @@ function initProtocol()
     protocols[104] = SimpleObject
 end
 
-ProtocolManager.initProtocol = initProtocol
 return ProtocolManager

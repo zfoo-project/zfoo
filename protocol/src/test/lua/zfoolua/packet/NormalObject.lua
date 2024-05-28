@@ -20,8 +20,7 @@ function NormalObject:new()
         m = {}, -- Dictionary<int, string>
         mm = {}, -- Dictionary<int, ObjectA>
         s = {}, -- HashSet<int>
-        ssss = {}, -- HashSet<string>
-        outCompatibleValue = 0 -- int
+        ssss = {} -- HashSet<string>
     }
     setmetatable(obj, self)
     self.__index = self
@@ -32,13 +31,20 @@ function NormalObject:protocolId()
     return 101
 end
 
+function NormalObject:protocolName()
+    return "NormalObject"
+end
+
+function NormalObject:__tostring()
+    return table.serializeTableToJson(self)
+end
+
 function NormalObject:write(buffer, packet)
     if packet == nil then
         buffer:writeInt(0)
         return
     end
-    local beforeWriteIndex = buffer:getWriteOffset()
-    buffer:writeInt(854)
+    buffer:writeInt(-1)
     buffer:writeByte(packet.a)
     buffer:writeByteArray(packet.aaa)
     buffer:writeShort(packet.b)
@@ -57,8 +63,6 @@ function NormalObject:write(buffer, packet)
     buffer:writeIntPacketMap(packet.mm, 102)
     buffer:writeIntArray(packet.s)
     buffer:writeStringArray(packet.ssss)
-    buffer:writeInt(packet.outCompatibleValue)
-    buffer:adjustPadding(854, beforeWriteIndex)
 end
 
 function NormalObject:read(buffer)
@@ -104,10 +108,6 @@ function NormalObject:read(buffer)
     packet.s = set16
     local set17 = buffer:readStringArray()
     packet.ssss = set17
-    if buffer:compatibleRead(beforeReadIndex, length) then
-        local result18 = buffer:readInt()
-        packet.outCompatibleValue = result18
-    end
     if length > 0 then
         buffer:setReadOffset(beforeReadIndex + length)
     end

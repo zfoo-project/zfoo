@@ -17,6 +17,23 @@ local ByteBuffer = {}
 local trueBooleanStrValue = string.char(1)
 local falseBooleanStrValue = string.char(0)
 
+function serializeTableToJson(tbl)
+    local res = {}
+    for k, v in pairs(tbl) do
+        local key = tostring(k)
+        if type(v) == "number" then
+            res[#res + 1] = key .. ":" .. v
+        elseif type(v) == "string" then
+            res[#res + 1] = key .. ':"' .. v .. '"'
+        elseif type(v) == "table" then
+            res[#res + 1] = key .. ":" .. serializeTableToJson(v)
+        end
+    end
+    return "{" .. table.concat(res, ",") .. "}"
+end
+
+table.serializeTableToJson = serializeTableToJson;
+
 -------------------------------------构造器-------------------------------------
 function ByteBuffer:new()
     --buffer里的每一个元素为一个长度为1的字符串

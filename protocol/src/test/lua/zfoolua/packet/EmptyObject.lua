@@ -14,6 +14,14 @@ function EmptyObject:protocolId()
     return 0
 end
 
+function EmptyObject:protocolName()
+    return "EmptyObject"
+end
+
+function EmptyObject:__tostring()
+    return table.serializeTableToJson(self)
+end
+
 function EmptyObject:write(buffer, packet)
     if packet == nil then
         buffer:writeInt(0)

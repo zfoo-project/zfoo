@@ -5,8 +5,7 @@ function ObjectA:new()
     local obj = {
         a = 0, -- int
         m = {}, -- Dictionary<int, string>
-        objectB = nil, -- ObjectB
-        innerCompatibleValue = 0 -- int
+        objectB = nil -- ObjectB
     }
     setmetatable(obj, self)
     self.__index = self
@@ -17,18 +16,23 @@ function ObjectA:protocolId()
     return 102
 end
 
+function ObjectA:protocolName()
+    return "ObjectA"
+end
+
+function ObjectA:__tostring()
+    return table.serializeTableToJson(self)
+end
+
 function ObjectA:write(buffer, packet)
     if packet == nil then
         buffer:writeInt(0)
         return
     end
-    local beforeWriteIndex = buffer:getWriteOffset()
-    buffer:writeInt(201)
+    buffer:writeInt(-1)
     buffer:writeInt(packet.a)
     buffer:writeIntStringMap(packet.m)
     buffer:writePacket(packet.objectB, 103)
-    buffer:writeInt(packet.innerCompatibleValue)
-    buffer:adjustPadding(201, beforeWriteIndex)
 end
 
 function ObjectA:read(buffer)
@@ -44,10 +48,6 @@ function ObjectA:read(buffer)
     packet.m = map1
     local result2 = buffer:readPacket(103)
     packet.objectB = result2
-    if buffer:compatibleRead(beforeReadIndex, length) then
-        local result3 = buffer:readInt()
-        packet.innerCompatibleValue = result3
-    end
     if length > 0 then
         buffer:setReadOffset(beforeReadIndex + length)
     end
