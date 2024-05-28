@@ -29,6 +29,7 @@ public class GenerateTesting {
     @Test
     public void generateAllProtocols() {
         var op = GenerateOperation.NO_OPERATION;
+        op.setFoldProtocol(true);
 
         var generateLanguages = op.getGenerateLanguages();
 
@@ -44,7 +45,7 @@ public class GenerateTesting {
         generateLanguages.add(CodeLanguage.Python);
 
         // Initialize and then generate the protocol
-        ProtocolManager.initProtocolAuto(List.of(NormalObject.class, SimpleObject.class, EmptyObject.class), op);
+        ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), op);
     }
 
 }
