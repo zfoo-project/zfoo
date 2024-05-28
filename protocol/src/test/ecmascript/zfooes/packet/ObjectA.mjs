@@ -3,6 +3,7 @@ class ObjectA {
     a = 0; // number
     m = new Map(); // Map<number, string>
     objectB = null; // ObjectB | null
+    innerCompatibleValue = 0; // number
 
     static PROTOCOL_ID = 102;
 
@@ -15,10 +16,13 @@ class ObjectA {
             buffer.writeInt(0);
             return;
         }
-        buffer.writeInt(-1);
+        const beforeWriteIndex = buffer.getWriteOffset();
+        buffer.writeInt(201);
         buffer.writeInt(packet.a);
         buffer.writeIntStringMap(packet.m);
         buffer.writePacket(packet.objectB, 103);
+        buffer.writeInt(packet.innerCompatibleValue);
+        buffer.adjustPadding(201, beforeWriteIndex);
     }
 
     static read(buffer) {
@@ -34,6 +38,10 @@ class ObjectA {
         packet.m = map1;
         const result2 = buffer.readPacket(103);
         packet.objectB = result2;
+        if (buffer.compatibleRead(beforeReadIndex, length)) {
+            const result3 = buffer.readInt();
+            packet.innerCompatibleValue = result3;
+        }
         if (length > 0) {
             buffer.setReadOffset(beforeReadIndex + length);
         }

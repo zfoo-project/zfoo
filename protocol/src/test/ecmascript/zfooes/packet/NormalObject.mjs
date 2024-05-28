@@ -18,6 +18,8 @@ class NormalObject {
     mm = new Map(); // Map<number, ObjectA>
     s = new Set(); // Set<number>
     ssss = new Set(); // Set<string>
+    outCompatibleValue = 0; // number
+    outCompatibleValue2 = 0; // number
 
     static PROTOCOL_ID = 101;
 
@@ -30,7 +32,8 @@ class NormalObject {
             buffer.writeInt(0);
             return;
         }
-        buffer.writeInt(-1);
+        const beforeWriteIndex = buffer.getWriteOffset();
+        buffer.writeInt(857);
         buffer.writeByte(packet.a);
         buffer.writeByteArray(packet.aaa);
         buffer.writeShort(packet.b);
@@ -49,6 +52,9 @@ class NormalObject {
         buffer.writeIntPacketMap(packet.mm, 102);
         buffer.writeIntSet(packet.s);
         buffer.writeStringSet(packet.ssss);
+        buffer.writeInt(packet.outCompatibleValue);
+        buffer.writeInt(packet.outCompatibleValue2);
+        buffer.adjustPadding(857, beforeWriteIndex);
     }
 
     static read(buffer) {
@@ -94,6 +100,14 @@ class NormalObject {
         packet.s = set16;
         const set17 = buffer.readStringSet();
         packet.ssss = set17;
+        if (buffer.compatibleRead(beforeReadIndex, length)) {
+            const result18 = buffer.readInt();
+            packet.outCompatibleValue = result18;
+        }
+        if (buffer.compatibleRead(beforeReadIndex, length)) {
+            const result19 = buffer.readInt();
+            packet.outCompatibleValue2 = result19;
+        }
         if (length > 0) {
             buffer.setReadOffset(beforeReadIndex + length);
         }
