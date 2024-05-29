@@ -21,8 +21,6 @@ import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
-import com.zfoo.protocol.serializer.python.GeneratePyUtils;
-import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -133,15 +131,6 @@ public abstract class GenerateProtocolFile {
             GenerateGdUtils.createProtocolManager(generateProtocols);
             for (var protocolRegistration : generateProtocols) {
                 GenerateGdUtils.createGdProtocolFile((ProtocolRegistration) protocolRegistration);
-            }
-        }
-
-        // 生成Python协议
-        if (generateLanguages.contains(CodeLanguage.Python)) {
-            GeneratePyUtils.init(generateOperation);
-            GeneratePyUtils.createProtocolManager(generateProtocols);
-            for (var protocolRegistration : generateProtocols) {
-                GeneratePyUtils.createPyProtocolFile((ProtocolRegistration) protocolRegistration);
             }
         }
 

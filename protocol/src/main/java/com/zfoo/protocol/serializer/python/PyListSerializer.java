@@ -54,7 +54,7 @@ public class PyListSerializer implements IPySerializer {
         String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} in {}:", element, objectStr)).append(LS);
-        GeneratePyUtils.pySerializer(listField.getListElementRegistration().serializer())
+        CodeGeneratePython.pySerializer(listField.getListElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, listField.getListElementRegistration());
     }
 
@@ -81,7 +81,7 @@ public class PyListSerializer implements IPySerializer {
         builder.append(StringUtils.format("if {} > 0:", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} in range({}):", i, size)).append(LS);
-        String readObject = GeneratePyUtils.pySerializer(listField.getListElementRegistration().serializer())
+        String readObject = CodeGeneratePython.pySerializer(listField.getListElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, listField.getListElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.append({})", result, readObject)).append(LS);

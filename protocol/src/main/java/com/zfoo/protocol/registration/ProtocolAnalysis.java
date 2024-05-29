@@ -27,7 +27,6 @@ import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.field.*;
 import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
-import com.zfoo.protocol.serializer.python.GeneratePyUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.*;
 import com.zfoo.protocol.xml.XmlProtocols;
@@ -397,7 +396,6 @@ public class ProtocolAnalysis {
         GenerateProtocolPath.clear();
         GenerateGoUtils.clear();
         GenerateGdUtils.clear();
-        GeneratePyUtils.clear();
     }
 
     public static List<Field> getFields(Class<?> clazz) {

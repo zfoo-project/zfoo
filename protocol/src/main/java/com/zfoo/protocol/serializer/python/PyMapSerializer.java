@@ -58,9 +58,9 @@ public class PyMapSerializer implements IPySerializer {
         builder.append(StringUtils.format("for {} in {}:", key, objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{} = {}[{}]", value, objectStr, key)).append(LS);
-        GeneratePyUtils.pySerializer(mapField.getMapKeyRegistration().serializer())
+        CodeGeneratePython.pySerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
-        GeneratePyUtils.pySerializer(mapField.getMapValueRegistration().serializer())
+        CodeGeneratePython.pySerializer(mapField.getMapValueRegistration().serializer())
                 .writeObject(builder, value, deep + 2, field, mapField.getMapValueRegistration());
     }
 
@@ -88,11 +88,11 @@ public class PyMapSerializer implements IPySerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} in range({}):", i, size)).append(LS);
 
-        String keyObject = GeneratePyUtils.pySerializer(mapField.getMapKeyRegistration().serializer())
+        String keyObject = CodeGeneratePython.pySerializer(mapField.getMapKeyRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapKeyRegistration());
 
 
-        String valueObject = GeneratePyUtils.pySerializer(mapField.getMapValueRegistration().serializer())
+        String valueObject = CodeGeneratePython.pySerializer(mapField.getMapValueRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
 

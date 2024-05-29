@@ -1,6 +1,5 @@
 
 class ObjectA:
-
     a = 0  # int
     m = {}  # Dictionary<int, string>
     objectB = None  # ObjectB
@@ -42,4 +41,3 @@ class ObjectA:
         if length > 0:
             buffer.setReadOffset(beforeReadIndex + length)
         return packet
-

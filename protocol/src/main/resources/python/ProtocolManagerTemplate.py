@@ -1,8 +1,8 @@
-{}
+${protocol_imports}
 
 protocols = {}
 
-{}
+${protocol_manager_registrations}
 
 def getProtocol(protocolId):
 	return protocols[protocolId]

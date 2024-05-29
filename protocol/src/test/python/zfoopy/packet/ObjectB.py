@@ -1,6 +1,5 @@
 
 class ObjectB:
-
     flag = False  # bool
     innerCompatibleValue = 0  # int
 
@@ -34,4 +33,3 @@ class ObjectB:
         if length > 0:
             buffer.setReadOffset(beforeReadIndex + length)
         return packet
-

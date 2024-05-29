@@ -1,6 +1,5 @@
 
 class VeryBigObject:
-
     a1 = 0  # byte
     aa1 = 0  # byte
     aaa1 = []  # byte[]
@@ -13399,4 +13398,3 @@ class VeryBigObject:
         if length > 0:
             buffer.setReadOffset(beforeReadIndex + length)
         return packet
-

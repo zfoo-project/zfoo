@@ -1,6 +1,5 @@
 
 class NormalObject:
-
     a = 0  # byte
     aaa = []  # byte[]
     b = 0  # short
@@ -107,4 +106,3 @@ class NormalObject:
         if length > 0:
             buffer.setReadOffset(beforeReadIndex + length)
         return packet
-

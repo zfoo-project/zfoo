@@ -54,7 +54,7 @@ public class PySetSerializer implements IPySerializer {
         String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} in {}:", element, objectStr)).append(LS);
-        GeneratePyUtils.pySerializer(setField.getSetElementRegistration().serializer())
+        CodeGeneratePython.pySerializer(setField.getSetElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
     }
 
@@ -81,7 +81,7 @@ public class PySetSerializer implements IPySerializer {
         builder.append(StringUtils.format("if {} > 0:", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} in range({}):", i, size)).append(LS);
-        String readObject = GeneratePyUtils.pySerializer(setField.getSetElementRegistration().serializer())
+        String readObject = CodeGeneratePython.pySerializer(setField.getSetElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
         builder.append(StringUtils.format("{}.append({})", result, readObject)).append(LS);

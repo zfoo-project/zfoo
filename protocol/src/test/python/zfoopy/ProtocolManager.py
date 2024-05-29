@@ -1,10 +1,10 @@
-from . import EmptyObject
-from . import VeryBigObject
-from . import ComplexObject
-from . import NormalObject
-from . import ObjectA
-from . import ObjectB
-from . import SimpleObject
+from .packet import EmptyObject
+from .packet import VeryBigObject
+from .packet import ComplexObject
+from .packet import NormalObject
+from .packet import ObjectA
+from .packet import ObjectB
+from .packet import SimpleObject
 
 protocols = {}
 

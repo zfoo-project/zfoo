@@ -1,6 +1,5 @@
 
 class SimpleObject:
-
     c = 0  # int
     g = False  # bool
 
@@ -31,4 +30,3 @@ class SimpleObject:
         if length > 0:
             buffer.setReadOffset(beforeReadIndex + length)
         return packet
-

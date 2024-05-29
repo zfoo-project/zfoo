@@ -1,6 +1,5 @@
 
 class EmptyObject:
-
     
 
     def protocolId(self):
@@ -25,4 +24,3 @@ class EmptyObject:
         if length > 0:
             buffer.setReadOffset(beforeReadIndex + length)
         return packet
-
