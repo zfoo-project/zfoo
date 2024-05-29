@@ -25,10 +25,6 @@ public interface IEntity<PK extends Comparable<PK>> {
     PK id();
 
     /**
-     * 设置主键
-     */
-    void setId(PK pk);
-    /**
      * 一个文档的写入到数据库的version版本，version的get和set方法
      * <p>
      * 写入一条数据到数据库的时候会对比当前entity的vs和数据库的vs是不是一样，不是一样的话无法写入，一致的话就写入数据并且让vs自增+1.

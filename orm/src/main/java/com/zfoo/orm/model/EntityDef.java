@@ -12,6 +12,7 @@
 
 package com.zfoo.orm.model;
 
+import com.zfoo.orm.anno.Id;
 import com.zfoo.orm.config.PersisterStrategy;
 import com.zfoo.protocol.util.ReflectionUtils;
 
@@ -54,8 +55,15 @@ public class EntityDef {
         return clazz;
     }
 
+    public IEntity<?> newEmptyEntity() {
+        var entity = ReflectionUtils.newInstance(clazz);
+        return entity;
+    }
+
     public IEntity<?> newEntity(Object id) {
         var entity = ReflectionUtils.newInstance(clazz);
+        var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
+        ReflectionUtils.setField(idFields[0], entity, id);
         return entity;
     }
 

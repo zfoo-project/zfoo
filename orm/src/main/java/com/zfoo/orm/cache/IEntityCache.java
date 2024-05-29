@@ -35,7 +35,7 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
      * <p>
      * CN: 从数据库中加载数据到缓存，如果数据库不存在则返回一个id为传入值的默认示例。并且入库。(设置了索引唯一的无法使用该方法)
      */
-    E loadOrInit(PK pk);
+    E loadOrCreate(PK pk);
 
     /**
      * 更新缓存中的数据，只更新缓存的时间戳，并通过一定策略写入到数据库

@@ -68,11 +68,6 @@ public class UserEntity implements IEntity<Long> {
         return id;
     }
 
-    @Override
-    public void setId(Long id) {
-        this.id=id;
-    }
-
     public long getId() {
         return id;
     }

@@ -122,7 +122,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         if (entity == null) {
             // 数据库无法加载缓存，返回默认值
             logger.warn("[{}] can not load [pk:{}] and use default entity to replace it", entityDef.getClazz().getSimpleName(), pk);
-            entity = (E) entityDef.newEntity(pk);
+            entity = (E) entityDef.newEmptyEntity();
         }
         pnode = new PNode<>(entity);
         cache.put(pk, pnode);
@@ -130,7 +130,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     }
 
     @Override
-    public E loadOrInit(PK pk) {
+    public E loadOrCreate(PK pk) {
         AssertionUtils.notNull(pk);
         var pnode = cache.get(pk);
         if (pnode != null) {
@@ -142,9 +142,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
         // 如果数据库中不存在则给一个默认值
         if (entity == null) {
-            // 数据库无法加载缓存，返回默认值
             entity = (E) entityDef.newEntity(pk);
-            entity.setId(pk);
             OrmContext.getAccessor().insert(entity);
         }
         pnode = new PNode<>(entity);

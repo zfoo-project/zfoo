@@ -70,7 +70,7 @@ public class EntityCachesTest {
         var mailEntityCaches = (IEntityCache<String, MailEntity>) OrmContext.getOrmManager().getEntityCaches(MailEntity.class);
 
         for (var i = 1; i <= 10; i++) {
-            var entity = mailEntityCaches.loadOrInit(String.valueOf(i));
+            var entity = mailEntityCaches.loadOrCreate(String.valueOf(i));
             entity.setContent("msg:" + i);
             mailEntityCaches.update(entity);
         }
