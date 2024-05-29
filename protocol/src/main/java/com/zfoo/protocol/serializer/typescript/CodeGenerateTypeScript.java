@@ -169,7 +169,7 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
                     , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
             ));
 
-            var outputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocol_id), protocol_name);
+            var outputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated TypeScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
@@ -234,7 +234,7 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         // import IByteBuffer first
         var protocolId = registration.getId();
         var importBuilder = new StringBuilder();
-        var protocolPath = GenerateProtocolPath.protocolPath(protocolId);
+        var protocolPath = GenerateProtocolPath.protocolPathPeriod(protocolId);
         var splits = protocolPath.split(StringUtils.PERIOD_REGEX);
         importBuilder.append(StringUtils.format("import IByteBuffer from '{}IByteBuffer';", "../".repeat(splits.length))).append(LS);
 

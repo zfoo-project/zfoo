@@ -123,7 +123,7 @@ public abstract class GeneratePyUtils {
 
         protocolTemplate = StringUtils.format(protocolTemplate, classNote, protocolClazzName
                 , fieldDefinition.trim(), protocolId, writeObject.trim(), protocolClazzName, readObject.trim());
-        var outputPath = StringUtils.format("{}/{}/{}.py", protocolOutputPath, GenerateProtocolPath.getProtocolPath(protocolId), protocolClazzName);
+        var outputPath = StringUtils.format("{}/{}/{}.py", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocolId), protocolClazzName);
         var file = new File(outputPath);
         FileUtils.writeStringToFile(file, protocolTemplate, true);
         logger.info("Generated Python protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());

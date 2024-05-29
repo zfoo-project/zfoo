@@ -136,7 +136,7 @@ public class CodeGenerateLua implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var path = GenerateProtocolPath.protocolPath(protocol_id);
+            var path = GenerateProtocolPath.protocolPathPeriod(protocol_id);
             protocol_imports.append(StringUtils.format("local {} = require(\"{}.{}.{}\")", protocol_name, protocolOutputRootPath, path.replace(StringUtils.SLASH, StringUtils.PERIOD), protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}", protocol_id, protocol_name)).append(LS);
         }
@@ -156,7 +156,7 @@ public class CodeGenerateLua implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             var formatProtocolTemplate = formatProtocolTemplate(registration);
-            var outputPath = StringUtils.format("{}/{}/{}.lua", protocolOutputPath, GenerateProtocolPath.protocolPath(protocol_id), protocol_name);
+            var outputPath = StringUtils.format("{}/{}/{}.lua", protocolOutputPath, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated Lua protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());

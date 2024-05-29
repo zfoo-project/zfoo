@@ -158,7 +158,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
 
-            var outputPath = StringUtils.format("{}/{}/{}.h", protocolOutputPath, GenerateProtocolPath.protocolPath(protocol_id), protocol_name);
+            var outputPath = StringUtils.format("{}/{}/{}.h", protocolOutputPath, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated C++ protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
@@ -250,7 +250,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
         var cppBuilder = new StringBuilder();
         for (var subProtocolId : subProtocols) {
             var protocolClassName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
-            var subProtocolPath = StringUtils.format("#include \"{}/{}/{}.h\"", protocolOutputRootPath, GenerateProtocolPath.getCapitalizeProtocolPath(subProtocolId), protocolClassName);
+            var subProtocolPath = StringUtils.format("#include \"{}/{}/{}.h\"", protocolOutputRootPath, GenerateProtocolPath.capitalizeProtocolPathFold(subProtocolId), protocolClassName);
             cppBuilder.append(subProtocolPath).append(LS);
         }
         return cppBuilder.toString();

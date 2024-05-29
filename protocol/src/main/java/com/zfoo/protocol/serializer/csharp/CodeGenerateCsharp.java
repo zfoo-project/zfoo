@@ -116,7 +116,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
             var protocolId = registration.protocolId();
             var protocolClazzName = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             var formatProtocolTemplate = formatProtocolTemplate(registration);
-            var outputPath = StringUtils.format("{}/{}/{}.cs", protocolOutputPath, GenerateProtocolPath.getCapitalizeProtocolPath(protocolId), protocolClazzName);
+            var outputPath = StringUtils.format("{}/{}/{}.cs", protocolOutputPath, GenerateProtocolPath.capitalizeProtocolPathFold(protocolId), protocolClazzName);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated C# protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());

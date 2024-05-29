@@ -44,7 +44,7 @@ public abstract class GenerateProtocolPath {
     }
 
     public static String protocolAbsolutePath(short protocolId, CodeLanguage language) {
-        var path = getProtocolPath(protocolId);
+        var path = protocolPathSlash(protocolId);
         var name = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
         if (StringUtils.isBlank(path)) {
             path = name;
@@ -72,7 +72,7 @@ public abstract class GenerateProtocolPath {
             case GdScript:
                 break;
             case Python:
-                if (StringUtils.isBlank(getProtocolPath(protocolId))) {
+                if (StringUtils.isBlank(protocolPathSlash(protocolId))) {
                     path = StringUtils.PERIOD;
                 } else {
                     path = StringUtils.substringBeforeLast(path, StringUtils.SLASH);
@@ -88,28 +88,21 @@ public abstract class GenerateProtocolPath {
     /**
      * 获取协议生成的路径
      */
-    public static String protocolPath(short protocolId) {
+    public static String protocolPathPeriod(short protocolId) {
         return protocolPathMap.get(protocolId);
     }
 
-    public static String getProtocolPath(short protocolId) {
-        AssertionUtils.notNull(protocolPathMap
-                , "[{}]The initialization has been completed. Get Protocol Path cannot be called after the initialization is completed."
-                , GenerateProtocolPath.class.getSimpleName());
 
+    public static String protocolPathSlash(short protocolId) {
         var protocolPath = protocolPathMap.get(protocolId);
-        if (StringUtils.isBlank(protocolPath)) {
-            return StringUtils.EMPTY;
-        }
-
         return protocolPath.replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH);
     }
 
     /**
      * 获取协议生成的首字母大写的路径
      */
-    public static String getCapitalizeProtocolPath(short protocolId) {
-        return StringUtils.joinWith(StringUtils.SLASH, Arrays.stream(getProtocolPath(protocolId).split(StringUtils.SLASH)).map(it -> StringUtils.capitalize(it)).toArray());
+    public static String capitalizeProtocolPathFold(short protocolId) {
+        return StringUtils.joinWith(StringUtils.SLASH, Arrays.stream(protocolPathSlash(protocolId).split(StringUtils.SLASH)).map(it -> StringUtils.capitalize(it)).toArray());
     }
 
     public static String getRelativePath(short protocolId, short relativeProtocolId) {
