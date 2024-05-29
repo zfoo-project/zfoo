@@ -133,7 +133,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("#include \"{}/{}.h\"", protocolOutputRootPath, GenerateProtocolPath.protocolAbsolutePath(protocol_id, CodeLanguage.Cpp))).append(LS);
+            protocol_imports.append(StringUtils.format("#include \"{}/{}/{}.h\"", protocolOutputRootPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocols[{}] = new {}Registration();", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()

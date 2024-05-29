@@ -43,48 +43,6 @@ public abstract class GenerateProtocolPath {
         protocolPathMap = null;
     }
 
-    public static String protocolAbsolutePath(short protocolId, CodeLanguage language) {
-        var path = protocolPathSlash(protocolId);
-        var name = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
-        if (StringUtils.isBlank(path)) {
-            path = name;
-        } else {
-            path = StringUtils.format("{}/{}", path, name);
-        }
-
-        switch (language) {
-            case Cpp:
-                break;
-            case Go:
-                break;
-            case JavaScript:
-                break;
-            case EcmaScript:
-                break;
-            case TypeScript:
-                break;
-            case CSharp:
-                break;
-            case Protobuf:
-                break;
-            case Lua:
-                break;
-            case GdScript:
-                break;
-            case Python:
-                if (StringUtils.isBlank(protocolPathSlash(protocolId))) {
-                    path = StringUtils.PERIOD;
-                } else {
-                    path = StringUtils.substringBeforeLast(path, StringUtils.SLASH);
-                    path = path.replaceAll(StringUtils.SLASH, StringUtils.PERIOD);
-                }
-                break;
-            case Enhance:
-                break;
-        }
-        return path;
-    }
-
     /**
      * 获取协议生成的路径
      */

@@ -96,8 +96,7 @@ public abstract class GenerateGdUtils {
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
             var name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
-            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.GdScript);
-            importBuilder.append(StringUtils.format("const {} = preload(\"res://{}/{}.gd\")", name, protocolOutputRootPath, path)).append(LS);
+            importBuilder.append(StringUtils.format("const {} = preload(\"res://{}/{}/{}.gd\")", name, protocolOutputRootPath, GenerateProtocolPath.protocolPathSlash(protocolId), name)).append(LS);
             initList.add(StringUtils.format("{}{}: {}", TAB_ASCII, protocolId, name));
         }
         var initProtocols = StringUtils.joinWith(StringUtils.COMMA + LS, initList.toArray());
@@ -140,8 +139,7 @@ public abstract class GenerateGdUtils {
         var gdBuilder = new StringBuilder();
         for (var subProtocolId : subProtocols) {
             var name = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
-            var path = GenerateProtocolPath.protocolAbsolutePath(subProtocolId, CodeLanguage.GdScript);
-            gdBuilder.append(StringUtils.format("const {} = preload(\"res://{}/{}.gd\")", name, protocolOutputRootPath, path)).append(LS);
+            gdBuilder.append(StringUtils.format("const {} = preload(\"res://{}/{}/{}.gd\")", name, protocolOutputRootPath, GenerateProtocolPath.protocolPathSlash(protocolId), name)).append(LS);
         }
         return gdBuilder.toString();
     }
@@ -159,7 +157,7 @@ public abstract class GenerateGdUtils {
             var fieldName = field.getName();
             // 生成注释
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.GdScript);
-            for(var fieldNote : fieldNotes) {
+            for (var fieldNote : fieldNotes) {
                 gdBuilder.append(fieldNote).append(LS);
             }
             var fieldType = gdSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);

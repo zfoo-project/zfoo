@@ -134,7 +134,7 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("import {} from './{}.js';", protocol_name, GenerateProtocolPath.protocolAbsolutePath(registration.protocolId(), CodeLanguage.JavaScript))).append(LS);
+            protocol_imports.append(StringUtils.format("import {} from './{}/{}.js';", protocol_name, GenerateProtocolPath.protocolPathSlash(registration.protocolId()), protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocols.set({}, {});", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()

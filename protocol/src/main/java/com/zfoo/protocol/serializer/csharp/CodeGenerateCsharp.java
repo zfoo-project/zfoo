@@ -207,9 +207,8 @@ public class CodeGenerateCsharp implements ICodeGenerate {
         for (var protocol : protocolList) {
             var protocolId = protocol.protocolId();
             var protocolName = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
-            var path = GenerateProtocolPath.protocolAbsolutePath(protocolId, CodeLanguage.CSharp);
-            csBuilder.append(StringUtils.format("protocols[{}] = new {}Registration();", protocolId, protocolName, path)).append(LS);
-            csBuilder.append(StringUtils.format("protocolIdMap[typeof({})] = {};", protocolName, protocolId, path)).append(LS);
+            csBuilder.append(StringUtils.format("protocols[{}] = new {}Registration();", protocolId, protocolName, protocolName)).append(LS);
+            csBuilder.append(StringUtils.format("protocolIdMap[typeof({})] = {};", protocolName, protocolId, protocolName)).append(LS);
         }
         return csBuilder.toString();
     }
