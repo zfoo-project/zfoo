@@ -1,5 +1,4 @@
 import EmptyObject from './packet/EmptyObject.mjs';
-import VeryBigObject from './packet/VeryBigObject.mjs';
 import ComplexObject from './packet/ComplexObject.mjs';
 import NormalObject from './packet/NormalObject.mjs';
 import ObjectA from './packet/ObjectA.mjs';
@@ -10,7 +9,6 @@ const protocols = new Map();
 
 // initProtocol
 protocols.set(0, EmptyObject);
-protocols.set(1, VeryBigObject);
 protocols.set(100, ComplexObject);
 protocols.set(101, NormalObject);
 protocols.set(102, ObjectA);
