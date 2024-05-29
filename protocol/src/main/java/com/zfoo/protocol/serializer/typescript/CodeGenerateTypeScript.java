@@ -234,7 +234,7 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         // import IByteBuffer first
         var protocolId = registration.getId();
         var importBuilder = new StringBuilder();
-        var protocolPath = GenerateProtocolPath.getProtocolPath(protocolId);
+        var protocolPath = GenerateProtocolPath.protocolPath(protocolId);
         var splits = protocolPath.split(StringUtils.PERIOD_REGEX);
         importBuilder.append(StringUtils.format("import IByteBuffer from '{}IByteBuffer';", "../".repeat(splits.length))).append(LS);
 
