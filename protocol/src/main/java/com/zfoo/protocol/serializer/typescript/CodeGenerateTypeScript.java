@@ -81,9 +81,9 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
     public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
+
         // 生成ProtocolManager.ts文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolManagerTemplate.ts");
-
         var protocol_imports_manager = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
         protocol_imports_manager.append("import Protocols from './Protocols';").append(LS);
@@ -119,7 +119,6 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
             protocol_class.append(formatProtocolTemplate).append(LS);
             protocol_registration.append(StringUtils.format("static {} = {}", protocol_name, protocol_name)).append(LS);
         }
-
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolsTemplate.ts");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_imports, protocol_imports_protocols.toString()
@@ -136,9 +135,9 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
     public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
+
         // 生成ProtocolManager.ts文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolManagerTemplate.ts");
-
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
         for (var registration : registrations) {
@@ -154,11 +153,11 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated TypeScript protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
+
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolTemplate.ts");
-
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                     , CodeTemplatePlaceholder.protocol_name, protocol_name
@@ -168,7 +167,6 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
                     , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
                     , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
             ));
-
             var outputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
@@ -180,9 +178,9 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
     public void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
+
         // 生成ProtocolManager.ts文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolManagerTemplate.ts");
-
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
         for (var registration : registrations) {
@@ -191,7 +189,6 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
             protocol_imports.append(StringUtils.format("import {} from './{}';", protocol_name, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocols.set({}, {});", protocol_id, protocol_name)).append(LS);
         }
-
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
         var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
@@ -199,11 +196,11 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated TypeScript protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
+
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolTemplate.ts");
-
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                     , CodeTemplatePlaceholder.protocol_name, protocol_name
@@ -213,7 +210,6 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
                     , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
                     , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
             ));
-
             var outputPath = StringUtils.format("{}/{}.ts", protocolOutputPath, protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);

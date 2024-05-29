@@ -78,6 +78,7 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
     public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
+
         // 生成ProtocolManager.js文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolManagerTemplate.js");
         var protocol_imports = new StringBuilder();
@@ -95,24 +96,21 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated Javascript protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
+
         var protocol_class = new StringBuilder();
         var protocol_registration = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
-
             // protocol
             protocol_class.append(protocol_class(registration)).append(LS);
-
             // registration
             protocol_registration.append(protocol_registration(registration)).append(LS);
         }
-
         protocol_registration.append(LS);
         for (var registration : registrations) {
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_registration.append(StringUtils.format("Protocols.{} = {}", protocol_name, protocol_name)).append(LS);
         }
-
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolsTemplate.js");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
@@ -127,6 +125,7 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
     @Override
     public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
+
 
         // 生成ProtocolManager.js文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolManagerTemplate.js");
@@ -149,14 +148,12 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolTemplate.js");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_name, protocol_name
                     , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
-
             var outputPath = StringUtils.format("{}/{}/{}.js", protocolOutputPath, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
@@ -167,6 +164,8 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
     @Override
     public void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
+
+
         // 生成ProtocolManager.js文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolManagerTemplate.js");
         var protocol_imports = new StringBuilder();
@@ -188,14 +187,12 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolTemplate.js");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_name, protocol_name
                     , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
-
             var outputPath = StringUtils.format("{}/{}.js", protocolOutputPath, protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);

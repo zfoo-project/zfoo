@@ -78,6 +78,7 @@ public class CodeGenerateLua implements ICodeGenerate {
     public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
+
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
         protocol_imports.append(StringUtils.format("local Protocols = require(\"{}.Protocols\")", protocolOutputRootPath)).append(LS);
@@ -101,20 +102,16 @@ public class CodeGenerateLua implements ICodeGenerate {
         var protocol_registration = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
-
             // protocol
             protocol_class.append(protocol_class(registration)).append(LS);
-
             // registration
             protocol_registration.append(protocol_registration(registration)).append(LS);
         }
-
         protocol_registration.append(LS);
         for (var registration : registrations) {
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_registration.append(StringUtils.format("Protocols.{} = {}", protocol_name, protocol_name)).append(LS);
         }
-
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolsTemplate.lua");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
@@ -131,6 +128,7 @@ public class CodeGenerateLua implements ICodeGenerate {
     public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
+
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
         for (var registration : registrations) {
@@ -140,7 +138,6 @@ public class CodeGenerateLua implements ICodeGenerate {
             protocol_imports.append(StringUtils.format("local {} = require(\"{}.{}.{}\")", protocol_name, protocolOutputRootPath, path.replace(StringUtils.SLASH, StringUtils.PERIOD), protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}", protocol_id, protocol_name)).append(LS);
         }
-
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("lua/ProtocolManagerTemplate.lua");
         var placeholderMap = Map.of(
                 CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
@@ -166,6 +163,7 @@ public class CodeGenerateLua implements ICodeGenerate {
     @Override
     public void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
+
 
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();

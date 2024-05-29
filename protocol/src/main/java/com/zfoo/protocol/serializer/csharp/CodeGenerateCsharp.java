@@ -81,6 +81,8 @@ public class CodeGenerateCsharp implements ICodeGenerate {
     @Override
     public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createProtocolManagerFile(registrations);
+
+
         var mergerProtocolPathMap = GenerateProtocolPath.mergerProtocolPathMap();
         for (var entry : mergerProtocolPathMap.entrySet()) {
             var protocol_merger_name = StringUtils.capitalize(entry.getKey());
@@ -95,7 +97,6 @@ public class CodeGenerateCsharp implements ICodeGenerate {
                 // registration
                 protocol_registration.append(protocol_registration(registration)).append(LS);
             }
-
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("csharp/ProtocolTemplate.cs");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
@@ -112,6 +113,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
     public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createProtocolManagerFile(registrations);
 
+
         for (var registration : registrations) {
             var protocolId = registration.protocolId();
             var protocolClazzName = registration.protocolConstructor().getDeclaringClass().getSimpleName();
@@ -126,6 +128,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
     @Override
     public void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createProtocolManagerFile(registrations);
+
 
         for (var registration : registrations) {
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();

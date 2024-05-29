@@ -81,7 +81,8 @@ public class CodeGenerateCpp implements ICodeGenerate {
 
     @Override
     public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
-        createTemplateFile(registrations);
+        createTemplateFile();
+
 
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolManagerTemplate.h");
         var protocol_imports = new StringBuilder();
@@ -104,14 +105,11 @@ public class CodeGenerateCpp implements ICodeGenerate {
         var protocol_registration = new StringBuilder();
         for (var registration : GenerateProtocolFile.subProtocolFirst(registrations)) {
             var protocol_id = registration.protocolId();
-
             // protocol
             protocol_class.append(protocol_class(registration)).append(LS);
-
             // registration
             protocol_registration.append(protocol_registration(registration)).append(LS);
         }
-
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolsTemplate.h");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_root_path, protocolOutputRootPath
@@ -126,7 +124,8 @@ public class CodeGenerateCpp implements ICodeGenerate {
 
     @Override
     public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
-        createTemplateFile(registrations);
+        createTemplateFile();
+
 
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolManagerTemplate.h");
         var protocol_imports = new StringBuilder();
@@ -148,7 +147,6 @@ public class CodeGenerateCpp implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolTemplate.h");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_root_path, protocolOutputRootPath
@@ -157,7 +155,6 @@ public class CodeGenerateCpp implements ICodeGenerate {
                     , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
-
             var outputPath = StringUtils.format("{}/{}/{}.h", protocolOutputPath, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
@@ -167,7 +164,8 @@ public class CodeGenerateCpp implements ICodeGenerate {
 
     @Override
     public void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException {
-        createTemplateFile(registrations);
+        createTemplateFile();
+
 
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolManagerTemplate.h");
         var protocol_imports = new StringBuilder();
@@ -185,9 +183,9 @@ public class CodeGenerateCpp implements ICodeGenerate {
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated C++ protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
+
         for (var registration : registrations) {
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("cpp/ProtocolTemplate.h");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_root_path, protocolOutputRootPath
@@ -196,7 +194,6 @@ public class CodeGenerateCpp implements ICodeGenerate {
                     , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
-
             var outputPath = StringUtils.format("{}/{}.h", protocolOutputPath, protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
@@ -205,7 +202,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
     }
 
 
-    public void createTemplateFile(List<ProtocolRegistration> registrations) throws IOException {
+    public void createTemplateFile() throws IOException {
         var list = List.of("cpp/ByteBuffer.h");
 
         for (var fileName : list) {

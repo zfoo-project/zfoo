@@ -79,6 +79,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
     public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
+
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolManagerTemplate.mjs");
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
@@ -95,17 +96,16 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated ES protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
+
         var protocol_class = new StringBuilder();
         var protocol_registration = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-
             // protocol
             protocol_class.append(formatProtocolClassTemplate(registration)).append(LS);
             protocol_registration.append(StringUtils.format("Protocols.{} = {}", protocol_name, protocol_name)).append(LS);
         }
-
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolsTemplate.mjs");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
@@ -120,6 +120,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
     @Override
     public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
+
 
         // 生成ProtocolManager.mjs文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolManagerTemplate.mjs");
@@ -138,6 +139,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated ES protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
+
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
@@ -152,6 +154,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
     @Override
     public void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
+
 
         // 生成ProtocolManager.mjs文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolManagerTemplate.mjs");
@@ -169,6 +172,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.mjs"));
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated ES protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
+
 
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
