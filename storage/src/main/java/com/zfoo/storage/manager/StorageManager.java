@@ -29,6 +29,7 @@ import com.zfoo.storage.model.StorageDefinition;
 import com.zfoo.storage.util.function.Func1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -148,12 +149,16 @@ public class StorageManager implements IStorageManager {
         var applicationContext = StorageContext.getApplicationContext();
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
-            var clazz = bean.getClass();
+
+            //防止被CGLIB代理时 直接赋值无效
+            var targetBean = Objects.requireNonNullElse(AopProxyUtils.getSingletonTarget(bean), bean);
+
+            var clazz = targetBean.getClass();
             ReflectionUtils.filterFieldsInClass(clazz, field -> field.isAnnotationPresent(StorageAutowired.class), field -> {
                 Type type = field.getGenericType();
 
                 if (!(type instanceof ParameterizedType)) {
-                    throw new RuntimeException(StringUtils.format("[bean:{}] type declaration is incorrect, not a generic class", bean.getClass().getSimpleName()));
+                    throw new RuntimeException(StringUtils.format("[bean:{}] type declaration is incorrect, not a generic class", targetBean.getClass().getSimpleName()));
                 }
 
                 Type[] types = ((ParameterizedType) type).getActualTypeArguments();
@@ -181,7 +186,7 @@ public class StorageManager implements IStorageManager {
                 }
 
                 ReflectionUtils.makeAccessible(field);
-                ReflectionUtils.setField(field, bean, storage);
+                ReflectionUtils.setField(field, targetBean, storage);
                 storage.setRecycle(false);
             });
         }

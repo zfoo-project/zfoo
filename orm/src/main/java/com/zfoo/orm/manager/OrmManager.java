@@ -40,6 +40,7 @@ import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.type.AnnotationMetadata;
@@ -191,7 +192,9 @@ public class OrmManager implements IOrmManager {
         var applicationContext = OrmContext.getApplicationContext();
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
-            ReflectionUtils.filterFieldsInClass(bean.getClass()
+            //防止被CGLIB代理时 直接赋值无效
+            var targetBean = Objects.requireNonNullElse(AopProxyUtils.getSingletonTarget(bean), bean);
+            ReflectionUtils.filterFieldsInClass(targetBean.getClass()
                     , field -> field.isAnnotationPresent(EntityCacheAutowired.class)
                     , field -> {
                         Type type = field.getGenericType();
@@ -212,7 +215,7 @@ public class OrmManager implements IOrmManager {
                         }
 
                         ReflectionUtils.makeAccessible(field);
-                        ReflectionUtils.setField(field, bean, entityCaches);
+                        ReflectionUtils.setField(field, targetBean, entityCaches);
                         allEntityCachesUsableMap.put(entityClazz, true);
                     });
         }
