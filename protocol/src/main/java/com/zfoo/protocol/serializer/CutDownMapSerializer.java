@@ -66,7 +66,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteIntIntMap({});", objectStr)).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("buffer.WriteIntIntMap({})", objectStr)).append(LS);
                             return true;
                         case Cpp:
@@ -91,7 +91,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteIntLongMap({});", objectStr)).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("buffer.WriteIntLongMap({})", objectStr)).append(LS);
                             return true;
                         case Cpp:
@@ -116,7 +116,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteIntStringMap({});", objectStr)).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("buffer.WriteIntStringMap({})", objectStr)).append(LS);
                             return true;
                         case Cpp:
@@ -147,7 +147,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                         case Protobuf:
                         default:
                     }
@@ -168,7 +168,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteLongIntMap({});", objectStr)).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("buffer.WriteLongIntMap({})", objectStr)).append(LS);
                             return true;
                         case Cpp:
@@ -193,7 +193,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteLongLongMap({});", objectStr)).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("buffer.WriteLongLongMap({})", objectStr)).append(LS);
                             return true;
                         case Cpp:
@@ -218,7 +218,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteLongStringMap({});", objectStr)).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("buffer.WriteLongStringMap({})", objectStr)).append(LS);
                             return true;
                         case Cpp:
@@ -249,7 +249,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                         case Protobuf:
                         default:
                     }
@@ -270,7 +270,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteStringIntMap({});", objectStr)).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("buffer.WriteStringIntMap({})", objectStr)).append(LS);
                             return true;
                         case Cpp:
@@ -295,7 +295,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteStringLongMap({});", objectStr)).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("buffer.WriteStringLongMap({})", objectStr)).append(LS);
                             return true;
                         case Cpp:
@@ -320,7 +320,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteStringStringMap({});", objectStr)).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("buffer.WriteStringStringMap({})", objectStr)).append(LS);
                             return true;
                         case Cpp:
@@ -351,7 +351,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
                             return true;
-                        case Go:
+                        case Golang:
                         case Protobuf:
                         default:
                     }
@@ -390,7 +390,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadIntIntMap();", map)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("var {} = buffer.ReadIntIntMap()", map)).append(LS);
                             return map;
                         case Cpp:
@@ -419,7 +419,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadIntLongMap();", map)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("var {} = buffer.ReadIntLongMap()", map)).append(LS);
                             return map;
                         case Cpp:
@@ -448,7 +448,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadIntStringMap();", map)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("var {} = buffer.ReadIntStringMap()", map)).append(LS);
                             return map;
                         case Cpp:
@@ -486,7 +486,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntPacketMap({});", map, protocolId)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                         case Protobuf:
                     }
                 }
@@ -508,7 +508,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadLongIntMap();", map)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("var {} = buffer.ReadLongIntMap()", map)).append(LS);
                             return map;
                         case Cpp:
@@ -537,7 +537,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadLongLongMap();", map)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("var {} = buffer.ReadLongLongMap()", map)).append(LS);
                             return map;
                         case Cpp:
@@ -566,7 +566,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadLongStringMap();", map)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("var {} = buffer.ReadLongStringMap()", map)).append(LS);
                             return map;
                         case Cpp:
@@ -604,7 +604,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongPacketMap({});", map, protocolId)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                         case Protobuf:
                         default:
                     }
@@ -627,7 +627,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadStringIntMap();", map)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("var {} = buffer.ReadStringIntMap()", map)).append(LS);
                             return map;
                         case Cpp:
@@ -656,7 +656,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadStringLongMap();", map)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("var {} = buffer.ReadStringLongMap()", map)).append(LS);
                             return map;
                         case Cpp:
@@ -685,7 +685,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadStringStringMap();", map)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                             builder.append(StringUtils.format("var {} = buffer.ReadStringStringMap()", map)).append(LS);
                             return map;
                         case Cpp:
@@ -723,7 +723,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringPacketMap({});", map, protocolId)).append(LS);
                             return map;
-                        case Go:
+                        case Golang:
                         case Protobuf:
                         default:
                     }

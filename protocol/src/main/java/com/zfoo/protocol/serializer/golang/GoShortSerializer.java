@@ -11,48 +11,38 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.go;
+package com.zfoo.protocol.serializer.golang;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.registration.field.ObjectProtocolField;
-import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 
-
 /**
  * @author godotg
  */
-public class GoObjectProtocolSerializer implements IGoSerializer {
+public class GoShortSerializer implements IGoSerializer {
 
     @Override
     public String fieldType(Field field, IFieldRegistration fieldRegistration) {
-        ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        return EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
+        return "int16";
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
-        ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.WritePacket(&{}, {})", objectStr, objectProtocolField.getProtocolId()))
-                .append(LS);
+        builder.append(StringUtils.format("buffer.WriteShort({})", objectStr)).append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
-        var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
-
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("var {} = *buffer.ReadPacket({}).(*{})", result, objectProtocolField.getProtocolId(), protocolSimpleName))
-                .append(LS);
+        builder.append(StringUtils.format("var {} = buffer.ReadShort()", result)).append(LS);
         return result;
     }
 

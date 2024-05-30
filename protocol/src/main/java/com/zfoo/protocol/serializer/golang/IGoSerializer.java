@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.go;
+package com.zfoo.protocol.serializer.golang;
 
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 

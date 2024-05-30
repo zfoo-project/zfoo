@@ -18,8 +18,6 @@ import com.zfoo.protocol.exception.UnknownException;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -113,21 +111,7 @@ public abstract class GenerateProtocolFile {
         // 计算协议生成的路径
         GenerateProtocolPath.initProtocolPath(generateProtocols);
 
-        var generateLanguages = generateOperation.getGenerateLanguages();
-
-        // 生成Golang协议
-        if (generateLanguages.contains(CodeLanguage.Go)) {
-            GenerateGoUtils.init(generateOperation);
-            GenerateGoUtils.createProtocolManager(generateProtocols);
-            for (var protocolRegistration : generateProtocols) {
-                GenerateGoUtils.createGoProtocolFile((ProtocolRegistration) protocolRegistration);
-            }
-        }
-
         for (var language : generateOperation.getGenerateLanguages()) {
-            if (language.codeGenerateClass == null) {
-                continue;
-            }
             var codeGenerate = ReflectionUtils.newInstance(language.codeGenerateClass);
             codeGenerate.init(generateOperation);
             if (generateOperation.isMergeProtocol()) {
@@ -141,6 +125,9 @@ public abstract class GenerateProtocolFile {
 
         // 预留参数，以后可能会用，比如给Lua修改一个后缀名称
         var protocolParam = generateOperation.getProtocolParam();
+
+        GenerateProtocolNote.clear();
+        GenerateProtocolPath.clear();
     }
 
 

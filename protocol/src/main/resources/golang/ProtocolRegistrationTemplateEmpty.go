@@ -1,14 +1,8 @@
-package protocol
-{}
-type {} struct {
-	{}
+func (protocol ${protocol_name}) ProtocolId() int16 {
+	return ${protocol_id}
 }
 
-func (protocol {}) ProtocolId() int16 {
-	return {}
-}
-
-func (protocol {}) write(buffer *ByteBuffer, packet any) {
+func (protocol ${protocol_name}) write(buffer *ByteBuffer, packet any) {
 	if packet == nil {
 	    buffer.WriteInt(0)
 		return
@@ -16,8 +10,8 @@ func (protocol {}) write(buffer *ByteBuffer, packet any) {
 	buffer.WriteInt(-1)
 }
 
-func (protocol {}) read(buffer *ByteBuffer) any {
-	var packet = new({})
+func (protocol ${protocol_name}) read(buffer *ByteBuffer) any {
+	var packet = new(${protocol_name})
 	var length = buffer.ReadInt()
 	if length == 0 {
 		return packet

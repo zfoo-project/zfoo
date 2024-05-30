@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.go;
+package com.zfoo.protocol.serializer.golang;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
@@ -24,17 +24,17 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class GoShortSerializer implements IGoSerializer {
+public class GoStringSerializer implements IGoSerializer {
 
     @Override
     public String fieldType(Field field, IFieldRegistration fieldRegistration) {
-        return "int16";
+        return "string";
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.WriteShort({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.WriteString({})", objectStr)).append(LS);
     }
 
     @Override
@@ -42,8 +42,9 @@ public class GoShortSerializer implements IGoSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("var {} = buffer.ReadShort()", result)).append(LS);
+        builder.append(StringUtils.format("var {} = buffer.ReadString()", result)).append(LS);
         return result;
     }
+
 
 }

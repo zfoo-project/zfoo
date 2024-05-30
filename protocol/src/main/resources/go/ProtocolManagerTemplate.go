@@ -1,5 +1,0 @@
-package protocol
-
-func init() {
-	{}
-}

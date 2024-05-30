@@ -59,7 +59,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanList({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteBooleanArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -87,7 +87,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteByteList({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteByteArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -115,7 +115,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteShortList({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteShortArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -143,7 +143,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteIntList({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteIntArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -171,7 +171,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteLongList({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteLongArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -200,7 +200,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteFloatList({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteFloatArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -229,7 +229,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteDoubleList({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteDoubleArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -258,7 +258,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteStringList({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteStringArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -295,7 +295,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writePacketList({}, {});", objectStr, protocolId)).append(LS);
                             break;
-                        case Go:
+                        case Golang:
                         case Protobuf:
                         default:
                             flag = false;
@@ -333,7 +333,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanList();", list)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray()", list)).append(LS);
                         break;
                     case Cpp:
@@ -365,7 +365,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadByteList();", list)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadByteArray()", list)).append(LS);
                         break;
                     case Cpp:
@@ -397,7 +397,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadShortList();", list)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadShortArray()", list)).append(LS);
                         break;
                     case Cpp:
@@ -429,7 +429,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadIntList();", list)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadIntArray()", list)).append(LS);
                         break;
                     case Cpp:
@@ -461,7 +461,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadLongList();", list)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadLongArray()", list)).append(LS);
                         break;
                     case Cpp:
@@ -493,7 +493,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadFloatList();", list)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadFloatArray()", list)).append(LS);
                         break;
                     case Cpp:
@@ -525,7 +525,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadDoubleList();", list)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadDoubleArray()", list)).append(LS);
                         break;
                     case Cpp:
@@ -557,7 +557,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadStringList();", list)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadStringArray()", list)).append(LS);
                         break;
                     case Cpp:
@@ -599,7 +599,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readPacketList({});", list, protocolId)).append(LS);
                             break;
-                        case Go:
+                        case Golang:
                         case Protobuf:
                         default:
                             flag = false;

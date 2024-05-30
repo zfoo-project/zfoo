@@ -62,7 +62,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanSet({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteBooleanArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -92,7 +92,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteByteSet({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteByteArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -122,7 +122,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteShortSet({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteShortArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -152,7 +152,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteIntSet({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteIntArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -182,7 +182,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteLongSet({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteLongArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -212,7 +212,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteFloatSet({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteFloatArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -242,7 +242,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteDoubleSet({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteDoubleArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -272,7 +272,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteStringSet({});", objectStr)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("buffer.WriteStringArray({})", objectStr)).append(LS);
                         break;
                     case Cpp:
@@ -311,7 +311,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("buffer.writePacketSet({}, {});", objectStr, protocolId)).append(LS);
                             break;
-                        case Go:
+                        case Golang:
                         case Protobuf:
                         default:
                             flag = false;
@@ -352,7 +352,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readBooleanSet();", set)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray()", set)).append(LS);
                         break;
                     case JavaScript:
@@ -381,7 +381,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadByteSet();", set)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadByteArray()", set)).append(LS);
                         break;
                     case Cpp:
@@ -413,7 +413,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadShortSet();", set)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadShortArray()", set)).append(LS);
                         break;
                     case Cpp:
@@ -445,7 +445,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadIntSet();", set)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadIntArray()", set)).append(LS);
                         break;
                     case Cpp:
@@ -477,7 +477,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadLongSet();", set)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadLongArray()", set)).append(LS);
                         break;
                     case Cpp:
@@ -509,7 +509,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadFloatSet();", set)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadFloatArray()", set)).append(LS);
                         break;
                     case Cpp:
@@ -541,7 +541,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadDoubleSet();", set)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadDoubleArray()", set)).append(LS);
                         break;
                     case Cpp:
@@ -573,7 +573,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadStringSet();", set)).append(LS);
                         break;
-                    case Go:
+                    case Golang:
                         builder.append(StringUtils.format("var {} = buffer.ReadStringArray()", set)).append(LS);
                         break;
                     case Cpp:
@@ -615,7 +615,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         case TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readPacketSet({});", set, protocolId)).append(LS);
                             break;
-                        case Go:
+                        case Golang:
                         case Protobuf:
                         default:
                             flag = false;

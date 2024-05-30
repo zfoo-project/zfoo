@@ -25,7 +25,6 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.field.*;
-import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.*;
 import com.zfoo.protocol.xml.XmlProtocols;
@@ -386,14 +385,6 @@ public class ProtocolAnalysis {
         unsupportedTypes = null;
 
         EnhanceUtils.clear();
-
-        if (CollectionUtils.isEmpty(generateOperation.getGenerateLanguages())) {
-            return;
-        }
-
-        GenerateProtocolNote.clear();
-        GenerateProtocolPath.clear();
-        GenerateGoUtils.clear();
     }
 
     public static List<Field> getFields(Class<?> clazz) {

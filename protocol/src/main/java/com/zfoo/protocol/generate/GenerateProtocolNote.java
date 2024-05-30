@@ -63,21 +63,6 @@ public abstract class GenerateProtocolNote {
         return formatNote(codeLanguage, classNote);
     }
 
-    public static String classNote(short protocolId, CodeLanguage language, String tab, int deep) {
-        var protocolNote = protocolNoteMap.get(protocolId);
-        var classNote = protocolNote.getKey();
-        if (StringUtils.isBlank(classNote)) {
-            return StringUtils.EMPTY;
-        }
-        var multipleLineNotes = classNote.split(FileUtils.LS_REGEX);
-        var notes = new ArrayList<String>();
-        for(var oneLineNote : multipleLineNotes) {
-            var formatFieldNote = formatNote(language, oneLineNote);
-            notes.add(tab.repeat(Math.max(0, deep)) + formatFieldNote);
-        }
-        return StringUtils.joinWith(FileUtils.LS, notes.toArray());
-    }
-
     public static List<String> fieldNotes(short protocolId, String fieldName, CodeLanguage language) {
         var protocolNote = protocolNoteMap.get(protocolId);
         var fieldNoteMap = protocolNote.getValue();
@@ -97,7 +82,7 @@ public abstract class GenerateProtocolNote {
     private static String formatNote(CodeLanguage language, String note) {
         switch (language) {
             case Cpp:
-            case Go:
+            case Golang:
             case JavaScript:
             case EcmaScript:
             case TypeScript:

@@ -11,13 +11,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.go;
+package com.zfoo.protocol.serializer.golang;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
-import com.zfoo.protocol.registration.field.SetField;
+import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.CutDownSetSerializer;
+import com.zfoo.protocol.serializer.CutDownMapSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -27,26 +27,31 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class GoSetSerializer implements IGoSerializer {
+public class GoMapSerializer implements IGoSerializer {
 
     @Override
     public String fieldType(Field field, IFieldRegistration fieldRegistration) {
-        var setField = (SetField) fieldRegistration;
-        var registration = setField.getSetElementRegistration();
-        var type = GenerateGoUtils.goSerializer(registration.serializer()).fieldType(field, registration);
-        return StringUtils.format("[]{}", type);
+        var mapField = (MapField) fieldRegistration;
+        var keyRegistration = mapField.getMapKeyRegistration();
+        var valueRegistration = mapField.getMapValueRegistration();
+
+        var keyType = CodeGenerateGolang.goSerializer(keyRegistration.serializer()).fieldType(field, keyRegistration);
+        var valueType = CodeGenerateGolang.goSerializer(valueRegistration.serializer()).fieldType(field, valueRegistration);
+
+        return StringUtils.format("map[{}]{}", keyType, valueType);
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        if (CutDownSetSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Go)) {
+        if (CutDownMapSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Golang)) {
             return;
         }
 
-        SetField setField = (SetField) fieldRegistration;
+        MapField mapField = (MapField) fieldRegistration;
 
-        builder.append(StringUtils.format("if {} == nil {", objectStr)).append(LS);
+        builder.append(StringUtils.format("if ({} == nil) || (len({}) == 0) {", objectStr, objectStr)).append(LS);
+
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("buffer.WriteInt(0)").append(LS);
 
@@ -56,61 +61,66 @@ public class GoSetSerializer implements IGoSerializer {
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.WriteInt(len({}))", objectStr)).append(LS);
 
-        GenerateProtocolFile.addTab(builder, deep + 1);
-        String length = "length" + GenerateProtocolFile.localVariableId++;
-        builder.append(StringUtils.format("var {} = len({})", length, objectStr)).append(LS);
 
-        GenerateProtocolFile.addTab(builder, deep + 1);
         String i = "i" + GenerateProtocolFile.localVariableId++;
-        builder.append(StringUtils.format("for {} := 0; {} < {}; {}++ {", i, i, length, i)).append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 2);
-        String element = "element" + GenerateProtocolFile.localVariableId++;
-        builder.append(StringUtils.format("var {} = {}[{}]", element, objectStr, i)).append(LS);
 
-        GenerateGoUtils.goSerializer(setField.getSetElementRegistration().serializer())
-                .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
+        GenerateProtocolFile.addTab(builder, deep + 1);
 
+        String key = "keyElement" + GenerateProtocolFile.localVariableId++;
+        String value = "valueElement" + GenerateProtocolFile.localVariableId++;
+        builder.append(StringUtils.format("for {}, {} := range {} {", key, value, objectStr)).append(LS);
+
+        CodeGenerateGolang.goSerializer(mapField.getMapKeyRegistration().serializer())
+                .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
+        CodeGenerateGolang.goSerializer(mapField.getMapValueRegistration().serializer())
+                .writeObject(builder, value, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
     }
+
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        var cutDown = CutDownSetSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Go);
+        var cutDown = CutDownMapSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Golang);
         if (cutDown != null) {
             return cutDown;
         }
 
-        SetField setField = (SetField) fieldRegistration;
-        var result = "result" + GenerateProtocolFile.localVariableId++;
+        MapField mapField = (MapField) fieldRegistration;
+        String result = "result" + GenerateProtocolFile.localVariableId++;
 
         var typeName = fieldType(field, fieldRegistration);
 
-        var i = "index" + GenerateProtocolFile.localVariableId++;
-        var size = "size" + GenerateProtocolFile.localVariableId++;
-
+        String size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("var {} = buffer.ReadInt()", size)).append(LS);
+
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("var {} = make({}, {})", result, typeName, size)).append(LS);
+        builder.append(StringUtils.format("var {} = make({})", result, typeName)).append(LS);
+
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if {} > 0 {", size)).append(LS);
 
+        String i = "index" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} := 0; {} < {}; {}++ {", i, i, size, i)).append(LS);
-        var readObject = GenerateGoUtils.goSerializer(setField.getSetElementRegistration().serializer())
-                .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
+
+        String keyObject = CodeGenerateGolang.goSerializer(mapField.getMapKeyRegistration().serializer())
+                .readObject(builder, deep + 2, field, mapField.getMapKeyRegistration());
+
+
+        String valueObject = CodeGenerateGolang.goSerializer(mapField.getMapValueRegistration().serializer())
+                .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
-        builder.append(StringUtils.format("{}[{}] = {}", result, i, readObject)).append(LS);
+
+        builder.append(StringUtils.format("{}[{}] = {}", result, keyObject, valueObject)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
-
         return result;
     }
-
 }

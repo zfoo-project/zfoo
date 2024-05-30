@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.go;
+package com.zfoo.protocol.serializer.golang;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
@@ -24,17 +24,17 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class GoBooleanSerializer implements IGoSerializer {
+public class GoFloatSerializer implements IGoSerializer {
 
     @Override
     public String fieldType(Field field, IFieldRegistration fieldRegistration) {
-        return "bool";
+        return "float32";
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.WriteBool({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.WriteFloat({})", objectStr)).append(LS);
     }
 
     @Override
@@ -42,7 +42,8 @@ public class GoBooleanSerializer implements IGoSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("var {} = buffer.ReadBool()", result)).append(LS);
+        builder.append(StringUtils.format("var {} = buffer.ReadFloat()", result)).append(LS);
         return result;
     }
+
 }

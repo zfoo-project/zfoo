@@ -11,13 +11,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.go;
+package com.zfoo.protocol.serializer.golang;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
+import com.zfoo.protocol.registration.field.SetField;
 import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.CutDownArraySerializer;
+import com.zfoo.protocol.serializer.CutDownSetSerializer;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -27,47 +27,48 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class GoArraySerializer implements IGoSerializer {
+public class GoSetSerializer implements IGoSerializer {
 
     @Override
     public String fieldType(Field field, IFieldRegistration fieldRegistration) {
-        var arrayField = (ArrayField) fieldRegistration;
-        var registration = arrayField.getArrayElementRegistration();
-        var type = GenerateGoUtils.goSerializer(registration.serializer()).fieldType(field, registration);
+        var setField = (SetField) fieldRegistration;
+        var registration = setField.getSetElementRegistration();
+        var type = CodeGenerateGolang.goSerializer(registration.serializer()).fieldType(field, registration);
         return StringUtils.format("[]{}", type);
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        if (CutDownArraySerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Go)) {
+        if (CutDownSetSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Golang)) {
             return;
         }
 
-        ArrayField arrayField = (ArrayField) fieldRegistration;
+        SetField setField = (SetField) fieldRegistration;
 
-        builder.append(StringUtils.format("if ({} == nil) || (len({}) == 0) {", objectStr, objectStr)).append(LS);
+        builder.append(StringUtils.format("if {} == nil {", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("buffer.WriteInt(0)").append(LS);
-        GenerateProtocolFile.addTab(builder, deep);
 
+        GenerateProtocolFile.addTab(builder, deep);
         builder.append("} else {").append(LS);
+
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("buffer.WriteInt(len({}))", objectStr)).append(LS);
+
         GenerateProtocolFile.addTab(builder, deep + 1);
         String length = "length" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("var {} = len({})", length, objectStr)).append(LS);
 
-        String i = "i" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
+        String i = "i" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("for {} := 0; {} < {}; {}++ {", i, i, length, i)).append(LS);
-
         GenerateProtocolFile.addTab(builder, deep + 2);
         String element = "element" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("var {} = {}[{}]", element, objectStr, i)).append(LS);
 
-        GenerateGoUtils.goSerializer(arrayField.getArrayElementRegistration().serializer())
-                .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
+        CodeGenerateGolang.goSerializer(setField.getSetElementRegistration().serializer())
+                .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
 
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
@@ -78,21 +79,20 @@ public class GoArraySerializer implements IGoSerializer {
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        var cutDown = CutDownArraySerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Go);
+        var cutDown = CutDownSetSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Golang);
         if (cutDown != null) {
             return cutDown;
         }
 
-
-        var arrayField = (ArrayField) fieldRegistration;
+        SetField setField = (SetField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.localVariableId++;
 
         var typeName = fieldType(field, fieldRegistration);
 
         var i = "index" + GenerateProtocolFile.localVariableId++;
         var size = "size" + GenerateProtocolFile.localVariableId++;
-        builder.append(StringUtils.format("var {} = buffer.ReadInt()", size)).append(LS);
 
+        builder.append(StringUtils.format("var {} = buffer.ReadInt()", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("var {} = make({}, {})", result, typeName, size)).append(LS);
 
@@ -101,17 +101,16 @@ public class GoArraySerializer implements IGoSerializer {
 
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append(StringUtils.format("for {} := 0; {} < {}; {}++ {", i, i, size, i)).append(LS);
-        var readObject = GenerateGoUtils.goSerializer(arrayField.getArrayElementRegistration().serializer())
-                .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
+        var readObject = CodeGenerateGolang.goSerializer(setField.getSetElementRegistration().serializer())
+                .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
-        builder.append(StringUtils.format("{}[{}] = {}", result, i, readObject));
-        builder.append(LS);
+        builder.append(StringUtils.format("{}[{}] = {}", result, i, readObject)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
 
-
         return result;
     }
+
 }
