@@ -28,6 +28,7 @@ public class RegistryConfig {
     private String user;
     private String password;
     private Map<String, String> address;
+    private String driverClassName;
 
 
     public boolean hasZookeeperAuthor() {
@@ -96,5 +97,13 @@ public class RegistryConfig {
     @Override
     public int hashCode() {
         return Objects.hash(center, user, password, address);
+    }
+
+    public String getDriverClassName() {
+        return driverClassName;
+    }
+
+    public void setDriverClassName(String driverClassName) {
+        this.driverClassName = driverClassName;
     }
 }
