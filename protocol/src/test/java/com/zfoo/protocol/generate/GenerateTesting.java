@@ -35,7 +35,7 @@ public class GenerateTesting {
 
         // generate the jsProtocol folder and its corresponding js protocol file in the current protocol directory
         generateLanguages.add(CodeLanguage.Cpp);
-        generateLanguages.add(CodeLanguage.Go);
+        generateLanguages.add(CodeLanguage.Golang);
         generateLanguages.add(CodeLanguage.JavaScript);
         generateLanguages.add(CodeLanguage.EcmaScript);
         generateLanguages.add(CodeLanguage.TypeScript);
