@@ -12,6 +12,7 @@
 
 package com.zfoo.net.config;
 
+import com.zfoo.net.NetContext;
 import com.zfoo.net.config.model.NetConfig;
 import com.zfoo.net.consumer.registry.IRegistry;
 import com.zfoo.net.consumer.registry.ZookeeperRegistry;
@@ -82,7 +83,18 @@ public class ConfigManager implements IConfigManager {
 
         // 走到这之后，NetConfig通过app.xml(读取有哪些消费者)+protocol.xml(模块号信息)完成了初始化
         // 接下来就是通过注册中心，把生产者和消费者关联起来
-        registry = new ZookeeperRegistry();
+        try {
+            var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
+            String driverClassName = registryConfig.getDriverClassName();
+            if (driverClassName == null || driverClassName.isBlank()){
+                registry = new ZookeeperRegistry();
+            } else {
+                registry = (IRegistry) Class.forName(driverClassName).getDeclaredConstructor().newInstance();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("registry instance err", e);
+        }
+
         registry.start();
     }
 
