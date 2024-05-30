@@ -120,9 +120,9 @@ public class OrmManager implements IOrmManager {
 
         // 设置数据库账号密码
         if (StringUtils.isNotBlank(hostConfig.getUser()) && StringUtils.isNotBlank(hostConfig.getPassword())) {
-            var authSource = "admin";
-            if (hostConfig.getAuthSource() != null)
-                authSource = hostConfig.getAuthSource();
+            var authSource = StringUtils.isEmpty(hostConfig.getAuthSource())
+                    ? "admin"
+                    : hostConfig.getAuthSource();
             mongoBuilder.credential(MongoCredential.createCredential(hostConfig.getUser(), authSource, hostConfig.getPassword().toCharArray()));
         }
 
@@ -542,9 +542,9 @@ public class OrmManager implements IOrmManager {
                 }
 
                 checkSubEntity(clazz, valueType);
-            } else if (ObjectId.class.isAssignableFrom(fieldType)){
+            } else if (ObjectId.class.isAssignableFrom(fieldType)) {
                 // do nothing
-            }else {
+            } else {
                 checkEntity(fieldType);
             }
         }
