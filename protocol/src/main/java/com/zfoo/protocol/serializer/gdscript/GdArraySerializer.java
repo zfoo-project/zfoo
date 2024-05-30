@@ -42,7 +42,7 @@ public class GdArraySerializer implements IGdSerializer {
     public String fieldType(Field field, IFieldRegistration fieldRegistration) {
         var arrayField = (ArrayField) fieldRegistration;
         var registration = arrayField.getArrayElementRegistration();
-        var type = GenerateGdUtils.gdSerializer(registration.serializer()).fieldType(field, registration);
+        var type = CodeGenerateGdScript.gdSerializer(registration.serializer()).fieldType(field, registration);
         return arrayType(type);
     }
 
@@ -67,7 +67,7 @@ public class GdArraySerializer implements IGdSerializer {
         String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("for {} in {}:", element, objectStr)).append(LS);
-        GenerateGdUtils.gdSerializer(arrayField.getArrayElementRegistration().serializer())
+        CodeGenerateGdScript.gdSerializer(arrayField.getArrayElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
     }
 
@@ -94,7 +94,7 @@ public class GdArraySerializer implements IGdSerializer {
         builder.append(StringUtils.format("if ({} > 0):", size)).append(LS);
         GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("for {} in range({}):", i, size)).append(LS);
-        String readObject = GenerateGdUtils.gdSerializer(arrayField.getArrayElementRegistration().serializer())
+        String readObject = CodeGenerateGdScript.gdSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTabAscii(builder, deep + 2);
         builder.append(StringUtils.format("{}.append({})", result, readObject)).append(LS);

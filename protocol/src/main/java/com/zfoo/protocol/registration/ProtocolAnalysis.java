@@ -25,7 +25,6 @@ import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.field.*;
-import com.zfoo.protocol.serializer.gdscript.GenerateGdUtils;
 import com.zfoo.protocol.serializer.go.GenerateGoUtils;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.*;
@@ -395,7 +394,6 @@ public class ProtocolAnalysis {
         GenerateProtocolNote.clear();
         GenerateProtocolPath.clear();
         GenerateGoUtils.clear();
-        GenerateGdUtils.clear();
     }
 
     public static List<Field> getFields(Class<?> clazz) {

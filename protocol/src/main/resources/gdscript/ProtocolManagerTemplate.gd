@@ -1,7 +1,7 @@
-{}
+${protocol_imports}
 
 const protocols: Dictionary = {
-{}
+	${protocol_manager_registrations}
 }
 
 static func getProtocol(protocolId: int):

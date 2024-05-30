@@ -15,6 +15,7 @@ package com.zfoo.protocol.serializer;
 import com.zfoo.protocol.serializer.cpp.CodeGenerateCpp;
 import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
 import com.zfoo.protocol.serializer.ecmascript.CodeGenerateEcmaScript;
+import com.zfoo.protocol.serializer.gdscript.CodeGenerateGdScript;
 import com.zfoo.protocol.serializer.javascript.CodeGenerateJavaScript;
 import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
 import com.zfoo.protocol.serializer.python.CodeGeneratePython;
@@ -44,7 +45,7 @@ public enum CodeLanguage {
 
     CSharp(1 << 11, CodeGenerateCsharp.class),
 
-    GdScript(1 << 12, null),
+    GdScript(1 << 12, CodeGenerateGdScript.class),
 
     Python(1 << 13, CodeGeneratePython.class),
 

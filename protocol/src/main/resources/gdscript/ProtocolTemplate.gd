@@ -1,19 +1,19 @@
-const PROTOCOL_ID = {}
-const PROTOCOL_CLASS_NAME = "{}"
-{}
-{}
-{}
+const PROTOCOL_ID = ${protocol_id}
+const PROTOCOL_CLASS_NAME = "${protocol_name}"
+${protocol_imports}
+${protocol_note}
+${protocol_field_definition}
 
 func _to_string() -> String:
-	const jsonTemplate = "{}"
-	var params = {}
+	const jsonTemplate = "${protocol_json}"
+	var params = [${protocol_to_string}]
 	return jsonTemplate.format(params, "{}")
 
 static func write(buffer, packet):
 	if (packet == null):
 		buffer.writeInt(0)
 		return
-	{}
+	${protocol_write_serialization}
 	pass
 
 static func read(buffer):
@@ -22,7 +22,7 @@ static func read(buffer):
 		return null
 	var beforeReadIndex = buffer.getReadOffset()
 	var packet = buffer.newInstance(PROTOCOL_ID)
-	{}
+	${protocol_read_deserialization}
 	if (length > 0):
 		buffer.setReadOffset(beforeReadIndex + length)
 	return packet

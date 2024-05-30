@@ -59,9 +59,9 @@ public class GdMapSerializer implements IGdSerializer {
         builder.append(StringUtils.format("for {} in {}:", key, objectStr)).append(LS);
         GenerateProtocolFile.addTabAscii(builder, deep + 2);
         builder.append(StringUtils.format("var {} = {}[{}]", value, objectStr, key)).append(LS);
-        GenerateGdUtils.gdSerializer(mapField.getMapKeyRegistration().serializer())
+        CodeGenerateGdScript.gdSerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
-        GenerateGdUtils.gdSerializer(mapField.getMapValueRegistration().serializer())
+        CodeGenerateGdScript.gdSerializer(mapField.getMapValueRegistration().serializer())
                 .writeObject(builder, value, deep + 2, field, mapField.getMapValueRegistration());
     }
 
@@ -89,11 +89,11 @@ public class GdMapSerializer implements IGdSerializer {
         GenerateProtocolFile.addTabAscii(builder, deep + 1);
         builder.append(StringUtils.format("for {} in range({}):", i, size)).append(LS);
 
-        String keyObject = GenerateGdUtils.gdSerializer(mapField.getMapKeyRegistration().serializer())
+        String keyObject = CodeGenerateGdScript.gdSerializer(mapField.getMapKeyRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapKeyRegistration());
 
 
-        String valueObject = GenerateGdUtils.gdSerializer(mapField.getMapValueRegistration().serializer())
+        String valueObject = CodeGenerateGdScript.gdSerializer(mapField.getMapValueRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
         GenerateProtocolFile.addTabAscii(builder, deep + 2);
 

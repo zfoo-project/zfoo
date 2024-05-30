@@ -246,8 +246,8 @@ public class CodeGenerateCpp implements ICodeGenerate {
         var subProtocols = ProtocolAnalysis.getAllSubProtocolIds(protocolId);
         var cppBuilder = new StringBuilder();
         for (var subProtocolId : subProtocols) {
-            var protocolClassName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
-            var subProtocolPath = StringUtils.format("#include \"{}/{}/{}.h\"", protocolOutputRootPath, GenerateProtocolPath.capitalizeProtocolPathFold(subProtocolId), protocolClassName);
+            var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
+            var subProtocolPath = StringUtils.format("#include \"{}/{}/{}.h\"", protocolOutputRootPath, GenerateProtocolPath.capitalizeProtocolPathFold(subProtocolId), protocolName);
             cppBuilder.append(subProtocolPath).append(LS);
         }
         return cppBuilder.toString();
@@ -258,8 +258,8 @@ public class CodeGenerateCpp implements ICodeGenerate {
         var subProtocols = ProtocolAnalysis.getAllSubProtocolIds(protocolId);
         var cppBuilder = new StringBuilder();
         for (var subProtocolId : subProtocols) {
-            var protocolClassName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
-            var subProtocolPath = StringUtils.format("#include \"{}/{}.h\"", protocolOutputRootPath, protocolClassName);
+            var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
+            var subProtocolPath = StringUtils.format("#include \"{}/{}.h\"", protocolOutputRootPath, protocolName);
             cppBuilder.append(subProtocolPath).append(LS);
         }
         return cppBuilder.toString();

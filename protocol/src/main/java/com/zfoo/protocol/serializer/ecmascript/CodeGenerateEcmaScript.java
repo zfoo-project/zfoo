@@ -94,7 +94,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
         var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.mjs"));
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
-        logger.info("Generated ES protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
+        logger.info("Generated EcmaScript protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
 
         var protocol_class = new StringBuilder();
@@ -114,7 +114,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         var outputPath = StringUtils.format("{}/Protocols.mjs", protocolOutputPath);
         var file = new File(outputPath);
         FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
-        logger.info("Generated ES protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+        logger.info("Generated EcmaScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     @Override
@@ -137,7 +137,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
         var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.mjs"));
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
-        logger.info("Generated ES protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
+        logger.info("Generated EcmaScript protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
 
         for (var registration : registrations) {
@@ -147,7 +147,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
             var outputPath = StringUtils.format("{}/{}/{}.mjs", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
-            logger.info("Generated ES protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+            logger.info("Generated EcmaScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
         }
     }
 
@@ -171,7 +171,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
         var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.mjs"));
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
-        logger.info("Generated ES protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
+        logger.info("Generated EcmaScript protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
 
         for (var registration : registrations) {
@@ -181,7 +181,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
             var outputPath = StringUtils.format("{}/{}.mjs", protocolOutputPath, protocol_name, protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
-            logger.info("Generated ES protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+            logger.info("Generated EcmaScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
         }
     }
 

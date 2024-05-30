@@ -237,9 +237,9 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         var subProtocols = ProtocolAnalysis.getFirstSubProtocolIds(protocolId);
         // import other sub protocols
         for (var subProtocolId : subProtocols) {
-            var protocolClassName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
+            var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
             var path = GenerateProtocolPath.getRelativePath(protocolId, subProtocolId);
-            importBuilder.append(StringUtils.format("import {} from '{}/{}';", protocolClassName, path, protocolClassName)).append(LS);
+            importBuilder.append(StringUtils.format("import {} from '{}/{}';", protocolName, path, protocolName)).append(LS);
         }
         return importBuilder.toString();
     }
@@ -253,8 +253,8 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         // import other sub protocols
         var subProtocols = ProtocolAnalysis.getFirstSubProtocolIds(protocolId);
         for (var subProtocolId : subProtocols) {
-            var protocolClassName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
-            importBuilder.append(StringUtils.format("import {} from './{}';", protocolClassName, protocolClassName)).append(LS);
+            var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
+            importBuilder.append(StringUtils.format("import {} from './{}';", protocolName, protocolName)).append(LS);
         }
         return importBuilder.toString();
     }
