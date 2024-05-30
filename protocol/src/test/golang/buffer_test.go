@@ -10,13 +10,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package protocol
+package main
 
 import (
 	"fmt"
 	"math"
 	"os"
 	"testing"
+	"zfoogo/zfoogo"
 )
 
 func assert(flag bool) {
@@ -26,7 +27,7 @@ func assert(flag bool) {
 }
 
 func TestByteBuffer(t *testing.T) {
-	var buffer = new(ByteBuffer)
+	var buffer = new(zfoogo.ByteBuffer)
 	boolTest(buffer)
 	byteTest(buffer)
 	bytesTest(buffer)
@@ -39,7 +40,7 @@ func TestByteBuffer(t *testing.T) {
 	packetTest()
 }
 
-func boolTest(buffer *ByteBuffer) {
+func boolTest(buffer *zfoogo.ByteBuffer) {
 	var value = true
 	buffer.WriteBool(value)
 	assert(buffer.ReadBool() == value)
@@ -48,7 +49,7 @@ func boolTest(buffer *ByteBuffer) {
 	assert(buffer.ReadBool() == value)
 }
 
-func byteTest(buffer *ByteBuffer) {
+func byteTest(buffer *zfoogo.ByteBuffer) {
 	var byteValues = []byte{127, 0, 255}
 	for _, value := range byteValues {
 		buffer.WriteUByte(value)
@@ -62,7 +63,7 @@ func byteTest(buffer *ByteBuffer) {
 	}
 }
 
-func bytesTest(buffer *ByteBuffer) {
+func bytesTest(buffer *zfoogo.ByteBuffer) {
 	var bytes = []byte{127, 0, 255}
 	buffer.WriteUBytes(bytes)
 	var readBytes = buffer.ReadUBytes(len(bytes))
@@ -71,7 +72,7 @@ func bytesTest(buffer *ByteBuffer) {
 	}
 }
 
-func shortTest(buffer *ByteBuffer) {
+func shortTest(buffer *zfoogo.ByteBuffer) {
 	var shortValues = []int16{-32768, -100, -2, -1, 0, 1, 2, 100, 32767}
 	for _, value := range shortValues {
 		buffer.WriteShort(value)
@@ -80,7 +81,7 @@ func shortTest(buffer *ByteBuffer) {
 	}
 }
 
-func intTest(buffer *ByteBuffer) {
+func intTest(buffer *zfoogo.ByteBuffer) {
 	var intValues = []int{math.MinInt32, -99999999, -32768, -100, -2, -1, 0, 1, 2, 100, 32767, 99999999, math.MaxInt32}
 	for _, value := range intValues {
 		buffer.WriteInt(value)
@@ -89,7 +90,7 @@ func intTest(buffer *ByteBuffer) {
 	}
 }
 
-func longTest(buffer *ByteBuffer) {
+func longTest(buffer *zfoogo.ByteBuffer) {
 	var longValues = []int64{math.MinInt64, -99999999, -32768, -100, -2, -1, 0, 1, 2, 100, 32767, 99999999, math.MaxInt64}
 	for _, value := range longValues {
 		buffer.WriteLong(value)
@@ -98,7 +99,7 @@ func longTest(buffer *ByteBuffer) {
 	}
 }
 
-func floatTest(buffer *ByteBuffer) {
+func floatTest(buffer *zfoogo.ByteBuffer) {
 	var floatValues = []float32{-12345678.12345678, -1234.5678, -100, -2, -1, 0, 1, 2, 100, 1234.5678, math.MaxFloat32}
 	for _, value := range floatValues {
 		buffer.WriteFloat(value)
@@ -107,7 +108,7 @@ func floatTest(buffer *ByteBuffer) {
 	}
 }
 
-func doubleTest(buffer *ByteBuffer) {
+func doubleTest(buffer *zfoogo.ByteBuffer) {
 	var doubleValues = []float64{-12345678.12345678, -1234.5678, -100, -2, -1, 0, 1, 2, 100, 1234.5678, math.MaxFloat64}
 	for _, value := range doubleValues {
 		buffer.WriteDouble(value)
@@ -116,7 +117,7 @@ func doubleTest(buffer *ByteBuffer) {
 	}
 }
 
-func stringTest(buffer *ByteBuffer) {
+func stringTest(buffer *zfoogo.ByteBuffer) {
 	var value = "hello world!"
 	buffer.WriteString(value)
 	assert(buffer.ReadString() == value)
@@ -127,16 +128,16 @@ func packetTest() {
 	//bytes, _ := os.ReadFile("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes")
 	//bytes, _ := os.ReadFile("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes")
 	//bytes, _ := os.ReadFile("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes")
-	bytes, _ := os.ReadFile("D:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes")
-	var buffer = new(ByteBuffer)
+	bytes, _ := os.ReadFile("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes")
+	var buffer = new(zfoogo.ByteBuffer)
 	buffer.WriteUBytes(bytes)
-	var packet = Read(buffer)
+	var packet = zfoogo.Read(buffer)
 	fmt.Println(packet)
 	fmt.Println("source size ", buffer.WriteOffset())
 
 	buffer.Clear()
-	Write(buffer, packet)
-	var newPacket = Read(buffer)
+	zfoogo.Write(buffer, packet)
+	var newPacket = zfoogo.Read(buffer)
 	fmt.Println("target size ", buffer.WriteOffset())
 	fmt.Println(newPacket)
 }
