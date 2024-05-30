@@ -93,7 +93,7 @@ public class CodeGenerateGdScript implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("{}{}: Protocols.{},", TAB_ASCII, protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("{}: Protocols.{},", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, StringUtils.substringBeforeLast(protocol_manager_registrations.toString(), StringUtils.COMMA));
@@ -145,7 +145,7 @@ public class CodeGenerateGdScript implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("const {} = preload(\"res://{}/{}/{}.gd\")", protocol_name, protocolOutputRootPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("{}{}: {},", TAB_ASCII, protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("{}: {},", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, StringUtils.substringBeforeLast(protocol_manager_registrations.toString(), StringUtils.COMMA));
@@ -190,7 +190,7 @@ public class CodeGenerateGdScript implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("const {} = preload(\"res://{}/{}.gd\")", protocol_name, protocolOutputRootPath, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("{}{}: {},", TAB_ASCII, protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("{}: {},", protocol_id, protocol_name)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, StringUtils.substringBeforeLast(protocol_manager_registrations.toString(), StringUtils.COMMA));
