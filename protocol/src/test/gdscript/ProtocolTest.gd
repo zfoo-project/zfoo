@@ -3,7 +3,6 @@ extends Node2D
 
 const ProtocolManager = preload("res://zfoogd/ProtocolManager.gd")
 const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
-const FileUtils = preload("res://zfoo/FileUtils.gd")
 
 # 测试参数
 #op.setFoldProtocol(true);
@@ -84,12 +83,15 @@ func _ready():
 
 func test():
 	var buffer = ByteBuffer.new()
-	#var poolByteArray = FileUtils.readFileToByteArray("res://test/protocol/normal-no-compatible.txt")
-	#var poolByteArray = FileUtils.readFileToByteArray("res://test/protocol/normal-inner-compatible.txt")
-	#var poolByteArray = FileUtils.readFileToByteArray("res://test/protocol/normal-out-compatible.txt")
-	#var poolByteArray = FileUtils.readFileToByteArray("res://test/protocol/normal-out-inner-compatible.txt")
-	var poolByteArray = FileUtils.readFileToByteArray("res://test/protocol/normal-out-inner-inner-compatible.txt")
+	
+	var filePath = "res://compatible/normal-out-inner-inner-compatible.bytes"
+	#var filePath = "res://compatible/normal-inner-compatible.bytes"
+	#var filePath = "res://compatible/normal-out-compatible.bytes"
+	#var filePath = "res://compatible/normal-out-inner-compatible.bytes"
+	#var filePath = "res://compatible/normal-no-compatible.bytes"
+	var file = FileAccess.open(filePath, FileAccess.READ)
 
+	var poolByteArray = file.get_buffer(file.get_length())
 	buffer.writePackedByteArray(poolByteArray)
 	
 	var packet = ProtocolManager.read(buffer)
@@ -101,9 +103,6 @@ func test():
 	
 	var newPacket = ProtocolManager.read(newByteBuffer);
 	print(newPacket)
-
-
-
-
+	pass
 
 

@@ -2,7 +2,6 @@ const PROTOCOL_ID = 102
 const PROTOCOL_CLASS_NAME = "ObjectA"
 const ObjectB = preload("res://zfoogd/packet/ObjectB.gd")
 
-
 var a: int
 var m: Dictionary	# Map<number, string>
 var objectB: ObjectB

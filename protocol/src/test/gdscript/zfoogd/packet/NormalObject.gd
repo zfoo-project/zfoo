@@ -3,7 +3,6 @@ const PROTOCOL_CLASS_NAME = "NormalObject"
 const ObjectA = preload("res://zfoogd/packet/ObjectA.gd")
 const ObjectB = preload("res://zfoogd/packet/ObjectB.gd")
 
-
 var a: int
 var aaa: Array[int]
 var b: int

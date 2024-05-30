@@ -3,7 +3,6 @@ const PROTOCOL_CLASS_NAME = "VeryBigObject"
 const ObjectA = preload("res://zfoogd/packet/ObjectA.gd")
 const ObjectB = preload("res://zfoogd/packet/ObjectB.gd")
 
-
 var a1: int
 var aa1: int
 var aaa1: Array[int]
