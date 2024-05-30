@@ -25,6 +25,7 @@ import java.util.Map;
 public enum CodeTemplatePlaceholder {
 
     protocol_root_path("${protocol_root_path}"),
+
     protocol_imports("${protocol_imports}"),
 
     protocol_class("${protocol_class}"),
