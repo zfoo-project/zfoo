@@ -16,9 +16,6 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.collection.tree.GeneralTree;
 import com.zfoo.protocol.collection.tree.TreeNode;
 import com.zfoo.protocol.registration.ProtocolRegistration;
-import com.zfoo.protocol.serializer.CodeLanguage;
-import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
-import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
@@ -63,7 +60,7 @@ public abstract class GenerateProtocolPath {
         return StringUtils.joinWith(StringUtils.SLASH, Arrays.stream(protocolPathSlash(protocolId).split(StringUtils.SLASH)).map(it -> StringUtils.capitalize(it)).toArray());
     }
 
-    public static String getRelativePath(short protocolId, short relativeProtocolId) {
+    public static String relativePath(short protocolId, short relativeProtocolId) {
         // 不是折叠协议的话，protocolPathMap一定是空，这里返回“”，上层会解析为同一个文件下
         if (CollectionUtils.isEmpty(protocolPathMap)) {
             return StringUtils.EMPTY;

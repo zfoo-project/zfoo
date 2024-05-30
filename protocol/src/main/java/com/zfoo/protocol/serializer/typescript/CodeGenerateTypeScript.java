@@ -238,7 +238,7 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         // import other sub protocols
         for (var subProtocolId : subProtocols) {
             var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
-            var path = GenerateProtocolPath.getRelativePath(protocolId, subProtocolId);
+            var path = GenerateProtocolPath.relativePath(protocolId, subProtocolId);
             importBuilder.append(StringUtils.format("import {} from '{}/{}';", protocolName, path, protocolName)).append(LS);
         }
         return importBuilder.toString();
