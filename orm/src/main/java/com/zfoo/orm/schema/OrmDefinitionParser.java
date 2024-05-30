@@ -105,6 +105,7 @@ public class OrmDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("database", "database", builder, element, parserContext);
         resolvePlaceholder("user", "user", builder, element, parserContext);
         resolvePlaceholder("password", "password", builder, element, parserContext);
+        resolvePlaceholder("authSource", "authSource", builder, element, parserContext);
 
         var addressMap = parseAddress(element, parserContext);
         builder.addPropertyValue("address", addressMap);
