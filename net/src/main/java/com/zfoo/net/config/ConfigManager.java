@@ -92,8 +92,10 @@ public class ConfigManager implements IConfigManager {
                 } else {
                     registry = (IRegistry) Class.forName(driverClassName).getDeclaredConstructor().newInstance();
                 }
-                registry.start();
+            } else {
+                registry = new ZookeeperRegistry();
             }
+            registry.start();
         } catch (Exception e) {
             throw new RuntimeException("registry instance err", e);
         }
