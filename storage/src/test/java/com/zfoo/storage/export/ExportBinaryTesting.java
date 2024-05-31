@@ -75,7 +75,7 @@ public class ExportBinaryTesting {
 
     // excel对应的java文件路径，比如ResourceData，StudentResource
     public static final String excelClassPath = "com.zfoo.storage.export";
-    // excel文件路径，如果是类路径以classpath开头，如果是目录文件路径则以file开头
+    // excel文件路径，如果是类路径以classpath开头，如果是目录文件路径则以file开头，这里的excel文件在java代码的resources/excel目录里属于类路径
     public static final String excelFilePath = "classpath:/excel";
     // excel输出的gdscript文件路径，会将excel转为gdscript对象
     public static final String gdscriptOutputPath = "D:\\github\\godot-bird\\excel";
