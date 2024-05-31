@@ -17,13 +17,10 @@ import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.exception.AssertException;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.exception.UnknownException;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.generate.GenerateProtocolNote;
-import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.field.*;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.*;
@@ -122,25 +119,9 @@ public class ProtocolAnalysis {
 
     public static synchronized void analyzeAuto(List<Class<?>> protocolClassList, GenerateOperation generateOperation) {
         AssertionUtils.notNull(subProtocolIdMap, "[{}] initialization has already been completed, please do not repeat the initialization", ProtocolManager.class.getSimpleName());
-        // 获取所有协议类
-        var tempProtocolClassSet = new LinkedHashSet<Class<?>>(protocolClassList);
-        //去重
-        protocolClassList = new ArrayList<>();
-        protocolClassList.addAll(tempProtocolClassSet);
-
-        var relevantClassList = new LinkedHashSet<Class<?>>(protocolClassList);
+        var relevantClassSet = new LinkedHashSet<Class<?>>(protocolClassList);
         for (var clazz : protocolClassList) {
-            var classSet = ClassUtils.relevantClass(clazz);
-            for (var cls : classSet) {
-                if (!relevantClassList.contains(cls)) {
-                    int protocolId = getProtocolIdAndCheckClass(cls);
-                    if (protocolId >= 0) {
-                        relevantClassList.add(cls);
-                    } else {
-                        throw new AssertException("[class:{}]类型必须声明", cls.getCanonicalName());
-                    }
-                }
-            }
+            relevantClassSet.addAll(ClassUtils.relevantClass(clazz));
         }
         //var relevantClassList = relevantClassSet;
        /*  var relevantClassList = relevantClassSet.stream()
@@ -149,7 +130,7 @@ public class ProtocolAnalysis {
 
         // 检查协议类是否合法
         var noProtocolIds = new ArrayList<Class<?>>();
-        for (var protocolClass : relevantClassList) {
+        for (var protocolClass : relevantClassSet) {
             var protocolId = getProtocolIdAndCheckClass(protocolClass);
             if (protocolId >= 0) {
                 initProtocolClass(protocolId, protocolClass);
@@ -166,7 +147,7 @@ public class ProtocolAnalysis {
         }
 
         // 协议id和协议信息对应起来
-        for (var protocolClass : relevantClassList) {
+        for (var protocolClass : relevantClassSet) {
             var registration = parseProtocolRegistration(protocolClass, ProtocolModule.DEFAULT_PROTOCOL_MODULE);
             protocols[registration.protocolId()] = registration;
         }
