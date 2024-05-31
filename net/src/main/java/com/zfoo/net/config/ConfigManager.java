@@ -85,17 +85,20 @@ public class ConfigManager implements IConfigManager {
         // 接下来就是通过注册中心，把生产者和消费者关联起来
         try {
             var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
-            String driverClassName = registryConfig.getDriverClassName();
-            if (driverClassName == null || driverClassName.isBlank()){
-                registry = new ZookeeperRegistry();
+            if (registryConfig != null) {
+                String driverClassName = registryConfig.getDriverClassName();
+                if (driverClassName == null || driverClassName.isBlank()){
+                    registry = new ZookeeperRegistry();
+                } else {
+                    registry = (IRegistry) Class.forName(driverClassName).getDeclaredConstructor().newInstance();
+                }
             } else {
-                registry = (IRegistry) Class.forName(driverClassName).getDeclaredConstructor().newInstance();
+                registry = new ZookeeperRegistry();
             }
+            registry.start();
         } catch (Exception e) {
             throw new RuntimeException("registry instance err", e);
         }
-
-        registry.start();
     }
 
     @Override
