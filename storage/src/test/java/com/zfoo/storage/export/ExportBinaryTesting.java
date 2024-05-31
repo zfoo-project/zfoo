@@ -31,7 +31,6 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,11 +73,21 @@ public class ExportBinaryTesting {
 
     }
 
+    // excel对应的java文件路径，比如ResourceData，StudentResource
+    public static final String excelClassPath = "com.zfoo.storage.export";
+    // excel文件路径，如果是类路径以classpath开头，如果是目录文件路径则以file开头
+    public static final String excelFilePath = "classpath:/excel";
+    // excel输出的gdscript文件路径，会将excel转为gdscript对象
+    public static final String gdscriptOutputPath = "D:\\github\\godot-bird\\excel";
+    // excel导出的二进制文件路径
+    public static final String binaryOutputFilePath = "D:/github/godot-bird/excel/binary_data.cfg";
+
+
     @Test
     public void test() throws Exception {
         var config = new StorageConfig();
-        config.setScanPackage("com.zfoo.storage.export");
-        config.setResourceLocation("classpath:/excel");
+        config.setScanPackage(excelClassPath);
+        config.setResourceLocation(excelFilePath);
         config.setWriteable(true);
         config.setRecycle(false);
         var storageManager = new StorageManager();
@@ -87,11 +96,11 @@ public class ExportBinaryTesting {
         storageManager.initAfter();
 
         // 生成协议
-        List protocols = new ArrayList<>();
+        var protocols = new ArrayList<Class<?>>();
         protocols.add(ResourceData.class);
         protocols.addAll(storageManager.storageMap().keySet());
         var operation = new GenerateOperation();
-        operation.setProtocolPath("D:\\github\\godot-bird\\test\\storage\\protocol");
+        operation.setProtocolPath(gdscriptOutputPath);
         operation.getGenerateLanguages().add(CodeLanguage.GdScript);
         ProtocolManager.initProtocolAuto(protocols, operation);
 
@@ -100,7 +109,7 @@ public class ExportBinaryTesting {
         var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, Integer.MAX_VALUE);
         ProtocolManager.write(buffer, resourceData);
         var bytes = ByteBufUtils.readAllBytes(buffer);
-        FileUtils.writeInputStreamToFile(new File("D:/github/godot-bird/binary_data.cfg"), new ByteArrayInputStream(bytes));
+        FileUtils.writeInputStreamToFile(new File(binaryOutputFilePath), new ByteArrayInputStream(bytes));
     }
 
 }
