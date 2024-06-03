@@ -18,6 +18,9 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.anno.Task;
 import com.zfoo.net.core.event.ServerExceptionEvent;
+import com.zfoo.net.enhance.EnhanceUtils;
+import com.zfoo.net.enhance.IPacketReceiver;
+import com.zfoo.net.enhance.PacketReceiverDefinition;
 import com.zfoo.net.packet.EncodedPacketInfo;
 import com.zfoo.net.packet.PacketService;
 import com.zfoo.net.packet.common.Error;
@@ -31,9 +34,6 @@ import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.net.router.exception.ErrorResponseException;
 import com.zfoo.net.router.exception.NetTimeOutException;
 import com.zfoo.net.router.exception.UnexpectedProtocolException;
-import com.zfoo.net.enhance.EnhanceUtils;
-import com.zfoo.net.enhance.IPacketReceiver;
-import com.zfoo.net.enhance.PacketReceiverDefinition;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.task.PacketReceiverTask;
 import com.zfoo.net.task.TaskBus;
@@ -84,7 +84,7 @@ public class Router implements IRouter {
         var task = new PacketReceiverTask(session, packet, attachment);
         if (attachment == null) {
             // 正常发送消息的接收,把客户端的业务请求包装下到路由策略指定的线程进行业务处理
-            // 注意：像客户端以asyncAsk发送请求，在服务器处理完后返回结果，在请求方也是进入这个receive方法，但是attachment不为空，会提前return掉不会走到这
+            // 客户端以asyncAsk发送请求会携带attachment，服务器也是进入这个receive方法，不会直接return
             dispatchBySession(task);
             return;
         }
