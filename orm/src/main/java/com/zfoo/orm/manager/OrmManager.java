@@ -418,6 +418,10 @@ public class OrmManager implements IOrmManager {
             throw new RunException("orm only supports int long float double String");
         }
 
+        if (!idField.getName().equals("id")) {
+            throw new RunException("@Id filed must name with id");
+        }
+
         ReflectionUtils.makeAccessible(idField);
         ReflectionUtils.setField(idField, entityInstance, idFiledValue);
         var idMethodOptional = Arrays.stream(ReflectionUtils.getAllMethods(clazz)).filter(it -> it.getName().equalsIgnoreCase("id"))
