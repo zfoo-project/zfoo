@@ -59,7 +59,9 @@ public abstract class EventBus {
     /**
      * event exception handler
      */
-    public static BiConsumer<IEventReceiver, IEvent> exceptionFunction = (receiver, event) -> {};
+    public static TriConsumer<IEventReceiver, IEvent, Throwable> exceptionFunction = (receiver, event, throwable) -> {
+        event.exceptionHandle(receiver, throwable);
+    };
     public static Consumer<IEvent> noReceiverFunction = event -> {};
 
     static {
@@ -122,9 +124,13 @@ public abstract class EventBus {
         try {
             receiver.invoke(event);
         } catch (Throwable t) {
-            logger.error("eventBus {} [{}] unknown error", receiver.bus(), event.getClass().getSimpleName(), t);
-            exceptionFunction.accept(receiver, event);
+            exceptionFunction.accept(receiver, event, t);
         }
+    }
+
+    @FunctionalInterface
+    public interface TriConsumer<T, U, V> {
+        void accept(T t, U u, V v);
     }
 
     public static void asyncExecute(Runnable runnable) {

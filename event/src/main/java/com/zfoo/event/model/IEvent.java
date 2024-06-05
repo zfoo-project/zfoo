@@ -12,12 +12,16 @@
 
 package com.zfoo.event.model;
 
+import com.zfoo.event.enhance.IEventReceiver;
 import com.zfoo.protocol.util.RandomUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author godotg
  */
 public interface IEvent {
+    Logger logger = LoggerFactory.getLogger(IEvent.class);
 
     /**
      * 这个返回的是一个用于确定事件在EventBus中的哪个线程池的执行的一个参数，只有异步事件才会有作用
@@ -39,4 +43,12 @@ public interface IEvent {
         return RandomUtils.randomInt();
     }
 
+    /**
+     * 处理事件的异常
+     * @param receiver IEventReceiver
+     * @param throwable Throwable
+     */
+    default void exceptionHandle(IEventReceiver receiver, Throwable throwable) {
+        logger.error("eventBus {} [{}] unknown error", receiver.bus(), this.getClass().getSimpleName(), throwable);
+    }
 }
