@@ -107,8 +107,6 @@ public abstract class EnhanceUtils {
      * @return 返回类的名称格式：EnhanceUtilsProtocolRegistration1
      */
     public static IProtocolRegistration createProtocolRegistration(ProtocolRegistration registration) throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        GenerateProtocolFile.localVariableId = 0;
-
         var classPool = ClassPool.getDefault();
         var protocolId = registration.getId();
         var packetFields = registration.getFieldRegistrations();
@@ -178,6 +176,7 @@ public abstract class EnhanceUtils {
 
     // see: ProtocolRegistration.write()
     private static String writeMethodBody(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var constructor = registration.getConstructor();
         var fields = registration.getFields();
         var compatible = registration.isCompatible();
@@ -216,6 +215,7 @@ public abstract class EnhanceUtils {
 
     // see: ProtocolRegistration.read()
     private static String readMethodBody(ProtocolRegistration registration) {
+        GenerateProtocolFile.localVariableId = 0;
         var constructor = registration.getConstructor();
         var fieldRegistrations = registration.getFieldRegistrations();
 
