@@ -89,14 +89,16 @@ public class RegistryConfig {
         }
         RegistryConfig that = (RegistryConfig) o;
         return Objects.equals(center, that.center) &&
+                Objects.equals(path, that.path) &&
                 Objects.equals(user, that.user) &&
                 Objects.equals(password, that.password) &&
+                Objects.equals(driverClassName, that.driverClassName) &&
                 Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(center, user, password, address);
+        return Objects.hash(center, user, password, address, path, driverClassName);
     }
 
     public String getDriverClassName() {

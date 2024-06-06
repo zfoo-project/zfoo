@@ -22,6 +22,7 @@
         <xsd:attribute name="path" type="xsd:string" use="optional"/>
         <xsd:attribute name="user" type="xsd:string" use="required"/>
         <xsd:attribute name="password" type="xsd:string" use="required"/>
+        <xsd:attribute name="driver-class-name" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
     <xsd:complexType name="providersType">
