@@ -152,6 +152,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         resolvePlaceholder("path", "path", builder, element, parserContext);
         resolvePlaceholder("user", "user", builder, element, parserContext);
         resolvePlaceholder("password", "password", builder, element, parserContext);
+        resolvePlaceholder("driver-class-name", "driverClassName", builder, element, parserContext);
         var addressMap = parseAddress(element, parserContext);
         builder.addPropertyValue("address", addressMap);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
