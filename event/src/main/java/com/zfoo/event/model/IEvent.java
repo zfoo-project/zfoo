@@ -49,6 +49,6 @@ public interface IEvent {
      * @param throwable Throwable
      */
     default void exceptionHandle(IEventReceiver receiver, Throwable throwable) {
-        logger.error("eventBus {} [{}] unknown error", receiver.bus(), this.getClass().getSimpleName(), throwable);
+        logger.error("bean:[{}] event:[{}] unhandled exception", receiver.getBean().getClass().getSimpleName(), this.getClass().getSimpleName(), throwable);
     }
 }

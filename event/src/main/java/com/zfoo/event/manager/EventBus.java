@@ -33,7 +33,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -57,11 +56,8 @@ public abstract class EventBus {
      */
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
     /**
-     * event exception handler
+     * event noReceiver handler
      */
-    public static TriConsumer<IEventReceiver, IEvent, Throwable> exceptionFunction = (receiver, event, throwable) -> {
-        event.exceptionHandle(receiver, throwable);
-    };
     public static Consumer<IEvent> noReceiverFunction = event -> {};
 
     static {
@@ -124,7 +120,7 @@ public abstract class EventBus {
         try {
             receiver.invoke(event);
         } catch (Throwable t) {
-            exceptionFunction.accept(receiver, event, t);
+            event.exceptionHandle(receiver, t);
         }
     }
 
