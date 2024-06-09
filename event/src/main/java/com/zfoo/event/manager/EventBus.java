@@ -13,6 +13,7 @@
 package com.zfoo.event.manager;
 
 import com.zfoo.event.enhance.IEventReceiver;
+import com.zfoo.event.model.ExceptionEvent;
 import com.zfoo.event.model.IEvent;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
@@ -33,6 +34,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -55,6 +57,11 @@ public abstract class EventBus {
      * event mapping
      */
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
+
+    /**
+     * event exception handler
+     */
+    public static BiConsumer<IEventReceiver, IEvent> exceptionFunction = (receiver, event) -> {};
     /**
      * event noReceiver handler
      */
@@ -120,13 +127,10 @@ public abstract class EventBus {
         try {
             receiver.invoke(event);
         } catch (Throwable t) {
-            event.exceptionHandle(receiver, t);
+            logger.error("bean:[{}] event:[{}] unhandled exception", receiver.getBean().getClass().getSimpleName(), event.getClass().getSimpleName(), t);
+            exceptionFunction.accept(receiver, event);
+            post(new ExceptionEvent(receiver, event, t));
         }
-    }
-
-    @FunctionalInterface
-    public interface TriConsumer<T, U, V> {
-        void accept(T t, U u, V v);
     }
 
     public static void asyncExecute(Runnable runnable) {
