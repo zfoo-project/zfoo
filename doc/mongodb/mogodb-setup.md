@@ -22,11 +22,26 @@
 ### 1. MongoDB安装配置
 
 1. 直接安装MongoDB，用custom自定义安装目录，一般用默认的安装目录即可，不要勾选mongoDB compass
-2. 将C:\Program Files\MongoDB\Server\4.2\bin配置到环境变量中，便于全局使用
-3. mongo -version # 查看安装的版本
+
+```text
+MongoDB安装出现Verify that you have sufficient privileges to start system services的解决办法如下：
+
+网络服务Network Service账户的权限不够。
+找到“我的电脑——右键——管理——本地用户和组——Administrators
+双击Administrators后，点击”添加“——”高级“——”立即查找“——”Network Service“，
+将Network Service 添加进去后，我们再来重新启动Mongodb service，发现启动成功！
+```
+
+2. 将C:\Program Files\MongoDB\Server\7.0\bin配置到环境变量中，便于全局使用
+```text
+需要另外下载 MongoDB Shell 解压到 C:\Program Files\MongoDB\Server\7.0\bin 目录中
+```
+3. mongod -version # 查看安装的版本
 4. MongoDB的工具
 
 ```
+需要另外下载 MongoDB Database Tools 解压到 C:\Program Files\MongoDB\Server\7.0\bin 目录中
+
 bsondump        # bson转换工具
 mongodump       # 逻辑备份工具
 mongorestore    # 逻辑恢复工具
@@ -42,7 +57,6 @@ mongotop        # 读写监控工具
 
 - 客户端自行下载
 
-
 ## Linux
 
 ### 1.MongoDB安装配置
@@ -54,7 +68,6 @@ tar -zxvf mongodb-linux-x86_64-ubuntu2204-6.0.6.tgz -C /usr/local
 mv mongodb-linux-x86_64-ubuntu2204-6.0.6 mongodb
 vim /usr/local/mongodb/mongodb.config # 创建自定义配置文件，解压的mongodb安装包没有默认的配置文件
 ```
-
 
 - wiredTiger
 
@@ -128,12 +141,14 @@ mongod: error while loading shared libraries: libnetsnmpmibs.so.31: cannot open 
 ```
 
 - mongosh -port 22400 # 使用mongo客户端链接MongoDB
+
 ```
 dpkg -i mongodb-mongosh_1.10.1_amd64.deb
 mongodb客户端命令行和服务器分开了，需要安装mongosh工具
 ```
 
 - vim /etc/security/limits.conf 数据库需要大的文件句柄，保存并退出编辑器，重新启动机器使配置生效
+
 ```
 * soft nofile 65536
 * hard nofile 65536
