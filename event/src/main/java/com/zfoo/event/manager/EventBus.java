@@ -34,7 +34,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -61,7 +60,10 @@ public abstract class EventBus {
     /**
      * event exception handler
      */
-    public static BiConsumer<IEventReceiver, IEvent> exceptionFunction = (receiver, event) -> {};
+    public static TriConsumer<IEventReceiver, IEvent, Throwable> exceptionFunction = (receiver, event, throwable) -> {
+        logger.error("bean:[{}] event:[{}] unhandled exception", receiver.getBean().getClass().getSimpleName(), event.getClass().getSimpleName(), throwable);
+        post(new ExceptionEvent(receiver, event, throwable));
+    };
     /**
      * event noReceiver handler
      */
@@ -127,10 +129,13 @@ public abstract class EventBus {
         try {
             receiver.invoke(event);
         } catch (Throwable t) {
-            logger.error("bean:[{}] event:[{}] unhandled exception", receiver.getBean().getClass().getSimpleName(), event.getClass().getSimpleName(), t);
-            exceptionFunction.accept(receiver, event);
-            post(new ExceptionEvent(receiver, event, t));
+            exceptionFunction.accept(receiver, event, t);
         }
+    }
+
+    @FunctionalInterface
+    public interface TriConsumer<T, U, V> {
+        void accept(T t, U u, V v);
     }
 
     public static void asyncExecute(Runnable runnable) {
