@@ -15,6 +15,7 @@ package com.zfoo.event.manager;
 import com.zfoo.event.enhance.IEventReceiver;
 import com.zfoo.event.model.ExceptionEvent;
 import com.zfoo.event.model.IEvent;
+import com.zfoo.event.model.TripleConsumer;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
@@ -60,10 +61,7 @@ public abstract class EventBus {
     /**
      * event exception handler
      */
-    public static TriConsumer<IEventReceiver, IEvent, Throwable> exceptionFunction = (receiver, event, throwable) -> {
-        logger.error("bean:[{}] event:[{}] unhandled exception", receiver.getBean().getClass().getSimpleName(), event.getClass().getSimpleName(), throwable);
-        post(new ExceptionEvent(receiver, event, throwable));
-    };
+    public static TripleConsumer<IEventReceiver, IEvent, Throwable> exceptionFunction = null;
     /**
      * event noReceiver handler
      */
@@ -129,13 +127,13 @@ public abstract class EventBus {
         try {
             receiver.invoke(event);
         } catch (Throwable t) {
-            exceptionFunction.accept(receiver, event, t);
+            if (exceptionFunction == null) {
+                logger.error("bean:[{}] event:[{}] unhandled exception", receiver.getBean().getClass().getSimpleName(), event.getClass().getSimpleName(), t);
+            } else {
+                exceptionFunction.accept(receiver, event, t);
+            }
+            post(new ExceptionEvent(receiver, event, t));
         }
-    }
-
-    @FunctionalInterface
-    public interface TriConsumer<T, U, V> {
-        void accept(T t, U u, V v);
     }
 
     public static void asyncExecute(Runnable runnable) {
