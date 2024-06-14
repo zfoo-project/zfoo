@@ -41,7 +41,7 @@ public class LongMapCodec<V> implements Codec<Map<Long, V>> {
     @Override
     public Map<Long, V> decode(final BsonReader reader, final DecoderContext context) {
         reader.readStartDocument();
-        Map<Long, V> map = new HashMap<>();
+        var map = new HashMap<Long, V>();
         while (!BsonType.END_OF_DOCUMENT.equals(reader.readBsonType())) {
             long key = Long.parseLong(reader.readName());
             V value = BsonType.NULL.equals(reader.getCurrentBsonType()) ? null : valueCodec.decode(reader, context);
