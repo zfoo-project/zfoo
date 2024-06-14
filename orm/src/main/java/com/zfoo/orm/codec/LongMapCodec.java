@@ -1,6 +1,8 @@
 package com.zfoo.orm.codec;
 
-import org.bson.*;
+import org.bson.BsonReader;
+import org.bson.BsonType;
+import org.bson.BsonWriter;
 import org.bson.codecs.Codec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
@@ -28,17 +30,10 @@ public class LongMapCodec<V> implements Codec<Map<Long, V>> {
 
     @Override
     public void encode(final BsonWriter writer, final Map<Long, V> map, final EncoderContext encoderContext) {
-        try (var dummyWriter = new BsonDocumentWriter(new BsonDocument())) {
-            dummyWriter.writeStartDocument();
-            writer.writeStartDocument();
-
-            for (final Map.Entry<Long, V> entry : map.entrySet()) {
-                writer.writeName(entry.getKey().toString());
-                valueCodec.encode(writer, entry.getValue(), encoderContext);
-            }
-            dummyWriter.writeEndDocument();
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
+        writer.writeStartDocument();
+        for (final Map.Entry<Long, V> entry : map.entrySet()) {
+            writer.writeName(entry.getKey().toString());
+            valueCodec.encode(writer, entry.getValue(), encoderContext);
         }
         writer.writeEndDocument();
     }
