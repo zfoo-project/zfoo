@@ -85,6 +85,10 @@ public class MapTest {
 
         OrmContext.getAccessor().insert(entity);
         var myEntity = OrmContext.getAccessor().load(1, MapEntity.class);
+        Assert.assertEquals(entity.getBagMap(), myEntity.getBagMap());
+        Assert.assertEquals(entity.getBaseMap(), myEntity.getBaseMap());
+        Assert.assertEquals(entity.getIntStringMap(), myEntity.getIntStringMap());
+        Assert.assertEquals(entity.getIntBagMap(), myEntity.getIntBagMap());
         Assert.assertEquals(entity, myEntity);
     }
 }
