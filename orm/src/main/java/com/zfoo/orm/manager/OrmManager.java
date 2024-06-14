@@ -38,7 +38,6 @@ import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.*;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
 import org.springframework.aop.framework.AopProxyUtils;
@@ -96,14 +95,12 @@ public class OrmManager implements IOrmManager {
             allEntityCachesUsableMap.put(entityDef.getClazz(), false);
         }
 
-        CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
-                MongoClientSettings.getDefaultCodecRegistry(),
-                CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true)
-                        .register(new MapCodecProvider()).build()));
+        var pojoCodecProvider = PojoCodecProvider.builder().automatic(true).register(new MapCodecProvider()).build();
+        var codecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), CodecRegistries.fromProviders(pojoCodecProvider));
 
         var mongoBuilder = MongoClientSettings
                 .builder()
-                .codecRegistry(pojoCodecRegistry);
+                .codecRegistry(codecRegistry);
 
         // 设置数据库地址
         var hostConfig = ormConfig.getHost();
