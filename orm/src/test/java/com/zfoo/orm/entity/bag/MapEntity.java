@@ -31,6 +31,8 @@ public class MapEntity implements IEntity<Long> {
 
     private Map<String, Map<String, String>> baseMap = new HashMap<>();
 
+    private Map<Long, String> longStringMap = new HashMap<>();
+
     @Override
     public Long id() {
         return id;
@@ -58,6 +60,14 @@ public class MapEntity implements IEntity<Long> {
 
     public void setBaseMap(Map<String, Map<String, String>> baseMap) {
         this.baseMap = baseMap;
+    }
+
+    public Map<Long, String> getLongStringMap() {
+        return longStringMap;
+    }
+
+    public void setLongStringMap(Map<Long, String> longStringMap) {
+        this.longStringMap = longStringMap;
     }
 
     @Override
