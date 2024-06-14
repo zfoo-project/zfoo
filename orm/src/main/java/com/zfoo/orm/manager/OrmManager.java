@@ -26,6 +26,7 @@ import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.anno.*;
 import com.zfoo.orm.cache.EntityCache;
 import com.zfoo.orm.cache.IEntityCache;
+import com.zfoo.orm.codec.MapCodecProvider;
 import com.zfoo.orm.config.OrmConfig;
 import com.zfoo.orm.model.EntityDef;
 import com.zfoo.orm.model.IEntity;
@@ -97,7 +98,8 @@ public class OrmManager implements IOrmManager {
 
         CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
                 MongoClientSettings.getDefaultCodecRegistry(),
-                CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+                CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true)
+                        .register(new MapCodecProvider()).build()));
 
         var mongoBuilder = MongoClientSettings
                 .builder()
@@ -541,9 +543,9 @@ public class OrmManager implements IOrmManager {
                 var keyType = types[0];
                 var valueType = types[1];
 
-                if (!String.class.isAssignableFrom((Class<?>) keyType)) {
-                    throw new RunException("[class:{}] type declaration is incorrect, and the key type of the Map must be the String type", clazz.getCanonicalName());
-                }
+//                if (!String.class.isAssignableFrom((Class<?>) keyType)) {
+//                    throw new RunException("[class:{}] type declaration is incorrect, and the key type of the Map must be the String type", clazz.getCanonicalName());
+//                }
 
                 checkSubEntity(clazz, valueType);
             } else if (ObjectId.class.isAssignableFrom(fieldType)) {

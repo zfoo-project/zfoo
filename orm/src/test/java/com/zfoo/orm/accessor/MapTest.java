@@ -60,6 +60,11 @@ public class MapTest {
         map.put("a", Map.of("b", "b"));
         entity.setBaseMap(map);
 
+        var longStringHashMap = new HashMap<Long, String>();
+        longStringHashMap.put(100L,"hello map1");
+        longStringHashMap.put(101L,"hello map2");
+        entity.setLongStringMap(longStringHashMap);
+
         OrmContext.getAccessor().insert(entity);
 
         var myEntity = OrmContext.getAccessor().load(1, MapEntity.class);
