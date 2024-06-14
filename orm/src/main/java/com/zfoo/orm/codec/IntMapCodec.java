@@ -48,7 +48,7 @@ public class IntMapCodec<V> implements Codec<Map<Integer, V>> {
         reader.readStartDocument();
         Map<Integer, V> map = new HashMap<>();
         while (!BsonType.END_OF_DOCUMENT.equals(reader.readBsonType())) {
-            int key = java.lang.Integer.parseInt(reader.readName());
+            int key = Integer.parseInt(reader.readName());
             V value = BsonType.NULL.equals(reader.getCurrentBsonType()) ? null : valueCodec.decode(reader, context);
             map.put(key, value);
         }
