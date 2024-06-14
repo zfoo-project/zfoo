@@ -61,12 +61,29 @@ public class MapTest {
         entity.setBaseMap(map);
 
         var longStringHashMap = new HashMap<Long, String>();
-        longStringHashMap.put(100L,"hello map1");
-        longStringHashMap.put(101L,"hello map2");
+        longStringHashMap.put(100L, "hello map1");
+        longStringHashMap.put(101L, "hello map2");
         entity.setLongStringMap(longStringHashMap);
 
-        OrmContext.getAccessor().insert(entity);
+        var intStringHashMap = new HashMap<Integer, String>();
+        intStringHashMap.put(100, "hello map1");
+        intStringHashMap.put(102, "hello map2");
+        intStringHashMap.put(103, "hello map2");
+        entity.setIntStringMap(intStringHashMap);
 
+        var intBagMap = new HashMap<Integer, BagItem>();
+        entity.setIntBagMap(intBagMap);
+        intBagMap.put(1, bagItem1);
+        intBagMap.put(2, bagItem2);
+        intBagMap.put(3, bagItem3);
+
+        var intBaseMap = new HashMap<Integer, Map<Integer, String>>();
+        intBaseMap.put(1, Map.of(1, "1"));
+        intBaseMap.put(2, Map.of(2, "2"));
+        intBaseMap.put(3, Map.of(3, "3"));
+        entity.setIntBaseMap(intBaseMap);
+
+        OrmContext.getAccessor().insert(entity);
         var myEntity = OrmContext.getAccessor().load(1, MapEntity.class);
         Assert.assertEquals(entity, myEntity);
     }

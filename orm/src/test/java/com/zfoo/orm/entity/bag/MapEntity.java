@@ -32,6 +32,9 @@ public class MapEntity implements IEntity<Long> {
     private Map<String, Map<String, String>> baseMap = new HashMap<>();
 
     private Map<Long, String> longStringMap = new HashMap<>();
+    private Map<Integer, String> intStringMap = new HashMap<>();
+    private Map<Integer, BagItem> intBagMap = new HashMap<>();
+    private Map<Integer, Map<Integer, String>> intBaseMap = new HashMap<>();
 
     @Override
     public Long id() {
@@ -62,6 +65,14 @@ public class MapEntity implements IEntity<Long> {
         this.baseMap = baseMap;
     }
 
+    public Map<Integer, String> getIntStringMap() {
+        return intStringMap;
+    }
+
+    public void setIntStringMap(Map<Integer, String> intStringMap) {
+        this.intStringMap = intStringMap;
+    }
+
     public Map<Long, String> getLongStringMap() {
         return longStringMap;
     }
@@ -70,16 +81,32 @@ public class MapEntity implements IEntity<Long> {
         this.longStringMap = longStringMap;
     }
 
+    public Map<Integer, BagItem> getIntBagMap() {
+        return intBagMap;
+    }
+
+    public void setIntBagMap(Map<Integer, BagItem> intBagMap) {
+        this.intBagMap = intBagMap;
+    }
+
+    public Map<Integer, Map<Integer, String>> getIntBaseMap() {
+        return intBaseMap;
+    }
+
+    public void setIntBaseMap(Map<Integer, Map<Integer, String>> intBaseMap) {
+        this.intBaseMap = intBaseMap;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MapEntity mapEntity = (MapEntity) o;
-        return id == mapEntity.id && Objects.equals(bagMap, mapEntity.bagMap);
+        return id == mapEntity.id && Objects.equals(bagMap, mapEntity.bagMap) && Objects.equals(baseMap, mapEntity.baseMap) && Objects.equals(longStringMap, mapEntity.longStringMap) && Objects.equals(intStringMap, mapEntity.intStringMap) && Objects.equals(intBagMap, mapEntity.intBagMap) && Objects.equals(intBaseMap, mapEntity.intBaseMap);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, bagMap);
+        return Objects.hash(id, bagMap, baseMap, longStringMap, intStringMap, intBagMap, intBaseMap);
     }
 }
