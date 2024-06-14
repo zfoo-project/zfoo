@@ -20,16 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.net.JarURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.net.*;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -484,7 +476,7 @@ public abstract class ClassUtils {
         throw new RunException("[type:{}]类型不正确", type);
     }
 
-    private static boolean isBaseType(Class<?> clazz) {
+    public static boolean isBaseType(Class<?> clazz) {
         return clazz.isPrimitive()
                 || Number.class.isAssignableFrom(clazz)
                 || String.class.isAssignableFrom(clazz)
