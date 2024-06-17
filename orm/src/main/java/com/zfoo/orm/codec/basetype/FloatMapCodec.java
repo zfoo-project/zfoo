@@ -10,9 +10,7 @@ public class FloatMapCodec implements MapKeyCodec<Float> {
 
     @Override
     public String encode(Float value) {
-        return (value != null)
-                ? value.toString()
-                : null;
+        return value.toString();
     }
 
     @Override

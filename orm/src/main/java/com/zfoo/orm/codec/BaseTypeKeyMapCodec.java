@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 基础类型作为key的map解析器
+ * 基础类型作为key的map解析器 (key 默认不能为null)
  * @Author：lqh
  * @Date：2024/6/17 13:55
  */

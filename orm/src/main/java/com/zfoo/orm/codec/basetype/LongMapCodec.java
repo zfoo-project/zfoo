@@ -13,9 +13,7 @@ public class LongMapCodec implements MapKeyCodec<Long> {
 
     @Override
     public String encode(Long value) {
-        return (value != null)
-                ? value.toString()
-                : null;
+        return value.toString();
     }
 
     @Override

@@ -11,9 +11,7 @@ import org.springframework.util.StringUtils;
 public class CharacterMapCodec implements MapKeyCodec<Character> {
     @Override
     public String encode(Character value) {
-        return (value != null)
-                ? value.toString()
-                : "";
+        return value.toString();
     }
 
     @Override
