@@ -572,7 +572,6 @@ public class OrmManager implements IOrmManager {
                 var keyType = types[0];
                 var valueType = types[1];
                 if (!ClassUtils.isBaseType((Class<?>) keyType)) {
-                    // ORM中Map的key必须是String类型
                     throw new RunException("The key of the map in the ORM must be of the Base type");
                 }
                 checkSubEntity(currentEntityClass, valueType);

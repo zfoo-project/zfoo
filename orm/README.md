@@ -119,7 +119,6 @@ userEntityCaches.update(entity);
 - Supports basic data properties (byte, short, int, long, float, double, boolean), string String, custom objects, does
   not support generics
 - Arrays support one-dimensional arrays, and collections support List, Set
-- Map type: Mongo DB officially restricts key to String
 - Database primary keys can use integers as much as possible, because Mongo DB's default primary key is a string, which
   takes up space
 - The database uses a self-developed ORM framework, such as an entity class User Entity, which maps to the collection in
