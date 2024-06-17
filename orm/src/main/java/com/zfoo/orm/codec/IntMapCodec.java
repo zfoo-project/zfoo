@@ -38,7 +38,7 @@ public class IntMapCodec<V> implements Codec<Map<Integer, V>> {
             if (value == null) {
                 writer.writeNull();
             } else {
-                valueCodec.encode(writer, entry.getValue(), encoderContext);
+                valueCodec.encode(writer, value, encoderContext);
             }
         }
         writer.writeEndDocument();

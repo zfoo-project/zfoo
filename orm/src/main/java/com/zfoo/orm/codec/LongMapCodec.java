@@ -38,7 +38,7 @@ public class LongMapCodec<V> implements Codec<Map<Long, V>> {
             if (value == null) {
                 writer.writeNull();
             } else {
-                valueCodec.encode(writer, entry.getValue(), encoderContext);
+                valueCodec.encode(writer, value, encoderContext);
             }
         }
         writer.writeEndDocument();
