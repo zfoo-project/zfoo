@@ -86,18 +86,59 @@ public class MapTest {
         intStringHashMap.put(104, null);
         entity.setIntStringMap(intStringHashMap);
 
-        var intBagMap = new HashMap<Integer, BagItem>();
-        entity.setIntBagMap(intBagMap);
-        intBagMap.put(1, bagItem1);
-        intBagMap.put(2, bagItem2);
-        intBagMap.put(3, bagItem3);
-
         var intBaseMap = new HashMap<Integer, Map<Integer, String>>();
         intBaseMap.put(1, Map.of(1, "1"));
         intBaseMap.put(2, Map.of(2, "2"));
         intBaseMap.put(3, Map.of(3, "3"));
         intBaseMap.put(4, null);
         entity.setIntBaseMap(intBaseMap);
+
+        var charBagMap = new HashMap<Character, BagItem>();
+        entity.setCharBagMap(charBagMap);
+        charBagMap.put('a', bagItem1);
+        charBagMap.put('b', bagItem2);
+        charBagMap.put('d', null);
+
+        var boolBagMap = new HashMap<Boolean, BagItem>();
+        entity.setBoolBagMap(boolBagMap);
+        boolBagMap.put(true, bagItem1);
+        boolBagMap.put(false, null);
+
+        var byteBagMap = new HashMap<Byte, BagItem>();
+        entity.setByteBagMap(byteBagMap);
+        byteBagMap.put((byte) 1, bagItem1);
+        byteBagMap.put((byte) 2, bagItem2);
+        byteBagMap.put((byte) 3, null);
+
+        var shortBagMap = new HashMap<Short, BagItem>();
+        entity.setShortBagMap(shortBagMap);
+        shortBagMap.put((short) 1, bagItem1);
+        shortBagMap.put((short) 2, bagItem2);
+        shortBagMap.put((short) 3, null);
+
+        var intBagMap = new HashMap<Integer, BagItem>();
+        entity.setIntBagMap(intBagMap);
+        intBagMap.put(1, bagItem1);
+        intBagMap.put(2, bagItem2);
+        intBagMap.put(3, null);
+
+        var longBagMap = new HashMap<Long, BagItem>();
+        entity.setLongBagMap(longBagMap);
+        longBagMap.put(1L, bagItem1);
+        longBagMap.put(2L, bagItem2);
+        longBagMap.put(3L, null);
+
+        var floatBagMap = new HashMap<Float, BagItem>();
+        entity.setFloatBagMap(floatBagMap);
+        floatBagMap.put(1F, bagItem1);
+        floatBagMap.put(2F, bagItem2);
+        floatBagMap.put(3F, null);
+
+        var doubleBagMap = new HashMap<Double, BagItem>();
+        entity.setDoubleBagMap(doubleBagMap);
+        doubleBagMap.put(1D, bagItem1);
+        doubleBagMap.put(2D, bagItem2);
+        doubleBagMap.put(3D, null);
 
         OrmContext.getAccessor().insert(entity);
         var myEntity = OrmContext.getAccessor().load(id, MapEntity.class);

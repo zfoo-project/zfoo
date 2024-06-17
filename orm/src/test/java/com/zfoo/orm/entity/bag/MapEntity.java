@@ -33,8 +33,15 @@ public class MapEntity implements IEntity<Long> {
 
     private Map<Long, String> longStringMap = new HashMap<>();
     private Map<Integer, String> intStringMap = new HashMap<>();
-    private Map<Integer, BagItem> intBagMap = new HashMap<>();
     private Map<Integer, Map<Integer, String>> intBaseMap = new HashMap<>();
+    private Map<Character, BagItem> charBagMap = new HashMap<>();
+    private Map<Boolean, BagItem> boolBagMap = new HashMap<>();
+    private Map<Byte, BagItem> byteBagMap = new HashMap<>();
+    private Map<Short, BagItem> shortBagMap = new HashMap<>();
+    private Map<Integer, BagItem> intBagMap = new HashMap<>();
+    private Map<Long, BagItem> longBagMap = new HashMap<>();
+    private Map<Float, BagItem> floatBagMap = new HashMap<>();
+    private Map<Double, BagItem> doubleBagMap = new HashMap<>();
 
     @Override
     public Long id() {
@@ -65,14 +72,6 @@ public class MapEntity implements IEntity<Long> {
         this.baseMap = baseMap;
     }
 
-    public Map<Integer, String> getIntStringMap() {
-        return intStringMap;
-    }
-
-    public void setIntStringMap(Map<Integer, String> intStringMap) {
-        this.intStringMap = intStringMap;
-    }
-
     public Map<Long, String> getLongStringMap() {
         return longStringMap;
     }
@@ -81,12 +80,12 @@ public class MapEntity implements IEntity<Long> {
         this.longStringMap = longStringMap;
     }
 
-    public Map<Integer, BagItem> getIntBagMap() {
-        return intBagMap;
+    public Map<Integer, String> getIntStringMap() {
+        return intStringMap;
     }
 
-    public void setIntBagMap(Map<Integer, BagItem> intBagMap) {
-        this.intBagMap = intBagMap;
+    public void setIntStringMap(Map<Integer, String> intStringMap) {
+        this.intStringMap = intStringMap;
     }
 
     public Map<Integer, Map<Integer, String>> getIntBaseMap() {
@@ -97,16 +96,80 @@ public class MapEntity implements IEntity<Long> {
         this.intBaseMap = intBaseMap;
     }
 
+    public Map<Character, BagItem> getCharBagMap() {
+        return charBagMap;
+    }
+
+    public void setCharBagMap(Map<Character, BagItem> charBagMap) {
+        this.charBagMap = charBagMap;
+    }
+
+    public Map<Boolean, BagItem> getBoolBagMap() {
+        return boolBagMap;
+    }
+
+    public void setBoolBagMap(Map<Boolean, BagItem> boolBagMap) {
+        this.boolBagMap = boolBagMap;
+    }
+
+    public Map<Byte, BagItem> getByteBagMap() {
+        return byteBagMap;
+    }
+
+    public void setByteBagMap(Map<Byte, BagItem> byteBagMap) {
+        this.byteBagMap = byteBagMap;
+    }
+
+    public Map<Short, BagItem> getShortBagMap() {
+        return shortBagMap;
+    }
+
+    public void setShortBagMap(Map<Short, BagItem> shortBagMap) {
+        this.shortBagMap = shortBagMap;
+    }
+
+    public Map<Integer, BagItem> getIntBagMap() {
+        return intBagMap;
+    }
+
+    public void setIntBagMap(Map<Integer, BagItem> intBagMap) {
+        this.intBagMap = intBagMap;
+    }
+
+    public Map<Long, BagItem> getLongBagMap() {
+        return longBagMap;
+    }
+
+    public void setLongBagMap(Map<Long, BagItem> longBagMap) {
+        this.longBagMap = longBagMap;
+    }
+
+    public Map<Float, BagItem> getFloatBagMap() {
+        return floatBagMap;
+    }
+
+    public void setFloatBagMap(Map<Float, BagItem> floatBagMap) {
+        this.floatBagMap = floatBagMap;
+    }
+
+    public Map<Double, BagItem> getDoubleBagMap() {
+        return doubleBagMap;
+    }
+
+    public void setDoubleBagMap(Map<Double, BagItem> doubleBagMap) {
+        this.doubleBagMap = doubleBagMap;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MapEntity mapEntity = (MapEntity) o;
-        return id == mapEntity.id && Objects.equals(bagMap, mapEntity.bagMap) && Objects.equals(baseMap, mapEntity.baseMap) && Objects.equals(longStringMap, mapEntity.longStringMap) && Objects.equals(intStringMap, mapEntity.intStringMap) && Objects.equals(intBagMap, mapEntity.intBagMap) && Objects.equals(intBaseMap, mapEntity.intBaseMap);
+        return id == mapEntity.id && Objects.equals(bagMap, mapEntity.bagMap) && Objects.equals(baseMap, mapEntity.baseMap) && Objects.equals(longStringMap, mapEntity.longStringMap) && Objects.equals(intStringMap, mapEntity.intStringMap) && Objects.equals(intBaseMap, mapEntity.intBaseMap) && Objects.equals(charBagMap, mapEntity.charBagMap) && Objects.equals(boolBagMap, mapEntity.boolBagMap) && Objects.equals(byteBagMap, mapEntity.byteBagMap) && Objects.equals(shortBagMap, mapEntity.shortBagMap) && Objects.equals(intBagMap, mapEntity.intBagMap) && Objects.equals(longBagMap, mapEntity.longBagMap) && Objects.equals(floatBagMap, mapEntity.floatBagMap) && Objects.equals(doubleBagMap, mapEntity.doubleBagMap);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, bagMap, baseMap, longStringMap, intStringMap, intBagMap, intBaseMap);
+        return Objects.hash(id, bagMap, baseMap, longStringMap, intStringMap, intBaseMap, charBagMap, boolBagMap, byteBagMap, shortBagMap, intBagMap, longBagMap, floatBagMap, doubleBagMap);
     }
 }
