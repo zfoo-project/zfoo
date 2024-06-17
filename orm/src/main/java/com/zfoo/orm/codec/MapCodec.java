@@ -9,19 +9,20 @@ import org.bson.codecs.EncoderContext;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 基础类型作为key的map解析器 (key 默认不能为null)
  * @Author：lqh
  * @Date：2024/6/17 13:55
  */
-public class BaseTypeKeyMapCodec<K,V> implements Codec<Map<K, V>> {
+public class MapCodec<K, V> implements Codec<Map<K, V>> {
 
     private final Class<Map<K, V>> encoderClass;
     private final Codec<K> keyCodec;
     private final Codec<V> valueCodec;
 
-    BaseTypeKeyMapCodec(final Class<Map<K, V>> encoderClass, final Codec<K> keyCodec, final Codec<V> valueCodec) {
+    MapCodec(final Class<Map<K, V>> encoderClass, final Codec<K> keyCodec, final Codec<V> valueCodec) {
         this.encoderClass = encoderClass;
         this.keyCodec = keyCodec;
         this.valueCodec = valueCodec;
@@ -50,8 +51,8 @@ public class BaseTypeKeyMapCodec<K,V> implements Codec<Map<K, V>> {
         reader.readStartDocument();
         var map = new HashMap<K, V>();
         while (BsonType.END_OF_DOCUMENT != reader.readBsonType()) {
-            MapKeyCodec<K> codec = (MapKeyCodec<K>) BaseTypeEnum.getCodec(keyCodec.getEncoderClass());
-            K key = codec.decode(reader.readName());
+            var keyDecodeFunction = (Function<String, K>) MapKeyCodecEnum.keyDecode(keyCodec.getEncoderClass());
+            K key = keyDecodeFunction.apply(reader.readName());
             V value = null;
             if (BsonType.NULL == reader.getCurrentBsonType()) {
                 reader.readNull();

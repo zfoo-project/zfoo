@@ -25,8 +25,8 @@ public class MapCodecProvider implements PropertyCodecProvider {
         }
         var keyType = typeParameters.get(0);
         var valueType = typeParameters.get(1);
-        if (BaseTypeEnum.containsKeyType(keyType.getType())){
-            return new BaseTypeKeyMapCodec(type.getType(), registry.get(keyType), registry.get(valueType));
+        if (MapKeyCodecEnum.containsKeyDecode(keyType.getType())) {
+            return new MapCodec(type.getType(), registry.get(keyType), registry.get(valueType));
         }
         return null;
     }
