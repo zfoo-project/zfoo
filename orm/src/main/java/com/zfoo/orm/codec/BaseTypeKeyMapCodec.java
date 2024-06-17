@@ -34,7 +34,7 @@ public class BaseTypeKeyMapCodec<K,V> implements Codec<Map<K, V>> {
         for (var entry : map.entrySet()) {
             var key = entry.getKey();
             var value = entry.getValue();
-            MapKeyCodec<K> codec = BaseTypeEnum.getCodec(keyCodec.getEncoderClass());
+            MapKeyCodec<K> codec = (MapKeyCodec<K>) BaseTypeEnum.getCodec(keyCodec.getEncoderClass());
             String keyValue = codec.encode(key);
             writer.writeName(keyValue);
             if (value == null) {
@@ -52,7 +52,7 @@ public class BaseTypeKeyMapCodec<K,V> implements Codec<Map<K, V>> {
         reader.readStartDocument();
         var map = new HashMap<K, V>();
         while (!BsonType.END_OF_DOCUMENT.equals(reader.readBsonType())) {
-            MapKeyCodec<K> codec = BaseTypeEnum.getCodec(keyCodec.getEncoderClass());
+            MapKeyCodec<K> codec = (MapKeyCodec<K>) BaseTypeEnum.getCodec(keyCodec.getEncoderClass());
             K key = codec.decode(reader.readName());
             V value = null;
             if (BsonType.NULL.equals(reader.getCurrentBsonType())) {

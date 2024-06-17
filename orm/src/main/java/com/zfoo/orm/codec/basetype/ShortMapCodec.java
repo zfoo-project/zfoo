@@ -6,7 +6,7 @@ import com.zfoo.orm.codec.MapKeyCodec;
  * @Author：lqh
  * @Date：2024/6/17 11:38
  */
-public class ShortMapCodec<V> implements MapKeyCodec<Short> {
+public class ShortMapCodec implements MapKeyCodec<Short> {
     @Override
     public String encode(Short value) {
         return (value != null)

@@ -2,52 +2,62 @@ package com.zfoo.orm.codec;
 
 import com.zfoo.orm.codec.basetype.*;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 /**
  * 基础类型枚举
  * @Author：lqh
  * @Date：2024/6/17 11:41
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
 public enum BaseTypeEnum {
-    Float(java.lang.Float.class, new FloatMapCodec()),
-    Integer(java.lang.Integer.class, new IntMapCodec()),
-    Double(java.lang.Double.class, new DoubleMapCodec()),
-    Character(java.lang.Character.class, new CharacterMapCodec()),
-    Byte(java.lang.Byte.class, new ByteMapCodec()),
-    Boolean(java.lang.Boolean.class, new BooleanMapCodec()),
-    Long(java.lang.Long.class, new LongMapCodec()),
-    Short(java.lang.Short.class, new ShortMapCodec()),
+
+    Character(Character.class, new CharacterMapCodec()),
+
+    Boolean(Boolean.class, new BooleanMapCodec()),
+
+    Byte(Byte.class, new ByteMapCodec()),
+
+    Short(Short.class, new ShortMapCodec()),
+
+    Integer(Integer.class, new IntMapCodec()),
+
+    Long(Long.class, new LongMapCodec()),
+
+    Float(Float.class, new FloatMapCodec()),
+
+    Double(Double.class, new DoubleMapCodec()),
+
     ;
-    private final MapKeyCodec mapKeyCodec;
 
     private final Class<?> clazz;
 
-    BaseTypeEnum(Class<?> clazz, MapKeyCodec mapKeyCodec) {
+    private final MapKeyCodec<? extends Serializable> mapKeyCodec;
+
+
+    BaseTypeEnum(Class<?> clazz, MapKeyCodec<? extends Serializable> mapKeyCodec) {
         this.clazz = clazz;
         this.mapKeyCodec = mapKeyCodec;
     }
 
-    public MapKeyCodec getMapKeyCodec() {
-        return mapKeyCodec;
-    }
+    public static final Map<Class<?>, MapKeyCodec<? extends Serializable>> baseTypeMap = Arrays.stream(values()).collect(Collectors.toMap(BaseTypeEnum::getClazz, BaseTypeEnum::getMapKeyCodec));
+
 
     public Class<?> getClazz() {
         return clazz;
     }
-    public static boolean containsKeyType(Class<?> keyClass){
-        for (BaseTypeEnum typeEnum : values()) {
-            if (typeEnum.getClazz() == keyClass) {
-                return true;
-            }
-        }
-        return false;
+
+    public MapKeyCodec<? extends Serializable> getMapKeyCodec() {
+        return mapKeyCodec;
     }
-    public static MapKeyCodec getCodec(Class<?> clazz) {
-        for (BaseTypeEnum typeEnum : values()) {
-            if (typeEnum.getClazz() == clazz) {
-                return typeEnum.getMapKeyCodec();
-            }
-        }
-        return null;
+
+    public static boolean containsKeyType(Class<?> keyClass){
+        return baseTypeMap.containsKey(keyClass);
+    }
+
+    public static MapKeyCodec<? extends Serializable> getCodec(Class<?> clazz) {
+        return baseTypeMap.get(clazz);
     }
 }

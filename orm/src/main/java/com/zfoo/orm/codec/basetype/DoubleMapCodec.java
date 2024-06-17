@@ -6,7 +6,7 @@ import com.zfoo.orm.codec.MapKeyCodec;
  * @Author：lqh
  * @Date：2024/6/17 11:35
  */
-public class DoubleMapCodec<V> implements MapKeyCodec<Double> {
+public class DoubleMapCodec implements MapKeyCodec<Double> {
 
     @Override
     public String encode(Double value) {
