@@ -22,11 +22,13 @@ public class MapCodecProvider implements PropertyCodecProvider {
         if (type.getTypeParameters().size() != 2) {
             return null;
         }
-        if (typeParameters.get(0).getType() == Integer.class) {
-            return new IntMapCodec(type.getType(), registry.get(type.getTypeParameters().get(0)), registry.get(type.getTypeParameters().get(1)));
+        var keyType = typeParameters.get(0);
+        var valueType = typeParameters.get(1);
+        if (keyType.getType() == Integer.class) {
+            return new IntMapCodec(type.getType(), registry.get(keyType), registry.get(valueType));
         }
-        if (typeParameters.get(0).getType() == Long.class) {
-            return new LongMapCodec(type.getType(), registry.get(type.getTypeParameters().get(0)), registry.get(type.getTypeParameters().get(1)));
+        if (keyType.getType() == Long.class) {
+            return new LongMapCodec(type.getType(), registry.get(keyType), registry.get(valueType));
         }
         return null;
     }
