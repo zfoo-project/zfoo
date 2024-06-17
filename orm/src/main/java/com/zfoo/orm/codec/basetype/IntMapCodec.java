@@ -13,9 +13,7 @@ public class IntMapCodec implements MapKeyCodec<Integer> {
 
     @Override
     public String encode(Integer value) {
-        return (value != null)
-                ? value.toString()
-                : null;
+        return value.toString();
     }
 
     @Override

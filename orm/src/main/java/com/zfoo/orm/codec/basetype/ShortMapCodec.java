@@ -9,9 +9,7 @@ import com.zfoo.orm.codec.MapKeyCodec;
 public class ShortMapCodec implements MapKeyCodec<Short> {
     @Override
     public String encode(Short value) {
-        return (value != null)
-                ? value.toString()
-                : null;
+        return value.toString();
     }
 
     @Override

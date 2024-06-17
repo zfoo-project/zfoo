@@ -17,7 +17,7 @@ public class BooleanMapCodec implements MapKeyCodec<Boolean> {
     @Override
     public Boolean decode(String text) {
         if (text == null) {
-            return null;
+            throw new java.lang.NullPointerException();
         } else if (isValidName(true, text)) {
             return true;
         } else if (isValidName(false, text)) {

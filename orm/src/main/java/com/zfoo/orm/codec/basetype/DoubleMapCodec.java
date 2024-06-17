@@ -10,9 +10,7 @@ public class DoubleMapCodec implements MapKeyCodec<Double> {
 
     @Override
     public String encode(Double value) {
-        return (value != null)
-                ? value.toString()
-                : null;
+        return value.toString();
     }
 
     @Override

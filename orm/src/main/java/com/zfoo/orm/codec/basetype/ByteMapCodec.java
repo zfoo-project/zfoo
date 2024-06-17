@@ -10,9 +10,7 @@ import com.zfoo.orm.codec.MapKeyCodec;
 public class ByteMapCodec implements MapKeyCodec<Byte> {
     @Override
     public String encode(Byte value) {
-        return (value != null)
-                ? value.toString()
-                : null;
+        return value.toString();
     }
 
     @Override
