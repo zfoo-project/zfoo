@@ -55,6 +55,7 @@ public class MapTest {
         bagMap.put("bag1", bagItem1);
         bagMap.put("bag2", bagItem2);
         bagMap.put("bag3", bagItem3);
+        bagMap.put("bag4", null);
 
         var map = new HashMap<String, Map<String, String>>();
         map.put("a", Map.of("b", "b"));
@@ -63,6 +64,7 @@ public class MapTest {
         var longStringHashMap = new HashMap<Long, String>();
         longStringHashMap.put(100L, "hello map1");
         longStringHashMap.put(101L, "hello map2");
+        longStringHashMap.put(102L, null);
         entity.setLongStringMap(longStringHashMap);
 
         var intStringHashMap = new HashMap<Integer, String>();

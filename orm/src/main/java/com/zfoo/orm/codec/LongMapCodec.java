@@ -31,9 +31,15 @@ public class LongMapCodec<V> implements Codec<Map<Long, V>> {
     @Override
     public void encode(final BsonWriter writer, final Map<Long, V> map, final EncoderContext encoderContext) {
         writer.writeStartDocument();
-        for (final Map.Entry<Long, V> entry : map.entrySet()) {
-            writer.writeName(entry.getKey().toString());
-            valueCodec.encode(writer, entry.getValue(), encoderContext);
+        for (var entry : map.entrySet()) {
+            var key = entry.getKey();
+            var value = entry.getValue();
+            writer.writeName(key.toString());
+            if (value == null) {
+                writer.writeNull();
+            } else {
+                valueCodec.encode(writer, entry.getValue(), encoderContext);
+            }
         }
         writer.writeEndDocument();
     }
@@ -44,7 +50,12 @@ public class LongMapCodec<V> implements Codec<Map<Long, V>> {
         var map = new HashMap<Long, V>();
         while (!BsonType.END_OF_DOCUMENT.equals(reader.readBsonType())) {
             long key = Long.parseLong(reader.readName());
-            V value = BsonType.NULL.equals(reader.getCurrentBsonType()) ? null : valueCodec.decode(reader, context);
+            V value = null;
+            if (BsonType.NULL.equals(reader.getCurrentBsonType())) {
+                reader.readNull();
+            } else {
+                value = valueCodec.decode(reader, context);
+            }
             map.put(key, value);
         }
         reader.readEndDocument();

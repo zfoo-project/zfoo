@@ -32,8 +32,14 @@ public class IntMapCodec<V> implements Codec<Map<Integer, V>> {
     public void encode(final BsonWriter writer, final Map<Integer, V> map, final EncoderContext encoderContext) {
         writer.writeStartDocument();
         for (var entry : map.entrySet()) {
-            writer.writeName(entry.getKey().toString());
-            valueCodec.encode(writer, entry.getValue(), encoderContext);
+            var key = entry.getKey();
+            var value = entry.getValue();
+            writer.writeName(key.toString());
+            if (value == null) {
+                writer.writeNull();
+            } else {
+                valueCodec.encode(writer, entry.getValue(), encoderContext);
+            }
         }
         writer.writeEndDocument();
     }
