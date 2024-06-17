@@ -13,6 +13,7 @@ import java.util.function.Function;
 
 /**
  * 基础类型作为key的map解析器 (key 默认不能为null)
+ *
  * @Author：lqh
  * @Date：2024/6/17 13:55
  */
@@ -21,16 +22,18 @@ public class MapCodec<K, V> implements Codec<Map<K, V>> {
     private final Class<Map<K, V>> encoderClass;
     private final Codec<K> keyCodec;
     private final Codec<V> valueCodec;
+    private final Function<String, K> keyDecodeFunction;
 
-    MapCodec(final Class<Map<K, V>> encoderClass, final Codec<K> keyCodec, final Codec<V> valueCodec) {
+    @SuppressWarnings("unchecked")
+    MapCodec(Class<Map<K, V>> encoderClass, Codec<K> keyCodec, Codec<V> valueCodec) {
         this.encoderClass = encoderClass;
         this.keyCodec = keyCodec;
         this.valueCodec = valueCodec;
+        this.keyDecodeFunction = (Function<String, K>) MapKeyCodecEnum.keyDecode(keyCodec.getEncoderClass());
     }
 
     @Override
-    @SuppressWarnings({"unchecked"})
-    public void encode(final BsonWriter writer, final Map<K, V> map, final EncoderContext encoderContext) {
+    public void encode(BsonWriter writer, Map<K, V> map, EncoderContext encoderContext) {
         writer.writeStartDocument();
         for (var entry : map.entrySet()) {
             var key = entry.getKey();
@@ -46,12 +49,10 @@ public class MapCodec<K, V> implements Codec<Map<K, V>> {
     }
 
     @Override
-    @SuppressWarnings({"unchecked"})
-    public Map<K, V> decode(final BsonReader reader, final DecoderContext context) {
-        reader.readStartDocument();
+    public Map<K, V> decode(BsonReader reader, DecoderContext context) {
         var map = new HashMap<K, V>();
+        reader.readStartDocument();
         while (BsonType.END_OF_DOCUMENT != reader.readBsonType()) {
-            var keyDecodeFunction = (Function<String, K>) MapKeyCodecEnum.keyDecode(keyCodec.getEncoderClass());
             K key = keyDecodeFunction.apply(reader.readName());
             V value = null;
             if (BsonType.NULL == reader.getCurrentBsonType()) {

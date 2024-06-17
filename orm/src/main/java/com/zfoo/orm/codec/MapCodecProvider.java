@@ -15,7 +15,7 @@ import java.util.Map;
 public class MapCodecProvider implements PropertyCodecProvider {
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public <T> Codec<T> get(final TypeWithTypeParameters<T> type, final PropertyCodecRegistry registry) {
+    public <T> Codec<T> get(TypeWithTypeParameters<T> type, PropertyCodecRegistry registry) {
         if (!Map.class.isAssignableFrom(type.getType())) {
             return null;
         }

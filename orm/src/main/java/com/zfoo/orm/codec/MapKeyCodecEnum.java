@@ -31,9 +31,9 @@ public enum MapKeyCodecEnum {
 
     ;
 
-    private final Class<?> keyType;
+    public final Class<?> keyType;
 
-    private final Function<String, ?> keyDecodeFunction;
+    public final Function<String, ?> keyDecodeFunction;
 
 
     MapKeyCodecEnum(Class<?> keyType, Function<String, ?> keyDecodeFunction) {
@@ -41,16 +41,15 @@ public enum MapKeyCodecEnum {
         this.keyDecodeFunction = keyDecodeFunction;
     }
 
-    public static final Map<Class<?>, Function<String, ?>> keyDecodeMap = Arrays.stream(values()).collect(Collectors.toMap(MapKeyCodecEnum::getKeyType, MapKeyCodecEnum::getKeyDecodeFunction));
-
-
-    public Class<?> getKeyType() {
+    public Class<?> keyType() {
         return keyType;
     }
 
-    public Function<String, ?> getKeyDecodeFunction() {
+    public Function<String, ?> keyDecodeFunction() {
         return keyDecodeFunction;
     }
+
+    public static final Map<Class<?>, Function<String, ?>> keyDecodeMap = Arrays.stream(values()).collect(Collectors.toMap(MapKeyCodecEnum::keyType, MapKeyCodecEnum::keyDecodeFunction));
 
     public static boolean containsKeyDecode(Class<?> keyClass) {
         return keyDecodeMap.containsKey(keyClass);
