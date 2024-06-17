@@ -11,30 +11,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * map解析器
- *
+ * 基础类型作为key的map解析器
  * @Author：lqh
- * @Date：2024/6/14 10:32
+ * @Date：2024/6/17 13:55
  */
-public class IntMapCodec<V> implements Codec<Map<Integer, V>> {
+public class BaseTypeKeyMapCodec<K,V> implements Codec<Map<K, V>> {
 
-    private final Class<Map<Integer, V>> encoderClass;
-    private final Codec<Integer> keyCodec;
+    private final Class<Map<K, V>> encoderClass;
+    private final Codec<K> keyCodec;
     private final Codec<V> valueCodec;
 
-    IntMapCodec(final Class<Map<Integer, V>> encoderClass, final Codec<Integer> keyCodec, final Codec<V> valueCodec) {
+    BaseTypeKeyMapCodec(final Class<Map<K, V>> encoderClass, final Codec<K> keyCodec, final Codec<V> valueCodec) {
         this.encoderClass = encoderClass;
         this.keyCodec = keyCodec;
         this.valueCodec = valueCodec;
     }
 
     @Override
-    public void encode(final BsonWriter writer, final Map<Integer, V> map, final EncoderContext encoderContext) {
+    @SuppressWarnings({"unchecked"})
+    public void encode(final BsonWriter writer, final Map<K, V> map, final EncoderContext encoderContext) {
         writer.writeStartDocument();
         for (var entry : map.entrySet()) {
             var key = entry.getKey();
             var value = entry.getValue();
-            writer.writeName(key.toString());
+            MapKeyCodec<K> codec = BaseTypeEnum.getCodec(keyCodec.getEncoderClass());
+            String keyValue = codec.encode(key);
+            writer.writeName(keyValue);
             if (value == null) {
                 writer.writeNull();
             } else {
@@ -45,11 +47,13 @@ public class IntMapCodec<V> implements Codec<Map<Integer, V>> {
     }
 
     @Override
-    public Map<Integer, V> decode(final BsonReader reader, final DecoderContext context) {
+    @SuppressWarnings({"unchecked"})
+    public Map<K, V> decode(final BsonReader reader, final DecoderContext context) {
         reader.readStartDocument();
-        var map = new HashMap<Integer, V>();
+        var map = new HashMap<K, V>();
         while (!BsonType.END_OF_DOCUMENT.equals(reader.readBsonType())) {
-            int key = Integer.parseInt(reader.readName());
+            MapKeyCodec<K> codec = BaseTypeEnum.getCodec(keyCodec.getEncoderClass());
+            K key = codec.decode(reader.readName());
             V value = null;
             if (BsonType.NULL.equals(reader.getCurrentBsonType())) {
                 reader.readNull();
@@ -63,8 +67,9 @@ public class IntMapCodec<V> implements Codec<Map<Integer, V>> {
     }
 
     @Override
-    public Class<Map<Integer, V>> getEncoderClass() {
+    public Class<Map<K, V>> getEncoderClass() {
         return encoderClass;
     }
 
 }
+
