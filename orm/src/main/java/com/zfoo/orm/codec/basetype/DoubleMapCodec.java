@@ -9,12 +9,7 @@ import com.zfoo.orm.codec.MapKeyCodec;
 public class DoubleMapCodec implements MapKeyCodec<Double> {
 
     @Override
-    public String encode(Double value) {
-        return value.toString();
-    }
-
-    @Override
-    public Double decode(String text) {
-        return (text == null) ? null : Double.valueOf(text);
+    public Double decode(String key) {
+        return Double.valueOf(key);
     }
 }

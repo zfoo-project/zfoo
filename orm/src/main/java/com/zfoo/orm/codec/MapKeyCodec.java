@@ -7,16 +7,7 @@ package com.zfoo.orm.codec;
  */
 public interface MapKeyCodec<K> {
     /**
-     * 编码
-     * @param value
-     * @return
-     */
-    String encode(K value);
-
-    /**
      * 解析
-     * @param text
-     * @return
      */
-    K decode(String text);
+    K decode(String key);
 }

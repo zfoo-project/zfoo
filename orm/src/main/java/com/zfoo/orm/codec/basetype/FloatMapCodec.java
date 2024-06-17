@@ -9,12 +9,7 @@ import com.zfoo.orm.codec.MapKeyCodec;
 public class FloatMapCodec implements MapKeyCodec<Float> {
 
     @Override
-    public String encode(Float value) {
-        return value.toString();
-    }
-
-    @Override
-    public Float decode(String text) {
-        return (text == null) ? null : Float.valueOf(text);
+    public Float decode(String key) {
+        return Float.valueOf(key);
     }
 }

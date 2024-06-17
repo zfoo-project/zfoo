@@ -10,14 +10,8 @@ import com.zfoo.orm.codec.MapKeyCodec;
  */
 public class LongMapCodec implements MapKeyCodec<Long> {
 
-
     @Override
-    public String encode(Long value) {
-        return value.toString();
-    }
-
-    @Override
-    public Long decode(String text) {
-        return (text == null) ? null : Long.parseLong(text);
+    public Long decode(String key) {
+        return Long.valueOf(key);
     }
 }

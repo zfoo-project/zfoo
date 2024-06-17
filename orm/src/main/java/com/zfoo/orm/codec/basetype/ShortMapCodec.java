@@ -8,12 +8,7 @@ import com.zfoo.orm.codec.MapKeyCodec;
  */
 public class ShortMapCodec implements MapKeyCodec<Short> {
     @Override
-    public String encode(Short value) {
-        return value.toString();
-    }
-
-    @Override
-    public Short decode(String text) {
-        return (text == null) ? null : Short.parseShort(text);
+    public Short decode(String key) {
+        return Short.valueOf(key);
     }
 }

@@ -10,14 +10,8 @@ import com.zfoo.orm.codec.MapKeyCodec;
  */
 public class IntMapCodec implements MapKeyCodec<Integer> {
 
-
     @Override
-    public String encode(Integer value) {
-        return value.toString();
-    }
-
-    @Override
-    public Integer decode(String text) {
-        return (text == null) ? null : Integer.parseInt(text);
+    public Integer decode(String key) {
+        return Integer.valueOf(key);
     }
 }

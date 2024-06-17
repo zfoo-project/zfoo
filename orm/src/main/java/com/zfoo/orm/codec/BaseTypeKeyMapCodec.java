@@ -34,9 +34,7 @@ public class BaseTypeKeyMapCodec<K,V> implements Codec<Map<K, V>> {
         for (var entry : map.entrySet()) {
             var key = entry.getKey();
             var value = entry.getValue();
-            MapKeyCodec<K> codec = (MapKeyCodec<K>) BaseTypeEnum.getCodec(keyCodec.getEncoderClass());
-            String keyValue = codec.encode(key);
-            writer.writeName(keyValue);
+            writer.writeName(key.toString());
             if (value == null) {
                 writer.writeNull();
             } else {
