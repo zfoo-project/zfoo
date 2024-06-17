@@ -32,13 +32,24 @@ public class MapTest {
     private static final Logger log = LoggerFactory.getLogger(MapTest.class);
 
     @Test
-    public void insertMapData() {
+    public void insertTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
+        insert(1);
+    }
 
-        OrmContext.getAccessor().delete(1, MapEntity.class);
+    @Test
+    public void batchInsertTest() {
+        var context = new ClassPathXmlApplicationContext("application.xml");
+        for (int i = 0; i < 100; i++) {
+            insert(i);
+        }
+    }
+
+    public void insert(long id) {
+        OrmContext.getAccessor().delete(id, MapEntity.class);
 
         var entity = new MapEntity();
-        entity.setId(1);
+        entity.setId(id);
 
         var bagMap = new HashMap<String, BagItem>();
         entity.setBagMap(bagMap);
@@ -89,7 +100,7 @@ public class MapTest {
         entity.setIntBaseMap(intBaseMap);
 
         OrmContext.getAccessor().insert(entity);
-        var myEntity = OrmContext.getAccessor().load(1, MapEntity.class);
+        var myEntity = OrmContext.getAccessor().load(id, MapEntity.class);
         Assert.assertEquals(entity.getBagMap(), myEntity.getBagMap());
         Assert.assertEquals(entity.getBaseMap(), myEntity.getBaseMap());
         Assert.assertEquals(entity.getIntStringMap(), myEntity.getIntStringMap());
