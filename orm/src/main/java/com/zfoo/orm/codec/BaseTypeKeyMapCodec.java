@@ -51,11 +51,11 @@ public class BaseTypeKeyMapCodec<K,V> implements Codec<Map<K, V>> {
     public Map<K, V> decode(final BsonReader reader, final DecoderContext context) {
         reader.readStartDocument();
         var map = new HashMap<K, V>();
-        while (!BsonType.END_OF_DOCUMENT.equals(reader.readBsonType())) {
+        while (BsonType.END_OF_DOCUMENT != reader.readBsonType()) {
             MapKeyCodec<K> codec = (MapKeyCodec<K>) BaseTypeEnum.getCodec(keyCodec.getEncoderClass());
             K key = codec.decode(reader.readName());
             V value = null;
-            if (BsonType.NULL.equals(reader.getCurrentBsonType())) {
+            if (BsonType.NULL == reader.getCurrentBsonType()) {
                 reader.readNull();
             } else {
                 value = valueCodec.decode(reader, context);
