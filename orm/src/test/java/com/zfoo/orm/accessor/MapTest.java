@@ -45,8 +45,8 @@ public class MapTest {
 
         var itemMap = new HashMap<String, Item>();
         itemMap.put("1", new Item(1, "item1"));
-        itemMap.put("2", new Item(2, "item1"));
-        itemMap.put("3", new Item(3, "item1"));
+        itemMap.put("2", new Item(2, "item2"));
+        itemMap.put("3", new Item(3, "item3"));
 
         var bagItem1 = new BagItem(1, "desc1", itemMap);
         var bagItem2 = new BagItem(2, "desc2", itemMap);
@@ -64,13 +64,15 @@ public class MapTest {
         var longStringHashMap = new HashMap<Long, String>();
         longStringHashMap.put(100L, "hello map1");
         longStringHashMap.put(101L, "hello map2");
-        longStringHashMap.put(102L, null);
+        longStringHashMap.put(103L, "hello map3");
+        longStringHashMap.put(104L, null);
         entity.setLongStringMap(longStringHashMap);
 
         var intStringHashMap = new HashMap<Integer, String>();
         intStringHashMap.put(100, "hello map1");
         intStringHashMap.put(102, "hello map2");
-        intStringHashMap.put(103, "hello map2");
+        intStringHashMap.put(103, "hello map3");
+        intStringHashMap.put(104, null);
         entity.setIntStringMap(intStringHashMap);
 
         var intBagMap = new HashMap<Integer, BagItem>();
@@ -83,6 +85,7 @@ public class MapTest {
         intBaseMap.put(1, Map.of(1, "1"));
         intBaseMap.put(2, Map.of(2, "2"));
         intBaseMap.put(3, Map.of(3, "3"));
+        intBaseMap.put(4, null);
         entity.setIntBaseMap(intBaseMap);
 
         OrmContext.getAccessor().insert(entity);

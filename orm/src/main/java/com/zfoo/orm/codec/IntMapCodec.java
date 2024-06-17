@@ -50,7 +50,12 @@ public class IntMapCodec<V> implements Codec<Map<Integer, V>> {
         var map = new HashMap<Integer, V>();
         while (!BsonType.END_OF_DOCUMENT.equals(reader.readBsonType())) {
             int key = Integer.parseInt(reader.readName());
-            V value = BsonType.NULL.equals(reader.getCurrentBsonType()) ? null : valueCodec.decode(reader, context);
+            V value = null;
+            if (BsonType.NULL.equals(reader.getCurrentBsonType())) {
+                reader.readNull();
+            } else {
+                value = valueCodec.decode(reader, context);
+            }
             map.put(key, value);
         }
         reader.readEndDocument();
