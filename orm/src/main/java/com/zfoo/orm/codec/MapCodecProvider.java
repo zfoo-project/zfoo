@@ -1,5 +1,6 @@
 package com.zfoo.orm.codec;
 
+
 import org.bson.codecs.Codec;
 import org.bson.codecs.pojo.PropertyCodecProvider;
 import org.bson.codecs.pojo.PropertyCodecRegistry;
@@ -24,11 +25,8 @@ public class MapCodecProvider implements PropertyCodecProvider {
         }
         var keyType = typeParameters.get(0);
         var valueType = typeParameters.get(1);
-        if (keyType.getType() == Integer.class) {
-            return new IntMapCodec(type.getType(), registry.get(keyType), registry.get(valueType));
-        }
-        if (keyType.getType() == Long.class) {
-            return new LongMapCodec(type.getType(), registry.get(keyType), registry.get(valueType));
+        if (BaseTypeEnum.containsKeyType(keyType.getType())){
+            return new BaseTypeKeyMapCodec(type.getType(), registry.get(keyType), registry.get(valueType));
         }
         return null;
     }
