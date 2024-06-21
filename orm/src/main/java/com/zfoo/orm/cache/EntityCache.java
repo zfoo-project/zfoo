@@ -246,34 +246,12 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 }
             }
         });
-        persistList(updateList, entityClass);
-    }
 
-    @Override
-    public void persist(PK pk) {
-        var pnode = cache.get(pk);
-        if (pnode == null) {
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        var entityClass = (Class<E>) entityDef.getClazz();
-        var updateList = new ArrayList<E>();
-        var currentTime = TimeUtils.currentTimeMillis();
-        if (pnode.getModifiedTime() == pnode.getWriteToDbTime()) {
-            return;
-        }
-        var entity = pnode.getEntity();
-        pnode.setWriteToDbTime(currentTime);
-        pnode.setModifiedTime(currentTime);
-        updateList.add(entity);
-        persistList(updateList, entityClass);
-    }
-
-    private void persistList(ArrayList<E> updateList, Class<E> entityClass) {
         // 执行更新
         if (updateList.isEmpty()) {
             return;
         }
+
         var page = Page.valueOf(1, BATCH_SIZE, updateList.size());
         var maxPageSize = page.totalPage();
 

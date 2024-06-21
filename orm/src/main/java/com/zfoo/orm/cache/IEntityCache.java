@@ -67,13 +67,6 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
     void invalidate(PK pk);
 
     /**
-     * 持久化缓存数据
-     *
-     * @param pk 主键
-     */
-    void persist(PK pk);
-
-    /**
      * 持久化所有缓存数据
      */
     void persistAll();
