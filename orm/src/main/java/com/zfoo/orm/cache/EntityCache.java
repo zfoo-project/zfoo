@@ -205,12 +205,18 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     public void updateNow(E entity) {
         var cachePnode = fetchCachePnode(entity, true);
         OrmContext.getAccessor().update(cachePnode.getEntity());
+        var currentTime = TimeUtils.now();
+        cachePnode.setWriteToDbTime(currentTime);
+        cachePnode.setModifiedTime(currentTime);
     }
 
     @Override
     public void updateNowUnsafe(E entity) {
         var cachePnode = fetchCachePnode(entity, false);
         OrmContext.getAccessor().update(cachePnode.getEntity());
+        var currentTime = TimeUtils.now();
+        cachePnode.setWriteToDbTime(currentTime);
+        cachePnode.setModifiedTime(currentTime);
     }
 
     @Override
