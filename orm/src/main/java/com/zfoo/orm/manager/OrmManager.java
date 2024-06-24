@@ -553,7 +553,7 @@ public class OrmManager implements IOrmManager {
             }
 
             if (hasUnsafeCollection) {
-                logger.warn("class[{}] field:[{}] is not concurrent collection, using CopyOnWriteArrayList or ConcurrentHashmap instead", clazz.getSimpleName(), field.getName());
+                logger.warn("class[{}] field:[{}] is not concurrent collection, use concurrent collection instead or not use @EntityCache annotation", clazz.getSimpleName(), field.getName());
             }
         }
     }
