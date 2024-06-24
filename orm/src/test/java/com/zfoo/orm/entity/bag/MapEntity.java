@@ -19,6 +19,7 @@ import com.zfoo.orm.anno.Persister;
 import com.zfoo.orm.model.IEntity;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @EntityCache(persister = @Persister("time30s"))
@@ -26,7 +27,13 @@ public class MapEntity implements IEntity<Long> {
     @Id
     private long id;
 
-    private List<Integer> list = new CopyOnWriteArrayList<>();
+    private List<Integer> list = new ArrayList<>();
+
+    private CopyOnWriteArrayList<Integer> copyOnWriteArrayList = new CopyOnWriteArrayList<>();
+
+    private ConcurrentHashMap<Long, Integer> concurrentHashMap = new ConcurrentHashMap<>();
+
+    private ConcurrentHashMap<Long, ConcurrentHashMap<Integer,Integer>> concurrentHashMapAndConcurrentHashMap = new ConcurrentHashMap<>();
     private Map<String, BagItem> bagMap = new HashMap<>();
 
     private Map<String, Map<String, String>> baseMap = new HashMap<>();
@@ -166,6 +173,31 @@ public class MapEntity implements IEntity<Long> {
 
     public void setDoubleBagMap(Map<Double, BagItem> doubleBagMap) {
         this.doubleBagMap = doubleBagMap;
+    }
+
+    public CopyOnWriteArrayList<Integer> getCopyOnWriteArrayList() {
+        return copyOnWriteArrayList;
+    }
+
+    public void setCopyOnWriteArrayList(CopyOnWriteArrayList<Integer> copyOnWriteArrayList) {
+        this.copyOnWriteArrayList = copyOnWriteArrayList;
+    }
+
+    public ConcurrentHashMap<Long, Integer> getConcurrentHashMap() {
+        return concurrentHashMap;
+    }
+
+    public void setConcurrentHashMap(ConcurrentHashMap<Long, Integer> concurrentHashMap) {
+        this.concurrentHashMap = concurrentHashMap;
+    }
+
+
+    public ConcurrentHashMap<Long, ConcurrentHashMap<Integer, Integer>> getConcurrentHashMapAndConcurrentHashMap() {
+        return concurrentHashMapAndConcurrentHashMap;
+    }
+
+    public void setConcurrentHashMapAndConcurrentHashMap(ConcurrentHashMap<Long, ConcurrentHashMap<Integer, Integer>> concurrentHashMapAndConcurrentHashMap) {
+        this.concurrentHashMapAndConcurrentHashMap = concurrentHashMapAndConcurrentHashMap;
     }
 
     @Override
