@@ -63,6 +63,7 @@ public class EntityDef {
     public IEntity<?> newEntity(Object id) {
         var entity = ReflectionUtils.newInstance(clazz);
         var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
+        ReflectionUtils.makeAccessible(idFields[0]);
         ReflectionUtils.setField(idFields[0], entity, id);
         return entity;
     }
