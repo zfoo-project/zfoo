@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Ignore
@@ -50,6 +51,8 @@ public class MapTest {
 
         var entity = new MapEntity();
         entity.setId(id);
+
+        entity.setList(List.of(1, 2, 3));
 
         var bagMap = new HashMap<String, BagItem>();
         entity.setBagMap(bagMap);

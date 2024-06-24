@@ -18,15 +18,15 @@ import com.zfoo.orm.anno.Id;
 import com.zfoo.orm.anno.Persister;
 import com.zfoo.orm.model.IEntity;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @EntityCache(persister = @Persister("time30s"))
 public class MapEntity implements IEntity<Long> {
     @Id
     private long id;
 
+    private List<Integer> list = new CopyOnWriteArrayList<>();
     private Map<String, BagItem> bagMap = new HashMap<>();
 
     private Map<String, Map<String, String>> baseMap = new HashMap<>();
@@ -46,6 +46,14 @@ public class MapEntity implements IEntity<Long> {
     @Override
     public Long id() {
         return id;
+    }
+
+    public List<Integer> getList() {
+        return list;
+    }
+
+    public void setList(List<Integer> list) {
+        this.list = list;
     }
 
     public long getId() {
@@ -165,11 +173,11 @@ public class MapEntity implements IEntity<Long> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MapEntity mapEntity = (MapEntity) o;
-        return id == mapEntity.id && Objects.equals(bagMap, mapEntity.bagMap) && Objects.equals(baseMap, mapEntity.baseMap) && Objects.equals(longStringMap, mapEntity.longStringMap) && Objects.equals(intStringMap, mapEntity.intStringMap) && Objects.equals(intBaseMap, mapEntity.intBaseMap) && Objects.equals(charBagMap, mapEntity.charBagMap) && Objects.equals(boolBagMap, mapEntity.boolBagMap) && Objects.equals(byteBagMap, mapEntity.byteBagMap) && Objects.equals(shortBagMap, mapEntity.shortBagMap) && Objects.equals(intBagMap, mapEntity.intBagMap) && Objects.equals(longBagMap, mapEntity.longBagMap) && Objects.equals(floatBagMap, mapEntity.floatBagMap) && Objects.equals(doubleBagMap, mapEntity.doubleBagMap);
+        return id == mapEntity.id && Objects.equals(list, mapEntity.list) && Objects.equals(bagMap, mapEntity.bagMap) && Objects.equals(baseMap, mapEntity.baseMap) && Objects.equals(longStringMap, mapEntity.longStringMap) && Objects.equals(intStringMap, mapEntity.intStringMap) && Objects.equals(intBaseMap, mapEntity.intBaseMap) && Objects.equals(charBagMap, mapEntity.charBagMap) && Objects.equals(boolBagMap, mapEntity.boolBagMap) && Objects.equals(byteBagMap, mapEntity.byteBagMap) && Objects.equals(shortBagMap, mapEntity.shortBagMap) && Objects.equals(intBagMap, mapEntity.intBagMap) && Objects.equals(longBagMap, mapEntity.longBagMap) && Objects.equals(floatBagMap, mapEntity.floatBagMap) && Objects.equals(doubleBagMap, mapEntity.doubleBagMap);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, bagMap, baseMap, longStringMap, intStringMap, intBaseMap, charBagMap, boolBagMap, byteBagMap, shortBagMap, intBagMap, longBagMap, floatBagMap, doubleBagMap);
+        return Objects.hash(id, list, bagMap, baseMap, longStringMap, intStringMap, intBaseMap, charBagMap, boolBagMap, byteBagMap, shortBagMap, intBagMap, longBagMap, floatBagMap, doubleBagMap);
     }
 }
