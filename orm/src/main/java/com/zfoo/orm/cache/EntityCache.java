@@ -233,7 +233,17 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         if (pnode == null) {
             return;
         }
-        updateUnsafeNow(pnode.getEntity());
+        @SuppressWarnings("unchecked")
+        var entityClass = (Class<E>) entityDef.getClazz();
+        if (pnode.getModifiedTime() == pnode.getWriteToDbTime()) {
+            return;
+        }
+        var currentTime = TimeUtils.currentTimeMillis();
+        pnode.setWriteToDbTime(currentTime);
+        pnode.setModifiedTime(currentTime);
+        var updateList = new ArrayList<E>();
+        updateList.add(pnode.getEntity());
+        doPersist(updateList, entityClass);
     }
 
     // 游戏中80%都是执行更新的操作，这样做会极大的提高更新速度
@@ -256,6 +266,10 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             }
         });
 
+        doPersist(updateList, entityClass);
+    }
+
+    private void doPersist(List<E> updateList, Class<E> entityClass) {
         // 执行更新
         if (updateList.isEmpty()) {
             return;
