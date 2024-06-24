@@ -11,13 +11,13 @@
  */
 package com.zfoo.orm.codec;
 
+import com.zfoo.protocol.util.ReflectionUtils;
 import org.bson.BsonReader;
 import org.bson.BsonType;
 import org.bson.BsonWriter;
 import org.bson.codecs.Codec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
-import org.bson.codecs.configuration.CodecConfigurationException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -82,15 +82,12 @@ public class MapCodec<K, V> implements Codec<Map<K, V>> {
     public Class<Map<K, V>> getEncoderClass() {
         return encoderClass;
     }
+
     private Map<K, V> getInstance() {
         if (encoderClass.isInterface()) {
             return new HashMap<>();
         }
-        try {
-            return encoderClass.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            throw new CodecConfigurationException(e.getMessage(), e);
-        }
+        return ReflectionUtils.newInstance(encoderClass);
     }
 }
 

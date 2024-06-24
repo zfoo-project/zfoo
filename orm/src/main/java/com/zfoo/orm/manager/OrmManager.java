@@ -465,6 +465,8 @@ public class OrmManager implements IOrmManager {
         AssertionUtils.isTrue(gvsReturnValue.equals(vsValue), "The gvs and svs methods of the Entity[{}] are not correctly", clazz.getSimpleName());
     }
 
+    private static final Set<Class<?>> unsafeCollections = Set.of(List.class, ArrayList.class, LinkedList.class, Set.class, HashSet.class, TreeSet.class, Map.class, HashMap.class, TreeMap.class);
+
     private void checkEntity(Class<?> clazz) {
         // 是否为一个简单的javabean，为了防止不同层对象混用造成潜在的并发问题，特别是网络层和po层混用
         ReflectionUtils.assertIsPojoClass(clazz);
@@ -481,9 +483,10 @@ public class OrmManager implements IOrmManager {
         }
 
         var filedList = ReflectionUtils.notStaticAndTransientFields(clazz);
-        boolean concurrentSecurityFlag=true;
 
         for (var field : filedList) {
+            var hasUnsafeCollection = false;
+
             // entity必须包含属性的get和set方法
             FieldUtils.fieldToGetMethod(clazz, field);
             FieldUtils.fieldToSetMethod(clazz, field);
@@ -499,9 +502,7 @@ public class OrmManager implements IOrmManager {
                 AssertionUtils.isTrue(arrayClazz == byte.class, "The array type of ORM[class:{}] only supports byte[]", clazz.getCanonicalName());
             } else if (Set.class.isAssignableFrom(fieldType)) {
                 // 是一个Set
-                if (fieldType.equals(Set.class)){
-                    concurrentSecurityFlag = false;
-                }
+                hasUnsafeCollection |= unsafeCollections.contains(fieldType);
                 var type = field.getGenericType();
                 // field必须泛型类
                 AssertionUtils.isTrue(type instanceof ParameterizedType, "[class:{}] type declaration is incorrect, not a generic class[field:{}]", clazz.getCanonicalName(), field.getName());
@@ -512,9 +513,7 @@ public class OrmManager implements IOrmManager {
                 checkSubEntity(clazz, types[0]);
             } else if (List.class.isAssignableFrom(fieldType)) {
                 // 是一个List
-                if (fieldType.equals(List.class)){
-                    concurrentSecurityFlag = false;
-                }
+                hasUnsafeCollection |= unsafeCollections.contains(fieldType);
                 var type = field.getGenericType();
                 // field必须泛型类
                 AssertionUtils.isTrue(type instanceof ParameterizedType, "[class:{}] type declaration is incorrect, not a generic class[field:{}]", clazz.getCanonicalName(), field.getName());
@@ -526,9 +525,7 @@ public class OrmManager implements IOrmManager {
                 checkSubEntity(clazz, types[0]);
             } else if (Map.class.isAssignableFrom(fieldType)) {
                 // 是Map接口类型
-                if (fieldType.equals(Map.class)) {
-                    concurrentSecurityFlag=false;
-                }
+                hasUnsafeCollection |= unsafeCollections.contains(fieldType);
 
                 var type = field.getGenericType();
 
@@ -548,17 +545,16 @@ public class OrmManager implements IOrmManager {
                 if (!ClassUtils.isBaseType((Class<?>) keyType)) {
                     throw new RunException("[class:{}] type declaration is incorrect, and the key type of the Map must be the Base type", clazz.getCanonicalName());
                 }
-                if (concurrentSecurityFlag) {
-                    concurrentSecurityFlag = checkSubEntity(clazz, valueType);
-                }
+                hasUnsafeCollection |= checkSubEntity(clazz, valueType);
             } else if (ObjectId.class.isAssignableFrom(fieldType)) {
                 // do nothing
             } else {
                 checkEntity(fieldType);
             }
-        }
-        if (!concurrentSecurityFlag) {
-            logger.warn("class[{}] has collection not declared with specified implementation, deserialization defaults to using the thread unsafe implementation", clazz.getSimpleName());
+
+            if (hasUnsafeCollection) {
+                logger.warn("class[{}] field:[{}] is not concurrent collection, using CopyOnWriteArrayList or ConcurrentHashmap instead", clazz.getSimpleName(), field.getName());
+            }
         }
     }
 
@@ -569,12 +565,10 @@ public class OrmManager implements IOrmManager {
             Class<?> clazz = (Class<?>) ((ParameterizedType) type).getRawType();
             if (Set.class.isAssignableFrom(clazz)) {
                 // Set<Set<String>>
-                checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
-                return clazz.equals(Set.class);
+                return unsafeCollections.contains(clazz) | checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
             } else if (List.class.isAssignableFrom(clazz)) {
                 // List<List<String>>
-                checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
-                return clazz.equals(List.class);
+                return unsafeCollections.contains(clazz) | checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
             } else if (Map.class.isAssignableFrom(clazz)) {
                 // Map<List<String>, List<String>>
                 var types = ((ParameterizedType) type).getActualTypeArguments();
@@ -583,8 +577,7 @@ public class OrmManager implements IOrmManager {
                 if (!ClassUtils.isBaseType((Class<?>) keyType)) {
                     throw new RunException("The key of the map in the ORM must be of the Base type");
                 }
-                checkSubEntity(currentEntityClass, valueType);
-                return clazz.equals(Map.class);
+                return unsafeCollections.contains(clazz) | checkSubEntity(currentEntityClass, valueType);
             }
         } else if (type instanceof Class) {
             Class<?> clazz = ((Class<?>) type);
