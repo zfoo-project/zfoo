@@ -13,16 +13,13 @@
 
 package com.zfoo.orm.entity.bag;
 
-import com.zfoo.orm.anno.EntityCache;
 import com.zfoo.orm.anno.Id;
-import com.zfoo.orm.anno.Persister;
 import com.zfoo.orm.model.IEntity;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@EntityCache(persister = @Persister("time30s"))
 public class MapEntity implements IEntity<Long> {
     @Id
     private long id;
