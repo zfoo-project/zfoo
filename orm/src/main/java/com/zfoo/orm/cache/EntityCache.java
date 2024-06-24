@@ -227,6 +227,15 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         cache.remove(pk);
     }
 
+    @Override
+    public void persist(PK pk) {
+        var pnode = cache.get(pk);
+        if (pnode == null) {
+            return;
+        }
+        updateUnsafeNow(pnode.getEntity());
+    }
+
     // 游戏中80%都是执行更新的操作，这样做会极大的提高更新速度
     @Override
     public void persistAll() {
