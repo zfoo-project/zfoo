@@ -574,7 +574,7 @@ public class OrmManager implements IOrmManager {
                 var keyType = types[0];
                 var valueType = types[1];
                 if (!ClassUtils.isBaseType((Class<?>) keyType)) {
-                    throw new RunException("The key of the map in the ORM must be of the Base type");
+                    throw new RunException("The key of the map in class:[{}] must be of the Base type", currentEntityClass.getSimpleName());
                 }
                 return unsafeCollections.contains(clazz) | hasUnsafeCollectionInner(currentEntityClass, valueType);
             }
@@ -585,15 +585,16 @@ public class OrmManager implements IOrmManager {
                 return false;
             } else if (clazz.getComponentType() != null) {
                 // ORM不支持多维数组或集合嵌套数组类型，仅支持一维数组
-                throw new RunException("[type:{}] does not support multi-dimensional arrays or nested arrays, and only supports one-dimensional arrays", type);
+                throw new RunException("class:[{}] type:[{}] does not support multi-dimensional arrays or nested arrays, and only supports one-dimensional arrays"
+                        , currentEntityClass.getSimpleName(), clazz.getSimpleName());
             } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
                 // ORM不支持集合嵌套数组类型
-                throw new RunException("ORMs do not support the combination of arrays and collections with the [type:{}] type", type);
+                throw new RunException("orm do not support the combination of arrays and collections with the class:[{}] type:[{}]", currentEntityClass.getSimpleName(), clazz.getSimpleName());
             } else {
                 return hasUnsafeCollection(clazz);
             }
         }
-        throw new RunException("[type:{}] is incorrect", type);
+        throw new RunException("class:[{}] type:[{}] is incorrect", currentEntityClass.getSimpleName(), type);
     }
 
     private boolean isBaseType(Class<?> clazz) {
