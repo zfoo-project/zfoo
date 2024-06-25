@@ -40,8 +40,6 @@ import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -63,7 +61,6 @@ import java.util.concurrent.TimeUnit;
  * @author godotg
  */
 public class OrmManager implements IOrmManager {
-    private static final Logger logger = LoggerFactory.getLogger(OrmManager.class);
     private OrmConfig ormConfig;
 
     private MongoClient mongoClient;
