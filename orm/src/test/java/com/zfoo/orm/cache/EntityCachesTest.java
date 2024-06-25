@@ -14,6 +14,7 @@
 package com.zfoo.orm.cache;
 
 import com.mongodb.client.model.Filters;
+import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.entity.MailEntity;
 import com.zfoo.orm.entity.UserEntity;
@@ -53,7 +54,7 @@ public class EntityCachesTest {
             var entity = userEntityCaches.load((long) i);
             entity.setE("update" + i);
             entity.setC(i);
-            userEntityCaches.update(entity);
+            EventBus.asyncExecute(() -> userEntityCaches.update(entity));
         }
 
         ThreadUtils.sleep(60 * TimeUtils.MILLIS_PER_SECOND);
