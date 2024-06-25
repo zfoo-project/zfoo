@@ -582,7 +582,7 @@ public class OrmManager implements IOrmManager {
             Class<?> clazz = ((Class<?>) type);
             if (isBaseType(clazz)) {
                 // do nothing
-                return true;
+                return false;
             } else if (clazz.getComponentType() != null) {
                 // ORM不支持多维数组或集合嵌套数组类型，仅支持一维数组
                 throw new RunException("[type:{}] does not support multi-dimensional arrays or nested arrays, and only supports one-dimensional arrays", type);
