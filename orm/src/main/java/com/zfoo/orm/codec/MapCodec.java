@@ -19,6 +19,7 @@ import org.bson.codecs.Codec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -62,7 +63,7 @@ public class MapCodec<K, V> implements Codec<Map<K, V>> {
 
     @Override
     public Map<K, V> decode(BsonReader reader, DecoderContext context) {
-        var map = getInstance();
+        var map = newInstance();
         reader.readStartDocument();
         while (BsonType.END_OF_DOCUMENT != reader.readBsonType()) {
             K key = keyDecodeFunction.apply(reader.readName());
@@ -83,8 +84,8 @@ public class MapCodec<K, V> implements Codec<Map<K, V>> {
         return encoderClass;
     }
 
-    private Map<K, V> getInstance() {
-        if (encoderClass.isInterface()) {
+    private Map<K, V> newInstance() {
+        if (encoderClass.isInterface() || Modifier.isAbstract(encoderClass.getModifiers())) {
             return new HashMap<>();
         }
         return ReflectionUtils.newInstance(encoderClass);
