@@ -47,6 +47,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     private static final Logger logger = LoggerFactory.getLogger(EntityCache.class);
 
     private static final int BATCH_SIZE = 512;
+    private static final int UNSAFE_COLLECTION_BATCH_SIZE = BATCH_SIZE / Runtime.getRuntime().availableProcessors();
 
     private final EntityDef entityDef;
 
@@ -230,15 +231,13 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         if (pnode == null) {
             return;
         }
-        @SuppressWarnings("unchecked")
-        var entityClass = (Class<E>) entityDef.getClazz();
         if (pnode.getModifiedTime() == pnode.getWriteToDbTime()) {
             return;
         }
         pnode.resetTime(TimeUtils.currentTimeMillis());
         var updateList = new ArrayList<E>();
         updateList.add(pnode.getEntity());
-        doPersist(updateList, entityClass);
+        doPersist(updateList, BATCH_SIZE);
     }
 
     // 游戏中80%都是执行更新的操作，这样做会极大的提高更新速度
@@ -246,9 +245,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     // 没有并发问题的entity还是在异步线程池Event慢慢更新，有并发问题的entity才放到原来的update线程去更新（第一次update会记录entity所在线程）
     @Override
     public void persistAll() {
-        @SuppressWarnings("unchecked")
-        var entityClass = (Class<E>) entityDef.getClazz();
-
         var currentTime = TimeUtils.currentTimeMillis();
 
         if (entityDef.hasUnsafeCollection()) {
@@ -265,14 +261,14 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     }
                 }
             });
-            for(var entry : updateMap.entrySet()) {
+            for (var entry : updateMap.entrySet()) {
                 var threadId = entry.getKey();
                 var updateList = entry.getValue();
                 var executor = ThreadUtils.executorByThreadId(threadId);
                 if (executor == null) {
-                    EventBus.asyncExecute(entityClass.hashCode(), () -> doPersist(updateList, entityClass));
+                    EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList, BATCH_SIZE));
                 } else {
-                    executor.execute(() -> doPersist(updateList, entityClass));
+                    executor.execute(() -> doPersist(updateList, UNSAFE_COLLECTION_BATCH_SIZE));
                 }
             }
         } else {
@@ -287,17 +283,20 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     }
                 }
             });
-            EventBus.asyncExecute(entityClass.hashCode(), () -> doPersist(updateList, entityClass));
+            EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList, BATCH_SIZE));
         }
     }
 
-    private void doPersist(List<E> updateList, Class<E> entityClass) {
+    private void doPersist(List<E> updateList, int batchSize) {
         // 执行更新
         if (updateList.isEmpty()) {
             return;
         }
 
-        var page = Page.valueOf(1, BATCH_SIZE, updateList.size());
+        @SuppressWarnings("unchecked")
+        var entityClass = (Class<E>) entityDef.getClazz();
+
+        var page = Page.valueOf(1, batchSize, updateList.size());
         var maxPageSize = page.totalPage();
 
         for (var currentPage = 1; currentPage <= maxPageSize; currentPage++) {
