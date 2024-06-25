@@ -46,8 +46,8 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     private static final Logger logger = LoggerFactory.getLogger(EntityCache.class);
 
-    private static final int BATCH_SIZE = 512;
-    private static final int UNSAFE_COLLECTION_BATCH_SIZE = BATCH_SIZE / Runtime.getRuntime().availableProcessors();
+    private static final int DEFAULT_BATCH_SIZE = 512;
+    private static final int NOT_THREAD_SAFE_BATCH_SIZE = Math.max(128, DEFAULT_BATCH_SIZE / Runtime.getRuntime().availableProcessors());
 
     private final EntityDef entityDef;
 
@@ -237,7 +237,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         pnode.resetTime(TimeUtils.currentTimeMillis());
         var updateList = new ArrayList<E>();
         updateList.add(pnode.getEntity());
-        doPersist(updateList, BATCH_SIZE);
+        doPersist(updateList, DEFAULT_BATCH_SIZE);
     }
 
     // 游戏中80%都是执行更新的操作，这样做会极大的提高更新速度
@@ -246,8 +246,20 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     @Override
     public void persistAll() {
         var currentTime = TimeUtils.currentTimeMillis();
-
-        if (entityDef.hasUnsafeCollection()) {
+        if (entityDef.isThreadSafe()) {
+            var updateList = new ArrayList<E>();
+            cache.forEach(new BiConsumer<PK, PNode<E>>() {
+                @Override
+                public void accept(PK pk, PNode<E> pnode) {
+                    var entity = pnode.getEntity();
+                    if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
+                        pnode.resetTime(currentTime);
+                        updateList.add(entity);
+                    }
+                }
+            });
+            EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList, DEFAULT_BATCH_SIZE));
+        } else {
             // key为threadId
             var updateMap = new HashMap<Long, List<E>>();
             cache.forEach(new BiConsumer<PK, PNode<E>>() {
@@ -266,24 +278,11 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 var updateList = entry.getValue();
                 var executor = ThreadUtils.executorByThreadId(threadId);
                 if (executor == null) {
-                    EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList, BATCH_SIZE));
+                    EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList, DEFAULT_BATCH_SIZE));
                 } else {
-                    executor.execute(() -> doPersist(updateList, UNSAFE_COLLECTION_BATCH_SIZE));
+                    executor.execute(() -> doPersist(updateList, NOT_THREAD_SAFE_BATCH_SIZE));
                 }
             }
-        } else {
-            var updateList = new ArrayList<E>();
-            cache.forEach(new BiConsumer<PK, PNode<E>>() {
-                @Override
-                public void accept(PK pk, PNode<E> pnode) {
-                    var entity = pnode.getEntity();
-                    if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
-                        pnode.resetTime(currentTime);
-                        updateList.add(entity);
-                    }
-                }
-            });
-            EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList, BATCH_SIZE));
         }
     }
 

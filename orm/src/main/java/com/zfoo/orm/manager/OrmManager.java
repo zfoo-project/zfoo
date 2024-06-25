@@ -376,7 +376,7 @@ public class OrmManager implements IOrmManager {
             indexTextDefMap.put(field.getName(), indexTextDef);
         }
 
-        return EntityDef.valueOf(idField, clazz, hasUnsafeCollection, cacheSize, expireMillisecond, persisterStrategy, indexDefMap, indexTextDefMap);
+        return EntityDef.valueOf(idField, clazz, !hasUnsafeCollection, cacheSize, expireMillisecond, persisterStrategy, indexDefMap, indexTextDefMap);
     }
 
     private void checkEntity(Class<?> clazz) {

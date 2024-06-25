@@ -28,7 +28,8 @@ public class EntityDef {
 
     private Class<? extends IEntity<?>> clazz;
 
-    private boolean hasUnsafeCollection;
+    // 线程安全指的是内部没有使用集合或者使用的集合全部支持并发操作
+    private boolean threadSafe;
 
     private int cacheSize;
 
@@ -41,12 +42,12 @@ public class EntityDef {
     private Map<String, IndexTextDef> indexTextDefMap;
 
 
-    public static EntityDef valueOf(Field idField, Class<? extends IEntity<?>> clazz, boolean hasUnsafeCollection, int cacheSize, long expireMillisecond
+    public static EntityDef valueOf(Field idField, Class<? extends IEntity<?>> clazz, boolean threadSafe, int cacheSize, long expireMillisecond
             , PersisterStrategy persisterStrategy, Map<String, IndexDef> indexDefMap, Map<String, IndexTextDef> indexTextDefMap) {
         var entityDef = new EntityDef();
         entityDef.idField = idField;
         entityDef.clazz = clazz;
-        entityDef.hasUnsafeCollection = hasUnsafeCollection;
+        entityDef.threadSafe = threadSafe;
         entityDef.cacheSize = cacheSize;
         entityDef.expireMillisecond = expireMillisecond;
         entityDef.persisterStrategy = persisterStrategy;
@@ -71,8 +72,8 @@ public class EntityDef {
         return clazz;
     }
 
-    public boolean hasUnsafeCollection() {
-        return hasUnsafeCollection;
+    public boolean isThreadSafe() {
+        return threadSafe;
     }
 
     public int getCacheSize() {
