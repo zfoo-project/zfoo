@@ -17,7 +17,6 @@ import com.zfoo.event.model.ExceptionEvent;
 import com.zfoo.event.model.IEvent;
 import com.zfoo.event.model.TripleConsumer;
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.RandomUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -30,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -52,7 +50,6 @@ public abstract class EventBus {
 
     private static final ExecutorService[] executors = new ExecutorService[EXECUTORS_SIZE];
 
-    private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>(EXECUTORS_SIZE);
     /**
      * event mapping
      */
@@ -94,7 +91,7 @@ public abstract class EventBus {
             thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
             var executor = executors[poolNumber];
             AssertionUtils.notNull(executor);
-            threadMap.put(thread.getId(), executor);
+            ThreadUtils.registerExecutor(thread.getId(), executor);
             return thread;
         }
     }
@@ -154,9 +151,6 @@ public abstract class EventBus {
         receiverMap.computeIfAbsent(eventType, it -> new ArrayList<>(1)).add(receiver);
     }
 
-    public static Executor threadExecutor(long currentThreadId) {
-        return threadMap.getPrimitive(currentThreadId);
-    }
 }
 
 

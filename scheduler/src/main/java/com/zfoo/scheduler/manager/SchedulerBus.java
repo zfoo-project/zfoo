@@ -43,10 +43,6 @@ public abstract class SchedulerBus {
      */
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new SchedulerThreadFactory(1));
 
-    /**
-     * executor创建的线程id号
-     */
-    private static long threadId = 0;
 
     /**
      * 上一次trigger触发时间
@@ -87,7 +83,7 @@ public abstract class SchedulerBus {
             thread.setDaemon(false);
             thread.setPriority(Thread.NORM_PRIORITY);
             thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
-            threadId = thread.getId();
+            ThreadUtils.registerExecutor(thread.getId(), executor);
             return thread;
         }
 
@@ -191,7 +187,4 @@ public abstract class SchedulerBus {
         registerScheduler(SchedulerDefinition.valueOf(cron, runnable));
     }
 
-    public static Executor threadExecutor(long currentThreadId) {
-        return threadId == currentThreadId ? executor : null;
-    }
 }

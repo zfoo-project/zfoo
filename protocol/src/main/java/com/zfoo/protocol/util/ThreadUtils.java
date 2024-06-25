@@ -12,10 +12,12 @@
 
 package com.zfoo.protocol.util;
 
+import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import io.netty.util.concurrent.EventExecutorGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
@@ -122,6 +124,17 @@ public abstract class ThreadUtils {
                 }
             }
         };
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // threadId -> Executor
+    private static final CopyOnWriteHashMapLongObject<Executor> threadExecutorMap = new CopyOnWriteHashMapLongObject<>(Runtime.getRuntime().availableProcessors() * 8);
+    public static void registerExecutor(long threadId, Executor executor) {
+        threadExecutorMap.put(threadId, executor);
+    }
+
+    public static Executor executorByThreadId(long threadId) {
+        return threadExecutorMap.get(threadId);
     }
 
 }

@@ -13,14 +13,11 @@
 
 package com.zfoo.net.task;
 
-import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
-import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.RandomUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
-import com.zfoo.scheduler.manager.SchedulerBus;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,8 +63,6 @@ public final class TaskBus {
         }
     }
 
-    private static final CopyOnWriteHashMapLongObject<ExecutorService> threadMap = new CopyOnWriteHashMapLongObject<>(EXECUTOR_SIZE);
-
     public static class TaskThreadFactory implements ThreadFactory {
         private final int poolNumber;
         private final AtomicInteger threadNumber = new AtomicInteger(1);
@@ -87,7 +82,7 @@ public final class TaskBus {
             thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
             var executor = executors[poolNumber];
             AssertionUtils.notNull(executor);
-            threadMap.put(thread.getId(), executor);
+            ThreadUtils.registerExecutor(thread.getId(), executor);
             return thread;
         }
     }
@@ -121,22 +116,11 @@ public final class TaskBus {
     // 在task，event，scheduler线程执行的异步请求，请求成功过后依然在相同的线程执行回调任务
     public static Executor currentThreadExecutor() {
         var threadId = Thread.currentThread().getId();
-        var taskExecutor = threadMap.getPrimitive(threadId);
-        if (taskExecutor != null) {
-            return taskExecutor;
+        var executor = ThreadUtils.executorByThreadId(threadId);
+        if (executor == null) {
+            return executors[calTaskExecutorIndex(RandomUtils.randomInt())];
         }
-
-        var eventExecutor = EventBus.threadExecutor(threadId);
-        if (eventExecutor != null) {
-            return eventExecutor;
-        }
-
-        var schedulerExecutor = SchedulerBus.threadExecutor(threadId);
-        if (schedulerExecutor != null) {
-            return schedulerExecutor;
-        }
-
-        return executors[calTaskExecutorIndex(RandomUtils.randomInt())];
+        return executor;
     }
 
 }
