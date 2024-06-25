@@ -242,6 +242,8 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     }
 
     // 游戏中80%都是执行更新的操作，这样做会极大的提高更新速度
+    // 没有并发问题的entity指的是内部没有使用集合或者使用的集合全部支持并发操作
+    // 没有并发问题的entity还是在异步线程池Event慢慢更新，有并发问题的entity才放到原来的update线程去更新（第一次update会记录entity所在线程）
     @Override
     public void persistAll() {
         @SuppressWarnings("unchecked")

@@ -511,7 +511,7 @@ public class OrmManager implements IOrmManager {
                 var types = ((ParameterizedType) type).getActualTypeArguments();
                 // 必须声明Set的泛型类
                 AssertionUtils.isTrue(types.length == 1, "Set type declaration in [class:{}] is incorrect, and the generic class must be declared in [field:{}]", clazz.getCanonicalName(), field.getName());
-                checkSubEntity(clazz, types[0]);
+                hasUnsafeCollectionInner(clazz, types[0]);
             } else if (List.class.isAssignableFrom(fieldType)) {
                 // 是一个List
                 hasUnsafeCollection |= unsafeCollections.contains(fieldType);
@@ -523,7 +523,7 @@ public class OrmManager implements IOrmManager {
                 var types = ((ParameterizedType) type).getActualTypeArguments();
                 AssertionUtils.isTrue(types.length == 1, "List type declaration in [class:{}] is incorrect, and the generic class must be declared in [field:{}]", clazz.getCanonicalName(), field.getName());
 
-                checkSubEntity(clazz, types[0]);
+                hasUnsafeCollectionInner(clazz, types[0]);
             } else if (Map.class.isAssignableFrom(fieldType)) {
                 // 是Map接口类型
                 hasUnsafeCollection |= unsafeCollections.contains(fieldType);
@@ -546,7 +546,7 @@ public class OrmManager implements IOrmManager {
                 if (!ClassUtils.isBaseType((Class<?>) keyType)) {
                     throw new RunException("[class:{}] type declaration is incorrect, and the key type of the Map must be the Base type", clazz.getCanonicalName());
                 }
-                hasUnsafeCollection |= checkSubEntity(clazz, valueType);
+                hasUnsafeCollection |= hasUnsafeCollectionInner(clazz, valueType);
             } else if (ObjectId.class.isAssignableFrom(fieldType)) {
                 // do nothing
             } else {
@@ -558,16 +558,16 @@ public class OrmManager implements IOrmManager {
     }
 
 
-    private boolean checkSubEntity(Class<?> currentEntityClass, Type type) {
+    private boolean hasUnsafeCollectionInner(Class<?> currentEntityClass, Type type) {
         if (type instanceof ParameterizedType) {
             // 泛型类
             Class<?> clazz = (Class<?>) ((ParameterizedType) type).getRawType();
             if (Set.class.isAssignableFrom(clazz)) {
                 // Set<Set<String>>
-                return unsafeCollections.contains(clazz) | checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
+                return unsafeCollections.contains(clazz) | hasUnsafeCollectionInner(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
             } else if (List.class.isAssignableFrom(clazz)) {
                 // List<List<String>>
-                return unsafeCollections.contains(clazz) | checkSubEntity(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
+                return unsafeCollections.contains(clazz) | hasUnsafeCollectionInner(currentEntityClass, ((ParameterizedType) type).getActualTypeArguments()[0]);
             } else if (Map.class.isAssignableFrom(clazz)) {
                 // Map<List<String>, List<String>>
                 var types = ((ParameterizedType) type).getActualTypeArguments();
@@ -576,7 +576,7 @@ public class OrmManager implements IOrmManager {
                 if (!ClassUtils.isBaseType((Class<?>) keyType)) {
                     throw new RunException("The key of the map in the ORM must be of the Base type");
                 }
-                return unsafeCollections.contains(clazz) | checkSubEntity(currentEntityClass, valueType);
+                return unsafeCollections.contains(clazz) | hasUnsafeCollectionInner(currentEntityClass, valueType);
             }
         } else if (type instanceof Class) {
             Class<?> clazz = ((Class<?>) type);
