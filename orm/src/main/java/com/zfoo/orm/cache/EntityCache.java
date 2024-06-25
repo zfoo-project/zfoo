@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -205,18 +206,14 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     public void updateNow(E entity) {
         var cachePnode = fetchCachePnode(entity, true);
         OrmContext.getAccessor().update(cachePnode.getEntity());
-        var now = TimeUtils.now();
-        cachePnode.setWriteToDbTime(now);
-        cachePnode.setModifiedTime(now);
+        cachePnode.resetTime(TimeUtils.now());
     }
 
     @Override
     public void updateUnsafeNow(E entity) {
         var cachePnode = fetchCachePnode(entity, false);
         OrmContext.getAccessor().update(cachePnode.getEntity());
-        var now = TimeUtils.now();
-        cachePnode.setWriteToDbTime(now);
-        cachePnode.setModifiedTime(now);
+        cachePnode.resetTime(TimeUtils.now());
     }
 
     @Override
@@ -238,9 +235,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         if (pnode.getModifiedTime() == pnode.getWriteToDbTime()) {
             return;
         }
-        var currentTime = TimeUtils.currentTimeMillis();
-        pnode.setWriteToDbTime(currentTime);
-        pnode.setModifiedTime(currentTime);
+        pnode.resetTime(TimeUtils.currentTimeMillis());
         var updateList = new ArrayList<E>();
         updateList.add(pnode.getEntity());
         doPersist(updateList, entityClass);
@@ -252,21 +247,46 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         @SuppressWarnings("unchecked")
         var entityClass = (Class<E>) entityDef.getClazz();
 
-        var updateList = new ArrayList<E>();
         var currentTime = TimeUtils.currentTimeMillis();
-        cache.forEach(new BiConsumer<PK, PNode<E>>() {
-            @Override
-            public void accept(PK pk, PNode<E> pnode) {
-                var entity = pnode.getEntity();
-                if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
-                    pnode.setWriteToDbTime(currentTime);
-                    pnode.setModifiedTime(currentTime);
-                    updateList.add(entity);
+
+        if (entityDef.hasUnsafeCollection()) {
+            // key为threadId
+            var updateMap = new HashMap<Long, List<E>>();
+            cache.forEach(new BiConsumer<PK, PNode<E>>() {
+                @Override
+                public void accept(PK pk, PNode<E> pnode) {
+                    var entity = pnode.getEntity();
+                    if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
+                        pnode.resetTime(currentTime);
+                        var updateList = updateMap.computeIfAbsent(pnode.getThreadId(), it -> new ArrayList<>());
+                        updateList.add(entity);
+                    }
+                }
+            });
+            for(var entry : updateMap.entrySet()) {
+                var threadId = entry.getKey();
+                var updateList = entry.getValue();
+                var executor = ThreadUtils.executorByThreadId(threadId);
+                if (executor == null) {
+                    EventBus.asyncExecute(entityClass.hashCode(), () -> doPersist(updateList, entityClass));
+                } else {
+                    executor.execute(() -> doPersist(updateList, entityClass));
                 }
             }
-        });
-
-        doPersist(updateList, entityClass);
+        } else {
+            var updateList = new ArrayList<E>();
+            cache.forEach(new BiConsumer<PK, PNode<E>>() {
+                @Override
+                public void accept(PK pk, PNode<E> pnode) {
+                    var entity = pnode.getEntity();
+                    if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
+                        pnode.resetTime(currentTime);
+                        updateList.add(entity);
+                    }
+                }
+            });
+            EventBus.asyncExecute(entityClass.hashCode(), () -> doPersist(updateList, entityClass));
+        }
     }
 
     private void doPersist(List<E> updateList, Class<E> entityClass) {

@@ -44,7 +44,7 @@ public class TimeOrmPersister extends AbstractOrmPersister {
     public void start() {
         SchedulerBus.scheduleAtFixedRate(() -> {
             if (!OrmContext.isStop()) {
-                EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> entityCaches.persistAll());
+                entityCaches.persistAll();
             }
         }, rate, TimeUnit.MILLISECONDS);
     }

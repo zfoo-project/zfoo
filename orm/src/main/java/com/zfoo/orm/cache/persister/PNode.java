@@ -37,10 +37,12 @@ public class PNode<E extends IEntity<?>> {
 
     public PNode(E entity) {
         this.entity = entity;
+        resetTime(TimeUtils.now());
+    }
 
-        var currentTime = TimeUtils.now();
-        this.writeToDbTime = currentTime;
-        this.modifiedTime = currentTime;
+    public void resetTime(long timestamp) {
+        this.writeToDbTime = timestamp;
+        this.modifiedTime = timestamp;
     }
 
     public E getEntity() {

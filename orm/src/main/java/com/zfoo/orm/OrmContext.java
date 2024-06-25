@@ -46,7 +46,7 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
 
     private IOrmManager ormManager;
 
-    private boolean stop = false;
+    private volatile boolean stop = false;
 
     public static ApplicationContext getApplicationContext() {
         return instance.applicationContext;
