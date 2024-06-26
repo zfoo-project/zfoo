@@ -107,7 +107,7 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
         try {
             instance.ormManager
                     .getAllEntityCaches()
-                    .forEach(it -> it.persistAll());
+                    .forEach(it -> it.persistAllBlock());
             instance.ormManager.mongoClient().close();
         } catch (Exception e) {
             logger.error("Failed to close the MongoClient database connection", e);

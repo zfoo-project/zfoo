@@ -14,6 +14,7 @@ package com.zfoo.orm.cache;
 
 import com.zfoo.orm.model.IEntity;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
@@ -76,6 +77,8 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
     /**
      * 持久化所有缓存数据
      */
+    void persistAllBlock();
+
     void persistAll();
 
     void forEach(BiConsumer<PK, E> biConsumer);

@@ -240,26 +240,33 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         doPersist(updateList, DEFAULT_BATCH_SIZE);
     }
 
+    @Override
+    public void persistAllBlock() {
+        var currentTime = TimeUtils.currentTimeMillis();
+        var updateList = new ArrayList<E>();
+        cache.forEach(new BiConsumer<PK, PNode<E>>() {
+            @Override
+            public void accept(PK pk, PNode<E> pnode) {
+                var entity = pnode.getEntity();
+                if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
+                    pnode.resetTime(currentTime);
+                    updateList.add(entity);
+                }
+            }
+        });
+        doPersist(updateList, DEFAULT_BATCH_SIZE);
+    }
+
+
     // 游戏中80%都是执行更新的操作，这样做会极大的提高更新速度
     // 没有并发问题的entity指的是内部没有使用集合或者使用的集合全部支持并发操作
     // 没有并发问题的entity还是在异步线程池Event慢慢更新，有并发问题的entity才放到原来的update线程去更新（第一次update会记录entity所在线程）
     @Override
     public void persistAll() {
-        var currentTime = TimeUtils.currentTimeMillis();
         if (entityDef.isThreadSafe()) {
-            var updateList = new ArrayList<E>();
-            cache.forEach(new BiConsumer<PK, PNode<E>>() {
-                @Override
-                public void accept(PK pk, PNode<E> pnode) {
-                    var entity = pnode.getEntity();
-                    if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
-                        pnode.resetTime(currentTime);
-                        updateList.add(entity);
-                    }
-                }
-            });
-            EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList, DEFAULT_BATCH_SIZE));
+            EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> persistAllBlock());
         } else {
+            var currentTime = TimeUtils.currentTimeMillis();
             // key为threadId
             var updateMap = new HashMap<Long, List<E>>();
             cache.forEach(new BiConsumer<PK, PNode<E>>() {
