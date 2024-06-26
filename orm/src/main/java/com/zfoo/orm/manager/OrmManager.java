@@ -429,7 +429,7 @@ public class OrmManager implements IOrmManager {
         } else if (idFieldType.equals(ObjectId.class)) {
             idFiledValue = new ObjectId();
         } else {
-            throw new RunException("orm only supports int long float double String");
+            throw new RunException("orm id field only supports int long float double String ObjectId");
         }
 
         if (!idField.getName().equals("id")) {
