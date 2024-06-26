@@ -29,13 +29,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * @author godotg
@@ -142,8 +140,12 @@ public abstract class EventBus {
     /**
      * Use the event thread specified by the hashcode to execute the task
      */
-    public static void asyncExecute(int executorHash, Runnable runnable) {
-        executors[Math.abs(executorHash % EXECUTORS_SIZE)].execute(ThreadUtils.safeRunnable(runnable));
+    public static void asyncExecute(int hash, Runnable runnable) {
+        executorOf(hash).execute(ThreadUtils.safeRunnable(runnable));
+    }
+
+    public static ExecutorService executorOf(int hash){
+        return executors[Math.abs(hash % EXECUTORS_SIZE)];
     }
 
     /**
@@ -151,10 +153,6 @@ public abstract class EventBus {
      */
     public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver) {
         receiverMap.computeIfAbsent(eventType, it -> new ArrayList<>(1)).add(receiver);
-    }
-
-    public static ExecutorService getExecutor(int executorHash){
-        return executors[Math.abs(executorHash % EXECUTORS_SIZE)];
     }
 
 }

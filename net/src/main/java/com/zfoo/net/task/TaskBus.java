@@ -106,11 +106,15 @@ public final class TaskBus {
     }
 
     public static void execute(int taskExecutorHash, Runnable runnable) {
-        executors[calTaskExecutorIndex(taskExecutorHash)].execute(ThreadUtils.safeRunnable(runnable));
+        executorOf(taskExecutorHash).execute(ThreadUtils.safeRunnable(runnable));
     }
 
     public static void execute(Object argument, Runnable runnable) {
         execute(calTaskExecutorHash(argument), runnable);
+    }
+
+    public static ExecutorService executorOf(int hash){
+        return executors[calTaskExecutorIndex(hash)];
     }
 
     // 在task，event，scheduler线程执行的异步请求，请求成功过后依然在相同的线程执行回调任务
@@ -118,13 +122,9 @@ public final class TaskBus {
         var threadId = Thread.currentThread().getId();
         var executor = ThreadUtils.executorByThreadId(threadId);
         if (executor == null) {
-            return executors[calTaskExecutorIndex(RandomUtils.randomInt())];
+            return executorOf(RandomUtils.randomInt());
         }
         return executor;
-    }
-
-    public static ExecutorService getExecutor(int hash){
-        return executors[calTaskExecutorIndex(hash)];
     }
 
 }
