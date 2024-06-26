@@ -77,9 +77,10 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
     /**
      * 持久化所有缓存数据
      */
+    void persistAll();
+
     void persistAllBlock();
 
-    void persistAll();
 
     void forEach(BiConsumer<PK, E> biConsumer);
 
