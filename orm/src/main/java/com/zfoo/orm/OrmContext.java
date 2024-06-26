@@ -93,11 +93,6 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
         }
     }
 
-    @Override
-    public int getOrder() {
-        return 1;
-    }
-
     public static synchronized void shutdown() {
         if (isStop()) {
             return;
@@ -113,6 +108,11 @@ public class OrmContext implements ApplicationListener<ApplicationContextEvent>,
             logger.error("Failed to close the MongoClient database connection", e);
         }
         logger.info("Orm shutdown gracefully.");
+    }
+
+    @Override
+    public int getOrder() {
+        return 1;
     }
 
 }

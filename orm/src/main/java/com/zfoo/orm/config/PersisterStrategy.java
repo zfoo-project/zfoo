@@ -12,10 +12,14 @@
 
 package com.zfoo.orm.config;
 
+import com.zfoo.scheduler.util.TimeUtils;
+
 /**
  * @author godotg
  */
 public class PersisterStrategy {
+
+    public static final PersisterStrategy DEFAULT = new PersisterStrategy("default", "time", String.valueOf(30 * TimeUtils.MILLIS_PER_SECOND));
 
     private String strategy;
 

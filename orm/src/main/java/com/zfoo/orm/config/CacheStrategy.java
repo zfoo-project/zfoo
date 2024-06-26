@@ -12,10 +12,14 @@
 
 package com.zfoo.orm.config;
 
+import com.zfoo.scheduler.util.TimeUtils;
+
 /**
  * @author godotg
  */
 public class CacheStrategy {
+
+    public static final CacheStrategy DEFAULT = new CacheStrategy("default", 6000, 60 * TimeUtils.MILLIS_PER_SECOND);
 
     private String strategy;
     private int size;

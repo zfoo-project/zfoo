@@ -27,7 +27,9 @@ import com.zfoo.orm.anno.*;
 import com.zfoo.orm.cache.EntityCache;
 import com.zfoo.orm.cache.IEntityCache;
 import com.zfoo.orm.codec.MapCodecProvider;
+import com.zfoo.orm.config.CacheStrategy;
 import com.zfoo.orm.config.OrmConfig;
+import com.zfoo.orm.config.PersisterStrategy;
 import com.zfoo.orm.model.EntityDef;
 import com.zfoo.orm.model.IEntity;
 import com.zfoo.orm.model.IndexDef;
@@ -306,14 +308,21 @@ public class OrmManager implements IOrmManager {
             String packageSearchPath = prefixPattern + scanLocation.replace(StringUtils.PERIOD, StringUtils.SLASH) + StringUtils.SLASH + suffixPattern;
             Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
             var result = new HashSet<Class<?>>();
-            String name = com.zfoo.orm.anno.EntityCache.class.getName();
+            String annoEntityCacheName = com.zfoo.orm.anno.EntityCache.class.getName();
+            String interfaceEntityName = IEntity.class.getName();
             for (Resource resource : resources) {
                 if (resource.isReadable()) {
                     MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
                     AnnotationMetadata annoMeta = metadataReader.getAnnotationMetadata();
-                    if (annoMeta.hasAnnotation(name)) {
-                        ClassMetadata clazzMeta = metadataReader.getClassMetadata();
-                        result.add(Class.forName(clazzMeta.getClassName()));
+                    ClassMetadata classMeta = metadataReader.getClassMetadata();
+
+                    if (annoMeta.hasAnnotation(annoEntityCacheName)) {
+                        result.add(Class.forName(classMeta.getClassName()));
+                    }
+
+                    List<String> interfaces = ArrayUtils.toList(classMeta.getInterfaceNames());
+                    if (interfaces.stream().anyMatch(it -> it.equals(interfaceEntityName))) {
+                        result.add(Class.forName(classMeta.getClassName()));
                     }
                 }
             }
@@ -333,25 +342,36 @@ public class OrmManager implements IOrmManager {
         var cacheStrategies = ormConfig.getCaches();
         var persisterStrategies = ormConfig.getPersisters();
 
-        var entityCache = clazz.getAnnotation(com.zfoo.orm.anno.EntityCache.class);
-        var cache = entityCache.cache();
-        var cacheStrategyOptional = cacheStrategies.stream().filter(it -> it.getStrategy().equals(cache.value())).findFirst();
-        // Entity需要有@Cache注解的缓存策略
-        AssertionUtils.isTrue(cacheStrategyOptional.isPresent(), "No Entity[{}] @Cache policy found[{}]", clazz.getSimpleName(), cache.value());
+        var cacheStrategy = CacheStrategy.DEFAULT;
+        var persisterStrategy = PersisterStrategy.DEFAULT;
+        // Entity如果有被@EntityCache注解标识，则使用被标识的缓存和持久化策略，否则使用默认的策略
+        if (clazz.isAnnotationPresent(com.zfoo.orm.anno.EntityCache.class)) {
+            var entityCache = clazz.getAnnotation(com.zfoo.orm.anno.EntityCache.class);
+            var cache = entityCache.cache().value();
+            var cacheStrategyOptional = cacheStrategies.stream().filter(it -> it.getStrategy().equals(cache)).findFirst();
+            // Entity需要有@Cache注解的缓存策略
+            AssertionUtils.isTrue(cacheStrategyOptional.isPresent(), "No Entity[{}] @Cache policy found[{}]", clazz.getSimpleName(), cache);
+            cacheStrategy = cacheStrategyOptional.get();
 
-        var cacheStrategy = cacheStrategyOptional.get();
-        var cacheSize = cacheStrategy.getSize();
-        var expireMillisecond = cacheStrategy.getExpireMillisecond();
+            var persister = entityCache.persister().value();
+            var persisterStrategyOptional = persisterStrategies.stream().filter(it -> it.getStrategy().equals(persister)).findFirst();
+            // 实体类Entity需要有持久化策略
+            AssertionUtils.isTrue(persisterStrategyOptional.isPresent(), "Entity[{}] No persistence strategy found[{}]", clazz.getSimpleName(), persister);
+            persisterStrategy = persisterStrategyOptional.get();
+        } else {
+            cacheStrategy = cacheStrategies.stream()
+                    .filter(it -> it.getStrategy().equals(CacheStrategy.DEFAULT.getStrategy()))
+                    .findFirst()
+                    .orElse(CacheStrategy.DEFAULT);
+            persisterStrategy = persisterStrategies.stream()
+                    .filter(it -> it.getStrategy().equals(PersisterStrategy.DEFAULT.getStrategy()))
+                    .findFirst()
+                    .orElse(PersisterStrategy.DEFAULT);
+        }
 
         var idField = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class)[0];
         ReflectionUtils.makeAccessible(idField);
 
-        var persister = entityCache.persister();
-        var persisterStrategyOptional = persisterStrategies.stream().filter(it -> it.getStrategy().equals(persister.value())).findFirst();
-        // 实体类Entity需要有持久化策略
-        AssertionUtils.isTrue(persisterStrategyOptional.isPresent(), "Entity[{}] No persistence strategy found[{}]", clazz.getSimpleName(), persister.value());
-
-        var persisterStrategy = persisterStrategyOptional.get();
         var indexDefMap = new HashMap<String, IndexDef>();
         var fields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Index.class);
         for (var field : fields) {
@@ -376,15 +396,13 @@ public class OrmManager implements IOrmManager {
             indexTextDefMap.put(field.getName(), indexTextDef);
         }
 
-        return EntityDef.valueOf(idField, clazz, !hasUnsafeCollection, cacheSize, expireMillisecond, persisterStrategy, indexDefMap, indexTextDefMap);
+        return EntityDef.valueOf(idField, clazz, !hasUnsafeCollection, cacheStrategy.getSize(), cacheStrategy.getExpireMillisecond(), persisterStrategy, indexDefMap, indexTextDefMap);
     }
 
     private void checkEntity(Class<?> clazz) {
         // 是否实现了IEntity接口
         AssertionUtils.isTrue(IEntity.class.isAssignableFrom(clazz), "The entity:[{}] annotated by the [{}] annotation does not implement the interface [{}]"
                 , com.zfoo.orm.anno.EntityCache.class.getName(), clazz.getCanonicalName(), IEntity.class.getCanonicalName());
-        // 实体类Entity必须被注解EntityCache标注
-        AssertionUtils.notNull(clazz.getAnnotation(com.zfoo.orm.anno.EntityCache.class), "The Entity[{}] must be annotated with the annotation [{}].", clazz.getCanonicalName(), com.zfoo.orm.anno.EntityCache.class.getName());
 
         // 校验id字段和id()方法的格式，一个Entity类只能有一个@Id注解
         var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
