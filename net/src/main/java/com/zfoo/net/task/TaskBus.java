@@ -123,4 +123,8 @@ public final class TaskBus {
         return executor;
     }
 
+    public static ExecutorService getExecutor(int hash){
+        return executors[calTaskExecutorIndex(hash)];
+    }
+
 }
