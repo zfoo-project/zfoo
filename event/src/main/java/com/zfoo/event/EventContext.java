@@ -47,6 +47,18 @@ public class EventContext implements ApplicationListener<ApplicationContextEvent
         return instance.applicationContext;
     }
 
+    @Override
+    public void onApplicationEvent(ApplicationContextEvent event) {
+        if (event instanceof ContextRefreshedEvent) {
+            // 初始化上下文
+            EventContext.instance = this;
+            instance.applicationContext = event.getApplicationContext();
+        } else if (event instanceof ContextClosedEvent) {
+            shutdown();
+            ThreadUtils.shutdownForkJoinPool();
+        }
+    }
+
     private synchronized void shutdown() {
         try {
             var field = EventBus.class.getDeclaredField("executors");
@@ -62,18 +74,6 @@ public class EventContext implements ApplicationListener<ApplicationContextEvent
         }
 
         logger.info("Event shutdown gracefully.");
-    }
-
-    @Override
-    public void onApplicationEvent(ApplicationContextEvent event) {
-        if (event instanceof ContextRefreshedEvent) {
-            // 初始化上下文
-            EventContext.instance = this;
-            instance.applicationContext = event.getApplicationContext();
-        } else if (event instanceof ContextClosedEvent) {
-            shutdown();
-            ThreadUtils.shutdownForkJoinPool();
-        }
     }
 
     @Override
