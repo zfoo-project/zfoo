@@ -47,7 +47,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     private static final Logger logger = LoggerFactory.getLogger(EntityCache.class);
 
     private static final int DEFAULT_BATCH_SIZE = 512;
-    private static final int NOT_THREAD_SAFE_BATCH_SIZE = Math.max(128, DEFAULT_BATCH_SIZE / Runtime.getRuntime().availableProcessors());
 
     private final EntityDef entityDef;
 
@@ -237,24 +236,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         pnode.resetTime(TimeUtils.currentTimeMillis());
         var updateList = new ArrayList<E>();
         updateList.add(pnode.getEntity());
-        doPersist(updateList, DEFAULT_BATCH_SIZE);
-    }
-
-    @Override
-    public void persistAllBlock() {
-        var currentTime = TimeUtils.currentTimeMillis();
-        var updateList = new ArrayList<E>();
-        cache.forEach(new BiConsumer<PK, PNode<E>>() {
-            @Override
-            public void accept(PK pk, PNode<E> pnode) {
-                var entity = pnode.getEntity();
-                if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
-                    pnode.resetTime(currentTime);
-                    updateList.add(entity);
-                }
-            }
-        });
-        doPersist(updateList, DEFAULT_BATCH_SIZE);
+        doPersist(updateList);
     }
 
 
@@ -285,15 +267,32 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 var updateList = entry.getValue();
                 var executor = ThreadUtils.executorByThreadId(threadId);
                 if (executor == null) {
-                    EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList, DEFAULT_BATCH_SIZE));
+                    EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList));
                 } else {
-                    executor.execute(() -> doPersist(updateList, NOT_THREAD_SAFE_BATCH_SIZE));
+                    executor.execute(() -> doPersist(updateList));
                 }
             }
         }
     }
 
-    private void doPersist(List<E> updateList, int batchSize) {
+    @Override
+    public void persistAllBlock() {
+        var currentTime = TimeUtils.currentTimeMillis();
+        var updateList = new ArrayList<E>();
+        cache.forEach(new BiConsumer<PK, PNode<E>>() {
+            @Override
+            public void accept(PK pk, PNode<E> pnode) {
+                var entity = pnode.getEntity();
+                if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
+                    pnode.resetTime(currentTime);
+                    updateList.add(entity);
+                }
+            }
+        });
+        doPersist(updateList);
+    }
+
+    private void doPersist(List<E> updateList) {
         // 执行更新
         if (updateList.isEmpty()) {
             return;
@@ -302,7 +301,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         @SuppressWarnings("unchecked")
         var entityClass = (Class<E>) entityDef.getClazz();
 
-        var page = Page.valueOf(1, batchSize, updateList.size());
+        var page = Page.valueOf(1, DEFAULT_BATCH_SIZE, updateList.size());
         var maxPageSize = page.totalPage();
 
         for (var currentPage = 1; currentPage <= maxPageSize; currentPage++) {
