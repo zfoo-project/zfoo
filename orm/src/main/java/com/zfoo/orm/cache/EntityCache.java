@@ -28,6 +28,7 @@ import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.ThreadUtils;
+import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.scheduler.util.LazyCache;
 import com.zfoo.scheduler.util.TimeUtils;
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -262,6 +264,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     }
                 }
             });
+            var count = 0;
             for (var entry : updateMap.entrySet()) {
                 var threadId = entry.getKey();
                 var updateList = entry.getValue();
@@ -269,7 +272,8 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 if (executor == null) {
                     EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList));
                 } else {
-                    executor.execute(() -> doPersist(updateList));
+                    // 使用scheduler均匀的分配入库的时间点，减少数据库的并发写入压力
+                    SchedulerBus.schedule(() -> executor.execute(() -> doPersist(updateList)), count++ * 100L, TimeUnit.MILLISECONDS);
                 }
             }
         }
