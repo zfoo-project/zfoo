@@ -13,6 +13,7 @@
 package com.zfoo.orm.cache;
 
 import com.zfoo.orm.model.IEntity;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -28,6 +29,7 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
      * <p>
      * CN: 从数据库中加载数据到缓存，如果数据库不存在则返回一个id为空的默认值。可以通过 entity.empty() 方法判断id是否为空
      */
+    @Nullable
     E load(PK pk);
 
     /**
