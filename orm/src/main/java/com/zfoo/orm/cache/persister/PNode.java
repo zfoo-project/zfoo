@@ -23,7 +23,7 @@ import com.zfoo.scheduler.util.TimeUtils;
  *
  * @author godotg
  */
-public class PNode<E extends IEntity<?>> {
+public class PNode<PK extends Comparable<PK>, E extends IEntity<PK>> {
 
     // 写入数据库的时间
     private volatile long writeToDbTime;

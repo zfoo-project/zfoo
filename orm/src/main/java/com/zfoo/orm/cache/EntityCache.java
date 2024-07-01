@@ -59,7 +59,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     private final EntityDef entityDef;
 
-    private final LazyCache<PK, PNode<E>> cache;
+    private final LazyCache<PK, PNode<PK, E>> cache;
 
     private ICacheVersion<PK, E> cacheVersion = new CacheVersionDefault<>();
 
@@ -75,9 +75,9 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             cacheVersion = new CacheVersion<>(filed.getName(), getMethod, setMethod);
         }
 
-        var removeCallback = new BiConsumer<Pair<PK, PNode<E>>, LazyCache.RemovalCause>() {
+        var removeCallback = new BiConsumer<Pair<PK, PNode<PK, E>>, LazyCache.RemovalCause>() {
             @Override
-            public void accept(Pair<PK, PNode<E>> pair, LazyCache.RemovalCause removalCause) {
+            public void accept(Pair<PK, PNode<PK, E>> pair, LazyCache.RemovalCause removalCause) {
                 if (removalCause == LazyCache.RemovalCause.EXPLICIT) {
                     return;
                 }
@@ -176,7 +176,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     /**
      * 校验需要更新的entity和缓存的entity是否为同一个entity
      */
-    private PNode<E> fetchCachePnode(E entity, boolean safe) {
+    private PNode<PK, E> fetchCachePnode(E entity, boolean safe) {
         var id = entity.id();
         var cachePnode = cache.get(id);
         if (cachePnode == null) {
@@ -273,9 +273,9 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             var currentTime = TimeUtils.currentTimeMillis();
             // key为threadId
             var updateMap = new HashMap<Long, List<E>>();
-            cache.forEach(new BiConsumer<PK, PNode<E>>() {
+            cache.forEach(new BiConsumer<PK, PNode<PK, E>>() {
                 @Override
-                public void accept(PK pk, PNode<E> pnode) {
+                public void accept(PK pk, PNode<PK, E> pnode) {
                     var entity = pnode.getEntity();
                     if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
                         pnode.resetTime(currentTime);
@@ -303,9 +303,9 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     public void persistAllBlock() {
         var currentTime = TimeUtils.currentTimeMillis();
         var updateList = new ArrayList<E>();
-        cache.forEach(new BiConsumer<PK, PNode<E>>() {
+        cache.forEach(new BiConsumer<PK, PNode<PK, E>>() {
             @Override
-            public void accept(PK pk, PNode<E> pnode) {
+            public void accept(PK pk, PNode<PK, E> pnode) {
                 var entity = pnode.getEntity();
                 if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
                     pnode.resetTime(currentTime);
@@ -405,13 +405,11 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 continue;
             }
 
-            // 如果数据库版本号较大，说明缓存的数据不是最新的，直接清除缓存，下次重新加载
-            if (dbEntityVersion > entityVersion) {
-                cache.remove(id);
-                load(id);
-                logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}]", entityClass.getSimpleName(), id, dbEntityVersion, entityVersion);
-                continue;
-            }
+            // 数据库版本号较大，说明缓存的数据不是最新的，直接清除缓存，下次重新加载
+            cache.remove(id);
+            load(id);
+            logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}]", entityClass.getSimpleName(), id, dbEntityVersion, entityVersion);
+            continue;
         }
     }
 
