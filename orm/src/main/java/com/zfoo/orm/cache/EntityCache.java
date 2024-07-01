@@ -75,7 +75,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 version = cacheVersionReflect;
             } else {
                 try {
-                    version = EnhanceUtils.createEventReceiver(cacheVersionReflect);
+                    version = EnhanceUtils.createVersion(cacheVersionReflect);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

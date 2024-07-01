@@ -42,7 +42,7 @@ public abstract class EnhanceUtils {
         }
     }
 
-    public static IVersion createEventReceiver(VersionReflect cacheVersion) throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static IVersion createVersion(VersionReflect cacheVersion) throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         var classPool = ClassPool.getDefault();
 
         Class<?> clazz = cacheVersion.getEntityClass();
