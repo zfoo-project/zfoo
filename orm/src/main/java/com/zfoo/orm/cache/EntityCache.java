@@ -100,7 +100,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                         var result = collection.replaceOne(filter, entity);
                         if (result.getModifiedCount() <= 0) {
                             // 移除缓存时，更新数据库中的实体文档异常
-                            logger.error("onRemoval(): update entity to db failed when remove [{}] [pk:{}] by [removalCause:{}]", entityClass.getSimpleName(), entity.id(), removalCause);
+                            logger.error("onRemoval(): update entity to db failed when remove [{}] [pk:{}] by [removalCause:{}]", clazz.getSimpleName(), entity.id(), removalCause);
                         }
                     }
                 });
@@ -133,9 +133,8 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
         var entity = OrmContext.getAccessor().load(pk, clazz);
 
-        // 如果数据库中不存在则给一个默认值
+        // 如果数据库中不存在则返回null，并将null放入缓存，防止频繁查库
         if (entity == null) {
-            // 数据库无法加载缓存，返回默认值
             logger.warn("[{}] can not load [pk:{}] and use null to replace it", clazz.getSimpleName(), pk);
         }
         pnode = new PNode<>(entity);
