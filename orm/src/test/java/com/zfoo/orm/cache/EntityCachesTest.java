@@ -36,7 +36,7 @@ public class EntityCachesTest {
 
 
     @Test
-    public void test() {
+    public void loadTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
 
         // 每次运行前先删除数据库
@@ -65,33 +65,29 @@ public class EntityCachesTest {
     }
 
     @Test
-    public void testLoadOrInsert() {
+    public void loadOrCreateTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
+
+        // 每次运行前先删除数据库
+        var collection = OrmContext.getOrmManager().getCollection(UserEntity.class);
+        collection.drop();
+
+        @SuppressWarnings("unchecked")
+        var userEntityCaches = (IEntityCache<Long, UserEntity>) OrmContext.getOrmManager().getEntityCaches(UserEntity.class);
 
         // 动态去拿到UserEntity的EntityCaches
-        @SuppressWarnings("unchecked")
-        var mailEntityCaches = (IEntityCache<String, MailEntity>) OrmContext.getOrmManager().getEntityCaches(MailEntity.class);
-
         for (var i = 1; i <= 10; i++) {
-            var entity = mailEntityCaches.loadOrCreate(String.valueOf(i));
-            entity.setContent("msg:" + i);
-            mailEntityCaches.update(entity);
+            for (var j = 1; j <= 10; j++) {
+                var entity = userEntityCaches.loadOrCreate((long) j);
+                entity.setE(StringUtils.format("update-{}-{}", i, j));
+                entity.setC(j);
+                userEntityCaches.update(entity);
+            }
+
+            ThreadUtils.sleep(60 * TimeUtils.MILLIS_PER_SECOND);
         }
-
-        ThreadUtils.sleep(60 * TimeUtils.MILLIS_PER_SECOND);
-
-        mailEntityCaches.load("1");
     }
 
-    @Test
-    public void collectionTest() {
-        var context = new ClassPathXmlApplicationContext("application.xml");
-
-        var collection = OrmContext.getOrmManager().getCollection(UserEntity.class);
-        var result = collection.updateOne(Filters.eq("_id", 1), new Document("$inc", new Document("c", 1L)));
-        System.out.println(result);
-        ThreadUtils.sleep(Long.MAX_VALUE);
-    }
 
     public void batchInsert() {
         var listUser = new ArrayList<UserEntity>();

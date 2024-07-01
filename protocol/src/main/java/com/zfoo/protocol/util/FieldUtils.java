@@ -44,7 +44,7 @@ public abstract class FieldUtils {
             clazz.getDeclaredMethod(methodName);
             return methodName;
         } catch (NoSuchMethodException e) {
-            throw new RunException("field:[{}] has no getMethod or isMethod in class:[{}]", field.getName(), clazz.getCanonicalName());
+            throw new RunException("field:[{}] has no get or set method in class:[{}]", field.getName(), clazz.getCanonicalName());
         }
     }
 

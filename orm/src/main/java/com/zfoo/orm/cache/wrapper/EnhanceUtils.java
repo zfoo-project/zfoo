@@ -54,7 +54,7 @@ public abstract class EnhanceUtils {
         } else if (idType == float.class || idType == Float.class) {
             return "((Float)$1).floatValue()";
         } else if (idType == double.class || idType == Double.class) {
-            return "((Double)$1).floatValue()";
+            return "((Double)$1).doubleValue()";
         } else if (idType == String.class) {
             return "(String)$1";
         } else {
