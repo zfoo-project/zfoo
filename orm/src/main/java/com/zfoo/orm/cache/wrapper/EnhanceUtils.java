@@ -80,14 +80,14 @@ public abstract class EnhanceUtils {
             CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.ORM) + UuidUtils.getLocalIntId());
             enhanceClazz.addInterface(classPool.get(IEntityWrapper.class.getName()));
 
-            // 定义类实现的接口方法name
+            // 定义类实现的接口方法newEntity
             CtMethod newEntityMethod = new CtMethod(classPool.get(IEntity.class.getName()), "newEntity", classPool.get(new String[]{Comparable.class.getName()}), enhanceClazz);
             newEntityMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
             String newEntityMethodBody = StringUtils.format("{ {} entity = new {}(); entity.{}({}); return entity; }", clazz.getName(), clazz.getName(), setIdMethod.getName(), rawObjectId(idField));
             newEntityMethod.setBody(newEntityMethodBody);
             enhanceClazz.addMethod(newEntityMethod);
 
-            // 定义类实现的接口方法name
+            // 定义类实现的接口方法versionFieldName
             CtMethod versionFieldNameMethod = new CtMethod(classPool.get(String.class.getName()), "versionFieldName", null, enhanceClazz);
             versionFieldNameMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
             String versionFieldNameMethodBody = versionField == null ? "{ return null; }" : StringUtils.format("{ return \"{}\"; }", entityWrapper.versionFieldName());
