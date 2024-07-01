@@ -85,15 +85,18 @@ public class OrmManager implements IOrmManager {
         this.ormConfig = ormConfig;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initBefore() {
         var entityDefMap = entityClass();
 
-        for (var entityDef : entityDefMap.values()) {
+        for (var entry : entityDefMap.entrySet()) {
+            var entityClass = entry.getKey();
+            var entityDef = entry.getValue();
             @SuppressWarnings("rawtypes")
-            var entityCaches = new EntityCache(entityDef);
-            entityCachesMap.put(entityDef.getClazz(), entityCaches);
-            allEntityCachesUsableMap.put(entityDef.getClazz(), false);
+            var entityCaches = new EntityCache(entityClass, entityDef);
+            entityCachesMap.put(entityClass, entityCaches);
+            allEntityCachesUsableMap.put(entityClass, false);
         }
 
         var pojoCodecProvider = PojoCodecProvider.builder().automatic(true).register(new MapCodecProvider()).build();
@@ -134,10 +137,12 @@ public class OrmManager implements IOrmManager {
         mongodbDatabase = mongoClient.getDatabase(hostConfig.getDatabase());
 
         // 创建索引
-        for (var entityDef : entityDefMap.values()) {
+        for (var entry : entityDefMap.entrySet()) {
+            var entityClass = entry.getKey();
+            var entityDef = entry.getValue();
             var indexDefMap = entityDef.getIndexDefMap();
             if (CollectionUtils.isNotEmpty(indexDefMap)) {
-                var collection = getCollection(entityDef.getClazz());
+                var collection = getCollection(entityClass);
                 for (var indexDef : indexDefMap.entrySet()) {
                     var fieldName = indexDef.getKey();
                     var index = indexDef.getValue();
@@ -169,7 +174,7 @@ public class OrmManager implements IOrmManager {
             if (CollectionUtils.isNotEmpty(indexTextDefMap)) {
                 AssertionUtils.isTrue(indexTextDefMap.size() == 1
                         , StringUtils.format("A collection can have only one text index [{}]", JsonUtils.object2String(indexTextDefMap.keySet())));
-                var collection = getCollection(entityDef.getClazz());
+                var collection = getCollection(entityClass);
                 for (var indexTextDef : indexTextDefMap.entrySet()) {
                     var fieldName = indexTextDef.getKey();
                     var hasIndex = false;
@@ -396,7 +401,7 @@ public class OrmManager implements IOrmManager {
             indexTextDefMap.put(field.getName(), indexTextDef);
         }
 
-        return EntityDef.valueOf(clazz, !hasUnsafeCollection, cacheStrategy.getSize(), cacheStrategy.getExpireMillisecond(), persisterStrategy, indexDefMap, indexTextDefMap);
+        return EntityDef.valueOf(!hasUnsafeCollection, cacheStrategy.getSize(), cacheStrategy.getExpireMillisecond(), persisterStrategy, indexDefMap, indexTextDefMap);
     }
 
     private void checkEntity(Class<?> clazz) {
@@ -453,7 +458,7 @@ public class OrmManager implements IOrmManager {
         // @Version标识的字段必须是long类型
         var versionFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Version.class);
         if (ArrayUtils.isNotEmpty(versionFields)) {
-            AssertionUtils.isTrue(versionFields.length == 1,"The Entity[{}] must have only one @Version annotation", clazz.getSimpleName());
+            AssertionUtils.isTrue(versionFields.length == 1, "The Entity[{}] must have only one @Version annotation", clazz.getSimpleName());
             var versionField = versionFields[0];
             // idField必须用private修饰
             AssertionUtils.isTrue(Modifier.isPrivate(versionField.getModifiers()), "The version of the Entity[{}] must be private", clazz.getSimpleName());

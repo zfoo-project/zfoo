@@ -54,6 +54,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     private static final int DEFAULT_BATCH_SIZE = 512;
 
+    private final Class<E> clazz;
     private final EntityDef entityDef;
 
     private final LazyCache<PK, PNode<PK, E>> cache;
@@ -61,9 +62,11 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     private IEntityWrapper wrapper;
 
 
-    public EntityCache(EntityDef entityDef) {
+    @SuppressWarnings("unchecked")
+    public EntityCache(Class<? extends IEntity<?>> entityClass, EntityDef entityDef) {
+        this.clazz = (Class<E>) entityClass;
         // 创建CacheVersion
-        var entityWrapper = new EntityWrapper(entityDef.getClazz());
+        var entityWrapper = new EntityWrapper(entityClass);
         if (GraalVmUtils.isGraalVM()) {
             wrapper = entityWrapper;
         } else {
@@ -90,12 +93,10 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
                 // 缓存失效之前，将数据写入数据库
                 var entity = pnode.getEntity();
-                @SuppressWarnings("unchecked")
-                var entityClass = (Class<E>) entityDef.getClazz();
-                EventBus.asyncExecute(entityClass.hashCode(), new Runnable() {
+                EventBus.asyncExecute(clazz.hashCode(), new Runnable() {
                     @Override
                     public void run() {
-                        var collection = OrmContext.getOrmManager().getCollection(entityClass);
+                        var collection = OrmContext.getOrmManager().getCollection(clazz);
 
                         var version = wrapper.gvs(entity);
                         wrapper.svs(entity, version + 1);
@@ -138,19 +139,19 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             return pnode.getEntity();
         }
 
-        @SuppressWarnings("unchecked")
-        var entity = (E) OrmContext.getAccessor().load(pk, (Class<IEntity<?>>) entityDef.getClazz());
+        var entity = OrmContext.getAccessor().load(pk, clazz);
 
         // 如果数据库中不存在则给一个默认值
         if (entity == null) {
             // 数据库无法加载缓存，返回默认值
-            logger.warn("[{}] can not load [pk:{}] and use null to replace it", entityDef.getClazz().getSimpleName(), pk);
+            logger.warn("[{}] can not load [pk:{}] and use null to replace it", clazz.getSimpleName(), pk);
         }
         pnode = new PNode<>(entity);
         cache.put(pk, pnode);
         return entity;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E loadOrCreate(PK pk) {
         AssertionUtils.notNull(pk);
@@ -159,8 +160,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             return pnode.getEntity();
         }
 
-        @SuppressWarnings("unchecked")
-        var entity = (E) OrmContext.getAccessor().load(pk, (Class<IEntity<?>>) entityDef.getClazz());
+        var entity = (E) OrmContext.getAccessor().load(pk, clazz);
 
         // 如果数据库中不存在则给一个默认值
         if (entity == null) {
@@ -267,7 +267,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     @Override
     public void persistAll() {
         if (entityDef.isThreadSafe()) {
-            EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> persistAllBlock());
+            EventBus.asyncExecute(clazz.hashCode(), () -> persistAllBlock());
         } else {
             var currentTime = TimeUtils.currentTimeMillis();
             // key为threadId
@@ -289,7 +289,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 var updateList = entry.getValue();
                 var executor = ThreadUtils.executorByThreadId(threadId);
                 if (executor == null) {
-                    EventBus.asyncExecute(entityDef.getClazz().hashCode(), () -> doPersist(updateList));
+                    EventBus.asyncExecute(clazz.hashCode(), () -> doPersist(updateList));
                 } else {
                     // 使用scheduler均匀的分配入库的时间点，减少数据库的并发写入压力
                     SchedulerBus.schedule(() -> executor.execute(() -> doPersist(updateList)), count++ * 100L, TimeUnit.MILLISECONDS);
@@ -321,9 +321,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             return;
         }
 
-        @SuppressWarnings("unchecked")
-        var entityClass = (Class<E>) entityDef.getClazz();
-
         var page = Page.valueOf(1, DEFAULT_BATCH_SIZE, updateList.size());
         var maxPageSize = page.totalPage();
 
@@ -331,7 +328,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             page.setPage(currentPage);
             var currentUpdateList = page.currentPageList(updateList);
             try {
-                var collection = OrmContext.getOrmManager().getCollection(entityClass).withWriteConcern(WriteConcern.ACKNOWLEDGED);
+                var collection = OrmContext.getOrmManager().getCollection(clazz).withWriteConcern(WriteConcern.ACKNOWLEDGED);
 
                 var batchList = currentUpdateList.stream()
                         .map(it -> {
@@ -354,9 +351,9 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 // mostly because the document that needs to be updated is the same as the document in the database
                 // 开始执行容错操作（大部分原因都是因为需要更新的文档和数据库的文档相同）
                 logger.warn("persistAll(): [{}] batch update [{}] not equal to final update [{}], and try to use persistAllAndCompare() to update every single entity."
-                        , entityClass.getSimpleName(), currentUpdateList.size(), result.getModifiedCount());
+                        , clazz.getSimpleName(), currentUpdateList.size(), result.getModifiedCount());
             } catch (Throwable t) {
-                logger.error("persistAll(): [{}] batch update unknown error and try ", entityClass.getSimpleName(), t);
+                logger.error("persistAll(): [{}] batch update unknown error and try ", clazz.getSimpleName(), t);
             }
             persistAllAndCompare(currentUpdateList);
         }
@@ -369,11 +366,9 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             return;
         }
 
-        @SuppressWarnings("unchecked")
-        var entityClass = (Class<E>) entityDef.getClazz();
         var ids = updateList.stream().map(it -> it.id()).toList();
 
-        var dbList = OrmContext.getQuery(entityClass).in("_id", ids).queryAll();
+        var dbList = OrmContext.getQuery(clazz).in("_id", ids).queryAll();
         var dbMap = dbList.stream().collect(Collectors.toMap(key -> key.id(), value -> value));
         for (var entity : updateList) {
             var id = entity.id();
@@ -381,7 +376,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
             if (dbEntity == null) {
                 cache.remove(entity.id());
-                logger.warn("[database:{}] not found entity [id:{}]", entityClass.getSimpleName(), id);
+                logger.warn("[database:{}] not found entity [id:{}]", clazz.getSimpleName(), id);
                 continue;
             }
 
@@ -407,7 +402,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             // 数据库版本号较大，说明缓存的数据不是最新的，直接清除缓存，下次重新加载
             cache.remove(id);
             load(id);
-            logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}]", entityClass.getSimpleName(), id, dbEntityVersion, entityVersion);
+            logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}]", clazz.getSimpleName(), id, dbEntityVersion, entityVersion);
             continue;
         }
     }

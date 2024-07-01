@@ -21,8 +21,6 @@ import java.util.Map;
  */
 public class EntityDef {
 
-    private Class<? extends IEntity<?>> clazz;
-
     // 线程安全指的是内部没有使用集合或者使用的集合全部支持并发操作
     private boolean threadSafe;
 
@@ -37,10 +35,9 @@ public class EntityDef {
     private Map<String, IndexTextDef> indexTextDefMap;
 
 
-    public static EntityDef valueOf(Class<? extends IEntity<?>> clazz, boolean threadSafe, int cacheSize, long expireMillisecond
+    public static EntityDef valueOf(boolean threadSafe, int cacheSize, long expireMillisecond
             , PersisterStrategy persisterStrategy, Map<String, IndexDef> indexDefMap, Map<String, IndexTextDef> indexTextDefMap) {
         var entityDef = new EntityDef();
-        entityDef.clazz = clazz;
         entityDef.threadSafe = threadSafe;
         entityDef.cacheSize = cacheSize;
         entityDef.expireMillisecond = expireMillisecond;
@@ -48,10 +45,6 @@ public class EntityDef {
         entityDef.indexDefMap = indexDefMap;
         entityDef.indexTextDefMap = indexTextDefMap;
         return entityDef;
-    }
-
-    public Class<? extends IEntity<?>> getClazz() {
-        return clazz;
     }
 
     public boolean isThreadSafe() {
