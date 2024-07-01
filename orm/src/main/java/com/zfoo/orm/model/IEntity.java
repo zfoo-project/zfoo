@@ -18,7 +18,8 @@ package com.zfoo.orm.model;
 public interface IEntity<PK extends Comparable<PK>> {
 
     /**
-     * 一个文档的主键 primary key
+     * EN: The primary key of a document. The type of primary key only supports int long float double String ObjectId
+     * CN: 一个文档的主键 primary key，主键Id支持的类型有6种 int long float double String ObjectId
      */
     PK id();
 
