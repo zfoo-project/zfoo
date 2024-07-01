@@ -21,9 +21,10 @@ import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.anno.Version;
 import com.zfoo.orm.cache.persister.IOrmPersister;
 import com.zfoo.orm.cache.persister.PNode;
-import com.zfoo.orm.cache.version.CacheVersion;
-import com.zfoo.orm.cache.version.CacheVersionDefault;
-import com.zfoo.orm.cache.version.ICacheVersion;
+import com.zfoo.orm.cache.version.VersionDefault;
+import com.zfoo.orm.cache.version.VersionReflect;
+import com.zfoo.orm.cache.version.EnhanceUtils;
+import com.zfoo.orm.cache.version.IVersion;
 import com.zfoo.orm.model.EntityDef;
 import com.zfoo.orm.model.IEntity;
 import com.zfoo.orm.query.Page;
@@ -31,10 +32,7 @@ import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.FieldUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
-import com.zfoo.protocol.util.ThreadUtils;
+import com.zfoo.protocol.util.*;
 import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.scheduler.util.LazyCache;
 import com.zfoo.scheduler.util.TimeUtils;
@@ -61,7 +59,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     private final LazyCache<PK, PNode<PK, E>> cache;
 
-    private ICacheVersion<PK, E> cacheVersion = new CacheVersionDefault<>();
+    private IVersion version = VersionDefault.DEFAULT;
 
 
     public EntityCache(EntityDef entityDef) {
@@ -72,7 +70,16 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             var filed = versionFields[0];
             var getMethod = ReflectionUtils.getMethodByNameInPOJOClass(clazz, FieldUtils.fieldToGetMethod(clazz, filed));
             var setMethod = ReflectionUtils.getMethodByNameInPOJOClass(clazz, FieldUtils.fieldToSetMethod(clazz, filed), filed.getType());
-            cacheVersion = new CacheVersion<>(filed.getName(), getMethod, setMethod);
+            var cacheVersionReflect = new VersionReflect(clazz, getMethod, setMethod, filed.getName());
+            if (GraalVmUtils.isGraalVM()) {
+                version = cacheVersionReflect;
+            } else {
+                try {
+                    version = EnhanceUtils.createEventReceiver(cacheVersionReflect);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
 
         var removeCallback = new BiConsumer<Pair<PK, PNode<PK, E>>, LazyCache.RemovalCause>() {
@@ -97,11 +104,11 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     public void run() {
                         var collection = OrmContext.getOrmManager().getCollection(entityClass);
 
-                        var version = cacheVersion.gvs(entity);
-                        cacheVersion.svs(entity, version + 1);
+                        var currentVersion = version.gvs(entity);
+                        version.svs(entity, currentVersion + 1);
 
-                        var filter = cacheVersion.gvs(entity) > 0
-                                ? Filters.and(Filters.eq("_id", entity.id()), Filters.eq(cacheVersion.versionField(), version))
+                        var filter = version.gvs(entity) > 0
+                                ? Filters.and(Filters.eq("_id", entity.id()), Filters.eq(version.name(), currentVersion))
                                 : Filters.eq("_id", entity.id());
                         var result = collection.replaceOne(filter, entity);
                         if (result.getModifiedCount() <= 0) {
@@ -336,11 +343,11 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
                 var batchList = currentUpdateList.stream()
                         .map(it -> {
-                            var version = cacheVersion.gvs(it);
-                            cacheVersion.svs(it, version + 1);
+                            var currentVersion = version.gvs(it);
+                            version.svs(it, currentVersion + 1);
 
-                            var filter = cacheVersion.gvs(it) > 0
-                                    ? Filters.and(Filters.eq("_id", it.id()), Filters.eq(cacheVersion.versionField(), version))
+                            var filter = version.gvs(it) > 0
+                                    ? Filters.and(Filters.eq("_id", it.id()), Filters.eq(version.name(), currentVersion))
                                     : Filters.eq("_id", it.id());
 
                             return new ReplaceOneModel<>(filter, it);
@@ -387,8 +394,8 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             }
 
             // 如果没有版本号，则直接更新数据库
-            var entityVersion = cacheVersion.gvs(entity);
-            var dbEntityVersion = cacheVersion.gvs(dbEntity);
+            var entityVersion = version.gvs(entity);
+            var dbEntityVersion = version.gvs(dbEntity);
             if (entityVersion <= 0) {
                 OrmContext.getAccessor().update(entity);
                 continue;

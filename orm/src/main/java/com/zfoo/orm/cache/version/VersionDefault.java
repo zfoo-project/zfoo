@@ -12,12 +12,28 @@
 
 package com.zfoo.orm.cache.version;
 
+
 import com.zfoo.orm.model.IEntity;
 
 /**
  * @author godotg
  */
-public class CacheVersionDefault<PK extends Comparable<PK>, E extends IEntity<PK>> implements ICacheVersion<PK, E> {
+public class VersionDefault implements IVersion {
 
+    public static final VersionDefault DEFAULT = new VersionDefault();
 
+    @Override
+    public String name() {
+        return "version";
+    }
+
+    @Override
+    public long gvs(IEntity<?> entity) {
+        return 0;
+    }
+
+    @Override
+    public void svs(IEntity<?> entity, long vs) {
+
+    }
 }

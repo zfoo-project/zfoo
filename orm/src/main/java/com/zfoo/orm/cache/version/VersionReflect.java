@@ -20,31 +20,49 @@ import java.lang.reflect.Method;
 /**
  * @author godotg
  */
-public class CacheVersion<PK extends Comparable<PK>, E extends IEntity<PK>> implements ICacheVersion<PK, E> {
+public class VersionReflect implements IVersion {
 
-    private String versionFiled;
+    private Class<? extends IEntity<?>> entityClass;
     private Method getVersionMethod;
     private Method setVersionMethod;
+    private String versionFiled;
 
-    public CacheVersion(String versionFiled, Method getVersionMethod, Method setVersionMethod) {
-        this.versionFiled = versionFiled;
+    public VersionReflect(Class<? extends IEntity<?>> entityClass, Method getVersionMethod, Method setVersionMethod, String versionFiled) {
+        this.entityClass = entityClass;
         this.getVersionMethod = getVersionMethod;
         this.setVersionMethod = setVersionMethod;
+        this.versionFiled = versionFiled;
     }
 
     @Override
-    public String versionField() {
+    public String name() {
         return versionFiled;
     }
 
     @Override
-    public long gvs(E entity) {
+    public long gvs(IEntity<?> entity) {
         return (long) ReflectionUtils.invokeMethod(entity, getVersionMethod);
     }
 
     @Override
-    public void svs(E entity, long vs) {
+    public void svs(IEntity<?> entity, long vs) {
         ReflectionUtils.invokeMethod(entity, setVersionMethod, vs);
     }
 
+
+    public Class<? extends IEntity<?>> getEntityClass() {
+        return entityClass;
+    }
+
+    public Method getGetVersionMethod() {
+        return getVersionMethod;
+    }
+
+    public Method getSetVersionMethod() {
+        return setVersionMethod;
+    }
+
+    public String getVersionFiled() {
+        return versionFiled;
+    }
 }

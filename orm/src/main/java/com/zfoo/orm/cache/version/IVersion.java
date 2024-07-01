@@ -18,11 +18,12 @@ import com.zfoo.orm.model.IEntity;
 /**
  * @author godotg
  */
-public interface ICacheVersion<PK extends Comparable<PK>, E extends IEntity<PK>> {
+public interface IVersion {
 
-    default String versionField() {
-        return "version";
-    }
+    /**
+     * version field的名称
+     */
+    String name();
 
     /**
      * 一个文档的写入到数据库的version版本，version的get和set方法
@@ -38,11 +39,8 @@ public interface ICacheVersion<PK extends Comparable<PK>, E extends IEntity<PK>>
      * <p>
      * 分布式环境下，要想服务器性能好，就要做成有状态的，有状态就要遇到这种多服对同一条数据写入问题，这是一个千古难以解决的问题，进退两难。
      */
-    default long gvs(E entity) {
-        return 0L;
-    }
+    long gvs(IEntity<?> entity);
 
-    default void svs(E entity, long vs) {
-    }
+    void svs(IEntity<?> entity, long vs);
 
 }
