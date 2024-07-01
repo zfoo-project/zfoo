@@ -20,7 +20,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
  */
 public class NamespaceHandler extends NamespaceHandlerSupport {
 
-    private final String ORM = "config";
+    public static final String ORM = "orm";
 
     @Override
     public void init() {

@@ -13,6 +13,7 @@
 package com.zfoo.orm.cache.version;
 
 import com.zfoo.orm.model.IEntity;
+import com.zfoo.orm.schema.NamespaceHandler;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.UuidUtils;
 import javassist.*;
@@ -50,7 +51,7 @@ public abstract class EnhanceUtils {
         Method setVersionMethod = cacheVersion.getSetVersionMethod();
 
         // 定义类名称
-        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + UuidUtils.getLocalIntId());
+        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.ORM) + UuidUtils.getLocalIntId());
         enhanceClazz.addInterface(classPool.get(IVersion.class.getName()));
 
         // 定义类实现的接口方法name
