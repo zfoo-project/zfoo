@@ -51,13 +51,15 @@ public class EntityCachesTest {
         var userEntityCaches = (IEntityCache<Long, UserEntity>) OrmContext.getOrmManager().getEntityCaches(UserEntity.class);
 
         for (var i = 1; i <= 10; i++) {
-            var entity = userEntityCaches.load((long) i);
-            entity.setE("update" + i);
-            entity.setC(i);
-            EventBus.asyncExecute(() -> userEntityCaches.update(entity));
-        }
+            for (var j = 1; j <= 10; j++) {
+                var entity = userEntityCaches.load((long) j);
+                entity.setE("update" + j);
+                entity.setC(j);
+                userEntityCaches.update(entity);
+            }
 
-        ThreadUtils.sleep(60 * TimeUtils.MILLIS_PER_SECOND);
+            ThreadUtils.sleep(60 * TimeUtils.MILLIS_PER_SECOND);
+        }
 
         userEntityCaches.load(1L);
     }

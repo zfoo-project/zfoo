@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.orm.cache.version;
+package com.zfoo.orm.cache.wrapper;
 
 
 import com.zfoo.orm.model.IEntity;
@@ -18,12 +18,14 @@ import com.zfoo.orm.model.IEntity;
 /**
  * @author godotg
  */
-public interface IVersion {
+public interface IEntityWrapper {
+
+    IEntity<?> newEntity(Object id);
 
     /**
      * version field的名称
      */
-    String name();
+    String versionFieldName();
 
     /**
      * 一个文档的写入到数据库的version版本，version的get和set方法
