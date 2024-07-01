@@ -14,10 +14,10 @@
 package com.zfoo.orm.cache;
 
 import com.mongodb.client.model.Filters;
-import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.entity.MailEntity;
 import com.zfoo.orm.entity.UserEntity;
+import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.scheduler.util.TimeUtils;
 import org.bson.Document;
@@ -53,7 +53,7 @@ public class EntityCachesTest {
         for (var i = 1; i <= 10; i++) {
             for (var j = 1; j <= 10; j++) {
                 var entity = userEntityCaches.load((long) j);
-                entity.setE("update" + j);
+                entity.setE(StringUtils.format("update-{}-{}", i, j));
                 entity.setC(j);
                 userEntityCaches.update(entity);
             }

@@ -12,19 +12,14 @@
 
 package com.zfoo.orm.model;
 
-import com.zfoo.orm.anno.Id;
 import com.zfoo.orm.config.PersisterStrategy;
-import com.zfoo.protocol.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
  * @author godotg
  */
 public class EntityDef {
-
-    private Field idField;
 
     private Class<? extends IEntity<?>> clazz;
 
@@ -42,10 +37,9 @@ public class EntityDef {
     private Map<String, IndexTextDef> indexTextDefMap;
 
 
-    public static EntityDef valueOf(Field idField, Class<? extends IEntity<?>> clazz, boolean threadSafe, int cacheSize, long expireMillisecond
+    public static EntityDef valueOf(Class<? extends IEntity<?>> clazz, boolean threadSafe, int cacheSize, long expireMillisecond
             , PersisterStrategy persisterStrategy, Map<String, IndexDef> indexDefMap, Map<String, IndexTextDef> indexTextDefMap) {
         var entityDef = new EntityDef();
-        entityDef.idField = idField;
         entityDef.clazz = clazz;
         entityDef.threadSafe = threadSafe;
         entityDef.cacheSize = cacheSize;
@@ -56,18 +50,6 @@ public class EntityDef {
         return entityDef;
     }
 
-    public IEntity<?> newEmptyEntity() {
-        var entity = ReflectionUtils.newInstance(clazz);
-        return entity;
-    }
-
-    public IEntity<?> newEntity(Object id) {
-        var entity = ReflectionUtils.newInstance(clazz);
-        var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
-        ReflectionUtils.makeAccessible(idFields[0]);
-        ReflectionUtils.setField(idFields[0], entity, id);
-        return entity;
-    }
     public Class<? extends IEntity<?>> getClazz() {
         return clazz;
     }

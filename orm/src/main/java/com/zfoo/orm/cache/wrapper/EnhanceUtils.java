@@ -68,6 +68,7 @@ public abstract class EnhanceUtils {
         Class<?> clazz = entityWrapper.getEntityClass();
         Field idField = entityWrapper.getIdField();
         Method setIdMethod = entityWrapper.getSetIdMethod();
+        Field versionField = entityWrapper.getVersionField();
         Method getVersionMethod = entityWrapper.getGetVersionMethod();
         Method setVersionMethod = entityWrapper.getSetVersionMethod();
 
@@ -83,11 +84,11 @@ public abstract class EnhanceUtils {
         enhanceClazz.addMethod(newEntityMethod);
 
         // 定义类实现的接口方法name
-        CtMethod nameMethod = new CtMethod(classPool.get(String.class.getName()), "versionFieldName", null, enhanceClazz);
-        nameMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String nameMethodBody = StringUtils.format("{ return \"{}\"; }", entityWrapper.versionFieldName());
-        nameMethod.setBody(nameMethodBody);
-        enhanceClazz.addMethod(nameMethod);
+        CtMethod versionFieldNameMethod = new CtMethod(classPool.get(String.class.getName()), "versionFieldName", null, enhanceClazz);
+        versionFieldNameMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
+        String versionFieldNameMethodBody = versionField == null ? "{ return null; }" : StringUtils.format("{ return \"{}\"; }", entityWrapper.versionFieldName());
+        versionFieldNameMethod.setBody(versionFieldNameMethodBody);
+        enhanceClazz.addMethod(versionFieldNameMethod);
 
         // 定义类实现的接口方法gvs
         CtMethod gvsMethod = new CtMethod(classPool.get(long.class.getName()), "gvs", classPool.get(new String[]{IEntity.class.getName()}), enhanceClazz);

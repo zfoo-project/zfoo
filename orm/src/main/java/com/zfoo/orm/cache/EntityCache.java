@@ -164,7 +164,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
         // 如果数据库中不存在则给一个默认值
         if (entity == null) {
-            entity = (E) entityDef.newEntity(pk);
+            entity = (E) wrapper.newEntity(pk);
             OrmContext.getAccessor().insert(entity);
         }
         pnode = new PNode<>(entity);

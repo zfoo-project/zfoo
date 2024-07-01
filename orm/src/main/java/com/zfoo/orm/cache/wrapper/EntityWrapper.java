@@ -29,8 +29,9 @@ public class EntityWrapper implements IEntityWrapper {
 
     private Class<? extends IEntity<?>> entityClass;
     private Field idField;
-    private Field versionField;
     private Method setIdMethod;
+    // -----------------------------------------------------------------------------------------------------------------
+    private Field versionField;
     private Method getVersionMethod;
     private Method setVersionMethod;
 
@@ -61,7 +62,10 @@ public class EntityWrapper implements IEntityWrapper {
 
     @Override
     public String versionFieldName() {
-        return idField.getName();
+        if (versionField == null) {
+            return null;
+        }
+        return versionField.getName();
     }
 
     @Override
