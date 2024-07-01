@@ -142,7 +142,7 @@ public class OrmManager implements IOrmManager {
             var entityDef = entry.getValue();
             var indexDefMap = entityDef.getIndexDefMap();
             if (CollectionUtils.isNotEmpty(indexDefMap)) {
-                var collection = getCollection(entityClass);
+                var collection = mongodbDatabase.getCollection(collectionName(entityClass), entityClass);
                 for (var indexDef : indexDefMap.entrySet()) {
                     var fieldName = indexDef.getKey();
                     var index = indexDef.getValue();
@@ -174,7 +174,7 @@ public class OrmManager implements IOrmManager {
             if (CollectionUtils.isNotEmpty(indexTextDefMap)) {
                 AssertionUtils.isTrue(indexTextDefMap.size() == 1
                         , StringUtils.format("A collection can have only one text index [{}]", JsonUtils.object2String(indexTextDefMap.keySet())));
-                var collection = getCollection(entityClass);
+                var collection = mongodbDatabase.getCollection(collectionName(entityClass), entityClass);
                 for (var indexTextDef : indexTextDefMap.entrySet()) {
                     var fieldName = indexTextDef.getKey();
                     var hasIndex = false;
@@ -240,7 +240,7 @@ public class OrmManager implements IOrmManager {
     }
 
     @Override
-    public <E extends IEntity<?>> IEntityCache<?, E> getEntityCaches(Class<E> clazz) {
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> IEntityCache<PK, E> getEntityCaches(Class<E> clazz) {
         var usable = allEntityCachesUsableMap.get(clazz);
         if (usable == null) {
             throw new RunException("EntityCaches that do not have [] defined", clazz.getCanonicalName());
@@ -250,7 +250,7 @@ public class OrmManager implements IOrmManager {
             throw new RunException("Orm does not use [] EntityCacheAutowired annotation, which are released in advance to save memory", clazz.getCanonicalName());
         }
         @SuppressWarnings("unchecked")
-        var entityCache = (IEntityCache<?, E>) entityCachesMap.get(clazz);
+        var entityCache = (IEntityCache<PK, E>) entityCachesMap.get(clazz);
         return entityCache;
     }
 
@@ -259,14 +259,18 @@ public class OrmManager implements IOrmManager {
         return Collections.unmodifiableCollection(entityCachesMap.values());
     }
 
-    @Override
-    public <E extends IEntity<?>> MongoCollection<E> getCollection(Class<E> entityClazz) {
+    private String collectionName(Class<? extends IEntity<?>> entityClazz) {
         var collectionName = collectionNameMap.get(entityClazz);
         if (collectionName == null) {
             collectionName = StringUtils.substringBeforeLast(StringUtils.uncapitalize(entityClazz.getSimpleName()), "Entity");
             collectionNameMap.put(entityClazz, collectionName);
         }
-        return mongodbDatabase.getCollection(collectionName, entityClazz);
+        return collectionName;
+    }
+
+    @Override
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> MongoCollection<E> getCollection(Class<E> entityClazz) {
+        return mongodbDatabase.getCollection(collectionName(entityClazz), entityClazz);
     }
 
 

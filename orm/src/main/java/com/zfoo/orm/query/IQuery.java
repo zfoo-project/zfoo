@@ -20,8 +20,8 @@ import com.zfoo.orm.model.IEntity;
  *
  * @author godotg
  */
-public interface IQuery {
+public interface IQuery<PK extends Comparable<PK>, E extends IEntity<PK>> {
 
-    <E extends IEntity<?>> IQueryBuilder<E> builder(Class<E> entityClazz);
+    IQueryBuilder<PK, E> builder(Class<E> entityClazz);
 
 }

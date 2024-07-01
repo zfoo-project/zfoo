@@ -25,23 +25,23 @@ import java.util.List;
  */
 public interface IAccessor {
 
-    <E extends IEntity<?>> boolean insert(E entity);
+    <PK extends Comparable<PK>, E extends IEntity<PK>> boolean insert(E entity);
 
-    <E extends IEntity<?>> void batchInsert(List<E> entities);
+    <PK extends Comparable<PK>, E extends IEntity<PK>> void batchInsert(List<E> entities);
 
-    <E extends IEntity<?>> boolean update(E entity);
+    <PK extends Comparable<PK>, E extends IEntity<PK>> boolean update(E entity);
 
-    <E extends IEntity<?>> void batchUpdate(List<E> entities);
+    <PK extends Comparable<PK>, E extends IEntity<PK>> void batchUpdate(List<E> entities);
 
-    <E extends IEntity<?>> boolean delete(E entity);
+    <PK extends Comparable<PK>, E extends IEntity<PK>> boolean delete(E entity);
 
-    <E extends IEntity<?>> boolean delete(Object pk, Class<E> entityClazz);
+    <PK extends Comparable<PK>, E extends IEntity<PK>> boolean delete(PK pk, Class<E> entityClazz);
 
-    <E extends IEntity<?>> void batchDelete(List<E> entities);
+    <PK extends Comparable<PK>, E extends IEntity<PK>> void batchDelete(List<E> entities);
 
-    <E extends IEntity<?>> void batchDelete(List<?> pks, Class<E> entityClazz);
+    <PK extends Comparable<PK>, E extends IEntity<PK>> void batchDelete(List<PK> pks, Class<E> entityClazz);
 
     @Nullable
-    <E extends IEntity<?>> E load(Object pk, Class<E> entityClazz);
+    <PK extends Comparable<PK>, E extends IEntity<PK>> E load(PK pk, Class<E> entityClazz);
 
 }

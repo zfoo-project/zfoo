@@ -35,7 +35,7 @@ public class MongodbAccessor implements IAccessor {
 
 
     @Override
-    public <E extends IEntity<?>> boolean insert(E entity) {
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> boolean insert(E entity) {
         @SuppressWarnings("unchecked")
         var entityClazz = (Class<E>) entity.getClass();
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
@@ -44,7 +44,7 @@ public class MongodbAccessor implements IAccessor {
     }
 
     @Override
-    public <E extends IEntity<?>> void batchInsert(List<E> entities) {
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> void batchInsert(List<E> entities) {
         if (CollectionUtils.isEmpty(entities)) {
             return;
         }
@@ -55,7 +55,7 @@ public class MongodbAccessor implements IAccessor {
     }
 
     @Override
-    public <E extends IEntity<?>> boolean update(E entity) {
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> boolean update(E entity) {
         try {
             @SuppressWarnings("unchecked")
             var entityClazz = (Class<E>) entity.getClass();
@@ -76,7 +76,7 @@ public class MongodbAccessor implements IAccessor {
     }
 
     @Override
-    public <E extends IEntity<?>> void batchUpdate(List<E> entities) {
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> void batchUpdate(List<E> entities) {
         if (CollectionUtils.isEmpty(entities)) {
             return;
         }
@@ -101,7 +101,7 @@ public class MongodbAccessor implements IAccessor {
     }
 
     @Override
-    public <E extends IEntity<?>> boolean delete(E entity) {
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> boolean delete(E entity) {
         @SuppressWarnings("unchecked")
         var entityClazz = (Class<E>) entity.getClass();
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
@@ -110,14 +110,14 @@ public class MongodbAccessor implements IAccessor {
     }
 
     @Override
-    public <E extends IEntity<?>> boolean delete(Object pk, Class<E> entityClazz) {
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> boolean delete(PK pk, Class<E> entityClazz) {
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
         var result = collection.deleteOne(Filters.eq("_id", pk));
         return result.getDeletedCount() > 0;
     }
 
     @Override
-    public <E extends IEntity<?>> void batchDelete(List<E> entities) {
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> void batchDelete(List<E> entities) {
         if (CollectionUtils.isEmpty(entities)) {
             return;
         }
@@ -129,13 +129,13 @@ public class MongodbAccessor implements IAccessor {
     }
 
     @Override
-    public <E extends IEntity<?>> void batchDelete(List<?> pks, Class<E> entityClazz) {
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> void batchDelete(List<PK> pks, Class<E> entityClazz) {
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
         collection.deleteMany(Filters.in("_id", pks));
     }
 
     @Override
-    public <E extends IEntity<?>> E load(Object pk, Class<E> entityClazz) {
+    public <PK extends Comparable<PK>, E extends IEntity<PK>> E load(PK pk, Class<E> entityClazz) {
         var collection = OrmContext.getOrmManager().getCollection(entityClazz);
         var result = new ArrayList<E>(1);
         collection.find(Filters.eq("_id", pk)).forEach(document -> result.add(document));

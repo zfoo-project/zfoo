@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E> {
+public class MongoQueryBuilder<PK extends Comparable<PK>, E extends IEntity<PK>> implements IQueryBuilder<PK, E> {
 
     private final Class<E> entity;
     private Bson builder = Filters.empty();
@@ -38,63 +38,63 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
     }
 
     @Override
-    public IQueryBuilder<E> eq(String fieldName, Object fieldValue) {
+    public IQueryBuilder<PK, E> eq(String fieldName, Object fieldValue) {
         var bson = Filters.eq(fieldName, fieldValue);
         wrapBuilder(bson);
         return this;
     }
 
     @Override
-    public IQueryBuilder<E> ne(String fieldName, Object fieldValue) {
+    public IQueryBuilder<PK, E> ne(String fieldName, Object fieldValue) {
         var bson = Filters.ne(fieldName, fieldValue);
         wrapBuilder(bson);
         return this;
     }
 
     @Override
-    public IQueryBuilder<E> lt(String fieldName, Object fieldValue) {
+    public IQueryBuilder<PK, E> lt(String fieldName, Object fieldValue) {
         var bson = Filters.lt(fieldName, fieldValue);
         wrapBuilder(bson);
         return this;
     }
 
     @Override
-    public IQueryBuilder<E> lte(String fieldName, Object fieldValue) {
+    public IQueryBuilder<PK, E> lte(String fieldName, Object fieldValue) {
         var bson = Filters.lte(fieldName, fieldValue);
         wrapBuilder(bson);
         return this;
     }
 
     @Override
-    public IQueryBuilder<E> gt(String fieldName, Object fieldValue) {
+    public IQueryBuilder<PK, E> gt(String fieldName, Object fieldValue) {
         var bson = Filters.gt(fieldName, fieldValue);
         wrapBuilder(bson);
         return this;
     }
 
     @Override
-    public IQueryBuilder<E> gte(String fieldName, Object fieldValue) {
+    public IQueryBuilder<PK, E> gte(String fieldName, Object fieldValue) {
         var bson = Filters.gte(fieldName, fieldValue);
         wrapBuilder(bson);
         return this;
     }
 
     @Override
-    public IQueryBuilder<E> in(String fieldName, List<?> fieldValueList) {
+    public IQueryBuilder<PK, E> in(String fieldName, List<?> fieldValueList) {
         var bson = Filters.in(fieldName, fieldValueList);
         wrapBuilder(bson);
         return this;
     }
 
     @Override
-    public IQueryBuilder<E> nin(String fieldName, List<?> fieldValueList) {
+    public IQueryBuilder<PK, E> nin(String fieldName, List<?> fieldValueList) {
         var bson = Filters.nin(fieldName, fieldValueList);
         wrapBuilder(bson);
         return this;
     }
 
     @Override
-    public IQueryBuilder<E> like(String fieldName, String fieldValue) {
+    public IQueryBuilder<PK, E> like(String fieldName, String fieldValue) {
         var regex = StringUtils.format("^{}.*", fieldValue);
         var bson = Filters.regex(fieldName, regex);
         wrapBuilder(bson);
@@ -106,14 +106,7 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
         var collection = OrmContext.getOrmManager().getCollection(entity);
         var list = new ArrayList<E>();
         var result = collection.find(builder);
-        result.forEach(new Consumer<IEntity<?>>() {
-            @Override
-            public void accept(IEntity<?> entity) {
-                @SuppressWarnings("unchecked")
-                var e = (E) entity;
-                list.add(e);
-            }
-        });
+        result.forEach(entity -> list.add(entity));
         return list;
     }
 
@@ -127,12 +120,10 @@ public class MongoQueryBuilder<E extends IEntity<?>> implements IQueryBuilder<E>
         var list = new ArrayList<E>();
         result.skip(p.skipNum())
                 .limit(p.getItemsPerPage())
-                .forEach(new Consumer<IEntity<?>>() {
+                .forEach(new Consumer<E>() {
                     @Override
-                    public void accept(IEntity<?> entity) {
-                        @SuppressWarnings("unchecked")
-                        var e = (E) entity;
-                        list.add(e);
+                    public void accept(E entity) {
+                        list.add(entity);
                     }
                 });
 

@@ -22,33 +22,33 @@ import java.util.List;
 /**
  * @author sinprog
  */
-public interface IQueryBuilder<E extends IEntity> {
+public interface IQueryBuilder<PK extends Comparable<PK>, E extends IEntity<PK>> {
 
     // EQ、=	等于（=）
-    IQueryBuilder<E> eq(String fieldName, Object fieldValue);
+    IQueryBuilder<PK, E> eq(String fieldName, Object fieldValue);
 
     // NE、<>	不等于（<>）
-    IQueryBuilder<E> ne(String fieldName, Object fieldValue);
+    IQueryBuilder<PK, E> ne(String fieldName, Object fieldValue);
 
-    IQueryBuilder<E> in(String fieldName, List<?> fieldValueList);
+    IQueryBuilder<PK, E> in(String fieldName, List<?> fieldValueList);
 
     // [n] in	（不在）IN 查询
-    IQueryBuilder<E> nin(String fieldName, List<?> fieldValueList);
+    IQueryBuilder<PK, E> nin(String fieldName, List<?> fieldValueList);
 
     // LT、<	小于（<）
-    IQueryBuilder<E> lt(String fieldName, Object fieldValue);
+    IQueryBuilder<PK, E> lt(String fieldName, Object fieldValue);
 
     // lte、<=	小于等于（<=）
-    IQueryBuilder<E> lte(String fieldName, Object fieldValue);
+    IQueryBuilder<PK, E> lte(String fieldName, Object fieldValue);
 
     //  GT、>	大于（>）
-    IQueryBuilder<E> gt(String fieldName, Object fieldValue);
+    IQueryBuilder<PK, E> gt(String fieldName, Object fieldValue);
 
     // GTE、>=	大于等于（>=）
-    IQueryBuilder<E> gte(String fieldName, Object fieldValue);
+    IQueryBuilder<PK, E> gte(String fieldName, Object fieldValue);
 
     // LIKE	模糊查询
-    IQueryBuilder<E> like(String fieldName, String fieldValue);
+    IQueryBuilder<PK, E> like(String fieldName, String fieldValue);
 
     List<E> queryAll();
 

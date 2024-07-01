@@ -18,11 +18,11 @@ import com.zfoo.orm.model.IEntity;
 /**
  * @author godotg
  */
-public class MongodbQuery implements IQuery {
+public class MongodbQuery<PK extends Comparable<PK>, E extends IEntity<PK>> implements IQuery<PK, E> {
 
     @Override
-    public <E extends IEntity<?>> IQueryBuilder<E> builder(Class<E> entityClazz) {
-        return new MongoQueryBuilder<E>(entityClazz);
+    public IQueryBuilder<PK, E> builder(Class<E> entityClazz) {
+        return new MongoQueryBuilder<PK, E>(entityClazz);
     }
 
 }
