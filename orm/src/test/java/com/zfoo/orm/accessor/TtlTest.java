@@ -30,6 +30,7 @@ public class TtlTest {
     @Test
     public void ttlTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
+        OrmContext.getOrmManager().getCollection(MailEntity.class).drop();
         var mailEntity = MailEntity.valueOf("d", "godot", "hello ttl", new Date(TimeUtils.now()));
         OrmContext.getAccessor().insert(mailEntity);
     }
