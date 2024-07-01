@@ -25,9 +25,9 @@ import java.lang.reflect.Method;
 /**
  * @author godotg
  */
-public class EntityWrapper implements IEntityWrapper {
+public class EntityWrapper<PK extends Comparable<PK>, E extends IEntity<PK>> implements IEntityWrapper<PK, E> {
 
-    private Class<? extends IEntity<?>> entityClass;
+    private Class<E> entityClass;
     private Field idField;
     private Method setIdMethod;
     // -----------------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ public class EntityWrapper implements IEntityWrapper {
     private Method getVersionMethod;
     private Method setVersionMethod;
 
-    public EntityWrapper(Class<? extends IEntity<?>> entityClass) {
+    public EntityWrapper(Class<E> entityClass) {
         this.entityClass = entityClass;
 
         var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(entityClass, Id.class);
@@ -54,7 +54,7 @@ public class EntityWrapper implements IEntityWrapper {
     }
 
     @Override
-    public IEntity<?> newEntity(Object id) {
+    public E newEntity(PK id) {
         var entity = ReflectionUtils.newInstance(entityClass);
         ReflectionUtils.invokeMethod(entity, setIdMethod, id);
         return entity;
@@ -69,7 +69,7 @@ public class EntityWrapper implements IEntityWrapper {
     }
 
     @Override
-    public long gvs(IEntity<?> entity) {
+    public long gvs(E entity) {
         if (getVersionMethod == null) {
             return 0;
         }
@@ -77,14 +77,14 @@ public class EntityWrapper implements IEntityWrapper {
     }
 
     @Override
-    public void svs(IEntity<?> entity, long vs) {
+    public void svs(E entity, long vs) {
         if (setVersionMethod == null) {
             return;
         }
         ReflectionUtils.invokeMethod(entity, setVersionMethod, vs);
     }
 
-    public Class<? extends IEntity<?>> getEntityClass() {
+    public Class<E> getEntityClass() {
         return entityClass;
     }
 

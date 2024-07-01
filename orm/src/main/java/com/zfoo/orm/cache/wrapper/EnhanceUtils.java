@@ -16,11 +16,13 @@ import com.zfoo.orm.model.IEntity;
 import com.zfoo.orm.schema.NamespaceHandler;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.UuidUtils;
-import javassist.*;
+import javassist.ClassClassPath;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
 import org.bson.types.ObjectId;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -62,52 +64,57 @@ public abstract class EnhanceUtils {
         }
     }
 
-    public static IEntityWrapper createEntityWrapper(EntityWrapper entityWrapper) throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        var classPool = ClassPool.getDefault();
+    @SuppressWarnings("unchecked")
+    public static <PK extends Comparable<PK>, E extends IEntity<PK>> IEntityWrapper<PK, E> createEntityWrapper(EntityWrapper<PK, E> entityWrapper) {
+        try {
+            var classPool = ClassPool.getDefault();
 
-        Class<?> clazz = entityWrapper.getEntityClass();
-        Field idField = entityWrapper.getIdField();
-        Method setIdMethod = entityWrapper.getSetIdMethod();
-        Field versionField = entityWrapper.getVersionField();
-        Method getVersionMethod = entityWrapper.getGetVersionMethod();
-        Method setVersionMethod = entityWrapper.getSetVersionMethod();
+            Class<?> clazz = entityWrapper.getEntityClass();
+            Field idField = entityWrapper.getIdField();
+            Method setIdMethod = entityWrapper.getSetIdMethod();
+            Field versionField = entityWrapper.getVersionField();
+            Method getVersionMethod = entityWrapper.getGetVersionMethod();
+            Method setVersionMethod = entityWrapper.getSetVersionMethod();
 
-        // 定义类名称
-        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.ORM) + UuidUtils.getLocalIntId());
-        enhanceClazz.addInterface(classPool.get(IEntityWrapper.class.getName()));
+            // 定义类名称
+            CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.ORM) + UuidUtils.getLocalIntId());
+            enhanceClazz.addInterface(classPool.get(IEntityWrapper.class.getName()));
 
-        // 定义类实现的接口方法name
-        CtMethod newEntityMethod = new CtMethod(classPool.get(IEntity.class.getName()), "newEntity", classPool.get(new String[]{Object.class.getName()}), enhanceClazz);
-        newEntityMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String newEntityMethodBody = StringUtils.format("{ {} entity = new {}(); entity.{}({}); return entity; }", clazz.getName(), clazz.getName(), setIdMethod.getName(), rawObjectId(idField));
-        newEntityMethod.setBody(newEntityMethodBody);
-        enhanceClazz.addMethod(newEntityMethod);
+            // 定义类实现的接口方法name
+            CtMethod newEntityMethod = new CtMethod(classPool.get(IEntity.class.getName()), "newEntity", classPool.get(new String[]{Comparable.class.getName()}), enhanceClazz);
+            newEntityMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
+            String newEntityMethodBody = StringUtils.format("{ {} entity = new {}(); entity.{}({}); return entity; }", clazz.getName(), clazz.getName(), setIdMethod.getName(), rawObjectId(idField));
+            newEntityMethod.setBody(newEntityMethodBody);
+            enhanceClazz.addMethod(newEntityMethod);
 
-        // 定义类实现的接口方法name
-        CtMethod versionFieldNameMethod = new CtMethod(classPool.get(String.class.getName()), "versionFieldName", null, enhanceClazz);
-        versionFieldNameMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String versionFieldNameMethodBody = versionField == null ? "{ return null; }" : StringUtils.format("{ return \"{}\"; }", entityWrapper.versionFieldName());
-        versionFieldNameMethod.setBody(versionFieldNameMethodBody);
-        enhanceClazz.addMethod(versionFieldNameMethod);
+            // 定义类实现的接口方法name
+            CtMethod versionFieldNameMethod = new CtMethod(classPool.get(String.class.getName()), "versionFieldName", null, enhanceClazz);
+            versionFieldNameMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
+            String versionFieldNameMethodBody = versionField == null ? "{ return null; }" : StringUtils.format("{ return \"{}\"; }", entityWrapper.versionFieldName());
+            versionFieldNameMethod.setBody(versionFieldNameMethodBody);
+            enhanceClazz.addMethod(versionFieldNameMethod);
 
-        // 定义类实现的接口方法gvs
-        CtMethod gvsMethod = new CtMethod(classPool.get(long.class.getName()), "gvs", classPool.get(new String[]{IEntity.class.getName()}), enhanceClazz);
-        gvsMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String gvsMethodBody = getVersionMethod == null ? "{ return 0L; }" : StringUtils.format("{ return (({})$1).{}(); }", clazz.getName(), getVersionMethod.getName());
-        gvsMethod.setBody(gvsMethodBody);
-        enhanceClazz.addMethod(gvsMethod);
+            // 定义类实现的接口方法gvs
+            CtMethod gvsMethod = new CtMethod(classPool.get(long.class.getName()), "gvs", classPool.get(new String[]{IEntity.class.getName()}), enhanceClazz);
+            gvsMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
+            String gvsMethodBody = getVersionMethod == null ? "{ return 0L; }" : StringUtils.format("{ return (({})$1).{}(); }", clazz.getName(), getVersionMethod.getName());
+            gvsMethod.setBody(gvsMethodBody);
+            enhanceClazz.addMethod(gvsMethod);
 
-        // 定义类实现的接口方法svs
-        CtMethod svsMethod = new CtMethod(classPool.get(void.class.getName()), "svs", classPool.get(new String[]{IEntity.class.getName(), long.class.getName()}), enhanceClazz);
-        svsMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String svsMethodBody = setVersionMethod == null ? "{}" : StringUtils.format("{ (({})$1).{}($2); }", clazz.getName(), setVersionMethod.getName());
-        svsMethod.setBody(svsMethodBody);
-        enhanceClazz.addMethod(svsMethod);
+            // 定义类实现的接口方法svs
+            CtMethod svsMethod = new CtMethod(classPool.get(void.class.getName()), "svs", classPool.get(new String[]{IEntity.class.getName(), long.class.getName()}), enhanceClazz);
+            svsMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
+            String svsMethodBody = setVersionMethod == null ? "{}" : StringUtils.format("{ (({})$1).{}($2); }", clazz.getName(), setVersionMethod.getName());
+            svsMethod.setBody(svsMethodBody);
+            enhanceClazz.addMethod(svsMethod);
 
-        // 释放缓存
-        enhanceClazz.detach();
+            // 释放缓存
+            enhanceClazz.detach();
 
-        Class<?> resultClazz = enhanceClazz.toClass(IEntityWrapper.class);
-        return (IEntityWrapper) resultClazz.newInstance();
+            Class<?> resultClazz = enhanceClazz.toClass(IEntityWrapper.class);
+            return (IEntityWrapper<PK, E>) resultClazz.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

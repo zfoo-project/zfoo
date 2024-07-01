@@ -56,27 +56,20 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     private final Class<E> clazz;
     private final EntityDef entityDef;
-
     private final LazyCache<PK, PNode<PK, E>> cache;
+    private final IEntityWrapper<PK, E> wrapper;
 
-    private IEntityWrapper wrapper;
 
-
-    @SuppressWarnings("unchecked")
-    public EntityCache(Class<? extends IEntity<?>> entityClass, EntityDef entityDef) {
-        this.clazz = (Class<E>) entityClass;
+    public EntityCache(Class<E> entityClass, EntityDef entityDef) {
+        this.clazz = entityClass;
+        this.entityDef = entityDef;
         // 创建CacheVersion
-        var entityWrapper = new EntityWrapper(entityClass);
+        var entityWrapper = new EntityWrapper<>(clazz);
         if (GraalVmUtils.isGraalVM()) {
             wrapper = entityWrapper;
         } else {
-            try {
-                wrapper = EnhanceUtils.createEntityWrapper(entityWrapper);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            wrapper = EnhanceUtils.createEntityWrapper(entityWrapper);
         }
-
 
         var removeCallback = new BiConsumer<Pair<PK, PNode<PK, E>>, LazyCache.RemovalCause>() {
             @Override
@@ -114,7 +107,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             }
         };
         var expireCheckIntervalMillis = Math.max(3 * TimeUtils.MILLIS_PER_SECOND, entityDef.getExpireMillisecond() / 10);
-        this.entityDef = entityDef;
         this.cache = new LazyCache<>(entityDef.getCacheSize(), entityDef.getExpireMillisecond(), expireCheckIntervalMillis, removeCallback);
 
         if (CollectionUtils.isNotEmpty(entityDef.getIndexDefMap())) {
@@ -151,7 +143,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         return entity;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public E loadOrCreate(PK pk) {
         AssertionUtils.notNull(pk);
@@ -164,7 +155,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
         // 如果数据库中不存在则给一个默认值
         if (entity == null) {
-            entity = (E) wrapper.newEntity(pk);
+            entity = wrapper.newEntity(pk);
             OrmContext.getAccessor().insert(entity);
         }
         pnode = new PNode<>(entity);
@@ -403,7 +394,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             cache.remove(id);
             load(id);
             logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}]", clazz.getSimpleName(), id, dbEntityVersion, entityVersion);
-            continue;
         }
     }
 

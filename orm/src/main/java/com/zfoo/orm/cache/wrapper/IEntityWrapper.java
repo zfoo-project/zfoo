@@ -18,9 +18,9 @@ import com.zfoo.orm.model.IEntity;
 /**
  * @author godotg
  */
-public interface IEntityWrapper {
+public interface IEntityWrapper<PK extends Comparable<PK>, E extends IEntity<PK>> {
 
-    IEntity<?> newEntity(Object id);
+    E newEntity(PK id);
 
     /**
      * version field的名称
@@ -41,8 +41,8 @@ public interface IEntityWrapper {
      * <p>
      * 分布式环境下，要想服务器性能好，就要做成有状态的，有状态就要遇到这种多服对同一条数据写入问题，这是一个千古难以解决的问题，进退两难。
      */
-    long gvs(IEntity<?> entity);
+    long gvs(E entity);
 
-    void svs(IEntity<?> entity, long vs);
+    void svs(E entity, long vs);
 
 }
