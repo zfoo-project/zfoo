@@ -18,15 +18,22 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.OrmContext;
+import com.zfoo.orm.anno.Version;
 import com.zfoo.orm.cache.persister.IOrmPersister;
 import com.zfoo.orm.cache.persister.PNode;
+import com.zfoo.orm.cache.version.CacheVersion;
+import com.zfoo.orm.cache.version.CacheVersionDefault;
+import com.zfoo.orm.cache.version.ICacheVersion;
 import com.zfoo.orm.model.EntityDef;
 import com.zfoo.orm.model.IEntity;
 import com.zfoo.orm.query.Page;
+import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.FieldUtils;
+import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.scheduler.util.LazyCache;
@@ -54,7 +61,20 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     private final LazyCache<PK, PNode<E>> cache;
 
+    private ICacheVersion<PK, E> cacheVersion = new CacheVersionDefault<>();
+
+
     public EntityCache(EntityDef entityDef) {
+        var clazz = entityDef.getClazz();
+        // 创建CacheVersion
+        var versionFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Version.class);
+        if (ArrayUtils.isNotEmpty(versionFields)) {
+            var filed = versionFields[0];
+            var getMethod = ReflectionUtils.getMethodByNameInPOJOClass(clazz, FieldUtils.fieldToGetMethod(clazz, filed));
+            var setMethod = ReflectionUtils.getMethodByNameInPOJOClass(clazz, FieldUtils.fieldToSetMethod(clazz, filed), filed.getType());
+            cacheVersion = new CacheVersion<>(filed.getName(), getMethod, setMethod);
+        }
+
         var removeCallback = new BiConsumer<Pair<PK, PNode<E>>, LazyCache.RemovalCause>() {
             @Override
             public void accept(Pair<PK, PNode<E>> pair, LazyCache.RemovalCause removalCause) {
@@ -77,11 +97,11 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     public void run() {
                         var collection = OrmContext.getOrmManager().getCollection(entityClass);
 
-                        var version = entity.gvs();
-                        entity.svs(version + 1);
+                        var version = cacheVersion.gvs(entity);
+                        cacheVersion.svs(entity, version + 1);
 
-                        var filter = entity.gvs() > 0
-                                ? Filters.and(Filters.eq("_id", entity.id()), Filters.eq("vs", version))
+                        var filter = cacheVersion.gvs(entity) > 0
+                                ? Filters.and(Filters.eq("_id", entity.id()), Filters.eq(cacheVersion.versionField(), version))
                                 : Filters.eq("_id", entity.id());
                         var result = collection.replaceOne(filter, entity);
                         if (result.getModifiedCount() <= 0) {
@@ -316,11 +336,11 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
                 var batchList = currentUpdateList.stream()
                         .map(it -> {
-                            var version = it.gvs();
-                            it.svs(version + 1);
+                            var version = cacheVersion.gvs(it);
+                            cacheVersion.svs(it, version + 1);
 
-                            var filter = it.gvs() > 0
-                                    ? Filters.and(Filters.eq("_id", it.id()), Filters.eq("vs", version))
+                            var filter = cacheVersion.gvs(it) > 0
+                                    ? Filters.and(Filters.eq("_id", it.id()), Filters.eq(cacheVersion.versionField(), version))
                                     : Filters.eq("_id", it.id());
 
                             return new ReplaceOneModel<>(filter, it);
@@ -367,27 +387,29 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             }
 
             // 如果没有版本号，则直接更新数据库
-            if (entity.gvs() <= 0) {
+            var entityVersion = cacheVersion.gvs(entity);
+            var dbEntityVersion = cacheVersion.gvs(dbEntity);
+            if (entityVersion <= 0) {
                 OrmContext.getAccessor().update(entity);
                 continue;
             }
 
             // 如果版本号相同，说明已经更新到
-            if (dbEntity.gvs() == entity.gvs()) {
+            if (dbEntityVersion == entityVersion) {
                 continue;
             }
 
             // 如果数据库版本号较小，说明缓存的数据是最新的，直接写入数据库
-            if (dbEntity.gvs() < entity.gvs()) {
+            if (dbEntityVersion < entityVersion) {
                 OrmContext.getAccessor().update(entity);
                 continue;
             }
 
             // 如果数据库版本号较大，说明缓存的数据不是最新的，直接清除缓存，下次重新加载
-            if (dbEntity.gvs() > entity.gvs()) {
+            if (dbEntityVersion > entityVersion) {
                 cache.remove(id);
                 load(id);
-                logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}]", entityClass.getSimpleName(), id, dbEntity.gvs(), entity.gvs());
+                logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}]", entityClass.getSimpleName(), id, dbEntityVersion, entityVersion);
                 continue;
             }
         }

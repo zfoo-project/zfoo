@@ -173,6 +173,14 @@ public abstract class ReflectionUtils {
         return ArrayUtils.listToArray(list, Method.class);
     }
 
+    public static Method getMethodByNameInPOJOClass(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+        try {
+            return clazz.getDeclaredMethod(methodName, parameterTypes);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalStateException(StringUtils.format("[class:{}] has no [method:{}] exception", clazz, methodName), e);
+        }
+    }
+
 
     /**
      * Attempt to get all Methods on the supplied class.
@@ -210,7 +218,7 @@ public abstract class ReflectionUtils {
         }
     }
 
-    public static <T> T newInstance(Constructor<T> constructor, Object ... initargs) {
+    public static <T> T newInstance(Constructor<T> constructor, Object... initargs) {
         try {
             return constructor.newInstance(initargs);
         } catch (Exception e) {

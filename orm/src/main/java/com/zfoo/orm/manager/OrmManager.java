@@ -407,7 +407,7 @@ public class OrmManager implements IOrmManager {
         // 校验id字段和id()方法的格式，一个Entity类只能有一个@Id注解
         var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
         AssertionUtils.isTrue(ArrayUtils.isNotEmpty(idFields) && idFields.length == 1
-                , "The Entity[{}] must have only one Id annotation (if it is indeed marked with an Id annotation, be careful not to use the Stored Id annotation)", clazz.getSimpleName());
+                , "The Entity[{}] must have only one @Id annotation (if it is indeed marked with an Id annotation, be careful not to use the Stored Id annotation)", clazz.getSimpleName());
         var idField = idFields[0];
         // idField必须用private修饰
         AssertionUtils.isTrue(Modifier.isPrivate(idField.getModifiers()), "The id of the Entity[{}] must be private", clazz.getSimpleName());
@@ -450,32 +450,15 @@ public class OrmManager implements IOrmManager {
         AssertionUtils.isTrue(idFiledValue.equals(idMethodReturnValue), "The return value id [field:{}] of the Entity[{}] and the return value id [method:{}] are not equal, please check whether the id() method is implemented correctly"
                 , clazz.getSimpleName(), idFiledValue, idMethodReturnValue);
 
-        // 校验gvs()方法和svs()方法的格式
-        var gvsMethodOptional = Arrays.stream(ReflectionUtils.getAllMethods(clazz))
-                .filter(it -> it.getName().equals("gvs"))
-                .filter(it -> it.getParameterCount() <= 0)
-                .findFirst();
-
-        var svsMethodOptional = Arrays.stream(ReflectionUtils.getAllMethods(clazz))
-                .filter(it -> it.getName().equals("svs"))
-                .filter(it -> it.getParameterCount() == 1)
-                .filter(it -> it.getParameterTypes()[0].equals(long.class))
-                .findFirst();
-        // gvs和svs要实现都实现，不实现都不实现
-        if (gvsMethodOptional.isEmpty() || svsMethodOptional.isEmpty()) {
-            // 实体类Entity的gvs和svs方法要实现都实现，不实现都不实现
-            AssertionUtils.isTrue(gvsMethodOptional.isEmpty() && svsMethodOptional.isEmpty()
-                    , "The gvs and svs methods of the Entity[{}] should be implemented together", clazz.getSimpleName());
-            return;
+        // @Version标识的字段必须是long类型
+        var versionFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Version.class);
+        if (ArrayUtils.isNotEmpty(versionFields)) {
+            AssertionUtils.isTrue(versionFields.length == 1,"The Entity[{}] must have only one @Version annotation", clazz.getSimpleName());
+            var versionField = versionFields[0];
+            // idField必须用private修饰
+            AssertionUtils.isTrue(Modifier.isPrivate(versionField.getModifiers()), "The version of the Entity[{}] must be private", clazz.getSimpleName());
+            AssertionUtils.isTrue(versionField.getType().equals(long.class), "The version type of the Entity[{}] must be long", clazz.getSimpleName());
         }
-
-        var gvsMethod = gvsMethodOptional.get();
-        var svsMethod = svsMethodOptional.get();
-        var vsValue = RandomUtils.randomLong();
-        ReflectionUtils.invokeMethod(entityInstance, svsMethod, vsValue);
-        var gvsReturnValue = ReflectionUtils.invokeMethod(entityInstance, gvsMethod);
-        // 实体类Entity的gvs方法和svs方法定义格式不正确
-        AssertionUtils.isTrue(gvsReturnValue.equals(vsValue), "The gvs and svs methods of the Entity[{}] are not correctly", clazz.getSimpleName());
     }
 
     private static final Set<Class<?>> unsafeCollections = Set.of(List.class, ArrayList.class, LinkedList.class
