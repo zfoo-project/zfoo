@@ -15,6 +15,7 @@ package com.zfoo.orm.entity.bag;
 
 import com.zfoo.orm.anno.Id;
 import com.zfoo.orm.model.IEntity;
+import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMap;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +31,7 @@ public class MapEntity implements IEntity<Long> {
 
     private ConcurrentHashMap<Long, Integer> concurrentHashMap = new ConcurrentHashMap<>();
 
-    private ConcurrentHashMap<Long, ConcurrentHashMap<Integer,Integer>> concurrentHashMapAndConcurrentHashMap = new ConcurrentHashMap<>();
+    private CopyOnWriteHashMap<Long, CopyOnWriteHashMap<Integer,Integer>> copyOnWriteHashMap = new CopyOnWriteHashMap<>();
     private Map<String, BagItem> bagMap = new HashMap<>();
 
     private Map<String, Map<String, String>> baseMap = new HashMap<>();
@@ -52,6 +53,14 @@ public class MapEntity implements IEntity<Long> {
         return id;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public List<Integer> getList() {
         return list;
     }
@@ -60,12 +69,28 @@ public class MapEntity implements IEntity<Long> {
         this.list = list;
     }
 
-    public long getId() {
-        return id;
+    public CopyOnWriteArrayList<Integer> getCopyOnWriteArrayList() {
+        return copyOnWriteArrayList;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setCopyOnWriteArrayList(CopyOnWriteArrayList<Integer> copyOnWriteArrayList) {
+        this.copyOnWriteArrayList = copyOnWriteArrayList;
+    }
+
+    public ConcurrentHashMap<Long, Integer> getConcurrentHashMap() {
+        return concurrentHashMap;
+    }
+
+    public void setConcurrentHashMap(ConcurrentHashMap<Long, Integer> concurrentHashMap) {
+        this.concurrentHashMap = concurrentHashMap;
+    }
+
+    public CopyOnWriteHashMap<Long, CopyOnWriteHashMap<Integer, Integer>> getCopyOnWriteHashMap() {
+        return copyOnWriteHashMap;
+    }
+
+    public void setCopyOnWriteHashMap(CopyOnWriteHashMap<Long, CopyOnWriteHashMap<Integer, Integer>> copyOnWriteHashMap) {
+        this.copyOnWriteHashMap = copyOnWriteHashMap;
     }
 
     public Map<String, BagItem> getBagMap() {
@@ -170,31 +195,6 @@ public class MapEntity implements IEntity<Long> {
 
     public void setDoubleBagMap(Map<Double, BagItem> doubleBagMap) {
         this.doubleBagMap = doubleBagMap;
-    }
-
-    public CopyOnWriteArrayList<Integer> getCopyOnWriteArrayList() {
-        return copyOnWriteArrayList;
-    }
-
-    public void setCopyOnWriteArrayList(CopyOnWriteArrayList<Integer> copyOnWriteArrayList) {
-        this.copyOnWriteArrayList = copyOnWriteArrayList;
-    }
-
-    public ConcurrentHashMap<Long, Integer> getConcurrentHashMap() {
-        return concurrentHashMap;
-    }
-
-    public void setConcurrentHashMap(ConcurrentHashMap<Long, Integer> concurrentHashMap) {
-        this.concurrentHashMap = concurrentHashMap;
-    }
-
-
-    public ConcurrentHashMap<Long, ConcurrentHashMap<Integer, Integer>> getConcurrentHashMapAndConcurrentHashMap() {
-        return concurrentHashMapAndConcurrentHashMap;
-    }
-
-    public void setConcurrentHashMapAndConcurrentHashMap(ConcurrentHashMap<Long, ConcurrentHashMap<Integer, Integer>> concurrentHashMapAndConcurrentHashMap) {
-        this.concurrentHashMapAndConcurrentHashMap = concurrentHashMapAndConcurrentHashMap;
     }
 
     @Override

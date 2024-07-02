@@ -17,11 +17,10 @@ import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.entity.bag.BagItem;
 import com.zfoo.orm.entity.bag.Item;
 import com.zfoo.orm.entity.bag.MapEntity;
+import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMap;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.HashMap;
@@ -32,7 +31,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Ignore
 public class MapTest {
-    private static final Logger log = LoggerFactory.getLogger(MapTest.class);
 
     @Test
     public void insertTest() {
@@ -61,17 +59,19 @@ public class MapTest {
         copyOnWriteArrayList.add(2);
         entity.setCopyOnWriteArrayList(copyOnWriteArrayList);
 
-        ConcurrentHashMap<Long,Integer> concurrentHashMap=new ConcurrentHashMap<>();
-        concurrentHashMap.put(1L,1);
-        concurrentHashMap.put(2L,2);
+        ConcurrentHashMap<Long, Integer> concurrentHashMap = new ConcurrentHashMap<>();
+        concurrentHashMap.put(1L, 1);
+        concurrentHashMap.put(2L, 2);
         entity.setConcurrentHashMap(concurrentHashMap);
 
-        ConcurrentHashMap<Long,ConcurrentHashMap<Integer,Integer>> concurrentHashMapConcurrentHashMap=new ConcurrentHashMap<>();
-
-        ConcurrentHashMap<Integer, Integer> conMap = new ConcurrentHashMap<>();
-        conMap.put(1,1);
-        concurrentHashMapConcurrentHashMap.putIfAbsent(1L,conMap);
-        entity.setConcurrentHashMapAndConcurrentHashMap(concurrentHashMapConcurrentHashMap);
+        CopyOnWriteHashMap<Long, CopyOnWriteHashMap<Integer, Integer>> copyOnWriteHashMap = new CopyOnWriteHashMap<>();
+        CopyOnWriteHashMap<Integer, Integer> copMap = new CopyOnWriteHashMap<>();
+        copMap.put(1, 1);
+        copMap.put(2, 2);
+        copMap.put(3, 3);
+        copyOnWriteHashMap.putIfAbsent(1L, copMap);
+        copyOnWriteHashMap.putIfAbsent(2L, copMap);
+        entity.setCopyOnWriteHashMap(copyOnWriteHashMap);
         var bagMap = new HashMap<String, BagItem>();
         entity.setBagMap(bagMap);
 
