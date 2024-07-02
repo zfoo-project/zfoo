@@ -46,17 +46,16 @@ public class DomUtilsTest {
     @Test
     public void testXmlWithHead() {
         var protos = DomUtils.string2Object(XML_WITH_HEAD, XmlProtocols.class);
-        for (var module : protos.getModules()) {
-            System.out.println(module.getId());
-        }
+        Assert.assertEquals(protos.getModules().get(0).getId(), 1);
+        Assert.assertEquals(protos.getModules().get(1).getId(), 2);
+        Assert.assertEquals(protos.getModules().get(0).getProtocols().get(0).getId(), 1000);
     }
 
     @Test
     public void testXmlOfStandardText() {
         var protos = DomUtils.string2Object(XML_OF_STANDARD_TEXT, XmlProtocols.class);
-        for (var module : protos.getModules()) {
-            System.out.println(module.getId());
-        }
+        Assert.assertEquals(protos.getModules().get(0).getId(), 1);
+        Assert.assertEquals(protos.getModules().get(1).getId(), 2);
     }
 
 }

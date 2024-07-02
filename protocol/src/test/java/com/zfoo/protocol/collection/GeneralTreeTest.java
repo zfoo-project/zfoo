@@ -13,6 +13,7 @@
 package com.zfoo.protocol.collection;
 
 import com.zfoo.protocol.collection.tree.GeneralTree;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -30,8 +31,8 @@ public class GeneralTreeTest {
         generalTree.addNode("a.b.d", "world2");
         generalTree.addNode("a.b.e", "world3");
 
-        System.out.println(generalTree.getNodeByPath("a.b").getData());
-        System.out.println(generalTree.getNodeByPath("a.b").getChildren());
+        Assert.assertEquals("hello", generalTree.getNodeByPath("a.b").getData());
+        Assert.assertEquals("[[a.b.c]:[world1], [a.b.d]:[world2], [a.b.e]:[world3]]", generalTree.getNodeByPath("a.b").getChildren().toString());
     }
 
 }

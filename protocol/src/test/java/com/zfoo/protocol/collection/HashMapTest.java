@@ -37,8 +37,7 @@ public class HashMapTest {
         map.put(1, 1);
         map.put(2, 2);
         map.put(3, 3);
-        System.out.println(map.size());
-        System.out.println(map);
+        Assert.assertEquals(map.size(), 4);
     }
 
     private void assertKey(HashMapIntInt primitiveMap, HashMap<Integer, Integer> javaMap, int key) {

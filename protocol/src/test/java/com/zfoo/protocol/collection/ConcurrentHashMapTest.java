@@ -46,7 +46,6 @@ public class ConcurrentHashMapTest {
     @Test
     public void primitiveMapTest() {
         var map = new LongObjectHashMap<Integer>();
-        var startTime = System.currentTimeMillis();
 
         var num = 10;
 
@@ -67,7 +66,7 @@ public class ConcurrentHashMapTest {
             }
         }
 
-        System.out.println(System.currentTimeMillis() - startTime);
+        Assert.assertTrue(map.isEmpty());
     }
 
 }
