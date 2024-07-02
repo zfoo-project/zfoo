@@ -58,7 +58,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -167,7 +166,8 @@ public class OrmManager implements IOrmManager {
                         String indexName = isAscending
                                 ? collection.createIndex(Indexes.ascending(fieldName), indexOptions)
                                 : collection.createIndex(Indexes.descending(fieldName), indexOptions);
-                        logger.info("orm auto created index:[{}] ascending:[{}] field:[{}] unique:[{}]", indexName, isAscending, fieldName, isUnique);
+                        logger.info("Database:[{}] collection:[{}] auto created field index:[{}][{}] ascending:[{}] unique:[{}]"
+                                , hostConfig.getDatabase(), entityClass.getSimpleName(), fieldName, indexName, isAscending, isUnique);
                     }
                 }
             }
@@ -188,7 +188,7 @@ public class OrmManager implements IOrmManager {
                     }
                     if (!hasIndex) {
                         String indexName = collection.createIndex(Indexes.text(fieldName));
-                        logger.info("orm auto created text index:[{}] field:[{}]", indexName, fieldName);
+                        logger.info("Database:[{}] collection:[{}] auto created text index:[{}][{}]", hostConfig.getDatabase(), entityClass.getSimpleName(), fieldName, indexName);
                     }
                 }
             }
