@@ -137,4 +137,14 @@ public class CopyOnWriteHashMapLongObject<V> implements Map<Long, V> {
     public Set<Entry<Long, V>> entrySet() {
         return map.entrySet();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return map.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return map.hashCode();
+    }
 }

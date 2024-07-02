@@ -89,7 +89,7 @@ public class MapTest {
         bagMap.put("bag3", bagItem3);
         bagMap.put("bag4", null);
 
-        var map = new HashMap<String, Map<String, String>>();
+        var map = new CopyOnWriteHashMap<String, Map<String, String>>();
         map.put("a", Map.of("b", "b"));
         entity.setBaseMap(map);
 

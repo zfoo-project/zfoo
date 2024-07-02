@@ -34,7 +34,7 @@ public class MapEntity implements IEntity<Long> {
     private CopyOnWriteHashMap<Long, CopyOnWriteHashMap<Integer,Integer>> copyOnWriteHashMap = new CopyOnWriteHashMap<>();
     private Map<String, BagItem> bagMap = new HashMap<>();
 
-    private Map<String, Map<String, String>> baseMap = new HashMap<>();
+    private CopyOnWriteHashMap<String, Map<String, String>> baseMap = new CopyOnWriteHashMap<>();
 
     private Map<Long, String> longStringMap = new HashMap<>();
     private Map<Integer, String> intStringMap = new HashMap<>();
@@ -101,11 +101,11 @@ public class MapEntity implements IEntity<Long> {
         this.bagMap = bagMap;
     }
 
-    public Map<String, Map<String, String>> getBaseMap() {
+    public CopyOnWriteHashMap<String, Map<String, String>> getBaseMap() {
         return baseMap;
     }
 
-    public void setBaseMap(Map<String, Map<String, String>> baseMap) {
+    public void setBaseMap(CopyOnWriteHashMap<String, Map<String, String>> baseMap) {
         this.baseMap = baseMap;
     }
 

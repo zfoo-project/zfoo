@@ -133,4 +133,14 @@ public class CopyOnWriteHashMap<K, V> implements Map<K, V> {
     public Set<Entry<K, V>> entrySet() {
         return map.entrySet();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return map.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return map.hashCode();
+    }
 }
