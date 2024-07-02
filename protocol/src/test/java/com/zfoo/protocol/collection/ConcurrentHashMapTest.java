@@ -28,7 +28,7 @@ public class ConcurrentHashMapTest {
 
     @Test
     public void equalsMapTest() {
-        var map = Map.of(1L, "a", 2L, "b", 3L, "c");
+        var map = Map.of(1L, "a", 2L, "b", 3L, "c", 4L, "d", 5L, "e", Long.MAX_VALUE, "max", Long.MIN_VALUE, "min");
 
         var concurrentHashMapLongObject = new ConcurrentHashMapLongObject<String>();
         concurrentHashMapLongObject.putAll(map);
@@ -40,7 +40,7 @@ public class ConcurrentHashMapTest {
 
         var copyOnWriteHashMapLongObject = new CopyOnWriteHashMapLongObject<String>();
         copyOnWriteHashMapLongObject.putAll(map);
-        Assert.assertEquals(map, concurrentHashMapLongObject);
+        Assert.assertEquals(map, copyOnWriteHashMapLongObject);
     }
 
     @Test
