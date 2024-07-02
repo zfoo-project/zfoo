@@ -226,22 +226,7 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
         if (!(o instanceof Map<?, ?> m)) {
             return false;
         }
-
-        if (m.size() != size()) {
-            return false;
-        }
-
-        for (var entry : m.entrySet()) {
-            var key = entry.getKey();
-            var value = entry.getValue();
-            if (!containsKey(key)) {
-                return false;
-            }
-            if (!Objects.equals(value, get(key))) {
-                return false;
-            }
-        }
-        return true;
+        return m.equals(this);
     }
 
     @Override
