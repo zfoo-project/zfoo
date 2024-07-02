@@ -16,7 +16,7 @@ import io.netty.util.collection.LongObjectHashMap;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
-import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author godotg
@@ -78,18 +78,14 @@ public class HashSetLong extends AbstractSet<Long> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Set<?> s)) {
             return false;
         }
-        var obj = (HashSetLong) o;
-        return Objects.equals(map, obj.map);
+        return s.equals(this);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(map);
+        return map.hashCode();
     }
 }

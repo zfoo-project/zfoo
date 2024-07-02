@@ -275,6 +275,19 @@ public class ArrayListBoolean implements List<Boolean> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof List<?> l)) {
+            return false;
+        }
+        return l.equals(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
     public String toString() {
         var builder = new StringBuilder();
         builder.append('[');

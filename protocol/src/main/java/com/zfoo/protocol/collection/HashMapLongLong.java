@@ -387,6 +387,19 @@ public class HashMapLongLong implements Map<Long, Long> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Map<?, ?> m)) {
+            return false;
+        }
+        return m.equals(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
     public String toString() {
         if (isEmpty()) {
             return StringUtils.EMPTY_JSON;

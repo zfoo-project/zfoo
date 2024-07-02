@@ -270,12 +270,10 @@ public class ConcurrentArrayList<E> implements List<E> {
 
     @Override
     public boolean equals(Object o) {
-        lock.lock();
-        try {
-            return list.equals(o);
-        } finally {
-            lock.unlock();
+        if (!(o instanceof List<?> l)) {
+            return false;
         }
+        return l.equals(this);
     }
 
     @Override
