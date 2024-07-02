@@ -191,20 +191,61 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
         }
     }
 
+    private Map<Long, V> copyMap() {
+        var copyMap = new HashMap<Long, V>();
+        for (var i = 0; i < buckets; i++) {
+            var readLock = locks[i].readLock();
+            var map = maps.get(i);
+            readLock.lock();
+            try {
+                copyMap.putAll(map);
+            } finally {
+                readLock.unlock();
+            }
+        }
+        return copyMap;
+    }
+
     @Override
     public Set<Long> keySet() {
-        throw new UnsupportedOperationException();
+        return copyMap().keySet();
     }
 
     @Override
     public Collection<V> values() {
-        throw new UnsupportedOperationException();
+        return copyMap().values();
     }
 
     @Override
     public Set<Entry<Long, V>> entrySet() {
-        throw new UnsupportedOperationException();
+        return copyMap().entrySet();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Map<?, ?> m)) {
+            return false;
+        }
 
+        if (m.size() != size()) {
+            return false;
+        }
+
+        for (var entry : m.entrySet()) {
+            var key = entry.getKey();
+            var value = entry.getValue();
+            if (!containsKey(key)) {
+                return false;
+            }
+            if (!Objects.equals(value, get(key))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
