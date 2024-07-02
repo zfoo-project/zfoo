@@ -15,6 +15,7 @@ package com.zfoo.protocol.collection;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -249,5 +250,385 @@ public class ArrayListTest {
         while (listIterator.hasNext()) {
             Assert.assertEquals(listIterator.next(), list.get(index++));
         }
+    }
+
+    @Test
+    public void booleanTest() {
+        var list = new ArrayList<Boolean>(8);
+        var myList = new ArrayListBoolean(8);
+        for (var i = 0; i < 1000; i++) {
+            list.add(i % 2 == 0);
+            myList.add(i % 2 == 0);
+        }
+        Assert.assertEquals(list, myList);
+        Assert.assertEquals(list, myList.toList());
+        Assert.assertArrayEquals(list.toArray(), myList.toArray());
+        Assert.assertArrayEquals(list.toArray(list.toArray()), myList.toArray(myList.toArray()));
+        Assert.assertEquals(list.size(), myList.size());
+        myList.clear();
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        for (var ele : list) {
+            myList.remove(ele);
+        }
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        list.remove(1);
+        myList.remove(1);
+        Assert.assertEquals(myList, list);
+        myList.removeAll(list);
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        myList.retainAll(list);
+        Assert.assertEquals(myList, list);
+        Assert.assertTrue(myList.containsAll(list));
+        Assert.assertEquals(list.indexOf(Boolean.TRUE), myList.indexOf(Boolean.TRUE));
+        Assert.assertEquals(list.lastIndexOf(Boolean.TRUE), myList.lastIndexOf(Boolean.TRUE));
+        var iteratorList = list.iterator();
+        var iteratorMyList = myList.iterator();
+        while (iteratorList.hasNext()) {
+            Assert.assertEquals(iteratorList.next(), iteratorMyList.next());
+        }
+        var listIteratorList = list.listIterator();
+        var listIteratorMyList = myList.listIterator();
+        while (listIteratorList.hasNext()) {
+            Assert.assertEquals(listIteratorList.next(), listIteratorMyList.next());
+        }
+        var listIteratorIndexList = list.listIterator(1);
+        var listIteratorIndexMyList = myList.listIterator(1);
+        while (listIteratorIndexList.hasNext()) {
+            Assert.assertEquals(listIteratorIndexList.next(), listIteratorIndexMyList.next());
+        }
+        Assert.assertEquals(list.subList(1, 100), myList.subList(1, 100));
+    }
+
+    @Test
+    public void byteTest() {
+        var list = new ArrayList<Byte>(8);
+        var myList = new ArrayListByte(8);
+        var myEle = (byte) 100;
+        for (var i = 0; i < 200; i++) {
+            list.add((byte) i);
+            myList.add((byte) i);
+        }
+        list.add(Byte.MAX_VALUE);
+        list.add(Byte.MIN_VALUE);
+        myList.add(Byte.MAX_VALUE);
+        myList.add(Byte.MIN_VALUE);
+        Assert.assertEquals(list, myList);
+        Assert.assertEquals(list, myList.toList());
+        Assert.assertArrayEquals(list.toArray(), myList.toArray());
+        Assert.assertArrayEquals(list.toArray(list.toArray()), myList.toArray(myList.toArray()));
+        Assert.assertEquals(list.size(), myList.size());
+        myList.clear();
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        for (var ele : list) {
+            myList.remove(ele);
+        }
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        list.remove(1);
+        myList.remove(1);
+        Assert.assertEquals(myList, list);
+        myList.removeAll(list);
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        myList.retainAll(list);
+        Assert.assertEquals(myList, list);
+        Assert.assertTrue(myList.containsAll(list));
+        Assert.assertEquals(list.indexOf(myEle), myList.indexOf(myEle));
+        Assert.assertEquals(list.lastIndexOf(myEle), myList.lastIndexOf(myEle));
+        var iteratorList = list.iterator();
+        var iteratorMyList = myList.iterator();
+        while (iteratorList.hasNext()) {
+            Assert.assertEquals(iteratorList.next(), iteratorMyList.next());
+        }
+        var listIteratorList = list.listIterator();
+        var listIteratorMyList = myList.listIterator();
+        while (listIteratorList.hasNext()) {
+            Assert.assertEquals(listIteratorList.next(), listIteratorMyList.next());
+        }
+        var listIteratorIndexList = list.listIterator(1);
+        var listIteratorIndexMyList = myList.listIterator(1);
+        while (listIteratorIndexList.hasNext()) {
+            Assert.assertEquals(listIteratorIndexList.next(), listIteratorIndexMyList.next());
+        }
+        Assert.assertEquals(list.subList(1, 100), myList.subList(1, 100));
+    }
+
+    @Test
+    public void shortTest() {
+        var list = new ArrayList<Short>(8);
+        var myList = new ArrayListShort(8);
+        var myEle = (short) 100;
+        for (var i = 0; i < 1000; i++) {
+            list.add((short) i);
+            myList.add((short) i);
+        }
+        list.add(Short.MAX_VALUE);
+        list.add(Short.MIN_VALUE);
+        myList.add(Short.MAX_VALUE);
+        myList.add(Short.MIN_VALUE);
+        Assert.assertEquals(list, myList);
+        Assert.assertEquals(list, myList.toList());
+        Assert.assertArrayEquals(list.toArray(), myList.toArray());
+        Assert.assertArrayEquals(list.toArray(list.toArray()), myList.toArray(myList.toArray()));
+        Assert.assertEquals(list.size(), myList.size());
+        myList.clear();
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        for (var ele : list) {
+            myList.remove(ele);
+        }
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        list.remove(1);
+        myList.remove(1);
+        Assert.assertEquals(myList, list);
+        myList.removeAll(list);
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        myList.retainAll(list);
+        Assert.assertEquals(myList, list);
+        Assert.assertTrue(myList.containsAll(list));
+        Assert.assertEquals(list.indexOf(myEle), myList.indexOf(myEle));
+        Assert.assertEquals(list.lastIndexOf(myEle), myList.lastIndexOf(myEle));
+        var iteratorList = list.iterator();
+        var iteratorMyList = myList.iterator();
+        while (iteratorList.hasNext()) {
+            Assert.assertEquals(iteratorList.next(), iteratorMyList.next());
+        }
+        var listIteratorList = list.listIterator();
+        var listIteratorMyList = myList.listIterator();
+        while (listIteratorList.hasNext()) {
+            Assert.assertEquals(listIteratorList.next(), listIteratorMyList.next());
+        }
+        var listIteratorIndexList = list.listIterator(1);
+        var listIteratorIndexMyList = myList.listIterator(1);
+        while (listIteratorIndexList.hasNext()) {
+            Assert.assertEquals(listIteratorIndexList.next(), listIteratorIndexMyList.next());
+        }
+        Assert.assertEquals(list.subList(1, 100), myList.subList(1, 100));
+    }
+
+    @Test
+    public void intTest() {
+        var list = new ArrayList<Integer>(8);
+        var myList = new ArrayListInt(8);
+        var myEle = 100;
+        for (var i = 0; i < 1000; i++) {
+            list.add(i);
+            myList.add(i);
+        }
+        list.add(Integer.MAX_VALUE);
+        list.add(Integer.MIN_VALUE);
+        myList.add(Integer.MAX_VALUE);
+        myList.add(Integer.MIN_VALUE);
+        Assert.assertEquals(list, myList);
+        Assert.assertEquals(list, myList.toList());
+        Assert.assertArrayEquals(list.toArray(), myList.toArray());
+        Assert.assertArrayEquals(list.toArray(list.toArray()), myList.toArray(myList.toArray()));
+        Assert.assertEquals(list.size(), myList.size());
+        myList.clear();
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        for (var ele : list) {
+            myList.remove(ele);
+        }
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        list.remove(1);
+        myList.remove(1);
+        Assert.assertEquals(myList, list);
+        myList.removeAll(list);
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        myList.retainAll(list);
+        Assert.assertEquals(myList, list);
+        Assert.assertTrue(myList.containsAll(list));
+        Assert.assertEquals(list.indexOf(myEle), myList.indexOf(myEle));
+        Assert.assertEquals(list.lastIndexOf(myEle), myList.lastIndexOf(myEle));
+        var iteratorList = list.iterator();
+        var iteratorMyList = myList.iterator();
+        while (iteratorList.hasNext()) {
+            Assert.assertEquals(iteratorList.next(), iteratorMyList.next());
+        }
+        var listIteratorList = list.listIterator();
+        var listIteratorMyList = myList.listIterator();
+        while (listIteratorList.hasNext()) {
+            Assert.assertEquals(listIteratorList.next(), listIteratorMyList.next());
+        }
+        var listIteratorIndexList = list.listIterator(1);
+        var listIteratorIndexMyList = myList.listIterator(1);
+        while (listIteratorIndexList.hasNext()) {
+            Assert.assertEquals(listIteratorIndexList.next(), listIteratorIndexMyList.next());
+        }
+        Assert.assertEquals(list.subList(1, 100), myList.subList(1, 100));
+    }
+
+    @Test
+    public void longTest() {
+        var list = new ArrayList<Long>(8);
+        var myList = new ArrayListLong(8);
+        var myEle = 100L;
+        for (var i = 0; i < 1000; i++) {
+            list.add((long) i);
+            myList.add((long) i);
+        }
+        list.add(Long.MAX_VALUE);
+        list.add(Long.MIN_VALUE);
+        myList.add(Long.MAX_VALUE);
+        myList.add(Long.MIN_VALUE);
+        Assert.assertEquals(list, myList);
+        Assert.assertEquals(list, myList.toList());
+        Assert.assertArrayEquals(list.toArray(), myList.toArray());
+        Assert.assertArrayEquals(list.toArray(list.toArray()), myList.toArray(myList.toArray()));
+        Assert.assertEquals(list.size(), myList.size());
+        myList.clear();
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        for (var ele : list) {
+            myList.remove(ele);
+        }
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        list.remove(1);
+        myList.remove(1);
+        Assert.assertEquals(myList, list);
+        myList.removeAll(list);
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        myList.retainAll(list);
+        Assert.assertEquals(myList, list);
+        Assert.assertTrue(myList.containsAll(list));
+        Assert.assertEquals(list.indexOf(myEle), myList.indexOf(myEle));
+        Assert.assertEquals(list.lastIndexOf(myEle), myList.lastIndexOf(myEle));
+        var iteratorList = list.iterator();
+        var iteratorMyList = myList.iterator();
+        while (iteratorList.hasNext()) {
+            Assert.assertEquals(iteratorList.next(), iteratorMyList.next());
+        }
+        var listIteratorList = list.listIterator();
+        var listIteratorMyList = myList.listIterator();
+        while (listIteratorList.hasNext()) {
+            Assert.assertEquals(listIteratorList.next(), listIteratorMyList.next());
+        }
+        var listIteratorIndexList = list.listIterator(1);
+        var listIteratorIndexMyList = myList.listIterator(1);
+        while (listIteratorIndexList.hasNext()) {
+            Assert.assertEquals(listIteratorIndexList.next(), listIteratorIndexMyList.next());
+        }
+        Assert.assertEquals(list.subList(1, 100), myList.subList(1, 100));
+    }
+
+    @Test
+    public void floatTest() {
+        var list = new ArrayList<Float>(8);
+        var myList = new ArrayListFloat(8);
+        var myEle = 100F;
+        for (var i = 0; i < 1000; i++) {
+            list.add((float) i);
+            myList.add((float) i);
+        }
+        list.add(Float.MAX_VALUE);
+        list.add(Float.MIN_VALUE);
+        myList.add(Float.MAX_VALUE);
+        myList.add(Float.MIN_VALUE);
+        Assert.assertEquals(list, myList);
+        Assert.assertEquals(list, myList.toList());
+        Assert.assertArrayEquals(list.toArray(), myList.toArray());
+        Assert.assertArrayEquals(list.toArray(list.toArray()), myList.toArray(myList.toArray()));
+        Assert.assertEquals(list.size(), myList.size());
+        myList.clear();
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        for (var ele : list) {
+            myList.remove(ele);
+        }
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        list.remove(1);
+        myList.remove(1);
+        Assert.assertEquals(myList, list);
+        myList.removeAll(list);
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        myList.retainAll(list);
+        Assert.assertEquals(myList, list);
+        Assert.assertTrue(myList.containsAll(list));
+        Assert.assertEquals(list.indexOf(myEle), myList.indexOf(myEle));
+        Assert.assertEquals(list.lastIndexOf(myEle), myList.lastIndexOf(myEle));
+        var iteratorList = list.iterator();
+        var iteratorMyList = myList.iterator();
+        while (iteratorList.hasNext()) {
+            Assert.assertEquals(iteratorList.next(), iteratorMyList.next());
+        }
+        var listIteratorList = list.listIterator();
+        var listIteratorMyList = myList.listIterator();
+        while (listIteratorList.hasNext()) {
+            Assert.assertEquals(listIteratorList.next(), listIteratorMyList.next());
+        }
+        var listIteratorIndexList = list.listIterator(1);
+        var listIteratorIndexMyList = myList.listIterator(1);
+        while (listIteratorIndexList.hasNext()) {
+            Assert.assertEquals(listIteratorIndexList.next(), listIteratorIndexMyList.next());
+        }
+        Assert.assertEquals(list.subList(1, 100), myList.subList(1, 100));
+    }
+
+    @Test
+    public void doubleTest() {
+        var list = new ArrayList<Double>(8);
+        var myList = new ArrayListDouble(8);
+        var myEle = 100D;
+        for (var i = 0; i < 1000; i++) {
+            list.add((double) i);
+            myList.add((double) i);
+        }
+        list.add(Double.MAX_VALUE);
+        list.add(Double.MIN_VALUE);
+        myList.add(Double.MAX_VALUE);
+        myList.add(Double.MIN_VALUE);
+        Assert.assertEquals(list, myList);
+        Assert.assertEquals(list, myList.toList());
+        Assert.assertArrayEquals(list.toArray(), myList.toArray());
+        Assert.assertArrayEquals(list.toArray(list.toArray()), myList.toArray(myList.toArray()));
+        Assert.assertEquals(list.size(), myList.size());
+        myList.clear();
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        for (var ele : list) {
+            myList.remove(ele);
+        }
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        list.remove(1);
+        myList.remove(1);
+        Assert.assertEquals(myList, list);
+        myList.removeAll(list);
+        Assert.assertTrue(myList.isEmpty());
+        myList.addAll(list);
+        myList.retainAll(list);
+        Assert.assertEquals(myList, list);
+        Assert.assertTrue(myList.containsAll(list));
+        Assert.assertEquals(list.indexOf(myEle), myList.indexOf(myEle));
+        Assert.assertEquals(list.lastIndexOf(myEle), myList.lastIndexOf(myEle));
+        var iteratorList = list.iterator();
+        var iteratorMyList = myList.iterator();
+        while (iteratorList.hasNext()) {
+            Assert.assertEquals(iteratorList.next(), iteratorMyList.next());
+        }
+        var listIteratorList = list.listIterator();
+        var listIteratorMyList = myList.listIterator();
+        while (listIteratorList.hasNext()) {
+            Assert.assertEquals(listIteratorList.next(), listIteratorMyList.next());
+        }
+        var listIteratorIndexList = list.listIterator(1);
+        var listIteratorIndexMyList = myList.listIterator(1);
+        while (listIteratorIndexList.hasNext()) {
+            Assert.assertEquals(listIteratorIndexList.next(), listIteratorIndexMyList.next());
+        }
+        Assert.assertEquals(list.subList(1, 100), myList.subList(1, 100));
     }
 }
