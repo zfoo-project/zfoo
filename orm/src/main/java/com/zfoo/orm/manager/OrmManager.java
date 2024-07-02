@@ -305,6 +305,18 @@ public class OrmManager implements IOrmManager {
             var cacheDef = parserEntityDef(entityClass);
             cacheDefMap.putIfAbsent(entityClass, cacheDef);
         }
+
+        var unsafeList = cacheDefMap.entrySet()
+                .stream()
+                .filter(it -> !it.getValue().isThreadSafe())
+                .filter(it -> it.getKey().isAnnotationPresent(com.zfoo.orm.anno.EntityCache.class))
+                .map(it -> it.getKey().getSimpleName())
+                .toList();
+        if (CollectionUtils.isNotEmpty(unsafeList)) {
+            logger.info("In order to improve performance, highly recommend using CopyOnWriteArrayList or ConcurrentHashMap in @EntityCache:[{}]"
+                    , StringUtils.joinWith(", ", unsafeList.toArray()));
+        }
+
         return cacheDefMap;
     }
 
