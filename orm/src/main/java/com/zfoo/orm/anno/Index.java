@@ -28,6 +28,4 @@ public @interface Index {
 
     boolean unique();
 
-    // 默认小于0不开启TTL文档超时索引
-    long ttlExpireAfterSeconds() default -1L;
 }

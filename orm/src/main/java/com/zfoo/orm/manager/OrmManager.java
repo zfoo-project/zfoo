@@ -42,6 +42,8 @@ import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -63,6 +65,9 @@ import java.util.concurrent.TimeUnit;
  * @author godotg
  */
 public class OrmManager implements IOrmManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrmManager.class);
+
     private OrmConfig ormConfig;
 
     private MongoClient mongoClient;
@@ -154,18 +159,15 @@ public class OrmManager implements IOrmManager {
                         }
                     }
                     if (!hasIndex) {
+                        var isUnique = index.isUnique();
+                        var isAscending = index.isAscending();
+
                         var indexOptions = new IndexOptions();
-                        indexOptions.unique(index.isUnique());
-
-                        if (index.getTtlExpireAfterSeconds() > 0) {
-                            indexOptions.expireAfter(index.getTtlExpireAfterSeconds(), TimeUnit.SECONDS);
-                        }
-
-                        if (index.isAscending()) {
-                            collection.createIndex(Indexes.ascending(fieldName), indexOptions);
-                        } else {
-                            collection.createIndex(Indexes.descending(fieldName), indexOptions);
-                        }
+                        indexOptions.unique(isUnique);
+                        String indexName = isAscending
+                                ? collection.createIndex(Indexes.ascending(fieldName), indexOptions)
+                                : collection.createIndex(Indexes.descending(fieldName), indexOptions);
+                        logger.info("orm auto created index:[{}] ascending:[{}] field:[{}] unique:[{}]", indexName, isAscending, fieldName, isUnique);
                     }
                 }
             }
@@ -185,7 +187,8 @@ public class OrmManager implements IOrmManager {
                         }
                     }
                     if (!hasIndex) {
-                        collection.createIndex(Indexes.text(fieldName));
+                        String indexName = collection.createIndex(Indexes.text(fieldName));
+                        logger.info("orm auto created text index:[{}] field:[{}]", indexName, fieldName);
                     }
                 }
             }
@@ -386,15 +389,7 @@ public class OrmManager implements IOrmManager {
         for (var field : fields) {
             var indexAnnotation = field.getAnnotation(Index.class);
 
-            if (indexAnnotation.ttlExpireAfterSeconds() > 0) {
-                var fieldType = field.getGenericType();
-                if (!(fieldType == Date.class || field.getGenericType().toString().equals("java.util.List<java.util.Date>"))) {
-                    // MongoDB规定TTL类型必须是Date，List<Date>的其中一种类型
-                    throw new IllegalArgumentException(StringUtils.format("MongoDB TTL type:[{}] must be Date or List<Date>", field.getName()));
-                }
-            }
-
-            IndexDef indexDef = new IndexDef(field, indexAnnotation.ascending(), indexAnnotation.unique(), indexAnnotation.ttlExpireAfterSeconds());
+            IndexDef indexDef = new IndexDef(field, indexAnnotation.ascending(), indexAnnotation.unique());
             indexDefMap.put(field.getName(), indexDef);
         }
 

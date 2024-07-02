@@ -22,13 +22,11 @@ public class IndexDef {
     private Field field;
     private boolean ascending;
     private boolean unique;
-    private long ttlExpireAfterSeconds;
 
-    public IndexDef(Field field, boolean ascending, boolean unique, long ttlExpireAfterSeconds) {
+    public IndexDef(Field field, boolean ascending, boolean unique) {
         this.field = field;
         this.ascending = ascending;
         this.unique = unique;
-        this.ttlExpireAfterSeconds = ttlExpireAfterSeconds;
     }
 
     public Field getField() {
@@ -55,11 +53,5 @@ public class IndexDef {
         this.unique = unique;
     }
 
-    public long getTtlExpireAfterSeconds() {
-        return ttlExpireAfterSeconds;
-    }
 
-    public void setTtlExpireAfterSeconds(long ttlExpireAfterSeconds) {
-        this.ttlExpireAfterSeconds = ttlExpireAfterSeconds;
-    }
 }

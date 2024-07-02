@@ -35,9 +35,6 @@ public class MailEntity implements IEntity<String> {
 
     private String content;
 
-//    @Index(ascending = true, unique = false, ttlExpireAfterSeconds = 10)
-//    private Date createDate;
-    @Index(ascending = true, unique = false, ttlExpireAfterSeconds = 10)
     private Date createDate;
 
     public static MailEntity valueOf(String id, String userName, String content, Date createDate) {
