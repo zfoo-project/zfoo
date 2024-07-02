@@ -13,14 +13,11 @@
 
 package com.zfoo.orm.cache;
 
-import com.mongodb.client.model.Filters;
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.entity.MailEntity;
 import com.zfoo.orm.entity.UserEntity;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.scheduler.util.TimeUtils;
-import org.bson.Document;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
