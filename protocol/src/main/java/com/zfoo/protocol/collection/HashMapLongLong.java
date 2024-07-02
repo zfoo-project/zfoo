@@ -74,13 +74,13 @@ public class HashMapLongLong implements Map<Long, Long> {
         return size == 0;
     }
 
-    public boolean containsKeyPrimitive(int key) {
+    public boolean containsKeyPrimitive(long key) {
         return indexOf(key) >= 0;
     }
 
     @Override
     public boolean containsKey(Object key) {
-        return containsKeyPrimitive(ArrayUtils.intValue((Integer) key));
+        return containsKeyPrimitive(ArrayUtils.longValue((Long) key));
     }
 
     @Override
@@ -99,7 +99,7 @@ public class HashMapLongLong implements Map<Long, Long> {
 
     @Override
     public Long get(Object key) {
-        var index = indexOf(ArrayUtils.intValue((Integer) key));
+        var index = indexOf(ArrayUtils.longValue((Number) key));
         return index == -1 ? null : values[index];
     }
 
