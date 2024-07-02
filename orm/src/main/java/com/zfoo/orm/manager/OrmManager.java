@@ -313,7 +313,7 @@ public class OrmManager implements IOrmManager {
                 .map(it -> it.getKey().getSimpleName())
                 .toList();
         if (CollectionUtils.isNotEmpty(unsafeList)) {
-            logger.info("In order to improve performance, highly recommend using CopyOnWriteArrayList or ConcurrentHashMap in @EntityCache:[{}]"
+            logger.info("In order to improve performance, highly recommend using CopyOnWriteArrayList or CopyOnWriteHashMap in @EntityCache:[{}]"
                     , StringUtils.joinWith(", ", unsafeList.toArray()));
         }
 
