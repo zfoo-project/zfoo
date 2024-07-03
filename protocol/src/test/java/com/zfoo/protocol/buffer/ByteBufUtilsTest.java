@@ -100,4 +100,88 @@ public class ByteBufUtilsTest {
         Assert.assertEquals(result, str);
     }
 
+    @Test
+    public void adjustPaddingEqualTest() {
+        var byteBuf = Unpooled.buffer();
+        var beforeWriteIndex = byteBuf.writerIndex();
+        var predictionLength = 1000;
+
+        // padding等于0的情况
+        ByteBufUtils.writeInt(byteBuf, predictionLength);
+        for (int i = 0; i < predictionLength; i++) {
+            ByteBufUtils.writeByte(byteBuf, (byte) 1);
+        }
+
+        byteBuf.markReaderIndex();
+        var bytes1 = ByteBufUtils.readAllBytes(byteBuf);
+        byteBuf.resetReaderIndex();
+
+        ByteBufUtils.adjustPadding(byteBuf, predictionLength, beforeWriteIndex);
+
+        byteBuf.markReaderIndex();
+        var bytes2 = ByteBufUtils.readAllBytes(byteBuf);
+        byteBuf.resetReaderIndex();
+
+        Assert.assertArrayEquals(bytes1, bytes2);
+    }
+
+    @Test
+    public void adjustPaddingLessTest() {
+        var byteBuf = Unpooled.buffer();
+        var beforeWriteIndex = byteBuf.writerIndex();
+        var predictionLength = 1000;
+        var length = predictionLength / 100;
+
+        // padding等于0的情况
+        ByteBufUtils.writeInt(byteBuf, predictionLength);
+        for (int i = 0; i < length; i++) {
+            ByteBufUtils.writeByte(byteBuf, (byte) 1);
+        }
+
+
+        var byteBuf1 = Unpooled.buffer();
+        ByteBufUtils.writeInt(byteBuf1, length);
+        for (int i = 0; i < length; i++) {
+            ByteBufUtils.writeByte(byteBuf1, (byte) 1);
+        }
+        var bytes1 = ByteBufUtils.readAllBytes(byteBuf1);
+
+        ByteBufUtils.adjustPadding(byteBuf, predictionLength, beforeWriteIndex);
+
+        byteBuf.markReaderIndex();
+        var bytes2 = ByteBufUtils.readAllBytes(byteBuf);
+        byteBuf.resetReaderIndex();
+
+        Assert.assertArrayEquals(bytes1, bytes2);
+    }
+
+    @Test
+    public void adjustPaddingMoreTest() {
+        var byteBuf = Unpooled.buffer();
+        var beforeWriteIndex = byteBuf.writerIndex();
+        var predictionLength = 1000;
+        var length = predictionLength * 10;
+
+        // padding等于0的情况
+        ByteBufUtils.writeInt(byteBuf, predictionLength);
+        for (int i = 0; i < length; i++) {
+            ByteBufUtils.writeByte(byteBuf, (byte) 1);
+        }
+
+
+        var byteBuf1 = Unpooled.buffer();
+        ByteBufUtils.writeInt(byteBuf1, length);
+        for (int i = 0; i < length; i++) {
+            ByteBufUtils.writeByte(byteBuf1, (byte) 1);
+        }
+        var bytes1 = ByteBufUtils.readAllBytes(byteBuf1);
+
+        ByteBufUtils.adjustPadding(byteBuf, predictionLength, beforeWriteIndex);
+
+        byteBuf.markReaderIndex();
+        var bytes2 = ByteBufUtils.readAllBytes(byteBuf);
+        byteBuf.resetReaderIndex();
+
+        Assert.assertArrayEquals(bytes1, bytes2);
+    }
 }
