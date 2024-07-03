@@ -49,14 +49,22 @@ public abstract class EnhanceUtils {
 
     public static String rawObjectId(Field idField) {
         var idType = idField.getType();
-        if (idType == int.class || idType == Integer.class) {
+        if (idType == int.class) {
             return "((Integer)$1).intValue()";
-        } else if (idType == long.class || idType == Long.class) {
+        } else if (idType == Integer.class) {
+            return "(Integer)$1";
+        } else if (idType == long.class) {
             return "((Long)$1).longValue()";
-        } else if (idType == float.class || idType == Float.class) {
+        } else if (idType == Long.class) {
+            return "(Long)$1";
+        } else if (idType == float.class) {
             return "((Float)$1).floatValue()";
-        } else if (idType == double.class || idType == Double.class) {
+        } else if (idType == Float.class) {
+            return "(Float)$1";
+        } else if (idType == double.class) {
             return "((Double)$1).doubleValue()";
+        } else if (idType == Double.class) {
+            return "(Double)$1";
         } else if (idType == String.class) {
             return "(String)$1";
         } else {
