@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * @author godotg
@@ -31,7 +30,7 @@ public class AccessorTest {
     @Test
     public void oneTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
-        OrmContext.getOrmManager().getCollection(UserEntity.class).drop();
+        delete();
         insert();
         delete();
         insert();
@@ -42,7 +41,7 @@ public class AccessorTest {
     @Test
     public void batchTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
-        OrmContext.getOrmManager().getCollection(UserEntity.class).drop();
+        deleteAll();
         batchInsert();
         batchUpdate();
         queryAll();

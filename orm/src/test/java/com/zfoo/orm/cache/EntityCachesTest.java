@@ -36,9 +36,7 @@ public class EntityCachesTest {
     public void loadTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
 
-        // 每次运行前先删除数据库
-        var collection = OrmContext.getOrmManager().getCollection(UserEntity.class);
-        collection.drop();
+        batchDelete();
 
         // 再插入
         batchInsert();
@@ -65,9 +63,7 @@ public class EntityCachesTest {
     public void loadOrCreateTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
 
-        // 每次运行前先删除数据库
-        var collection = OrmContext.getOrmManager().getCollection(UserEntity.class);
-        collection.drop();
+        batchDelete();
 
         @SuppressWarnings("unchecked")
         var userEntityCaches = (IEntityCache<Long, UserEntity>) OrmContext.getOrmManager().getEntityCaches(UserEntity.class);
@@ -95,4 +91,9 @@ public class EntityCachesTest {
         OrmContext.getAccessor().batchInsert(listUser);
     }
 
+    public void batchDelete() {
+        for (var i = 1; i <= 10; i++) {
+            OrmContext.getAccessor().delete((long) i, UserEntity.class);
+        }
+    }
 }

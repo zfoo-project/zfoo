@@ -31,7 +31,7 @@ public class DocumentTest {
     @Test
     public void collectionTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
-
+        OrmContext.getAccessor().delete(1L, UserEntity.class);
         var collection = OrmContext.getOrmManager().getCollection(UserEntity.class);
         var result = collection.updateOne(Filters.eq("_id", 1), new Document("$inc", new Document("c", 1L)));
         System.out.println(result);
