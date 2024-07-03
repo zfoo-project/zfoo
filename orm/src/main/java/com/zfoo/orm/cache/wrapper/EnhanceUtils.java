@@ -47,7 +47,7 @@ public abstract class EnhanceUtils {
         }
     }
 
-    public static String rawObjectId(Field idField) {
+    public static String toOriginType(Field idField) {
         var idType = idField.getType();
         if (idType == int.class) {
             return "((Integer)$1).intValue()";
@@ -91,7 +91,7 @@ public abstract class EnhanceUtils {
             // 定义类实现的接口方法newEntity
             CtMethod newEntityMethod = new CtMethod(classPool.get(IEntity.class.getName()), "newEntity", classPool.get(new String[]{Comparable.class.getName()}), enhanceClazz);
             newEntityMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-            String newEntityMethodBody = StringUtils.format("{ {} entity = new {}(); entity.{}({}); return entity; }", clazz.getName(), clazz.getName(), setIdMethod.getName(), rawObjectId(idField));
+            String newEntityMethodBody = StringUtils.format("{ {} entity = new {}(); entity.{}({}); return entity; }", clazz.getName(), clazz.getName(), setIdMethod.getName(), toOriginType(idField));
             newEntityMethod.setBody(newEntityMethodBody);
             enhanceClazz.addMethod(newEntityMethod);
 
