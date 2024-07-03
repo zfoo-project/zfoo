@@ -49,7 +49,7 @@
         <xsd:attribute name="consumer" type="xsd:string" use="required"/>
     </xsd:complexType>
 
-    <xsd:complexType name="configType">
+    <xsd:complexType name="netType">
         <xsd:sequence>
             <xsd:choice minOccurs="0" maxOccurs="1">
                 <xsd:element name="registry" type="addressType"/>
@@ -73,7 +73,7 @@
         <xsd:attribute name="protocol-param" type="xsd:string"/>
     </xsd:complexType>
 
-    <xsd:element name="config" type="configType"/>
+    <xsd:element name="net" type="netType"/>
 
 
 </xsd:schema>
