@@ -358,10 +358,12 @@ public class OrmManager implements IOrmManager {
 
 
     public EntityDef parserEntityDef(Class<? extends IEntity<?>> clazz) {
-        checkEntity(clazz);
-
-        // 校验entity格式
         var hasUnsafeCollection = hasUnsafeCollection(clazz);
+
+        // 校验id字段的格式
+        checkIdField(clazz);
+        // 校验version字段的格式
+        checkVersionField(clazz);
 
         var cacheStrategies = ormConfig.getCaches();
         var persisterStrategies = ormConfig.getPersisters();
@@ -415,7 +417,7 @@ public class OrmManager implements IOrmManager {
         return EntityDef.valueOf(!hasUnsafeCollection, cacheStrategy.getSize(), cacheStrategy.getExpireMillisecond(), persisterStrategy, indexDefMap, indexTextDefMap);
     }
 
-    private void checkEntity(Class<?> clazz) {
+    private void checkIdField(Class<?> clazz) {
         // 是否实现了IEntity接口
         AssertionUtils.isTrue(IEntity.class.isAssignableFrom(clazz), "The entity:[{}] annotated by the [{}] annotation does not implement the interface [{}]"
                 , com.zfoo.orm.anno.EntityCache.class.getName(), clazz.getCanonicalName(), IEntity.class.getCanonicalName());
@@ -425,12 +427,18 @@ public class OrmManager implements IOrmManager {
         AssertionUtils.isTrue(ArrayUtils.isNotEmpty(idFields) && idFields.length == 1
                 , "The Entity[{}] must have only one @Id annotation (if it is indeed marked with an Id annotation, be careful not to use the Stored Id annotation)", clazz.getSimpleName());
         var idField = idFields[0];
+        var idFieldType = idField.getType();
         // idField必须用private修饰
         AssertionUtils.isTrue(Modifier.isPrivate(idField.getModifiers()), "The id of the Entity[{}] must be private", clazz.getSimpleName());
 
+        // id的get方法的返回类型要和id字段一样，setId在hasUnsafeCollection方法中已经校验过了
+        var getIdMethod = ReflectionUtils.getMethodByNameInPOJOClass(clazz, FieldUtils.fieldToGetMethod(clazz, idField));
+        var returnTypeOfGetIdMethod = getIdMethod.getReturnType();
+        AssertionUtils.isTrue(returnTypeOfGetIdMethod.equals(idFieldType), "[{}] getIdMethod:[{}] return type:[{}] must be equal with type id:[{}]"
+                , clazz.getSimpleName(), getIdMethod.getName(),returnTypeOfGetIdMethod.getName(), idFieldType.getName());
+
         // 随机给id字段赋值，然后调用id()方法，看看两者的返回值是不是一样的，避免出错
         var entityInstance = ReflectionUtils.newInstance(clazz);
-        var idFieldType = idField.getType();
         Object idFiledValue = null;
         if (idFieldType.equals(int.class) || idFieldType.equals(Integer.class)) {
             idFiledValue = RandomUtils.randomInt();
@@ -465,7 +473,9 @@ public class OrmManager implements IOrmManager {
         // 实体类Entity的id字段的返回值field和id方法的返回值method必须相等
         AssertionUtils.isTrue(idFiledValue.equals(idMethodReturnValue), "The return value id [field:{}] of the Entity[{}] and the return value id [method:{}] are not equal, please check whether the id() method is implemented correctly"
                 , clazz.getSimpleName(), idFiledValue, idMethodReturnValue);
+    }
 
+    public void checkVersionField(Class<?> clazz) {
         // @Version标识的字段必须是long类型
         var versionFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Version.class);
         if (ArrayUtils.isNotEmpty(versionFields)) {
