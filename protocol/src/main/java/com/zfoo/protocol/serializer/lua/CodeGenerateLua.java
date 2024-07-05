@@ -153,7 +153,7 @@ public class CodeGenerateLua implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             var formatProtocolTemplate = formatProtocolTemplate(registration);
-            var outputPath = StringUtils.format("{}/{}/{}.lua", protocolOutputPath, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name);
+            var outputPath = StringUtils.format("{}/{}/{}.lua", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated Lua protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());

@@ -155,7 +155,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
                     , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
-            var outputPath = StringUtils.format("{}/{}/{}.h", protocolOutputPath, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name);
+            var outputPath = StringUtils.format("{}/{}/{}.h", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated C++ protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());

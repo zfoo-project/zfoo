@@ -160,7 +160,7 @@ public class CodeGenerateJava implements ICodeGenerate {
                     , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
-            var outputPath = StringUtils.format("{}/{}/{}.java", protocolOutputPath, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name);
+            var outputPath = StringUtils.format("{}/{}/{}.java", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated Java protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());

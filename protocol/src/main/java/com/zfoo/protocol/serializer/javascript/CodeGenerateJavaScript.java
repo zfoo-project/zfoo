@@ -154,7 +154,7 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
                     , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
-            var outputPath = StringUtils.format("{}/{}/{}.js", protocolOutputPath, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name);
+            var outputPath = StringUtils.format("{}/{}/{}.js", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated Javascript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
