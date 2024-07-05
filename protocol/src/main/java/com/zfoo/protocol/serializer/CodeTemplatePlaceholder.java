@@ -12,6 +12,7 @@
 
 package com.zfoo.protocol.serializer;
 
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -73,6 +74,9 @@ public enum CodeTemplatePlaceholder {
                 // calculate the tab length
                 var startSpace = StringUtils.substringBeforeFirst(line, startPlaceholder.placeholder);
                 var startPlaceholderValue = placeholderMap.get(startPlaceholder);
+                if (startPlaceholderValue == null) {
+                    throw new RunException("placeholder:[{}] not exist, and add [{}] to your placeholderMap", startPlaceholder, startPlaceholder);
+                }
                 var startPlaceholderValueLines = Arrays.stream(startPlaceholderValue.split(FileUtils.LS_REGEX)).map(it -> startSpace + it).toList();
 
                 // add tab length to start placeholder
@@ -83,7 +87,11 @@ public enum CodeTemplatePlaceholder {
 
             for (var codeTemplatePlaceholder : CodeTemplatePlaceholder.values()) {
                 if (formatLine.contains(codeTemplatePlaceholder.placeholder)) {
-                     formatLine = formatLine.replace(codeTemplatePlaceholder.placeholder, placeholderMap.get(codeTemplatePlaceholder));
+                    var placeholder = placeholderMap.get(codeTemplatePlaceholder);
+                    if (placeholder == null) {
+                        throw new RunException("placeholder:[{}] not exist, and add [{}] to your placeholderMap", placeholder, placeholder);
+                    }
+                    formatLine = formatLine.replace(codeTemplatePlaceholder.placeholder, placeholder);
                 }
             }
 

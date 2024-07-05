@@ -17,6 +17,7 @@ import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
 import com.zfoo.protocol.serializer.ecmascript.CodeGenerateEcmaScript;
 import com.zfoo.protocol.serializer.gdscript.CodeGenerateGdScript;
 import com.zfoo.protocol.serializer.golang.CodeGenerateGolang;
+import com.zfoo.protocol.serializer.java.CodeGenerateJava;
 import com.zfoo.protocol.serializer.javascript.CodeGenerateJavaScript;
 import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
 import com.zfoo.protocol.serializer.python.CodeGeneratePython;
@@ -32,23 +33,29 @@ public enum CodeLanguage {
      */
     Enhance(1, null),
 
-    Cpp(1 << 1, CodeGenerateCpp.class),
+    Java(1<<1, CodeGenerateJava.class),
 
-    Golang(1 << 2, CodeGenerateGolang.class),
+    Kotlin(1<<2, null),
 
-    JavaScript(1 << 3, CodeGenerateJavaScript.class),
+    Scala(1<<3, null),
 
-    EcmaScript(1 << 4, CodeGenerateEcmaScript.class),
+    Cpp(1 << 7, CodeGenerateCpp.class),
 
-    TypeScript(1 << 5, CodeGenerateTypeScript.class),
+    Golang(1 << 9, CodeGenerateGolang.class),
 
-    Lua(1 << 10, CodeGenerateLua.class),
+    JavaScript(1 << 10, CodeGenerateJavaScript.class),
 
-    CSharp(1 << 11, CodeGenerateCsharp.class),
+    EcmaScript(1 << 11, CodeGenerateEcmaScript.class),
 
-    GdScript(1 << 12, CodeGenerateGdScript.class),
+    TypeScript(1 << 12, CodeGenerateTypeScript.class),
 
-    Python(1 << 13, CodeGeneratePython.class),
+    Lua(1 << 15, CodeGenerateLua.class),
+
+    CSharp(1 << 18, CodeGenerateCsharp.class),
+
+    GdScript(1 << 20, CodeGenerateGdScript.class),
+
+    Python(1 << 22, CodeGeneratePython.class),
 
     Protobuf(1 << 30, null);
 
