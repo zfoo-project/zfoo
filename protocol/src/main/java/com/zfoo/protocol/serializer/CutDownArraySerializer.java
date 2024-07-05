@@ -476,6 +476,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
             default:
                 if (arrayField.getArrayElementRegistration() instanceof ObjectProtocolField) {
                     var protocolId = ((ObjectProtocolField) arrayField.getArrayElementRegistration()).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writePacketArray($1, {}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
@@ -488,10 +489,10 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("buffer:writePacketArray({}, {})", objectStr, protocolId)).append(LS);
                             break;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WritePacketArray<{}>({}, {});", EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), objectStr, protocolId)).append(LS);
+                            builder.append(StringUtils.format("buffer.WritePacketArray<{}>({}, {});", protocolName, objectStr, protocolId)).append(LS);
                             break;
                         case Cpp:
-                            builder.append(StringUtils.format("buffer.writePacketArray<{}>({}, {});", EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), objectStr, protocolId)).append(LS);
+                            builder.append(StringUtils.format("buffer.writePacketArray<{}>({}, {});", protocolName, objectStr, protocolId)).append(LS);
                             break;
                         case JavaScript:
                         case EcmaScript:
@@ -1027,6 +1028,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
             default:
                 if (arrayField.getArrayElementRegistration() instanceof ObjectProtocolField) {
                     var protocolId = ((ObjectProtocolField) arrayField.getArrayElementRegistration()).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         // Java不支持泛型的数组初始化，这里不做任何操作
                         case GdScript:
@@ -1039,10 +1041,10 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("local {} = buffer:readPacketArray({})", array, protocolId)).append(LS);
                             break;
                         case CSharp:
-                            builder.append(StringUtils.format("var {} = buffer.ReadPacketArray<{}>({});", array, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.ReadPacketArray<{}>({});", array, protocolName, protocolId)).append(LS);
                             break;
                         case Cpp:
-                            builder.append(StringUtils.format("auto {} = buffer.readPacketArray<{}>({});", array, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("auto {} = buffer.readPacketArray<{}>({});", array, protocolName, protocolId)).append(LS);
                             break;
                         case JavaScript:
                         case EcmaScript:

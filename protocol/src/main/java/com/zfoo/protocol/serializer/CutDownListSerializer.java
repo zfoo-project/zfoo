@@ -610,6 +610,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
             default:
                 if (listField.getListElementRegistration() instanceof ObjectProtocolField) {
                     var protocolId = ((ObjectProtocolField) listField.getListElementRegistration()).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("List {} = {}.readPacketList($1, {});", list, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
@@ -624,13 +625,13 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("local {} = buffer:readPacketArray({})", list, protocolId)).append(LS);
                             break;
                         case CSharp:
-                            builder.append(StringUtils.format("var {} = buffer.ReadPacketList<{}>({});", list, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.ReadPacketList<{}>({});", list, protocolName, protocolId)).append(LS);
                             break;
                         case Cpp:
-                            builder.append(StringUtils.format("auto {} = buffer.readPacketList<{}>({});", list, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("auto {} = buffer.readPacketList<{}>({});", list, protocolName, protocolId)).append(LS);
                             break;
                         case Java:
-                            builder.append(StringUtils.format("var {} = buffer.readPacketList({}.class, (short) {});", list, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readPacketList({}.class, (short) {});", list, protocolName, protocolId)).append(LS);
                             break;
                         case JavaScript:
                         case EcmaScript:

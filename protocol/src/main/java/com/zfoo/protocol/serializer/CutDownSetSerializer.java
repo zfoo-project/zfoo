@@ -626,6 +626,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
             default:
                 if (setField.getSetElementRegistration() instanceof ObjectProtocolField) {
                     var protocolId = ((ObjectProtocolField) setField.getSetElementRegistration()).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("Set {} = {}.readPacketSet($1, {});", set, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
@@ -640,13 +641,13 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("local {} = buffer:readPacketArray({})", set, protocolId)).append(LS);
                             break;
                         case CSharp:
-                            builder.append(StringUtils.format("var {} = buffer.ReadPacketSet<{}>({});", set, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.ReadPacketSet<{}>({});", set, protocolName, protocolId)).append(LS);
                             break;
                         case Cpp:
-                            builder.append(StringUtils.format("auto {} = buffer.readPacketSet<{}>({});", set, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("auto {} = buffer.readPacketSet<{}>({});", set, protocolName, protocolId)).append(LS);
                             break;
                         case Java:
-                            builder.append(StringUtils.format("var {} = buffer.readPacketSet({}.class, (short) {});", set, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readPacketSet({}.class, (short) {});", set, protocolName, protocolId)).append(LS);
                             break;
                         case JavaScript:
                         case EcmaScript:

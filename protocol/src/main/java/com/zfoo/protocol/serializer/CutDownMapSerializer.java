@@ -130,28 +130,29 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
+                    var protocolId = ((ObjectProtocolField) valueRegistration).getProtocolId();
                     switch (language) {
                         case Enhance:
-                            builder.append(StringUtils.format("{}.writeIntPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
+                            builder.append(StringUtils.format("{}.writeIntPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             return true;
                         case GdScript:
                         case Python:
-                            builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case Lua:
-                            builder.append(StringUtils.format("buffer:writeIntPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer:writeIntPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WriteIntPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WriteIntPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Cpp:
                         case JavaScript:
                         case EcmaScript:
                         case TypeScript:
-                            builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Java:
-                            builder.append(StringUtils.format("buffer.writeIntPacketMap({}, (short) {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeIntPacketMap({}, (short) {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Golang:
                         case Protobuf:
@@ -238,28 +239,29 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
+                    var protocolId = ((ObjectProtocolField) valueRegistration).getProtocolId();
                     switch (language) {
                         case Enhance:
-                            builder.append(StringUtils.format("{}.writeLongPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
+                            builder.append(StringUtils.format("{}.writeLongPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             return true;
                         case GdScript:
                         case Python:
-                            builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case Lua:
-                            builder.append(StringUtils.format("buffer:writeLongPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer:writeLongPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WriteLongPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WriteLongPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Cpp:
                         case JavaScript:
                         case EcmaScript:
                         case TypeScript:
-                            builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Java:
-                            builder.append(StringUtils.format("buffer.writeLongPacketMap({}, (short) {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeLongPacketMap({}, (short) {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Golang:
                         case Protobuf:
@@ -346,28 +348,29 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
+                    var protocolId = ((ObjectProtocolField) valueRegistration).getProtocolId();
                     switch (language) {
                         case Enhance:
-                            builder.append(StringUtils.format("{}.writeStringPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
+                            builder.append(StringUtils.format("{}.writeStringPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             return true;
                         case GdScript:
                         case Python:
-                            builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case Lua:
-                            builder.append(StringUtils.format("buffer:writeStringPacketMap({}, {})", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer:writeStringPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case CSharp:
-                            builder.append(StringUtils.format("buffer.WriteStringPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.WriteStringPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Cpp:
                         case JavaScript:
                         case EcmaScript:
                         case TypeScript:
-                            builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Java:
-                            builder.append(StringUtils.format("buffer.writeStringPacketMap({}, (short) {});", objectStr, ((ObjectProtocolField) valueRegistration).getProtocolId())).append(LS);
+                            builder.append(StringUtils.format("buffer.writeStringPacketMap({}, (short) {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Golang:
                         case Protobuf:
@@ -489,9 +492,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     var protocolId = ((ObjectProtocolField) valueRegistration).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
-                            builder.append(StringUtils.format("Map {} = {}.readIntPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(((ObjectProtocolField) valueRegistration).getProtocolId())));
+                            builder.append(StringUtils.format("Map {} = {}.readIntPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readIntPacketMap({})", map, protocolId)).append(LS);
@@ -503,13 +507,13 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("local {} = buffer:readIntPacketMap({})", map, protocolId)).append(LS);
                             return map;
                         case CSharp:
-                            builder.append(StringUtils.format("var {} = buffer.ReadIntPacketMap<{}>({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.ReadIntPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case Cpp:
-                            builder.append(StringUtils.format("auto {} = buffer.readIntPacketMap<{}>({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("auto {} = buffer.readIntPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case Java:
-                            builder.append(StringUtils.format("var {} = buffer.readIntPacketMap({}.class, (short) {});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readIntPacketMap({}.class, (short) {});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case JavaScript:
                         case EcmaScript:
@@ -619,6 +623,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     var protocolId = ((ObjectProtocolField) valueRegistration).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readLongPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
@@ -633,13 +638,13 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("local {} = buffer:readLongPacketMap({})", map, protocolId)).append(LS);
                             return map;
                         case CSharp:
-                            builder.append(StringUtils.format("var {} = buffer.ReadLongPacketMap<{}>({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.ReadLongPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case Cpp:
-                            builder.append(StringUtils.format("auto {} = buffer.readLongPacketMap<{}>({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("auto {} = buffer.readLongPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case Java:
-                            builder.append(StringUtils.format("var {} = buffer.readLongPacketMap({}.class, (short) {});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readLongPacketMap({}.class, (short) {});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case JavaScript:
                         case EcmaScript:
@@ -750,6 +755,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     var protocolId = ((ObjectProtocolField) valueRegistration).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readStringPacketMap($1, {});", map, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
@@ -764,13 +770,13 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("local {} = buffer:readStringPacketMap({})", map, protocolId)).append(LS);
                             return map;
                         case CSharp:
-                            builder.append(StringUtils.format("var {} = buffer.ReadStringPacketMap<{}>({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.ReadStringPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case Cpp:
-                            builder.append(StringUtils.format("auto {} = buffer.readStringPacketMap<{}>({});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("auto {} = buffer.readStringPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case Java:
-                            builder.append(StringUtils.format("var {} = buffer.readStringPacketMap({}.class, (short) {});", map, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId), protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readStringPacketMap({}.class, (short) {});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case JavaScript:
                         case EcmaScript:
