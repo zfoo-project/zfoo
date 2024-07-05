@@ -754,13 +754,13 @@ public class ByteBuffer {
         }
     }
 
-    public List<Object> readPacketList(short protocolId) {
+    public <T> List<T> readPacketList(Class<T> clazz, short protocolId) {
         int size = readInt();
-        List<Object> list = new ArrayList<>();
+        List<T> list = new ArrayList<>();
         if (size > 0) {
             IProtocolRegistration protocolRegistration = ProtocolManager.getProtocol(protocolId);
             for (int index = 0; index < size; index++) {
-                list.add(protocolRegistration.read(this));
+                list.add((T) protocolRegistration.read(this));
             }
         }
         return list;
@@ -932,16 +932,15 @@ public class ByteBuffer {
         }
     }
 
-    public Set<Object> readPacketSet(short protocolId) {
+    public <T> Set<T> readPacketSet(Class<T> clazz, short protocolId) {
         int size = readInt();
-        Set<Object> set = new HashSet<>();
+        Set<T> set = new HashSet<>();
         if (size > 0) {
             IProtocolRegistration protocolRegistration = ProtocolManager.getProtocol(protocolId);
             for (int index = 0; index < size; index++) {
-                set.add(protocolRegistration.read(this));
+                set.add((T) protocolRegistration.read(this));
             }
         }
-
         return set;
     }
 
@@ -1034,14 +1033,14 @@ public class ByteBuffer {
         }
     }
 
-    public Map<Integer, Object> readIntPacketMap(short protocolId) {
+    public <T> Map<Integer, T> readIntPacketMap(Class<T> clazz, short protocolId) {
         int size = readInt();
-        Map<Integer, Object> map = new HashMap<>();
+        Map<Integer, T> map = new HashMap<>();
         if (size > 0) {
             IProtocolRegistration protocolRegistration = ProtocolManager.getProtocol(protocolId);
             for (int index = 0; index < size; index++) {
                 var key = readInt();
-                var value = protocolRegistration.read(this);
+                var value = (T) protocolRegistration.read(this);
                 map.put(key, value);
             }
         }
@@ -1136,14 +1135,14 @@ public class ByteBuffer {
         }
     }
 
-    public Map<Long, Object> readLongPacketMap(short protocolId) {
+    public <T> Map<Long, T> readLongPacketMap(Class<T> clazz, short protocolId) {
         int size = readInt();
-        Map<Long, Object> map = new HashMap<>();
+        Map<Long, T> map = new HashMap<>();
         if (size > 0) {
             IProtocolRegistration protocolRegistration = ProtocolManager.getProtocol(protocolId);
             for (int index = 0; index < size; index++) {
                 var key = readLong();
-                var value = protocolRegistration.read(this);
+                var value = (T) protocolRegistration.read(this);
                 map.put(key, value);
             }
         }
@@ -1239,14 +1238,14 @@ public class ByteBuffer {
         }
     }
 
-    public Map<String, Object> readStringPacketMap(short protocolId) {
+    public <T> Map<String, T> readStringPacketMap(Class<T> clazz, short protocolId) {
         int size = readInt();
-        Map<String, Object> map = new HashMap<>();
+        Map<String, T> map = new HashMap<>();
         if (size > 0) {
             IProtocolRegistration protocolRegistration = ProtocolManager.getProtocol(protocolId);
             for (int index = 0; index < size; index++) {
                 var key = readString();
-                var value = protocolRegistration.read(this);
+                var value = (T) protocolRegistration.read(this);
                 map.put(key, value);
             }
         }

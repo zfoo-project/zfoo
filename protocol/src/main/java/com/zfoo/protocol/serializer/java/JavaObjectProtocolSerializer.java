@@ -45,7 +45,7 @@ public class JavaObjectProtocolSerializer implements IJavaSerializer {
         var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("{} {} = ({}) buffer.readPacket((short){});", protocolSimpleName, result, protocolSimpleName, objectProtocolField.getProtocolId()))
+        builder.append(StringUtils.format("{} {} = ({}) buffer.readPacket((short) {});", protocolSimpleName, result, protocolSimpleName, objectProtocolField.getProtocolId()))
                 .append(LS);
         return result;
     }
