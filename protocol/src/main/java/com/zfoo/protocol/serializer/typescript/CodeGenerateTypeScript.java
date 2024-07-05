@@ -265,19 +265,19 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         var fieldRegistrations = registration.getFieldRegistrations();
         // when generate source code fields, use origin fields sort
         var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
-        var fieldDefinitionBuilder = new StringBuilder();
+        var tsBuilder = new StringBuilder();
         for (var field : sequencedFields) {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
             // 生成注释
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.TypeScript);
             for (var fieldNote : fieldNotes) {
-                fieldDefinitionBuilder.append(fieldNote).append(LS);
+                tsBuilder.append(fieldNote).append(LS);
             }
             var triple = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
-            fieldDefinitionBuilder.append(StringUtils.format("{}{} = {};", triple.getMiddle(), triple.getLeft(), triple.getRight())).append(LS);
+            tsBuilder.append(StringUtils.format("{}{} = {};", triple.getMiddle(), triple.getLeft(), triple.getRight())).append(LS);
         }
-        return fieldDefinitionBuilder.toString();
+        return tsBuilder.toString();
     }
 
     private String protocol_write_serialization(ProtocolRegistration registration) {

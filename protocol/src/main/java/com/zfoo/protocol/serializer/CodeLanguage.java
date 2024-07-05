@@ -19,6 +19,7 @@ import com.zfoo.protocol.serializer.gdscript.CodeGenerateGdScript;
 import com.zfoo.protocol.serializer.golang.CodeGenerateGolang;
 import com.zfoo.protocol.serializer.java.CodeGenerateJava;
 import com.zfoo.protocol.serializer.javascript.CodeGenerateJavaScript;
+import com.zfoo.protocol.serializer.kotlin.CodeGenerateKotlin;
 import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
 import com.zfoo.protocol.serializer.python.CodeGeneratePython;
 import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
@@ -35,7 +36,7 @@ public enum CodeLanguage {
 
     Java(1<<1, CodeGenerateJava.class),
 
-    Kotlin(1<<2, null),
+    Kotlin(1<<2, CodeGenerateKotlin.class),
 
     Scala(1<<3, null),
 
