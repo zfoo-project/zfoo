@@ -31,7 +31,7 @@ class ProtocolManager {
         }
 
         @JvmStatic
-        fun read(buffer: ByteBuffer): Any? {
+        fun read(buffer: ByteBuffer): Any {
             val protocolId = buffer.readShort()
             return getProtocol(protocolId).read(buffer)
         }
