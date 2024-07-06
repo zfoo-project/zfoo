@@ -1,7 +1,5 @@
 package com.zfoo.kotlin
 
-import java.nio.charset.Charset
-
 class ByteBuffer {
     private var buffer = ByteArray(INIT_SIZE)
     private var writeOffset = 0
@@ -26,8 +24,8 @@ class ByteBuffer {
         }
     }
 
-    fun compatibleRead(beforereadIndex: Int, length: Int): Boolean {
-        return length != -1 && readOffset < length + beforereadIndex
+    fun compatibleRead(beforeReadIndex: Int, length: Int): Boolean {
+        return length != -1 && readOffset < length + beforeReadIndex
     }
 
     // -------------------------------------------------get/set-------------------------------------------------
@@ -35,7 +33,7 @@ class ByteBuffer {
         return writeOffset
     }
 
-    fun setwriteOffset(writeIndex: Int) {
+    fun setWriteOffset(writeIndex: Int) {
         if (writeIndex > buffer.size) {
             throw RuntimeException(
                 "writeIndex[" + writeIndex + "] out of bounds exception: readerIndex: " + readOffset +
@@ -317,20 +315,20 @@ class ByteBuffer {
 
     // *******************************************float***************************************************
     fun writeFloat(value: Float) {
-        writeRawInt(java.lang.Float.floatToRawIntBits(value))
+        writeRawInt(value.toBits())
     }
 
     fun readFloat(): Float {
-        return java.lang.Float.intBitsToFloat(readRawInt())
+        return Float.fromBits(readRawInt())
     }
 
     // *******************************************double***************************************************
     fun writeDouble(value: Double) {
-        writeRawLong(java.lang.Double.doubleToRawLongBits(value))
+        writeRawLong(value.toBits())
     }
 
     fun readDouble(): Double {
-        return java.lang.Double.longBitsToDouble(readRawLong())
+        return Double.fromBits(readRawLong())
     }
 
     fun writeString(value: String?) {
@@ -338,7 +336,7 @@ class ByteBuffer {
             writeInt(0)
             return
         }
-        val bytes = value.toByteArray(DEFAULT_CHARSET)
+        val bytes = value.toByteArray()
         writeInt(bytes.size)
         writeBytes(bytes)
     }
@@ -349,7 +347,7 @@ class ByteBuffer {
             return ""
         }
         val bytes = readBytes(length)
-        return String(bytes, DEFAULT_CHARSET)
+        return String(bytes)
     }
 
     fun writeBooleanArray(array: Array<Boolean>) {
@@ -1233,9 +1231,5 @@ class ByteBuffer {
     companion object {
         private const val INIT_SIZE = 128
         private const val MAX_SIZE = 655537
-
-        // *******************************************String***************************************************
-        const val DEFAULT_CHARSET_NAME = "UTF-8"
-        val DEFAULT_CHARSET = Charset.forName(DEFAULT_CHARSET_NAME)
     }
 }
