@@ -35,7 +35,7 @@ class ByteBuffer {
         return writeOffset
     }
 
-    fun setwriteOffset(writeIndex: Int) {
+    fun setWriteOffset(writeIndex: Int) {
         if (writeIndex > buffer.size) {
             throw RuntimeException(
                 "writeIndex[" + writeIndex + "] out of bounds exception: readerIndex: " + readOffset +

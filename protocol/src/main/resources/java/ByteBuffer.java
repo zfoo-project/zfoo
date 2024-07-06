@@ -41,7 +41,7 @@ public class ByteBuffer {
         return writeOffset;
     }
 
-    public void setwriteOffset(int writeIndex) {
+    public void setWriteOffset(int writeIndex) {
         if (writeIndex > buffer.length) {
             throw new RuntimeException("writeIndex[" + writeIndex + "] out of bounds exception: readerIndex: " + readOffset +
                     ", writerIndex: " + writeOffset + "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + buffer.length);
