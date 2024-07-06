@@ -52,12 +52,12 @@ public class CodeGenerateKotlin implements ICodeGenerate {
     // custom configuration
     public static String protocolOutputRootPath = "zfookt";
     private static String protocolOutputPath = StringUtils.EMPTY;
-    public static String protocolPackage = "com.zfoo.java";
+    public static String protocolPackage = "com.zfoo.kotlin";
 
-    private static final Map<ISerializer, IKtSerializer> kotlinSerializerMap = new HashMap<>();
+    private static final Map<ISerializer, IKtSerializer> ktSerializerMap = new HashMap<>();
 
-    public static IKtSerializer kotlinSerializer(ISerializer serializer) {
-        return kotlinSerializerMap.get(serializer);
+    public static IKtSerializer ktSerializer(ISerializer serializer) {
+        return ktSerializerMap.get(serializer);
     }
 
     @Override
@@ -65,40 +65,42 @@ public class CodeGenerateKotlin implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        kotlinSerializerMap.put(BooleanSerializer.INSTANCE, new KtBooleanSerializer());
-        kotlinSerializerMap.put(ByteSerializer.INSTANCE, new KtByteSerializer());
-        kotlinSerializerMap.put(ShortSerializer.INSTANCE, new KtShortSerializer());
-        kotlinSerializerMap.put(IntSerializer.INSTANCE, new KtIntSerializer());
-        kotlinSerializerMap.put(LongSerializer.INSTANCE, new KtLongSerializer());
-        kotlinSerializerMap.put(FloatSerializer.INSTANCE, new KtFloatSerializer());
-        kotlinSerializerMap.put(DoubleSerializer.INSTANCE, new KtDoubleSerializer());
-        kotlinSerializerMap.put(StringSerializer.INSTANCE, new KtStringSerializer());
-        kotlinSerializerMap.put(ArraySerializer.INSTANCE, new KtArraySerializer());
-        kotlinSerializerMap.put(ListSerializer.INSTANCE, new KtListSerializer());
-        kotlinSerializerMap.put(SetSerializer.INSTANCE, new KtSetSerializer());
-        kotlinSerializerMap.put(MapSerializer.INSTANCE, new KtMapSerializer());
-        kotlinSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new KtObjectProtocolSerializer());
+        ktSerializerMap.put(BooleanSerializer.INSTANCE, new KtBooleanSerializer());
+        ktSerializerMap.put(ByteSerializer.INSTANCE, new KtByteSerializer());
+        ktSerializerMap.put(ShortSerializer.INSTANCE, new KtShortSerializer());
+        ktSerializerMap.put(IntSerializer.INSTANCE, new KtIntSerializer());
+        ktSerializerMap.put(LongSerializer.INSTANCE, new KtLongSerializer());
+        ktSerializerMap.put(FloatSerializer.INSTANCE, new KtFloatSerializer());
+        ktSerializerMap.put(DoubleSerializer.INSTANCE, new KtDoubleSerializer());
+        ktSerializerMap.put(StringSerializer.INSTANCE, new KtStringSerializer());
+        ktSerializerMap.put(ArraySerializer.INSTANCE, new KtArraySerializer());
+        ktSerializerMap.put(ListSerializer.INSTANCE, new KtListSerializer());
+        ktSerializerMap.put(SetSerializer.INSTANCE, new KtSetSerializer());
+        ktSerializerMap.put(MapSerializer.INSTANCE, new KtMapSerializer());
+        ktSerializerMap.put(ObjectProtocolSerializer.INSTANCE, new KtObjectProtocolSerializer());
     }
 
     @Override
     public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
-        var protocol_root_path = StringUtils.format("package {};", protocolPackage);
+        var protocol_root_path = StringUtils.format("package {}", protocolPackage);
 
-        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("java/ProtocolManagerTemplate.java");
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolManagerTemplate.kt");
         var protocol_manager_registrations = new StringBuilder();
+        var protocol_imports = new StringBuilder();
+        protocol_imports.append(StringUtils.format("import {}.*", protocolPackage)).append(LS);
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = Protocols.registration{};", protocol_id, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put(Protocols.{}.class, (short){});", protocol_name, protocol_id)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = registration{}", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put({}::class.java, {})", protocol_name, protocol_id)).append(LS);
         }
 
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_root_path, protocol_root_path
-                , CodeTemplatePlaceholder.protocol_imports, StringUtils.EMPTY
+                , CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
         var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
-        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.java"));
+        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.kt"));
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated Kotlin protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
@@ -109,16 +111,16 @@ public class CodeGenerateKotlin implements ICodeGenerate {
             // protocol
             protocol_class.append(protocol_class(registration)).append(LS);
             // registration
-            protocol_registration.append(protocol_registration(registration)).append(LS);
+            protocol_registration.append(protocol_registration_merger(registration)).append(LS);
         }
-        var protocolTemplate = ClassUtils.getFileFromClassPathToString("java/ProtocolsTemplate.java");
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolsTemplate.kt");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_root_path, protocol_root_path
                 , CodeTemplatePlaceholder.protocol_imports, StringUtils.EMPTY
-                , CodeTemplatePlaceholder.protocol_class, protocol_class.toString().replace("public class", "public static class")
+                , CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
                 , CodeTemplatePlaceholder.protocol_registration, protocol_registration.toString()
         ));
-        var outputPath = StringUtils.format("{}/Protocols.java", protocolOutputPath);
+        var outputPath = StringUtils.format("{}/Protocols.kt", protocolOutputPath);
         var file = new File(outputPath);
         FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
         logger.info("Generated Kotlin protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
@@ -128,30 +130,30 @@ public class CodeGenerateKotlin implements ICodeGenerate {
     public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
-        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("java/ProtocolManagerTemplate.java");
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolManagerTemplate.kt");
         var protocol_manager_registrations = new StringBuilder();
         var protocol_imports = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("import {}.{}.{};", protocolPackage, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.registration{};", protocol_id, protocol_name, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put({}.class, (short){});", protocol_name, protocol_id)).append(LS);
+            protocol_imports.append(StringUtils.format("import {}.{}.{}", protocolPackage, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.registration{}", protocol_id, protocol_name, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap[{}::class.java] = {}.toShort()", protocol_name, protocol_id)).append(LS);
         }
 
-        var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_root_path, StringUtils.format("package {};", protocolPackage)
+        var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_root_path, StringUtils.format("package {}", protocolPackage)
                 , CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
         var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
-        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.java"));
+        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.kt"));
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated Kotlin protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var protocolTemplate = ClassUtils.getFileFromClassPathToString("java/ProtocolTemplate.java");
-            var protocol_root_path = StringUtils.format("package {}.{};", protocolPackage, GenerateProtocolPath.protocolPathPeriod(protocol_id));
+            var protocolTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolTemplate.kt");
+            var protocol_root_path = StringUtils.format("package {}.{}", protocolPackage, GenerateProtocolPath.protocolPathPeriod(protocol_id));
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_root_path, protocol_root_path
                     , CodeTemplatePlaceholder.protocol_imports, protocol_imports_fold(registration)
@@ -160,7 +162,7 @@ public class CodeGenerateKotlin implements ICodeGenerate {
                     , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
-            var outputPath = StringUtils.format("{}/{}/{}.java", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
+            var outputPath = StringUtils.format("{}/{}/{}.kt", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated Kotlin protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
@@ -251,6 +253,19 @@ public class CodeGenerateKotlin implements ICodeGenerate {
         return formatProtocolTemplate;
     }
 
+    private String protocol_registration_merger(ProtocolRegistration registration) {
+        var protocol_id = registration.protocolId();
+        var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolRegistrationMergerTemplate.kt");
+        var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                CodeTemplatePlaceholder.protocol_name, protocol_name
+                , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
+                , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
+                , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
+        ));
+        return formatProtocolTemplate;
+    }
+
 
     private String protocol_imports_fold(ProtocolRegistration registration) {
         var protocolId = registration.getId();
@@ -281,8 +296,8 @@ public class CodeGenerateKotlin implements ICodeGenerate {
             for (var fieldNote : fieldNotes) {
                 ktBuilder.append(fieldNote).append(LS);
             }
-            var pair = kotlinSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
-            ktBuilder.append(StringUtils.format("{}: {} = {}", fieldName, pair.getKey(), pair.getValue())).append(LS);
+            var pair = ktSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
+            ktBuilder.append(StringUtils.format("var {}: {} = {}", fieldName, pair.getKey(), pair.getValue())).append(LS);
         }
         return ktBuilder.toString();
     }
@@ -302,7 +317,7 @@ public class CodeGenerateKotlin implements ICodeGenerate {
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            kotlinSerializer(fieldRegistration.serializer()).writeObject(ktBuilder, "message." + field.getName(), 0, field, fieldRegistration);
+            ktSerializer(fieldRegistration.serializer()).writeObject(ktBuilder, "message." + field.getName(), 0, field, fieldRegistration);
         }
         if (registration.isCompatible()) {
             ktBuilder.append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex)", registration.getPredictionLength())).append(LS);
@@ -322,12 +337,12 @@ public class CodeGenerateKotlin implements ICodeGenerate {
 
             if (field.isAnnotationPresent(Compatible.class)) {
                 ktBuilder.append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
-                var compatibleReadObject = kotlinSerializer(fieldRegistration.serializer()).readObject(ktBuilder, 1, field, fieldRegistration);
+                var compatibleReadObject = ktSerializer(fieldRegistration.serializer()).readObject(ktBuilder, 1, field, fieldRegistration);
                 ktBuilder.append(TAB).append(StringUtils.format("packet.{} = {}", field.getName(), compatibleReadObject)).append(LS);
                 ktBuilder.append("}").append(LS);
                 continue;
             }
-            var readObject = kotlinSerializer(fieldRegistration.serializer()).readObject(ktBuilder, 0, field, fieldRegistration);
+            var readObject = ktSerializer(fieldRegistration.serializer()).readObject(ktBuilder, 0, field, fieldRegistration);
             ktBuilder.append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);
         }
         return ktBuilder.toString();
@@ -421,7 +436,7 @@ public class CodeGenerateKotlin implements ICodeGenerate {
 
         typeName = typeName.replace("Map<", "Map<");
         typeName = typeName.replace("Set<", "Set<");
-        typeName = typeName.replace("List<", "Array<");
+        typeName = typeName.replace("List<", "List<");
 
         return typeName;
     }

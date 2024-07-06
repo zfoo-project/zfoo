@@ -35,7 +35,7 @@ public class KtShortSerializer implements IKtSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeShort({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeShort({})", objectStr)).append(LS);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class KtShortSerializer implements IKtSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("short {} = buffer.readShort();", result)).append(LS);
+        builder.append(StringUtils.format("val {} = buffer.readShort()", result)).append(LS);
         return result;
     }
 

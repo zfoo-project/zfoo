@@ -45,30 +45,21 @@ public class KtArraySerializer implements IKtSerializer {
 
         ArrayField arrayField = (ArrayField) fieldRegistration;
 
-        builder.append(StringUtils.format("if (({} == null) || ({}.length == 0)) {", objectStr, objectStr)).append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append("buffer.writeInt(0);").append(LS);
+        builder.append(StringUtils.format("buffer.writeInt({}.size)", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);
-
-        builder.append("} else {").append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("buffer.writeInt({}.length);", objectStr)).append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 1);
         String length = "length" + GenerateProtocolFile.localVariableId++;
-        builder.append(StringUtils.format("int {} = {}.length;", length, objectStr)).append(LS);
+        builder.append(StringUtils.format("val {} = {}.size", length, objectStr)).append(LS);
 
         String i = "i" + GenerateProtocolFile.localVariableId++;
+        GenerateProtocolFile.addTab(builder, deep);
+        builder.append(StringUtils.format("for ({} in 0 until {}) {", i, length)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++) {", i, i, length, i)).append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 2);
         String element = "element" + GenerateProtocolFile.localVariableId++;
-        builder.append(StringUtils.format("{} {} = {}[{}];", CodeGenerateKotlin.toKotlinClassName(arrayField.getType().getSimpleName()), element, objectStr, i)).append(LS);
+        builder.append(StringUtils.format("val {} = {}[{}]", element, objectStr, i)).append(LS);
 
-        CodeGenerateKotlin.kotlinSerializer(arrayField.getArrayElementRegistration().serializer())
-                .writeObject(builder, element, deep + 2, field, arrayField.getArrayElementRegistration());
+        CodeGenerateKotlin.ktSerializer(arrayField.getArrayElementRegistration().serializer())
+                .writeObject(builder, element, deep + 1, field, arrayField.getArrayElementRegistration());
 
-        GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append("}").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
     }
@@ -88,21 +79,27 @@ public class KtArraySerializer implements IKtSerializer {
         var typeName = CodeGenerateKotlin.toKotlinClassName(arrayField.getType().getSimpleName());
 
         var i = "index" + GenerateProtocolFile.localVariableId++;
+        var init = "init" + GenerateProtocolFile.localVariableId++;
         var size = "size" + GenerateProtocolFile.localVariableId++;
-        builder.append(StringUtils.format("int {} = buffer.readInt();", size)).append(LS);
+        builder.append(StringUtils.format("val {} = buffer.readInt()", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("{}[] {} = new {}[{}];", typeName, result, typeName, size)).append(LS);
+        var pair = CodeGenerateKotlin.ktSerializer(arrayField.getArrayElementRegistration().serializer()).field(field, arrayField.getArrayElementRegistration());
+        var defaultValue = pair.getValue();
+        if (defaultValue.equals("null")) {
+            defaultValue = StringUtils.format("{}()", typeName);
+        }
+        builder.append(StringUtils.format("val {} = Array<{}>({}) { init -> {}}", result, typeName, size, defaultValue)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
-        var readObject = CodeGenerateKotlin.kotlinSerializer(arrayField.getArrayElementRegistration().serializer())
+        builder.append(StringUtils.format("for ({} in 0 until {}) {", i, size)).append(LS);
+        var readObject = CodeGenerateKotlin.ktSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
-        builder.append(StringUtils.format("{}[{}] = {};", result, i, readObject));
+        builder.append(StringUtils.format("{}[{}] = {}", result, i, readObject));
         builder.append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);

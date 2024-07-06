@@ -29,13 +29,13 @@ public class KtDoubleSerializer implements IKtSerializer {
 
     @Override
     public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Pair<>("Float", "0f");
+        return new Pair<>("Double", "0.0");
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeDouble({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeDouble({})", objectStr)).append(LS);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class KtDoubleSerializer implements IKtSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("double {} = buffer.readDouble();", result)).append(LS);
+        builder.append(StringUtils.format("val {} = buffer.readDouble()", result)).append(LS);
         return result;
     }
 

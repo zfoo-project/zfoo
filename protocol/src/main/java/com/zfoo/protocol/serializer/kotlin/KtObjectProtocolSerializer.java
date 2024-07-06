@@ -42,7 +42,7 @@ public class KtObjectProtocolSerializer implements IKtSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writePacket({}, (short){});", objectStr, objectProtocolField.getProtocolId()))
+        builder.append(StringUtils.format("buffer.writePacket({}, {})", objectStr, objectProtocolField.getProtocolId()))
                 .append(LS);
     }
 
@@ -54,7 +54,7 @@ public class KtObjectProtocolSerializer implements IKtSerializer {
         var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("{} {} = ({}) buffer.readPacket((short) {});", protocolSimpleName, result, protocolSimpleName, objectProtocolField.getProtocolId()))
+        builder.append(StringUtils.format("val {} = buffer.readPacket({}) as {}", result, objectProtocolField.getProtocolId(), protocolSimpleName))
                 .append(LS);
         return result;
     }

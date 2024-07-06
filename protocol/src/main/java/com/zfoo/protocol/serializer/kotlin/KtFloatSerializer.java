@@ -29,13 +29,13 @@ public class KtFloatSerializer implements IKtSerializer {
 
     @Override
     public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Pair<>("Double", "0.0");
+        return new Pair<>("Float", "0f");
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeFloat({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeFloat({})", objectStr)).append(LS);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class KtFloatSerializer implements IKtSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("float {} = buffer.readFloat();", result)).append(LS);
+        builder.append(StringUtils.format("val {} = buffer.readFloat()", result)).append(LS);
         return result;
     }
 

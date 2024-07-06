@@ -45,25 +45,15 @@ public class KtSetSerializer implements IKtSerializer {
 
         SetField setField = (SetField) fieldRegistration;
 
-        builder.append(StringUtils.format("if ({} == null) {", objectStr)).append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append("buffer.writeInt(0);").append(LS);
-
-        GenerateProtocolFile.addTab(builder, deep);
-        builder.append("} else {").append(LS);
-
-        GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("buffer.writeInt({}.size());", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeInt({}.size)", objectStr)).append(LS);
 
         String element = "i" + GenerateProtocolFile.localVariableId++;
-        GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("for (var {} : {}) {", element, objectStr)).append(LS);
+        GenerateProtocolFile.addTab(builder, deep );
+        builder.append(StringUtils.format("for ({} in {}) {", element, objectStr)).append(LS);
 
-        CodeGenerateKotlin.kotlinSerializer(setField.getSetElementRegistration().serializer())
-                .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
+        CodeGenerateKotlin.ktSerializer(setField.getSetElementRegistration().serializer())
+                .writeObject(builder, element, deep + 1, field, setField.getSetElementRegistration());
 
-        GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append("}").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
         builder.append("}").append(LS);
     }
@@ -83,22 +73,20 @@ public class KtSetSerializer implements IKtSerializer {
 
         var i = "index" + GenerateProtocolFile.localVariableId++;
         var size = "size" + GenerateProtocolFile.localVariableId++;
-        builder.append(StringUtils.format("int {} = buffer.readInt();", size)).append(LS);
+        builder.append(StringUtils.format("val {} = buffer.readInt()", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);
-        // unity里不支持HashSet的初始化大小
-//        builder.append("var " + result + " = new " + typeName + "(" + size + ");" + LS);
-        builder.append(StringUtils.format("var {} = new Hash{}();", result, typeName)).append(LS);
+        builder.append(StringUtils.format("val {} = Hash{}()", result, typeName)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("for (int {} = 0; {} < {}; {}++) {", i, i, size, i)).append(LS);
+        builder.append(StringUtils.format("for ({} in 0 until {}) {", i, size)).append(LS);
 
-        var readObject = CodeGenerateKotlin.kotlinSerializer(setField.getSetElementRegistration().serializer())
+        var readObject = CodeGenerateKotlin.ktSerializer(setField.getSetElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
-        builder.append(StringUtils.format("{}.add({});", result, readObject)).append(LS);
+        builder.append(StringUtils.format("{}.add({})", result, readObject)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("}").append(LS);
         GenerateProtocolFile.addTab(builder, deep);

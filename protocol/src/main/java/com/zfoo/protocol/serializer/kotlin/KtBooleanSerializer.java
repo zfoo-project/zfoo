@@ -35,7 +35,7 @@ public class KtBooleanSerializer implements IKtSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeBool({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeBool({})", objectStr)).append(LS);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class KtBooleanSerializer implements IKtSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("boolean {} = buffer.readBool();", result)).append(LS);
+        builder.append(StringUtils.format("val {} = buffer.readBool()", result)).append(LS);
         return result;
     }
 }

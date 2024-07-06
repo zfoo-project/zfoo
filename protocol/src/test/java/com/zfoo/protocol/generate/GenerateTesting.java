@@ -15,9 +15,12 @@ package com.zfoo.protocol.generate;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.packet.*;
 import com.zfoo.protocol.serializer.CodeLanguage;
+import com.zfoo.protocol.util.FileUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -27,7 +30,7 @@ import java.util.List;
 public class GenerateTesting {
 
     @Test
-    public void generateAllProtocols() {
+    public void generateAllProtocols() throws IOException {
         var op = GenerateOperation.NO_OPERATION;
         op.setFoldProtocol(true);
 
@@ -35,6 +38,8 @@ public class GenerateTesting {
 
         // generate the jsProtocol folder and its corresponding js protocol file in the current protocol directory
         generateLanguages.add(CodeLanguage.Cpp);
+        generateLanguages.add(CodeLanguage.Java);
+        generateLanguages.add(CodeLanguage.Kotlin);
         generateLanguages.add(CodeLanguage.Golang);
         generateLanguages.add(CodeLanguage.JavaScript);
         generateLanguages.add(CodeLanguage.EcmaScript);
@@ -46,6 +51,14 @@ public class GenerateTesting {
 
         // Initialize and then generate the protocol
         ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), op);
+        copyFiles();
+    }
+
+    @Test
+    public void copyFiles() throws IOException {
+        var sourceDirectory = "C:\\github\\zfoo\\protocol\\zfookt";
+        var targetDirectory = "C:\\github\\zfoo-kotlin-support\\src\\main\\kotlin\\com\\zfoo\\kotlin";
+        FileUtils.copyDirectory(new File(sourceDirectory), new File(targetDirectory));
     }
 
 }

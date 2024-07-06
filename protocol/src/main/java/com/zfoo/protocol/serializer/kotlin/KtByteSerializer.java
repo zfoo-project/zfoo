@@ -35,7 +35,7 @@ public class KtByteSerializer implements IKtSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeByte({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeByte({})", objectStr)).append(LS);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class KtByteSerializer implements IKtSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("byte {} = buffer.readByte();", result)).append(LS);
+        builder.append(StringUtils.format("val {} = buffer.readByte()", result)).append(LS);
         return result;
     }
 
