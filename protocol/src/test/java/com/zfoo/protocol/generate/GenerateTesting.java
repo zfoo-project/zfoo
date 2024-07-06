@@ -50,14 +50,15 @@ public class GenerateTesting {
         generateLanguages.add(CodeLanguage.Python);
 
         // Initialize and then generate the protocol
-        ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), op);
-        copyFiles();
+        ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class), op);
+//        copyFiles();
     }
 
     @Test
     public void copyFiles() throws IOException {
         var sourceDirectory = "C:\\github\\zfoo\\protocol\\zfookt";
         var targetDirectory = "C:\\github\\zfoo-kotlin-support\\src\\main\\kotlin\\com\\zfoo\\kotlin";
+        FileUtils.deleteFile(new File(targetDirectory));
         FileUtils.copyDirectory(new File(sourceDirectory), new File(targetDirectory));
     }
 
