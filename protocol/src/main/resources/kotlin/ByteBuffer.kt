@@ -26,8 +26,8 @@ class ByteBuffer {
         }
     }
 
-    fun compatibleRead(beforereadIndex: Int, length: Int): Boolean {
-        return length != -1 && readOffset < length + beforereadIndex
+    fun compatibleRead(beforeReadIndex: Int, length: Int): Boolean {
+        return length != -1 && readOffset < length + beforeReadIndex
     }
 
     // -------------------------------------------------get/set-------------------------------------------------

@@ -32,8 +32,8 @@ public class ByteBuffer {
         }
     }
 
-    public boolean compatibleRead(int beforereadIndex, int length) {
-        return length != -1 && readOffset < length + beforereadIndex;
+    public boolean compatibleRead(int beforeReadIndex, int length) {
+        return length != -1 && readOffset < length + beforeReadIndex;
     }
 
     // -------------------------------------------------get/set-------------------------------------------------
