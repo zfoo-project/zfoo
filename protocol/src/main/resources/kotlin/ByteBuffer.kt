@@ -352,8 +352,8 @@ class ByteBuffer {
         return String(bytes, DEFAULT_CHARSET)
     }
 
-    fun writeBooleanArray(array: BooleanArray?) {
-        if (array == null || array.size == 0) {
+    fun writeBooleanArray(array: Array<Boolean>) {
+        if (array.size == 0) {
             writeInt(0)
         } else {
             writeInt(array.size)
@@ -364,9 +364,9 @@ class ByteBuffer {
         }
     }
 
-    fun readBooleanArray(): BooleanArray {
+    fun readBooleanArray(): Array<Boolean> {
         val size = readInt()
-        val array = BooleanArray(size)
+        val array = Array<Boolean>(size) { init -> false }
         if (size > 0) {
             for (index in 0 until size) {
                 array[index] = readBool()
@@ -375,8 +375,8 @@ class ByteBuffer {
         return array
     }
 
-    fun writeByteArray(array: ByteArray?) {
-        if (array == null || array.size == 0) {
+    fun writeByteArray(array: Array<Byte>) {
+        if (array.size == 0) {
             writeInt(0)
         } else {
             writeInt(array.size)
@@ -387,9 +387,9 @@ class ByteBuffer {
         }
     }
 
-    fun readByteArray(): ByteArray {
+    fun readByteArray(): Array<Byte> {
         val size = readInt()
-        val array = ByteArray(size)
+        val array = Array<Byte>(size) { init -> 0 }
         if (size > 0) {
             for (index in 0 until size) {
                 array[index] = readByte()
@@ -398,8 +398,8 @@ class ByteBuffer {
         return array
     }
 
-    fun writeShortArray(array: ShortArray?) {
-        if (array == null || array.size == 0) {
+    fun writeShortArray(array: Array<Short>) {
+        if (array.size == 0) {
             writeInt(0)
         } else {
             writeInt(array.size)
@@ -410,9 +410,9 @@ class ByteBuffer {
         }
     }
 
-    fun readShortArray(): ShortArray {
+    fun readShortArray(): Array<Short> {
         val size = readInt()
-        val array = ShortArray(size)
+        val array = Array<Short>(size) { init -> 0 }
         if (size > 0) {
             for (index in 0 until size) {
                 array[index] = readShort()
@@ -421,8 +421,8 @@ class ByteBuffer {
         return array
     }
 
-    fun writeIntArray(array: IntArray?) {
-        if (array == null || array.size == 0) {
+    fun writeIntArray(array: Array<Int>) {
+        if (array.size == 0) {
             writeInt(0)
         } else {
             writeInt(array.size)
@@ -433,9 +433,9 @@ class ByteBuffer {
         }
     }
 
-    fun readIntArray(): IntArray {
+    fun readIntArray(): Array<Int> {
         val size = readInt()
-        val array = IntArray(size)
+        val array = Array<Int>(size) { init -> 0 }
         if (size > 0) {
             for (index in 0 until size) {
                 array[index] = readInt()
@@ -444,8 +444,8 @@ class ByteBuffer {
         return array
     }
 
-    fun writeLongArray(array: LongArray?) {
-        if (array == null || array.size == 0) {
+    fun writeLongArray(array: Array<Long>) {
+        if (array.size == 0) {
             writeInt(0)
         } else {
             writeInt(array.size)
@@ -456,9 +456,9 @@ class ByteBuffer {
         }
     }
 
-    fun readLongArray(): LongArray {
+    fun readLongArray(): Array<Long> {
         val size = readInt()
-        val array = LongArray(size)
+        val array = Array<Long>(size) { init -> 0 }
         if (size > 0) {
             for (index in 0 until size) {
                 array[index] = readLong()
@@ -467,8 +467,8 @@ class ByteBuffer {
         return array
     }
 
-    fun writeFloatArray(array: FloatArray?) {
-        if (array == null || array.size == 0) {
+    fun writeFloatArray(array: Array<Float>) {
+        if (array.size == 0) {
             writeInt(0)
         } else {
             writeInt(array.size)
@@ -479,9 +479,9 @@ class ByteBuffer {
         }
     }
 
-    fun readFloatArray(): FloatArray {
+    fun readFloatArray(): Array<Float> {
         val size = readInt()
-        val array = FloatArray(size)
+        val array = Array<Float>(size) { init -> 0F }
         if (size > 0) {
             for (index in 0 until size) {
                 array[index] = readFloat()
@@ -490,8 +490,8 @@ class ByteBuffer {
         return array
     }
 
-    fun writeDoubleArray(array: DoubleArray?) {
-        if (array == null || array.size == 0) {
+    fun writeDoubleArray(array: Array<Double>) {
+        if (array.size == 0) {
             writeInt(0)
         } else {
             writeInt(array.size)
@@ -502,9 +502,9 @@ class ByteBuffer {
         }
     }
 
-    fun readDoubleArray(): DoubleArray {
+    fun readDoubleArray(): Array<Double> {
         val size = readInt()
-        val array = DoubleArray(size)
+        val array = Array<Double>(size) { init -> 0.0 }
         if (size > 0) {
             for (index in 0 until size) {
                 array[index] = readDouble()
@@ -513,8 +513,8 @@ class ByteBuffer {
         return array
     }
 
-    fun writeStringArray(array: Array<String?>?) {
-        if (array == null || array.size == 0) {
+    fun writeStringArray(array: Array<String>) {
+        if (array.size == 0) {
             writeInt(0)
         } else {
             writeInt(array.size)
@@ -525,9 +525,9 @@ class ByteBuffer {
         }
     }
 
-    fun readStringArray(): Array<String?> {
+    fun readStringArray(): Array<String> {
         val size = readInt()
-        val array = arrayOfNulls<String>(size)
+        val array = Array<String>(size) { init -> "" }
         if (size > 0) {
             for (index in 0 until size) {
                 array[index] = readString()
@@ -536,8 +536,8 @@ class ByteBuffer {
         return array
     }
 
-    fun writeBooleanList(list: List<Boolean>?) {
-        if (list == null || list.isEmpty()) {
+    fun writeBooleanList(list: List<Boolean>) {
+        if (list.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(list.size)
@@ -558,8 +558,8 @@ class ByteBuffer {
         return list
     }
 
-    fun writeByteList(list: List<Byte>?) {
-        if (list == null || list.isEmpty()) {
+    fun writeByteList(list: List<Byte>) {
+        if (list.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(list.size)
@@ -580,8 +580,8 @@ class ByteBuffer {
         return list
     }
 
-    fun writeShortList(list: List<Short>?) {
-        if (list == null || list.isEmpty()) {
+    fun writeShortList(list: List<Short>) {
+        if (list.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(list.size)
@@ -602,8 +602,8 @@ class ByteBuffer {
         return list
     }
 
-    fun writeIntList(list: List<Int>?) {
-        if (list == null || list.isEmpty()) {
+    fun writeIntList(list: List<Int>) {
+        if (list.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(list.size)
@@ -624,8 +624,8 @@ class ByteBuffer {
         return list
     }
 
-    fun writeLongList(list: List<Long>?) {
-        if (list == null || list.isEmpty()) {
+    fun writeLongList(list: List<Long>) {
+        if (list.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(list.size)
@@ -646,8 +646,8 @@ class ByteBuffer {
         return list
     }
 
-    fun writeFloatList(list: List<Float>?) {
-        if (list == null || list.isEmpty()) {
+    fun writeFloatList(list: List<Float>) {
+        if (list.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(list.size)
@@ -668,8 +668,8 @@ class ByteBuffer {
         return list
     }
 
-    fun writeDoubleList(list: List<Double>?) {
-        if (list == null || list.isEmpty()) {
+    fun writeDoubleList(list: List<Double>) {
+        if (list.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(list.size)
@@ -690,8 +690,8 @@ class ByteBuffer {
         return list
     }
 
-    fun writeStringList(list: List<String?>?) {
-        if (list == null || list.isEmpty()) {
+    fun writeStringList(list: List<String>) {
+        if (list.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(list.size)
@@ -712,8 +712,8 @@ class ByteBuffer {
         return list
     }
 
-    fun writePacketList(list: List<*>?, protocolId: Short) {
-        if (list == null || list.isEmpty()) {
+    fun writePacketList(list: List<*>, protocolId: Short) {
+        if (list.isEmpty()) {
             writeInt(0)
         } else {
             val protocolRegistration = ProtocolManager.getProtocol(protocolId)
@@ -724,7 +724,7 @@ class ByteBuffer {
         }
     }
 
-    fun <T> readPacketList(clazz: Class<T>?, protocolId: Short): List<T> {
+    fun <T> readPacketList(clazz: Class<T>, protocolId: Short): List<T> {
         val size = readInt()
         val list: MutableList<T> = ArrayList()
         if (size > 0) {
@@ -736,8 +736,8 @@ class ByteBuffer {
         return list
     }
 
-    fun writeBooleanSet(set: Set<Boolean>?) {
-        if (set == null || set.isEmpty()) {
+    fun writeBooleanSet(set: Set<Boolean>) {
+        if (set.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(set.size)
@@ -758,8 +758,8 @@ class ByteBuffer {
         return set
     }
 
-    fun writeShortSet(set: Set<Short>?) {
-        if (set == null || set.isEmpty()) {
+    fun writeShortSet(set: Set<Short>) {
+        if (set.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(set.size)
@@ -780,8 +780,8 @@ class ByteBuffer {
         return set
     }
 
-    fun writeIntSet(set: Set<Int>?) {
-        if (set == null || set.isEmpty()) {
+    fun writeIntSet(set: Set<Int>) {
+        if (set.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(set.size)
@@ -802,8 +802,8 @@ class ByteBuffer {
         return set
     }
 
-    fun writeLongSet(set: Set<Long>?) {
-        if (set == null || set.isEmpty()) {
+    fun writeLongSet(set: Set<Long>) {
+        if (set.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(set.size)
@@ -824,8 +824,8 @@ class ByteBuffer {
         return set
     }
 
-    fun writeFloatSet(set: Set<Float>?) {
-        if (set == null || set.isEmpty()) {
+    fun writeFloatSet(set: Set<Float>) {
+        if (set.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(set.size)
@@ -846,8 +846,8 @@ class ByteBuffer {
         return set
     }
 
-    fun writeDoubleSet(set: Set<Double>?) {
-        if (set == null || set.isEmpty()) {
+    fun writeDoubleSet(set: Set<Double>) {
+        if (set.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(set.size)
@@ -868,8 +868,8 @@ class ByteBuffer {
         return set
     }
 
-    fun writeStringSet(set: Set<String?>?) {
-        if (set == null || set.isEmpty()) {
+    fun writeStringSet(set: Set<String>) {
+        if (set.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(set.size)
@@ -890,8 +890,8 @@ class ByteBuffer {
         return set
     }
 
-    fun writePacketSet(set: Set<*>?, protocolId: Short) {
-        if (set == null || set.isEmpty()) {
+    fun writePacketSet(set: Set<*>, protocolId: Short) {
+        if (set.isEmpty()) {
             writeInt(0)
         } else {
             val protocolRegistration = ProtocolManager.getProtocol(protocolId)
@@ -902,7 +902,7 @@ class ByteBuffer {
         }
     }
 
-    fun <T> readPacketSet(clazz: Class<T>?, protocolId: Short): Set<T> {
+    fun <T> readPacketSet(clazz: Class<T>, protocolId: Short): Set<T> {
         val size = readInt()
         val set: MutableSet<T> = HashSet()
         if (size > 0) {
@@ -914,8 +914,8 @@ class ByteBuffer {
         return set
     }
 
-    fun writeIntIntMap(map: Map<Int, Int>?) {
-        if (map == null || map.isEmpty()) {
+    fun writeIntIntMap(map: Map<Int, Int>) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(map.size)
@@ -939,8 +939,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeIntLongMap(map: Map<Int, Long>?) {
-        if (map == null || map.isEmpty()) {
+    fun writeIntLongMap(map: Map<Int, Long>) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(map.size)
@@ -964,8 +964,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeIntStringMap(map: Map<Int, String?>?) {
-        if (map == null || map.isEmpty()) {
+    fun writeIntStringMap(map: Map<Int, String>) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(map.size)
@@ -989,8 +989,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeIntPacketMap(map: Map<Int, *>?, protocolId: Short) {
-        if (map == null || map.isEmpty()) {
+    fun writeIntPacketMap(map: Map<Int, *>, protocolId: Short) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             val protocolRegistration = ProtocolManager.getProtocol(protocolId)
@@ -1002,7 +1002,7 @@ class ByteBuffer {
         }
     }
 
-    fun <T> readIntPacketMap(clazz: Class<T>?, protocolId: Short): Map<Int, T> {
+    fun <T> readIntPacketMap(clazz: Class<T>, protocolId: Short): Map<Int, T> {
         val size = readInt()
         val map: MutableMap<Int, T> = HashMap()
         if (size > 0) {
@@ -1016,8 +1016,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeLongIntMap(map: Map<Long, Int>?) {
-        if (map == null || map.isEmpty()) {
+    fun writeLongIntMap(map: Map<Long, Int>) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(map.size)
@@ -1041,8 +1041,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeLongLongMap(map: Map<Long, Long>?) {
-        if (map == null || map.isEmpty()) {
+    fun writeLongLongMap(map: Map<Long, Long>) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(map.size)
@@ -1066,8 +1066,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeLongStringMap(map: Map<Long, String?>?) {
-        if (map == null || map.isEmpty()) {
+    fun writeLongStringMap(map: Map<Long, String>) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(map.size)
@@ -1091,8 +1091,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeLongPacketMap(map: Map<Long, *>?, protocolId: Short) {
-        if (map == null || map.isEmpty()) {
+    fun writeLongPacketMap(map: Map<Long, *>, protocolId: Short) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             val protocolRegistration = ProtocolManager.getProtocol(protocolId)
@@ -1104,7 +1104,7 @@ class ByteBuffer {
         }
     }
 
-    fun <T> readLongPacketMap(clazz: Class<T>?, protocolId: Short): Map<Long, T> {
+    fun <T> readLongPacketMap(clazz: Class<T>, protocolId: Short): Map<Long, T> {
         val size = readInt()
         val map: MutableMap<Long, T> = HashMap()
         if (size > 0) {
@@ -1118,8 +1118,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeStringIntMap(map: Map<String?, Int>?) {
-        if (map == null || map.isEmpty()) {
+    fun writeStringIntMap(map: Map<String, Int>) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(map.size)
@@ -1143,8 +1143,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeStringLongMap(map: Map<String?, Long>?) {
-        if (map == null || map.isEmpty()) {
+    fun writeStringLongMap(map: Map<String, Long>) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(map.size)
@@ -1168,8 +1168,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeStringStringMap(map: Map<String?, String?>?) {
-        if (map == null || map.isEmpty()) {
+    fun writeStringStringMap(map: Map<String, String>) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             writeInt(map.size)
@@ -1193,8 +1193,8 @@ class ByteBuffer {
         return map
     }
 
-    fun writeStringPacketMap(map: Map<String?, *>?, protocolId: Short) {
-        if (map == null || map.isEmpty()) {
+    fun writeStringPacketMap(map: Map<String, *>, protocolId: Short) {
+        if (map.isEmpty()) {
             writeInt(0)
         } else {
             val protocolRegistration = ProtocolManager.getProtocol(protocolId)
@@ -1206,7 +1206,7 @@ class ByteBuffer {
         }
     }
 
-    fun <T> readStringPacketMap(clazz: Class<T>?, protocolId: Short): Map<String, T> {
+    fun <T> readStringPacketMap(clazz: Class<T>, protocolId: Short): Map<String, T> {
         val size = readInt()
         val map: MutableMap<String, T> = HashMap()
         if (size > 0) {
