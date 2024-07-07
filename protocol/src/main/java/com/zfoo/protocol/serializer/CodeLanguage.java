@@ -22,6 +22,7 @@ import com.zfoo.protocol.serializer.javascript.CodeGenerateJavaScript;
 import com.zfoo.protocol.serializer.kotlin.CodeGenerateKotlin;
 import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
 import com.zfoo.protocol.serializer.python.CodeGeneratePython;
+import com.zfoo.protocol.serializer.scala.CodeGenerateScala;
 import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
 
 /**
@@ -34,11 +35,11 @@ public enum CodeLanguage {
      */
     Enhance(1, null),
 
-    Java(1<<1, CodeGenerateJava.class),
+    Java(1 << 1, CodeGenerateJava.class),
 
-    Kotlin(1<<2, CodeGenerateKotlin.class),
+    Kotlin(1 << 2, CodeGenerateKotlin.class),
 
-    Scala(1<<3, null),
+    Scala(1 << 3, CodeGenerateScala.class),
 
     Cpp(1 << 7, CodeGenerateCpp.class),
 
