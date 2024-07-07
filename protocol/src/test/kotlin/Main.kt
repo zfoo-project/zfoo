@@ -4,6 +4,7 @@ import com.zfoo.kotlin.ProtocolManager.Companion.initProtocol
 import com.zfoo.kotlin.ProtocolManager.Companion.read
 import com.zfoo.kotlin.ProtocolManager.Companion.write
 import java.io.*
+import java.nio.file.Files
 
 /**
  * @author godotg
@@ -148,8 +149,7 @@ fun assertArrayEquals(a: ByteArray?, b: ByteArray?) {
 // -----------------------------------------------------------------------------------------------------------------
 @Throws(IOException::class)
 fun compatibleTest() {
-    val bytes =
-        toByteArray(FileInputStream("C:\\github\\zfoo\\protocol\\src\\test\\resources\\complexObject.bytes"))
+    val bytes = Files.readAllBytes(File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\complexObject.bytes").toPath())
     val buffer = ByteBuffer()
     buffer.writeBytes(bytes)
 
@@ -172,18 +172,18 @@ fun compatibleTest() {
             notEqual++
         }
     }
-    println(format("equal [{}], not equal [{}]", equal, notEqual))
+    println("equal: " + equal)
+    println("not equal:" + notEqual)
 }
 
 
 @Throws(IOException::class)
 fun normalReadTest() {
-//    var bytes = toByteArray(FileInputStream("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes"));
-//    var bytes = toByteArray(FileInputStream("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes"));
-//    var bytes = toByteArray(FileInputStream ("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes"));
-    var bytes =
-        toByteArray(FileInputStream("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes"));
-//    val bytes = toByteArray(FileInputStream("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes"))
+//    var bytes = Files.readAllBytes(File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes").toPath())
+//    var bytes = Files.readAllBytes(File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes").toPath())
+//    var bytes = Files.readAllBytes(File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes").toPath())
+//    var bytes = Files.readAllBytes(File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes").toPath())
+    val bytes = Files.readAllBytes(File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes").toPath())
 
     val buffer = ByteBuffer()
     buffer.writeBytes(bytes)
@@ -195,72 +195,4 @@ fun normalReadTest() {
 
     println(packet)
     println(newPacket)
-}
-
-
-// -----------------------------------------------------------------------------------------------------------------
-@Throws(IOException::class)
-fun toByteArray(input: InputStream): ByteArray {
-    val output = ByteArrayOutputStream()
-    copy(input, output)
-    val bytes = output.toByteArray()
-    return bytes
-}
-
-const val EOF: Int = -1
-
-// The number of bytes in a byte
-const val ONE_BYTE: Int = 1
-
-// The number of bytes in a kilobyte
-const val BYTES_PER_KB: Int = ONE_BYTE * 1024
-
-// The number of bytes in a megabyte
-const val BYTES_PER_MB: Int = BYTES_PER_KB * 1024
-
-// The number of bytes in a gigabyte
-const val BYTES_PER_GB: Long = (BYTES_PER_MB * 1024).toLong()
-
-@Throws(IOException::class)
-fun copy(input: InputStream, output: OutputStream): Int {
-    val buffer = ByteArray(BYTES_PER_KB)
-    var count: Long = 0
-    var n: Int
-    while (EOF != (input.read(buffer).also { n = it })) {
-        output.write(buffer, 0, n)
-        count += n.toLong()
-    }
-
-    if (count > BYTES_PER_GB * 2L) {
-        return -1
-    }
-    return count.toInt()
-}
-
-fun format(template: String, vararg args: Any?): String {
-    // 初始化定义好的长度以获得更好的性能
-    val builder = StringBuilder(template.length + 50)
-
-    // 记录已经处理到的位置
-    var readIndex = 0
-    for (i in args.indices) {
-        // 占位符所在位置
-        val placeholderIndex = template.indexOf("{}", readIndex)
-        // 剩余部分无占位符
-        if (placeholderIndex == -1) {
-            // 不带占位符的模板直接返回
-            if (readIndex == 0) {
-                return template
-            }
-            break
-        }
-
-        builder.append(template, readIndex, placeholderIndex)
-        builder.append(args[i])
-        readIndex = placeholderIndex + 2
-    }
-
-    // 字符串模板剩余部分不再包含占位符，加入剩余部分后返回结果
-    builder.append(template, readIndex, template.length)
-    return builder.toString()
 }

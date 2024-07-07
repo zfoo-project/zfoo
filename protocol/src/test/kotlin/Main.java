@@ -2,6 +2,7 @@ import com.zfoo.java.ByteBuffer;
 import com.zfoo.java.ProtocolManager;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.List;
 
 /**
@@ -150,7 +151,7 @@ public class Main {
 
     // -----------------------------------------------------------------------------------------------------------------
     public static void compatibleTest() throws IOException {
-        var bytes = toByteArray(new FileInputStream("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\complexObject.bytes"));
+        var bytes = Files.readAllBytes(new File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\complexObject.bytes").toPath());
         var buffer = new ByteBuffer();
         buffer.writeBytes(bytes);
 
@@ -173,17 +174,18 @@ public class Main {
                 notEqual++;
             }
         }
-        System.out.println(format("equal [{}], not equal [{}]", equal, notEqual));
+        System.out.println("equal: " + equal);
+        System.out.println("not equal: " + notEqual);
     }
 
 
     public static void normalReadTest() throws IOException {
 
-//        var bytes = toByteArray(new FileInputStream("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes"));
-//        var bytes = toByteArray(new FileInputStream("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes"));
-//        var bytes = toByteArray(new FileInputStream("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes"));
-//        var bytes = toByteArray(new FileInputStream("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes"));
-        var bytes = toByteArray(new FileInputStream("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes"));
+//        var bytes = Files.readAllBytes(new File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes").toPath());
+//        var bytes = Files.readAllBytes(new File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes").toPath());
+//        var bytes = Files.readAllBytes(new File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes").toPath());
+//        var bytes = Files.readAllBytes(new File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes").toPath());
+        var bytes = Files.readAllBytes(new File("C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes").toPath());
 
         var buffer = new ByteBuffer();
         buffer.writeBytes(bytes);
@@ -193,63 +195,4 @@ public class Main {
     }
 
 
-    // -----------------------------------------------------------------------------------------------------------------
-    public static byte[] toByteArray(final InputStream input) throws IOException {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        copy(input, output);
-        var bytes = output.toByteArray();
-        return bytes;
-    }
-    public static final int EOF = -1;
-
-    // The number of bytes in a byte
-    public static final int ONE_BYTE = 1;
-    // The number of bytes in a kilobyte
-    public static final int BYTES_PER_KB = ONE_BYTE * 1024;
-    // The number of bytes in a megabyte
-    public static final int BYTES_PER_MB = BYTES_PER_KB * 1024;
-    // The number of bytes in a gigabyte
-    public static final long BYTES_PER_GB = BYTES_PER_MB * 1024;
-    public static int copy(final InputStream input, final OutputStream output) throws IOException {
-        byte[] buffer = new byte[BYTES_PER_KB];
-        long count = 0;
-        int n;
-        while (EOF != (n = input.read(buffer))) {
-            output.write(buffer, 0, n);
-            count += n;
-        }
-
-        if (count > BYTES_PER_GB * 2L) {
-            return -1;
-        }
-        return (int) count;
-    }
-
-    public static String format(final String template, final Object... args) {
-        // 初始化定义好的长度以获得更好的性能
-        var builder = new StringBuilder(template.length() + 50);
-
-        // 记录已经处理到的位置
-        var readIndex = 0;
-        for (int i = 0; i < args.length; i++) {
-            // 占位符所在位置
-            var placeholderIndex = template.indexOf("{}", readIndex);
-            // 剩余部分无占位符
-            if (placeholderIndex == -1) {
-                // 不带占位符的模板直接返回
-                if (readIndex == 0) {
-                    return template;
-                }
-                break;
-            }
-
-            builder.append(template, readIndex, placeholderIndex);
-            builder.append(args[i]);
-            readIndex = placeholderIndex + 2;
-        }
-
-        // 字符串模板剩余部分不再包含占位符，加入剩余部分后返回结果
-        builder.append(template, readIndex, template.length());
-        return builder.toString();
-    }
 }
