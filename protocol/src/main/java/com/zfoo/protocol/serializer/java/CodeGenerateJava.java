@@ -90,7 +90,7 @@ public class CodeGenerateJava implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = Protocols.registration{};", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = new Protocols.{}Registration();", protocol_id, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put(Protocols.{}.class, (short){});", protocol_name, protocol_id)).append(LS);
         }
 
@@ -109,7 +109,7 @@ public class CodeGenerateJava implements ICodeGenerate {
             // protocol
             protocol_class.append(protocol_class(registration)).append(LS);
             // registration
-            protocol_registration.append(protocol_registration(registration)).append(LS);
+            protocol_registration.append("public static " + protocol_registration(registration)).append(LS);
         }
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("java/ProtocolsTemplate.java");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
@@ -135,7 +135,7 @@ public class CodeGenerateJava implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("import {}.{}.{};", protocolPackage, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.registration{};", protocol_id, protocol_name, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.{}Registration;", protocol_id, protocol_name, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put({}.class, (short){});", protocol_name, protocol_id)).append(LS);
         }
 
@@ -155,9 +155,7 @@ public class CodeGenerateJava implements ICodeGenerate {
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_root_path, protocol_root_path
                     , CodeTemplatePlaceholder.protocol_imports, protocol_imports_fold(registration)
-                    , CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Java)
-                    , CodeTemplatePlaceholder.protocol_name, protocol_name
-                    , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class_fold(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
             var outputPath = StringUtils.format("{}/{}/{}.java", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
@@ -177,7 +175,7 @@ public class CodeGenerateJava implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.registration{};", protocol_id, protocol_name, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = new {}Registration();", protocol_id, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put({}.class, (short){});", protocol_name, protocol_id)).append(LS);
         }
 
@@ -196,9 +194,7 @@ public class CodeGenerateJava implements ICodeGenerate {
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_root_path, protocol_root_path
                     , CodeTemplatePlaceholder.protocol_imports, StringUtils.EMPTY
-                    , CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Java)
-                    , CodeTemplatePlaceholder.protocol_name, protocol_name
-                    , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
             var outputPath = StringUtils.format("{}/{}.java", protocolOutputPath, protocol_name);
@@ -224,6 +220,19 @@ public class CodeGenerateJava implements ICodeGenerate {
         }
     }
 
+    private String protocol_class_fold(ProtocolRegistration registration) {
+        var protocol_id = registration.protocolId();
+        var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("java/ProtocolClassFoldTemplate.java");
+        var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Java)
+                , CodeTemplatePlaceholder.protocol_name, protocol_name
+                , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
+                , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
+        ));
+        return formatProtocolTemplate;
+    }
+
     private String protocol_class(ProtocolRegistration registration) {
         var protocol_id = registration.protocolId();
         var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
@@ -233,7 +242,6 @@ public class CodeGenerateJava implements ICodeGenerate {
                 , CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
-                , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
         ));
         return formatProtocolTemplate;
     }

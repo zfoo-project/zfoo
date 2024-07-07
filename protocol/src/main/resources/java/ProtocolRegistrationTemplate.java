@@ -1,4 +1,4 @@
-public static final IProtocolRegistration registration${protocol_name} = new IProtocolRegistration() {
+class ${protocol_name}Registration implements IProtocolRegistration {
     @Override
     public short protocolId() {
         return ${protocol_id};
