@@ -1,4 +1,4 @@
-object Registration${protocol_name} extends IProtocolRegistration {
+object ${protocol_name}Registration extends IProtocolRegistration {
   override def protocolId: Short = ${protocol_id}
 
   override def write(buffer: ByteBuffer, packet: Any): Unit = {

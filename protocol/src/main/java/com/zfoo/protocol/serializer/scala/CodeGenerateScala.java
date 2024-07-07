@@ -90,7 +90,7 @@ public class CodeGenerateScala implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols({}) = Registration{}", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols({}) = {}Registration", protocol_id, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put(classOf[{}], {})", protocol_name, protocol_id)).append(LS);
         }
 
@@ -135,8 +135,8 @@ public class CodeGenerateScala implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("import {}.{}.{}", protocolPackage, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name)).append(LS);
-            protocol_imports.append(StringUtils.format("import {}.{}.Registration{}", protocolPackage, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols({}) = Registration{}", protocol_id, protocol_name)).append(LS);
+            protocol_imports.append(StringUtils.format("import {}.{}.{}Registration", protocolPackage, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols({}) = {}Registration", protocol_id, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put(classOf[{}], {})", protocol_name, protocol_id)).append(LS);
         }
 
@@ -178,7 +178,7 @@ public class CodeGenerateScala implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols({}) = Registration{}", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols({}) = {}Registration", protocol_id, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put(classOf[{}], {})", protocol_name, protocol_id)).append(LS);
         }
 
