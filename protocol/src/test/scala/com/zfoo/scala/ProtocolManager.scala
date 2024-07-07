@@ -1,6 +1,8 @@
 package com.zfoo.scala
 import com.zfoo.scala.packet.EmptyObject
 import com.zfoo.scala.packet.RegistrationEmptyObject
+import com.zfoo.scala.packet.VeryBigObject
+import com.zfoo.scala.packet.RegistrationVeryBigObject
 import com.zfoo.scala.packet.ComplexObject
 import com.zfoo.scala.packet.RegistrationComplexObject
 import com.zfoo.scala.packet.NormalObject
@@ -22,6 +24,8 @@ object ProtocolManager {
     // initProtocol
     protocols(0) = RegistrationEmptyObject
     protocolIdMap.put(classOf[EmptyObject], 0)
+    protocols(1) = RegistrationVeryBigObject
+    protocolIdMap.put(classOf[VeryBigObject], 1)
     protocols(100) = RegistrationComplexObject
     protocolIdMap.put(classOf[ComplexObject], 100)
     protocols(101) = RegistrationNormalObject
