@@ -40,6 +40,7 @@ public class GenerateTesting {
         generateLanguages.add(CodeLanguage.Cpp);
         generateLanguages.add(CodeLanguage.Java);
         generateLanguages.add(CodeLanguage.Kotlin);
+        generateLanguages.add(CodeLanguage.Scala);
         generateLanguages.add(CodeLanguage.Golang);
         generateLanguages.add(CodeLanguage.JavaScript);
         generateLanguages.add(CodeLanguage.EcmaScript);
@@ -51,7 +52,7 @@ public class GenerateTesting {
 
         // Initialize and then generate the protocol
         ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class), op);
-//        copyFiles();
+        // copyFiles();
     }
 
     @Test
