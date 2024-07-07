@@ -1,4 +1,4 @@
-class Registration${protocol_name} : IProtocolRegistration {
+class ${protocol_name}Registration : IProtocolRegistration {
     override fun protocolId(): Short {
         return ${protocol_id}
     }
