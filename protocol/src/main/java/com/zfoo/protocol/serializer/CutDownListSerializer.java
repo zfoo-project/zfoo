@@ -64,7 +64,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeBooleanList({});", objectStr)).append(LS);
                         break;
-                    case Kotlin:
+                    case Kotlin, Scala:
                         builder.append(StringUtils.format("buffer.writeBooleanList({})", objectStr)).append(LS);
                         break;
                     default:
@@ -91,7 +91,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeByteList({});", objectStr)).append(LS);
                         break;
-                    case Kotlin:
+                    case Kotlin, Scala:
                         builder.append(StringUtils.format("buffer.writeByteList({})", objectStr)).append(LS);
                         break;
 
@@ -119,7 +119,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeShortList({});", objectStr)).append(LS);
                         break;
-                    case Kotlin:
+                    case Kotlin, Scala:
                         builder.append(StringUtils.format("buffer.writeShortList({})", objectStr)).append(LS);
                         break;
                     default:
@@ -146,7 +146,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeIntList({});", objectStr)).append(LS);
                         break;
-                    case Kotlin:
+                    case Kotlin, Scala:
                         builder.append(StringUtils.format("buffer.writeIntList({})", objectStr)).append(LS);
                         break;
                     default:
@@ -173,7 +173,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeLongList({});", objectStr)).append(LS);
                         break;
-                    case Kotlin:
+                    case Kotlin, Scala:
                         builder.append(StringUtils.format("buffer.writeLongList({})", objectStr)).append(LS);
                         break;
                     default:
@@ -201,7 +201,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeFloatList({});", objectStr)).append(LS);
                         break;
-                    case Kotlin:
+                    case Kotlin, Scala:
                         builder.append(StringUtils.format("buffer.writeFloatList({})", objectStr)).append(LS);
                         break;
                     default:
@@ -229,7 +229,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeDoubleList({});", objectStr)).append(LS);
                         break;
-                    case Kotlin:
+                    case Kotlin, Scala:
                         builder.append(StringUtils.format("buffer.writeDoubleList({})", objectStr)).append(LS);
                         break;
                     default:
@@ -257,7 +257,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeStringList({});", objectStr)).append(LS);
                         break;
-                    case Kotlin:
+                    case Kotlin, Scala:
                         builder.append(StringUtils.format("buffer.writeStringList({})", objectStr)).append(LS);
                         break;
                     default:
@@ -287,7 +287,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         case Java:
                             builder.append(StringUtils.format("buffer.writePacketList({}, (short) {});", objectStr, protocolId)).append(LS);
                             break;
-                        case Kotlin:
+                        case Kotlin, Scala:
                             builder.append(StringUtils.format("buffer.writePacketList({}, {})", objectStr, protocolId)).append(LS);
                             break;
                         case Golang, Protobuf:
@@ -339,6 +339,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Kotlin:
                         builder.append(StringUtils.format("val {} = buffer.readBooleanList()", list)).append(LS);
                         break;
+                    case Scala:
+                        builder.append(StringUtils.format("val {} = buffer.readBooleanList", list)).append(LS);
+                        break;
                     case JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readBooleanList();", list)).append(LS);
                         break;
@@ -374,6 +377,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Kotlin:
                         builder.append(StringUtils.format("val {} = buffer.readByteList()", list)).append(LS);
+                        break;
+                    case Scala:
+                        builder.append(StringUtils.format("val {} = buffer.readByteList", list)).append(LS);
                         break;
                     case JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readByteList();", list)).append(LS);
@@ -411,6 +417,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Kotlin:
                         builder.append(StringUtils.format("val {} = buffer.readShortList()", list)).append(LS);
                         break;
+                    case Scala:
+                        builder.append(StringUtils.format("val {} = buffer.readShortList", list)).append(LS);
+                        break;
                     case JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readShortList();", list)).append(LS);
                         break;
@@ -446,6 +455,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Kotlin:
                         builder.append(StringUtils.format("val {} = buffer.readIntList()", list)).append(LS);
+                        break;
+                    case Scala:
+                        builder.append(StringUtils.format("val {} = buffer.readIntList", list)).append(LS);
                         break;
                     case JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readIntList();", list)).append(LS);
@@ -483,6 +495,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Kotlin:
                         builder.append(StringUtils.format("val {} = buffer.readLongList()", list)).append(LS);
                         break;
+                    case Scala:
+                        builder.append(StringUtils.format("val {} = buffer.readLongList", list)).append(LS);
+                        break;
                     case JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readLongList();", list)).append(LS);
                         break;
@@ -518,6 +533,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Kotlin:
                         builder.append(StringUtils.format("val {} = buffer.readFloatList()", list)).append(LS);
+                        break;
+                    case Scala:
+                        builder.append(StringUtils.format("val {} = buffer.readFloatList", list)).append(LS);
                         break;
                     case JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readFloatList();", list)).append(LS);
@@ -555,6 +573,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Kotlin:
                         builder.append(StringUtils.format("val {} = buffer.readDoubleList()", list)).append(LS);
                         break;
+                    case Scala:
+                        builder.append(StringUtils.format("val {} = buffer.readDoubleList", list)).append(LS);
+                        break;
                     case JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readDoubleList();", list)).append(LS);
                         break;
@@ -591,6 +612,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Kotlin:
                         builder.append(StringUtils.format("val {} = buffer.readStringList()", list)).append(LS);
                         break;
+                    case Scala:
+                        builder.append(StringUtils.format("val {} = buffer.readStringList", list)).append(LS);
+                        break;
                     case JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("const {} = buffer.readStringList();", list)).append(LS);
                         break;
@@ -626,6 +650,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             break;
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readPacketList({}::class.java, {})", list, protocolName, protocolId)).append(LS);
+                            break;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readPacketList(classOf[{}], {})", list, protocolName, protocolId)).append(LS);
                             break;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readPacketList({});", list, protocolId)).append(LS);

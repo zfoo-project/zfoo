@@ -56,7 +56,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeIntIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeIntIntMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -77,7 +77,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeIntLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeIntLongMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -98,7 +98,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeIntStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeIntStringMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -120,7 +120,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeIntPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case Lua:
@@ -146,7 +146,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeLongIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeLongIntMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -167,7 +167,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeLongLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeLongLongMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -188,7 +188,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeLongStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeLongStringMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -210,7 +210,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeLongPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case Lua:
@@ -236,7 +236,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeStringIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeStringIntMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -257,7 +257,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeStringLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeStringLongMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -278,7 +278,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeStringStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeStringStringMap({})", objectStr)).append(LS);
                             return true;
                         case Lua:
@@ -300,7 +300,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeStringPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             return true;
-                        case Kotlin, GdScript, Python:
+                        case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case Lua:
@@ -365,6 +365,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readIntIntMap()", map)).append(LS);
                             return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readIntIntMap", map)).append(LS);
+                            return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntIntMap();", map)).append(LS);
                             return map;
@@ -397,6 +400,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readIntLongMap()", map)).append(LS);
+                            return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readIntLongMap", map)).append(LS);
                             return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntLongMap();", map)).append(LS);
@@ -431,6 +437,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readIntStringMap()", map)).append(LS);
                             return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readIntStringMap", map)).append(LS);
+                            return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntStringMap();", map)).append(LS);
                             return map;
@@ -462,6 +471,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readIntPacketMap({}::class.java, {})", map, protocolName, protocolId)).append(LS);
+                            return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readIntPacketMap(classOf[{}], {})", map, protocolName, protocolId)).append(LS);
                             return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntPacketMap({});", map, protocolId)).append(LS);
@@ -500,6 +512,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readLongIntMap()", map)).append(LS);
                             return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readLongIntMap", map)).append(LS);
+                            return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongIntMap();", map)).append(LS);
                             return map;
@@ -532,6 +547,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readLongLongMap()", map)).append(LS);
+                            return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readLongLongMap", map)).append(LS);
                             return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongLongMap();", map)).append(LS);
@@ -566,6 +584,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readLongStringMap()", map)).append(LS);
                             return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readLongStringMap", map)).append(LS);
+                            return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongStringMap();", map)).append(LS);
                             return map;
@@ -597,6 +618,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readLongPacketMap({}::class.java, {})", map, protocolName, protocolId)).append(LS);
+                            return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readLongPacketMap(classOf[{}], {})", map, protocolName, protocolId)).append(LS);
                             return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongPacketMap({});", map, protocolId)).append(LS);
@@ -636,6 +660,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readStringIntMap()", map)).append(LS);
                             return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readStringIntMap", map)).append(LS);
+                            return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringIntMap();", map)).append(LS);
                             return map;
@@ -668,6 +695,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readStringLongMap()", map)).append(LS);
+                            return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readStringLongMap", map)).append(LS);
                             return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringLongMap();", map)).append(LS);
@@ -702,6 +732,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readStringStringMap()", map)).append(LS);
                             return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readStringStringMap", map)).append(LS);
+                            return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringStringMap();", map)).append(LS);
                             return map;
@@ -733,6 +766,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readStringPacketMap({}::class.java, {})", map, protocolName, protocolId)).append(LS);
+                            return map;
+                        case Scala:
+                            builder.append(StringUtils.format("val {} = buffer.readStringPacketMap(classOf[{}], {})", map, protocolName, protocolId)).append(LS);
                             return map;
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringPacketMap({});", map, protocolId)).append(LS);
