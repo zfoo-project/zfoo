@@ -30,7 +30,7 @@ class NormalObject {
   var outCompatibleValue2: Int = 0
 }
 
-object RegistrationNormalObject extends IProtocolRegistration {
+object NormalObjectRegistration extends IProtocolRegistration {
   override def protocolId: Short = 101
 
   override def write(buffer: ByteBuffer, packet: Any): Unit = {

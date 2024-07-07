@@ -8,7 +8,7 @@ class EmptyObject {
   
 }
 
-object RegistrationEmptyObject extends IProtocolRegistration {
+object EmptyObjectRegistration extends IProtocolRegistration {
   override def protocolId: Short = 0
 
   override def write(buffer: ByteBuffer, packet: Any): Unit = {

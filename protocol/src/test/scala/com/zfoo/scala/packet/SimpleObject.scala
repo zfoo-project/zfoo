@@ -9,7 +9,7 @@ class SimpleObject {
   var g: Boolean = false
 }
 
-object RegistrationSimpleObject extends IProtocolRegistration {
+object SimpleObjectRegistration extends IProtocolRegistration {
   override def protocolId: Short = 104
 
   override def write(buffer: ByteBuffer, packet: Any): Unit = {

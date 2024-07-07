@@ -3353,7 +3353,7 @@ class VeryBigObject {
   var ssss88: Set[String] = _
 }
 
-object RegistrationVeryBigObject extends IProtocolRegistration {
+object VeryBigObjectRegistration extends IProtocolRegistration {
   override def protocolId: Short = 1
 
   override def write(buffer: ByteBuffer, packet: Any): Unit = {

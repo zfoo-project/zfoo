@@ -62,7 +62,7 @@ class ComplexObject {
   var myObject: ObjectA = _
 }
 
-object RegistrationComplexObject extends IProtocolRegistration {
+object ComplexObjectRegistration extends IProtocolRegistration {
   override def protocolId: Short = 100
 
   override def write(buffer: ByteBuffer, packet: Any): Unit = {

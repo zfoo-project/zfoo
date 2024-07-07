@@ -12,7 +12,7 @@ class ObjectA {
   var innerCompatibleValue: Int = 0
 }
 
-object RegistrationObjectA extends IProtocolRegistration {
+object ObjectARegistration extends IProtocolRegistration {
   override def protocolId: Short = 102
 
   override def write(buffer: ByteBuffer, packet: Any): Unit = {
