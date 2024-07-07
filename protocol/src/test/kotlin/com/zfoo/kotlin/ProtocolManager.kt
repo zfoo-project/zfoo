@@ -1,10 +1,16 @@
 package com.zfoo.kotlin
 import com.zfoo.kotlin.packet.EmptyObject
+import com.zfoo.kotlin.packet.EmptyObjectRegistration
 import com.zfoo.kotlin.packet.ComplexObject
+import com.zfoo.kotlin.packet.ComplexObjectRegistration
 import com.zfoo.kotlin.packet.NormalObject
+import com.zfoo.kotlin.packet.NormalObjectRegistration
 import com.zfoo.kotlin.packet.ObjectA
+import com.zfoo.kotlin.packet.ObjectARegistration
 import com.zfoo.kotlin.packet.ObjectB
+import com.zfoo.kotlin.packet.ObjectBRegistration
 import com.zfoo.kotlin.packet.SimpleObject
+import com.zfoo.kotlin.packet.SimpleObjectRegistration
 class ProtocolManager {
     companion object {
         val protocols = arrayOfNulls<IProtocolRegistration>(Short.MAX_VALUE.toInt())
@@ -12,17 +18,17 @@ class ProtocolManager {
         @JvmStatic
         fun initProtocol() {
             // initProtocol
-            protocols[0] = EmptyObject.registrationEmptyObject
+            protocols[0] = EmptyObjectRegistration()
             protocolIdMap[EmptyObject::class.java] = 0.toShort()
-            protocols[100] = ComplexObject.registrationComplexObject
+            protocols[100] = ComplexObjectRegistration()
             protocolIdMap[ComplexObject::class.java] = 100.toShort()
-            protocols[101] = NormalObject.registrationNormalObject
+            protocols[101] = NormalObjectRegistration()
             protocolIdMap[NormalObject::class.java] = 101.toShort()
-            protocols[102] = ObjectA.registrationObjectA
+            protocols[102] = ObjectARegistration()
             protocolIdMap[ObjectA::class.java] = 102.toShort()
-            protocols[103] = ObjectB.registrationObjectB
+            protocols[103] = ObjectBRegistration()
             protocolIdMap[ObjectB::class.java] = 103.toShort()
-            protocols[104] = SimpleObject.registrationSimpleObject
+            protocols[104] = SimpleObjectRegistration()
             protocolIdMap[SimpleObject::class.java] = 104.toShort()
         }
 
