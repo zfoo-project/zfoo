@@ -92,7 +92,7 @@ public class CodeGenerateKotlin implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = registration{}", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = Registration{}()", protocol_id, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put({}::class.java, {})", protocol_name, protocol_id)).append(LS);
         }
 
@@ -111,7 +111,7 @@ public class CodeGenerateKotlin implements ICodeGenerate {
             // protocol
             protocol_class.append(protocol_class(registration)).append(LS);
             // registration
-            protocol_registration.append(protocol_registration_merger(registration)).append(LS);
+            protocol_registration.append(protocol_registration(registration)).append(LS);
         }
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolsTemplate.kt");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
@@ -137,7 +137,8 @@ public class CodeGenerateKotlin implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("import {}.{}.{}", protocolPackage, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.registration{}", protocol_id, protocol_name, protocol_name)).append(LS);
+            protocol_imports.append(StringUtils.format("import {}.{}.Registration{}", protocolPackage, GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = Registration{}()", protocol_id, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolIdMap[{}::class.java] = {}.toShort()", protocol_name, protocol_id)).append(LS);
         }
 
@@ -157,9 +158,7 @@ public class CodeGenerateKotlin implements ICodeGenerate {
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_root_path, protocol_root_path
                     , CodeTemplatePlaceholder.protocol_imports, protocol_imports_fold(registration)
-                    , CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Kotlin)
-                    , CodeTemplatePlaceholder.protocol_name, protocol_name
-                    , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
             var outputPath = StringUtils.format("{}/{}/{}.kt", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
@@ -179,7 +178,7 @@ public class CodeGenerateKotlin implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.registration{}", protocol_id, protocol_name, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = Registration{}()", protocol_id, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolIdMap[{}::class.java] = {}.toShort()", protocol_name, protocol_id)).append(LS);
         }
 
@@ -198,9 +197,7 @@ public class CodeGenerateKotlin implements ICodeGenerate {
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_root_path, protocol_root_path
                     , CodeTemplatePlaceholder.protocol_imports, StringUtils.EMPTY
-                    , CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Kotlin)
-                    , CodeTemplatePlaceholder.protocol_name, protocol_name
-                    , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
             var outputPath = StringUtils.format("{}/{}.kt", protocolOutputPath, protocol_name);
@@ -252,20 +249,6 @@ public class CodeGenerateKotlin implements ICodeGenerate {
         ));
         return formatProtocolTemplate;
     }
-
-    private String protocol_registration_merger(ProtocolRegistration registration) {
-        var protocol_id = registration.protocolId();
-        var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-        var protocolTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolRegistrationMergerTemplate.kt");
-        var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
-                CodeTemplatePlaceholder.protocol_name, protocol_name
-                , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
-                , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
-                , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
-        ));
-        return formatProtocolTemplate;
-    }
-
 
     private String protocol_imports_fold(ProtocolRegistration registration) {
         var protocolId = registration.getId();
