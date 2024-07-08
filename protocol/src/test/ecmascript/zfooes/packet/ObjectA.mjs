@@ -4,14 +4,14 @@ class ObjectA {
     m = new Map(); // Map<number, string>
     objectB = null; // ObjectB | null
     innerCompatibleValue = 0; // number
+}
 
-    static PROTOCOL_ID = 102;
-
+export class ObjectARegistration {
     protocolId() {
-        return ObjectA.PROTOCOL_ID;
+        return 102;
     }
 
-    static write(buffer, packet) {
+    write(buffer, packet) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -25,7 +25,7 @@ class ObjectA {
         buffer.adjustPadding(201, beforeWriteIndex);
     }
 
-    static read(buffer) {
+    read(buffer) {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
@@ -48,4 +48,5 @@ class ObjectA {
         return packet;
     }
 }
+
 export default ObjectA;

@@ -53,14 +53,14 @@ class ComplexObject {
     // 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
     myCompatible = 0; // number
     myObject = null; // ObjectA | null
+}
 
-    static PROTOCOL_ID = 100;
-
+export class ComplexObjectRegistration {
     protocolId() {
-        return ComplexObject.PROTOCOL_ID;
+        return 100;
     }
 
-    static write(buffer, packet) {
+    write(buffer, packet) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -234,7 +234,7 @@ class ComplexObject {
         buffer.adjustPadding(36962, beforeWriteIndex);
     }
 
-    static read(buffer) {
+    read(buffer) {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
@@ -464,4 +464,5 @@ class ComplexObject {
         return packet;
     }
 }
+
 export default ComplexObject;

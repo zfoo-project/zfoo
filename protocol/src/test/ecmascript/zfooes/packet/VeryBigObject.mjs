@@ -3344,14 +3344,14 @@ class VeryBigObject {
     mm88 = new Map(); // Map<number, ObjectA>
     s88 = new Set(); // Set<number>
     ssss88 = new Set(); // Set<string>
+}
 
-    static PROTOCOL_ID = 1;
-
+export class VeryBigObjectRegistration {
     protocolId() {
-        return VeryBigObject.PROTOCOL_ID;
+        return 1;
     }
 
-    static write(buffer, packet) {
+    write(buffer, packet) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -6703,7 +6703,7 @@ class VeryBigObject {
         buffer.writeStringSet(packet.ssss9);
     }
 
-    static read(buffer) {
+    read(buffer) {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
@@ -13404,4 +13404,5 @@ class VeryBigObject {
         return packet;
     }
 }
+
 export default VeryBigObject;

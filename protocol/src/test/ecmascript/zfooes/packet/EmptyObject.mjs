@@ -1,14 +1,14 @@
 
 class EmptyObject {
     
+}
 
-    static PROTOCOL_ID = 0;
-
+export class EmptyObjectRegistration {
     protocolId() {
-        return EmptyObject.PROTOCOL_ID;
+        return 0;
     }
 
-    static write(buffer, packet) {
+    write(buffer, packet) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -16,7 +16,7 @@ class EmptyObject {
         buffer.writeInt(-1);
     }
 
-    static read(buffer) {
+    read(buffer) {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
@@ -30,4 +30,5 @@ class EmptyObject {
         return packet;
     }
 }
+
 export default EmptyObject;

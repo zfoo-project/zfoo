@@ -2,14 +2,14 @@
 class ObjectB {
     flag = false; // boolean
     innerCompatibleValue = 0; // number
+}
 
-    static PROTOCOL_ID = 103;
-
+export class ObjectBRegistration {
     protocolId() {
-        return ObjectB.PROTOCOL_ID;
+        return 103;
     }
 
-    static write(buffer, packet) {
+    write(buffer, packet) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -21,7 +21,7 @@ class ObjectB {
         buffer.adjustPadding(4, beforeWriteIndex);
     }
 
-    static read(buffer) {
+    read(buffer) {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
@@ -40,4 +40,5 @@ class ObjectB {
         return packet;
     }
 }
+
 export default ObjectB;

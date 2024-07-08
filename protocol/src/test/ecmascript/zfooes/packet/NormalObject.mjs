@@ -1,8 +1,9 @@
-
+// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
 class NormalObject {
     a = 0; // number
     aaa = []; // Array<number>
     b = 0; // number
+    // 整数类型
     c = 0; // number
     d = 0; // number
     e = 0; // number
@@ -20,14 +21,14 @@ class NormalObject {
     ssss = new Set(); // Set<string>
     outCompatibleValue = 0; // number
     outCompatibleValue2 = 0; // number
+}
 
-    static PROTOCOL_ID = 101;
-
+export class NormalObjectRegistration {
     protocolId() {
-        return NormalObject.PROTOCOL_ID;
+        return 101;
     }
 
-    static write(buffer, packet) {
+    write(buffer, packet) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -57,7 +58,7 @@ class NormalObject {
         buffer.adjustPadding(857, beforeWriteIndex);
     }
 
-    static read(buffer) {
+    read(buffer) {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
@@ -114,4 +115,5 @@ class NormalObject {
         return packet;
     }
 }
+
 export default NormalObject;

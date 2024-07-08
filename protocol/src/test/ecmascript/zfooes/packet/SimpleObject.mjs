@@ -2,14 +2,14 @@
 class SimpleObject {
     c = 0; // number
     g = false; // boolean
+}
 
-    static PROTOCOL_ID = 104;
-
+export class SimpleObjectRegistration {
     protocolId() {
-        return SimpleObject.PROTOCOL_ID;
+        return 104;
     }
 
-    static write(buffer, packet) {
+    write(buffer, packet) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -19,7 +19,7 @@ class SimpleObject {
         buffer.writeBoolean(packet.g);
     }
 
-    static read(buffer) {
+    read(buffer) {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
@@ -36,4 +36,5 @@ class SimpleObject {
         return packet;
     }
 }
+
 export default SimpleObject;
