@@ -88,7 +88,8 @@ public class CodeGeneratePython implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = Protocols.{}", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = Protocols.{}Registration", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap[Protocols.{}] = {}", protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -99,14 +100,17 @@ public class CodeGeneratePython implements ICodeGenerate {
 
 
         var protocol_class = new StringBuilder();
+        var protocol_registration = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_class.append(formatProtocolTemplate(registration)).append(LS);
+            protocol_class.append(protocol_class(registration)).append(LS);
+            protocol_registration.append(protocol_registration(registration)).append(LS);
         }
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("python/ProtocolsTemplate.py");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
+                , CodeTemplatePlaceholder.protocol_registration, protocol_registration.toString()
         ));
         var outputPath = StringUtils.format("{}/Protocols.py", protocolOutputPath);
         var file = new File(outputPath);
@@ -127,7 +131,8 @@ public class CodeGeneratePython implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("from .{} import {}", GenerateProtocolPath.protocolPathPeriod(protocol_id), protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.{}", protocol_id, protocol_name, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.{}Registration", protocol_id, protocol_name, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap[{}.{}] = {}", protocol_name, protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -140,7 +145,12 @@ public class CodeGeneratePython implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var formatProtocolTemplate = formatProtocolTemplate(registration);
+            var protocolTemplate = ClassUtils.getFileFromClassPathToString("python/ProtocolTemplate.py");
+            var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                    CodeTemplatePlaceholder.protocol_name, protocol_name
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
+                    , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
+            ));
             var outputPath = StringUtils.format("{}/{}/{}.py", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
@@ -160,7 +170,8 @@ public class CodeGeneratePython implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("from . import {}", protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.{}", protocol_id, protocol_name, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.{}Registration", protocol_id, protocol_name, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap[{}.{}] = {}", protocol_name, protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -169,11 +180,15 @@ public class CodeGeneratePython implements ICodeGenerate {
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated Python protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
-
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var formatProtocolTemplate = formatProtocolTemplate(registration);
+            var protocolTemplate = ClassUtils.getFileFromClassPathToString("python/ProtocolTemplate.py");
+            var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                    CodeTemplatePlaceholder.protocol_name, protocol_name
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
+                    , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
+            ));
             var outputPath = StringUtils.format("{}/{}.py", protocolOutputPath, protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
@@ -191,21 +206,32 @@ public class CodeGeneratePython implements ICodeGenerate {
         }
     }
 
-    public String formatProtocolTemplate(ProtocolRegistration registration) {
+    public String protocol_class(ProtocolRegistration registration) {
         var protocol_id = registration.protocolId();
         var protocol_name = registration.getConstructor().getDeclaringClass().getSimpleName();
-        var protocolTemplate = ClassUtils.getFileFromClassPathToString("python/ProtocolTemplate.py");
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("python/ProtocolClassTemplate.py");
         var placeholderMap = Map.of(
                 CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Python)
                 , CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
+        );
+        return CodeTemplatePlaceholder.formatTemplate(protocolTemplate, placeholderMap);
+    }
+
+    public String protocol_registration(ProtocolRegistration registration) {
+        var protocol_id = registration.protocolId();
+        var protocol_name = registration.getConstructor().getDeclaringClass().getSimpleName();
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("python/ProtocolRegistrationTemplate.py");
+        var placeholderMap = Map.of(
+                CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.Python)
+                , CodeTemplatePlaceholder.protocol_name, protocol_name
+                , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
                 , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
         );
         return CodeTemplatePlaceholder.formatTemplate(protocolTemplate, placeholderMap);
     }
-
 
     private String protocol_field_definition(ProtocolRegistration registration) {
         var protocolId = registration.getId();

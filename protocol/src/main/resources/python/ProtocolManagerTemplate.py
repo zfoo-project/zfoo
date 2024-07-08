@@ -1,6 +1,7 @@
 ${protocol_imports}
 
 protocols = {}
+protocolIdMap = {}
 
 ${protocol_manager_registrations}
 
@@ -8,7 +9,7 @@ def getProtocol(protocolId):
 	return protocols[protocolId]
 
 def write(buffer, packet):
-	protocolId = packet.protocolId()
+	protocolId = protocolIdMap[type(packet)]
 	buffer.writeShort(protocolId)
 	protocol = protocols[protocolId]
 	protocol.write(buffer, packet)
