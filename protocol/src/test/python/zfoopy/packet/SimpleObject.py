@@ -2,8 +2,11 @@
 class SimpleObject:
     c = 0  # int
     g = False  # bool
+    pass
 
-    def protocolId(self):
+class SimpleObjectRegistration:
+    @classmethod
+    def protocolId(cls, self):
         return 104
 
     @classmethod

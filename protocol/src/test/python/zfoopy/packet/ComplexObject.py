@@ -53,8 +53,11 @@ class ComplexObject:
     # 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
     myCompatible = 0  # int
     myObject = None  # ObjectA
+    pass
 
-    def protocolId(self):
+class ComplexObjectRegistration:
+    @classmethod
+    def protocolId(cls, self):
         return 100
 
     @classmethod

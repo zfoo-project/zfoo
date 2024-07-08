@@ -2,8 +2,11 @@
 class ObjectB:
     flag = False  # bool
     innerCompatibleValue = 0  # int
+    pass
 
-    def protocolId(self):
+class ObjectBRegistration:
+    @classmethod
+    def protocolId(cls, self):
         return 103
 
     @classmethod

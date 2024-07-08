@@ -3344,8 +3344,11 @@ class VeryBigObject:
     mm88 = {}  # Dictionary<int, ObjectA>
     s88 = {}  # HashSet<int>
     ssss88 = {}  # HashSet<string>
+    pass
 
-    def protocolId(self):
+class VeryBigObjectRegistration:
+    @classmethod
+    def protocolId(cls, self):
         return 1
 
     @classmethod

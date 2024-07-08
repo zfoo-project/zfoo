@@ -1,8 +1,9 @@
-
+# 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
 class NormalObject:
     a = 0  # byte
     aaa = []  # byte[]
     b = 0  # short
+    # 整数类型
     c = 0  # int
     d = 0  # long
     e = 0.0  # float
@@ -20,8 +21,11 @@ class NormalObject:
     ssss = {}  # HashSet<string>
     outCompatibleValue = 0  # int
     outCompatibleValue2 = 0  # int
+    pass
 
-    def protocolId(self):
+class NormalObjectRegistration:
+    @classmethod
+    def protocolId(cls, self):
         return 101
 
     @classmethod

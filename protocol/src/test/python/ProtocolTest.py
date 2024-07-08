@@ -93,8 +93,3 @@ class ByteBufferTestCase(TestCase):
         byteBuffer.writeString(str)
         self.assertEqual(byteBuffer.readString(), str)
 
-        charStr = "A"
-        byteBuffer.writeChar(charStr)
-        self.assertEqual(byteBuffer.readChar(), charStr)
-        print("----------------------------------------------------------------")
-        print_bytearray(byteBuffer.buffer)

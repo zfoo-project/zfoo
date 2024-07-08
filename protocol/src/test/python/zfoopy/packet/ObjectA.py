@@ -4,8 +4,11 @@ class ObjectA:
     m = {}  # Dictionary<int, string>
     objectB = None  # ObjectB
     innerCompatibleValue = 0  # int
+    pass
 
-    def protocolId(self):
+class ObjectARegistration:
+    @classmethod
+    def protocolId(cls, self):
         return 102
 
     @classmethod

@@ -1,8 +1,11 @@
 
 class EmptyObject:
     
+    pass
 
-    def protocolId(self):
+class EmptyObjectRegistration:
+    @classmethod
+    def protocolId(cls, self):
         return 0
 
     @classmethod
