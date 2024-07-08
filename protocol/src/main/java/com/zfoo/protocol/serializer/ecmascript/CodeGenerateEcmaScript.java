@@ -83,11 +83,12 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolManagerTemplate.mjs");
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
-        protocol_imports.append("import Protocols from './Protocols.mjs';").append(LS);
+        protocol_imports.append("import * as Protocols from './Protocols.mjs';").append(LS);
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, Protocols.{});", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, new Protocols.{}Registration());", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.set(Protocols.{}, {});", protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -103,8 +104,8 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             // protocol
-            protocol_class.append(formatProtocolClassTemplate(registration)).append(LS);
-            protocol_registration.append(StringUtils.format("Protocols.{} = {}", protocol_name, protocol_name)).append(LS);
+            protocol_class.append(protocol_class(registration).replace("class ", "export class ")).append(LS);
+            protocol_registration.append(protocol_registration(registration)).append(LS);
         }
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolsTemplate.mjs");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
@@ -129,8 +130,11 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         for (var protocol : registrations) {
             var protocol_id = protocol.protocolId();
             var protocol_name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
+
             protocol_imports.append(StringUtils.format("import {} from './{}/{}.mjs';", protocol_name, GenerateProtocolPath.protocolPathSlash(protocol.protocolId()), protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, {});", protocol_id, protocol_name)).append(LS);
+            protocol_imports.append(StringUtils.format("import { {}Registration } from './{}/{}.mjs';", protocol_name, GenerateProtocolPath.protocolPathSlash(protocol.protocolId()), protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, new {}Registration());", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.set({}, {});", protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -143,7 +147,12 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var formatProtocolTemplate = formatProtocolTemplate(registration);
+            var protocolTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolTemplate.mjs");
+            var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                    CodeTemplatePlaceholder.protocol_name, protocol_name
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
+                    , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
+            ));
             var outputPath = StringUtils.format("{}/{}/{}.mjs", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
@@ -155,16 +164,17 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
     public void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createTemplateFile();
 
-
         // 生成ProtocolManager.mjs文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolManagerTemplate.mjs");
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
-        for (var protocol : registrations) {
-            var protocol_id = protocol.protocolId();
-            var protocol_name = protocol.protocolConstructor().getDeclaringClass().getSimpleName();
+        for (var registration : registrations) {
+            var protocol_id = registration.protocolId();
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("import {} from './{}.mjs';", protocol_name, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, {});", protocol_id, protocol_name)).append(LS);
+            protocol_imports.append(StringUtils.format("import { {}Registration } from './{}.mjs';", protocol_name, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, new {}Registration());", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.set({}, {});", protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -177,8 +187,13 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var formatProtocolTemplate = formatProtocolTemplate(registration);
-            var outputPath = StringUtils.format("{}/{}.mjs", protocolOutputPath, protocol_name, protocol_name);
+            var protocolTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolTemplate.mjs");
+            var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                    CodeTemplatePlaceholder.protocol_name, protocol_name
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
+                    , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
+            ));
+            var outputPath = StringUtils.format("{}/{}.mjs", protocolOutputPath, protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated EcmaScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
@@ -195,22 +210,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         }
     }
 
-    public String formatProtocolTemplate(ProtocolRegistration registration) {
-        var protocol_id = registration.protocolId();
-        var protocol_name = registration.getConstructor().getDeclaringClass().getSimpleName();
-        var protocolTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolTemplate.mjs");
-        var placeholderMap = Map.of(
-                CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.EcmaScript)
-                , CodeTemplatePlaceholder.protocol_name, protocol_name
-                , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
-                , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
-                , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
-                , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
-        );
-        return CodeTemplatePlaceholder.formatTemplate(protocolTemplate, placeholderMap);
-    }
-
-    public String formatProtocolClassTemplate(ProtocolRegistration registration) {
+    public String protocol_class(ProtocolRegistration registration) {
         var protocol_id = registration.protocolId();
         var protocol_name = registration.getConstructor().getDeclaringClass().getSimpleName();
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolClassTemplate.mjs");
@@ -219,6 +219,18 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
                 , CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
+        );
+        return CodeTemplatePlaceholder.formatTemplate(protocolTemplate, placeholderMap);
+    }
+
+    public String protocol_registration(ProtocolRegistration registration) {
+        var protocol_id = registration.protocolId();
+        var protocol_name = registration.getConstructor().getDeclaringClass().getSimpleName();
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("ecmascript/ProtocolRegistrationTemplate.mjs");
+        var placeholderMap = Map.of(
+                CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.EcmaScript)
+                , CodeTemplatePlaceholder.protocol_name, protocol_name
+                , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
                 , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
         );
