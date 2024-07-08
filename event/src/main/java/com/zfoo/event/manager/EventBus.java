@@ -43,7 +43,8 @@ public abstract class EventBus {
     private static final Logger logger = LoggerFactory.getLogger(EventBus.class);
 
     /**
-     * EN: The size of the thread pool. Event's thread pool is often used to do time-consuming operations, so set it a little bigger
+     * EN: The size of the thread pool. Event's thread pool is often used to do
+     * time-consuming operations, so set it a little bigger
      * CN: 线程池的大小. event的线程池经常用来做一些耗时的操作，所以要设置大一点
      */
     private static final int EXECUTORS_SIZE = Math.max(Runtime.getRuntime().availableProcessors(), 4) * 2 + 1;
@@ -62,7 +63,8 @@ public abstract class EventBus {
     /**
      * event noReceiver handler
      */
-    public static Consumer<IEvent> noReceiverFunction = event -> {};
+    public static Consumer<IEvent> noReceiverFunction = event -> {
+    };
 
     static {
         for (int i = 0; i < executors.length; i++) {
@@ -115,7 +117,46 @@ public abstract class EventBus {
             switch (receiver.bus()) {
                 case CurrentThread -> doReceiver(receiver, event);
                 case AsyncThread -> asyncExecute(event.executorHash(), () -> doReceiver(receiver, event));
-//                case VirtualThread -> Thread.ofVirtual().name("virtual-on" + clazz.getSimpleName()).start(() -> doReceiver(receiver, event));
+                // case VirtualThread -> Thread.ofVirtual().name("virtual-on" +
+                // clazz.getSimpleName()).start(() -> doReceiver(receiver, event));
+            }
+        }
+    }
+
+    /**
+     * Publish the event with before and after callbacks
+     *
+     * @param event  Event object
+     * @param before The Runnable function after the event is published and before
+     *               the event is processed
+     * @param after  The Runnable function after the event is processed
+     */
+    public static void post(IEvent event, Runnable before, Runnable after) {
+        if (event == null) {
+            return;
+        }
+        var clazz = event.getClass();
+        var receivers = receiverMap.get(clazz);
+        if (CollectionUtils.isEmpty(receivers)) {
+            noReceiverFunction.accept(event);
+            return;
+        }
+        for (var receiver : receivers) {
+            switch (receiver.bus()) {
+                case CurrentThread:
+                    before.run();
+                    doReceiver(receiver, event);
+                    after.run();
+                    break;
+                case AsyncThread:
+                    asyncExecute(event.executorHash(), () -> {
+                        before.run();
+                        doReceiver(receiver, event);
+                        after.run();
+                    });
+                    break;
+                // case VirtualThread -> Thread.ofVirtual().name("virtual-on" +
+                // clazz.getSimpleName()).start(() -> doReceiver(receiver, event));
             }
         }
     }
@@ -125,7 +166,8 @@ public abstract class EventBus {
             receiver.invoke(event);
         } catch (Throwable t) {
             if (exceptionFunction == null) {
-                logger.error("bean:[{}] event:[{}] unhandled exception", receiver.getBean().getClass().getSimpleName(), event.getClass().getSimpleName(), t);
+                logger.error("bean:[{}] event:[{}] unhandled exception", receiver.getBean().getClass().getSimpleName(),
+                        event.getClass().getSimpleName(), t);
             } else {
                 exceptionFunction.accept(receiver, event, t);
             }
@@ -144,7 +186,7 @@ public abstract class EventBus {
         executorOf(hash).execute(ThreadUtils.safeRunnable(runnable));
     }
 
-    public static ExecutorService executorOf(int hash){
+    public static ExecutorService executorOf(int hash) {
         return executors[Math.abs(hash % EXECUTORS_SIZE)];
     }
 
@@ -156,5 +198,3 @@ public abstract class EventBus {
     }
 
 }
-
-

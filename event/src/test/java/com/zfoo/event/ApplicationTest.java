@@ -32,6 +32,9 @@ public class ApplicationTest {
         // see receiver method of MyController1 and MyController2
         EventBus.post(MyNoticeEvent.valueOf("我的事件"));
 
+        EventBus.post(MyNoticeEvent.valueOf("我的事件"), () -> System.out.println("事件执行前"),
+                () -> System.out.println("事件执行后"));
+
         ThreadUtils.sleep(1000);
     }
 
