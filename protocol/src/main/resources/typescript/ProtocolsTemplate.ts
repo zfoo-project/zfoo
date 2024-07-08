@@ -2,8 +2,4 @@ ${protocol_imports}
 
 ${protocol_class}
 
-class Protocols {
-    ${protocol_registration}
-}
-
-export default Protocols;
+${protocol_registration}

@@ -86,11 +86,12 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolManagerTemplate.ts");
         var protocol_imports_manager = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
-        protocol_imports_manager.append("import Protocols from './Protocols';").append(LS);
+        protocol_imports_manager.append("import * as Protocols from './Protocols';").append(LS);
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, Protocols.{});", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, new Protocols.{}Registration());", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.set(Protocols.{}, {});", protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports_manager.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -102,28 +103,18 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
 
         var protocol_imports_protocols = new StringBuilder();
         protocol_imports_protocols.append("import IByteBuffer from './IByteBuffer';").append(LS);
+        protocol_imports_protocols.append("import IProtocolRegistration from './IProtocolRegistration';").append(LS);
         var protocol_class = new StringBuilder();
         var protocol_registration = new StringBuilder();
         for (var registration : registrations) {
-            var protocol_id = registration.protocolId();
-            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolClassTemplate.ts");
-            var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
-                    CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
-                    , CodeTemplatePlaceholder.protocol_name, protocol_name
-                    , CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.TypeScript)
-                    , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
-                    , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
-                    , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
-            ));
-            protocol_class.append(formatProtocolTemplate).append(LS);
-            protocol_registration.append(StringUtils.format("static {} = {}", protocol_name, protocol_name)).append(LS);
+            protocol_class.append(protocol_class(registration).replace("class ", "export class ")).append(LS);
+            protocol_registration.append(protocol_registration(registration)).append(LS);
         }
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolsTemplate.ts");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_imports, protocol_imports_protocols.toString()
-                ,CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
-                ,     CodeTemplatePlaceholder.protocol_registration, protocol_registration.toString()
+                , CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
+                , CodeTemplatePlaceholder.protocol_registration, protocol_registration.toString()
         ));
         var outputPath = StringUtils.format("{}/Protocols.ts", protocolOutputPath);
         var file = new File(outputPath);
@@ -144,7 +135,9 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("import {} from './{}/{}';", protocol_name, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, {});", protocol_id, protocol_name)).append(LS);
+            protocol_imports.append(StringUtils.format("import { {}Registration } from './{}/{}';", protocol_name, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, new {}Registration());", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.set({}, {});", protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -161,11 +154,9 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                     , CodeTemplatePlaceholder.protocol_name, protocol_name
-                    , CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.TypeScript)
                     , CodeTemplatePlaceholder.protocol_imports, protocol_imports_fold(registration)
-                    , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
-                    , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
-                    , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
+                    , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
             var outputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
@@ -187,7 +178,9 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             protocol_imports.append(StringUtils.format("import {} from './{}';", protocol_name, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, {});", protocol_id, protocol_name)).append(LS);
+            protocol_imports.append(StringUtils.format("import { {}Registration } from './{}';", protocol_name, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, new {}Registration());", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.set({}, {});", protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
@@ -202,13 +195,10 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolTemplate.ts");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
-                    CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
-                    , CodeTemplatePlaceholder.protocol_name, protocol_name
-                    , CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.TypeScript)
+                    CodeTemplatePlaceholder.protocol_name, protocol_name
                     , CodeTemplatePlaceholder.protocol_imports, protocol_imports_default(registration)
-                    , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
-                    , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
-                    , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
+                    , CodeTemplatePlaceholder.protocol_registration,  protocol_registration(registration)
             ));
             var outputPath = StringUtils.format("{}/{}.ts", protocolOutputPath, protocol_name);
             var file = new File(outputPath);
@@ -218,12 +208,39 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
     }
 
     private void createTemplateFile() throws IOException {
-        var list = List.of("typescript/IByteBuffer.ts", "typescript/buffer/ByteBuffer.ts", "typescript/buffer/Long.ts", "typescript/buffer/Longbits.ts");
+        var list = List.of("typescript/IProtocolRegistration.ts", "typescript/IByteBuffer.ts", "typescript/buffer/ByteBuffer.ts"
+                , "typescript/buffer/Long.ts", "typescript/buffer/Longbits.ts");
         for (var fileName : list) {
             var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
             var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "typescript/")));
             FileUtils.writeInputStreamToFile(createFile, fileInputStream);
         }
+    }
+
+    private String protocol_class(ProtocolRegistration registration) {
+        var protocol_id = registration.protocolId();
+        var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolClassTemplate.ts");
+        var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                CodeTemplatePlaceholder.protocol_note, GenerateProtocolNote.protocol_note(protocol_id, CodeLanguage.TypeScript)
+                , CodeTemplatePlaceholder.protocol_name, protocol_name
+                , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
+                , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
+        ));
+        return formatProtocolTemplate;
+    }
+
+    private String protocol_registration(ProtocolRegistration registration) {
+        var protocol_id = registration.protocolId();
+        var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolRegistrationTemplate.ts");
+        var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                CodeTemplatePlaceholder.protocol_name, protocol_name
+                , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
+                , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
+                , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
+        ));
+        return formatProtocolTemplate;
     }
 
     private String protocol_imports_fold(ProtocolRegistration registration) {
@@ -233,6 +250,7 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         var protocolPath = GenerateProtocolPath.protocolPathPeriod(protocolId);
         var splits = protocolPath.split(StringUtils.PERIOD_REGEX);
         importBuilder.append(StringUtils.format("import IByteBuffer from '{}IByteBuffer';", "../".repeat(splits.length))).append(LS);
+        importBuilder.append(StringUtils.format("import IProtocolRegistration from '{}IProtocolRegistration';", "../".repeat(splits.length))).append(LS);
 
         var subProtocols = ProtocolAnalysis.getFirstSubProtocolIds(protocolId);
         // import other sub protocols
@@ -249,6 +267,7 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         var protocolId = registration.getId();
         var importBuilder = new StringBuilder();
         importBuilder.append(StringUtils.format("import IByteBuffer from './IByteBuffer';")).append(LS);
+        importBuilder.append(StringUtils.format("import IProtocolRegistration from './IProtocolRegistration';")).append(LS);
 
         // import other sub protocols
         var subProtocols = ProtocolAnalysis.getFirstSubProtocolIds(protocolId);
