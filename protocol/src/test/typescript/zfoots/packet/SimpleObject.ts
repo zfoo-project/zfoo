@@ -1,16 +1,18 @@
 import IByteBuffer from '../IByteBuffer';
+import IProtocolRegistration from '../IProtocolRegistration';
+
 
 class SimpleObject {
     c: number = 0;
     g: boolean = false;
+}
 
-    static PROTOCOL_ID: number = 104;
-
+export class SimpleObjectRegistration implements IProtocolRegistration<SimpleObject> {
     protocolId(): number {
-        return SimpleObject.PROTOCOL_ID;
+        return 104;
     }
 
-    static write(buffer: IByteBuffer, packet: SimpleObject | null) {
+    write(buffer: IByteBuffer, packet: SimpleObject | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -20,7 +22,7 @@ class SimpleObject {
         buffer.writeBoolean(packet.g);
     }
 
-    static read(buffer: IByteBuffer): SimpleObject | null {
+    read(buffer: IByteBuffer): SimpleObject | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;

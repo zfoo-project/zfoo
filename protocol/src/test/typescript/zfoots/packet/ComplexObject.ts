@@ -1,5 +1,7 @@
 import IByteBuffer from '../IByteBuffer';
+import IProtocolRegistration from '../IProtocolRegistration';
 import ObjectA from './ObjectA';
+
 // 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
 class ComplexObject {
     // byte类型，最简单的整形
@@ -55,14 +57,14 @@ class ComplexObject {
     // 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
     myCompatible: number = 0;
     myObject: ObjectA | null = null;
+}
 
-    static PROTOCOL_ID: number = 100;
-
+export class ComplexObjectRegistration implements IProtocolRegistration<ComplexObject> {
     protocolId(): number {
-        return ComplexObject.PROTOCOL_ID;
+        return 100;
     }
 
-    static write(buffer: IByteBuffer, packet: ComplexObject | null) {
+    write(buffer: IByteBuffer, packet: ComplexObject | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -236,7 +238,7 @@ class ComplexObject {
         buffer.adjustPadding(36962, beforeWriteIndex);
     }
 
-    static read(buffer: IByteBuffer): ComplexObject | null {
+    read(buffer: IByteBuffer): ComplexObject | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;

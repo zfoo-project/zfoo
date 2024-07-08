@@ -1,15 +1,17 @@
 import IByteBuffer from '../IByteBuffer';
+import IProtocolRegistration from '../IProtocolRegistration';
+
 
 class EmptyObject {
     
+}
 
-    static PROTOCOL_ID: number = 0;
-
+export class EmptyObjectRegistration implements IProtocolRegistration<EmptyObject> {
     protocolId(): number {
-        return EmptyObject.PROTOCOL_ID;
+        return 0;
     }
 
-    static write(buffer: IByteBuffer, packet: EmptyObject | null) {
+    write(buffer: IByteBuffer, packet: EmptyObject | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -17,7 +19,7 @@ class EmptyObject {
         buffer.writeInt(-1);
     }
 
-    static read(buffer: IByteBuffer): EmptyObject | null {
+    read(buffer: IByteBuffer): EmptyObject | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;

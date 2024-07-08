@@ -1,19 +1,21 @@
 import IByteBuffer from '../IByteBuffer';
+import IProtocolRegistration from '../IProtocolRegistration';
 import ObjectB from './ObjectB';
+
 
 class ObjectA {
     a: number = 0;
     m: Map<number, string> = new Map();
     objectB: ObjectB | null = null;
     innerCompatibleValue: number = 0;
+}
 
-    static PROTOCOL_ID: number = 102;
-
+export class ObjectARegistration implements IProtocolRegistration<ObjectA> {
     protocolId(): number {
-        return ObjectA.PROTOCOL_ID;
+        return 102;
     }
 
-    static write(buffer: IByteBuffer, packet: ObjectA | null) {
+    write(buffer: IByteBuffer, packet: ObjectA | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -27,7 +29,7 @@ class ObjectA {
         buffer.adjustPadding(201, beforeWriteIndex);
     }
 
-    static read(buffer: IByteBuffer): ObjectA | null {
+    read(buffer: IByteBuffer): ObjectA | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;

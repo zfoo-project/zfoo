@@ -1,5 +1,7 @@
 import IByteBuffer from '../IByteBuffer';
+import IProtocolRegistration from '../IProtocolRegistration';
 import ObjectA from './ObjectA';
+
 
 class VeryBigObject {
     a1: number = 0;
@@ -3346,14 +3348,14 @@ class VeryBigObject {
     mm88: Map<number, ObjectA> = new Map();
     s88: Set<number> = new Set();
     ssss88: Set<string> = new Set();
+}
 
-    static PROTOCOL_ID: number = 1;
-
+export class VeryBigObjectRegistration implements IProtocolRegistration<VeryBigObject> {
     protocolId(): number {
-        return VeryBigObject.PROTOCOL_ID;
+        return 1;
     }
 
-    static write(buffer: IByteBuffer, packet: VeryBigObject | null) {
+    write(buffer: IByteBuffer, packet: VeryBigObject | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -6705,7 +6707,7 @@ class VeryBigObject {
         buffer.writeStringSet(packet.ssss9);
     }
 
-    static read(buffer: IByteBuffer): VeryBigObject | null {
+    read(buffer: IByteBuffer): VeryBigObject | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;

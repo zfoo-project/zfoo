@@ -1,10 +1,13 @@
 import IByteBuffer from '../IByteBuffer';
+import IProtocolRegistration from '../IProtocolRegistration';
 import ObjectA from './ObjectA';
 
+// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
 class NormalObject {
     a: number = 0;
     aaa: Array<number> = [];
     b: number = 0;
+    // 整数类型
     c: number = 0;
     d: number = 0;
     e: number = 0;
@@ -22,14 +25,14 @@ class NormalObject {
     ssss: Set<string> = new Set();
     outCompatibleValue: number = 0;
     outCompatibleValue2: number = 0;
+}
 
-    static PROTOCOL_ID: number = 101;
-
+export class NormalObjectRegistration implements IProtocolRegistration<NormalObject> {
     protocolId(): number {
-        return NormalObject.PROTOCOL_ID;
+        return 101;
     }
 
-    static write(buffer: IByteBuffer, packet: NormalObject | null) {
+    write(buffer: IByteBuffer, packet: NormalObject | null) {
         if (packet === null) {
             buffer.writeInt(0);
             return;
@@ -59,7 +62,7 @@ class NormalObject {
         buffer.adjustPadding(857, beforeWriteIndex);
     }
 
-    static read(buffer: IByteBuffer): NormalObject | null {
+    read(buffer: IByteBuffer): NormalObject | null {
         const length = buffer.readInt();
         if (length === 0) {
             return null;
