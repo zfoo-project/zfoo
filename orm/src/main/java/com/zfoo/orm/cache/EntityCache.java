@@ -188,10 +188,10 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     var pnodeThread = ThreadUtils.findThread(pnodeThreadId);
                     // 有并发写风险，第一次更新文档的线程和第2次更新更新文档的线程不相等
                     if (pnodeThread == null) {
-                        logger.warn("[{}][id:{}] concurrent write warning, first update [threadId:{}], second update [threadId:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId);
+                        logger.warn("orm concurrent write warning", new RunException("[{}][id:{}] first update [threadId:{}], second update [threadId:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId));
                     } else {
-                        logger.warn("[{}][id:{}] concurrent write warning, first update [threadId:{}][threadName:{}], second update [threadId:{}][threadName:{}]"
-                                , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, pnodeThread.getName(), currentThreadId, Thread.currentThread().getName());
+                        logger.warn("orm concurrent write warning", new RunException("[{}][id:{}] first update [threadId:{}][threadName:{}], second update [threadId:{}][threadName:{}]"
+                                , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, pnodeThread.getName(), currentThreadId, Thread.currentThread().getName()));
                     }
                 }
             }
