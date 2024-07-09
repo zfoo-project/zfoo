@@ -30,6 +30,7 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.AssertionUtils;
+import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.GraalVmUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.scheduler.manager.SchedulerBus;
@@ -186,12 +187,17 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     cachePnode.setThreadId(currentThreadId);
                 } else {
                     var pnodeThread = ThreadUtils.findThread(pnodeThreadId);
+                    var builder = new StringBuilder();
+                    for(var stack : Thread.currentThread().getStackTrace()) {
+                        builder.append(FileUtils.LS).append(stack);
+                    }
                     // 有并发写风险，第一次更新文档的线程和第2次更新更新文档的线程不相等
                     if (pnodeThread == null) {
-                        logger.warn("orm concurrent write warning", new RunException("[{}][id:{}] first update [threadId:{}], second update [threadId:{}]", entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId));
+                        logger.warn("[{}][id:{}] concurrent write warning, first update [threadId:{}], second update [threadId:{}], current stack trace as following:{}"
+                                , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId, builder);
                     } else {
-                        logger.warn("orm concurrent write warning", new RunException("[{}][id:{}] first update [threadId:{}][threadName:{}], second update [threadId:{}][threadName:{}]"
-                                , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, pnodeThread.getName(), currentThreadId, Thread.currentThread().getName()));
+                        logger.warn("[{}][id:{}] concurrent write warning, first update [threadId:{}][threadName:{}], second update [threadId:{}][threadName:{}], current stack trace as following:{}"
+                                , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, pnodeThread.getName(), currentThreadId, Thread.currentThread().getName(), builder);
                     }
                 }
             }
