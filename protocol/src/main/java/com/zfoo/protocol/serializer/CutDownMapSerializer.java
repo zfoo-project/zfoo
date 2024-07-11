@@ -62,6 +62,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeIntIntMap({})", objectStr)).append(LS);
                             return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeIntIntMap({});", objectStr)).append(LS);
+                            return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteIntIntMap({});", objectStr)).append(LS);
                             return true;
@@ -82,6 +85,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeIntLongMap({})", objectStr)).append(LS);
+                            return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeIntLongMap({});", objectStr)).append(LS);
                             return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteIntLongMap({});", objectStr)).append(LS);
@@ -104,6 +110,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeIntStringMap({})", objectStr)).append(LS);
                             return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeIntStringMap({});", objectStr)).append(LS);
+                            return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteIntStringMap({});", objectStr)).append(LS);
                             return true;
@@ -125,6 +134,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeIntPacketMap({}, {})", objectStr, protocolId)).append(LS);
+                            return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeIntPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteIntPacketMap({}, {});", objectStr, protocolId)).append(LS);
@@ -152,6 +164,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeLongIntMap({})", objectStr)).append(LS);
                             return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeLongIntMap({});", objectStr)).append(LS);
+                            return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteLongIntMap({});", objectStr)).append(LS);
                             return true;
@@ -172,6 +187,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeLongLongMap({})", objectStr)).append(LS);
+                            return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeLongLongMap({});", objectStr)).append(LS);
                             return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteLongLongMap({});", objectStr)).append(LS);
@@ -194,6 +212,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeLongStringMap({})", objectStr)).append(LS);
                             return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeLongStringMap({});", objectStr)).append(LS);
+                            return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteLongStringMap({});", objectStr)).append(LS);
                             return true;
@@ -215,6 +236,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeLongPacketMap({}, {})", objectStr, protocolId)).append(LS);
+                            return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeLongPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteLongPacketMap({}, {});", objectStr, protocolId)).append(LS);
@@ -242,6 +266,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeStringIntMap({})", objectStr)).append(LS);
                             return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeStringIntMap({});", objectStr)).append(LS);
+                            return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteStringIntMap({});", objectStr)).append(LS);
                             return true;
@@ -262,6 +289,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeStringLongMap({})", objectStr)).append(LS);
+                            return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeStringLongMap({});", objectStr)).append(LS);
                             return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteStringLongMap({});", objectStr)).append(LS);
@@ -284,6 +314,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeStringStringMap({})", objectStr)).append(LS);
                             return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeStringStringMap({});", objectStr)).append(LS);
+                            return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteStringStringMap({});", objectStr)).append(LS);
                             return true;
@@ -305,6 +338,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return true;
                         case Lua:
                             builder.append(StringUtils.format("buffer:writeStringPacketMap({}, {})", objectStr, protocolId)).append(LS);
+                            return true;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writeStringPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteStringPacketMap({}, {});", objectStr, protocolId)).append(LS);
@@ -350,6 +386,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readIntIntMap()", map)).append(LS);
                             return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readIntIntMap();", map)).append(LS);
+                            return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadIntIntMap();", map)).append(LS);
                             return map;
@@ -386,6 +426,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readIntLongMap()", map)).append(LS);
                             return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readIntLongMap();", map)).append(LS);
+                            return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadIntLongMap();", map)).append(LS);
                             return map;
@@ -421,6 +465,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readIntStringMap()", map)).append(LS);
+                            return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readIntStringMap();", map)).append(LS);
                             return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadIntStringMap();", map)).append(LS);
@@ -460,6 +508,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readIntPacketMap({})", map, protocolId)).append(LS);
                             return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readIntPacketMap({});", map, protocolId)).append(LS);
+                            return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadIntPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
@@ -497,6 +549,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readLongIntMap()", map)).append(LS);
                             return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readLongIntMap();", map)).append(LS);
+                            return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadLongIntMap();", map)).append(LS);
                             return map;
@@ -533,6 +589,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readLongLongMap()", map)).append(LS);
                             return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readLongLongMap();", map)).append(LS);
+                            return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadLongLongMap();", map)).append(LS);
                             return map;
@@ -568,6 +628,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readLongStringMap()", map)).append(LS);
+                            return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readLongStringMap();", map)).append(LS);
                             return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadLongStringMap();", map)).append(LS);
@@ -607,6 +671,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readLongPacketMap({})", map, protocolId)).append(LS);
                             return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readLongPacketMap({});", map, protocolId)).append(LS);
+                            return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadLongPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
@@ -645,6 +713,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readStringIntMap()", map)).append(LS);
                             return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readStringIntMap();", map)).append(LS);
+                            return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadStringIntMap();", map)).append(LS);
                             return map;
@@ -681,6 +753,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readStringLongMap()", map)).append(LS);
                             return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readStringLongMap();", map)).append(LS);
+                            return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadStringLongMap();", map)).append(LS);
                             return map;
@@ -716,6 +792,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readStringStringMap()", map)).append(LS);
+                            return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readStringStringMap();", map)).append(LS);
                             return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadStringStringMap();", map)).append(LS);
@@ -754,6 +834,10 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readStringPacketMap({})", map, protocolId)).append(LS);
+                            return map;
+                        case Php:
+                            map = "$" + map;
+                            builder.append(StringUtils.format("{} = $buffer->readStringPacketMap({});", map, protocolId)).append(LS);
                             return map;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadStringPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);

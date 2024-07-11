@@ -59,6 +59,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Lua:
                         builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
                         break;
+                    case Php:
+                        builder.append(StringUtils.format("$buffer->writeBooleanArray({});", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanSet({});", objectStr)).append(LS);
                         break;
@@ -85,6 +88,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Lua:
                         builder.append(StringUtils.format("buffer:writeByteArray({})", objectStr)).append(LS);
+                        break;
+                    case Php:
+                        builder.append(StringUtils.format("$buffer->writeByteArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteByteSet({});", objectStr)).append(LS);
@@ -113,6 +119,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Lua:
                         builder.append(StringUtils.format("buffer:writeShortArray({})", objectStr)).append(LS);
                         break;
+                    case Php:
+                        builder.append(StringUtils.format("$buffer->writeShortArray({});", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteShortSet({});", objectStr)).append(LS);
                         break;
@@ -139,6 +148,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Lua:
                         builder.append(StringUtils.format("buffer:writeIntArray({})", objectStr)).append(LS);
+                        break;
+                    case Php:
+                        builder.append(StringUtils.format("$buffer->writeIntArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteIntSet({});", objectStr)).append(LS);
@@ -167,6 +179,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Lua:
                         builder.append(StringUtils.format("buffer:writeLongArray({})", objectStr)).append(LS);
                         break;
+                    case Php:
+                        builder.append(StringUtils.format("$buffer->writeLongArray({});", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteLongSet({});", objectStr)).append(LS);
                         break;
@@ -193,6 +208,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Lua:
                         builder.append(StringUtils.format("buffer:writeFloatArray({})", objectStr)).append(LS);
+                        break;
+                    case Php:
+                        builder.append(StringUtils.format("$buffer->writeFloatArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteFloatSet({});", objectStr)).append(LS);
@@ -221,6 +239,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Lua:
                         builder.append(StringUtils.format("buffer:writeDoubleArray({})", objectStr)).append(LS);
                         break;
+                    case Php:
+                        builder.append(StringUtils.format("$buffer->writeDoubleArray({});", objectStr)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteDoubleSet({});", objectStr)).append(LS);
                         break;
@@ -247,6 +268,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Lua:
                         builder.append(StringUtils.format("buffer:writeStringArray({})", objectStr)).append(LS);
+                        break;
+                    case Php:
+                        builder.append(StringUtils.format("$buffer->writeStringArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteStringSet({});", objectStr)).append(LS);
@@ -277,6 +301,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                             break;
                         case Lua:
                             builder.append(StringUtils.format("buffer:writePacketArray({}, {})", objectStr, protocolId)).append(LS);
+                            break;
+                        case Php:
+                            builder.append(StringUtils.format("$buffer->writePacketArray({}, {});", objectStr, protocolId)).append(LS);
                             break;
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WritePacketSet({}, {});", objectStr, protocolId)).append(LS);
@@ -321,6 +348,10 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Lua:
                         builder.append(StringUtils.format("local {} = buffer:readBooleanArray()", set)).append(LS);
                         break;
+                    case Php:
+                        set = "$" + set;
+                        builder.append(StringUtils.format("{} = $buffer->readBooleanArray();", set)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanSet();", set)).append(LS);
                         break;
@@ -359,6 +390,10 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Lua:
                         builder.append(StringUtils.format("local {} = buffer:readByteArray()", set)).append(LS);
+                        break;
+                    case Php:
+                        set = "$" + set;
+                        builder.append(StringUtils.format("{} = $buffer->readByteArray();", set)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadByteSet();", set)).append(LS);
@@ -399,6 +434,10 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Lua:
                         builder.append(StringUtils.format("local {} = buffer:readShortArray()", set)).append(LS);
                         break;
+                    case Php:
+                        set = "$" + set;
+                        builder.append(StringUtils.format("{} = $buffer->readShortArray();", set)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadShortSet();", set)).append(LS);
                         break;
@@ -437,6 +476,10 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Lua:
                         builder.append(StringUtils.format("local {} = buffer:readIntArray()", set)).append(LS);
+                        break;
+                    case Php:
+                        set = "$" + set;
+                        builder.append(StringUtils.format("{} = $buffer->readIntArray();", set)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadIntSet();", set)).append(LS);
@@ -477,6 +520,10 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Lua:
                         builder.append(StringUtils.format("local {} = buffer:readLongArray()", set)).append(LS);
                         break;
+                    case Php:
+                        set = "$" + set;
+                        builder.append(StringUtils.format("{} = $buffer->readLongArray();", set)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadLongSet();", set)).append(LS);
                         break;
@@ -515,6 +562,10 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Lua:
                         builder.append(StringUtils.format("local {} = buffer:readFloatArray()", set)).append(LS);
+                        break;
+                    case Php:
+                        set = "$" + set;
+                        builder.append(StringUtils.format("{} = $buffer->readFloatArray();", set)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadFloatSet();", set)).append(LS);
@@ -555,6 +606,10 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Lua:
                         builder.append(StringUtils.format("local {} = buffer:readDoubleArray()", set)).append(LS);
                         break;
+                    case Php:
+                        set = "$" + set;
+                        builder.append(StringUtils.format("{} = $buffer->readDoubleArray();", set)).append(LS);
+                        break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadDoubleSet();", set)).append(LS);
                         break;
@@ -593,6 +648,10 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Lua:
                         builder.append(StringUtils.format("local {} = buffer:readStringArray()", set)).append(LS);
+                        break;
+                    case Php:
+                        set = "$" + set;
+                        builder.append(StringUtils.format("{} = $buffer->readStringArray();", set)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadStringSet();", set)).append(LS);
@@ -635,6 +694,10 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                             break;
                         case Lua:
                             builder.append(StringUtils.format("local {} = buffer:readPacketArray({})", set, protocolId)).append(LS);
+                            break;
+                        case Php:
+                            set = "$" + set;
+                            builder.append(StringUtils.format("{} = $buffer->readPacketArray({});", set, protocolId)).append(LS);
                             break;
                         case CSharp:
                             builder.append(StringUtils.format("var {} = buffer.ReadPacketSet<{}>({});", set, protocolName, protocolId)).append(LS);
