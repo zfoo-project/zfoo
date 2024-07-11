@@ -21,6 +21,7 @@ import com.zfoo.protocol.serializer.java.CodeGenerateJava;
 import com.zfoo.protocol.serializer.javascript.CodeGenerateJavaScript;
 import com.zfoo.protocol.serializer.kotlin.CodeGenerateKotlin;
 import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
+import com.zfoo.protocol.serializer.php.CodeGeneratePhp;
 import com.zfoo.protocol.serializer.python.CodeGeneratePython;
 import com.zfoo.protocol.serializer.scala.CodeGenerateScala;
 import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
@@ -58,6 +59,8 @@ public enum CodeLanguage {
     GdScript(1 << 20, CodeGenerateGdScript.class),
 
     Python(1 << 22, CodeGeneratePython.class),
+
+    Php(1 << 28, CodeGeneratePhp.class),
 
     Protobuf(1 << 30, null);
 

@@ -90,6 +90,7 @@ public abstract class GenerateProtocolNote {
             case EcmaScript:
             case TypeScript:
             case CSharp:
+            case Php:
             case Protobuf:
                 note = StringUtils.format("// {}", note);
                 break;
