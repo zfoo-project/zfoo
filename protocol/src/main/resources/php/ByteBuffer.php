@@ -394,7 +394,7 @@ class ByteBuffer
         return $protocolRegistration->read($this);
     }
 
-    public function writeBooleanArray(array $array): void
+    public function writeBoolArray(array $array): void
     {
         if (empty($array)) {
             $this->writeInt(0);
@@ -407,7 +407,7 @@ class ByteBuffer
         }
     }
 
-    public function readBooleanArray(): array
+    public function readBoolArray(): array
     {
         $size = $this->readInt();
         $array = array();

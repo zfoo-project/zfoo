@@ -57,7 +57,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
                         break;
                     case Php:
-                        builder.append(StringUtils.format("$buffer->writeBooleanArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("$buffer->writeBoolArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanArray({});", objectStr)).append(LS);
@@ -84,7 +84,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
                         break;
                     case Php:
-                        builder.append(StringUtils.format("$buffer->writeBooleanArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("$buffer->writeBoolArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanArray({});", objectStr)).append(LS);
@@ -514,7 +514,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Php:
                         array = "$" + array;
-                        builder.append(StringUtils.format("{} = $buffer->readBooleanArray();", array)).append(LS);
+                        builder.append(StringUtils.format("{} = $buffer->readBoolArray();", array)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray();", array)).append(LS);
@@ -557,7 +557,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         break;
                     case Php:
                         array = "$" + array;
-                        builder.append(StringUtils.format("{} = $buffer->readBooleanArray();", array)).append(LS);
+                        builder.append(StringUtils.format("{} = $buffer->readBoolArray();", array)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray();", array)).append(LS);

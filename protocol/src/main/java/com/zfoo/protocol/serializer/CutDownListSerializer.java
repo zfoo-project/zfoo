@@ -56,7 +56,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
                         break;
                     case Php:
-                        builder.append(StringUtils.format("$buffer->writeBooleanArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("$buffer->writeBoolArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("buffer.WriteBooleanList({});", objectStr)).append(LS);
@@ -353,7 +353,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         break;
                     case Php:
                         list = "$" + list;
-                        builder.append(StringUtils.format("{} = buffer->readBooleanArray();", list)).append(LS);
+                        builder.append(StringUtils.format("{} = buffer->readBoolArray();", list)).append(LS);
                         break;
                     case CSharp:
                         builder.append(StringUtils.format("var {} = buffer.ReadBooleanList();", list)).append(LS);
