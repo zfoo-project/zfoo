@@ -18,12 +18,10 @@ import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
-import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.CodeTemplatePlaceholder;
 import com.zfoo.protocol.serializer.ICodeGenerate;
-import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.util.ClassUtils;
 import com.zfoo.protocol.util.FileUtils;
@@ -82,44 +80,39 @@ public class CodeGeneratePhp implements ICodeGenerate {
         createTemplateFile();
 
 
-        // 生成ProtocolManager.ts文件
-        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolManagerTemplate.ts");
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("php/ProtocolManagerTemplate.php");
         var protocol_imports_manager = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
-        protocol_imports_manager.append("import * as Protocols from './Protocols';").append(LS);
+        protocol_imports_manager.append("include_once 'Protocols.php';").append(LS);
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, new Protocols.{}Registration());", protocol_id, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.set(Protocols.{}, {});", protocol_name, protocol_id)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("self::$protocols[{}] = new {}Registration();", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("self::$protocolIdMap[{}::class] = {};", protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports_manager.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
         var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
-        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.ts"));
+        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.php"));
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
-        logger.info("Generated TypeScript protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
+        logger.info("Generated Php protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
 
-        var protocol_imports_protocols = new StringBuilder();
-        protocol_imports_protocols.append("import IByteBuffer from './IByteBuffer';").append(LS);
-        protocol_imports_protocols.append("import IProtocolRegistration from './IProtocolRegistration';").append(LS);
         var protocol_class = new StringBuilder();
         var protocol_registration = new StringBuilder();
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("php/ProtocolTemplate.php");
         for (var registration : registrations) {
-            protocol_class.append(protocol_class(registration).replace("class ", "export class ")).append(LS);
+            protocol_class.append(protocol_class(registration)).append(LS);
             protocol_registration.append(protocol_registration(registration)).append(LS);
         }
-        var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolsTemplate.ts");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
-                CodeTemplatePlaceholder.protocol_imports, protocol_imports_protocols.toString()
-                , CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
+                CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
                 , CodeTemplatePlaceholder.protocol_registration, protocol_registration.toString()
         ));
-        var outputPath = StringUtils.format("{}/Protocols.ts", protocolOutputPath);
+        var outputPath = StringUtils.format("{}/Protocols.php", protocolOutputPath);
         var file = new File(outputPath);
         FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
-        logger.info("Generated TypeScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+        logger.info("Generated Php protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     @Override
@@ -127,40 +120,37 @@ public class CodeGeneratePhp implements ICodeGenerate {
         createTemplateFile();
 
 
-        // 生成ProtocolManager.ts文件
-        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolManagerTemplate.ts");
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("php/ProtocolManagerTemplate.php");
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("import {} from './{}/{}';", protocol_name, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
-            protocol_imports.append(StringUtils.format("import { {}Registration } from './{}/{}';", protocol_name, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, new {}Registration());", protocol_id, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.set({}, {});", protocol_name, protocol_id)).append(LS);
+            protocol_imports.append(StringUtils.format("include_once '{}/{}.php';", GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("self::$protocols[{}] = new {}Registration();", protocol_id, protocol_name)).append(LS);
+            protocol_manager_registrations.append(StringUtils.format("self::$protocolIdMap[{}::class] = {};", protocol_name, protocol_id)).append(LS);
         }
         var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
                 , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
         var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
-        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.ts"));
+        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.php"));
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
-        logger.info("Generated TypeScript protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
+        logger.info("Generated Php protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
 
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolTemplate.ts");
+            var protocolTemplate = ClassUtils.getFileFromClassPathToString("php/ProtocolTemplate.php");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
-                    CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
-                    , CodeTemplatePlaceholder.protocol_name, protocol_name
+                    CodeTemplatePlaceholder.protocol_name, protocol_name
                     , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
-            var outputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
+            var outputPath = StringUtils.format("{}/{}/{}.php", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
-            logger.info("Generated TypeScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+            logger.info("Generated Php protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
         }
     }
 
@@ -169,7 +159,6 @@ public class CodeGeneratePhp implements ICodeGenerate {
         createTemplateFile();
 
 
-        // 生成ProtocolManager.ts文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("php/ProtocolManagerTemplate.php");
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
@@ -194,9 +183,8 @@ public class CodeGeneratePhp implements ICodeGenerate {
             var protocolTemplate = ClassUtils.getFileFromClassPathToString("php/ProtocolTemplate.php");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                     CodeTemplatePlaceholder.protocol_name, protocol_name
-                    , CodeTemplatePlaceholder.protocol_imports, protocol_imports_default(registration)
                     , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
-                    , CodeTemplatePlaceholder.protocol_registration,  protocol_registration(registration)
+                    , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
             var outputPath = StringUtils.format("{}/{}.php", protocolOutputPath, protocol_name);
             var file = new File(outputPath);
@@ -238,21 +226,6 @@ public class CodeGeneratePhp implements ICodeGenerate {
                 , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
         ));
         return formatProtocolTemplate;
-    }
-
-    private String protocol_imports_default(ProtocolRegistration registration) {
-        // import IByteBuffer first
-        var protocolId = registration.getId();
-        var importBuilder = new StringBuilder();
-        importBuilder.append(StringUtils.format("include_once 'IProtocolRegistration.php';")).append(LS);
-
-        // import other sub protocols
-        var subProtocols = ProtocolAnalysis.getFirstSubProtocolIds(protocolId);
-        for (var subProtocolId : subProtocols) {
-            var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
-            importBuilder.append(StringUtils.format("include_once '{}.php';", protocolName, protocolName)).append(LS);
-        }
-        return importBuilder.toString();
     }
 
     private String protocol_field_definition(ProtocolRegistration registration) {

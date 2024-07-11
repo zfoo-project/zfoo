@@ -2,6 +2,7 @@
 
 namespace zfoophp;
 
+include_once 'IProtocolRegistration.php';
 ${protocol_imports}
 
 class ProtocolManager
