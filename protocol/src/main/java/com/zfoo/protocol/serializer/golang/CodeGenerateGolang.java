@@ -60,7 +60,7 @@ public class CodeGenerateGolang implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        goSerializerMap.put(BooleanSerializer.INSTANCE, new GoBooleanSerializer());
+        goSerializerMap.put(BoolSerializer.INSTANCE, new GoBoolSerializer());
         goSerializerMap.put(ByteSerializer.INSTANCE, new GoByteSerializer());
         goSerializerMap.put(ShortSerializer.INSTANCE, new GoShortSerializer());
         goSerializerMap.put(IntSerializer.INSTANCE, new GoIntSerializer());

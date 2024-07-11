@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.csharp;
+package com.zfoo.protocol.serializer.python;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
@@ -24,12 +24,16 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class CsBooleanSerializer implements ICsSerializer {
+public class PyBoolSerializer implements IPySerializer {
+    @Override
+    public String fieldDefaultValue(Field field, IFieldRegistration fieldRegistration) {
+        return "False";
+    }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.WriteBool({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeBool({})", objectStr)).append(LS);
     }
 
     @Override
@@ -37,7 +41,7 @@ public class CsBooleanSerializer implements ICsSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("bool {} = buffer.ReadBool();", result)).append(LS);
+        builder.append(StringUtils.format("{} = buffer.readBool() ", result)).append(LS);
         return result;
     }
 }

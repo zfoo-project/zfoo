@@ -61,7 +61,7 @@ public class CodeGeneratePython implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        pySerializerMap.put(BooleanSerializer.INSTANCE, new PyBooleanSerializer());
+        pySerializerMap.put(BoolSerializer.INSTANCE, new PyBoolSerializer());
         pySerializerMap.put(ByteSerializer.INSTANCE, new PyByteSerializer());
         pySerializerMap.put(ShortSerializer.INSTANCE, new PyShortSerializer());
         pySerializerMap.put(IntSerializer.INSTANCE, new PyIntSerializer());

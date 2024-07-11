@@ -59,7 +59,7 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        jsSerializerMap.put(BooleanSerializer.INSTANCE, new JsBooleanSerializer());
+        jsSerializerMap.put(BoolSerializer.INSTANCE, new JsBoolSerializer());
         jsSerializerMap.put(ByteSerializer.INSTANCE, new JsByteSerializer());
         jsSerializerMap.put(ShortSerializer.INSTANCE, new JsShortSerializer());
         jsSerializerMap.put(IntSerializer.INSTANCE, new JsIntSerializer());

@@ -20,9 +20,9 @@ import io.netty.buffer.ByteBuf;
 /**
  * @author godotg
  */
-public class BooleanSerializer implements ISerializer {
+public class BoolSerializer implements ISerializer {
 
-    public static final BooleanSerializer INSTANCE = new BooleanSerializer();
+    public static final BoolSerializer INSTANCE = new BoolSerializer();
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {

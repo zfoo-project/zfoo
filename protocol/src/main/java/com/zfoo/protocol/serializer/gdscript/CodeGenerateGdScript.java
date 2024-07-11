@@ -65,7 +65,7 @@ public class CodeGenerateGdScript implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        gdSerializerMap.put(BooleanSerializer.INSTANCE, new GdBooleanSerializer());
+        gdSerializerMap.put(BoolSerializer.INSTANCE, new GdBoolSerializer());
         gdSerializerMap.put(ByteSerializer.INSTANCE, new GdByteSerializer());
         gdSerializerMap.put(ShortSerializer.INSTANCE, new GdShortSerializer());
         gdSerializerMap.put(IntSerializer.INSTANCE, new GdIntSerializer());

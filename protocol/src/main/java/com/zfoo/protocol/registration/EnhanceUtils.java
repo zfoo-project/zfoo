@@ -69,7 +69,7 @@ public abstract class EnhanceUtils {
             }
         }
 
-        enhanceSerializerMap.put(BooleanSerializer.INSTANCE, new EnhanceBooleanSerializer());
+        enhanceSerializerMap.put(BoolSerializer.INSTANCE, new EnhanceBoolSerializer());
         enhanceSerializerMap.put(ByteSerializer.INSTANCE, new EnhanceByteSerializer());
         enhanceSerializerMap.put(ShortSerializer.INSTANCE, new EnhanceShortSerializer());
         enhanceSerializerMap.put(IntSerializer.INSTANCE, new EnhanceIntSerializer());

@@ -11,10 +11,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.javascript;
+package com.zfoo.protocol.serializer.golang;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -25,23 +24,25 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class JsBooleanSerializer implements IJsSerializer {
+public class GoBoolSerializer implements IGoSerializer {
+
     @Override
-    public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Triple<>("boolean", field.getName(), "false");
+    public String fieldType(Field field, IFieldRegistration fieldRegistration) {
+        return "bool";
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeBoolean({});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.WriteBool({})", objectStr)).append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         String result = "result" + GenerateProtocolFile.localVariableId++;
+
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("const {} = buffer.readBoolean(); ", result)).append(LS);
+        builder.append(StringUtils.format("var {} = buffer.ReadBool()", result)).append(LS);
         return result;
     }
 }

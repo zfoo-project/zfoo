@@ -77,8 +77,8 @@ public class ProtocolAnalysis {
 
     static {
         // 初始化基础类型序列化器
-        baseSerializerMap.put(boolean.class, BooleanSerializer.INSTANCE);
-        baseSerializerMap.put(Boolean.class, BooleanSerializer.INSTANCE);
+        baseSerializerMap.put(boolean.class, BoolSerializer.INSTANCE);
+        baseSerializerMap.put(Boolean.class, BoolSerializer.INSTANCE);
         baseSerializerMap.put(byte.class, ByteSerializer.INSTANCE);
         baseSerializerMap.put(Byte.class, ByteSerializer.INSTANCE);
         baseSerializerMap.put(short.class, ShortSerializer.INSTANCE);

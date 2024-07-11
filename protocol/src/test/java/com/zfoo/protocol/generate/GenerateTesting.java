@@ -46,13 +46,14 @@ public class GenerateTesting {
         generateLanguages.add(CodeLanguage.EcmaScript);
         generateLanguages.add(CodeLanguage.TypeScript);
         generateLanguages.add(CodeLanguage.Lua);
+        generateLanguages.add(CodeLanguage.Php);
         generateLanguages.add(CodeLanguage.CSharp);
         generateLanguages.add(CodeLanguage.GdScript);
         generateLanguages.add(CodeLanguage.Python);
 
         // Initialize and then generate the protocol
         ProtocolManager.initProtocolAuto(List.of(NormalObject.class, SimpleObject.class, EmptyObject.class), op);
-         copyFiles();
+        // copyFiles();
     }
 
     @Test

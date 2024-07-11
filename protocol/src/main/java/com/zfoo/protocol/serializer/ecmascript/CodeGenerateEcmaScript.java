@@ -60,7 +60,7 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        esSerializerMap.put(BooleanSerializer.INSTANCE, new EsBooleanSerializer());
+        esSerializerMap.put(BoolSerializer.INSTANCE, new EsBoolSerializer());
         esSerializerMap.put(ByteSerializer.INSTANCE, new EsByteSerializer());
         esSerializerMap.put(ShortSerializer.INSTANCE, new EsShortSerializer());
         esSerializerMap.put(IntSerializer.INSTANCE, new EsIntSerializer());

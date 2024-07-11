@@ -65,7 +65,7 @@ public class CodeGenerateJava implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        javaSerializerMap.put(BooleanSerializer.INSTANCE, new JavaBooleanSerializer());
+        javaSerializerMap.put(BoolSerializer.INSTANCE, new JavaBoolSerializer());
         javaSerializerMap.put(ByteSerializer.INSTANCE, new JavaByteSerializer());
         javaSerializerMap.put(ShortSerializer.INSTANCE, new JavaShortSerializer());
         javaSerializerMap.put(IntSerializer.INSTANCE, new JavaIntSerializer());

@@ -59,7 +59,7 @@ public class CodeGenerateLua implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        luaSerializerMap.put(BooleanSerializer.INSTANCE, new LuaBooleanSerializer());
+        luaSerializerMap.put(BoolSerializer.INSTANCE, new LuaBoolSerializer());
         luaSerializerMap.put(ByteSerializer.INSTANCE, new LuaByteSerializer());
         luaSerializerMap.put(ShortSerializer.INSTANCE, new LuaShortSerializer());
         luaSerializerMap.put(IntSerializer.INSTANCE, new LuaIntSerializer());

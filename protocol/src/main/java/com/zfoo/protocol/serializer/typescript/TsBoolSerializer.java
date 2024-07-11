@@ -25,7 +25,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class TsBooleanSerializer implements ITsSerializer {
+public class TsBoolSerializer implements ITsSerializer {
 
     @Override
     public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {

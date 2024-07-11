@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.kotlin;
+package com.zfoo.protocol.serializer.cpp;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.model.Pair;
@@ -25,17 +25,17 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class KtBooleanSerializer implements IKtSerializer {
+public class CppBoolSerializer implements ICppSerializer {
 
     @Override
     public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Pair<>("Boolean", "false");
+        return new Pair<>("bool", field.getName());
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeBool({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeBool({});", objectStr)).append(LS);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class KtBooleanSerializer implements IKtSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("val {} = buffer.readBool()", result)).append(LS);
+        builder.append(StringUtils.format("bool {} = buffer.readBool();", result)).append(LS);
         return result;
     }
 }

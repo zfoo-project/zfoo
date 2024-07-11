@@ -25,7 +25,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class GdBooleanSerializer implements IGdSerializer {
+public class GdBoolSerializer implements IGdSerializer {
 
     @Override
     public String fieldType(Field field, IFieldRegistration fieldRegistration) {

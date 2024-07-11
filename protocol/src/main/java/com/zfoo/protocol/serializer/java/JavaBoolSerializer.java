@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.lua;
+package com.zfoo.protocol.serializer.java;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
@@ -21,21 +21,15 @@ import java.lang.reflect.Field;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
 
-
 /**
  * @author godotg
  */
-public class LuaBooleanSerializer implements ILuaSerializer {
-
-    @Override
-    public String fieldDefaultValue(Field field, IFieldRegistration fieldRegistration) {
-        return "false";
-    }
+public class JavaBoolSerializer implements IJavaSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer:writeBoolean({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeBool({});", objectStr)).append(LS);
     }
 
     @Override
@@ -43,7 +37,7 @@ public class LuaBooleanSerializer implements ILuaSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("local {} = buffer:readBoolean()", result)).append(LS);
+        builder.append(StringUtils.format("boolean {} = buffer.readBool();", result)).append(LS);
         return result;
     }
 }

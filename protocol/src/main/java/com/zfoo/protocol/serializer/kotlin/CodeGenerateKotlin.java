@@ -65,7 +65,7 @@ public class CodeGenerateKotlin implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        ktSerializerMap.put(BooleanSerializer.INSTANCE, new KtBooleanSerializer());
+        ktSerializerMap.put(BoolSerializer.INSTANCE, new KtBoolSerializer());
         ktSerializerMap.put(ByteSerializer.INSTANCE, new KtByteSerializer());
         ktSerializerMap.put(ShortSerializer.INSTANCE, new KtShortSerializer());
         ktSerializerMap.put(IntSerializer.INSTANCE, new KtIntSerializer());

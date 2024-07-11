@@ -60,7 +60,7 @@ public class CodeGeneratePhp implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        phpSerializerMap.put(BooleanSerializer.INSTANCE, new PhpBooleanSerializer());
+        phpSerializerMap.put(BoolSerializer.INSTANCE, new PhpBoolSerializer());
         phpSerializerMap.put(ByteSerializer.INSTANCE, new PhpByteSerializer());
         phpSerializerMap.put(ShortSerializer.INSTANCE, new PhpShortSerializer());
         phpSerializerMap.put(IntSerializer.INSTANCE, new PhpIntSerializer());

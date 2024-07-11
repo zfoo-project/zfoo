@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.protocol.serializer.scala;
+package com.zfoo.protocol.serializer.ecmascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Pair;
+import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -25,25 +25,23 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 /**
  * @author godotg
  */
-public class ScalaBooleanSerializer implements IScalaSerializer {
-
+public class EsBoolSerializer implements IEsSerializer {
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Pair<>("Boolean", "false");
+    public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
+        return new Triple<>("boolean", field.getName(), "false");
     }
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeBool({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeBoolean({});", objectStr)).append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         String result = "result" + GenerateProtocolFile.localVariableId++;
-
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("val {} = buffer.readBool", result)).append(LS);
+        builder.append(StringUtils.format("const {} = buffer.readBoolean(); ", result)).append(LS);
         return result;
     }
 }

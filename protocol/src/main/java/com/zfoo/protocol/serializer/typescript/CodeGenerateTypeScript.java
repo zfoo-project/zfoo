@@ -62,7 +62,7 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        tsSerializerMap.put(BooleanSerializer.INSTANCE, new TsBooleanSerializer());
+        tsSerializerMap.put(BoolSerializer.INSTANCE, new TsBoolSerializer());
         tsSerializerMap.put(ByteSerializer.INSTANCE, new TsByteSerializer());
         tsSerializerMap.put(ShortSerializer.INSTANCE, new TsShortSerializer());
         tsSerializerMap.put(IntSerializer.INSTANCE, new TsIntSerializer());

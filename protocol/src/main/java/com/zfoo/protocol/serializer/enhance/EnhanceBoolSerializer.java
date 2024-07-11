@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 /**
  * @author godotg
  */
-public class EnhanceBooleanSerializer implements IEnhanceSerializer {
+public class EnhanceBoolSerializer implements IEnhanceSerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration) {

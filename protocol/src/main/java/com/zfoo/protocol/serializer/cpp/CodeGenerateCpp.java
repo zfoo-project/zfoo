@@ -64,7 +64,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        cppSerializerMap.put(BooleanSerializer.INSTANCE, new CppBooleanSerializer());
+        cppSerializerMap.put(BoolSerializer.INSTANCE, new CppBoolSerializer());
         cppSerializerMap.put(ByteSerializer.INSTANCE, new CppByteSerializer());
         cppSerializerMap.put(ShortSerializer.INSTANCE, new CppShortSerializer());
         cppSerializerMap.put(IntSerializer.INSTANCE, new CppIntSerializer());

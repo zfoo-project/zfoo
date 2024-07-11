@@ -65,7 +65,7 @@ public class CodeGenerateScala implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        scalaSerializerMap.put(BooleanSerializer.INSTANCE, new ScalaBooleanSerializer());
+        scalaSerializerMap.put(BoolSerializer.INSTANCE, new ScalaBoolSerializer());
         scalaSerializerMap.put(ByteSerializer.INSTANCE, new ScalaByteSerializer());
         scalaSerializerMap.put(ShortSerializer.INSTANCE, new ScalaShortSerializer());
         scalaSerializerMap.put(IntSerializer.INSTANCE, new ScalaIntSerializer());

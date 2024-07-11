@@ -63,7 +63,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
         protocolOutputPath = FileUtils.joinPath(generateOperation.getProtocolPath(), protocolOutputRootPath);
         FileUtils.deleteFile(new File(protocolOutputPath));
 
-        csSerializerMap.put(BooleanSerializer.INSTANCE, new CsBooleanSerializer());
+        csSerializerMap.put(BoolSerializer.INSTANCE, new CsBoolSerializer());
         csSerializerMap.put(ByteSerializer.INSTANCE, new CsByteSerializer());
         csSerializerMap.put(ShortSerializer.INSTANCE, new CsShortSerializer());
         csSerializerMap.put(IntSerializer.INSTANCE, new CsIntSerializer());
