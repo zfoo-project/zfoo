@@ -21,7 +21,7 @@ class ${protocol_name}Registration implements IProtocolRegistration {
         if ($length == 0) {
             return $packet;
         }
-        $beforeReadIndex = $buffer->readOffset();
+        $beforeReadIndex = $buffer->getReadOffset();
         ${protocol_read_deserialization}
         if ($length > 0) {
             $buffer->setReadOffset($beforeReadIndex + $length);

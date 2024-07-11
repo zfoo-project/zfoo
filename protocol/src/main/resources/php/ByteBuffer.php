@@ -4,15 +4,19 @@ namespace zfoophp;
 
 use Exception;
 
+
 class ByteBuffer
 {
     private string $buffer;
     private int $writeOffset = 0;
     private int $readOffset = 0;
+    private bool $bigEndian = true;
 
     public function __construct()
     {
         $this->buffer = str_pad("", 128);
+        // 大端序还是小端序
+        $this->bigEndian = pack("L", 1) === "\x00\x00\x00\x01";
     }
 
     public function adjustPadding(int $predictionLength, int $beforewriteIndex): void
@@ -117,6 +121,24 @@ class ByteBuffer
         return $bytes;
     }
 
+    public function writeBytesBigEndian(string $bytes): void
+    {
+        if ($this->bigEndian) {
+            $this->writeBytes($bytes);
+        } else {
+            $this->writeBytes(strrev($bytes));
+        }
+    }
+
+    public function readBytesBigEndian(int $count): string
+    {
+        if ($this->bigEndian) {
+            return $this->readBytes($count);
+        } else {
+            return strrev($this->readBytes($count));
+        }
+    }
+
     public function writeByte(int $value): void
     {
         $this->writeBytes(pack('c', $value));
@@ -149,12 +171,12 @@ class ByteBuffer
 
     public function writeShort(int $value): void
     {
-        $this->writeBytes(pack('s', $value));
+        $this->writeBytesBigEndian(pack('s', $value));
     }
 
     public function readShort(): int
     {
-        return unpack('s', $this->readBytes(2))[1];
+        return unpack('s', $this->readBytesBigEndian(2))[1];
     }
 
     public function writeRawInt(int $value): void
