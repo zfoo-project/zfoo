@@ -99,8 +99,8 @@ object ComplexObjectRegistration extends IProtocolRegistration {
     buffer.writeDoubleArray(message.ffff)
     buffer.writeBool(message.g)
     buffer.writeBool(message.gg)
-    buffer.writeBooleanArray(message.ggg)
-    buffer.writeBooleanArray(message.gggg)
+    buffer.writeBoolArray(message.ggg)
+    buffer.writeBoolArray(message.gggg)
     buffer.writeString(message.jj)
     buffer.writeStringArray(message.jjj)
     buffer.writePacket(message.kk, 102)
@@ -238,9 +238,9 @@ object ComplexObjectRegistration extends IProtocolRegistration {
     packet.g = result24
     val result25 = buffer.readBool
     packet.gg = result25
-    val array26 = buffer.readBooleanArray
+    val array26 = buffer.readBoolArray
     packet.ggg = array26
-    val array27 = buffer.readBooleanArray
+    val array27 = buffer.readBoolArray
     packet.gggg = array27
     val result28 = buffer.readString
     packet.jj = result28

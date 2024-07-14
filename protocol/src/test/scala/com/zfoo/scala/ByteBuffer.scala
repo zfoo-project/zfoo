@@ -38,6 +38,8 @@ class ByteBuffer {
   def compatibleRead(beforeReadIndex: Int, length: Int): Boolean = length != -1 && readOffset < length + beforeReadIndex
 
   // -------------------------------------------------get/set-------------------------------------------------
+  def getBuffer: Array[Byte] = buffer
+
   def getWriteOffset: Int = writeOffset
 
   def setWriteOffset(writeIndex: Int): Unit = {
@@ -424,7 +426,7 @@ class ByteBuffer {
     new String(bytes, DEFAULT_CHARSET)
   }
 
-  def writeBooleanArray(array: Array[Boolean]): Unit = {
+  def writeBoolArray(array: Array[Boolean]): Unit = {
     if ((array == null) || (array.length == 0)) writeInt(0)
     else {
       writeInt(array.length)
@@ -435,7 +437,7 @@ class ByteBuffer {
     }
   }
 
-  def readBooleanArray: Array[Boolean] = {
+  def readBoolArray: Array[Boolean] = {
     val size: Int = readInt
     val array: Array[Boolean] = new Array[Boolean](size)
     if (size > 0) for (index <- 0 until size) {
@@ -584,7 +586,7 @@ class ByteBuffer {
     array
   }
 
-  def writeBooleanList(list: List[Boolean]): Unit = {
+  def writeBoolList(list: List[Boolean]): Unit = {
     if ((list == null) || list.isEmpty) writeInt(0)
     else {
       writeInt(list.size)
@@ -594,7 +596,7 @@ class ByteBuffer {
     }
   }
 
-  def readBooleanList: List[Boolean] = {
+  def readBoolList: List[Boolean] = {
     val size: Int = readInt
     var list: List[Boolean] = List()
     if (size > 0) {
@@ -763,7 +765,7 @@ class ByteBuffer {
     list.toList
   }
 
-  def writeBooleanSet(set: Set[Boolean]): Unit = {
+  def writeBoolSet(set: Set[Boolean]): Unit = {
     if ((set == null) || set.isEmpty) writeInt(0)
     else {
       writeInt(set.size)
@@ -773,7 +775,7 @@ class ByteBuffer {
     }
   }
 
-  def readBooleanSet: Set[Boolean] = {
+  def readBoolSet: Set[Boolean] = {
     val size: Int = readInt
     val set: ArrayBuffer[Boolean] = new ArrayBuffer[Boolean]
     if (size > 0) for (index <- 0 until size) {
