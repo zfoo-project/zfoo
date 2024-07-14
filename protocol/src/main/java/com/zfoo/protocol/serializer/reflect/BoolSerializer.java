@@ -26,12 +26,12 @@ public class BoolSerializer implements ISerializer {
 
     @Override
     public void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration) {
-        ByteBufUtils.writeBooleanBox(buffer, (Boolean) object);
+        ByteBufUtils.writeBoolBox(buffer, (Boolean) object);
     }
 
     @Override
     public Object readObject(ByteBuf buffer, IFieldRegistration fieldRegistration) {
-        return ByteBufUtils.readBooleanBox(buffer);
+        return ByteBufUtils.readBoolBox(buffer);
     }
 
     @Override

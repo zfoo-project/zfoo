@@ -165,7 +165,7 @@ public class Main {
 
         var equal = 0;
         var notEqual = 0;
-        for (int i = 0; i < buffer.writeOffset(); i++) {
+        for (int i = 0; i < buffer.getWriteOffset(); i++) {
             var a = buffer.readByte();
             var b = newBuffer.readByte();
             if (a == b) {

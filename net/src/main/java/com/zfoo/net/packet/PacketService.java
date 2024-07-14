@@ -152,7 +152,7 @@ public class PacketService implements IPacketService {
         // 解析包体
         var packet = ProtocolManager.read(buffer);
         // 解析包的附加包
-        var hasAttachment = ByteBufUtils.tryReadBoolean(buffer);
+        var hasAttachment = ByteBufUtils.tryReadBool(buffer);
         var attachment = hasAttachment ? (ProtocolManager.read(buffer)) : null;
         return DecodedPacketInfo.valueOf(packet, attachment);
     }
@@ -174,9 +174,9 @@ public class PacketService implements IPacketService {
 
             // 写入包的附加包attachment
             if (attachment == null) {
-                ByteBufUtils.writeBoolean(buffer, false);
+                ByteBufUtils.writeBool(buffer, false);
             } else {
-                ByteBufUtils.writeBoolean(buffer, true);
+                ByteBufUtils.writeBool(buffer, true);
                 // 写入包的附加包attachment
                 ProtocolManager.write(buffer, attachment);
             }

@@ -20,7 +20,7 @@ class ${protocol_name}Registration implements IProtocolRegistration {
         if (length == 0) {
             return null;
         }
-        var beforeReadIndex = buffer.readOffset();
+        var beforeReadIndex = buffer.getReadOffset();
         var packet = new ${protocol_name}();
         ${protocol_read_deserialization}
         if (length > 0) {

@@ -48,28 +48,28 @@ public class CutDownSetSerializer implements ICutDownSerializer {
             case "Boolean":
                 switch (language) {
                     case Enhance:
-                        builder.append(StringUtils.format("{}.writeBooleanSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
+                        builder.append(StringUtils.format("{}.writeBoolSet($1, (Set){});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case GdScript:
-                        builder.append(StringUtils.format("buffer.writeBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBoolArray({})", objectStr)).append(LS);
                         break;
                     case Python, Kotlin, Scala:
-                        builder.append(StringUtils.format("buffer.writeBooleanSet({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBoolSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
-                        builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer:writeBoolArray({})", objectStr)).append(LS);
                         break;
                     case Php:
                         builder.append(StringUtils.format("$buffer->writeBoolArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
-                        builder.append(StringUtils.format("buffer.WriteBooleanSet({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.WriteBoolSet({});", objectStr)).append(LS);
                         break;
                     case Golang:
-                        builder.append(StringUtils.format("buffer.WriteBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.WriteBoolArray({})", objectStr)).append(LS);
                         break;
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
-                        builder.append(StringUtils.format("buffer.writeBooleanSet({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBoolSet({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -337,41 +337,41 @@ public class CutDownSetSerializer implements ICutDownSerializer {
             case "Boolean":
                 switch (language) {
                     case Enhance:
-                        builder.append(StringUtils.format("Set {} = {}.readBooleanSet($1);", set, EnhanceUtils.byteBufUtils));
+                        builder.append(StringUtils.format("Set {} = {}.readBoolSet($1);", set, EnhanceUtils.byteBufUtils));
                         break;
                     case GdScript:
-                        builder.append(StringUtils.format("var {} = buffer.readBooleanArray()", set)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.readBoolArray()", set)).append(LS);
                         break;
                     case Python:
-                        builder.append(StringUtils.format("{} = buffer.readBooleanSet()", set)).append(LS);
+                        builder.append(StringUtils.format("{} = buffer.readBoolSet()", set)).append(LS);
                         break;
                     case Lua:
-                        builder.append(StringUtils.format("local {} = buffer:readBooleanArray()", set)).append(LS);
+                        builder.append(StringUtils.format("local {} = buffer:readBoolArray()", set)).append(LS);
                         break;
                     case Php:
                         set = "$" + set;
                         builder.append(StringUtils.format("{} = $buffer->readBoolArray();", set)).append(LS);
                         break;
                     case CSharp:
-                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanSet();", set)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.ReadBoolSet();", set)).append(LS);
                         break;
                     case Golang:
-                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray()", set)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.ReadBoolArray()", set)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("auto {} = buffer.readBooleanSet();", set)).append(LS);
+                        builder.append(StringUtils.format("auto {} = buffer.readBoolSet();", set)).append(LS);
                         break;
                     case Java:
-                        builder.append(StringUtils.format("var {} = buffer.readBooleanSet();", set)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.readBoolSet();", set)).append(LS);
                         break;
                     case Kotlin:
-                        builder.append(StringUtils.format("val {} = buffer.readBooleanSet()", set)).append(LS);
+                        builder.append(StringUtils.format("val {} = buffer.readBoolSet()", set)).append(LS);
                         break;
                     case Scala:
-                        builder.append(StringUtils.format("val {} = buffer.readBooleanSet", set)).append(LS);
+                        builder.append(StringUtils.format("val {} = buffer.readBoolSet", set)).append(LS);
                         break;
                     case JavaScript, EcmaScript, TypeScript:
-                        builder.append(StringUtils.format("const {} = buffer.readBooleanSet();", set)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readBoolSet();", set)).append(LS);
                         break;
                     default:
                         flag = false;

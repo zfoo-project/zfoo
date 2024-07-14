@@ -28,9 +28,9 @@ public class EnhanceBoolSerializer implements IEnhanceSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, Field field, IFieldRegistration fieldRegistration) {
         if (isPrimitiveField(field)) {
-            builder.append(StringUtils.format("{}.writeBoolean($1, {});", EnhanceUtils.byteBufUtils, objectStr));
+            builder.append(StringUtils.format("{}.writeBool($1, {});", EnhanceUtils.byteBufUtils, objectStr));
         } else {
-            builder.append(StringUtils.format("{}.writeBooleanBox($1, (Boolean){});", EnhanceUtils.byteBufUtils, objectStr));
+            builder.append(StringUtils.format("{}.writeBoolBox($1, (Boolean){});", EnhanceUtils.byteBufUtils, objectStr));
         }
     }
 
@@ -38,9 +38,9 @@ public class EnhanceBoolSerializer implements IEnhanceSerializer {
     public String readObject(StringBuilder builder, Field field, IFieldRegistration fieldRegistration) {
         var result = "result" + GenerateProtocolFile.localVariableId++;
         if (isPrimitiveField(field)) {
-            builder.append(StringUtils.format("boolean {} = {}.readBoolean($1);", result, EnhanceUtils.byteBufUtils));
+            builder.append(StringUtils.format("boolean {} = {}.readBool($1);", result, EnhanceUtils.byteBufUtils));
         } else {
-            builder.append(StringUtils.format("Boolean {} = {}.readBooleanBox($1);", result, EnhanceUtils.byteBufUtils));
+            builder.append(StringUtils.format("Boolean {} = {}.readBoolBox($1);", result, EnhanceUtils.byteBufUtils));
         }
         return result;
     }

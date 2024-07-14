@@ -37,7 +37,12 @@ public class ByteBuffer {
     }
 
     // -------------------------------------------------get/set-------------------------------------------------
-    public int writeOffset() {
+
+    public byte[] getBuffer() {
+        return buffer;
+    }
+
+    public int getWriteOffset() {
         return writeOffset;
     }
 
@@ -49,7 +54,7 @@ public class ByteBuffer {
         writeOffset = writeIndex;
     }
 
-    public int readOffset() {
+    public int getReadOffset() {
         return readOffset;
     }
 
@@ -382,7 +387,7 @@ public class ByteBuffer {
         return new String(bytes, DEFAULT_CHARSET);
     }
 
-    public void writeBooleanArray(boolean[] array) {
+    public void writeBoolArray(boolean[] array) {
         if ((array == null) || (array.length == 0)) {
             writeInt(0);
         } else {
@@ -394,7 +399,7 @@ public class ByteBuffer {
         }
     }
 
-    public boolean[] readBooleanArray() {
+    public boolean[] readBoolArray() {
         int size = readInt();
         boolean[] array = new boolean[size];
         if (size > 0) {
@@ -566,7 +571,7 @@ public class ByteBuffer {
         return array;
     }
 
-    public void writeBooleanList(List<Boolean> list) {
+    public void writeBoolList(List<Boolean> list) {
         if ((list == null) || list.isEmpty()) {
             writeInt(0);
         } else {
@@ -577,7 +582,7 @@ public class ByteBuffer {
         }
     }
 
-    public List<Boolean> readBooleanList() {
+    public List<Boolean> readBoolList() {
         int size = readInt();
         List<Boolean> list = new ArrayList<>();
         if (size > 0) {
@@ -766,7 +771,7 @@ public class ByteBuffer {
         return list;
     }
 
-    public void writeBooleanSet(Set<Boolean> set) {
+    public void writeBoolSet(Set<Boolean> set) {
         if ((set == null) || set.isEmpty()) {
             writeInt(0);
         } else {
@@ -777,7 +782,7 @@ public class ByteBuffer {
         }
     }
 
-    public Set<Boolean> readBooleanSet() {
+    public Set<Boolean> readBoolSet() {
         int size = readInt();
         Set<Boolean> set = new HashSet<>();
         if (size > 0) {

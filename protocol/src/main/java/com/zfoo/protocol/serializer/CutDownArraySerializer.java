@@ -48,25 +48,25 @@ public class CutDownArraySerializer implements ICutDownSerializer {
             case "boolean":
                 switch (language) {
                     case Enhance:
-                        builder.append(StringUtils.format("{}.writeBooleanArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
+                        builder.append(StringUtils.format("{}.writeBoolArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case Kotlin, Scala, GdScript, Python:
-                        builder.append(StringUtils.format("buffer.writeBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBoolArray({})", objectStr)).append(LS);
                         break;
                     case Lua:
-                        builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer:writeBoolArray({})", objectStr)).append(LS);
                         break;
                     case Php:
                         builder.append(StringUtils.format("$buffer->writeBoolArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
-                        builder.append(StringUtils.format("buffer.WriteBooleanArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.WriteBoolArray({});", objectStr)).append(LS);
                         break;
                     case Golang:
-                        builder.append(StringUtils.format("buffer.WriteBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.WriteBoolArray({})", objectStr)).append(LS);
                         break;
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
-                        builder.append(StringUtils.format("buffer.writeBooleanArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBoolArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -75,25 +75,25 @@ public class CutDownArraySerializer implements ICutDownSerializer {
             case "Boolean":
                 switch (language) {
                     case Enhance:
-                        builder.append(StringUtils.format("{}.writeBooleanBoxArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
+                        builder.append(StringUtils.format("{}.writeBoolBoxArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case Kotlin, Scala, GdScript, Python:
-                        builder.append(StringUtils.format("buffer.writeBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBoolArray({})", objectStr)).append(LS);
                         break;
                     case Lua:
-                        builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer:writeBoolArray({})", objectStr)).append(LS);
                         break;
                     case Php:
                         builder.append(StringUtils.format("$buffer->writeBoolArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
-                        builder.append(StringUtils.format("buffer.WriteBooleanArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.WriteBoolArray({});", objectStr)).append(LS);
                         break;
                     case Golang:
-                        builder.append(StringUtils.format("buffer.WriteBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.WriteBoolArray({})", objectStr)).append(LS);
                         break;
                     case Cpp, JavaScript, EcmaScript, TypeScript:
-                        builder.append(StringUtils.format("buffer.writeBooleanArray({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBoolArray({});", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -501,41 +501,41 @@ public class CutDownArraySerializer implements ICutDownSerializer {
             case "boolean":
                 switch (language) {
                     case Enhance:
-                        builder.append(StringUtils.format("{}[] {} = {}.readBooleanArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
+                        builder.append(StringUtils.format("{}[] {} = {}.readBoolArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
                         break;
                     case GdScript:
-                        builder.append(StringUtils.format("var {} = buffer.readBooleanArray()", array)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.readBoolArray()", array)).append(LS);
                         break;
                     case Python:
-                        builder.append(StringUtils.format("{} = buffer.readBooleanArray()", array)).append(LS);
+                        builder.append(StringUtils.format("{} = buffer.readBoolArray()", array)).append(LS);
                         break;
                     case Lua:
-                        builder.append(StringUtils.format("local {} = buffer:readBooleanArray()", array)).append(LS);
+                        builder.append(StringUtils.format("local {} = buffer:readBoolArray()", array)).append(LS);
                         break;
                     case Php:
                         array = "$" + array;
                         builder.append(StringUtils.format("{} = $buffer->readBoolArray();", array)).append(LS);
                         break;
                     case CSharp:
-                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray();", array)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.ReadBoolArray();", array)).append(LS);
                         break;
                     case Golang:
-                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray()", array)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.ReadBoolArray()", array)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("auto {} = buffer.readBooleanArray();", array)).append(LS);
+                        builder.append(StringUtils.format("auto {} = buffer.readBoolArray();", array)).append(LS);
                         break;
                     case Java:
-                        builder.append(StringUtils.format("var {} = buffer.readBooleanArray();", array)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.readBoolArray();", array)).append(LS);
                         break;
                     case Kotlin:
-                        builder.append(StringUtils.format("val {} = buffer.readBooleanArray()", array)).append(LS);
+                        builder.append(StringUtils.format("val {} = buffer.readBoolArray()", array)).append(LS);
                         break;
                     case Scala:
-                        builder.append(StringUtils.format("val {} = buffer.readBooleanArray", array)).append(LS);
+                        builder.append(StringUtils.format("val {} = buffer.readBoolArray", array)).append(LS);
                         break;
                     case JavaScript, EcmaScript, TypeScript:
-                        builder.append(StringUtils.format("const {} = buffer.readBooleanArray();", array)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readBoolArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -544,38 +544,38 @@ public class CutDownArraySerializer implements ICutDownSerializer {
             case "Boolean":
                 switch (language) {
                     case Enhance:
-                        builder.append(StringUtils.format("{}[] {} = {}.readBooleanBoxArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
+                        builder.append(StringUtils.format("{}[] {} = {}.readBoolBoxArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
                         break;
                     case GdScript:
-                        builder.append(StringUtils.format("var {} = buffer.readBooleanArray()", array)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.readBoolArray()", array)).append(LS);
                         break;
                     case Python:
-                        builder.append(StringUtils.format("{} = buffer.readBooleanArray()", array)).append(LS);
+                        builder.append(StringUtils.format("{} = buffer.readBoolArray()", array)).append(LS);
                         break;
                     case Lua:
-                        builder.append(StringUtils.format("local {} = buffer:readBooleanArray()", array)).append(LS);
+                        builder.append(StringUtils.format("local {} = buffer:readBoolArray()", array)).append(LS);
                         break;
                     case Php:
                         array = "$" + array;
                         builder.append(StringUtils.format("{} = $buffer->readBoolArray();", array)).append(LS);
                         break;
                     case CSharp:
-                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray();", array)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.ReadBoolArray();", array)).append(LS);
                         break;
                     case Golang:
-                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray()", array)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.ReadBoolArray()", array)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("auto {} = buffer.readBooleanArray();", array)).append(LS);
+                        builder.append(StringUtils.format("auto {} = buffer.readBoolArray();", array)).append(LS);
                         break;
                     case Kotlin:
-                        builder.append(StringUtils.format("val {} = buffer.readBooleanArray()", array)).append(LS);
+                        builder.append(StringUtils.format("val {} = buffer.readBoolArray()", array)).append(LS);
                         break;
                     case Scala:
-                        builder.append(StringUtils.format("val {} = buffer.readBooleanArray", array)).append(LS);
+                        builder.append(StringUtils.format("val {} = buffer.readBoolArray", array)).append(LS);
                         break;
                     case JavaScript, EcmaScript, TypeScript:
-                        builder.append(StringUtils.format("const {} = buffer.readBooleanArray();", array)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readBoolArray();", array)).append(LS);
                         break;
                     default:
                         flag = false;

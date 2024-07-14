@@ -303,7 +303,7 @@ public class CodeGenerateJava implements ICodeGenerate {
         var fieldRegistrations = registration.getFieldRegistrations();
         var javaBuilder = new StringBuilder();
         if (registration.isCompatible()) {
-            javaBuilder.append("int beforeWriteIndex = buffer.writeOffset();").append(LS);
+            javaBuilder.append("int beforeWriteIndex = buffer.getWriteOffset();").append(LS);
             javaBuilder.append(StringUtils.format("buffer.writeInt({});", registration.getPredictionLength())).append(LS);
         } else {
             javaBuilder.append("buffer.writeInt(-1);").append(LS);

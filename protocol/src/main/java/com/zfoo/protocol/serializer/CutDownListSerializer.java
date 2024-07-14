@@ -47,28 +47,28 @@ public class CutDownListSerializer implements ICutDownSerializer {
             case "Boolean":
                 switch (language) {
                     case Enhance:
-                        builder.append(StringUtils.format("{}.writeBooleanList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
+                        builder.append(StringUtils.format("{}.writeBoolList($1, (List){});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
                     case GdScript, Python:
-                        builder.append(StringUtils.format("buffer.writeBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBoolArray({})", objectStr)).append(LS);
                         break;
                     case Lua:
-                        builder.append(StringUtils.format("buffer:writeBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer:writeBoolArray({})", objectStr)).append(LS);
                         break;
                     case Php:
                         builder.append(StringUtils.format("$buffer->writeBoolArray({});", objectStr)).append(LS);
                         break;
                     case CSharp:
-                        builder.append(StringUtils.format("buffer.WriteBooleanList({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.WriteBoolList({});", objectStr)).append(LS);
                         break;
                     case Golang:
-                        builder.append(StringUtils.format("buffer.WriteBooleanArray({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.WriteBoolArray({})", objectStr)).append(LS);
                         break;
                     case Cpp, Java, JavaScript, EcmaScript, TypeScript:
-                        builder.append(StringUtils.format("buffer.writeBooleanList({});", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBoolList({});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala:
-                        builder.append(StringUtils.format("buffer.writeBooleanList({})", objectStr)).append(LS);
+                        builder.append(StringUtils.format("buffer.writeBoolList({})", objectStr)).append(LS);
                         break;
                     default:
                         flag = false;
@@ -340,41 +340,41 @@ public class CutDownListSerializer implements ICutDownSerializer {
             case "Boolean":
                 switch (language) {
                     case Enhance:
-                        builder.append(StringUtils.format("List {} = {}.readBooleanList($1);", list, EnhanceUtils.byteBufUtils));
+                        builder.append(StringUtils.format("List {} = {}.readBoolList($1);", list, EnhanceUtils.byteBufUtils));
                         break;
                     case GdScript:
-                        builder.append(StringUtils.format("var {} = buffer.readBooleanArray()", list)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.readBoolArray()", list)).append(LS);
                         break;
                     case Python:
-                        builder.append(StringUtils.format("{} = buffer.readBooleanArray()", list)).append(LS);
+                        builder.append(StringUtils.format("{} = buffer.readBoolArray()", list)).append(LS);
                         break;
                     case Lua:
-                        builder.append(StringUtils.format("local {} = buffer:readBooleanArray()", list)).append(LS);
+                        builder.append(StringUtils.format("local {} = buffer:readBoolArray()", list)).append(LS);
                         break;
                     case Php:
                         list = "$" + list;
                         builder.append(StringUtils.format("{} = buffer->readBoolArray();", list)).append(LS);
                         break;
                     case CSharp:
-                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanList();", list)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.ReadBoolList();", list)).append(LS);
                         break;
                     case Golang:
-                        builder.append(StringUtils.format("var {} = buffer.ReadBooleanArray()", list)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.ReadBoolArray()", list)).append(LS);
                         break;
                     case Cpp:
-                        builder.append(StringUtils.format("auto {} = buffer.readBooleanList();", list)).append(LS);
+                        builder.append(StringUtils.format("auto {} = buffer.readBoolList();", list)).append(LS);
                         break;
                     case Java:
-                        builder.append(StringUtils.format("var {} = buffer.readBooleanList();", list)).append(LS);
+                        builder.append(StringUtils.format("var {} = buffer.readBoolList();", list)).append(LS);
                         break;
                     case Kotlin:
-                        builder.append(StringUtils.format("val {} = buffer.readBooleanList()", list)).append(LS);
+                        builder.append(StringUtils.format("val {} = buffer.readBoolList()", list)).append(LS);
                         break;
                     case Scala:
-                        builder.append(StringUtils.format("val {} = buffer.readBooleanList", list)).append(LS);
+                        builder.append(StringUtils.format("val {} = buffer.readBoolList", list)).append(LS);
                         break;
                     case JavaScript, EcmaScript, TypeScript:
-                        builder.append(StringUtils.format("const {} = buffer.readBooleanList();", list)).append(LS);
+                        builder.append(StringUtils.format("const {} = buffer.readBoolList();", list)).append(LS);
                         break;
                     default:
                         flag = false;

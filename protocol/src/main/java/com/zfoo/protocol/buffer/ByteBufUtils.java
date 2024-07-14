@@ -71,23 +71,23 @@ public abstract class ByteBufUtils {
     }
 
     //---------------------------------boolean--------------------------------------
-    public static void writeBoolean(ByteBuf byteBuf, boolean value) {
+    public static void writeBool(ByteBuf byteBuf, boolean value) {
         byteBuf.writeBoolean(value);
     }
 
-    public static boolean readBoolean(ByteBuf byteBuf) {
+    public static boolean readBool(ByteBuf byteBuf) {
         return byteBuf.readBoolean();
     }
 
-    public static boolean tryReadBoolean(ByteBuf byteBuf) {
-        return byteBuf.isReadable() && readBoolean(byteBuf);
+    public static boolean tryReadBool(ByteBuf byteBuf) {
+        return byteBuf.isReadable() && readBool(byteBuf);
     }
 
-    public static void writeBooleanBox(ByteBuf byteBuf, Boolean value) {
+    public static void writeBoolBox(ByteBuf byteBuf, Boolean value) {
         byteBuf.writeBoolean(value != null && value);
     }
 
-    public static Boolean readBooleanBox(ByteBuf byteBuf) {
+    public static Boolean readBoolBox(ByteBuf byteBuf) {
         return byteBuf.readBoolean();
     }
 
@@ -698,7 +698,7 @@ public abstract class ByteBufUtils {
     }
 
     //---------------------------------boolean--------------------------------------
-    public static void writeBooleanArray(ByteBuf byteBuf, boolean[] array) {
+    public static void writeBoolArray(ByteBuf byteBuf, boolean[] array) {
         if (array == null) {
             byteBuf.writeByte(0);
             return;
@@ -712,7 +712,7 @@ public abstract class ByteBufUtils {
         byteBuf.writeBytes(bytes);
     }
 
-    public static boolean[] readBooleanArray(ByteBuf byteBuf) {
+    public static boolean[] readBoolArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
         var bytes = new byte[CollectionUtils.comfortableByteLength(length)];
         var array = new boolean[length];
@@ -723,54 +723,54 @@ public abstract class ByteBufUtils {
         return array;
     }
 
-    public static void writeBooleanBoxArray(ByteBuf byteBuf, Boolean[] array) {
+    public static void writeBoolBoxArray(ByteBuf byteBuf, Boolean[] array) {
         if (array == null) {
             byteBuf.writeByte(0);
             return;
         }
         writeInt(byteBuf, array.length);
         for (var value : array) {
-            writeBooleanBox(byteBuf, value);
+            writeBoolBox(byteBuf, value);
         }
     }
 
-    public static Boolean[] readBooleanBoxArray(ByteBuf byteBuf) {
+    public static Boolean[] readBoolBoxArray(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
         var array = new Boolean[CollectionUtils.comfortableByteLength(length)];
         for (var i = 0; i < length; i++) {
-            array[i] = readBooleanBox(byteBuf);
+            array[i] = readBoolBox(byteBuf);
         }
         return array;
     }
 
-    public static void writeBooleanCollection(ByteBuf byteBuf, Collection<Boolean> collection) {
+    public static void writeBoolCollection(ByteBuf byteBuf, Collection<Boolean> collection) {
         if (collection == null) {
             byteBuf.writeByte(0);
             return;
         }
         writeInt(byteBuf, collection.size());
         for (var value : collection) {
-            writeBooleanBox(byteBuf, value);
+            writeBoolBox(byteBuf, value);
         }
     }
 
-    public static void writeBooleanList(ByteBuf byteBuf, List<Boolean> list) {
-        writeBooleanCollection(byteBuf, list);
+    public static void writeBoolList(ByteBuf byteBuf, List<Boolean> list) {
+        writeBoolCollection(byteBuf, list);
     }
 
-    public static List<Boolean> readBooleanList(ByteBuf byteBuf) {
-        return new ArrayListBoolean(readBooleanArray(byteBuf));
+    public static List<Boolean> readBoolList(ByteBuf byteBuf) {
+        return new ArrayListBoolean(readBoolArray(byteBuf));
     }
 
-    public static void writeBooleanSet(ByteBuf byteBuf, Set<Boolean> set) {
-        writeBooleanCollection(byteBuf, set);
+    public static void writeBoolSet(ByteBuf byteBuf, Set<Boolean> set) {
+        writeBoolCollection(byteBuf, set);
     }
 
-    public static Set<Boolean> readBooleanSet(ByteBuf byteBuf) {
+    public static Set<Boolean> readBoolSet(ByteBuf byteBuf) {
         var length = readInt(byteBuf);
         Set<Boolean> set = CollectionUtils.newSet(length);
         for (var i = 0; i < length; i++) {
-            set.add(readBooleanBox(byteBuf));
+            set.add(readBoolBox(byteBuf));
         }
         return set;
     }
