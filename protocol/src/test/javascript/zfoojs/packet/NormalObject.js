@@ -1,8 +1,9 @@
-
+// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
 const NormalObject = function() {
     this.a = 0; // number
     this.aaa = []; // Array<number>
     this.b = 0; // number
+    // 整数类型
     this.c = 0; // number
     this.d = 0; // number
     this.e = 0; // number
@@ -42,7 +43,7 @@ NormalObject.write = function(buffer, packet) {
     buffer.writeLong(packet.d);
     buffer.writeFloat(packet.e);
     buffer.writeDouble(packet.f);
-    buffer.writeBoolean(packet.g);
+    buffer.writeBool(packet.g);
     buffer.writeString(packet.jj);
     buffer.writePacket(packet.kk, 102);
     buffer.writeIntList(packet.l);
@@ -79,7 +80,7 @@ NormalObject.read = function(buffer) {
     packet.e = result5;
     const result6 = buffer.readDouble();
     packet.f = result6;
-    const result7 = buffer.readBoolean(); 
+    const result7 = buffer.readBool(); 
     packet.g = result7;
     const result8 = buffer.readString();
     packet.jj = result8;

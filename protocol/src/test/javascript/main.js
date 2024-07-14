@@ -8,11 +8,11 @@ function assert(flag) {
     }
 }
 
-const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes');
-// const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes');
-// const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes');
-// const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes');
-// const data = fs.readFileSync('D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes');
+const data = fs.readFileSync('C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes');
+// const data = fs.readFileSync('C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes');
+// const data = fs.readFileSync('C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes');
+// const data = fs.readFileSync('C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-compatible.bytes');
+// const data = fs.readFileSync('C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-inner-inner-compatible.bytes');
 
 const arrayBytes = new Uint8Array(data.length);
 data.copy(arrayBytes, 0, 0, data.length);
@@ -43,8 +43,8 @@ function byteBufferTest() {
     // boolean
     const testBoolean = [false, true];
     testBoolean.forEach((value) => {
-        buffer.writeBoolean(value);
-        assert(buffer.readBoolean() == value);
+        buffer.writeBool(value);
+        assert(buffer.readBool() == value);
     });
 
     assert(buffer.writeOffset == testBoolean.length);
