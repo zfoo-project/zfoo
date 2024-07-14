@@ -19,7 +19,7 @@ export class ObjectBRegistration implements IProtocolRegistration<ObjectB> {
         }
         const beforeWriteIndex = buffer.getWriteOffset();
         buffer.writeInt(4);
-        buffer.writeBoolean(packet.flag);
+        buffer.writeBool(packet.flag);
         buffer.writeInt(packet.innerCompatibleValue);
         buffer.adjustPadding(4, beforeWriteIndex);
     }
@@ -31,7 +31,7 @@ export class ObjectBRegistration implements IProtocolRegistration<ObjectB> {
         }
         const beforeReadIndex = buffer.getReadOffset();
         const packet = new ObjectB();
-        const result0 = buffer.readBoolean(); 
+        const result0 = buffer.readBool(); 
         packet.flag = result0;
         if (buffer.compatibleRead(beforeReadIndex, length)) {
             const result1 = buffer.readInt();

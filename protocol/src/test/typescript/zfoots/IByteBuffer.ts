@@ -1,6 +1,7 @@
 interface IByteBuffer {
     adjustPadding(predictionLength: number, beforeWriteIndex: number): void
     compatibleRead(beforeReadIndex: number, length: number): boolean
+    getBuffer(): ArrayBuffer;
     setWriteOffset(writeOffset: number): void
     getWriteOffset(): number
     setReadOffset(readOffset: number): void
@@ -10,8 +11,8 @@ interface IByteBuffer {
     isReadable(): boolean
     writeBytes(byteArray: ArrayBuffer): void
     toBytes(): ArrayBuffer
-    writeBoolean(value: boolean): void
-    readBoolean(): boolean
+    writeBool(value: boolean): void
+    readBool(): boolean
     writeByte(value: number): void
     readByte(): number
     writeShort(value: number): void
@@ -31,8 +32,8 @@ interface IByteBuffer {
     readString(): string
     writePacket(packet: any, protocolId: number): void
     readPacket(protocolId: number): any
-    writeBooleanArray(array: Array<boolean> | null): void
-    readBooleanArray(): boolean[]
+    writeBoolArray(array: Array<boolean> | null): void
+    readBoolArray(): boolean[]
     writeByteArray(array: Array<number> | null): void
     readByteArray(): number[]
     writeShortArray(array: Array<number> | null): void
@@ -50,8 +51,8 @@ interface IByteBuffer {
     writePacketArray(array: Array<any> | null, protocolId: number): void
     readPacketArray(protocolId: number): any
     // ---------------------------------------------list-------------------------------------------
-    writeBooleanList(list: Array<boolean> | null): void
-    readBooleanList(): boolean[]
+    writeBoolList(list: Array<boolean> | null): void
+    readBoolList(): boolean[]
     writeByteList(list: Array<number> | null): void
     readByteList(): number[]
     writeShortList(list: Array<number> | null): void
@@ -69,8 +70,8 @@ interface IByteBuffer {
     writePacketList(list: Array<any> | null, protocolId: number): void
     readPacketList(protocolId: number): any[]
     // ---------------------------------------------set-------------------------------------------
-    writeBooleanSet(set: Set<boolean> | null): void
-    readBooleanSet(): Set<boolean>
+    writeBoolSet(set: Set<boolean> | null): void
+    readBoolSet(): Set<boolean>
     writeByteSet(set: Set<number> | null): void
     readByteSet(): Set<number>
     writeShortSet(set: Set<number> | null): void
