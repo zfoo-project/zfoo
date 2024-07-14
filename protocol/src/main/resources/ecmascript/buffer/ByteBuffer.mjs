@@ -75,6 +75,10 @@ class ByteBuffer {
         return length !== -1 && this.getReadOffset() < length + beforeReadIndex;
     }
 
+    getBuffer() {
+        return this.buffer;
+    }
+
     getWriteOffset() {
         return this.writeOffset;
     }
@@ -120,7 +124,7 @@ class ByteBuffer {
         return this.writeOffset > this.readOffset;
     }
 
-    writeBoolean(value) {
+    writeBool(value) {
         if (!(value === true || value === false)) {
             throw new Error('value must be true of false');
         }
@@ -133,7 +137,7 @@ class ByteBuffer {
         this.writeOffset++;
     }
 
-    readBoolean() {
+    readBool() {
         const value = this.bufferView.getInt8(this.readOffset);
         this.readOffset++;
         return (value === 1);
@@ -386,7 +390,7 @@ class ByteBuffer {
 
     writePacketFlag(value) {
         const flag = (value === null) || (value === undefined);
-        this.writeBoolean(!flag);
+        this.writeBool(!flag);
         return flag;
     }
 
@@ -400,23 +404,23 @@ class ByteBuffer {
         return protocolRegistration.read(this);
     }
 
-    writeBooleanArray(array) {
+    writeBoolArray(array) {
         if (array === null) {
             this.writeInt(0);
         } else {
             this.writeInt(array.length);
             array.forEach(element => {
-                this.writeBoolean(element);
+                this.writeBool(element);
             });
         }
     }
 
-    readBooleanArray() {
+    readBoolArray() {
         const array = [];
         const length = this.readInt();
         if (length > 0) {
             for (let index = 0; index < length; index++) {
-                array.push(this.readBoolean());
+                array.push(this.readBool());
             }
         }
         return array;
@@ -601,12 +605,12 @@ class ByteBuffer {
     }
 
     // ---------------------------------------------list-------------------------------------------
-    writeBooleanList(list) {
-        this.writeBooleanArray(list);
+    writeBoolList(list) {
+        this.writeBoolArray(list);
     }
 
-    readBooleanList() {
-        return this.readBooleanArray();
+    readBoolList() {
+        return this.readBoolArray();
     }
 
     writeByteList(list) {
@@ -674,19 +678,19 @@ class ByteBuffer {
     }
 
     // ---------------------------------------------set-------------------------------------------
-    writeBooleanSet(set) {
+    writeBoolSet(set) {
         if (set === null) {
             this.writeInt(0);
         } else {
             this.writeInt(set.size);
             set.forEach(element => {
-                this.writeBoolean(element);
+                this.writeBool(element);
             });
         }
     }
 
-    readBooleanSet() {
-        return new Set(this.readBooleanArray());
+    readBoolSet() {
+        return new Set(this.readBoolArray());
     }
 
     writeByteSet(set) {

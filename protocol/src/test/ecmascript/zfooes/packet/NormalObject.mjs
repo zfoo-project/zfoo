@@ -42,7 +42,7 @@ export class NormalObjectRegistration {
         buffer.writeLong(packet.d);
         buffer.writeFloat(packet.e);
         buffer.writeDouble(packet.f);
-        buffer.writeBoolean(packet.g);
+        buffer.writeBool(packet.g);
         buffer.writeString(packet.jj);
         buffer.writePacket(packet.kk, 102);
         buffer.writeIntList(packet.l);
@@ -79,7 +79,7 @@ export class NormalObjectRegistration {
         packet.e = result5;
         const result6 = buffer.readDouble();
         packet.f = result6;
-        const result7 = buffer.readBoolean(); 
+        const result7 = buffer.readBool(); 
         packet.g = result7;
         const result8 = buffer.readString();
         packet.jj = result8;
