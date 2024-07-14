@@ -29,7 +29,11 @@ class ByteBuffer {
     }
 
     // -------------------------------------------------get/set-------------------------------------------------
-    fun writeOffset(): Int {
+    fun getBuffer(): ByteArray {
+        return buffer;
+    }
+
+    fun getWriteOffset(): Int {
         return writeOffset
     }
 
@@ -43,7 +47,7 @@ class ByteBuffer {
         writeOffset = writeIndex
     }
 
-    fun readOffset(): Int {
+    fun getReadOffset(): Int {
         return readOffset
     }
 
@@ -350,7 +354,7 @@ class ByteBuffer {
         return String(bytes)
     }
 
-    fun writeBooleanArray(array: Array<Boolean>) {
+    fun writeBoolArray(array: Array<Boolean>) {
         if (array.size == 0) {
             writeInt(0)
         } else {
@@ -362,7 +366,7 @@ class ByteBuffer {
         }
     }
 
-    fun readBooleanArray(): Array<Boolean> {
+    fun readBoolArray(): Array<Boolean> {
         val size = readInt()
         val array = Array<Boolean>(size) { init -> false }
         if (size > 0) {
@@ -534,7 +538,7 @@ class ByteBuffer {
         return array
     }
 
-    fun writeBooleanList(list: List<Boolean>) {
+    fun writeBoolList(list: List<Boolean>) {
         if (list.isEmpty()) {
             writeInt(0)
         } else {
@@ -545,7 +549,7 @@ class ByteBuffer {
         }
     }
 
-    fun readBooleanList(): List<Boolean> {
+    fun readBoolList(): List<Boolean> {
         val size = readInt()
         val list: MutableList<Boolean> = ArrayList()
         if (size > 0) {
@@ -734,7 +738,7 @@ class ByteBuffer {
         return list
     }
 
-    fun writeBooleanSet(set: Set<Boolean>) {
+    fun writeBoolSet(set: Set<Boolean>) {
         if (set.isEmpty()) {
             writeInt(0)
         } else {
@@ -745,7 +749,7 @@ class ByteBuffer {
         }
     }
 
-    fun readBooleanSet(): Set<Boolean> {
+    fun readBoolSet(): Set<Boolean> {
         val size = readInt()
         val set: MutableSet<Boolean> = HashSet()
         if (size > 0) {

@@ -27,7 +27,7 @@ class EmptyObjectRegistration : IProtocolRegistration {
         if (length == 0) {
             return packet
         }
-        val beforeReadIndex = buffer.readOffset()
+        val beforeReadIndex = buffer.getReadOffset()
         
         if (length > 0) {
             buffer.setReadOffset(beforeReadIndex + length)

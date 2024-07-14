@@ -30,7 +30,7 @@ class SimpleObjectRegistration : IProtocolRegistration {
         if (length == 0) {
             return packet
         }
-        val beforeReadIndex = buffer.readOffset()
+        val beforeReadIndex = buffer.getReadOffset()
         val result0 = buffer.readInt()
         packet.c = result0
         val result1 = buffer.readBool()

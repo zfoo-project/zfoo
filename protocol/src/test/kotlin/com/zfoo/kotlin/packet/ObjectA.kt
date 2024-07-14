@@ -22,7 +22,7 @@ class ObjectARegistration : IProtocolRegistration {
             return
         }
         val message = packet as ObjectA
-        val beforeWriteIndex = buffer.writeOffset()
+        val beforeWriteIndex = buffer.getWriteOffset()
         buffer.writeInt(201)
         buffer.writeInt(message.a)
         buffer.writeIntStringMap(message.m)
@@ -37,7 +37,7 @@ class ObjectARegistration : IProtocolRegistration {
         if (length == 0) {
             return packet
         }
-        val beforeReadIndex = buffer.readOffset()
+        val beforeReadIndex = buffer.getReadOffset()
         val result0 = buffer.readInt()
         packet.a = result0
         val map1 = buffer.readIntStringMap()

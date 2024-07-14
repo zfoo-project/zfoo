@@ -163,7 +163,7 @@ fun compatibleTest() {
 
     var equal = 0
     var notEqual = 0
-    for (i in 0 until buffer.writeOffset()) {
+    for (i in 0 until buffer.getWriteOffset()) {
         val a = buffer.readByte()
         val b = newBuffer.readByte()
         if (a == b) {

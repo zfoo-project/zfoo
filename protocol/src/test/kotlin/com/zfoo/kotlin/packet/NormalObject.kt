@@ -40,7 +40,7 @@ class NormalObjectRegistration : IProtocolRegistration {
             return
         }
         val message = packet as NormalObject
-        val beforeWriteIndex = buffer.writeOffset()
+        val beforeWriteIndex = buffer.getWriteOffset()
         buffer.writeInt(857)
         buffer.writeByte(message.a)
         buffer.writeByteArray(message.aaa)
@@ -71,7 +71,7 @@ class NormalObjectRegistration : IProtocolRegistration {
         if (length == 0) {
             return packet
         }
-        val beforeReadIndex = buffer.readOffset()
+        val beforeReadIndex = buffer.getReadOffset()
         val result0 = buffer.readByte()
         packet.a = result0
         val array1 = buffer.readByteArray()

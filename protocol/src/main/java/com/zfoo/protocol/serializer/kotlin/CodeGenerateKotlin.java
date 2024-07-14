@@ -292,7 +292,7 @@ public class CodeGenerateKotlin implements ICodeGenerate {
         var fieldRegistrations = registration.getFieldRegistrations();
         var ktBuilder = new StringBuilder();
         if (registration.isCompatible()) {
-            ktBuilder.append("val beforeWriteIndex = buffer.writeOffset()").append(LS);
+            ktBuilder.append("val beforeWriteIndex = buffer.getWriteOffset()").append(LS);
             ktBuilder.append(StringUtils.format("buffer.writeInt({})", registration.getPredictionLength())).append(LS);
         } else {
             ktBuilder.append("buffer.writeInt(-1)").append(LS);

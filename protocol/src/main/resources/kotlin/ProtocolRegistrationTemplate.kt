@@ -18,7 +18,7 @@ class ${protocol_name}Registration : IProtocolRegistration {
         if (length == 0) {
             return packet
         }
-        val beforeReadIndex = buffer.readOffset()
+        val beforeReadIndex = buffer.getReadOffset()
         ${protocol_read_deserialization}
         if (length > 0) {
             buffer.setReadOffset(beforeReadIndex + length)

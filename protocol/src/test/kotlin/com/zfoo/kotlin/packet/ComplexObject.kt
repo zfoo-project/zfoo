@@ -72,7 +72,7 @@ class ComplexObjectRegistration : IProtocolRegistration {
             return
         }
         val message = packet as ComplexObject
-        val beforeWriteIndex = buffer.writeOffset()
+        val beforeWriteIndex = buffer.getWriteOffset()
         buffer.writeInt(36962)
         buffer.writeByte(message.a)
         buffer.writeByte(message.aa)
@@ -100,8 +100,8 @@ class ComplexObjectRegistration : IProtocolRegistration {
         buffer.writeDoubleArray(message.ffff)
         buffer.writeBool(message.g)
         buffer.writeBool(message.gg)
-        buffer.writeBooleanArray(message.ggg)
-        buffer.writeBooleanArray(message.gggg)
+        buffer.writeBoolArray(message.ggg)
+        buffer.writeBoolArray(message.gggg)
         buffer.writeString(message.jj)
         buffer.writeStringArray(message.jjj)
         buffer.writePacket(message.kk, 102)
@@ -188,7 +188,7 @@ class ComplexObjectRegistration : IProtocolRegistration {
         if (length == 0) {
             return packet
         }
-        val beforeReadIndex = buffer.readOffset()
+        val beforeReadIndex = buffer.getReadOffset()
         val result0 = buffer.readByte()
         packet.a = result0
         val result1 = buffer.readByte()
@@ -241,9 +241,9 @@ class ComplexObjectRegistration : IProtocolRegistration {
         packet.g = result24
         val result25 = buffer.readBool()
         packet.gg = result25
-        val array26 = buffer.readBooleanArray()
+        val array26 = buffer.readBoolArray()
         packet.ggg = array26
-        val array27 = buffer.readBooleanArray()
+        val array27 = buffer.readBoolArray()
         packet.gggg = array27
         val result28 = buffer.readString()
         packet.jj = result28

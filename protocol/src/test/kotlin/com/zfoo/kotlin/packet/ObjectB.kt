@@ -19,7 +19,7 @@ class ObjectBRegistration : IProtocolRegistration {
             return
         }
         val message = packet as ObjectB
-        val beforeWriteIndex = buffer.writeOffset()
+        val beforeWriteIndex = buffer.getWriteOffset()
         buffer.writeInt(4)
         buffer.writeBool(message.flag)
         buffer.writeInt(message.innerCompatibleValue)
@@ -32,7 +32,7 @@ class ObjectBRegistration : IProtocolRegistration {
         if (length == 0) {
             return packet
         }
-        val beforeReadIndex = buffer.readOffset()
+        val beforeReadIndex = buffer.getReadOffset()
         val result0 = buffer.readBool()
         packet.flag = result0
         if (buffer.compatibleRead(beforeReadIndex, length)) {
