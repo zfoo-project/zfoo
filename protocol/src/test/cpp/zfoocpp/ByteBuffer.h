@@ -11,7 +11,6 @@
 
 // 网络传输默认使用大端传输
 namespace zfoo {
-
     using std::string;
     using std::vector;
     using std::list;
@@ -58,8 +57,8 @@ namespace zfoo {
     private:
         int8_t *m_buffer;
         int32_t m_max_capacity;
-        int32_t m_writerIndex;
-        int32_t m_readerIndex;
+        int32_t m_writerOffset;
+        int32_t m_readerOffset;
 
     public:
         ByteBuffer(int32_t capacity = DEFAULT_BUFFER_SIZE) : m_max_capacity(capacity) {
@@ -78,19 +77,19 @@ namespace zfoo {
         ByteBuffer &operator=(const ByteBuffer &buffer) = delete;
 
         void adjustPadding(int32_t predictionLength, int32_t beforeWriteIndex) {
-            int32_t currentWriteIndex = writerIndex();
+            int32_t currentWriteIndex = getWriterOffset();
             int32_t predictionCount = writeIntCount(predictionLength);
             int32_t length = currentWriteIndex - beforeWriteIndex - predictionCount;
             int32_t lengthCount = writeIntCount(length);
             int32_t padding = lengthCount - predictionCount;
             if (padding == 0) {
-                writerIndex(beforeWriteIndex);
+                setWriterOffset(beforeWriteIndex);
                 writeInt(length);
-                writerIndex(currentWriteIndex);
+                setWriterOffset(currentWriteIndex);
             } else {
                 int8_t *targetPtr = (int8_t *) calloc(length, sizeof(int8_t));
-                memcpy(targetPtr, &m_buffer[currentWriteIndex - length],  length);
-                writerIndex(beforeWriteIndex);
+                memcpy(targetPtr, &m_buffer[currentWriteIndex - length], length);
+                setWriterOffset(beforeWriteIndex);
                 writeInt(length);
                 writeBytes(targetPtr, length);
                 free(targetPtr);
@@ -98,48 +97,52 @@ namespace zfoo {
         }
 
         bool compatibleRead(int32_t beforeReadIndex, int32_t length) {
-            return length != -1 && readerIndex() < length + beforeReadIndex;
+            return length != -1 && getReaderOffset() < length + beforeReadIndex;
         }
 
         void clear() {
-            m_writerIndex = 0;
-            m_readerIndex = 0;
+            m_writerOffset = 0;
+            m_readerOffset = 0;
         }
 
-        int32_t writerIndex() const {
-            return m_writerIndex;
+        int8_t *getBuffer() {
+            return m_buffer;
         }
 
-        int32_t readerIndex() const {
-            return m_readerIndex;
+        int32_t getWriterOffset() const {
+            return m_writerOffset;
         }
 
-        void writerIndex(int32_t writeIndex) {
+        int32_t getReaderOffset() const {
+            return m_readerOffset;
+        }
+
+        void setWriterOffset(int32_t writeIndex) {
             if (writeIndex > m_max_capacity) {
                 string errorMessage =
                         "writeIndex[" + std::to_string(writeIndex) + "] out of bounds exception: readerIndex: " +
-                        std::to_string(m_readerIndex) +
-                        ", writerIndex: " + std::to_string(m_writerIndex) +
+                        std::to_string(m_readerOffset) +
+                        ", writerIndex: " + std::to_string(m_writerOffset) +
                         "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + std::to_string(m_max_capacity);
                 throw errorMessage;
             }
-            m_writerIndex = writeIndex;
+            m_writerOffset = writeIndex;
         }
 
-        void readerIndex(int32_t readerIndex) {
-            if (readerIndex > m_writerIndex) {
+        void setReaderOffset(int32_t readerIndex) {
+            if (readerIndex > m_writerOffset) {
                 string errorMessage =
                         "readIndex[" + std::to_string(readerIndex) + "] out of bounds exception: readerIndex: " +
-                        std::to_string(m_readerIndex) +
-                        ", writerIndex: " + std::to_string(m_writerIndex) +
+                        std::to_string(m_readerOffset) +
+                        ", writerIndex: " + std::to_string(m_writerOffset) +
                         "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + std::to_string(m_max_capacity);
                 throw errorMessage;
             }
-            m_readerIndex = readerIndex;
+            m_readerOffset = readerIndex;
         }
 
         inline int32_t getCapacity() const {
-            return m_max_capacity - m_writerIndex;
+            return m_max_capacity - m_writerOffset;
         }
 
         inline void ensureCapacity(const int32_t &capacity) {
@@ -156,27 +159,27 @@ namespace zfoo {
         }
 
         inline bool isReadable() {
-            return m_writerIndex > m_readerIndex;
+            return m_writerOffset > m_readerOffset;
         }
 
         inline void writeBool(const bool &value) {
             ensureCapacity(1);
             int8_t v = value ? 1 : 0;
-            m_buffer[m_writerIndex++] = v;
+            m_buffer[m_writerOffset++] = v;
         }
 
         inline bool readBool() {
-            int8_t value = m_buffer[m_readerIndex++];
+            int8_t value = m_buffer[m_readerOffset++];
             return value == 1;
         }
 
         inline void writeByte(const int8_t &value) {
             ensureCapacity(1);
-            m_buffer[m_writerIndex++] = value;
+            m_buffer[m_writerOffset++] = value;
         }
 
         inline int8_t readByte() {
-            return m_buffer[m_readerIndex++];
+            return m_buffer[m_readerOffset++];
         }
 
         inline void setByte(const int32_t &index, const int8_t &value) {
@@ -189,13 +192,13 @@ namespace zfoo {
 
         inline void writeBytes(const int8_t *buffer, const int32_t &length) {
             ensureCapacity(length);
-            memcpy(&m_buffer[m_writerIndex], buffer, length);
-            m_writerIndex += length;
+            memcpy(&m_buffer[m_writerOffset], buffer, length);
+            m_writerOffset += length;
         }
 
         inline int8_t *readBytes(const int32_t &length) {
-            int8_t *bytes = &m_buffer[m_readerIndex];
-            m_readerIndex += length;
+            int8_t *bytes = &m_buffer[m_readerOffset];
+            m_readerOffset += length;
             return bytes;
         }
 
@@ -219,14 +222,14 @@ namespace zfoo {
                 return;
             }
 
-            int32_t writeIndex = m_writerIndex;
+            int32_t writeIndex = m_writerOffset;
             ensureCapacity(5);
 
             setByte(writeIndex++, (int8_t) (value | 0x80));
             uint32_t b = value >> 14;
             if (b == 0) {
                 setByte(writeIndex++, (int8_t) a);
-                writerIndex(writeIndex);
+                setWriterOffset(writeIndex);
                 return;
             }
 
@@ -234,7 +237,7 @@ namespace zfoo {
             a = value >> 21;
             if (a == 0) {
                 setByte(writeIndex++, (int8_t) b);
-                writerIndex(writeIndex);
+                setWriterOffset(writeIndex);
                 return;
             }
 
@@ -242,13 +245,13 @@ namespace zfoo {
             b = value >> 28;
             if (b == 0) {
                 setByte(writeIndex++, (int8_t) a);
-                writerIndex(writeIndex);
+                setWriterOffset(writeIndex);
                 return;
             }
 
             setByte(writeIndex++, (int8_t) (a | 0x80));
             setByte(writeIndex++, (int8_t) b);
-            writerIndex(writeIndex);
+            setWriterOffset(writeIndex);
         }
 
         inline int32_t writeIntCount(const int32_t &intValue) {
@@ -269,7 +272,7 @@ namespace zfoo {
         }
 
         inline int32_t readInt() {
-            int32_t readIndex = m_readerIndex;
+            int32_t readIndex = m_readerOffset;
 
             int32_t b = getByte(readIndex++);
             uint32_t value = b;
@@ -288,7 +291,7 @@ namespace zfoo {
                     }
                 }
             }
-            readerIndex(readIndex);
+            setReaderOffset(readIndex);
             value = ((value >> 1) ^ -((int32_t) value & 1));
             return (int32_t) value;
         }
@@ -345,7 +348,7 @@ namespace zfoo {
         }
 
         inline int64_t readLong() {
-            int32_t readIndex = m_readerIndex;
+            int32_t readIndex = m_readerOffset;
 
             int64_t b = getByte(readIndex++);
             uint64_t value = b;
@@ -382,7 +385,7 @@ namespace zfoo {
                 }
             }
 
-            readerIndex(readIndex);
+            setReaderOffset(readIndex);
             value = ((value >> 1) ^ -((int64_t) value & 1));
             return (int64_t) value;
         }
@@ -437,19 +440,19 @@ namespace zfoo {
 
 
         //---------------------------------boolean--------------------------------------
-        inline void writeBooleanArray(const vector<bool> &array) {
+        inline void writeBoolArray(const vector<bool> &array) {
             if (array.empty()) {
                 writeByte(0);
                 return;
             }
             int32_t length = array.size();
             writeInt(length);
-            for (auto value : array) {
+            for (auto value: array) {
                 writeBool(value);
             }
         }
 
-        inline vector<bool> readBooleanArray() {
+        inline vector<bool> readBoolArray() {
             int32_t length = readInt();
             int8_t *bytes = readBytes(length);
             vector<bool> array;
@@ -459,19 +462,19 @@ namespace zfoo {
             return array;
         }
 
-        inline void writeBooleanList(const list<bool> &list) {
+        inline void writeBoolList(const list<bool> &list) {
             if (list.empty()) {
                 writeByte(0);
                 return;
             }
             int32_t length = list.size();
             writeInt(length);
-            for (auto value : list) {
+            for (auto value: list) {
                 writeBool(value);
             }
         }
 
-        inline list<bool> readBooleanList() {
+        inline list<bool> readBoolList() {
             int32_t length = readInt();
             list<bool> list;
             for (auto i = 0; i < length; i++) {
@@ -480,19 +483,19 @@ namespace zfoo {
             return list;
         }
 
-        inline void writeBooleanSet(const set<bool> &set) {
+        inline void writeBoolSet(const set<bool> &set) {
             if (set.empty()) {
                 writeByte(0);
                 return;
             }
             int32_t length = set.size();
             writeInt(length);
-            for (auto value : set) {
+            for (auto value: set) {
                 writeBool(value);
             }
         }
 
-        inline set<bool> readBooleanSet() {
+        inline set<bool> readBoolSet() {
             int32_t length = readInt();
             set<bool> set;
             for (auto i = 0; i < length; i++) {
@@ -509,7 +512,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (auto value : array) {
+            for (auto value: array) {
                 writeByte(value);
             }
         }
@@ -531,7 +534,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (auto value : list) {
+            for (auto value: list) {
                 writeByte(value);
             }
         }
@@ -552,7 +555,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (auto value : set) {
+            for (auto value: set) {
                 writeByte(value);
             }
         }
@@ -574,7 +577,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (auto value : array) {
+            for (auto value: array) {
                 writeShort(value);
             }
         }
@@ -595,7 +598,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (auto value : list) {
+            for (auto value: list) {
                 writeShort(value);
             }
         }
@@ -616,7 +619,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (auto value : set) {
+            for (auto value: set) {
                 writeShort(value);
             }
         }
@@ -638,7 +641,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (auto value : array) {
+            for (auto value: array) {
                 writeInt(value);
             }
         }
@@ -659,7 +662,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (auto value : list) {
+            for (auto value: list) {
                 writeInt(value);
             }
         }
@@ -680,7 +683,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (auto value : set) {
+            for (auto value: set) {
                 writeInt(value);
             }
         }
@@ -702,7 +705,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (auto value : array) {
+            for (auto value: array) {
                 writeLong(value);
             }
         }
@@ -723,7 +726,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (auto value : list) {
+            for (auto value: list) {
                 writeLong(value);
             }
         }
@@ -744,7 +747,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (auto value : set) {
+            for (auto value: set) {
                 writeLong(value);
             }
         }
@@ -766,7 +769,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (auto value : array) {
+            for (auto value: array) {
                 writeFloat(value);
             }
         }
@@ -787,7 +790,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (auto value : list) {
+            for (auto value: list) {
                 writeFloat(value);
             }
         }
@@ -808,7 +811,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (auto value : list) {
+            for (auto value: list) {
                 writeFloat(value);
             }
         }
@@ -830,7 +833,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (auto value : array) {
+            for (auto value: array) {
                 writeDouble(value);
             }
         }
@@ -851,7 +854,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (auto value : list) {
+            for (auto value: list) {
                 writeDouble(value);
             }
         }
@@ -872,7 +875,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (auto value : set) {
+            for (auto value: set) {
                 writeDouble(value);
             }
         }
@@ -894,7 +897,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (auto value : array) {
+            for (auto value: array) {
                 writeString(value);
             }
         }
@@ -915,7 +918,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (auto value : list) {
+            for (auto value: list) {
                 writeString(value);
             }
         }
@@ -936,7 +939,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (auto value : set) {
+            for (auto value: set) {
                 writeString(value);
             }
         }
@@ -956,7 +959,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeInt(key);
                 writeInt(value);
             }
@@ -979,7 +982,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeInt(key);
                 writeLong(value);
             }
@@ -1002,7 +1005,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeInt(key);
                 writeString(value);
             }
@@ -1026,7 +1029,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeInt(key);
                 writePacket((IProtocol *) &value, protocolId);
             }
@@ -1051,7 +1054,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeLong(key);
                 writeInt(value);
             }
@@ -1074,7 +1077,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeLong(key);
                 writeLong(value);
             }
@@ -1097,7 +1100,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeLong(key);
                 writeString(value);
             }
@@ -1121,7 +1124,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeLong(key);
                 writePacket((IProtocol *) &value, protocolId);
             }
@@ -1146,7 +1149,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeString(key);
                 writeInt(value);
             }
@@ -1169,7 +1172,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeString(key);
                 writeLong(value);
             }
@@ -1192,7 +1195,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeString(key);
                 writeString(value);
             }
@@ -1216,7 +1219,7 @@ namespace zfoo {
                 return;
             }
             writeInt(map.size());
-            for (const auto&[key, value] : map) {
+            for (const auto &[key, value]: map) {
                 writeString(key);
                 writePacket((IProtocol *) &value, protocolId);
             }
@@ -1245,7 +1248,7 @@ namespace zfoo {
             }
             int32_t length = array.size();
             writeInt(length);
-            for (auto value : array) {
+            for (auto value: array) {
                 writePacket((IProtocol *) &value, protocolId);
             }
         }
@@ -1270,7 +1273,7 @@ namespace zfoo {
             }
             int32_t length = list.size();
             writeInt(length);
-            for (auto value : list) {
+            for (auto value: list) {
                 writePacket((IProtocol *) &value, protocolId);
             }
         }
@@ -1295,7 +1298,7 @@ namespace zfoo {
             }
             int32_t length = set.size();
             writeInt(length);
-            for (auto value : set) {
+            for (auto value: set) {
                 writePacket((IProtocol *) &value, protocolId);
             }
         }
@@ -1321,17 +1324,17 @@ namespace zfoo {
             if (IS_LITTLE_ENDIAN) {
                 swap_bytes<sizeof(T)>(reinterpret_cast<int8_t *>(&value));
             }
-            memcpy(&m_buffer[m_writerIndex], (int8_t *) &value, sizeof(T));
-            m_writerIndex += sizeof(T);
+            memcpy(&m_buffer[m_writerOffset], (int8_t *) &value, sizeof(T));
+            m_writerOffset += sizeof(T);
         }
 
         template<class T>
         inline T read() {
-            T value = *((T *) &m_buffer[m_readerIndex]);
+            T value = *((T *) &m_buffer[m_readerOffset]);
             if (IS_LITTLE_ENDIAN) {
                 swap_bytes<sizeof(T)>(reinterpret_cast<int8_t *>(&value));
             }
-            m_readerIndex += sizeof(T);
+            m_readerOffset += sizeof(T);
             return value;
         }
 
@@ -1343,7 +1346,6 @@ namespace zfoo {
             }
         }
     };
-
 }
 
 #endif

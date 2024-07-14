@@ -2,11 +2,11 @@
 #define ZFOO_PROTOCOLMANAGER_H
 
 #include "ByteBuffer.h"
-#include "zfoocpp/EmptyObject.h"
-#include "zfoocpp/NormalObject.h"
-#include "zfoocpp/ObjectA.h"
-#include "zfoocpp/ObjectB.h"
-#include "zfoocpp/SimpleObject.h"
+#include "zfoocpp/packet/EmptyObject.h"
+#include "zfoocpp/packet/NormalObject.h"
+#include "zfoocpp/packet/ObjectA.h"
+#include "zfoocpp/packet/ObjectB.h"
+#include "zfoocpp/packet/SimpleObject.h"
 namespace zfoo {
 
     const int16_t MAX_PROTOCOL_NUM = 32767;

@@ -19,10 +19,10 @@ public:
         if (length == 0) {
             return packet;
         }
-        auto beforeReadIndex = buffer.readerIndex();
+        auto beforeReadIndex = buffer.getReaderOffset();
         ${protocol_read_deserialization}
         if (length > 0) {
-            buffer.readerIndex(beforeReadIndex + length);
+            buffer.setReaderOffset(beforeReadIndex + length);
         }
         return packet;
     }
