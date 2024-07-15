@@ -475,7 +475,6 @@ namespace zfoo {
         }
 
         inline list<bool> readBoolList() {
-
             int32_t length = readInt();
             list<bool> list;
             for (auto i = 0; i < length; i++) {
