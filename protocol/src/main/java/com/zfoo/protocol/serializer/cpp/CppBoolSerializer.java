@@ -28,8 +28,8 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class CppBoolSerializer implements ICppSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Pair<>("bool", field.getName());
+    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
+        return new Pair<>("bool", "false");
     }
 
     @Override

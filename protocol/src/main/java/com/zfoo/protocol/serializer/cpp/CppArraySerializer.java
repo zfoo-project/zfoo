@@ -32,9 +32,9 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class CppArraySerializer implements ICppSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
         var type = CodeGenerateCpp.toCppClassName(field.getType().getComponentType().getSimpleName());
-        return new Pair<>(StringUtils.format("vector<{}>", type), field.getName());
+        return new Pair<>(StringUtils.format("vector<{}>", type), "null");
     }
 
     @Override

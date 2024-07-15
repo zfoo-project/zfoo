@@ -28,8 +28,8 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class CppIntSerializer implements ICppSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Pair<>("int32_t", field.getName());
+    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
+        return new Pair<>("int32_t", "0");
     }
 
     @Override

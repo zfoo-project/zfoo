@@ -32,9 +32,9 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class CppSetSerializer implements ICppSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
         var type = CodeGenerateCpp.toCppClassName(field.getGenericType().toString());
-        return new Pair<>(type, field.getName());
+        return new Pair<>(type, "null");
     }
 
     @Override
