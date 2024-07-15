@@ -253,8 +253,8 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
             for (var fieldNote : fieldNotes) {
                 fieldDefinitionBuilder.append(fieldNote).append(LS);
             }
-            var triple = jsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
-            fieldDefinitionBuilder.append(StringUtils.format("this.{} = {}; // {}", fieldName, triple.getRight(), triple.getLeft()))
+            var pair = jsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
+            fieldDefinitionBuilder.append(StringUtils.format("this.{} = {}; // {}", fieldName, pair.getValue(), pair.getKey()))
                     .append(LS);
 
         }
