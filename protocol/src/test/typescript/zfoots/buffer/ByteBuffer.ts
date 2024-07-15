@@ -88,26 +88,26 @@ class ByteBuffer implements IByteBuffer{
         return this.buffer;
     }
 
-    setWriteOffset(writeOffset: number): void {
-        if (writeOffset > this.buffer.byteLength) {
-            throw new Error('index out of bounds exception:readerIndex:' + this.readOffset +
-                ', writerIndex:' + this.writeOffset +
-                '(expected:0 <= readerIndex <= writerIndex <= capacity:' + this.buffer.byteLength);
+    setWriteOffset(writeIndex: number): void {
+        if (writeIndex > this.buffer.byteLength) {
+            throw new Error('writeIndex out of bounds exception:readOffset:' + this.readOffset +
+                ', writeOffset:' + this.writeOffset +
+                '(expected:0 <= readOffset <= writeOffset <= capacity:' + this.buffer.byteLength + ')');
         }
-        this.writeOffset = writeOffset;
+        this.writeOffset = writeIndex;
     }
 
     getWriteOffset(): number {
         return this.writeOffset;
     }
 
-    setReadOffset(readOffset: number): void {
-        if (readOffset > this.writeOffset) {
-            throw new Error('index out of bounds exception:readerIndex:' + this.readOffset +
-                ', writerIndex:' + this.writeOffset +
-                '(expected:0 <= readerIndex <= writerIndex <= capacity:' + this.buffer.byteLength);
+    setReadOffset(readIndex: number): void {
+        if (readIndex > this.writeOffset) {
+            throw new Error('readIndex out of bounds exception:readIndex:' + this.readOffset +
+                ', writeOffset:' + this.writeOffset +
+                '(expected:0 <= readOffset <= writeOffset <= capacity:' + this.buffer.byteLength + ')');
         }
-        this.readOffset = readOffset;
+        this.readOffset = readIndex;
     }
 
     getReadOffset(): number {
