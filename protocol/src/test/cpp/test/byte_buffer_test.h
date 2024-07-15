@@ -113,8 +113,8 @@ namespace byte_buffer_test {
 
         ByteBuffer buffer;
         assert(buffer.getCapacity() == DEFAULT_BUFFER_SIZE);
-        assert(buffer.writerIndex() == 0);
-        assert(buffer.readerIndex() == 0);
+        assert(buffer.getWriterOffset() == 0);
+        assert(buffer.getReaderOffset() == 0);
 
         boolTest(buffer);
         byteTest(buffer);
