@@ -27,7 +27,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  */
 public class EsBoolSerializer implements IEsSerializer {
     @Override
-    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration) {
         return new Pair<>("boolean", "false");
     }
 

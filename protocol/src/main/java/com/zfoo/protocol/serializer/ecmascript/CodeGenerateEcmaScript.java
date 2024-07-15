@@ -253,8 +253,10 @@ public class CodeGenerateEcmaScript implements ICodeGenerate {
             for (var fieldNote : fieldNotes) {
                 fieldDefinitionBuilder.append(fieldNote).append(LS);
             }
-            var fieldTypeValue = esSerializer(fieldRegistration.serializer()).fieldTypeValue(field, fieldRegistration);
-            fieldDefinitionBuilder.append(StringUtils.format("{} = {}; // {}", fieldName, fieldTypeValue.getValue(), fieldTypeValue.getKey()))
+            var fieldTypeDefaultValue = esSerializer(fieldRegistration.serializer()).fieldTypeDefaultValue(field, fieldRegistration);
+            var fieldType = fieldTypeDefaultValue.getKey();
+            var fieldDefaultValue = fieldTypeDefaultValue.getValue();
+            fieldDefinitionBuilder.append(StringUtils.format("{} = {}; // {}", fieldName, fieldDefaultValue, fieldType))
                     .append(LS);
 
         }
