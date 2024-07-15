@@ -26,7 +26,7 @@ namespace zfoocs
                 return;
             }
             ObjectA message = (ObjectA) packet;
-            int beforeWriteIndex = buffer.WriteOffset();
+            int beforeWriteIndex = buffer.GetWriteOffset();
             buffer.WriteInt(201);
             buffer.WriteInt(message.a);
             buffer.WriteIntStringMap(message.m);
@@ -42,7 +42,7 @@ namespace zfoocs
             {
                 return null;
             }
-            int beforeReadIndex = buffer.ReadOffset();
+            int beforeReadIndex = buffer.GetReadOffset();
             ObjectA packet = new ObjectA();
             int result0 = buffer.ReadInt();
             packet.a = result0;

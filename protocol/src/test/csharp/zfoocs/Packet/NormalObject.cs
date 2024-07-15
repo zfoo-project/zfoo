@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 namespace zfoocs
 {
-    
+    // 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
     public class NormalObject
     {
         public byte a;
         public byte[] aaa;
         public short b;
+        // 整数类型
         public int c;
         public long d;
         public float e;
@@ -42,7 +43,7 @@ namespace zfoocs
                 return;
             }
             NormalObject message = (NormalObject) packet;
-            int beforeWriteIndex = buffer.WriteOffset();
+            int beforeWriteIndex = buffer.GetWriteOffset();
             buffer.WriteInt(857);
             buffer.WriteByte(message.a);
             buffer.WriteByteArray(message.aaa);
@@ -74,7 +75,7 @@ namespace zfoocs
             {
                 return null;
             }
-            int beforeReadIndex = buffer.ReadOffset();
+            int beforeReadIndex = buffer.GetReadOffset();
             NormalObject packet = new NormalObject();
             byte result0 = buffer.ReadByte();
             packet.a = result0;

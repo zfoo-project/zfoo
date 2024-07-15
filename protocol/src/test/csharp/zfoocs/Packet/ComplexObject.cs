@@ -75,7 +75,7 @@ namespace zfoocs
                 return;
             }
             ComplexObject message = (ComplexObject) packet;
-            int beforeWriteIndex = buffer.WriteOffset();
+            int beforeWriteIndex = buffer.GetWriteOffset();
             buffer.WriteInt(36962);
             buffer.WriteByte(message.a);
             buffer.WriteByte(message.aa);
@@ -103,8 +103,8 @@ namespace zfoocs
             buffer.WriteDoubleArray(message.ffff);
             buffer.WriteBool(message.g);
             buffer.WriteBool(message.gg);
-            buffer.WriteBooleanArray(message.ggg);
-            buffer.WriteBooleanArray(message.gggg);
+            buffer.WriteBoolArray(message.ggg);
+            buffer.WriteBoolArray(message.gggg);
             buffer.WriteString(message.jj);
             buffer.WriteStringArray(message.jjj);
             buffer.WritePacket(message.kk, 102);
@@ -337,7 +337,7 @@ namespace zfoocs
             {
                 return null;
             }
-            int beforeReadIndex = buffer.ReadOffset();
+            int beforeReadIndex = buffer.GetReadOffset();
             ComplexObject packet = new ComplexObject();
             byte result0 = buffer.ReadByte();
             packet.a = result0;
@@ -391,9 +391,9 @@ namespace zfoocs
             packet.g = result24;
             bool result25 = buffer.ReadBool();
             packet.gg = result25;
-            var array26 = buffer.ReadBooleanArray();
+            var array26 = buffer.ReadBoolArray();
             packet.ggg = array26;
-            var array27 = buffer.ReadBooleanArray();
+            var array27 = buffer.ReadBoolArray();
             packet.gggg = array27;
             string result28 = buffer.ReadString();
             packet.jj = result28;

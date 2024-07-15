@@ -36,7 +36,7 @@ namespace zfoocs
             {
                 return null;
             }
-            int beforeReadIndex = buffer.ReadOffset();
+            int beforeReadIndex = buffer.GetReadOffset();
             SimpleObject packet = new SimpleObject();
             int result0 = buffer.ReadInt();
             packet.c = result0;
