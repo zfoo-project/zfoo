@@ -276,8 +276,8 @@ public class CodeGenerateCpp implements ICodeGenerate {
             var field = sequencedFields.get(i);
             IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            var fieldTypeValue = cppSerializer(fieldRegistration.serializer()).fieldTypeValue(field, fieldRegistration);
-            var fieldType = fieldTypeValue.getKey();
+            var fieldTypeDefaultValue = cppSerializer(fieldRegistration.serializer()).fieldTypeDefaultValue(field, fieldRegistration);
+            var fieldType = fieldTypeDefaultValue.getKey();
 
             var propertyFullName = StringUtils.format("{} {};", fieldType, fieldName);
             // 生成注释

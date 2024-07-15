@@ -32,7 +32,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class CppObjectProtocolSerializer implements ICppSerializer {
 
     @Override
-    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
         var type = StringUtils.format("{}", protocolSimpleName);
