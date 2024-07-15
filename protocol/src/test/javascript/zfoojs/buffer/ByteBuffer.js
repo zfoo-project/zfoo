@@ -100,7 +100,7 @@ const ByteBuffer = function() {
         if (writeIndex > this.buffer.byteLength) {
             throw new Error('writeIndex out of bounds exception: readOffset: ' + this.readOffset +
             ', writeOffset: ' + this.writeOffset +
-            '(expected: 0 <= readOffset <= writeOffset <= capacity:' + this.buffer.byteLength);
+            '(expected: 0 <= readOffset <= writeOffset <= capacity:' + this.buffer.byteLength) + ')';
         }
         this.writeOffset = writeIndex;
     };
@@ -113,7 +113,7 @@ const ByteBuffer = function() {
         if (readIndex > this.writeOffset) {
             throw new Error('readIndex out of bounds exception: readOffset: ' + this.readOffset +
                 ', writeOffset: ' + this.writeOffset +
-                '(expected: 0 <= readOffset <= writeOffset <= capacity:' + this.buffer.byteLength);
+                '(expected: 0 <= readOffset <= writeOffset <= capacity:' + this.buffer.byteLength) + ')';
         }
         this.readOffset = readIndex;
     };

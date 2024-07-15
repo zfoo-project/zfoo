@@ -123,7 +123,7 @@ namespace zfoo {
                         "writeIndex[" + std::to_string(writeIndex) + "] out of bounds exception: readOffset: " +
                         std::to_string(readOffset) +
                         ", writeOffset: " + std::to_string(writeOffset) +
-                        "(expected: 0 <= readOffset <= writeOffset <= capacity:" + std::to_string(max_capacity);
+                        "(expected: 0 <= readOffset <= writeOffset <= capacity:" + std::to_string(max_capacity)  + ")";
                 throw errorMessage;
             }
             writeOffset = writeIndex;
@@ -135,7 +135,7 @@ namespace zfoo {
                         "readIndex[" + std::to_string(readIndex) + "] out of bounds exception: readOffset: " +
                         std::to_string(readOffset) +
                         ", writeOffset: " + std::to_string(writeOffset) +
-                        "(expected: 0 <= readOffset <= writeOffset <= capacity:" + std::to_string(max_capacity);
+                        "(expected: 0 <= readOffset <= writeOffset <= capacity:" + std::to_string(max_capacity)  + ")";
                 throw errorMessage;
             }
             readOffset = readIndex;
