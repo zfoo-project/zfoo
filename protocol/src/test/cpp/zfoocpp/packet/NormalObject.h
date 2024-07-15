@@ -49,7 +49,7 @@ namespace zfoo {
                 return;
             }
             auto *message = (NormalObject *) packet;
-            auto beforeWriteIndex = buffer.getWriterOffset();
+            auto beforeWriteIndex = buffer.getWriteOffset();
             buffer.writeInt(857);
             buffer.writeByte(message->a);
             buffer.writeByteArray(message->aaa);
@@ -80,7 +80,7 @@ namespace zfoo {
             if (length == 0) {
                 return packet;
             }
-            auto beforeReadIndex = buffer.getReaderOffset();
+            auto beforeReadIndex = buffer.getReadOffset();
             int8_t result0 = buffer.readByte();
             packet->a = result0;
             auto array1 = buffer.readByteArray();
@@ -127,7 +127,7 @@ namespace zfoo {
                 packet->outCompatibleValue2 = result20;
             }
             if (length > 0) {
-                buffer.setReaderOffset(beforeReadIndex + length);
+                buffer.setReadOffset(beforeReadIndex + length);
             }
             return packet;
         }

@@ -31,7 +31,7 @@ namespace zfoo {
                 return;
             }
             auto *message = (ObjectA *) packet;
-            auto beforeWriteIndex = buffer.getWriterOffset();
+            auto beforeWriteIndex = buffer.getWriteOffset();
             buffer.writeInt(201);
             buffer.writeInt(message->a);
             buffer.writeIntStringMap(message->m);
@@ -46,7 +46,7 @@ namespace zfoo {
             if (length == 0) {
                 return packet;
             }
-            auto beforeReadIndex = buffer.getReaderOffset();
+            auto beforeReadIndex = buffer.getReadOffset();
             int32_t result0 = buffer.readInt();
             packet->a = result0;
             auto map1 = buffer.readIntStringMap();
@@ -59,7 +59,7 @@ namespace zfoo {
                 packet->innerCompatibleValue = result4;
             }
             if (length > 0) {
-                buffer.setReaderOffset(beforeReadIndex + length);
+                buffer.setReadOffset(beforeReadIndex + length);
             }
             return packet;
         }

@@ -29,7 +29,7 @@ namespace zfoo {
                 return;
             }
             auto *message = (ObjectB *) packet;
-            auto beforeWriteIndex = buffer.getWriterOffset();
+            auto beforeWriteIndex = buffer.getWriteOffset();
             buffer.writeInt(4);
             buffer.writeBool(message->flag);
             buffer.writeInt(message->innerCompatibleValue);
@@ -42,7 +42,7 @@ namespace zfoo {
             if (length == 0) {
                 return packet;
             }
-            auto beforeReadIndex = buffer.getReaderOffset();
+            auto beforeReadIndex = buffer.getReadOffset();
             bool result0 = buffer.readBool();
             packet->flag = result0;
             if (buffer.compatibleRead(beforeReadIndex, length)) {
@@ -50,7 +50,7 @@ namespace zfoo {
                 packet->innerCompatibleValue = result1;
             }
             if (length > 0) {
-                buffer.setReaderOffset(beforeReadIndex + length);
+                buffer.setReadOffset(beforeReadIndex + length);
             }
             return packet;
         }

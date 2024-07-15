@@ -96,7 +96,7 @@ namespace serialization_test {
         obj = *((NormalObject *) read(newBuffer));
 
         cout << "source size " << length << endl;
-        cout << "target size " << newBuffer.getWriterOffset() << endl;
+        cout << "target size " << newBuffer.getWriteOffset() << endl;
         cout << "compatible test" << endl;
     }
 

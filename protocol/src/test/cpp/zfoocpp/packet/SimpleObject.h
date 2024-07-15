@@ -40,13 +40,13 @@ namespace zfoo {
             if (length == 0) {
                 return packet;
             }
-            auto beforeReadIndex = buffer.getReaderOffset();
+            auto beforeReadIndex = buffer.getReadOffset();
             int32_t result0 = buffer.readInt();
             packet->c = result0;
             bool result1 = buffer.readBool();
             packet->g = result1;
             if (length > 0) {
-                buffer.setReaderOffset(beforeReadIndex + length);
+                buffer.setReadOffset(beforeReadIndex + length);
             }
             return packet;
         }

@@ -58,7 +58,7 @@ namespace zfoo {
         int8_t *buffer;
         int32_t max_capacity;
         int32_t writeOffset;
-        int32_t readerOffset;
+        int32_t readOffset;
 
     public:
         ByteBuffer(int32_t capacity = DEFAULT_BUFFER_SIZE) : max_capacity(capacity) {
@@ -102,7 +102,7 @@ namespace zfoo {
 
         void clear() {
             writeOffset = 0;
-            readerOffset = 0;
+            readOffset = 0;
         }
 
         int8_t *getBuffer() {
@@ -114,31 +114,31 @@ namespace zfoo {
         }
 
         int32_t getReadOffset() const {
-            return readerOffset;
+            return readOffset;
         }
 
         void setWriteOffset(int32_t writeIndex) {
             if (writeIndex > max_capacity) {
                 string errorMessage =
-                        "writeIndex[" + std::to_string(writeIndex) + "] out of bounds exception: readerIndex: " +
-                        std::to_string(readerOffset) +
-                        ", writerIndex: " + std::to_string(writeOffset) +
-                        "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + std::to_string(max_capacity);
+                        "writeIndex[" + std::to_string(writeIndex) + "] out of bounds exception: readIndex: " +
+                        std::to_string(readOffset) +
+                        ", writIndex: " + std::to_string(writeOffset) +
+                        "(expected: 0 <= readIndex <= writeIndex <= capacity:" + std::to_string(max_capacity);
                 throw errorMessage;
             }
             writeOffset = writeIndex;
         }
 
-        void setReadOffset(int32_t readerIndex) {
-            if (readerIndex > writeOffset) {
+        void setReadOffset(int32_t readIndex) {
+            if (readIndex > writeOffset) {
                 string errorMessage =
-                        "readIndex[" + std::to_string(readerIndex) + "] out of bounds exception: readerIndex: " +
-                        std::to_string(readerOffset) +
-                        ", writerIndex: " + std::to_string(writeOffset) +
-                        "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + std::to_string(max_capacity);
+                        "readIndex[" + std::to_string(readIndex) + "] out of bounds exception: readIndex: " +
+                        std::to_string(readOffset) +
+                        ", writeIndex: " + std::to_string(writeOffset) +
+                        "(expected: 0 <= readIndex <= writeIndex <= capacity:" + std::to_string(max_capacity);
                 throw errorMessage;
             }
-            readerOffset = readerIndex;
+            readOffset = readIndex;
         }
 
         inline int32_t getCapacity() const {
@@ -159,7 +159,7 @@ namespace zfoo {
         }
 
         inline bool isReadable() {
-            return writeOffset > readerOffset;
+            return writeOffset > readOffset;
         }
 
         inline void writeBool(const bool &value) {
@@ -169,7 +169,7 @@ namespace zfoo {
         }
 
         inline bool readBool() {
-            int8_t value = buffer[readerOffset++];
+            int8_t value = buffer[readOffset++];
             return value == 1;
         }
 
@@ -179,7 +179,7 @@ namespace zfoo {
         }
 
         inline int8_t readByte() {
-            return buffer[readerOffset++];
+            return buffer[readOffset++];
         }
 
         inline void setByte(const int32_t &index, const int8_t &value) {
@@ -197,8 +197,8 @@ namespace zfoo {
         }
 
         inline int8_t *readBytes(const int32_t &length) {
-            int8_t *bytes = &buffer[readerOffset];
-            readerOffset += length;
+            int8_t *bytes = &buffer[readOffset];
+            readOffset += length;
             return bytes;
         }
 
@@ -272,7 +272,7 @@ namespace zfoo {
         }
 
         inline int32_t readInt() {
-            int32_t readIndex = readerOffset;
+            int32_t readIndex = readOffset;
 
             int32_t b = getByte(readIndex++);
             uint32_t value = b;
@@ -348,7 +348,7 @@ namespace zfoo {
         }
 
         inline int64_t readLong() {
-            int32_t readIndex = readerOffset;
+            int32_t readIndex = readOffset;
 
             int64_t b = getByte(readIndex++);
             uint64_t value = b;
@@ -1331,11 +1331,11 @@ namespace zfoo {
 
         template<class T>
         inline T read() {
-            T value = *((T *) &buffer[readerOffset]);
+            T value = *((T *) &buffer[readOffset]);
             if (IS_LITTLE_ENDIAN) {
                 swap_bytes<sizeof(T)>(reinterpret_cast<int8_t *>(&value));
             }
-            readerOffset += sizeof(T);
+            readOffset += sizeof(T);
             return value;
         }
 
