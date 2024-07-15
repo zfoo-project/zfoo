@@ -31,7 +31,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  */
 public class JsMapSerializer implements IJsSerializer {
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration) {
         return new Pair<>(CodeGenerateTypeScript.toTsClassName(field.getGenericType().toString()), "new Map()");
     }
 

@@ -32,7 +32,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  */
 public class JsArraySerializer implements IJsSerializer {
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration) {
         var type = StringUtils.format("Array<{}>", CodeGenerateTypeScript.toTsClassName(field.getType().getComponentType().getSimpleName()));
         return new Pair<>(type, "[]");
     }
