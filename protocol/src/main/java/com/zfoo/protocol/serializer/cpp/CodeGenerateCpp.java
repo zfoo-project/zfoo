@@ -297,7 +297,7 @@ public class CodeGenerateCpp implements ICodeGenerate {
         var fieldRegistrations = registration.getFieldRegistrations();
         var cppBuilder = new StringBuilder();
         if (registration.isCompatible()) {
-            cppBuilder.append("auto beforeWriteIndex = buffer.getWriterOffset();").append(LS);
+            cppBuilder.append("auto beforeWriteIndex = buffer.getWriteOffset();").append(LS);
             cppBuilder.append(StringUtils.format("buffer.writeInt({});", registration.getPredictionLength())).append(LS);
         } else {
             cppBuilder.append("buffer.writeInt(-1);").append(LS);
