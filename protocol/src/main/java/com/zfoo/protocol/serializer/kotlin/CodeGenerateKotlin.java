@@ -279,8 +279,10 @@ public class CodeGenerateKotlin implements ICodeGenerate {
             for (var fieldNote : fieldNotes) {
                 ktBuilder.append(fieldNote).append(LS);
             }
-            var pair = ktSerializer(fieldRegistration.serializer()).fieldTypeValue(field, fieldRegistration);
-            ktBuilder.append(StringUtils.format("var {}: {} = {}", fieldName, pair.getKey(), pair.getValue())).append(LS);
+            var fieldTypeDefaultValue = ktSerializer(fieldRegistration.serializer()).fieldTypeDefaultValue(field, fieldRegistration);
+            var fieldType = fieldTypeDefaultValue.getKey();
+            var fieldDefaultValue = fieldTypeDefaultValue.getValue();
+            ktBuilder.append(StringUtils.format("var {}: {} = {}", fieldName, fieldType, fieldDefaultValue)).append(LS);
         }
         return ktBuilder.toString();
     }

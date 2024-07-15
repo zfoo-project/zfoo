@@ -28,7 +28,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class KtShortSerializer implements IKtSerializer {
 
     @Override
-    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration) {
         return new Pair<>("Short", "0");
     }
 
