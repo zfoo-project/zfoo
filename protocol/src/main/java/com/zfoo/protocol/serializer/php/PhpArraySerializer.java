@@ -15,12 +15,10 @@ package com.zfoo.protocol.serializer.php;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.CutDownArraySerializer;
-import com.zfoo.protocol.serializer.kotlin.CodeGenerateKotlin;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.lang.reflect.Field;

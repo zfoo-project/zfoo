@@ -15,7 +15,6 @@ package com.zfoo.protocol.serializer.javascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
