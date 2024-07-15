@@ -293,8 +293,8 @@ public class CodeGenerateTypeScript implements ICodeGenerate {
             for (var fieldNote : fieldNotes) {
                 tsBuilder.append(fieldNote).append(LS);
             }
-            var triple = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
-            tsBuilder.append(StringUtils.format("{}{} = {};", triple.getMiddle(), triple.getLeft(), triple.getRight())).append(LS);
+            var pair = tsSerializer(fieldRegistration.serializer()).field(field, fieldRegistration);
+            tsBuilder.append(StringUtils.format("{}: {} = {};", fieldName, pair.getKey(), pair.getValue())).append(LS);
         }
         return tsBuilder.toString();
     }

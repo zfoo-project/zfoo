@@ -14,7 +14,7 @@
 package com.zfoo.protocol.serializer.typescript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Triple;
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
@@ -31,9 +31,9 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class TsMapSerializer implements ITsSerializer {
 
     @Override
-    public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        var type = StringUtils.format(": {}", CodeGenerateTypeScript.toTsClassName(field.getGenericType().toString()));
-        return new Triple<>(type, field.getName(), "new Map()");
+    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+        var type = StringUtils.format("{}", CodeGenerateTypeScript.toTsClassName(field.getGenericType().toString()));
+        return new Pair<>(type, "new Map()");
     }
 
     @Override

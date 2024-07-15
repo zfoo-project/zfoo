@@ -14,7 +14,7 @@
 package com.zfoo.protocol.serializer.typescript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Triple;
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.util.StringUtils;
 
@@ -28,8 +28,8 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class TsStringSerializer implements ITsSerializer {
 
     @Override
-    public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
-        return new Triple<>(": string", field.getName(), "''");
+    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+        return new Pair<>("string", "''");
     }
 
     @Override
