@@ -279,8 +279,10 @@ public class CodeGenerateScala implements ICodeGenerate {
             for (var fieldNote : fieldNotes) {
                 scalaBuilder.append(fieldNote).append(LS);
             }
-            var pair = scalaSerializer(fieldRegistration.serializer()).fieldTypeDefaultValue(field, fieldRegistration);
-            scalaBuilder.append(StringUtils.format("var {}: {} = {}", fieldName, pair.getKey(), pair.getValue())).append(LS);
+            var fieldTypeDefaultValue = scalaSerializer(fieldRegistration.serializer()).fieldTypeDefaultValue(field, fieldRegistration);
+            var fieldType = fieldTypeDefaultValue.getKey();
+            var fieldDefaultValue = fieldTypeDefaultValue.getValue();
+            scalaBuilder.append(StringUtils.format("var {}: {} = {}", fieldName, fieldType, fieldDefaultValue)).append(LS);
         }
         return scalaBuilder.toString();
     }

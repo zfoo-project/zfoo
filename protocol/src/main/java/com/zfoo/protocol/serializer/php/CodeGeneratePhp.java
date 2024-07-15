@@ -243,8 +243,10 @@ public class CodeGeneratePhp implements ICodeGenerate {
             for (var fieldNote : fieldNotes) {
                 phpBuilder.append(fieldNote).append(LS);
             }
-            var pair = phpSerializer(fieldRegistration.serializer()).fieldTypeDefaultValue(field, fieldRegistration);
-            phpBuilder.append(StringUtils.format("var {} ${} = {};", pair.getKey(), fieldName, pair.getValue())).append(LS);
+            var fieldTypeDefaultValue = phpSerializer(fieldRegistration.serializer()).fieldTypeDefaultValue(field, fieldRegistration);
+            var fieldType = fieldTypeDefaultValue.getKey();
+            var fieldDefaultValue = fieldTypeDefaultValue.getValue();
+            phpBuilder.append(StringUtils.format("var {} ${} = {};", fieldType, fieldName, fieldDefaultValue)).append(LS);
         }
         return phpBuilder.toString();
     }
