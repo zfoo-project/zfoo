@@ -100,7 +100,7 @@ const ByteBuffer = function() {
         if (writeIndex > this.buffer.byteLength) {
             throw new Error('writeIndex out of bounds exception: readOffset: ' + this.readOffset +
             ', writeOffset: ' + this.writeOffset +
-            '(expected: 0 <= readOffset <= writeOffset <= capacity:' + this.buffer.byteLength) + ')';
+            '(expected: 0 <= readOffset <= writeOffset <= capacity:' + this.buffer.byteLength  + ')');
         }
         this.writeOffset = writeIndex;
     };

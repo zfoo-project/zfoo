@@ -92,7 +92,7 @@ namespace zfoocs
                 throw new Exception("writeIndex[" + writeIndex + "] out of bounds exception: readOffset: " +
                                     readOffset +
                                     ", writeOffset: " + writeOffset +
-                                    "(expected: 0 <= readOffset <= writeOffset <= capacity:" + buffer.Length) + ")";
+                                    "(expected: 0 <= readOffset <= writeOffset <= capacity:" + buffer.Length  + ")");
             }
             writeOffset = writeIndex;
         }
@@ -108,7 +108,7 @@ namespace zfoocs
             {
                 throw new Exception("readIndex[" + readIndex + "] out of bounds exception: readIndex: " + readOffset +
                                     ", writeOffset: " + writeOffset +
-                                    "(expected: 0 <= readOffset <= writeOffset <= capacity:" + buffer.Length) + ")";
+                                    "(expected: 0 <= readOffset <= writeOffset <= capacity:" + buffer.Length + ")");
             }
             readOffset = readIndex;
         }
