@@ -31,7 +31,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class KtListSerializer implements IKtSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
         var type = StringUtils.format("{}", CodeGenerateKotlin.toKotlinClassName(field.getGenericType().toString()));
         return new Pair<>(type, "emptyList()");
     }

@@ -14,7 +14,6 @@
 package com.zfoo.protocol.serializer.php;
 
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.protocol.model.Triple;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 
 import java.lang.reflect.Field;
@@ -25,9 +24,9 @@ import java.lang.reflect.Field;
 public interface IPhpSerializer {
 
     /**
-     * 获取属性的类型，名称，默认值
+     * 获取属性的类型，默认值
      */
-    Pair<String, String> field(Field field, IFieldRegistration fieldRegistration);
+    Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration);
 
     void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration);
 

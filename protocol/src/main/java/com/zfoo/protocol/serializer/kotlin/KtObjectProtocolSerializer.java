@@ -31,7 +31,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class KtObjectProtocolSerializer implements IKtSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
         var type = StringUtils.format("{}?", protocolSimpleName);

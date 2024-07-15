@@ -25,7 +25,7 @@ public interface IScalaSerializer {
     /**
      * 获取属性的类型，默认值
      */
-    Pair<String, String> field(Field field, IFieldRegistration fieldRegistration);
+    Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration);
 
     void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration);
 

@@ -13,7 +13,6 @@
 
 package com.zfoo.protocol.serializer.gdscript;
 
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 
 import java.lang.reflect.Field;

@@ -33,7 +33,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class PhpArraySerializer implements IPhpSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration) {
         return new Pair<>("array", "array()");
     }
 

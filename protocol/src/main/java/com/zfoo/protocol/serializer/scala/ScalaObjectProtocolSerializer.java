@@ -31,7 +31,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class ScalaObjectProtocolSerializer implements IScalaSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
         return new Pair<>(protocolSimpleName, "_");

@@ -31,7 +31,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class ScalaArraySerializer implements IScalaSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration) {
         var type = StringUtils.format("Array[{}]", CodeGenerateScala.toScalaClassName(field.getType().getComponentType().getSimpleName()));
         return new Pair<>(type, "_");
     }
@@ -84,7 +84,7 @@ public class ScalaArraySerializer implements IScalaSerializer {
         builder.append(StringUtils.format("val {} = buffer.readInt", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
-        var pair = CodeGenerateScala.scalaSerializer(arrayField.getArrayElementRegistration().serializer()).field(field, arrayField.getArrayElementRegistration());
+        var pair = CodeGenerateScala.scalaSerializer(arrayField.getArrayElementRegistration().serializer()).fieldTypeDefaultValue(field, arrayField.getArrayElementRegistration());
         var defaultValue = pair.getValue();
         if (defaultValue.equals("null")) {
             defaultValue = StringUtils.format("{}()", typeName);

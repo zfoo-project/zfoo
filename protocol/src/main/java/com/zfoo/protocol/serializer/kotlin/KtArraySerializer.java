@@ -31,7 +31,7 @@ import static com.zfoo.protocol.util.FileUtils.LS;
 public class KtArraySerializer implements IKtSerializer {
 
     @Override
-    public Pair<String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
         var type = StringUtils.format("Array<{}>", CodeGenerateKotlin.toKotlinClassName(field.getType().getComponentType().getSimpleName()));
         return new Pair<>(type, "emptyArray()");
     }
@@ -84,7 +84,7 @@ public class KtArraySerializer implements IKtSerializer {
         builder.append(StringUtils.format("val {} = buffer.readInt()", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
-        var pair = CodeGenerateKotlin.ktSerializer(arrayField.getArrayElementRegistration().serializer()).field(field, arrayField.getArrayElementRegistration());
+        var pair = CodeGenerateKotlin.ktSerializer(arrayField.getArrayElementRegistration().serializer()).fieldTypeValue(field, arrayField.getArrayElementRegistration());
         var defaultValue = pair.getValue();
         if (defaultValue.equals("null")) {
             defaultValue = StringUtils.format("{}()", typeName);
