@@ -52,7 +52,7 @@ namespace zfoocs
         
         public void AdjustPadding(int predictionLength, int beforeWriteIndex) {
             // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
-            var currentWriteIndex = WriteOffset();
+            var currentWriteIndex = GetWriteOffset();
             var predictionCount = WriteIntCount(predictionLength);
             var length = currentWriteIndex - beforeWriteIndex - predictionCount;
             var lengthCount = WriteIntCount(length);
@@ -71,11 +71,16 @@ namespace zfoocs
         }
         
         public bool CompatibleRead(int beforeReadIndex, int length) {
-            return length != -1 && ReadOffset() < length + beforeReadIndex;
+            return length != -1 && GetReadOffset() < length + beforeReadIndex;
         }
 
         // -------------------------------------------------get/set-------------------------------------------------
-        public int WriteOffset()
+        public byte[] GetBuffer()
+        {
+            return buffer;
+        }
+
+        public int GetWriteOffset()
         {
             return writeOffset;
         }
@@ -93,7 +98,7 @@ namespace zfoocs
             writeOffset = writeIndex;
         }
 
-        public int ReadOffset()
+        public int GetReadOffset()
         {
             return readOffset;
         }
@@ -603,7 +608,7 @@ namespace zfoocs
             return Encoding.UTF8.GetString(value, 0, value.Length);
         }
 
-        public void WriteBooleanArray(bool[] array)
+        public void WriteBoolArray(bool[] array)
         {
             if ((array == null) || (array.Length == 0))
             {
@@ -620,7 +625,7 @@ namespace zfoocs
             }
         }
 
-        public bool[] ReadBooleanArray()
+        public bool[] ReadBoolArray()
         {
             int size = ReadInt();
             bool[] array = new bool[size];
@@ -893,7 +898,7 @@ namespace zfoocs
             return array;
         }
 
-        public void WriteBooleanList(List<bool> list)
+        public void WriteBoolList(List<bool> list)
         {
             if ((list == null) || (list.Count == 0))
             {
@@ -910,7 +915,7 @@ namespace zfoocs
             }
         }
 
-        public List<bool> ReadBooleanList()
+        public List<bool> ReadBoolList()
         {
             int size = ReadInt();
             List<bool> list = new List<bool>(size);
@@ -1183,7 +1188,7 @@ namespace zfoocs
             return list;
         }
 
-        public void WriteBooleanSet(HashSet<bool> set)
+        public void WriteBoolSet(HashSet<bool> set)
         {
             if ((set == null) || (set.Count == 0))
             {
@@ -1199,7 +1204,7 @@ namespace zfoocs
             }
         }
 
-        public HashSet<bool> ReadBooleanSet()
+        public HashSet<bool> ReadBoolSet()
         {
             int size = ReadInt();
             HashSet<bool> set = new HashSet<bool>();

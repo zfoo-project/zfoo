@@ -23,7 +23,7 @@ public class ${protocol_name}Registration : IProtocolRegistration
         {
             return null;
         }
-        int beforeReadIndex = buffer.ReadOffset();
+        int beforeReadIndex = buffer.GetReadOffset();
         ${protocol_name} packet = new ${protocol_name}();
         ${protocol_read_deserialization}
         if (length > 0)

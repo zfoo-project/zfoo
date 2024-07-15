@@ -242,7 +242,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
         var fieldRegistrations = registration.getFieldRegistrations();
         var csBuilder = new StringBuilder();
         if (registration.isCompatible()) {
-            csBuilder.append("int beforeWriteIndex = buffer.WriteOffset();").append(LS);
+            csBuilder.append("int beforeWriteIndex = buffer.GetWriteOffset();").append(LS);
             csBuilder.append(StringUtils.format("buffer.WriteInt({});", registration.getPredictionLength())).append(LS);
         } else {
             csBuilder.append("buffer.WriteInt(-1);").append(LS);
