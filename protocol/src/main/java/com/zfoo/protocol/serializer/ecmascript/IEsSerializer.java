@@ -13,7 +13,7 @@
 
 package com.zfoo.protocol.serializer.ecmascript;
 
-import com.zfoo.protocol.model.Triple;
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 
 import java.lang.reflect.Field;
@@ -24,9 +24,9 @@ import java.lang.reflect.Field;
 public interface IEsSerializer {
 
     /**
-     * 获取属性的类型，名称，默认值
+     * 获取属性的类型，默认值
      */
-    Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration);
+    Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration);
 
     void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration);
 

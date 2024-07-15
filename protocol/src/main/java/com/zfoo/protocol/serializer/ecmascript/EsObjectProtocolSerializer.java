@@ -14,7 +14,7 @@
 package com.zfoo.protocol.serializer.ecmascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Triple;
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.ObjectProtocolField;
 import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
@@ -29,11 +29,11 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  */
 public class EsObjectProtocolSerializer implements IEsSerializer {
     @Override
-    public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         var protocolSimpleName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId());
         var type = StringUtils.format("{} | null", protocolSimpleName);
-        return new Triple<>(type, field.getName(), "null");
+        return new Pair<>(type, "null");
     }
 
     @Override

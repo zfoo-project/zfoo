@@ -14,7 +14,7 @@
 package com.zfoo.protocol.serializer.ecmascript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.model.Triple;
+import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
@@ -31,9 +31,9 @@ import static com.zfoo.protocol.util.FileUtils.LS;
  */
 public class EsArraySerializer implements IEsSerializer {
     @Override
-    public Triple<String, String, String> field(Field field, IFieldRegistration fieldRegistration) {
+    public Pair<String, String> fieldTypeValue(Field field, IFieldRegistration fieldRegistration) {
         var type = StringUtils.format("Array<{}>", CodeGenerateTypeScript.toTsClassName(field.getType().getComponentType().getSimpleName()));
-        return new Triple<>(type, field.getName(), "[]");
+        return new Pair<>(type, "[]");
     }
 
     @Override
