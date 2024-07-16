@@ -40,8 +40,8 @@ class ByteBuffer {
     fun setWriteOffset(writeIndex: Int) {
         if (writeIndex > buffer.size) {
             throw RuntimeException(
-                "writeIndex[" + writeIndex + "] out of bounds exception: readerIndex: " + readOffset +
-                        ", writerIndex: " + writeOffset + "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + buffer.size
+                "writeIndex[" + writeIndex + "] out of bounds exception: readOffset: " + readOffset +
+                        ", writeOffset: " + writeOffset + "(expected: 0 <= readOffset <= writeOffset <= capacity:" + buffer.size + ")"
             )
         }
         writeOffset = writeIndex
@@ -54,8 +54,8 @@ class ByteBuffer {
     fun setReadOffset(readIndex: Int) {
         if (readIndex > writeOffset) {
             throw RuntimeException(
-                "readIndex[" + readIndex + "] out of bounds exception: readerIndex: " + readOffset +
-                        ", writerIndex: " + writeOffset + "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + buffer.size
+                "readIndex[" + readIndex + "] out of bounds exception: readOffset: " + readOffset +
+                        ", writeOffset: " + writeOffset + "(expected: 0 <= readOffsetIndex <= writeOffset <= capacity:" + buffer.size + ")"
             )
         }
         readOffset = readIndex
