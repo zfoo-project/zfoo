@@ -105,10 +105,10 @@ function ComplexObject:write(buffer, packet)
     buffer:writeDouble(packet.ff)
     buffer:writeDoubleArray(packet.fff)
     buffer:writeDoubleArray(packet.ffff)
-    buffer:writeBoolean(packet.g)
-    buffer:writeBoolean(packet.gg)
-    buffer:writeBooleanArray(packet.ggg)
-    buffer:writeBooleanArray(packet.gggg)
+    buffer:writeBool(packet.g)
+    buffer:writeBool(packet.gg)
+    buffer:writeBoolArray(packet.ggg)
+    buffer:writeBoolArray(packet.gggg)
     buffer:writeString(packet.jj)
     buffer:writeStringArray(packet.jjj)
     buffer:writePacket(packet.kk, 102)
@@ -303,13 +303,13 @@ function ComplexObject:read(buffer)
     packet.fff = array22
     local array23 = buffer:readDoubleArray()
     packet.ffff = array23
-    local result24 = buffer:readBoolean()
+    local result24 = buffer:readBool()
     packet.g = result24
-    local result25 = buffer:readBoolean()
+    local result25 = buffer:readBool()
     packet.gg = result25
-    local array26 = buffer:readBooleanArray()
+    local array26 = buffer:readBoolArray()
     packet.ggg = array26
-    local array27 = buffer:readBooleanArray()
+    local array27 = buffer:readBoolArray()
     packet.gggg = array27
     local result28 = buffer:readString()
     packet.jj = result28

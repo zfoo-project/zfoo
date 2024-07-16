@@ -1,4 +1,4 @@
-
+-- 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
 local NormalObject = {}
 
 function NormalObject:new()
@@ -6,6 +6,7 @@ function NormalObject:new()
         a = 0, -- byte
         aaa = {}, -- byte[]
         b = 0, -- short
+        -- 整数类型
         c = 0, -- int
         d = 0, -- long
         e = 0, -- float
@@ -20,7 +21,9 @@ function NormalObject:new()
         m = {}, -- Dictionary<int, string>
         mm = {}, -- Dictionary<int, ObjectA>
         s = {}, -- HashSet<int>
-        ssss = {} -- HashSet<string>
+        ssss = {}, -- HashSet<string>
+        outCompatibleValue = 0, -- int
+        outCompatibleValue2 = 0 -- int
     }
     setmetatable(obj, self)
     self.__index = self
@@ -44,7 +47,8 @@ function NormalObject:write(buffer, packet)
         buffer:writeInt(0)
         return
     end
-    buffer:writeInt(-1)
+    local beforeWriteIndex = buffer:getWriteOffset()
+    buffer:writeInt(857)
     buffer:writeByte(packet.a)
     buffer:writeByteArray(packet.aaa)
     buffer:writeShort(packet.b)
@@ -52,7 +56,7 @@ function NormalObject:write(buffer, packet)
     buffer:writeLong(packet.d)
     buffer:writeFloat(packet.e)
     buffer:writeDouble(packet.f)
-    buffer:writeBoolean(packet.g)
+    buffer:writeBool(packet.g)
     buffer:writeString(packet.jj)
     buffer:writePacket(packet.kk, 102)
     buffer:writeIntArray(packet.l)
@@ -63,6 +67,9 @@ function NormalObject:write(buffer, packet)
     buffer:writeIntPacketMap(packet.mm, 102)
     buffer:writeIntArray(packet.s)
     buffer:writeStringArray(packet.ssss)
+    buffer:writeInt(packet.outCompatibleValue)
+    buffer:writeInt(packet.outCompatibleValue2)
+    buffer:adjustPadding(857, beforeWriteIndex)
 end
 
 function NormalObject:read(buffer)
@@ -86,7 +93,7 @@ function NormalObject:read(buffer)
     packet.e = result5
     local result6 = buffer:readDouble()
     packet.f = result6
-    local result7 = buffer:readBoolean()
+    local result7 = buffer:readBool()
     packet.g = result7
     local result8 = buffer:readString()
     packet.jj = result8
@@ -108,6 +115,14 @@ function NormalObject:read(buffer)
     packet.s = set16
     local set17 = buffer:readStringArray()
     packet.ssss = set17
+    if buffer:compatibleRead(beforeReadIndex, length) then
+        local result18 = buffer:readInt()
+        packet.outCompatibleValue = result18
+    end
+    if buffer:compatibleRead(beforeReadIndex, length) then
+        local result19 = buffer:readInt()
+        packet.outCompatibleValue2 = result19
+    end
     if length > 0 then
         buffer:setReadOffset(beforeReadIndex + length)
     end

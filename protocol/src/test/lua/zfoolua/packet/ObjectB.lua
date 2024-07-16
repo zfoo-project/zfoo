@@ -3,7 +3,8 @@ local ObjectB = {}
 
 function ObjectB:new()
     local obj = {
-        flag = false -- bool
+        flag = false, -- bool
+        innerCompatibleValue = 0 -- int
     }
     setmetatable(obj, self)
     self.__index = self
@@ -27,8 +28,11 @@ function ObjectB:write(buffer, packet)
         buffer:writeInt(0)
         return
     end
-    buffer:writeInt(-1)
-    buffer:writeBoolean(packet.flag)
+    local beforeWriteIndex = buffer:getWriteOffset()
+    buffer:writeInt(4)
+    buffer:writeBool(packet.flag)
+    buffer:writeInt(packet.innerCompatibleValue)
+    buffer:adjustPadding(4, beforeWriteIndex)
 end
 
 function ObjectB:read(buffer)
@@ -38,8 +42,12 @@ function ObjectB:read(buffer)
     end
     local beforeReadIndex = buffer:getReadOffset()
     local packet = ObjectB:new()
-    local result0 = buffer:readBoolean()
+    local result0 = buffer:readBool()
     packet.flag = result0
+    if buffer:compatibleRead(beforeReadIndex, length) then
+        local result1 = buffer:readInt()
+        packet.innerCompatibleValue = result1
+    end
     if length > 0 then
         buffer:setReadOffset(beforeReadIndex + length)
     end

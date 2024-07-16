@@ -30,7 +30,7 @@ function SimpleObject:write(buffer, packet)
     end
     buffer:writeInt(-1)
     buffer:writeInt(packet.c)
-    buffer:writeBoolean(packet.g)
+    buffer:writeBool(packet.g)
 end
 
 function SimpleObject:read(buffer)
@@ -42,7 +42,7 @@ function SimpleObject:read(buffer)
     local packet = SimpleObject:new()
     local result0 = buffer:readInt()
     packet.c = result0
-    local result1 = buffer:readBoolean()
+    local result1 = buffer:readBool()
     packet.g = result1
     if length > 0 then
         buffer:setReadOffset(beforeReadIndex + length)

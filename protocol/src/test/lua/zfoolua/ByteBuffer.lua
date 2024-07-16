@@ -14,8 +14,8 @@ local zeroByte = string.char(0)
 
 local ByteBuffer = {}
 
-local trueBooleanStrValue = string.char(1)
-local falseBooleanStrValue = string.char(0)
+local trueBoolStrValue = string.char(1)
+local falseBoolStrValue = string.char(0)
 
 function serializeTableToJson(tbl)
     local res = {}
@@ -127,6 +127,10 @@ function ByteBuffer:compatibleRead(beforeReadIndex, length)
 end
 
 -------------------------------------get和set-------------------------------------
+function ByteBuffer:getBuffer()
+    return self.buffer
+end
+
 function ByteBuffer:getWriteOffset()
     return self.writeOffset
 end
@@ -166,19 +170,19 @@ end
 -------------------------------------write和read-------------------------------------
 
 --bool
-function ByteBuffer:writeBoolean(boolValue)
+function ByteBuffer:writeBool(boolValue)
     if boolValue then
-        self:writeRawByteStr(trueBooleanStrValue)
+        self:writeRawByteStr(trueBoolStrValue)
     else
-        self:writeRawByteStr(falseBooleanStrValue)
+        self:writeRawByteStr(falseBoolStrValue)
     end
     return self
 end
 
-function ByteBuffer:readBoolean()
+function ByteBuffer:readBool()
     -- When char > 256, the readUByte method will show an error.
     -- So, we have to use readChar
-    return self:readRawByteStr() == trueBooleanStrValue
+    return self:readRawByteStr() == trueBoolStrValue
 end
 
 
@@ -527,24 +531,24 @@ function ByteBuffer:readPacket(protocolId)
     return protocolRegistration:read(self)
 end
 
-function ByteBuffer:writeBooleanArray(array)
+function ByteBuffer:writeBoolArray(array)
     if array == nil then
         self:writeInt(0)
     else
         self:writeInt(#array)
         for index, element in pairs(array) do
-            self:writeBoolean(element)
+            self:writeBool(element)
         end
     end
     return self
 end
 
-function ByteBuffer:readBooleanArray()
+function ByteBuffer:readBoolArray()
     local array = {}
     local size = self:readInt()
     if size > 0 then
         for index = 1, size do
-            table.insert(array, self:readBoolean())
+            table.insert(array, self:readBool())
         end
     end
     return array
