@@ -93,8 +93,8 @@ class ComplexObjectRegistration:
         buffer.writeDoubleArray(packet.ffff)
         buffer.writeBool(packet.g)
         buffer.writeBool(packet.gg)
-        buffer.writeBooleanArray(packet.ggg)
-        buffer.writeBooleanArray(packet.gggg)
+        buffer.writeBoolArray(packet.ggg)
+        buffer.writeBoolArray(packet.gggg)
         buffer.writeString(packet.jj)
         buffer.writeStringArray(packet.jjj)
         buffer.writePacket(packet.kk, 102)
@@ -264,9 +264,9 @@ class ComplexObjectRegistration:
         packet.g = result24
         result25 = buffer.readBool() 
         packet.gg = result25
-        array26 = buffer.readBooleanArray()
+        array26 = buffer.readBoolArray()
         packet.ggg = array26
-        array27 = buffer.readBooleanArray()
+        array27 = buffer.readBoolArray()
         packet.gggg = array27
         result28 = buffer.readString()
         packet.jj = result28

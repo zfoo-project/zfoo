@@ -34,26 +34,29 @@ class ByteBuffer():
     def compatibleRead(self, beforeReadIndex, length):
         return length != -1 and self.getReadOffset() < length + beforeReadIndex
 
+    def getBuffer(self):
+        return self.buffer
+
     def getWriteOffset(self):
         return self.writeOffset
 
-    def setWriteOffset(self, writeOffset):
-        if writeOffset > len(self.buffer):
-            raise ValueError("index out of bounds exception:readerIndex:" + str(self.readOffset) +
-                             ", writerIndex:" + str(self.writeOffset) +
-                             "(expected:0 <= readerIndex <= writerIndex <= capacity:" + str(len(self.buffer)))
-        self.writeOffset = writeOffset
+    def setWriteOffset(self, writeIndex):
+        if writeIndex > len(self.buffer):
+            raise ValueError("writeIndex out of bounds exception:readOffset:" + str(self.readOffset) +
+                             ", writeOffset:" + str(self.writeOffset) +
+                             "(expected:0 <= readOffset <= writeOffset <= capacity:" + str(len(self.buffer)))
+        self.writeOffset = writeIndex
         pass
 
     def getReadOffset(self):
         return self.readOffset
 
-    def setReadOffset(self, readOffset):
-        if readOffset > self.writeOffset:
-            raise ValueError("index out of bounds exception:readerIndex:" + str(self.readOffset) +
-                             ", writerIndex:" + str(self.writeOffset) +
-                             "(expected:0 <= readerIndex <= writerIndex <= capacity:" + str(len(self.buffer)))
-        self.readOffset = readOffset
+    def setReadOffset(self, readIndex):
+        if readIndex > self.writeOffset:
+            raise ValueError("readIndex out of bounds exception:readOffset:" + str(self.readOffset) +
+                             ", writeOffset:" + str(self.writeOffset) +
+                             "(expected:0 <= readOffset <= writeOffset <= capacity:" + str(len(self.buffer)))
+        self.readOffset = readIndex
         pass
 
     def isReadable(self):
@@ -362,7 +365,7 @@ class ByteBuffer():
         protocolRegistration = ProtocolManager.getProtocol(protocolId)
         return protocolRegistration.read(self)
 
-    def writeBooleanArray(self, array):
+    def writeBoolArray(self, array):
         if array is None:
             self.writeInt(0)
         else:
@@ -371,7 +374,7 @@ class ByteBuffer():
                 self.writeBool(element)
         pass
 
-    def readBooleanArray(self):
+    def readBoolArray(self):
         array = []
         size = self.readInt()
         if size > 0:
@@ -755,7 +758,7 @@ class ByteBuffer():
                 map[key] = value
         return map
 
-    def writeBooleanSet(self, value):
+    def writeBoolSet(self, value):
         if value is None:
             self.writeInt(0)
         else:
@@ -764,7 +767,7 @@ class ByteBuffer():
                 self.writeBool(element)
         pass
 
-    def readBooleanSet(self):
+    def readBoolSet(self):
         value = set()
         size = self.readInt()
         if size > 0:
