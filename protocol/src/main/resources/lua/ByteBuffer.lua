@@ -131,11 +131,11 @@ function ByteBuffer:getWriteOffset()
     return self.writeOffset
 end
 
-function ByteBuffer:setWriteOffset(writeOffset)
-    if writeOffset > #self.buffer + 1 then
-        error(string.format("writeOffset: %s index out of bounds exception: readerIndex: %s, writerIndex: %s, (expected: 0 <= readerIndex <= writerIndex <= capacity: %s)", writeOffset, self.readOffset, self.writeOffset, #self.buffer))
+function ByteBuffer:setWriteOffset(writeIndex)
+    if writeIndex > #self.buffer + 1 then
+        error(string.format("writeIndex: %s index out of bounds exception: readOffset: %s, writerOffset: %s, (expected: 0 <= readOffset <= writeOffset <= capacity: %s)", writeIndex, self.readOffset, self.writeOffset, #self.buffer))
     end
-    self.writeOffset = writeOffset
+    self.writeOffset = writeIndex
     return self
 end
 
@@ -143,11 +143,11 @@ function ByteBuffer:getReadOffset()
     return self.readOffset
 end
 
-function ByteBuffer:setReadOffset(readOffset)
-    if readOffset > self.writeOffset then
-        error(string.format("readOffset: %s index out of bounds exception: readerIndex: %s, writerIndex: %s, (expected: 0 <= readerIndex <= writerIndex <= capacity: %s)", readOffset, self.readOffset, self.writeOffset, #self.buffer))
+function ByteBuffer:setReadOffset(readIndex)
+    if readIndex > self.writeOffset then
+        error(string.format("readIndex: %s index out of bounds exception: readOffset: %s, writerIndex: %s, (expected: 0 <= readOffset <= writeOffset <= capacity: %s)", readIndex, self.readOffset, self.writeOffset, #self.buffer))
     end
-    self.readOffset = readOffset
+    self.readOffset = readIndex
     return self
 end
 
