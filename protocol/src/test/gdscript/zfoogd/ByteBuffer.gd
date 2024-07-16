@@ -39,9 +39,12 @@ func compatibleRead(beforeReadIndex: int, length: int) -> bool:
 	return length != -1 && getReadOffset() < length + beforeReadIndex
 
 # -------------------------------------------------get/set-------------------------------------------------
+func getBuffer() -> StreamPeerBuffer:
+	return buffer
+
 func setWriteOffset(writeIndex: int) -> void:
 	if (writeIndex > buffer.get_size()):
-		var template = "writeIndex[{}] out of bounds exception: readerIndex: {}, writerIndex: {} (expected: 0 <= readerIndex <= writerIndex <= capacity: {})"
+		var template = "writeIndex[{}] out of bounds exception: readOffset: {}, writeOffset: {} (expected: 0 <= readOffset <= writeOffset <= capacity: {})"
 		printerr(template.format([writeIndex, readOffset, writeOffset, buffer.get_size()], "{}"))
 		return
 	writeOffset = writeIndex
@@ -52,7 +55,7 @@ func getWriteOffset() -> int:
 
 func setReadOffset(readIndex: int) -> void:
 	if (readIndex > writeOffset):
-		var template = "readIndex[{}] out of bounds exception: readerIndex: {}, writerIndex: {} (expected: 0 <= readerIndex <= writerIndex <= capacity: {})"
+		var template = "readIndex[{}] out of bounds exception: readOffset: {}, writeOffset: {} (expected: 0 <= readOffset <= writeOffset <= capacity: {})"
 		printerr(template.format([readIndex, readOffset, writeOffset, buffer.size()], "{}"))
 		return
 	readOffset = readIndex
@@ -306,7 +309,7 @@ func readPacket(protocolId):
 func newInstance(protocolId: int):
 	return ProtocolManager.newInstance(protocolId)
 
-func writeBooleanArray(array):
+func writeBoolArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
@@ -315,7 +318,7 @@ func writeBooleanArray(array):
 			writeBool(element)
 	pass
 
-func readBooleanArray() -> Array[bool]:
+func readBoolArray() -> Array[bool]:
 	var array: Array[bool] = []
 	var size = readInt()
 	if (size > 0):
