@@ -16,7 +16,7 @@ func (protocol ${protocol_name}) read(buffer *ByteBuffer) any {
 	if length == 0 {
 		return packet
 	}
-	var beforeReadIndex = buffer.ReadOffset()
+	var beforeReadIndex = buffer.GetReadOffset()
 	if length > 0 {
         buffer.SetReadOffset(beforeReadIndex + length)
     }

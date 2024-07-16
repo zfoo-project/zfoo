@@ -216,7 +216,7 @@ public class CodeGenerateGolang implements ICodeGenerate {
         var fieldRegistrations = registration.getFieldRegistrations();
         var goBuilder = new StringBuilder();
         if (registration.isCompatible()) {
-            goBuilder.append("var beforeWriteIndex = buffer.WriteOffset()").append(LS);
+            goBuilder.append("var beforeWriteIndex = buffer.GetWriteOffset()").append(LS);
             goBuilder.append(StringUtils.format("buffer.WriteInt({})", registration.getPredictionLength())).append(LS);
         } else {
             goBuilder.append("buffer.WriteInt(-1)").append(LS);
