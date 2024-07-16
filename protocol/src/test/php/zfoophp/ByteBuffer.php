@@ -61,8 +61,8 @@ class ByteBuffer
     public function setWriteOffset(int $writeIndex): void
     {
         if ($writeIndex > strlen($this->buffer)) {
-            throw new Exception("writeIndex[" . $writeIndex . "] out of bounds exception: readerIndex: " . $this->readOffset .
-                ", writerIndex: " . $this->writeOffset . "(expected: 0 <= readerIndex <= writerIndex <= capacity:" . strlen($this->buffer));
+            throw new Exception("writeIndex[" . $writeIndex . "] out of bounds exception: readOffset: " . $this->readOffset .
+                ", writeOffset: " . $this->writeOffset . "(expected: 0 <= readOffset <= writeOffset <= capacity:" . strlen($this->buffer) . ")");
         }
         $this->writeOffset = $writeIndex;
     }
@@ -78,8 +78,8 @@ class ByteBuffer
     public function setReadOffset(int $readIndex): void
     {
         if ($readIndex > $this->writeOffset) {
-            throw new Exception("readIndex[" . $readIndex . "] out of bounds exception: readerIndex: " . $this->readOffset .
-                ", writerIndex: " . $this->writeOffset . "(expected: 0 <= readerIndex <= writerIndex <= capacity:" . strlen($this->buffer));
+            throw new Exception("readIndex[" . $readIndex . "] out of bounds exception: readOffset: " . $this->readOffset .
+                ", writeOffset: " . $this->writeOffset . "(expected: 0 <= readOffset <= writeOffset <= capacity:" . strlen($this->buffer));
         }
         $this->readOffset = $readIndex;
     }
