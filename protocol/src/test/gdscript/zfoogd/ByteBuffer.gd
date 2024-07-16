@@ -67,15 +67,18 @@ func getReadOffset() -> int:
 func isReadable() -> bool:
 	return writeOffset > readOffset
 
+func toBytes() -> PackedByteArray:
+	return buffer.data_array.slice(0, writeOffset)
+
 # -------------------------------------------------write/read-------------------------------------------------
-func writePackedByteArray(value: PackedByteArray):
+func writeBytes(value: PackedByteArray):
 	var length: int = value.size()
 	buffer.put_partial_data(value)
 	writeOffset += length
 	pass
 
-func toPackedByteArray() -> PackedByteArray:
-	return buffer.data_array.slice(0, writeOffset)
+func readBytes(length: int) -> PackedByteArray:
+	return buffer.data_array.slice(0, length)
 
 func writeBool(value: bool) -> void:
 	var byte: int = 1 if value else 0
@@ -306,9 +309,6 @@ func readPacket(protocolId):
 	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
 	return protocolRegistration.read(self)
 
-func newInstance(protocolId: int):
-	return ProtocolManager.newInstance(protocolId)
-
 func writeBoolArray(array):
 	if (array == null):
 		writeInt(0)
@@ -457,7 +457,8 @@ func writePacketArray(array, protocolId):
 
 func readPacketArray(protocolId):
 	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-	var array = Array([], typeof(protocolRegistration), StringName("RefCounted"), protocolRegistration)
+	var protocol = ProtocolManager.getProtocolClass(protocolId)
+	var array = Array([], typeof(protocol), StringName("RefCounted"), protocol)
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):

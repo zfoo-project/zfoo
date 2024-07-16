@@ -213,10 +213,10 @@ public class CodeGenerateGdScript implements ICodeGenerate {
         }
     }
 
-    private void createTemplateFile() {
-        var byteBufferFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ByteBuffer.gd"));
-        var byteBufferTemplate = ClassUtils.getFileFromClassPathToString("gdscript/ByteBuffer.gd");
-        FileUtils.writeStringToFile(byteBufferFile, StringUtils.format(byteBufferTemplate, protocolOutputRootPath), false);
+    private void createTemplateFile() throws IOException {
+        var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ByteBuffer.gd"));
+        var fileInputStream = ClassUtils.getFileFromClassPath("gdscript/ByteBuffer.gd");
+        FileUtils.writeInputStreamToFile(createFile, fileInputStream);
     }
 
     private String protocol_class(ProtocolRegistration registration) {
