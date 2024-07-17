@@ -1,8 +1,5 @@
 class ${protocol_name}Registration:
-	func getProtocolId():
-		return ${protocol_id}
-
-	func write(buffer: ByteBuffer, packet: ${protocol_name}):
+	func write(buffer: ByteBuffer, packet: Object):
 		if (packet == null):
 			buffer.writeInt(0)
 			return
@@ -14,7 +11,7 @@ class ${protocol_name}Registration:
 		if (length == 0):
 			return null
 		var beforeReadIndex = buffer.getReadOffset()
-		var packet = ${protocol_name}.new()
+		var packet = buffer.newInstance(${protocol_id})
 		${protocol_read_deserialization}
 		if (length > 0):
 			buffer.setReadOffset(beforeReadIndex + length)

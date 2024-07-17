@@ -2,7 +2,6 @@ ${protocol_imports}
 
 static var protocols: Dictionary = {}
 static var protocolClassMap: Dictionary = {}
-static var protocolIdMap: Dictionary = {}
 
 static func initProtocol():
 	${protocol_manager_registrations}
@@ -14,8 +13,12 @@ static func getProtocol(protocolId: int):
 static func getProtocolClass(protocolId: int):
 	return protocolClassMap[protocolId]
 
+static func newInstance(protocolId: int):
+	var protocol = protocolClassMap[protocolId]
+	return protocol.new()
+
 static func write(buffer, packet):
-	var protocolId: int = protocolIdMap[packet.get_script()]
+	var protocolId: int = packet.protocolId()
 	buffer.writeShort(protocolId)
 	var protocol = protocols[protocolId]
 	protocol.write(buffer, packet)

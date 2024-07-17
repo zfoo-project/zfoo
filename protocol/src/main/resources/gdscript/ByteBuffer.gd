@@ -70,6 +70,9 @@ func isReadable() -> bool:
 func toBytes() -> PackedByteArray:
 	return buffer.data_array.slice(0, writeOffset)
 
+func newInstance(protocolId: int):
+	return ProtocolManager.newInstance(protocolId)
+
 # -------------------------------------------------write/read-------------------------------------------------
 func writeBytes(value: PackedByteArray):
 	var length: int = value.size()
