@@ -1,20 +1,22 @@
 const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
 
 
-class SimpleObject:
-	var c: int
-	var g: bool
+var c: int
+var g: bool
 
-	func _to_string() -> String:
-		const jsonTemplate = "{c:{}, g:{}}"
-		var params = [self.c, self.g]
-		return jsonTemplate.format(params, "{}")
+func protocolId() -> int:
+	return 104
+
+func get_class_name() -> String:
+	return "SimpleObject"
+
+func _to_string() -> String:
+	const jsonTemplate = "{c:{}, g:{}}"
+	var params = [self.c, self.g]
+	return jsonTemplate.format(params, "{}")
 
 class SimpleObjectRegistration:
-	func getProtocolId():
-		return 104
-
-	func write(buffer: ByteBuffer, packet: SimpleObject):
+	func write(buffer: ByteBuffer, packet: Object):
 		if (packet == null):
 			buffer.writeInt(0)
 			return
@@ -28,7 +30,7 @@ class SimpleObjectRegistration:
 		if (length == 0):
 			return null
 		var beforeReadIndex = buffer.getReadOffset()
-		var packet = SimpleObject.new()
+		var packet = buffer.newInstance(104)
 		var result0 = buffer.readInt()
 		packet.c = result0
 		var result1 = buffer.readBool() 

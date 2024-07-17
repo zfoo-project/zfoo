@@ -1,23 +1,25 @@
 const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
-const ObjectB = preload("res://zfoogd/packet/ObjectB.gd").ObjectB
+const ObjectB = preload("res://zfoogd/packet/ObjectB.gd")
 
 
-class ObjectA:
-	var a: int
-	var m: Dictionary	# Map<number, string>
-	var objectB: ObjectB
-	var innerCompatibleValue: int
+var a: int
+var m: Dictionary	# Map<number, string>
+var objectB: ObjectB
+var innerCompatibleValue: int
 
-	func _to_string() -> String:
-		const jsonTemplate = "{a:{}, m:{}, objectB:{}, innerCompatibleValue:{}}"
-		var params = [self.a, JSON.stringify(self.m), self.objectB, self.innerCompatibleValue]
-		return jsonTemplate.format(params, "{}")
+func protocolId() -> int:
+	return 102
+
+func get_class_name() -> String:
+	return "ObjectA"
+
+func _to_string() -> String:
+	const jsonTemplate = "{a:{}, m:{}, objectB:{}, innerCompatibleValue:{}}"
+	var params = [self.a, JSON.stringify(self.m), self.objectB, self.innerCompatibleValue]
+	return jsonTemplate.format(params, "{}")
 
 class ObjectARegistration:
-	func getProtocolId():
-		return 102
-
-	func write(buffer: ByteBuffer, packet: ObjectA):
+	func write(buffer: ByteBuffer, packet: Object):
 		if (packet == null):
 			buffer.writeInt(0)
 			return
@@ -35,7 +37,7 @@ class ObjectARegistration:
 		if (length == 0):
 			return null
 		var beforeReadIndex = buffer.getReadOffset()
-		var packet = ObjectA.new()
+		var packet = buffer.newInstance(102)
 		var result0 = buffer.readInt()
 		packet.a = result0
 		var map1 = buffer.readIntStringMap()

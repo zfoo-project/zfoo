@@ -1,20 +1,22 @@
 const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
 
 
-class ObjectB:
-	var flag: bool
-	var innerCompatibleValue: int
+var flag: bool
+var innerCompatibleValue: int
 
-	func _to_string() -> String:
-		const jsonTemplate = "{flag:{}, innerCompatibleValue:{}}"
-		var params = [self.flag, self.innerCompatibleValue]
-		return jsonTemplate.format(params, "{}")
+func protocolId() -> int:
+	return 103
+
+func get_class_name() -> String:
+	return "ObjectB"
+
+func _to_string() -> String:
+	const jsonTemplate = "{flag:{}, innerCompatibleValue:{}}"
+	var params = [self.flag, self.innerCompatibleValue]
+	return jsonTemplate.format(params, "{}")
 
 class ObjectBRegistration:
-	func getProtocolId():
-		return 103
-
-	func write(buffer: ByteBuffer, packet: ObjectB):
+	func write(buffer: ByteBuffer, packet: Object):
 		if (packet == null):
 			buffer.writeInt(0)
 			return
@@ -30,7 +32,7 @@ class ObjectBRegistration:
 		if (length == 0):
 			return null
 		var beforeReadIndex = buffer.getReadOffset()
-		var packet = ObjectB.new()
+		var packet = buffer.newInstance(103)
 		var result0 = buffer.readBool() 
 		packet.flag = result0
 		if buffer.compatibleRead(beforeReadIndex, length):

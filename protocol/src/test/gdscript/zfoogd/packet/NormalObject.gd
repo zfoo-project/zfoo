@@ -1,41 +1,43 @@
 const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
-const ObjectA = preload("res://zfoogd/packet/ObjectA.gd").ObjectA
-const ObjectB = preload("res://zfoogd/packet/ObjectB.gd").ObjectB
+const ObjectA = preload("res://zfoogd/packet/ObjectA.gd")
+const ObjectB = preload("res://zfoogd/packet/ObjectB.gd")
 
 # 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
-class NormalObject:
-	var a: int
-	var aaa: Array[int]
-	var b: int
-	# 整数类型
-	var c: int
-	var d: int
-	var e: float
-	var f: float
-	var g: bool
-	var jj: String
-	var kk: ObjectA
-	var l: Array[int]
-	var ll: Array[int]
-	var lll: Array[ObjectA]
-	var llll: Array[String]
-	var m: Dictionary	# Map<number, string>
-	var mm: Dictionary	# Map<number, ObjectA>
-	var s: Array[int]
-	var ssss: Array[String]
-	var outCompatibleValue: int
-	var outCompatibleValue2: int
+var a: int
+var aaa: Array[int]
+var b: int
+# 整数类型
+var c: int
+var d: int
+var e: float
+var f: float
+var g: bool
+var jj: String
+var kk: ObjectA
+var l: Array[int]
+var ll: Array[int]
+var lll: Array[ObjectA]
+var llll: Array[String]
+var m: Dictionary	# Map<number, string>
+var mm: Dictionary	# Map<number, ObjectA>
+var s: Array[int]
+var ssss: Array[String]
+var outCompatibleValue: int
+var outCompatibleValue2: int
 
-	func _to_string() -> String:
-		const jsonTemplate = "{a:{}, aaa:{}, b:{}, c:{}, d:{}, e:{}, f:{}, g:{}, jj:'{}', kk:{}, l:{}, ll:{}, lll:{}, llll:{}, m:{}, mm:{}, s:{}, ssss:{}, outCompatibleValue:{}, outCompatibleValue2:{}}"
-		var params = [self.a, JSON.stringify(self.aaa), self.b, self.c, self.d, self.e, self.f, self.g, self.jj, self.kk, JSON.stringify(self.l), JSON.stringify(self.ll), JSON.stringify(self.lll), JSON.stringify(self.llll), JSON.stringify(self.m), JSON.stringify(self.mm), JSON.stringify(self.s), JSON.stringify(self.ssss), self.outCompatibleValue, self.outCompatibleValue2]
-		return jsonTemplate.format(params, "{}")
+func protocolId() -> int:
+	return 101
+
+func get_class_name() -> String:
+	return "NormalObject"
+
+func _to_string() -> String:
+	const jsonTemplate = "{a:{}, aaa:{}, b:{}, c:{}, d:{}, e:{}, f:{}, g:{}, jj:'{}', kk:{}, l:{}, ll:{}, lll:{}, llll:{}, m:{}, mm:{}, s:{}, ssss:{}, outCompatibleValue:{}, outCompatibleValue2:{}}"
+	var params = [self.a, JSON.stringify(self.aaa), self.b, self.c, self.d, self.e, self.f, self.g, self.jj, self.kk, JSON.stringify(self.l), JSON.stringify(self.ll), JSON.stringify(self.lll), JSON.stringify(self.llll), JSON.stringify(self.m), JSON.stringify(self.mm), JSON.stringify(self.s), JSON.stringify(self.ssss), self.outCompatibleValue, self.outCompatibleValue2]
+	return jsonTemplate.format(params, "{}")
 
 class NormalObjectRegistration:
-	func getProtocolId():
-		return 101
-
-	func write(buffer: ByteBuffer, packet: NormalObject):
+	func write(buffer: ByteBuffer, packet: Object):
 		if (packet == null):
 			buffer.writeInt(0)
 			return
@@ -69,7 +71,7 @@ class NormalObjectRegistration:
 		if (length == 0):
 			return null
 		var beforeReadIndex = buffer.getReadOffset()
-		var packet = NormalObject.new()
+		var packet = buffer.newInstance(101)
 		var result0 = buffer.readByte()
 		packet.a = result0
 		var array1 = buffer.readByteArray()

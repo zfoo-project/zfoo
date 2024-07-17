@@ -1,19 +1,21 @@
 const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
 
 
-class EmptyObject:
-	
 
-	func _to_string() -> String:
-		const jsonTemplate = "{}"
-		var params = []
-		return jsonTemplate.format(params, "{}")
+
+func protocolId() -> int:
+	return 0
+
+func get_class_name() -> String:
+	return "EmptyObject"
+
+func _to_string() -> String:
+	const jsonTemplate = "{}"
+	var params = []
+	return jsonTemplate.format(params, "{}")
 
 class EmptyObjectRegistration:
-	func getProtocolId():
-		return 0
-
-	func write(buffer: ByteBuffer, packet: EmptyObject):
+	func write(buffer: ByteBuffer, packet: Object):
 		if (packet == null):
 			buffer.writeInt(0)
 			return
@@ -25,7 +27,7 @@ class EmptyObjectRegistration:
 		if (length == 0):
 			return null
 		var beforeReadIndex = buffer.getReadOffset()
-		var packet = EmptyObject.new()
+		var packet = buffer.newInstance(0)
 		
 		if (length > 0):
 			buffer.setReadOffset(beforeReadIndex + length)
