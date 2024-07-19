@@ -39,9 +39,12 @@ func compatibleRead(beforeReadIndex: int, length: int) -> bool:
 	return length != -1 && getReadOffset() < length + beforeReadIndex
 
 # -------------------------------------------------get/set-------------------------------------------------
+func getBuffer() -> StreamPeerBuffer:
+	return buffer
+
 func setWriteOffset(writeIndex: int) -> void:
 	if (writeIndex > buffer.get_size()):
-		var template = "writeIndex[{}] out of bounds exception: readerIndex: {}, writerIndex: {} (expected: 0 <= readerIndex <= writerIndex <= capacity: {})"
+		var template = "writeIndex[{}] out of bounds exception: readOffset: {}, writeOffset: {} (expected: 0 <= readOffset <= writeOffset <= capacity: {})"
 		printerr(template.format([writeIndex, readOffset, writeOffset, buffer.get_size()], "{}"))
 		return
 	writeOffset = writeIndex
@@ -52,7 +55,7 @@ func getWriteOffset() -> int:
 
 func setReadOffset(readIndex: int) -> void:
 	if (readIndex > writeOffset):
-		var template = "readIndex[{}] out of bounds exception: readerIndex: {}, writerIndex: {} (expected: 0 <= readerIndex <= writerIndex <= capacity: {})"
+		var template = "readIndex[{}] out of bounds exception: readOffset: {}, writeOffset: {} (expected: 0 <= readOffset <= writeOffset <= capacity: {})"
 		printerr(template.format([readIndex, readOffset, writeOffset, buffer.size()], "{}"))
 		return
 	readOffset = readIndex
@@ -64,15 +67,21 @@ func getReadOffset() -> int:
 func isReadable() -> bool:
 	return writeOffset > readOffset
 
+func toBytes() -> PackedByteArray:
+	return buffer.data_array.slice(0, writeOffset)
+
+func newInstance(protocolId: int):
+	return ProtocolManager.newInstance(protocolId)
+
 # -------------------------------------------------write/read-------------------------------------------------
-func writePackedByteArray(value: PackedByteArray):
+func writeBytes(value: PackedByteArray):
 	var length: int = value.size()
 	buffer.put_partial_data(value)
 	writeOffset += length
 	pass
 
-func toPackedByteArray() -> PackedByteArray:
-	return buffer.data_array.slice(0, writeOffset)
+func readBytes(length: int) -> PackedByteArray:
+	return buffer.data_array.slice(0, length)
 
 func writeBool(value: bool) -> void:
 	var byte: int = 1 if value else 0
@@ -303,10 +312,7 @@ func readPacket(protocolId):
 	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
 	return protocolRegistration.read(self)
 
-func newInstance(protocolId: int):
-	return ProtocolManager.newInstance(protocolId)
-
-func writeBooleanArray(array):
+func writeBoolArray(array):
 	if (array == null):
 		writeInt(0)
 	else:
@@ -315,7 +321,7 @@ func writeBooleanArray(array):
 			writeBool(element)
 	pass
 
-func readBooleanArray() -> Array[bool]:
+func readBoolArray() -> Array[bool]:
 	var array: Array[bool] = []
 	var size = readInt()
 	if (size > 0):
@@ -454,7 +460,8 @@ func writePacketArray(array, protocolId):
 
 func readPacketArray(protocolId):
 	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-	var array = Array([], typeof(protocolRegistration), StringName("RefCounted"), protocolRegistration)
+	var protocol = ProtocolManager.getProtocolClass(protocolId)
+	var array = Array([], typeof(protocol), StringName("RefCounted"), protocol)
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):

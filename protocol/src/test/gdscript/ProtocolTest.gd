@@ -82,6 +82,7 @@ func _ready():
 
 
 func test():
+	ProtocolManager.initProtocol()
 	var buffer = ByteBuffer.new()
 	
 	var filePath = "res://compatible/normal-out-inner-inner-compatible.bytes"
@@ -92,7 +93,7 @@ func test():
 	var file = FileAccess.open(filePath, FileAccess.READ)
 
 	var poolByteArray = file.get_buffer(file.get_length())
-	buffer.writePackedByteArray(poolByteArray)
+	buffer.writeBytes(poolByteArray)
 	
 	var packet = ProtocolManager.read(buffer)
 	print(packet)

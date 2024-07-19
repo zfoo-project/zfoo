@@ -48,8 +48,8 @@ public class ByteBuffer {
 
     public void setWriteOffset(int writeIndex) {
         if (writeIndex > buffer.length) {
-            throw new RuntimeException("writeIndex[" + writeIndex + "] out of bounds exception: readerIndex: " + readOffset +
-                    ", writerIndex: " + writeOffset + "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + buffer.length);
+            throw new RuntimeException("writeIndex[" + writeIndex + "] out of bounds exception: readOffset: " + readOffset +
+                    ", writeOffset: " + writeOffset + "(expected: 0 <= readOffset <= writeOffset <= capacity:" + buffer.length + ")");
         }
         writeOffset = writeIndex;
     }
@@ -60,8 +60,8 @@ public class ByteBuffer {
 
     public void setReadOffset(int readIndex) {
         if (readIndex > writeOffset) {
-            throw new RuntimeException("readIndex[" + readIndex + "] out of bounds exception: readerIndex: " + readOffset +
-                    ", writerIndex: " + writeOffset + "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + buffer.length);
+            throw new RuntimeException("readIndex[" + readIndex + "] out of bounds exception: readOffset: " + readOffset +
+                    ", writeOffset: " + writeOffset + "(expected: 0 <= readOffset <= writeOffset <= capacity:" + buffer.length + ")");
         }
         readOffset = readIndex;
     }

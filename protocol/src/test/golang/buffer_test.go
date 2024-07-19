@@ -133,11 +133,11 @@ func packetTest() {
 	buffer.WriteUBytes(bytes)
 	var packet = zfoogo.Read(buffer)
 	fmt.Println(packet)
-	fmt.Println("source size ", buffer.WriteOffset())
+	fmt.Println("source size ", buffer.GetWriteOffset())
 
 	buffer.Clear()
 	zfoogo.Write(buffer, packet)
 	var newPacket = zfoogo.Read(buffer)
-	fmt.Println("target size ", buffer.WriteOffset())
+	fmt.Println("target size ", buffer.GetWriteOffset())
 	fmt.Println(newPacket)
 }

@@ -1,8 +1,15 @@
-func (protocol ${protocol_name}) ProtocolId() int16 {
-	return ${protocol_id}
+package zfoogo
+
+
+type EmptyObject struct {
+	
 }
 
-func (protocol ${protocol_name}) write(buffer *ByteBuffer, packet any) {
+func (protocol EmptyObject) ProtocolId() int16 {
+	return 0
+}
+
+func (protocol EmptyObject) write(buffer *ByteBuffer, packet any) {
 	if packet == nil {
 	    buffer.WriteInt(0)
 		return
@@ -10,8 +17,8 @@ func (protocol ${protocol_name}) write(buffer *ByteBuffer, packet any) {
 	buffer.WriteInt(-1)
 }
 
-func (protocol ${protocol_name}) read(buffer *ByteBuffer) any {
-	var packet = new(${protocol_name})
+func (protocol EmptyObject) read(buffer *ByteBuffer) any {
+	var packet = new(EmptyObject)
 	var length = buffer.ReadInt()
 	if length == 0 {
 		return packet

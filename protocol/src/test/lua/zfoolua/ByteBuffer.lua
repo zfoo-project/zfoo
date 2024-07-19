@@ -14,8 +14,8 @@ local zeroByte = string.char(0)
 
 local ByteBuffer = {}
 
-local trueBooleanStrValue = string.char(1)
-local falseBooleanStrValue = string.char(0)
+local trueBoolStrValue = string.char(1)
+local falseBoolStrValue = string.char(0)
 
 function serializeTableToJson(tbl)
     local res = {}
@@ -127,15 +127,19 @@ function ByteBuffer:compatibleRead(beforeReadIndex, length)
 end
 
 -------------------------------------get和set-------------------------------------
+function ByteBuffer:getBuffer()
+    return self.buffer
+end
+
 function ByteBuffer:getWriteOffset()
     return self.writeOffset
 end
 
-function ByteBuffer:setWriteOffset(writeOffset)
-    if writeOffset > #self.buffer + 1 then
-        error(string.format("writeOffset: %s index out of bounds exception: readerIndex: %s, writerIndex: %s, (expected: 0 <= readerIndex <= writerIndex <= capacity: %s)", writeOffset, self.readOffset, self.writeOffset, #self.buffer))
+function ByteBuffer:setWriteOffset(writeIndex)
+    if writeIndex > #self.buffer + 1 then
+        error(string.format("writeIndex: %s index out of bounds exception: readOffset: %s, writerOffset: %s, (expected: 0 <= readOffset <= writeOffset <= capacity: %s)", writeIndex, self.readOffset, self.writeOffset, #self.buffer))
     end
-    self.writeOffset = writeOffset
+    self.writeOffset = writeIndex
     return self
 end
 
@@ -143,11 +147,11 @@ function ByteBuffer:getReadOffset()
     return self.readOffset
 end
 
-function ByteBuffer:setReadOffset(readOffset)
-    if readOffset > self.writeOffset then
-        error(string.format("readOffset: %s index out of bounds exception: readerIndex: %s, writerIndex: %s, (expected: 0 <= readerIndex <= writerIndex <= capacity: %s)", readOffset, self.readOffset, self.writeOffset, #self.buffer))
+function ByteBuffer:setReadOffset(readIndex)
+    if readIndex > self.writeOffset then
+        error(string.format("readIndex: %s index out of bounds exception: readOffset: %s, writerIndex: %s, (expected: 0 <= readOffset <= writeOffset <= capacity: %s)", readIndex, self.readOffset, self.writeOffset, #self.buffer))
     end
-    self.readOffset = readOffset
+    self.readOffset = readIndex
     return self
 end
 
@@ -166,19 +170,19 @@ end
 -------------------------------------write和read-------------------------------------
 
 --bool
-function ByteBuffer:writeBoolean(boolValue)
+function ByteBuffer:writeBool(boolValue)
     if boolValue then
-        self:writeRawByteStr(trueBooleanStrValue)
+        self:writeRawByteStr(trueBoolStrValue)
     else
-        self:writeRawByteStr(falseBooleanStrValue)
+        self:writeRawByteStr(falseBoolStrValue)
     end
     return self
 end
 
-function ByteBuffer:readBoolean()
+function ByteBuffer:readBool()
     -- When char > 256, the readUByte method will show an error.
     -- So, we have to use readChar
-    return self:readRawByteStr() == trueBooleanStrValue
+    return self:readRawByteStr() == trueBoolStrValue
 end
 
 
@@ -527,24 +531,24 @@ function ByteBuffer:readPacket(protocolId)
     return protocolRegistration:read(self)
 end
 
-function ByteBuffer:writeBooleanArray(array)
+function ByteBuffer:writeBoolArray(array)
     if array == nil then
         self:writeInt(0)
     else
         self:writeInt(#array)
         for index, element in pairs(array) do
-            self:writeBoolean(element)
+            self:writeBool(element)
         end
     end
     return self
 end
 
-function ByteBuffer:readBooleanArray()
+function ByteBuffer:readBoolArray()
     local array = {}
     local size = self:readInt()
     if size > 0 then
         for index = 1, size do
-            table.insert(array, self:readBoolean())
+            table.insert(array, self:readBool())
         end
     end
     return array

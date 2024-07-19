@@ -43,14 +43,14 @@ class ByteBuffer {
   def getWriteOffset: Int = writeOffset
 
   def setWriteOffset(writeIndex: Int): Unit = {
-    if (writeIndex > buffer.length) throw new RuntimeException("writeIndex[" + writeIndex + "] out of bounds exception: readerIndex: " + readOffset + ", writerIndex: " + writeOffset + "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + buffer.length)
+    if (writeIndex > buffer.length) throw new RuntimeException("writeIndex[" + writeIndex + "] out of bounds exception: readOffset: " + readOffset + ", writeOffset: " + writeOffset + "(expected: 0 <= readOffset <= writeOffset <= capacity:" + buffer.length + ")")
     writeOffset = writeIndex
   }
 
   def getReadOffset: Int = readOffset
 
   def setReadOffset(readIndex: Int): Unit = {
-    if (readIndex > writeOffset) throw new RuntimeException("readIndex[" + readIndex + "] out of bounds exception: readerIndex: " + readOffset + ", writerIndex: " + writeOffset + "(expected: 0 <= readerIndex <= writerIndex <= capacity:" + buffer.length)
+    if (readIndex > writeOffset) throw new RuntimeException("readIndex[" + readIndex + "] out of bounds exception: readOffset: " + readOffset + ", writeOffset: " + writeOffset + "(expected: 0 <= readOffset <= writeOffset <= capacity:" + buffer.length + ")")
     readOffset = readIndex
   }
 

@@ -89,7 +89,7 @@ public enum CodeTemplatePlaceholder {
                 if (formatLine.contains(codeTemplatePlaceholder.placeholder)) {
                     var placeholder = placeholderMap.get(codeTemplatePlaceholder);
                     if (placeholder == null) {
-                        throw new RunException("placeholder:[{}] not exist, and add [{}] to your placeholderMap", placeholder, placeholder);
+                        throw new RunException("placeholder:[{}] not exist, and add [{}] to your placeholderMap", codeTemplatePlaceholder, codeTemplatePlaceholder);
                     }
                     formatLine = formatLine.replace(codeTemplatePlaceholder.placeholder, placeholder);
                 }

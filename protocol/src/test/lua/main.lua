@@ -52,10 +52,10 @@ end
 function byteBufferTest()
     local byteBuffer = ByteBuffer:new()
 
-    byteBuffer:writeBoolean(true)
-    byteBuffer:writeBoolean(false)
-    assert(byteBuffer:readBoolean() == true)
-    assert(byteBuffer:readBoolean() == false)
+    byteBuffer:writeBool(true)
+    byteBuffer:writeBool(false)
+    assert(byteBuffer:readBool() == true)
+    assert(byteBuffer:readBool() == false)
     byteBuffer:setWriteOffset(1)
     byteBuffer:setReadOffset(1)
 

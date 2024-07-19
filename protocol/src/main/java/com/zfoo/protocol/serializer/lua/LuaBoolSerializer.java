@@ -35,7 +35,7 @@ public class LuaBoolSerializer implements ILuaSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer:writeBoolean({})", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer:writeBool({})", objectStr)).append(LS);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class LuaBoolSerializer implements ILuaSerializer {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("local {} = buffer:readBoolean()", result)).append(LS);
+        builder.append(StringUtils.format("local {} = buffer:readBool()", result)).append(LS);
         return result;
     }
 }

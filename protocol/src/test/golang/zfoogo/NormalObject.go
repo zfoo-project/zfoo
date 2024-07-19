@@ -1,14 +1,11 @@
 package zfoogo
 
-
-type EmptyObject struct {
-	
-}
-
+// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
 type NormalObject struct {
 	A int8
 	Aaa []int8
 	B int16
+	// 整数类型
 	C int
 	D int64
 	E float32
@@ -28,47 +25,6 @@ type NormalObject struct {
 	OutCompatibleValue2 int
 }
 
-type ObjectA struct {
-	A int
-	M map[int]string
-	ObjectB ObjectB
-	InnerCompatibleValue int
-}
-
-type ObjectB struct {
-	Flag bool
-	InnerCompatibleValue int
-}
-
-type SimpleObject struct {
-	C int
-	G bool
-}
-
-func (protocol EmptyObject) ProtocolId() int16 {
-	return 0
-}
-
-func (protocol EmptyObject) write(buffer *ByteBuffer, packet any) {
-	if packet == nil {
-	    buffer.WriteInt(0)
-		return
-	}
-	buffer.WriteInt(-1)
-}
-
-func (protocol EmptyObject) read(buffer *ByteBuffer) any {
-	var packet = new(EmptyObject)
-	var length = buffer.ReadInt()
-	if length == 0 {
-		return packet
-	}
-	var beforeReadIndex = buffer.ReadOffset()
-	if length > 0 {
-        buffer.SetReadOffset(beforeReadIndex + length)
-    }
-	return packet
-}
 func (protocol NormalObject) ProtocolId() int16 {
 	return 101
 }
@@ -79,7 +35,7 @@ func (protocol NormalObject) write(buffer *ByteBuffer, packet any) {
 		return
 	}
 	var message = packet.(*NormalObject)
-	var beforeWriteIndex = buffer.WriteOffset()
+	var beforeWriteIndex = buffer.GetWriteOffset()
 	buffer.WriteInt(857)
 	buffer.WriteByte(message.A)
 	buffer.WriteByteArray(message.Aaa)
@@ -127,7 +83,7 @@ func (protocol NormalObject) read(buffer *ByteBuffer) any {
 	if length == 0 {
 		return packet
 	}
-	var beforeReadIndex = buffer.ReadOffset()
+	var beforeReadIndex = buffer.GetReadOffset()
 	var result0 = buffer.ReadByte()
 	packet.A = result0
 	var array1 = buffer.ReadByteArray()
@@ -187,113 +143,6 @@ func (protocol NormalObject) read(buffer *ByteBuffer) any {
 	    var result26 = buffer.ReadInt()
 	    packet.OutCompatibleValue2 = result26
 	}
-	if length > 0 {
-        buffer.SetReadOffset(beforeReadIndex + length)
-    }
-	return packet
-}
-func (protocol ObjectA) ProtocolId() int16 {
-	return 102
-}
-
-func (protocol ObjectA) write(buffer *ByteBuffer, packet any) {
-	if packet == nil {
-	    buffer.WriteInt(0)
-		return
-	}
-	var message = packet.(*ObjectA)
-	var beforeWriteIndex = buffer.WriteOffset()
-	buffer.WriteInt(201)
-	buffer.WriteInt(message.A)
-	buffer.WriteIntStringMap(message.M)
-	buffer.WritePacket(&message.ObjectB, 103)
-	buffer.WriteInt(message.InnerCompatibleValue)
-	buffer.AdjustPadding(201, beforeWriteIndex)
-}
-
-func (protocol ObjectA) read(buffer *ByteBuffer) any {
-	var packet = new(ObjectA)
-	var length = buffer.ReadInt()
-	if length == 0 {
-		return packet
-	}
-	var beforeReadIndex = buffer.ReadOffset()
-	var result0 = buffer.ReadInt()
-	packet.A = result0
-	var map1 = buffer.ReadIntStringMap()
-	packet.M = map1
-	var result2 = *buffer.ReadPacket(103).(*ObjectB)
-	packet.ObjectB = result2
-	if buffer.CompatibleRead(beforeReadIndex, length) {
-	    var result3 = buffer.ReadInt()
-	    packet.InnerCompatibleValue = result3
-	}
-	if length > 0 {
-        buffer.SetReadOffset(beforeReadIndex + length)
-    }
-	return packet
-}
-func (protocol ObjectB) ProtocolId() int16 {
-	return 103
-}
-
-func (protocol ObjectB) write(buffer *ByteBuffer, packet any) {
-	if packet == nil {
-	    buffer.WriteInt(0)
-		return
-	}
-	var message = packet.(*ObjectB)
-	var beforeWriteIndex = buffer.WriteOffset()
-	buffer.WriteInt(4)
-	buffer.WriteBool(message.Flag)
-	buffer.WriteInt(message.InnerCompatibleValue)
-	buffer.AdjustPadding(4, beforeWriteIndex)
-}
-
-func (protocol ObjectB) read(buffer *ByteBuffer) any {
-	var packet = new(ObjectB)
-	var length = buffer.ReadInt()
-	if length == 0 {
-		return packet
-	}
-	var beforeReadIndex = buffer.ReadOffset()
-	var result0 = buffer.ReadBool()
-	packet.Flag = result0
-	if buffer.CompatibleRead(beforeReadIndex, length) {
-	    var result1 = buffer.ReadInt()
-	    packet.InnerCompatibleValue = result1
-	}
-	if length > 0 {
-        buffer.SetReadOffset(beforeReadIndex + length)
-    }
-	return packet
-}
-func (protocol SimpleObject) ProtocolId() int16 {
-	return 104
-}
-
-func (protocol SimpleObject) write(buffer *ByteBuffer, packet any) {
-	if packet == nil {
-	    buffer.WriteInt(0)
-		return
-	}
-	var message = packet.(*SimpleObject)
-	buffer.WriteInt(-1)
-	buffer.WriteInt(message.C)
-	buffer.WriteBool(message.G)
-}
-
-func (protocol SimpleObject) read(buffer *ByteBuffer) any {
-	var packet = new(SimpleObject)
-	var length = buffer.ReadInt()
-	if length == 0 {
-		return packet
-	}
-	var beforeReadIndex = buffer.ReadOffset()
-	var result0 = buffer.ReadInt()
-	packet.C = result0
-	var result1 = buffer.ReadBool()
-	packet.G = result1
 	if length > 0 {
         buffer.SetReadOffset(beforeReadIndex + length)
     }
