@@ -38,7 +38,6 @@ public abstract class ConvertUtils {
         converters.add(new JsonToObjectConverter());
         converters.add(new StringToClassConverter());
         converters.add(new StringToDateConverter());
-        converters.add(new StringToMapConverter());
         conversionServiceFactoryBean.setConverters(converters);
         conversionServiceFactoryBean.afterPropertiesSet();
     }
