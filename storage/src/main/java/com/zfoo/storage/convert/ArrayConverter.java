@@ -46,10 +46,14 @@ public class ArrayConverter implements ConditionalGenericConverter {
             return Array.newInstance(componentType, 0);
         }
         // 如果为json格式，则以json格式解析
-        if (content.startsWith("[") || content.endsWith("]")) {
-            return componentType.isPrimitive()
-                    ? JsonUtils.string2Object(content, targetType.getObjectType())
-                    : JsonUtils.string2Array(content, componentType);
+        if (content.startsWith("[") && content.endsWith("]")) {
+            try {
+                return componentType.isPrimitive()
+                        ? JsonUtils.string2Object(content, targetType.getObjectType())
+                        : JsonUtils.string2Array(content, componentType);
+
+            } catch (Exception e) {
+            }
         }
         return ConvertUtils.convertToArray(content, componentType);
     }

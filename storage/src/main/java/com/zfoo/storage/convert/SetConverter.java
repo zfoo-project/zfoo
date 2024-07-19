@@ -53,8 +53,11 @@ public class SetConverter implements ConditionalGenericConverter {
         } else {
             clazz = (Class<?>) type;
         }
-        if (content.startsWith("[") || content.endsWith("]")) {
-            return Collections.unmodifiableSet(JsonUtils.string2Set(content, clazz));
+        if (content.startsWith("[") && content.endsWith("]")) {
+            try {
+                return Collections.unmodifiableSet(JsonUtils.string2Set(content, clazz));
+            } catch (Exception e) {
+            }
         }
         return ConvertUtils.convertToSet(content, clazz);
     }
