@@ -25,7 +25,7 @@ import java.util.Set;
 /**
  * @author godotg
  */
-public class JsonToArrayConverter implements ConditionalGenericConverter {
+public class ArrayConverter implements ConditionalGenericConverter {
 
 
     @Override

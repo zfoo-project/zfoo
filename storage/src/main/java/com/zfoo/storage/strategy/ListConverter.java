@@ -29,7 +29,7 @@ import java.util.Set;
 /**
  * @author liqi
  */
-public class JsonToListConverter implements ConditionalGenericConverter {
+public class ListConverter implements ConditionalGenericConverter {
 
 
     @Override
@@ -50,14 +50,16 @@ public class JsonToListConverter implements ConditionalGenericConverter {
         }
         Class<?> clazz = null;
         Type type = targetType.getResolvableType().getGeneric(0).getType();
-        if (type instanceof Class) {
-            clazz = (Class<?>) type;
-        } else if (type instanceof ParameterizedType parameterizedType) {
+        if (type instanceof ParameterizedType parameterizedType) {
             clazz = (Class<?>) parameterizedType.getRawType();
+        } else {
+            clazz = (Class<?>) type;
         }
         if (content.startsWith("[") || content.endsWith("]")) {
-            return Collections.unmodifiableList(JsonUtils.string2List(content, clazz));
+            return clazz.equals(List.class)
+                    ? Collections.unmodifiableList(JsonUtils.string2List(content, clazz))
+                    : JsonUtils.string2List(content, clazz);
         }
-        return Collections.unmodifiableList(ConvertUtils.convertToList(content, clazz));
+        return ConvertUtils.convertToList(content, clazz);
     }
 }

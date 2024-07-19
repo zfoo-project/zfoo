@@ -19,10 +19,7 @@ import org.springframework.core.convert.TypeDescriptor;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author godotg
@@ -35,8 +32,8 @@ public abstract class ConvertUtils {
 
     static {
         var converters = new HashSet<>();
-        converters.add(new JsonToArrayConverter());
-        converters.add(new JsonToListConverter());
+        converters.add(new ArrayConverter());
+        converters.add(new ListConverter());
         converters.add(new JsonToMapConverter());
         converters.add(new JsonToObjectConverter());
         converters.add(new StringToClassConverter());
@@ -85,6 +82,21 @@ public abstract class ConvertUtils {
             var value = ConvertUtils.convert(StringUtils.trim(splits[i]), type);
             list.add(value);
         }
-        return list;
+        return Collections.unmodifiableList(list);
+    }
+
+    public static <T> Set<T> convertToSet(String content, Class<T> type) {
+        content = StringUtils.trim(content);
+        if (StringUtils.isEmpty(content)) {
+            return Collections.emptySet();
+        }
+        var splits = content.split(StringUtils.COMMA_REGEX);
+        var length = splits.length;
+        var set = new HashSet<T>();
+        for (var i = 0; i < length; i++) {
+            var value = ConvertUtils.convert(StringUtils.trim(splits[i]), type);
+            set.add(value);
+        }
+        return Collections.unmodifiableSet(set);
     }
 }

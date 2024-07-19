@@ -13,7 +13,7 @@
 
 package com.zfoo.storage.conversion;
 
-import com.zfoo.storage.strategy.JsonToArrayConverter;
+import com.zfoo.storage.strategy.ArrayConverter;
 import com.zfoo.storage.strategy.JsonToMapConverter;
 import com.zfoo.storage.strategy.StringToClassConverter;
 import com.zfoo.storage.strategy.StringToDateConverter;
@@ -38,7 +38,7 @@ public class ConversionTest {
     private static final StringToDateConverter std = new StringToDateConverter();
     private static final StringToClassConverter stcc = new StringToClassConverter();
     private static final JsonToMapConverter jtmc = new JsonToMapConverter();
-    private static final JsonToArrayConverter jtac = new JsonToArrayConverter();
+    private static final ArrayConverter jtac = new ArrayConverter();
 
     static {
         converters.add(std);

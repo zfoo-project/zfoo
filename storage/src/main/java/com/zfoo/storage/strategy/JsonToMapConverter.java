@@ -39,8 +39,5 @@ public class JsonToMapConverter implements ConditionalGenericConverter {
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
         String content = (String) source;
         return JsonUtils.string2Map(content, targetType.getMapKeyTypeDescriptor().getType(), targetType.getMapValueTypeDescriptor().getType());
-//        return JsonUtils.string2Object(content, targetType.getType());
-        // return JsonUtil.string2Map(content, targetType.getMapKeyTypeDescriptor().getType()
-        //         , targetType.getMapValueTypeDescriptor().getType());
     }
 }
