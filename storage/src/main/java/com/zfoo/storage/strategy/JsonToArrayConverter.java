@@ -14,7 +14,6 @@
 package com.zfoo.storage.strategy;
 
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.protocol.util.StringUtils;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
 
@@ -39,25 +38,9 @@ public class JsonToArrayConverter implements ConditionalGenericConverter {
 
     @Override
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-        // String content = (String) source;
-        // return targetType.isPrimitive() ? JsonUtil.string2Object(content, targetType.getObjectType())
-        //         : JsonUtil.string2Array(content, targetType.getType());
-        Class<?> clazz = null;
-
-        String content = (String) source;
-
-        String targetClazzName = targetType.getObjectType().getName();
-        if (targetClazzName.contains(StringUtils.LEFT_SQUARE_BRACKET) || targetClazzName.contains(StringUtils.SEMICOLON)) {
-            String clazzPath = targetClazzName.substring(2, targetClazzName.length() - 1);
-            try {
-                clazz = Class.forName(clazzPath);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            clazz = targetType.getObjectType();
-        }
-
-        return JsonUtils.string2Array(content, clazz);
+         String content = (String) source;
+         return targetType.getType().getComponentType().isPrimitive()
+                 ? JsonUtils.string2Object(content, targetType.getObjectType())
+                 : JsonUtils.string2Array(content, targetType.getType().getComponentType());
     }
 }
