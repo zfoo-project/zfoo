@@ -73,10 +73,9 @@ public abstract class ConvertUtils {
             return Collections.emptyList();
         }
         var splits = content.split(StringUtils.COMMA_REGEX);
-        var length = splits.length;
         var list = new ArrayList<T>();
-        for (var i = 0; i < length; i++) {
-            var value = ConvertUtils.convert(StringUtils.trim(splits[i]), genericType);
+        for (var split : splits) {
+            var value = ConvertUtils.convert(StringUtils.trim(split), genericType);
             list.add(value);
         }
         return Collections.unmodifiableList(list);
