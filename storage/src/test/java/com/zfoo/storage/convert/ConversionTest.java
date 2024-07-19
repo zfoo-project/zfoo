@@ -11,12 +11,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.conversion;
+package com.zfoo.storage.convert;
 
-import com.zfoo.storage.convert.ArrayConverter;
-import com.zfoo.storage.convert.JsonToMapConverter;
-import com.zfoo.storage.convert.StringToClassConverter;
-import com.zfoo.storage.convert.StringToDateConverter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.support.ConversionServiceFactoryBean;
