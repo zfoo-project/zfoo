@@ -13,10 +13,10 @@
 
 package com.zfoo.storage.conversion;
 
-import com.zfoo.storage.strategy.ArrayConverter;
-import com.zfoo.storage.strategy.JsonToMapConverter;
-import com.zfoo.storage.strategy.StringToClassConverter;
-import com.zfoo.storage.strategy.StringToDateConverter;
+import com.zfoo.storage.convert.ArrayConverter;
+import com.zfoo.storage.convert.JsonToMapConverter;
+import com.zfoo.storage.convert.StringToClassConverter;
+import com.zfoo.storage.convert.StringToDateConverter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.support.ConversionServiceFactoryBean;

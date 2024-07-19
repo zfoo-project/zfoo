@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.strategy;
+package com.zfoo.storage.convert;
 
 import com.zfoo.protocol.util.JsonUtils;
 import org.springframework.core.convert.converter.Converter;

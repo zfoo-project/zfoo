@@ -11,33 +11,46 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.strategy;
+package com.zfoo.storage.convert;
 
 import com.zfoo.protocol.util.JsonUtils;
+import com.zfoo.protocol.util.StringUtils;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
 
-import java.util.Collections;
-import java.util.Map;
+import java.lang.reflect.Array;
 import java.util.Set;
 
 /**
  * @author godotg
  */
-public class JsonToMapConverter implements ConditionalGenericConverter {
+public class ArrayConverter implements ConditionalGenericConverter {
+
+
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
-        return sourceType.getType() == String.class && Map.class.isAssignableFrom(targetType.getType());
+        return sourceType.getType() == String.class && targetType.getType().isArray();
     }
 
     @Override
     public Set<ConvertiblePair> getConvertibleTypes() {
-        return Collections.singleton(new ConvertiblePair(String.class, Map.class));
+        return null;
     }
 
     @Override
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-        String content = (String) source;
-        return JsonUtils.string2Map(content, targetType.getMapKeyTypeDescriptor().getType(), targetType.getMapValueTypeDescriptor().getType());
+        var content = StringUtils.trim((String) source);
+        var componentType = targetType.getType().getComponentType();
+        // null safe，content为空则返回长度为0的数组
+        if (StringUtils.isEmpty(content)) {
+            return Array.newInstance(componentType, 0);
+        }
+        // 如果为json格式，则以json格式解析
+        if (content.startsWith("[") || content.endsWith("]")) {
+            return componentType.isPrimitive()
+                    ? JsonUtils.string2Object(content, targetType.getObjectType())
+                    : JsonUtils.string2Array(content, componentType);
+        }
+        return ConvertUtils.convertToArray(content, componentType);
     }
 }

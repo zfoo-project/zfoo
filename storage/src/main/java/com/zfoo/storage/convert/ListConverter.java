@@ -11,47 +11,52 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.strategy;
+package com.zfoo.storage.convert;
 
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.storage.util.ConvertUtils;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
+import org.springframework.lang.NonNull;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
- * @author godotg
+ * @author liqi
  */
-public class ArrayConverter implements ConditionalGenericConverter {
+public class ListConverter implements ConditionalGenericConverter {
 
 
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
-        return sourceType.getType() == String.class && targetType.getType().isArray();
+        return sourceType.getType() == String.class && List.class.isAssignableFrom(targetType.getType());
     }
 
     @Override
     public Set<ConvertiblePair> getConvertibleTypes() {
-        return null;
+        return Collections.singleton(new ConvertiblePair(String.class, List.class));
     }
 
     @Override
-    public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
+    public Object convert(Object source, @NonNull TypeDescriptor sourceType, TypeDescriptor targetType) {
         var content = StringUtils.trim((String) source);
-        var componentType = targetType.getType().getComponentType();
-        // null safe，content为空则返回长度为0的数组
         if (StringUtils.isEmpty(content)) {
-            return Array.newInstance(componentType, 0);
+            return Collections.emptyList();
         }
-        // 如果为json格式，则以json格式解析
+        Class<?> clazz = null;
+        Type type = targetType.getResolvableType().getGeneric(0).getType();
+        if (type instanceof ParameterizedType parameterizedType) {
+            clazz = (Class<?>) parameterizedType.getRawType();
+        } else {
+            clazz = (Class<?>) type;
+        }
         if (content.startsWith("[") || content.endsWith("]")) {
-            return componentType.isPrimitive()
-                    ? JsonUtils.string2Object(content, targetType.getObjectType())
-                    : JsonUtils.string2Array(content, componentType);
+            return Collections.unmodifiableList(JsonUtils.string2List(content, clazz));
         }
-        return ConvertUtils.convertToArray(content, componentType);
+        return ConvertUtils.convertToList(content, clazz);
     }
 }

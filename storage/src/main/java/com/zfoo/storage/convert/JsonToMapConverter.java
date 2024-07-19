@@ -11,53 +11,33 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.storage.strategy;
+package com.zfoo.storage.convert;
 
 import com.zfoo.protocol.util.JsonUtils;
-import com.zfoo.protocol.util.ReflectionUtils;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
 /**
- * 转换一个String到一个POJO对象，且这个对象不能继承如何接口
- *
  * @author godotg
  */
-public class JsonToObjectConverter implements ConditionalGenericConverter {
-
-
+public class JsonToMapConverter implements ConditionalGenericConverter {
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
-        if (sourceType.getType() != String.class) {
-            return false;
-        }
-
-        if (targetType.getType().isPrimitive()) {
-            return false;
-        }
-
-        if (Number.class.isAssignableFrom(targetType.getType())) {
-            return false;
-        }
-
-        if (CharSequence.class.isAssignableFrom(targetType.getType())) {
-            return false;
-        }
-
-        return ReflectionUtils.isPojoClass(targetType.getType());
+        return sourceType.getType() == String.class && Map.class.isAssignableFrom(targetType.getType());
     }
 
     @Override
     public Set<ConvertiblePair> getConvertibleTypes() {
-        return Collections.singleton(new ConvertiblePair(String.class, Object.class));
+        return Collections.singleton(new ConvertiblePair(String.class, Map.class));
     }
 
     @Override
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
         String content = (String) source;
-        return JsonUtils.string2Object(content, targetType.getType());
+        return JsonUtils.string2Map(content, targetType.getMapKeyTypeDescriptor().getType(), targetType.getMapValueTypeDescriptor().getType());
     }
 }

@@ -17,9 +17,9 @@ import com.zfoo.protocol.util.ReflectionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.anno.AliasFieldName;
 import com.zfoo.storage.anno.Id;
+import com.zfoo.storage.convert.ConvertUtils;
 import com.zfoo.storage.interpreter.data.StorageData;
 import com.zfoo.storage.interpreter.data.StorageEnum;
-import com.zfoo.storage.util.ConvertUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
