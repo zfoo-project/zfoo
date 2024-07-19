@@ -28,7 +28,7 @@ import java.util.Set;
 public class JsonToMapConverter implements ConditionalGenericConverter {
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
-        return sourceType.getType() == String.class && Map.class.isAssignableFrom(targetType.getType());
+        return sourceType.getType() == String.class && targetType.isMap();
     }
 
     @Override

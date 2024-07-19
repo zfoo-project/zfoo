@@ -29,7 +29,7 @@ public class ArrayConverter implements ConditionalGenericConverter {
 
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
-        return sourceType.getType() == String.class && targetType.getType().isArray();
+        return sourceType.getType() == String.class && targetType.isArray();
     }
 
     @Override
