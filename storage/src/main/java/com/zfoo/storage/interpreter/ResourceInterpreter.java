@@ -81,9 +81,7 @@ public class ResourceInterpreter {
 
                 for (var fieldInfo : fieldInfos) {
                     var content = columns.get(fieldInfo.index);
-                    if (StringUtils.isNotEmpty(content) || fieldInfo.field.getType() == String.class) {
-                        inject(instance, fieldInfo.field, content);
-                    }
+                    inject(instance, fieldInfo.field, content);
                 }
                 result.add(instance);
             }

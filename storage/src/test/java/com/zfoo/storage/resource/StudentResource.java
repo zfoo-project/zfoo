@@ -19,6 +19,7 @@ import com.zfoo.storage.anno.Index;
 import com.zfoo.storage.anno.Storage;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author godotg
@@ -39,6 +40,9 @@ public class StudentResource {
     private int age;
     private float score;
     private String[] courses;
+    private int[] intArray;
+    private List<Integer> intList;
+    private Set<Integer> intSet;
     private User[] users;
     private List<User> userList;
     private User user;
@@ -65,6 +69,18 @@ public class StudentResource {
 
     public String[] getCourses() {
         return courses;
+    }
+
+    public int[] getIntArray() {
+        return intArray;
+    }
+
+    public List<Integer> getIntList() {
+        return intList;
+    }
+
+    public Set<Integer> getIntSet() {
+        return intSet;
     }
 
     public User[] getUsers() {

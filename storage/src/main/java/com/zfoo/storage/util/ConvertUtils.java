@@ -34,6 +34,7 @@ public abstract class ConvertUtils {
         var converters = new HashSet<>();
         converters.add(new ArrayConverter());
         converters.add(new ListConverter());
+        converters.add(new SetConverter());
         converters.add(new JsonToMapConverter());
         converters.add(new JsonToObjectConverter());
         converters.add(new StringToClassConverter());
@@ -60,12 +61,10 @@ public abstract class ConvertUtils {
             return Array.newInstance(componentType, 0);
         }
         // 用普通的逗号分隔符解析
-        var splits = content.split(StringUtils.COMMA_REGEX);
-        var length = splits.length;
-        Object array = Array.newInstance(componentType, length);
-        for (var i = 0; i < length; i++) {
-            Object value = ConvertUtils.convert(StringUtils.trim(splits[i]), componentType);
-            Array.set(array, i, value);
+        var list = convertToList(content, componentType);
+        Object array = Array.newInstance(componentType, list.size());
+        for (var i = 0; i < list.size(); i++) {
+            Array.set(array, i, list.get(i));
         }
         return array;
     }
@@ -90,13 +89,6 @@ public abstract class ConvertUtils {
         if (StringUtils.isEmpty(content)) {
             return Collections.emptySet();
         }
-        var splits = content.split(StringUtils.COMMA_REGEX);
-        var length = splits.length;
-        var set = new HashSet<T>();
-        for (var i = 0; i < length; i++) {
-            var value = ConvertUtils.convert(StringUtils.trim(splits[i]), type);
-            set.add(value);
-        }
-        return Collections.unmodifiableSet(set);
+        return Set.copyOf(convertToList(content, type));
     }
 }

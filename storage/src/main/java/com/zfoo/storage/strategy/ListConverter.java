@@ -56,9 +56,7 @@ public class ListConverter implements ConditionalGenericConverter {
             clazz = (Class<?>) type;
         }
         if (content.startsWith("[") || content.endsWith("]")) {
-            return clazz.equals(List.class)
-                    ? Collections.unmodifiableList(JsonUtils.string2List(content, clazz))
-                    : JsonUtils.string2List(content, clazz);
+            return Collections.unmodifiableList(JsonUtils.string2List(content, clazz));
         }
         return ConvertUtils.convertToList(content, clazz);
     }
