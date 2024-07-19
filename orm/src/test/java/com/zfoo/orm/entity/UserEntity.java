@@ -34,7 +34,7 @@ public class UserEntity implements IEntity<Long> {
     private short b;
 
     @Index(ascending = false, unique = true)
-    private int c;
+    private long c;
 
     private boolean d;
 
@@ -92,11 +92,11 @@ public class UserEntity implements IEntity<Long> {
         this.b = b;
     }
 
-    public int getC() {
+    public long getC() {
         return c;
     }
 
-    public void setC(int c) {
+    public void setC(long c) {
         this.c = c;
     }
 
