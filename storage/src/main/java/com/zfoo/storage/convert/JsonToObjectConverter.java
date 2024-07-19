@@ -15,6 +15,7 @@ package com.zfoo.storage.convert;
 
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ReflectionUtils;
+import com.zfoo.protocol.util.StringUtils;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
 
@@ -58,6 +59,9 @@ public class JsonToObjectConverter implements ConditionalGenericConverter {
     @Override
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
         String content = (String) source;
+        if (StringUtils.isBlank(content)) {
+            return null;
+        }
         return JsonUtils.string2Object(content, targetType.getType());
     }
 }
