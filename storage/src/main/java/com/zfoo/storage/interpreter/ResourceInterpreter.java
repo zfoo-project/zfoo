@@ -19,9 +19,7 @@ import com.zfoo.storage.anno.AliasFieldName;
 import com.zfoo.storage.anno.Id;
 import com.zfoo.storage.interpreter.data.StorageData;
 import com.zfoo.storage.interpreter.data.StorageEnum;
-import com.zfoo.storage.strategy.*;
-import org.springframework.context.support.ConversionServiceFactoryBean;
-import org.springframework.core.convert.TypeDescriptor;
+import com.zfoo.storage.util.ConvertUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,22 +32,6 @@ import java.util.*;
  */
 public class ResourceInterpreter {
 
-    private static final TypeDescriptor TYPE_DESCRIPTOR = TypeDescriptor.valueOf(String.class);
-
-    private static final ConversionServiceFactoryBean conversionServiceFactoryBean = new ConversionServiceFactoryBean();
-
-    static {
-        var converters = new HashSet<>();
-        converters.add(new JsonToArrayConverter());
-        converters.add(new JsonToListConverter());
-        converters.add(new JsonToMapConverter());
-        converters.add(new JsonToObjectConverter());
-        converters.add(new StringToClassConverter());
-        converters.add(new StringToDateConverter());
-        converters.add(new StringToMapConverter());
-        conversionServiceFactoryBean.setConverters(converters);
-        conversionServiceFactoryBean.afterPropertiesSet();
-    }
 
     public static <T> List<T> read(InputStream inputStream, Class<T> clazz, String suffix) throws IOException {
         StorageData resource = null;
@@ -83,8 +65,7 @@ public class ResourceInterpreter {
                 for (var fieldInfo : fieldInfos) {
                     var content = columns.get(fieldInfo.index);
                     if (StringUtils.isNotEmpty(content) || fieldInfo.field.getType() == String.class) {
-                        var targetType = new TypeDescriptor(fieldInfo.field);
-                        var value = conversionServiceFactoryBean.getObject().convert(content, TYPE_DESCRIPTOR, targetType);
+                        var value = ConvertUtils.convertField(content, fieldInfo.field);
                         params[index++] = value;
                     }
                 }
@@ -113,8 +94,7 @@ public class ResourceInterpreter {
 
     private static void inject(Object instance, Field field, String content) {
         try {
-            var targetType = new TypeDescriptor(field);
-            var value = conversionServiceFactoryBean.getObject().convert(content, TYPE_DESCRIPTOR, targetType);
+            var value = ConvertUtils.convertField(content, field);
             ReflectionUtils.makeAccessible(field);
             ReflectionUtils.setField(field, instance, value);
         } catch (Exception e) {
