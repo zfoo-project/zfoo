@@ -20,7 +20,6 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
 
 import java.lang.reflect.Array;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -49,16 +48,10 @@ public class JsonToArrayConverter implements ConditionalGenericConverter {
         }
         // 如果为json格式，则以json格式解析
         if (content.startsWith("[") || content.endsWith("]")) {
-            return JsonUtils.string2Object(content, targetType.getType());
+            return componentType.isPrimitive()
+                    ? JsonUtils.string2Object(content, targetType.getObjectType())
+                    : JsonUtils.string2Array(content, componentType);
         }
-        // 用普通的逗号分隔符解析
-        var splits = content.split(StringUtils.COMMA_REGEX);
-        var length = splits.length;
-        Object array = Array.newInstance(componentType, length);
-        for (var i = 0; i < length; i++) {
-            Object value = ConvertUtils.convert(splits[i], componentType);
-            Array.set(array, i, value);
-        }
-        return array;
+        return ConvertUtils.convertToArray(content, componentType);
     }
 }

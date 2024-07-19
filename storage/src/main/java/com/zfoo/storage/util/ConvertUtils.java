@@ -12,12 +12,17 @@
  */
 package com.zfoo.storage.util;
 
+import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.storage.strategy.*;
 import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.TypeDescriptor;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * @author godotg
@@ -51,4 +56,35 @@ public abstract class ConvertUtils {
         return conversionServiceFactoryBean.getObject().convert(content, TYPE_DESCRIPTOR, targetType);
     }
 
+    public static Object convertToArray(String content, Class<?> componentType) {
+        content = StringUtils.trim(content);
+        // null safe，content为空则返回长度为0的数组
+        if (StringUtils.isEmpty(content)) {
+            return Array.newInstance(componentType, 0);
+        }
+        // 用普通的逗号分隔符解析
+        var splits = content.split(StringUtils.COMMA_REGEX);
+        var length = splits.length;
+        Object array = Array.newInstance(componentType, length);
+        for (var i = 0; i < length; i++) {
+            Object value = ConvertUtils.convert(StringUtils.trim(splits[i]), componentType);
+            Array.set(array, i, value);
+        }
+        return array;
+    }
+
+    public static <T> List<T> convertToList(String content, Class<T> type) {
+        content = StringUtils.trim(content);
+        if (StringUtils.isEmpty(content)) {
+            return Collections.emptyList();
+        }
+        var splits = content.split(StringUtils.COMMA_REGEX);
+        var length = splits.length;
+        var list = new ArrayList<T>();
+        for (var i = 0; i < length; i++) {
+            var value = ConvertUtils.convert(StringUtils.trim(splits[i]), type);
+            list.add(value);
+        }
+        return list;
+    }
 }
