@@ -67,7 +67,7 @@ public abstract class ConvertUtils {
         return array;
     }
 
-    public static <T> List<T> convertToList(String content, Class<T> type) {
+    public static <T> List<T> convertToList(String content, Class<T> genericType) {
         content = StringUtils.trim(content);
         if (StringUtils.isEmpty(content)) {
             return Collections.emptyList();
@@ -76,17 +76,17 @@ public abstract class ConvertUtils {
         var length = splits.length;
         var list = new ArrayList<T>();
         for (var i = 0; i < length; i++) {
-            var value = ConvertUtils.convert(StringUtils.trim(splits[i]), type);
+            var value = ConvertUtils.convert(StringUtils.trim(splits[i]), genericType);
             list.add(value);
         }
         return Collections.unmodifiableList(list);
     }
 
-    public static <T> Set<T> convertToSet(String content, Class<T> type) {
+    public static <T> Set<T> convertToSet(String content, Class<T> genericType) {
         content = StringUtils.trim(content);
         if (StringUtils.isEmpty(content)) {
             return Collections.emptySet();
         }
-        return Set.copyOf(convertToList(content, type));
+        return Set.copyOf(convertToList(content, genericType));
     }
 }
