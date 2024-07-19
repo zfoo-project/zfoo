@@ -8,6 +8,8 @@ English | [简体中文](./README_CN.md)
 
 - Take advantage of the reflection nature of the Java dynamic language to parse Excel without any code
 
+- null safe, empty strings resolve to strings of length 0, and empty collections resolve to sets of length 0
+
 - Support Excel to export json, csv files
 
 ### Ⅱ. Automatic mapping
