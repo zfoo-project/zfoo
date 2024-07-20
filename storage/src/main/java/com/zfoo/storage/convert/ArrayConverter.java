@@ -26,6 +26,10 @@ import java.util.Set;
  */
 public class ArrayConverter implements ConditionalGenericConverter {
 
+    public static final ArrayConverter INSTANCE = new ArrayConverter();
+
+    private ArrayConverter() {
+    }
 
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {

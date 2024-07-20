@@ -30,6 +30,10 @@ import java.util.Set;
  */
 public class ListConverter implements ConditionalGenericConverter {
 
+    public static final ListConverter INSTANCE = new ListConverter();
+
+    private ListConverter() {
+    }
 
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {

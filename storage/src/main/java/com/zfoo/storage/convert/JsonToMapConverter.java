@@ -26,6 +26,12 @@ import java.util.Set;
  * @author godotg
  */
 public class JsonToMapConverter implements ConditionalGenericConverter {
+
+    public static final JsonToMapConverter INSTANCE = new JsonToMapConverter();
+
+    private JsonToMapConverter() {
+    }
+
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
         return sourceType.getType() == String.class && targetType.isMap();

@@ -29,6 +29,10 @@ import java.util.Set;
  */
 public class SetConverter implements ConditionalGenericConverter {
 
+    public static final SetConverter INSTANCE = new SetConverter();
+
+    private SetConverter() {
+    }
 
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {

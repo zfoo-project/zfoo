@@ -22,6 +22,10 @@ import org.springframework.core.convert.converter.Converter;
  */
 public class StringToClassConverter implements Converter<String, Class<?>> {
 
+    public static final StringToClassConverter INSTANCE = new StringToClassConverter();
+
+    private StringToClassConverter() {
+    }
 
     @Override
     public Class<?> convert(String source) {

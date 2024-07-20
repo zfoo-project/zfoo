@@ -29,6 +29,10 @@ import java.util.Set;
  */
 public class JsonToObjectConverter implements ConditionalGenericConverter {
 
+    public static final JsonToObjectConverter INSTANCE = new JsonToObjectConverter();
+
+    private JsonToObjectConverter() {
+    }
 
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {

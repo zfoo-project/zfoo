@@ -14,6 +14,7 @@ package com.zfoo.storage.convert;
 
 import com.zfoo.protocol.util.StringUtils;
 import org.springframework.context.support.ConversionServiceFactoryBean;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
 
 import java.lang.reflect.Array;
@@ -27,29 +28,36 @@ public abstract class ConvertUtils {
 
     private static final TypeDescriptor TYPE_DESCRIPTOR = TypeDescriptor.valueOf(String.class);
 
-    private static final ConversionServiceFactoryBean conversionServiceFactoryBean = new ConversionServiceFactoryBean();
+    private static ConversionService conversionService = customConvert(Collections.emptySet());
 
-    static {
+
+    public static ConversionService customConvert(Set<?> customConverts) {
         var converters = new HashSet<>();
-        converters.add(new ArrayConverter());
-        converters.add(new ListConverter());
-        converters.add(new SetConverter());
-        converters.add(new JsonToMapConverter());
-        converters.add(new JsonToObjectConverter());
-        converters.add(new StringToClassConverter());
-        converters.add(new StringToDateConverter());
+        // default convert
+        converters.add(ArrayConverter.INSTANCE);
+        converters.add(ListConverter.INSTANCE);
+        converters.add(SetConverter.INSTANCE);
+        converters.add(JsonToMapConverter.INSTANCE);
+        converters.add(JsonToObjectConverter.INSTANCE);
+        converters.add(StringToClassConverter.INSTANCE);
+        converters.add(StringToDateConverter.INSTANCE);
+        // custom convert
+        converters.addAll(customConverts);
+
+        ConversionServiceFactoryBean conversionServiceFactoryBean = new ConversionServiceFactoryBean();
         conversionServiceFactoryBean.setConverters(converters);
         conversionServiceFactoryBean.afterPropertiesSet();
+        return conversionServiceFactoryBean.getObject();
     }
 
 
     public static <T> T convert(String content, Class<T> targetType) {
-        return conversionServiceFactoryBean.getObject().convert(content, targetType);
+        return conversionService.convert(content, targetType);
     }
 
     public static Object convertField(String content, Field field) {
         var targetType = new TypeDescriptor(field);
-        return conversionServiceFactoryBean.getObject().convert(content, TYPE_DESCRIPTOR, targetType);
+        return conversionService.convert(content, TYPE_DESCRIPTOR, targetType);
     }
 
     public static Object convertToArray(String content, Class<?> componentType) {
@@ -75,7 +83,7 @@ public abstract class ConvertUtils {
         var splits = content.split(StringUtils.COMMA_REGEX);
         var list = new ArrayList<T>();
         for (var split : splits) {
-            var value = ConvertUtils.convert(StringUtils.trim(split), genericType);
+            var value = convert(StringUtils.trim(split), genericType);
             list.add(value);
         }
         return Collections.unmodifiableList(list);

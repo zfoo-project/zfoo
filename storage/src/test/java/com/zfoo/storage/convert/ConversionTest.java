@@ -31,10 +31,10 @@ public class ConversionTest {
     private static final ConversionServiceFactoryBean csfb = new ConversionServiceFactoryBean();
     private static final Set<Object> converters = new HashSet<>();
 
-    private static final StringToDateConverter std = new StringToDateConverter();
-    private static final StringToClassConverter stcc = new StringToClassConverter();
-    private static final JsonToMapConverter jtmc = new JsonToMapConverter();
-    private static final ArrayConverter jtac = new ArrayConverter();
+    private static final StringToDateConverter std = StringToDateConverter.INSTANCE;
+    private static final StringToClassConverter stcc = StringToClassConverter.INSTANCE;
+    private static final JsonToMapConverter jtmc = JsonToMapConverter.INSTANCE;
+    private static final ArrayConverter jtac = ArrayConverter.INSTANCE;
 
     static {
         converters.add(std);

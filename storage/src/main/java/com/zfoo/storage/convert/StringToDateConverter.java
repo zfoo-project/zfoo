@@ -25,6 +25,10 @@ import java.util.Date;
  */
 public class StringToDateConverter implements Converter<String, Date> {
 
+    public static final StringToDateConverter INSTANCE = new StringToDateConverter();
+
+    private StringToDateConverter() {
+    }
 
     @Override
     public Date convert(String source) {
