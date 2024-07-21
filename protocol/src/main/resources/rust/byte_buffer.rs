@@ -759,4 +759,229 @@ impl IByteBuffer for ByteBuffer {
         }
         return set;
     }
+
+    fn writeIntIntMap(&mut self, map: &HashMap<i32, i32>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeInt(key);
+                self.writeInt(value)
+            }
+        }
+    }
+
+    fn readIntIntMap(&mut self) -> HashMap<i32, i32> {
+        let mut map: HashMap<i32, i32> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readInt();
+                let value = self.readInt();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeIntLongMap(&mut self, map: &HashMap<i32, i64>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeInt(key);
+                self.writeLong(value)
+            }
+        }
+    }
+
+    fn readIntLongMap(&mut self) -> HashMap<i32, i64> {
+        let mut map: HashMap<i32, i64> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readInt();
+                let value = self.readLong();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeIntStringMap(&mut self, map: &HashMap<i32, String>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeInt(key);
+                self.writeString(value)
+            }
+        }
+    }
+
+    fn readIntStringMap(&mut self) -> HashMap<i32, String> {
+        let mut map: HashMap<i32, String> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readInt();
+                let value = self.readString();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeLongIntMap(&mut self, map: &HashMap<i64, i32>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeLong(key);
+                self.writeInt(value)
+            }
+        }
+    }
+
+    fn readLongIntMap(&mut self) -> HashMap<i64, i32> {
+        let mut map: HashMap<i64, i32> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readLong();
+                let value = self.readInt();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeLongLongMap(&mut self, map: &HashMap<i64, i64>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeLong(key);
+                self.writeLong(value)
+            }
+        }
+    }
+
+    fn readLongLongMap(&mut self) -> HashMap<i64, i64> {
+        let mut map: HashMap<i64, i64> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readLong();
+                let value = self.readLong();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeLongStringMap(&mut self, map: &HashMap<i64, String>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeLong(key);
+                self.writeString(value)
+            }
+        }
+    }
+
+    fn readLongStringMap(&mut self) -> HashMap<i64, String> {
+        let mut map: HashMap<i64, String> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readLong();
+                let value = self.readString();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeStringIntMap(&mut self, map: &HashMap<String, i32>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeString(key);
+                self.writeInt(value)
+            }
+        }
+    }
+
+    fn readStringIntMap(&mut self) -> HashMap<String, i32> {
+        let mut map: HashMap<String, i32> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readString();
+                let value = self.readInt();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeStringLongMap(&mut self, map: &HashMap<String, i64>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeString(key);
+                self.writeLong(value)
+            }
+        }
+    }
+
+    fn readStringLongMap(&mut self) -> HashMap<String, i64> {
+        let mut map: HashMap<String, i64> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readString();
+                let value = self.readLong();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeStringStringMap(&mut self, map: &HashMap<String, String>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeString(key);
+                self.writeString(value)
+            }
+        }
+    }
+
+    fn readStringStringMap(&mut self) -> HashMap<String, String> {
+        let mut map: HashMap<String, String> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readString();
+                let value = self.readString();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
 }

@@ -56,6 +56,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeIntIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
+                        case Rust:
+                            builder.append(StringUtils.format("buffer.writeIntIntMap(&{});", objectStr)).append(LS);
+                            return true;
                         case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeIntIntMap({})", objectStr)).append(LS);
                             return true;
@@ -80,6 +83,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeIntLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
+                        case Rust:
+                            builder.append(StringUtils.format("buffer.writeIntLongMap(&{});", objectStr)).append(LS);
+                            return true;
                         case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeIntLongMap({})", objectStr)).append(LS);
                             return true;
@@ -103,6 +109,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeIntStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case Rust:
+                            builder.append(StringUtils.format("buffer.writeIntStringMap(&{});", objectStr)).append(LS);
                             return true;
                         case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeIntStringMap({})", objectStr)).append(LS);
@@ -147,8 +156,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Java:
                             builder.append(StringUtils.format("buffer.writeIntPacketMap({}, (short) {});", objectStr, protocolId)).append(LS);
                             return true;
-                        case Golang:
-                        case Protobuf:
+                        case Rust, Golang, Protobuf:
                         default:
                     }
                 }
@@ -157,6 +165,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeLongIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case Rust:
+                            builder.append(StringUtils.format("buffer.writeLongIntMap(&{});", objectStr)).append(LS);
                             return true;
                         case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeLongIntMap({})", objectStr)).append(LS);
@@ -182,6 +193,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeLongLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
+                        case Rust:
+                            builder.append(StringUtils.format("buffer.writeLongLongMap(&{});", objectStr)).append(LS);
+                            return true;
                         case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeLongLongMap({})", objectStr)).append(LS);
                             return true;
@@ -205,6 +219,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeLongStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case Rust:
+                            builder.append(StringUtils.format("buffer.writeLongStringMap(&{});", objectStr)).append(LS);
                             return true;
                         case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeLongStringMap({})", objectStr)).append(LS);
@@ -249,8 +266,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Java:
                             builder.append(StringUtils.format("buffer.writeLongPacketMap({}, (short) {});", objectStr, protocolId)).append(LS);
                             return true;
-                        case Golang:
-                        case Protobuf:
+                        case Rust, Golang, Protobuf:
                         default:
                     }
                 }
@@ -259,6 +275,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeStringIntMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case Rust:
+                            builder.append(StringUtils.format("buffer.writeStringIntMap(&{});", objectStr)).append(LS);
                             return true;
                         case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeStringIntMap({})", objectStr)).append(LS);
@@ -284,6 +303,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeStringLongMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
                             return true;
+                        case Rust:
+                            builder.append(StringUtils.format("buffer.writeStringLongMap(&{});", objectStr)).append(LS);
+                            return true;
                         case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeStringLongMap({})", objectStr)).append(LS);
                             return true;
@@ -307,6 +329,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeStringStringMap($1, (Map){});", EnhanceUtils.byteBufUtils, objectStr));
+                            return true;
+                        case Rust:
+                            builder.append(StringUtils.format("buffer.writeStringStringMap(&{});", objectStr)).append(LS);
                             return true;
                         case Kotlin, Scala, GdScript, Python:
                             builder.append(StringUtils.format("buffer.writeStringStringMap({})", objectStr)).append(LS);
@@ -351,7 +376,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Java:
                             builder.append(StringUtils.format("buffer.writeStringPacketMap({}, (short) {});", objectStr, protocolId)).append(LS);
                             return true;
-                        case Golang, Protobuf:
+                        case Rust, Golang, Protobuf:
                         default:
                     }
                 }
@@ -376,6 +401,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readIntIntMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case Rust:
+                            builder.append(StringUtils.format("let {} = buffer.readIntIntMap();", map)).append(LS);
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readIntIntMap()", map)).append(LS);
@@ -417,6 +445,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readIntLongMap($1);", map, EnhanceUtils.byteBufUtils));
                             return map;
+                        case Rust:
+                            builder.append(StringUtils.format("let {} = buffer.readIntLongMap();", map)).append(LS);
+                            return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readIntLongMap()", map)).append(LS);
                             return map;
@@ -456,6 +487,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readIntStringMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case Rust:
+                            builder.append(StringUtils.format("let {} = buffer.readIntStringMap();", map)).append(LS);
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readIntStringMap()", map)).append(LS);
@@ -530,8 +564,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readIntPacketMap({});", map, protocolId)).append(LS);
                             return map;
-                        case Golang:
-                        case Protobuf:
+                        case Rust, Golang, Protobuf:
                     }
                 }
             } else if (keySerializer == LongSerializer.INSTANCE) {
@@ -539,6 +572,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readLongIntMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case Rust:
+                            builder.append(StringUtils.format("let {} = buffer.readLongIntMap();", map)).append(LS);
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readLongIntMap()", map)).append(LS);
@@ -580,6 +616,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readLongLongMap($1);", map, EnhanceUtils.byteBufUtils));
                             return map;
+                        case Rust:
+                            builder.append(StringUtils.format("let {} = buffer.readLongLongMap();", map)).append(LS);
+                            return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readLongLongMap()", map)).append(LS);
                             return map;
@@ -619,6 +658,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readLongStringMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case Rust:
+                            builder.append(StringUtils.format("let {} = buffer.readLongStringMap();", map)).append(LS);
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readLongStringMap()", map)).append(LS);
@@ -693,8 +735,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readLongPacketMap({});", map, protocolId)).append(LS);
                             return map;
-                        case Golang:
-                        case Protobuf:
+                        case Rust, Golang, Protobuf:
                         default:
                     }
                 }
@@ -703,6 +744,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readStringIntMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case Rust:
+                            builder.append(StringUtils.format("let {} = buffer.readStringIntMap();", map)).append(LS);
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readStringIntMap()", map)).append(LS);
@@ -744,6 +788,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readStringLongMap($1);", map, EnhanceUtils.byteBufUtils));
                             return map;
+                        case Rust:
+                            builder.append(StringUtils.format("let {} = buffer.readStringLongMap();", map)).append(LS);
+                            return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readStringLongMap()", map)).append(LS);
                             return map;
@@ -783,6 +830,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("Map {} = {}.readStringStringMap($1);", map, EnhanceUtils.byteBufUtils));
+                            return map;
+                        case Rust:
+                            builder.append(StringUtils.format("let {} = buffer.readStringStringMap();", map)).append(LS);
                             return map;
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readStringStringMap()", map)).append(LS);
@@ -857,7 +907,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readStringPacketMap({});", map, protocolId)).append(LS);
                             return map;
-                        case Golang, Protobuf:
+                        case Rust, Golang, Protobuf:
                         default:
                     }
                 }

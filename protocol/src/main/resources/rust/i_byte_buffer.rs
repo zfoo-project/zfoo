@@ -82,4 +82,22 @@ pub trait IByteBuffer {
     fn readLongSet(&mut self) -> HashSet<i64>;
     fn writeStringSet(&mut self, set: &HashSet<String>);
     fn readStringSet(&mut self) -> HashSet<String>;
+    fn writeIntIntMap(&mut self, map: &HashMap<i32, i32>);
+    fn readIntIntMap(&mut self) -> HashMap<i32, i32>;
+    fn writeIntLongMap(&mut self, map: &HashMap<i32, i64>);
+    fn readIntLongMap(&mut self) -> HashMap<i32, i64>;
+    fn writeIntStringMap(&mut self, map: &HashMap<i32, String>);
+    fn readIntStringMap(&mut self) -> HashMap<i32, String>;
+    fn writeLongIntMap(&mut self, map: &HashMap<i64, i32>);
+    fn readLongIntMap(&mut self) -> HashMap<i64, i32>;
+    fn writeLongLongMap(&mut self, map: &HashMap<i64, i64>);
+    fn readLongLongMap(&mut self) -> HashMap<i64, i64>;
+    fn writeLongStringMap(&mut self, map: &HashMap<i64, String>);
+    fn readLongStringMap(&mut self) -> HashMap<i64, String>;
+    fn writeStringIntMap(&mut self, map: &HashMap<String, i32>);
+    fn readStringIntMap(&mut self) -> HashMap<String, i32>;
+    fn writeStringLongMap(&mut self, map: &HashMap<String, i64>);
+    fn readStringLongMap(&mut self) -> HashMap<String, i64>;
+    fn writeStringStringMap(&mut self, map: &HashMap<String, String>);
+    fn readStringStringMap(&mut self) -> HashMap<String, String>;
 }
