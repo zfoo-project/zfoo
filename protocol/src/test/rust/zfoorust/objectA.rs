@@ -41,15 +41,7 @@ pub fn writeObjectA(buffer: &mut dyn IByteBuffer, packet: &dyn Any) {
     let beforeWriteIndex = buffer.getWriteOffset();
     buffer.writeInt(201);
     buffer.writeInt(message.a);
-    if message.m.is_empty() {
-        buffer.writeInt(0);
-    } else {
-        buffer.writeInt(message.m.len() as i32);
-        for (key0, value1) in message.m.clone() {
-            buffer.writeInt(key0);
-            buffer.writeString(value1.clone());
-        }
-    }
+    buffer.writeIntStringMap(&message.m);
     buffer.writePacket(&message.objectB, 103);
     buffer.writeInt(message.innerCompatibleValue);
     buffer.adjustPadding(201, beforeWriteIndex);
@@ -64,22 +56,14 @@ pub fn readObjectA(buffer: &mut dyn IByteBuffer) -> Box<dyn Any> {
     let beforeReadIndex = buffer.getReadOffset();
     let result0 = buffer.readInt();
     packet.a = result0;
-    let mut result1: HashMap<i32, String> = HashMap::new();
-    let size2 = buffer.readInt();
-    if size2 > 0 {
-        for index3 in 0 .. size2 {
-            let result4 = buffer.readInt();
-            let result5 = buffer.readString();
-            result1.insert(result4, result5);
-        }
-    }
-    packet.m = result1;
-    let result6 = buffer.readPacket(103);
-    let result7 = result6.downcast_ref::<ObjectB>().unwrap().clone();
-    packet.objectB = result7;
+    let map1 = buffer.readIntStringMap();
+    packet.m = map1;
+    let result2 = buffer.readPacket(103);
+    let result3 = result2.downcast_ref::<ObjectB>().unwrap().clone();
+    packet.objectB = result3;
     if buffer.compatibleRead(beforeReadIndex, length) {
-        let result8 = buffer.readInt();
-        packet.innerCompatibleValue = result8;
+        let result4 = buffer.readInt();
+        packet.innerCompatibleValue = result4;
     }
     if length > 0 {
         buffer.setReadOffset(beforeReadIndex + length);

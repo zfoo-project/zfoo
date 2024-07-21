@@ -3,6 +3,8 @@
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
 use std::any::Any;
+use std::collections::HashMap;
+use std::collections::HashSet;
 use crate::zfoorust::i_byte_buffer::IByteBuffer;
 use crate::zfoorust::protocol_manager::writeNoProtocolId;
 use crate::zfoorust::protocol_manager::readNoProtocolId;
@@ -51,7 +53,7 @@ impl IByteBuffer for ByteBuffer {
         }
     }
 
-    fn compatibleRead(&mut self, beforeReadIndex: i32, length: i32) -> bool{
+    fn compatibleRead(&mut self, beforeReadIndex: i32, length: i32) -> bool {
         return length != -1 && self.getReadOffset() < length + beforeReadIndex;
     }
 
@@ -448,5 +450,538 @@ impl IByteBuffer for ByteBuffer {
 
     fn readPacket(&mut self, protocolId: i16) -> Box<dyn Any> {
         return readNoProtocolId(self, protocolId);
+    }
+
+    fn writeBoolArray(&mut self, array: &Vec<bool>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeBool(*ele);
+            }
+        }
+    }
+
+    fn readBoolArray(&mut self) -> Vec<bool> {
+        let mut array: Vec<bool> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readBool());
+            }
+        }
+        return array;
+    }
+
+    fn writeByteArray(&mut self, array: &Vec<i8>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeByte(*ele);
+            }
+        }
+    }
+
+    fn readByteArray(&mut self) -> Vec<i8> {
+        let mut array: Vec<i8> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readByte());
+            }
+        }
+        return array;
+    }
+
+    fn writeShortArray(&mut self, array: &Vec<i16>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeShort(*ele);
+            }
+        }
+    }
+
+    fn readShortArray(&mut self) -> Vec<i16> {
+        let mut array: Vec<i16> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readShort());
+            }
+        }
+        return array;
+    }
+
+    fn writeIntArray(&mut self, array: &Vec<i32>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeInt(*ele);
+            }
+        }
+    }
+
+    fn readIntArray(&mut self) -> Vec<i32> {
+        let mut array: Vec<i32> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readInt());
+            }
+        }
+        return array;
+    }
+
+    fn writeLongArray(&mut self, array: &Vec<i64>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeLong(*ele);
+            }
+        }
+    }
+
+    fn readLongArray(&mut self) -> Vec<i64> {
+        let mut array: Vec<i64> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readLong());
+            }
+        }
+        return array;
+    }
+
+    fn writeFloatArray(&mut self, array: &Vec<f32>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeFloat(*ele);
+            }
+        }
+    }
+
+    fn readFloatArray(&mut self) -> Vec<f32> {
+        let mut array: Vec<f32> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readFloat());
+            }
+        }
+        return array;
+    }
+
+    fn writeDoubleArray(&mut self, array: &Vec<f64>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeDouble(*ele);
+            }
+        }
+    }
+
+    fn readDoubleArray(&mut self) -> Vec<f64> {
+        let mut array: Vec<f64> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readDouble());
+            }
+        }
+        return array;
+    }
+
+    fn writeStringArray(&mut self, array: &Vec<String>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeString(String::from(ele));
+            }
+        }
+    }
+
+    fn readStringArray(&mut self) -> Vec<String> {
+        let mut array: Vec<String> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readString());
+            }
+        }
+        return array;
+    }
+
+    fn writeBoolSet(&mut self, set: &HashSet<bool>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeBool(*ele);
+            }
+        }
+    }
+
+    fn readBoolSet(&mut self) -> HashSet<bool> {
+        let mut set: HashSet<bool> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readBool());
+            }
+        }
+        return set;
+    }
+
+    fn writeByteSet(&mut self, set: &HashSet<i8>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeByte(*ele);
+            }
+        }
+    }
+
+    fn readByteSet(&mut self) -> HashSet<i8> {
+        let mut set: HashSet<i8> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readByte());
+            }
+        }
+        return set;
+    }
+
+    fn writeShortSet(&mut self, set: &HashSet<i16>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeShort(*ele);
+            }
+        }
+    }
+
+    fn readShortSet(&mut self) -> HashSet<i16> {
+        let mut set: HashSet<i16> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readShort());
+            }
+        }
+        return set;
+    }
+
+    fn writeIntSet(&mut self, set: &HashSet<i32>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeInt(*ele);
+            }
+        }
+    }
+
+    fn readIntSet(&mut self) -> HashSet<i32> {
+        let mut set: HashSet<i32> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readInt());
+            }
+        }
+        return set;
+    }
+
+    fn writeLongSet(&mut self, set: &HashSet<i64>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeLong(*ele);
+            }
+        }
+    }
+
+    fn readLongSet(&mut self) -> HashSet<i64> {
+        let mut set: HashSet<i64> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readLong());
+            }
+        }
+        return set;
+    }
+
+    fn writeStringSet(&mut self, set: &HashSet<String>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeString(String::from(ele));
+            }
+        }
+    }
+
+    fn readStringSet(&mut self) -> HashSet<String> {
+        let mut set: HashSet<String> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readString());
+            }
+        }
+        return set;
+    }
+
+    fn writeIntIntMap(&mut self, map: &HashMap<i32, i32>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeInt(key);
+                self.writeInt(value)
+            }
+        }
+    }
+
+    fn readIntIntMap(&mut self) -> HashMap<i32, i32> {
+        let mut map: HashMap<i32, i32> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readInt();
+                let value = self.readInt();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeIntLongMap(&mut self, map: &HashMap<i32, i64>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeInt(key);
+                self.writeLong(value)
+            }
+        }
+    }
+
+    fn readIntLongMap(&mut self) -> HashMap<i32, i64> {
+        let mut map: HashMap<i32, i64> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readInt();
+                let value = self.readLong();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeIntStringMap(&mut self, map: &HashMap<i32, String>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeInt(key);
+                self.writeString(value)
+            }
+        }
+    }
+
+    fn readIntStringMap(&mut self) -> HashMap<i32, String> {
+        let mut map: HashMap<i32, String> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readInt();
+                let value = self.readString();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeLongIntMap(&mut self, map: &HashMap<i64, i32>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeLong(key);
+                self.writeInt(value)
+            }
+        }
+    }
+
+    fn readLongIntMap(&mut self) -> HashMap<i64, i32> {
+        let mut map: HashMap<i64, i32> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readLong();
+                let value = self.readInt();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeLongLongMap(&mut self, map: &HashMap<i64, i64>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeLong(key);
+                self.writeLong(value)
+            }
+        }
+    }
+
+    fn readLongLongMap(&mut self) -> HashMap<i64, i64> {
+        let mut map: HashMap<i64, i64> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readLong();
+                let value = self.readLong();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeLongStringMap(&mut self, map: &HashMap<i64, String>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeLong(key);
+                self.writeString(value)
+            }
+        }
+    }
+
+    fn readLongStringMap(&mut self) -> HashMap<i64, String> {
+        let mut map: HashMap<i64, String> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readLong();
+                let value = self.readString();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeStringIntMap(&mut self, map: &HashMap<String, i32>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeString(key);
+                self.writeInt(value)
+            }
+        }
+    }
+
+    fn readStringIntMap(&mut self) -> HashMap<String, i32> {
+        let mut map: HashMap<String, i32> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readString();
+                let value = self.readInt();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeStringLongMap(&mut self, map: &HashMap<String, i64>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeString(key);
+                self.writeLong(value)
+            }
+        }
+    }
+
+    fn readStringLongMap(&mut self) -> HashMap<String, i64> {
+        let mut map: HashMap<String, i64> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readString();
+                let value = self.readLong();
+                map.insert(key, value);
+            }
+        }
+        return map;
+    }
+
+    fn writeStringStringMap(&mut self, map: &HashMap<String, String>) {
+        if map.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(map.len() as i32);
+            for (key, value) in map.clone() {
+                self.writeString(key);
+                self.writeString(value)
+            }
+        }
+    }
+
+    fn readStringStringMap(&mut self) -> HashMap<String, String> {
+        let mut map: HashMap<String, String> = HashMap::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                let key = self.readString();
+                let value = self.readString();
+                map.insert(key, value);
+            }
+        }
+        return map;
     }
 }

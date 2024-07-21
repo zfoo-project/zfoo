@@ -75,14 +75,7 @@ pub fn writeNormalObject(buffer: &mut dyn IByteBuffer, packet: &dyn Any) {
     let beforeWriteIndex = buffer.getWriteOffset();
     buffer.writeInt(857);
     buffer.writeByte(message.a);
-    if message.aaa.is_empty() {
-        buffer.writeInt(0);
-    } else {
-        buffer.writeInt(message.aaa.len() as i32);
-        for element0 in message.aaa.clone() {
-            buffer.writeByte(element0);
-        }
-    }
+    buffer.writeByteArray(&message.aaa);
     buffer.writeShort(message.b);
     buffer.writeInt(message.c);
     buffer.writeLong(message.d);
@@ -91,72 +84,29 @@ pub fn writeNormalObject(buffer: &mut dyn IByteBuffer, packet: &dyn Any) {
     buffer.writeBool(message.g);
     buffer.writeString(message.jj.clone());
     buffer.writePacket(&message.kk, 102);
-    if message.l.is_empty() {
-        buffer.writeInt(0);
-    } else {
-        buffer.writeInt(message.l.len() as i32);
-        for element1 in message.l.clone() {
-            buffer.writeInt(element1);
-        }
-    }
-    if message.ll.is_empty() {
-        buffer.writeInt(0);
-    } else {
-        buffer.writeInt(message.ll.len() as i32);
-        for element2 in message.ll.clone() {
-            buffer.writeLong(element2);
-        }
-    }
+    buffer.writeIntArray(&message.l);
+    buffer.writeLongArray(&message.ll);
     if message.lll.is_empty() {
         buffer.writeInt(0);
     } else {
         buffer.writeInt(message.lll.len() as i32);
-        for element3 in message.lll.clone() {
-            buffer.writePacket(&element3, 102);
+        for element0 in message.lll.clone() {
+            buffer.writePacket(&element0, 102);
         }
     }
-    if message.llll.is_empty() {
-        buffer.writeInt(0);
-    } else {
-        buffer.writeInt(message.llll.len() as i32);
-        for element4 in message.llll.clone() {
-            buffer.writeString(element4.clone());
-        }
-    }
-    if message.m.is_empty() {
-        buffer.writeInt(0);
-    } else {
-        buffer.writeInt(message.m.len() as i32);
-        for (key5, value6) in message.m.clone() {
-            buffer.writeInt(key5);
-            buffer.writeString(value6.clone());
-        }
-    }
+    buffer.writeStringArray(&message.llll);
+    buffer.writeIntStringMap(&message.m);
     if message.mm.is_empty() {
         buffer.writeInt(0);
     } else {
         buffer.writeInt(message.mm.len() as i32);
-        for (key7, value8) in message.mm.clone() {
-            buffer.writeInt(key7);
-            buffer.writePacket(&value8, 102);
+        for (key1, value2) in message.mm.clone() {
+            buffer.writeInt(key1);
+            buffer.writePacket(&value2, 102);
         }
     }
-    if message.s.is_empty() {
-        buffer.writeInt(0);
-    } else {
-        buffer.writeInt(message.s.len() as i32);
-        for element9 in message.s.clone() {
-            buffer.writeInt(element9);
-        }
-    }
-    if message.ssss.is_empty() {
-        buffer.writeInt(0);
-    } else {
-        buffer.writeInt(message.ssss.len() as i32);
-        for element10 in message.ssss.clone() {
-            buffer.writeString(element10.clone());
-        }
-    }
+    buffer.writeIntSet(&message.s);
+    buffer.writeStringSet(&message.ssss);
     buffer.writeInt(message.outCompatibleValue);
     buffer.writeInt(message.outCompatibleValue2);
     buffer.adjustPadding(857, beforeWriteIndex);
@@ -171,115 +121,65 @@ pub fn readNormalObject(buffer: &mut dyn IByteBuffer) -> Box<dyn Any> {
     let beforeReadIndex = buffer.getReadOffset();
     let result0 = buffer.readByte();
     packet.a = result0;
-    let mut result1: Vec<i8> = Vec::new();
-    let size3 = buffer.readInt();
-    if size3 > 0 {
-        for index2 in 0 .. size3 {
-            let result4 = buffer.readByte();
-            result1.push(result4);
+    let array1 = buffer.readByteArray();
+    packet.aaa = array1;
+    let result2 = buffer.readShort();
+    packet.b = result2;
+    let result3 = buffer.readInt();
+    packet.c = result3;
+    let result4 = buffer.readLong();
+    packet.d = result4;
+    let result5 = buffer.readFloat();
+    packet.e = result5;
+    let result6 = buffer.readDouble();
+    packet.f = result6;
+    let result7 = buffer.readBool(); 
+    packet.g = result7;
+    let result8 = buffer.readString();
+    packet.jj = result8;
+    let result9 = buffer.readPacket(102);
+    let result10 = result9.downcast_ref::<ObjectA>().unwrap().clone();
+    packet.kk = result10;
+    let list11 = buffer.readIntArray();
+    packet.l = list11;
+    let list12 = buffer.readLongArray();
+    packet.ll = list12;
+    let mut result13: Vec<ObjectA> = Vec::new();
+    let size14 = buffer.readInt();
+    if size14 > 0 {
+        for index15 in 0..size14 {
+            let result16 = buffer.readPacket(102);
+            let result17 = result16.downcast_ref::<ObjectA>().unwrap().clone();
+            result13.push(result17);
         }
     }
-    packet.aaa = result1;
-    let result5 = buffer.readShort();
-    packet.b = result5;
-    let result6 = buffer.readInt();
-    packet.c = result6;
-    let result7 = buffer.readLong();
-    packet.d = result7;
-    let result8 = buffer.readFloat();
-    packet.e = result8;
-    let result9 = buffer.readDouble();
-    packet.f = result9;
-    let result10 = buffer.readBool(); 
-    packet.g = result10;
-    let result11 = buffer.readString();
-    packet.jj = result11;
-    let result12 = buffer.readPacket(102);
-    let result13 = result12.downcast_ref::<ObjectA>().unwrap().clone();
-    packet.kk = result13;
-    let mut result14: Vec<i32> = Vec::new();
-    let size15 = buffer.readInt();
-    if size15 > 0 {
-        for index16 in 0 .. size15 {
-            let result17 = buffer.readInt();
-            result14.push(result17);
+    packet.lll = result13;
+    let list18 = buffer.readStringArray();
+    packet.llll = list18;
+    let map19 = buffer.readIntStringMap();
+    packet.m = map19;
+    let mut result20: HashMap<i32, ObjectA> = HashMap::new();
+    let size21 = buffer.readInt();
+    if size21 > 0 {
+        for index22 in 0..size21 {
+            let result23 = buffer.readInt();
+            let result24 = buffer.readPacket(102);
+            let result25 = result24.downcast_ref::<ObjectA>().unwrap().clone();
+            result20.insert(result23, result25);
         }
     }
-    packet.l = result14;
-    let mut result18: Vec<i64> = Vec::new();
-    let size19 = buffer.readInt();
-    if size19 > 0 {
-        for index20 in 0 .. size19 {
-            let result21 = buffer.readLong();
-            result18.push(result21);
-        }
-    }
-    packet.ll = result18;
-    let mut result22: Vec<ObjectA> = Vec::new();
-    let size23 = buffer.readInt();
-    if size23 > 0 {
-        for index24 in 0 .. size23 {
-            let result25 = buffer.readPacket(102);
-            let result26 = result25.downcast_ref::<ObjectA>().unwrap().clone();
-            result22.push(result26);
-        }
-    }
-    packet.lll = result22;
-    let mut result27: Vec<String> = Vec::new();
-    let size28 = buffer.readInt();
-    if size28 > 0 {
-        for index29 in 0 .. size28 {
-            let result30 = buffer.readString();
-            result27.push(result30);
-        }
-    }
-    packet.llll = result27;
-    let mut result31: HashMap<i32, String> = HashMap::new();
-    let size32 = buffer.readInt();
-    if size32 > 0 {
-        for index33 in 0 .. size32 {
-            let result34 = buffer.readInt();
-            let result35 = buffer.readString();
-            result31.insert(result34, result35);
-        }
-    }
-    packet.m = result31;
-    let mut result36: HashMap<i32, ObjectA> = HashMap::new();
-    let size37 = buffer.readInt();
-    if size37 > 0 {
-        for index38 in 0 .. size37 {
-            let result39 = buffer.readInt();
-            let result40 = buffer.readPacket(102);
-            let result41 = result40.downcast_ref::<ObjectA>().unwrap().clone();
-            result36.insert(result39, result41);
-        }
-    }
-    packet.mm = result36;
-    let mut result42: HashSet<i32> = HashSet::new();
-    let size43 = buffer.readInt();
-    if size43 > 0 {
-        for index44 in 0 .. size43 {
-            let result45 = buffer.readInt();
-            result42.insert(result45);
-        }
-    }
-    packet.s = result42;
-    let mut result46: HashSet<String> = HashSet::new();
-    let size47 = buffer.readInt();
-    if size47 > 0 {
-        for index48 in 0 .. size47 {
-            let result49 = buffer.readString();
-            result46.insert(result49);
-        }
-    }
-    packet.ssss = result46;
+    packet.mm = result20;
+    let set26 = buffer.readIntSet();
+    packet.s = set26;
+    let set27 = buffer.readStringSet();
+    packet.ssss = set27;
     if buffer.compatibleRead(beforeReadIndex, length) {
-        let result50 = buffer.readInt();
-        packet.outCompatibleValue = result50;
+        let result28 = buffer.readInt();
+        packet.outCompatibleValue = result28;
     }
     if buffer.compatibleRead(beforeReadIndex, length) {
-        let result51 = buffer.readInt();
-        packet.outCompatibleValue2 = result51;
+        let result29 = buffer.readInt();
+        packet.outCompatibleValue2 = result29;
     }
     if length > 0 {
         buffer.setReadOffset(beforeReadIndex + length);

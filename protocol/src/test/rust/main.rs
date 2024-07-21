@@ -33,7 +33,7 @@ fn main() {
     println!("new_byte_buffer length:[{}]", new_byte_buffer.getWriteOffset());
     let new_message = read(&mut new_byte_buffer);
     let new_packet = new_message.downcast_ref::<NormalObject>().unwrap();
-    println!("hello {}", new_packet.g);
+    println!("new packet g:{}", new_packet.g);
 }
 
 fn byte_buffer_test() {
