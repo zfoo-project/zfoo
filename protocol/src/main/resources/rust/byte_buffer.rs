@@ -4,8 +4,8 @@
 #![allow(non_camel_case_types)]
 use std::any::Any;
 use crate::${protocol_root_path}::i_byte_buffer::IByteBuffer;
-use crate::${protocol_root_path}::protocol_manager::write;
-use crate::${protocol_root_path}::protocol_manager::readByProtocolId;
+use crate::${protocol_root_path}::protocol_manager::writeNoProtocolId;
+use crate::${protocol_root_path}::protocol_manager::readNoProtocolId;
 
 #[allow(non_snake_case)]
 pub struct ByteBuffer {
@@ -443,10 +443,10 @@ impl IByteBuffer for ByteBuffer {
     }
 
     fn writePacket(&mut self, packet: &dyn Any, protocolId: i16) {
-        write(self, packet, protocolId);
+        writeNoProtocolId(self, packet, protocolId);
     }
 
     fn readPacket(&mut self, protocolId: i16) -> Box<dyn Any> {
-        return readByProtocolId(self, protocolId);
+        return readNoProtocolId(self, protocolId);
     }
 }
