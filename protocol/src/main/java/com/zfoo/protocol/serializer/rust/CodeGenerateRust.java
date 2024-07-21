@@ -353,7 +353,7 @@ public class CodeGenerateRust implements ICodeGenerate {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                rustBuilder.append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
+                rustBuilder.append("if buffer.compatibleRead(beforeReadIndex, length) {").append(LS);
                 var compatibleReadObject = rustSerializer(fieldRegistration.serializer()).readObject(rustBuilder, 1, field, fieldRegistration);
                 rustBuilder.append(TAB).append(StringUtils.format("packet.{} = {};", field.getName(), compatibleReadObject)).append(LS);
                 rustBuilder.append("}").append(LS);

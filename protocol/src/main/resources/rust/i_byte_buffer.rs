@@ -13,6 +13,7 @@ pub trait IPacket {
 #[allow(unused_parens)]
 pub trait IByteBuffer {
     fn adjustPadding(&mut self, predictionLength: i32, beforeWriteIndex: i32);
+    fn compatibleRead(&mut self, beforeReadIndex: i32, length: i32) -> bool;
     fn getBuffer(&self) -> &Vec<i8>;
     fn getWriteOffset(&self) -> i32;
     fn setWriteOffset(&mut self, writeIndex: i32);

@@ -51,6 +51,10 @@ impl IByteBuffer for ByteBuffer {
         }
     }
 
+    fn compatibleRead(&mut self, beforeReadIndex: i32, length: i32) -> bool{
+        return length != -1 && self.getReadOffset() < length + beforeReadIndex;
+    }
+
     fn getBuffer(&self) -> &Vec<i8> {
         return &self.buffer;
     }
