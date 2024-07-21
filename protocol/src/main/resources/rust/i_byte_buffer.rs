@@ -2,6 +2,8 @@
 #![allow(dead_code)]
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
+use std::collections::HashMap;
+use std::collections::HashSet;
 use std::any::Any;
 
 pub trait IPacket {
@@ -68,4 +70,16 @@ pub trait IByteBuffer {
     fn readDoubleArray(&mut self) -> Vec<f64>;
     fn writeStringArray(&mut self, array: &Vec<String>);
     fn readStringArray(&mut self) -> Vec<String>;
+    fn writeBoolSet(&mut self, set: &HashSet<bool>);
+    fn readBoolSet(&mut self) -> HashSet<bool>;
+    fn writeByteSet(&mut self, set: &HashSet<i8>);
+    fn readByteSet(&mut self) -> HashSet<i8>;
+    fn writeShortSet(&mut self, set: &HashSet<i16>);
+    fn readShortSet(&mut self) -> HashSet<i16>;
+    fn writeIntSet(&mut self, set: &HashSet<i32>);
+    fn readIntSet(&mut self) -> HashSet<i32>;
+    fn writeLongSet(&mut self, set: &HashSet<i64>);
+    fn readLongSet(&mut self) -> HashSet<i64>;
+    fn writeStringSet(&mut self, set: &HashSet<String>);
+    fn readStringSet(&mut self) -> HashSet<String>;
 }

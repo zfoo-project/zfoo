@@ -3,6 +3,8 @@
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
 use std::any::Any;
+use std::collections::HashMap;
+use std::collections::HashSet;
 use crate::${protocol_root_path}::i_byte_buffer::IByteBuffer;
 use crate::${protocol_root_path}::protocol_manager::writeNoProtocolId;
 use crate::${protocol_root_path}::protocol_manager::readNoProtocolId;
@@ -624,5 +626,137 @@ impl IByteBuffer for ByteBuffer {
             }
         }
         return array;
+    }
+
+    fn writeBoolSet(&mut self, set: &HashSet<bool>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeBool(*ele);
+            }
+        }
+    }
+
+    fn readBoolSet(&mut self) -> HashSet<bool> {
+        let mut set: HashSet<bool> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readBool());
+            }
+        }
+        return set;
+    }
+
+    fn writeByteSet(&mut self, set: &HashSet<i8>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeByte(*ele);
+            }
+        }
+    }
+
+    fn readByteSet(&mut self) -> HashSet<i8> {
+        let mut set: HashSet<i8> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readByte());
+            }
+        }
+        return set;
+    }
+
+    fn writeShortSet(&mut self, set: &HashSet<i16>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeShort(*ele);
+            }
+        }
+    }
+
+    fn readShortSet(&mut self) -> HashSet<i16> {
+        let mut set: HashSet<i16> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readShort());
+            }
+        }
+        return set;
+    }
+
+    fn writeIntSet(&mut self, set: &HashSet<i32>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeInt(*ele);
+            }
+        }
+    }
+
+    fn readIntSet(&mut self) -> HashSet<i32> {
+        let mut set: HashSet<i32> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readInt());
+            }
+        }
+        return set;
+    }
+
+    fn writeLongSet(&mut self, set: &HashSet<i64>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeLong(*ele);
+            }
+        }
+    }
+
+    fn readLongSet(&mut self) -> HashSet<i64> {
+        let mut set: HashSet<i64> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readLong());
+            }
+        }
+        return set;
+    }
+
+    fn writeStringSet(&mut self, set: &HashSet<String>) {
+        if set.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(set.len() as i32);
+            for ele in set {
+                self.writeString(String::from(ele));
+            }
+        }
+    }
+
+    fn readStringSet(&mut self) -> HashSet<String> {
+        let mut set: HashSet<String> = HashSet::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                set.insert(self.readString());
+            }
+        }
+        return set;
     }
 }
