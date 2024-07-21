@@ -12,7 +12,7 @@ class ProtocolManager
 
     public static function initProtocol(): void
     {
-        ${protocol_manager_registrations};
+        ${protocol_manager_registrations}
     }
 
     public static function getProtocolId(mixed $clazz): int
