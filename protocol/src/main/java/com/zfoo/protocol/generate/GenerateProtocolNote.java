@@ -82,6 +82,7 @@ public abstract class GenerateProtocolNote {
     private static String formatNote(CodeLanguage language, String note) {
         switch (language) {
             case Cpp:
+            case Rust:
             case Java:
             case Kotlin:
             case Scala:
