@@ -1,6 +1,9 @@
+#![allow(unused_imports)]
+#![allow(dead_code)]
+#![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
 use std::any::Any;
-use std::collections::HashMap;
-use crate::${protocol_root_path}::i_byte_buffer::{IByteBuffer, IPacket};
+use crate::${protocol_root_path}::i_byte_buffer::IByteBuffer;
 ${protocol_imports}
 
 pub fn write(buffer: &mut dyn IByteBuffer, packet: &dyn Any, protocolId: i16) {

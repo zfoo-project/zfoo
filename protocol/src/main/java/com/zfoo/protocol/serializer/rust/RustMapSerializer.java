@@ -44,7 +44,7 @@ public class RustMapSerializer implements IRustSerializer {
         }
 
         MapField mapField = (MapField) fieldRegistration;
-        builder.append(StringUtils.format("if ({}.is_empty()) {", objectStr)).append(LS);
+        builder.append(StringUtils.format("if {}.is_empty() {", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("buffer.writeInt(0);").append(LS);
 
@@ -58,7 +58,7 @@ public class RustMapSerializer implements IRustSerializer {
         String value = "value" + GenerateProtocolFile.localVariableId++;
 
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("for ({}, {}) in {} {", key, value, objectStr)).append(LS);
+        builder.append(StringUtils.format("for ({}, {}) in {}.clone() {", key, value, objectStr)).append(LS);
         CodeGenerateRust.rustSerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
         CodeGenerateRust.rustSerializer(mapField.getMapValueRegistration().serializer())
@@ -87,7 +87,7 @@ public class RustMapSerializer implements IRustSerializer {
         builder.append(StringUtils.format("let {} = buffer.readInt();", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
+        builder.append(StringUtils.format("if {} > 0 {", size)).append(LS);
 
         String i = "index" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);

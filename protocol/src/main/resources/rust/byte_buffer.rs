@@ -1,6 +1,9 @@
+#![allow(unused_imports)]
+#![allow(dead_code)]
+#![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
 use std::any::Any;
 use crate::${protocol_root_path}::i_byte_buffer::IByteBuffer;
-use crate::${protocol_root_path}::i_byte_buffer::IPacket;
 use crate::${protocol_root_path}::protocol_manager::write;
 use crate::${protocol_root_path}::protocol_manager::readByProtocolId;
 
@@ -29,6 +32,25 @@ impl ByteBuffer {
 #[allow(dead_code)]
 #[allow(unused_parens)]
 impl IByteBuffer for ByteBuffer {
+    fn adjustPadding(&mut self, predictionLength: i32, beforeWriteIndex: i32) {
+        let currentWriteIndex = self.getWriteOffset();
+        let predictionCount = self.writeIntCount(predictionLength);
+        let length = currentWriteIndex - beforeWriteIndex - predictionCount;
+        let lengthCount = self.writeIntCount(length);
+        let padding = lengthCount - predictionCount;
+        if (padding == 0) {
+            self.setWriteOffset(beforeWriteIndex);
+            self.writeInt(length);
+            self.setWriteOffset(currentWriteIndex);
+        } else {
+            let mut bytes: Vec<i8> = Vec::with_capacity(length as usize);
+            bytes.extend(&self.buffer[(currentWriteIndex - length) as usize..currentWriteIndex as usize]);
+            self.setWriteOffset(beforeWriteIndex);
+            self.writeInt(length);
+            self.writeBytes(bytes.as_slice());
+        }
+    }
+
     fn getBuffer(&self) -> &Vec<i8> {
         return &self.buffer;
     }
@@ -398,7 +420,7 @@ impl IByteBuffer for ByteBuffer {
         return f64::from_bits(self.readRawLong() as u64);
     }
 
-    fn writeString(&mut self, value: &String) {
+    fn writeString(&mut self, value: String) {
         if (value == "" || value.is_empty()) {
             self.writeInt(0);
         }

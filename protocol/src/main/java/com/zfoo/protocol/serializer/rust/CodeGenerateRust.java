@@ -183,7 +183,6 @@ public class CodeGenerateRust implements ICodeGenerate {
         logger.info("Generated Rust mod file:[{}] is in path:[{}]", modFile.getName(), modFile.getAbsolutePath());
 
 
-        // 生成ProtocolManager.ts文件
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("rust/protocol_manager_template.rs");
         var protocol_imports = new StringBuilder();
         var protocol_manager_write_registrations = new StringBuilder();
@@ -191,7 +190,7 @@ public class CodeGenerateRust implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("use crate::{}::{}::{{}, write{}, read{}};", protocolOutputRootPath, StringUtils.uncapitalize(protocol_name), protocol_name, protocol_name, protocol_name)).append(LS);
+            protocol_imports.append(StringUtils.format("use crate::{}::{}::{write{}, read{}};", protocolOutputRootPath, StringUtils.uncapitalize(protocol_name), protocol_name, protocol_name)).append(LS);
             protocol_manager_write_registrations.append(StringUtils.format("{} => write{}(buffer, packet),", protocol_id, protocol_name)).append(LS);
             protocol_manager_read_registrations.append(StringUtils.format("{} => read{}(buffer),", protocol_id, protocol_name)).append(LS);
         }
@@ -337,11 +336,7 @@ public class CodeGenerateRust implements ICodeGenerate {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             var serializer = rustSerializer(fieldRegistration.serializer());
-            if (serializer instanceof RustStringSerializer || serializer instanceof RustObjectProtocolSerializer) {
-                serializer.writeObject(rustBuilder, "&message." + field.getName(), 0, field, fieldRegistration);
-            } else {
-                serializer.writeObject(rustBuilder, "message." + field.getName(), 0, field, fieldRegistration);
-            }
+            serializer.writeObject(rustBuilder, "message." + field.getName(), 0, field, fieldRegistration);
         }
         if (registration.isCompatible()) {
             rustBuilder.append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex);", registration.getPredictionLength())).append(LS);
@@ -396,9 +391,11 @@ public class CodeGenerateRust implements ICodeGenerate {
             case "Long":
                 typeName = "i64";
                 return typeName;
+            case "float":
             case "Float":
                 typeName = "f32";
                 return typeName;
+            case "double":
             case "Double":
                 typeName = "f64";
                 return typeName;

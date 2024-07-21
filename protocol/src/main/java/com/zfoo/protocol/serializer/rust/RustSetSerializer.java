@@ -45,7 +45,7 @@ public class RustSetSerializer implements IRustSerializer {
 
         SetField setField = (SetField) fieldRegistration;
 
-        builder.append(StringUtils.format("if ({}.is_empty()) {", objectStr)).append(LS);
+        builder.append(StringUtils.format("if {}.is_empty() {", objectStr)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
         builder.append("buffer.writeInt(0);").append(LS);
         GenerateProtocolFile.addTab(builder, deep);
@@ -57,7 +57,7 @@ public class RustSetSerializer implements IRustSerializer {
 
         String element = "element" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("for {} in {} {", element, objectStr)).append(LS);
+        builder.append(StringUtils.format("for {} in {}.clone() {", element, objectStr)).append(LS);
         CodeGenerateRust.rustSerializer(setField.getSetElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 1);
@@ -84,7 +84,7 @@ public class RustSetSerializer implements IRustSerializer {
         builder.append(StringUtils.format("let {} = buffer.readInt();", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("if ({} > 0) {", size)).append(LS);
+        builder.append(StringUtils.format("if {} > 0 {", size)).append(LS);
 
         GenerateProtocolFile.addTab(builder, deep + 1);
         String i = "index" + GenerateProtocolFile.localVariableId++;

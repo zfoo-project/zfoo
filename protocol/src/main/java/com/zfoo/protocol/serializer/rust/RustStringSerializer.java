@@ -35,7 +35,7 @@ public class RustStringSerializer implements IRustSerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("buffer.writeString(&{});", objectStr)).append(LS);
+        builder.append(StringUtils.format("buffer.writeString({}.clone());", objectStr)).append(LS);
     }
 
     @Override

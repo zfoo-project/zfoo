@@ -54,7 +54,7 @@ public class RustObjectProtocolSerializer implements IRustSerializer {
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("let {} = buffer.readPacket({});", result, objectProtocolField.getProtocolId())).append(LS);
         GenerateProtocolFile.addTab(builder, deep);
-        builder.append(StringUtils.format("let {} = {}.downcast_ref::<{}>().unwrap();", ptr, result, protocolSimpleName)).append(LS);
+        builder.append(StringUtils.format("let {} = {}.downcast_ref::<{}>().unwrap().clone();", ptr, result, protocolSimpleName)).append(LS);
         return ptr;
     }
 }

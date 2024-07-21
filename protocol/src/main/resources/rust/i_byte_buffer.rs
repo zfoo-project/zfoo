@@ -1,6 +1,9 @@
+#![allow(unused_imports)]
+#![allow(dead_code)]
+#![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
 use std::any::Any;
 
-#[allow(non_snake_case)]
 pub trait IPacket {
     fn protocolId(&self) -> i16;
 }
@@ -9,6 +12,7 @@ pub trait IPacket {
 #[allow(dead_code)]
 #[allow(unused_parens)]
 pub trait IByteBuffer {
+    fn adjustPadding(&mut self, predictionLength: i32, beforeWriteIndex: i32);
     fn getBuffer(&self) -> &Vec<i8>;
     fn getWriteOffset(&self) -> i32;
     fn setWriteOffset(&mut self, writeIndex: i32);
@@ -43,7 +47,7 @@ pub trait IByteBuffer {
     fn readFloat(&mut self) -> f32;
     fn writeDouble(&mut self, value: f64);
     fn readDouble(&mut self) -> f64;
-    fn writeString(&mut self, value: &String);
+    fn writeString(&mut self, value: String);
     fn readString(&mut self) -> String;
     fn writePacket(&mut self, packet: &dyn Any, protocolId: i16);
     fn readPacket(&mut self, protocolId: i16) -> Box<dyn Any>;
