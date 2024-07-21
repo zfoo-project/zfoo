@@ -17,7 +17,6 @@ import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
-import com.zfoo.protocol.generate.GenerateProtocolPath;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
@@ -82,86 +81,62 @@ public class CodeGenerateRust implements ICodeGenerate {
         createTemplateFile();
 
 
-        // 生成ProtocolManager.ts文件
-        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolManagerTemplate.ts");
-        var protocol_imports_manager = new StringBuilder();
-        var protocol_manager_registrations = new StringBuilder();
-        protocol_imports_manager.append("import * as Protocols from './Protocols';").append(LS);
+        // 生成mod文件
+        var modBuilder = new StringBuilder();
+        modBuilder.append("pub mod i_byte_buffer;").append(LS);
+        modBuilder.append("pub mod byte_buffer;").append(LS);
+        modBuilder.append("pub mod protocol_manager;").append(LS);
+        modBuilder.append("pub mod protocols;").append(LS);
+        var modFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "mod.rs"));
+        FileUtils.writeStringToFile(modFile, modBuilder.toString(), true);
+        logger.info("Generated Rust mod file:[{}] is in path:[{}]", modFile.getName(), modFile.getAbsolutePath());
+
+
+        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("rust/protocol_manager_template.rs");
+        var protocol_imports = new StringBuilder();
+        var protocol_manager_write_registrations = new StringBuilder();
+        var protocol_manager_read_registrations = new StringBuilder();
+
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, new Protocols.{}Registration());", protocol_id, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.set(Protocols.{}, {});", protocol_name, protocol_id)).append(LS);
+            protocol_imports.append(StringUtils.format("use crate::{}::protocols::{write{}, read{}};", protocolOutputRootPath, protocol_name, protocol_name)).append(LS);
+            protocol_manager_write_registrations.append(StringUtils.format("{} => write{}(buffer, packet),", protocol_id, protocol_name)).append(LS);
+            protocol_manager_read_registrations.append(StringUtils.format("{} => read{}(buffer),", protocol_id, protocol_name)).append(LS);
         }
-        var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports_manager.toString()
-                , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
+        var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_root_path, protocolOutputRootPath
+                , CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
+                , CodeTemplatePlaceholder.protocol_write_serialization, protocol_manager_write_registrations.toString()
+                , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_manager_read_registrations.toString()
+        );
         var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
-        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.ts"));
+        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "protocol_manager.rs"));
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
-        logger.info("Generated TypeScript protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
+        logger.info("Generated Rust protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
 
 
-        var protocol_imports_protocols = new StringBuilder();
-        protocol_imports_protocols.append("import IByteBuffer from './IByteBuffer';").append(LS);
         var protocol_class = new StringBuilder();
         var protocol_registration = new StringBuilder();
         for (var registration : registrations) {
-            protocol_class.append(protocol_class(registration).replace("class ", "export class ")).append(LS);
+            protocol_class.append(protocol_class(registration)).append(LS);
             protocol_registration.append(protocol_registration(registration)).append(LS);
         }
-        var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolsTemplate.ts");
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("rust/protocol_template.rs");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
-                CodeTemplatePlaceholder.protocol_imports, protocol_imports_protocols.toString()
+                CodeTemplatePlaceholder.protocol_root_path, protocolOutputRootPath
+                , CodeTemplatePlaceholder.protocol_imports, StringUtils.EMPTY
                 , CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
                 , CodeTemplatePlaceholder.protocol_registration, protocol_registration.toString()
         ));
-        var outputPath = StringUtils.format("{}/Protocols.ts", protocolOutputPath);
+        var outputPath = StringUtils.format("{}/Protocols.rs", protocolOutputPath);
         var file = new File(outputPath);
         FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
-        logger.info("Generated TypeScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+        logger.info("Generated Rust protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
     }
 
     @Override
     public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
-        createTemplateFile();
-
-
-        // 生成ProtocolManager.ts文件
-        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolManagerTemplate.ts");
-        var protocol_imports = new StringBuilder();
-        var protocol_manager_registrations = new StringBuilder();
-        for (var registration : registrations) {
-            var protocol_id = registration.protocolId();
-            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("import {} from './{}/{}';", protocol_name, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
-            protocol_imports.append(StringUtils.format("import { {}Registration } from './{}/{}';", protocol_name, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocols.set({}, new {}Registration());", protocol_id, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.set({}, {});", protocol_name, protocol_id)).append(LS);
-        }
-        var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
-                , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
-        var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
-        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputPath, "ProtocolManager.ts"));
-        FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
-        logger.info("Generated TypeScript protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
-
-//
-//        for (var registration : registrations) {
-//            var protocol_id = registration.protocolId();
-//            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-//            var protocolTemplate = ClassUtils.getFileFromClassPathToString("typescript/ProtocolTemplate.ts");
-//            var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
-//                    CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
-//                    , CodeTemplatePlaceholder.protocol_name, protocol_name
-//                    , CodeTemplatePlaceholder.protocol_imports, protocol_imports_fold(registration)
-//                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
-//                    , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
-//            ));
-//            var outputPath = StringUtils.format("{}/{}/{}.ts", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
-//            var file = new File(outputPath);
-//            FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
-//            logger.info("Generated TypeScript protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
-//        }
+        defaultProtocol(registrations);
     }
 
     @Override
