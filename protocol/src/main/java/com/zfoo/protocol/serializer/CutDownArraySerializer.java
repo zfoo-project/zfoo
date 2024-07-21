@@ -50,6 +50,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeBoolArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeBoolArray(&{});", objectStr)).append(LS);
+                        break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeBoolArray({})", objectStr)).append(LS);
                         break;
@@ -76,6 +79,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeBoolBoxArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeBoolArray(&{});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeBoolArray({})", objectStr)).append(LS);
@@ -104,6 +110,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeByteArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeByteArray(&{});", objectStr)).append(LS);
+                        break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeByteArray({})", objectStr)).append(LS);
                         break;
@@ -130,6 +139,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeByteBoxArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeByteArray(&{});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeByteArray({})", objectStr)).append(LS);
@@ -158,6 +170,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeShortArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeShortArray(&{});", objectStr)).append(LS);
+                        break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeShortArray({})", objectStr)).append(LS);
                         break;
@@ -184,6 +199,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeShortBoxArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeShortArray(&{});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeShortArray({})", objectStr)).append(LS);
@@ -212,6 +230,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeIntArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeIntArray(&{});", objectStr)).append(LS);
+                        break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeIntArray({})", objectStr)).append(LS);
                         break;
@@ -238,6 +259,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeIntBoxArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeIntArray(&{});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeIntArray({})", objectStr)).append(LS);
@@ -266,6 +290,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeLongArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeLongArray(&{});", objectStr)).append(LS);
+                        break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeLongArray({})", objectStr)).append(LS);
                         break;
@@ -292,6 +319,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeLongBoxArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeLongArray(&{});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeLongArray({})", objectStr)).append(LS);
@@ -320,6 +350,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeFloatArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeFloatArray(&{});", objectStr)).append(LS);
+                        break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeFloatArray({})", objectStr)).append(LS);
                         break;
@@ -346,6 +379,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeFloatBoxArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeFloatArray(&{});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeFloatArray({})", objectStr)).append(LS);
@@ -374,6 +410,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeDoubleArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeDoubleArray(&{});", objectStr)).append(LS);
+                        break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({})", objectStr)).append(LS);
                         break;
@@ -401,6 +440,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeDoubleBoxArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeDoubleArray(&{});", objectStr)).append(LS);
+                        break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({})", objectStr)).append(LS);
                         break;
@@ -427,6 +469,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}.writeStringArray($1, {});", EnhanceUtils.byteBufUtils, objectStr));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("buffer.writeStringArray(&{});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala, GdScript, Python:
                         builder.append(StringUtils.format("buffer.writeStringArray({})", objectStr)).append(LS);
@@ -477,7 +522,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {});", objectStr, protocolId)).append(LS);
                             break;
-                        case Golang, Protobuf, Java, Kotlin, Scala:
+                        case Rust, Golang, Protobuf, Java, Kotlin, Scala:
                         default:
                             flag = false;
                     }
@@ -502,6 +547,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readBoolArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readBoolArray();", array)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readBoolArray()", array)).append(LS);
@@ -546,6 +594,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readBoolBoxArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readBoolArray();", array)).append(LS);
+                        break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readBoolArray()", array)).append(LS);
                         break;
@@ -585,6 +636,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readByteArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readByteArray();", array)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readByteArray()", array)).append(LS);
@@ -629,6 +683,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readByteBoxArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readByteArray();", array)).append(LS);
+                        break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readByteArray()", array)).append(LS);
                         break;
@@ -668,6 +725,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readShortArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readShortArray();", array)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readShortArray()", array)).append(LS);
@@ -712,6 +772,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readShortBoxArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readShortArray();", array)).append(LS);
+                        break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readShortArray()", array)).append(LS);
                         break;
@@ -751,6 +814,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readIntArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readIntArray();", array)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readIntArray()", array)).append(LS);
@@ -795,6 +861,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readIntBoxArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readIntArray();", array)).append(LS);
+                        break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readIntArray()", array)).append(LS);
                         break;
@@ -834,6 +903,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readLongArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readLongArray();", array)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readLongArray()", array)).append(LS);
@@ -878,6 +950,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readLongBoxArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readLongArray();", array)).append(LS);
+                        break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readLongArray()", array)).append(LS);
                         break;
@@ -917,6 +992,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readFloatArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readFloatArray();", array)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readFloatArray()", array)).append(LS);
@@ -961,6 +1039,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readFloatBoxArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readFloatArray();", array)).append(LS);
+                        break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readFloatArray()", array)).append(LS);
                         break;
@@ -1000,6 +1081,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readDoubleArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readDoubleArray();", array)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleArray()", array)).append(LS);
@@ -1044,6 +1128,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readDoubleBoxArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
                         break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readDoubleArray();", array)).append(LS);
+                        break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleArray()", array)).append(LS);
                         break;
@@ -1083,6 +1170,9 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("{}[] {} = {}.readStringArray($1);", arrayName, array, EnhanceUtils.byteBufUtils));
+                        break;
+                    case Rust:
+                        builder.append(StringUtils.format("let {} = buffer.readStringArray();", array)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readStringArray()", array)).append(LS);
@@ -1150,7 +1240,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readPacketArray({});", array, protocolId)).append(LS);
                             break;
-                        case Golang, Java, Kotlin, Scala, Protobuf, Enhance:
+                        case Rust, Golang, Java, Kotlin, Scala, Protobuf, Enhance:
                         default:
                             flag = false;
                     }

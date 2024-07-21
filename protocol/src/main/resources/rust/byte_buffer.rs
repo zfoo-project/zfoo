@@ -51,7 +51,7 @@ impl IByteBuffer for ByteBuffer {
         }
     }
 
-    fn compatibleRead(&mut self, beforeReadIndex: i32, length: i32) -> bool{
+    fn compatibleRead(&mut self, beforeReadIndex: i32, length: i32) -> bool {
         return length != -1 && self.getReadOffset() < length + beforeReadIndex;
     }
 
@@ -448,5 +448,181 @@ impl IByteBuffer for ByteBuffer {
 
     fn readPacket(&mut self, protocolId: i16) -> Box<dyn Any> {
         return readNoProtocolId(self, protocolId);
+    }
+
+    fn writeBoolArray(&mut self, array: &Vec<bool>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeBool(*ele);
+            }
+        }
+    }
+
+    fn readBoolArray(&mut self) -> Vec<bool> {
+        let mut array: Vec<bool> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readBool());
+            }
+        }
+        return array;
+    }
+
+    fn writeByteArray(&mut self, array: &Vec<i8>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeByte(*ele);
+            }
+        }
+    }
+
+    fn readByteArray(&mut self) -> Vec<i8> {
+        let mut array: Vec<i8> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readByte());
+            }
+        }
+        return array;
+    }
+
+    fn writeShortArray(&mut self, array: &Vec<i16>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeShort(*ele);
+            }
+        }
+    }
+
+    fn readShortArray(&mut self) -> Vec<i16> {
+        let mut array: Vec<i16> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readShort());
+            }
+        }
+        return array;
+    }
+
+    fn writeIntArray(&mut self, array: &Vec<i32>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeInt(*ele);
+            }
+        }
+    }
+
+    fn readIntArray(&mut self) -> Vec<i32> {
+        let mut array: Vec<i32> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readInt());
+            }
+        }
+        return array;
+    }
+
+    fn writeLongArray(&mut self, array: &Vec<i64>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeLong(*ele);
+            }
+        }
+    }
+
+    fn readLongArray(&mut self) -> Vec<i64> {
+        let mut array: Vec<i64> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readLong());
+            }
+        }
+        return array;
+    }
+
+    fn writeFloatArray(&mut self, array: &Vec<f32>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeFloat(*ele);
+            }
+        }
+    }
+
+    fn readFloatArray(&mut self) -> Vec<f32> {
+        let mut array: Vec<f32> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readFloat());
+            }
+        }
+        return array;
+    }
+
+    fn writeDoubleArray(&mut self, array: &Vec<f64>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeDouble(*ele);
+            }
+        }
+    }
+
+    fn readDoubleArray(&mut self) -> Vec<f64> {
+        let mut array: Vec<f64> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readDouble());
+            }
+        }
+        return array;
+    }
+
+    fn writeStringArray(&mut self, array: &Vec<String>) {
+        if array.is_empty() {
+            self.writeInt(0);
+        } else {
+            self.writeInt(array.len() as i32);
+            for ele in array {
+                self.writeString(String::from(ele));
+            }
+        }
+    }
+
+    fn readStringArray(&mut self) -> Vec<String> {
+        let mut array: Vec<String> = Vec::new();
+        let length = self.readInt();
+        if length > 0 {
+            for _index in 0..length {
+                array.push(self.readString());
+            }
+        }
+        return array;
     }
 }

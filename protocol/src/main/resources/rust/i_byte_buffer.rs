@@ -52,4 +52,20 @@ pub trait IByteBuffer {
     fn readString(&mut self) -> String;
     fn writePacket(&mut self, packet: &dyn Any, protocolId: i16);
     fn readPacket(&mut self, protocolId: i16) -> Box<dyn Any>;
+    fn writeBoolArray(&mut self, array: &Vec<bool>);
+    fn readBoolArray(&mut self) -> Vec<bool>;
+    fn writeByteArray(&mut self, array: &Vec<i8>);
+    fn readByteArray(&mut self) -> Vec<i8>;
+    fn writeShortArray(&mut self, array: &Vec<i16>);
+    fn readShortArray(&mut self) -> Vec<i16>;
+    fn writeIntArray(&mut self, array: &Vec<i32>);
+    fn readIntArray(&mut self) -> Vec<i32>;
+    fn writeLongArray(&mut self, array: &Vec<i64>);
+    fn readLongArray(&mut self) -> Vec<i64>;
+    fn writeFloatArray(&mut self, array: &Vec<f32>);
+    fn readFloatArray(&mut self) -> Vec<f32>;
+    fn writeDoubleArray(&mut self, array: &Vec<f64>);
+    fn readDoubleArray(&mut self) -> Vec<f64>;
+    fn writeStringArray(&mut self, array: &Vec<String>);
+    fn readStringArray(&mut self) -> Vec<String>;
 }
