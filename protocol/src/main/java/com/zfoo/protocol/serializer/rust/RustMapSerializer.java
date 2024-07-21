@@ -91,7 +91,7 @@ public class RustMapSerializer implements IRustSerializer {
 
         String i = "index" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("for {} in 0 .. {} {", i, size)).append(LS);
+        builder.append(StringUtils.format("for {} in 0..{} {", i, size)).append(LS);
         String keyObject = CodeGenerateRust.rustSerializer(mapField.getMapKeyRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapKeyRegistration());
 

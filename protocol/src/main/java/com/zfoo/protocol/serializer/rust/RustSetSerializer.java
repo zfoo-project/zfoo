@@ -88,7 +88,7 @@ public class RustSetSerializer implements IRustSerializer {
 
         GenerateProtocolFile.addTab(builder, deep + 1);
         String i = "index" + GenerateProtocolFile.localVariableId++;
-        builder.append(StringUtils.format("for {} in 0 .. {} {", i, size)).append(LS);
+        builder.append(StringUtils.format("for {} in 0..{} {", i, size)).append(LS);
         String readObject = CodeGenerateRust.rustSerializer(setField.getSetElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);

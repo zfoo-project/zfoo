@@ -87,7 +87,7 @@ public class RustArraySerializer implements IRustSerializer {
         GenerateProtocolFile.addTab(builder, deep);
         builder.append(StringUtils.format("if {} > 0 {", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep + 1);
-        builder.append(StringUtils.format("for {} in 0 .. {} {", i, size)).append(LS);
+        builder.append(StringUtils.format("for {} in 0..{} {", i, size)).append(LS);
         String readObject = CodeGenerateRust.rustSerializer(arrayField.getArrayElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, arrayField.getArrayElementRegistration());
         GenerateProtocolFile.addTab(builder, deep + 2);
