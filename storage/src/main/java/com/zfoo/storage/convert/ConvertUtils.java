@@ -47,7 +47,8 @@ public abstract class ConvertUtils {
         ConversionServiceFactoryBean conversionServiceFactoryBean = new ConversionServiceFactoryBean();
         conversionServiceFactoryBean.setConverters(converters);
         conversionServiceFactoryBean.afterPropertiesSet();
-        return conversionServiceFactoryBean.getObject();
+        conversionService = conversionServiceFactoryBean.getObject();
+        return conversionService;
     }
 
 
