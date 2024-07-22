@@ -78,7 +78,7 @@ impl IByteBuffer for ByteBuffer {
     }
 
     fn getCapacity(&self) -> i32 {
-        return self.buffer.capacity() as i32 - self.writeOffset;
+        return self.buffer.len() as i32 - self.writeOffset;
     }
 
     fn ensureCapacity(&mut self, capacity: i32) {
