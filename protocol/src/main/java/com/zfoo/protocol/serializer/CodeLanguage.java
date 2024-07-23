@@ -23,6 +23,7 @@ import com.zfoo.protocol.serializer.kotlin.CodeGenerateKotlin;
 import com.zfoo.protocol.serializer.lua.CodeGenerateLua;
 import com.zfoo.protocol.serializer.php.CodeGeneratePhp;
 import com.zfoo.protocol.serializer.python.CodeGeneratePython;
+import com.zfoo.protocol.serializer.ruby.CodeGenerateRuby;
 import com.zfoo.protocol.serializer.rust.CodeGenerateRust;
 import com.zfoo.protocol.serializer.scala.CodeGenerateScala;
 import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
@@ -64,6 +65,8 @@ public enum CodeLanguage {
     Python(1 << 22, CodeGeneratePython.class),
 
     Php(1 << 28, CodeGeneratePhp.class),
+
+    Ruby(1 << 29, CodeGenerateRuby.class),
 
     Protobuf(1 << 30, null);
 

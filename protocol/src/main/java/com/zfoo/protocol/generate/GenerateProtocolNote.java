@@ -100,6 +100,7 @@ public abstract class GenerateProtocolNote {
                 break;
             case Python:
             case GdScript:
+            case Ruby:
                 note = StringUtils.format("# {}", note);
                 break;
             case Enhance:
