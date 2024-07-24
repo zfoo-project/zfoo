@@ -41,7 +41,6 @@ def byteBufferTest
   assertEqual(buffer.readDouble(), -99.0)
 end
 
-
 ProtocolManager.initProtocol()
 # data = File.read("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes")
 # data = File.read("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes")
@@ -59,6 +58,5 @@ newPacket = ProtocolManager.read(newByteBuffer)
 
 puts packet.inspect
 puts newPacket.inspect
-
 
 byteBufferTest()
