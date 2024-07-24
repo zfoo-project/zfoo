@@ -35,41 +35,41 @@ public class RubyMapSerializer implements IRubySerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         if (CutDownMapSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Ruby)) {
             return;
         }
 
         MapField mapField = (MapField) fieldRegistration;
         builder.append(StringUtils.format("if {}.nil? || {}.empty?", objectStr, objectStr)).append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append("buffer.writeInt(0)").append(LS);
 
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append("else").append(LS);
 
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append(StringUtils.format("buffer.writeInt({}.length)", objectStr)).append(LS);
 
         String key = "key" + GenerateProtocolFile.localVariableId++;
         String value = "value" + GenerateProtocolFile.localVariableId++;
 
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append(StringUtils.format("{}.each do |{}, {}|", objectStr, key, value)).append(LS);
         CodeGenerateRuby.rbSerializer(mapField.getMapKeyRegistration().serializer())
                 .writeObject(builder, key, deep + 2, field, mapField.getMapKeyRegistration());
         CodeGenerateRuby.rbSerializer(mapField.getMapValueRegistration().serializer())
                 .writeObject(builder, value, deep + 2, field, mapField.getMapValueRegistration());
 
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append("end").append(LS);
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append("end").append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         var cutDown = CutDownMapSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Ruby);
         if (cutDown != null) {
             return cutDown;
@@ -80,15 +80,15 @@ public class RubyMapSerializer implements IRubySerializer {
 
         builder.append(StringUtils.format("{} = Hash.new()", result)).append(LS);
 
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         String size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("{} = buffer.readInt()", size)).append(LS);
 
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append(StringUtils.format("if {} > 0", size)).append(LS);
 
         String i = "index" + GenerateProtocolFile.localVariableId++;
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append(StringUtils.format("for {} in 0..{} - 1", i, size)).append(LS);
 
         String keyObject = CodeGenerateRuby.rbSerializer(mapField.getMapKeyRegistration().serializer())
@@ -97,13 +97,13 @@ public class RubyMapSerializer implements IRubySerializer {
 
         String valueObject = CodeGenerateRuby.rbSerializer(mapField.getMapValueRegistration().serializer())
                 .readObject(builder, deep + 2, field, mapField.getMapValueRegistration());
-        GenerateProtocolFile.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 2);
 
         builder.append(StringUtils.format("{}[{}] = {}", result, keyObject, valueObject)).append(LS);
 
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append("end").append(LS);
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append("end").append(LS);
         return result;
     }

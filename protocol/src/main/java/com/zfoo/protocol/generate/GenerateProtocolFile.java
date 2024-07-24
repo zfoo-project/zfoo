@@ -27,8 +27,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static com.zfoo.protocol.util.StringUtils.TAB;
-import static com.zfoo.protocol.util.StringUtils.TAB_ASCII;
+import static com.zfoo.protocol.util.StringUtils.*;
 
 /**
  * @author godotg
@@ -45,6 +44,11 @@ public abstract class GenerateProtocolFile {
 
     public static StringBuilder addTab(StringBuilder builder, int deep) {
         builder.append(TAB.repeat(Math.max(0, deep)));
+        return builder;
+    }
+
+    public static StringBuilder addTabWith2Space(StringBuilder builder, int deep) {
+        builder.append(SPACE.repeat(Math.max(0, deep * 2)));
         return builder;
     }
 

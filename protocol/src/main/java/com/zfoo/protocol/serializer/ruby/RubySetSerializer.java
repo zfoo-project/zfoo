@@ -35,7 +35,7 @@ public class RubySetSerializer implements IRubySerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         if (CutDownSetSerializer.getInstance().writeObject(builder, objectStr, field, fieldRegistration, CodeLanguage.Ruby)) {
             return;
         }
@@ -43,29 +43,29 @@ public class RubySetSerializer implements IRubySerializer {
         SetField setField = (SetField) fieldRegistration;
 
         builder.append(StringUtils.format("if {}.nil? || {}.empty?", objectStr, objectStr)).append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append("buffer.writeInt(0)").append(LS);
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
 
         builder.append("else").append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append(StringUtils.format("buffer.writeInt({}.length)", objectStr)).append(LS);
 
         String element = "element" + GenerateProtocolFile.localVariableId++;
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append(StringUtils.format("for {} in {}", element, objectStr)).append(LS);
         CodeGenerateRuby.rbSerializer(setField.getSetElementRegistration().serializer())
                 .writeObject(builder, element, deep + 2, field, setField.getSetElementRegistration());
 
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append("end").append(LS);
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append("end").append(LS);
     }
 
     @Override
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         var cutDown = CutDownSetSerializer.getInstance().readObject(builder, field, fieldRegistration, CodeLanguage.Ruby);
         if (cutDown != null) {
             return cutDown;
@@ -79,21 +79,21 @@ public class RubySetSerializer implements IRubySerializer {
         String i = "index" + GenerateProtocolFile.localVariableId++;
         String size = "size" + GenerateProtocolFile.localVariableId++;
 
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append(StringUtils.format("{} = buffer.readInt()", size)).append(LS);
 
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append(StringUtils.format("if {} > 0", size)).append(LS);
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append(StringUtils.format("for {} in 0..{} - 1", i, size)).append(LS);
         String readObject = CodeGenerateRuby.rbSerializer(setField.getSetElementRegistration().serializer())
                 .readObject(builder, deep + 2, field, setField.getSetElementRegistration());
-        GenerateProtocolFile.addTab(builder, deep + 2);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 2);
         builder.append(StringUtils.format("{}.add({})", result, readObject)).append(LS);
 
-        GenerateProtocolFile.addTab(builder, deep + 1);
+        GenerateProtocolFile.addTabWith2Space(builder, deep + 1);
         builder.append("end").append(LS);
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append("end").append(LS);
         return result;
     }

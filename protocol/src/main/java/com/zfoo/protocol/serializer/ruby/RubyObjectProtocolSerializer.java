@@ -34,7 +34,7 @@ public class RubyObjectProtocolSerializer implements IRubySerializer {
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append(StringUtils.format("buffer.writePacket({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
     }
 
@@ -42,7 +42,7 @@ public class RubyObjectProtocolSerializer implements IRubySerializer {
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.localVariableId++;
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append(StringUtils.format("{} = buffer.readPacket({})", result, objectProtocolField.getProtocolId())).append(LS);
         return result;
     }

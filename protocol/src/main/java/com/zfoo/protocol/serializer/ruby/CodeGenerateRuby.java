@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.zfoo.protocol.util.FileUtils.LS;
-import static com.zfoo.protocol.util.StringUtils.TAB;
 
 /**
  * @author godotg
@@ -303,7 +302,8 @@ public class CodeGenerateRuby implements ICodeGenerate {
             if (field.isAnnotationPresent(Compatible.class)) {
                 rbBuilder.append("if buffer.compatibleRead(beforeReadIndex, length)").append(LS);
                 var compatibleReadObject = rbSerializer(fieldRegistration.serializer()).readObject(rbBuilder, 1, field, fieldRegistration);
-                rbBuilder.append(TAB).append(StringUtils.format("packet.{} = {}", field.getName(), compatibleReadObject)).append(LS);
+                GenerateProtocolFile.addTabWith2Space(rbBuilder, 1);
+                rbBuilder.append(StringUtils.format("packet.{} = {}", field.getName(), compatibleReadObject)).append(LS);
                 rbBuilder.append("end").append(LS);
                 continue;
             }

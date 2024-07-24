@@ -32,7 +32,7 @@ public class RubyByteSerializer implements IRubySerializer {
 
     @Override
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append(StringUtils.format("buffer.writeByte({})", objectStr)).append(LS);
     }
 
@@ -40,7 +40,7 @@ public class RubyByteSerializer implements IRubySerializer {
     public String readObject(StringBuilder builder, int deep, Field field, IFieldRegistration fieldRegistration) {
         String result = "result" + GenerateProtocolFile.localVariableId++;
 
-        GenerateProtocolFile.addTab(builder, deep);
+        GenerateProtocolFile.addTabWith2Space(builder, deep);
         builder.append(StringUtils.format("{} = buffer.readByte()", result)).append(LS);
         return result;
     }
