@@ -301,9 +301,10 @@ public class CodeGenerateRuby implements ICodeGenerate {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             if (field.isAnnotationPresent(Compatible.class)) {
-                rbBuilder.append("if buffer.compatibleRead(beforeReadIndex, length):").append(LS);
+                rbBuilder.append("if buffer.compatibleRead(beforeReadIndex, length)").append(LS);
                 var compatibleReadObject = rbSerializer(fieldRegistration.serializer()).readObject(rbBuilder, 1, field, fieldRegistration);
                 rbBuilder.append(TAB).append(StringUtils.format("packet.{} = {}", field.getName(), compatibleReadObject)).append(LS);
+                rbBuilder.append("end").append(LS);
                 continue;
             }
             var readObject = rbSerializer(fieldRegistration.serializer()).readObject(rbBuilder, 0, field, fieldRegistration);
