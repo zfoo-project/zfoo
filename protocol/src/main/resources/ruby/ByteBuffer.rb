@@ -316,4 +316,699 @@ class ByteBuffer
         return protocolRegistration.read(self)
     end
 
+    def writeBoolArray(array)
+        if array.nil? || array.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(array.length)
+        for element in array
+            writeBool(element)
+        end
+    end
+
+    def readBoolArray()
+        array = Array.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                array.push(readBool())
+            end
+        end
+        return array
+    end
+
+    def writeByteArray(array)
+        if array.nil? || array.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(array.length)
+        for element in array
+            writeByte(element)
+        end
+    end
+
+    def readByteArray()
+        array = Array.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                array.push(readByte())
+            end
+        end
+        return array
+    end
+
+    def writeShortArray(array)
+        if array.nil? || array.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(array.length)
+        for element in array
+            writeShort(element)
+        end
+    end
+
+    def readShortArray()
+        array = Array.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                array.push(readShort())
+            end
+        end
+        return array
+    end
+
+    def writeIntArray(array)
+        if array.nil? || array.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(array.length)
+        for element in array
+            writeInt(element)
+        end
+    end
+
+    def readIntArray()
+        array = Array.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                array.push(readInt())
+            end
+        end
+        return array
+    end
+
+    def writeLongArray(array)
+        if array.nil? || array.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(array.length)
+        for element in array
+            writeLong(element)
+        end
+    end
+
+    def readLongArray()
+        array = Array.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                array.push(readLong())
+            end
+        end
+        return array
+    end
+
+    def writeFloatArray(array)
+        if array.nil? || array.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(array.length)
+        for element in array
+            writeFloat(element)
+        end
+    end
+
+    def readFloatArray()
+        array = Array.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                array.push(readFloat())
+            end
+        end
+        return array
+    end
+
+    def writeDoubleArray(array)
+        if array.nil? || array.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(array.length)
+        for element in array
+            writeDouble(element)
+        end
+    end
+
+    def readDoubleArray()
+        array = Array.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                array.push(readDouble())
+            end
+        end
+        return array
+    end
+
+    def writeStringArray(array)
+        if array.nil? || array.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(array.length)
+        for element in array
+            writeString(element)
+        end
+    end
+
+    def readStringArray()
+        array = Array.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                array.push(readString())
+            end
+        end
+        return array
+    end
+
+    def writePacketArray(array, protocolId)
+        if array.nil? || array.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(array.length)
+        for element in array
+            writePacket(element, protocolId)
+        end
+    end
+
+    def readPacketArray(protocolId)
+        array = Array.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                array.push(readPacket(protocolId))
+            end
+        end
+        return array
+    end
+
+    def writeBoolSet(set)
+        if set.nil? || set.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(set.length)
+        for element in set
+            writeBool(element)
+        end
+    end
+
+    def readBoolSet()
+        set = Set.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                set.add(readBool())
+            end
+        end
+        return set
+    end
+
+    def writeByteSet(set)
+        if set.nil? || set.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(set.length)
+        for element in set
+            writeByte(element)
+        end
+    end
+
+    def readByteSet()
+        set = Set.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                set.add(readByte())
+            end
+        end
+        return set
+    end
+
+    def writeShortSet(set)
+        if set.nil? || set.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(set.length)
+        for element in set
+            writeShort(element)
+        end
+    end
+
+    def readShortSet()
+        set = Set.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                set.add(readShort())
+            end
+        end
+        return set
+    end
+
+    def writeIntSet(set)
+        if set.nil? || set.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(set.length)
+        for element in set
+            writeInt(element)
+        end
+    end
+
+    def readIntSet()
+        set = Set.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                set.add(readInt())
+            end
+        end
+        return set
+    end
+
+    def writeLongSet(set)
+        if set.nil? || set.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(set.length)
+        for element in set
+            writeLong(element)
+        end
+    end
+
+    def readLongSet()
+        set = Set.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                set.add(readLong())
+            end
+        end
+        return set
+    end
+
+    def writeFloatSet(set)
+        if set.nil? || set.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(set.length)
+        for element in set
+            writeFloat(element)
+        end
+    end
+
+    def readFloatSet()
+        set = Set.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                set.add(readFloat())
+            end
+        end
+        return set
+    end
+
+    def writeDoubleSet(set)
+        if set.nil? || set.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(set.length)
+        for element in set
+            writeDouble(element)
+        end
+    end
+
+    def readDoubleSet()
+        set = Set.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                set.add(readDouble())
+            end
+        end
+        return set
+    end
+
+    def writeStringSet(set)
+        if set.nil? || set.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(set.length)
+        for element in set
+            writeString(element)
+        end
+    end
+
+    def readStringSet()
+        set = Set.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                set.add(readString())
+            end
+        end
+        return set
+    end
+
+    def writePacketSet(set, protocolId)
+        if set.nil? || set.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(set.length)
+        for element in set
+            writePacket(element, protocolId)
+        end
+    end
+
+    def readPacketSet(protocolId)
+        set = Set.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                set.add(readPacket(protocolId))
+            end
+        end
+        return set
+    end
+
+    def writeIntIntMap(map)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeInt(key)
+            writeInt(value)
+        end
+    end
+
+    def readIntIntMap()
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readInt()
+                value = readInt()
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeIntLongMap(map)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeInt(key)
+            writeLong(value)
+        end
+    end
+
+    def readIntLongMap()
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readInt()
+                value = readLong()
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeIntStringMap(map)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeInt(key)
+            writeString(value)
+        end
+    end
+
+    def readIntStringMap()
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readInt()
+                value = readString()
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeIntPacketMap(map, protocolId)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeInt(key)
+            writePacket(value, protocolId)
+        end
+    end
+
+    def readIntPacketMap(protocolId)
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readInt()
+                value = readPacket(protocolId)
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeLongIntMap(map)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeLong(key)
+            writeInt(value)
+        end
+    end
+
+    def readLongIntMap()
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readLong()
+                value = readInt()
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeLongLongMap(map)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeLong(key)
+            writeLong(value)
+        end
+    end
+
+    def readLongLongMap()
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readLong()
+                value = readLong()
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeLongStringMap(map)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeLong(key)
+            writeString(value)
+        end
+    end
+
+    def readLongStringMap()
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readLong()
+                value = readString()
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeLongPacketMap(map, protocolId)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeLong(key)
+            writePacket(value, protocolId)
+        end
+    end
+
+    def readLongPacketMap(protocolId)
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readLong()
+                value = readPacket(protocolId)
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeStringIntMap(map)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeString(key)
+            writeInt(value)
+        end
+    end
+
+    def readStringIntMap()
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readString()
+                value = readInt()
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeStringLongMap(map)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeString(key)
+            writeLong(value)
+        end
+    end
+
+    def readLongLongMap()
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readString()
+                value = readLong()
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeStringStringMap(map)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeString(key)
+            writeString(value)
+        end
+    end
+
+    def readStringStringMap()
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readString()
+                value = readString()
+                map[key] = value
+            end
+        end
+        return map
+    end
+
+    def writeStringPacketMap(map, protocolId)
+        if map.nil? || map.empty?
+            writeInt(0)
+            return
+        end
+        writeInt(map.length)
+        map.each do |key, value|
+            writeString(key)
+            writePacket(value, protocolId)
+        end
+    end
+
+    def readStringPacketMap(protocolId)
+        map = Hash.new()
+        size = readInt()
+        if size > 0
+            for i in 0..(size - 1)
+                key = readString()
+                value = readPacket(protocolId)
+                map[key] = value
+            end
+        end
+        return map
+    end
 end

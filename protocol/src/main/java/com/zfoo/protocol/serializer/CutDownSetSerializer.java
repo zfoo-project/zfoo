@@ -56,7 +56,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeBoolArray({})", objectStr)).append(LS);
                         break;
-                    case Python, Kotlin, Scala:
+                    case Kotlin, Scala, Python, Ruby:
                         builder.append(StringUtils.format("buffer.writeBoolSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -89,7 +89,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({})", objectStr)).append(LS);
                         break;
-                    case Python, Kotlin, Scala:
+                    case Kotlin, Scala, Python, Ruby:
                         builder.append(StringUtils.format("buffer.writeByteSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -122,7 +122,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({})", objectStr)).append(LS);
                         break;
-                    case Python, Kotlin, Scala:
+                    case Kotlin, Scala, Python, Ruby:
                         builder.append(StringUtils.format("buffer.writeShortSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -155,7 +155,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({})", objectStr)).append(LS);
                         break;
-                    case Python, Kotlin, Scala:
+                    case Kotlin, Scala, Python, Ruby:
                         builder.append(StringUtils.format("buffer.writeIntSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -188,7 +188,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({})", objectStr)).append(LS);
                         break;
-                    case Python, Kotlin, Scala:
+                    case Kotlin, Scala, Python, Ruby:
                         builder.append(StringUtils.format("buffer.writeLongSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -218,7 +218,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({})", objectStr)).append(LS);
                         break;
-                    case Python, Kotlin, Scala:
+                    case Kotlin, Scala, Python, Ruby:
                         builder.append(StringUtils.format("buffer.writeFloatSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -249,7 +249,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({})", objectStr)).append(LS);
                         break;
-                    case Python, Kotlin, Scala:
+                    case Kotlin, Scala, Python, Ruby:
                         builder.append(StringUtils.format("buffer.writeDoubleSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -283,7 +283,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeStringArray({})", objectStr)).append(LS);
                         break;
-                    case Python, Kotlin, Scala:
+                    case Kotlin, Scala, Python, Ruby:
                         builder.append(StringUtils.format("buffer.writeStringSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -316,7 +316,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, protocolId)).append(LS);
                             break;
-                        case Python, Kotlin, Scala:
+                        case Kotlin, Scala, Python, Ruby:
                             builder.append(StringUtils.format("buffer.writePacketSet({}, {})", objectStr, protocolId)).append(LS);
                             break;
                         case Lua:
@@ -365,7 +365,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readBoolArray()", set)).append(LS);
                         break;
-                    case Python:
+                    case Python, Ruby:
                         builder.append(StringUtils.format("{} = buffer.readBoolSet()", set)).append(LS);
                         break;
                     case Lua:
@@ -411,7 +411,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readByteArray()", set)).append(LS);
                         break;
-                    case Python:
+                    case Python, Ruby:
                         builder.append(StringUtils.format("{} = buffer.readByteSet()", set)).append(LS);
                         break;
                     case Lua:
@@ -457,7 +457,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readShortArray()", set)).append(LS);
                         break;
-                    case Python:
+                    case Python, Ruby:
                         builder.append(StringUtils.format("{} = buffer.readShortSet()", set)).append(LS);
                         break;
                     case Lua:
@@ -503,7 +503,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readIntArray()", set)).append(LS);
                         break;
-                    case Python:
+                    case Python, Ruby:
                         builder.append(StringUtils.format("{} = buffer.readIntSet()", set)).append(LS);
                         break;
                     case Lua:
@@ -549,7 +549,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readLongArray()", set)).append(LS);
                         break;
-                    case Python:
+                    case Python, Ruby:
                         builder.append(StringUtils.format("{} = buffer.readLongSet()", set)).append(LS);
                         break;
                     case Lua:
@@ -592,7 +592,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readFloatArray()", set)).append(LS);
                         break;
-                    case Python:
+                    case Python, Ruby:
                         builder.append(StringUtils.format("{} = buffer.readFloatSet()", set)).append(LS);
                         break;
                     case Lua:
@@ -636,7 +636,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleArray()", set)).append(LS);
                         break;
-                    case Python:
+                    case Python, Ruby:
                         builder.append(StringUtils.format("{} = buffer.readDoubleSet()", set)).append(LS);
                         break;
                     case Lua:
@@ -683,7 +683,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readStringArray()", set)).append(LS);
                         break;
-                    case Python:
+                    case Python, Ruby:
                         builder.append(StringUtils.format("{} = buffer.readStringSet()", set)).append(LS);
                         break;
                     case Lua:
@@ -729,7 +729,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         case GdScript:
                             builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", set, protocolId)).append(LS);
                             break;
-                        case Python:
+                        case Python, Ruby:
                             builder.append(StringUtils.format("{} = buffer.readPacketSet({})", set, protocolId)).append(LS);
                             break;
                         case Lua:
