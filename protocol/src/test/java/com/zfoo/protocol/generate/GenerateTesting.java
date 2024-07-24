@@ -51,6 +51,7 @@ public class GenerateTesting {
         generateLanguages.add(CodeLanguage.CSharp);
         generateLanguages.add(CodeLanguage.GdScript);
         generateLanguages.add(CodeLanguage.Python);
+        generateLanguages.add(CodeLanguage.Ruby);
 
         // Initialize and then generate the protocol
         ProtocolManager.initProtocolAuto(List.of(NormalObject.class, SimpleObject.class, EmptyObject.class), op);
