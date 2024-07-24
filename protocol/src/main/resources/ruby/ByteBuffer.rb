@@ -7,6 +7,25 @@ class ByteBuffer
         @buffer = "\u0000" * 2
     end
 
+    def adjustPadding(predictionLength, beforeWriteIndex)
+        currentWriteIndex = getWriteOffset
+        predictionCount = writeIntCount(predictionLength)
+        length = currentWriteIndex - beforeWriteIndex - predictionCount
+        lengthCount = writeIntCount(length)
+        padding = lengthCount - predictionCount
+        if padding == 0
+            setWriteOffset(beforeWriteIndex)
+            writeInt(length)
+            setWriteOffset(currentWriteIndex)
+        else
+            retainedByteBuf = "\u0000" * length
+            retainedByteBuf[0..(length - 1)] = @buffer[(currentWriteIndex - length)..(currentWriteIndex - 1)]
+            setWriteOffset(beforeWriteIndex)
+            writeInt(length)
+            writeBytesString(retainedByteBuf)
+        end
+    end
+
     def compatibleRead(beforeReadIndex, length)
         return length != -1 && getWriteOffset() < length + beforeReadIndex
     end
@@ -54,10 +73,10 @@ class ByteBuffer
         end
     end
 
-    def writeBytesString(bytes)
-        length = bytes.length
+    def writeBytesString(strBytes)
+        length = strBytes.bytes().length
         ensureCapacity(length)
-        @buffer[@writeOffset..(@writeOffset + length - 1)] = bytes[0..(length - 1)]
+        @buffer[@writeOffset..(@writeOffset + length - 1)] = strBytes[0..(length - 1)]
         @writeOffset += length
     end
 
@@ -120,6 +139,23 @@ class ByteBuffer
         value = @buffer[@readOffset..(@readOffset + 3)].unpack('i>').first
         @readOffset += 4
         return value
+    end
+
+    def writeIntCount(value)
+        value = (value << 1) ^ (value >> 31);
+        if value >> 7 == 0
+            return 1
+        end
+        if value >> 14 == 0
+            return 2
+        end
+        if value >> 21 == 0
+            return 3
+        end
+        if value >> 28 == 0
+            return 4
+        end
+        return 5
     end
 
     def writeInt(value)
