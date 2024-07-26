@@ -71,7 +71,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteBoolArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeBoolSet({});", objectStr)).append(LS);
                         break;
                     default:
@@ -104,7 +104,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteByteArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeByteSet({});", objectStr)).append(LS);
                         break;
                     default:
@@ -137,7 +137,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteShortArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeShortSet({});", objectStr)).append(LS);
                         break;
                     default:
@@ -170,7 +170,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteIntArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeIntSet({});", objectStr)).append(LS);
                         break;
                     default:
@@ -203,7 +203,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteLongArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeLongSet({});", objectStr)).append(LS);
                         break;
                     default:
@@ -233,7 +233,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteFloatArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeFloatSet({});", objectStr)).append(LS);
                         break;
                     case Rust, Protobuf:
@@ -264,7 +264,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteDoubleArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeDoubleSet({});", objectStr)).append(LS);
                         break;
                     case Rust, Protobuf:
@@ -298,7 +298,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteStringArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeStringSet({});", objectStr)).append(LS);
                         break;
                     default:
@@ -328,7 +328,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WritePacketSet({}, {});", objectStr, protocolId)).append(LS);
                             break;
-                        case Cpp, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writePacketSet({}, {});", objectStr, protocolId)).append(LS);
                             break;
                         case Java:
@@ -384,7 +384,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readBoolSet();", set)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readBoolSet();", set)).append(LS);
                         break;
                     case Kotlin:
@@ -430,7 +430,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readByteSet();", set)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readByteSet();", set)).append(LS);
                         break;
                     case Kotlin:
@@ -476,7 +476,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readShortSet();", set)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readShortSet();", set)).append(LS);
                         break;
                     case Kotlin:
@@ -522,7 +522,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readIntSet();", set)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readIntSet();", set)).append(LS);
                         break;
                     case Kotlin:
@@ -568,7 +568,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readLongSet();", set)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readLongSet();", set)).append(LS);
                         break;
                     case Kotlin:
@@ -611,7 +611,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readFloatSet();", set)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readFloatSet();", set)).append(LS);
                         break;
                     case Kotlin:
@@ -655,7 +655,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readDoubleSet();", set)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleSet();", set)).append(LS);
                         break;
                     case Kotlin:
@@ -702,7 +702,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readStringSet();", set)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readStringSet();", set)).append(LS);
                         break;
                     case Kotlin:
@@ -747,6 +747,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                             break;
                         case Java:
                             builder.append(StringUtils.format("var {} = buffer.readPacketSet({}.class, (short) {});", set, protocolName, protocolId)).append(LS);
+                            break;
+                        case Dart:
+                            builder.append(StringUtils.format("var {} = buffer.readPacketSet<{}>({});", set, protocolName, protocolId)).append(LS);
                             break;
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readPacketSet({}::class.java, {})", set, protocolName, protocolId)).append(LS);

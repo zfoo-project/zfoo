@@ -21,7 +21,8 @@ class ByteBuffer implements IByteBuffer {
       writeInt(length);
       setWriteOffset(currentWriteIndex);
     } else {
-      var retainedByteBuf = buffer.sublist(currentWriteIndex - length, currentWriteIndex);
+      var retainedByteBuf =
+          buffer.sublist(currentWriteIndex - length, currentWriteIndex);
       setWriteOffset(beforeWriteIndex);
       writeInt(length);
       writeBytes(retainedByteBuf);
@@ -369,5 +370,851 @@ class ByteBuffer implements IByteBuffer {
   Object readPacket(int protocolId) {
     var protocol = Protocolmanager.getProtocol(protocolId);
     return protocol.read(this);
+  }
+
+  @override
+  void writeBoolArray(List<bool> array) {
+    writeBoolList(array);
+  }
+
+  @override
+  List<bool> readBoolArray() {
+    return readBoolList();
+  }
+
+  @override
+  void writeByteArray(List<int> array) {
+    writeByteList(array);
+  }
+
+  @override
+  List<int> readByteArray() {
+    return readByteList();
+  }
+
+  @override
+  void writeShortArray(List<int> array) {
+    writeShortList(array);
+  }
+
+  @override
+  List<int> readShortArray() {
+    return readShortList();
+  }
+
+  @override
+  void writeIntArray(List<int> array) {
+    writeIntList(array);
+  }
+
+  @override
+  List<int> readIntArray() {
+    return readIntList();
+  }
+
+  @override
+  void writeLongArray(List<int> array) {
+    writeLongList(array);
+  }
+
+  @override
+  List<int> readLongArray() {
+    return readLongList();
+  }
+
+  @override
+  void writeFloatArray(List<double> array) {
+    writeFloatList(array);
+  }
+
+  @override
+  List<double> readFloatArray() {
+    return readFloatList();
+  }
+
+  @override
+  void writeDoubleArray(List<double> array) {
+    writeDoubleList(array);
+  }
+
+  @override
+  List<double> readDoubleArray() {
+    return readDoubleList();
+  }
+
+  @override
+  void writeStringArray(List<String> array) {
+    writeStringList(array);
+  }
+
+  @override
+  List<String> readStringArray() {
+    return readStringList();
+  }
+
+  @override
+  void writePacketArray(List<Object> array, int protocolId) {
+    writePacketList(array, protocolId);
+  }
+
+  @override
+  List<T> readPacketArray<T>(int protocolId) {
+    return readPacketList(protocolId);
+  }
+
+  @override
+  void writeBoolList(List<bool> list) {
+    if (list.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(list.length);
+      for (var ele in list) {
+        writeBool(ele);
+      }
+    }
+  }
+
+  @override
+  List<bool> readBoolList() {
+    var length = readInt();
+    List<bool> list = List.empty(growable: true);
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        list.add(readBool());
+      }
+    }
+    return list;
+  }
+
+  @override
+  void writeByteList(List<int> list) {
+    if (list.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(list.length);
+      for (var ele in list) {
+        writeByte(ele);
+      }
+    }
+  }
+
+  @override
+  List<int> readByteList() {
+    var length = readInt();
+    List<int> list = List.empty(growable: true);
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        list.add(readByte());
+      }
+    }
+    return list;
+  }
+
+  @override
+  void writeShortList(List<int> list) {
+    if (list.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(list.length);
+      for (var ele in list) {
+        writeShort(ele);
+      }
+    }
+  }
+
+  @override
+  List<int> readShortList() {
+    var length = readInt();
+    List<int> list = List.empty(growable: true);
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        list.add(readShort());
+      }
+    }
+    return list;
+  }
+
+  @override
+  void writeIntList(List<int> list) {
+    if (list.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(list.length);
+      for (var ele in list) {
+        writeInt(ele);
+      }
+    }
+  }
+
+  @override
+  List<int> readIntList() {
+    var length = readInt();
+    List<int> list = List.empty(growable: true);
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        list.add(readInt());
+      }
+    }
+    return list;
+  }
+
+  @override
+  void writeLongList(List<int> list) {
+    if (list.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(list.length);
+      for (var ele in list) {
+        writeLong(ele);
+      }
+    }
+  }
+
+  @override
+  List<int> readLongList() {
+    var length = readInt();
+    List<int> list = List.empty(growable: true);
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        list.add(readLong());
+      }
+    }
+    return list;
+  }
+
+  @override
+  void writeFloatList(List<double> list) {
+    if (list.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(list.length);
+      for (var ele in list) {
+        writeFloat(ele);
+      }
+    }
+  }
+
+  @override
+  List<double> readFloatList() {
+    var length = readInt();
+    List<double> list = List.empty(growable: true);
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        list.add(readFloat());
+      }
+    }
+    return list;
+  }
+
+  @override
+  void writeDoubleList(List<double> list) {
+    if (list.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(list.length);
+      for (var ele in list) {
+        writeDouble(ele);
+      }
+    }
+  }
+
+  @override
+  List<double> readDoubleList() {
+    var length = readInt();
+    List<double> list = List.empty(growable: true);
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        list.add(readDouble());
+      }
+    }
+    return list;
+  }
+
+  @override
+  void writeStringList(List<String> list) {
+    if (list.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(list.length);
+      for (var ele in list) {
+        writeString(ele);
+      }
+    }
+  }
+
+  @override
+  List<String> readStringList() {
+    var length = readInt();
+    List<String> list = List.empty(growable: true);
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        list.add(readString());
+      }
+    }
+    return list;
+  }
+
+  @override
+  void writePacketList(List<Object> list, int protocolId) {
+    if (list.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(list.length);
+      for (var ele in list) {
+        writePacket(ele, protocolId);
+      }
+    }
+  }
+
+  @override
+  List<T> readPacketList<T>(int protocolId) {
+    var length = readInt();
+    List<T> list = List.empty(growable: true);
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        list.add(readPacket(protocolId) as T);
+      }
+    }
+    return list;
+  }
+
+  @override
+  void writeBoolSet(Set<bool> set) {
+    if (set.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(set.length);
+      for (var ele in set) {
+        writeBool(ele);
+      }
+    }
+  }
+
+  @override
+  Set<bool> readBoolSet() {
+    var length = readInt();
+    Set<bool> set = Set();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        set.add(readBool());
+      }
+    }
+    return set;
+  }
+
+  @override
+  void writeByteSet(Set<int> set) {
+    if (set.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(set.length);
+      for (var ele in set) {
+        writeByte(ele);
+      }
+    }
+  }
+
+  @override
+  Set<int> readByteSet() {
+    var length = readInt();
+    Set<int> set = Set();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        set.add(readByte());
+      }
+    }
+    return set;
+  }
+
+  @override
+  void writeShortSet(Set<int> set) {
+    if (set.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(set.length);
+      for (var ele in set) {
+        writeShort(ele);
+      }
+    }
+  }
+
+  @override
+  Set<int> readShortSet() {
+    var length = readInt();
+    Set<int> set = Set();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        set.add(readShort());
+      }
+    }
+    return set;
+  }
+
+  @override
+  void writeIntSet(Set<int> set) {
+    if (set.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(set.length);
+      for (var ele in set) {
+        writeInt(ele);
+      }
+    }
+  }
+
+  @override
+  Set<int> readIntSet() {
+    var length = readInt();
+    Set<int> set = Set();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        set.add(readInt());
+      }
+    }
+    return set;
+  }
+
+  @override
+  void writeLongSet(Set<int> set) {
+    if (set.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(set.length);
+      for (var ele in set) {
+        writeLong(ele);
+      }
+    }
+  }
+
+  @override
+  Set<int> readLongSet() {
+    var length = readInt();
+    Set<int> set = Set();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        set.add(readLong());
+      }
+    }
+    return set;
+  }
+
+  @override
+  void writeFloatSet(Set<double> set) {
+    if (set.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(set.length);
+      for (var ele in set) {
+        writeFloat(ele);
+      }
+    }
+  }
+
+  @override
+  Set<double> readFloatSet() {
+    var length = readInt();
+    Set<double> set = Set();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        set.add(readFloat());
+      }
+    }
+    return set;
+  }
+
+  @override
+  void writeDoubleSet(Set<double> set) {
+    if (set.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(set.length);
+      for (var ele in set) {
+        writeDouble(ele);
+      }
+    }
+  }
+
+  @override
+  Set<double> readDoubleSet() {
+    var length = readInt();
+    Set<double> set = Set();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        set.add(readDouble());
+      }
+    }
+    return set;
+  }
+
+  @override
+  void writeStringSet(Set<String> set) {
+    if (set.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(set.length);
+      for (var ele in set) {
+        writeString(ele);
+      }
+    }
+  }
+
+  @override
+  Set<String> readStringSet() {
+    var length = readInt();
+    Set<String> set = Set();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        set.add(readString());
+      }
+    }
+    return set;
+  }
+
+  @override
+  void writePacketSet(Set<Object> set, int protocolId) {
+    if (set.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(set.length);
+      for (var ele in set) {
+        writePacket(ele, protocolId);
+      }
+    }
+  }
+
+  @override
+  Set<T> readPacketSet<T>(int protocolId) {
+    var length = readInt();
+    Set<T> set = Set();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        set.add(readPacket(protocolId) as T);
+      }
+    }
+    return set;
+  }
+
+  @override
+  void writeIntIntMap(Map<int, int> map) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeInt(key);
+        writeInt(value);
+      });
+    }
+  }
+
+  @override
+  Map<int, int> readIntIntMap() {
+    var length = readInt();
+    Map<int, int> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readInt();
+        var value = readInt();
+        map[key] = value;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeIntLongMap(Map<int, int> map) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeInt(key);
+        writeLong(value);
+      });
+    }
+  }
+
+  @override
+  Map<int, int> readIntLongMap() {
+    var length = readInt();
+    Map<int, int> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readInt();
+        var value = readLong();
+        map[key] = value;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeIntStringMap(Map<int, String> map) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeInt(key);
+        writeString(value);
+      });
+    }
+  }
+
+  @override
+  Map<int, String> readIntStringMap() {
+    var length = readInt();
+    Map<int, String> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readInt();
+        var value = readString();
+        map[key] = value;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeIntPacketMap(Map<int, Object> map, int protocolId) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeInt(key);
+        writePacket(value, protocolId);
+      });
+    }
+  }
+
+  @override
+  Map<int, T> readIntPacketMap<T>(int protocolId) {
+    var length = readInt();
+    Map<int, T> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readInt();
+        var value = readPacket(protocolId);
+        map[key] = value as T;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeLongIntMap(Map<int, int> map) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeLong(key);
+        writeInt(value);
+      });
+    }
+  }
+
+  @override
+  Map<int, int> readLongIntMap() {
+    var length = readInt();
+    Map<int, int> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readLong();
+        var value = readInt();
+        map[key] = value;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeLongLongMap(Map<int, int> map) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeLong(key);
+        writeLong(value);
+      });
+    }
+  }
+
+  @override
+  Map<int, int> readLongLongMap() {
+    var length = readInt();
+    Map<int, int> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readLong();
+        var value = readLong();
+        map[key] = value;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeLongStringMap(Map<int, String> map) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeLong(key);
+        writeString(value);
+      });
+    }
+  }
+
+  @override
+  Map<int, String> readLongStringMap() {
+    var length = readInt();
+    Map<int, String> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readLong();
+        var value = readString();
+        map[key] = value;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeLongPacketMap(Map<int, Object> map, int protocolId) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeLong(key);
+        writePacket(value, protocolId);
+      });
+    }
+  }
+
+  @override
+  Map<int, T> readLongPacketMap<T>(int protocolId) {
+    var length = readInt();
+    Map<int, T> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readInt();
+        var value = readPacket(protocolId) as T;
+        map[key] = value;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeStringIntMap(Map<String, int> map) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeString(key);
+        writeInt(value);
+      });
+    }
+  }
+
+  @override
+  Map<String, int> readStringIntMap() {
+    var length = readInt();
+    Map<String, int> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readString();
+        var value = readInt();
+        map[key] = value;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeStringLongMap(Map<String, int> map) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeString(key);
+        writeLong(value);
+      });
+    }
+  }
+
+  @override
+  Map<String, int> readStringLongMap() {
+    var length = readInt();
+    Map<String, int> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readString();
+        var value = readLong();
+        map[key] = value;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeStringStringMap(Map<String, String> map) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeString(key);
+        writeString(value);
+      });
+    }
+  }
+
+  @override
+  Map<String, String> readStringStringMap() {
+    var length = readInt();
+    Map<String, String> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readString();
+        var value = readString();
+        map[key] = value;
+      }
+    }
+    return map;
+  }
+
+  @override
+  void writeStringPacketMap(Map<String, Object> map, int protocolId) {
+    if (map.isEmpty) {
+      writeInt(0);
+    } else {
+      writeInt(map.length);
+      map.forEach((key, value) {
+        writeString(key);
+        writePacket(value, protocolId);
+      });
+    }
+  }
+
+  @override
+  Map<String, T> readStringPacketMap<T>(int protocolId) {
+    var length = readInt();
+    Map<String, T> map = Map();
+    if (length > 0) {
+      for (var i = 0; i < length; i++) {
+        var key = readString();
+        var value = readPacket(protocolId) as T;
+        map[key] = value;
+      }
+    }
+    return map;
   }
 }

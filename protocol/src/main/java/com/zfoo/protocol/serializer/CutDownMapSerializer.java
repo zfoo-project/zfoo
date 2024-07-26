@@ -74,7 +74,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Golang:
                             builder.append(StringUtils.format("buffer.WriteIntIntMap({})", objectStr)).append(LS);
                             return true;
-                        case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeIntIntMap({});", objectStr)).append(LS);
                             return true;
                     }
@@ -101,7 +101,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Golang:
                             builder.append(StringUtils.format("buffer.WriteIntLongMap({})", objectStr)).append(LS);
                             return true;
-                        case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeIntLongMap({});", objectStr)).append(LS);
                             return true;
                     }
@@ -128,7 +128,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Golang:
                             builder.append(StringUtils.format("buffer.WriteIntStringMap({})", objectStr)).append(LS);
                             return true;
-                        case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeIntStringMap({});", objectStr)).append(LS);
                             return true;
                     }
@@ -150,7 +150,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteIntPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
-                        case Cpp, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Java:
@@ -184,7 +184,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Golang:
                             builder.append(StringUtils.format("buffer.WriteLongIntMap({})", objectStr)).append(LS);
                             return true;
-                        case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeLongIntMap({});", objectStr)).append(LS);
                             return true;
                     }
@@ -211,7 +211,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Golang:
                             builder.append(StringUtils.format("buffer.WriteLongLongMap({})", objectStr)).append(LS);
                             return true;
-                        case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeLongLongMap({});", objectStr)).append(LS);
                             return true;
                     }
@@ -238,7 +238,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Golang:
                             builder.append(StringUtils.format("buffer.WriteLongStringMap({})", objectStr)).append(LS);
                             return true;
-                        case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeLongStringMap({});", objectStr)).append(LS);
                             return true;
                     }
@@ -260,7 +260,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteLongPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
-                        case Cpp, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Java:
@@ -294,7 +294,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Golang:
                             builder.append(StringUtils.format("buffer.WriteStringIntMap({})", objectStr)).append(LS);
                             return true;
-                        case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeStringIntMap({});", objectStr)).append(LS);
                             return true;
                     }
@@ -321,7 +321,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Golang:
                             builder.append(StringUtils.format("buffer.WriteStringLongMap({})", objectStr)).append(LS);
                             return true;
-                        case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeStringLongMap({});", objectStr)).append(LS);
                             return true;
                     }
@@ -348,7 +348,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Golang:
                             builder.append(StringUtils.format("buffer.WriteStringStringMap({})", objectStr)).append(LS);
                             return true;
-                        case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeStringStringMap({});", objectStr)).append(LS);
                             return true;
                     }
@@ -370,7 +370,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WriteStringPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
-                        case Cpp, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {});", objectStr, protocolId)).append(LS);
                             return true;
                         case Java:
@@ -427,7 +427,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readIntIntMap();", map)).append(LS);
                             return map;
-                        case Java:
+                        case Java, Dart:
                             builder.append(StringUtils.format("var {} = buffer.readIntIntMap();", map)).append(LS);
                             return map;
                         case Kotlin:
@@ -470,7 +470,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readIntLongMap();", map)).append(LS);
                             return map;
-                        case Java:
+                        case Java, Dart:
                             builder.append(StringUtils.format("var {} = buffer.readIntLongMap();", map)).append(LS);
                             return map;
                         case Kotlin:
@@ -513,7 +513,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readIntStringMap();", map)).append(LS);
                             return map;
-                        case Java:
+                        case Java, Dart:
                             builder.append(StringUtils.format("var {} = buffer.readIntStringMap();", map)).append(LS);
                             return map;
                         case Kotlin:
@@ -551,6 +551,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readIntPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
+                            return map;
+                        case Dart:
+                            builder.append(StringUtils.format("var {} = buffer.readIntPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case Java:
                             builder.append(StringUtils.format("var {} = buffer.readIntPacketMap({}.class, (short) {});", map, protocolName, protocolId)).append(LS);
@@ -598,7 +601,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readLongIntMap();", map)).append(LS);
                             return map;
-                        case Java:
+                        case Java, Dart:
                             builder.append(StringUtils.format("var {} = buffer.readLongIntMap();", map)).append(LS);
                             return map;
                         case Kotlin:
@@ -641,7 +644,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readLongLongMap();", map)).append(LS);
                             return map;
-                        case Java:
+                        case Java, Dart:
                             builder.append(StringUtils.format("var {} = buffer.readLongLongMap();", map)).append(LS);
                             return map;
                         case Kotlin:
@@ -684,7 +687,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readLongStringMap();", map)).append(LS);
                             return map;
-                        case Java:
+                        case Java, Dart:
                             builder.append(StringUtils.format("var {} = buffer.readLongStringMap();", map)).append(LS);
                             return map;
                         case Kotlin:
@@ -722,6 +725,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readLongPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
+                            return map;
+                        case Dart:
+                            builder.append(StringUtils.format("var {} = buffer.readLongPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case Java:
                             builder.append(StringUtils.format("var {} = buffer.readLongPacketMap({}.class, (short) {});", map, protocolName, protocolId)).append(LS);
@@ -770,7 +776,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readStringIntMap();", map)).append(LS);
                             return map;
-                        case Java:
+                        case Java, Dart:
                             builder.append(StringUtils.format("var {} = buffer.readStringIntMap();", map)).append(LS);
                             return map;
                         case Kotlin:
@@ -813,7 +819,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readStringLongMap();", map)).append(LS);
                             return map;
-                        case Java:
+                        case Java, Dart:
                             builder.append(StringUtils.format("var {} = buffer.readStringLongMap();", map)).append(LS);
                             return map;
                         case Kotlin:
@@ -856,7 +862,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readStringStringMap();", map)).append(LS);
                             return map;
-                        case Java:
+                        case Java, Dart:
                             builder.append(StringUtils.format("var {} = buffer.readStringStringMap();", map)).append(LS);
                             return map;
                         case Kotlin:
@@ -894,6 +900,9 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             return map;
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readStringPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
+                            return map;
+                        case Dart:
+                            builder.append(StringUtils.format("var {} = buffer.readStringPacketMap<{}>({});", map, protocolName, protocolId)).append(LS);
                             return map;
                         case Java:
                             builder.append(StringUtils.format("var {} = buffer.readStringPacketMap({}.class, (short) {});", map, protocolName, protocolId)).append(LS);

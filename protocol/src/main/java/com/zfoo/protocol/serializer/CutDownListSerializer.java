@@ -67,7 +67,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteBoolArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeBoolList({});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala:
@@ -100,7 +100,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteByteArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeByteList({});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala:
@@ -134,7 +134,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteShortArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeShortList({});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala:
@@ -167,7 +167,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteIntArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeIntList({});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala:
@@ -200,7 +200,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteLongArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeLongList({});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala:
@@ -234,7 +234,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteFloatArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeFloatList({});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala:
@@ -268,7 +268,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteDoubleArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeDoubleList({});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala:
@@ -302,7 +302,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Golang:
                         builder.append(StringUtils.format("buffer.WriteStringArray({})", objectStr)).append(LS);
                         break;
-                    case Cpp, Java, JavaScript, EcmaScript, TypeScript:
+                    case Cpp, Java, Dart, JavaScript, EcmaScript, TypeScript:
                         builder.append(StringUtils.format("buffer.writeStringList({});", objectStr)).append(LS);
                         break;
                     case Kotlin, Scala:
@@ -332,7 +332,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WritePacketList({}, {});", objectStr, protocolId)).append(LS);
                             break;
-                        case Cpp, JavaScript, EcmaScript, TypeScript:
+                        case Cpp, Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writePacketList({}, {});", objectStr, protocolId)).append(LS);
                             break;
                         case Java:
@@ -391,7 +391,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readBoolList();", list)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readBoolList();", list)).append(LS);
                         break;
                     case Kotlin:
@@ -437,7 +437,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readByteList();", list)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readByteList();", list)).append(LS);
                         break;
                     case Kotlin:
@@ -483,7 +483,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readShortList();", list)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readShortList();", list)).append(LS);
                         break;
                     case Kotlin:
@@ -529,7 +529,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readIntList();", list)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readIntList();", list)).append(LS);
                         break;
                     case Kotlin:
@@ -575,7 +575,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readLongList();", list)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readLongList();", list)).append(LS);
                         break;
                     case Kotlin:
@@ -621,7 +621,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readFloatList();", list)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readFloatList();", list)).append(LS);
                         break;
                     case Kotlin:
@@ -667,7 +667,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readDoubleList();", list)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleList();", list)).append(LS);
                         break;
                     case Kotlin:
@@ -713,7 +713,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                     case Cpp:
                         builder.append(StringUtils.format("auto {} = buffer.readStringList();", list)).append(LS);
                         break;
-                    case Java:
+                    case Java, Dart:
                         builder.append(StringUtils.format("var {} = buffer.readStringList();", list)).append(LS);
                         break;
                     case Kotlin:
@@ -758,6 +758,9 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             break;
                         case Java:
                             builder.append(StringUtils.format("var {} = buffer.readPacketList({}.class, (short) {});", list, protocolName, protocolId)).append(LS);
+                            break;
+                        case Dart:
+                            builder.append(StringUtils.format("var {} = buffer.readPacketList<{}>({});", list, protocolName, protocolId)).append(LS);
                             break;
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readPacketList({}::class.java, {})", list, protocolName, protocolId)).append(LS);
