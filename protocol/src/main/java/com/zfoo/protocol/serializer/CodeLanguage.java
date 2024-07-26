@@ -14,6 +14,7 @@ package com.zfoo.protocol.serializer;
 
 import com.zfoo.protocol.serializer.cpp.CodeGenerateCpp;
 import com.zfoo.protocol.serializer.csharp.CodeGenerateCsharp;
+import com.zfoo.protocol.serializer.dart.CodeGenerateDart;
 import com.zfoo.protocol.serializer.ecmascript.CodeGenerateEcmaScript;
 import com.zfoo.protocol.serializer.gdscript.CodeGenerateGdScript;
 import com.zfoo.protocol.serializer.golang.CodeGenerateGolang;
@@ -43,6 +44,8 @@ public enum CodeLanguage {
     Kotlin(1 << 2, CodeGenerateKotlin.class),
 
     Scala(1 << 3, CodeGenerateScala.class),
+
+    Dart(1 << 3, CodeGenerateDart.class),
 
     Cpp(1 << 7, CodeGenerateCpp.class),
 

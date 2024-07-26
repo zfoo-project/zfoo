@@ -92,6 +92,7 @@ public abstract class GenerateProtocolNote {
             case TypeScript:
             case CSharp:
             case Php:
+            case Dart:
             case Protobuf:
                 note = StringUtils.format("// {}", note);
                 break;
