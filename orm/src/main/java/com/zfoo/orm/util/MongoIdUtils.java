@@ -14,11 +14,14 @@
 package com.zfoo.orm.util;
 
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.Updates;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -50,16 +53,13 @@ public abstract class MongoIdUtils {
     public static long getIncrementIdFromMongo(String collectionName, String documentName) {
         var collection = OrmContext.getOrmManager().getCollection(collectionName);
 
-        var document = collection.findOneAndUpdate(Filters.eq("_id", documentName)
-                , new Document("$inc", new Document(COUNT, 1L)));
+        Bson query = Filters.eq("_id", documentName);
+        Document inc = new Document("$inc", new Document(COUNT, 1L));
+        Document setOnInsert = new Document("$setOnInsert", new Document("_id", documentName));
 
-        if (document == null) {
-            var result = collection.insertOne(new Document("_id", documentName).append(COUNT, INIT_ID));
-            AssertionUtils.notNull(result.getInsertedId());
-            return INIT_ID;
-        }
+        var document = collection.findOneAndUpdate(query, Updates.combine(inc, setOnInsert), new FindOneAndUpdateOptions().upsert(true));
 
-        return document.getLong("count") + 1;
+        return null == document ? INIT_ID : document.getLong(COUNT) + 1;
     }
 
     public static long getIncrementIdFromMongoDefault(String documentName) {
