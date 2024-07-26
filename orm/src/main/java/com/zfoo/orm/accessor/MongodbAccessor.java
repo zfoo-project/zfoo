@@ -65,12 +65,13 @@ public class MongodbAccessor implements IAccessor {
 
             var result = collection.replaceOne(filter, entity);
             if (result.getModifiedCount() <= 0) {
-                logger.warn("数据库[{}]中没有[id:{}]的字段，或者需要更新的数据和数据库中的相同", entityClazz.getSimpleName(), entity.id());
+                // 数据库中没有这个id或者需要更新的数据和数据库中的相同
+                logger.warn("database:[{}] 1.[_id:{}] not exist or 2. update entity is equal with database entity", entityClazz.getSimpleName(), entity.id());
                 return false;
             }
             return true;
         } catch (Throwable t) {
-            logger.error("更新update未知异常", t);
+            logger.error("update unknown exception", t);
         }
         return false;
     }
@@ -92,11 +93,12 @@ public class MongodbAccessor implements IAccessor {
 
             var result = collection.bulkWrite(batchList, new BulkWriteOptions().ordered(false));
             if (result.getModifiedCount() != entities.size()) {
-                logger.warn("在数据库[{}]的批量更新操作中需要更新的数量[{}]和最终更新的数量[{}]不相同（大部分原因都是因为需要更新的文档和数据库的文档相同）"
+                // 在数据库的批量更新操作中需要更新的数量和最终更新的数量不相同（大部分原因都是因为需要更新的文档和数据库的文档相同）
+                logger.warn("database:[{}] update size:[{}] not equal with modified size:[{}](Most of the reasons is that update entity is equal with database entity)"
                         , entityClazz.getSimpleName(), entities.size(), result.getModifiedCount());
             }
         } catch (Throwable t) {
-            logger.error("批量更新batchUpdate未知异常", t);
+            logger.error("batchUpdate unknown exception", t);
         }
     }
 
