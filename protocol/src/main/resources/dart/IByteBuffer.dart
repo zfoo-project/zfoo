@@ -1,6 +1,10 @@
 import 'dart:typed_data';
 
 abstract class IByteBuffer {
+  void adjustPadding(int predictionLength, int beforeWriteIndex);
+
+  bool compatibleRead(int beforeReadIndex, int length);
+
   Int8List getBuffer();
 
   int getWriteOffset();
@@ -32,6 +36,8 @@ abstract class IByteBuffer {
   void writeShort(int value);
 
   int readShort();
+
+  int writeIntCount(int value);
 
   void writeRawInt(int value);
 

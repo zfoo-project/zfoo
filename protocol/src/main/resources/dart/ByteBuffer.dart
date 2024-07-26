@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+
 import 'IByteBuffer.dart';
 import 'ProtocolManager.dart';
 
@@ -7,6 +8,30 @@ class ByteBuffer implements IByteBuffer {
   Int8List buffer = Int8List(128);
   int writeOffset = 0;
   int readOffset = 0;
+
+  @override
+  void adjustPadding(int predictionLength, int beforeWriteIndex) {
+    var currentWriteIndex = getWriteOffset();
+    var predictionCount = writeIntCount(predictionLength);
+    var length = currentWriteIndex - beforeWriteIndex - predictionCount;
+    var lengthCount = writeIntCount(length);
+    var padding = lengthCount - predictionCount;
+    if (padding == 0) {
+      setWriteOffset(beforeWriteIndex);
+      writeInt(length);
+      setWriteOffset(currentWriteIndex);
+    } else {
+      var retainedByteBuf = buffer.sublist(currentWriteIndex - length, currentWriteIndex);
+      setWriteOffset(beforeWriteIndex);
+      writeInt(length);
+      writeBytes(retainedByteBuf);
+    }
+  }
+
+  @override
+  bool compatibleRead(int beforeReadIndex, int length) {
+    return length != -1 && getReadOffset() < length + beforeReadIndex;
+  }
 
   @override
   Int8List getBuffer() {
@@ -127,6 +152,29 @@ class ByteBuffer implements IByteBuffer {
     var value = buffer.buffer.asByteData().getInt32(readOffset);
     readOffset += 4;
     return value;
+  }
+
+  @override
+  int writeIntCount(int value) {
+    value = (value << 1) ^ (value >> 31);
+
+    if (value >>> 7 == 0) {
+      return 1;
+    }
+
+    if (value >>> 14 == 0) {
+      return 2;
+    }
+
+    if (value >>> 21 == 0) {
+      return 3;
+    }
+
+    if (value >>> 28 == 0) {
+      return 4;
+    }
+
+    return 5;
   }
 
   @override
@@ -323,4 +371,3 @@ class ByteBuffer implements IByteBuffer {
     return protocol.read(this);
   }
 }
-
