@@ -57,15 +57,20 @@ public abstract class MongoIdUtils {
     public static long getIncrementIdFromMongo(String collectionName, String documentName) {
         var collection = OrmContext.getOrmManager().getCollection(collectionName);
 
+        var document = collection.findOneAndUpdate(Filters.eq("_id", documentName)
+          , new Document("$inc", new Document(COUNT, 1L)));
+
+        if (document != null) {
+            return document.getLong("count") + 1;
+        }
+
         Bson query = Filters.eq("_id", documentName);
         Document inc = new Document("$inc", new Document(COUNT, 1L));
         Document setOnInsert = new Document("$setOnInsert", new Document("_id", documentName));
-
-
-        // 报错后重试获取id，在大并发create这个key的时候mongodb总是会报错一次“duplicate key error!” 所以重试一次
+        // 报错后重试创建并获取id，在大并发create的时候mongodb总是会报错一次“duplicate key error!” 所以重试一次
         for (int i = 0; i < 2; i++) {
             try {
-                var document = collection.findOneAndUpdate(query, Updates.combine(inc, setOnInsert), new FindOneAndUpdateOptions().upsert(true));
+                document = collection.findOneAndUpdate(query, Updates.combine(inc, setOnInsert), new FindOneAndUpdateOptions().upsert(true));
                 return null == document ? INIT_ID : document.getLong(COUNT) + 1;
             } catch (Throwable throwable) {
                 logger.info("getIncrementIdFromMongo error! retry! ", throwable);
