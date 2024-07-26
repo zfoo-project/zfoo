@@ -22,6 +22,8 @@ import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -31,6 +33,8 @@ import java.util.function.Consumer;
  * @author godotg
  */
 public abstract class MongoIdUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(MongoIdUtils.class);
 
     private static final long INIT_ID = 1L;
 
@@ -57,9 +61,18 @@ public abstract class MongoIdUtils {
         Document inc = new Document("$inc", new Document(COUNT, 1L));
         Document setOnInsert = new Document("$setOnInsert", new Document("_id", documentName));
 
-        var document = collection.findOneAndUpdate(query, Updates.combine(inc, setOnInsert), new FindOneAndUpdateOptions().upsert(true));
 
-        return null == document ? INIT_ID : document.getLong(COUNT) + 1;
+        // 报错后重试获取id，在大并发create这个key的时候mongodb总是会报错一次“duplicate key error!” 所以重试一次
+        for (int i = 0; i < 2; i++) {
+            try {
+                var document = collection.findOneAndUpdate(query, Updates.combine(inc, setOnInsert), new FindOneAndUpdateOptions().upsert(true));
+                return null == document ? INIT_ID : document.getLong(COUNT) + 1;
+            } catch (Throwable throwable) {
+                logger.info("getIncrementIdFromMongo error! retry! ", throwable);
+            }
+        }
+
+        throw new RuntimeException("getIncrementIdFromMongo error!");
     }
 
     public static long getIncrementIdFromMongoDefault(String documentName) {
