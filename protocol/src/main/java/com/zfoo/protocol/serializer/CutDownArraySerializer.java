@@ -515,10 +515,10 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         case CSharp:
                             builder.append(StringUtils.format("buffer.WritePacketArray<{}>({}, {});", protocolName, objectStr, protocolId)).append(LS);
                             break;
-                        case Cpp, Dart:
+                        case Cpp:
                             builder.append(StringUtils.format("buffer.writePacketArray<{}>({}, {});", protocolName, objectStr, protocolId)).append(LS);
                             break;
-                        case JavaScript, EcmaScript, TypeScript:
+                        case Dart, JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {});", objectStr, protocolId)).append(LS);
                             break;
                         case Rust, Golang, Protobuf, Java, Kotlin, Scala:

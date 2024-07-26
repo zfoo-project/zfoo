@@ -745,11 +745,11 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         case Cpp:
                             builder.append(StringUtils.format("auto {} = buffer.readPacketSet<{}>({});", set, protocolName, protocolId)).append(LS);
                             break;
-                        case Java:
-                            builder.append(StringUtils.format("var {} = buffer.readPacketSet({}.class, (short) {});", set, protocolName, protocolId)).append(LS);
-                            break;
                         case Dart:
                             builder.append(StringUtils.format("var {} = buffer.readPacketSet<{}>({});", set, protocolName, protocolId)).append(LS);
+                            break;
+                        case Java:
+                            builder.append(StringUtils.format("var {} = buffer.readPacketSet({}.class, (short) {});", set, protocolName, protocolId)).append(LS);
                             break;
                         case Kotlin:
                             builder.append(StringUtils.format("val {} = buffer.readPacketSet({}::class.java, {})", set, protocolName, protocolId)).append(LS);
