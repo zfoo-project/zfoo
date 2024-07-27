@@ -87,12 +87,17 @@ namespace zfoo {
                 writeInt(length);
                 setWriteOffset(currentWriteIndex);
             } else {
-                int8_t *targetPtr = (int8_t *) calloc(length, sizeof(int8_t));
-                memcpy(targetPtr, &buffer[currentWriteIndex - length], length);
+//                int8_t *targetPtr = (int8_t *) calloc(length, sizeof(int8_t));
+//                memcpy(targetPtr, &buffer[currentWriteIndex - length], length);
+//                setWriteOffset(beforeWriteIndex);
+//                writeInt(length);
+//                writeBytes(targetPtr, length);
+//                free(targetPtr);
+
+                memmove(&buffer[beforeWriteIndex + lengthCount], &buffer[currentWriteIndex - length], length);
                 setWriteOffset(beforeWriteIndex);
                 writeInt(length);
-                writeBytes(targetPtr, length);
-                free(targetPtr);
+                setWriteOffset(beforeWriteIndex + lengthCount + length);
             }
         }
 
