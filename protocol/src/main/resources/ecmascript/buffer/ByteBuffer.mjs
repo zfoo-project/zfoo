@@ -64,6 +64,7 @@ class ByteBuffer {
             this.writeInt(length);
             this.setWriteOffset(currentWriteIndex);
         } else {
+            // ArrayBuffer slice is deep clone
             const retainedByteBuf = this.buffer.slice(currentWriteIndex - length, currentWriteIndex);
             this.setWriteOffset(beforeWriteIndex);
             this.writeInt(length);
