@@ -56,7 +56,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeBoolArray({})", objectStr)).append(LS);
                         break;
-                    case Kotlin, Scala, Python, Ruby:
+                    case Kotlin, Scala, Python, Ruby, Swift:
                         builder.append(StringUtils.format("buffer.writeBoolSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -89,7 +89,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeByteArray({})", objectStr)).append(LS);
                         break;
-                    case Kotlin, Scala, Python, Ruby:
+                    case Kotlin, Scala, Python, Ruby, Swift:
                         builder.append(StringUtils.format("buffer.writeByteSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -122,7 +122,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeShortArray({})", objectStr)).append(LS);
                         break;
-                    case Kotlin, Scala, Python, Ruby:
+                    case Kotlin, Scala, Python, Ruby, Swift:
                         builder.append(StringUtils.format("buffer.writeShortSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -155,7 +155,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeIntArray({})", objectStr)).append(LS);
                         break;
-                    case Kotlin, Scala, Python, Ruby:
+                    case Kotlin, Scala, Python, Ruby, Swift:
                         builder.append(StringUtils.format("buffer.writeIntSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -188,7 +188,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeLongArray({})", objectStr)).append(LS);
                         break;
-                    case Kotlin, Scala, Python, Ruby:
+                    case Kotlin, Scala, Python, Ruby, Swift:
                         builder.append(StringUtils.format("buffer.writeLongSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -218,7 +218,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeFloatArray({})", objectStr)).append(LS);
                         break;
-                    case Kotlin, Scala, Python, Ruby:
+                    case Kotlin, Scala, Python, Ruby, Swift:
                         builder.append(StringUtils.format("buffer.writeFloatSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -249,7 +249,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeDoubleArray({})", objectStr)).append(LS);
                         break;
-                    case Kotlin, Scala, Python, Ruby:
+                    case Kotlin, Scala, Python, Ruby, Swift:
                         builder.append(StringUtils.format("buffer.writeDoubleSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -283,7 +283,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case GdScript:
                         builder.append(StringUtils.format("buffer.writeStringArray({})", objectStr)).append(LS);
                         break;
-                    case Kotlin, Scala, Python, Ruby:
+                    case Kotlin, Scala, Python, Ruby, Swift:
                         builder.append(StringUtils.format("buffer.writeStringSet({})", objectStr)).append(LS);
                         break;
                     case Lua:
@@ -334,7 +334,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         case Java:
                             builder.append(StringUtils.format("buffer.writePacketSet({}, (short) {});", objectStr, protocolId)).append(LS);
                             break;
-                        case Rust, Golang, Protobuf:
+                        case Rust, Swift, Golang, Protobuf:
                         default:
                             flag = false;
                     }
@@ -361,6 +361,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Rust:
                         builder.append(StringUtils.format("let {} = buffer.readBoolSet();", set)).append(LS);
+                        break;
+                    case Swift:
+                        builder.append(StringUtils.format("let {} = buffer.readBoolSet()", set)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readBoolArray()", set)).append(LS);
@@ -408,6 +411,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Rust:
                         builder.append(StringUtils.format("let {} = buffer.readByteSet();", set)).append(LS);
                         break;
+                    case Swift:
+                        builder.append(StringUtils.format("let {} = buffer.readByteSet()", set)).append(LS);
+                        break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readByteArray()", set)).append(LS);
                         break;
@@ -453,6 +459,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Rust:
                         builder.append(StringUtils.format("let {} = buffer.readShortSet();", set)).append(LS);
+                        break;
+                    case Swift:
+                        builder.append(StringUtils.format("let {} = buffer.readShortSet()", set)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readShortArray()", set)).append(LS);
@@ -500,6 +509,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Rust:
                         builder.append(StringUtils.format("let {} = buffer.readIntSet();", set)).append(LS);
                         break;
+                    case Swift:
+                        builder.append(StringUtils.format("let {} = buffer.readIntSet()", set)).append(LS);
+                        break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readIntArray()", set)).append(LS);
                         break;
@@ -546,6 +558,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                     case Rust:
                         builder.append(StringUtils.format("let {} = buffer.readLongSet();", set)).append(LS);
                         break;
+                    case Swift:
+                        builder.append(StringUtils.format("let {} = buffer.readLongSet()", set)).append(LS);
+                        break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readLongArray()", set)).append(LS);
                         break;
@@ -588,6 +603,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("Set {} = {}.readFloatSet($1);", set, EnhanceUtils.byteBufUtils));
+                        break;
+                    case Swift:
+                        builder.append(StringUtils.format("let {} = buffer.readFloatArray()", set)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readFloatArray()", set)).append(LS);
@@ -632,6 +650,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                 switch (language) {
                     case Enhance:
                         builder.append(StringUtils.format("Set {} = {}.readDoubleSet($1);", set, EnhanceUtils.byteBufUtils));
+                        break;
+                    case Swift:
+                        builder.append(StringUtils.format("let {} = buffer.readDoubleArray()", set)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readDoubleArray()", set)).append(LS);
@@ -679,6 +700,9 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         break;
                     case Rust:
                         builder.append(StringUtils.format("let {} = buffer.readStringSet();", set)).append(LS);
+                        break;
+                    case Swift:
+                        builder.append(StringUtils.format("let {} = buffer.readStringSet()", set)).append(LS);
                         break;
                     case GdScript:
                         builder.append(StringUtils.format("var {} = buffer.readStringArray()", set)).append(LS);
@@ -760,7 +784,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                         case JavaScript, EcmaScript, TypeScript:
                             builder.append(StringUtils.format("const {} = buffer.readPacketSet({});", set, protocolId)).append(LS);
                             break;
-                        case Rust, Golang, Protobuf:
+                        case Rust, Swift, Golang, Protobuf:
                         default:
                             flag = false;
                     }

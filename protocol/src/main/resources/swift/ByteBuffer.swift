@@ -569,4 +569,181 @@ class ByteBuffer {
         }
         return array
     }
+
+    func writeBoolSet(_ set: Set<Bool>) {
+        if (set.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(set.count)
+            for ele in set {
+                writeBool(ele)
+            }
+        }
+    }
+
+    func readBoolSet() -> Set<Bool> {
+        let size = readInt()
+        var set = Set<Bool>()
+        if (size > 0) {
+            for _ in 0..<size {
+                set.insert(readBool())
+            }
+        }
+        return set
+    }
+
+    func writeByteSet(_ set: Set<Int8>) {
+        if (set.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(set.count)
+            for ele in set {
+                writeByte(ele)
+            }
+        }
+    }
+
+    func readByteSet() -> Set<Int8> {
+        let size = readInt()
+        var set = Set<Int8>()
+        if (size > 0) {
+            for _ in 0..<size {
+                set.insert(readByte())
+            }
+        }
+        return set
+    }
+
+    func writeShortSet(_ set: Set<Int16>) {
+        if (set.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(set.count)
+            for ele in set {
+                writeShort(ele)
+            }
+        }
+    }
+
+    func readShortSet() -> Set<Int16> {
+        let size = readInt()
+        var set = Set<Int16>()
+        if (size > 0) {
+            for _ in 0..<size {
+                set.insert(readShort())
+            }
+        }
+        return set
+    }
+
+    func writeIntSet(_ set: Set<Int>) {
+        if (set.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(set.count)
+            for ele in set {
+                writeInt(ele)
+            }
+        }
+    }
+
+    func readIntSet() -> Set<Int> {
+        let size = readInt()
+        var set = Set<Int>()
+        if (size > 0) {
+            for _ in 0..<size {
+                set.insert(readInt())
+            }
+        }
+        return set
+    }
+
+    func writeLongSet(_ set: Set<Int64>) {
+        if (set.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(set.count)
+            for ele in set {
+                writeLong(ele)
+            }
+        }
+    }
+
+    func readLongSet() -> Set<Int64> {
+        let size = readInt()
+        var set = Set<Int64>()
+        if (size > 0) {
+            for _ in 0..<size {
+                set.insert(readLong())
+            }
+        }
+        return set
+    }
+
+    func writeFloatSet(_ set: Set<Float32>) {
+        if (set.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(set.count)
+            for ele in set {
+                writeFloat(ele)
+            }
+        }
+    }
+
+    func readFloatSet() -> Set<Float32> {
+        let size = readInt()
+        var set = Set<Float32>()
+        if (size > 0) {
+            for _ in 0..<size {
+                set.insert(readFloat())
+            }
+        }
+        return set
+    }
+
+    func writeDoubleSet(_ set: Set<Float64>) {
+        if (set.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(set.count)
+            for ele in set {
+                writeDouble(ele)
+            }
+        }
+    }
+
+    func readDoubleSet() -> Set<Float64> {
+        let size = readInt()
+        var set = Set<Float64>()
+        if (size > 0) {
+            for _ in 0..<size {
+                set.insert(readDouble())
+            }
+        }
+        return set
+    }
+
+    func writeStringSet(_ set: Set<String>) {
+        if (set.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(set.count)
+            for ele in set {
+                writeString(ele)
+            }
+        }
+    }
+
+    func readStringSet() -> Set<String> {
+        let size = readInt()
+        var set = Set<String>()
+        if (size > 0) {
+            for _ in 0..<size {
+                set.insert(readString())
+            }
+        }
+        return set
+    }
+
 }
