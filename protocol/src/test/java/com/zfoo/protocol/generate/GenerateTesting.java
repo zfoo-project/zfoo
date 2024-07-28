@@ -42,6 +42,8 @@ public class GenerateTesting {
         generateLanguages.add(CodeLanguage.Java);
         generateLanguages.add(CodeLanguage.Kotlin);
         generateLanguages.add(CodeLanguage.Scala);
+        generateLanguages.add(CodeLanguage.Dart);
+        generateLanguages.add(CodeLanguage.Swift);
         generateLanguages.add(CodeLanguage.Golang);
         generateLanguages.add(CodeLanguage.JavaScript);
         generateLanguages.add(CodeLanguage.EcmaScript);
@@ -60,8 +62,8 @@ public class GenerateTesting {
 
     @Test
     public void copyFiles() throws IOException {
-        var sourceDirectory = "D:\\Project\\zfoo\\protocol\\zfoophp";
-        var targetDirectory = "D:\\github\\zfoo-php-support2\\zfoophp";
+        var sourceDirectory = "D:\\github\\zfoo\\protocol\\zfoophp";
+        var targetDirectory = "D:\\github\\zfoo-php-support\\zfoophp";
         FileUtils.deleteFile(new File(targetDirectory));
         FileUtils.copyDirectory(new File(sourceDirectory), new File(targetDirectory));
     }
