@@ -64,6 +64,14 @@ class ByteBuffer {
         return Array<Int8>(bytes)
     }
     
+    func writeUBytes(_ bytes: [UInt8]) {
+        let length = bytes.count
+        ensureCapacity(length)
+        for ubyte in bytes {
+            writeUByte(ubyte)
+        }
+    }
+    
     func toBytes() -> [Int8] {
         return Array<Int8>(buffer[0..<writeOffset])
     }
