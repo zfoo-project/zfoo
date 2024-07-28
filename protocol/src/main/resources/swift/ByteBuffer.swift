@@ -371,4 +371,202 @@ class ByteBuffer {
         let pro = ProtocolManager.getProtocol(protocolId)
         return pro.read(self)
     }
+
+    func writeBoolArray(_ array: Array<Bool>) {
+        if (array.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(array.count)
+            for ele in array {
+                writeBool(ele)
+            }
+        }
+    }
+
+    func readBoolArray() -> Array<Bool> {
+        let size = readInt()
+        var array = Array<Bool>()
+        if (size > 0) {
+            for _ in 0..<size {
+                array.append(readBool())
+            }
+        }
+        return array
+    }
+
+    func writeByteArray(_ array: Array<Int8>) {
+        if (array.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(array.count)
+            for ele in array {
+                writeByte(ele)
+            }
+        }
+    }
+
+    func readByteArray() -> Array<Int8> {
+        let size = readInt()
+        var array = Array<Int8>()
+        if (size > 0) {
+            for _ in 0..<size {
+                array.append(readByte())
+            }
+        }
+        return array
+    }
+
+    func writeShortArray(_ array: Array<Int16>) {
+        if (array.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(array.count)
+            for ele in array {
+                writeShort(ele)
+            }
+        }
+    }
+
+    func readShortArray() -> Array<Int16> {
+        let size = readInt()
+        var array = Array<Int16>()
+        if (size > 0) {
+            for _ in 0..<size {
+                array.append(readShort())
+            }
+        }
+        return array
+    }
+
+    func writeIntArray(_ array: Array<Int>) {
+        if (array.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(array.count)
+            for ele in array {
+                writeInt(ele)
+            }
+        }
+    }
+
+    func readIntArray() -> Array<Int> {
+        let size = readInt()
+        var array = Array<Int>()
+        if (size > 0) {
+            for _ in 0..<size {
+                array.append(readInt())
+            }
+        }
+        return array
+    }
+
+    func writeLongArray(_ array: Array<Int64>) {
+        if (array.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(array.count)
+            for ele in array {
+                writeLong(ele)
+            }
+        }
+    }
+
+    func readLongArray() -> Array<Int64> {
+        let size = readInt()
+        var array = Array<Int64>()
+        if (size > 0) {
+            for _ in 0..<size {
+                array.append(readLong())
+            }
+        }
+        return array
+    }
+
+    func writeFloatArray(_ array: Array<Float32>) {
+        if (array.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(array.count)
+            for ele in array {
+                writeFloat(ele)
+            }
+        }
+    }
+
+    func readFloatArray() -> Array<Float32> {
+        let size = readInt()
+        var array = Array<Float32>()
+        if (size > 0) {
+            for _ in 0..<size {
+                array.append(readFloat())
+            }
+        }
+        return array
+    }
+
+    func writeDoubleArray(_ array: Array<Float64>) {
+        if (array.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(array.count)
+            for ele in array {
+                writeDouble(ele)
+            }
+        }
+    }
+
+    func readDoubleArray() -> Array<Float64> {
+        let size = readInt()
+        var array = Array<Float64>()
+        if (size > 0) {
+            for _ in 0..<size {
+                array.append(readDouble())
+            }
+        }
+        return array
+    }
+
+    func writeStringArray(_ array: Array<String>) {
+        if (array.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(array.count)
+            for ele in array {
+                writeString(ele)
+            }
+        }
+    }
+
+    func readStringArray() -> Array<String> {
+        let size = readInt()
+        var array = Array<String>()
+        if (size > 0) {
+            for _ in 0..<size {
+                array.append(readString())
+            }
+        }
+        return array
+    }
+
+    func writePacketArray(_ array: Array<Any>, _ protocolId: Int) {
+        if (array.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(array.count)
+            for ele in array {
+                writePacket(ele, protocolId)
+            }
+        }
+    }
+
+    func readPacketArray(_ protocolId: Int) -> Array<Any> {
+        let size = readInt()
+        var array = Array<Any>()
+        if (size > 0) {
+            for _ in 0..<size {
+                array.append(readPacket(protocolId))
+            }
+        }
+        return array
+    }
 }
