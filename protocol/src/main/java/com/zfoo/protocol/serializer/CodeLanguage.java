@@ -27,6 +27,7 @@ import com.zfoo.protocol.serializer.python.CodeGeneratePython;
 import com.zfoo.protocol.serializer.ruby.CodeGenerateRuby;
 import com.zfoo.protocol.serializer.rust.CodeGenerateRust;
 import com.zfoo.protocol.serializer.scala.CodeGenerateScala;
+import com.zfoo.protocol.serializer.swift.CodeGenerateSwift;
 import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
 
 /**
@@ -46,6 +47,8 @@ public enum CodeLanguage {
     Scala(1 << 3, CodeGenerateScala.class),
 
     Dart(1 << 3, CodeGenerateDart.class),
+
+    Swift(1 << 4, CodeGenerateSwift.class),
 
     Cpp(1 << 7, CodeGenerateCpp.class),
 
