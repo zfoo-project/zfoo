@@ -746,4 +746,253 @@ class ByteBuffer {
         return set
     }
 
+    func writeIntIntMap(_ map: Dictionary<Int, Int>) {
+        if (map.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(map.count)
+            for (key, value) in map {
+                writeInt(key)
+                writeInt(value)
+            }
+        }
+    }
+
+    func readIntIntMap() -> Dictionary<Int, Int> {
+        let size = readInt()
+        var map = Dictionary<Int, Int>()
+        if (size > 0) {
+            for _ in 0..<size {
+                let key = readInt()
+                let value = readInt()
+                map[key] = value
+            }
+        }
+        return map
+    }
+
+    func writeIntLongMap(_ map: Dictionary<Int, Int64>) {
+        if (map.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(map.count)
+            for (key, value) in map {
+                writeInt(key)
+                writeLong(value)
+            }
+        }
+    }
+
+    func readIntLongMap() -> Dictionary<Int, Int64> {
+        let size = readInt()
+        var map = Dictionary<Int, Int64>()
+        if (size > 0) {
+            for _ in 0..<size {
+                let key = readInt()
+                let value = readLong()
+                map[key] = value
+            }
+        }
+        return map
+    }
+
+    func writeIntStringMap(_ map: Dictionary<Int, String>) {
+        if (map.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(map.count)
+            for (key, value) in map {
+                writeInt(key)
+                writeString(value)
+            }
+        }
+    }
+
+    func readIntStringMap() -> Dictionary<Int, String> {
+        let size = readInt()
+        var map = Dictionary<Int, String>()
+        if (size > 0) {
+            for _ in 0..<size {
+                let key = readInt()
+                let value = readString()
+                map[key] = value
+            }
+        }
+        return map
+    }
+
+    func writeIntPacketMap(_ map: Dictionary<Int, Any>, _ protocolId: Int) {
+        if (map.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(map.count)
+            for (key, value) in map {
+                writeInt(key)
+                writePacket(value, protocolId)
+            }
+        }
+    }
+
+    func readIntPacketMap(_ protocolId: Int) -> Dictionary<Int, Any> {
+        let size = readInt()
+        var map = Dictionary<Int, Any>()
+        if (size > 0) {
+            for _ in 0..<size {
+                let key = readInt()
+                let value = readPacket(protocolId)
+                map[key] = value
+            }
+        }
+        return map
+    }
+
+    func writeLongIntMap(_ map: Dictionary<Int64, Int>) {
+        if (map.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(map.count)
+            for (key, value) in map {
+                writeLong(key)
+                writeInt(value)
+            }
+        }
+    }
+
+    func readLongIntMap() -> Dictionary<Int64, Int> {
+        let size = readInt()
+        var map = Dictionary<Int64, Int>()
+        if (size > 0) {
+            for _ in 0..<size {
+                let key = readLong()
+                let value = readInt()
+                map[key] = value
+            }
+        }
+        return map
+    }
+
+    func writeLongLongMap(_ map: Dictionary<Int64, Int64>) {
+        if (map.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(map.count)
+            for (key, value) in map {
+                writeLong(key)
+                writeLong(value)
+            }
+        }
+    }
+
+    func readLongLongMap() -> Dictionary<Int64, Int64> {
+        let size = readInt()
+        var map = Dictionary<Int64, Int64>()
+        if (size > 0) {
+            for _ in 0..<size {
+                let key = readLong()
+                let value = readLong()
+                map[key] = value
+            }
+        }
+        return map
+    }
+
+    func writeLongPacketMap(_ map: Dictionary<Int64, Any>, _ protocolId: Int) {
+        if (map.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(map.count)
+            for (key, value) in map {
+                writeLong(key)
+                writePacket(value, protocolId)
+            }
+        }
+    }
+
+    func readLongPacketMap(_ protocolId: Int) -> Dictionary<Int64, Any> {
+        let size = readInt()
+        var map = Dictionary<Int64, Any>()
+        if (size > 0) {
+            for _ in 0..<size {
+                let key = readLong()
+                let value = readPacket(protocolId)
+                map[key] = value
+            }
+        }
+        return map
+    }
+
+    func writeStringIntMap(_ map: Dictionary<String, Int>) {
+        if (map.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(map.count)
+            for (key, value) in map {
+                writeString(key)
+                writeInt(value)
+            }
+        }
+    }
+
+    func readStringIntMap() -> Dictionary<String, Int> {
+        let size = readInt()
+        var map = Dictionary<String, Int>()
+        if (size > 0) {
+            for _ in 0..<size {
+                let key = readString()
+                let value = readInt()
+                map[key] = value
+            }
+        }
+        return map
+    }
+
+    func writeStringLongMap(_ map: Dictionary<String, Int64>) {
+        if (map.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(map.count)
+            for (key, value) in map {
+                writeString(key)
+                writeLong(value)
+            }
+        }
+    }
+
+    func readStringLongMap() -> Dictionary<String, Int64> {
+        let size = readInt()
+        var map = Dictionary<String, Int64>()
+        if (size > 0) {
+            for _ in 0..<size {
+                let key = readString()
+                let value = readLong()
+                map[key] = value
+            }
+        }
+        return map
+    }
+
+    func writeStringPacketMap(_ map: Dictionary<String, Any>, _ protocolId: Int) {
+        if (map.isEmpty) {
+            writeInt(0)
+        } else {
+            writeInt(map.count)
+            for (key, value) in map {
+                writeString(key)
+                writePacket(value, protocolId)
+            }
+        }
+    }
+
+    func readStringPacketMap(_ protocolId: Int) -> Dictionary<String, Any> {
+        let size = readInt()
+        var map = Dictionary<String, Any>()
+        if (size > 0) {
+            for _ in 0..<size {
+                let key = readString()
+                let value = readPacket(protocolId)
+                map[key] = value
+            }
+        }
+        return map
+    }
 }
