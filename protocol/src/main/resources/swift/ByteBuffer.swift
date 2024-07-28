@@ -54,6 +54,7 @@ class ByteBuffer {
     
     func writeBytes(_ bytes: [Int8]) {
         let length = bytes.count
+        ensureCapacity(length)
         buffer[writeOffset..<(writeOffset + length)] = bytes[0..<length]
         writeOffset += length
     }
@@ -67,9 +68,8 @@ class ByteBuffer {
     func writeUBytes(_ bytes: [UInt8]) {
         let length = bytes.count
         ensureCapacity(length)
-        for ubyte in bytes {
-            writeUByte(ubyte)
-        }
+        let newBytes = bytes.map { Int8(bitPattern: $0) }
+        writeBytes(newBytes)
     }
     
     func toBytes() -> [Int8] {
@@ -82,10 +82,9 @@ class ByteBuffer {
     
     func ensureCapacity(_ capacity: Int) {
         while (capacity - getCapacity() > 0) {
-            let newSize = buffer.count * 2
-            var newBytes = Array<Int8>(repeating: 0, count: newSize)
-            newBytes.append(contentsOf: buffer)
-            buffer = newBytes
+            let newSize = buffer.count
+            let newBytes = Array<Int8>(repeating: 0, count: newSize)
+            buffer.append(contentsOf: newBytes)
         }
     }
     
@@ -320,22 +319,22 @@ class ByteBuffer {
     }
     
     func writeFloat(_ value: Float32) {
-        let v = value.bitPattern.bigEndian
+        let v = value.bitPattern
         writeRawInt(Int32(bitPattern: v))
     }
     
     func readFloat() -> Float32 {
-        let value = UInt32(bitPattern: readRawInt()).bigEndian
+        let value = UInt32(bitPattern: readRawInt())
         return Float32(bitPattern: value)
     }
     
     func writeDouble(_ value: Float64) {
-        let v = value.bitPattern.bigEndian
+        let v = value.bitPattern
         writeRawLong(Int64(bitPattern: v))
     }
     
     func readDouble() -> Float64 {
-        let value = UInt64(bitPattern: readRawLong()).bigEndian
+        let value = UInt64(bitPattern: readRawLong())
         return Float64(bitPattern: value)
     }
     

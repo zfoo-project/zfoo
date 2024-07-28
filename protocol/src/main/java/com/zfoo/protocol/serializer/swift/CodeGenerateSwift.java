@@ -79,24 +79,7 @@ public class CodeGenerateSwift implements ICodeGenerate {
 
     @Override
     public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
-        createTemplateFile();
-
-        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolManagerTemplate.kt");
-        var protocol_manager_registrations = new StringBuilder();
-        var protocol_imports = new StringBuilder();
-        for (var registration : registrations) {
-            var protocol_id = registration.protocolId();
-            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}Registration()", protocol_id, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocolIdMap.put({}::class.java, {})", protocol_name, protocol_id)).append(LS);
-        }
-
-        var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
-                , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
-        var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
-        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.kt"));
-        FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
-        logger.info("Generated Swift protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
+        createTemplateFile(registrations);
 
         var protocol_class = new StringBuilder();
         var protocol_registration = new StringBuilder();
@@ -107,13 +90,13 @@ public class CodeGenerateSwift implements ICodeGenerate {
             // registration
             protocol_registration.append(protocol_registration(registration)).append(LS);
         }
-        var protocolTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolsTemplate.kt");
+        var protocolTemplate = ClassUtils.getFileFromClassPathToString("swift/ProtocolsTemplate.swift");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
                 CodeTemplatePlaceholder.protocol_imports, StringUtils.EMPTY
                 , CodeTemplatePlaceholder.protocol_class, protocol_class.toString()
                 , CodeTemplatePlaceholder.protocol_registration, protocol_registration.toString()
         ));
-        var outputPath = StringUtils.format("{}/Protocols.kt", protocolOutputPath);
+        var outputPath = StringUtils.format("{}/Protocols.swift", protocolOutputPath);
         var file = new File(outputPath);
         FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
         logger.info("Generated Swift protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
@@ -121,34 +104,18 @@ public class CodeGenerateSwift implements ICodeGenerate {
 
     @Override
     public void foldProtocol(List<ProtocolRegistration> registrations) throws IOException {
-        createTemplateFile();
-
-        var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolManagerTemplate.kt");
-        var protocol_manager_registrations = new StringBuilder();
-        var protocol_imports = new StringBuilder();
-        for (var registration : registrations) {
-            var protocol_id = registration.protocolId();
-            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}Registration()", protocol_id, protocol_name)).append(LS);
-            protocol_manager_registrations.append(StringUtils.format("protocolIdMap[{}::class.java] = {}.toShort()", protocol_name, protocol_id)).append(LS);
-        }
-
-        var placeholderMap = Map.of(CodeTemplatePlaceholder.protocol_imports, protocol_imports.toString()
-                , CodeTemplatePlaceholder.protocol_manager_registrations, protocol_manager_registrations.toString());
-        var formatProtocolManagerTemplate = CodeTemplatePlaceholder.formatTemplate(protocolManagerTemplate, placeholderMap);
-        var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.kt"));
-        FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
-        logger.info("Generated Swift protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
+        createTemplateFile(registrations);
 
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var protocolTemplate = ClassUtils.getFileFromClassPathToString("kotlin/ProtocolTemplate.kt");
+            var protocolTemplate = ClassUtils.getFileFromClassPathToString("swift/ProtocolTemplate.swift");
             var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
-                    CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
+                    CodeTemplatePlaceholder.protocol_imports, StringUtils.EMPTY
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
                     , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
             ));
-            var outputPath = StringUtils.format("{}/{}/{}.kt", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
+            var outputPath = StringUtils.format("{}/{}/{}.swift", protocolOutputPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name);
             var file = new File(outputPath);
             FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
             logger.info("Generated Swift protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
@@ -157,7 +124,31 @@ public class CodeGenerateSwift implements ICodeGenerate {
 
     @Override
     public void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException {
-        createTemplateFile();
+        createTemplateFile(registrations);
+
+        for (var registration : registrations) {
+            var protocol_id = registration.protocolId();
+            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
+            var protocolTemplate = ClassUtils.getFileFromClassPathToString("swift/ProtocolTemplate.swift");
+            var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
+                    CodeTemplatePlaceholder.protocol_imports, StringUtils.EMPTY
+                    , CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
+                    , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
+            ));
+            var outputPath = StringUtils.format("{}/{}.swift", protocolOutputPath, protocol_name);
+            var file = new File(outputPath);
+            FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
+            logger.info("Generated Swift protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
+        }
+    }
+
+    private void createTemplateFile(List<ProtocolRegistration> registrations) throws IOException {
+        var list = List.of("swift/ByteBuffer.swift", "swift/IProtocolRegistration.swift");
+        for (var fileName : list) {
+            var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
+            var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "swift/")));
+            FileUtils.writeInputStreamToFile(createFile, fileInputStream);
+        }
 
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("swift/ProtocolManagerTemplate.swift");
         var protocol_manager_registrations = new StringBuilder();
@@ -172,30 +163,6 @@ public class CodeGenerateSwift implements ICodeGenerate {
         var protocolManagerFile = new File(StringUtils.format("{}/{}", protocolOutputRootPath, "ProtocolManager.swift"));
         FileUtils.writeStringToFile(protocolManagerFile, formatProtocolManagerTemplate, true);
         logger.info("Generated Swift protocol manager file:[{}] is in path:[{}]", protocolManagerFile.getName(), protocolManagerFile.getAbsolutePath());
-
-        for (var registration : registrations) {
-            var protocol_id = registration.protocolId();
-            var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            var protocolTemplate = ClassUtils.getFileFromClassPathToString("swift/ProtocolTemplate.swift");
-            var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
-                    CodeTemplatePlaceholder.protocol_imports, StringUtils.EMPTY
-                    ,CodeTemplatePlaceholder.protocol_class, protocol_class(registration)
-                    , CodeTemplatePlaceholder.protocol_registration, protocol_registration(registration)
-            ));
-            var outputPath = StringUtils.format("{}/{}.swift", protocolOutputPath, protocol_name);
-            var file = new File(outputPath);
-            FileUtils.writeStringToFile(file, formatProtocolTemplate, true);
-            logger.info("Generated Swift protocol file:[{}] is in path:[{}]", file.getName(), file.getAbsolutePath());
-        }
-    }
-
-    private void createTemplateFile() throws IOException {
-        var list = List.of("swift/ByteBuffer.swift", "swift/IProtocolRegistration.swift");
-        for (var fileName : list) {
-            var fileInputStream = ClassUtils.getFileFromClassPath(fileName);
-            var createFile = new File(StringUtils.format("{}/{}", protocolOutputPath, StringUtils.substringAfterFirst(fileName, "swift/")));
-            FileUtils.writeInputStreamToFile(createFile, fileInputStream);
-        }
     }
 
     private String protocol_class(ProtocolRegistration registration) {
@@ -229,7 +196,7 @@ public class CodeGenerateSwift implements ICodeGenerate {
         var protocolId = registration.getId();
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
-        var ktBuilder = new StringBuilder();
+        var swiftBuilder = new StringBuilder();
         var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
         for (int i = 0; i < sequencedFields.size(); i++) {
             var field = sequencedFields.get(i);
@@ -238,14 +205,14 @@ public class CodeGenerateSwift implements ICodeGenerate {
             // 生成注释
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Swift);
             for (var fieldNote : fieldNotes) {
-                ktBuilder.append(fieldNote).append(LS);
+                swiftBuilder.append(fieldNote).append(LS);
             }
             var fieldTypeDefaultValue = swiftSerializer(fieldRegistration.serializer()).fieldTypeDefaultValue(field, fieldRegistration);
             var fieldType = fieldTypeDefaultValue.getKey();
             var fieldDefaultValue = fieldTypeDefaultValue.getValue();
-            ktBuilder.append(StringUtils.format("var {}: {} = {}", fieldName, fieldType, fieldDefaultValue)).append(LS);
+            swiftBuilder.append(StringUtils.format("var {}: {} = {}", fieldName, fieldType, fieldDefaultValue)).append(LS);
         }
-        return ktBuilder.toString();
+        return swiftBuilder.toString();
     }
 
 
@@ -253,22 +220,22 @@ public class CodeGenerateSwift implements ICodeGenerate {
         GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
-        var ktBuilder = new StringBuilder();
+        var swiftBuilder = new StringBuilder();
         if (registration.isCompatible()) {
-            ktBuilder.append("let beforeWriteIndex = buffer.getWriteOffset()").append(LS);
-            ktBuilder.append(StringUtils.format("buffer.writeInt({})", registration.getPredictionLength())).append(LS);
+            swiftBuilder.append("let beforeWriteIndex = buffer.getWriteOffset()").append(LS);
+            swiftBuilder.append(StringUtils.format("buffer.writeInt({})", registration.getPredictionLength())).append(LS);
         } else {
-            ktBuilder.append("buffer.writeInt(-1)").append(LS);
+            swiftBuilder.append("buffer.writeInt(-1)").append(LS);
         }
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
-            swiftSerializer(fieldRegistration.serializer()).writeObject(ktBuilder, "message." + field.getName(), 0, field, fieldRegistration);
+            swiftSerializer(fieldRegistration.serializer()).writeObject(swiftBuilder, "message." + field.getName(), 0, field, fieldRegistration);
         }
         if (registration.isCompatible()) {
-            ktBuilder.append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex)", registration.getPredictionLength())).append(LS);
+            swiftBuilder.append(StringUtils.format("buffer.adjustPadding({}, beforeWriteIndex)", registration.getPredictionLength())).append(LS);
         }
-        return ktBuilder.toString();
+        return swiftBuilder.toString();
     }
 
 
@@ -276,22 +243,22 @@ public class CodeGenerateSwift implements ICodeGenerate {
         GenerateProtocolFile.localVariableId = 0;
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
-        var ktBuilder = new StringBuilder();
+        var swiftBuilder = new StringBuilder();
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
 
             if (field.isAnnotationPresent(Compatible.class)) {
-                ktBuilder.append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
-                var compatibleReadObject = swiftSerializer(fieldRegistration.serializer()).readObject(ktBuilder, 1, field, fieldRegistration);
-                ktBuilder.append(TAB).append(StringUtils.format("packet.{} = {}", field.getName(), compatibleReadObject)).append(LS);
-                ktBuilder.append("}").append(LS);
+                swiftBuilder.append("if (buffer.compatibleRead(beforeReadIndex, length)) {").append(LS);
+                var compatibleReadObject = swiftSerializer(fieldRegistration.serializer()).readObject(swiftBuilder, 1, field, fieldRegistration);
+                swiftBuilder.append(TAB).append(StringUtils.format("packet.{} = {}", field.getName(), compatibleReadObject)).append(LS);
+                swiftBuilder.append("}").append(LS);
                 continue;
             }
-            var readObject = swiftSerializer(fieldRegistration.serializer()).readObject(ktBuilder, 0, field, fieldRegistration);
-            ktBuilder.append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);
+            var readObject = swiftSerializer(fieldRegistration.serializer()).readObject(swiftBuilder, 0, field, fieldRegistration);
+            swiftBuilder.append(StringUtils.format("packet.{} = {}", field.getName(), readObject)).append(LS);
         }
-        return ktBuilder.toString();
+        return swiftBuilder.toString();
     }
 
     public static String toSwiftClassName(String typeName) {
