@@ -99,7 +99,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                                 ? Filters.and(Filters.eq("_id", entity.id()), Filters.eq(wrapper.versionFieldName(), version))
                                 : Filters.eq("_id", entity.id());
                         var result = collection.replaceOne(filter, entity);
-                        if (result.getModifiedCount() <= 0) {
+                        if (result.getMatchedCount() <= 0) {
                             // 移除缓存时，更新数据库中的实体文档异常
                             logger.error("onRemoval(): update entity to db failed when remove [{}] [pk:{}] by [removalCause:{}]", clazz.getSimpleName(), entity.id(), removalCause);
                         }
@@ -340,14 +340,14 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                         .toList();
 
                 var result = collection.bulkWrite(batchList, new BulkWriteOptions().ordered(false));
-                if (result.getModifiedCount() == batchList.size()) {
+                if (result.getMatchedCount() == batchList.size()) {
                     continue;
                 }
 
                 // mostly because the document that needs to be updated is the same as the document in the database
                 // 开始执行容错操作（大部分原因都是因为需要更新的文档和数据库的文档相同）
                 logger.warn("persistAll(): [{}] batch update [{}] not equal to final update [{}], and try to use persistAllAndCompare() to update every single entity."
-                        , clazz.getSimpleName(), currentUpdateList.size(), result.getModifiedCount());
+                        , clazz.getSimpleName(), currentUpdateList.size(), result.getMatchedCount());
             } catch (Throwable t) {
                 logger.error("persistAll(): [{}] batch update unknown error and try ", clazz.getSimpleName(), t);
             }
