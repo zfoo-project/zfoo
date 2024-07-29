@@ -29,10 +29,7 @@ import com.zfoo.orm.query.Page;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.protocol.util.AssertionUtils;
-import com.zfoo.protocol.util.FileUtils;
-import com.zfoo.protocol.util.GraalVmUtils;
-import com.zfoo.protocol.util.ThreadUtils;
+import com.zfoo.protocol.util.*;
 import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.scheduler.util.LazyCache;
 import com.zfoo.scheduler.util.TimeUtils;
@@ -162,7 +159,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 } else {
                     var pnodeThread = ThreadUtils.findThread(pnodeThreadId);
                     var builder = new StringBuilder();
-                    for(var stack : Thread.currentThread().getStackTrace()) {
+                    for (var stack : Thread.currentThread().getStackTrace()) {
                         builder.append(FileUtils.LS).append(stack);
                     }
                     // 有并发写风险，第一次更新文档的线程和第2次更新更新文档的线程不相等
@@ -291,8 +288,27 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             return;
         }
 
+        if (StringUtils.isEmpty(wrapper.versionFieldName())) {
+            doPersistNoVersion(updateList);
+        } else {
+            doPersistWithVersion(updateList);
+        }
+    }
+
+    private void doPersistNoVersion(List<E> updateList) {
         var page = Page.valueOf(1, DEFAULT_BATCH_SIZE, updateList.size());
         var maxPageSize = page.totalPage();
+        for (var currentPage = 1; currentPage <= maxPageSize; currentPage++) {
+            page.setPage(currentPage);
+            var currentUpdateList = page.currentPageList(updateList);
+            OrmContext.getAccessor().batchUpdate(currentUpdateList);
+        }
+    }
+
+    private void doPersistWithVersion(List<E> updateList) {
+        var page = Page.valueOf(1, DEFAULT_BATCH_SIZE, updateList.size());
+        var maxPageSize = page.totalPage();
+        var versionFiledName = wrapper.versionFieldName();
 
         for (var currentPage = 1; currentPage <= maxPageSize; currentPage++) {
             page.setPage(currentPage);
@@ -304,11 +320,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                         .map(it -> {
                             var version = wrapper.gvs(it);
                             wrapper.svs(it, version + 1);
-
-                            var filter = wrapper.gvs(it) > 0
-                                    ? Filters.and(Filters.eq("_id", it.id()), Filters.eq(wrapper.versionFieldName(), version))
-                                    : Filters.eq("_id", it.id());
-
+                            var filter = Filters.and(Filters.eq("_id", it.id()), Filters.eq(versionFiledName, version));
                             return new ReplaceOneModel<>(filter, it);
                         })
                         .toList();
@@ -320,16 +332,17 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
                 // mostly because the document that needs to be updated is the same as the document in the database
                 // 开始执行容错操作（大部分原因都是因为需要更新的文档和数据库的文档相同）
-                logger.warn("persistAll(): [{}] batch update [{}] not equal to final update [{}], and try to use persistAllAndCompare() to update every single entity."
+                logger.warn("doPersistWithVersion(): [{}] batch update [{}] not equal to final update [{}], and try to use persistAndCompareVersion() to update every single entity."
                         , clazz.getSimpleName(), currentUpdateList.size(), result.getMatchedCount());
             } catch (Throwable t) {
-                logger.error("persistAll(): [{}] batch update unknown error and try ", clazz.getSimpleName(), t);
+                logger.error("doPersistWithVersion(): [{}] batch update unknown error and try ", clazz.getSimpleName(), t);
             }
-            persistAllAndCompare(currentUpdateList);
+            persistAndCompareVersion(currentUpdateList);
         }
     }
 
-    private void persistAllAndCompare(List<E> updateList) {
+
+    private void persistAndCompareVersion(List<E> updateList) {
         if (CollectionUtils.isEmpty(updateList)) {
             return;
         }
