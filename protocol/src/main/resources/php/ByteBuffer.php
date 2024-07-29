@@ -32,6 +32,7 @@ class ByteBuffer
             $this->writeInt($length);
             $this->writeOffset = $currentwriteIndex;
         } else {
+            // substr is deep clone
             $bytes = substr($this->buffer, $currentwriteIndex - $length, $length);
             $this->writeOffset = $beforewriteIndex;
             $this->writeInt($length);

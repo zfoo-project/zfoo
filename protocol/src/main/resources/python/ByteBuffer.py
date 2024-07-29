@@ -25,6 +25,7 @@ class ByteBuffer():
             self.writeInt(length)
             self.setWriteOffset(currentWriteIndex)
         else:
+            # slice of bytearray is deep clone
             retainedByteBuf = self.buffer[(currentWriteIndex - length):currentWriteIndex]
             self.setWriteOffset(beforeWriteIndex)
             self.writeInt(length)
