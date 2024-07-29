@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
@@ -19,10 +20,12 @@ public class LazyCacheTesting {
 
     private static final Logger logger = LoggerFactory.getLogger(LazyCacheTesting.class);
 
-    private static final BiConsumer<Pair<Integer, String>, LazyCache.RemovalCause> myRemoveCallback = new BiConsumer<Pair<Integer, String>, LazyCache.RemovalCause>() {
+    private static final BiConsumer<List<Pair<Integer, String>>, LazyCache.RemovalCause> myRemoveCallback = new BiConsumer<List<Pair<Integer, String>>, LazyCache.RemovalCause>() {
         @Override
-        public void accept(Pair<Integer, String> pair, LazyCache.RemovalCause removalCause) {
-            logger.info("remove key:[{}] value:[{}] removalCause:[{}]", pair.getKey(), pair.getValue(), removalCause);
+        public void accept(List<Pair<Integer, String>> pairs, LazyCache.RemovalCause removalCause) {
+            for(var pair : pairs) {
+                logger.info("remove key:[{}] value:[{}] removalCause:[{}]", pair.getKey(), pair.getValue(), removalCause);
+            }
         }
     };
 

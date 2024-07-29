@@ -72,39 +72,13 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             wrapper = EnhanceUtils.createEntityWrapper(entityWrapper);
         }
 
-        var removeCallback = new BiConsumer<Pair<PK, PNode<PK, E>>, LazyCache.RemovalCause>() {
+        var removeCallback = new BiConsumer<List<Pair<PK, PNode<PK, E>>>, LazyCache.RemovalCause>() {
             @Override
-            public void accept(Pair<PK, PNode<PK, E>> pair, LazyCache.RemovalCause removalCause) {
+            public void accept(List<Pair<PK, PNode<PK, E>>> removes, LazyCache.RemovalCause removalCause) {
                 if (removalCause == LazyCache.RemovalCause.EXPLICIT) {
                     return;
                 }
-
-                var pk = pair.getKey();
-                var pnode = pair.getValue();
-                if (pnode.getWriteToDbTime() == pnode.getModifiedTime()) {
-                    return;
-                }
-
-                // 缓存失效之前，将数据写入数据库
-                var entity = pnode.getEntity();
-                EventBus.asyncExecute(clazz.hashCode(), new Runnable() {
-                    @Override
-                    public void run() {
-                        var collection = OrmContext.getOrmManager().getCollection(clazz);
-
-                        var version = wrapper.gvs(entity);
-                        wrapper.svs(entity, version + 1);
-
-                        var filter = wrapper.gvs(entity) > 0
-                                ? Filters.and(Filters.eq("_id", entity.id()), Filters.eq(wrapper.versionFieldName(), version))
-                                : Filters.eq("_id", entity.id());
-                        var result = collection.replaceOne(filter, entity);
-                        if (result.getMatchedCount() <= 0) {
-                            // 移除缓存时，更新数据库中的实体文档异常
-                            logger.error("onRemoval(): update entity to db failed when remove [{}] [pk:{}] by [removalCause:{}]", clazz.getSimpleName(), entity.id(), removalCause);
-                        }
-                    }
-                });
+                EventBus.asyncExecute(clazz.hashCode(), () -> doPersist(removes.stream().map(it -> it.getValue().getEntity()).toList()));
             }
         };
         var expireCheckIntervalMillis = Math.max(3 * TimeUtils.MILLIS_PER_SECOND, entityDef.getExpireMillisecond() / 10);
@@ -353,8 +327,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             }
             persistAllAndCompare(currentUpdateList);
         }
-
-        updateList.clear();
     }
 
     private void persistAllAndCompare(List<E> updateList) {

@@ -1,10 +1,10 @@
 package com.zfoo.scheduler.util;
 
 import com.zfoo.protocol.model.Pair;
-import com.zfoo.protocol.model.PairLong;
 import com.zfoo.protocol.util.AssertionUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -59,10 +59,10 @@ public class LazyCache<K, V> {
     private volatile long minExpireTime;
     private AtomicLong expireCheckTimeAtomic;
     private ConcurrentMap<K, CacheValue<V>> cacheMap;
-    private BiConsumer<Pair<K, V>, RemovalCause> removeListener = (pair, removalCause) -> {
+    private BiConsumer<List<Pair<K, V>>, RemovalCause> removeListener = (removes, removalCause) -> {
     };
 
-    public LazyCache(int maximumSize, long expireAfterAccessMillis, long expireCheckIntervalMillis, BiConsumer<Pair<K, V>, RemovalCause> removeListener) {
+    public LazyCache(int maximumSize, long expireAfterAccessMillis, long expireCheckIntervalMillis, BiConsumer<List<Pair<K, V>>, RemovalCause> removeListener) {
         AssertionUtils.ge1(maximumSize);
         AssertionUtils.ge0(expireAfterAccessMillis);
         AssertionUtils.ge0(expireCheckIntervalMillis);
@@ -87,7 +87,7 @@ public class LazyCache<K, V> {
         cacheValue.expireTime = TimeUtils.now() + expireAfterAccessMillis;
         var oldCacheValue = cacheMap.put(key, cacheValue);
         if (oldCacheValue != null) {
-            removeListener.accept(new Pair<>(key, oldCacheValue.value), RemovalCause.REPLACED);
+            removeListener.accept(List.of(new Pair<>(key, oldCacheValue.value)), RemovalCause.REPLACED);
         }
         checkExpire();
         checkMaximumSize();
@@ -119,7 +119,7 @@ public class LazyCache<K, V> {
         }
         var cacheValue = cacheMap.remove(key);
         if (cacheValue != null) {
-            removeListener.accept(new Pair<>(key, cacheValue.value), removalCause);
+            removeListener.accept(List.of(new Pair<>(key, cacheValue.value)), removalCause);
         }
     }
 
@@ -137,12 +137,13 @@ public class LazyCache<K, V> {
     // -----------------------------------------------------------------------------------------------------------------
     private void checkMaximumSize() {
         if (cacheMap.size() > backPressureSize) {
-            cacheMap.entrySet()
+            var removeList = cacheMap.entrySet()
                     .stream()
-                    .map(it -> new PairLong<>(it.getValue().expireTime, it.getKey()))
-                    .sorted((a, b) -> Long.compare(a.getKey(), b.getKey()))
+                    .sorted((a, b) -> Long.compare(a.getValue().expireTime, b.getValue().expireTime))
                     .limit(Math.max(0, cacheMap.size() - maximumSize))
-                    .forEach(it -> removeForCause(it.getValue(), RemovalCause.SIZE));
+                    .map(it -> new Pair<>(it.getKey(), it.getValue().value))
+                    .toList();
+            removeListener.accept(removeList, RemovalCause.SIZE);
         }
     }
 
@@ -153,18 +154,18 @@ public class LazyCache<K, V> {
             if (expireCheckTimeAtomic.compareAndSet(expireCheckTime, now + expireCheckIntervalMillis)) {
                 if (now > this.minExpireTime) {
                     var minTimestamp = Long.MAX_VALUE;
-                    var removeList = new ArrayList<K>();
+                    var removeList = new ArrayList<Pair<K, V>>();
                     for (var entry : cacheMap.entrySet()) {
                         var expireTime = entry.getValue().expireTime;
                         if (expireTime < now) {
-                            removeList.add(entry.getKey());
+                            removeList.add(new Pair<>(entry.getKey(), entry.getValue().value));
                             continue;
                         }
                         if (expireTime < minTimestamp) {
                             minTimestamp = expireTime;
                         }
                     }
-                    removeList.forEach(it -> removeForCause(it, RemovalCause.EXPIRED));
+                    removeListener.accept(removeList, RemovalCause.EXPIRED);
                     if (this.minExpireTime < Long.MAX_VALUE) {
                         this.minExpireTime = minTimestamp;
                     }
