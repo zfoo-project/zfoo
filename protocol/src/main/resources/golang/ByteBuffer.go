@@ -29,11 +29,18 @@ func (byteBuffer *ByteBuffer) AdjustPadding(predictionLength int, beforeWriteInd
 		byteBuffer.SetWriteOffset(beforeWriteIndex)
 		byteBuffer.WriteInt(length)
 		byteBuffer.SetWriteOffset(currentWriteIndex)
-	} else {
+	} else if padding < 0 {
 		var byteArray = byteBuffer.buffer[(currentWriteIndex - length):currentWriteIndex]
 		byteBuffer.SetWriteOffset(beforeWriteIndex)
 		byteBuffer.WriteInt(length)
 		byteBuffer.WriteUBytes(byteArray)
+	} else {
+		var byteArray = byteBuffer.buffer[(currentWriteIndex - length):currentWriteIndex]
+		var copyBytes = make([]byte, length)
+		copy(copyBytes, byteArray)
+		byteBuffer.SetWriteOffset(beforeWriteIndex)
+		byteBuffer.WriteInt(length)
+		byteBuffer.WriteUBytes(copyBytes)
 	}
 }
 
