@@ -65,8 +65,8 @@ public class MongodbAccessor implements IAccessor {
 
             var result = collection.replaceOne(filter, entity);
             if (result.getMatchedCount() <= 0) {
-                // 数据库中没有这个id或者需要更新的数据和数据库中的相同
-                logger.warn("database:[{}] 1.[_id:{}] not exist or 2. update entity is equal with database entity", entityClazz.getSimpleName(), entity.id());
+                // 数据库中没有这个id
+                logger.warn("database:[{}] [_id:{}] not exist", entityClazz.getSimpleName(), entity.id());
                 return false;
             }
             return true;
@@ -93,8 +93,8 @@ public class MongodbAccessor implements IAccessor {
 
             var result = collection.bulkWrite(batchList, new BulkWriteOptions().ordered(false));
             if (result.getMatchedCount() != entities.size()) {
-                // 在数据库的批量更新操作中需要更新的数量和最终更新的数量不相同（大部分原因都是因为需要更新的文档和数据库的文档相同）
-                logger.warn("database:[{}] update size:[{}] not equal with matched size:[{}](Most of the reasons is that update entity is equal with database entity)"
+                // 在数据库的批量更新操作中需要更新的数量和最终更新的数量不相同
+                logger.warn("database:[{}] update size:[{}] not equal with matched size:[{}](some entity of id not exist in database)"
                         , entityClazz.getSimpleName(), entities.size(), result.getMatchedCount());
             }
         } catch (Throwable t) {
