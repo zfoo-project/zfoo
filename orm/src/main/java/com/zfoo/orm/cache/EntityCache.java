@@ -364,10 +364,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             // 如果没有版本号，则直接更新数据库
             var entityVersion = wrapper.gvs(entity);
             var dbEntityVersion = wrapper.gvs(dbEntity);
-            if (entityVersion <= 0) {
-                OrmContext.getAccessor().update(entity);
-                continue;
-            }
 
             // 如果版本号相同，说明已经更新到
             if (dbEntityVersion == entityVersion) {
@@ -383,7 +379,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             // 数据库版本号较大，说明缓存的数据不是最新的，直接清除缓存，下次重新加载
             cache.remove(id);
             load(id);
-            logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}]", clazz.getSimpleName(), id, dbEntityVersion, entityVersion);
+            logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}] and reload db entity to cache", clazz.getSimpleName(), id, dbEntityVersion, entityVersion);
         }
     }
 
