@@ -15,7 +15,9 @@ package com.zfoo.orm.accessor;
 
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.entity.MailEntity;
+import com.zfoo.orm.entity.WrongEntity;
 import com.zfoo.protocol.util.StringUtils;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -37,5 +39,18 @@ public class IdAnnotationTest {
         OrmContext.getAccessor().delete(mailId, MailEntity.class);
         var mailEntity = MailEntity.valueOf(mailId, "userName-" + mailId, "content" + mailId, new Date());
         OrmContext.getAccessor().insert(mailEntity);
+    }
+
+    @Test
+    public void wrongCase() {
+        new ClassPathXmlApplicationContext("application.xml");
+        var entity = new WrongEntity();
+        Exception exception = null;
+        try {
+            OrmContext.getAccessor().insert(entity);
+        } catch (Exception e) {
+            exception = e;
+        }
+        Assert.assertNotNull(exception);
     }
 }
