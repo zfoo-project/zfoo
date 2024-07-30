@@ -25,7 +25,7 @@ var collection = OrmContext.getOrmManager().getCollection(UserEntity.class)
 #### 2. 间接使用(middle level api)，通过collection的简易包装类IAccessor和IQuery接口访问数据
 
 - IAccessor接口，为数据访问接口
-  - 插入数据到数据库，会以对象的id()方法的返回值作为主键
+  - 插入数据到数据库，会以对象class的@Id字段的值作为主键
   ```
   OrmContext.getAccessor().insert(obj)
   ```

@@ -30,6 +30,7 @@ import com.zfoo.orm.codec.MapCodecProvider;
 import com.zfoo.orm.config.CacheStrategy;
 import com.zfoo.orm.config.OrmConfig;
 import com.zfoo.orm.config.PersisterStrategy;
+import com.zfoo.orm.convention.ZfooAnnotationConvention;
 import com.zfoo.orm.model.EntityDef;
 import com.zfoo.orm.model.IEntity;
 import com.zfoo.orm.model.IndexDef;
@@ -40,6 +41,7 @@ import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.*;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.pojo.Conventions;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -103,8 +105,11 @@ public class OrmManager implements IOrmManager {
             allEntityCachesUsableMap.put(entityClass, false);
         }
 
-        var pojoCodecProvider = PojoCodecProvider.builder().automatic(true).register(new MapCodecProvider()).build();
-        var codecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), CodecRegistries.fromProviders(pojoCodecProvider));
+        var pojoCodecProvider = PojoCodecProvider.builder().automatic(true)
+                .conventions(List.of(Conventions.ANNOTATION_CONVENTION, ZfooAnnotationConvention.INSTANCE))
+                .register(new MapCodecProvider()).build();
+        var codecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                CodecRegistries.fromProviders(pojoCodecProvider));
 
         var mongoBuilder = MongoClientSettings
                 .builder()
@@ -454,10 +459,6 @@ public class OrmManager implements IOrmManager {
             idFiledValue = new ObjectId();
         } else {
             throw new RunException("orm id field only supports int long float double String ObjectId");
-        }
-
-        if (!idField.getName().equals("id")) {
-            throw new RunException("@Id filed must name with id");
         }
 
         ReflectionUtils.makeAccessible(idField);

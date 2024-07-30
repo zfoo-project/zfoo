@@ -28,7 +28,7 @@ import java.util.Date;
 public class MailEntity implements IEntity<String> {
 
     @Id
-    private String id;
+    private String mailId;
 
     @Index(ascending = true, unique = false)
     private String userName;
@@ -39,7 +39,7 @@ public class MailEntity implements IEntity<String> {
 
     public static MailEntity valueOf(String id, String userName, String content, Date createDate) {
         var entity = new MailEntity();
-        entity.id = id;
+        entity.mailId = id;
         entity.userName = userName;
         entity.content = content;
         entity.createDate = createDate;
@@ -48,15 +48,15 @@ public class MailEntity implements IEntity<String> {
 
     @Override
     public String id() {
-        return id;
+        return mailId;
     }
 
-    public String getId() {
-        return id;
+    public String getMailId() {
+        return mailId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setMailId(String mailId) {
+        this.mailId = mailId;
     }
 
     public String getUserName() {

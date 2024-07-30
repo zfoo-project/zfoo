@@ -26,7 +26,7 @@ var collection = OrmContext.getOrmManager().getCollection(UserEntity.class)
 #### 2. Indirect use (middle level API) to access data through the collection's simple wrapper IAccessor and IQuery interfaces
 
 - IAccessor is a data access interface
-  - Inserting data into the database uses the return value of the object's id() method as the primary key
+  - Inserting data into the database uses the field value of the object's field which marked `@Id` as the primary key
   ```
   OrmContext.getAccessor().insert(obj)
   ```
