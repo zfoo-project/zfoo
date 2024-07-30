@@ -40,9 +40,7 @@ import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.*;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.pojo.Conventions;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,11 +103,7 @@ public class OrmManager implements IOrmManager {
             allEntityCachesUsableMap.put(entityClass, false);
         }
 
-        var pojoCodecProvider = PojoCodecProvider.builder()
-                .conventions(List.of(Conventions.ANNOTATION_CONVENTION))
-                .automatic(true)
-                .register(new MapCodecProvider())
-                .build();
+        var pojoCodecProvider = PojoCodecProvider.builder().automatic(true).register(new MapCodecProvider()).build();
         var codecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), CodecRegistries.fromProviders(pojoCodecProvider));
 
         var mongoBuilder = MongoClientSettings
@@ -441,7 +435,7 @@ public class OrmManager implements IOrmManager {
         var getIdMethod = ReflectionUtils.getMethodByNameInPOJOClass(clazz, FieldUtils.fieldToGetMethod(clazz, idField));
         var returnTypeOfGetIdMethod = getIdMethod.getReturnType();
         AssertionUtils.isTrue(returnTypeOfGetIdMethod.equals(idFieldType), "[{}] getIdMethod:[{}] return type:[{}] must be equal with type id:[{}]"
-                , clazz.getSimpleName(), getIdMethod.getName(), returnTypeOfGetIdMethod.getName(), idFieldType.getName());
+                , clazz.getSimpleName(), getIdMethod.getName(),returnTypeOfGetIdMethod.getName(), idFieldType.getName());
 
         // 随机给id字段赋值，然后调用id()方法，看看两者的返回值是不是一样的，避免出错
         var entityInstance = ReflectionUtils.newInstance(clazz);
@@ -462,8 +456,8 @@ public class OrmManager implements IOrmManager {
             throw new RunException("orm id field only supports int long float double String ObjectId");
         }
 
-        if (!idField.getName().equals("id") && !idField.isAnnotationPresent(BsonId.class)) {
-            throw new RunException("use @BsonId annotation to @Id filed:[{}] or rename this field with id", idField.getName());
+        if (!idField.getName().equals("id")) {
+            throw new RunException("@Id filed must name with id");
         }
 
         ReflectionUtils.makeAccessible(idField);

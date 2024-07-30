@@ -13,10 +13,10 @@
 
 package com.zfoo.orm.entity;
 
+import com.zfoo.orm.anno.EntityCache;
 import com.zfoo.orm.anno.Id;
 import com.zfoo.orm.anno.Index;
 import com.zfoo.orm.model.IEntity;
-import org.bson.codecs.pojo.annotations.BsonId;
 
 import java.util.Date;
 
@@ -24,11 +24,11 @@ import java.util.Date;
 /**
  * @author godotg
  */
+@EntityCache
 public class MailEntity implements IEntity<String> {
 
     @Id
-    @BsonId
-    private String mailId;
+    private String id;
 
     @Index(ascending = true, unique = false)
     private String userName;
@@ -37,9 +37,9 @@ public class MailEntity implements IEntity<String> {
 
     private Date createDate;
 
-    public static MailEntity valueOf(String mailId, String userName, String content, Date createDate) {
+    public static MailEntity valueOf(String id, String userName, String content, Date createDate) {
         var entity = new MailEntity();
-        entity.mailId = mailId;
+        entity.id = id;
         entity.userName = userName;
         entity.content = content;
         entity.createDate = createDate;
@@ -48,15 +48,15 @@ public class MailEntity implements IEntity<String> {
 
     @Override
     public String id() {
-        return mailId;
+        return id;
     }
 
-    public String getMailId() {
-        return mailId;
+    public String getId() {
+        return id;
     }
 
-    public void setMailId(String mailId) {
-        this.mailId = mailId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserName() {
