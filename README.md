@@ -4,9 +4,8 @@ English | [简体中文](./README_CN.md)
 ## Ⅰ. Introduction of zfoo🚩
 
 - **Extremely fast, asynchronous, actor design, lock free, universal RPC framework, native GraalVM support**
-- **Decentralized serialization [zfoo protocol](protocol/README.md)**, supports C++ C# Go Java Javascript TypeScript Lua GDScript Python
 - **High scalability**, Single server deployment, microservice deployment, cluster deployment, gateway deployment
-- **Can be used as a game server framework or website server framework.**
+- **[zfoo protocol](protocol/README.md)**, supports C++ Rust Java/Kotlin/Scala JavaScript/TypeScript/ES C# Go Php Ruby Lua GDScript Python Dart Swift
 
 Perfect work development process, complete online solution
 

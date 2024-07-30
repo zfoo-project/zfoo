@@ -3,8 +3,8 @@
 ### Ⅰ. 简介
 
 - 去中心化网络序列化库，安全可靠，自定义私有协议格式，可前后兼容，让每个人都拥有一套独一无二的协议
-- 协议目前原生支持 **C++ Java JavaScript TypeScript C# Go Lua GDScript Python**，可以轻易实现跨平台
 - 支持将protobuf的proto文件到生成到pojo协议文件，生成完成的协议不仅可以被转为其它协议也可以被java使用
+- 协议目前原生支持 **C++ Rust Java/Kotlin/Scala JavaScript/TypeScript/ES C# Go Php Ruby Lua GDScript Python Dart Swift**
 
 ### Ⅱ. 快速使用
 

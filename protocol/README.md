@@ -4,12 +4,12 @@ English | [简体中文](./README_CN.md)
 
 - A decentralized serialization library, secure, private, reliable, and compatible, allowing everyone to have a unique
   set of protocols
-- The protocol is currently natively supported **C++ Java Javascript TypeScript C# Go Lua GDScript Python**，It's easy to
-  do cross-platform
 - The protocol can customize the private protocol format to make your protocol more secure, and supports adding fields
   and being compatible with previous and subsequent protocols
 - Support to generate ProtoBuf's Proto file to Pojo protocol file, and the generated protocol can be converted to other
   protocols and used by Java
+- The protocol is currently natively supported **C++ Rust Java/Kotlin/Scala JavaScript/TypeScript/ES C# Go Php Ruby Lua
+  GDScript Python Dart Swift**
 
 ### Ⅱ. Quick use
 
