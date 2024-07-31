@@ -30,7 +30,7 @@ import com.zfoo.orm.codec.MapCodecProvider;
 import com.zfoo.orm.config.CacheStrategy;
 import com.zfoo.orm.config.OrmConfig;
 import com.zfoo.orm.config.PersisterStrategy;
-import com.zfoo.orm.convention.ZfooAnnotationConvention;
+import com.zfoo.orm.convention.AnnotationConvention;
 import com.zfoo.orm.model.EntityDef;
 import com.zfoo.orm.model.IEntity;
 import com.zfoo.orm.model.IndexDef;
@@ -106,7 +106,7 @@ public class OrmManager implements IOrmManager {
         }
 
         var pojoCodecProvider = PojoCodecProvider.builder().automatic(true)
-                .conventions(List.of(Conventions.ANNOTATION_CONVENTION, ZfooAnnotationConvention.INSTANCE))
+                .conventions(List.of(Conventions.ANNOTATION_CONVENTION, AnnotationConvention.INSTANCE))
                 .register(new MapCodecProvider()).build();
         var codecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 CodecRegistries.fromProviders(pojoCodecProvider));
