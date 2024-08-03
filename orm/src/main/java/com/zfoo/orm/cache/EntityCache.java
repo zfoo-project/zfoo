@@ -222,9 +222,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             return;
         }
         pnode.resetTime(TimeUtils.currentTimeMillis());
-        var updateList = new ArrayList<E>();
-        updateList.add(pnode.getEntity());
-        doPersist(updateList);
+        doPersist(List.of(pnode.getEntity()));
     }
 
 
@@ -239,13 +237,14 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             var currentTime = TimeUtils.currentTimeMillis();
             // key为threadId
             var updateMap = new HashMap<Long, List<E>>();
+            var initSize = cache.size() >> 2;
             cache.forEach(new BiConsumer<PK, PNode<PK, E>>() {
                 @Override
                 public void accept(PK pk, PNode<PK, E> pnode) {
                     var entity = pnode.getEntity();
                     if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
                         pnode.resetTime(currentTime);
-                        var updateList = updateMap.computeIfAbsent(pnode.getThreadId(), it -> new ArrayList<>());
+                        var updateList = updateMap.computeIfAbsent(pnode.getThreadId(), it -> new ArrayList<>(initSize));
                         updateList.add(entity);
                     }
                 }
@@ -268,7 +267,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     @Override
     public void persistAllBlock() {
         var currentTime = TimeUtils.currentTimeMillis();
-        var updateList = new ArrayList<E>();
+        var updateList = new ArrayList<E>(cache.size());
         cache.forEach(new BiConsumer<PK, PNode<PK, E>>() {
             @Override
             public void accept(PK pk, PNode<PK, E> pnode) {
