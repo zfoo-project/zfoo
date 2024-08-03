@@ -105,9 +105,11 @@ public class OrmManager implements IOrmManager {
             allEntityCachesUsableMap.put(entityClass, false);
         }
 
-        var pojoCodecProvider = PojoCodecProvider.builder().automatic(true)
+        var pojoCodecProvider = PojoCodecProvider.builder()
+                .automatic(true)
                 .conventions(List.of(Conventions.ANNOTATION_CONVENTION, AnnotationConvention.INSTANCE))
-                .register(new MapCodecProvider()).build();
+                .register(new MapCodecProvider())
+                .build();
         var codecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 CodecRegistries.fromProviders(pojoCodecProvider));
 
