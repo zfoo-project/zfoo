@@ -13,9 +13,6 @@
 package com.zfoo.net.router;
 
 import com.zfoo.net.router.attachment.SignalAttachment;
-import com.zfoo.protocol.util.JsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,8 +25,6 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * @author godotg
  */
 public class SignalBridge {
-
-    private static final Logger logger = LoggerFactory.getLogger(SignalBridge.class);
 
     // equal with 32767
     private static final int SIGNAL_MASK = 0B00000000_00000000_01111111_11111111;
@@ -72,18 +67,16 @@ public class SignalBridge {
         return signalAttachmentMap.remove(signalId);
     }
 
-    public static void status() {
-        var count = 0;
+    public static int signalSize() {
+        var size = 0;
         for (int i = 0; i < SIGNAL_MASK + 1; i++) {
             var value = signalAttachmentArray.get(i);
             if (value != null) {
-                logger.info("signalPacketArray has attachment [index:{}][count:{}][value:{}]", i, ++count, JsonUtils.object2String(value));
+                size++;
             }
         }
-
-        signalAttachmentMap.forEach((key, value) -> {
-            logger.info("signalAttachmentMap has attachment [key:{}][value:{}]", key, JsonUtils.object2String(value));
-        });
+        size += signalAttachmentMap.size();
+        return size;
     }
 
 }
