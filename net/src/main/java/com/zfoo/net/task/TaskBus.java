@@ -19,6 +19,7 @@ import com.zfoo.protocol.util.RandomUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import io.netty.util.concurrent.FastThreadLocalThread;
+import io.netty.util.internal.MathUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,8 +41,9 @@ public final class TaskBus {
     private static final Logger logger = LoggerFactory.getLogger(TaskBus.class);
 
     // EN: The size of the thread pool can also be specified through the provider thread configuration
-    // CN: 线程池的大小，也可以通过provider thread配置指定
-    private static final int EXECUTOR_SIZE;
+    // CN: 线程池的大小，也可以通过provider thread配置指定，会通过EXECUTOR_MASK的与操作提高定位到Executor的性能
+    public static final int EXECUTOR_SIZE;
+    private static final int EXECUTOR_MASK;
 
     /**
      * EN: Use different thread pools to achieve isolation between thread pools without affecting each other
@@ -50,11 +52,13 @@ public final class TaskBus {
     private static final ExecutorService[] executors;
 
     static {
-        var localConfig = NetContext.getConfigManager().getLocalConfig();
-        var providerConfig = localConfig.getProvider();
-
-        EXECUTOR_SIZE = (providerConfig == null || StringUtils.isBlank(providerConfig.getThread())) ? (Runtime.getRuntime().availableProcessors() + 1) : Integer.parseInt(providerConfig.getThread());
-
+        var providerConfig = NetContext.getConfigManager().getLocalConfig().getProvider();
+        var expectThreads = (providerConfig == null || StringUtils.isBlank(providerConfig.getThread()))
+                ? Runtime.getRuntime().availableProcessors()
+                : Integer.parseInt(providerConfig.getThread());
+        EXECUTOR_SIZE = MathUtil.safeFindNextPositivePowerOfTwo(expectThreads);
+        // if EXECUTOR_SIZE = 8 then EXECUTOR_MASK = 7 =  0b0111
+        EXECUTOR_MASK = EXECUTOR_SIZE - 1;
         executors = new ExecutorService[EXECUTOR_SIZE];
         for (int i = 0; i < executors.length; i++) {
             var namedThreadFactory = new TaskThreadFactory(i);
@@ -89,8 +93,7 @@ public final class TaskBus {
 
 
     private static int calTaskExecutorIndex(int taskExecutorHash) {
-        // Other hash algorithms can be customized to make the distribution more uniform
-        return Math.abs(taskExecutorHash % EXECUTOR_SIZE);
+        return taskExecutorHash & EXECUTOR_MASK;
     }
 
     public static int calTaskExecutorHash(Object argument) {
@@ -113,7 +116,7 @@ public final class TaskBus {
         execute(calTaskExecutorHash(argument), runnable);
     }
 
-    public static ExecutorService executorOf(int hash){
+    public static ExecutorService executorOf(int hash) {
         return executors[calTaskExecutorIndex(hash)];
     }
 
