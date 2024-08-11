@@ -122,12 +122,9 @@ public final class TaskBus {
 
     // 在task，event，scheduler线程执行的异步请求，请求成功过后依然在相同的线程执行回调任务
     public static Executor currentThreadExecutor() {
-        var threadId = Thread.currentThread().getId();
-        var executor = ThreadUtils.executorByThreadId(threadId);
-        if (executor == null) {
-            return executorOf(RandomUtils.randomInt());
-        }
-        return executor;
+        var currentThreadId = Thread.currentThread().getId();
+        var executor = ThreadUtils.executorByThreadId(currentThreadId);
+        return executor == null ? executorOf(RandomUtils.randomInt()) : executor;
     }
 
 }
