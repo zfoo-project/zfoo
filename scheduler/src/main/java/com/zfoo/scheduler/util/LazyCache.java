@@ -111,9 +111,24 @@ public class LazyCache<K, V> {
 
 
     public void remove(K key) {
+        checkExpire();
         removeForCause(key, RemovalCause.EXPLICIT);
     }
 
+    public void forEach(BiConsumer<K, V> biConsumer) {
+        checkExpire();
+        for (var entry : cacheMap.entrySet()) {
+            biConsumer.accept(entry.getKey(), entry.getValue().value);
+        }
+    }
+
+    public int size() {
+        checkExpire();
+        return cacheMap.size();
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------
     private void removeForCause(K key, RemovalCause removalCause) {
         if (key == null) {
             return;
@@ -134,18 +149,6 @@ public class LazyCache<K, V> {
         removeListener.accept(removeList, removalCause);
     }
 
-    public void forEach(BiConsumer<K, V> biConsumer) {
-        for (var entry : cacheMap.entrySet()) {
-            biConsumer.accept(entry.getKey(), entry.getValue().value);
-        }
-    }
-
-    public int size() {
-        return cacheMap.size();
-    }
-
-
-    // -----------------------------------------------------------------------------------------------------------------
     private void checkMaximumSize() {
         if (cacheMap.size() > backPressureSize) {
             var removeList = cacheMap.entrySet()
