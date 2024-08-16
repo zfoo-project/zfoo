@@ -23,7 +23,7 @@ public class LazyCacheTesting {
     private static final BiConsumer<List<Pair<Integer, String>>, LazyCache.RemovalCause> myRemoveCallback = new BiConsumer<List<Pair<Integer, String>>, LazyCache.RemovalCause>() {
         @Override
         public void accept(List<Pair<Integer, String>> pairs, LazyCache.RemovalCause removalCause) {
-            for(var pair : pairs) {
+            for (var pair : pairs) {
                 logger.info("remove key:[{}] value:[{}] removalCause:[{}]", pair.getKey(), pair.getValue(), removalCause);
             }
         }
@@ -46,8 +46,10 @@ public class LazyCacheTesting {
         lazyCache.put(11, "k");
         lazyCache.put(12, "l");
         ThreadUtils.sleep(3000);
+        System.out.println("first ->");
         lazyCache.put(13, "m");
         ThreadUtils.sleep(3000);
+        System.out.println("second ->");
         lazyCache.put(14, "n");
         ThreadUtils.sleep(3000);
     }
@@ -109,17 +111,18 @@ public class LazyCacheTesting {
         for (int i = 0; i < executors.length; i++) {
             executors[i] = Executors.newSingleThreadExecutor();
         }
-        var lazyCache = new LazyCache<Integer, String>(1_00, 10000000 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
+        var lazyCache = new LazyCache<Integer, String>(1_00, 10000000 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, null);
         for (int i = 0; i < executors.length; i++) {
-
             var executor = executors[i];
             int i1 = i;
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
                     var startIndex = i1 * 1_0000;
-                    for (int j = i1 * 1_0000; j < startIndex + 1_0000; j++) {
-                        lazyCache.put(j, String.valueOf(j));
+                    while (true) {
+                        for (int j = i1 * 1_0000; j < startIndex + 1_0000; j++) {
+                            lazyCache.put(j, String.valueOf(j));
+                        }
                     }
                 }
             });
@@ -138,7 +141,7 @@ public class LazyCacheTesting {
         for (int i = 0; i < executors.length; i++) {
             executors[i] = Executors.newSingleThreadExecutor();
         }
-        var lazyCache = new LazyCache<Integer, String>(1_0000, 10000000 * TimeUtils.MILLIS_PER_SECOND, 0, myRemoveCallback);
+        var lazyCache = new LazyCache<Integer, String>(1_0000, 10000000 * TimeUtils.MILLIS_PER_SECOND, 0, null);
         for (int i = 0; i < executors.length; i++) {
 
             var executor = executors[i];
@@ -147,8 +150,11 @@ public class LazyCacheTesting {
                 @Override
                 public void run() {
                     var startIndex = i1 * 1_0000;
-                    for (int j = i1 * 1_0000; j < startIndex + 1_0000; j++) {
-                        lazyCache.put(j, String.valueOf(j));
+                    while (true) {
+                        for (int j = i1 * 1_0000; j < startIndex + 1_0000; j++) {
+                            lazyCache.put(j, String.valueOf(j));
+                        }
+
                     }
                 }
             });
@@ -197,7 +203,7 @@ public class LazyCacheTesting {
         for (int i = 0; i < executors.length; i++) {
             executors[i] = Executors.newSingleThreadExecutor();
         }
-        var lazyCache = new LazyCache<Integer, String>(1_0000, 100000 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
+        var lazyCache = new LazyCache<Integer, String>(1_0000, 100000 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, null);
         for (int i = 0; i < executors.length; i++) {
 
             var executor = executors[i];

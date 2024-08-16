@@ -1,5 +1,6 @@
 package com.zfoo.scheduler.util;
 
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.AssertionUtils;
 
@@ -123,6 +124,16 @@ public class LazyCache<K, V> {
         }
     }
 
+    private void removeForCause(List<Pair<K, V>> list, RemovalCause removalCause) {
+        if (CollectionUtils.isEmpty(list)) {
+            return;
+        }
+        var removeList = list.stream()
+                .filter(it -> cacheMap.remove(it.getKey()) != null)
+                .toList();
+        removeListener.accept(removeList, removalCause);
+    }
+
     public void forEach(BiConsumer<K, V> biConsumer) {
         for (var entry : cacheMap.entrySet()) {
             biConsumer.accept(entry.getKey(), entry.getValue().value);
@@ -143,8 +154,7 @@ public class LazyCache<K, V> {
                     .limit(Math.max(0, cacheMap.size() - maximumSize))
                     .map(it -> new Pair<>(it.getKey(), it.getValue().value))
                     .toList();
-            removeList.forEach(it -> cacheMap.remove(it.getKey()));
-            removeListener.accept(removeList, RemovalCause.SIZE);
+            removeForCause(removeList, RemovalCause.SIZE);
         }
     }
 
@@ -166,8 +176,7 @@ public class LazyCache<K, V> {
                             minTimestamp = expireTime;
                         }
                     }
-                    removeList.forEach(it -> cacheMap.remove(it.getKey()));
-                    removeListener.accept(removeList, RemovalCause.EXPIRED);
+                    removeForCause(removeList, RemovalCause.EXPIRED);
                     if (minTimestamp < Long.MAX_VALUE) {
                         this.minExpireTime = minTimestamp;
                     }
