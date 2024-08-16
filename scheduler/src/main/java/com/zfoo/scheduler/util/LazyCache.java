@@ -85,9 +85,6 @@ public class LazyCache<K, V> {
         var cacheValue = new CacheValue<V>();
         cacheValue.value = value;
         cacheValue.expireTime = TimeUtils.now() + expireAfterAccessMillis;
-        if (cacheValue.expireTime < this.minExpireTime) {
-            this.minExpireTime = cacheValue.expireTime;
-        }
         var oldCacheValue = cacheMap.put(key, cacheValue);
         if (oldCacheValue != null) {
             removeListener.accept(List.of(new Pair<>(key, oldCacheValue.value)), RemovalCause.REPLACED);
@@ -146,6 +143,7 @@ public class LazyCache<K, V> {
                     .limit(Math.max(0, cacheMap.size() - maximumSize))
                     .map(it -> new Pair<>(it.getKey(), it.getValue().value))
                     .toList();
+            removeList.forEach(it -> cacheMap.remove(it.getKey()));
             removeListener.accept(removeList, RemovalCause.SIZE);
         }
     }
@@ -168,8 +166,9 @@ public class LazyCache<K, V> {
                             minTimestamp = expireTime;
                         }
                     }
+                    removeList.forEach(it -> cacheMap.remove(it.getKey()));
                     removeListener.accept(removeList, RemovalCause.EXPIRED);
-                    if (this.minExpireTime < Long.MAX_VALUE) {
+                    if (minTimestamp < Long.MAX_VALUE) {
                         this.minExpireTime = minTimestamp;
                     }
                 }

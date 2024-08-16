@@ -45,28 +45,26 @@ public class LazyCacheTesting {
         lazyCache.put(10, "j");
         lazyCache.put(11, "k");
         lazyCache.put(12, "l");
-        ThreadUtils.sleep(1000);
+        ThreadUtils.sleep(3000);
         lazyCache.put(13, "m");
-        ThreadUtils.sleep(1000);
+        ThreadUtils.sleep(3000);
         lazyCache.put(14, "n");
-        ThreadUtils.sleep(1000);
+        ThreadUtils.sleep(3000);
     }
 
     @Test
     public void expireTest() {
-        var lazyCache = new LazyCache<Integer, String>(10, 10 * TimeUtils.MILLIS_PER_SECOND, 5 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
+        var lazyCache = new LazyCache<Integer, String>(10, 3 * TimeUtils.MILLIS_PER_SECOND, 1 * TimeUtils.MILLIS_PER_SECOND, myRemoveCallback);
 
-        lazyCache.put(1, "a");
-        lazyCache.put(2, "b");
-        lazyCache.put(3, "c");
-        lazyCache.put(4, "d");
-        lazyCache.put(5, "e");
-        ThreadUtils.sleep(11 * TimeUtils.MILLIS_PER_SECOND);
-        System.out.println(lazyCache.get(1));
-        System.out.println(lazyCache.get(2));
-        System.out.println(lazyCache.get(3));
-        System.out.println(lazyCache.get(4));
-        System.out.println(lazyCache.get(5));
+        for (int i = 0; i < 10; i++) {
+            lazyCache.put(1, "a");
+            lazyCache.put(2, "b");
+            lazyCache.put(3, "c");
+            lazyCache.put(4, "d");
+            lazyCache.put(5, "e");
+            ThreadUtils.sleep(5 * TimeUtils.MILLIS_PER_SECOND);
+            System.out.println(lazyCache.get(1));
+        }
     }
 
     @Test
@@ -78,7 +76,7 @@ public class LazyCacheTesting {
         lazyCache.put(3, "c");
         lazyCache.put(4, "d");
         lazyCache.put(5, "e");
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 12; i++) {
             lazyCache.get(1);
             lazyCache.get(2);
             ThreadUtils.sleep(1 * TimeUtils.MILLIS_PER_SECOND);
