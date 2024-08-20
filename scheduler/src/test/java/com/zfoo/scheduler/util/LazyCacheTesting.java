@@ -1,6 +1,5 @@
 package com.zfoo.scheduler.util;
 
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,11 +19,11 @@ public class LazyCacheTesting {
 
     private static final Logger logger = LoggerFactory.getLogger(LazyCacheTesting.class);
 
-    private static final BiConsumer<List<Pair<Integer, String>>, LazyCache.RemovalCause> myRemoveCallback = new BiConsumer<List<Pair<Integer, String>>, LazyCache.RemovalCause>() {
+    private static final BiConsumer<List<LazyCache.Cache<Integer, String>>, LazyCache.RemovalCause> myRemoveCallback = new BiConsumer<List<LazyCache.Cache<Integer, String>>, LazyCache.RemovalCause>() {
         @Override
-        public void accept(List<Pair<Integer, String>> pairs, LazyCache.RemovalCause removalCause) {
-            for (var pair : pairs) {
-                logger.info("remove key:[{}] value:[{}] removalCause:[{}]", pair.getKey(), pair.getValue(), removalCause);
+        public void accept(List<LazyCache.Cache<Integer, String>> caches, LazyCache.RemovalCause removalCause) {
+            for (var cache : caches) {
+                logger.info("remove key:[{}] value:[{}] removalCause:[{}]", cache.k, cache.v, removalCause);
             }
         }
     };

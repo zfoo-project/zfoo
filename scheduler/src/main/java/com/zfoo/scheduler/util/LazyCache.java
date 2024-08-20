@@ -1,7 +1,6 @@
 package com.zfoo.scheduler.util;
 
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.AssertionUtils;
 
 import java.util.ArrayList;
@@ -20,8 +19,9 @@ public class LazyCache<K, V> {
 
     private static final float DEFAULT_BACK_PRESSURE_FACTOR = 0.13f;
 
-    private static class CacheValue<V> {
-        public volatile V value;
+    public static class Cache<K, V> {
+        public K k;
+        public V v;
         public volatile long expireTime;
     }
 
@@ -59,11 +59,11 @@ public class LazyCache<K, V> {
     private long expireCheckIntervalMillis;
     private volatile long minExpireTime;
     private AtomicLong expireCheckTimeAtomic;
-    private ConcurrentMap<K, CacheValue<V>> cacheMap;
-    private BiConsumer<List<Pair<K, V>>, RemovalCause> removeListener = (removes, removalCause) -> {
+    private ConcurrentMap<K, Cache<K, V>> cacheMap;
+    private BiConsumer<List<Cache<K, V>>, RemovalCause> removeListener = (removes, removalCause) -> {
     };
 
-    public LazyCache(int maximumSize, long expireAfterAccessMillis, long expireCheckIntervalMillis, BiConsumer<List<Pair<K, V>>, RemovalCause> removeListener) {
+    public LazyCache(int maximumSize, long expireAfterAccessMillis, long expireCheckIntervalMillis, BiConsumer<List<Cache<K, V>>, RemovalCause> removeListener) {
         AssertionUtils.ge1(maximumSize);
         AssertionUtils.ge0(expireAfterAccessMillis);
         AssertionUtils.ge0(expireCheckIntervalMillis);
@@ -83,30 +83,32 @@ public class LazyCache<K, V> {
      * If the cache previously contained a value associated with the key, the old value is replaced by the new value.
      */
     public void put(K key, V value) {
-        var cacheValue = new CacheValue<V>();
-        cacheValue.value = value;
-        cacheValue.expireTime = TimeUtils.now() + expireAfterAccessMillis;
-        var oldCacheValue = cacheMap.put(key, cacheValue);
-        if (oldCacheValue != null) {
-            removeListener.accept(List.of(new Pair<>(key, oldCacheValue.value)), RemovalCause.REPLACED);
-        }
         checkExpire();
         checkMaximumSize();
+
+        var cache = new Cache<K, V>();
+        cache.k = key;
+        cache.v = value;
+        cache.expireTime = TimeUtils.now() + expireAfterAccessMillis;
+        var oldCache = cacheMap.put(key, cache);
+        if (oldCache != null) {
+            removeListener.accept(List.of(oldCache), RemovalCause.REPLACED);
+        }
     }
 
     public V get(K key) {
         checkExpire();
 
-        var cacheValue = cacheMap.get(key);
-        if (cacheValue == null) {
+        var cache = cacheMap.get(key);
+        if (cache == null) {
             return null;
         }
-        if (cacheValue.expireTime < TimeUtils.now()) {
+        if (cache.expireTime < TimeUtils.now()) {
             removeForCause(key, RemovalCause.EXPIRED);
             return null;
         }
-        cacheValue.expireTime = TimeUtils.now() + expireAfterAccessMillis;
-        return cacheValue.value;
+        cache.expireTime = TimeUtils.now() + expireAfterAccessMillis;
+        return cache.v;
     }
 
 
@@ -117,8 +119,8 @@ public class LazyCache<K, V> {
 
     public void forEach(BiConsumer<K, V> biConsumer) {
         checkExpire();
-        for (var entry : cacheMap.entrySet()) {
-            biConsumer.accept(entry.getKey(), entry.getValue().value);
+        for (var cache : cacheMap.values()) {
+            biConsumer.accept(cache.k, cache.v);
         }
     }
 
@@ -133,29 +135,28 @@ public class LazyCache<K, V> {
         if (key == null) {
             return;
         }
-        var cacheValue = cacheMap.remove(key);
-        if (cacheValue != null) {
-            removeListener.accept(List.of(new Pair<>(key, cacheValue.value)), removalCause);
+        var cache = cacheMap.remove(key);
+        if (cache != null) {
+            removeListener.accept(List.of(cache), removalCause);
         }
     }
 
-    private void removeForCause(List<Pair<K, V>> list, RemovalCause removalCause) {
+    private void removeForCause(List<Cache<K, V>> list, RemovalCause removalCause) {
         if (CollectionUtils.isEmpty(list)) {
             return;
         }
         var removeList = list.stream()
-                .filter(it -> cacheMap.remove(it.getKey()) != null)
+                .filter(it -> cacheMap.remove(it.k) != null)
                 .toList();
         removeListener.accept(removeList, removalCause);
     }
 
     private void checkMaximumSize() {
         if (cacheMap.size() > backPressureSize) {
-            var removeList = cacheMap.entrySet()
+            var removeList = cacheMap.values()
                     .stream()
-                    .sorted((a, b) -> Long.compare(a.getValue().expireTime, b.getValue().expireTime))
+                    .sorted((a, b) -> Long.compare(a.expireTime, b.expireTime))
                     .limit(Math.max(0, cacheMap.size() - maximumSize))
-                    .map(it -> new Pair<>(it.getKey(), it.getValue().value))
                     .toList();
             removeForCause(removeList, RemovalCause.SIZE);
         }
@@ -168,11 +169,11 @@ public class LazyCache<K, V> {
             if (expireCheckTimeAtomic.compareAndSet(expireCheckTime, now + expireCheckIntervalMillis)) {
                 if (now > this.minExpireTime) {
                     var minTimestamp = Long.MAX_VALUE;
-                    var removeList = new ArrayList<Pair<K, V>>();
-                    for (var entry : cacheMap.entrySet()) {
-                        var expireTime = entry.getValue().expireTime;
+                    var removeList = new ArrayList<Cache<K, V>>();
+                    for (var cache : cacheMap.values()) {
+                        var expireTime = cache.expireTime;
                         if (expireTime < now) {
-                            removeList.add(new Pair<>(entry.getKey(), entry.getValue().value));
+                            removeList.add(cache);
                             continue;
                         }
                         if (expireTime < minTimestamp) {

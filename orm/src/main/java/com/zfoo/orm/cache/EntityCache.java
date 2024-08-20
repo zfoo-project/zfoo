@@ -28,7 +28,6 @@ import com.zfoo.orm.model.IEntity;
 import com.zfoo.orm.query.Page;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.RunException;
-import com.zfoo.protocol.model.Pair;
 import com.zfoo.protocol.util.*;
 import com.zfoo.scheduler.manager.SchedulerBus;
 import com.zfoo.scheduler.util.LazyCache;
@@ -54,7 +53,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     private final Class<E> clazz;
     private final EntityDef entityDef;
-    private final LazyCache<PK, PNode<PK, E>> cache;
+    private final LazyCache<PK, PNode<PK, E>> caches;
     private final IEntityWrapper<PK, E> wrapper;
 
 
@@ -69,17 +68,17 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             wrapper = EnhanceUtils.createEntityWrapper(entityWrapper);
         }
 
-        var removeCallback = new BiConsumer<List<Pair<PK, PNode<PK, E>>>, LazyCache.RemovalCause>() {
+        var removeCallback = new BiConsumer<List<LazyCache.Cache<PK, PNode<PK, E>>>, LazyCache.RemovalCause>() {
             @Override
-            public void accept(List<Pair<PK, PNode<PK, E>>> removes, LazyCache.RemovalCause removalCause) {
+            public void accept(List<LazyCache.Cache<PK, PNode<PK, E>>> removes, LazyCache.RemovalCause removalCause) {
                 if (removalCause == LazyCache.RemovalCause.EXPLICIT) {
                     return;
                 }
-                EventBus.asyncExecute(clazz.hashCode(), () -> doPersist(removes.stream().map(it -> it.getValue().getEntity()).toList()));
+                EventBus.asyncExecute(clazz.hashCode(), () -> doPersist(removes.stream().map(it -> it.v.getEntity()).toList()));
             }
         };
         var expireCheckIntervalMillis = Math.max(3 * TimeUtils.MILLIS_PER_SECOND, entityDef.getExpireMillisecond() / 10);
-        this.cache = new LazyCache<>(entityDef.getCacheSize(), entityDef.getExpireMillisecond(), expireCheckIntervalMillis, removeCallback);
+        this.caches = new LazyCache<>(entityDef.getCacheSize(), entityDef.getExpireMillisecond(), expireCheckIntervalMillis, removeCallback);
 
         if (CollectionUtils.isNotEmpty(entityDef.getIndexDefMap())) {
             // indexMap
@@ -98,7 +97,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     @Override
     public E load(PK pk) {
         AssertionUtils.notNull(pk);
-        var pnode = cache.get(pk);
+        var pnode = caches.get(pk);
         if (pnode != null) {
             return pnode.getEntity();
         }
@@ -110,14 +109,14 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             logger.warn("[{}] can not load [pk:{}] and use null to replace it", clazz.getSimpleName(), pk);
         }
         pnode = new PNode<>(entity);
-        cache.put(pk, pnode);
+        caches.put(pk, pnode);
         return entity;
     }
 
     @Override
     public E loadOrCreate(PK pk) {
         AssertionUtils.notNull(pk);
-        var pnode = cache.get(pk);
+        var pnode = caches.get(pk);
         if (pnode != null) {
             return pnode.getEntity();
         }
@@ -130,7 +129,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             OrmContext.getAccessor().insert(entity);
         }
         pnode = new PNode<>(entity);
-        cache.put(pk, pnode);
+        caches.put(pk, pnode);
         return entity;
     }
 
@@ -139,10 +138,10 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
      */
     private PNode<PK, E> fetchCachePnode(E entity, boolean safe) {
         var id = entity.id();
-        var cachePnode = cache.get(id);
+        var cachePnode = caches.get(id);
         if (cachePnode == null) {
             cachePnode = new PNode<>(entity);
-            cache.put(entity.id(), cachePnode);
+            caches.put(entity.id(), cachePnode);
         }
 
         // 比较地址是否相等
@@ -209,12 +208,12 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         // 游戏业务中，操作最频繁的是update，不是insert，delete，query
         // 所以这边并不考虑
         AssertionUtils.notNull(pk);
-        cache.remove(pk);
+        caches.remove(pk);
     }
 
     @Override
     public void persist(PK pk) {
-        var pnode = cache.get(pk);
+        var pnode = caches.get(pk);
         if (pnode == null) {
             return;
         }
@@ -237,8 +236,8 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             var currentTime = TimeUtils.currentTimeMillis();
             // key为threadId
             var updateMap = new HashMap<Long, List<E>>();
-            var initSize = cache.size() >> 2;
-            cache.forEach(new BiConsumer<PK, PNode<PK, E>>() {
+            var initSize = caches.size() >> 2;
+            caches.forEach(new BiConsumer<PK, PNode<PK, E>>() {
                 @Override
                 public void accept(PK pk, PNode<PK, E> pnode) {
                     var entity = pnode.getEntity();
@@ -267,8 +266,8 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     @Override
     public void persistAllBlock() {
         var currentTime = TimeUtils.currentTimeMillis();
-        var updateList = new ArrayList<E>(cache.size());
-        cache.forEach(new BiConsumer<PK, PNode<PK, E>>() {
+        var updateList = new ArrayList<E>(caches.size());
+        caches.forEach(new BiConsumer<PK, PNode<PK, E>>() {
             @Override
             public void accept(PK pk, PNode<PK, E> pnode) {
                 var entity = pnode.getEntity();
@@ -355,7 +354,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             var dbEntity = dbMap.get(id);
 
             if (dbEntity == null) {
-                cache.remove(entity.id());
+                caches.remove(entity.id());
                 logger.warn("[database:{}] not found entity [id:{}]", clazz.getSimpleName(), id);
                 continue;
             }
@@ -376,7 +375,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             }
 
             // 数据库版本号较大，说明缓存的数据不是最新的，直接清除缓存，下次重新加载
-            cache.remove(id);
+            caches.remove(id);
             load(id);
             logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}] and reload db entity to cache", clazz.getSimpleName(), id, dbEntityVersion, entityVersion);
         }
@@ -384,12 +383,12 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     @Override
     public void forEach(BiConsumer<PK, E> biConsumer) {
-        cache.forEach((pk, pnode) -> biConsumer.accept(pk, pnode.getEntity()));
+        caches.forEach((pk, pnode) -> biConsumer.accept(pk, pnode.getEntity()));
     }
 
     @Override
     public long size() {
-        return cache.size();
+        return caches.size();
     }
 
 }
