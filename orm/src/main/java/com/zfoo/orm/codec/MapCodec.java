@@ -27,8 +27,7 @@ import java.util.function.Function;
 /**
  * 基础类型作为key的map解析器 (key 默认不能为null)
  *
- * @Author：lqh
- * @Date：2024/6/17 13:55
+ * @author lqh
  */
 public class MapCodec<K, V> implements Codec<Map<K, V>> {
 

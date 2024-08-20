@@ -23,8 +23,7 @@ import java.util.Map;
  * MongoDB官方驱动Map的key只能为String，为了支持key为其它基础类型的Map有了MapCodecProvider
  * java的8种基础类型目前全部支持（char，boolean，byte，short，int，long，float，double）
  *
- * @Author：lqh
- * @Date：2024/6/14 10:23
+ * @author lqh
  */
 public class MapCodecProvider implements PropertyCodecProvider {
     @Override

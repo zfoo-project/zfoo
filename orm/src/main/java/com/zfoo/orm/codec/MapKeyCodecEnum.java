@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 /**
  * 基础类型枚举
  *
- * @Author：lqh
- * @Date：2024/6/17 11:41
+ * @author lqh
  */
 public enum MapKeyCodecEnum {
 

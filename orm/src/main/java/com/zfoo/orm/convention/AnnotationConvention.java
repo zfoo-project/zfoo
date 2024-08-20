@@ -14,8 +14,6 @@ import java.lang.reflect.Field;
  * 注解约定
  *
  * @author Sando
- * @version 1.0
- * @since 2024/7/30
  */
 public class AnnotationConvention implements Convention {
 
