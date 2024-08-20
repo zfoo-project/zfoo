@@ -84,7 +84,6 @@ public class LazyCache<K, V> {
      */
     public void put(K key, V value) {
         checkExpire();
-        checkMaximumSize();
 
         var cache = new Cache<K, V>();
         cache.k = key;
@@ -94,6 +93,8 @@ public class LazyCache<K, V> {
         if (oldCache != null) {
             removeListener.accept(List.of(oldCache), RemovalCause.REPLACED);
         }
+
+        checkMaximumSize();
     }
 
     public V get(K key) {
@@ -114,11 +115,13 @@ public class LazyCache<K, V> {
 
     public void remove(K key) {
         checkExpire();
+
         removeForCause(key, RemovalCause.EXPLICIT);
     }
 
     public void forEach(BiConsumer<K, V> biConsumer) {
         checkExpire();
+
         for (var cache : cacheMap.values()) {
             biConsumer.accept(cache.k, cache.v);
         }
@@ -126,6 +129,7 @@ public class LazyCache<K, V> {
 
     public int size() {
         checkExpire();
+
         return cacheMap.size();
     }
 
