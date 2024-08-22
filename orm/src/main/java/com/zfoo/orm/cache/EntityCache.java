@@ -177,6 +177,15 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     }
 
     @Override
+    public E get(PK pk) {
+        PNode<PK, E> cachePnode = caches.get(pk);
+        if (cachePnode == null) {
+            return null;
+        }
+        return cachePnode.getEntity();
+    }
+
+    @Override
     public void update(E entity) {
         var cachePnode = fetchCachePnode(entity, true);
         // 加100以防止，立刻加载并且立刻修改数据的情况发生时，服务器取到的时间戳相同

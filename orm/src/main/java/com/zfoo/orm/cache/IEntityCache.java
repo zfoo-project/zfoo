@@ -39,6 +39,13 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
     E loadOrCreate(PK pk);
 
     /**
+     * EN: Get the data in the cache or returns null if it does not exist in the cache.
+     * CN: 获取缓存中的数据，如果缓存中不存在则返回null。
+     */
+    @Nullable
+    E get(PK pk);
+
+    /**
      * 更新缓存中的数据，只更新缓存的时间戳，并通过一定策略写入到数据库
      * <p>
      * 第一次update()会记录线程号表面当前哪个线程在更新这个entity，后面如果发现update()线程号和第一次不一致会给出线程安全的警告
