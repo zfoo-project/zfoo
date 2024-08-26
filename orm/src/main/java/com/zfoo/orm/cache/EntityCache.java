@@ -179,23 +179,20 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     @Override
     public E get(PK pk) {
         PNode<PK, E> cachePnode = caches.get(pk);
-        if (cachePnode == null) {
-            return null;
-        }
-        return cachePnode.getEntity();
+        return cachePnode == null ? null : cachePnode.getEntity();
     }
 
     @Override
     public void update(E entity) {
         var cachePnode = fetchCachePnode(entity, true);
-        // 加100以防止，立刻加载并且立刻修改数据的情况发生时，服务器取到的时间戳相同
-        cachePnode.setModifiedTime(TimeUtils.now() + 100);
+        // 加128以防止，立刻加载并且立刻修改数据的情况发生时，服务器取到的时间戳相同
+        cachePnode.setModifiedTime(TimeUtils.now() + 128);
     }
 
     @Override
     public void updateUnsafe(E entity) {
         var cachePnode = fetchCachePnode(entity, false);
-        cachePnode.setModifiedTime(TimeUtils.now() + 100);
+        cachePnode.setModifiedTime(TimeUtils.now() + 128);
     }
 
     @Override
@@ -266,7 +263,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     EventBus.asyncExecute(clazz.hashCode(), () -> doPersist(updateList));
                 } else {
                     // 使用scheduler均匀的分配入库的时间点，减少数据库的并发写入压力
-                    SchedulerBus.schedule(() -> executor.execute(() -> doPersist(updateList)), count++ * 100L, TimeUnit.MILLISECONDS);
+                    SchedulerBus.schedule(() -> executor.execute(() -> doPersist(updateList)), count++ * 128L, TimeUnit.MILLISECONDS);
                 }
             }
         }
