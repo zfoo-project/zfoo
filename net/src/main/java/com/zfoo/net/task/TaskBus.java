@@ -92,6 +92,11 @@ public final class TaskBus {
     }
 
 
+    /**
+     * EN: Use uid, sid, or hashcode to bind tasks to the same thread to improve the cache hit ratio of the CPU
+     * CN: 通过uid，sid，或者hashcode来把任务绑定到相同的线程中来提高cpu的缓存命中率
+     * <a href="https://zhuanlan.zhihu.com/p/439381000">系统性能调优之绑定cpu</a>
+     */
     private static int calTaskExecutorIndex(int taskExecutorHash) {
         return taskExecutorHash & EXECUTOR_MASK;
     }
