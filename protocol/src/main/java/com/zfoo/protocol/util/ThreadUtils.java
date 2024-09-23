@@ -117,7 +117,7 @@ public abstract class ThreadUtils {
     }
 
     public static Executor executorByThreadId(long threadId) {
-        var threadExecutor = threadExecutorMap.getPrimitive(threadId);
+        var threadExecutor = threadExecutorMap.get(threadId);
         return threadExecutor == null ? null : threadExecutor.getValue();
     }
 
@@ -125,7 +125,7 @@ public abstract class ThreadUtils {
      * search for the corresponding thread by the thread id
      */
     public static Thread findThread(long threadId) {
-        var threadExecutor = threadExecutorMap.getPrimitive(threadId);
+        var threadExecutor = threadExecutorMap.get(threadId);
         if (threadExecutor != null) {
             return threadExecutor.getKey();
         }

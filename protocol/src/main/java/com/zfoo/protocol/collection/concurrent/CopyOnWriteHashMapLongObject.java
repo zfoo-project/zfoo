@@ -70,12 +70,16 @@ public class CopyOnWriteHashMapLongObject<V> implements Map<Long, V> {
         return map.get(key);
     }
 
-    public V getPrimitive(long key) {
+    public V get(long key) {
         return map.get(key);
     }
 
     @Override
     public V put(Long key, V value) {
+        return put(key.longValue(), value);
+    }
+
+    public V put(long key, V value) {
         lock.lock();
         try {
             var newMap = newCopyMap();
@@ -89,6 +93,10 @@ public class CopyOnWriteHashMapLongObject<V> implements Map<Long, V> {
 
     @Override
     public V remove(Object key) {
+        return remove(((Long) key).longValue());
+    }
+
+    public V remove(long key) {
         lock.lock();
         try {
             var newMap = newCopyMap();
