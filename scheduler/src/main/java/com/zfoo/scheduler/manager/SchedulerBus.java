@@ -83,7 +83,7 @@ public abstract class SchedulerBus {
             thread.setDaemon(false);
             thread.setPriority(Thread.NORM_PRIORITY);
             thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
-            ThreadUtils.registerExecutor(thread.getId(), executor);
+            ThreadUtils.registerSingleThreadExecutor(thread, executor);
             return thread;
         }
 

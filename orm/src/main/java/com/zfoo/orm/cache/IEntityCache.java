@@ -24,8 +24,8 @@ import java.util.function.BiConsumer;
 public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> {
 
     /**
-     * EN: Load data from the database to the cache and return a default value with an empty ID if the database does not exist.
-     * CN: 从数据库中加载数据到缓存，如果数据库不存在则返回一个id为空的默认值。
+     * EN: Load data from the database to the cache and return null if the database does not exist.
+     * CN: 从数据库中加载数据到缓存，如果数据库不存在则返回null。
      */
     @Nullable
     E load(PK pk);

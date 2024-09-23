@@ -93,7 +93,7 @@ public abstract class EventBus {
             thread.setUncaughtExceptionHandler((t, e) -> logger.error(t.toString(), e));
             var executor = executors[poolNumber];
             AssertionUtils.notNull(executor);
-            ThreadUtils.registerExecutor(thread.getId(), executor);
+            ThreadUtils.registerSingleThreadExecutor(thread, executor);
             return thread;
         }
     }

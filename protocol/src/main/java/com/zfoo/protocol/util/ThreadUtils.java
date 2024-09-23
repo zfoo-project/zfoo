@@ -13,6 +13,7 @@
 package com.zfoo.protocol.util;
 
 import com.zfoo.protocol.collection.concurrent.CopyOnWriteHashMapLongObject;
+import com.zfoo.protocol.model.Pair;
 import io.netty.util.concurrent.EventExecutorGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,25 +40,6 @@ public abstract class ThreadUtils {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * 通过线程号寻找对应的线程
-     */
-    public static Thread findThread(long threadId) {
-        var group = Thread.currentThread().getThreadGroup();
-        while (group != null) {
-            var threads = new Thread[group.activeCount() * 2];
-            var count = group.enumerate(threads, true);
-            for (var i = 0; i < count; i++) {
-                if (threadId == threads[i].getId()) {
-                    return threads[i];
-                }
-            }
-            group = group.getParent();
-        }
-        return null;
-    }
-
 
     public static void shutdown(ExecutorService executor) {
         try {
@@ -127,14 +109,38 @@ public abstract class ThreadUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // threadId -> Executor
-    private static final CopyOnWriteHashMapLongObject<Executor> threadExecutorMap = new CopyOnWriteHashMapLongObject<>(Runtime.getRuntime().availableProcessors() * 8);
-    public static void registerExecutor(long threadId, Executor executor) {
-        threadExecutorMap.put(threadId, executor);
+    // threadId -> (Thread, Executor)
+    private static final CopyOnWriteHashMapLongObject<Pair<Thread, Executor>> threadExecutorMap = new CopyOnWriteHashMapLongObject<>(Runtime.getRuntime().availableProcessors() * 8);
+
+    public static void registerSingleThreadExecutor(Thread thread, Executor executor) {
+        threadExecutorMap.put(thread.getId(), new Pair<>(thread, executor));
     }
 
     public static Executor executorByThreadId(long threadId) {
-        return threadExecutorMap.get(threadId);
+        var threadExecutor = threadExecutorMap.getPrimitive(threadId);
+        return threadExecutor == null ? null : threadExecutor.getValue();
     }
 
+    /**
+     * search for the corresponding thread by the thread id
+     */
+    public static Thread findThread(long threadId) {
+        var threadExecutor = threadExecutorMap.getPrimitive(threadId);
+        if (threadExecutor != null) {
+            return threadExecutor.getKey();
+        }
+
+        var group = Thread.currentThread().getThreadGroup();
+        while (group != null) {
+            var threads = new Thread[group.activeCount() * 2];
+            var count = group.enumerate(threads, true);
+            for (var i = 0; i < count; i++) {
+                if (threadId == threads[i].getId()) {
+                    return threads[i];
+                }
+            }
+            group = group.getParent();
+        }
+        return null;
+    }
 }

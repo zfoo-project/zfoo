@@ -63,7 +63,7 @@ public abstract class MongoIdUtils {
                 return document.getLong("count") + 1;
             }
         } catch (Throwable t) {
-            logger.info("getIncrementIdFromMongo collection:[{}] document:[{}] default error", collectionName, documentName, t);
+            logger.error("getIncrementIdFromMongo collection:[{}] document:[{}] default error", collectionName, documentName, t);
         }
 
         var query = Filters.eq("_id", documentName);
@@ -75,7 +75,7 @@ public abstract class MongoIdUtils {
                 var document = collection.findOneAndUpdate(query, Updates.combine(inc, setOnInsert), new FindOneAndUpdateOptions().upsert(true));
                 return null == document ? INIT_ID : document.getLong(COUNT) + 1;
             } catch (Throwable t) {
-                logger.info("getIncrementIdFromMongo collection:[{}] document:[{}] retry error! ", collectionName, documentName, t);
+                logger.error("getIncrementIdFromMongo collection:[{}] document:[{}] retry error! ", collectionName, documentName, t);
             }
         }
 
