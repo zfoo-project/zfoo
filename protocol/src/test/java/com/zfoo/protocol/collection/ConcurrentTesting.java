@@ -43,7 +43,7 @@ public class ConcurrentTesting {
                 @Override
                 public void run() {
                     for (int j = 0; j < num; j++) {
-                        map.put((long) j, j);
+                        map.put(j, j);
                     }
                     countDownLatch.countDown();
                 }
