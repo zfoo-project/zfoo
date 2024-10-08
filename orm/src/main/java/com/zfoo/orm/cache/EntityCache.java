@@ -74,7 +74,12 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 if (removalCause == LazyCache.RemovalCause.EXPLICIT) {
                     return;
                 }
-                EventBus.asyncExecute(clazz.hashCode(), () -> doPersist(removes.stream().map(it -> it.v.getEntity()).toList()));
+                var updateList = removes.stream()
+                        .map(it -> it.v)
+                        .filter(it -> !noNeedUpdate(it))
+                        .map(it -> it.getEntity())
+                        .toList();
+                EventBus.asyncExecute(clazz.hashCode(), () -> doPersist(updateList));
             }
         };
         var expireCheckIntervalMillis = Math.max(3 * TimeUtils.MILLIS_PER_SECOND, entityDef.getExpireMillisecond() / 10);
@@ -220,14 +225,15 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     @Override
     public void persist(PK pk) {
         var pnode = caches.get(pk);
-        if (pnode == null) {
-            return;
-        }
-        if (pnode.getModifiedTime() == pnode.getWriteToDbTime()) {
+        if (noNeedUpdate(pnode)) {
             return;
         }
         pnode.resetTime(TimeUtils.currentTimeMillis());
         doPersist(List.of(pnode.getEntity()));
+    }
+
+    private boolean noNeedUpdate(PNode<PK, E> pnode) {
+        return pnode == null || pnode.getEntity() == null || pnode.getModifiedTime() == pnode.getWriteToDbTime();
     }
 
 
@@ -246,12 +252,12 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             caches.forEach(new BiConsumer<PK, PNode<PK, E>>() {
                 @Override
                 public void accept(PK pk, PNode<PK, E> pnode) {
-                    var entity = pnode.getEntity();
-                    if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
-                        pnode.resetTime(currentTime);
-                        var updateList = updateMap.computeIfAbsent(pnode.getThreadId(), it -> new ArrayList<>(initSize));
-                        updateList.add(entity);
+                    if (noNeedUpdate(pnode)) {
+                        return;
                     }
+                    pnode.resetTime(currentTime);
+                    var updateList = updateMap.computeIfAbsent(pnode.getThreadId(), it -> new ArrayList<>(initSize));
+                    updateList.add(pnode.getEntity());
                 }
             });
             var count = 0;
@@ -276,11 +282,11 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         caches.forEach(new BiConsumer<PK, PNode<PK, E>>() {
             @Override
             public void accept(PK pk, PNode<PK, E> pnode) {
-                var entity = pnode.getEntity();
-                if (pnode.getModifiedTime() != pnode.getWriteToDbTime()) {
-                    pnode.resetTime(currentTime);
-                    updateList.add(entity);
+                if (noNeedUpdate(pnode)) {
+                    return;
                 }
+                pnode.resetTime(currentTime);
+                updateList.add(pnode.getEntity());
             }
         });
         doPersist(updateList);
