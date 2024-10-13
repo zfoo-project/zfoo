@@ -264,6 +264,11 @@ public class Router implements IRouter {
      */
     @Override
     public <T> AsyncAnswer<T> asyncAsk(Session session, Object packet, @Nullable Class<T> answerClass, @Nullable Object argument) {
+        return asyncAsk(session, packet, answerClass, argument, DEFAULT_TIMEOUT);
+    }
+
+    @Override
+    public <T> AsyncAnswer<T> asyncAsk(Session session, Object packet, Class<T> answerClass, Object argument, long timeoutMillis) {
         var clientSignalAttachment = new SignalAttachment();
 
         if (argument == null) {
@@ -281,7 +286,7 @@ public class Router implements IRouter {
             asyncAnswer.setSignalAttachment(clientSignalAttachment);
 
             clientSignalAttachment.getResponseFuture()
-                    .completeOnTimeout(null, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS) // 因此超时的情况，返回的是null
+                    .completeOnTimeout(null, timeoutMillis, TimeUnit.MILLISECONDS) // 因此超时的情况，返回的是null
                     .thenApply(answer -> {
                         if (answer == null) {
                             throw new NetTimeOutException("async ask [{}] timeout exception", packet.getClass().getSimpleName());
