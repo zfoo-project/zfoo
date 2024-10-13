@@ -223,6 +223,11 @@ public class Router implements IRouter {
 
     @Override
     public <T> SyncAnswer<T> syncAsk(Session session, Object packet, @Nullable Class<T> answerClass, @Nullable Object argument) throws Exception {
+        return syncAsk(session, packet, answerClass, argument, DEFAULT_TIMEOUT);
+    }
+
+    @Override
+    public <T> SyncAnswer<T> syncAsk(Session session, Object packet, Class<T> answerClass, Object argument, long timeoutMillis) throws Exception {
         var clientSignalAttachment = new SignalAttachment();
         if (argument == null) {
             clientSignalAttachment.setClient(SignalAttachment.SIGNAL_NATIVE_NO_ARGUMENT_CLIENT);
@@ -237,7 +242,7 @@ public class Router implements IRouter {
             // 里面调用的依然是：send方法发送消息
             send(session, packet, clientSignalAttachment);
 
-            Object responsePacket = clientSignalAttachment.getResponseFuture().get(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
+            Object responsePacket = clientSignalAttachment.getResponseFuture().get(timeoutMillis, TimeUnit.MILLISECONDS);
 
             if (responsePacket.getClass() == Error.class) {
                 throw new ErrorResponseException((Error) responsePacket);
@@ -254,7 +259,6 @@ public class Router implements IRouter {
         } finally {
             SignalBridge.removeSignalAttachment(clientSignalAttachment);
         }
-
     }
 
     /**
@@ -384,7 +388,7 @@ public class Router implements IRouter {
         }
     }
 
-    protected void exceptionHandler(Exception e, PacketReceiverTask packetReceiverTask){
+    protected void exceptionHandler(Exception e, PacketReceiverTask packetReceiverTask) {
         var session = packetReceiverTask.getSession();
         var packet = packetReceiverTask.getPacket();
         var attachment = packetReceiverTask.getAttachment();
@@ -392,7 +396,7 @@ public class Router implements IRouter {
         logger.error("at{} e[uid:{}][sid:{}] invoke exception", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), e);
     }
 
-    protected void throwableHandler(Throwable t, PacketReceiverTask packetReceiverTask){
+    protected void throwableHandler(Throwable t, PacketReceiverTask packetReceiverTask) {
         var session = packetReceiverTask.getSession();
         var packet = packetReceiverTask.getPacket();
         logger.error("at{} e[uid:{}][sid:{}] invoke error", StringUtils.capitalize(packet.getClass().getSimpleName()), session.getUid(), session.getSid(), t);
