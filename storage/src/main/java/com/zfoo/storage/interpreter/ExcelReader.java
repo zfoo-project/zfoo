@@ -110,7 +110,7 @@ public abstract class ExcelReader {
     private static Workbook createWorkbook(InputStream input, String fileName) {
         try {
             return WorkbookFactory.create(input);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RunException("Static excel resource [{}] is abnormal, and the file cannot be read", fileName, e);
         }
     }
