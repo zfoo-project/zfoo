@@ -105,37 +105,6 @@ public class MongodbAccessor implements IAccessor {
     }
 
     @Override
-    public <PK extends Comparable<PK>, E extends IEntity<PK>> void batchUpdateNode(List<PNode<PK,E>> nodes) {
-        if (CollectionUtils.isEmpty(nodes)) {
-            return;
-        }
-
-        try {
-            @SuppressWarnings("unchecked")
-            var entityClazz = (Class<E>) nodes.get(0).getClass();
-            var collection = OrmContext.getOrmManager().getCollection(entityClazz);
-            List<E> entities = nodes.stream().map(PNode::getEntity).toList();
-            var batchList = entities.stream()
-                    .map(it -> new ReplaceOneModel<E>(Filters.eq("_id", it.id()), it))
-                    .toList();
-
-            var result = collection.bulkWrite(batchList, new BulkWriteOptions().ordered(false));
-
-            //设置修改时间
-            long  currentTime = TimeUtils.currentTimeMillis();
-            nodes.forEach(k->k.resetTime(currentTime));
-
-            if (result.getMatchedCount() != entities.size()) {
-                // 在数据库的批量更新操作中需要更新的数量和最终更新的数量不相同
-                logger.warn("database:[{}] update size:[{}] not equal with matched size:[{}](some entity of id not exist in database)"
-                        , entityClazz.getSimpleName(), entities.size(), result.getMatchedCount());
-            }
-        } catch (Throwable t) {
-            logger.error("batchUpdate unknown exception", t);
-        }
-    }
-
-    @Override
     public <PK extends Comparable<PK>, E extends IEntity<PK>> boolean delete(E entity) {
         @SuppressWarnings("unchecked")
         var entityClazz = (Class<E>) entity.getClass();
