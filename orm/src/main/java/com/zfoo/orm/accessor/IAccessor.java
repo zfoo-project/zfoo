@@ -13,6 +13,7 @@
 
 package com.zfoo.orm.accessor;
 
+import com.zfoo.orm.cache.persister.PNode;
 import com.zfoo.orm.model.IEntity;
 import org.springframework.lang.Nullable;
 
@@ -32,6 +33,8 @@ public interface IAccessor {
     <PK extends Comparable<PK>, E extends IEntity<PK>> boolean update(E entity);
 
     <PK extends Comparable<PK>, E extends IEntity<PK>> void batchUpdate(List<E> entities);
+
+    <PK extends Comparable<PK>, E extends IEntity<PK>> void batchUpdateNode(List<PNode<PK,E>> entities);
 
     <PK extends Comparable<PK>, E extends IEntity<PK>> boolean delete(E entity);
 
