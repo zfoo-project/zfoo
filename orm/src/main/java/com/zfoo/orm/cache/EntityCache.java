@@ -309,7 +309,29 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         for (var currentPage = 1; currentPage <= maxPageSize; currentPage++) {
             page.setPage(currentPage);
             var currentUpdateList = page.currentPageList(updateList);
-            OrmContext.getAccessor().batchUpdateNode(currentUpdateList);
+            try {
+                @SuppressWarnings("unchecked")
+                var entityClazz = (Class<E>) currentUpdateList.get(0).getClass();
+                var collection = OrmContext.getOrmManager().getCollection(entityClazz);
+                List<E> entities = currentUpdateList.stream().map(PNode::getEntity).toList();
+                var batchList = entities.stream()
+                        .map(it -> new ReplaceOneModel<E>(Filters.eq("_id", it.id()), it))
+                        .toList();
+
+                var result = collection.bulkWrite(batchList, new BulkWriteOptions().ordered(false));
+
+                //设置修改时间
+                long  currentTime = TimeUtils.currentTimeMillis();
+                currentUpdateList.forEach(k->k.resetTime(currentTime));
+
+                if (result.getMatchedCount() != entities.size()) {
+                    // 在数据库的批量更新操作中需要更新的数量和最终更新的数量不相同
+                    logger.warn("database:[{}] update size:[{}] not equal with matched size:[{}](some entity of id not exist in database)"
+                            , entityClazz.getSimpleName(), entities.size(), result.getMatchedCount());
+                }
+            } catch (Throwable t) {
+                logger.error("batchUpdate unknown exception", t);
+            }
         }
     }
 

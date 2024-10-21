@@ -34,8 +34,6 @@ public interface IAccessor {
 
     <PK extends Comparable<PK>, E extends IEntity<PK>> void batchUpdate(List<E> entities);
 
-    <PK extends Comparable<PK>, E extends IEntity<PK>> void batchUpdateNode(List<PNode<PK,E>> entities);
-
     <PK extends Comparable<PK>, E extends IEntity<PK>> boolean delete(E entity);
 
     <PK extends Comparable<PK>, E extends IEntity<PK>> boolean delete(PK pk, Class<E> entityClazz);
