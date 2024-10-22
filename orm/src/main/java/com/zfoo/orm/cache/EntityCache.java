@@ -243,7 +243,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         if (entityDef.isThreadSafe()) {
             EventBus.asyncExecute(clazz.hashCode(), () -> persistAllBlock());
         } else {
-            var currentTime = TimeUtils.currentTimeMillis();
             // key为threadId
             var updateMap = new HashMap<Long, List<PNode<PK, E>>>();
             var initSize = caches.size() >> 2;
@@ -253,7 +252,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     if (noNeedUpdate(pnode)) {
                         return;
                     }
-                    pnode.resetTime(currentTime);
                     var updateList = updateMap.computeIfAbsent(pnode.getThreadId(), it -> new ArrayList<>(initSize));
                     updateList.add(pnode);
                 }
@@ -275,7 +273,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     @Override
     public void persistAllBlock() {
-        var currentTime = TimeUtils.currentTimeMillis();
         var updateList = new ArrayList<PNode<PK, E>>(caches.size());
         caches.forEach(new BiConsumer<PK, PNode<PK, E>>() {
             @Override
@@ -283,7 +280,6 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 if (noNeedUpdate(pnode)) {
                     return;
                 }
-                pnode.resetTime(currentTime);
                 updateList.add(pnode);
             }
         });
