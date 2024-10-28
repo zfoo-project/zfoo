@@ -307,8 +307,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             var currentUpdateList = page.currentPageList(updateList);
             try {
                 @SuppressWarnings("unchecked")
-                var entityClazz = (Class<E>) currentUpdateList.get(0).getClass();
-                var collection = OrmContext.getOrmManager().getCollection(entityClazz);
+                var collection = OrmContext.getOrmManager().getCollection(clazz);
                 List<E> entities = currentUpdateList.stream().map(PNode::getEntity).toList();
                 var batchList = entities.stream()
                         .map(it -> new ReplaceOneModel<E>(Filters.eq("_id", it.id()), it))
@@ -323,7 +322,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 if (result.getMatchedCount() != entities.size()) {
                     // 在数据库的批量更新操作中需要更新的数量和最终更新的数量不相同
                     logger.warn("database:[{}] update size:[{}] not equal with matched size:[{}](some entity of id not exist in database)"
-                            , entityClazz.getSimpleName(), entities.size(), result.getMatchedCount());
+                            , clazz.getSimpleName(), entities.size(), result.getMatchedCount());
                 }
             } catch (Throwable t) {
                 logger.error("batchUpdate unknown exception", t);
