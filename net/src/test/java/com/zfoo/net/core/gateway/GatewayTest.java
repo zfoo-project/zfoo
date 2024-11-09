@@ -18,7 +18,7 @@ import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.core.tcp.TcpClient;
 import com.zfoo.net.packet.gateway.GatewayToProviderRequest;
 import com.zfoo.net.packet.gateway.GatewayToProviderResponse;
-import com.zfoo.net.session.SessionUtils;
+import com.zfoo.net.util.SessionUtilsTest;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
@@ -51,21 +51,21 @@ public class GatewayTest {
     @Test
     public void startProvider0() {
         var context = new ClassPathXmlApplicationContext("provider/provider_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
     @Test
     public void startProvider1() {
         var context = new ClassPathXmlApplicationContext("provider/provider_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
     @Test
     public void startProvider2() {
         var context = new ClassPathXmlApplicationContext("provider/provider_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
@@ -75,7 +75,7 @@ public class GatewayTest {
     @Test
     public void startGateway() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
 
         // 注意：这里创建的是GatewayServer里面是GatewayRouteHandler(而不是BaseRouteHandler),里面会通过ConsumerSession把消息转发到Provider
         var gatewayServer = new GatewayServer(HostAndPort.valueOf("127.0.0.1:9000"), null);
@@ -89,7 +89,7 @@ public class GatewayTest {
     @Test
     public void clientSyncTest() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_client_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
 
         // 这里的地址是网关的地址
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
@@ -124,7 +124,7 @@ public class GatewayTest {
     @Test
     public void clientAsyncTest() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_client_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
 
         // 这里的地址是网关的地址
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));

@@ -16,7 +16,7 @@ package com.zfoo.net.core.provider;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.provider.ProviderMessAnswer;
 import com.zfoo.net.packet.provider.ProviderMessAsk;
-import com.zfoo.net.session.SessionUtils;
+import com.zfoo.net.util.SessionUtilsTest;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
@@ -45,21 +45,21 @@ public class ProviderTest {
     @Test
     public void startProvider0() {
         var context = new ClassPathXmlApplicationContext("provider/provider_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
     @Test
     public void startProvider1() {
         var context = new ClassPathXmlApplicationContext("provider/provider_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
     @Test
     public void startProvider2() {
         var context = new ClassPathXmlApplicationContext("provider/provider_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
@@ -69,7 +69,7 @@ public class ProviderTest {
     @Test
     public void startSyncRandomConsumer() throws Exception {
         var context = new ClassPathXmlApplicationContext("provider/consumer_random_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
 
         var ask = new ProviderMessAsk();
         ask.setMessage("Hello, this is the consumer!");
@@ -88,7 +88,7 @@ public class ProviderTest {
     @Test
     public void startAsyncRandomConsumer() {
         var context = new ClassPathXmlApplicationContext("provider/consumer_random_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
 
         var ask = new ProviderMessAsk();
         ask.setMessage("Hello, this is the consumer!");
@@ -110,7 +110,7 @@ public class ProviderTest {
     @Test
     public void startConsistentHashConsumer() {
         var context = new ClassPathXmlApplicationContext("provider/consumer_consistent_hash_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
 
         var ask = new ProviderMessAsk();
         ask.setMessage("Hello, this is the consumer!");
@@ -132,7 +132,7 @@ public class ProviderTest {
     @Test
     public void startCachedConsistentHashConsumer() {
         var context = new ClassPathXmlApplicationContext("provider/consumer_cached_consistent_config.xml");
-        SessionUtils.printSessionInfo();
+        SessionUtilsTest.printSessionInfo();
 
         var ask = new ProviderMessAsk();
         ask.setMessage("Hello, this is the consumer!");

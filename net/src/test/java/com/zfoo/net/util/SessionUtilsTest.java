@@ -11,9 +11,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.net.session;
+package com.zfoo.net.util;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.ThreadUtils;
@@ -23,7 +24,7 @@ import java.util.function.Consumer;
 /**
  * @author godotg
  */
-public abstract class SessionUtils {
+public class SessionUtilsTest {
 
     public static void printSessionInfo() {
         Thread thread = new Thread(() -> {
