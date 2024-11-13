@@ -311,7 +311,7 @@ public class ProtocolAnalysis {
         return new ArrayList<>(classes);
     }
 
-    private static void enhance(GenerateOperation generateOperation, List<IProtocolRegistration> enhanceList) {
+    public static void enhance(GenerateOperation generateOperation, List<IProtocolRegistration> enhanceList) {
         try {
             enhanceProtocolBefore(generateOperation);
             enhanceProtocolRegistration(enhanceList);
@@ -421,7 +421,7 @@ public class ProtocolAnalysis {
         return notCompatibleFields;
     }
 
-    private static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) {
+    public static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) {
         var protocolId = ProtocolManager.protocolId(clazz);
         var declaredFields = getFields(clazz);
         // 对象需要被序列化的属性
@@ -637,7 +637,7 @@ public class ProtocolAnalysis {
 
     // 协议智能语法分析，错误的协议定义将无法启动程序并给出错误警告
     //-----------------------------------------------------------------------
-    private static void initProtocolClass(short protocolId, Class<?> clazz) {
+    public static void initProtocolClass(short protocolId, Class<?> clazz) {
         // 协议号重复定义
         if (protocolIdMap.containsKey(clazz)) {
             throw new RunException("duplicate protocol:[{}] protocolId:[{}] and [protocolId:{}]", clazz.getSimpleName(), protocolIdMap.get(clazz), protocolId);
