@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Ubuntu需要将dash取消才能运行shell脚本，sudo dpkg-reconfigure dash
+
 # doc:
 # EN:Server deployment script, this script encapsulates common deployment operations, not necessarily used
 # CN:服务器部署脚本，这个脚本封装了常用部署操作，不是一定要使用的
