@@ -617,6 +617,8 @@ public class OrmManager implements IOrmManager {
             } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
                 // ORM不支持集合嵌套数组类型
                 throw new RunException("orm do not support the combination of arrays and collections with the class:[{}] type:[{}]", currentEntityClass.getSimpleName(), clazz.getSimpleName());
+            } else if (clazz.equals(currentEntityClass)) {
+                return false;
             } else {
                 return hasUnsafeCollection(clazz);
             }
