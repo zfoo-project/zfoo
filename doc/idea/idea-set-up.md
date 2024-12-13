@@ -175,6 +175,9 @@ See the License for the specific language governing permissions and limitations 
 - idea代理设置
   ![Image text](../image/idea/idea-proxy.jpg)
 
+- maven需要设置代理，把当前目录中的settings.xml复制到.m2文件夹下，settings.xml中配置了proxy网络代理
+  ![Image text](../image/idea/maven-settings-config.png)
+
 - maven代理设置（非全局），-DproxySet=true -DproxyHost=127.0.0.1 -DproxyPort=10809
   ![Image text](../image/idea/idea-proxy-maven.jpg)
 
