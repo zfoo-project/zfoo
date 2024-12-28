@@ -14,6 +14,7 @@ package com.zfoo.protocol;
 
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.HashMapIntShort;
+import com.zfoo.protocol.exception.DecodeException;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.registration.ProtocolAnalysis;
@@ -70,7 +71,13 @@ public class ProtocolManager {
      * ByteBuf convert to byte[] using ByteBufUtils.readAllBytes(ByteBuf) in zfoo
      */
     public static Object read(ByteBuf buffer) {
-        return protocols[ByteBufUtils.readShort(buffer)].read(buffer);
+        short protocolId = -1;
+        try {
+            protocolId = ByteBufUtils.readShort(buffer);
+            return protocols[protocolId].read(buffer);
+        } catch (Throwable e) {
+            throw new DecodeException(e, protocolId);
+        }
     }
 
     public static IProtocolRegistration getProtocol(short protocolId) {
