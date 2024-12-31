@@ -60,7 +60,7 @@ ranslate.google.com
 查看nodejs是否安装成功：node --version；
 ```
 
-- nodejs设置代理
+- nodejs设置代理，大部分代理软件在windows的http代理端口是10809，ubuntu的是10808
 
 ```
 npm config set proxy http://127.0.0.1:10809
