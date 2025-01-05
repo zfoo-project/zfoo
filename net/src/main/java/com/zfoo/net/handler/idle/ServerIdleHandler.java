@@ -15,7 +15,6 @@ package com.zfoo.net.handler.idle;
 
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelDuplexHandler;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -25,7 +24,6 @@ import org.slf4j.LoggerFactory;
 /**
  * @author godotg
  */
-@ChannelHandler.Sharable
 public class ServerIdleHandler extends ChannelDuplexHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerIdleHandler.class);
