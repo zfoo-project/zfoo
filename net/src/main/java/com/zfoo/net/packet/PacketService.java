@@ -159,11 +159,6 @@ public class PacketService implements IPacketService {
 
     @Override
     public void write(ByteBuf buffer, Object packet, Object attachment) {
-
-        if (packet == null) {
-            logger.error("packet is null and can not be sent.");
-            return;
-        }
         try {
             // 预留写入包的长度，一个int字节大小
             buffer.ensureWritable(7);
