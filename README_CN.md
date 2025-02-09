@@ -62,8 +62,9 @@
 
 - [zfoo sdk gdscript for godot](https://github.com/zfoo-project/zfoo-sdk-gdscript-godot)
 
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server) 网络游戏《进击的坦克（The Fight of
-  Tanks）》，新手友好，难度2星
+- [jc-site](https://github.com/zfoo-project/jc-site) AI聚合网站
+
+- [tank-game-server](https://github.com/zfoo-project/tank-game-server)
 
 - [godot-bird](https://github.com/zfoo-project/godot-bird) 鸟了个鸟，客户端使用godot开发，服务器依然使用的tank-game-server
 
@@ -74,8 +75,7 @@
 #### 1. [protocol](protocol/README.md) 极致性能的Java序列化和反序列化库
 
 ```
-// zfoo协议注册，只能初始化一次
-// 注意：实际项目中是通过读取protocol.xml文件自动完成协议注册的，无需调用此方法手动注册
+// 协议注册
 ProtocolManager.initProtocol(Set.of(ComplexObject.class, ObjectA.class, ObjectB.class));
 
 // 序列化
@@ -98,11 +98,10 @@ var userInfoAsk = UserInfoAsk.valueOf(userId);
 var answer = NetContext.getCosumer().syncAsk(userInfoAsk, UserInfoAnswer.class, userId).packet();
 
 // 消费者，异步请求远程用户信息，不会柱塞当前的线程，异步请求成功过后依然会在当前线程执行逻辑
-NetContext.getCosumer()
-                    .asyncAsk(userInfoAsk, UserInfoAnswer.class, userId)
-                    .whenComplete(sm -> {
-                        // do something
-                    );
+NetContext.getCosumer().asyncAsk(userInfoAsk, UserInfoAnswer.class, userId)
+          .whenComplete(sm -> {
+              // do something
+          );
 ```
 
 #### 3. [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java) 热更新代码，不需要停止服务器，不需要额外的任何配置，一行代码开启热更新

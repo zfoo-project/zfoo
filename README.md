@@ -57,8 +57,8 @@ Perfect work development process, complete online solution
 - [zfoo sdk of csharp and lua for unity and godot](https://github.com/zfoo-project/zfoo-sdk-csharp-lua-unity-godot)
 - [zfoo sdk typescript javascript cocos web h5](https://github.com/zfoo-project/zfoo-sdk-typescript-javascript-cocos-web-h5)
 - [zfoo sdk gdscript for godot](https://github.com/zfoo-project/zfoo-sdk-gdscript-godot)
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server) Online game《The Fight of Tanks》, novice friendly,
-  difficulty 2 stars
+- [jc-site](https://github.com/zfoo-project/jc-site) AI website
+- [tank-game-server](https://github.com/zfoo-project/tank-game-server)
 - [godot-bird](https://github.com/zfoo-project/godot-bird) bird and bird，powered by godot
 - [FAQ](./doc/FAQ.md)，There are standard demo display and instructions in the test folder of each project directory,
   which can be run directly
@@ -69,7 +69,7 @@ Perfect work development process, complete online solution
 #### 1. [protocol](protocol/README.md) ultimate performance serialization and deserialization
 
 ```
-// zfoo protocol registration, can only be initialized once
+// protocol registration
 ProtocolManager.initProtocol(Set.of(ComplexObject.class, ObjectA.class, ObjectB.class));
 
 // serialization
@@ -92,11 +92,10 @@ var userInfoAsk = UserInfoAsk.valueOf(userId);
 var answer = NetContext.getCosumer().syncAsk(userInfoAsk, UserInfoAnswer.class, userId).packet();
 
 // Consumers, asynchronously requesting remote service, and will still execute logic in the current thread after the asynchronous
-NetContext.getCosumer()
-                    .asyncAsk(userInfoAsk, UserInfoAnswer.class, userId)
-                    .whenComplete(sm -> {
-                        // do something
-                    );
+NetContext.getCosumer().asyncAsk(userInfoAsk, UserInfoAnswer.class, userId)
+          .whenComplete(sm -> {
+              // do something
+          );
 ```
 
 #### 3. [hotswap](hotswap/src/test/java/com/zfoo/hotswap/ApplicationTest.java) hot update code, no need to stop the server, no additional configuration, just one line of code to start hot update
