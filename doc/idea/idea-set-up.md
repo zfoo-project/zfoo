@@ -20,9 +20,9 @@
 - git下载代码慢的解决方法|无法下载代码的解决方法，取消git配置使用git config --global --unset http.proxy
 
 ```
-使用vpn
-git config --global http.proxy http://127.0.0.1:10809
-git config --global https.proxy https://127.0.0.1:10809
+使用vpn，老版本的是10809端口，新版本的只有一个10809端口
+git config --global http.proxy http://127.0.0.1:10808
+git config --global https.proxy https://127.0.0.1:10808
 ```
 
 - 换行符
