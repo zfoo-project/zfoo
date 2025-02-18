@@ -194,21 +194,17 @@ public class Router implements IRouter {
 
     @Override
     public void send(Session session, Object packet, Object attachment) {
-        if (session == null) {
-            logger.error("session is null and can not be sent.");
+        if (session == null || packet == null) {
             return;
         }
-        if (packet == null) {
-            logger.error("packet is null and can not be sent.");
-            return;
-        }
-
-        var packetInfo = EncodedPacketInfo.valueOf(packet, attachment);
-
         var channel = session.getChannel();
-        if (!channel.isActive() || !channel.isWritable()) {
-            logger.warn("send msg error, protocol [{}] isActive=[{}] isWritable=[{}]"
-                    , packet.getClass().getSimpleName(), channel.isActive(), channel.isWritable());
+        if (!channel.isActive()) {
+            return;
+        }
+        var packetInfo = EncodedPacketInfo.valueOf(packet, attachment);
+        if (!channel.isWritable()) {
+            logger.warn("send msg error, protocol [{}] sid=[{}] uid=[{}] isActive=[{}] isWritable=[{}]"
+                    , packet.getClass().getSimpleName(), session.getSid(), session.getUid(), channel.isActive(), channel.isWritable());
         }
         channel.writeAndFlush(packetInfo);
     }
