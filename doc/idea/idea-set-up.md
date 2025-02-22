@@ -53,7 +53,7 @@ ranslate.google.com
 
 ## 3. nodejs安装
 
-- 直接默认安装
+- windows直接默认安装，linux到官网 https://nodejs.org/ 查看最新的安装教程
 
 ```
 查看npm是否安装成功：npm --version；  
