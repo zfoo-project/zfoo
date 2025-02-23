@@ -187,4 +187,11 @@ public abstract class SchedulerBus {
         registerScheduler(SchedulerDefinition.valueOf(cron, runnable));
     }
 
+    /**
+     * 立刻执行的任务
+     */
+    public static void execute(Runnable runnable) {
+        executor.execute(ThreadUtils.safeRunnable(runnable));
+    }
+
 }

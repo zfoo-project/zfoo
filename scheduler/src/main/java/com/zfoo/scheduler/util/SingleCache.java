@@ -13,6 +13,9 @@
 
 package com.zfoo.scheduler.util;
 
+import com.zfoo.scheduler.manager.SchedulerBus;
+
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
@@ -55,6 +58,18 @@ public class SingleCache<V> {
         if (now > refreshTime) {
             if (refreshTimeAtomic.compareAndSet(refreshTime, now + refreshDuration)) {
                 cache = supplier.get();
+            }
+        }
+        return cache;
+    }
+
+    public V lazyGet() {
+        var now = TimeUtils.now();
+        var refreshTime = refreshTimeAtomic.get();
+        // 使用双重检测锁的方式
+        if (now > refreshTime) {
+            if (refreshTimeAtomic.compareAndSet(refreshTime, now + refreshDuration)) {
+                SchedulerBus.execute(() -> cache = supplier.get());
             }
         }
         return cache;
