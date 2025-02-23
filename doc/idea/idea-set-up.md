@@ -21,8 +21,8 @@
 
 ```
 使用vpn，老版本的是10809端口，新版本的只有一个10809端口
-git config --global http.proxy http://127.0.0.1:10808
-git config --global https.proxy https://127.0.0.1:10808
+git config --global http.proxy http://127.0.0.1:10809
+git config --global https.proxy https://127.0.0.1:10809
 ```
 
 - 换行符

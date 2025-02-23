@@ -45,8 +45,8 @@ public class SingleCache<V> {
         var cache = new SingleCache<V>();
         cache.refreshDuration = refreshDuration;
         cache.supplier = supplier;
-        cache.cache = supplier.get();
         cache.refreshTimeAtomic = new AtomicLong(TimeUtils.now() + refreshDuration);
+        SchedulerBus.execute(() -> cache.cache = supplier.get());
         return cache;
     }
 
