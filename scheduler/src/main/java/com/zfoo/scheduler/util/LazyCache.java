@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiConsumer;
 
 /**
@@ -52,7 +53,6 @@ public class LazyCache<K, V> {
         SIZE;
     }
 
-
     private int maximumSize;
     private int backPressureSize;
     private long expireAfterAccessMillis;
@@ -62,6 +62,7 @@ public class LazyCache<K, V> {
     private ConcurrentMap<K, Cache<K, V>> cacheMap;
     private BiConsumer<List<Cache<K, V>>, RemovalCause> removeListener = (removes, removalCause) -> {
     };
+    private final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
 
     public LazyCache(int maximumSize, long expireAfterAccessMillis, long expireCheckIntervalMillis, BiConsumer<List<Cache<K, V>>, RemovalCause> removeListener) {
         AssertionUtils.ge1(maximumSize);
@@ -155,16 +156,23 @@ public class LazyCache<K, V> {
         removeListener.accept(removeList, removalCause);
     }
 
-    private synchronized void checkMaximumSize() {
-        if (cacheMap.size() > backPressureSize) {
-            var removeList = cacheMap.values()
-                    .stream()
-                    .sorted((a, b) -> Long.compare(a.expireTime, b.expireTime))
-                    .limit(Math.max(0, cacheMap.size() - maximumSize))
-                    .toList();
-            removeForCause(removeList, RemovalCause.SIZE);
+    private void checkMaximumSize() {
+        if (rwLock.writeLock().tryLock()) { // 获取写锁
+            try {
+                if (cacheMap.size() > backPressureSize) {
+                    var removeList = cacheMap.values()
+                            .stream()
+                            .sorted((a, b) -> Long.compare(a.expireTime, b.expireTime))
+                            .limit(Math.max(0, cacheMap.size() - maximumSize))
+                            .toList();
+                    removeForCause(removeList, RemovalCause.SIZE);
+                }
+            } finally {
+                rwLock.writeLock().unlock();
+            }
         }
     }
+
 
     private void checkExpire() {
         var now = TimeUtils.now();
