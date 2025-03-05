@@ -155,7 +155,7 @@ public class LazyCache<K, V> {
         removeListener.accept(removeList, removalCause);
     }
 
-    private void checkMaximumSize() {
+    private synchronized void checkMaximumSize() {
         if (cacheMap.size() > backPressureSize) {
             var removeList = cacheMap.values()
                     .stream()
