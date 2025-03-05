@@ -172,7 +172,7 @@ public class LazyCache<K, V> {
             }
         }
     }
-    synchronized
+
 
     private void checkExpire() {
         var now = TimeUtils.now();
