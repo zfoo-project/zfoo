@@ -157,7 +157,7 @@ public class LazyCache<K, V> {
     }
 
     private void checkMaximumSize() {
-        if (lock.tryLock()) { // 获取写锁
+        if (lock.tryLock()) {
             try {
                 if (cacheMap.size() > backPressureSize) {
                     var removeList = cacheMap.values()
