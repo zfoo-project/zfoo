@@ -35,7 +35,7 @@
 <dependency>
     <groupId>com.zfoo</groupId>
     <artifactId>boot</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -45,7 +45,7 @@
 <dependency>
     <groupId>com.zfoo</groupId>
     <artifactId>protocol</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
