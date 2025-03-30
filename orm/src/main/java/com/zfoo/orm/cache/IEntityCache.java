@@ -32,9 +32,9 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
 
     /**
      * EN: Load data from the database into the cache, and if the database does not exist,
-     * return a default example with the id as the passed in value. And put it into storage.
+     * return a default example with the id as the passed in value and put it into storage.
      * <p>
-     * CN: 从数据库中加载数据到缓存，如果数据库不存在则返回一个id为传入值的默认示例。并且入库。(设置了索引唯一的无法使用该方法)
+     * CN: 从数据库中加载数据到缓存，如果数据库不存在则返回一个id为传入值的默认示例，并且入库。(设置了索引唯一的无法使用该方法)
      */
     E loadOrCreate(PK pk);
 
@@ -46,44 +46,53 @@ public interface IEntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> 
     E get(PK pk);
 
     /**
-     * 更新缓存中的数据，只更新缓存的时间戳，并通过一定策略写入到数据库
+     * EN: Update the timestamp of the cache in the memory.
+     * The first update() will record the thread number, and a thread-safe warning will be given if the thread number of next update() is not equal with the first time
      * <p>
-     * 第一次update()会记录线程号表面当前哪个线程在更新这个entity，后面如果发现update()线程号和第一次不一致会给出线程安全的警告
+     * CN: 更新缓存中的数据，只更新缓存的时间戳，并通过一定策略写入到数据库
+     * 第一次update()会记录更新的线程号，后面如果发现update()所在的线程号和第一次不一致会给出线程安全的警告
      */
     void update(E entity);
 
     /**
-     * 同update()，不会校验更新的线程是否一致
+     * EN: The similar as update() will not check whether the updated thread number is equal.
+     * <p>
+     * CN: 同update()，不会校验更新的线程是否一致
      */
     void updateUnsafe(E entity);
 
     /**
-     * 更新缓存中的数据，立刻写入到数据库
+     * EN: Update the cached entity and write it to the database immediately
+     * <p>
+     * CN: 更新缓存中的数据，立刻写入到数据库
      */
     void updateNow(E entity);
 
     /**
-     * 同updateNow()，不会校验更新的线程是否一致
+     * EN: The similar as updateNow() will not check whether the updated thread number is equal.
+     * <p>
+     * CN: 同updateNow()，不会校验更新的线程是否一致
      */
     void updateUnsafeNow(E entity);
 
     /**
-     * 不会删除数据库中的数据，只会删除缓存数据
+     * EN: The data in the database will not be deleted, only the cached entity will be deleted.
+     * <p>
+     * CN: 不会删除数据库中的数据，只会删除缓存数据
      *
-     * @param pk 组要删除的主键
+     * @param pk primary key
      */
     void invalidate(PK pk);
 
     /**
-     * 持久化缓存数据
+     * EN: Persistence cached entity in memory
+     * <p>
+     * CN: 持久化缓存数据
      *
-     * @param pk 主键
+     * @param pk primary key
      */
     void persist(PK pk);
 
-    /**
-     * 持久化所有缓存数据
-     */
     void persistAll();
 
     void persistAllBlock();

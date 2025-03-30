@@ -130,7 +130,10 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
         // 如果数据库中不存在则给一个默认值
         if (entity == null) {
             entity = wrapper.newEntity(pk);
-            OrmContext.getAccessor().insert(entity);
+            var inserted = OrmContext.getAccessor().insert(entity);
+            if (!inserted) {
+                throw new RunException("loadOrCreate: [{}] can not create [pk:{}]", clazz.getSimpleName(), pk);
+            }
         }
         pnode = new PNode<>(entity);
         caches.put(pk, pnode);
@@ -150,7 +153,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
         // 比较地址是否相等
         if (entity != cachePnode.getEntity()) {
-            throw new RunException("fetchCachePnode(): cache entity [id:{}] not equal with update entity [id:{}]", cachePnode.getEntity().id(), id);
+            throw new RunException("fetchCachePnode: cache entity [id:{}] not equal with update entity [id:{}]", cachePnode.getEntity().id(), id);
         }
 
         if (safe) {
