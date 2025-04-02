@@ -1,102 +1,115 @@
-/*
- * Copyright (C) 2020 The zfoo Authors
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- */
-
 package com.zfoo.event.enhance;
 
+// 注意：需要JDK 21+ 并启用预览功能
+
 import com.zfoo.event.anno.Bus;
-import com.zfoo.event.model.IEvent;
 import com.zfoo.event.schema.NamespaceHandler;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.UuidUtils;
-import javassist.*;
 
+import java.io.FileOutputStream;
+import java.lang.classfile.ClassFile;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
-/**
- * @author godotg
- */
+import static java.lang.classfile.ClassFile.*;
+import static java.lang.constant.ConstantDescs.CD_void;
+
 public abstract class EnhanceUtils {
+    private static final ClassDesc I_EVENT_RECEIVER = ClassDesc.of("com.zfoo.event.enhance.IEventReceiver");
+    private static final ClassDesc I_EVENT = ClassDesc.of("com.zfoo.event.model.IEvent");
+    private static final ClassDesc OBJECT = ClassDesc.of("java.lang.Object");
 
-    static {
-        // 适配Tomcat，因为Tomcat不是用的默认的类加载器，而Javassist用的是默认的加载器
-        var classArray = new Class<?>[]{
-                IEventReceiver.class,
-                IEvent.class
-        };
-
-        var classPool = ClassPool.getDefault();
-
-        for (var clazz : classArray) {
-            if (classPool.find(clazz.getName()) == null) {
-                ClassClassPath classPath = new ClassClassPath(clazz);
-                classPool.insertClassPath(classPath);
-            }
-        }
-    }
-
-    public static IEventReceiver createEventReceiver(EventReceiverDefinition definition) throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        var classPool = ClassPool.getDefault();
-
-        Object bean = definition.getBean();
+    public static IEventReceiver createEventReceiver(EventReceiverDefinition definition) throws Throwable {
+        Class<?> beanClass = definition.getBean().getClass();
         Method method = definition.getMethod();
-        Class<?> clazz = definition.getEventClazz();
+        Class<?> eventClass = definition.getEventClazz();
+        Bus bus = definition.getBus();
 
-        // 定义类名称
-        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.EVENT) + UuidUtils.getLocalIntId());
-        enhanceClazz.addInterface(classPool.get(IEventReceiver.class.getName()));
+        String className = EnhanceUtils.class.getName()
+                + StringUtils.capitalize(NamespaceHandler.EVENT)
+                + UuidUtils.getLocalIntId();
 
-        // 定义类中的一个成员bean
-        CtClass beanClass = classPool.get(bean.getClass().getName());
-        CtField field = new CtField(beanClass, "bean", enhanceClazz);
-        field.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
-        enhanceClazz.addField(field);
+        ClassDesc targetClass = ClassDesc.of(className);
+        ClassDesc beanType = ClassDesc.of(beanClass.getName());
 
-        // 定义类的构造器
-        // 创建构造函数参数数组
-        CtClass[] parameterTypes = {beanClass};
-        CtConstructor constructor = new CtConstructor(parameterTypes, enhanceClazz);
-        constructor.setBody("{this.bean=$1;}");
-        constructor.setModifiers(Modifier.PUBLIC);
-        enhanceClazz.addConstructor(constructor);
+        // 构建类文件
+        byte[] bytecode = ClassFile.of().build(targetClass, classBuilder -> {
+            classBuilder.withSuperclass(ClassDesc.of("java.lang.Object"))
+                    .withInterfaceSymbols(I_EVENT_RECEIVER)
 
-        // 定义类实现的接口方法invoker
-        CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getName()), "invoke", classPool.get(new String[]{IEvent.class.getName()}), enhanceClazz);
-        invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String invokeMethodBody = StringUtils.format("{ this.bean.{}(({})$1); }", method.getName(), clazz.getName()); // 强制类型转换，转换为具体的Event类型的类型
-        invokeMethod.setBody(invokeMethodBody);
-        enhanceClazz.addMethod(invokeMethod);
+                    // 添加 final 字段 bean
+                    .withField("bean", beanType, ACC_PRIVATE | ACC_FINAL)
 
-        // 定义类实现的接口方法bus
-        CtMethod busMethod = new CtMethod(classPool.get(Bus.class.getName()), "bus", null, enhanceClazz);
-        busMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String busMethodBody = StringUtils.format("{ return {}.{}; }", Bus.class.getName(), definition.getBus());
-        busMethod.setBody(busMethodBody);
-        enhanceClazz.addMethod(busMethod);
+                    // 添加构造器
+                    .withMethod("<init>", MethodTypeDesc.of(CD_void, beanType), ACC_PUBLIC, codeBuilder -> {
+                        codeBuilder.withCode(code -> {
+                                code.aload(0)
+                                    .invokespecial(ClassDesc.of("java.lang.Object"), "<init>", MethodTypeDesc.of(CD_void))
+                                    .aload(0)
+                                    .aload(1)
+                                    .putfield(targetClass, "bean", beanType)
+                                    .return_();
+                        });
+                    })
 
-        // 定义类实现的接口方法getBean
-        CtMethod beanMethod = new CtMethod(classPool.get(Object.class.getName()), "getBean", null, enhanceClazz);
-        beanMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String beanMethodBody = "{ return this.bean; }";
-        beanMethod.setBody(beanMethodBody);
-        enhanceClazz.addMethod(beanMethod);
+                    // 添加 invoke 方法
+                    .withMethod("invoke", MethodTypeDesc.of(CD_void, I_EVENT), ACC_PUBLIC | ACC_FINAL, codeBuilder -> {
+                        codeBuilder.withCode(code -> {
+                            code.aload(0)
+                                    .getfield(targetClass, "bean", beanType)
+                                    .aload(1)
+                                    .checkcast(ClassDesc.of(eventClass.getName()))
+                                    .invokevirtual(beanType, method.getName(), MethodTypeDesc.of(CD_void, ClassDesc.of(eventClass.getName())))
+                                    .return_();
+                        });
+                    })
 
-        // 释放缓存
-        enhanceClazz.detach();
+                    // 添加 bus 方法
+                    .withMethod("bus",
+                            MethodTypeDesc.of(ClassDesc.of("com.zfoo.event.anno.Bus"))
+                            ,
+                            ACC_PUBLIC | ACC_FINAL,
+                            methodBuilder -> methodBuilder.withCode(codeBuilder -> {
+                                codeBuilder
+                                        .getstatic(
+                                                ClassDesc.of("com.zfoo.event.anno.Bus"),
+                                                bus.name(),
+                                                ClassDesc.of("com.zfoo.event.anno.Bus")
+                                        )
+                                        .areturn();
+                            }))
 
-        Class<?> resultClazz = enhanceClazz.toClass(IEventReceiver.class);
-        Constructor<?> resultConstructor = resultClazz.getConstructor(bean.getClass());
-        return (IEventReceiver) resultConstructor.newInstance(bean);
+
+                    // 添加 getBean 方法
+                    .withMethod("getBean", MethodTypeDesc.of(OBJECT), ACC_PUBLIC | ACC_FINAL, codeBuilder -> {
+                        codeBuilder.withCode(code -> {
+                            code.aload(0)
+                                    .getfield(targetClass, "bean", beanType)
+                                    .areturn();
+                        });
+                    });
+        });
+
+        // 定义类
+        MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(IEventReceiver.class, MethodHandles.lookup());
+        Class<?> clazz = lookup.defineClass(bytecode);
+
+
+        try {
+
+            FileOutputStream fos = new FileOutputStream("d://" +className+ ".class");
+            fos.write(bytecode);
+            fos.close();
+        } catch (Throwable throwable) {
+
+        }
+
+        // 创建实例
+        Constructor<?> constructor = clazz.getConstructor(beanClass);
+        return (IEventReceiver) constructor.newInstance(definition.getBean());
     }
 }
