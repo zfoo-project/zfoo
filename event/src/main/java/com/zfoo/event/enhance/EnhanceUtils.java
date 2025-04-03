@@ -98,16 +98,6 @@ public abstract class EnhanceUtils {
         MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(IEventReceiver.class, MethodHandles.lookup());
         Class<?> clazz = lookup.defineClass(bytecode);
 
-
-        try {
-
-            FileOutputStream fos = new FileOutputStream("d://" +className+ ".class");
-            fos.write(bytecode);
-            fos.close();
-        } catch (Throwable throwable) {
-
-        }
-
         // 创建实例
         Constructor<?> constructor = clazz.getConstructor(beanClass);
         return (IEventReceiver) constructor.newInstance(definition.getBean());
