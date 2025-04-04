@@ -14,6 +14,7 @@
 package com.zfoo.protocol.serializer.gdscript;
 
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.registration.field.ArrayField;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.registration.field.MapField;
 import com.zfoo.protocol.serializer.CodeLanguage;
@@ -31,7 +32,18 @@ public class GdMapSerializer implements IGdSerializer {
 
     @Override
     public String fieldType(Field field, IFieldRegistration fieldRegistration) {
-        return "Dictionary";
+        var mapField = (MapField) fieldRegistration;
+        var keyRegistration = mapField.getMapKeyRegistration();
+        var valueRegistration = mapField.getMapValueRegistration();
+
+        var keyType = CodeGenerateGdScript.gdSerializer(keyRegistration.serializer()).fieldType(field, keyRegistration);
+        var valueType = CodeGenerateGdScript.gdSerializer(valueRegistration.serializer()).fieldType(field, valueRegistration);
+
+        if (keyType.startsWith("Array") || keyType.startsWith("Dictionary") || valueType.startsWith("Array") || valueType.startsWith("Dictionary")) {
+            return "Dictionary";
+        } else {
+            return StringUtils.format("Dictionary[{}, {}]", keyType, valueType);
+        }
     }
 
     @Override

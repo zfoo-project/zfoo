@@ -18,12 +18,10 @@ var l: Array[int]
 var ll: Array[int]
 var lll: Array[ObjectA]
 var llll: Array[String]
-var m: Dictionary	# Map<number, string>
-var mm: Dictionary	# Map<number, ObjectA>
+var m: Dictionary[int, String]
+var mm: Dictionary[int, ObjectA]
 var s: Array[int]
 var ssss: Array[String]
-var outCompatibleValue: int
-var outCompatibleValue2: int
 
 func protocolId() -> int:
 	return 101
@@ -32,8 +30,8 @@ func get_class_name() -> String:
 	return "NormalObject"
 
 func _to_string() -> String:
-	const jsonTemplate = "{a:{}, aaa:{}, b:{}, c:{}, d:{}, e:{}, f:{}, g:{}, jj:'{}', kk:{}, l:{}, ll:{}, lll:{}, llll:{}, m:{}, mm:{}, s:{}, ssss:{}, outCompatibleValue:{}, outCompatibleValue2:{}}"
-	var params = [self.a, JSON.stringify(self.aaa), self.b, self.c, self.d, self.e, self.f, self.g, self.jj, self.kk, JSON.stringify(self.l), JSON.stringify(self.ll), JSON.stringify(self.lll), JSON.stringify(self.llll), JSON.stringify(self.m), JSON.stringify(self.mm), JSON.stringify(self.s), JSON.stringify(self.ssss), self.outCompatibleValue, self.outCompatibleValue2]
+	const jsonTemplate = "{a:{}, aaa:{}, b:{}, c:{}, d:{}, e:{}, f:{}, g:{}, jj:'{}', kk:{}, l:{}, ll:{}, lll:{}, llll:{}, m:{}, mm:{}, s:{}, ssss:{}}"
+	var params = [self.a, JSON.stringify(self.aaa), self.b, self.c, self.d, self.e, self.f, self.g, self.jj, self.kk, JSON.stringify(self.l), JSON.stringify(self.ll), JSON.stringify(self.lll), JSON.stringify(self.llll), self.m, self.mm, JSON.stringify(self.s), JSON.stringify(self.ssss)]
 	return jsonTemplate.format(params, "{}")
 
 class NormalObjectRegistration:
@@ -41,8 +39,7 @@ class NormalObjectRegistration:
 		if (packet == null):
 			buffer.writeInt(0)
 			return
-		var beforeWriteIndex = buffer.getWriteOffset()
-		buffer.writeInt(857)
+		buffer.writeInt(-1)
 		buffer.writeByte(packet.a)
 		buffer.writeByteArray(packet.aaa)
 		buffer.writeShort(packet.b)
@@ -61,9 +58,6 @@ class NormalObjectRegistration:
 		buffer.writeIntPacketMap(packet.mm, 102)
 		buffer.writeIntArray(packet.s)
 		buffer.writeStringArray(packet.ssss)
-		buffer.writeInt(packet.outCompatibleValue)
-		buffer.writeInt(packet.outCompatibleValue2)
-		buffer.adjustPadding(857, beforeWriteIndex)
 		pass
 
 	func read(buffer: ByteBuffer):
@@ -108,12 +102,6 @@ class NormalObjectRegistration:
 		packet.s = set16
 		var set17 = buffer.readStringArray()
 		packet.ssss = set17
-		if buffer.compatibleRead(beforeReadIndex, length):
-			var result18 = buffer.readInt()
-			packet.outCompatibleValue = result18
-		if buffer.compatibleRead(beforeReadIndex, length):
-			var result19 = buffer.readInt()
-			packet.outCompatibleValue2 = result19
 		if (length > 0):
 			buffer.setReadOffset(beforeReadIndex + length)
 		return packet

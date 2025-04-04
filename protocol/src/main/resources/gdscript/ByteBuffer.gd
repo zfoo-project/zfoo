@@ -488,7 +488,7 @@ func writeIntIntMap(map):
 	pass
 
 func readIntIntMap():
-	var map = {}
+	var map: Dictionary[int, int] = {}
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -508,7 +508,7 @@ func writeIntLongMap(map):
 	pass
 
 func readIntLongMap():
-	var map = {}
+	var map: Dictionary[int, int] = {}
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -528,7 +528,7 @@ func writeIntStringMap(map):
 	pass
 
 func readIntStringMap():
-	var map = {}
+	var map: Dictionary[int, String] = {}
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -549,10 +549,11 @@ func writeIntPacketMap(map, protocolId):
 	pass
 
 func readIntPacketMap(protocolId):
-	var map = {}
+	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
+	var protocol = ProtocolManager.getProtocolClass(protocolId)
+	var map = Dictionary({}, TYPE_INT, "", null, typeof(protocol), StringName("RefCounted"), protocol)
 	var size = readInt()
 	if (size > 0):
-		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
 		for index in range(size):
 			var key = readInt()
 			var value = protocolRegistration.read(self)
@@ -570,7 +571,7 @@ func writeLongIntMap(map):
 	pass
 
 func readLongIntMap():
-	var map = {}
+	var map: Dictionary[int, int] = {}
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -590,7 +591,7 @@ func writeLongLongMap(map):
 	pass
 
 func readLongLongMap():
-	var map = {}
+	var map: Dictionary[int, int] = {}
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -610,7 +611,7 @@ func writeLongStringMap(map):
 	pass
 
 func readLongStringMap():
-	var map = {}
+	var map: Dictionary[int, String] = {}
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -631,10 +632,11 @@ func writeLongPacketMap(map, protocolId):
 	pass
 
 func readLongPacketMap(protocolId):
-	var map = {}
+	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
+	var protocol = ProtocolManager.getProtocolClass(protocolId)
+	var map = Dictionary({}, TYPE_INT, "", null, typeof(protocol), StringName("RefCounted"), protocol)
 	var size = readInt()
 	if (size > 0):
-		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
 		for index in range(size):
 			var key = readLong()
 			var value = protocolRegistration.read(self)
@@ -652,7 +654,7 @@ func writeStringIntMap(map):
 	pass
 
 func readStringIntMap():
-	var map = {}
+	var map: Dictionary[String, String] = {}
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -672,7 +674,7 @@ func writeStringLongMap(map):
 	pass
 
 func readStringLongMap():
-	var map = {}
+	var map: Dictionary[String, int] = {}
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -692,7 +694,7 @@ func writeStringStringMap(map):
 	pass
 
 func readStringStringMap():
-	var map = {}
+	var map: Dictionary[String, String] = {}
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
@@ -713,10 +715,11 @@ func writeStringPacketMap(map, protocolId):
 	pass
 
 func readStringPacketMap(protocolId):
-	var map = {}
+	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
+	var protocol = ProtocolManager.getProtocolClass(protocolId)
+	var map = Dictionary({}, TYPE_STRING, "", null, typeof(protocol), StringName("RefCounted"), protocol)
 	var size = readInt()
 	if (size > 0):
-		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
 		for index in range(size):
 			var key = readString()
 			var value = protocolRegistration.read(self)
