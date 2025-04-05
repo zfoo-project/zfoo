@@ -6,8 +6,8 @@ const ObjectA = preload("res://zfoogd/packet/ObjectA.gd")
 const ObjectB = preload("res://zfoogd/packet/ObjectB.gd")
 const SimpleObject = preload("res://zfoogd/packet/SimpleObject.gd")
 
-static var protocols: Dictionary = {}
-static var protocolClassMap: Dictionary = {}
+static var protocols: Dictionary[int, RefCounted] = {}
+static var protocolClassMap: Dictionary[int, Object] = {}
 
 static func initProtocol():
 	protocols[0] = EmptyObject.EmptyObjectRegistration.new()

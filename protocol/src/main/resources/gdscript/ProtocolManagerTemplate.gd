@@ -1,7 +1,7 @@
 ${protocol_imports}
 
-static var protocols: Dictionary = {}
-static var protocolClassMap: Dictionary = {}
+static var protocols: Dictionary[int, RefCounted] = {}
+static var protocolClassMap: Dictionary[int, Object] = {}
 
 static func initProtocol():
 	${protocol_manager_registrations}
