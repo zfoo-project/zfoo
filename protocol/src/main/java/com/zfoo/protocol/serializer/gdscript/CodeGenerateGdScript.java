@@ -89,7 +89,7 @@ public class CodeGenerateGdScript implements ICodeGenerate {
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("gdscript/ProtocolManagerTemplate.gd");
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
-        protocol_imports.append(StringUtils.format("const Protocols = preload(\"res://{}/Protocols.gd\")", protocolOutputRootPath)).append(LS);
+        protocol_imports.append("const Protocols = preload(\"./Protocols.gd\")").append(LS);
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
@@ -108,10 +108,10 @@ public class CodeGenerateGdScript implements ICodeGenerate {
         protocol_imports = new StringBuilder();
         var protocol_class = new StringBuilder();
         var protocol_registration = new StringBuilder();
-        protocol_imports.append(StringUtils.format("const ByteBuffer = preload(\"res://{}/ByteBuffer.gd\")", protocolOutputRootPath)).append(LS);
+        protocol_imports.append("const ByteBuffer = preload(\"./ByteBuffer.gd\")").append(LS);
         for (var registration : registrations) {
-            protocol_class.append(protocol_class(registration)).append(LS);
-            protocol_registration.append(protocol_registration(registration)).append(LS);
+            protocol_class.append(protocol_class(registration)).append(LS).append(LS);
+            protocol_registration.append(protocol_registration(registration)).append(LS).append(LS).append(LS);
         }
         var protocolTemplate = ClassUtils.getFileFromClassPathToString("gdscript/ProtocolsTemplate.gd");
         var formatProtocolTemplate = CodeTemplatePlaceholder.formatTemplate(protocolTemplate, Map.of(
@@ -137,7 +137,7 @@ public class CodeGenerateGdScript implements ICodeGenerate {
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("const {} = preload(\"res://{}/{}/{}.gd\")", protocol_name, protocolOutputRootPath, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
+            protocol_imports.append(StringUtils.format("const {} = preload(\"./{}/{}.gd\")", protocol_name, GenerateProtocolPath.protocolPathSlash(protocol_id), protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.{}Registration.new()", protocol_id, protocol_name, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolClassMap[{}] = {}", protocol_id, protocol_name)).append(LS);
         }
@@ -176,11 +176,11 @@ public class CodeGenerateGdScript implements ICodeGenerate {
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("gdscript/ProtocolManagerTemplate.gd");
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
-        protocol_imports.append(StringUtils.format("const ByteBuffer = preload(\"res://{}/ByteBuffer.gd\")", protocolOutputRootPath)).append(LS);
+        protocol_imports.append("const ByteBuffer = preload(\"./ByteBuffer.gd\")").append(LS);
         for (var registration : registrations) {
             var protocol_id = registration.protocolId();
             var protocol_name = registration.protocolConstructor().getDeclaringClass().getSimpleName();
-            protocol_imports.append(StringUtils.format("const {} = preload(\"res://{}/{}.gd\")", protocol_name, protocolOutputRootPath, protocol_name)).append(LS);
+            protocol_imports.append(StringUtils.format("const {} = preload(\"./{}.gd\")", protocol_name, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocols[{}] = {}.{}Registration.new()", protocol_id, protocol_name, protocol_name)).append(LS);
             protocol_manager_registrations.append(StringUtils.format("protocolClassMap[{}] = {}", protocol_id, protocol_name)).append(LS);
         }
@@ -263,10 +263,13 @@ public class CodeGenerateGdScript implements ICodeGenerate {
         var protocolId = registration.getId();
         var subProtocols = ProtocolAnalysis.getAllSubProtocolIds(protocolId);
         var importBuilder = new StringBuilder();
-        importBuilder.append(StringUtils.format("const ByteBuffer = preload(\"res://{}/ByteBuffer.gd\")", protocolOutputRootPath)).append(LS);
+        var protocolPath = GenerateProtocolPath.protocolPathPeriod(protocolId);
+        var splits = protocolPath.split(StringUtils.PERIOD_REGEX);
+        importBuilder.append(StringUtils.format("const ByteBuffer = preload(\"{}ByteBuffer.gd\")", "../".repeat(splits.length))).append(LS);
         for (var subProtocolId : subProtocols) {
             var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
-            importBuilder.append(StringUtils.format("const {} = preload(\"res://{}/{}/{}.gd\")", protocolName, protocolOutputRootPath, GenerateProtocolPath.protocolPathSlash(protocolId), protocolName)).append(LS);
+            var path = GenerateProtocolPath.relativePath(protocolId, subProtocolId);
+            importBuilder.append(StringUtils.format("const {} = preload(\"{}/{}.gd\")", protocolName, path, protocolName)).append(LS);
         }
         return importBuilder.toString();
     }
@@ -275,10 +278,10 @@ public class CodeGenerateGdScript implements ICodeGenerate {
         var protocolId = registration.getId();
         var subProtocols = ProtocolAnalysis.getAllSubProtocolIds(protocolId);
         var importBuilder = new StringBuilder();
-        importBuilder.append(StringUtils.format("const ByteBuffer = preload(\"res://{}/ByteBuffer.gd\")", protocolOutputRootPath)).append(LS);
+        importBuilder.append("const ByteBuffer = preload(\"./ByteBuffer.gd\")").append(LS);
         for (var subProtocolId : subProtocols) {
             var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(subProtocolId);
-            importBuilder.append(StringUtils.format("const {} = preload(\"res://{}/{}.gd\")", protocolName, protocolOutputRootPath, protocolName)).append(LS);
+            importBuilder.append(StringUtils.format("const {} = preload(\"./{}.gd\")", protocolName, protocolName)).append(LS);
         }
         return importBuilder.toString();
     }
