@@ -1,4 +1,4 @@
-class_name ${protocol_name}
+class_name _${protocol_name}
 
 ${protocol_imports}
 
