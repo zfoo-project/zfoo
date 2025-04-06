@@ -1,5 +1,7 @@
-const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
-const ObjectB = preload("res://zfoogd/packet/ObjectB.gd")
+class_name ObjectA
+
+const ByteBuffer = preload("../ByteBuffer.gd")
+const ObjectB = preload("./ObjectB.gd")
 
 
 var a: int
@@ -9,16 +11,13 @@ var objectB: ObjectB
 func protocolId() -> int:
 	return 102
 
-func get_class_name() -> String:
-	return "ObjectA"
-
 func _to_string() -> String:
 	const jsonTemplate = "{a:{}, m:{}, objectB:{}}"
 	var params = [self.a, self.m, self.objectB]
 	return jsonTemplate.format(params, "{}")
 
 class ObjectARegistration:
-	func write(buffer: ByteBuffer, packet: Object):
+	func write(buffer: ByteBuffer, packet: ObjectA):
 		if (packet == null):
 			buffer.writeInt(0)
 			return
@@ -28,12 +27,12 @@ class ObjectARegistration:
 		buffer.writePacket(packet.objectB, 103)
 		pass
 
-	func read(buffer: ByteBuffer):
+	func read(buffer: ByteBuffer) -> ObjectA:
 		var length = buffer.readInt()
 		if (length == 0):
 			return null
 		var beforeReadIndex = buffer.getReadOffset()
-		var packet = buffer.newInstance(102)
+		var packet: ObjectA = buffer.newInstance(102)
 		var result0 = buffer.readInt()
 		packet.a = result0
 		var map1 = buffer.readIntStringMap()

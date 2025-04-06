@@ -1,10 +1,10 @@
-const EmptyObject = preload("res://zfoogd/packet/EmptyObject.gd")
-const VeryBigObject = preload("res://zfoogd/packet/VeryBigObject.gd")
-const ComplexObject = preload("res://zfoogd/packet/ComplexObject.gd")
-const NormalObject = preload("res://zfoogd/packet/NormalObject.gd")
-const ObjectA = preload("res://zfoogd/packet/ObjectA.gd")
-const ObjectB = preload("res://zfoogd/packet/ObjectB.gd")
-const SimpleObject = preload("res://zfoogd/packet/SimpleObject.gd")
+const EmptyObject = preload("./packet/EmptyObject.gd")
+const VeryBigObject = preload("./packet/VeryBigObject.gd")
+const ComplexObject = preload("./packet/ComplexObject.gd")
+const NormalObject = preload("./packet/NormalObject.gd")
+const ObjectA = preload("./packet/ObjectA.gd")
+const ObjectB = preload("./packet/ObjectB.gd")
+const SimpleObject = preload("./packet/SimpleObject.gd")
 
 static var protocols: Dictionary[int, RefCounted] = {}
 static var protocolClassMap: Dictionary[int, Object] = {}

@@ -1,6 +1,8 @@
-const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
-const ObjectA = preload("res://zfoogd/packet/ObjectA.gd")
-const ObjectB = preload("res://zfoogd/packet/ObjectB.gd")
+class_name NormalObject
+
+const ByteBuffer = preload("../ByteBuffer.gd")
+const ObjectA = preload("./ObjectA.gd")
+const ObjectB = preload("./ObjectB.gd")
 
 # 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
 var a: int
@@ -26,16 +28,13 @@ var ssss: Array[String]
 func protocolId() -> int:
 	return 101
 
-func get_class_name() -> String:
-	return "NormalObject"
-
 func _to_string() -> String:
 	const jsonTemplate = "{a:{}, aaa:{}, b:{}, c:{}, d:{}, e:{}, f:{}, g:{}, jj:'{}', kk:{}, l:{}, ll:{}, lll:{}, llll:{}, m:{}, mm:{}, s:{}, ssss:{}}"
 	var params = [self.a, JSON.stringify(self.aaa), self.b, self.c, self.d, self.e, self.f, self.g, self.jj, self.kk, JSON.stringify(self.l), JSON.stringify(self.ll), JSON.stringify(self.lll), JSON.stringify(self.llll), self.m, self.mm, JSON.stringify(self.s), JSON.stringify(self.ssss)]
 	return jsonTemplate.format(params, "{}")
 
 class NormalObjectRegistration:
-	func write(buffer: ByteBuffer, packet: Object):
+	func write(buffer: ByteBuffer, packet: NormalObject):
 		if (packet == null):
 			buffer.writeInt(0)
 			return
@@ -60,12 +59,12 @@ class NormalObjectRegistration:
 		buffer.writeStringArray(packet.ssss)
 		pass
 
-	func read(buffer: ByteBuffer):
+	func read(buffer: ByteBuffer) -> NormalObject:
 		var length = buffer.readInt()
 		if (length == 0):
 			return null
 		var beforeReadIndex = buffer.getReadOffset()
-		var packet = buffer.newInstance(101)
+		var packet: NormalObject = buffer.newInstance(101)
 		var result0 = buffer.readByte()
 		packet.a = result0
 		var array1 = buffer.readByteArray()

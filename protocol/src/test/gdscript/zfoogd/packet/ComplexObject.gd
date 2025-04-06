@@ -1,6 +1,8 @@
-const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
-const ObjectA = preload("res://zfoogd/packet/ObjectA.gd")
-const ObjectB = preload("res://zfoogd/packet/ObjectB.gd")
+class_name ComplexObject
+
+const ByteBuffer = preload("../ByteBuffer.gd")
+const ObjectA = preload("./ObjectA.gd")
+const ObjectB = preload("./ObjectB.gd")
 
 # 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
 # byte类型，最简单的整形
@@ -60,16 +62,13 @@ var myObject: ObjectA
 func protocolId() -> int:
 	return 100
 
-func get_class_name() -> String:
-	return "ComplexObject"
-
 func _to_string() -> String:
 	const jsonTemplate = "{a:{}, aa:{}, aaa:{}, aaaa:{}, b:{}, bb:{}, bbb:{}, bbbb:{}, c:{}, cc:{}, ccc:{}, cccc:{}, d:{}, dd:{}, ddd:{}, dddd:{}, e:{}, ee:{}, eee:{}, eeee:{}, f:{}, ff:{}, fff:{}, ffff:{}, g:{}, gg:{}, ggg:{}, gggg:{}, jj:'{}', jjj:{}, kk:{}, kkk:{}, l:{}, ll:{}, lll:{}, llll:{}, lllll:{}, m:{}, mm:{}, mmm:{}, mmmm:{}, mmmmm:{}, s:{}, ss:{}, sss:{}, ssss:{}, sssss:{}, myCompatible:{}, myObject:{}}"
 	var params = [self.a, self.aa, JSON.stringify(self.aaa), JSON.stringify(self.aaaa), self.b, self.bb, JSON.stringify(self.bbb), JSON.stringify(self.bbbb), self.c, self.cc, JSON.stringify(self.ccc), JSON.stringify(self.cccc), self.d, self.dd, JSON.stringify(self.ddd), JSON.stringify(self.dddd), self.e, self.ee, JSON.stringify(self.eee), JSON.stringify(self.eeee), self.f, self.ff, JSON.stringify(self.fff), JSON.stringify(self.ffff), self.g, self.gg, JSON.stringify(self.ggg), JSON.stringify(self.gggg), self.jj, JSON.stringify(self.jjj), self.kk, JSON.stringify(self.kkk), JSON.stringify(self.l), JSON.stringify(self.ll), JSON.stringify(self.lll), JSON.stringify(self.llll), JSON.stringify(self.lllll), self.m, self.mm, JSON.stringify(self.mmm), JSON.stringify(self.mmmm), JSON.stringify(self.mmmmm), JSON.stringify(self.s), JSON.stringify(self.ss), JSON.stringify(self.sss), JSON.stringify(self.ssss), JSON.stringify(self.sssss), self.myCompatible, self.myObject]
 	return jsonTemplate.format(params, "{}")
 
 class ComplexObjectRegistration:
-	func write(buffer: ByteBuffer, packet: Object):
+	func write(buffer: ByteBuffer, packet: ComplexObject):
 		if (packet == null):
 			buffer.writeInt(0)
 			return
@@ -213,12 +212,12 @@ class ComplexObjectRegistration:
 		buffer.adjustPadding(36962, beforeWriteIndex)
 		pass
 
-	func read(buffer: ByteBuffer):
+	func read(buffer: ByteBuffer) -> ComplexObject:
 		var length = buffer.readInt()
 		if (length == 0):
 			return null
 		var beforeReadIndex = buffer.getReadOffset()
-		var packet = buffer.newInstance(100)
+		var packet: ComplexObject = buffer.newInstance(100)
 		var result0 = buffer.readByte()
 		packet.a = result0
 		var result1 = buffer.readByte()
