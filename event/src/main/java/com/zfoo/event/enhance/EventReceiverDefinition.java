@@ -26,16 +26,16 @@ import java.lang.reflect.Method;
 public class EventReceiverDefinition implements IEventReceiver {
 
     // 观察者的bean
-    private Object bean;
+    private final Object bean;
 
     // 被EventReceiver注解标注的方法
-    private Method method;
+    private final Method method;
 
     // 事件接收方式
-    private Bus bus;
+    private final Bus bus;
 
     // 接收的参数Class
-    private Class<? extends IEvent> eventClazz;
+    private final Class<? extends IEvent> eventClazz;
 
     public EventReceiverDefinition(Object bean, Method method, Bus bus, Class<? extends IEvent> eventClazz) {
         this.bean = bean;

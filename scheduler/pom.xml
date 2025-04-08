@@ -46,7 +46,7 @@
         <!-- encoding and java version -->
         <project.build.sourceEncoding>${file.encoding}</project.build.sourceEncoding>
         <maven.compiler.encoding>${file.encoding}</maven.compiler.encoding>
-        <java.version>17</java.version>
+        <java.version>24</java.version>
         <file.encoding>UTF-8</file.encoding>
     </properties>
 

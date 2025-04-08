@@ -35,7 +35,7 @@ public class SchedulerDefinition {
 
     private long triggerTimestamp;
 
-    public static SchedulerDefinition valueOf(String cron, Object bean, Method method) throws NoSuchMethodException, IllegalAccessException, InstantiationException, CannotCompileException, NotFoundException, InvocationTargetException {
+    public static SchedulerDefinition valueOf(String cron, Object bean, Method method) throws Throwable {
         var schedulerDef = new SchedulerDefinition();
         var cronExpression = CronExpression.parse(cron);
         schedulerDef.cronExpression = cronExpression;

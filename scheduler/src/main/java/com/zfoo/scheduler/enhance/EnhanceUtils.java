@@ -1,81 +1,79 @@
-/*
- * Copyright (C) 2020 The zfoo Authors
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- */
-
 package com.zfoo.scheduler.enhance;
 
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.UuidUtils;
 import com.zfoo.scheduler.schema.NamespaceHandler;
-import javassist.*;
 
+import java.io.FileOutputStream;
+import java.lang.classfile.*;
+import java.lang.constant.*;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
-/**
- * @author godotg
- */
+import static java.lang.classfile.ClassFile.*;
+import static java.lang.constant.ConstantDescs.CD_void;
+
 public abstract class EnhanceUtils {
 
-    static {
-        // 适配Tomcat，因为Tomcat不是用的默认的类加载器，而Javassist用的是默认的加载器
-        var classArray = new Class<?>[]{
-                IScheduler.class
-        };
+    private static final ClassDesc I_SCHEDULER_RECEIVER = ClassDesc.of("com.zfoo.scheduler.enhance.IScheduler");
+    private static final MethodTypeDesc VOID_METHOD = MethodTypeDesc.ofDescriptor("()V");
+    private static final ClassDesc OBJECT = ClassDesc.of("java.lang.Object");
 
-        var classPool = ClassPool.getDefault();
-
-        for (var clazz : classArray) {
-            if (classPool.find(clazz.getName()) == null) {
-                ClassClassPath classPath = new ClassClassPath(clazz);
-                classPool.insertClassPath(classPath);
-            }
-        }
-    }
-
-    public static IScheduler createScheduler(ReflectScheduler reflectScheduler) throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        var classPool = ClassPool.getDefault();
-
+    public static IScheduler createScheduler(ReflectScheduler reflectScheduler) throws Throwable {
         Object bean = reflectScheduler.getBean();
         Method method = reflectScheduler.getMethod();
+        Class<?> beanClass = bean.getClass();
 
-        // 定义类名称
-        CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.SCHEDULER) + UuidUtils.getLocalIntId());
-        enhanceClazz.addInterface(classPool.get(IScheduler.class.getName()));
+        // 1. 定义类名和接口
+        String className = EnhanceUtils.class.getName()
+                + StringUtils.capitalize(NamespaceHandler.SCHEDULER)
+                + UuidUtils.getLocalIntId();
 
-        // 定义类中的一个成员
-        CtField field = new CtField(classPool.get(bean.getClass().getName()), "bean", enhanceClazz);
-        field.setModifiers(Modifier.PRIVATE);
-        enhanceClazz.addField(field);
+        // 2. 构建类文件模型
+        ClassDesc targetClass = ClassDesc.of(className);
+        ClassDesc beanType = ClassDesc.of(beanClass.getName());
 
-        // 定义类的构造器
-        CtConstructor constructor = new CtConstructor(classPool.get(new String[]{bean.getClass().getName()}), enhanceClazz);
-        constructor.setBody("{this.bean=$1;}");
-        constructor.setModifiers(Modifier.PUBLIC);
-        enhanceClazz.addConstructor(constructor);
+        // 构建类文件
+        byte[] bytecode = ClassFile.of().build(targetClass, classBuilder -> {
+            classBuilder.withSuperclass(OBJECT)
+                    .withInterfaceSymbols(I_SCHEDULER_RECEIVER)
 
-        // 定义类实现的接口方法
-        CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getName()), "invoke", null, enhanceClazz);
-        invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String invokeMethodBody = "{this.bean." + method.getName() + "();}";
-        invokeMethod.setBody(invokeMethodBody);
-        enhanceClazz.addMethod(invokeMethod);
+                    // 添加 final 字段 bean
+                    .withField("bean", beanType, ACC_PRIVATE | ACC_FINAL)
 
-        // 释放缓存
-        enhanceClazz.detach();
+                    // 添加构造器
+                    .withMethod("<init>", MethodTypeDesc.of(CD_void, beanType), ACC_PUBLIC, codeBuilder -> {
+                        codeBuilder.withCode(code -> {
+                            code.aload(0)
+                                    .invokespecial(OBJECT, "<init>", MethodTypeDesc.of(CD_void))
+                                    .aload(0)
+                                    .aload(1)
+                                    .putfield(targetClass, "bean", beanType)
+                                    .return_();
+                        });
+                    })
 
-        Class<?> resultClazz = enhanceClazz.toClass(IScheduler.class);
-        Constructor<?> resultConstructor = resultClazz.getConstructor(bean.getClass());
-        return (IScheduler) resultConstructor.newInstance(bean);
+                    // 添加 invoke 方法
+                    .withMethod("invoke", MethodTypeDesc.of(CD_void), ACC_PUBLIC | ACC_FINAL, codeBuilder -> {
+                        codeBuilder.withCode(code -> {
+                            code.aload(0)
+                                    .getfield(targetClass, "bean", beanType)
+                                    .invokevirtual(beanType, method.getName(), MethodTypeDesc.of(CD_void))
+                                    .return_();
+                        });
+                    });
+
+        });
+
+
+
+        // 定义类
+        MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(IScheduler.class, MethodHandles.lookup());
+        Class<?> clazz = lookup.defineClass(bytecode);
+
+        // 8. 实例化对象
+        Constructor<?> constructor = clazz.getConstructor(beanClass);
+        return (IScheduler) constructor.newInstance(bean);
     }
 }
