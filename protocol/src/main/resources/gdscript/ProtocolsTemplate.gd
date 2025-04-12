@@ -1,5 +1,3 @@
-${protocol_imports}
+class_name Protocols
 
 ${protocol_class}
-
-${protocol_registration}

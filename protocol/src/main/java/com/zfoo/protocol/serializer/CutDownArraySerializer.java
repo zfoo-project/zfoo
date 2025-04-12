@@ -503,7 +503,10 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writePacketArray($1, {}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             break;
-                        case GdScript, Python, Ruby, Swift:
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, protocolName)).append(LS);
+                            break;
+                        case Python, Ruby, Swift:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, protocolId)).append(LS);
                             break;
                         case Lua:
@@ -1287,7 +1290,7 @@ public class CutDownArraySerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("let {} = buffer.readPacketArray({}) as! Array<{}>", array, protocolId, protocolName)).append(LS);
                             break;
                         case GdScript:
-                            builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", array, protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", array, protocolName)).append(LS);
                             break;
                         case Python, Ruby:
                             builder.append(StringUtils.format("{} = buffer.readPacketArray({})", array, protocolId)).append(LS);

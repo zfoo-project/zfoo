@@ -309,12 +309,13 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                 // Set<IProtocol>
                 if (setField.getSetElementRegistration() instanceof ObjectProtocolField) {
                     var protocolId = ((ObjectProtocolField) setField.getSetElementRegistration()).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writePacketSet($1, (Set){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             break;
                         case GdScript:
-                            builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, protocolId)).append(LS);
+                            builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, protocolName)).append(LS);
                             break;
                         case Kotlin, Scala, Python, Ruby:
                             builder.append(StringUtils.format("buffer.writePacketSet({}, {})", objectStr, protocolId)).append(LS);
@@ -751,7 +752,7 @@ public class CutDownSetSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("Set {} = {}.readPacketSet($1, {});", set, EnhanceUtils.byteBufUtils, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             break;
                         case GdScript:
-                            builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", set, protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", set, protocolName)).append(LS);
                             break;
                         case Python, Ruby:
                             builder.append(StringUtils.format("{} = buffer.readPacketSet({})", set, protocolId)).append(LS);

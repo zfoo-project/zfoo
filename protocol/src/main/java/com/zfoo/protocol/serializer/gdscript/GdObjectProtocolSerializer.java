@@ -38,7 +38,7 @@ public class GdObjectProtocolSerializer implements IGdSerializer {
     public void writeObject(StringBuilder builder, String objectStr, int deep, Field field, IFieldRegistration fieldRegistration) {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         GenerateProtocolFile.addTabAscii(builder, deep);
-        builder.append(StringUtils.format("buffer.writePacket({}, {})", objectStr, objectProtocolField.getProtocolId())).append(LS);
+        builder.append(StringUtils.format("buffer.writePacket({}, {})", objectStr, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId()))).append(LS);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class GdObjectProtocolSerializer implements IGdSerializer {
         ObjectProtocolField objectProtocolField = (ObjectProtocolField) fieldRegistration;
         var result = "result" + GenerateProtocolFile.localVariableId++;
         GenerateProtocolFile.addTabAscii(builder, deep);
-        builder.append(StringUtils.format("var {} = buffer.readPacket({})", result, objectProtocolField.getProtocolId())).append(LS);
+        builder.append(StringUtils.format("var {} = buffer.readPacket({})", result, EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(objectProtocolField.getProtocolId()))).append(LS);
         return result;
     }
 }

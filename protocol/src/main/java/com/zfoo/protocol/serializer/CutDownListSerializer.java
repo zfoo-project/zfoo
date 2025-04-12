@@ -316,11 +316,15 @@ public class CutDownListSerializer implements ICutDownSerializer {
                 // List<IProtocol>
                 if (listField.getListElementRegistration() instanceof ObjectProtocolField) {
                     var protocolId = ((ObjectProtocolField) listField.getListElementRegistration()).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writePacketList($1, (List){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             break;
-                        case GdScript, Python, Ruby, Swift:
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, protocolName)).append(LS);
+                            break;
+                        case Python, Ruby, Swift:
                             builder.append(StringUtils.format("buffer.writePacketArray({}, {})", objectStr, protocolId)).append(LS);
                             break;
                         case Lua:
@@ -765,7 +769,7 @@ public class CutDownListSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("let {} = buffer.readPacketArray({}) as! Array<{}>", list, protocolId, protocolName)).append(LS);
                             break;
                         case GdScript:
-                            builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", list, protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readPacketArray({})", list, protocolName)).append(LS);
                             break;
                         case Python, Ruby:
                             builder.append(StringUtils.format("{} = buffer.readPacketArray({})", list, protocolId)).append(LS);

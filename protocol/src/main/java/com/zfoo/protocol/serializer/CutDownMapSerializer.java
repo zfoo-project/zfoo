@@ -134,11 +134,15 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     var protocolId = ((ObjectProtocolField) valueRegistration).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeIntPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             return true;
-                        case Kotlin, Scala, GdScript, Python, Ruby, Swift:
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {})", objectStr, protocolName)).append(LS);
+                            return true;
+                        case Kotlin, Scala, Python, Ruby, Swift:
                             builder.append(StringUtils.format("buffer.writeIntPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case Lua:
@@ -244,11 +248,15 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     var protocolId = ((ObjectProtocolField) valueRegistration).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeLongPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             return true;
-                        case Kotlin, Scala, GdScript, Python, Ruby, Swift:
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {})", objectStr, protocolName)).append(LS);
+                            return true;
+                        case Kotlin, Scala, Python, Ruby, Swift:
                             builder.append(StringUtils.format("buffer.writeLongPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case Lua:
@@ -354,11 +362,15 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                     }
                 } else if (valueSerializer == ObjectProtocolSerializer.INSTANCE) {
                     var protocolId = ((ObjectProtocolField) valueRegistration).getProtocolId();
+                    var protocolName = EnhanceObjectProtocolSerializer.getProtocolClassSimpleName(protocolId);
                     switch (language) {
                         case Enhance:
                             builder.append(StringUtils.format("{}.writeStringPacketMap($1, (Map){}, {});", EnhanceUtils.byteBufUtils, objectStr, EnhanceUtils.getProtocolRegistrationFieldNameByProtocolId(protocolId)));
                             return true;
-                        case Kotlin, Scala, GdScript, Python, Ruby, Swift:
+                        case GdScript:
+                            builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {})", objectStr, protocolName)).append(LS);
+                            return true;
+                        case Kotlin, Scala, Python, Ruby, Swift:
                             builder.append(StringUtils.format("buffer.writeStringPacketMap({}, {})", objectStr, protocolId)).append(LS);
                             return true;
                         case Lua:
@@ -546,7 +558,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("let {} = buffer.readIntPacketMap({}) as! Dictionary<Int, {}>", map, protocolId, protocolName)).append(LS);
                             return map;
                         case GdScript:
-                            builder.append(StringUtils.format("var {} = buffer.readIntPacketMap({})", map, protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readIntPacketMap({})", map, protocolName)).append(LS);
                             return map;
                         case Python, Ruby:
                             builder.append(StringUtils.format("{} = buffer.readIntPacketMap({})", map, protocolId)).append(LS);
@@ -732,7 +744,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("let {} = buffer.readLongPacketMap({}) as! Dictionary<Int64, {}>", map, protocolId, protocolName)).append(LS);
                             return map;
                         case GdScript:
-                            builder.append(StringUtils.format("var {} = buffer.readLongPacketMap({})", map, protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readLongPacketMap({})", map, protocolName)).append(LS);
                             return map;
                         case Python, Ruby:
                             builder.append(StringUtils.format("{} = buffer.readLongPacketMap({})", map, protocolId)).append(LS);
@@ -919,7 +931,7 @@ public class CutDownMapSerializer implements ICutDownSerializer {
                             builder.append(StringUtils.format("let {} = buffer.readStringPacketMap({}) as! Dictionary<String, {}>", map, protocolId, protocolName)).append(LS);
                             return map;
                         case GdScript:
-                            builder.append(StringUtils.format("var {} = buffer.readStringPacketMap({})", map, protocolId)).append(LS);
+                            builder.append(StringUtils.format("var {} = buffer.readStringPacketMap({})", map, protocolName)).append(LS);
                             return map;
                         case Python, Ruby:
                             builder.append(StringUtils.format("{} = buffer.readStringPacketMap({})", map, protocolId)).append(LS);
