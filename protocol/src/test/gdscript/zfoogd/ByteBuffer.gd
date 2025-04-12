@@ -1,4 +1,4 @@
-const ProtocolManager = preload("./ProtocolManager.gd")
+class_name ByteBuffer
 
 const EMPTY: String = ""
 
@@ -70,9 +70,6 @@ func isReadable() -> bool:
 
 func toBytes() -> PackedByteArray:
 	return buffer.data_array.slice(0, writeOffset)
-
-func newInstance(protocolId: int) -> Object:
-	return ProtocolManager.newInstance(protocolId)
 
 # -------------------------------------------------write/read-------------------------------------------------
 func writeBytes(value: PackedByteArray):
@@ -304,14 +301,12 @@ func readString() -> String:
 	readOffset += length
 	return value
 
-func writePacket(packet, protocolId):
-	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-	protocolRegistration.write(self, packet)
+func writePacket(packet: Object, protocol: Object):
+	protocol.write(self, packet)
 	pass
 
-func readPacket(protocolId) -> Object:
-	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-	return protocolRegistration.read(self)
+func readPacket(protocol: Object) -> Object:
+	return protocol.read(self)
 
 func writeBoolArray(array):
 	if (array == null):
@@ -449,24 +444,21 @@ func readStringArray() -> Array[String]:
 			array.append(readString())
 	return array
 
-func writePacketArray(array, protocolId):
+func writePacketArray(array: Array, protocol: Object):
 	if (array == null):
 		writeInt(0)
 	else:
-		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
 		writeInt(array.size())
 		for element in array:
-			protocolRegistration.write(self, element)
+			protocol.write(self, element)
 	pass
 
-func readPacketArray(protocolId) -> Array:
-	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-	var protocol = ProtocolManager.getProtocolClass(protocolId)
+func readPacketArray(protocol: Object) -> Array:
 	var array = Array([], typeof(protocol), StringName("RefCounted"), protocol)
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
-			array.append(protocolRegistration.read(self))
+			array.append(protocol.read(self))
 	#var a = array.get_typed_class_name()
 	#var b = array.get_typed_script()
 	#var c = array.get_typed_builtin()
@@ -537,26 +529,23 @@ func readIntStringMap() -> Dictionary[int, String]:
 			map[key] = value
 	return map
 
-func writeIntPacketMap(map, protocolId):
+func writeIntPacketMap(map: Dictionary, protocol: Object):
 	if (map == null):
 		writeInt(0)
 	else:
-		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
 		writeInt(map.size())
 		for key in map:
 			writeInt(key)
-			protocolRegistration.write(self, map[key])
+			protocol.write(self, map[key])
 	pass
 
-func readIntPacketMap(protocolId) -> Dictionary:
-	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-	var protocol = ProtocolManager.getProtocolClass(protocolId)
+func readIntPacketMap(protocol: Object) -> Dictionary:
 	var map = Dictionary({}, TYPE_INT, "", null, typeof(protocol), StringName("RefCounted"), protocol)
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
 			var key = readInt()
-			var value = protocolRegistration.read(self)
+			var value = protocol.read(self)
 			map[key] = value
 	return map
 
@@ -620,26 +609,23 @@ func readLongStringMap() -> Dictionary[int, String]:
 			map[key] = value
 	return map
 
-func writeLongPacketMap(map, protocolId):
+func writeLongPacketMap(map: Dictionary, protocol: Object):
 	if (map == null):
 		writeInt(0)
 	else:
-		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
 		writeInt(map.size())
 		for key in map:
 			writeLong(key)
-			protocolRegistration.write(self, map[key])
+			protocol.write(self, map[key])
 	pass
 
-func readLongPacketMap(protocolId) -> Dictionary:
-	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-	var protocol = ProtocolManager.getProtocolClass(protocolId)
+func readLongPacketMap(protocol: Object) -> Dictionary:
 	var map = Dictionary({}, TYPE_INT, "", null, typeof(protocol), StringName("RefCounted"), protocol)
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
 			var key = readLong()
-			var value = protocolRegistration.read(self)
+			var value = protocol.read(self)
 			map[key] = value
 	return map
 
@@ -703,25 +689,22 @@ func readStringStringMap() -> Dictionary[String, String]:
 			map[key] = value
 	return map
 
-func writeStringPacketMap(map, protocolId):
+func writeStringPacketMap(map: Dictionary, protocol: Object):
 	if (map == null):
 		writeInt(0)
 	else:
-		var protocolRegistration = ProtocolManager.getProtocol(protocolId)
 		writeInt(map.size())
 		for key in map:
 			writeString(key)
-			protocolRegistration.write(self, map[key])
+			protocol.write(self, map[key])
 	pass
 
-func readStringPacketMap(protocolId) -> Dictionary:
-	var protocolRegistration = ProtocolManager.getProtocol(protocolId)
-	var protocol = ProtocolManager.getProtocolClass(protocolId)
+func readStringPacketMap(protocol: Object) -> Dictionary:
 	var map = Dictionary({}, TYPE_STRING, "", null, typeof(protocol), StringName("RefCounted"), protocol)
 	var size = readInt()
 	if (size > 0):
 		for index in range(size):
 			var key = readString()
-			var value = protocolRegistration.read(self)
+			var value = protocol.read(self)
 			map[key] = value
 	return map
