@@ -25,13 +25,17 @@ import org.springframework.lang.Nullable;
 public interface IRouter {
 
     /**
-     * EN:send() and receive() are the entry points for sending and receiving messages, which can be called directly
-     * CN:send()和receive()是消息的发送和接收的入口，可以直接调用
+     * EN: send messages entry
+     * CN: 发送消息的入口
      */
     void send(Session session, Object packet);
 
     void send(Session session, Object packet, @Nullable Object attachment);
 
+    /**
+     * EN: receive messages entry
+     * CN: 接收消息的入口
+     */
     void receive(Session session, Object packet, @Nullable Object attachment);
 
     void atReceiver(PacketReceiverTask packetReceiverTask);
@@ -42,15 +46,11 @@ public interface IRouter {
      * 服务器对每个syncAsk和asyncAsk请求消息也只能回复一条消息，不能在处理一条不同或者异步消息的时候回复多条消息。
      *
      * @param session     一个网络通信的会话
-     * @param packet      一个网络通信包，消息体
+     * @param packet      一个网络通信包，需要发送的消息体
      * @param answerClass 等待返回包的class类。
      *                    如果为null，则不会检查这个class类的协议号是否和返回消息体的协议号相等；
      *                    如果不为null，会检查返回包的协议号。为null的情况主要用在网关。
-     * @param <T>         请求消息需要服务器返回的类型
-     * @param argument    参数，主要用来计算一致性hashId。
-     *                    1.IConsumer会使用这个参数计算负载到哪个服务提供者；
-     *                    2.服务提供者收到请求过后会使用这个参数来计算再哪个线程执行任务；
-     *                    综上所述，这个参数会在上面两种情况使用。
+     * @param argument    参数，主要用来计算一致性hashId，服务器收到请求过后会使用这个参数来计算再哪个线程执行任务；
      * @return 服务器返回的消息Response
      * @throws Exception 如果超时或者其它异常
      */
