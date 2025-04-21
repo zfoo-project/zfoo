@@ -1,14 +1,8 @@
 ${protocol_note}
 class ${protocol_name}:
+	const PROTOCOL_ID: int = ${protocol_id}
+
 	${protocol_field_definition}
-
-	func protocolId() -> int:
-		return ${protocol_id}
-
-	func _to_string() -> String:
-		const jsonTemplate = "${protocol_json}"
-		var params = [${protocol_to_string}]
-		return jsonTemplate.format(params, "{}")
 
 	static func write(buffer: ByteBuffer, packet: ${protocol_name}):
 		if (packet == null):

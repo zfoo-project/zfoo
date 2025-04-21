@@ -3,7 +3,7 @@ ${protocol_manager_registrations}
 }
 
 static func write(buffer: ByteBuffer, packet: Object) -> void:
-	var protocolId: int = packet.protocolId()
+	var protocolId: int = packet.PROTOCOL_ID
 	buffer.writeShort(protocolId)
 	packet.write(buffer, packet)
 	pass

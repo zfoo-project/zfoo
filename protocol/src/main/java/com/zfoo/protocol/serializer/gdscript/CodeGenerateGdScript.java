@@ -190,8 +190,6 @@ public class CodeGenerateGdScript implements ICodeGenerate {
                 , CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
-                , CodeTemplatePlaceholder.protocol_json, protocol_json(registration)
-                , CodeTemplatePlaceholder.protocol_to_string, protocol_to_string(registration)
                 , CodeTemplatePlaceholder.protocol_write_serialization, protocol_write_serialization(registration)
                 , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
         ));
@@ -207,8 +205,6 @@ public class CodeGenerateGdScript implements ICodeGenerate {
                 , CodeTemplatePlaceholder.protocol_name, protocol_name
                 , CodeTemplatePlaceholder.protocol_id, String.valueOf(protocol_id)
                 , CodeTemplatePlaceholder.protocol_field_definition, protocol_field_definition(registration)
-                , CodeTemplatePlaceholder.protocol_json, protocol_json(registration)
-                , CodeTemplatePlaceholder.protocol_to_string, protocol_to_string(registration)
         ));
         return formatProtocolTemplate;
     }
@@ -224,51 +220,6 @@ public class CodeGenerateGdScript implements ICodeGenerate {
                 , CodeTemplatePlaceholder.protocol_read_deserialization, protocol_read_deserialization(registration)
         ));
         return formatProtocolTemplate;
-    }
-
-
-    private String protocol_json(ProtocolRegistration registration) {
-        var fields = registration.getFields();
-        var fieldRegistrations = registration.getFieldRegistrations();
-        var gdBuilder = new StringBuilder();
-        gdBuilder.append("{");
-        // when generate source code fields, use origin fields sort
-        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
-        var params = new ArrayList<String>();
-        for (var field : sequencedFields) {
-            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
-            var fieldName = field.getName();
-            var fieldType = gdSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
-            if (fieldType.equals("String")) {
-                params.add(StringUtils.format("{}:'{}'", fieldName));
-            } else {
-                params.add(StringUtils.format("{}:{}", fieldName));
-            }
-        }
-        gdBuilder.append(StringUtils.joinWith(", ", params.toArray()));
-        gdBuilder.append("}");
-        return gdBuilder.toString();
-    }
-
-    private String protocol_to_string(ProtocolRegistration registration) {
-        var fields = registration.getFields();
-        var fieldRegistrations = registration.getFieldRegistrations();
-        var gdBuilder = new StringBuilder();
-        // when generate source code fields, use origin fields sort
-        var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
-        var params = new ArrayList<String>();
-        for (var field : sequencedFields) {
-            var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
-            var fieldName = field.getName();
-            var fieldType = gdSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
-            if (fieldType.equals("Dictionary") || fieldType.startsWith("Array")) {
-                params.add(StringUtils.format("JSON.stringify(self.{})", field.getName()));
-            } else {
-                params.add(StringUtils.format("self.{}", field.getName()));
-            }
-        }
-        gdBuilder.append(StringUtils.joinWith(", ", params.toArray()));
-        return gdBuilder.toString();
     }
 
     private String protocol_field_definition(ProtocolRegistration registration) {

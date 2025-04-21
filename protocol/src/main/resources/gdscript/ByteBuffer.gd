@@ -39,6 +39,47 @@ func adjustPadding(predictionLength: int, beforeWriteIndex: int):
 func compatibleRead(beforeReadIndex: int, length: int) -> bool:
 	return length != -1 && getReadOffset() < length + beforeReadIndex
 
+static func object_to_json(obj) -> String:
+	var type = typeof(obj)
+	match type:
+		TYPE_NIL:
+			return "null"
+		TYPE_BOOL:
+			return str(obj)
+		TYPE_INT:
+			return str(obj)
+		TYPE_FLOAT:
+			return str(obj)
+		TYPE_STRING:
+			return "\"" + obj as String + "\""
+		TYPE_ARRAY:
+			var array: PackedStringArray = PackedStringArray()
+			for element in obj:
+				array.push_back(object_to_json(element))
+			return "[" + ",".join(array) + "]"
+		TYPE_DICTIONARY:
+			var array: PackedStringArray = PackedStringArray()
+			for key in obj:
+				var value = obj.get(key)
+				array.push_back("\"" + object_to_json(key) + "\":" + object_to_json(value))
+			return "{" + ",".join(array) + "}"
+		TYPE_OBJECT:
+			var properties = obj.get_property_list()
+			var array: PackedStringArray = PackedStringArray()
+			for property in properties:
+				var propertyType = property.type
+				var propertyName = property.name
+				if propertyType == TYPE_NIL:
+					continue
+				if propertyName == "script":
+					continue
+				var value = obj.get(propertyName)
+				array.push_back("\"" + propertyName + "\":" + object_to_json(value))
+			return "{" + ",".join(array) + "}"
+		_:
+			printerr("unknow type " + type)
+	return ""
+
 # -------------------------------------------------get/set-------------------------------------------------
 func getBuffer() -> StreamPeerBuffer:
 	return buffer

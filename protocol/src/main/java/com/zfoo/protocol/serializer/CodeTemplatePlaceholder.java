@@ -50,10 +50,6 @@ public enum CodeTemplatePlaceholder {
     // -----------------------------------------------------------------------------------------------------------------
     protocol_field_accessor("${protocol_field_accessor}"),
 
-    protocol_json("${protocol_json}"),
-
-    protocol_to_string("${protocol_to_string}"),
-
     ;
     public final String placeholder;
 
