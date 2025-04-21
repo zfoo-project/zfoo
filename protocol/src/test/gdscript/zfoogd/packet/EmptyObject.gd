@@ -1,15 +1,5 @@
 class_name EmptyObject
-
-
-
-
-func protocolId() -> int:
-	return 0
-
-func _to_string() -> String:
-	const jsonTemplate = "{}"
-	var params = []
-	return jsonTemplate.format(params, "{}")
+const PROTOCOL_ID: int = 0
 
 static func write(buffer: ByteBuffer, packet: EmptyObject):
 	if (packet == null):

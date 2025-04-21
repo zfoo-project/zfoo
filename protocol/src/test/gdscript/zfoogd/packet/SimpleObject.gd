@@ -1,16 +1,8 @@
 class_name SimpleObject
-
+const PROTOCOL_ID: int = 104
 
 var c: int
 var g: bool
-
-func protocolId() -> int:
-	return 104
-
-func _to_string() -> String:
-	const jsonTemplate = "{c:{}, g:{}}"
-	var params = [self.c, self.g]
-	return jsonTemplate.format(params, "{}")
 
 static func write(buffer: ByteBuffer, packet: SimpleObject):
 	if (packet == null):

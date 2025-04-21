@@ -1,17 +1,9 @@
 class_name ObjectA
-
+const PROTOCOL_ID: int = 102
 
 var a: int
 var m: Dictionary[int, String]
 var objectB: ObjectB
-
-func protocolId() -> int:
-	return 102
-
-func _to_string() -> String:
-	const jsonTemplate = "{a:{}, m:{}, objectB:{}}"
-	var params = [self.a, self.m, self.objectB]
-	return jsonTemplate.format(params, "{}")
 
 static func write(buffer: ByteBuffer, packet: ObjectA):
 	if (packet == null):

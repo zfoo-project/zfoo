@@ -1,5 +1,5 @@
 class_name ComplexObject
-
+const PROTOCOL_ID: int = 100
 # 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
 # byte类型，最简单的整形
 var a: int
@@ -54,14 +54,6 @@ var sssss: Array	# Set<Map<number, string>>
 # 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
 var myCompatible: int
 var myObject: ObjectA
-
-func protocolId() -> int:
-	return 100
-
-func _to_string() -> String:
-	const jsonTemplate = "{a:{}, aa:{}, aaa:{}, aaaa:{}, b:{}, bb:{}, bbb:{}, bbbb:{}, c:{}, cc:{}, ccc:{}, cccc:{}, d:{}, dd:{}, ddd:{}, dddd:{}, e:{}, ee:{}, eee:{}, eeee:{}, f:{}, ff:{}, fff:{}, ffff:{}, g:{}, gg:{}, ggg:{}, gggg:{}, jj:'{}', jjj:{}, kk:{}, kkk:{}, l:{}, ll:{}, lll:{}, llll:{}, lllll:{}, m:{}, mm:{}, mmm:{}, mmmm:{}, mmmmm:{}, s:{}, ss:{}, sss:{}, ssss:{}, sssss:{}, myCompatible:{}, myObject:{}}"
-	var params = [self.a, self.aa, JSON.stringify(self.aaa), JSON.stringify(self.aaaa), self.b, self.bb, JSON.stringify(self.bbb), JSON.stringify(self.bbbb), self.c, self.cc, JSON.stringify(self.ccc), JSON.stringify(self.cccc), self.d, self.dd, JSON.stringify(self.ddd), JSON.stringify(self.dddd), self.e, self.ee, JSON.stringify(self.eee), JSON.stringify(self.eeee), self.f, self.ff, JSON.stringify(self.fff), JSON.stringify(self.ffff), self.g, self.gg, JSON.stringify(self.ggg), JSON.stringify(self.gggg), self.jj, JSON.stringify(self.jjj), self.kk, JSON.stringify(self.kkk), JSON.stringify(self.l), JSON.stringify(self.ll), JSON.stringify(self.lll), JSON.stringify(self.llll), JSON.stringify(self.lllll), self.m, self.mm, JSON.stringify(self.mmm), JSON.stringify(self.mmmm), JSON.stringify(self.mmmmm), JSON.stringify(self.s), JSON.stringify(self.ss), JSON.stringify(self.sss), JSON.stringify(self.ssss), JSON.stringify(self.sssss), self.myCompatible, self.myObject]
-	return jsonTemplate.format(params, "{}")
 
 static func write(buffer: ByteBuffer, packet: ComplexObject):
 	if (packet == null):

@@ -1,8 +1,6 @@
 extends Node2D
 
-
 const ProtocolManager = preload("res://zfoogd/ProtocolManager.gd")
-const ByteBuffer = preload("res://zfoogd/ByteBuffer.gd")
 
 # 测试参数
 #op.setFoldProtocol(true);
@@ -82,7 +80,6 @@ func _ready():
 
 
 func test():
-	ProtocolManager.initProtocol()
 	var buffer = ByteBuffer.new()
 	
 	var filePath = "res://compatible/normal-out-inner-inner-compatible.bytes"
@@ -96,14 +93,12 @@ func test():
 	buffer.writeBytes(poolByteArray)
 	
 	var packet = ProtocolManager.read(buffer)
-	print(packet)
+	print(ByteBuffer.object_to_json(packet))
 
 	var newByteBuffer = ByteBuffer.new()
 	ProtocolManager.write(newByteBuffer, packet);
-	print(newByteBuffer.getWriteOffset())
+	print("-----------------------------------------------size:" + str(newByteBuffer.getWriteOffset()))
 	
 	var newPacket = ProtocolManager.read(newByteBuffer);
-	print(newPacket)
+	print(ByteBuffer.object_to_json(newPacket))
 	pass
-
-

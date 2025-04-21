@@ -1,5 +1,5 @@
 class_name NormalObject
-
+const PROTOCOL_ID: int = 101
 # 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
 var a: int
 var aaa: Array[int]
@@ -20,14 +20,6 @@ var m: Dictionary[int, String]
 var mm: Dictionary[int, ObjectA]
 var s: Array[int]
 var ssss: Array[String]
-
-func protocolId() -> int:
-	return 101
-
-func _to_string() -> String:
-	const jsonTemplate = "{a:{}, aaa:{}, b:{}, c:{}, d:{}, e:{}, f:{}, g:{}, jj:'{}', kk:{}, l:{}, ll:{}, lll:{}, llll:{}, m:{}, mm:{}, s:{}, ssss:{}}"
-	var params = [self.a, JSON.stringify(self.aaa), self.b, self.c, self.d, self.e, self.f, self.g, self.jj, self.kk, JSON.stringify(self.l), JSON.stringify(self.ll), JSON.stringify(self.lll), JSON.stringify(self.llll), self.m, self.mm, JSON.stringify(self.s), JSON.stringify(self.ssss)]
-	return jsonTemplate.format(params, "{}")
 
 static func write(buffer: ByteBuffer, packet: NormalObject):
 	if (packet == null):

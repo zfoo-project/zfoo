@@ -1,15 +1,7 @@
 class_name ObjectB
-
+const PROTOCOL_ID: int = 103
 
 var flag: bool
-
-func protocolId() -> int:
-	return 103
-
-func _to_string() -> String:
-	const jsonTemplate = "{flag:{}}"
-	var params = [self.flag]
-	return jsonTemplate.format(params, "{}")
 
 static func write(buffer: ByteBuffer, packet: ObjectB):
 	if (packet == null):
