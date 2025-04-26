@@ -194,6 +194,7 @@ Keymap->Main menu->Code->Completion->Basic，删除ctrl+空格，设置为ctrl+e
 Run to Cursor，设置为F9
 find，设置为ctrl+f
 replace，设置为alt+f
+folding，expand all设置为 ctrl +，collapse all设置为 ctrl -
 在输入法上右键，将win10的简体繁体切换ctrl+f快捷键键取消
 ```
 
