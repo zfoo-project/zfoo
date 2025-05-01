@@ -13,6 +13,7 @@
 package com.zfoo.storage.convert;
 
 import com.zfoo.protocol.util.StringUtils;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
@@ -63,15 +64,16 @@ public abstract class ConvertUtils {
 
     public static Object convertToArray(String content, Class<?> componentType) {
         content = StringUtils.trim(content);
-        // null safe，content为空则返回长度为0的数组
         if (StringUtils.isEmpty(content)) {
             return Array.newInstance(componentType, 0);
         }
-        // 用普通的逗号分隔符解析
-        var list = convertToList(content, componentType);
-        Object array = Array.newInstance(componentType, list.size());
-        for (var i = 0; i < list.size(); i++) {
-            Array.set(array, i, list.get(i));
+        // Use commas, semicolons, newline separators to parse
+        var splits = StringUtils.tokenize(content, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
+        Object array = Array.newInstance(componentType, splits.length);
+        for (var i = 0; i < splits.length; i++) {
+            var split = splits[i];
+            var value = convert(StringUtils.trim(split), componentType);
+            Array.set(array, i, value);
         }
         return array;
     }
