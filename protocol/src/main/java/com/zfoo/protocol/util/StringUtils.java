@@ -36,6 +36,7 @@ public abstract class StringUtils {
 
     public static final String COMMA = ",";     // [com·ma || 'kɒmə] n.  逗点; 逗号
     public static final String COMMA_REGEX = ",|，";
+    public static final String COMMON_SPLIT_REGEX = "[,，\\s]+";
 
     public static final String PERIOD = ".";    // 句号
     public static final String PERIOD_REGEX = "\\.";

@@ -68,12 +68,10 @@ public abstract class ConvertUtils {
             return Array.newInstance(componentType, 0);
         }
         // Use commas, semicolons, newline separators to parse
-        var splits = StringUtils.tokenize(content, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
-        Object array = Array.newInstance(componentType, splits.length);
-        for (var i = 0; i < splits.length; i++) {
-            var split = splits[i];
-            var value = convert(StringUtils.trim(split), componentType);
-            Array.set(array, i, value);
+        var list = convertToList(content, componentType);
+        Object array = Array.newInstance(componentType, list.size());
+        for (var i = 0; i < list.size(); i++) {
+            Array.set(array, i, list.get(i));
         }
         return array;
     }
@@ -83,7 +81,7 @@ public abstract class ConvertUtils {
         if (StringUtils.isEmpty(content)) {
             return Collections.emptyList();
         }
-        var splits = content.split(StringUtils.COMMA_REGEX);
+        var splits = content.split(StringUtils.COMMON_SPLIT_REGEX);
         var list = new ArrayList<T>();
         for (var split : splits) {
             var value = convert(StringUtils.trim(split), genericType);
