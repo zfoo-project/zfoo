@@ -63,6 +63,9 @@
 
         <protocol id="1700" location="com.zfoo.net.packet.http.HttpHelloRequest"/>
         <protocol id="1701" location="com.zfoo.net.packet.http.HttpHelloResponse"/>
+
+        <protocol id="1800" location="com.zfoo.net.packet.proxy.ProxyHelloRequest"/>
+        <protocol id="1801" location="com.zfoo.net.packet.proxy.ProxyHelloResponse"/>
     </module>
 
     <module id="4" name="js">
