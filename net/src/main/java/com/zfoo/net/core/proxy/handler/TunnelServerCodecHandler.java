@@ -59,6 +59,7 @@ public class TunnelServerCodecHandler extends ByteToMessageCodec<TunnelProtocolS
         var messageType = sliceByteBuf.readByte();
         if (messageType == -1) {
             TunnelServer.tunnels.add(ctx.channel());
+            return;
         }
 
 

@@ -14,6 +14,7 @@
 package com.zfoo.net.core.proxy.handler;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.core.proxy.TunnelClient;
 import com.zfoo.net.core.proxy.TunnelProtocolServer2Client;
 import com.zfoo.net.core.proxy.TunnelServer;
 import com.zfoo.net.packet.PacketService;
@@ -59,7 +60,7 @@ public class TunnelClientCodecHandler extends ByteToMessageCodec<TunnelProtocolS
 
         var sid = ByteBufUtils.readLong(sliceByteBuf);
         var packetInfo = NetContext.getPacketService().read(sliceByteBuf);
-        out.add(packetInfo);
+        out.add(new TunnelClient.DecodedPacketInfo(sid, packetInfo.getPacket(), packetInfo.getAttachment()));
     }
 
     @Override

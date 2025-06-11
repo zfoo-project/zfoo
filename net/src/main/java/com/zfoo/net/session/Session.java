@@ -29,7 +29,7 @@ public class Session implements Closeable {
     /**
      * The globally unique ID of the session and the negative sid are allowed
      */
-    private long sid = ATOMIC_LONG.incrementAndGet();
+    private long sid;
 
     private Channel channel;
 
@@ -52,8 +52,14 @@ public class Session implements Closeable {
             throw new IllegalArgumentException("channel cannot be empty");
         }
         this.channel = channel;
+        this.sid = ATOMIC_LONG.incrementAndGet();
     }
 
+    public Session(long sid, Channel channel, long uid) {
+        this.sid = sid;
+        this.channel = channel;
+        this.uid = uid;
+    }
 
     @Override
     public String toString() {

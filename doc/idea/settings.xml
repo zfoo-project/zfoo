@@ -9,7 +9,7 @@
       <active>true</active>
       <protocol>http</protocol>
       <host>127.0.0.1</host>
-      <port>10808</port>
+      <port>10809</port>
     </proxy>
   </proxies>
 

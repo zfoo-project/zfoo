@@ -17,6 +17,7 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.core.proxy.TunnelClient;
 import com.zfoo.net.handler.BaseRouteHandler;
 import com.zfoo.net.packet.DecodedPacketInfo;
+import com.zfoo.net.session.Session;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -40,7 +41,9 @@ public class TunnelClientRouteHandler extends BaseRouteHandler {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        var decodedPacketInfo = (TunnelClient.DecodedPacketInfo) msg;
+        var session = new Session(decodedPacketInfo.sid, ctx.channel(), 0);
+        NetContext.getRouter().receive(session, decodedPacketInfo.packet, decodedPacketInfo.attachment);
 
-        DecodedPacketInfo decodedPacketInfo = (DecodedPacketInfo) msg;
     }
 }

@@ -52,6 +52,11 @@ public class TunnelClient extends AbstractClient<SocketChannel> {
 
         public Object attachment;
 
+        public DecodedPacketInfo(long sid, Object packet, Object attachment) {
+            this.sid = sid;
+            this.packet = packet;
+            this.attachment = attachment;
+        }
     }
 
 }
