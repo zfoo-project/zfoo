@@ -17,6 +17,7 @@ import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.event.ClientSessionActiveEvent;
 import com.zfoo.net.core.event.ClientSessionInactiveEvent;
+import com.zfoo.net.core.event.ServerSessionActiveEvent;
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,10 +35,10 @@ public class ClientRouteHandler extends BaseRouteHandler {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        // 客户端的session初始化在启动的时候已经做了，这边直接获取session
-        var session = SessionUtils.getSession(ctx);
-        EventBus.post(ClientSessionActiveEvent.valueOf(session));
+        var session = initChannel(ctx.channel());
+        NetContext.getSessionManager().addClientSession(session);
         logger.info("client channel is active {}", SessionUtils.sessionInfo(ctx));
+        EventBus.post(ClientSessionActiveEvent.valueOf(session));
     }
 
     @Override

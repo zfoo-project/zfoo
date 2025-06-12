@@ -13,12 +13,12 @@
 
 package com.zfoo.net.core;
 
-import com.zfoo.net.NetContext;
-import com.zfoo.net.handler.BaseRouteHandler;
 import com.zfoo.net.session.Session;
-import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.net.util.SessionUtils;
+import com.zfoo.protocol.exception.RunException;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.ThreadUtils;
+import com.zfoo.scheduler.util.TimeUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
@@ -29,6 +29,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.SQLOutput;
 
 /**
  * @author godotg
@@ -66,20 +68,31 @@ public abstract class AbstractClient<C extends Channel> extends ChannelInitializ
         var channelFuture = bootstrap.connect(hostAddress, port);
         channelFuture.syncUninterruptibly();
 
-        if (channelFuture.isSuccess()) {
-            if (channelFuture.channel().isActive()) {
-                var channel = channelFuture.channel();
-                var session = BaseRouteHandler.initChannel(channel);
-                NetContext.getSessionManager().addClientSession(session);
-                logger.info("{} started at [{}]", this.getClass().getSimpleName(), channel.localAddress());
-                return session;
-            }
-        } else if (channelFuture.cause() != null) {
-            logger.error(ExceptionUtils.getMessage(channelFuture.cause()));
-        } else {
-            logger.error("[{}] started failed", this.getClass().getSimpleName());
+        if (channelFuture.cause() != null) {
+            throw new RuntimeException(channelFuture.cause());
         }
-        return null;
+
+        if (!channelFuture.isSuccess() || !channelFuture.channel().isActive()) {
+            throw new RunException("[{}] started failed", this.getClass().getSimpleName());
+        }
+
+        var channel = channelFuture.channel();
+        var session = SessionUtils.getSession(channel);
+        var loop = 128;
+        var sleepMillisSeconds = 100;
+        for (int i = 0; i < loop; i++) {
+            ThreadUtils.sleep(sleepMillisSeconds);
+            session = SessionUtils.getSession(channel);
+            if (session != null) {
+                break;
+            }
+        }
+        if (session == null) {
+            channel.close();
+            throw new RunException("[{}] start client timeout after [{}] seconds", this.getClass().getSimpleName(), loop * sleepMillisSeconds / TimeUtils.MILLIS_PER_SECOND);
+        }
+        logger.info("{} started at [{}]", this.getClass().getSimpleName(), channel.localAddress());
+        return session;
     }
 
 

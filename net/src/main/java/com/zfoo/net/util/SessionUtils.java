@@ -40,8 +40,11 @@ public abstract class SessionUtils {
     }
 
     public static Session getSession(ChannelHandlerContext ctx) {
-        var sessionAttr = ctx.channel().attr(SESSION_KEY);
-        return sessionAttr.get();
+        return getSession(ctx.channel());
+    }
+
+    public static Session getSession(Channel channel) {
+        return channel.attr(SESSION_KEY).get();
     }
 
     public static String toIp(Session session) {
