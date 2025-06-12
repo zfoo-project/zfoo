@@ -44,19 +44,4 @@ public class TunnelClient extends AbstractClient<SocketChannel> {
         channel.pipeline().addLast(new TunnelClientRouteHandler());
     }
 
-    public static class DecodedPacketInfo {
-
-        public long sid;
-
-        public Object packet;
-
-        public Object attachment;
-
-        public DecodedPacketInfo(long sid, Object packet, Object attachment) {
-            this.sid = sid;
-            this.packet = packet;
-            this.attachment = attachment;
-        }
-    }
-
 }

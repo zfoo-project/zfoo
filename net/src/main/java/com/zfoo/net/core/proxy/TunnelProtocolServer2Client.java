@@ -12,6 +12,9 @@
 
 package com.zfoo.net.core.proxy;
 
+import com.zfoo.net.NetContext;
+import com.zfoo.net.packet.PacketService;
+import com.zfoo.protocol.buffer.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 
 
@@ -22,28 +25,66 @@ public class TunnelProtocolServer2Client {
 
     private long sid;
 
+    private long uid;
+
     private ByteBuf byteBuf;
 
-    public static TunnelProtocolServer2Client valueOf(long sid, ByteBuf byteBuf) {
+    public static TunnelProtocolServer2Client valueOf(long sid, long uid, ByteBuf byteBuf) {
         var tunnelProtocol = new TunnelProtocolServer2Client();
         tunnelProtocol.sid = sid;
+        tunnelProtocol.uid = uid;
         tunnelProtocol.byteBuf = byteBuf;
         return tunnelProtocol;
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static class TunnelPacketInfo {
+
+        public long sid;
+
+        public long uid;
+
+        public Object packet;
+
+        public Object attachment;
+
+        public TunnelPacketInfo(long sid, long uid, Object packet, Object attachment) {
+            this.sid = sid;
+            this.uid = uid;
+            this.packet = packet;
+            this.attachment = attachment;
+        }
+    }
+
+    public static TunnelPacketInfo read(ByteBuf in) {
+        var sid = ByteBufUtils.readLong(in);
+        var uid = ByteBufUtils.readLong(in);
+        var packetInfo = NetContext.getPacketService().read(in);
+        return new TunnelPacketInfo(sid, uid, packetInfo.getPacket(), packetInfo.getAttachment());
+    }
+    // -----------------------------------------------------------------------------------------------------------------
+
+
+    public void write(ByteBuf out) {
+        out.ensureWritable(4);
+        out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
+        ByteBufUtils.writeLong(out, sid);
+        ByteBufUtils.writeLong(out, uid);
+        out.writeBytes(byteBuf);
+        NetContext.getPacketService().writeHeaderBefore(out);
+    }
+    // -----------------------------------------------------------------------------------------------------------------
+
 
     public long getSid() {
         return sid;
     }
 
-    public void setSid(long sid) {
-        this.sid = sid;
+    public long getUid() {
+        return uid;
     }
 
     public ByteBuf getByteBuf() {
         return byteBuf;
-    }
-
-    public void setByteBuf(ByteBuf byteBuf) {
-        this.byteBuf = byteBuf;
     }
 }

@@ -201,7 +201,7 @@ public class Router implements IRouter {
         if (!channel.isActive()) {
             return;
         }
-        var packetInfo = EncodedPacketInfo.valueOf(packet, attachment);
+        var packetInfo = EncodedPacketInfo.valueOf(session.getSid(), session.getUid(), packet, attachment);
         if (!channel.isWritable()) {
             logger.warn("send msg error, protocol [{}] sid=[{}] uid=[{}] isActive=[{}] isWritable=[{}]"
                     , packet.getClass().getSimpleName(), session.getSid(), session.getUid(), channel.isActive(), channel.isWritable());

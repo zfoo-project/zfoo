@@ -60,7 +60,7 @@ public class TcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, EncodedPacketInfo packetInfo, ByteBuf out) {
-        NetContext.getPacketService().write(out, packetInfo.getPacket(), packetInfo.getAttachment());
+        NetContext.getPacketService().writeHeaderAndBody(out, packetInfo.getPacket(), packetInfo.getAttachment());
     }
 
 }

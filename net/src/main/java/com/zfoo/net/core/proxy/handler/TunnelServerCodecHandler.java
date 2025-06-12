@@ -13,11 +13,9 @@
 
 package com.zfoo.net.core.proxy.handler;
 
-import com.zfoo.net.NetContext;
+import com.zfoo.net.core.proxy.TunnelProtocolClient2Server;
 import com.zfoo.net.core.proxy.TunnelProtocolServer2Client;
-import com.zfoo.net.core.proxy.TunnelServer;
 import com.zfoo.net.packet.PacketService;
-import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
@@ -56,29 +54,12 @@ public class TunnelServerCodecHandler extends ByteToMessageCodec<TunnelProtocolS
         }
 
         var sliceByteBuf = in.readSlice(length);
-        var messageType = sliceByteBuf.readByte();
-        if (messageType == -1) {
-            TunnelServer.tunnels.add(ctx.channel());
-            return;
-        }
-
-
-        var packetInfo = NetContext.getPacketService().read(sliceByteBuf);
-        out.add(packetInfo);
+        TunnelProtocolClient2Server.read(ctx.channel(), sliceByteBuf);
     }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, TunnelProtocolServer2Client tunnelProtocol, ByteBuf out) {
-        out.ensureWritable(4);
-        out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
-        ByteBufUtils.writeLong(out, tunnelProtocol.getSid());
-        out.writeBytes(tunnelProtocol.getByteBuf());
-
-        int length = out.writerIndex();
-        int packetLength = length - PacketService.PACKET_HEAD_LENGTH;
-        out.writerIndex(0);
-        out.writeInt(packetLength);
-        out.writerIndex(length);
+        tunnelProtocol.write(out);
     }
 
 }

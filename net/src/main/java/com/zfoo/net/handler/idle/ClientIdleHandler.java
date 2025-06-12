@@ -30,7 +30,7 @@ public class ClientIdleHandler extends ChannelDuplexHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientIdleHandler.class);
 
-    private static final EncodedPacketInfo heartbeatPacket = EncodedPacketInfo.valueOf(new Heartbeat(), null);
+    private static final EncodedPacketInfo heartbeatPacket = EncodedPacketInfo.valueOf(0, 0, new Heartbeat(), null);
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {

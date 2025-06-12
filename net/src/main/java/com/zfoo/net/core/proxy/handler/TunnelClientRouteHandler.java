@@ -15,22 +15,25 @@ package com.zfoo.net.core.proxy.handler;
 
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.proxy.TunnelClient;
-import com.zfoo.net.handler.BaseRouteHandler;
-import com.zfoo.net.packet.DecodedPacketInfo;
+import com.zfoo.net.core.proxy.TunnelProtocolClient2Server;
+import com.zfoo.net.core.proxy.TunnelProtocolServer2Client;
+import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.session.Session;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
- * @author godotg
+ * @author jaysunxiao
  */
 @ChannelHandler.Sharable
-public class TunnelClientRouteHandler extends BaseRouteHandler {
+public class TunnelClientRouteHandler extends ClientRouteHandler {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
         TunnelClient.tunnels.add(ctx.channel());
+
+        ctx.channel().writeAndFlush(new TunnelProtocolClient2Server.TunnelRegister(1));
     }
 
     @Override
@@ -41,9 +44,9 @@ public class TunnelClientRouteHandler extends BaseRouteHandler {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        var decodedPacketInfo = (TunnelClient.DecodedPacketInfo) msg;
-        var session = new Session(decodedPacketInfo.sid, ctx.channel(), 0);
-        NetContext.getRouter().receive(session, decodedPacketInfo.packet, decodedPacketInfo.attachment);
-
+        var tunnelPacketInfo = (TunnelProtocolServer2Client.TunnelPacketInfo) msg;
+        var session = new Session(tunnelPacketInfo.sid, tunnelPacketInfo.uid, ctx.channel());
+        NetContext.getRouter().receive(session, tunnelPacketInfo.packet, tunnelPacketInfo.attachment);
     }
+
 }

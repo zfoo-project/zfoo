@@ -13,6 +13,7 @@
 
 package com.zfoo.net.core.proxy.handler;
 
+import com.zfoo.net.NetContext;
 import com.zfoo.net.core.proxy.TunnelProtocolServer2Client;
 import com.zfoo.net.core.proxy.TunnelServer;
 import com.zfoo.net.packet.PacketService;
@@ -56,11 +57,15 @@ public class ProxyCodecHandler extends ByteToMessageCodec<TunnelProtocolServer2C
 
         var session = SessionUtils.getSession(ctx);
         var tunnel = RandomUtils.randomEle(TunnelServer.tunnels);
-        tunnel.writeAndFlush(TunnelProtocolServer2Client.valueOf(session.getSid(), sliceByteBuf));
+        tunnel.writeAndFlush(TunnelProtocolServer2Client.valueOf(session.getSid(), session.getUid(), sliceByteBuf));
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, TunnelProtocolServer2Client broker, ByteBuf out) {
+    protected void encode(ChannelHandlerContext ctx, TunnelProtocolServer2Client tunnelProtocol, ByteBuf out) {
+        out.ensureWritable(7);
+        out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
+        out.writeBytes(tunnelProtocol.getByteBuf());
+        NetContext.getPacketService().writeHeaderBefore(out);
     }
 
 }

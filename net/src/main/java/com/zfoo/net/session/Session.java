@@ -55,10 +55,10 @@ public class Session implements Closeable {
         this.sid = ATOMIC_LONG.incrementAndGet();
     }
 
-    public Session(long sid, Channel channel, long uid) {
+    public Session(long sid, long uid, Channel channel) {
         this.sid = sid;
-        this.channel = channel;
         this.uid = uid;
+        this.channel = channel;
     }
 
     @Override

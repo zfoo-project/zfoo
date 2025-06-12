@@ -13,12 +13,10 @@
 
 package com.zfoo.net.core.proxy.handler;
 
-import com.zfoo.net.NetContext;
-import com.zfoo.net.core.proxy.TunnelClient;
+import com.zfoo.net.core.proxy.TunnelProtocolClient2Server;
 import com.zfoo.net.core.proxy.TunnelProtocolServer2Client;
-import com.zfoo.net.core.proxy.TunnelServer;
+import com.zfoo.net.packet.EncodedPacketInfo;
 import com.zfoo.net.packet.PacketService;
-import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
@@ -32,9 +30,8 @@ import java.util.List;
 /**
  * @author jaysunxiao
  */
-public class TunnelClientCodecHandler extends ByteToMessageCodec<TunnelProtocolServer2Client> {
+public class TunnelClientCodecHandler extends ByteToMessageCodec<Object> {
 
-    private static final Logger logger = LoggerFactory.getLogger(TunnelClientCodecHandler.class);
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
@@ -58,13 +55,15 @@ public class TunnelClientCodecHandler extends ByteToMessageCodec<TunnelProtocolS
 
         var sliceByteBuf = in.readSlice(length);
 
-        var sid = ByteBufUtils.readLong(sliceByteBuf);
-        var packetInfo = NetContext.getPacketService().read(sliceByteBuf);
-        out.add(new TunnelClient.DecodedPacketInfo(sid, packetInfo.getPacket(), packetInfo.getAttachment()));
+        var tunnelPacketInfo = TunnelProtocolServer2Client.read(sliceByteBuf);
+        out.add(tunnelPacketInfo);
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, TunnelProtocolServer2Client tunnelProtocol, ByteBuf out) {
+    protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) {
+        if (msg instanceof EncodedPacketInfo) {
+            TunnelProtocolClient2Server.writePacket(out, (EncodedPacketInfo) msg);
+        }
     }
 
 }

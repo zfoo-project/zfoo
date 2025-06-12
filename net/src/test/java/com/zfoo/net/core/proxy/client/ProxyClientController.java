@@ -15,7 +15,6 @@ package com.zfoo.net.core.proxy.client;
 
 import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.packet.proxy.ProxyHelloResponse;
-import com.zfoo.net.packet.tcp.TcpHelloResponse;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import org.slf4j.Logger;
@@ -26,10 +25,10 @@ import org.springframework.stereotype.Component;
  * @author jaysunxiao
  */
 @Component
-public class ReverseProxyClientController {
+public class ProxyClientController {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(ReverseProxyClientController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProxyClientController.class);
 
     @PacketReceiver
     public void atProxyHelloResponse(Session session, ProxyHelloResponse response) {

@@ -159,36 +159,46 @@ public class PacketService implements IPacketService {
 
     @Override
     public void write(ByteBuf buffer, Object packet, Object attachment) {
+        // 写入包packet
+        ProtocolManager.write(buffer, packet);
+
+        // 写入包的附加包attachment
+        if (attachment == null) {
+            ByteBufUtils.writeBool(buffer, false);
+        } else {
+            ByteBufUtils.writeBool(buffer, true);
+            // 写入包的附加包attachment
+            ProtocolManager.write(buffer, attachment);
+        }
+    }
+
+    @Override
+    public void writeHeaderAndBody(ByteBuf buffer, Object packet, Object attachment) {
         try {
             // 预留写入包的长度，一个int字节大小
             buffer.ensureWritable(7);
             buffer.writerIndex(PACKET_HEAD_LENGTH);
 
-            // 写入包packet
-            ProtocolManager.write(buffer, packet);
+            write(buffer, packet, attachment);
 
-            // 写入包的附加包attachment
-            if (attachment == null) {
-                ByteBufUtils.writeBool(buffer, false);
-            } else {
-                ByteBufUtils.writeBool(buffer, true);
-                // 写入包的附加包attachment
-                ProtocolManager.write(buffer, attachment);
-            }
-
-            int length = buffer.writerIndex();
-
-            int packetLength = length - PACKET_HEAD_LENGTH;
-
-            buffer.writerIndex(0);
-
-            buffer.writeInt(packetLength);
-
-            buffer.writerIndex(length);
+            writeHeaderBefore(buffer);
         } catch (Exception e) {
             logger.error("write packet exception", e);
         } catch (Throwable t) {
             logger.error("write packet error", t);
         }
+    }
+
+    @Override
+    public void writeHeaderBefore(ByteBuf buffer) {
+        int length = buffer.writerIndex();
+
+        int packetLength = length - PACKET_HEAD_LENGTH;
+
+        buffer.writerIndex(0);
+
+        buffer.writeInt(packetLength);
+
+        buffer.writerIndex(length);
     }
 }

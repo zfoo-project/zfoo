@@ -26,4 +26,7 @@ public interface IPacketService {
 
     void write(ByteBuf buffer, Object packet, @Nullable Object attachment);
 
+    void writeHeaderAndBody(ByteBuf buffer, Object packet, @Nullable Object attachment);
+
+    void writeHeaderBefore(ByteBuf buffer);
 }

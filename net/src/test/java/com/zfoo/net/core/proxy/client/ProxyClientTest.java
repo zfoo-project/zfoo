@@ -26,15 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.function.Consumer;
-
 /**
  * @author jaysunxiao
  */
 @Ignore
-public class ReverseProxyClientTest {
+public class ProxyClientTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReverseProxyClientTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProxyClientTest.class);
 
     @Test
     public void startClient() throws Exception {

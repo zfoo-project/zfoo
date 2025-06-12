@@ -19,7 +19,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
- * @author godotg
+ * @author jaysunxiao
  */
 @ChannelHandler.Sharable
 public class TunnelServerRouteHandler extends ServerRouteHandler {

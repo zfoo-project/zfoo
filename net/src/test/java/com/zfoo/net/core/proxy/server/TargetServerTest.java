@@ -14,8 +14,7 @@
 package com.zfoo.net.core.proxy.server;
 
 import com.zfoo.net.core.HostAndPort;
-import com.zfoo.net.core.tcp.TcpClient;
-import com.zfoo.net.core.tcp.TcpServer;
+import com.zfoo.net.core.proxy.TunnelClient;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,8 +35,8 @@ public class TargetServerTest {
     public void startServer() {
         var context = new ClassPathXmlApplicationContext("config.xml");
 
-        var reverseProxyClient = new TcpClient(HostAndPort.valueOf("127.0.0.1:9001"));
-        var session = reverseProxyClient.start();
+        var tunnelClient = new TunnelClient(HostAndPort.valueOf("127.0.0.1:9001"));
+        var session = tunnelClient.start();
 
         ThreadUtils.sleep(Long.MAX_VALUE);
     }

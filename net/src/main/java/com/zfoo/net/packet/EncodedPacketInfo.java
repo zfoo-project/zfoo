@@ -21,6 +21,9 @@ import org.springframework.lang.Nullable;
  */
 public class EncodedPacketInfo {
 
+    private long sid;
+    private long uid;
+
     /**
      * 解码后的包
      */
@@ -32,26 +35,28 @@ public class EncodedPacketInfo {
     private Object attachment;
 
 
-    public static EncodedPacketInfo valueOf(Object packet, @Nullable Object attachment) {
+    public static EncodedPacketInfo valueOf(long sid, long uid, Object packet, @Nullable Object attachment) {
         EncodedPacketInfo packetInfo = new EncodedPacketInfo();
+        packetInfo.sid = sid;
+        packetInfo.uid = uid;
         packetInfo.packet = packet;
         packetInfo.attachment = attachment;
         return packetInfo;
+    }
+
+    public long getSid() {
+        return sid;
+    }
+
+    public long getUid() {
+        return uid;
     }
 
     public Object getPacket() {
         return packet;
     }
 
-    public void setPacket(Object packet) {
-        this.packet = packet;
-    }
-
     public Object getAttachment() {
         return attachment;
-    }
-
-    public void setAttachment(Object attachment) {
-        this.attachment = attachment;
     }
 }

@@ -49,7 +49,7 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, EncodedPacketInfo out, List<Object> list) {
         var byteBuf = channelHandlerContext.alloc().ioBuffer();
-        NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getAttachment());
+        NetContext.getPacketService().writeHeaderAndBody(byteBuf, out.getPacket(), out.getAttachment());
         list.add(new BinaryWebSocketFrame(byteBuf));
     }
 

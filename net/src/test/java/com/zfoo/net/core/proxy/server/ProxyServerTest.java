@@ -25,7 +25,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author jaysunxiao
  */
 @Ignore
-public class ReverseProxyServerTest {
+public class ProxyServerTest {
 
     /**
      * ReverseProxyServerTest reverse proxy TargetServerTest
@@ -37,8 +37,8 @@ public class ReverseProxyServerTest {
         var server = new TcpServer(HostAndPort.valueOf("0.0.0.0:9000"));
         server.start();
 
-        var reverseProxyServer = new TunnelServer(HostAndPort.valueOf("0.0.0.0:9001"));
-        reverseProxyServer.start();
+        var tunnelServer = new TunnelServer(HostAndPort.valueOf("0.0.0.0:9001"));
+        tunnelServer.start();
 
         ThreadUtils.sleep(Long.MAX_VALUE);
     }

@@ -66,7 +66,7 @@ public class UdpCodecHandler extends MessageToMessageCodec<DatagramPacket, Encod
         var byteBuf = channelHandlerContext.alloc().ioBuffer();
         var udpAttachment = (UdpAttachment) out.getAttachment();
 
-        NetContext.getPacketService().write(byteBuf, out.getPacket(), out.getAttachment());
+        NetContext.getPacketService().writeHeaderAndBody(byteBuf, out.getPacket(), out.getAttachment());
         list.add(new DatagramPacket(byteBuf, new InetSocketAddress(udpAttachment.getHost(), udpAttachment.getPort())));
     }
 }

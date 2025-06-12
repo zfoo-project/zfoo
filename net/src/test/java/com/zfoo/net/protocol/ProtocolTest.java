@@ -66,7 +66,7 @@ public class ProtocolTest {
         cm.setF("Hello Jaysunxiao，this is the World!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         ByteBuf writeBuff = Unpooled.directBuffer();
-        packetService.write(writeBuff, cm, attachment);
+        packetService.writeHeaderAndBody(writeBuff, cm, attachment);
 
         writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
@@ -83,7 +83,7 @@ public class ProtocolTest {
         cm.setB(objectA0);
 
         ByteBuf writeBuff = Unpooled.buffer();
-        packetService.write(writeBuff, cm, null);
+        packetService.writeHeaderAndBody(writeBuff, cm, null);
 
         writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
@@ -102,7 +102,7 @@ public class ProtocolTest {
         cm.setD(Double.MIN_VALUE);
 
         ByteBuf writeBuff = Unpooled.buffer();
-        packetService.write(writeBuff, cm, null);
+        packetService.writeHeaderAndBody(writeBuff, cm, null);
 
         writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
@@ -121,7 +121,7 @@ public class ProtocolTest {
         cm.setD(100.1);
 
         ByteBuf writeBuff = Unpooled.buffer();
-        packetService.write(writeBuff, cm, null);
+        packetService.writeHeaderAndBody(writeBuff, cm, null);
 
         writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
@@ -156,7 +156,7 @@ public class ProtocolTest {
         cm.setListListWithMap(listListWithMap);
 
         ByteBuf writeBuff = Unpooled.buffer();
-        packetService.write(writeBuff, cm, null);
+        packetService.writeHeaderAndBody(writeBuff, cm, null);
 
         writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
@@ -186,7 +186,7 @@ public class ProtocolTest {
 
 
         ByteBuf writeBuff = Unpooled.buffer();
-        packetService.write(writeBuff, cm, null);
+        packetService.writeHeaderAndBody(writeBuff, cm, null);
 
         writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
@@ -205,7 +205,7 @@ public class ProtocolTest {
         cm.setB(array);
 
         ByteBuf writeBuff = Unpooled.buffer();
-        packetService.write(writeBuff, cm, null);
+        packetService.writeHeaderAndBody(writeBuff, cm, null);
 
         writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
@@ -233,7 +233,7 @@ public class ProtocolTest {
         cm.setMapWithListAndMap(mapWithListAndMap);
 
         ByteBuf writeBuff = Unpooled.buffer();
-        packetService.write(writeBuff, cm, null);
+        packetService.writeHeaderAndBody(writeBuff, cm, null);
 
         writeBuff.readerIndex(PacketService.PACKET_HEAD_LENGTH);// 信息头的长度
 
