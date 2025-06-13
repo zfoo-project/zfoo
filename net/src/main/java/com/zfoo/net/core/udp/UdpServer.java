@@ -14,7 +14,6 @@ package com.zfoo.net.core.udp;
 
 import com.zfoo.net.core.AbstractServer;
 import com.zfoo.net.core.HostAndPort;
-import com.zfoo.net.handler.ServerRouteHandler;
 import com.zfoo.net.handler.codec.udp.UdpCodecHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -65,6 +64,6 @@ public class UdpServer extends AbstractServer<Channel> {
     @Override
     protected void initChannel(Channel channel) {
         channel.pipeline().addLast(new UdpCodecHandler());
-        channel.pipeline().addLast(new ServerRouteHandler());
+        channel.pipeline().addLast(new UdpRouteHandler());
     }
 }

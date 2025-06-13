@@ -17,10 +17,9 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.handler.BaseRouteHandler;
-import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.handler.codec.udp.UdpCodecHandler;
 import com.zfoo.net.session.Session;
-import com.zfoo.protocol.exception.ExceptionUtils;
+import com.zfoo.protocol.exception.RunException;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
@@ -39,39 +38,31 @@ public class UdpClient extends AbstractClient<Channel> {
 
     @Override
     public synchronized Session start() {
-        try {
-            this.bootstrap = new Bootstrap();
-            this.bootstrap.group(nioEventLoopGroup)
-                    .channel(Epoll.isAvailable() ? EpollDatagramChannel.class : NioDatagramChannel.class)
-                    .option(ChannelOption.SO_BROADCAST, true)
-                    .handler(this);
+        this.bootstrap = new Bootstrap();
+        this.bootstrap.group(nioEventLoopGroup)
+                .channel(Epoll.isAvailable() ? EpollDatagramChannel.class : NioDatagramChannel.class)
+                .option(ChannelOption.SO_BROADCAST, true)
+                .handler(this);
 
-            // bind(0)随机选择一个端口
-            var channelFuture = bootstrap.bind(0).sync();
-            channelFuture.syncUninterruptibly();
+        // bind(0)随机选择一个端口
+        var channelFuture = bootstrap.bind(0);
+        channelFuture.syncUninterruptibly();
 
-            if (channelFuture.isSuccess()) {
-                if (channelFuture.channel().isActive()) {
-                    var channel = channelFuture.channel();
-                    var session = BaseRouteHandler.initChannel(channel);
-                    NetContext.getSessionManager().addClientSession(session);
-                    logger.info("UdpClient started at [{}]", channel.localAddress());
-                    return session;
-                }
-            } else if (channelFuture.cause() != null) {
-                logger.error(ExceptionUtils.getMessage(channelFuture.cause()));
-            } else {
-                logger.error("[{}] started failed", this.getClass().getSimpleName());
-            }
-        } catch (Exception e) {
-            logger.error(ExceptionUtils.getMessage(e));
+        if (channelFuture.cause() != null) {
+            throw new RuntimeException(channelFuture.cause());
         }
-        return null;
+
+        if (!channelFuture.isSuccess() || !channelFuture.channel().isActive()) {
+            throw new RunException("[{}] started failed", this.getClass().getSimpleName());
+        }
+
+        var session = BaseRouteHandler.initChannel(channelFuture.channel());
+        return session;
     }
 
     @Override
     protected void initChannel(Channel channel) {
         channel.pipeline().addLast(new UdpCodecHandler());
-        channel.pipeline().addLast(new ClientRouteHandler());
+        channel.pipeline().addLast(new UdpRouteHandler());
     }
 }
