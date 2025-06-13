@@ -19,6 +19,7 @@ import com.zfoo.net.core.proxy.TunnelProtocolClient2Server;
 import com.zfoo.net.core.proxy.TunnelProtocolServer2Client;
 import com.zfoo.net.handler.ClientRouteHandler;
 import com.zfoo.net.session.Session;
+import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -32,8 +33,8 @@ public class TunnelClientRouteHandler extends ClientRouteHandler {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
         TunnelClient.tunnels.add(ctx.channel());
-
-        ctx.channel().writeAndFlush(new TunnelProtocolClient2Server.TunnelRegister(1));
+        var session = SessionUtils.getSession(ctx);
+        ctx.channel().writeAndFlush(new TunnelProtocolClient2Server.TunnelRegister(session.getSid()));
     }
 
     @Override

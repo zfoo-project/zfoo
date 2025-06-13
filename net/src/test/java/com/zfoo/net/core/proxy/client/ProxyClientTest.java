@@ -16,8 +16,8 @@ package com.zfoo.net.core.proxy.client;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.core.tcp.TcpClient;
-import com.zfoo.net.packet.tcp.TcpHelloRequest;
-import com.zfoo.net.packet.tcp.TcpHelloResponse;
+import com.zfoo.net.packet.proxy.ProxyHelloRequest;
+import com.zfoo.net.packet.proxy.ProxyHelloResponse;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
@@ -25,6 +25,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.function.Consumer;
 
 /**
  * @author jaysunxiao
@@ -41,9 +43,22 @@ public class ProxyClientTest {
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
         var session = client.start();
 
-        var request = TcpHelloRequest.valueOf("Hello, this is the tcp client!");
-        var response = NetContext.getRouter().syncAsk(session, request, TcpHelloResponse.class, null).packet();
-        logger.info("sync client receive [packet:{}] from server", JsonUtils.object2String(response));
+        var request = ProxyHelloRequest.valueOf("Hello, this is the tcp client!");
+
+        for (int i = 0; i < 1000; i++) {
+            NetContext.getRouter().send(session, request);
+
+            var response = NetContext.getRouter().syncAsk(session, request, ProxyHelloResponse.class, null).packet();
+            logger.info("sync client receive [packet:{}] from server", JsonUtils.object2String(response));
+
+            NetContext.getRouter().asyncAsk(session, request, ProxyHelloResponse.class, null)
+                    .whenComplete(new Consumer<ProxyHelloResponse>() {
+                        @Override
+                        public void accept(ProxyHelloResponse jsonHelloResponse) {
+                            logger.info("async client receive [packet:{}] from server", JsonUtils.object2String(jsonHelloResponse));
+                        }
+                    });
+        }
 
         ThreadUtils.sleep(Long.MAX_VALUE);
     }

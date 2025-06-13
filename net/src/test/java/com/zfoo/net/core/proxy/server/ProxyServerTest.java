@@ -14,8 +14,8 @@
 package com.zfoo.net.core.proxy.server;
 
 import com.zfoo.net.core.HostAndPort;
+import com.zfoo.net.core.proxy.ProxyTcpServer;
 import com.zfoo.net.core.proxy.TunnelServer;
-import com.zfoo.net.core.tcp.TcpServer;
 import com.zfoo.protocol.util.ThreadUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,8 +34,8 @@ public class ProxyServerTest {
     public void startServer() {
         var context = new ClassPathXmlApplicationContext("config.xml");
 
-        var server = new TcpServer(HostAndPort.valueOf("0.0.0.0:9000"));
-        server.start();
+        var proxyServer = new ProxyTcpServer(HostAndPort.valueOf("0.0.0.0:9000"));
+        proxyServer.start();
 
         var tunnelServer = new TunnelServer(HostAndPort.valueOf("0.0.0.0:9001"));
         tunnelServer.start();

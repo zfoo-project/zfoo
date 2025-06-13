@@ -21,8 +21,7 @@ import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.netty.util.ReferenceCountUtil;
 
 import java.util.List;
 
@@ -30,8 +29,6 @@ import java.util.List;
  * @author jaysunxiao
  */
 public class TunnelServerCodecHandler extends ByteToMessageCodec<TunnelProtocolServer2Client> {
-
-    private static final Logger logger = LoggerFactory.getLogger(TunnelServerCodecHandler.class);
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
@@ -53,8 +50,12 @@ public class TunnelServerCodecHandler extends ByteToMessageCodec<TunnelProtocolS
             return;
         }
 
-        var sliceByteBuf = in.readSlice(length);
-        TunnelProtocolClient2Server.read(ctx.channel(), sliceByteBuf);
+        var retainedByteBuf = in.readRetainedSlice(length);
+        try {
+            TunnelProtocolClient2Server.read(ctx.channel(), retainedByteBuf);
+        } catch (Throwable t) {
+            ReferenceCountUtil.release(retainedByteBuf);
+        }
     }
 
     @Override

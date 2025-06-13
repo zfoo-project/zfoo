@@ -16,6 +16,7 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.PacketService;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
+import io.netty.util.ReferenceCountUtil;
 
 
 /**
@@ -27,13 +28,13 @@ public class TunnelProtocolServer2Client {
 
     private long uid;
 
-    private ByteBuf byteBuf;
+    private ByteBuf retainedByteBuf;
 
-    public static TunnelProtocolServer2Client valueOf(long sid, long uid, ByteBuf byteBuf) {
+    public static TunnelProtocolServer2Client valueOf(long sid, long uid, ByteBuf retainedByteBuf) {
         var tunnelProtocol = new TunnelProtocolServer2Client();
         tunnelProtocol.sid = sid;
         tunnelProtocol.uid = uid;
-        tunnelProtocol.byteBuf = byteBuf;
+        tunnelProtocol.retainedByteBuf = retainedByteBuf;
         return tunnelProtocol;
     }
 
@@ -66,12 +67,16 @@ public class TunnelProtocolServer2Client {
 
 
     public void write(ByteBuf out) {
-        out.ensureWritable(4);
-        out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
-        ByteBufUtils.writeLong(out, sid);
-        ByteBufUtils.writeLong(out, uid);
-        out.writeBytes(byteBuf);
-        NetContext.getPacketService().writeHeaderBefore(out);
+        try {
+            out.ensureWritable(22);
+            out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
+            ByteBufUtils.writeLong(out, sid);
+            ByteBufUtils.writeLong(out, uid);
+            out.writeBytes(retainedByteBuf);
+            NetContext.getPacketService().writeHeaderBefore(out);
+        } finally {
+            ReferenceCountUtil.release(retainedByteBuf);
+        }
     }
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -84,7 +89,7 @@ public class TunnelProtocolServer2Client {
         return uid;
     }
 
-    public ByteBuf getByteBuf() {
-        return byteBuf;
+    public ByteBuf getRetainedByteBuf() {
+        return retainedByteBuf;
     }
 }

@@ -15,7 +15,7 @@ package com.zfoo.net.core.proxy.server;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.packet.proxy.ProxyHelloRequest;
-import com.zfoo.net.packet.tcp.TcpHelloRequest;
+import com.zfoo.net.packet.proxy.ProxyHelloResponse;
 import com.zfoo.net.packet.tcp.TcpHelloResponse;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.JsonUtils;
@@ -27,15 +27,15 @@ import org.springframework.stereotype.Component;
  * @author jaysunxiao
  */
 @Component
-public class ReverseProxyServerController {
+public class ProxyServerController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReverseProxyServerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProxyServerController.class);
 
     @PacketReceiver
     public void atProxyHelloRequest(Session session, ProxyHelloRequest request) {
         logger.info("receive [packet:{}] from client", JsonUtils.object2String(request));
 
-        var response = new TcpHelloResponse();
+        var response = new ProxyHelloResponse();
         response.setMessage("Hello, this is the proxy server! -> " + request.getMessage());
 
         NetContext.getRouter().send(session, response);

@@ -15,9 +15,11 @@ package com.zfoo.net.core.proxy;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.packet.EncodedPacketInfo;
 import com.zfoo.net.packet.PacketService;
+import com.zfoo.net.util.SessionUtils;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.util.ReferenceCountUtil;
 
 
 /**
@@ -33,6 +35,7 @@ public class TunnelProtocolClient2Server {
 
     public static final byte FLAG_PACKET = 0;
     public static final byte FLAG_REGISTER = 10;
+    public static final byte FLAG_HEARTBEAT = 20;
 
     private long sid;
 
@@ -85,28 +88,41 @@ public class TunnelProtocolClient2Server {
     }
 
     public static void writeRegister(ByteBuf out, TunnelRegister register) {
-//        out.ensureWritable(4);
-//        out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
-//        out.writeByte(FLAG_PACKET);
-//        ByteBufUtils.writeLong(out, encodedPacketInfo.getSid());
-//        ByteBufUtils.writeLong(out, encodedPacketInfo.getUid());
-//
-//        var packet = encodedPacketInfo.getPacket();
-//        var attachment = encodedPacketInfo.getAttachment();
-//        NetContext.getPacketService().write(out, packet, attachment);
-//        NetContext.getPacketService().writeHeaderBefore(out);
+        out.ensureWritable(4);
+        out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
+        out.writeByte(FLAG_REGISTER);
+        ByteBufUtils.writeLong(out, register.sid);
+        NetContext.getPacketService().writeHeaderBefore(out);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static class TunnelHeartbeat {
+    }
+
+    public static void writeHeartbeat(ByteBuf out, TunnelHeartbeat heartbeat) {
+        out.ensureWritable(4);
+        out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
+        out.writeByte(FLAG_HEARTBEAT);
+        NetContext.getPacketService().writeHeaderBefore(out);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     public static void read(Channel channel, ByteBuf in) {
         var flag = in.readByte();
-        if (flag == FLAG_REGISTER) {
-            TunnelServer.tunnels.add(channel);
-        } else if (flag == FLAG_PACKET) {
+        if (flag == FLAG_PACKET) {
             var sid = ByteBufUtils.readLong(in);
             var uid = ByteBufUtils.readLong(in);
             var session = NetContext.getSessionManager().getServerSession(sid);
-            session.getChannel().writeAndFlush(TunnelProtocolServer2Client.valueOf(sid, uid, in));
+            if (SessionUtils.isActive(session)) {
+                session.getChannel().writeAndFlush(TunnelProtocolServer2Client.valueOf(sid, uid, in));
+            } else {
+                ReferenceCountUtil.release(in);
+            }
+        } else if (flag == FLAG_REGISTER) {
+            TunnelServer.tunnels.add(channel);
+            ReferenceCountUtil.release(in);
+        } else if (flag == FLAG_HEARTBEAT) {
+            ReferenceCountUtil.release(in);
         }
     }
 

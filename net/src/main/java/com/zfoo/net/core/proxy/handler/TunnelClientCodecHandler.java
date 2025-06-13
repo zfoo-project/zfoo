@@ -22,8 +22,6 @@ import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -63,6 +61,10 @@ public class TunnelClientCodecHandler extends ByteToMessageCodec<Object> {
     protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) {
         if (msg instanceof EncodedPacketInfo) {
             TunnelProtocolClient2Server.writePacket(out, (EncodedPacketInfo) msg);
+        } else if (msg instanceof TunnelProtocolClient2Server.TunnelHeartbeat) {
+            TunnelProtocolClient2Server.writeHeartbeat(out, (TunnelProtocolClient2Server.TunnelHeartbeat) msg);
+        } else if (msg instanceof TunnelProtocolClient2Server.TunnelRegister) {
+            TunnelProtocolClient2Server.writeRegister(out, (TunnelProtocolClient2Server.TunnelRegister) msg);
         }
     }
 

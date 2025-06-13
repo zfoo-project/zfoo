@@ -15,6 +15,7 @@ package com.zfoo.net.core.proxy;
 
 import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.core.HostAndPort;
+import com.zfoo.net.core.proxy.handler.TunnelClientIdleHandler;
 import com.zfoo.net.core.proxy.handler.TunnelClientRouteHandler;
 import com.zfoo.net.core.proxy.handler.TunnelClientCodecHandler;
 import com.zfoo.net.handler.idle.ClientIdleHandler;
@@ -39,7 +40,7 @@ public class TunnelClient extends AbstractClient<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel channel) {
         channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
-        channel.pipeline().addLast(new ClientIdleHandler());
+        channel.pipeline().addLast(new TunnelClientIdleHandler());
         channel.pipeline().addLast(new TunnelClientCodecHandler());
         channel.pipeline().addLast(new TunnelClientRouteHandler());
     }

@@ -18,12 +18,14 @@ import com.zfoo.net.core.proxy.TunnelProtocolServer2Client;
 import com.zfoo.net.core.proxy.TunnelServer;
 import com.zfoo.net.packet.PacketService;
 import com.zfoo.net.util.SessionUtils;
+import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.RandomUtils;
 import com.zfoo.protocol.util.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
+import io.netty.util.ReferenceCountUtil;
 
 import java.util.List;
 
@@ -53,19 +55,35 @@ public class ProxyCodecHandler extends ByteToMessageCodec<TunnelProtocolServer2C
             return;
         }
 
-        var sliceByteBuf = in.readSlice(length);
-
-        var session = SessionUtils.getSession(ctx);
+        if (CollectionUtils.isEmpty(TunnelServer.tunnels)) {
+            in.readSlice(length);
+            return;
+        }
         var tunnel = RandomUtils.randomEle(TunnelServer.tunnels);
-        tunnel.writeAndFlush(TunnelProtocolServer2Client.valueOf(session.getSid(), session.getUid(), sliceByteBuf));
+        if (!SessionUtils.isActive(tunnel)) {
+            in.readSlice(length);
+            return;
+        }
+
+        var retainedByteBuf = in.readRetainedSlice(length);
+        try {
+            var session = SessionUtils.getSession(ctx);
+            tunnel.writeAndFlush(TunnelProtocolServer2Client.valueOf(session.getSid(), session.getUid(), retainedByteBuf));
+        } catch (Throwable t) {
+            ReferenceCountUtil.release(retainedByteBuf);
+        }
     }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, TunnelProtocolServer2Client tunnelProtocol, ByteBuf out) {
-        out.ensureWritable(7);
-        out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
-        out.writeBytes(tunnelProtocol.getByteBuf());
-        NetContext.getPacketService().writeHeaderBefore(out);
+        try {
+            out.ensureWritable(7);
+            out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
+            out.writeBytes(tunnelProtocol.getRetainedByteBuf());
+            NetContext.getPacketService().writeHeaderBefore(out);
+        } finally {
+            ReferenceCountUtil.release(tunnelProtocol.getRetainedByteBuf());
+        }
     }
 
 }
