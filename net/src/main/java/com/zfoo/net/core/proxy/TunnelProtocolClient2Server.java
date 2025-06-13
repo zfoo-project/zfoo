@@ -37,33 +37,6 @@ public class TunnelProtocolClient2Server {
     public static final byte FLAG_REGISTER = 10;
     public static final byte FLAG_HEARTBEAT = 20;
 
-    private long sid;
-
-    private long uid;
-
-    private ByteBuf byteBuf;
-
-    public static TunnelProtocolClient2Server valueOf(long sid, long uid, ByteBuf byteBuf) {
-        var tunnelProtocol = new TunnelProtocolClient2Server();
-        tunnelProtocol.sid = sid;
-        tunnelProtocol.uid = uid;
-        tunnelProtocol.byteBuf = byteBuf;
-        return tunnelProtocol;
-    }
-
-    public long getSid() {
-        return sid;
-    }
-
-    public long getUid() {
-        return uid;
-    }
-
-    public ByteBuf getByteBuf() {
-        return byteBuf;
-    }
-
-
     // -----------------------------------------------------------------------------------------------------------------
     public static void writePacket(ByteBuf out, EncodedPacketInfo encodedPacketInfo) {
         out.ensureWritable(4);
