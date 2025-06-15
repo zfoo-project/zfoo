@@ -1,6 +1,6 @@
 # Ⅰ. 环境搭建
 
-## 1. Java安装
+## 1. Java安装，直接用Idea自带的（非全局）
 
 ```
 安装JDK11
@@ -9,7 +9,7 @@
 在cmd命令中运行：java -version ,有结果返回则表示安装成功
 ```
 
-## 2. git使用默认的安装，选择git bash only
+## 2. git使用默认的安装，直接用Idea自带的（全局）
 
 ```
 安装好以后，在git bash中输入：git --version，有结果返回则表示安装成功
@@ -32,17 +32,6 @@ git config --global https.proxy https://127.0.0.1:10809
 git config --global core.autocrlf input
 ```
 
-- google translate设置
-
-```
-direct -> domain:zfoo.net
-
-新增proxy
-proxy -> 
-ranslate.googleapis.com, 
-ranslate.google.com
-```
-
 - idea git log 不同颜色
 
 ```
@@ -51,7 +40,7 @@ ranslate.google.com
 紫色是远程分支,
 ```
 
-## 3. nodejs安装
+## 3. nodejs安装（非全局）
 
 - windows直接默认安装，linux到官网 https://nodejs.org/ 查看最新的安装教程
 
@@ -75,31 +64,6 @@ npm config set proxy http://127.0.0.1:10809
 安装完成后，在node module，和static上右键->mark Directory as->excluded
 然后，File->Invalidate Cache/Restart
 
-```
-
-## 4. mongodb
-
-1. 直接安装MongoDB，用custom自定义安装目录，一般用默认的安装目录即可，不要勾选mongoDB compas
-2. 将C:\Program Files\MongoDB\Server\4.2\bin配置到环境变量中，便于全局使用
-3. 直接安装MongoSh，将安装目录定位到MongoDB的bin目录
-4. mongo -version # 查看安装的版本
-
-## 5. 中间件安装
-
-- zookeeper安装，解压过后，直接运行zkServer.md，zookeeper运行需要依赖JAVA_HOME环境变量
-
-## 6. 办公软件
-
-```
-Google浏览器
-极速pdf
-tube get
-office
-kms，破解工具
-adobe ps , premiere
-obs studio
-steam
-迅雷迷你版
 ```
 
 # Ⅱ. IntelliJ相关设置
@@ -152,7 +116,7 @@ Line separator，Unix and MacOs （\n）
 
 ```
 /**
- * @author godotg
+ * @author jaysunxiao
  */
 ```
 
@@ -190,15 +154,15 @@ See the License for the specific language governing permissions and limitations 
 - eclipse快捷键设置，个人习惯
 
 ```
-Keymap->Main menu->Code->Completion->Basic，删除ctrl+空格，设置为ctrl+enter
 Run to Cursor，设置为F9
 find，设置为ctrl+f
 replace，设置为alt+f
+close tab, 设置为 [ctrl + w]
 folding，expand all设置为 ctrl +，collapse all设置为 ctrl -
-在输入法上右键，将win10的简体繁体切换ctrl+f快捷键键取消
+在输入法上右键，将win10的简体繁体切换 [ctrl+f] 快捷键键取消，也取消 [ctrl + 空格] 的中英文切换快捷键
 ```
 
-### 4.2 服务器插件安装
+### 7 插件安装
 
 - translate插件
 
@@ -208,34 +172,18 @@ Show Translation Dialog，设置为ctrl + shift + x
 Translate，设置为ctrl + x
 ```
 
-- Cyan Light Theme主题插件，个人习惯
-- zoolytic，zookeeper客户端管理插件，推荐下载
 - Maven Helper，maven依赖查看工具，推荐下载
-- jclasslib，字节码查看工具，推荐下载
-- vue，vue语法识别，推荐下载
 
-- Alibaba Java Coding Guidelines
-- Alibaba Cloud tool
-- Power Mode 2
-- EasyApi
 
-### 4.3 web插件安装
+# Ⅲ 其他软件安装
 
-- eslint
-  ![Image text](../image/idea/idea-plugin-eslint-setup.png)
+## 1. mongodb
 
-## 4.4 格式设置，个人习惯
+1. 直接安装MongoDB，用custom自定义安装目录，一般用默认的安装目录即可，不要勾选mongoDB compas
+2. 将C:\Program Files\MongoDB\Server\4.2\bin配置到环境变量中，便于全局使用
+3. 直接安装MongoSh，将安装目录定位到MongoDB的bin目录
+4. mongo -version # 查看安装的版本
 
-- CSS格式设置
-- SCSS格式设置
-  ![Image text](../image/idea/idea-setting-css.png)
+## 2. 中间件安装
 
-- JSON格式设置
-  ![Image text](../image/idea/idea-setting-json.png)
-
-- HTML格式设置
-- XML格式设置
-- VUE格式设置
-  ![Image text](../image/idea/idea-setting-html-0.png)
-  ![Image text](../image/idea/idea-setting-html-1.png)
-
+- zookeeper安装，解压过后，直接运行zkServer.md，zookeeper运行需要依赖JAVA_HOME环境变量
