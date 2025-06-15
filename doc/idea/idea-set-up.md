@@ -181,8 +181,9 @@ Translate，设置为ctrl + x
 
 1. 直接安装MongoDB，用custom自定义安装目录，一般用默认的安装目录即可，不要勾选mongoDB compas
 2. 将C:\Program Files\MongoDB\Server\4.2\bin配置到环境变量中，便于全局使用
-3. 直接安装MongoSh，将安装目录定位到MongoDB的bin目录
-4. mongo -version # 查看安装的版本
+3. 在MongoDB的官网下载 MongoSh 和 MongoDB Database Tools，解压复制到MongoDB安装目录下的bin目录
+4. mongosh # 进入命令行界面，查看安装的版本
+5. 下载安装 Navicat for MongoDB
 
 ## 2. 中间件安装
 
