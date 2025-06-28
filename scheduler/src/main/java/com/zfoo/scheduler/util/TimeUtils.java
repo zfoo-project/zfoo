@@ -94,10 +94,13 @@ public abstract class TimeUtils {
      *
      * @param dateString 日期字符串，如：2018-02-12 10:12:50
      * @return <code>Date</code>
-     * @throws ParseException 解析异常
      */
-    public static Date stringToDate(String dateString) throws ParseException {
-        return DATE_FORMAT.get().parse(dateString);
+    public static Date stringToDate(String dateString) {
+        try {
+            return DATE_FORMAT.get().parse(dateString);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -118,8 +121,12 @@ public abstract class TimeUtils {
         return SIMPLE_DATE_FORMAT.get().format(new Date(now()));
     }
 
-    public static Date dayStringToDate(String dateString) throws ParseException {
-        return DATE_FORMAT_FOR_DAY.get().parse(dateString);
+    public static Date dayStringToDate(String dateString) {
+        try {
+            return DATE_FORMAT_FOR_DAY.get().parse(dateString);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
     // --------------------------------------日期判断--------------------------------------
 
