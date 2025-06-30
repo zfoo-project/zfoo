@@ -26,6 +26,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.util.ReferenceCountUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -33,6 +35,8 @@ import java.util.List;
  * @author jaysunxiao
  */
 public class ProxyCodecHandler extends ByteToMessageCodec<TunnelProtocolServer2Client> {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProxyCodecHandler.class);
 
 
     @Override
@@ -57,11 +61,20 @@ public class ProxyCodecHandler extends ByteToMessageCodec<TunnelProtocolServer2C
 
         if (CollectionUtils.isEmpty(TunnelServer.tunnels)) {
             in.readSlice(length);
+            logger.warn("Tunnel server has no tunnels");
             return;
         }
+
         var tunnel = RandomUtils.randomEle(TunnelServer.tunnels);
         if (!SessionUtils.isActive(tunnel)) {
             in.readSlice(length);
+            logger.warn("Tunnel server has no active tunnels");
+            return;
+        }
+
+        if (!tunnel.isWritable()) {
+            in.readSlice(length);
+            logger.warn("Tunnel server has no writable tunnels");
             return;
         }
 

@@ -67,16 +67,12 @@ public class TunnelProtocolServer2Client {
 
 
     public void write(ByteBuf out) {
-        try {
-            out.ensureWritable(22);
-            out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
-            ByteBufUtils.writeLong(out, sid);
-            ByteBufUtils.writeLong(out, uid);
-            out.writeBytes(retainedByteBuf);
-            NetContext.getPacketService().writeHeaderBefore(out);
-        } finally {
-            ReferenceCountUtil.release(retainedByteBuf);
-        }
+        out.ensureWritable(22);
+        out.writerIndex(PacketService.PACKET_HEAD_LENGTH);
+        ByteBufUtils.writeLong(out, sid);
+        ByteBufUtils.writeLong(out, uid);
+        out.writeBytes(retainedByteBuf);
+        NetContext.getPacketService().writeHeaderBefore(out);
     }
     // -----------------------------------------------------------------------------------------------------------------
 

@@ -60,7 +60,11 @@ public class TunnelServerCodecHandler extends ByteToMessageCodec<TunnelProtocolS
 
     @Override
     protected void encode(ChannelHandlerContext ctx, TunnelProtocolServer2Client tunnelProtocol, ByteBuf out) {
-        tunnelProtocol.write(out);
+        try {
+            tunnelProtocol.write(out);
+        } finally {
+            ReferenceCountUtil.release(tunnelProtocol.getRetainedByteBuf());
+        }
     }
 
 }
