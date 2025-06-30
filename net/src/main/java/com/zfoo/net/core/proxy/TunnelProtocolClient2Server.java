@@ -80,23 +80,5 @@ public class TunnelProtocolClient2Server {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static void read(Channel channel, ByteBuf in) {
-        var flag = in.readByte();
-        if (flag == FLAG_PACKET) {
-            var sid = ByteBufUtils.readLong(in);
-            var uid = ByteBufUtils.readLong(in);
-            var session = NetContext.getSessionManager().getServerSession(sid);
-            if (SessionUtils.isActive(session)) {
-                session.getChannel().writeAndFlush(TunnelProtocolServer2Client.valueOf(sid, uid, in));
-            } else {
-                ReferenceCountUtil.release(in);
-            }
-        } else if (flag == FLAG_REGISTER) {
-            TunnelServer.tunnels.add(channel);
-            ReferenceCountUtil.release(in);
-        } else if (flag == FLAG_HEARTBEAT) {
-            ReferenceCountUtil.release(in);
-        }
-    }
 
 }
