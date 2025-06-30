@@ -37,7 +37,7 @@ public class TunnelServer extends AbstractServer<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel channel) throws Exception {
-        channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
+        channel.pipeline().addLast(new IdleStateHandler(0, 0, 32));
         channel.pipeline().addLast(new ServerIdleHandler());
         channel.pipeline().addLast(new TunnelServerCodecHandler());
         channel.pipeline().addLast(new TunnelServerRouteHandler());

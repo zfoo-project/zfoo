@@ -39,7 +39,7 @@ public class TunnelClient extends AbstractClient<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel channel) {
-        channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
+        channel.pipeline().addLast(new IdleStateHandler(0, 0, 8));
         channel.pipeline().addLast(new TunnelClientIdleHandler());
         channel.pipeline().addLast(new TunnelClientCodecHandler());
         channel.pipeline().addLast(new TunnelClientRouteHandler());
