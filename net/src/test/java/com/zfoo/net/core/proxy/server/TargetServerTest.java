@@ -26,11 +26,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 @Ignore
 public class TargetServerTest {
 
-    /**
-     * 单机服务器教程，启动成功过后在com.zfoo.net.core.tcp.client.TcpClientTest中运行startClientTest
-     * <p>
-     * startClientTest连接服务器成功过后，会不断的发消息给服务器
-     */
     @Test
     public void startServer() {
         var context = new ClassPathXmlApplicationContext("config.xml");
