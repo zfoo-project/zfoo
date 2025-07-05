@@ -69,7 +69,7 @@ public class PacketService implements IPacketService {
 
     public static final String NET_COMMON_MODULE = "common";
 
-    public final Predicate<IProtocolRegistration> netGenerateProtocolFilter = it -> {
+    public static final Predicate<IProtocolRegistration> netGenerateProtocolFilter = it -> {
         var clazz = it.protocolConstructor().getDeclaringClass();
         var className = clazz.getSimpleName();
         if (className.endsWith(NET_ASK_SUFFIX) || className.endsWith(NET_ANSWER_SUFFIX)) {
