@@ -35,7 +35,8 @@ public class ClientRouteHandler extends BaseRouteHandler {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        var session = initChannel(ctx.channel());
+
+        var session = SessionUtils.getSession(ctx);
         NetContext.getSessionManager().addClientSession(session);
         logger.info("client channel is active {}", SessionUtils.sessionInfo(ctx));
         EventBus.post(ClientSessionActiveEvent.valueOf(session));
@@ -46,7 +47,6 @@ public class ClientRouteHandler extends BaseRouteHandler {
         super.channelInactive(ctx);
 
         var session = SessionUtils.getSession(ctx);
-
         if (session == null) {
             return;
         }

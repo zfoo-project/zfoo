@@ -48,6 +48,11 @@ public abstract class BaseRouteHandler extends ChannelInboundHandlerAdapter {
         return session;
     }
 
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
+        initChannel(ctx.channel());
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {

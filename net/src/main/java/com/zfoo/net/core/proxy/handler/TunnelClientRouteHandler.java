@@ -17,17 +17,21 @@ import com.zfoo.net.NetContext;
 import com.zfoo.net.core.proxy.TunnelClient;
 import com.zfoo.net.core.proxy.TunnelProtocolClient2Server;
 import com.zfoo.net.core.proxy.TunnelProtocolServer2Client;
-import com.zfoo.net.handler.ClientRouteHandler;
+import com.zfoo.net.handler.BaseRouteHandler;
 import com.zfoo.net.session.Session;
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jaysunxiao
  */
 @ChannelHandler.Sharable
-public class TunnelClientRouteHandler extends ClientRouteHandler {
+public class TunnelClientRouteHandler extends BaseRouteHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(TunnelClientRouteHandler.class);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -35,12 +39,15 @@ public class TunnelClientRouteHandler extends ClientRouteHandler {
         TunnelClient.tunnels.add(ctx.channel());
         var session = SessionUtils.getSession(ctx);
         ctx.channel().writeAndFlush(new TunnelProtocolClient2Server.TunnelRegister(session.getSid()));
+        logger.info("tunnel client activate in sid:[{}]", session.getSid());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
+        var session = SessionUtils.getSession(ctx);
         TunnelClient.tunnels.remove(ctx.channel());
+        logger.info("tunnel client inactivate in sid:[{}]", session.getSid());
     }
 
     @Override
