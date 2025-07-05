@@ -53,6 +53,10 @@ public class HashSetShort extends AbstractSet<Short> {
         return map.containsKey(o);
     }
 
+    public boolean contains(short key) {
+        return map.containsKey(key);
+    }
+
     @Override
     public boolean add(Short e) {
         return map.put(e, Boolean.TRUE) == null;

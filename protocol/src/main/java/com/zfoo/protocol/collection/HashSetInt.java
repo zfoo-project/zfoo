@@ -53,6 +53,10 @@ public class HashSetInt extends AbstractSet<Integer> {
         return map.containsKey(o);
     }
 
+    public boolean contains(int key) {
+        return map.containsKey(key);
+    }
+
     @Override
     public boolean add(Integer e) {
         return map.put(e, Boolean.TRUE) == null;
