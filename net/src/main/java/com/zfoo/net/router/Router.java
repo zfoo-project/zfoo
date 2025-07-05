@@ -415,7 +415,7 @@ public class Router implements IRouter {
         for (var method : methods) {
             var paramClazzs = method.getParameterTypes();
 
-            AssertionUtils.isTrue(paramClazzs.length == 2 || paramClazzs.length == 3, "[class:{}] [method:{}] must have two or three parameter!", bean.getClass().getName(), method.getName());
+            AssertionUtils.isTrue(paramClazzs.length == 2 || paramClazzs.length == 3, "[class:{}] [method:{}] must have two or three parameter! such as atMethod(session, packet) or atMethod(session, packet, attachment)", bean.getClass().getName(), method.getName());
 
             AssertionUtils.isTrue(Session.class.isAssignableFrom(paramClazzs[0]), "[class:{}] [method:{}],the first parameter must be Session type parameter Exception.", bean.getClass().getName(), method.getName());
 

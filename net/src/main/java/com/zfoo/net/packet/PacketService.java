@@ -69,9 +69,13 @@ public class PacketService implements IPacketService {
 
     public static final String NET_COMMON_MODULE = "common";
 
-    private final Predicate<IProtocolRegistration> netGenerateProtocolFilter = it -> {
+    public final Predicate<IProtocolRegistration> netGenerateProtocolFilter = it -> {
         var clazz = it.protocolConstructor().getDeclaringClass();
         var className = clazz.getSimpleName();
+        if (className.endsWith(NET_ASK_SUFFIX) || className.endsWith(NET_ANSWER_SUFFIX)) {
+            return false;
+        }
+
         var module = ProtocolManager.moduleByModuleId(it.module());
         return clazz == SignalAttachment.class
                 || className.endsWith(NET_REQUEST_SUFFIX)
