@@ -13,9 +13,8 @@
 
 package com.zfoo.scheduler.util;
 
-import com.zfoo.scheduler.manager.SchedulerBus;
+import com.zfoo.event.manager.EventBus;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
@@ -35,6 +34,11 @@ public class SingleCache<V> {
 
     private AtomicLong refreshTimeAtomic;
 
+    private SingleCache(long refreshDuration, Supplier<V> supplier) {
+        this.refreshDuration = refreshDuration;
+        this.supplier = supplier;
+        this.refreshTimeAtomic = new AtomicLong(TimeUtils.now() + refreshDuration);
+    }
 
     /**
      * @param refreshDuration 刷新实际那，毫秒
@@ -42,11 +46,14 @@ public class SingleCache<V> {
      * @return 简单的缓存
      */
     public static <V> SingleCache<V> build(long refreshDuration, Supplier<V> supplier) {
-        var cache = new SingleCache<V>();
-        cache.refreshDuration = refreshDuration;
-        cache.supplier = supplier;
-        cache.refreshTimeAtomic = new AtomicLong(TimeUtils.now() + refreshDuration);
-        SchedulerBus.execute(() -> cache.cache = supplier.get());
+        var cache = new SingleCache<V>(refreshDuration, supplier);
+        cache.cache = supplier.get();
+        return cache;
+    }
+
+    public static <V> SingleCache<V> lazyBuild(long refreshDuration, Supplier<V> supplier) {
+        var cache = new SingleCache<V>(refreshDuration, supplier);
+        EventBus.asyncExecute(cache.hashCode(), () -> cache.cache = supplier.get());
         return cache;
     }
 
@@ -69,7 +76,7 @@ public class SingleCache<V> {
         // 使用双重检测锁的方式
         if (now > refreshTime) {
             if (refreshTimeAtomic.compareAndSet(refreshTime, now + refreshDuration)) {
-                SchedulerBus.execute(() -> cache = supplier.get());
+                EventBus.asyncExecute(cache.hashCode(), () -> cache = supplier.get());
             }
         }
         return cache;
