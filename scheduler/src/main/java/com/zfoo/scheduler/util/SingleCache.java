@@ -87,7 +87,7 @@ public class SingleCache<V> {
     }
 
     public void lazyRefresh() {
-        EventBus.asyncExecute(cache.hashCode(), () -> cache = supplier.get());
+        EventBus.asyncExecute(this.hashCode(), () -> cache = supplier.get());
     }
 
 }
