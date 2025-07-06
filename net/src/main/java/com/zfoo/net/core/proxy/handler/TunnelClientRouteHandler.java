@@ -47,7 +47,7 @@ public class TunnelClientRouteHandler extends BaseRouteHandler {
         super.channelInactive(ctx);
         var session = SessionUtils.getSession(ctx);
         TunnelClient.tunnels.remove(ctx.channel());
-        logger.info("tunnel client inactivate in sid:[{}]", session.getSid());
+        logger.warn("tunnel client inactivate in sid:[{}]", session.getSid());
     }
 
     @Override
