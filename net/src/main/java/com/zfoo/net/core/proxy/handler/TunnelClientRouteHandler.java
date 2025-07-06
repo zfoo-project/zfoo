@@ -57,4 +57,8 @@ public class TunnelClientRouteHandler extends BaseRouteHandler {
         NetContext.getRouter().receive(session, tunnelPacketInfo.packet, tunnelPacketInfo.attachment);
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        logger.error("{} session exception:[{}]", SessionUtils.sessionSimpleInfo(ctx), cause.getMessage());
+    }
 }

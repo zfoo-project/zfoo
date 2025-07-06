@@ -44,4 +44,9 @@ public class TunnelServerRouteHandler extends BaseRouteHandler {
         TunnelServer.tunnels.remove(ctx.channel());
         logger.warn("tunnel server channel is inactive {}", SessionUtils.sessionSimpleInfo(ctx));
     }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        logger.error("{} session exception:[{}]", SessionUtils.sessionSimpleInfo(ctx), cause.getMessage());
+    }
 }
