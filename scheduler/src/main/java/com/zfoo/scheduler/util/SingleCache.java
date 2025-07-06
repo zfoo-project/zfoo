@@ -53,7 +53,7 @@ public class SingleCache<V> {
 
     public static <V> SingleCache<V> lazyBuild(long refreshDuration, Supplier<V> supplier) {
         var cache = new SingleCache<V>(refreshDuration, supplier);
-        EventBus.asyncExecute(cache.hashCode(), () -> cache.cache = supplier.get());
+        cache.lazyRefresh();
         return cache;
     }
 
@@ -76,7 +76,7 @@ public class SingleCache<V> {
         // 使用双重检测锁的方式
         if (now > refreshTime) {
             if (refreshTimeAtomic.compareAndSet(refreshTime, now + refreshDuration)) {
-                EventBus.asyncExecute(cache.hashCode(), () -> cache = supplier.get());
+                lazyRefresh();
             }
         }
         return cache;
@@ -84,6 +84,10 @@ public class SingleCache<V> {
 
     public void set(V value) {
         cache = value;
+    }
+
+    public void lazyRefresh() {
+        EventBus.asyncExecute(cache.hashCode(), () -> cache = supplier.get());
     }
 
 }
