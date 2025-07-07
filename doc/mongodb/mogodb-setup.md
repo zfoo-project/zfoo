@@ -122,13 +122,12 @@ processManagement:
 
 ```
 JAVA_HOME=/usr/local/java
-JRE_HOME=$JAVA_HOME/lib
 
 MONGODB_HOME=/usr/local/mongodb
 
 PATH=$JAVA_HOME/bin:$MONGODB_HOME/bin:$PATH
 
-export JAVA_HOME JRE_HOME MONGODB_HOME PATH
+export JAVA_HOME MONGODB_HOME PATH
 ```
 
 - source /etc/profile，加载环境变量
