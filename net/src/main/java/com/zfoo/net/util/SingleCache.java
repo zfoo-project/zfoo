@@ -11,10 +11,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.zfoo.scheduler.util;
+package com.zfoo.net.util;
 
 import com.zfoo.event.manager.EventBus;
+import com.zfoo.scheduler.manager.SchedulerBus;
+import com.zfoo.scheduler.util.TimeUtils;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
@@ -88,6 +91,10 @@ public class SingleCache<V> {
 
     public void lazyRefresh() {
         EventBus.asyncExecute(this.hashCode(), () -> cache = supplier.get());
+    }
+
+    public void lazyRefreshDelay(long delay, TimeUnit unit) {
+        SchedulerBus.schedule(this::lazyRefresh, delay, unit);
     }
 
 }
