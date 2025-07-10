@@ -41,6 +41,7 @@ import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.collection.ArrayUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.exception.RunException;
+import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.util.*;
 import io.netty.util.collection.ShortObjectHashMap;
 import org.slf4j.Logger;
@@ -436,7 +437,7 @@ public class Router implements IRouter {
             // These rules are not necessary, but can reduce us from making low-level mistakes
             // If the request class name ends with Request which is for outer net client, then the attachment can not be a SignalAttachment
             // If the request class name ends with Ask which is for intranet client, then attachment can not be a GatewayAttachment
-            if (attachmentClazz != null && packetName.endsWith(PacketService.NET_ASK_SUFFIX)) {
+            if (attachmentClazz != null && packetName.endsWith(GenerateProtocolFile.NET_ASK_SUFFIX)) {
                 AssertionUtils.isTrue(!attachmentClazz.equals(GatewayAttachment.class), "[class:{}] [method:{}] [packet:{}] can not match with [attachment:{}]!", bean.getClass().getName(), methodName, packetName, GatewayAttachment.class.getCanonicalName());
             }
 

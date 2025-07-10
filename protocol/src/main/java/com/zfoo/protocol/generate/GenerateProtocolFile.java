@@ -40,6 +40,58 @@ public abstract class GenerateProtocolFile {
      */
     public static Predicate<IProtocolRegistration> generateProtocolFilter = registration -> true;
 
+
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * EN: The conventions for network packets are as follows:
+     * 1. Client requests should end with "Request", and server responses should end with "Response".
+     * 2. Internal server requests should end with "Ask", and internal server responses should end with "Answer".
+     * 3. Server-initiated notifications to the client should end with "Notice".
+     * 4. Common protocols should be placed in the common module.
+     * 5. Internal protocols are not allowed to be used outside their scope.
+     * <p>
+     * CN: 网络包的约定规则如下：
+     * 1. 客户端的请求约定以Request结尾，服务器的响应约定以Response结尾
+     * 2. 服务器内部请求约定以Ask结尾，服务器内部的响应约定以Answer结尾
+     * 3. 服务器主动通知客户端以Notice结尾
+     * 4. 公共的协议放在common模块
+     * 5. 内部协议范围不允许使用
+     */
+    public static final String NET_REQUEST_SUFFIX = "Request";
+    public static final String NET_RESPONSE_SUFFIX = "Response";
+    public static final String NET_NOTICE_SUFFIX = "Notice";
+
+    public static final String NET_ASK_SUFFIX = "Ask";
+    public static final String NET_ANSWER_SUFFIX = "Answer";
+
+    public static final String NET_COMMON_PACKAGE = "common";
+    public static final String NET_ATTACHMENT_PACKAGE = "attachment";
+
+    public static final Predicate<IProtocolRegistration> DefaultNetGenerateProtocolFilter = it -> {
+        var clazz = it.protocolConstructor().getDeclaringClass();
+        var className = clazz.getSimpleName();
+        if (className.endsWith(NET_ASK_SUFFIX) || className.endsWith(NET_ANSWER_SUFFIX)) {
+            return false;
+        }
+
+        if (className.endsWith(NET_REQUEST_SUFFIX) || className.endsWith(NET_RESPONSE_SUFFIX) || className.endsWith(NET_NOTICE_SUFFIX)) {
+            return true;
+        }
+
+        if (clazz.getPackageName().endsWith(NET_COMMON_PACKAGE) || clazz.getPackageName().endsWith(NET_ATTACHMENT_PACKAGE)) {
+            return true;
+        }
+
+        var module = ProtocolManager.moduleByModuleId(it.module());
+        if (module.getName().equals(NET_COMMON_PACKAGE) || module.getName().equals(NET_ATTACHMENT_PACKAGE)) {
+            return true;
+        }
+        return false;
+    };
+
+
+    // -----------------------------------------------------------------------------------------------------------------
+
     public static int localVariableId = 0;
 
     public static StringBuilder addTab(StringBuilder builder, int deep) {

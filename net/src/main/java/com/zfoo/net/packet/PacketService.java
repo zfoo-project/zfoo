@@ -50,39 +50,6 @@ public class PacketService implements IPacketService {
      */
     public static final int PACKET_HEAD_LENGTH = 4;
 
-    /**
-     * 网络包的约定规则如下：
-     * 1. 客户端的请求约定以Request结尾，服务器的响应约定以Response结尾
-     * 2. 服务器内部请求约定以Ask结尾，服务器内部的响应约定以Answer结尾
-     * 3. 服务器主动通知客户端以Notice结尾
-     * 4. 公共的协议放在common模块
-     * 5. 内部协议范围不允许使用
-     */
-    public static final String NET_REQUEST_SUFFIX = "Request";
-    public static final String NET_RESPONSE_SUFFIX = "Response";
-
-    public static final String NET_ASK_SUFFIX = "Ask";
-    public static final String NET_ANSWER_SUFFIX = "Answer";
-
-    public static final String NET_NOTICE_SUFFIX = "Notice";
-
-
-    public static final String NET_COMMON_MODULE = "common";
-
-    public static final Predicate<IProtocolRegistration> netGenerateProtocolFilter = it -> {
-        var clazz = it.protocolConstructor().getDeclaringClass();
-        var className = clazz.getSimpleName();
-        if (className.endsWith(NET_ASK_SUFFIX) || className.endsWith(NET_ANSWER_SUFFIX)) {
-            return false;
-        }
-
-        var module = ProtocolManager.moduleByModuleId(it.module());
-        return clazz == SignalAttachment.class
-                || className.endsWith(NET_REQUEST_SUFFIX)
-                || className.endsWith(NET_RESPONSE_SUFFIX)
-                || className.endsWith(NET_NOTICE_SUFFIX)
-                || module.getName().matches(NET_COMMON_MODULE);
-    };
 
     public PacketService() {
 
@@ -110,7 +77,7 @@ public class PacketService implements IPacketService {
             generateOperation.getGenerateLanguages().addAll(codeLanguageSet);
         }
         // 设置生成协议的过滤器
-        GenerateProtocolFile.generateProtocolFilter = netGenerateProtocolFilter;
+        GenerateProtocolFile.generateProtocolFilter = GenerateProtocolFile.DefaultNetGenerateProtocolFilter;
 
         // 解析protocol.xml文件，并将协议生成ProtocolRegistration
         var resource = applicationContext.getResource(ResourceUtils.CLASSPATH_URL_PREFIX + protocolLocation);
