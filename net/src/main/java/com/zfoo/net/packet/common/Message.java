@@ -46,26 +46,28 @@ public class Message {
         return code == 0;
     }
 
+    public Message() {
+    }
+
+    public Message(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 
     public static Message valueError(String message) {
-        var mess = new Message();
-        mess.code = 0;
-        mess.message = message;
-        return mess;
+        return new Message(0, message);
     }
 
     public static Message valueSuccess(String message) {
-        var mess = new Message();
-        mess.code = 1;
-        mess.message = message;
-        return mess;
+        return new Message(1, message);
     }
 
     public static Message valueInfo(String message) {
-        var mess = new Message();
-        mess.code = 2;
-        mess.message = message;
-        return mess;
+        return new Message(2, message);
+    }
+
+    public static Message valueWarn(String message) {
+        return new Message(3, message);
     }
 
 
