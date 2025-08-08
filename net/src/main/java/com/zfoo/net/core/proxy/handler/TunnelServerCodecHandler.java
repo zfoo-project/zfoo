@@ -92,7 +92,11 @@ public class TunnelServerCodecHandler extends ByteToMessageCodec<TunnelProtocolS
         }
 
         var retainedByteBuf = in.readRetainedSlice(length);
-        session.getChannel().writeAndFlush(TunnelProtocolServer2Client.valueOf(sid, uid, retainedByteBuf));
+        try {
+            session.getChannel().writeAndFlush(TunnelProtocolServer2Client.valueOf(sid, uid, retainedByteBuf));
+        } catch (Throwable t) {
+            ReferenceCountUtil.release(retainedByteBuf);
+        }
     }
 
     @Override
