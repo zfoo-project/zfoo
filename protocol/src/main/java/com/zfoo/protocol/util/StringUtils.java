@@ -16,6 +16,7 @@ import com.zfoo.protocol.collection.ArrayUtils;
 
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -466,6 +467,23 @@ public abstract class StringUtils {
         // 字符串模板剩余部分不再包含占位符，加入剩余部分后返回结果
         builder.append(template, readIndex, template.length());
         return builder.toString();
+    }
+
+    /**
+     * 格式化字符串，类似JavaScript的占位符${name}替换
+     */
+    public static String render(String template, Map<String, String> params) {
+        var pattern = Pattern.compile("\\$\\{(\\w+)\\}");
+        var matcher = pattern.matcher(template);
+        var sb = new StringBuffer();
+
+        while (matcher.find()) {
+            var key = matcher.group(1);
+            var replacement = params.getOrDefault(key, "");
+            matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
     public static boolean isEnglishChar(char ch) {
