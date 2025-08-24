@@ -46,7 +46,7 @@ public abstract class DomUtils {
         try {
             return MAPPER.readValue(xml, clazz);
         } catch (IOException e) {
-            throw new RunException("将xml字符串[xml:{}]转换为对象[{}]异常", xml, clazz, e);
+            throw new RunException("convert xml:[{}] to class:[{}] exception", xml, clazz, e);
         }
     }
 
@@ -56,7 +56,7 @@ public abstract class DomUtils {
             var sr = f.createXMLStreamReader(new FileInputStream(xmlFile));
             return MAPPER.readValue(sr, clazz);
         } catch (Exception e) {
-            throw new RunException("将xml文件[xml:{}]转换为对象[{}]异常", xmlFile, clazz, e);
+            throw new RunException("convert file xml:[{}] to class:[{}] exception", xmlFile.getName(), clazz, e);
         }
     }
 
@@ -64,7 +64,7 @@ public abstract class DomUtils {
         try {
             return MAPPER.readValue(xmlInputStream, clazz);
         } catch (Exception e) {
-            throw new RunException("将xmlInputStream转换为对象[{}]异常", clazz, e);
+            throw new RunException("convert input stream to class:[{}] exception", clazz, e);
         }
     }
 
