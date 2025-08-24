@@ -11,25 +11,22 @@
  */
 package com.zfoo.protocol.util;
 
+import com.zfoo.protocol.collection.ArrayUtils;
+import com.zfoo.protocol.collection.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author jaysunxiao
  */
 public class CsvUtils {
 
-    /**
-     * CSV 字符串转对象列表
-     *
-     * @param csv   CSV 格式字符串，第一行是表头
-     * @param clazz 目标类
-     * @param <T>   泛型类型
-     * @return 对象列表
-     */
-    public static <T> List<T> parse(String csv, Class<T> clazz) {
+
+    public static <T> List<T> toList(String csv, Class<T> clazz) {
         if (StringUtils.isEmpty(csv)) {
             return Collections.emptyList();
         }
@@ -40,7 +37,7 @@ public class CsvUtils {
         }
 
         var result = new ArrayList<T>();
-        // 第一行作为表头
+        // first line as header
         var headers = lines[0].split(StringUtils.COMMA_REGEX);
         var headerIndex = new HashMap<String, Integer>();
         for (var i = 0; i < headers.length; i++) {
@@ -49,7 +46,7 @@ public class CsvUtils {
 
         var fields = ReflectionUtils.notStaticAndTransientFields(clazz);
         fields.forEach(it -> ReflectionUtils.makeAccessible(it));
-        // 从第二行开始解析
+        // next line from second line is data
         for (var i = 1; i < lines.length; i++) {
             var values = lines[i].split(StringUtils.COMMA_REGEX);
 
@@ -70,4 +67,39 @@ public class CsvUtils {
         return result;
     }
 
+    public static <T> T[] toArray(String csv, Class<T> clazz) {
+        return ArrayUtils.listToArray(toList(csv, clazz), clazz);
+    }
+
+
+    public static <T> String toCsv(List<T> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return StringUtils.EMPTY;
+        }
+
+        var builder = new StringBuilder();
+
+        // header
+        var clazz = list.get(0).getClass();
+        var fields = ReflectionUtils.notStaticAndTransientFields(clazz);
+        fields.forEach(it -> ReflectionUtils.makeAccessible(it));
+
+        var headers = fields.stream().map(it -> it.getName()).collect(Collectors.joining(StringUtils.COMMA_REGEX));
+        builder.append(headers).append(FileUtils.LS);
+
+        // data row
+        for (T obj : list) {
+            var row = fields.stream()
+                    .map(it -> ReflectionUtils.getField(it, obj))
+                    .map(it -> it.toString())
+                    .collect(Collectors.joining(StringUtils.COMMA_REGEX));
+            builder.append(row).append(FileUtils.LS);
+        }
+
+        return builder.toString();
+    }
+
+    public static <T> String toCsv(T[] array) {
+        return toCsv(ArrayUtils.toList(array));
+    }
 }
