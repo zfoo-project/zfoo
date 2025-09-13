@@ -114,7 +114,7 @@ public class StorageManager implements IStorageManager {
                 for (var field : fieldList) {
                     if (Modifier.isPublic(field.getModifiers())) {
                         // 因为静态资源类是不能被修改的，资源类的属性不能被public修饰，用private修饰或者开启配置writeable属性
-                        throw new RunException("Static resource classes cannot be modified, [class:{}][filed:{}] cannot be modified by public, use private modified or enable writeable configuration", clazz, field.getName());
+                        throw new RunException("Static resource classes cannot be modified, class:[{}] filed:{}[] cannot be modified by public, use private modified or enable writeable configuration", clazz, field.getName());
                     }
 
                     var setMethodName = StringUtils.EMPTY;
@@ -158,7 +158,7 @@ public class StorageManager implements IStorageManager {
                 Type type = field.getGenericType();
 
                 if (!(type instanceof ParameterizedType)) {
-                    throw new RuntimeException(StringUtils.format("[bean:{}] type declaration is incorrect, not a generic class", targetBean.getClass().getSimpleName()));
+                    throw new RuntimeException(StringUtils.format("bean:[{}] type declaration is incorrect, not a generic class", targetBean.getClass().getSimpleName()));
                 }
 
                 Type[] types = ((ParameterizedType) type).getActualTypeArguments();
@@ -172,17 +172,17 @@ public class StorageManager implements IStorageManager {
                 IStorage<?, ?> storage = storageMap.get(resourceClazz);
 
                 if (storage == null) {
-                    throw new RuntimeException(StringUtils.format("Static class [resource:{}] does not exist", resourceClazz.getSimpleName()));
+                    throw new RuntimeException(StringUtils.format("Static class resource:[{}] does not exist", resourceClazz.getSimpleName()));
                 }
 
                 Field[] idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(resourceClazz, Id.class);
                 if (idFields.length != 1) {
-                    throw new RuntimeException(StringUtils.format("Static class [resource:{}] has no @Id annotation", resourceClazz.getSimpleName()));
+                    throw new RuntimeException(StringUtils.format("Static class resource:[{}] has no @Id annotation", resourceClazz.getSimpleName()));
                 }
 
                 if (!keyClazz.getSimpleName().toLowerCase().contains(idFields[0].getType().getSimpleName().toLowerCase())) {
                     // 注入静态类配置资源的类型和泛型类型不匹配
-                    throw new RuntimeException(StringUtils.format("Inject static class configuration [storage:{}][key:{}] type and generic type [type:{}] do not match", resourceClazz.getSimpleName(), idFields[0].getType().getSimpleName(), keyClazz.getSimpleName()));
+                    throw new RuntimeException(StringUtils.format("Inject static class configuration storage:[{}] key:[{}] type and generic type type:[{}] do not match", resourceClazz.getSimpleName(), idFields[0].getType().getSimpleName(), keyClazz.getSimpleName()));
                 }
 
                 ReflectionUtils.makeAccessible(field);
@@ -328,7 +328,7 @@ public class StorageManager implements IStorageManager {
             }
             if (resourceSet.size() > 1) {
                 var resourceNames = resourceSet.stream().map(it -> it.getFilename()).collect(Collectors.joining(StringUtils.COMMA));
-                throw new RuntimeException(StringUtils.format("Resource [class:{}] has duplicate configuration [{}]", clazz.getSimpleName(), resourceNames));
+                throw new RuntimeException(StringUtils.format("Resource class:[{}] has duplicate configuration [{}]", clazz.getSimpleName(), resourceNames));
             }
 
             return resourceSet.stream().findFirst().get();
