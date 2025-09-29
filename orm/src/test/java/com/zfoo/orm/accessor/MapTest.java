@@ -14,6 +14,7 @@
 package com.zfoo.orm.accessor;
 
 import com.zfoo.orm.OrmContext;
+import com.zfoo.orm.entity.UserEntity;
 import com.zfoo.orm.entity.bag.BagItem;
 import com.zfoo.orm.entity.bag.Item;
 import com.zfoo.orm.entity.bag.MapEntity;
@@ -52,7 +53,8 @@ public class MapTest {
         var entity = new MapEntity();
         entity.setId(id);
 
-        entity.setList(List.of(1, 2, 3));
+        entity.setItem(new Item(1, "item1"));
+        entity.setList(List.of(new Item(1, "item1"), new Item(2, "item2"), new Item(3, "item3")));
 
         CopyOnWriteArrayList<Integer> copyOnWriteArrayList = new CopyOnWriteArrayList<>();
         copyOnWriteArrayList.add(1);

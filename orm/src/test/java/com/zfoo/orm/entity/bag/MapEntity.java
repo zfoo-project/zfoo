@@ -25,7 +25,8 @@ public class MapEntity implements IEntity<Long> {
     @Id
     private long id;
 
-    private List<Integer> list = new ArrayList<>();
+    private Item item;
+    private List<Item> list = new ArrayList<>();
 
     private CopyOnWriteArrayList<Integer> copyOnWriteArrayList = new CopyOnWriteArrayList<>();
 
@@ -61,11 +62,19 @@ public class MapEntity implements IEntity<Long> {
         this.id = id;
     }
 
-    public List<Integer> getList() {
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public List<Item> getList() {
         return list;
     }
 
-    public void setList(List<Integer> list) {
+    public void setList(List<Item> list) {
         this.list = list;
     }
 
@@ -202,11 +211,11 @@ public class MapEntity implements IEntity<Long> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MapEntity mapEntity = (MapEntity) o;
-        return id == mapEntity.id && Objects.equals(list, mapEntity.list) && Objects.equals(bagMap, mapEntity.bagMap) && Objects.equals(baseMap, mapEntity.baseMap) && Objects.equals(longStringMap, mapEntity.longStringMap) && Objects.equals(intStringMap, mapEntity.intStringMap) && Objects.equals(intBaseMap, mapEntity.intBaseMap) && Objects.equals(charBagMap, mapEntity.charBagMap) && Objects.equals(boolBagMap, mapEntity.boolBagMap) && Objects.equals(byteBagMap, mapEntity.byteBagMap) && Objects.equals(shortBagMap, mapEntity.shortBagMap) && Objects.equals(intBagMap, mapEntity.intBagMap) && Objects.equals(longBagMap, mapEntity.longBagMap) && Objects.equals(floatBagMap, mapEntity.floatBagMap) && Objects.equals(doubleBagMap, mapEntity.doubleBagMap);
+        return id == mapEntity.id && Objects.equals(item, mapEntity.item) && Objects.equals(list, mapEntity.list) && Objects.equals(copyOnWriteArrayList, mapEntity.copyOnWriteArrayList) && Objects.equals(concurrentHashMap, mapEntity.concurrentHashMap) && Objects.equals(copyOnWriteHashMap, mapEntity.copyOnWriteHashMap) && Objects.equals(bagMap, mapEntity.bagMap) && Objects.equals(baseMap, mapEntity.baseMap) && Objects.equals(longStringMap, mapEntity.longStringMap) && Objects.equals(intStringMap, mapEntity.intStringMap) && Objects.equals(intBaseMap, mapEntity.intBaseMap) && Objects.equals(charBagMap, mapEntity.charBagMap) && Objects.equals(boolBagMap, mapEntity.boolBagMap) && Objects.equals(byteBagMap, mapEntity.byteBagMap) && Objects.equals(shortBagMap, mapEntity.shortBagMap) && Objects.equals(intBagMap, mapEntity.intBagMap) && Objects.equals(longBagMap, mapEntity.longBagMap) && Objects.equals(floatBagMap, mapEntity.floatBagMap) && Objects.equals(doubleBagMap, mapEntity.doubleBagMap);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, list, bagMap, baseMap, longStringMap, intStringMap, intBaseMap, charBagMap, boolBagMap, byteBagMap, shortBagMap, intBagMap, longBagMap, floatBagMap, doubleBagMap);
+        return Objects.hash(id, item, list, copyOnWriteArrayList, concurrentHashMap, copyOnWriteHashMap, bagMap, baseMap, longStringMap, intStringMap, intBaseMap, charBagMap, boolBagMap, byteBagMap, shortBagMap, intBagMap, longBagMap, floatBagMap, doubleBagMap);
     }
 }

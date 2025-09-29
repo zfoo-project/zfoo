@@ -500,7 +500,9 @@ public class OrmManager implements IOrmManager {
         // 不能是泛型类
         AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}] can't be a generic class", clazz.getCanonicalName());
         // 必须要有一个空的构造器
-        ReflectionUtils.publicEmptyConstructor(clazz);
+        if (!clazz.isRecord()) {
+            ReflectionUtils.publicEmptyConstructor(clazz);
+        }
 
         // 不能使用Storage的Index注解
         var storageIndexes = ReflectionUtils.getFieldsByAnnoNameInPOJOClass(clazz, "com.zfoo.storage.anno.Index");
@@ -517,7 +519,9 @@ public class OrmManager implements IOrmManager {
 
             // entity必须包含属性的get和set方法
             FieldUtils.fieldToGetMethod(clazz, field);
-            FieldUtils.fieldToSetMethod(clazz, field);
+            if (!clazz.isRecord()) {
+                FieldUtils.fieldToSetMethod(clazz, field);
+            }
 
             // 是一个基本类型变量
             var fieldType = field.getType();
