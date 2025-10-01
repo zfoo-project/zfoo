@@ -117,6 +117,10 @@ public final class TaskBus {
         executorOf(taskExecutorHash).execute(ThreadUtils.safeRunnable(runnable));
     }
 
+    public static void execute(long taskExecutorHash, Runnable runnable) {
+        execute((int) taskExecutorHash, runnable);
+    }
+
     public static void execute(Object argument, Runnable runnable) {
         execute(calTaskExecutorHash(argument), runnable);
     }
