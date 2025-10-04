@@ -129,17 +129,19 @@ public class ProtocolAnalysis {
                 .toList();*/
 
         // 检查协议类是否合法
-        var noProtocolIds = new ArrayList<Class<?>>();
+        var noProtocolClassList = new ArrayList<Class<?>>();
         for (var protocolClass : relevantClassSet) {
             var protocolId = getProtocolIdAndCheckClass(protocolClass);
             if (protocolId >= 0) {
                 initProtocolClass(protocolId, protocolClass);
             } else {
-                noProtocolIds.add(protocolClass);
+                noProtocolClassList.add(protocolClass);
             }
         }
+
+        noProtocolClassList.sort(Comparator.comparing(Class::getCanonicalName));
         var countProtocolId = (short) 0;
-        for (var protocolClass : noProtocolIds) {
+        for (var protocolClass : noProtocolClassList) {
             while (protocolClassMap.containsKey(countProtocolId)) {
                 countProtocolId++;
             }
