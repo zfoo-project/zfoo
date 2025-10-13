@@ -7,7 +7,7 @@
     <groupId>com.zfoo</groupId>
     <artifactId>boot</artifactId>
     <packaging>jar</packaging>
-    <version>4.1.0</version>
+    <version>4.1.1</version>
 
     <properties>
         <zfoo.version>4.1.0</zfoo.version>

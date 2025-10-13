@@ -37,7 +37,7 @@ Perfect work development process, complete online solution
 <dependency>
     <groupId>com.zfoo</groupId>
     <artifactId>boot</artifactId>
-    <version>4.1.0</version>
+    <version>4.1.1</version>
 </dependency>
 ```
 
@@ -47,7 +47,7 @@ Perfect work development process, complete online solution
 <dependency>
     <groupId>com.zfoo</groupId>
     <artifactId>protocol</artifactId>
-    <version>4.1.0</version>
+    <version>4.1.1</version>
 </dependency>
 ```
 

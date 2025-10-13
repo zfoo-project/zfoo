@@ -7,7 +7,7 @@
     <groupId>com.zfoo</groupId>
     <artifactId>zfoo</artifactId>
     <packaging>pom</packaging>
-    <version>4.1.0</version>
+    <version>4.1.1</version>
 
 
     <name>zfoo</name>
