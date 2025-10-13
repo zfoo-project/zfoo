@@ -265,4 +265,9 @@
         </license>
     </licenses>
 
+    <scm>
+        <connection>https://github.com/zfoo-project/zfoo.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:zfoo-project/zfoo.git</developerConnection>
+        <url>https://github.com/zfoo-project/zfoo</url>
+    </scm>
 </project>
