@@ -7,10 +7,10 @@
     <groupId>com.zfoo</groupId>
     <artifactId>event</artifactId>
     <packaging>jar</packaging>
-    <version>4.1.2</version>
+    <version>4.1.3</version>
 
     <properties>
-        <zfoo.version>4.1.2</zfoo.version>
+        <zfoo.version>4.1.3</zfoo.version>
         <!-- spring and spring boot -->
         <spring.version>6.2.6</spring.version>
         <spring.boot.version>3.4.5</spring.boot.version>
