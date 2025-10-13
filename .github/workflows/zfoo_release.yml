@@ -1,4 +1,4 @@
-name: Maven Central Repo Deployment
+name: zfoo release to mvnrepository
 on:
   release:
     types: [ released ]
