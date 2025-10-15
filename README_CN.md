@@ -62,10 +62,6 @@
 
 - [zfoo sdk gdscript for godot](https://github.com/zfoo-project/zfoo-sdk-gdscript-godot)
 
-- [jc-site](https://github.com/zfoo-project/jc-site) AI聚合网站
-
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server)
-
 - [godot-bird](https://github.com/zfoo-project/godot-bird) 鸟了个鸟，客户端使用godot开发，服务器依然使用的tank-game-server
 
 
@@ -94,12 +90,12 @@ public void atUserInfoAsk(Session session, UserInfoAsk ask) {
 }
 
 // 消费者，同步请求远程用户信息，会阻塞当前的线程，慎重考虑使用同步请求
-var userInfoAsk = UserInfoAsk.valueOf(userId);
-var answer = NetContext.getCosumer().syncAsk(userInfoAsk, UserInfoAnswer.class, userId).packet();
+var ask = UserInfoAsk.valueOf(userId);
+var answer = NetContext.getCosumer().syncAsk(ask, UserInfoAnswer.class, userId).packet();
 
 // 消费者，异步请求远程用户信息，不会柱塞当前的线程，异步请求成功过后依然会在当前线程执行逻辑
-NetContext.getCosumer().asyncAsk(userInfoAsk, UserInfoAnswer.class, userId)
-          .whenComplete(sm -> {
+NetContext.getCosumer().asyncAsk(ask, UserInfoAnswer.class, userId)
+          .whenComplete(answer -> {
               // do something
           );
 ```

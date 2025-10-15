@@ -57,8 +57,6 @@ Perfect work development process, complete online solution
 - [zfoo sdk of csharp and lua for unity and godot](https://github.com/zfoo-project/zfoo-sdk-csharp-lua-unity-godot)
 - [zfoo sdk typescript javascript cocos web h5](https://github.com/zfoo-project/zfoo-sdk-typescript-javascript-cocos-web-h5)
 - [zfoo sdk gdscript for godot](https://github.com/zfoo-project/zfoo-sdk-gdscript-godot)
-- [jc-site](https://github.com/zfoo-project/jc-site) AI website
-- [tank-game-server](https://github.com/zfoo-project/tank-game-server)
 - [godot-bird](https://github.com/zfoo-project/godot-bird) bird and bird，powered by godot
 - [FAQ](./doc/FAQ.md)，There are standard demo display and instructions in the test folder of each project directory,
   which can be run directly
@@ -88,12 +86,12 @@ public void atUserInfoAsk(Session session, UserInfoAsk ask) {
 }
 
 // Consumers, synchronously requesting remote service, will block the current thread
-var userInfoAsk = UserInfoAsk.valueOf(userId);
-var answer = NetContext.getCosumer().syncAsk(userInfoAsk, UserInfoAnswer.class, userId).packet();
+var ask = UserInfoAsk.valueOf(userId);
+var answer = NetContext.getCosumer().syncAsk(ask, UserInfoAnswer.class, userId).packet();
 
 // Consumers, asynchronously requesting remote service, and will still execute logic in the current thread after the asynchronous
-NetContext.getCosumer().asyncAsk(userInfoAsk, UserInfoAnswer.class, userId)
-          .whenComplete(sm -> {
+NetContext.getCosumer().asyncAsk(ask, UserInfoAnswer.class, userId)
+          .whenComplete(answer -> {
               // do something
           );
 ```
