@@ -84,7 +84,7 @@ public class CsvUtils {
         var fields = ReflectionUtils.notStaticAndTransientFields(clazz);
         fields.forEach(it -> ReflectionUtils.makeAccessible(it));
 
-        var headers = fields.stream().map(it -> it.getName()).collect(Collectors.joining(StringUtils.COMMA_REGEX));
+        var headers = fields.stream().map(it -> it.getName()).collect(Collectors.joining(StringUtils.COMMA));
         builder.append(headers).append(FileUtils.LS);
 
         // data row
@@ -92,7 +92,7 @@ public class CsvUtils {
             var row = fields.stream()
                     .map(it -> ReflectionUtils.getField(it, obj))
                     .map(it -> it.toString())
-                    .collect(Collectors.joining(StringUtils.COMMA_REGEX));
+                    .collect(Collectors.joining(StringUtils.COMMA));
             builder.append(row).append(FileUtils.LS);
         }
 
