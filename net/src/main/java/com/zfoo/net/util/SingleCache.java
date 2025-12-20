@@ -56,7 +56,7 @@ public class SingleCache<V> {
 
     public static <V> SingleCache<V> lazyBuild(long refreshDuration, Supplier<V> supplier) {
         var cache = new SingleCache<V>(refreshDuration, supplier);
-        cache.lazyRefresh();
+        cache.lazyRefreshDelay(18, TimeUnit.SECONDS);
         return cache;
     }
 
