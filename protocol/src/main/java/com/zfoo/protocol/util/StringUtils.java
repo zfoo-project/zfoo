@@ -323,6 +323,25 @@ public abstract class StringUtils {
         return str.substring(pos + separator.length());
     }
 
+    public static String truncate(CharSequence charSequence) {
+        return truncate(charSequence, 18);
+    }
+
+    /**
+     * Truncate the supplied {@link CharSequence}.
+     * <p>If the length of the {@code CharSequence} is greater than the threshold,
+     * this method returns a {@linkplain CharSequence#subSequence(int, int) subsequence} of the {@code CharSequence} (up to the threshold) appended
+     * with the suffix {@code "..."}. Otherwise, this method returns {@code charSequence.toString()}.
+     * @param charSequence the {@code CharSequence} to truncate
+     * @param threshold the maximum length after which to truncate; must be a positive number
+     * @return a truncated string, or a string representation of the original
+     */
+    public static String truncate(CharSequence charSequence, int threshold) {
+        if (charSequence.length() > threshold) {
+            return charSequence.subSequence(0, threshold) + "...";
+        }
+        return charSequence.toString();
+    }
 
     // Replacing
     //-----------------------------------------------------------------------
