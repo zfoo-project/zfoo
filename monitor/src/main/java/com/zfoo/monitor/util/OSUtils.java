@@ -34,9 +34,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Oshi库封装的工具类，通过此工具类，可获取系统、硬件相关信息
@@ -281,24 +279,26 @@ public abstract class OSUtils {
                     .directory(wd)
                     .start();
 
+            var finished = process.waitFor(256, TimeUnit.SECONDS);
+            if (!finished) {
+                process.destroyForcibly();
+                throw new RunException("doExecCommand timeout with process of command:[{}]", command);
+            }
+
             //取得命令结果的输出流
             inputStream = process.getInputStream();
             var bytes = IOUtils.toByteArray(inputStream);
             var result = StringUtils.bytesToString(bytes);
 
-            // 其他线程都等待这个线程完成
-            process.waitFor();
-            // 获取javac线程的退出值，0代表正常退出，非0代表异常中止
+            // 获取线程的退出值，0代表正常退出，非0代表异常中止
             int exitValue = process.exitValue();
-
-            // 返回编译是否成功
             if (exitValue != 0) {
-                throw new RunException("error executing command exitValue:[{}] result:[{}]", exitValue, result);
+                throw new RunException("doExecCommand error executing command exitValue:[{}] result:[{}]", exitValue, result);
             }
 
             return result;
         } catch (Exception e) {
-            logger.error("unknown exception in command execution", e);
+            logger.error("doExecCommand unknown exception in command execution", e);
         } finally {
             if (process != null) {
                 process.destroy();
