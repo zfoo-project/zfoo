@@ -16,10 +16,7 @@ package com.zfoo.monitor.util;
 import com.zfoo.monitor.*;
 import com.zfoo.net.util.NetUtils;
 import com.zfoo.protocol.exception.RunException;
-import com.zfoo.protocol.util.FileUtils;
-import com.zfoo.protocol.util.IOUtils;
-import com.zfoo.protocol.util.StringUtils;
-import com.zfoo.protocol.util.UuidUtils;
+import com.zfoo.protocol.util.*;
 import com.zfoo.scheduler.util.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +26,7 @@ import oshi.hardware.NetworkIF;
 import oshi.software.os.OperatingSystem;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -258,7 +256,11 @@ public abstract class OSUtils {
     // -----------------------------------------------------------------------------------------------------------------
     public static String execCommand(String command) {
         logger.info("execCommand [{}]", command);
-        return doExecCommand(command, null);
+        try {
+            return doExecCommand(command, null);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -266,46 +268,63 @@ public abstract class OSUtils {
         logger.info("execCommand [{}] workingDirectory:[{}]", command, workingDirectory);
         FileUtils.createDirectory(workingDirectory);
         var wd = new File(workingDirectory);
-        return doExecCommand(command, wd);
+        try {
+            return doExecCommand(command, wd);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static String doExecCommand(String command, File wd) {
-        Process process = null;
-        InputStream inputStream = null;
-        try {
-            var commandSplits = command.split(StringUtils.SPACE_REGEX);
-            process = new ProcessBuilder(commandSplits)
-                    .redirectErrorStream(true)
-                    .directory(wd)
-                    .start();
+    private static String doExecCommand(String command, File wd) throws IOException, InterruptedException {
+        var commandSplits = command.split(StringUtils.SPACE_REGEX);
+        var process = new ProcessBuilder(commandSplits)
+                .redirectErrorStream(true)
+                .directory(wd)
+                .start();
 
-            var finished = process.waitFor(256, TimeUnit.SECONDS);
-            if (!finished) {
-                process.destroyForcibly();
-                throw new RunException("doExecCommand timeout with process of command:[{}]", command);
+        var out = new StringBuilder();
+        var err = new StringBuilder();
+
+        // 异步读取输出，避免缓冲区阻塞
+        var outThread = new Thread(ThreadUtils.safeRunnable(() -> {
+            try {
+                out.append(StringUtils.bytesToString(IOUtils.toByteArray(process.getInputStream())));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-
-            //取得命令结果的输出流
-            inputStream = process.getInputStream();
-            var bytes = IOUtils.toByteArray(inputStream);
-            var result = StringUtils.bytesToString(bytes);
-
-            // 获取线程的退出值，0代表正常退出，非0代表异常中止
-            int exitValue = process.exitValue();
-            if (exitValue != 0) {
-                throw new RunException("doExecCommand error executing command exitValue:[{}] result:[{}]", exitValue, result);
+        }));
+        var errThread = new Thread(() -> {
+            try {
+                err.append(StringUtils.bytesToString(IOUtils.toByteArray(process.getErrorStream())));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
+        });
 
-            return result;
-        } catch (Exception e) {
-            logger.error("doExecCommand unknown exception in command execution", e);
-        } finally {
-            if (process != null) {
-                process.destroy();
-            }
-            IOUtils.closeIO(inputStream);
+        outThread.start();
+        errThread.start();
+
+        var finished = process.waitFor(256, TimeUnit.SECONDS);
+        if (!finished) {
+            process.destroyForcibly();
+            logger.error("doExecCommand timeout with process of command:[{}]", command);
         }
 
-        return StringUtils.EMPTY;
+        process.destroy();
+
+        outThread.join();
+        errThread.join();
+
+        // 获取线程的退出值，0代表正常退出，非0代表异常中止
+        int exitValue = process.exitValue();
+        if (exitValue != 0) {
+            logger.error("doExecCommand error executing command exitValue:[{}] result:[{}] err:[{}]", exitValue, err, err);
+        }
+
+        if (!err.isEmpty()) {
+            logger.error("doExecCommand error executing command err:[{}]", err);
+        }
+
+        return out.toString();
     }
 }
