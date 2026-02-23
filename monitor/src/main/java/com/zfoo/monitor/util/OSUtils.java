@@ -15,8 +15,10 @@ package com.zfoo.monitor.util;
 
 import com.zfoo.monitor.*;
 import com.zfoo.net.util.NetUtils;
-import com.zfoo.protocol.exception.RunException;
-import com.zfoo.protocol.util.*;
+import com.zfoo.protocol.util.FileUtils;
+import com.zfoo.protocol.util.IOUtils;
+import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.util.ThreadUtils;
 import com.zfoo.scheduler.util.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +29,15 @@ import oshi.software.os.OperatingSystem;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Oshi库封装的工具类，通过此工具类，可获取系统、硬件相关信息
@@ -254,6 +259,15 @@ public abstract class OSUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    private static final ExecutorService executors = Executors.newCachedThreadPool(new MonitorThreadFactory());
+    public static class MonitorThreadFactory implements ThreadFactory {
+        private final AtomicInteger threadNumber = new AtomicInteger(1);
+        @Override
+        public Thread newThread(Runnable runnable) {
+            var threadName = StringUtils.format("monitor-t-{}", threadNumber.getAndIncrement());
+            return new Thread( runnable, threadName);
+        }
+    }
     public static String execCommand(String command) {
         logger.info("execCommand [{}]", command);
         try {
@@ -286,23 +300,21 @@ public abstract class OSUtils {
         var err = new StringBuilder();
 
         // 异步读取输出，避免缓冲区阻塞
-        var outThread = new Thread(ThreadUtils.safeRunnable(() -> {
+        executors.submit(ThreadUtils.safeRunnable(() -> {
             try {
                 out.append(StringUtils.bytesToString(IOUtils.toByteArray(process.getInputStream())));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }));
-        var errThread = new Thread(() -> {
+        executors.submit(ThreadUtils.safeRunnable(() -> {
             try {
                 err.append(StringUtils.bytesToString(IOUtils.toByteArray(process.getErrorStream())));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        });
 
-        outThread.start();
-        errThread.start();
+        }));
 
         var finished = process.waitFor(256, TimeUnit.SECONDS);
         if (!finished) {
@@ -311,9 +323,6 @@ public abstract class OSUtils {
         }
 
         process.destroy();
-
-        outThread.join();
-        errThread.join();
 
         // 获取线程的退出值，0代表正常退出，非0代表异常中止
         int exitValue = process.exitValue();
