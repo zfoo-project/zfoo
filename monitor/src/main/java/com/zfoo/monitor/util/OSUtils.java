@@ -296,20 +296,20 @@ public abstract class OSUtils {
                 .directory(wd)
                 .start();
 
-        var out = new StringBuilder();
-        var err = new StringBuilder();
+        var stdout = new StringBuilder();
+        var stderr = new StringBuilder();
 
         // 异步读取输出，避免缓冲区阻塞
         executors.submit(ThreadUtils.safeRunnable(() -> {
             try {
-                out.append(StringUtils.bytesToString(IOUtils.toByteArray(process.getInputStream())));
+                stdout.append(StringUtils.bytesToString(IOUtils.toByteArray(process.getInputStream())));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }));
         executors.submit(ThreadUtils.safeRunnable(() -> {
             try {
-                err.append(StringUtils.bytesToString(IOUtils.toByteArray(process.getErrorStream())));
+                stderr.append(StringUtils.bytesToString(IOUtils.toByteArray(process.getErrorStream())));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -326,14 +326,10 @@ public abstract class OSUtils {
 
         // 获取线程的退出值，0代表正常退出，非0代表异常中止
         int exitValue = process.exitValue();
-        if (exitValue != 0) {
-            logger.error("doExecCommand error executing command exitValue:[{}] result:[{}] err:[{}]", exitValue, err, err);
+        if (exitValue != 0 || !stderr.isEmpty()) {
+            logger.error("doExecCommand error executing command exitValue:[{}] stdout:[{}] stderr:[{}]", exitValue, stdout, stderr);
         }
 
-        if (!err.isEmpty()) {
-            logger.error("doExecCommand error executing command err:[{}]", err);
-        }
-
-        return out.toString();
+        return stdout.toString();
     }
 }
