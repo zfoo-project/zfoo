@@ -260,36 +260,42 @@ public abstract class OSUtils {
 
     // -----------------------------------------------------------------------------------------------------------------
     private static final ExecutorService executors = Executors.newCachedThreadPool(new MonitorThreadFactory());
+
     public static class MonitorThreadFactory implements ThreadFactory {
         private final AtomicInteger threadNumber = new AtomicInteger(1);
+
         @Override
         public Thread newThread(Runnable runnable) {
             var threadName = StringUtils.format("monitor-t-{}", threadNumber.getAndIncrement());
-            return new Thread( runnable, threadName);
+            return new Thread(runnable, threadName);
         }
     }
+
     public static String execCommand(String command) {
         logger.info("execCommand [{}]", command);
         try {
-            return doExecCommand(command, null);
+            return doExecCommand(command, null, 5 * TimeUtils.MILLIS_PER_MINUTE);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-
     public static String execCommand(String command, String workingDirectory) {
+        return execCommand(command, workingDirectory, 5 * TimeUtils.MILLIS_PER_MINUTE);
+    }
+
+    public static String execCommand(String command, String workingDirectory, long timeoutMillis) {
         logger.info("execCommand [{}] workingDirectory:[{}]", command, workingDirectory);
         FileUtils.createDirectory(workingDirectory);
         var wd = new File(workingDirectory);
         try {
-            return doExecCommand(command, wd);
+            return doExecCommand(command, wd, timeoutMillis);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static String doExecCommand(String command, File wd) throws IOException, InterruptedException {
+    private static String doExecCommand(String command, File wd, long timeoutMillis) throws IOException, InterruptedException {
         var commandSplits = command.split(StringUtils.SPACE_REGEX);
         var process = new ProcessBuilder(commandSplits)
                 .redirectErrorStream(true)
@@ -316,7 +322,7 @@ public abstract class OSUtils {
 
         }));
 
-        var finished = process.waitFor(256, TimeUnit.SECONDS);
+        var finished = process.waitFor(timeoutMillis, TimeUnit.MILLISECONDS);
         if (!finished) {
             process.destroyForcibly();
             logger.error("doExecCommand timeout with process of command:[{}]", command);
