@@ -272,7 +272,7 @@ public abstract class OSUtils {
         logger.info("execCommand [{}]", command);
         try {
             return doExecCommand(command, null, 5 * TimeUtils.MILLIS_PER_MINUTE);
-        } catch (IOException | InterruptedException | ExecutionException e) {
+        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException(e);
         }
     }
@@ -287,12 +287,12 @@ public abstract class OSUtils {
         var wd = new File(workingDirectory);
         try {
             return doExecCommand(command, wd, timeoutMillis);
-        } catch (IOException | InterruptedException | ExecutionException e) {
+        } catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static String doExecCommand(String command, File wd, long timeoutMillis) throws IOException, InterruptedException, ExecutionException {
+    private static String doExecCommand(String command, File wd, long timeoutMillis) throws IOException, InterruptedException, ExecutionException, TimeoutException {
         var commandSplits = command.split(StringUtils.SPACE_REGEX);
         var process = new ProcessBuilder(commandSplits)
                 .redirectErrorStream(true)
@@ -310,8 +310,8 @@ public abstract class OSUtils {
         }
 
         process.destroy();
-        var stdout = stdoutFuture.get();
-        var stderr = stderrFuture.get();
+        var stdout = stdoutFuture.get(timeoutMillis, TimeUnit.MILLISECONDS);
+        var stderr = stderrFuture.get(timeoutMillis, TimeUnit.MILLISECONDS);
 
         // 获取线程的退出值，0代表正常退出，非0代表异常中止
         int exitValue = process.exitValue();
@@ -319,6 +319,6 @@ public abstract class OSUtils {
             logger.error("doExecCommand error executing command exitValue:[{}] stdout:[{}] stderr:[{}]", exitValue, stdout, stderr);
         }
 
-        return stdout.toString();
+        return stdout;
     }
 }
