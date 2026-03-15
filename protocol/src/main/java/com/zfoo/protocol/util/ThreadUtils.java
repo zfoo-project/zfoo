@@ -18,10 +18,7 @@ import io.netty.util.concurrent.EventExecutorGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author godotg
@@ -104,6 +101,22 @@ public abstract class ThreadUtils {
                 } catch (Throwable t) {
                     logger.error("unknown error", t);
                 }
+            }
+        };
+    }
+
+    public static <T> Callable<T> safeCallable(Callable<T> callable) {
+        return new Callable<T>() {
+            @Override
+            public T call() {
+                try {
+                    return callable.call();
+                } catch (Exception e) {
+                    logger.error("unknown exception", e);
+                } catch (Throwable t) {
+                    logger.error("unknown error", t);
+                }
+                return null;
             }
         };
     }

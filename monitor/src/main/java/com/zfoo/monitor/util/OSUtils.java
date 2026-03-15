@@ -33,10 +33,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -275,7 +272,7 @@ public abstract class OSUtils {
         logger.info("execCommand [{}]", command);
         try {
             return doExecCommand(command, null, 5 * TimeUtils.MILLIS_PER_MINUTE);
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
     }
@@ -290,37 +287,21 @@ public abstract class OSUtils {
         var wd = new File(workingDirectory);
         try {
             return doExecCommand(command, wd, timeoutMillis);
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static String doExecCommand(String command, File wd, long timeoutMillis) throws IOException, InterruptedException {
+    private static String doExecCommand(String command, File wd, long timeoutMillis) throws IOException, InterruptedException, ExecutionException {
         var commandSplits = command.split(StringUtils.SPACE_REGEX);
         var process = new ProcessBuilder(commandSplits)
                 .redirectErrorStream(true)
                 .directory(wd)
                 .start();
 
-        var stdout = new StringBuilder();
-        var stderr = new StringBuilder();
-
         // 异步读取输出，避免缓冲区阻塞
-        executors.submit(ThreadUtils.safeRunnable(() -> {
-            try {
-                stdout.append(StringUtils.bytesToString(IOUtils.toByteArray(process.getInputStream())));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }));
-        executors.submit(ThreadUtils.safeRunnable(() -> {
-            try {
-                stderr.append(StringUtils.bytesToString(IOUtils.toByteArray(process.getErrorStream())));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-        }));
+        var stdoutFuture = executors.submit(ThreadUtils.safeCallable(() -> StringUtils.bytesToString(IOUtils.toByteArray(process.getInputStream()))));
+        var stderrFuture = executors.submit(ThreadUtils.safeCallable(() -> StringUtils.bytesToString(IOUtils.toByteArray(process.getErrorStream()))));
 
         var finished = process.waitFor(timeoutMillis, TimeUnit.MILLISECONDS);
         if (!finished) {
@@ -329,6 +310,8 @@ public abstract class OSUtils {
         }
 
         process.destroy();
+        var stdout = stdoutFuture.get();
+        var stderr = stderrFuture.get();
 
         // 获取线程的退出值，0代表正常退出，非0代表异常中止
         int exitValue = process.exitValue();
