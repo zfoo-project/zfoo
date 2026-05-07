@@ -20,7 +20,7 @@ import java.lang.instrument.ClassDefinition;
  * Hotswap java class
  * <p>
  * EN: Prefer using simple Javassist for hot updates, followed by Byte Buddy hot updates
- * CN: 优先使用简单的Javassist做热更新，因为Byte Buddy使用了更为复杂的ASM，spring boot web项目中会优先使用Byte Buddy热更新
+ * Prefer Javassist for hot-swapping (simpler); Byte Buddy uses more complex ASM. Spring Boot web projects prefer Byte Buddy for hot-swapping
  *
  * @author godotg
  */
@@ -31,13 +31,13 @@ public abstract class HotSwapUtils {
     /**
      * need to add JVM startup parameters: -Djdk.attach.allowAttachSelf=true
      * <p>
-     * JVM的启动参数，jdk11过后默认JVM不允许连接自己，所以需要自己添加 -Djdk.attach.allowAttachSelf=true 启动参数
+     * JVM startup parameter: since JDK 11, the JVM does not allow self-attachment by default. Add -Djdk.attach.allowAttachSelf=true to enable it
      * <p>
-     * note: 需要配置 JAVA_HOME 环境变量，如果没有配置这个环境变量可能会导致未知异常
-     * note: 使用 -cp 或者 -Djava.ext.dirs 参数可能会导致热更新未知异常，推荐使用maven-shade-plugin或者spring-boot-maven-plugin将工程打包进一个jar里。
-     * note: 使用 -cp热更时会有概率出现java.lang.NoClassDefFoundError，其中多现于Lambda表达式和静态Enum的类中
+     * note: JAVA_HOME environment variable must be configured; unknown errors may occur without it
+     * note: Using -cp or -Djava.ext.dirs may cause unknown hot-swap errors; recommend packaging with maven-shade-plugin or spring-boot-maven-plugin
+     * note: Using -cp may occasionally cause java.lang.NoClassDefFoundError, especially in Lambda expressions and static Enum classes
      *
-     * @param bytes .class结尾的字节码文件
+     * @param bytes bytecode from a .class file
      */
     public static synchronized void hotswapClass(byte[] bytes) {
         if (ArrayUtils.isEmpty(bytes)) {

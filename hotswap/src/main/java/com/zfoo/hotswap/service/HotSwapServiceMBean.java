@@ -24,17 +24,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//java11过后ClassFile对外不可见
+// After Java 11, ClassFile is no longer publicly visible
 //import com.sun.tools.classfile.ClassFile;
 
 /**
- * JMX（JAVA Management Extensions）技术是java5的新特性，它提供一种简单，标准的方式去管理应用程序，设备，服务等资源。
- * JMS定义了一些设计模式，api和一些服务来进行应用程序和网络的监控，这些都是基于java语言环境的。
- * 使用JMS技术，资源被一种叫做MBeans（Managed Beans）监控，这些MBean都在一个核心对象管理server上注册。
- * JMS给java开发者提供了自由的方式去监控java代码，创建智能java agents,实现分布式管理的中间件和管理者，并且能够快速整合这些方案到的管理和监控系统。
+ * JMX (Java Management Extensions) is a Java 5 feature providing a simple, standard way to manage applications, devices, and services.
+ * JMX defines design patterns, APIs, and services for monitoring applications and networks within the Java environment.
+ * With JMX, resources are managed by MBeans (Managed Beans) registered with a central MBean server.
+ * JMX gives Java developers a flexible way to monitor Java code, create intelligent agents, build distributed management middleware, and integrate into management/monitoring systems.
  * <p>
- * 根据JMX描述，MBean接口包括一些可读或者可写的属性，还有一些定义好的方法，这些方法能够被MBean管理应用程序调用。
- * 实现类，类名必须为接口sufixMBean的前缀。也就是Hello。如果不按这个命名注册MBean就会有问题。
+ * Per the JMX spec, an MBean interface exposes readable/writable attributes and defined methods callable by management applications.
+ * Implementation class name must be the interface name without the 'MBean' suffix (e.g., 'Hello' for 'HelloMBean'). Non-compliance causes registration errors.
  *
  * @author godotg
  */
@@ -44,7 +44,7 @@ public class HotSwapServiceMBean implements IHotSwapServiceMBean {
 
     private static final Logger logger = LoggerFactory.getLogger(HotSwapServiceMBean.class);
 
-    // 热更新的代理和热更新的文件要放在同一个目录
+    // The hot-swap agent and hot-swap files must be in the same directory
     private static final String HOT_SWAP_SCRIPT = "hotscript";
     private static final String HOT_SWAP_AGENT = HOT_SWAP_SCRIPT + "/hotswap-2.0.jar";
 
@@ -57,15 +57,15 @@ public class HotSwapServiceMBean implements IHotSwapServiceMBean {
         registerMBean();
     }
 
-    // 使用jconsole去连接，当然也可以使用RMI进行远程连接MBean server，来进行管理和执行操作。
+    // Connect via jconsole or remotely via RMI to the MBean server for management
     private void registerMBean() {
-        //注册监控
+        // Register monitoring
         try {
-            //获取MBeanServer  如果没有MBean server存在那么下面会自动调用ManagementFactory.createMBeanServer()
+            // Get MBeanServer; if none exists, ManagementFactory.createMBeanServer() is called automatically
             MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-            // 包名加 类名 创建一个ObjectName
+            // Create ObjectName from package + class name
             ObjectName objectName = new ObjectName(this.getClass().getPackage().getName() + ":type=" + this.getClass().getSimpleName());
-            // 在MBean server上注册MBean
+            // Register MBean with the MBean server
             mbs.registerMBean(this, objectName);
         } catch (Exception e) {
             logger.error("MBean error", e);
@@ -83,11 +83,11 @@ public class HotSwapServiceMBean implements IHotSwapServiceMBean {
 
     @Override
     public synchronized void hotSwapByAbsolutePath(String absolutePath) {
-        // 热更新class文件，上一步没有完成的操作本次继续执行
+        // Hot-swap class files; continue any operations not completed in the previous pass
         try {
             hotSwapClass(absolutePath);
         } catch (Exception e) {
-            logger.error("热更新class文件异常：[exception:{}]", e);
+            logger.error("Hot-swap class file error: [exception:{}]", e);
         }
     }
 
@@ -95,7 +95,7 @@ public class HotSwapServiceMBean implements IHotSwapServiceMBean {
     public void logAllUpdateClassFileInfo() {
         int count = 0;
         for (Map.Entry<String, ClassFileDef> entry : HotSwapManager.getInstance().getClassFileDefMap().entrySet()) {
-            logger.info("[{}].更新的类名称:[{}]，更改的时间:[{}]", ++count, entry.getKey(), entry.getValue().getLastModifyTime());
+            logger.info("[{}]. Updated class: [{}], modified time: [{}]", ++count, entry.getKey(), entry.getValue().getLastModifyTime());
         }
     }
 
@@ -106,7 +106,7 @@ public class HotSwapServiceMBean implements IHotSwapServiceMBean {
         ByteArrayOutputStream baos = null;
         DataOutputStream dos = null;
         try {
-            // 本次需要更新的Class
+            // Classes to update in this pass
             Map<String, ClassFileDef> updateClassMap = new HashMap<>();
             List<File> fileList = FileUtils.getAllReadableFiles(new File(absolutePath));
             for (File file : fileList) {
@@ -122,60 +122,60 @@ public class HotSwapServiceMBean implements IHotSwapServiceMBean {
             }
 
             if (updateClassMap.isEmpty()) {
-                logger.debug("本次更新没有如何文件");
+                logger.debug("No files to update in this pass");
                 return;
             }
 
-            // 验证本次更新的所有class文件是否合法
+            // Validate all class files to be updated in this pass
             Map<String, ClassFileDef> classFileDefMap = HotSwapContext.getHotSwapManager().getClassFileDefMap();
-            for (Map.Entry<String, ClassFileDef> entry : updateClassMap.entrySet()) {// 读取所有本次需要热更新的字节码
+            for (Map.Entry<String, ClassFileDef> entry : updateClassMap.entrySet()) {// Read all bytecode to be hot-swapped in this pass
                 ClassFileDef classFileDef = entry.getValue();
-                // 上一次热更新的文件
+                // Files from the previous hot-swap
                 ClassFileDef lastClassFileDef = classFileDefMap.get(classFileDef.getClassName());
                 if (lastClassFileDef != null && !classFileDef.getClassName().equals(lastClassFileDef.getClassName())) {
-                    logger.error("本次热更新失败，两次热更新文件的类名称不一致，转换失败:[{}]-->[{}]"
+                    logger.error("Hot-swap failed: class names inconsistent between passes [{}]-->[{}]"
                             , classFileDef.getClassName(), lastClassFileDef.getClassName());
                     return;
                 }
             }
 
 
-            // 创建临时更新流
+            // Create temporary update stream
             baos = new ByteArrayOutputStream(1024);
             dos = new DataOutputStream(baos);
-            // 先写需要热更新类的数量
+            // Write the number of classes to hot-swap first
             dos.writeInt(updateClassMap.size());
             for (ClassFileDef classFileDef : updateClassMap.values()) {
-                dos.writeUTF(classFileDef.getClassName());// 写类名称
-                dos.writeInt(classFileDef.getData().length);// 字节码的长度
-                dos.write(classFileDef.getData());// 字节码
+                dos.writeUTF(classFileDef.getClassName()); // Write class name
+                dos.writeInt(classFileDef.getData().length); // Write bytecode length
+                dos.write(classFileDef.getData()); // Write bytecode
             }
             dos.flush();
-            //设置状态，准备更新
+            // Set state to ready for update
             HotSwapManager.updateBytes = baos.toByteArray();
             HotSwapManager.exception = null;
 
-            //更新
+            // Apply update
             loadHotSwapAgent();
 
             if (HotSwapManager.exception != null) {
                 for (ClassFileDef classFileDef : updateClassMap.values()) {
-                    logger.error("类[{}]热更新失败", classFileDef.getClassName());
+                    logger.error("Hot-swap failed for class [{}]", classFileDef.getClassName());
                 }
-                logger.error("热更新失败原因：", HotSwapManager.exception);
+                logger.error("Hot-swap failed: ", HotSwapManager.exception);
                 return;
             }
 
             for (ClassFileDef classFileDef : updateClassMap.values()) {
-                logger.info("类[{}]热更新成功", classFileDef.getClassName());
+                logger.info("Hot-swap successful for class [{}]", classFileDef.getClassName());
             }
             long end = TimeUtils.currentTimeMillis();
-            logger.info("本次热更新总耗时:[{}]毫秒", end - start);
+            logger.info("Hot-swap total time: [{}]ms", end - start);
 
-            // 更新成功，保存更新记录
+            // Update successful; save update record
             classFileDefMap.putAll(updateClassMap);
 
-            // 删除所有被更新过的java和class文件
+            // Delete all updated .java and .class files
             for (ClassFileDef def : updateClassMap.values()) {
                 FileUtils.deleteFile(new File(def.getPath()));
             }
@@ -187,13 +187,13 @@ public class HotSwapServiceMBean implements IHotSwapServiceMBean {
     private void loadHotSwapAgent() throws Exception {
         VirtualMachine vm = null;
         try {
-            // 获取运行当前这个类的jvm的pid
+            // Get the PID of the JVM running this class
             String pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
-            // attach到这个pid建立通信管道，让jvm加载agent
+            // Attach to the PID to establish a communication pipe and load the agent
             vm = VirtualMachine.attach(pid);
             vm.loadAgent(HOT_SWAP_AGENT);
         } catch (AgentInitializationException | AgentLoadException | AttachNotSupportedException | IOException e) {
-            logger.error("热更新开启VirtualMachine失败", e);
+            logger.error("Hot-swap: failed to attach VirtualMachine", e);
             throw e;
         } finally {
             try {
@@ -201,7 +201,7 @@ public class HotSwapServiceMBean implements IHotSwapServiceMBean {
                     vm.detach();
                 }
             } catch (IOException e) {
-                logger.error("热更新关闭vm失败", e);
+                logger.error("Hot-swap: failed to detach VM", e);
             }
         }
     }

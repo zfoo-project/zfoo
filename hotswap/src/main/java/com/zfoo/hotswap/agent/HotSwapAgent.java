@@ -8,9 +8,9 @@ import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
 
 /**
- * 使用 Instrumentation，开发者可以构建一个独立于应用程序的代理程序（Agent），用来监测和协助运行在 JVM 上的程序，
- * 甚至能够替换和修改某些类的定义。有了这样的功能，开发者就可以实现更为灵活的运行时虚拟机监控和 Java 类操作了，
- * 这样的特性实际上提供了一种虚拟机级别支持的 AOP 实现方式，使得开发者无需对 JDK 做任何升级和改动，就可以实现某些 AOP 的功能了。
+ * Using Instrumentation, developers can build an agent program independent of the application to monitor and assist programs running on the JVM,
+ * and even replace or modify class definitions. This enables flexible runtime JVM monitoring and Java class manipulation,
+ * effectively providing a JVM-level AOP mechanism without any JDK changes or upgrades.
  *
  * @author godotg
  */
@@ -24,11 +24,11 @@ public class HotSwapAgent {
 
 
     /*
-     Java SE6开始，提供了在应用程序的VM启动后在动态添加代理的方式，即agentmain方式。 与Permain类似，agent方式同样需要提供一个agent jar，并且这个jar需要满足：
-     在manifest中指定Agent-Class属性，值为代理类全路径
-     代理类需要提供public static void agentmain(String args, Instrumentation inst)或public static void agentmain(String args)方法。并且再二者同时存在时以前者优先。args和inst和premain中的一致。
-     不过如此设计的再运行时进行代理有个问题——如何在应用程序启动之后再开启代理程序呢？ JDK6中提供了Java Tools API，其中Attach API可以满足这个需求。
-     Attach API中的VirtualMachine代表一个运行中的VM。其提供了loadAgent()方法，可以在运行时动态加载一个代理jar。
+     Since Java SE 6, agents can be attached dynamically after the JVM starts via the agentmain method. Like premain, it requires an agent JAR that satisfies:
+     - Manifest must specify the Agent-Class attribute with the fully-qualified agent class name
+     - The agent class must provide agentmain(String args, Instrumentation inst) or agentmain(String args); the former takes priority if both exist. args and inst are the same as in premain.
+     However, this raises a question: how to attach an agent after the application has started? JDK6's Java Tools API provides the Attach API to solve this.
+     VirtualMachine in the Attach API represents a running JVM and provides loadAgent() to dynamically load an agent JAR at runtime.
      */
     public static void agentmain(String args, Instrumentation inst) {
         Class<?> clazz = null;
@@ -40,16 +40,16 @@ public class HotSwapAgent {
             int len = dis.readInt();
             ClassDefinition[] classDefs = new ClassDefinition[len];
             for (int i = 0; i < len; i++) {
-                //类名
+                // Class name
                 String className = dis.readUTF();
-                //类字节码
+                // Class bytecode
                 byte[] classBytes = new byte[dis.readInt()];
                 dis.readFully(classBytes);
                 classDefs[i] = new ClassDefinition(Class.forName(className), classBytes);
             }
-            //开始更新
+            // Start update
             inst.redefineClasses(classDefs);
-            //更新成功
+            // Update successful
         } catch (Exception e) {
             if (clazz != null) {
                 try {

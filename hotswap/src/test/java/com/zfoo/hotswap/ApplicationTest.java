@@ -12,17 +12,17 @@ import java.io.IOException;
  */
 public class ApplicationTest {
 
-    // 热更新教程，需要添加JVM参数，-Djdk.attach.allowAttachSelf=true，如果不加这个参数将使用Byte Buddy热更新替代Javassist热更新
-    // 使用Javassist热更新更加的轻量，如果Javassist热更新失败，则会自动使用Byte Buddy做热更新
+    // Hot-swap tutorial: add JVM arg -Djdk.attach.allowAttachSelf=true; without it, Byte Buddy hot-swap is used instead of Javassist
+    // Javassist hot-swap is lighter; if it fails, Byte Buddy is used automatically
     @Test
     public void startHotSwapTest() throws IOException {
-        // 热更新限制，不能为需要热更新的类添加或减少成员函数和成员变量，只能修改函数内部的逻辑
+        // Hot-swap limitation: cannot add or remove methods/fields; only internal logic may be changed
         var test = new HotswapClass();
-        // 没有热更新的输出
+        // Output before hot-swap
         test.print();
-        // 随便修改print方法，然后编译成为一个需要热更新的class文件
+        // Modify the print method, then compile it to a .class file to be hot-swapped
         HotSwapUtils.hotswapClass(IOUtils.toByteArray(ClassUtils.getFileFromClassPath("HotswapClass.class")));
-        // 热更新之后的输出
+        // Output after hot-swap
         test.print();
     }
 
