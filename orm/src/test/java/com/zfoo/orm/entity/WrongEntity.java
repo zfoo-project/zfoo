@@ -2,12 +2,11 @@ package com.zfoo.orm.entity;
 
 import com.zfoo.orm.anno.EntityCache;
 import com.zfoo.orm.anno.Id;
-import com.zfoo.orm.anno.Index;
 import com.zfoo.orm.model.IEntity;
 import org.bson.codecs.pojo.annotations.BsonId;
 
 /**
- * 用法有问题的entity
+ * Entity with intentionally wrong usage (for testing validation)
  *
  * @author Sando
  * @version 1.0

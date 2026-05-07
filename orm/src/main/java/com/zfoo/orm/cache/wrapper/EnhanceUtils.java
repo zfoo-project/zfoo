@@ -32,7 +32,7 @@ import java.lang.reflect.Modifier;
 public abstract class EnhanceUtils {
 
     static {
-        // 适配Tomcat，因为Tomcat不是用的默认的类加载器，而Javassist用的是默认的加载器
+        // Adapt for Tomcat: Tomcat uses its own class loader, but Javassist uses the default one
         var classArray = new Class<?>[]{
                 IEntityWrapper.class
         };
@@ -84,39 +84,39 @@ public abstract class EnhanceUtils {
             Method getVersionMethod = entityWrapper.getGetVersionMethod();
             Method setVersionMethod = entityWrapper.getSetVersionMethod();
 
-            // 定义类名称
+            // Define class name
             CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.ORM) + UuidUtils.getLocalIntId());
             enhanceClazz.addInterface(classPool.get(IEntityWrapper.class.getName()));
 
-            // 定义类实现的接口方法newEntity
+            // Define interface method: newEntity
             CtMethod newEntityMethod = new CtMethod(classPool.get(IEntity.class.getName()), "newEntity", classPool.get(new String[]{Comparable.class.getName()}), enhanceClazz);
             newEntityMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
             String newEntityMethodBody = StringUtils.format("{ {} entity = new {}(); entity.{}({}); return entity; }", clazz.getName(), clazz.getName(), setIdMethod.getName(), toOriginType(idField));
             newEntityMethod.setBody(newEntityMethodBody);
             enhanceClazz.addMethod(newEntityMethod);
 
-            // 定义类实现的接口方法versionFieldName
+            // Define interface method: versionFieldName
             CtMethod versionFieldNameMethod = new CtMethod(classPool.get(String.class.getName()), "versionFieldName", null, enhanceClazz);
             versionFieldNameMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
             String versionFieldNameMethodBody = versionField == null ? "{ return null; }" : StringUtils.format("{ return \"{}\"; }", entityWrapper.versionFieldName());
             versionFieldNameMethod.setBody(versionFieldNameMethodBody);
             enhanceClazz.addMethod(versionFieldNameMethod);
 
-            // 定义类实现的接口方法gvs
+            // Define interface method: gvs
             CtMethod gvsMethod = new CtMethod(classPool.get(long.class.getName()), "gvs", classPool.get(new String[]{IEntity.class.getName()}), enhanceClazz);
             gvsMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
             String gvsMethodBody = getVersionMethod == null ? "{ return 0L; }" : StringUtils.format("{ return (({})$1).{}(); }", clazz.getName(), getVersionMethod.getName());
             gvsMethod.setBody(gvsMethodBody);
             enhanceClazz.addMethod(gvsMethod);
 
-            // 定义类实现的接口方法svs
+            // Define interface method: svs
             CtMethod svsMethod = new CtMethod(classPool.get(void.class.getName()), "svs", classPool.get(new String[]{IEntity.class.getName(), long.class.getName()}), enhanceClazz);
             svsMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
             String svsMethodBody = setVersionMethod == null ? "{}" : StringUtils.format("{ (({})$1).{}($2); }", clazz.getName(), setVersionMethod.getName());
             svsMethod.setBody(svsMethodBody);
             enhanceClazz.addMethod(svsMethod);
 
-            // 释放缓存
+            // Release cache
             enhanceClazz.detach();
 
             Class<?> resultClazz = enhanceClazz.toClass(IEntityWrapper.class);

@@ -75,7 +75,7 @@ public class OrmManager implements IOrmManager {
     private MongoDatabase mongodbDatabase;
 
     /**
-     * 全部的Entity定义，key为对应的class，value为当前的Entity是否在当前项目中以缓存的形式使用
+     * All Entity definitions; key=class, value=whether the Entity is used with caching in the current project
      */
     private final Map<Class<?>, Boolean> allEntityCachesUsableMap = new HashMap<>();
 
@@ -117,7 +117,7 @@ public class OrmManager implements IOrmManager {
                 .builder()
                 .codecRegistry(codecRegistry);
 
-        // 设置数据库地址
+        // Set database host/address
         var hostConfig = ormConfig.getHost();
         if (CollectionUtils.isNotEmpty(hostConfig.getAddress())) {
             var hostList = hostConfig.getAddress().values()
@@ -132,7 +132,7 @@ public class OrmManager implements IOrmManager {
             mongoBuilder.applyToClusterSettings(builder -> builder.hosts(hostList));
         }
 
-        // 设置数据库账号密码
+        // Set database credentials
         if (StringUtils.isNotBlank(hostConfig.getUser()) && StringUtils.isNotBlank(hostConfig.getPassword())) {
             var authSource = StringUtils.isEmpty(hostConfig.getAuthSource())
                     ? "admin"
@@ -140,14 +140,14 @@ public class OrmManager implements IOrmManager {
             mongoBuilder.credential(MongoCredential.createCredential(hostConfig.getUser(), authSource, hostConfig.getPassword().toCharArray()));
         }
 
-        // 设置连接池的大小
+        // Set connection pool size
         var maxConnection = Runtime.getRuntime().availableProcessors() * 2 + 1;
         mongoBuilder.applyToConnectionPoolSettings(builder -> builder.maxSize(maxConnection).minSize(1));
 
         mongoClient = MongoClients.create(mongoBuilder.build());
         mongodbDatabase = mongoClient.getDatabase(hostConfig.getDatabase());
 
-        // 创建索引
+        // Create indexes
         for (var entry : entityDefMap.entrySet()) {
             var entityClass = entry.getKey();
             var entityDef = entry.getValue();
@@ -207,7 +207,7 @@ public class OrmManager implements IOrmManager {
         var applicationContext = OrmContext.getApplicationContext();
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
-            //防止被CGLIB代理时 直接赋值无效
+            // Prevent direct assignment from being ignored when the class is CGLIB-proxied
             var targetBean = Objects.requireNonNullElse(AopProxyUtils.getSingletonTarget(bean), bean);
             ReflectionUtils.filterFieldsInClass(targetBean.getClass()
                     , field -> field.isAnnotationPresent(EntityCacheAutowired.class)
@@ -215,7 +215,7 @@ public class OrmManager implements IOrmManager {
                         Type type = field.getGenericType();
 
                         if (!(type instanceof ParameterizedType)) {
-                            // 注入的变量类型需要是泛型类
+                            // Injected field must be a generic type
                             throw new RuntimeException(StringUtils.format("The variable [{}] is not of type generic", field.getName()));
                         }
 
@@ -225,7 +225,7 @@ public class OrmManager implements IOrmManager {
                         IEntityCache<?, ?> entityCaches = entityCachesMap.get(entityClazz);
 
                         if (entityCaches == null) {
-                            // entity-package需要配置到可以扫描到EntityCache注解的包
+                            // entity-package must be configured to scan packages where @EntityCache annotations are used
                             throw new RunException("The EntityCache object does not exist, please check that [entity-package:{}] and [entityCaches:{}] are configured in the correct position", ormConfig.getEntityPackage(), entityClazz);
                         }
 
@@ -256,7 +256,7 @@ public class OrmManager implements IOrmManager {
             throw new RunException("EntityCaches that do not have [] defined", clazz.getCanonicalName());
         }
         if (!usable) {
-            // Orm没有使用EntityCacheAutowired，为了节省内存提前释放了它；只有使用EntityCacheAutowired注解的Entity才能被动态获取
+            // Orm does not use EntityCacheAutowired here to save memory; only entities annotated with @EntityCacheAutowired can be retrieved dynamically
             throw new RunException("Orm does not use [] EntityCacheAutowired annotation, which are released in advance to save memory", clazz.getCanonicalName());
         }
         @SuppressWarnings("unchecked")
@@ -367,9 +367,9 @@ public class OrmManager implements IOrmManager {
     public EntityDef parserEntityDef(Class<? extends IEntity<?>> clazz) {
         var hasUnsafeCollection = hasUnsafeCollection(clazz);
 
-        // 校验id字段的格式
+        // Validate the id field format
         checkIdField(clazz);
-        // 校验version字段的格式
+        // Validate the version field format
         checkVersionField(clazz);
 
         var cacheStrategies = ormConfig.getCaches();
@@ -377,18 +377,18 @@ public class OrmManager implements IOrmManager {
 
         var cacheStrategy = CacheStrategy.DEFAULT;
         var persisterStrategy = PersisterStrategy.DEFAULT;
-        // Entity如果有被@EntityCache注解标识，则使用被标识的缓存和持久化策略，否则使用默认的策略
+        // If the Entity is annotated with @EntityCache, use the specified cache/persist strategy; otherwise use the default
         if (clazz.isAnnotationPresent(com.zfoo.orm.anno.EntityCache.class)) {
             var entityCache = clazz.getAnnotation(com.zfoo.orm.anno.EntityCache.class);
             var cache = entityCache.cache().value();
             var cacheStrategyOptional = cacheStrategies.stream().filter(it -> it.getStrategy().equals(cache)).findFirst();
-            // Entity需要有@Cache注解的缓存策略
+            // Entity must have a @Cache annotation for cache strategy
             AssertionUtils.isTrue(cacheStrategyOptional.isPresent(), "No Entity[{}] @Cache policy found[{}]", clazz.getSimpleName(), cache);
             cacheStrategy = cacheStrategyOptional.get();
 
             var persister = entityCache.persister().value();
             var persisterStrategyOptional = persisterStrategies.stream().filter(it -> it.getStrategy().equals(persister)).findFirst();
-            // 实体类Entity需要有持久化策略
+            // Entity must have a persistence strategy defined
             AssertionUtils.isTrue(persisterStrategyOptional.isPresent(), "Entity[{}] No persistence strategy found[{}]", clazz.getSimpleName(), persister);
             persisterStrategy = persisterStrategyOptional.get();
         } else {
@@ -425,26 +425,26 @@ public class OrmManager implements IOrmManager {
     }
 
     private void checkIdField(Class<?> clazz) {
-        // 是否实现了IEntity接口
+        // Check if the class implements IEntity
         AssertionUtils.isTrue(IEntity.class.isAssignableFrom(clazz), "The entity:[{}] annotated by the [{}] annotation does not implement the interface [{}]"
                 , com.zfoo.orm.anno.EntityCache.class.getName(), clazz.getCanonicalName(), IEntity.class.getCanonicalName());
 
-        // 校验id字段和id()方法的格式，一个Entity类只能有一个@Id注解
+        // Validate the id field and id() method; an Entity class may only have one @Id annotation
         var idFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Id.class);
         AssertionUtils.isTrue(ArrayUtils.isNotEmpty(idFields) && idFields.length == 1
                 , "The Entity[{}] must have only one @Id annotation (if it is indeed marked with an Id annotation, be careful not to use the Stored Id annotation)", clazz.getSimpleName());
         var idField = idFields[0];
         var idFieldType = idField.getType();
-        // idField必须用private修饰
+        // idField must be declared private
         AssertionUtils.isTrue(Modifier.isPrivate(idField.getModifiers()), "The id of the Entity[{}] must be private", clazz.getSimpleName());
 
-        // id的get方法的返回类型要和id字段一样，setId在hasUnsafeCollection方法中已经校验过了
+        // The return type of the id getter must match the id field type; setId is already validated in hasUnsafeCollection
         var getIdMethod = ReflectionUtils.getMethodByNameInPOJOClass(clazz, FieldUtils.fieldToGetMethod(clazz, idField));
         var returnTypeOfGetIdMethod = getIdMethod.getReturnType();
         AssertionUtils.isTrue(returnTypeOfGetIdMethod.equals(idFieldType), "[{}] getIdMethod:[{}] return type:[{}] must be equal with type id:[{}]"
                 , clazz.getSimpleName(), getIdMethod.getName(),returnTypeOfGetIdMethod.getName(), idFieldType.getName());
 
-        // 随机给id字段赋值，然后调用id()方法，看看两者的返回值是不是一样的，避免出错
+        // Assign a random value to the id field and call id(), verify they match to avoid bugs
         var entityInstance = ReflectionUtils.newInstance(clazz);
         Object idFiledValue = null;
         if (idFieldType.equals(int.class) || idFieldType.equals(Integer.class)) {
@@ -468,23 +468,23 @@ public class OrmManager implements IOrmManager {
         var idMethodOptional = Arrays.stream(ReflectionUtils.getAllMethods(clazz)).filter(it -> it.getName().equalsIgnoreCase("id"))
                 .filter(it -> it.getParameterCount() <= 0)
                 .findFirst();
-        // 实体类Entity必须重写id()方法
+        // Entity class must override the id() method
         AssertionUtils.isTrue(idMethodOptional.isPresent(), "The Entity[{}] must override the id() method", clazz.getSimpleName());
         var idMethod = idMethodOptional.get();
         ReflectionUtils.makeAccessible(idMethod);
         var idMethodReturnValue = ReflectionUtils.invokeMethod(entityInstance, idMethod);
-        // 实体类Entity的id字段的返回值field和id方法的返回值method必须相等
+        // The id field value and id() method return value must be equal
         AssertionUtils.isTrue(idFiledValue.equals(idMethodReturnValue), "The return value id [field:{}] of the Entity[{}] and the return value id [method:{}] are not equal, please check whether the id() method is implemented correctly"
                 , clazz.getSimpleName(), idFiledValue, idMethodReturnValue);
     }
 
     public void checkVersionField(Class<?> clazz) {
-        // @Version标识的字段必须是long类型
+        // @Version annotated field must be of type long
         var versionFields = ReflectionUtils.getFieldsByAnnoInPOJOClass(clazz, Version.class);
         if (ArrayUtils.isNotEmpty(versionFields)) {
             AssertionUtils.isTrue(versionFields.length == 1, "The Entity[{}] must have only one @Version annotation", clazz.getSimpleName());
             var versionField = versionFields[0];
-            // idField必须用private修饰
+            // idField must be declared private
             AssertionUtils.isTrue(Modifier.isPrivate(versionField.getModifiers()), "The version of the Entity[{}] must be private", clazz.getSimpleName());
             AssertionUtils.isTrue(versionField.getType().equals(long.class), "The version type of the Entity[{}] must be long", clazz.getSimpleName());
         }
@@ -495,19 +495,19 @@ public class OrmManager implements IOrmManager {
             Map.class, HashMap.class, LinkedHashMap.class, TreeMap.class);
 
     private boolean hasUnsafeCollection(Class<?> clazz) {
-        // 是否为一个简单的javabean，为了防止不同层对象混用造成潜在的并发问题，特别是网络层和po层混用
+        // Verify the class is a simple JavaBean to prevent concurrency issues from mixing layers (e.g. network layer and persistence layer)
         ReflectionUtils.assertIsPojoClass(clazz);
-        // 不能是泛型类
+        // Must not be a generic class
         AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}] can't be a generic class", clazz.getCanonicalName());
-        // 必须要有一个空的构造器
+        // Must have a no-arg constructor
         if (!clazz.isRecord()) {
             ReflectionUtils.publicEmptyConstructor(clazz);
         }
 
-        // 不能使用Storage的Index注解
+        // Must not use the Storage module's @Index annotation
         var storageIndexes = ReflectionUtils.getFieldsByAnnoNameInPOJOClass(clazz, "com.zfoo.storage.anno.Index");
         if (ArrayUtils.isNotEmpty(storageIndexes)) {
-            // 在Orm中只能使用Orm的Index注解，不能使用Storage的Index注解，为了避免不必要的误解和增强项目的健壮性，禁止这样使用
+            // Only Orm's own @Index annotation is allowed in Orm; using Storage's @Index is forbidden to avoid confusion and ensure robustness
             throw new RunException("only the Index annotation of Orm can be used, not the Index annotation of Storage, and it is forbidden to use it in order to avoid unnecessary misunderstandings and enhance the robustness of the project");
         }
 
@@ -517,46 +517,46 @@ public class OrmManager implements IOrmManager {
 
         for (var field : filedList) {
 
-            // entity必须包含属性的get和set方法
+            // Entity must have getters and setters for all fields
             FieldUtils.fieldToGetMethod(clazz, field);
             if (!clazz.isRecord()) {
                 FieldUtils.fieldToSetMethod(clazz, field);
             }
 
-            // 是一个基本类型变量
+            // Is a primitive type variable
             var fieldType = field.getType();
             if (isBaseType(fieldType)) {
                 // do nothing
             } else if (fieldType.isArray()) {
-                // 是一个数组
+                // Is an array
                 Class<?> arrayClazz = fieldType.getComponentType();
-                // ORM的数组类型只支持byte[]
+                // ORM only supports byte[] arrays
                 AssertionUtils.isTrue(arrayClazz == byte.class, "The array type of ORM[class:{}] only supports byte[]", clazz.getCanonicalName());
             } else if (Set.class.isAssignableFrom(fieldType)) {
-                // 是一个Set
+                // Is a Set
                 hasUnsafeCollection |= unsafeCollections.contains(fieldType);
                 var type = field.getGenericType();
-                // field必须泛型类
+                // Field must declare a generic type
                 AssertionUtils.isTrue(type instanceof ParameterizedType, "[class:{}] type declaration is incorrect, not a generic class[field:{}]", clazz.getCanonicalName(), field.getName());
 
                 var types = ((ParameterizedType) type).getActualTypeArguments();
-                // 必须声明Set的泛型类
+                // Must declare the generic type for Set
                 AssertionUtils.isTrue(types.length == 1, "Set type declaration in [class:{}] is incorrect, and the generic class must be declared in [field:{}]", clazz.getCanonicalName(), field.getName());
                 hasUnsafeCollectionInner(clazz, types[0]);
             } else if (List.class.isAssignableFrom(fieldType)) {
-                // 是一个List
+                // Is a List
                 hasUnsafeCollection |= unsafeCollections.contains(fieldType);
                 var type = field.getGenericType();
-                // field必须泛型类
+                // Field must declare a generic type
                 AssertionUtils.isTrue(type instanceof ParameterizedType, "[class:{}] type declaration is incorrect, not a generic class[field:{}]", clazz.getCanonicalName(), field.getName());
 
-                // 必须声明List的泛型类
+                // Must declare the generic type for List
                 var types = ((ParameterizedType) type).getActualTypeArguments();
                 AssertionUtils.isTrue(types.length == 1, "List type declaration in [class:{}] is incorrect, and the generic class must be declared in [field:{}]", clazz.getCanonicalName(), field.getName());
 
                 hasUnsafeCollectionInner(clazz, types[0]);
             } else if (Map.class.isAssignableFrom(fieldType)) {
-                // 是Map接口类型
+                // Is a Map type
                 hasUnsafeCollection |= unsafeCollections.contains(fieldType);
 
                 var type = field.getGenericType();
@@ -591,7 +591,7 @@ public class OrmManager implements IOrmManager {
 
     private boolean hasUnsafeCollectionInner(Class<?> currentEntityClass, Type type) {
         if (type instanceof ParameterizedType) {
-            // 泛型类
+            // Generic type
             Class<?> clazz = (Class<?>) ((ParameterizedType) type).getRawType();
             if (Set.class.isAssignableFrom(clazz)) {
                 // Set<Set<String>>
@@ -615,11 +615,11 @@ public class OrmManager implements IOrmManager {
                 // do nothing
                 return false;
             } else if (clazz.getComponentType() != null) {
-                // ORM不支持多维数组或集合嵌套数组类型，仅支持一维数组
+                // ORM does not support multi-dimensional arrays or collections nested with arrays; only 1D arrays are supported
                 throw new RunException("class:[{}] type:[{}] does not support multi-dimensional arrays or nested arrays, and only supports one-dimensional arrays"
                         , currentEntityClass.getSimpleName(), clazz.getSimpleName());
             } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
-                // ORM不支持集合嵌套数组类型
+                // ORM does not support collections containing array types
                 throw new RunException("orm do not support the combination of arrays and collections with the class:[{}] type:[{}]", currentEntityClass.getSimpleName(), clazz.getSimpleName());
             } else if (clazz.equals(currentEntityClass)) {
                 return false;

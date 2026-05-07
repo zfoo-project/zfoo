@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * MongoDB分布式唯一Id测试
+ * Test for MongoDB distributed unique ID generator
  *
  * @author godotg
  */

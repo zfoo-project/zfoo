@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * 基础类型作为key的map解析器 (key 默认不能为null)
+ * Map codec supporting primitive types as keys (key cannot be null by default)
  *
  * @author lqh
  */

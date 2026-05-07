@@ -34,12 +34,12 @@ public class IndexTextTest {
     public void insertTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
         var listUser = new ArrayList<UserEntity>();
-        var userEntity = new UserEntity(1, (byte) 1, (short) 1, 1, true, "两个黄鹂鸣翠柳，一行白鹭上青天。窗含西岭千秋雪，门泊东吴万里船。", null);
+        var userEntity = new UserEntity(1, (byte) 1, (short) 1, 1, true, "Two orioles sing among the green willows, a row of egrets fly into the blue sky.", null);
         listUser.add(userEntity);
-        userEntity = new UserEntity(2, (byte) 2, (short) 2, 2, true, "床前明月光，疑是地上霜。 举头望明月，低头思故乡。", null);
+        userEntity = new UserEntity(2, (byte) 2, (short) 2, 2, true, "Moonlight before my bed, could be frost on the ground.", null);
         listUser.add(userEntity);
-        userEntity = new UserEntity(3, (byte) 3, (short) 3, 3, true, "吴丝蜀桐张高秋，空山凝云颓不流。 江娥啼竹素女愁，李凭中国弹箜篌。 昆山玉碎凤凰叫，芙蓉泣露香兰笑。 十二门前融冷光，二十三丝动紫皇" +
-                "。 女娲炼石补天处，石破天惊逗秋雨。 梦入神山教神妪，老鱼跳波瘦蛟舞。 吴质不眠倚桂树，露脚斜飞湿寒兔。", null);
+        userEntity = new UserEntity(3, (byte) 3, (short) 3, 3, true, "Ancient Chinese instrument music poem test string" +
+                " Ancient music metaphor continued.", null);
         listUser.add(userEntity);
         OrmContext.getAccessor().batchInsert(listUser);
         ThreadUtils.sleep(Long.MAX_VALUE);
@@ -49,7 +49,7 @@ public class IndexTextTest {
     public void queryTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
         var collection = OrmContext.getOrmManager().getCollection(UserEntity.class);
-        collection.find(Filters.text("窗含西岭千秋雪")).forEach(new Consumer<UserEntity>() {
+        collection.find(Filters.text("orioles")).forEach(new Consumer<UserEntity>() {
             @Override
             public void accept(UserEntity userEntity) {
                 System.out.println(userEntity);

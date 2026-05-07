@@ -34,7 +34,7 @@ public class WrapperTest {
     public void wrapperTest() {
         var context = new ClassPathXmlApplicationContext("application.xml");
 
-        // 每次运行前先删除数据库
+        // Clear database before each test run
         OrmContext.getOrmManager().getCollection(IntEntity.class).drop();
         OrmContext.getOrmManager().getCollection(LongEntity.class).drop();
         OrmContext.getOrmManager().getCollection(FloatEntity.class).drop();

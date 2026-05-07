@@ -13,7 +13,6 @@
 
 package com.zfoo.orm.cache.persister;
 
-import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.cache.EntityCache;
 import com.zfoo.orm.model.EntityDef;
@@ -28,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class TimeOrmPersister extends AbstractOrmPersister {
 
     /**
-     * 执行的频率
+     * Execution frequency (in ms)
      */
     private final long rate;
 
@@ -36,7 +35,7 @@ public class TimeOrmPersister extends AbstractOrmPersister {
         super(entityDef, entityCaches);
         this.rate = Long.parseLong(entityDef.getPersisterStrategy().getConfig());
         if (this.rate <= 0) {
-            throw new RuntimeException(StringUtils.format("刷新频率[{}]不能小于0", rate));
+            throw new RuntimeException(StringUtils.format("refresh rate [{}] must be >= 0", rate));
         }
     }
 

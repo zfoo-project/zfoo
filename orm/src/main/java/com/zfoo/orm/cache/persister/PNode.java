@@ -19,20 +19,20 @@ import com.zfoo.scheduler.util.TimeUtils;
 /**
  * Persister Node
  * <p>
- * 需要持久化的一个节点
+ * A node that needs to be persisted
  *
  * @author godotg
  */
 public class PNode<PK extends Comparable<PK>, E extends IEntity<PK>> {
 
-    // 写入数据库的时间
+    // Time when written to database
     private volatile long writeToDbTime;
-    // 修改数据的时间
+    // Time when data was modified
     private volatile long modifiedTime;
 
     private volatile E entity;
 
-    // 记录最初访问时的线程信息
+    // Record the thread info at first access
     private long threadId;
 
     public PNode(E entity) {

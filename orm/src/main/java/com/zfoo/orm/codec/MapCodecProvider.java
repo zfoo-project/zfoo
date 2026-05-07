@@ -20,8 +20,8 @@ import org.bson.codecs.pojo.TypeWithTypeParameters;
 import java.util.Map;
 
 /**
- * MongoDB官方驱动Map的key只能为String，为了支持key为其它基础类型的Map有了MapCodecProvider
- * java的8种基础类型目前全部支持（char，boolean，byte，short，int，long，float，double）
+ * The official MongoDB driver only supports String keys; MapCodecProvider adds support for primitive-type keys
+ * All 8 Java primitive types are supported: char, boolean, byte, short, int, long, float, double
  *
  * @author lqh
  */

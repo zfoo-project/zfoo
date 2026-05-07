@@ -11,7 +11,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
- * 注解约定
+ * Annotation naming conventions
  *
  * @author Sando
  */

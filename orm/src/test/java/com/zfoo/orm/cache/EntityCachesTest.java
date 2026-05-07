@@ -38,10 +38,10 @@ public class EntityCachesTest {
 
         batchDelete();
 
-        // 再插入
+        // Insert again
         batchInsert();
 
-        // 动态去拿到UserEntity的EntityCaches
+        // Dynamically retrieve EntityCaches for UserEntity
         @SuppressWarnings("unchecked")
         var userEntityCaches = (IEntityCache<Long, UserEntity>) OrmContext.getOrmManager().getEntityCaches(UserEntity.class);
 
@@ -68,7 +68,7 @@ public class EntityCachesTest {
         @SuppressWarnings("unchecked")
         var userEntityCaches = (IEntityCache<Long, UserEntity>) OrmContext.getOrmManager().getEntityCaches(UserEntity.class);
 
-        // 动态去拿到UserEntity的EntityCaches
+        // Dynamically retrieve EntityCaches for UserEntity
         for (var i = 1; i <= 10; i++) {
             for (var j = 1; j <= 10; j++) {
                 var entity = userEntityCaches.loadOrCreate((long) j);

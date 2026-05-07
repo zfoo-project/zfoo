@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -47,12 +46,12 @@ public class SingleMongoTest {
         System.out.println("Connect to database successfully!");
         System.out.println("MongoDatabase inof is : " + mongodb.getName());
 
-        System.out.println("当前数据库中的所有集合是：");
+        System.out.println("All collections in current database:");
         for (String name : mongodb.listCollectionNames()) {
             System.out.println(name);
         }
 
-        // 查找并且遍历集合student的所有文档
+        // Find and iterate all documents in collection 'student'
         MongoCollection<Document> collection = mongodb.getCollection("student");
         System.out.println("Collection created successfully");
         collection.find().forEach(document -> System.out.println(document));
@@ -75,7 +74,7 @@ public class SingleMongoTest {
     @Test
     public void aggregateTest() {
         var collection = mongodb.getCollection("student");
-        // likeNum中有9的文档根据age分组后统计数量。
+        // Group documents where 'likeNum' contains 9 by age and count
         var result = collection.aggregate(Arrays.asList(
                 Aggregates.match(Filters.eq("name", "jay1")),
                 Aggregates.group("$age", Accumulators.sum("count", 1)))
@@ -86,10 +85,10 @@ public class SingleMongoTest {
 
     @Test
     public void insertOneTest() {
-        // 查找并且便利集合student的所有文档
+        // Find and iterate all documents in collection 'student'
         MongoCollection<Document> collection = mongodb.getCollection("student");
 
-        // 插入一个文档
+        // Insert a document
         Document document = new Document("_id", 1)
                 .append("name", "hello mongodb");
         collection.insertOne(document);
@@ -99,10 +98,10 @@ public class SingleMongoTest {
 
     @Test
     public void insertManyTest() {
-        // 查找并且便利集合student的所有文档
+        // Find and iterate all documents in collection 'student'
         MongoCollection<Document> collection = mongodb.getCollection("student");
 
-        //插入数据
+        // Insert data
         var datas = new ArrayList<Document>();
         for (int i = 0; i < 10; i++) {
             var studentName = "jay" + i;
@@ -110,17 +109,17 @@ public class SingleMongoTest {
             datas.add(document);
         }
         collection.insertMany(datas);
-        // 查询年龄大于等于20，小于25
+        // Query: age >= 20 and age < 25
         FindIterable<Document> result = collection.find(new Document("age", new Document("$gte", 20).append("$lt", 25)));
         System.out.println(result.first());
     }
 
     @Test
     public void updateOneTest() {
-        // 查找并且便利集合student的所有文档
+        // Find and iterate all documents in collection 'student'
         MongoCollection<Document> collection = mongodb.getCollection("student");
 
-        // 更新一个文档，updateOne方法第一个参数是查询条件，如果查出多条也只修改第一条;第二个参数是修改条件。
+        // Update one document; first arg is filter, second is update (only modifies first match)
         collection.updateOne(eq("age", 10), new Document("$set", new Document("name", "new hello mongodb")));
 
         collection.find().forEach(doc -> System.out.println(doc.toJson()));
@@ -129,10 +128,10 @@ public class SingleMongoTest {
 
     @Test
     public void updateManyTest() {
-        // 查找并且便利集合student的所有文档
+        // Find and iterate all documents in collection 'student'
         MongoCollection<Document> collection = mongodb.getCollection("student");
 
-        // 更新一个文档
+        // Update one document
         collection.updateMany(eq("age", 10), new Document("$set", new Document("name", "new hello mongodb")));
 
         collection.find().forEach(doc -> System.out.println(doc.toJson()));
@@ -142,7 +141,7 @@ public class SingleMongoTest {
     public void deleteTest() {
         MongoCollection<Document> collection = mongodb.getCollection("student");
 
-        // 删除一个文档
+        // Delete one document
         collection.deleteOne(eq("_id", 1));
 
         collection.find().forEach(doc -> System.out.println(doc.toJson()));
@@ -151,10 +150,10 @@ public class SingleMongoTest {
 
 
     // ******************************************************************************************************
-    // 更新一个字段和更新多个字段测试，测试结果，区别不大，可以忽略
+    // Test updating one field vs multiple fields; results show negligible difference
 
 
-    // 耗时[42598]
+    // time: ~42598ms
     @Test
     public void updateAllFieldTest() {
         var startTime = TimeUtils.currentTimeMillis();
@@ -170,7 +169,7 @@ public class SingleMongoTest {
             var key = j;
             var value = j;
             try {
-                // 插入一个文档
+                // Insert a document
                 Document document = new Document("_id", key)
                         .append("name0", value)
                         .append("name1", value)
@@ -192,10 +191,10 @@ public class SingleMongoTest {
 
 
         var endTime = TimeUtils.currentTimeMillis();
-        System.out.println(StringUtils.format("耗时[{}]", endTime - startTime));
+        System.out.println(StringUtils.format("elapsed[{}]ms", endTime - startTime));
     }
 
-    // 耗时[41971]
+    // time: ~41971ms
     @Test
     public void updateOneFieldTest() {
         var startTime = TimeUtils.currentTimeMillis();
@@ -210,7 +209,7 @@ public class SingleMongoTest {
             var key = j;
             var value = j;
             try {
-                // 插入一个文档
+                // Insert a document
                 Document document = new Document("_id", key)
                         .append("name0", value);
                 collection.updateOne(eq("_id", key), new Document("$set", document));
@@ -221,30 +220,30 @@ public class SingleMongoTest {
 
 
         var endTime = TimeUtils.currentTimeMillis();
-        System.out.println(StringUtils.format("耗时[{}]", endTime - startTime));
+        System.out.println(StringUtils.format("elapsed[{}]ms", endTime - startTime));
     }
 
 
     // ******************************************************************************************************
-    // wiredTiger引擎测试
-    // inMemory引擎测试
+    // WiredTiger engine test
+    // InMemory engine test
     private static final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10);
 
     /**
-     * inMemory测试结果如下：
-     * 总线程数[1]，操作数[10000]，耗时[4212]
-     * 总线程数[1]，操作数[1000000]，耗时[394215]
-     * 总线程数[4]，操作数[1000000]，耗时[223355]
-     * 总线程数[8]，操作数[1000000]，耗时[297476]
-     * 总线程数[16]，操作数[1000000]，耗时[442782]
-     * 总线程数[32]，操作数[1000000]，耗时[713675]
+     * InMemory engine benchmark results:
+     * threads[1], ops[10000], elapsed[4212]ms
+     * threads[1], ops[1000000], elapsed[394215]ms
+     * threads[4], ops[1000000], elapsed[223355]ms
+     * threads[8], ops[1000000], elapsed[297476]ms
+     * threads[16], ops[1000000], elapsed[442782]ms
+     * threads[32], ops[1000000], elapsed[713675]ms
      * <p>
      * <p>
-     * wiredTiger测试结果如下：
-     * 总线程数[1]，操作数[10000]，耗时[4170]
-     * 总线程数[1]，操作数[1000000]，耗时[400208]
-     * 总线程数[4]，操作数[1000000]，耗时[230471]
-     * 总线程数[8]，操作数[1000000]，耗时[298409]
+     * WiredTiger engine benchmark results:
+     * threads[1], ops[10000], elapsed[4170]ms
+     * threads[1], ops[1000000], elapsed[400208]ms
+     * threads[4], ops[1000000], elapsed[230471]ms
+     * threads[8], ops[1000000], elapsed[298409]ms
      */
     @Test
     public void mongodbWriteTest() {
@@ -269,7 +268,7 @@ public class SingleMongoTest {
                         var key = j;
                         var value = j;
                         try {
-                            // 插入一个文档
+                            // Insert a document
                             Document document = new Document("_id", key)
                                     .append("name", value);
                             collection.updateOne(eq("_id", key), new Document("$set", document));
@@ -293,18 +292,18 @@ public class SingleMongoTest {
         }
 
         var endTime = TimeUtils.currentTimeMillis();
-        System.out.println(StringUtils.format("总线程数[{}]，操作数[{}]，耗时[{}]"
+        System.out.println(StringUtils.format("threads[{}], ops[{}], elapsed[{}]ms"
                 , threadNum, count, endTime - startTime));
     }
 
 
     /**
-     * 总线程数[1]，操作数[10000]，耗时[4252]
-     * 总线程数[1]，操作数[1000000]，耗时[407131]
-     * 总线程数[4]，操作数[1000000]，耗时[226040]
-     * 总线程数[8]，操作数[1000000]，耗时[297418]
-     * 总线程数[16]，操作数[1000000]，耗时[436799]
-     * 总线程数[32]，操作数[1000000]，耗时[716651]
+     * threads[1], ops[10000], elapsed[4252]ms
+     * threads[1], ops[1000000], elapsed[407131]ms
+     * threads[4], ops[1000000], elapsed[226040]ms
+     * threads[8], ops[1000000], elapsed[297418]ms
+     * threads[16], ops[1000000], elapsed[436799]ms
+     * threads[32], ops[1000000], elapsed[716651]ms
      */
     @Test
     public void mongodbReadTest() {
@@ -351,7 +350,7 @@ public class SingleMongoTest {
         }
 
         var endTime = TimeUtils.currentTimeMillis();
-        System.out.println(StringUtils.format("总线程数[{}]，操作数[{}]，耗时[{}]"
+        System.out.println(StringUtils.format("threads[{}], ops[{}], elapsed[{}]ms"
                 , threadNum, count, endTime - startTime));
     }
 

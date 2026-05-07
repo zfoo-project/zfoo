@@ -50,7 +50,7 @@ public enum PersisterTypeEnum {
                 return persister;
             }
         }
-        throw new IllegalArgumentException(StringUtils.format("无效的持久化类型[persisterType:{}]", persisterType));
+        throw new IllegalArgumentException(StringUtils.format("invalid persister type [persisterType:{}]", persisterType));
     }
 
     public abstract IOrmPersister createPersister(EntityDef entityDef, EntityCache<?, ?> entityCaches);

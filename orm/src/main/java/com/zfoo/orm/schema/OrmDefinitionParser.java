@@ -44,29 +44,29 @@ public class OrmDefinitionParser implements BeanDefinitionParser {
         String name;
         BeanDefinitionBuilder builder;
 
-        // 解析OrmConfig的配置
+        // Parse OrmConfig configuration
         parseOrmConfig(element, parserContext);
 
-        // 注册OrmContext
+        // Register OrmContext
         clazz = OrmContext.class;
         name = StringUtils.uncapitalize(clazz.getSimpleName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注册OrmManager
+        // Register OrmManager
         clazz = OrmManager.class;
         name = StringUtils.uncapitalize(clazz.getSimpleName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         builder.addPropertyReference("ormConfig", OrmConfig.class.getCanonicalName());
         parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注册MongodbAccessor
+        // Register MongodbAccessor
         clazz = MongodbAccessor.class;
         name = StringUtils.uncapitalize(clazz.getSimpleName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注册MongodbQuery
+        // Register MongodbQuery
         clazz = MongodbQuery.class;
         name = StringUtils.uncapitalize(clazz.getSimpleName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
@@ -85,11 +85,11 @@ public class OrmDefinitionParser implements BeanDefinitionParser {
         parseHostConfig(DomUtils.getFirstChildElementByTagName(element, "host"), parserContext);
         builder.addPropertyReference("host", HostConfig.class.getCanonicalName());
 
-        // 解析caches标签
+        // Parse 'caches' tag
         var caches = parseCacheStrategies(DomUtils.getFirstChildElementByTagName(element, "caches"), parserContext);
         builder.addPropertyValue("caches", caches);
 
-        // 解析persisters标签
+        // Parse 'persisters' tag
         var persisters = parsePersisterStrategies(DomUtils.getFirstChildElementByTagName(element, "persisters"), parserContext);
         builder.addPropertyValue("persisters", persisters);
 
@@ -98,7 +98,7 @@ public class OrmDefinitionParser implements BeanDefinitionParser {
 
 
     private void parseHostConfig(Element element, ParserContext parserContext) {
-        // 解析host标签
+        // Parse 'host' tag
         var clazz = HostConfig.class;
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 

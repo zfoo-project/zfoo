@@ -17,10 +17,8 @@ import com.mongodb.client.model.BulkWriteOptions;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.zfoo.orm.OrmContext;
-import com.zfoo.orm.cache.persister.PNode;
 import com.zfoo.orm.model.IEntity;
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.scheduler.util.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +65,7 @@ public class MongodbAccessor implements IAccessor {
 
             var result = collection.replaceOne(filter, entity);
             if (result.getMatchedCount() <= 0) {
-                // 数据库中没有这个id
+                // No document with this id found in the database
                 logger.warn("database:[{}] [_id:{}] not exist", entityClazz.getSimpleName(), entity.id());
                 return false;
             }
@@ -95,7 +93,7 @@ public class MongodbAccessor implements IAccessor {
 
             var result = collection.bulkWrite(batchList, new BulkWriteOptions().ordered(false));
             if (result.getMatchedCount() != entities.size()) {
-                // 在数据库的批量更新操作中需要更新的数量和最终更新的数量不相同
+                // The expected update count does not match the actual update count in batch operation
                 logger.warn("database:[{}] update size:[{}] not equal with matched size:[{}](some entity of id not exist in database)"
                         , entityClazz.getSimpleName(), entities.size(), result.getMatchedCount());
             }

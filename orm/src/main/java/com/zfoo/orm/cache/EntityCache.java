@@ -60,7 +60,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     public EntityCache(Class<E> entityClass, EntityDef entityDef) {
         this.clazz = entityClass;
         this.entityDef = entityDef;
-        // 创建CacheVersion
+        // Create CacheVersion
         var entityWrapper = new EntityWrapper<>(clazz);
         if (GraalVmUtils.isGraalVM()) {
             wrapper = entityWrapper;
@@ -108,7 +108,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
         var entity = OrmContext.getAccessor().load(pk, clazz);
 
-        // 如果数据库中不存在则返回null，并将null放入缓存，防止频繁查库
+        // Return null if not in DB; cache null to prevent repeated DB queries
         if (entity == null) {
             logger.warn("[{}] can not load [pk:{}] and use null to replace it", clazz.getSimpleName(), pk);
         }
@@ -127,7 +127,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
         var entity = (E) OrmContext.getAccessor().load(pk, clazz);
 
-        // 如果数据库中不存在则给一个默认值
+        // If not in DB, use a default value
         if (entity == null) {
             entity = wrapper.newEntity(pk);
             var inserted = OrmContext.getAccessor().insert(entity);
@@ -141,7 +141,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     }
 
     /**
-     * 校验需要更新的entity和缓存的entity是否为同一个entity
+     * Verify that the entity to be updated is the same object as the cached entity
      */
     private PNode<PK, E> fetchCachePnode(E entity, boolean safe) {
         var id = entity.id();
@@ -151,7 +151,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
             caches.put(entity.id(), cachePnode);
         }
 
-        // 比较地址是否相等
+        // Compare object references
         if (entity != cachePnode.getEntity()) {
             throw new RunException("fetchCachePnode: cache entity [id:{}] not equal with update entity [id:{}]", cachePnode.getEntity().id(), id);
         }
@@ -168,7 +168,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     for (var stack : Thread.currentThread().getStackTrace()) {
                         builder.append(FileUtils.LS).append(stack);
                     }
-                    // 有并发写风险，第一次更新文档的线程和第2次更新更新文档的线程不相等
+                    // Concurrent write risk: the thread for the 1st and 2nd update are different
                     if (pnodeThread == null) {
                         logger.warn("[{}][id:{}] concurrent write warning, first update [threadId:{}], second update [threadId:{}], current stack trace as following:{}"
                                 , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId, builder);
@@ -192,7 +192,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     @Override
     public void update(E entity) {
         var cachePnode = fetchCachePnode(entity, true);
-        // 加128以防止，立刻加载并且立刻修改数据的情况发生时，服务器取到的时间戳相同
+        // Add 128ms buffer to prevent same-timestamp edge case when data is loaded and modified immediately
         cachePnode.setModifiedTime(TimeUtils.now() + 128);
     }
 
@@ -218,8 +218,8 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
     @Override
     public void invalidate(PK pk) {
-        // 游戏业务中，操作最频繁的是update，不是insert，delete，query
-        // 所以这边并不考虑
+        // In game services, update is the most frequent operation, not insert/delete/query
+        // So other operations are not the main concern here
         AssertionUtils.notNull(pk);
         caches.remove(pk);
     }
@@ -238,15 +238,15 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     }
 
 
-    // 游戏中80%都是执行更新的操作，这样做会极大的提高更新速度
-    // 没有并发问题的entity指的是内部没有使用集合或者使用的集合全部支持并发操作
-    // 没有并发问题的entity还是在异步线程池Event慢慢更新，有并发问题的entity才放到原来的update线程去更新（第一次update会记录entity所在线程）
+    // ~80% of game operations are updates; this approach greatly improves update performance
+    // Thread-safe entity: no collections, or all collections support concurrent access
+    // Thread-safe entities use async event pool; non-thread-safe entities use the original update thread (tracked on first update)
     @Override
     public void persistAll() {
         if (entityDef.isThreadSafe()) {
             EventBus.asyncExecute(clazz.hashCode(), () -> persistAllBlock());
         } else {
-            // key为threadId
+            // key is threadId
             var updateMap = new HashMap<Long, List<PNode<PK, E>>>();
             var initSize = caches.size() >> 2;
             caches.forEach(new BiConsumer<PK, PNode<PK, E>>() {
@@ -267,7 +267,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 if (executor == null) {
                     EventBus.asyncExecute(clazz.hashCode(), () -> doPersist(updateList));
                 } else {
-                    // 使用scheduler均匀的分配入库的时间点，减少数据库的并发写入压力
+                    // Use scheduler to evenly distribute DB write timestamps to reduce concurrent write pressure
                     SchedulerBus.schedule(() -> executor.execute(() -> doPersist(updateList)), count++ * 128L, TimeUnit.MILLISECONDS);
                 }
             }
@@ -290,7 +290,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
     }
 
     private void doPersist(List<PNode<PK,E>> updateList) {
-        // 执行更新
+        // Execute update
         if (updateList.isEmpty()) {
             return;
         }
@@ -318,12 +318,12 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
 
                 var result = collection.bulkWrite(batchList, new BulkWriteOptions().ordered(false));
 
-                //设置修改时间
+                // Set modification time
                 long  currentTime = TimeUtils.currentTimeMillis();
                 currentUpdateList.forEach(k->k.resetTime(currentTime));
 
                 if (result.getMatchedCount() != entities.size()) {
-                    // 在数据库的批量更新操作中需要更新的数量和最终更新的数量不相同
+                    // The expected update count does not match the actual update count in batch operation
                     logger.warn("database:[{}] update size:[{}] not equal with matched size:[{}](some entity of id not exist in database)"
                             , clazz.getSimpleName(), entities.size(), result.getMatchedCount());
                 }
@@ -362,7 +362,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 }
 
                 // mostly because the document that needs to be updated is the same as the document in the database
-                // 开始执行容错操作（大部分原因都是因为需要更新的文档和数据库的文档相同）
+                // Begin fallback operation (most cases: cached document already matches database)
                 logger.warn("doPersistWithVersion(): [{}] batch update [{}] not equal to final update [{}], and try to use persistAndCompareVersion() to update every single entity."
                         , clazz.getSimpleName(), currentUpdateList.size(), result.getMatchedCount());
             } catch (Throwable t) {
@@ -392,22 +392,22 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 continue;
             }
 
-            // 如果没有版本号，则直接更新数据库
+            // No version number: update the database directly
             var entityVersion = wrapper.gvs(entity);
             var dbEntityVersion = wrapper.gvs(dbEntity);
 
-            // 如果版本号相同，说明已经更新到
+            // Same version: already up-to-date
             if (dbEntityVersion == entityVersion) {
                 continue;
             }
 
-            // 如果数据库版本号较小，说明缓存的数据是最新的，直接写入数据库
+            // DB version smaller: cache is newer, write to database
             if (dbEntityVersion < entityVersion) {
                 OrmContext.getAccessor().update(entity);
                 continue;
             }
 
-            // 数据库版本号较大，说明缓存的数据不是最新的，直接清除缓存，下次重新加载
+            // DB version larger: cache is stale, evict it, reload on next access
             caches.remove(id);
             load(id);
             logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}] and reload db entity to cache", clazz.getSimpleName(), id, dbEntityVersion, entityVersion);

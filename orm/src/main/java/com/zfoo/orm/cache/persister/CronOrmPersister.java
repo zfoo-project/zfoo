@@ -13,7 +13,6 @@
 
 package com.zfoo.orm.cache.persister;
 
-import com.zfoo.event.manager.EventBus;
 import com.zfoo.orm.OrmContext;
 import com.zfoo.orm.cache.EntityCache;
 import com.zfoo.orm.model.EntityDef;
@@ -34,12 +33,12 @@ public class CronOrmPersister extends AbstractOrmPersister {
     private static final Logger logger = LoggerFactory.getLogger(CronOrmPersister.class);
 
     /**
-     * 持久化默认的延迟时间
+     * Default delay time before persisting
      */
     private static final long DEFAULT_DELAY = 30 * TimeUtils.MILLIS_PER_SECOND;
 
     /**
-     * cron表达式
+     * Cron expression
      */
     private final CronExpression cronExpression;
 
@@ -64,7 +63,7 @@ public class CronOrmPersister extends AbstractOrmPersister {
 
             if (delay < 0) {
                 delay = DEFAULT_DELAY;
-                logger.error("计算[cron:{}]表达式发生错误，当前时间[now:{}]，计算出来的时间[nextTimestamp:{}]，两者之差小于0"
+                logger.error("Error computing [cron:{}] expression, now[{}], nextTimestamp[{}], difference < 0"
                         , cronExpression.toString(), now, nextTimestamp);
             }
         } catch (Exception e) {

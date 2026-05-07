@@ -21,7 +21,6 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.AssertionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,15 +43,15 @@ public abstract class MongoIdUtils {
 
 
     /**
-     * 分布式唯一Id生成器，利用MongoDB数据库存储自增的ID，可以保证原子性，一致性。
+     * Distributed unique ID generator backed by MongoDB auto-increment; guarantees atomicity and consistency.
      * <p>
-     * 线程安全，不同线程互不影响。
+     * Thread-safe: independent across threads.
      * <p>
-     * 进程安全，不同的应用进程也可以保证唯一id。
+     * Process-safe: unique IDs guaranteed across different application processes.
      *
-     * @param collectionName 存储的集合名称
-     * @param documentName   文档id
-     * @return 增加后的唯一id
+     * @param collectionName collection name for storage
+     * @param documentName   document ID name
+     * @return the incremented unique ID
      */
     public static long getIncrementIdFromMongo(String collectionName, String documentName) {
         var collection = OrmContext.getOrmManager().getCollection(collectionName);
@@ -69,7 +68,7 @@ public abstract class MongoIdUtils {
         var query = Filters.eq("_id", documentName);
         var inc = new Document("$inc", new Document(COUNT, 1L));
         var setOnInsert = new Document("$setOnInsert", new Document("_id", documentName));
-        // 报错后重试创建并获取id，在大并发create的时候mongodb总是会报错一次“duplicate key error!” 所以重试一次
+        // Retry once on error; under high concurrency MongoDB may report "duplicate key error!" once
         for (var i = 0; i < 3; i++) {
             try {
                 var document = collection.findOneAndUpdate(query, Updates.combine(inc, setOnInsert), new FindOneAndUpdateOptions().upsert(true));
@@ -94,9 +93,9 @@ public abstract class MongoIdUtils {
     // ----------------------------------------------------------------------------------------------------
 
     /**
-     * 重置documentName的数值，重置为0
+     * Reset the document counter to 0
      *
-     * @param documentName 档id
+     * @param documentName document ID name
      */
     public static void resetIncrementIdFromMongoDefault(String documentName) {
         setIncrementIdFromMongo(COLLECTION_NAME, documentName, 0L);
@@ -124,11 +123,11 @@ public abstract class MongoIdUtils {
     // ----------------------------------------------------------------------------------------------------
 
     /**
-     * 获取最大的id
+     * Get the current maximum ID
      *
-     * @param collectionName 存储的集合名称
-     * @param documentName   文档id
-     * @return 增加后的唯一id
+     * @param collectionName collection name for storage
+     * @param documentName   document ID name
+     * @return the incremented unique ID
      */
     public static long getMaxIdFromMongo(String collectionName, String documentName) {
         var collection = OrmContext.getOrmManager().getCollection(collectionName);

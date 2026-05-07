@@ -13,14 +13,13 @@
 
 package com.zfoo.orm.accessor;
 
-import com.zfoo.orm.cache.persister.PNode;
 import com.zfoo.orm.model.IEntity;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 
 /**
- * 对数据库进行（增，删，改）的相关方法
+ * Methods for writing (insert, delete, update) to the database
  *
  * @author godotg
  */

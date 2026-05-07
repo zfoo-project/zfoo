@@ -70,7 +70,7 @@ public class AccessorTest {
     }
 
 
-    // 批量插入
+    // Batch insert
     public void batchInsert() {
         var list = new ArrayList<UserEntity>();
         for (var i = 1; i <= 10; i++) {

@@ -23,23 +23,23 @@ public interface IEntityWrapper<PK extends Comparable<PK>, E extends IEntity<PK>
     E newEntity(PK id);
 
     /**
-     * version field的名称
+     * Name of the version field
      */
     String versionFieldName();
 
     /**
-     * 一个文档的写入到数据库的version版本，version的get和set方法
+     * Document write version; getter and setter for the version field.
      * <p>
-     * 写入一条数据到数据库的时候会对比当前entity的vs和数据库的vs是不是一样，不是一样的话无法写入，一致的话就写入数据并且让vs自增+1.
-     * 主要是为了防止多个服务器去操作同一条数据，保证在分布式环境的数据一致性；简单的说就是一个数据版本号的简单实现，版本号一致才能写入数据。
-     * 在分布式环境中，会存在有状态服务器，比如网关路由一个用户或玩家的数据到a服务器，这个时候你加了一个b服务器，有可能下一条数据就被路由到b。
-     * 虽然用了一致性hash的负载均衡算法，但是一样有概率会让某些消息路由到不同服务器。
-     * 这个时候版本号就可以保证只有一台服务器可以对数据库做操作，不用担心多个服务器去操作数据。
-     * 这是一个容错的操作，真实环境下很少发生。为了高性能必须要把服务器做成有状态的，这个容错操作就是最后一道保证数据一致的方案。
-     * mongodb更新的时候是原子的，并发更新同一条数据只有一条数据会写入，第二条数据写入的时候版本号已经不一致了，所以老版本号的数据无法写入。
-     * 写入的时候只要发现版本号不一致，就让缓存失效，重新读取数据库最新的数据。
+     * On write, compares the entity's version with the DB version; if they differ the write is rejected; if equal, data is written and version is incremented.
+     * Prevents multiple servers from modifying the same document simultaneously, ensuring data consistency in a distributed environment.
+     * In a distributed environment, stateful servers exist; a gateway may route a user to server A, but after adding server B, the next request might go to B.
+     * Even with consistent hashing, there is still a chance that some requests are routed to different servers.
+     * The version number ensures only one server can write to the database at a time.
+     * This is a fallback operation; it rarely occurs in production. It is the last line of defense for data consistency in high-performance stateful servers.
+     * MongoDB updates are atomic; under concurrency only one write wins. The second writer's version will be stale and rejected.
+     * When a version mismatch is detected on write, invalidate the cache and reload from DB.
      * <p>
-     * 分布式环境下，要想服务器性能好，就要做成有状态的，有状态就要遇到这种多服对同一条数据写入问题，这是一个千古难以解决的问题，进退两难。
+     * For high performance in a distributed system you need stateful servers, but stateful servers face this multi-writer consistency dilemma — an ancient unsolved trade-off.
      */
     long gvs(E entity);
 

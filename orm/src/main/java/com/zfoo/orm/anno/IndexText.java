@@ -17,7 +17,7 @@ import org.springframework.aot.hint.annotation.Reflective;
 import java.lang.annotation.*;
 
 /**
- * Mongodb不支持中文分词
+ * MongoDB does not support CJK text segmentation natively
  *
  * @author godotg
  */

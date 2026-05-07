@@ -17,7 +17,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * 基础类型枚举
+ * Enum for supported primitive types
  *
  * @author lqh
  */

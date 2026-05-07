@@ -17,7 +17,7 @@ import org.springframework.aot.hint.annotation.Reflective;
 import java.lang.annotation.*;
 
 /**
- * 一个文档的写入到数据库的version版本，只有使用@EntityCache注解时才有用
+ * Document write version; only useful when the entity uses @EntityCache
  *
  * @author godotg
  */

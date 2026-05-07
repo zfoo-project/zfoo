@@ -25,28 +25,28 @@ import java.util.List;
 public class Page {
 
     /**
-     * 第几页
+     * page number (1-based)
      */
     private int page;
     /**
-     * 页容量
+     * page size
      */
     private int itemsPerPage;
 
     /**
-     * 数据库记录总数量
+     * total record count
      */
     private long totalSize;
 
     public static Page valueOf(int page, int itemsPerPage, long totalSize) {
         if (page <= 0) {
-            throw new IllegalArgumentException(StringUtils.format("分页数必须大于0，[page:{}]", page));
+            throw new IllegalArgumentException(StringUtils.format("page number must be greater than 0, [page:{}]", page));
         }
         if (itemsPerPage <= 0) {
-            throw new IllegalArgumentException(StringUtils.format("页容量必须大于0，[size:{}]", itemsPerPage));
+            throw new IllegalArgumentException(StringUtils.format("page size must be greater than 0, [size:{}]", itemsPerPage));
         }
         if (totalSize < 0) {
-            throw new IllegalArgumentException(StringUtils.format("总数两必须大于等于0，[size:{}]", totalSize));
+            throw new IllegalArgumentException(StringUtils.format("totalSize must be >= 0, [size:{}]", totalSize));
         }
         var p = new Page();
         p.page = page;

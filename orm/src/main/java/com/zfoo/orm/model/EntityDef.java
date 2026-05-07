@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class EntityDef {
 
-    // 线程安全指的是内部没有使用集合或者使用的集合全部支持并发操作
+    // Thread-safe: no collections used, or all collections support concurrent access
     private boolean threadSafe;
 
     private int cacheSize;

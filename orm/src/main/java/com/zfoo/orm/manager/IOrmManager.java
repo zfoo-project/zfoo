@@ -34,7 +34,7 @@ public interface IOrmManager {
 
     /**
      * EN:Get Mongo Client, through which you can get other databases or do some other complex operations
-     * CN:获取MongoClient，通过MongoClient可以获取到其它数据库或者做一些其它的复杂操作
+     * Get the MongoClient instance for accessing other databases or performing complex operations
      */
     MongoClient mongoClient();
 
@@ -43,12 +43,12 @@ public interface IOrmManager {
     Collection<IEntityCache<?, ?>> getAllEntityCaches();
 
     /**
-     * 基于对象的orm操作
+     * Object-oriented ORM operations
      */
     <PK extends Comparable<PK>, E extends IEntity<PK>> MongoCollection<E> getCollection(Class<E> entityClazz);
 
     /**
-     * 更加细粒度的操作
+     * Fine-grained operations
      */
     MongoCollection<Document> getCollection(String collection);
 

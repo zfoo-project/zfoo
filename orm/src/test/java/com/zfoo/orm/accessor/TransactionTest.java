@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * 必须要用复制集群才能使用事务
+ * Transactions require a replica set cluster
  *
  * @author godotg
  */

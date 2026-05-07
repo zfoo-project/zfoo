@@ -16,7 +16,7 @@ package com.zfoo.orm.query;
 import com.zfoo.orm.model.IEntity;
 
 /**
- * 对数据库进行（查找）的相关方法
+ * Methods for querying the database
  *
  * @author godotg
  */

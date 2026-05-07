@@ -30,12 +30,12 @@ public class IndexTextDef {
     public IndexTextDef(Field field, IndexText indexText) {
         AssertionUtils.notNull(field);
 
-        // 是否被private修饰
+        // Check if field is declared private
         if (!Modifier.isPrivate(field.getModifiers())) {
-            throw new IllegalArgumentException(StringUtils.format("[{}]没有被private修饰", field.getName()));
+            throw new IllegalArgumentException(StringUtils.format("[{}] is not declared private", field.getName()));
         }
 
-        // 唯一索引不能有set方法，为了避免客户端改变javabean中的属性
+        // Unique index fields must not have setters, to prevent clients from modifying them
         Class<?> clazz = field.getDeclaringClass();
         AssertionUtils.notNull(clazz);
         this.field = field;
