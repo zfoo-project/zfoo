@@ -30,9 +30,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * EN: The Task thread pool is generally used to process customer requests, do some CPU-intensive tasks, and try to avoid some blocking operations;
- * IO-intensive tasks can be executed in the Event thread pool
- * CN: Task线程池一般是用来处理客户的请求，做一些cpu密集型任务，尽量避免做一些阻塞操作；IO密集型任务可以放在Event线程池去做
+ * The Task thread pool is used to handle client requests and CPU-intensive tasks.
+ * Avoid performing blocking operations here; IO-intensive tasks should be delegated to the Event thread pool.
  *
  * @author godotg
  */
@@ -40,14 +39,13 @@ public final class TaskBus {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskBus.class);
 
-    // EN: The size of the thread pool can also be specified through the provider thread configuration
-    // CN: 线程池的大小，也可以通过provider thread配置指定，会通过EXECUTOR_MASK的与操作提高定位到Executor的性能
+    // The thread pool size can also be configured via the provider's thread setting.
+    // EXECUTOR_MASK is used with a bitwise AND to efficiently locate the target Executor.
     public static final int EXECUTOR_SIZE;
     private static final int EXECUTOR_MASK;
 
     /**
-     * EN: Use different thread pools to achieve isolation between thread pools without affecting each other
-     * CN: 使用不同的线程池，让线程池之间实现隔离，互不影响
+     * Multiple independent thread pools to ensure isolation; failures in one pool do not affect others.
      */
     private static final ExecutorService[] executors;
 
@@ -93,9 +91,8 @@ public final class TaskBus {
 
 
     /**
-     * EN: Use uid, sid, or hashcode to bind tasks to the same thread to improve the cache hit ratio of the CPU
-     * CN: 通过uid，sid，或者hashcode来把任务绑定到相同的线程中来提高cpu的缓存命中率
-     * <a href="https://zhuanlan.zhihu.com/p/439381000">系统性能调优之绑定cpu</a>
+     * Bind tasks to the same thread using uid, sid, or hashCode to improve CPU cache hit ratio.
+     * <a href="https://zhuanlan.zhihu.com/p/439381000">System performance tuning - binding CPU</a>
      */
     private static int calTaskExecutorIndex(int taskExecutorHash) {
         return taskExecutorHash & EXECUTOR_MASK;
@@ -129,7 +126,7 @@ public final class TaskBus {
         return executors[calTaskExecutorIndex(hash)];
     }
 
-    // 在task，event，scheduler线程执行的异步请求，请求成功过后依然在相同的线程执行回调任务
+    // Async requests executed in task/event/scheduler threads will continue to run their callbacks on the same thread
     public static Executor currentThreadExecutor() {
         var currentThreadId = Thread.currentThread().getId();
         var executor = ThreadUtils.executorByThreadId(currentThreadId);

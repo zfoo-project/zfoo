@@ -25,10 +25,10 @@ public class NioServerTest implements Runnable {
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
-    //多路复用器，一对多
+    // Multiplexer (Selector): one-to-many
     private Selector selector;
 
-    //1.获得一个ServerSocket通道，用于监听客户端的连接，它是所有客户端连接的父管道
+    // 1. Obtain a ServerSocketChannel for listening; it is the parent channel for all client connections
     private ServerSocketChannel serverChannel;
 
     private volatile boolean stop;
@@ -36,34 +36,34 @@ public class NioServerTest implements Runnable {
     public void init(int port) {
         try {
             serverChannel = ServerSocketChannel.open();
-            //2.绑定到port端口，设置通道为非阻塞
-            //serverChannel.socket().bind(new InetSocketAddress(port));
+            // 2. Bind to the port and set the channel to non-blocking mode
             serverChannel.socket().bind(new InetSocketAddress("127.0.0.1", port));
             serverChannel.configureBlocking(false);
-            //3.创建多路复用器
+            // 3. Create a Selector (multiplexer)
             this.selector = Selector.open();
-            //4.多路复用器和通道绑定，并注册绑定事件
+            // 4. Register the channel with the Selector for OP_ACCEPT events
             serverChannel.register(selector, SelectionKey.OP_ACCEPT);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("非正常退出");
+            System.out.println("Abnormal exit");
             System.exit(1);
         }
     }
 
     @Override
     public void run() {
-        System.out.println("服务器启动成功！");
-        //5.采用轮询的方式监听selector上是否有需要处理的事件(Key)
+        System.out.println("Server started successfully!");
+        // 5. Poll the Selector for ready keys
         while (!stop) {
             try {
-                //事件到达selector.open()会返回；否则一直阻塞
+                // Block until at least one event arrives; selector.select() returns when events are ready
                 selector.select();
-                //获得selector中选中的项的迭代器，选中的项为注册的事件
+                // Iterate over the selected keys (ready events)
                 Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
                 while (iterator.hasNext()) {
                     SelectionKey key = iterator.next();
-                    iterator.remove();//删除已选的key，防止重复处理
+                    // Remove processed key to prevent duplicate handling
+                    iterator.remove();
                     try {
                         handleInput(key);
                     } catch (Exception e) {
@@ -79,7 +79,8 @@ public class NioServerTest implements Runnable {
                 e.printStackTrace();
             }
         }
-        //多路复用器关闭后，所有注册在上面的Channel和Pipe等资源都会被自动去注册并关闭，所以不需要重复释放资源
+        // After the Selector is closed, all registered Channels and Pipes are automatically
+        // de-registered and closed, so no need to release them again
         if (selector != null) {
             try {
                 selector.close();
@@ -91,15 +92,15 @@ public class NioServerTest implements Runnable {
 
     public void handleInput(SelectionKey key) throws IOException {
         if (key.isValid()) {
-            if (key.isAcceptable()) { //客户请求连接事件
-                // 6.多路复用器监听到有新的客户端接入，处理新的接入请求，完成TCP三次握手，建立物理连接
+            if (key.isAcceptable()) { // Client connection request event
+                // 6. Multiplexer detected new client; complete TCP three-way handshake and establish connection
                 ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
                 SocketChannel channel = serverChannel.accept();
-                //7.设置服务端和客户端的连接为非阻塞模式，获得和客户端连接的通道
+                // 7. Set the client channel to non-blocking mode
                 channel.configureBlocking(false);
-                //给客户端发送消息
-                channel.write(ByteBuffer.wrap(new String("Hello client!This is server!").getBytes()));
-                //8.将客户端链路注册到多路复用器上，和客户端连接成功后，为了接受到客户端的消息，需要给通道设置读权限
+                // Send a greeting to the client
+                channel.write(ByteBuffer.wrap(new String("Hello client! This is server!").getBytes()));
+                // 8. Register client channel with the Selector for OP_READ to receive future messages
                 channel.register(selector, SelectionKey.OP_READ);
             }
 
@@ -108,27 +109,27 @@ public class NioServerTest implements Runnable {
             }
 
             if (key.isReadable()) {
-                //服务器可读取消息：得到事件发生的Socket通道
+                // Server can read data: retrieve the triggered SocketChannel
                 SocketChannel channel = (SocketChannel) key.channel();
-                //创建读取的缓冲区
+                // Allocate the read buffer
                 ByteBuffer readBuffer = ByteBuffer.allocate(1024);
                 int readBytes = channel.read(readBuffer);
                 if (readBytes > 0) {
-                    //接受
-                    readBuffer.flip();//limit=position, position=0
+                    readBuffer.flip(); // limit=position, position=0
                     byte[] data = new byte[readBuffer.remaining()];
                     readBuffer.get(data);
                     String message = new String(data).trim();
-                    System.out.println("服务器收到消息:" + message);
+                    System.out.println("Server received message: " + message);
 
-                    //发送
-                    ByteBuffer writeBuffer = ByteBuffer.wrap(String.format("北京时间：" + new Date().toString()).getBytes());//将消息返回给客户端
+                    // Reply with current time
+                    ByteBuffer writeBuffer = ByteBuffer.wrap(
+                            String.format("Beijing time: " + new Date().toString()).getBytes());
                     channel.write(writeBuffer);
-                } else if (readBytes < 0) {//对链路关闭
+                } else if (readBytes < 0) { // Link closed
                     key.cancel();
                     channel.close();
                 } else {
-                    //读到0字节忽略
+                    // 0 bytes read, ignore
                 }
             }
 

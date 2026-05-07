@@ -12,8 +12,6 @@
 
 package com.zfoo.net.config.model;
 
-import com.zfoo.protocol.registration.ProtocolModule;
-
 import java.util.Objects;
 
 /**
@@ -21,10 +19,10 @@ import java.util.Objects;
  */
 public class ConsumerModule {
 
-    // 负载均衡方式
+            // Load balancing strategy
     private String loadBalancer;
 
-    // 消费哪个provider
+    // The provider name this consumer subscribes to
     private String consumer;
 
     public ConsumerModule() {

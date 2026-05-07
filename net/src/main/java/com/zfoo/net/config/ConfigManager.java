@@ -33,12 +33,12 @@ public class ConfigManager implements IConfigManager {
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
 
     /**
-     * 本地配置
+     * Local network configuration for this node.
      */
     private NetConfig localConfig;
 
     /**
-     * 注册中心
+     * Service registry used for provider registration and discovery.
      */
     private IRegistry registry;
 
@@ -52,16 +52,17 @@ public class ConfigManager implements IConfigManager {
     }
 
     /**
-     * 在调用这个方法之前：localConfig也就是NetConfig虽然已经被注册到Spring容器中，但是模块id等信息依然是没有的。这需要从protocol.xml中读取覆盖才行
+     * Before this method is called, localConfig (NetConfig) has been registered in the Spring container
+     * but module IDs and versions are not yet populated — they must be read from protocol.xml.
      */
     @Override
     public void initRegistry() {
-        // 通过protocol，写入provider的module的id和version
+        // Populate provider module IDs and versions from the protocol configuration
         var providerConfig = localConfig.getProvider();
         if (providerConfig != null && CollectionUtils.isNotEmpty(providerConfig.getProviders())) {
-            // 服务提供者名字Set列表
+            // Set of declared provider names used for duplicate detection
             var providerSet = new HashSet<String>();
-            // 检查并且替换配置文件中的ProtocolModule
+            // Validate and cross-reference each ProtocolModule entry in the config
             for (var provider : providerConfig.getProviders()) {
                 var protocolModule = provider.getProtocolModule();
                 var providerName = provider.getProvider();
@@ -72,17 +73,17 @@ public class ConfigManager implements IConfigManager {
 
         var consumerConfig = localConfig.getConsumer();
         if (Objects.nonNull(consumerConfig) && CollectionUtils.isNotEmpty(consumerConfig.getConsumers())) {
-            // 服务消费者名字Set列表
+            // Set of declared consumer names used for duplicate detection
             var consumerSet = new HashSet<String>();
             for (var consumerModule : consumerConfig.getConsumers()) {
-                // 提供的接口实现 提供者名
+                // The provider name that this consumer subscribes to
                 var consumer = consumerModule.getConsumer();
                 AssertionUtils.isTrue(consumerSet.add(consumer), "consumer:[{}] has duplicate consumer module", consumer);
             }
         }
 
-        // 走到这之后，NetConfig通过app.xml(读取有哪些消费者)+protocol.xml(模块号信息)完成了初始化
-        // 接下来就是通过注册中心，把生产者和消费者关联起来
+        // At this point, NetConfig is fully initialised via app.xml (consumers) + protocol.xml (module IDs)
+        // The registry now links providers and consumers together
         try {
             var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
             if (registryConfig != null) {

@@ -29,8 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SignalAttachment {
 
     /**
-     * EN:Negative signalId are allowed
-     * CN:允许负数的signalId
+     * Negative signalId values are allowed.
      */
     public static final AtomicInteger ATOMIC_ID = new AtomicInteger(0);
     /**
@@ -42,14 +41,13 @@ public class SignalAttachment {
     public static final byte SIGNAL_OUTSIDE_CLIENT = 12;
 
     /**
-     * EN:Unique identification of a packet, unique representation of an attachment, hashcode() and equals() equals signalId value
-     * CN:唯一标识一个packet， 唯一表示一个Attachment，hashcode() and equals() 等于signalId
+     * Uniquely identifies a packet and its attachment.
+     * hashCode() and equals() are based on signalId.
      */
     private int signalId = ATOMIC_ID.incrementAndGet();
 
     /**
-     * EN:The parameter used to calculate the hash in TaskBus to determine which thread the task is executed on
-     * CN:用来在TaskBus中计算hash的参数，用来决定任务在哪一条线程执行
+     * The hash parameter used by TaskBus to determine which thread the task runs on.
      */
     private int taskExecutorHash = -1;
 
@@ -62,8 +60,7 @@ public class SignalAttachment {
     private long timestamp = TimeUtils.now();
 
     /**
-     * EN:The method of callback when the client receives a reply from the server
-     * CN:客户端收到服务器回复的时候回调的方法
+     * The callback invoked when the client receives a reply from the server.
      */
     @JsonIgnore
     private transient CompletableFuture<Object> responseFuture = new CompletableFuture<>();

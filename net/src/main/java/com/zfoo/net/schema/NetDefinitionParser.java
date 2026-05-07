@@ -42,39 +42,39 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         String name;
         BeanDefinitionBuilder builder;
 
-        // 解析NetConfig的配置
+        // Parse the NetConfig configuration
         parseNetConfig(element, parserContext);
 
-        // 注册NetContext
+        // Register NetContext
         clazz = NetContext.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注册ConfigManager
+        // Register ConfigManager and wire in the NetConfig bean as its localConfig property
         clazz = ConfigManager.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
-        // 把Spring容器中的NetConfig引用赋值给ConfigManager中的localConfig属性
         builder.addPropertyReference("localConfig", NetConfig.class.getCanonicalName());
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 
-        // 注册PacketService
+        // Register PacketService
         clazz = PacketService.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 
-        // 注册Router
+        // Register Router
         clazz = Router.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 
-        // 注册Consumer
+        // Register Consumer
         clazz = Consumer.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
 
-        // 注册SessionManager
-        // 里面的serverSessionMap 和 clientSessionMap 是根据自己是客户端还是服务器保存连接自己 和 自己连接 的网络节点信息
+        // Register SessionManager
+        // serverSessionMap: sessions of clients connected to this node (server role)
+        // clientSessionMap: sessions this node established to remote providers (client role)
         clazz = SessionManager.class;
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
@@ -84,63 +84,63 @@ public class NetDefinitionParser implements BeanDefinitionParser {
 
 
     /**
-     * 解析config标签，并且注册NetConfig类到Spring容器
+     * Parse the &lt;config&gt; element and register NetConfig as a Spring bean.
      *
-     * @param element
-     * @param parserContext
+     * @param element       the XML element to parse
+     * @param parserContext the Spring parser context
      */
     private void parseNetConfig(Element element, ParserContext parserContext) {
-        // 要注册到Spring的类，下面都是进行解析自定义标签，把值赋值给NetConfig的属性
+        // The class to register; parse each custom XML attribute and map it to a NetConfig field
         var clazz = NetConfig.class;
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
 
-        // -----config属性解析-----
-        // 解析id
+        // ----- config attribute parsing -----
+        // Parse the node/application id
         resolvePlaceholder("id", "id", builder, element, parserContext);
 
-        // 协议protocol.xml文件的位置。 注意：直接写protocol.xml 则是从resources目录下读
+        // Location of protocol.xml; writing just "protocol.xml" reads from the resources directory
         resolvePlaceholder("protocol-location", "protocolLocation", builder, element, parserContext);
 
-        // 协议文件是否生成在同一个协议文件中
+        // Whether all protocols are merged into a single file
         resolvePlaceholder("merge-protocol", "mergeProtocol", builder, element, parserContext);
-        // 文件是否折叠
+        // Whether the protocol file is folded/collapsed
         resolvePlaceholder("fold-protocol", "foldProtocol", builder, element, parserContext);
-        // 生成各种语言的协议列表
+        // List of languages for which protocol code should be generated
         resolvePlaceholder("code-languages", "codeLanguages", builder, element, parserContext);
 
         resolvePlaceholder("protocol-path", "protocolPath", builder, element, parserContext);
 
         resolvePlaceholder("protocol-param", "protocolParam", builder, element, parserContext);
 
-        // -----注册中心解析-----
-        // 上面解析的都是config标签的属性，这里开始解析registry元素
+        // ----- registry element parsing (all above were <config> attributes) -----
         var registryElement = DomUtils.getFirstChildElementByTagName(element, "registry");
         if (registryElement != null) {
             parseRegistryConfig(registryElement, parserContext);
             builder.addPropertyReference("registry", RegistryConfig.class.getCanonicalName());
         }
 
-        // ----- monitor解析-----
+        // ----- monitor element parsing -----
         var monitorElement = DomUtils.getFirstChildElementByTagName(element, "monitor");
         if (monitorElement != null) {
             parseMonitorConfig(monitorElement, parserContext);
             builder.addPropertyReference("monitor", MonitorConfig.class.getCanonicalName());
         }
 
-        // -----服务器生产者解析-----
+        // ----- provider element parsing -----
         var providerElement = DomUtils.getFirstChildElementByTagName(element, "providers");
         if (providerElement != null) {
             parseProviderConfig(providerElement, parserContext);
             builder.addPropertyReference("provider", ProviderConfig.class.getCanonicalName());
         }
 
+        // ----- consumer element parsing -----
         var consumerElement = DomUtils.getFirstChildElementByTagName(element, "consumers");
         if (consumerElement != null) {
             parseConsumerConfig(consumerElement, parserContext);
             builder.addPropertyReference("consumer", ConsumerConfig.class.getCanonicalName());
         }
 
-        // 注册NetConfig到Spring容器中
+        // Register NetConfig as a Spring bean
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
 
@@ -180,7 +180,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         var providerModules = parseProviderModules("providers", element, parserContext);
         builder.addPropertyValue("providers", providerModules);
 
-        // 注册Consumer到Spring容器中
+        // Register ProviderConfig as a Spring bean
         parserContext.getRegistry().registerBeanDefinition(clazz.getCanonicalName(), builder.getBeanDefinition());
     }
 

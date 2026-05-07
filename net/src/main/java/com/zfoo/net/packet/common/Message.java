@@ -18,8 +18,7 @@ import com.zfoo.protocol.util.StringUtils;
 
 /**
  *
- * EN: Generic returns can be used both remotely and nested in other protocols
- * CN: 通用的返回，既可以用在远程调用，又可以嵌套在其它协议里
+ * Generic response that can be used both in remote calls and nested inside other protocol packets.
  *
  * @author godotg
  */
@@ -27,7 +26,7 @@ import com.zfoo.protocol.util.StringUtils;
 public class Message {
 
     /**
-     * 1是成功，其它的均视为失败的请求
+     * 1 means success; any other value is treated as a failed request.
      */
     private int code;
 

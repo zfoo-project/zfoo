@@ -48,8 +48,8 @@ public class WebsocketClientTest {
         var client = new WebsocketClient(HostAndPort.valueOf("127.0.0.1:9000"), webSocketClientProtocolConfig);
         var session = client.start();
 
-        // Websocket在建立tcp连接过后不能立刻通讯，还需要使用Http协议去握手升级成Websocket协议，这里等待一秒让websocket内部协议初始化完毕
-        // WebSocket握手是在客户端和服务器之间建立WebSocket连接的过程。它是通过HTTP/HTTPS协议完成的，后续将升级为WebSocket协议。
+        // WebSocket requires an HTTP upgrade handshake before communication can start (even over TCP).
+        // This sleep allows the internal WebSocket protocol initialization to complete.
         ThreadUtils.sleep(1000);
 
         var request = new WebsocketHelloRequest();

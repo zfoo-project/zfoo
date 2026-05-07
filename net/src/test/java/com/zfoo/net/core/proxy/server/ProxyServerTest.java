@@ -30,7 +30,7 @@ public class ProxyServerTest {
     /**
      * ReverseProxyServerTest reverse proxy TargetServerTest
      *
-     * ProxyServer 代理了 TargetServer
+     * ProxyServer acts as a proxy forwarding to TargetServer
      */
     @Test
     public void startServer() {

@@ -31,7 +31,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 这是客户端连接网关，网关转发到服务提供者的测试用例
+ * Test case: client connects to the gateway, which then forwards requests to the service provider
  *
  * @author godotg
  */
@@ -41,13 +41,10 @@ public class GatewayTest {
     private static final Logger logger = LoggerFactory.getLogger(GatewayTest.class);
 
     /**
-     * 启动zookeeper，依次运行下面的测试方法启动：
-     * 1.服务提供者
-     * 2.网关
-     * 3.然后运行clientTest
+     * Start ZooKeeper first, then run the test methods below in order:
+     * 3. Run clientTest
      * <p>
-     * 消息会通过网关转发到服务提供者
-     */
+     * Messages are forwarded through the gateway to the service provider.
     @Test
     public void startProvider0() {
         var context = new ClassPathXmlApplicationContext("provider/provider_config.xml");
@@ -70,28 +67,28 @@ public class GatewayTest {
     }
 
     /**
-     * 这是网关
+     * This is the gateway
      */
     @Test
     public void startGateway() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_config.xml");
         SessionUtilsTest.printSessionInfo();
 
-        // 注意：这里创建的是GatewayServer里面是GatewayRouteHandler(而不是BaseRouteHandler),里面会通过ConsumerSession把消息转发到Provider
+        // Note: GatewayServer uses GatewayRouteHandler (not BaseRouteHandler); it forwards messages to the Provider via a ConsumerSession
         var gatewayServer = new GatewayServer(HostAndPort.valueOf("127.0.0.1:9000"), null);
         gatewayServer.start();
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
     /**
-     * 这里是客户端，客户端先请求数据到到网关(毕竟自己连接的就是网关)
+     * Client side: client first requests data from the gateway.
      */
     @Test
     public void clientSyncTest() {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_client_config.xml");
         SessionUtilsTest.printSessionInfo();
 
-        // 这里的地址是网关的地址
+        // The address here is the gateway address
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
         var session = client.start();
 
@@ -106,10 +103,9 @@ public class GatewayTest {
             var thread = new Thread(() -> {
                 for (int j = 0; j < 10000; j++) {
                     try {
-                        // 注意：这里的第2个请求参数是 xxxRequest，不是xxxAsk。  因为这里是网关要将数据转发给Provider的，因此当然不能是xxxAsk这种请求。
-                        // 第3个参数argument是null，这样子随机一个服务提供者进行消息处理
+                        // Note: 2nd parameter must be xxxRequest (not xxxAsk); 3rd argument null => random provider.
                         var response = NetContext.getRouter().syncAsk(session, request, GatewayToProviderResponse.class, null).packet();
-                        logger.info("客户端请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));
+                        logger.info("client request[{}] received response[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -126,7 +122,7 @@ public class GatewayTest {
         var context = new ClassPathXmlApplicationContext("gateway/gateway_client_config.xml");
         SessionUtilsTest.printSessionInfo();
 
-        // 这里的地址是网关的地址
+        // The address here is the gateway address
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
         var session = client.start();
 
@@ -141,11 +137,10 @@ public class GatewayTest {
             var thread = new Thread(() -> {
                 for (int j = 0; j < 1000; j++) {
                     try {
-                        // 注意：这里的第2个请求参数是 xxxRequest，不是xxxAsk。  因为这里是网关要将数据转发给Provider的，因此当然不能是xxxAsk这种请求。
-                        // 第3个参数argument是null，这样子随机一个服务提供者进行消息处理
+                        // Note: 2nd parameter must be xxxRequest (not xxxAsk); 3rd argument null => random provider.
                         NetContext.getRouter().asyncAsk(session, request, GatewayToProviderResponse.class, null)
                                 .whenComplete(response -> {
-                                    logger.info("客户端请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));
+                                    logger.info("client request[{}] received response[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));
                                 });
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -17,7 +17,6 @@ import com.zfoo.event.manager.EventBus;
 import com.zfoo.net.NetContext;
 import com.zfoo.net.core.event.ClientSessionActiveEvent;
 import com.zfoo.net.core.event.ClientSessionInactiveEvent;
-import com.zfoo.net.core.event.ServerSessionActiveEvent;
 import com.zfoo.net.util.SessionUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -54,7 +53,7 @@ public class ClientRouteHandler extends BaseRouteHandler {
         NetContext.getSessionManager().removeClientSession(session);
         EventBus.post(ClientSessionInactiveEvent.valueOf(session));
 
-        // 如果是消费者inactive，还需要触发客户端消费者检查事件，以便重新连接
+                // If a consumer session becomes inactive, trigger a consumer-check event to attempt reconnection
         if (session.getConsumerRegister() != null) {
             NetContext.getConfigManager().getRegistry().checkConsumer();
         }

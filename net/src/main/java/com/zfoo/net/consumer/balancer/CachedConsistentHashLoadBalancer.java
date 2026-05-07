@@ -9,7 +9,7 @@ import com.zfoo.scheduler.util.TimeUtils;
 import java.util.List;
 
 /**
- * 记忆化一致性hash
+ * Memoized consistent hashing — caches the hash ring result for repeated identical inputs.
  *
  * @author qmr
  */
@@ -20,7 +20,7 @@ public class CachedConsistentHashLoadBalancer extends AbstractConsumerLoadBalanc
     private static final int MAX_CACHE_SIZE = 10_0000;
 
     /**
-     * cache the sid after load balancer，key:[argument + protocolModuleId] -> value:[sid]
+     * cache the sid after load balancer, key:[argument + protocolModuleId] -> value:[sid]
      */
     private LazyCache<Long, Long> cache = new LazyCache<>(MAX_CACHE_SIZE, EXPIRED_ACCESS_DURATION, 5 * TimeUtils.MILLIS_PER_MINUTE, null);
 

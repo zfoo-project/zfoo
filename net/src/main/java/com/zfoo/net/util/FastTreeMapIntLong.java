@@ -31,7 +31,7 @@ public class FastTreeMapIntLong {
         keys = new int[size];
         values = new long[size];
 
-        // TreeMap遍历是有序的，直接放入数组中就能直接得到从小到大的有序数组
+        // TreeMap iteration is ordered, placing entries directly into an array yields a sorted ascending array
         var index = 0;
         for (var entry : treeMap.entrySet()) {
             var key = entry.getKey();
@@ -60,10 +60,10 @@ public class FastTreeMapIntLong {
     }
 
     /**
-     * 在一个从小到大的升序数组中，使用二分查找算法搜索给定的key
+     * Binary search for the given key in an ascending sorted array
      *
-     * @param key 需要搜索的值
-     * @return 返回搜索到值的数组下标索引，如果没有查找到返回-1
+     * @param key the value to search for
+     * @return the array index of the found value, or -1 if not found
      */
     public int indexOf(int key) {
         var low = 0;
@@ -93,16 +93,16 @@ public class FastTreeMapIntLong {
         }
 
         var size = keys.length;
-        // 目标数小于或等于数组的第一个元素
+        // Target is less than or equal to the first element
         if (key <= keys[0]) {
             return 0;
         }
-        // 目标数大于数组的最后元素
+        // Target is greater than the last element
         if (key > keys[size - 1]) {
             return size - 1;
         }
 
-        // 二分查找目标数
+        // Binary search for the target
         var low = 0;
         var high = size - 1;
         var nearestIndex = -1;
@@ -120,7 +120,7 @@ public class FastTreeMapIntLong {
             }
         }
 
-        // 如果找到了目标数，那么它的邻近最大值就是目标数本身
+        // If the exact key is found, it is its own nearest ceiling key
         if (nearestIndex == -1) {
             return 0;
         }

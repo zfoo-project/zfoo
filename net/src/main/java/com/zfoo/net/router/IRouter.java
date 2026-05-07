@@ -25,16 +25,14 @@ import org.springframework.lang.Nullable;
 public interface IRouter {
 
     /**
-     * EN: send messages entry
-     * CN: 发送消息的入口
+     * Entry point for sending messages.
      */
     void send(Session session, Object packet);
 
     void send(Session session, Object packet, @Nullable Object attachment);
 
     /**
-     * EN: receive messages entry
-     * CN: 接收消息的入口
+     * Entry point for receiving messages.
      */
     void receive(Session session, Object packet, @Nullable Object attachment);
 
@@ -43,16 +41,19 @@ public interface IRouter {
     void registerPacketReceiverDefinition(Object bean);
 
     /**
-     * 服务器对每个syncAsk和asyncAsk请求消息也只能回复一条消息，不能在处理一条不同或者异步消息的时候回复多条消息。
+     * The server can only reply with one message per syncAsk/asyncAsk request.
+     * Multiple replies to a single async message are not allowed.
      *
-     * @param session     一个网络通信的会话
-     * @param packet      一个网络通信包，需要发送的消息体
-     * @param answerClass 等待返回包的class类。
-     *                    如果为null，则不会检查这个class类的协议号是否和返回消息体的协议号相等；
-     *                    如果不为null，会检查返回包的协议号。为null的情况主要用在网关。
-     * @param argument    参数，主要用来计算一致性hashId，服务器收到请求过后会使用这个参数来计算再哪个线程执行任务；
-     * @return 服务器返回的消息Response
-     * @throws Exception 如果超时或者其它异常
+     * @param session     the network session
+     * @param packet      the request packet to send
+     * @param answerClass the expected response class.
+     *                    If null, the protocol ID of the response is not verified;
+     *                    if not null, the response protocol ID will be checked.
+     *                    Null is mainly used in gateway scenarios.
+     * @param argument    parameter for computing the consistent-hash ID; the server uses this to determine
+     *                    which thread the task runs on after receiving the request.
+     * @return the server's response message
+     * @throws Exception if the request times out or another exception occurs
      */
     <T> SyncAnswer<T> syncAsk(Session session, Object packet, @Nullable Class<T> answerClass, @Nullable Object argument) throws Exception;
 

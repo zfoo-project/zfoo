@@ -20,28 +20,28 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 /**
- * 带虚拟节点的一致性Hash算法，参考：http://www.zsythink.net/archives/1182
+ * Consistent Hash algorithm with virtual nodes, reference: http://www.zsythink.net/archives/1182
  *
  * @author godotg
  */
 
 public class ConsistentHash<K, V> {
 
-    // 真实结点列表,考虑到服务器上线、下线的场景，即添加、删除的场景会比较频繁，这里使用LinkedList会更好
+    // List of real nodes. Since nodes may be added or removed frequently (server up/down), LinkedList would be more efficient here.
     private List<Pair<K, V>> realNodes = new ArrayList<>();
 
-    // 虚拟节点，key表示虚拟节点的hash值，value表示虚拟节点的名称
+    // Virtual nodes: key is the hash of the virtual node, value is the corresponding real node
     private TreeMap<Integer, Pair<K, V>> virtualNodeTreeMap = new TreeMap<>();
 
-    // 虚拟节点的数目，数量越大约均匀
+    // Number of virtual nodes per real node; the more virtual nodes, the more uniform the distribution
     private int virtualNodes = 0;
 
     public ConsistentHash(List<Pair<K, V>> realNodes, int virtualNodes) {
-        // 先把原始的服务器添加到真实结点列表中
+        // First add all real nodes to the real node list
         this.realNodes.addAll(realNodes);
         this.virtualNodes = virtualNodes;
 
-        // 再添加虚拟节点，遍历LinkedList使用foreach循环效率会比较高
+        // Then add virtual nodes; using foreach loop for traversal is more efficient with LinkedList
         for (var realNode : realNodes) {
             for (var i = 0; i < this.virtualNodes; i++) {
                 var virtualNode = realNode.getKey().toString() + "&&VN" + i;
@@ -52,14 +52,14 @@ public class ConsistentHash<K, V> {
     }
 
 
-    // 得到应当路由到的结点
+    // Get the real node that the given key should be routed to
     public Pair<K, V> getRealNode(Object key) {
-        // 得到该key的hash值
+        // Compute the hash value of the key
         var hash = HashUtils.fnvHash(key);
-        // 第一个Key就是顺时针过去离node最近的那个结点
+        // The first key in the ceiling entry is the closest node clockwise
         var entry = virtualNodeTreeMap.ceilingEntry(hash);
         if (Objects.isNull(entry)) {
-            // 如果没有比该key的hash值大的，则从第一个node开始
+            // If no hash value is larger than the key's hash, wrap around to the first node
             return virtualNodeTreeMap.firstEntry().getValue();
         }
         return entry.getValue();

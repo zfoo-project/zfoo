@@ -54,7 +54,7 @@ public class FileClientTest {
         protected void initChannel(SocketChannel channel) throws Exception {
             channel.pipeline().addLast(new StringEncoder(CharsetUtil.UTF_8));
             channel.pipeline().addLast(new LineBasedFrameDecoder(1024));
-            channel.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8));//三者组合起来就是文本换行编码解码器
+            channel.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8)); // Together these three handlers form a text line codec
             channel.pipeline().addLast(new ClientHandler("rainbow.txt"));
         }
     }

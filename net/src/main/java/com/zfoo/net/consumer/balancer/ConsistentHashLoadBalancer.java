@@ -31,9 +31,8 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
- * 一致性hash负载均衡器，同一个session总是发到同一提供者
- * <p>
- * 通过argument计算一致性hash
+ * Consistent-hash load balancer: the same argument always routes to the same service provider.
+ * The consistent hash is computed from the argument's toString() value.
  *
  * @author godotg
  */
@@ -43,7 +42,7 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
 
     public static final ConsistentHashLoadBalancer INSTANCE = new ConsistentHashLoadBalancer();
 
-    // 数组下标为ProtocolModule的id
+    // Array indexed by ProtocolModule ID
     private static final AtomicReferenceArray<ConsistentCache> consistentHashMap = new AtomicReferenceArray<>(ProtocolManager.MAX_MODULE_NUM);
     private static final int VIRTUAL_NODE_NUMS = 200;
 
@@ -65,11 +64,11 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
     }
 
     /**
-     * 通过argument的toString计算一致性hash，所以传入的argument一般要能代表唯一性，比如用户的id
+     * Compute the consistent hash from argument.toString(), so the argument should be unique (e.g., a user ID).
      *
-     * @param packet   请求包
-     * @param argument 参数，一般要能代表唯一性，比如用户的id
-     * @return 调用的session
+     * @param packet   the request packet
+     * @param argument a unique parameter such as a user ID
+     * @return the selected provider session
      */
     @Override
     public Session selectProvider(List<Session> providers, Object packet, Object argument) {
@@ -84,7 +83,7 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
             consistentCache = updateModuleToConsistentHash(providers, module);
         }
         var providerSids = consistentCache.providerSids;
-        // providers和consistentHashMap的服务提供者不一致同样进行更新操作
+        // Update if the provider list has changed since the cache was built
         if (providerSids.size() != providers.size() || providers.stream().anyMatch(it -> !providerSids.contains(it.getSid()))) {
             consistentCache = updateModuleToConsistentHash(providers, module);
         }
@@ -94,7 +93,7 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
             throw new RunException("no service provides the [module:{}]", module);
         }
         var sid = treeMap.getByIndex(nearestIndex);
-        // 因为每次都会对比sid，一定会从providers获得session
+        // Since we compare sid every time, the session is guaranteed to be found in providers
         return providers.stream().filter(it -> it.getSid() == sid).findFirst().get();
     }
 
@@ -113,10 +112,10 @@ public class ConsistentHashLoadBalancer extends AbstractConsumerLoadBalancer {
             virtualTreeMap.put(entry.getKey(), entry.getValue().getValue());
         }
 
-        // 缓存服务提供者的sid
+        // Cache the provider sids
         var sidSet = new HashSetLong(16);
         providers.forEach(it -> sidSet.add(it.getSid()));
-        // 使用更高性能的tree map
+        // Use a higher-performance tree map
         var fastTreeMap = new FastTreeMapIntLong(virtualTreeMap);
 
         var consistentCache = new ConsistentCache(sidSet, fastTreeMap);

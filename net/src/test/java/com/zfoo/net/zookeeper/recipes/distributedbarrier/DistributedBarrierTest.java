@@ -9,7 +9,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * 使用Curator实现分布式Barrier
+ * Distributed Barrier implementation using Apache Curator
  *
  * @author godotg
  * @version 1.0
@@ -35,10 +35,10 @@ public class DistributedBarrierTest {
                                 .build();
                         client.start();
                         barrier = new DistributedBarrier(client, barrier_path);
-                        System.out.println(Thread.currentThread().getName() + "号barrier设置");
+                        System.out.println(Thread.currentThread().getName() + " barrier set");
                         barrier.setBarrier();
                         barrier.waitOnBarrier();
-                        System.err.println("启动...");
+                        System.err.println("Starting...");
 
                     } catch (Exception e) {
                         throw new RuntimeException(e);

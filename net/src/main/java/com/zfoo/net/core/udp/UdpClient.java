@@ -13,7 +13,6 @@
 
 package com.zfoo.net.core.udp;
 
-import com.zfoo.net.NetContext;
 import com.zfoo.net.core.AbstractClient;
 import com.zfoo.net.core.HostAndPort;
 import com.zfoo.net.handler.BaseRouteHandler;
@@ -44,7 +43,7 @@ public class UdpClient extends AbstractClient<Channel> {
                 .option(ChannelOption.SO_BROADCAST, true)
                 .handler(this);
 
-        // bind(0)随机选择一个端口
+                // bind(0) lets the OS pick a random available port
         var channelFuture = bootstrap.bind(0);
         channelFuture.syncUninterruptibly();
 

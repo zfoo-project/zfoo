@@ -40,21 +40,21 @@ public class TcpClientTest {
 
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
 
-        // 得到连接到服务器的session
+        // Obtain the session connected to the server
         var session = client.start();
 
         for (int i = 0; i < 1000; i++) {
             var ask = new AsyncMessAsk();
             ask.setMessage("Hello, this is async client!");
 
-            // Router只是一个接口，它的赋值也是在容器初始化好之后从Spring容器获取到的Router对象
-            // 要发送网络数据，要通过方法asyncAsk,第一个参数就是要发送消息的session
-            // 注意：第3个argument参数是当收到消息后，是要要到哪个线程处理,这是CompletableFuture保证的
-            // 其实这个依然是通过session，然后调用send发送过去的消息
-            // 最终依然是通过BaseRouteHandler得到响应，只不过attachment不为空，会触发CompletableFuture的completable方法，从而得到回调结果
+            // Router is just an interface; the actual implementation is retrieved from the Spring container after initialization
+            // To send network data, call asyncAsk; the first argument is the target session
+            // The 3rd argument specifies which thread handles the response (via CompletableFuture).
+            // Internally this still goes through the session and calls send()
+            // Response is still via BaseRouteHandler; non-null attachment triggers the CompletableFuture callback.
             NetContext.getRouter().asyncAsk(session, ask, AsyncMessAnswer.class, null)
                     .whenComplete(answer -> {
-                                logger.info("异步请求收到结果[{}]", JsonUtils.object2String(answer));
+                                logger.info("async request received result[{}]", JsonUtils.object2String(answer));
                             }
                     );
 

@@ -30,7 +30,7 @@ import java.util.TreeMap;
 @Ignore
 public class ConsistentHashTest {
 
-    //待添加入Hash环的服务器列表
+    // List of servers to be added to the hash ring
     private static final List<Pair<String, String>> servers = List.of(new Pair<>("192.168.0.0:111", "192.168.0.0:111")
             , new Pair<>("192.168.0.1:111", "192.168.0.1:111"), new Pair<>("192.168.0.2:111", "192.168.0.2:111"));
 

@@ -11,7 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * UDP通信
+ * UDP communication test
  *
  * @author godotg
  * @version 1.0
@@ -28,20 +28,20 @@ public class UDPServerTest {
     }
 
     public void init() {
-        //配置服务端nio线程组
-        EventLoopGroup group = new NioEventLoopGroup();//服务端接受客户端连接
+        // Configure single-thread NIO event loop
+        EventLoopGroup group = new NioEventLoopGroup(); // Single-thread NIO event loop
         try {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(group).channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true).handler(new UDPServerHandler());
-            //绑定端口，同步等待成功
+            // Bind port and wait synchronously until the bind succeeds
             ChannelFuture future = bootstrap.bind(9999).sync();
-            //等待服务端监听端口关闭
+            // Wait until the server socket is closed
             future.channel().closeFuture().await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            //优雅的退出，释放线程池资源
+            // Graceful shutdown: release thread pool resources
             group.shutdownGracefully();
         }
     }

@@ -31,21 +31,19 @@ public class UDPClientTest {
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
-
-
     public void init() {
-        //配置服务端nio线程组
-        EventLoopGroup group = new NioEventLoopGroup();//服务端接受客户端连接
+        // Configure single-thread NIO event loop
+        EventLoopGroup group = new NioEventLoopGroup(); // Single-thread NIO event loop
         try {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(group).channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true).handler(new UDPClientHandler());
-            //绑定端口，同步等待成功
+            // Bind to a random local port
             ChannelFuture future = bootstrap.bind(0).sync();
-            //等待服务端监听端口关闭
+            // Get the channel and send data
             Channel channel = future.channel();
 
-            //向内网的所有机器广播UDP消息
+            // Broadcast a UDP message to all machines on the local network
             channel.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("client"
                     , CharsetUtil.UTF_8), new InetSocketAddress("127.0.0.1", 9999))).sync();
 
@@ -53,7 +51,7 @@ public class UDPClientTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            //优雅的退出，释放线程池资源
+            // Graceful shutdown: release thread pool resources
             group.shutdownGracefully();
         }
     }

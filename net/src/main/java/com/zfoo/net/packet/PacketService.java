@@ -13,14 +13,12 @@
 package com.zfoo.net.packet;
 
 import com.zfoo.net.NetContext;
-import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
-import com.zfoo.protocol.registration.IProtocolRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.DomUtils;
 import com.zfoo.protocol.util.NumberUtils;
@@ -36,7 +34,6 @@ import org.springframework.util.ResourceUtils;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Predicate;
 
 /**
  * @author godotg
@@ -46,7 +43,7 @@ public class PacketService implements IPacketService {
     private static final Logger logger = LoggerFactory.getLogger(PacketService.class);
 
     /**
-     * 包体的头部的长度，一个int字节长度
+     * Length of the packet header, equal to the size of one int (4 bytes).
      */
     public static final int PACKET_HEAD_LENGTH = 4;
 
@@ -76,10 +73,10 @@ public class PacketService implements IPacketService {
             }
             generateOperation.getGenerateLanguages().addAll(codeLanguageSet);
         }
-        // 设置生成协议的过滤器
+        // Set the protocol generation filter
         GenerateProtocolFile.generateProtocolFilter = GenerateProtocolFile.DefaultNetGenerateProtocolFilter;
 
-        // 解析protocol.xml文件，并将协议生成ProtocolRegistration
+        // Parse protocol.xml and generate ProtocolRegistration objects
         var resource = applicationContext.getResource(ResourceUtils.CLASSPATH_URL_PREFIX + protocolLocation);
         try {
             var xmlProtocols = DomUtils.inputStream2Object(resource.getInputStream(), XmlProtocols.class);
@@ -89,7 +86,7 @@ public class PacketService implements IPacketService {
             throw new RuntimeException(e);
         }
 
-        // 注册协议接收器
+        // Register protocol receivers
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
             NetContext.getRouter().registerPacketReceiverDefinition(bean);
@@ -97,7 +94,7 @@ public class PacketService implements IPacketService {
     }
 
     /**
-     * 获取要生成协议列表
+     * Parse and return the set of code languages to generate protocols for.
      */
     private Set<CodeLanguage> getProtocolList(String codeLanguage) {
         var languageSet = new HashSet<CodeLanguage>();
@@ -118,11 +115,11 @@ public class PacketService implements IPacketService {
 
     @Override
     public DecodedPacketInfo read(ByteBuf buffer) {
-        // 包的长度在上一层已经解析过
+        // The packet length has already been parsed in the upper layer
 
-        // 解析包体
+        // Parse the packet body
         var packet = ProtocolManager.read(buffer);
-        // 解析包的附加包
+        // Parse the packet attachment
         var hasAttachment = ByteBufUtils.tryReadBool(buffer);
         var attachment = hasAttachment ? (ProtocolManager.read(buffer)) : null;
         return DecodedPacketInfo.valueOf(packet, attachment);
@@ -130,15 +127,15 @@ public class PacketService implements IPacketService {
 
     @Override
     public void write(ByteBuf buffer, Object packet, Object attachment) {
-        // 写入包packet
+        // Write the packet
         ProtocolManager.write(buffer, packet);
 
-        // 写入包的附加包attachment
+        // Write the attachment
         if (attachment == null) {
             ByteBufUtils.writeBool(buffer, false);
         } else {
             ByteBufUtils.writeBool(buffer, true);
-            // 写入包的附加包attachment
+            // Write the attachment
             ProtocolManager.write(buffer, attachment);
         }
     }
@@ -146,7 +143,7 @@ public class PacketService implements IPacketService {
     @Override
     public void writeHeaderAndBody(ByteBuf buffer, Object packet, Object attachment) {
         try {
-            // 预留写入包的长度，一个int字节大小
+            // Reserve space for the packet length header (4 bytes)
             buffer.ensureWritable(7);
             buffer.writerIndex(PACKET_HEAD_LENGTH);
 

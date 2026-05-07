@@ -22,7 +22,7 @@ import com.zfoo.protocol.anno.Protocol;
 public class Pong {
 
     /**
-     * 服务器当前的时间戳
+     * The current server timestamp.
      */
     private long time;
 

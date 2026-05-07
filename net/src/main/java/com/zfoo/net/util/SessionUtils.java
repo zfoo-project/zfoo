@@ -56,7 +56,7 @@ public abstract class SessionUtils {
         } catch (Throwable t) {
             // do nothing
             // to avoid: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer
-            // 有些情况当建立连接过后迅速关闭，这个时候取remoteAddress会有异常
+            // In some cases when a connection is established and then quickly closed, accessing remoteAddress may throw an exception
         }
         return StringUtils.EMPTY;
     }

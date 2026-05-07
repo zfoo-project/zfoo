@@ -19,7 +19,7 @@ import com.zfoo.protocol.util.RandomUtils;
 import java.util.List;
 
 /**
- * 随机负载均衡器，任选服务提供者的其中之一
+ * A random load balancer that selects one of the available service providers at random.
  *
  * @author godotg
  */

@@ -30,9 +30,9 @@ public class GetChildrenASyncTest {
 
         private void doSomething(ZooKeeper zookeeper) {
             try {
-                // 异步方法，不会阻塞
+                // Async method, non-blocking
                 zooKeeper.getChildren("/", true, new IChildren2Callback(), null);
-                System.out.println("不会阻塞");
+                System.out.println("non-blocking");
             } catch (Exception e) {
                 e.printStackTrace();
             }

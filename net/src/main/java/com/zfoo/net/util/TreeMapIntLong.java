@@ -18,7 +18,7 @@ import com.zfoo.net.packet.common.PairIntLong;
 import java.util.Arrays;
 
 /**
- * 性能更高，但是可能会浪费一定的内存
+ * A higher-performance tree map implementation, though it may waste some memory.
  *
  * @author godotg
  */

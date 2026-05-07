@@ -39,7 +39,7 @@ public class CreateNodeAuthTest {
         acls.add(aclDigest);
         acls.add(aclIp);
 
-        // 使用jaysunxiao:123456创建一个授权节点
+        // Create a node with authorization using jaysunxiao:123456 credentials
         String path = curator.create()
                 .creatingParentsIfNeeded()
                 .withMode(CreateMode.PERSISTENT)
@@ -60,7 +60,7 @@ public class CreateNodeAuthTest {
                 .builder()
                 .connectString("localhost:2181")
                 .sessionTimeoutMs(5000)
-                .authorization("digest", "godotg:123456".getBytes()) // 授权访问
+                .authorization("digest", "godotg:123456".getBytes()) // authorized access
                 .connectionTimeoutMs(5000)
                 .retryPolicy(retryPolicy)
                 .build();

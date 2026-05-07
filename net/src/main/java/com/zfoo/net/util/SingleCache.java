@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
 /**
- * 单值缓存，会隔一段时间在后台刷新一下缓存
+ * Single-value cache that refreshes itself in the background at a specified interval
  *
  * @author godotg
  */
@@ -44,9 +44,9 @@ public class SingleCache<V> {
     }
 
     /**
-     * @param refreshDuration 刷新实际那，毫秒
-     * @param supplier        缓存提供者
-     * @return 简单的缓存
+     * @param refreshDuration refresh interval in milliseconds
+     * @param supplier        cache value supplier
+     * @return a simple single-value cache
      */
     public static <V> SingleCache<V> build(long refreshDuration, Supplier<V> supplier) {
         var cache = new SingleCache<V>(refreshDuration, supplier);
@@ -64,7 +64,7 @@ public class SingleCache<V> {
     public V get() {
         var now = TimeUtils.now();
         var refreshTime = refreshTimeAtomic.get();
-        // 使用双重检测锁的方式
+        // Double-checked locking approach
         if (now > refreshTime) {
             if (refreshTimeAtomic.compareAndSet(refreshTime, now + refreshDuration)) {
                 cache = supplier.get();
@@ -76,7 +76,7 @@ public class SingleCache<V> {
     public V lazyGet() {
         var now = TimeUtils.now();
         var refreshTime = refreshTimeAtomic.get();
-        // 使用双重检测锁的方式
+        // Double-checked locking approach
         if (now > refreshTime) {
             if (refreshTimeAtomic.compareAndSet(refreshTime, now + refreshDuration)) {
                 lazyRefresh();

@@ -13,10 +13,10 @@
 package com.zfoo.net.core.gateway;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.packet.gateway.GatewayToProviderRequest;
 import com.zfoo.net.packet.gateway.GatewayToProviderResponse;
 import com.zfoo.net.router.attachment.GatewayAttachment;
-import com.zfoo.net.anno.PacketReceiver;
 import com.zfoo.net.session.Session;
 import com.zfoo.protocol.util.JsonUtils;
 import com.zfoo.protocol.util.StringUtils;
@@ -33,7 +33,7 @@ public class GatewayProviderController {
     private static final Logger logger = LoggerFactory.getLogger(GatewayProviderController.class);
 
     /**
-     * 注意：这里第2个请求参数以Request结尾，那么第3个参数必须是 GatewayAttachment类型(参加：PacketBus中扫描时的校验)
+     * Note: if the 2nd parameter ends with 'Request', the 3rd parameter must be GatewayAttachment type (see PacketBus scan logic)
      */
     @PacketReceiver
     public void atGatewayToProviderRequest(Session session, GatewayToProviderRequest request, GatewayAttachment gatewayAttachment) {

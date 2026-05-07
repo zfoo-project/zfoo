@@ -38,7 +38,7 @@ public class CreateNodeASyncTest {
 
         System.out.println("Main thread: " + Thread.currentThread().getName());
 
-        // 此处传入了自定义的Executor
+        // A custom Executor is provided here for the async callback
         curator.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).inBackground(new BackgroundCallback() {
             @Override
             public void processResult(CuratorFramework client, CuratorEvent event) throws Exception {
@@ -48,7 +48,7 @@ public class CreateNodeASyncTest {
             }
         }, executorService).forPath("/node_test", "Hello Zookeeper!".getBytes());
 
-        // 此处没有传入自定义的Executor，会默认使用Zookeeper内部的EventThread单线程处理
+        // No custom Executor provided; ZooKeeper's internal EventThread will handle the callback
         curator.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).inBackground(new BackgroundCallback() {
             @Override
             public void processResult(CuratorFramework client, CuratorEvent event) throws Exception {

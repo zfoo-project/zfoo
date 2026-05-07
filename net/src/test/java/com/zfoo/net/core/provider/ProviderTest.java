@@ -36,11 +36,11 @@ public class ProviderTest {
     private static final Logger logger = LoggerFactory.getLogger(ProviderTest.class);
 
     /**
-     * RPC教程：
-     * 1.首先必须保证启动zookeeper
-     * 2.启动服务提供者，startProvider0，startProvider1，startProvider2
-     * 3.启动服务消费者，startSyncRandomConsumer，startAsyncRandomConsumer，startConsistentHashConsumer, startCachedConsistentHashConsumer
-     * 4.每个消费者都是通过不同的策略消费，注意区别
+     * RPC tutorial:
+     * 1. Ensure ZooKeeper is started first
+     * 2. Start the service providers: startProvider0, startProvider1, startProvider2
+     * 3. Start the service consumers: startSyncRandomConsumer, startAsyncRandomConsumer, startConsistentHashConsumer, startCachedConsistentHashConsumer
+     * 4. Each consumer uses a different load-balancing strategy
      */
     @Test
     public void startProvider0() {
@@ -64,7 +64,7 @@ public class ProviderTest {
     }
 
     /**
-     * 随机消费，同步请求的方式
+     * Random load-balance, synchronous request mode
      */
     @Test
     public void startSyncRandomConsumer() throws Exception {
@@ -76,14 +76,14 @@ public class ProviderTest {
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(1000);
             var response = NetContext.getConsumer().syncAsk(ask, ProviderMessAnswer.class, null).packet();
-            logger.info("消费者请求[{}]收到消息[{}]", i, JsonUtils.object2String(response));
+            logger.info("consumer request[{}] received response[{}]", i, JsonUtils.object2String(response));
         }
 
         ThreadUtils.sleep(Long.MAX_VALUE);
     }
 
     /**
-     * 随机消费，异步请求的方式
+     * Random load-balance, asynchronous request mode
      */
     @Test
     public void startAsyncRandomConsumer() {
@@ -97,7 +97,7 @@ public class ProviderTest {
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(1000);
             NetContext.getConsumer().asyncAsk(ask, ProviderMessAnswer.class, null).whenComplete(answer -> {
-                logger.info("消费者请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
+                logger.info("consumer request[{}] received response[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
             });
         }
 
@@ -105,7 +105,7 @@ public class ProviderTest {
     }
 
     /**
-     * 一致性hash算法消费方式
+     * Consistent-hash load-balancing consumer
      */
     @Test
     public void startConsistentHashConsumer() {
@@ -119,7 +119,7 @@ public class ProviderTest {
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(1000);
             NetContext.getConsumer().asyncAsk(ask, ProviderMessAnswer.class, 100).whenComplete(answer -> {
-                logger.info("消费者请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
+                logger.info("consumer request[{}] received response[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
             });
         }
 
@@ -127,7 +127,7 @@ public class ProviderTest {
     }
 
     /**
-     * 缓存的一致性hash算法消费方式
+     * Cached consistent-hash load-balancing consumer
      */
     @Test
     public void startCachedConsistentHashConsumer() {
@@ -141,7 +141,7 @@ public class ProviderTest {
         for (int i = 0; i < 1000; i++) {
             ThreadUtils.sleep(1000);
             NetContext.getConsumer().asyncAsk(ask, ProviderMessAnswer.class, 100).whenComplete(answer -> {
-                logger.info("消费者请求[{}]收到消息[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
+                logger.info("consumer request[{}] received response[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(answer));
             });
         }
 

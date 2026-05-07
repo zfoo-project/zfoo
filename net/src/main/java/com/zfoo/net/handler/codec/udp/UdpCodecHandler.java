@@ -35,7 +35,7 @@ public class UdpCodecHandler extends MessageToMessageCodec<DatagramPacket, Encod
     protected void decode(ChannelHandlerContext channelHandlerContext, DatagramPacket datagramPacket, List<Object> list) {
         ByteBuf in = datagramPacket.content();
 
-        // 不够读一个int
+        // Not enough bytes to read the length header (4 bytes)
         if (in.readableBytes() <= PacketService.PACKET_HEAD_LENGTH) {
             return;
         }
@@ -43,12 +43,12 @@ public class UdpCodecHandler extends MessageToMessageCodec<DatagramPacket, Encod
         in.markReaderIndex();
         var length = in.readInt();
 
-        // 如果长度非法，则抛出异常断开连接，按照自己的使用场景指定合适的长度，防止客户端发送超大包占用带宽
+        // Reject illegal packet lengths to prevent oversized packets from consuming bandwidth
         if (length < 0 || length > IOUtils.BYTES_PER_MB) {
             throw new IllegalArgumentException(StringUtils.format("illegal packet [length:{}]", length));
         }
 
-        // ByteBuf里的数据太小
+        // Not enough data in ByteBuf yet
         if (in.readableBytes() < length) {
             in.resetReaderIndex();
             return;

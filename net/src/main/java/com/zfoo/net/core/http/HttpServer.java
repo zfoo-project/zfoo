@@ -33,7 +33,7 @@ import java.util.function.Function;
 public class HttpServer extends AbstractServer<SocketChannel> {
 
     /**
-     * http的地址解析器
+     * URI resolver that maps an HTTP request to a decoded packet.
      */
     private Function<FullHttpRequest, DecodedPacketInfo> uriResolver;
 

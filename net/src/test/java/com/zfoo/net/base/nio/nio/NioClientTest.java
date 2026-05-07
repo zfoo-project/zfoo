@@ -39,16 +39,16 @@ public class NioClientTest implements Runnable {
             channel.register(selector, SelectionKey.OP_CONNECT);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("非正常退出");
+            System.out.println("Abnormal exit");
             System.exit(1);
         }
     }
 
     @Override
     public void run() {
-        System.out.println("客户端启动成功！");
+        System.out.println("Client started successfully!");
         while (!stop) {
-            //不会阻塞
+            // non-blocking
             try {
                 selector.select(1001);
                 Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
@@ -82,10 +82,10 @@ public class NioClientTest implements Runnable {
 
     public void handleInput(SelectionKey key) throws IOException {
         if (key.isValid()) {
-            //连接事件发生
+            // Connection event triggered
             if (key.isConnectable()) {
                 SocketChannel channel = (SocketChannel) key.channel();
-                //如果正在连接，则完成连接
+                // If still connecting, finalize the connection
                 if (channel.finishConnect()) {
                     channel.finishConnect();
                 }
@@ -103,15 +103,16 @@ public class NioClientTest implements Runnable {
                     byte[] data = new byte[readBuffer.remaining()];
                     readBuffer.get(data);
                     String message = new String(data, "UTF-8").trim();
-                    System.out.println("客户端收到消息:" + message);
-                    ByteBuffer writeBuffer = ByteBuffer.wrap(message.getBytes());//将消息返回给客户端
+                    System.out.println("Client received message: " + message);
+                    // Echo message back to server
+                    ByteBuffer writeBuffer = ByteBuffer.wrap(message.getBytes());
                     writeBuffer.flip();
                     channel.write(writeBuffer);
-                } else if (readBytes < 0) {//对链路关闭
+                } else if (readBytes < 0) { // Link closed
                     key.cancel();
                     channel.close();
                 } else {
-                    //读到0字节忽略
+                    // 0 bytes read, ignore
                 }
             }
         }

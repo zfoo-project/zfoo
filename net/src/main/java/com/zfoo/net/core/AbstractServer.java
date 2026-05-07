@@ -35,17 +35,17 @@ import java.util.List;
 public abstract class AbstractServer<C extends Channel> extends ChannelInitializer<C> implements IServer {
     private static final Logger logger = LoggerFactory.getLogger(AbstractServer.class);
 
-    // 所有的服务器都可以在这个列表中取到
+    // Registry of all started server instances
     protected static final List<AbstractServer<? extends Channel>> allServers = new ArrayList<>(1);
 
     protected String hostAddress;
     protected int port;
 
 
-    // 配置服务端nio线程组，服务端接受客户端连接
+    // Boss group: accepts incoming client connections
     private EventLoopGroup bossGroup;
 
-    // SocketChannel的网络读写
+    // Worker group: handles network I/O for each SocketChannel
     protected EventLoopGroup workerGroup;
 
     protected ChannelFuture channelFuture;
@@ -62,7 +62,7 @@ public abstract class AbstractServer<C extends Channel> extends ChannelInitializ
 
     protected synchronized void doStart() {
         var cpuNum = Runtime.getRuntime().availableProcessors();
-        // 一条线程持有一个端口对应的selector，如果我们启动不仅仅是一个服务器端口的话，为了更好的性能需要修改对应的bossGroup数量
+        // Each boss thread owns one selector per port; increase bossGroup size if multiple server ports are used
         bossGroup = Epoll.isAvailable()
                 ? new EpollEventLoopGroup(Math.max(1, cpuNum / 8), new DefaultThreadFactory("netty-boss", true))
                 : new NioEventLoopGroup(Math.max(1, cpuNum / 8), new DefaultThreadFactory("netty-boss", true));
@@ -78,13 +78,12 @@ public abstract class AbstractServer<C extends Channel> extends ChannelInitializ
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_MB))
                 .childHandler(this);
-        // 绑定端口，同步等待成功
+        // Bind the port synchronously (commented-out alternative):
         // channelFuture = bootstrap.bind(hostAddress, port).sync();
-        // 等待服务端监听端口关闭
+        // Block until the server port is closed (commented-out alternative):
         // channelFuture.channel().closeFuture().sync();
 
-
-        // 异步
+        // Async bind — use syncUninterruptibly to wait for bind completion without blocking indefinitely
         channelFuture = bootstrap.bind(hostAddress, port);
         channelFuture.syncUninterruptibly();
 

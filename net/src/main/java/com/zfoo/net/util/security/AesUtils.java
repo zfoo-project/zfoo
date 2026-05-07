@@ -23,9 +23,9 @@ import java.util.Base64;
 import java.util.function.Supplier;
 
 /**
- * AES加密和解密
+ * AES encryption and decryption utilities.
  * <p>
- * 默认AES/ECB/PKCS5Padding
+ * Default mode: AES/ECB/PKCS5Padding
  *
  * @author godotg
  */
@@ -35,11 +35,11 @@ public abstract class AesUtils {
     private static final String KEY_STR = "=jE[`B],YO24Vt+Akh&}D7@s9l1uLKP)";
 
     /**
-     * 密钥算法
+     * Key algorithm name.
      */
     private static final String ALGORITHM = "AES";
     /**
-     * 加解密算法/工作模式/填充方式
+     * Cipher transformation: algorithm / operation mode / padding scheme.
      */
     private static final String ALGORITHM_STR = "AES/ECB/PKCS5Padding";
 
@@ -79,10 +79,10 @@ public abstract class AesUtils {
 
 
     /**
-     * 对str进行AES加密
+     * AES-encrypt the given string.
      *
-     * @param str 需要加密的字符串
-     * @return AES加密后的字符串
+     * @param str the plaintext string to encrypt
+     * @return Base64-encoded AES-encrypted string
      */
     public static String getEncryptString(String str) {
         try {
@@ -104,10 +104,10 @@ public abstract class AesUtils {
     }
 
     /**
-     * 对str进行AES解密
+     * AES-decrypt the given Base64-encoded string.
      *
-     * @param str 需要解密的字符串
-     * @return AES解密后的字符串
+     * @param str the Base64-encoded AES-encrypted string to decrypt
+     * @return the decrypted plaintext string
      */
     public static String getDecryptString(String str) {
         try {

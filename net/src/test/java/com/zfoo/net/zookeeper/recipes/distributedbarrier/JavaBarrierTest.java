@@ -20,9 +20,9 @@ public class JavaBarrierTest {
     @Test
     public void test() {
         ExecutorService executor = Executors.newFixedThreadPool(3);
-        executor.submit(new Thread(new Runner("1号选手")));
-        executor.submit(new Thread(new Runner("2号选手")));
-        executor.submit(new Thread(new Runner("3号选手")));
+        executor.submit(new Thread(new Runner("Racer 1")));
+        executor.submit(new Thread(new Runner("Racer 2")));
+        executor.submit(new Thread(new Runner("Racer 3")));
         executor.shutdown();
     }
 
@@ -34,12 +34,12 @@ public class JavaBarrierTest {
         }
 
         public void run() {
-            System.out.println(name + " 准备好了.");
+            System.out.println(name + " is ready.");
             try {
                 JavaBarrierTest.barrier.await();
             } catch (Exception e) {
             }
-            System.out.println(name + " 起跑!");
+            System.out.println(name + " go!");
         }
 
     }

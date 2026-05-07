@@ -12,14 +12,11 @@
 
 package com.zfoo.net.util.security;
 
-import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.util.FileUtils;
 import com.zfoo.protocol.util.IOUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.zip.*;
 
 /**
@@ -29,11 +26,11 @@ public abstract class ZipUtils {
 
     private static final int BUFFER_SIZE = IOUtils.ONE_BYTE;
 
-    // compression level (0-9)，只能是0-9
+    // Compression level (0-9 inclusive)
     private static final int COMPRESS_LEVEL = 5;
 
     public static byte[] zip(byte[] bytes) {
-        // deflate  [dɪ'fleɪt]  v.抽出空气; 缩小
+        // deflate [dɪ'fleɪt] v. to let air out; to reduce in size
         Deflater deflater = new Deflater(COMPRESS_LEVEL);
         deflater.setInput(bytes);
         deflater.finish();
@@ -128,16 +125,16 @@ public abstract class ZipUtils {
         FileUtils.createDirectory(destDirectory);
         var zipIn = new ZipInputStream(zipFileInputStream);
         var entry = zipIn.getNextEntry();
-        // 遍历ZIP文件中的所有条目
+        // Iterate over all entries in the ZIP file
         while (entry != null) {
             var filePath = destDirectory + File.separator + entry.getName();
             if (!entry.isDirectory()) {
-                // 如果条目是文件，则解压该文件
+                // Entry is a file — extract it
                 var fileOutputStream = FileUtils.openOutputStream(new File(filePath), false);
                 IOUtils.copy(zipIn, fileOutputStream);
                 IOUtils.closeIO(fileOutputStream);
             } else {
-                // 如果条目是目录，则创建目录
+                // Entry is a directory — create it
                 FileUtils.createDirectory(filePath);
             }
             zipIn.closeEntry();

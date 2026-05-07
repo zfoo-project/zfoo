@@ -15,11 +15,10 @@ public class FileReaderTest {
     @Test
     public void test() throws IOException {
         RandomAccessFile file = new RandomAccessFile("rainbow.txt", "rw");
-        //FileChannel无法设置为非阻塞模式，它总是运行在阻塞模式下
-        FileChannel fileChannel = file.getChannel();//NIO 中都从一个Channel 开始
-
+        // NIO always opens from a Channel; data can be read from Channel into Buffer or written from Buffer to Channel
+        FileChannel fileChannel = file.getChannel();
         //create buffer with capacity of 48 bytes
-        ByteBuffer buf = ByteBuffer.allocate(1000000000);//数据可以从Channel读到Buffer中，也可以从Buffer 写到Channel中
+        ByteBuffer buf = ByteBuffer.allocate(1000000000);
         //read into buffer
         int bytesRead = fileChannel.read(buf);
 

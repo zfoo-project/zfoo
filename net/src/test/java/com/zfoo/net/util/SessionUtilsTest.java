@@ -40,7 +40,7 @@ public class SessionUtilsTest {
                     }
                 });
 
-                builder.append(StringUtils.format("serverSession count：[{}]", NetContext.getSessionManager().serverSessionSize()));
+                builder.append(StringUtils.format("serverSession count[{}]", NetContext.getSessionManager().serverSessionSize()));
                 builder.append(FileUtils.LS);
                 NetContext.getSessionManager().forEachServerSession(new Consumer<Session>() {
                     @Override

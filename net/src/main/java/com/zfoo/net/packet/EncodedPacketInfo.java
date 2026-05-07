@@ -15,7 +15,7 @@ package com.zfoo.net.packet;
 import org.springframework.lang.Nullable;
 
 /**
- * 被解码后的Packet的信息
+ * Information about an encoded (outbound) packet.
  *
  * @author godotg
  */
@@ -25,12 +25,12 @@ public class EncodedPacketInfo {
     private long uid;
 
     /**
-     * 解码后的包
+     * The packet to be sent.
      */
     private Object packet;
 
     /**
-     * 解码后的包的附加包
+     * The attachment associated with the packet.
      */
     private Object attachment;
 

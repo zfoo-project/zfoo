@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * 使用Curator实现分布式锁功能
+ * Distributed lock implementation using Apache Curator
  *
  * @author godotg
  * @version 1.0
@@ -46,7 +46,7 @@ public class DistributedLockTest {
 
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss|SSS");
                     String orderNo = sdf.format(new Date());
-                    System.out.println("生成的订单号是 : " + orderNo);
+                    System.out.println("Generated order number: " + orderNo);
 
                     try {
                         lock.release();

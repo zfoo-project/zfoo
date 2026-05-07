@@ -41,7 +41,7 @@ public class UdpServer extends AbstractServer<Channel> {
     public void start() {
         var cpuNum = Runtime.getRuntime().availableProcessors();
 
-        // 配置服务端nio线程组
+        // Configure the server-side NIO event loop group
         workerGroup = Epoll.isAvailable()
                 ? new EpollEventLoopGroup(cpuNum * 2, new DefaultThreadFactory("netty-worker", true))
                 : new NioEventLoopGroup(cpuNum * 2, new DefaultThreadFactory("netty-worker", true));
@@ -52,7 +52,7 @@ public class UdpServer extends AbstractServer<Channel> {
                 .option(ChannelOption.SO_BROADCAST, true)
                 .handler(this);
 
-        // 异步
+        // Bind asynchronously
         channelFuture = bootstrap.bind(hostAddress, port);
         channelFuture.syncUninterruptibly();
 

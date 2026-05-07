@@ -19,7 +19,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * 通过netty的通信，和java原生的RandomAccessFile来实现小文件的传输
+ * Netty small file transfer server using Java's native RandomAccessFile.
  *
  * @author godotg
  * @version 1.0
@@ -36,23 +36,23 @@ public class FileServerTest {
     }
 
     public void init() {
-        //配置服务端nio线程组
-        EventLoopGroup bossGroup = new NioEventLoopGroup();//服务端接受客户端连接
-        EventLoopGroup workerGroup = new NioEventLoopGroup();//SocketChannel的网络读写
+        // Configure server-side NIO thread groups
+        EventLoopGroup bossGroup = new NioEventLoopGroup(); // Accept client connections
+        EventLoopGroup workerGroup = new NioEventLoopGroup(); // Handle SocketChannel network I/O
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 100).handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChildChannelHandler());
 
-            //绑定端口，同步等待成功
+            // Bind port and wait synchronously until the bind succeeds
             ChannelFuture future = bootstrap.bind(9999).sync();
-            //等待服务端监听端口关闭
+            // Wait until the server socket is closed
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            //优雅的退出，释放线程池资源
+            // Graceful shutdown: release thread pool resources
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
@@ -63,7 +63,7 @@ public class FileServerTest {
         protected void initChannel(SocketChannel channel) throws Exception {
             channel.pipeline().addLast(new StringEncoder(CharsetUtil.UTF_8));
             channel.pipeline().addLast(new LineBasedFrameDecoder(1024));
-            channel.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8));//三者组合起来就是文本换行编码解码器
+            channel.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8)); // Together these three handlers form a text line codec
             channel.pipeline().addLast(new FileServerHandler());
         }
     }

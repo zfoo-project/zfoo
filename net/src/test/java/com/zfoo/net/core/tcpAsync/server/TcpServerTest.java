@@ -28,23 +28,23 @@ public class TcpServerTest {
 
     @Test
     public void startServer() {
-        // 启动流程笔记：
-        // 首先，这里是xml配置，这样子就会解析xml配置中的标签
-        // 当遇到自定义标签后，就会触发NamespaceHandler 和 NetDefinitionParser 的自定义标签解析流程
-        // 接着就会往Spring容器注册相关的各种bean
+        // Startup sequence notes:
+        // First, the XML configuration is loaded and the custom namespace tags are parsed
+        // When a custom tag is encountered, NamespaceHandler and NetDefinitionParser handle the custom tag parsing
+        // The parser then registers the required beans into the Spring container
         var context = new ClassPathXmlApplicationContext("config.xml");
 
-        // 打印下当前spring管理的bean信息
-        // 可以得出结论：通过解析自定义标签，往spring容器中自己主动注册的几个
-        // 和网络有关的全类名的bean(NetConfig、NetContext、ConfigManager、PacketService、Router、Consumer、SessionManager)
+        // Print the names of all beans currently managed by Spring
+        // Conclusion: by parsing the custom XML tags, the following beans are self-registered:
+        // Network-related beans: NetConfig, NetContext, ConfigManager, PacketService, Router, Consumer, SessionManager
         String[] beanNames = context.getBeanDefinitionNames();
         for (String beanName : beanNames) {
             System.out.println(beanName);
         }
 
-        // 启动起来一个Tcp服务器
-        // 注意：由于之前往Spring容器中注册的SessionManager，从而可以使用这个bean变量管理所有的连接信息
-        // 这也是spring的好处：很多东西是解耦的，让SessionManager的初始化交给的是spring，而不是自己从main函数开始一个个组件去初始化
+        // Start up a TCP server
+        // Note: the SessionManager bean registered earlier manages all active connection sessions
+        // This is the benefit of Spring: decoupled initialization - SessionManager lifecycle is managed by Spring
         var server = new TcpServer(HostAndPort.valueOf("127.0.0.1:9000"));
         server.start();
 

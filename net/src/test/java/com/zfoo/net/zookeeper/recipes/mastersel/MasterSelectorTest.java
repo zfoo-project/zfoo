@@ -16,7 +16,7 @@ import org.junit.Test;
 @Ignore
 public class MasterSelectorTest {
 
-    // master选举的根节点，表面本次master选举都是在该节点下进行的
+    // The root ZNode for this master election
     private static String master_path = "/curator_recipes_master_path";
 
     private static CuratorFramework curator = CuratorFrameworkFactory.builder()
@@ -27,13 +27,13 @@ public class MasterSelectorTest {
     public void test() throws InterruptedException {
         curator.start();
 
-        // curator会在成功获取Master权利的时候回调该监听器
+        // Curator will invoke the listener callback when the Master role is successfully acquired
         LeaderSelector selector = new LeaderSelector(curator, master_path, new LeaderSelectorListenerAdapter() {
             @Override
             public void takeLeadership(CuratorFramework client) throws Exception {
-                System.out.println("成为Master角色");
+                System.out.println("Became Master");
                 Thread.sleep(3000);
-                System.out.println("完成Master操作，释放Master权利");
+                System.out.println("Master work done, releasing Master role");
             }
         });
 

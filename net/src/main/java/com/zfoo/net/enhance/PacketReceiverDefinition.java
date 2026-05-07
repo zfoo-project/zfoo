@@ -20,8 +20,8 @@ import com.zfoo.protocol.util.ReflectionUtils;
 import java.lang.reflect.Method;
 
 /**
- * EN:Dynamic proxy methods annotated by PacketReceiver annotations, to avoid reflection, will eventually use javassist bytecode enhanced methods to proxy this class
- * CN:动态代理被PacketReceiver注解标注的方法，为了避免反射最终会用javassist字节码增强的方法去代理PacketReceiverDefinition
+ * Dynamic proxy for methods annotated with @PacketReceiver.
+ * To avoid reflection overhead, Javassist bytecode enhancement is ultimately used to proxy this class.
  *
  * @author godotg
  */

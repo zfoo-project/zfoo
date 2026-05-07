@@ -39,17 +39,17 @@ public class WebsocketSslServer extends AbstractServer<SocketChannel> {
     private SslContext sslContext;
 
     /**
-     * 方式一：
-     * 下载的nginx格式的证书，里面包含pem和key两种格式的文件。其中pem格式我们可以直接用，key格式的Java无法直接使用。
-     * 我们使用OpenSSL将PKCS1 key格式证书换一个可以使用的PKCS8 key文件出来:
+     * Option 1: nginx certificate format
+     * Download the nginx-format certificate, which contains a .pem file and a .key file.
+     * The .pem file can be used directly; the .key file (PKCS1) cannot be used by Java as-is.
+     * Convert the PKCS1 key to PKCS8 using OpenSSL:
      * openssl pkcs8 -topk8 -nocrypt -in ws.jiucai.fun.key -out ws.jiucai.fun.key.pem
      * <p>
-     * 方式二：阿里云证书转换
-     * 进入阿里云证书下载页面，如下图。要下载两份，一个是tomcat的，一个是nginx的。
-     * 下载的nginx格式的证书，里面包含pem和key两种格式的文件。其中pem格式我们可以直接用，key格式的Java无法直接使用。
-     * 我们使用OpenSSL将前面下载tomcat格式证书pfx文件转换一个可以使用的key文件出来:
+     * Option 2: Alibaba Cloud certificate conversion
+     * Download two certificate bundles from the Alibaba Cloud console: one for Tomcat (.pfx), one for nginx.
+     * Use the nginx bundle's .pem directly, and convert the Tomcat .pfx to a usable key file:
      * openssl pkcs12 -in ws.jiucai.fun.pfx -nocerts -nodes -out ws.jiucai.fun.key
-     * openssl会让输入密码，密码是tomcat下载文件里的pfx-password.txt
+     * (OpenSSL will prompt for the password, which is stored in pfx-password.txt inside the Tomcat bundle)
      */
     public WebsocketSslServer(HostAndPort host, InputStream pem, InputStream key) {
         super(host);

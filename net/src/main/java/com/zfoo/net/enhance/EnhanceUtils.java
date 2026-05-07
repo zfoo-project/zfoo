@@ -65,7 +65,7 @@ public abstract class EnhanceUtils {
         var invokeMethod = new CtMethod(classPool.get(void.class.getName()), "invoke", classPool.get(new String[]{Session.class.getName(), Object.class.getName(), Object.class.getName()}), enhanceClazz);
         invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         if (attachmentClazz == null) {
-            // Cast type(强制类型转换)
+            // Cast types explicitly to match the method signature
             String invokeMethodBody = StringUtils.format("{this.bean.{}($1, ({})$2);}", method.getName(), packetClazz.getName());
             invokeMethod.setBody(invokeMethodBody);
         } else {
@@ -74,14 +74,14 @@ public abstract class EnhanceUtils {
         }
         enhanceClazz.addMethod(invokeMethod);
 
-        // 定义类实现的接口方法task
+        // Define the 'task' interface method
         CtMethod taskMethod = new CtMethod(classPool.get(Task.class.getName()), "task", null, enhanceClazz);
         taskMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         String taskMethodBody = StringUtils.format("{ return {}.{}; }", Task.class.getName(), definition.getTask());
         taskMethod.setBody(taskMethodBody);
         enhanceClazz.addMethod(taskMethod);
 
-        // 定义类实现的接口方法attachment
+        // Define the 'attachment' interface method
         CtMethod attachmentMethod = new CtMethod(classPool.get(Class.class.getName()), "attachment", null, enhanceClazz);
         attachmentMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         if (attachmentClazz == null) {

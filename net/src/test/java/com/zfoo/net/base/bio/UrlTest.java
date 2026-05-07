@@ -17,69 +17,69 @@ import java.net.UnknownHostException;
 @Ignore
 public class UrlTest {
 
-    // 不包含端口的ip地址
+    // IP address without a port
     @Test
     public void inetAddressTest() throws UnknownHostException {
-        // 获取本机的ip
+        // Get the local machine IP
         InetAddress ipLocal = InetAddress.getLocalHost();
-        System.out.println("本机地址相关信息：");
-        System.out.println("本机计算机名称：" + ipLocal.getHostName());
-        System.out.println("本机ip：" + ipLocal.getHostAddress());
+        System.out.println("Local address info:");
+        System.out.println("Local hostname: " + ipLocal.getHostName());
+        System.out.println("Local IP: " + ipLocal.getHostAddress());
 
         System.out.println("**************************************************************************");
 
-        // 获取远程ip地址
+        // Get a remote IP address
         InetAddress ipBaidu = InetAddress.getByName("www.baidu.com");
-        // 如果解析不到name和address都为ip
+        // If resolution fails, both name and address return the raw IP
         // InetAddress ipBaidu=InetAddress.getByName("115.239.211.112");
-        System.out.println("远程地址相关信息：");
-        System.out.println("远程计算机名称：" + ipBaidu.getHostName());
-        System.out.println("远程ip：" + ipBaidu.getHostAddress());
+        System.out.println("Remote address info:");
+        System.out.println("Remote hostname: " + ipBaidu.getHostName());
+        System.out.println("Remote IP: " + ipBaidu.getHostAddress());
     }
 
-    // 包含端口的ip地址
+    // IP address with a port
     @Test
     public void inetSocketAddressToInetAddressTest() {
-        // localhost=127.0.0.1,本机ip
+        // localhost = 127.0.0.1, loopback
         InetSocketAddress address = new InetSocketAddress("www.baidu.com", 9999);
         System.out.println(address.getHostName());
         System.out.println(address.getPort());
 
-        // InetSocketAddress和InetAddress的相互转换
+        // Conversion between InetSocketAddress and InetAddress
         InetAddress ip = address.getAddress();
-        System.out.println(ip.getHostName());// 计算机名称
-        System.out.println(ip.getHostAddress());// ip
+        System.out.println(ip.getHostName()); // hostname
+        System.out.println(ip.getHostAddress()); // ip
     }
 
     @Test
     public void urlTest() {
-        // URI统一资源标识符，用来唯一的标识一个资源
-        // URL统一资源定位符，一种具体的URI
-        // 四部分组成：协议 存放资源的主机名称 端口 资源文件名称
+        // URI (Uniform Resource Identifier) uniquely identifies a resource
+        // URL (Uniform Resource Locator) is a specific type of URI
+        // Composed of 4 parts: scheme, host, port, and resource path
         URL url = null;
 
-        // 读取网页的资源
+        // Read a web resource
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
         BufferedReader bufferedReader = null;
         try {
-            // 绝对路径
+            // Absolute path
             url = new URL("https://pic3.zhimg.com/v2-473b053a376f6752da5d5b06a31b7304_b.jpg");
             System.out.println(url.getProtocol());
             System.out.println(url.getHost());
             System.out.println(url.getPort());
-            System.out.println(url.getFile());// 资源
-            System.out.println(url.getPath());// 相对路径
-            System.out.println(url.getRef());// 锚点
-            System.out.println(url.getQuery());// 存在锚点，参数为null；如果不存在锚点，返回正确
-
+            System.out.println(url.getFile()); // resource
+            System.out.println(url.getPath()); // relative path
+            System.out.println(url.getRef()); // anchor/fragment
+            // fragment present => query is null; no fragment => returns the query string
+            System.out.println(url.getQuery());
             inputStream = url.openStream();
             inputStreamReader = new InputStreamReader(inputStream, "utf-8");
             bufferedReader = new BufferedReader(inputStreamReader);
 
             String message;
             while ((message = bufferedReader.readLine()) != null) {
-                System.out.println(message);// 输出到控制台
+                System.out.println(message); // print to console
             }
         } catch (IOException e) {
             e.printStackTrace();

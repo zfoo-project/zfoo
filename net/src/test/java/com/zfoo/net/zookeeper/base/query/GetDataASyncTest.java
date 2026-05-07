@@ -18,7 +18,7 @@ public class GetDataASyncTest {
     private static CountDownLatch connectedSemaphore = new CountDownLatch(1);
     private static ZooKeeper zk;
 
-    // ZooKeeper API 获取节点数据内容，使用异步(async)接口。
+    // ZooKeeper API get node data using async interface
     @Test
     public void test() throws IOException, InterruptedException, KeeperException {
         zk = new ZooKeeper("localhost:2181", 5000, new GetDataASyncWatcher());

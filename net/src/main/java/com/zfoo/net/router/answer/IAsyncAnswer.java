@@ -24,14 +24,12 @@ public interface IAsyncAnswer<T> {
     IAsyncAnswer<T> thenAccept(Consumer<T> consumer);
 
     /**
-     * EN:To receive the message returned asynchronously and process the message, the asynchronous request must call this method
-     * CN:接收到异步返回的消息，并处理这个消息，异步请求必须要调用这个方法
+     * Receives the async response message and processes it; must be called for every async request.
      */
     void whenComplete(Consumer<T> consumer);
 
     /**
-     * EN:If the asynchronous request does not return successfully, the method is called
-     * CN:如果异步请求没有成功返回，那么就会回调该方法
+     * Called if the asynchronous request does not return successfully.
      */
     IAsyncAnswer<T> notComplete(Runnable notCompleteCallback);
 

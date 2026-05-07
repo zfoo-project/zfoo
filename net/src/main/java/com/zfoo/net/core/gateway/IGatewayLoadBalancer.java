@@ -14,7 +14,9 @@
 package com.zfoo.net.core.gateway;
 
 /**
- * 网关负载均衡使用计算一致性hash的参数，如果packet继承了这个接口，则网关的一致性hash负载均衡优先使用这个接口计算一致性hash；
+ * The parameter used by the gateway load balancer to compute a consistent hash.
+ * If a packet implements this interface, the gateway's consistent-hash load balancer
+ * will use this value as the hash input with highest priority.
  *
  * @author godotg
  */

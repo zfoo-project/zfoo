@@ -61,7 +61,7 @@ public class NodeExistsTest {
 
         client.start();
 
-        // 如果没有这个节点，则stat返回空
+        // If node does not exist, stat returns null
         Stat stat = client.checkExists().forPath("/zfoo/provider");
 
         Thread.sleep(Integer.MAX_VALUE);

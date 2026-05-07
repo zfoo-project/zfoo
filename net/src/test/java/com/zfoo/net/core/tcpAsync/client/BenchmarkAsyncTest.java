@@ -40,7 +40,7 @@ public class BenchmarkAsyncTest {
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
         var session = client.start();
 
-        // 异步请求消息是一起发送过去的，服务器排队处理消息容易导致超时，可以调高Router的DEFAULT_TIMEOUT的超时时间，现在默认是3秒超时
+        // Async requests are sent together; the server queue may cause timeouts. Increase Router's DEFAULT_TIMEOUT if needed.
         var threadNums = Runtime.getRuntime().availableProcessors();
         var requestNums = 1000;
         for (int i = 0; i < threadNums; i++) {
@@ -53,11 +53,11 @@ public class BenchmarkAsyncTest {
                             ask.setMessage("Hello, this is async client!");
                             NetContext.getRouter().asyncAsk(session, ask, AsyncMessAnswer.class, null)
                                     .whenComplete(answer -> {
-                                                logger.info("异步请求收到结果[{}]", JsonUtils.object2String(answer));
+                                                logger.info("async request received result[{}]", JsonUtils.object2String(answer));
                                             }
                                     );
                         } catch (Exception e) {
-                            logger.info("同步请求异常", e);
+                            logger.info("sync request exception", e);
                         }
                     }
                 }

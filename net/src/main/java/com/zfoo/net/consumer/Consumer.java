@@ -43,9 +43,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * 服务调度和负载均衡，两个关键点：摘除故障节点，负载均衡
- * <p>
- * 在clientSession中选择一个可用的session，最终还是调用的IRouter中的方法
+ * Service dispatching and load balancing.
+ * Two key concerns: removing faulty nodes and balancing load.
+ * Selects an available session from the client session pool, then delegates to IRouter methods.
  *
  * @author godotg
  */
@@ -99,11 +99,11 @@ public class Consumer implements IConsumer {
         return list;
     }
 
-    // Select a consumer loadBalancer
+    // Select a consumer load balancer
     @Override
     public IConsumerLoadBalancer selectLoadBalancer(List<Session> providers, Object packet) {
-        // select first consumer loadBalancer
-        // 不同的服务提供者可能会提供同一个接口，消费者可能同时消费了这些提供了同一个接口的服务提供者，取第一个消费者的loadBalancer
+        // Different providers may expose the same interface; if a consumer connects to multiple such providers,
+        // pick the load balancer of the first matching consumer.
         IConsumerLoadBalancer loadBalancer = null;
         for (var providerSession : providers) {
             for (var provider : providerSession.getConsumerRegister().getProviderConfig().getProviders()) {
@@ -139,7 +139,7 @@ public class Consumer implements IConsumer {
         var loadBalancer = selectLoadBalancer(providers, packet);
         var session = loadBalancer.selectProvider(providers, packet, argument);
 
-        // 下面的代码逻辑同Router的syncAsk，如果修改的话，记得一起修改
+        // The logic below mirrors Router#syncAsk; update both if modified.
         var clientSignalAttachment = new SignalAttachment();
         var taskExecutorHash = TaskBus.calTaskExecutorHash(argument);
         clientSignalAttachment.setTaskExecutorHash(taskExecutorHash);
@@ -147,7 +147,7 @@ public class Consumer implements IConsumer {
         try {
             SignalBridge.addSignalAttachment(clientSignalAttachment);
 
-            // load balancer之前调用
+            // Invoke before load-balancer hook
             loadBalancer.beforeLoadBalancer(session, packet, clientSignalAttachment);
 
             NetContext.getRouter().send(session, packet, clientSignalAttachment);
@@ -163,7 +163,7 @@ public class Consumer implements IConsumer {
             @SuppressWarnings("unchecked")
             var syncAnswer = new SyncAnswer<>((T) responsePacket, clientSignalAttachment);
 
-            // load balancer之后调用
+            // Invoke after load-balancer hook
             loadBalancer.afterLoadBalancer(session, packet, clientSignalAttachment);
             return syncAnswer;
         } catch (TimeoutException e) {
@@ -181,10 +181,10 @@ public class Consumer implements IConsumer {
 
         var asyncAnswer = NetContext.getRouter().asyncAsk(session, packet, answerClass, argument);
 
-        // load balancer之前调用
+        // Invoke before load-balancer hook
         loadBalancer.beforeLoadBalancer(session, packet, asyncAnswer.getSignalAttachment());
 
-        // load balancer之后调用
+        // Invoke after load-balancer hook
         asyncAnswer.thenAccept(responsePacket -> loadBalancer.afterLoadBalancer(session, packet, asyncAnswer.getSignalAttachment()));
         return asyncAnswer;
     }

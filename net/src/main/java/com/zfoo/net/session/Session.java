@@ -34,16 +34,15 @@ public class Session implements Closeable {
     private Channel channel;
 
     // ------------------------------------------------------------------------------------------------------------
-    // The following are extra parameters, add them yourself if necessary（下面都是额外参数，有需要的自己添加）
+    // The following are extra parameters; add your own fields here if necessary.
     /**
-     * EN:The default user ID is an ID greater than 0, or equal 0 if there is no login, user extra parameters
-     * CN:默认用户的id都是大于0的id，如果没有登录则等于0，用户额外参数
+     * The default user ID is greater than 0; it equals 0 when the user is not logged in.
+     * This is a user-level extra parameter.
      */
     private long uid = 0;
 
     /**
-     * EN:Session extra parameters
-     * CN:Session附带的属性参数，消费者的属性
+     * Extra attributes attached to the session, representing consumer-side properties.
      */
     private Register consumerRegister = null;
 

@@ -51,14 +51,16 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
     private ApplicationContext applicationContext;
 
     /**
-     * 使用Router时，使用的send方法的第1个参数指定session发送消息
-     * 如：创建了一个TcpClient，那明确得到了这个session，则可以通过这个session发送消息
+     * When using the Router, the first parameter of the send() method specifies the session for sending messages.
+     * For example: after creating a TcpClient and obtaining its session, messages can be sent through that session.
      */
     private IRouter router;
 
     /**
-     * 使用Consumer时，提供的接口是没有Session参数的，都是通过负载均衡策略从而拿到ConsumerSession，然后再发送消息。
-     * 如：通过web端向游戏服务器发送请求，web端压根没保存任何session，因此就要通过Consumer去请求
+     * When using the Consumer, the provided interface has no Session parameter.
+     * Sessions are obtained via the load-balancing strategy (ConsumerSession) and messages are sent through it.
+     * For example: when a web client sends a request to a game server, the web side holds no session,
+     * so it must use Consumer to make the request.
      */
     private IConsumer consumer;
 
@@ -126,18 +128,18 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
     }
 
     public synchronized void shutdownAfter() {
-        // 关闭zookeeper的客户端
+        // Close the ZooKeeper client
         configManager.getRegistry().shutdown();
 
-        // 先关闭所有session
+        // Close all sessions first
         sessionManager.forEachClientSession(it -> IOUtils.closeIO(it));
         sessionManager.forEachServerSession(it -> IOUtils.closeIO(it));
 
-        // 关闭客户端和服务器
+        // Shut down clients and servers
         AbstractClient.shutdown();
         AbstractServer.shutdownAllServers();
 
-        // 关闭TaskBus
+        // Shut down TaskBus
         try {
             Field field = TaskBus.class.getDeclaredField("executors");
             ReflectionUtils.makeAccessible(field);

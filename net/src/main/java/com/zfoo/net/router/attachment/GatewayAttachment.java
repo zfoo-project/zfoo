@@ -27,16 +27,13 @@ public class GatewayAttachment {
     private long sid;
 
     /**
-     * EN:User ID, the message forwarded from the gateway to the back must be accompanied by the user's ID information,
-     * otherwise it is impossible to know which user sent it, 0 means no user ID
-     * <p>
-     * CN:用戶Id，从网关转发到后面的消息必须要附带用户的Id信息，要不然无法知道是哪个用户发过来的，0代表没有用户id
+     * User ID. Messages forwarded from the gateway must carry the user's ID so that downstream services
+     * know which user sent the message. 0 means no user ID.
      */
     private long uid;
 
     /**
-     * EN:Used to determine which thread the message is processed on
-     * CN:用来确定这条消息在哪一个线程处理
+     * Determines which thread this message is processed on.
      */
     private int taskExecutorHash;
 
@@ -47,8 +44,8 @@ public class GatewayAttachment {
 
 
     /**
-     * EN:The client may send an packet with synchronous or asynchronous to the gateway, and the gateway needs to bring this attachment when forwarding
-     * CN:客户端发到网关的可能是一个带有同步或者异步的附加包，网关转发的时候需要把这个附加包给带上
+     * A client packet sent to the gateway may carry a synchronous or asynchronous attachment.
+     * The gateway must forward this attachment along with the packet.
      */
     private SignalAttachment signalAttachment;
 
@@ -69,8 +66,8 @@ public class GatewayAttachment {
 
 
     /**
-     * EN:Used to determine which thread the message is processed on
-     * CN:用来确定这条消息在哪一个线程处理
+     * Determines which thread this message is processed on.
+     * Falls back to uid when taskExecutorHash is 0.
      */
     public int taskExecutorHash() {
         return taskExecutorHash == 0 ? (int) uid : taskExecutorHash;

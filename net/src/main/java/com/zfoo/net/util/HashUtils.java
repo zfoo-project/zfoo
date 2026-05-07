@@ -13,7 +13,8 @@
 package com.zfoo.net.util;
 
 /**
- * 改进的hash算法虽然发布比较均匀，但是没有Java自带的hash算法速度快，所以需要知道自己需要什么
+ * The improved hash algorithm distributes values more uniformly but is slower than Java's built-in hash.
+ * Choose based on your requirements.
  *
  * @author godotg
  */
@@ -24,10 +25,10 @@ public abstract class HashUtils {
     private static final int INIT_HASH = (int) 2166136261L;
 
     /**
-     * 改进的32位FNV算法1
+     * Improved 32-bit FNV-1 hash algorithm.
      *
-     * @param data 数组
-     * @return hash结果
+     * @param data byte array to hash
+     * @return hash result
      */
     public static int fnvHash(byte[] data) {
         var hash = INIT_HASH;
@@ -43,10 +44,10 @@ public abstract class HashUtils {
     }
 
     /**
-     * 改进的32位FNV算法1
+     * Improved 32-bit FNV-1 hash algorithm.
      *
-     * @param object 计算hash的对象，会调用toString方法
-     * @return hash结果
+     * @param object the object to hash; its toString() method will be called
+     * @return hash result
      */
     public static int fnvHash(Object object) {
         var hash = object.toString().chars().reduce(INIT_HASH, (left, right) -> (left ^ right) * P);

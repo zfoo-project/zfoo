@@ -36,27 +36,27 @@ public class NetConfig {
     private String protocolParam;
 
     /**
-     * 生成协议列表
+     * The list of code languages for which protocols should be generated.
      */
     private String codeLanguages;
 
     /**
-     * 注册中心
+     * Registry (e.g., ZooKeeper) configuration.
      */
     private RegistryConfig registry;
 
     /**
-     * 监控
+     * Monitoring configuration.
      */
     private MonitorConfig monitor;
 
     /**
-     * 生产者配置
+     * Provider (server-side) configuration.
      */
     private ProviderConfig provider;
 
     /**
-     * 消费者配置
+     * Consumer (client-side) configuration.
      */
     private ConsumerConfig consumer;
 

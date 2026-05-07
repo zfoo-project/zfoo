@@ -22,7 +22,6 @@ import com.zfoo.net.enhance.EnhanceUtils;
 import com.zfoo.net.enhance.IPacketReceiver;
 import com.zfoo.net.enhance.PacketReceiverDefinition;
 import com.zfoo.net.packet.EncodedPacketInfo;
-import com.zfoo.net.packet.PacketService;
 import com.zfoo.net.packet.common.Error;
 import com.zfoo.net.packet.common.Heartbeat;
 import com.zfoo.net.router.answer.AsyncAnswer;
@@ -66,14 +65,14 @@ public class Router implements IRouter {
     protected final ShortObjectHashMap<IPacketReceiver> receiverMap = new ShortObjectHashMap<>();
 
     /**
-     * 作为服务器接收方，会把receive收到的attachment存储在这个地方，只针对task线程。
-     * atReceiver会设置attachment，但是在方法调用完成会取消，不需要过多关注。
-     * asyncAsk会再次设置attachment，需要重点关注。
+     * As the server receiver, the attachment received in receive() is stored here, applicable only to task threads.
+     * atReceiver sets the attachment and clears it after the method returns, no special attention needed.
+     * asyncAsk sets the attachment again and requires careful attention.
      */
     protected final FastThreadLocalAdapter<Object> serverReceiverAttachmentThreadLocal = new FastThreadLocalAdapter<>();
 
     /**
-     * 在服务端收到数据后，会调用这个方法. 这个方法在BaseRouteHandler.java的channelRead中被调用
+     * Called after the server receives data. This method is invoked from channelRead in BaseRouteHandler.java.
      */
     @Override
     public void receive(Session session, Object packet, @Nullable Object attachment) {
@@ -84,18 +83,18 @@ public class Router implements IRouter {
 
         var task = new PacketReceiverTask(session, packet, attachment);
         if (attachment == null) {
-            // 正常发送消息的接收,把客户端的业务请求包装下到路由策略指定的线程进行业务处理
-            // 客户端以asyncAsk发送请求会携带attachment，服务器也是进入这个receive方法，不会直接return
+            // Normal message reception: wrap the client's request and dispatch it to the thread specified by the routing strategy
+            // When the client sends a request via asyncAsk, the attachment is non-null and the server also enters this receive method without returning early
             dispatchBySession(task);
             return;
         }
 
-        // 发送者（客户端）同步和异步消息的接收，发送者通过signalId判断重复
+        // Reception of sync/async responses for the sender (client), deduplicated by signalId
         if (attachment.getClass() == SignalAttachment.class) {
             var signalAttachment = (SignalAttachment) attachment;
 
             if (signalAttachment.getClient() == SignalAttachment.SIGNAL_OUTSIDE_CLIENT) {
-                // 服务器收到外部客户端的SIGNAL_OUTSIDE_CLIENT，不做任何处理
+                // Server received SIGNAL_OUTSIDE_CLIENT from an external client, no special handling needed
                 dispatchBySession(task);
             } else if (signalAttachment.getClient() == SignalAttachment.SIGNAL_NATIVE_ARGUMENT_CLIENT) {
                 signalAttachment.setClient(SignalAttachment.SIGNAL_SERVER);
@@ -104,14 +103,14 @@ public class Router implements IRouter {
                 signalAttachment.setClient(SignalAttachment.SIGNAL_SERVER);
                 dispatchBySession(task);
             } else {
-                // 客户端收到服务器应答，客户端发送的时候client为SIGNAL_NATIVE_CLIENT，服务器收到的时候将其设置为SIGNAL_SERVER
+                // Client received a response from the server; client sets it to SIGNAL_NATIVE_CLIENT when sending, server changes it to SIGNAL_SERVER
                 var removedAttachment = (SignalAttachment) SignalBridge.removeSignalAttachment(signalAttachment);
                 if (removedAttachment == null) {
                     logger.error("client receives packet:[{}] [{}] and attachment:[{}] [{}] from server, but clientAttachmentMap has no attachment, perhaps timeout exception."
                             , packet.getClass().getSimpleName(), JsonUtils.object2String(packet), attachment.getClass(), JsonUtils.object2String(attachment));
                     return;
                 }
-                // 这里会让之前的CompletableFuture得到结果，从而像asyncAsk之类的回调到结果
+                // Completes the CompletableFuture so that asyncAsk callbacks can receive the result
                 removedAttachment.getResponseFuture().complete(packet);
             }
             return;
@@ -120,13 +119,13 @@ public class Router implements IRouter {
         if (attachment.getClass() == GatewayAttachment.class) {
             var gatewayAttachment = (GatewayAttachment) attachment;
 
-            // 如：在网关监听到GatewaySessionInactiveEvent后，这时告诉home时，这个client参数设置的true
-            // 注意：此时并没有return，这样子网关的消息才能发给home，在home进行处理LogoutRequest消息的处理
+            // For example: after the gateway detects GatewaySessionInactiveEvent and notifies the home server,
+            // client is set to true. Note: no return here so the message can be forwarded from gateway to home for LogoutRequest handling.
             if (gatewayAttachment.isClient()) {
                 gatewayAttachment.setClient(false);
                 dispatchByTaskExecutorHash(gatewayAttachment.taskExecutorHash(), task);
             } else {
-                // 这里是：别的服务提供者提供授权给网关，比如：在用户或玩家登录后，home服查到了玩家uid，然后发给Gateway服
+                // Another service provider sends authorization to the gateway, e.g., after login the home server looks up the player's uid and sends it to the gateway
                 var gatewaySession = NetContext.getSessionManager().getServerSession(gatewayAttachment.getSid());
                 if (gatewaySession == null) {
                     logger.error("gateway receives packet:[{}] and attachment:[{}] from server" + ", but serverSessionMap has no session[id:{}], perhaps client disconnected from gateway.", JsonUtils.object2String(packet), JsonUtils.object2String(attachment), gatewayAttachment.getSid());
@@ -147,24 +146,30 @@ public class Router implements IRouter {
     }
 
     /**
-     * Actor模型，最主要的就是线程模型，Actor模型保证了某个Actor所代表的任务永远不会同时在两条线程同时处理任务，这就避免了并发。
-     * 无论是Java，Kotlin，Scala都没有真正的协程，所以最终做到Actor模型的只能是细致的控制线程。
+     * The most important aspect of the Actor model is the threading model. The Actor model guarantees that
+     * tasks represented by an Actor are never processed on two threads simultaneously, thereby avoiding concurrency issues.
+     * Java, Kotlin, and Scala do not have true coroutines, so the Actor model can only be achieved through fine-grained thread control.
      * <p>
-     * zfoo中通过对线程池的细粒度控制，从而实现了Actor模型。
-     * 为了简单，可以把Actor可以理解为一个用户或者一个玩家。
-     * 因为同一个用户或者玩家的uid是固定的，通过uid去计算一致性hash（taskExecutorHash）永远会得到一致的结果（如果没有uid就用session id），
-     * 从而保证同一个用户或者玩家的请求总能通过taskExecutorHash被路由到同一台服务器的同一个线程去执行，从而避免了并发，实现了无锁化。
+     * zfoo implements the Actor model through fine-grained thread pool control.
+     * An Actor can be understood simply as a user or a player.
+     * Because the uid of the same user/player is fixed, computing the consistent hash (taskExecutorHash) from uid always yields
+     * the same result (sid is used if uid is unavailable), ensuring that all requests from the same user/player are always
+     * routed to the same thread on the same server via taskExecutorHash, thus eliminating concurrency and achieving lock-free design.
      * <p>
-     * zfoo所代表的Actor模型，是更加精简的Actor模型，让上层调用无感知，在zfoo中可以简单的理解 actor = taskExecutorHash。
+     * The Actor model in zfoo is a streamlined version that is transparent to the caller. In zfoo, actor = taskExecutorHash.
      * <p>
-     * 在zfoo这套线程模型中，保证了服务器所接收到的Packet（最终被包装成PacketReceiverTask任务），永远只会在同一条线程处理，
-     * TaskBus通过AbstractTaskDispatch去派发PacketReceiverTask任务，具体在哪个线程处理通过IAttachment的taskExecutorHash计算。
+     * In this threading model, packets received by the server (wrapped as PacketReceiverTask) are always processed
+     * on the same thread. TaskBus dispatches PacketReceiverTask via AbstractTaskDispatch, and the target thread is
+     * determined by the taskExecutorHash from IAttachment.
      * <p>
-     * 这种流水线做法对cpu缓存非常友好，java线程能大部分时间跑在一个cpu核心，而用户逻辑又和线程一一对应，这样就可以最大限度提高cpu缓存命中率。
-     * cpu的cache越大命中率就越高，性能提高就越明显。
+     * This pipeline approach is very CPU-cache-friendly: Java threads mostly run on the same CPU core,
+     * and user logic maps one-to-one to threads, maximizing CPU cache hit rate.
+     * The larger the CPU cache, the higher the hit rate, and the more significant the performance improvement.
      * <p>
-     * 单线程热点问题，在负载足够大的情况下，比如5000人同时在线的8核服务器，因为样本足够大每个核心分配的人数差距并不会太大。
-     * 概率论告诉我们样本大的话分布是均匀的，小概率事件的单线程热点问题可以忽略，实在不行就加线程。
+     * Regarding single-thread hotspot issues: under sufficient load (e.g., 5000 concurrent users on an 8-core server),
+     * the sample size is large enough that the number of users per core is fairly balanced.
+     * Probability theory tells us that large samples yield uniform distributions, so single-thread hotspot issues
+     * are rare and can be ignored; otherwise just add more threads.
      */
     public void dispatchBySession(PacketReceiverTask task) {
         var session = task.getSession();
@@ -212,7 +217,7 @@ public class Router implements IRouter {
 
     @Override
     public void send(Session session, Object packet) {
-        // 服务器异步返回的消息的发送会有signalAttachment，验证返回的消息是否满足
+        // When the server sends an async response, there may be a signalAttachment to verify the response
         var serverSignalAttachment = serverReceiverAttachmentThreadLocal.get();
         send(session, packet, serverSignalAttachment);
     }
@@ -236,7 +241,7 @@ public class Router implements IRouter {
         try {
             SignalBridge.addSignalAttachment(clientSignalAttachment);
 
-            // 里面调用的依然是：send方法发送消息
+            // Internally still calls the send method to send the message
             send(session, packet, clientSignalAttachment);
 
             Object responsePacket = clientSignalAttachment.getResponseFuture().get(timeoutMillis, TimeUnit.MILLISECONDS);
@@ -259,9 +264,10 @@ public class Router implements IRouter {
     }
 
     /**
-     * 注意：
-     * 1.这个里面其实还是调用send发送的消息
-     * 2.这个argument的参数，只用于provider处哪个线程执行，其实就是hashId，如：工会业务，则传入guildId，回调回来后，一定会在发起者线程。
+     * Note:
+     * 1. Internally this still calls send() to deliver the message.
+     * 2. The argument parameter only determines which thread executes on the provider side (it is essentially a hashId).
+     *    For example, pass guildId for guild logic. After the callback, execution is guaranteed to return to the caller's thread.
      */
     @Override
     public <T> AsyncAnswer<T> asyncAsk(Session session, Object packet, @Nullable Class<T> answerClass, @Nullable Object argument) {
@@ -279,7 +285,7 @@ public class Router implements IRouter {
             clientSignalAttachment.setTaskExecutorHash(TaskBus.calTaskExecutorHash(argument));
         }
 
-        // 服务器在同步或异步的消息处理中，又调用了同步或异步的方法，这时候threadReceiverAttachment不为空
+        // If the server calls a sync/async method within another sync/async handler, serverSignalAttachment will be non-null
         var serverSignalAttachment = serverReceiverAttachmentThreadLocal.get();
 
         try {
@@ -287,7 +293,7 @@ public class Router implements IRouter {
             asyncAnswer.setSignalAttachment(clientSignalAttachment);
 
             clientSignalAttachment.getResponseFuture()
-                    .completeOnTimeout(null, timeoutMillis, TimeUnit.MILLISECONDS) // 因此超时的情况，返回的是null
+                    .completeOnTimeout(null, timeoutMillis, TimeUnit.MILLISECONDS) // On timeout, the result is null
                     .thenApply(answer -> {
                         if (answer == null) {
                             throw new NetTimeOutException("async ask [{}] timeout exception", packet.getClass().getSimpleName());
@@ -303,16 +309,17 @@ public class Router implements IRouter {
                         return answer;
                     })
                     .whenCompleteAsync((answer, throwable) -> {
-                        // 注意：进入这个方法的时机是：在上面的receive方法中，由于是asyncAsk的消息，attachment不为空，会调用CompletableFuture的complete方法
+                        // Note: this callback is triggered when receive() completes the CompletableFuture
+                        // because the asyncAsk message carries a non-null attachment
                         try {
                             SignalBridge.removeSignalAttachment(clientSignalAttachment);
 
-                            // 接收者在同步或异步的消息处理中，又调用了异步的方法，这时候threadServerAttachment不为空
+                            // If the receiver calls another async method within a sync/async handler, serverSignalAttachment will be non-null
                             if (serverSignalAttachment != null) {
                                 serverReceiverAttachmentThreadLocal.set(serverSignalAttachment);
                             }
 
-                            // 如果有异常的话，whenCompleteAsync的下一个thenAccept不会执行
+                            // If there is an exception, the subsequent thenAccept will not be executed
                             if (throwable != null) {
                                 var notCompleteCallback = asyncAnswer.getNotCompleteCallback();
                                 if (notCompleteCallback != null) {
@@ -323,13 +330,13 @@ public class Router implements IRouter {
                                 return;
                             }
 
-                            // 异步返回，回调业务逻辑
+                            // Async response received, invoke the business callback
                             @SuppressWarnings("unchecked")
                             var answerPacket = (T) answer;
                             asyncAnswer.setFuturePacket(answerPacket);
                             asyncAnswer.consume();
                         } catch (Throwable throwable1) {
-                            logger.error("Asynchronous callback method [ask:{}][answer:{}] error", packet.getClass().getSimpleName(), answer.getClass().getSimpleName(), throwable1);
+                            logger.error("Async callback method [ask:{}][answer:{}] error", packet.getClass().getSimpleName(), answer.getClass().getSimpleName(), throwable1);
                         } finally {
                             if (serverSignalAttachment != null) {
                                 serverReceiverAttachmentThreadLocal.set(null);
@@ -341,7 +348,7 @@ public class Router implements IRouter {
 
             SignalBridge.addSignalAttachment(clientSignalAttachment);
 
-            // 等到上层调用whenComplete才会发送消息
+            // The message is sent only after the caller invokes whenComplete
             asyncAnswer.setAskCallback(() -> send(session, packet, clientSignalAttachment));
             return asyncAnswer;
         } catch (Exception e) {
@@ -352,10 +359,10 @@ public class Router implements IRouter {
 
 
     /**
-     * 正常消息的接收
+     * Normal message reception.
      * <p>
-     * 发送者同时能发送多个包
-     * 接收者同时只能处理一个session的一个包，同一个发送者发送过来的包排队处理
+     * A sender can send multiple packets simultaneously.
+     * A receiver processes only one packet from a session at a time; packets from the same sender are queued.
      */
     @Override
     public void atReceiver(PacketReceiverTask packetReceiverTask) {
@@ -366,10 +373,10 @@ public class Router implements IRouter {
         // The routing of the message
         var receiver = receiverMap.get(ProtocolManager.protocolId(packet.getClass()));
         try {
-            // 接收者（服务器）同步和异步消息的接收
+            // The receiver (server) sets up the attachment for sync/async message handling
             serverReceiverAttachmentThreadLocal.set(attachment);
 
-            // 虚拟线程赋值给ThreadLocal会出错，这里给使用者一个提示
+            // Assigning ThreadLocal inside a virtual thread may cause errors; provide a warning to users
             if (receiver.task() == Task.VirtualThread && receiver.attachment() == null) {
                 logger.warn("virtual thread task can not set Attachment to ThreadLocal, may cause some sync and async timeout exception, please use attachment in receiver method signature and use attachment in sync and async request");
             }
@@ -380,7 +387,7 @@ public class Router implements IRouter {
         } catch (Throwable t) {
             throwableHandler(t, packetReceiverTask);
         } finally {
-            // 如果有服务器在处理同步或者异步消息的时候由于错误没有返回给客户端消息，则可能会残留serverAttachment，所以先移除
+            // If the server fails to respond during sync/async processing, a stale serverAttachment may remain; clear it here
             serverReceiverAttachmentThreadLocal.set(null);
         }
     }

@@ -18,7 +18,6 @@ import com.zfoo.net.config.model.ConsumerModule;
 import com.zfoo.net.config.model.ProviderConfig;
 import com.zfoo.net.config.model.ProviderModule;
 import com.zfoo.protocol.collection.CollectionUtils;
-import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.util.StringUtils;
 import com.zfoo.protocol.util.UuidUtils;
 import org.slf4j.Logger;
@@ -40,9 +39,9 @@ public class Register {
 
     private String id;
 
-    // 服务提供者配置
+    // Service provider configuration
     private ProviderConfig providerConfig;
-    // 服务消费者配置
+    // Service consumer configuration
     private ConsumerConfig consumerConfig;
 
     public static boolean providerHasConsumer(Register providerRegister, Register consumerRegister) {
@@ -125,17 +124,17 @@ public class Register {
     public String toProviderString() {
         var builder = new StringBuilder();
 
-        // 模块模块名
+        // Module name / node ID
         builder.append(id);
 
-        // 服务提供者相关配置信息
+        // Provider-related configuration
         if (Objects.nonNull(providerConfig)) {
             var providerAddress = providerConfig.getAddress();
             if (StringUtils.isBlank(providerAddress)) {
                 throw new RuntimeException(StringUtils.format("The address of provider Config cannot be empty"));
             }
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
-            // 服务提供者地址
+            // Provider address
             builder.append(providerAddress);
 
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
@@ -143,12 +142,12 @@ public class Register {
                     .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getProtocolModule(), it.getProvider()))
                     .toList();
 
-            // 服务提供者模块信息列表
+            // List of provider module descriptors
             builder.append(StringUtils.format("provider:[{}]"
                     , StringUtils.joinWith(StringUtils.COMMA + StringUtils.SPACE, providerModules.toArray())));
         }
 
-        // 服务消费者相关信息
+        // Consumer-related configuration
         if (Objects.nonNull(consumerConfig)) {
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
 
@@ -156,7 +155,7 @@ public class Register {
                     .map(it -> StringUtils.joinWith(StringUtils.HYPHEN, it.getLoadBalancer(), it.getConsumer()))
                     .toList();
 
-            // 服务消费者模块信息列表
+            // List of consumer module descriptors
             builder.append(StringUtils.format("consumer:[{}]"
                     , StringUtils.joinWith(StringUtils.COMMA + StringUtils.SPACE, consumerModules.toArray())));
         }
@@ -167,17 +166,17 @@ public class Register {
     public String toProviderSimple() {
         var builder = new StringBuilder();
 
-        // 模块模块名
+        // Module name / node ID
         builder.append(id);
 
-        // 服务提供者相关配置信息
+        // Provider-related configuration (address only)
         if (Objects.nonNull(providerConfig)) {
             var providerAddress = providerConfig.getAddress();
             if (StringUtils.isBlank(providerAddress)) {
                 throw new RuntimeException(StringUtils.format("The address of provider Config cannot be empty"));
             }
             builder.append(StringUtils.SPACE).append(StringUtils.VERTICAL_BAR).append(StringUtils.SPACE);
-            // 服务提供者地址
+            // Provider address
             builder.append(providerAddress);
         }
         return builder.toString();

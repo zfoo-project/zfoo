@@ -19,8 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
- * EN:Synchronous or asynchronous call controller, synchronous and asynchronous call signal communication bridge
- * CN:同步或异步的调用控制器，同步和异步调用的信号沟通桥梁
+ * Synchronous or asynchronous call controller, acting as a signal communication bridge for sync and async calls
  *
  * @author godotg
  */
@@ -30,12 +29,11 @@ public class SignalBridge {
     private static final int SIGNAL_MASK = 0B00000000_00000000_01111111_11111111;
 
     /**
-     * key：signalId
+     * key: signalId
      */
     private static final Map<Integer, SignalAttachment> signalAttachmentMap = new ConcurrentHashMap<>(1000);
     /**
-     * EN:Ring buffer data structure, which is cache-friendly, can reduce cache contention and improve memory access efficiency
-     * CN:环形缓冲区数据结构，该数据结构具有良好的缓存友好性，可以充分利用 CPU 缓存，减少缓存竞争，提高内存访问效率
+     * Ring buffer data structure, which is cache-friendly, reduces cache contention and improves memory access efficiency
      */
     private static final AtomicReferenceArray<SignalAttachment> signalAttachmentArray = new AtomicReferenceArray<>(SIGNAL_MASK + 1);
 
@@ -43,7 +41,7 @@ public class SignalBridge {
         var signalId = signalAttachment.getSignalId();
         var hash = signalId & SIGNAL_MASK;
 
-        // Using an Atomic Reference Array is just to improve performance, and only using a ConcurrentHashMap will still work
+        // Using an AtomicReferenceArray is just to improve performance; using only a ConcurrentHashMap would also work correctly
         if (signalAttachmentArray.compareAndSet(hash, null, signalAttachment)) {
             return;
         }
@@ -60,7 +58,7 @@ public class SignalBridge {
 
         var attachment = signalAttachmentArray.get(hash);
         if (attachment != null && attachment.getSignalId() == signalId) {
-            // 使用性能更高的lazySet()，当我们想对一个原子变量进行修改，而且我们知道这个修改不需要立即对其他线程可见。
+            // Use the higher-performance lazySet() when the modification doesn't need to be immediately visible to other threads
             signalAttachmentArray.lazySet(hash, null);
             return attachment;
         }

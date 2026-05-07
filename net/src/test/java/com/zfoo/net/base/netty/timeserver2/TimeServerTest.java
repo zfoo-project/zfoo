@@ -15,7 +15,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * 通过换行符解决半包读写的问题
+ * Solves the half-packet problem using line-delimiter framing
  *
  * @author godotg
  * @version 1.0
@@ -32,21 +32,21 @@ public class TimeServerTest {
     }
 
     public void init() {
-        //配置服务端nio线程组
-        EventLoopGroup bossGroup = new NioEventLoopGroup();//服务端接受客户端连接
-        EventLoopGroup workerGroup = new NioEventLoopGroup();//SocketChannel的网络读写
+        // Configure server-side NIO thread groups
+        EventLoopGroup bossGroup = new NioEventLoopGroup(); // Accept client connections
+        EventLoopGroup workerGroup = new NioEventLoopGroup(); // Handle SocketChannel network I/O
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024).childHandler(new ChildChannelHandler());
-            //绑定端口，同步等待成功
+            // Bind port and wait synchronously until the bind succeeds
             ChannelFuture future = bootstrap.bind(9999).sync();
-            //等待服务端监听端口关闭
+            // Wait until the server socket is closed
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            //优雅的退出，释放线程池资源
+            // Graceful shutdown: release thread pool resources
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }

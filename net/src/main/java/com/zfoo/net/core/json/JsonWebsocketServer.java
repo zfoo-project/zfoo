@@ -39,16 +39,15 @@ public class JsonWebsocketServer extends AbstractServer<SocketChannel> {
     public void initChannel(SocketChannel channel) {
         channel.pipeline().addLast(new IdleStateHandler(0, 0, 180));
         channel.pipeline().addLast(new ServerIdleHandler());
-        // 编解码 http 请求
+        // Encode/decode HTTP requests
         channel.pipeline().addLast(new HttpServerCodec(8 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB, 16 * IOUtils.BYTES_PER_KB));
-        // 聚合解码 HttpRequest/HttpContent/LastHttpContent 到 FullHttpRequest
-        // 保证接收的 Http 请求的完整性
+        // Aggregate HttpRequest/HttpContent/LastHttpContent into a single FullHttpRequest to ensure completeness
         channel.pipeline().addLast(new HttpObjectAggregator(16 * IOUtils.BYTES_PER_MB));
-        // 处理其他的 WebSocketFrame
+        // Handle WebSocketFrame upgrades and other WebSocket frames
         channel.pipeline().addLast(new WebSocketServerProtocolHandler("/websocket"));
-        // 写文件内容，支持异步发送大的码流，一般用于发送文件流
+        // Support async large-payload streaming (e.g. file transfers)
         channel.pipeline().addLast(new ChunkedWriteHandler());
-        // 编解码WebSocketFrame二进制协议
+        // Encode/decode WebSocketFrame binary protocol
         channel.pipeline().addLast(new JsonWebSocketCodecHandler());
         channel.pipeline().addLast(new ServerRouteHandler());
     }

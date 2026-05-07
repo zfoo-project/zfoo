@@ -25,12 +25,13 @@ import java.util.List;
 public interface IConsumerLoadBalancer {
 
     /**
-     * Select a service provider that can provide interface/packet services
-     * 只有一致性hash会使用这个argument参数，如果在一致性hash没有传入argument默认使用随机负载均衡
+     * Select a service provider that can handle the given packet.
+     * Only the consistent-hash balancer uses the {@code argument} parameter;
+     * if no argument is passed, it falls back to random load balancing.
      *
-     * @param packet   请求包
-     * @param argument 计算参数
-     * @return 一个服务提供者的session
+     * @param packet   the request packet
+     * @param argument the parameter used to compute the consistent hash
+     * @return a session of the selected service provider
      */
     Session selectProvider(List<Session> providers, Object packet, @Nullable Object argument);
 

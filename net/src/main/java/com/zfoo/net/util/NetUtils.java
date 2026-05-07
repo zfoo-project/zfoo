@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * 网络相关工具
+ * Network-related utility methods.
  *
  * @author godotg
  */
@@ -36,11 +36,11 @@ public class NetUtils {
     public final static String LOCAL_LOOPBACK_IP = "127.0.0.1";
 
     /**
-     * 默认最小端口，1024
+     * Default minimum port: 1024
      */
     public static final int PORT_RANGE_MIN = 1024;
     /**
-     * 默认最大端口，65535
+     * Default maximum port: 65535
      */
     public static final int PORT_RANGE_MAX = 0xFFFF;
 
@@ -54,17 +54,17 @@ public class NetUtils {
     public final static Pattern IPV6 = Pattern.compile("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))");
 
     /**
-     * 根据long值获取ip v4地址
+     * Convert a long value to an IPv4 address string.
      *
-     * @param longIP IP的long表示形式
-     * @return IP V4 地址
+     * @param longIP the long representation of an IP address
+     * @return the IPv4 address string
      */
     public static String longToIpv4(long longIP) {
         final StringBuilder sb = new StringBuilder();
-        // 直接右移24位
+        // Shift right 24 bits to get the first octet
         sb.append((longIP / 1_000_000_000));
         sb.append(".");
-        // 将高8位置0，然后右移16位
+        // Clear the top 8 bits and shift right 16 bits for the second octet
         sb.append(longIP / 1_000_000 % 1_000);
         sb.append(".");
         sb.append(longIP / 1_000 % 1_000);
@@ -74,19 +74,19 @@ public class NetUtils {
     }
 
     /**
-     * 根据ip地址计算出long型的数据
+     * Convert an IPv4 address string to a long value.
      *
-     * @param strIP IP V4 地址
-     * @return long值
+     * @param strIP the IPv4 address string
+     * @return the long representation
      */
     public static long ipv4ToLong(String strIP) {
         if (isValidAddress(strIP)) {
             long[] ip = new long[4];
-            // 先找到IP地址字符串中.的位置
+            // Find the positions of '.' in the IP address string
             int position1 = strIP.indexOf(".");
             int position2 = strIP.indexOf(".", position1 + 1);
             int position3 = strIP.indexOf(".", position2 + 1);
-            // 将每个.之间的字符串转换成整型
+            // Parse each octet between dots as a long
             ip[0] = Long.parseLong(strIP.substring(0, position1));
             ip[1] = Long.parseLong(strIP.substring(position1 + 1, position2));
             ip[2] = Long.parseLong(strIP.substring(position2 + 1, position3));
@@ -100,7 +100,7 @@ public class NetUtils {
         return IPV4.matcher(address).matches() || IPV6.matcher(address).matches();
     }
 
-    // 同时支持ipv4和ipv6
+    // Supports both IPv4 and IPv6
     public static long ipToLong(String ip) {
         var splits = ip.split(StringUtils.PERIOD_REGEX);
         var longs = new long[splits.length];
@@ -138,19 +138,19 @@ public class NetUtils {
     }
 
     /**
-     * 检测本地端口可用性<br>
-     * 来自org.springframework.util.SocketUtils
+     * Checks whether a local port is available.<br>
+     * Inspired by org.springframework.util.SocketUtils.
      *
-     * @param port 被检测的端口
-     * @return 是否可用
+     * @param port the port to check
+     * @return {@code true} if the port is available
      */
     public static boolean isAvailablePort(int port) {
         if (!isValidPort(port)) {
-            // 给定的IP未在指定端口范围中
+            // Port number is outside the valid range
             return false;
         }
 
-        // try-with-resources会自动调用close方法
+        // try-with-resources automatically calls close()
         try (ServerSocket ss = new ServerSocket(port, 0, getLocalhost())) {
             return true;
         } catch (Exception e) {
@@ -159,45 +159,45 @@ public class NetUtils {
     }
 
     /**
-     * 是否为有效的端口<br>
-     * 此方法并不检查端口是否被占用
+     * Checks whether a port number is valid.<br>
+     * This method does NOT check whether the port is already in use.
      *
-     * @param port 端口号
-     * @return 是否有效
+     * @param port the port number
+     * @return {@code true} if the port is in the range [0, 65535]
      */
     public static boolean isValidPort(int port) {
-        // 有效端口是0～65535
+        // Valid port range: 0 ~ 65535
         return port >= 0 && port <= PORT_RANGE_MAX;
     }
 
     /**
-     * 查找1024~65535范围内的可用端口<br>
-     * 此方法只检测给定范围内的随机一个端口，检测65535-1024次<br>
+     * Finds an available port in the range [1024, 65535].<br>
+     * Iterates sequentially up to (65535 - 1024) times.<br>
      *
-     * @return 可用的端口
+     * @return an available port number
      */
     public static int getAvailablePort() {
         return getAvailablePort(PORT_RANGE_MIN);
     }
 
     /**
-     * 查找指定范围内的可用端口，最大值为65535<br>
-     * 此方法只检测给定范围内的随机一个端口，检测65535-minPort次<br>
+     * Finds an available port in the range [{@code minPort}, 65535].<br>
+     * Iterates sequentially up to (65535 - minPort) times.<br>
      *
-     * @param minPort 端口最小值（包含）
-     * @return 可用的端口
+     * @param minPort the minimum port number (inclusive)
+     * @return an available port number
      */
     public static int getAvailablePort(int minPort) {
         return getAvailablePort(minPort, PORT_RANGE_MAX);
     }
 
     /**
-     * 查找指定范围内的可用端口<br>
-     * 此方法只检测给定范围内的随机一个端口，检测maxPort-minPort次<br>
+     * Finds an available port in the range [{@code minPort}, {@code maxPort}].<br>
+     * Iterates sequentially up to (maxPort - minPort) times.<br>
      *
-     * @param minPort 端口最小值（包含）
-     * @param maxPort 端口最大值（包含）
-     * @return 可用的端口
+     * @param minPort the minimum port number (inclusive)
+     * @param maxPort the maximum port number (inclusive)
+     * @return an available port number
      */
     public static int getAvailablePort(int minPort, int maxPort) {
         for (int i = minPort; i <= maxPort; i++) {
@@ -211,11 +211,12 @@ public class NetUtils {
     }
 
     /**
-     * 获取多个本地可用端口<br>
+     * Retrieves multiple available local ports.<br>
      *
-     * @param minPort 端口最小值（包含）
-     * @param maxPort 端口最大值（包含）
-     * @return 可用的端口
+     * @param numRequested the number of ports needed
+     * @param minPort      the minimum port number (inclusive)
+     * @param maxPort      the maximum port number (inclusive)
+     * @return a sorted set of available port numbers
      */
     public static TreeSet<Integer> getAvailablePorts(int numRequested, int minPort, int maxPort) {
         final TreeSet<Integer> availablePorts = new TreeSet<>();
@@ -233,11 +234,13 @@ public class NetUtils {
     }
 
     /**
-     * 判定是否为内网IP<br>
-     * 私有IP：A类 10.0.0.0-10.255.255.255 B类 172.16.0.0-172.31.255.255 C类 192.168.0.0-192.168.255.255 当然，还有127这个网段是环回地址
+     * Determines whether an IP address belongs to a private (intranet) range.<br>
+     * Private ranges: Class A 10.0.0.0–10.255.255.255,
+     * Class B 172.16.0.0–172.31.255.255, Class C 192.168.0.0–192.168.255.255,
+     * and the loopback range 127.x.x.x.
      *
-     * @param ipAddress IP地址
-     * @return 是否为内网IP
+     * @param ipAddress the IP address string
+     * @return {@code true} if the address is a private/loopback address
      */
     public static boolean isInnerIP(String ipAddress) {
         long ipNum = NetUtils.ipv4ToLong(ipAddress);
@@ -256,12 +259,12 @@ public class NetUtils {
     }
 
     /**
-     * 指定IP的long是否在指定范围内
+     * Checks whether the numeric representation of an IP address falls within [begin, end].
      *
-     * @param userIp 用户IP
-     * @param begin  开始IP
-     * @param end    结束IP
-     * @return 是否在范围内
+     * @param userIp the numeric IP to test
+     * @param begin  the lower bound (inclusive)
+     * @param end    the upper bound (inclusive)
+     * @return {@code true} if {@code userIp} is within the range
      */
     private static boolean isInner(long userIp, long begin, long end) {
         return (userIp >= begin) && (userIp <= end);
@@ -269,10 +272,10 @@ public class NetUtils {
 
 
     /**
-     * 通过域名得到IP
+     * Resolves a hostname to its IP address string.
      *
-     * @param hostName HOST
-     * @return ip address or hostName if UnknownHostException
+     * @param hostName the hostname or domain name
+     * @return the resolved IP address, or the original hostName if resolution fails
      */
     public static String getIpByHost(String hostName) {
         try {
@@ -283,7 +286,7 @@ public class NetUtils {
     }
 
     /**
-     * 获取本机所有网卡
+     * Returns all network interfaces on the local machine.
      */
     public static Set<NetworkInterface> getAllNetworkInterface() {
         try {
@@ -299,9 +302,9 @@ public class NetUtils {
     }
 
     /**
-     * 获取所有满足过滤条件的本地IP地址对象
+     * Returns all local {@link InetAddress} objects across all network interfaces.
      *
-     * @return 过滤后的地址对象列表
+     * @return a set of local addresses
      */
     public static Set<InetAddress> getAllAddress() {
         var networkInterfaces = getAllNetworkInterface();
@@ -319,8 +322,8 @@ public class NetUtils {
     }
 
     /**
-     * 获得本机的IPv4地址列表<br>
-     * 返回的IP列表有序，按照系统设备顺序
+     * Returns all local IPv4 addresses.<br>
+     * The list is ordered by system device order.
      */
     public static Set<String> localIpv4s() {
         var localAddressList = getAllAddress().stream()
@@ -329,8 +332,8 @@ public class NetUtils {
     }
 
     /**
-     * 获得本机的IPv6地址列表<br>
-     * 返回的IP列表有序，按照系统设备顺序
+     * Returns all local IPv6 addresses.<br>
+     * The list is ordered by system device order.
      */
     public static Set<String> localIpv6s() {
         var localAddressList = getAllAddress().stream()
@@ -339,7 +342,7 @@ public class NetUtils {
     }
 
     /**
-     * 地址列表转换为IP地址列表
+     * Converts a set of {@link InetAddress} objects to a set of IP address strings.
      */
     public static Set<String> toIpList(Set<InetAddress> addressList) {
         var ipSet = new LinkedHashSet<String>();
@@ -350,7 +353,7 @@ public class NetUtils {
     }
 
     /**
-     * 获得本机的IP地址列表（包括Ipv4和Ipv6）<br>
+     * Returns all local IP addresses (both IPv4 and IPv6).
      */
     public static Set<String> localIps() {
         var localAddressList = getAllAddress();
@@ -359,13 +362,14 @@ public class NetUtils {
 
 
     /**
-     * 获取本机网卡IP地址，这个地址为所有网卡中非回路地址的第一个<br>
-     * 如果获取失败调用 {@link InetAddress#getLocalHost()}方法获取。<br>
-     * 此方法不会抛出异常，获取失败将返回<code>null</code><br>
+     * Returns the local machine's primary NIC IP address string —
+     * the first non-loopback address among all network cards.<br>
+     * Falls back to {@link InetAddress#getLocalHost()} on failure.<br>
+     * Never throws; returns an empty string if the address cannot be determined.<br>
      * <p>
-     * 参考：http://stackoverflow.com/questions/9481865/getting-the-ip-address-of-the-current-machine-using-java
+     * Reference: http://stackoverflow.com/questions/9481865/getting-the-ip-address-of-the-current-machine-using-java
      *
-     * @return 本机网卡IP地址，获取失败返回空字符串
+     * @return the local NIC IP address string, or an empty string on failure
      */
     public static String getLocalhostStr() {
         InetAddress localhost = getLocalhost();
@@ -376,22 +380,22 @@ public class NetUtils {
     }
 
     /**
-     * 获取本机网卡IP地址，规则如下：
+     * Returns the local machine's primary NIC {@link InetAddress}, following these rules:
      *
      * <pre>
-     * 1. 查找所有网卡地址，必须非回路（loopback）地址、非局域网地址（siteLocal）、IPv4地址
-     * 2. 如果无满足要求的地址，调用 {@link InetAddress#getLocalHost()} 获取地址
+     * 1. Search all NIC addresses; must be non-loopback, site-local, and IPv4.
+     * 2. If no address meets the criteria, fall back to {@link InetAddress#getLocalHost()}.
      * </pre>
      *
-     * @return 本机网卡IP地址，获取失败返回<code>null</code>
+     * @return the local NIC address, or {@code null} on failure
      */
     @Nullable
     public static InetAddress getLocalhost() {
         var address = getAllAddress().stream()
                 .filter(it -> !it.isLoopbackAddress()
-                        // 非地区本地地址，指10.0.0.0 ~ 10.255.255.255、172.16.0.0 ~ 172.31.255.255、192.168.0.0 ~ 192.168.255.255
+                        // Site-local: 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255
                         && it.isSiteLocalAddress()
-                        // 需为IPV4地址
+                        // Must be an IPv4 address
                         && it instanceof Inet4Address
                         && !it.getHostAddress().contains(":"))
                 .findFirst();
@@ -408,30 +412,30 @@ public class NetUtils {
     }
 
     /**
-     * 获得本机MAC地址
+     * Returns the MAC address of the local machine's primary NIC.
      *
-     * @return 本机MAC地址
+     * @return the MAC address string
      */
     public static String getLocalMacAddress() {
         return getMacAddress(getLocalhost());
     }
 
     /**
-     * 获得指定地址信息中的MAC地址，使用分隔符“-”
+     * Returns the MAC address of the NIC bound to the given address, using {@code "-"} as separator.
      *
-     * @param inetAddress {@link InetAddress}
-     * @return MAC地址，用-分隔
+     * @param inetAddress the {@link InetAddress} whose NIC MAC is needed
+     * @return the MAC address string separated by {@code "-"}
      */
     public static String getMacAddress(InetAddress inetAddress) {
         return getMacAddress(inetAddress, "-");
     }
 
     /**
-     * 获得指定地址信息中的MAC地址
+     * Returns the MAC address of the NIC bound to the given address.
      *
-     * @param inetAddress {@link InetAddress}
-     * @param separator   分隔符，推荐使用“-”或者“:”
-     * @return MAC地址，用-分隔
+     * @param inetAddress the {@link InetAddress} whose NIC MAC is needed
+     * @param separator   the separator character; {@code "-"} or {@code ":"} are recommended
+     * @return the MAC address string
      */
     public static String getMacAddress(InetAddress inetAddress, String separator) {
         AssertionUtils.notNull(inetAddress);
@@ -449,7 +453,7 @@ public class NetUtils {
                 if (i != 0) {
                     sb.append(separator);
                 }
-                // 字节转换为整数
+                // Convert each byte to its hex integer representation
                 s = Integer.toHexString(mac[i] & 0xFF);
                 sb.append(s.length() == 1 ? 0 + s : s);
             }
@@ -459,12 +463,12 @@ public class NetUtils {
     }
 
     /**
-     * 使用普通Socket发送数据
+     * Sends raw bytes to a remote host using a plain TCP socket.
      *
-     * @param host Server主机
-     * @param port Server端口
-     * @param data 数据
-     * @throws IOException IO异常
+     * @param host the target server host
+     * @param port the target server port
+     * @param data the data to send
+     * @throws IOException if an I/O error occurs
      */
     public static void netCat(String host, int port, byte[] data) throws IOException {
         OutputStream out = null;
@@ -479,7 +483,11 @@ public class NetUtils {
     }
 
     /**
-     * 是否在一个ip网段下
+     * Checks whether an IP address falls within a given CIDR range.
+     *
+     * @param ip   the IP address to test
+     * @param cidr the CIDR notation (e.g. "192.168.1.0/24")
+     * @return {@code true} if the IP is within the CIDR range
      */
     public static boolean isInRange(String ip, String cidr) {
         if (StringUtils.isBlank(ip)) {

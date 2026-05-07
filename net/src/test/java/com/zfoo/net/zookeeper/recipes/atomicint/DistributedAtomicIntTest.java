@@ -11,7 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * 使用Curator实现分布式计数器
+ * Distributed atomic counter implementation using Apache Curator
  *
  * @author godotg
  * @version 1.0

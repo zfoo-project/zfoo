@@ -24,7 +24,7 @@ public class DeleteNodeSyncTest {
 
         connectedSemaphore.await();
 
-        // 如果一个节点存在至少一个子节点的话，那么该节点将无法被直接删除，必须先删除掉其它所有子节点
+        // A node with at least one child cannot be deleted directly; all children must be removed first
         zooKeeper.delete("/node_test", -1);
 
         Thread.sleep(Integer.MAX_VALUE);

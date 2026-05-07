@@ -45,17 +45,16 @@ public interface IRegistry {
     String rootPath();
 
     /**
-     * EN: Get registration information for all service providers
-     * CN: 获取所有服务提供者的注册信息
+     * Get registration information for all remote service providers.
      */
     List<Register> remoteProviderRegisters();
 
     /**
-     * 监听path路径下的更新
+     * Listen for changes under the given path.
      *
-     * @param listenerPath   需要监听的路径
-     * @param updateCallback 回调方法，第一个参数是路径，第二个是变化的内容
-     * @param removeCallback 回调方法，第一个参数是路径，第二个是变化的内容
+     * @param listenerPath   the path to watch
+     * @param updateCallback callback invoked on data creation/update; first parameter is the path, second is the changed content
+     * @param removeCallback callback invoked on data removal; first parameter is the path
      */
     void addListener(String listenerPath, @Nullable BiConsumer<String, byte[]> updateCallback, @Nullable Consumer<String> removeCallback);
 

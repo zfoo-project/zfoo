@@ -36,8 +36,8 @@ public class BrokerTcpClient extends AbstractClient<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel channel) {
-        // 可以看出来，这个客户端检测到空闲的时间是60s，相对短一点，这样子就可以发送心跳。
-        // 服务器端则是180s，相对长一点，一旦检测到空闲，则把客户端踢掉。
+                // The client's idle detection timeout is 60 s (shorter), allowing it to send heartbeats.
+                // The server's idle detection timeout is 180 s (longer); once idle is detected, the client is evicted.
         channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
         channel.pipeline().addLast(new ClientIdleHandler());
         channel.pipeline().addLast(new TcpCodecHandler());

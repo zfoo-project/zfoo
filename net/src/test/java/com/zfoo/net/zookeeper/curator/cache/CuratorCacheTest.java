@@ -35,7 +35,7 @@ public class CuratorCacheTest {
 
         curatorCache.start();
 
-        //节点变化的监听器
+        // Listener for node change events
         curatorCache.listenable().addListener(new CuratorCacheListener() {
             @Override
             public void event(Type type, ChildData oldData, ChildData data) {

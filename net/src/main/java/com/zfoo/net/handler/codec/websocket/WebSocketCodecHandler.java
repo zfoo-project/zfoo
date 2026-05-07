@@ -37,7 +37,7 @@ public class WebSocketCodecHandler extends MessageToMessageCodec<WebSocketFrame,
     protected void decode(ChannelHandlerContext channelHandlerContext, WebSocketFrame webSocketFrame, List<Object> list) {
         ByteBuf in = webSocketFrame.content();
         var length = in.readInt();
-        // 如果长度非法，则抛出异常断开连接，按照自己的使用场景指定合适的长度，防止客户端发送超大包占用带宽
+        // Reject illegal packet lengths to prevent oversized packets from consuming bandwidth
         if (length < 0 || length > IOUtils.BYTES_PER_MB) {
             throw new IllegalArgumentException(StringUtils.format("illegal packet [length:{}]", length));
         }

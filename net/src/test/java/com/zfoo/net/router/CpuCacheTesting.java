@@ -77,7 +77,7 @@ public class CpuCacheTesting {
                 competeTaskCount++;
             }
         }
-        System.out.println(StringUtils.format("cpu缓存友好写法胜出{} 不友好写法胜出{}", hashTaskCount, competeTaskCount));
+        System.out.println(StringUtils.format("cache-friendly wins:{} cache-unfriendly wins:{}", hashTaskCount, competeTaskCount));
     }
 
 
@@ -106,7 +106,7 @@ public class CpuCacheTesting {
         countdown.await();
         long endTime = System.currentTimeMillis();
         long cost = endTime - startTime;
-        System.out.println(StringUtils.format("cpu缓存友好的任务调度 -> {}", cost));
+        System.out.println(StringUtils.format("cache-friendly task dispatch -> {}ms", cost));
         return cost;
     }
 
@@ -134,7 +134,7 @@ public class CpuCacheTesting {
         countdown.await();
         long endTime = System.currentTimeMillis();
         long cost = endTime - startTime;
-        System.out.println(StringUtils.format("cpu缓存不友好的任务调度 -> {}", cost));
+        System.out.println(StringUtils.format("cache-unfriendly task dispatch -> {}ms", cost));
         return cost;
     }
 }

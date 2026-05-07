@@ -24,8 +24,8 @@
             <net:address name="${registry.address.name}" url="${registry.address.url}"/>
         </net:registry>
 
-        <!--1.这里声明自己是服务提供者 2.提供接口是myProviderModule模块下的接口 3.提供者的名字是myProvider1-->
-        <!--可以对同一个接口模块声明多个服务提供者，消费者可以选择其中一个，这样就可以实现分组的效果-->
+        <!--1.这里声明自己是服务提供�?2.提供接口是myProviderModule模块下的接口 3.提供者的名字是myProvider1-->
+        <!--Multiple providers can be declared for the same module; consumers can select one, enabling provider-group routing-->
         <net:providers>
             <net:provider protocol-module="myProviderModule" provider="provider1"/>
             <net:provider protocol-module="myProviderModule" provider="provider2"/>

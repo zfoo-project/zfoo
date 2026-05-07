@@ -35,7 +35,7 @@ import java.util.function.Function;
 public class HttpServerTest {
 
     /**
-     * 访问下面这个网址：
+     * Visit the following URL to test:
      * <p>
      * http://127.0.0.1:9000/hello
      */
@@ -51,7 +51,7 @@ public class HttpServerTest {
                 if (uri.equals("/hello")) {
                     return DecodedPacketInfo.valueOf(HttpHelloRequest.valueOf("other param"), attachment);
                 } else {
-                    throw new RunException("未知的http路径[{}]", uri);
+                    throw new RunException("Unknown HTTP path[{}]", uri);
                 }
             }
         });

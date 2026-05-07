@@ -19,12 +19,12 @@ package com.zfoo.net.packet;
 public class DecodedPacketInfo {
 
     /**
-     * 解码后的包
+     * The decoded packet.
      */
     private Object packet;
 
     /**
-     * 解码后的包的附加包
+     * The attachment of the decoded packet.
      */
     private Object attachment;
 

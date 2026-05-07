@@ -45,7 +45,7 @@ public class AsyncAnswer<T> implements IAsyncAnswer<T> {
     public void whenComplete(Consumer<T> consumer) {
         thenAccept(consumer);
 
-        // 这里其实会触发发送消息
+                // This actually triggers sending the message
         askCallback.run();
     }
 

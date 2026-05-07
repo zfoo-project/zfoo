@@ -22,12 +22,12 @@ import java.util.Objects;
 public class ProviderModule {
 
     /**
-     * 模块id和模块名
+     * The module ID and module name.
      */
     private String protocolModule;
 
     /**
-     * 提供者名字
+     * The name of the service provider.
      */
     private String provider;
 

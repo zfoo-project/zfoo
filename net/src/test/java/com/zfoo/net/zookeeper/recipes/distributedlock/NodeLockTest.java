@@ -28,7 +28,7 @@ public class NodeLockTest {
                     }
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss|SSS");
                     String orderNo = sdf.format(new Date());
-                    System.err.println("生成的订单号是 : " + orderNo);
+                    System.err.println("Generated order number: " + orderNo);
                 }
             }).start();
         }

@@ -10,24 +10,22 @@ import org.junit.Test;
 
 @Ignore
 public class CreateNodeSyncTest {
-    //RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3); // /ekspəʊ'nenʃl/ adj.  指数的; 幂数的
-    //RetryPolicy retryPolicy = new RetryNTimes(5, 1000); // 最多重试5次，每次一秒
-
+    //RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3); // exponential backoff strategy
+    //RetryPolicy retryPolicy = new RetryNTimes(5, 1000); // retry at most N times, sleep 1s between each
     @Test
     public void test() throws Exception {
-        // 重试的时间超过最大时间后，就不再重试
-        // 参数说明:
-        // maxElapsedTimeMs: 最大的重试时间
-        // sleepMsBetweenRetries：每次重试的间隔时间
-        RetryPolicy retryPolicy = new RetryUntilElapsed(5000, 1000);// elapsed /ɪ'læps/ v.  过去; 消逝
-
+        // Stop retrying once the total elapsed time exceeds the maximum
+        // Parameter description:
+        // maxElapsedTimeMs: maximum total retry duration (ms)
+        // sleepMsBetweenRetries: sleep duration between retry attempts (ms)
+        RetryPolicy retryPolicy = new RetryUntilElapsed(5000, 1000);// elapsed: time that has passed
         CuratorFramework client = CuratorFrameworkFactory
                 .builder()
                 .connectString("localhost:2181")
                 .sessionTimeoutMs(5000)
                 .connectionTimeoutMs(5000)
                 .retryPolicy(retryPolicy)
-                // .namespace(basePath); 指定namespace，该客户端的如何操作，都是基于该相对目录进行的。
+                // .namespace(basePath); // sets namespace so all operations are relative to this base path
                 .build();
 
         client.start();

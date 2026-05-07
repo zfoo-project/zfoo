@@ -16,7 +16,7 @@ public class CreateNodeASyncTest {
 
     private static CountDownLatch connectedSemaphore = new CountDownLatch(1);
 
-    // 异步创建一个节点
+    // Async node creation
     @Test
     public void test() throws IOException, InterruptedException {
         ZooKeeper zookeeper = new ZooKeeper("localhost:2181", 5000, new CreateNodeASyncWatcher());
@@ -27,7 +27,7 @@ public class CreateNodeASyncTest {
 
         String content = "Hello Zookeeper!";
 
-        // 异步创建，会回调processResult()
+        // Async creation: processResult() is invoked on completion
         zookeeper.create("/node_test", content.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT, new StringCallback(), "hello");
 
         Thread.sleep(Integer.MAX_VALUE);
@@ -36,7 +36,7 @@ public class CreateNodeASyncTest {
     static class CreateNodeASyncWatcher implements Watcher {
         @Override
         public void process(WatchedEvent event) {
-            System.out.println("接受事件" + event);
+            System.out.println("Received event: " + event);
             if (event.getState() == KeeperState.SyncConnected) {
                 if (event.getType() == EventType.None && null == event.getPath()) {
                     connectedSemaphore.countDown();

@@ -41,7 +41,7 @@ public class CreateNodeSyncAuthTest {
 
         @Override
         public void process(WatchedEvent event) {
-            System.out.println("收到事件：" + event);
+            System.out.println("Received event: " + event);
             if (event.getState() == KeeperState.SyncConnected) {
                 if (!somethingDone && event.getType() == EventType.None && null == event.getPath()) {
                     doSomething();
@@ -50,21 +50,21 @@ public class CreateNodeSyncAuthTest {
         }
 
         /*
-         * 权限模式(scheme): ip, digest
-         * 授权对象(ID)
-         * 		ip权限模式:  具体的ip地址
-         * 		digest权限模式: username:Base64(SHA-1(username:password))
-         * 权限(permission): create(C), DELETE(D),READ(R), WRITE(W), ADMIN(A)
-         * 		注：单个权限，完全权限，复合权限
+         * Permission scheme: ip, digest
+         * Authorization ID
+         * 		ip:  ip
+         * 		digest: username:Base64(SHA-1(username:password))
+         * Permission flags: CREATE(C), DELETE(D), READ(R), WRITE(W), ADMIN(A)
+         * 		
          *
-         * 权限组合: scheme + ID + permission
+         * ACL entry = scheme + ID + permission
          * */
         private void doSomething() {
             try {
                 // ACL access control list
                 ACL aclIp = new ACL(Perms.READ, new Id("ip", "192.168.1.105"));
 
-                ACL aclDigest = new ACL(Perms.READ | Perms.WRITE, new Id("digest", DigestAuthenticationProvider.generateDigest("godotg:123456")));// 用户名+密码
+                ACL aclDigest = new ACL(Perms.READ | Perms.WRITE, new Id("digest", DigestAuthenticationProvider.generateDigest("godotg:123456")));// username and password
 
                 ArrayList<ACL> acls = new ArrayList<>();
                 acls.add(aclDigest);
@@ -76,7 +76,7 @@ public class CreateNodeSyncAuthTest {
             }
 
             try {
-                // 没有取得权限之前，不能访问/node_test
+                // username and passwordnode_test
                 zookeeper.getData("/node_test", false, stat);
                 somethingDone = true;
             } catch (Exception e) {
@@ -84,7 +84,7 @@ public class CreateNodeSyncAuthTest {
             }
 
             try {
-                // 下面两句设置ACL的哪些author可以访问
+                // The following lines configure which authorized users can access this node
                 zookeeper.addAuthInfo("digest", "godotg:123456".getBytes());
                 zookeeper.getData("/node_test", false, stat);
                 somethingDone = true;

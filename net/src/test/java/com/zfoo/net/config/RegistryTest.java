@@ -32,19 +32,19 @@ public class RegistryTest {
 
     @Test
     public void registerVoTest() {
-        // 定义2个模块：可以为服务提供者用，也可以为服务消费者用，这个仅仅是模块信息
+        // Define 2 protocol modules that can be used by both providers and consumers (module metadata only)
         var protocolModule1 = "aaa";
         var protocolModule2 ="bbb";
 
-        // 服务提供者模块列表和服务提供者配置
-        // 定义2个服务提供者模块
+        // Provider module list and provider configuration
+        // Define 2 service-provider modules
         var providerModules = List.of(new ProviderModule(protocolModule1, "a"), new ProviderModule(protocolModule2, "b"));
-        // 服务器提供者配置：服务提供者的ip + 服务提供者模块
+        // Provider config: IP address + provider modules
         var providerConfig = ProviderConfig.valueOf(HostAndPort.valueOf("127.0.0.1", 80).toHostAndPortStr(), providerModules);
 
-        // 服务消费者模块和服务消费者配置(服务消费者模块多一个负载均衡属性)
+        // Consumer module list and consumer config (consumer module has an extra load-balance attribute)
         var consumerModules = List.of(new ConsumerModule("random", "a"), new ConsumerModule("random", "b"));
-        // 服务消费者配置：这个是没Ip的
+        // Consumer config: no IP (consumers connect out, not listen)
         var consumerConfig = ConsumerConfig.valueOf(consumerModules);
 
         var register = Register.valueOf("test", providerConfig, consumerConfig);

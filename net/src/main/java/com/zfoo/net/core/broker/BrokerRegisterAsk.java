@@ -20,9 +20,9 @@ import com.zfoo.protocol.anno.Protocol;
 @Protocol(id = 150)
 public class BrokerRegisterAsk {
 
-    // 不带gpu的服务器
+    // Server without GPU
     public static final int HOME = 1;
-    // 带了gpu的服务器
+    // Server with GPU
     public static final int HOME_GPU = 2;
 
     private int brokerType;

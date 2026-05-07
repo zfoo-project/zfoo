@@ -33,12 +33,14 @@ public interface IConsumer {
     IConsumerLoadBalancer selectLoadBalancer(List<Session> providers, Object packet);
 
     /**
-     * 直接发送，不需要任何返回值
+     * Send a packet without waiting for a response.
      * <p>
-     * 例子：参考 com.zfoo.app.zapp.chat.controller。FrinedController 的 atApplyFriendRequest方法，客户端发起申请请求，chat服务处理后，再把消息直接发给网关
+     * Example: see FriendController#atApplyFriendRequest in com.zfoo.app.zapp.chat.controller.
+     * The client sends a friend-request, the chat service processes it, then fires the message directly to the gateway.
      *
-     * @param packet   需要发送的包
-     * @param argument 计算负载均衡的参数，比如用户的id，会使用这个参数计算负载到哪个服务提供者；
+     * @param packet   the packet to send
+     * @param argument the parameter used for load-balancing calculation (e.g., user ID),
+     *                 which determines which service provider to route to
      */
     void send(Object packet, @Nullable Object argument);
 

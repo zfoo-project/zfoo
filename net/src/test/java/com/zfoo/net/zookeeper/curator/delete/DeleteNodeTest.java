@@ -25,7 +25,7 @@ public class DeleteNodeTest {
 
         client.start();
 
-        // guaranteed() 持续删除，直到成功
+        // guaranteed() - keep retrying until successful delete
         client.delete().guaranteed().deletingChildrenIfNeeded().withVersion(-1).forPath("/node_test");
 
         Thread.sleep(Integer.MAX_VALUE);
