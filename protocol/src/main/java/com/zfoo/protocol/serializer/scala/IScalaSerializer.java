@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
  */
 public interface IScalaSerializer {
     /**
-     * 获取属性的类型，默认值
+     * Get the property type and default value
      */
     Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration);
 

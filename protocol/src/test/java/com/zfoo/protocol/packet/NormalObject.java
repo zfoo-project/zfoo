@@ -14,7 +14,6 @@
 package com.zfoo.protocol.packet;
 
 
-import com.zfoo.protocol.anno.Compatible;
 import com.zfoo.protocol.anno.Note;
 import com.zfoo.protocol.anno.Protocol;
 
@@ -25,7 +24,7 @@ import java.util.Set;
 /**
  * @author godotg
  */
-@Note("常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法")
+@Note("Normal object covering the common subset of all target language syntaxes")
 @Protocol(id = 101)
 public class NormalObject {
 
@@ -34,7 +33,7 @@ public class NormalObject {
 
     private short b;
 
-    @Note("整数类型")
+    @Note("Integer type")
     private int c;
 
     private long d;

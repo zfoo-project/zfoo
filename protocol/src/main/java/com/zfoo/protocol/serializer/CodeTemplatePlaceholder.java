@@ -67,7 +67,7 @@ public enum CodeTemplatePlaceholder {
                     .filter(it -> lineTrim.startsWith(it.placeholder))
                     .findAny();
             var formatLine = line;
-            // 形如 space ${protocol_class} 的占位符多了几个space，在生成代码的时候将每一行都添加相等的space，以此来对齐生成的多行代码块
+            // A placeholder like 'space ${protocol_class} has extra leading spaces; each generated line gets the same indentation to align the multi-line block
             if (startPlaceholderOptional.isPresent()) {
                 var startPlaceholder = startPlaceholderOptional.get();
                 // calculate the tab length

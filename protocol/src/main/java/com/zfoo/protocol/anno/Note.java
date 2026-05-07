@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 
 /**
  * EN: Generate comments in other languages
- * CN: 生成其它语言的注释
+ * Generates comments/documentation for other target languages
  *
  * @author meiw
  */

@@ -21,15 +21,15 @@ import com.zfoo.protocol.anno.Protocol;
 import java.util.*;
 
 @Protocol(id = 100)
-@Note("复杂的对象，包括了各种复杂的结构，数组，List，Set，Map")
+@Note("Complex object with arrays, List, Set, and Map fields")
 public class ComplexObject {
 
 
-    @Note("byte类型，最简单的整形")
+    @Note("byte type, simplest integer")
     private byte a;
-    @Note("byte的包装类型，优先使用基础类型，包装类型会有装箱拆箱")
+    @Note("Byte wrapper type; prefer primitives to avoid boxing/unboxing")
     private Byte aa;
-    @Note("数组类型")
+    @Note("Array type")
     private byte[] aaa;
     private Byte[] aaaa;
 
@@ -89,7 +89,7 @@ public class ComplexObject {
     private Set<String> ssss;
     private Set<Map<Integer, String>> sssss;
 
-    @Note("如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增")
+    @Note("To modify while maintaining backward compatibility, add @Compatible with incrementing value")
     @Compatible(1)
     private int myCompatible;
     @Compatible(2)

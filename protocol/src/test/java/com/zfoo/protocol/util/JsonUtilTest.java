@@ -51,7 +51,7 @@ public class JsonUtilTest {
         user.setName("godotg");
         user.setSex("man");
         user.setAge(22);
-        //数组，链表，list
+        // Array, LinkedList, List
         List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);

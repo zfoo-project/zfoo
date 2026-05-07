@@ -44,11 +44,11 @@ public abstract class AssertionUtils {
     }
 
     /**
-     * 可支持带参数format的类型：类{}的成员变量：{}不能有set方法：{}
+     * Supports parameterized format: field {} of class {} must not have a setter: {}
      *
-     * @param expression 表达式
-     * @param format     格式
-     * @param args       参数
+     * @param expression the boolean expression
+     * @param format     format string
+     * @param args       arguments
      */
     public static void isTrue(boolean expression, String format, Object... args) {
         if (!expression) {
@@ -64,10 +64,10 @@ public abstract class AssertionUtils {
     // ----------------------------------long----------------------------------
 
     /**
-     * lt 参数1是否小于参数2
-     * le 参数1是否小于等于参数2
-     * gt 参数1是否大于参数2
-     * ge 参数1是否大于等于参数2
+     * lt: whether arg1 < arg2
+     * le: whether arg1 <= arg2
+     * gt: whether arg1 > arg2
+     * ge: whether arg1 >= arg2
      */
     public static void ge(long x, long y) {
         if (x < y) {

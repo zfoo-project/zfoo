@@ -20,27 +20,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * protocol buffer协议消息体属性数据类型定义
+ * Defines the field data types for a protobuf message
  */
 public class PbField {
     /**
-     * 属性是否赋值类型
+     * Indicates whether the field is an assignment type
      */
     public enum Cardinality {
         /**
-         * 未知类型
+         * Unknown type
          */
         UNKNOWN("unknown"),
         /**
-         * 必须赋值
+         * Required
          */
         REQUIRED("required"),
         /**
-         * 可以不赋值
+         * Optional
          */
         OPTIONAL("optional"),
         /**
-         * 可以赋多个值
+         * Repeated
          */
         REPEATED("repeated");
 
@@ -68,23 +68,23 @@ public class PbField {
     }
 
     /**
-     * 消息属性的规则
+     * Field rule in the message
      */
     private Cardinality cardinality;
     /**
-     * 消息属性名称
+     * Field name
      */
     private String name;
     /**
-     * 消息属性值的类型
+     * Field value type
      */
     private String type;
     /**
-     * 属性的顺序标记一个消息内不允许重复
+     * Field tag; must be unique within a message
      */
     private int tag;
     /**
-     * 消息属性的注释信息
+     * Field documentation comment
      */
     private List<String> comments = new ArrayList<>();
 

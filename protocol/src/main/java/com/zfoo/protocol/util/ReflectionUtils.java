@@ -31,18 +31,18 @@ import java.util.function.Predicate;
 
 
 /**
- * 反射工具类
+ * Reflection utility class
  *
  * @author godotg
  */
 public abstract class ReflectionUtils {
 
     /**
-     * 如果field符合FieldFilter过滤条件，则执行回调方法
+     * If the field matches the FieldFilter, invoke the callback
      *
-     * @param field         属性
-     * @param fieldFilter   属性过滤器
-     * @param fieldCallback 属性回调方法
+     * @param field         the field
+     * @param fieldFilter   field filter
+     * @param fieldCallback field callback
      */
     public static void filterField(Field field, Predicate<Field> fieldFilter, Consumer<Field> fieldCallback) {
         if (fieldFilter != null && !fieldFilter.test(field)) {
@@ -52,7 +52,7 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * 将clazz通过filter过滤，过滤后的field执行callback方法
+     * Filter fields of clazz using filter and invoke callback on matched fields
      * <p>
      * Invoke the given callback on all fields in the target class, going up the
      * class hierarchy to get all declared fields.
@@ -80,7 +80,7 @@ public abstract class ReflectionUtils {
 
     public static void assertIsPojoClass(Class<?> clazz) {
         if (!isPojoClass(clazz)) {
-            throw new RunException("[class:{}]不是简单的javabean（POJO类不能继承别的类，但是可以继承其它接口）", clazz.getName());
+            throw new RunException("[class:{}] is not a simple JavaBean (POJO cannot extend a class, but can implement interfaces)", clazz.getName());
         }
     }
 
@@ -101,7 +101,7 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * 标准的属性名称更加通用，前缀不能是is，否则属性名称在不同语言很难去统一get和set方法
+     * Standard field names are more portable; the 'is' prefix should be avoided to keep getters/setters consistent across languages
      */
     public static void assertIsStandardFieldName(Field field) {
         var fieldName = field.getName();
@@ -112,11 +112,11 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * 从一个指定的POJO的Class中获得具有指定注解的Field，只获取子类的Field，不获取父类的Field
+     * Get fields with the specified annotation from a POJO class; only current class fields, not inherited
      *
-     * @param clazz      指定的Class
-     * @param annotation 指定注解的Class
-     * @return 数组，可能长度为0
+     * @param clazz      the target class
+     * @param annotation the annotation class
+     * @return array, possibly empty
      */
     public static Field[] getFieldsByAnnoInPOJOClass(Class<?> clazz, Class<? extends Annotation> annotation) {
         var list = new ArrayList<Field>();
@@ -156,11 +156,11 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * 从一个Class中获得具有指定注解的Method，只获取子类的Method，不获取父类的Method
+     * Get methods with the specified annotation from a class; only current class methods, not inherited
      *
-     * @param clazz      指定的Class
-     * @param annotation 指定注解的Class
-     * @return 数组，可能长度为0
+     * @param clazz      the target class
+     * @param annotation the annotation class
+     * @return array, possibly empty
      */
     public static Method[] getMethodsByAnnoInPOJOClass(Class<?> clazz, Class<? extends Annotation> annotation) {
         var list = new ArrayList<Method>();
@@ -187,7 +187,7 @@ public abstract class ReflectionUtils {
      * Searches all superclasses up to {@code Object}.
      *
      * @param clazz the class to introspect
-     * @return 数组，可能长度为0
+     * @return array, possibly empty
      */
     public static Method[] getAllMethods(Class<?> clazz) {
         AssertionUtils.notNull(clazz, "Class must not be null");
@@ -200,7 +200,7 @@ public abstract class ReflectionUtils {
         }
         return ArrayUtils.listToArray(list, Method.class);
     }
-    //*************************************操作Class*********************************
+    //*********************************** Class operations ***********************************
 
     public static <T> T newInstance(Class<T> clazz) {
         try {
@@ -228,7 +228,7 @@ public abstract class ReflectionUtils {
 
 
     /**
-     * 等于{@link Field#get(Object)}
+     * Equivalent to {@link Field#get(Object)}
      * <p>
      * In accordance with {@link Field#get(Object)}
      * semantics, the returned value is automatically wrapped if the underlying field
@@ -248,7 +248,7 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * 等于{@link Field#set(Object, Object)}
+     * Equivalent to {@link Field#set(Object, Object)}
      * <p>
      * In accordance with {@link Field#set(Object, Object)} semantics, the new value
      * is automatically unwrapped if the underlying field has a primitive type.
@@ -286,7 +286,7 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * 让私有变量可访问，在必要的情况下调用
+     * Make a private field accessible; call only when necessary
      * <p>
      * Make the given field accessible, explicitly setting it accessible if necessary.
      * </p>
@@ -327,7 +327,7 @@ public abstract class ReflectionUtils {
         }
     }
 
-    // 获取class中的普通field属性字段
+    // Get regular (non-static, non-synthetic) fields from class
     public static List<Field> notStaticAndTransientFields(Class<?> clazz) {
         return Arrays.stream(clazz.getDeclaredFields())
                 .filter(it -> !Modifier.isStatic(it.getModifiers()))

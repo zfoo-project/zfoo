@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 
 /**
  * EN: Unique protocol number
- * CN: 唯一的协议号
+ * The unique protocol ID
  *
  * @author meiw
  */
@@ -29,7 +29,7 @@ public @interface Protocol {
 
     /**
      * EN: Use Javassist bytecode to enhance serialization of the protocol
-     * CN: 使用Javassist字节码增强协议的序列化
+     * Serialize the protocol using Javassist bytecode enhancement
      */
     boolean enhance() default true;
 

@@ -16,10 +16,10 @@ package com.zfoo.protocol.model;
 import java.util.Objects;
 
 /**
- * 键值对对象，只能在构造时传入键值
+ * Key-value pair; values can only be set via the constructor
  *
- * @param <K> 键类型
- * @param <V> 值类型
+ * @param <K> key type
+ * @param <V> value type
  * @author godotg
  */
 public class Pair<K, V> {
@@ -32,10 +32,10 @@ public class Pair<K, V> {
     }
 
     /**
-     * 构造
+     * Constructor
      *
-     * @param key   键
-     * @param value 值
+     * @param key   the key
+     * @param value the value
      */
     public Pair(K key, V value) {
         this.key = key;
@@ -43,18 +43,18 @@ public class Pair<K, V> {
     }
 
     /**
-     * 获取键
+     * Get the key
      *
-     * @return 键
+     * @return the key
      */
     public K getKey() {
         return this.key;
     }
 
     /**
-     * 获取值
+     * Get the value
      *
-     * @return 值
+     * @return the value
      */
     public V getValue() {
         return this.value;

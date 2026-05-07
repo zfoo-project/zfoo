@@ -225,7 +225,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
             var fieldName = field.getName();
             var propertyType = toCsClassName(field.getGenericType().getTypeName());
             var propertyFullName = StringUtils.format("public {} {};", propertyType, fieldName);
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.CSharp);
             for (var fieldNote : fieldNotes) {
                 csBuilder.append(fieldNote).append(LS);
@@ -285,7 +285,7 @@ public class CodeGenerateCsharp implements ICodeGenerate {
         typeName = typeName.replaceAll("java.util.|java.lang.", StringUtils.EMPTY);
         typeName = typeName.replaceAll("[a-zA-Z0-9_.]*\\.", StringUtils.EMPTY);
 
-        // CSharp不适用基础类型的泛型，会影响性能
+        // C# does not support primitives as generics; it degrades performance
         switch (typeName) {
             case "boolean":
             case "Boolean":
@@ -318,69 +318,69 @@ public class CodeGenerateCsharp implements ICodeGenerate {
             default:
         }
 
-        // 将boolean转为bool
+        // Convert boolean to bool
         typeName = typeName.replace(" boolean ", " bool ");
         typeName = typeName.replace(" Boolean ", " bool ");
         typeName = typeName.replaceAll("[B|b]oolean\\[", "bool[");
         typeName = typeName.replace("<Boolean", "<bool");
         typeName = typeName.replace("Boolean>", "bool>");
 
-        // 将Byte转为byte
+        // Convert Byte to byte
         typeName = typeName.replace(" Byte ", " byte ");
         typeName = typeName.replace("Byte[", "byte[");
         typeName = typeName.replace("Byte>", "byte>");
         typeName = typeName.replace("<Byte", "<byte");
 
-        // 将Short转为short
+        // Convert Short to short
         typeName = typeName.replace(" Short ", " short ");
         typeName = typeName.replace("Short[", "short[");
         typeName = typeName.replace("Short>", "short>");
         typeName = typeName.replace("<Short", "<short");
 
-        // 将Integer转为int
+        // Convert Integer to int
         typeName = typeName.replace(" Integer ", " int ");
         typeName = typeName.replace("Integer[", "int[");
         typeName = typeName.replace("Integer>", "int>");
         typeName = typeName.replace("<Integer", "<int");
 
 
-        // 将Long转为long
+        // Convert Long to long
         typeName = typeName.replace(" Long ", " long ");
         typeName = typeName.replace("Long[", "long[");
         typeName = typeName.replace("Long>", "long>");
         typeName = typeName.replace("<Long", "<long");
 
-        // 将Float转为float
+        // Convert Float to float
         typeName = typeName.replace(" Float ", " float ");
         typeName = typeName.replace("Float[", "float[");
         typeName = typeName.replace("Float>", "float>");
         typeName = typeName.replace("<Float", "<float");
 
-        // 将Double转为double
+        // Convert Double to double
         typeName = typeName.replace(" Double ", " double ");
         typeName = typeName.replace("Double[", "double[");
         typeName = typeName.replace("Double>", "double>");
         typeName = typeName.replace("<Double", "<double");
 
-        // 将Character转为Char
+        // Convert Character to Char
         typeName = typeName.replace(" Character ", " char ");
         typeName = typeName.replace("Character[", "char[");
         typeName = typeName.replace("Character>", "char>");
         typeName = typeName.replace("<Character", "<char");
 
-        // 将String转为string
+        // Convert String to string
         typeName = typeName.replace("String ", "string ");
         typeName = typeName.replace("String[", "string[");
         typeName = typeName.replace("String>", "string>");
         typeName = typeName.replace("<String", "<string");
 
-        // 将Map转为Dictionary
+        // Convert Map to Dictionary
         typeName = typeName.replace("Map<", "Dictionary<");
 
-        // 将Set转为HashSet
+        // Convert Set to HashSet
         typeName = typeName.replace("Set<", "HashSet<");
 
-        // 将private转为public
+        // Convert private to public
         typeName = typeName.replace(" private ", " public ");
 
         return typeName;

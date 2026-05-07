@@ -106,7 +106,7 @@ public class ByteBufUtilsTest {
         var beforeWriteIndex = byteBuf.writerIndex();
         var predictionLength = 1000;
 
-        // padding等于0的情况
+        // case where padding equals 0
         ByteBufUtils.writeInt(byteBuf, predictionLength);
         for (int i = 0; i < predictionLength; i++) {
             ByteBufUtils.writeByte(byteBuf, (byte) 1);
@@ -132,7 +132,7 @@ public class ByteBufUtilsTest {
         var predictionLength = 1000;
         var length = predictionLength / 100;
 
-        // padding等于0的情况
+        // case where padding equals 0
         ByteBufUtils.writeInt(byteBuf, predictionLength);
         for (int i = 0; i < length; i++) {
             ByteBufUtils.writeByte(byteBuf, (byte) 1);
@@ -162,7 +162,7 @@ public class ByteBufUtilsTest {
         var predictionLength = 1000;
         var length = predictionLength * 10;
 
-        // padding等于0的情况
+        // case where padding equals 0
         ByteBufUtils.writeInt(byteBuf, predictionLength);
         for (int i = 0; i < length; i++) {
             ByteBufUtils.writeByte(byteBuf, (byte) 1);

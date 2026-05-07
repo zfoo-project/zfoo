@@ -52,14 +52,14 @@ public class BenchmarkTesting {
     public static int benchmark = 10_0000;
 
     /**
-     * 单线程性能测试
+     * Single-threaded performance test
      * <p>
-     * 不使用任何JVM参数：zfoo比protobuf快20%，zfoo比kryo快40%
+     * Without JVM tuning: zfoo is ~20% faster than protobuf and ~40% faster than kryo
      * <p>
-     * 包体大小：
-     * 简单对象，zfoo包体大小8，kryo包体大小5，protobuf包体大小8
-     * 常规对象，zfoo包体大小430，kryo包体大小516，protobuf包体大小793
-     * 复杂对象，zfoo包体大小2191，kryo包体大小2611，protobuf包体大小5083
+     * Packet sizes:
+     * Simple object: zfoo=8B, kryo=5B, protobuf=8B
+     * Normal object: zfoo=430B, kryo=516B, protobuf=793B
+     * Complex object: zfoo=2191B, kryo=2611B, protobuf=5083B
      */
     @Test
     public void singleThreadBenchmarks() {
@@ -68,7 +68,7 @@ public class BenchmarkTesting {
                 return;
             }
             System.out.println(StringUtils.MULTIPLE_HYPHENS);
-            System.out.println(StringUtils.format("[单线程性能测试-->[benchmark:{}]]", benchmark));
+            System.out.println(StringUtils.format("[Single-threaded performance test-->[benchmark:{}]]", benchmark));
 
             zfooTest();
             jsonbTest();
@@ -77,13 +77,13 @@ public class BenchmarkTesting {
             kryoTest();
             protobufTest();
 
-            // 递归执行，多跑几遍
+            // Run recursively to warm up / repeat runs
             benchmark = benchmark * 2;
         }
     }
 
     /**
-     * 多线程性能测试
+     * Multi-threaded performance test
      */
     @Test
     public void multipleThreadBenchmarks() throws InterruptedException {
@@ -92,7 +92,7 @@ public class BenchmarkTesting {
                 return;
             }
             System.out.println(StringUtils.MULTIPLE_HYPHENS);
-            System.out.println(StringUtils.format("[多线程性能测试-->[benchmark:{}]]", benchmark));
+            System.out.println(StringUtils.format("[Multi-threaded performance test-->[benchmark:{}]]", benchmark));
 
             zfooMultipleThreadTest();
             furyMultipleThreadTest();
@@ -106,27 +106,27 @@ public class BenchmarkTesting {
 
     @Test
     public void zfooTest() {
-        // netty的ByteBuf做了更多的安全检测，java自带的ByteBuffer并没有做安全检测，为了公平，把不需要的检测去掉
-        // java通过ByteBuffer.allocate(1024 * 8)构造出来的是使用了unsafe的HeapByteBuffer，为了公平，使用netty中带有unsafe操作的UnpooledUnsafeHeapByteBuf
+        // Netty ByteBuf has extra safety checks; Java ByteBuffer does not. Remove unnecessary checks for a fair comparison
+        // ByteBuffer.allocate() creates an unsafe HeapByteBuffer; for a fair comparison, use Netty's UnpooledUnsafeHeapByteBuf
         System.setProperty("io.netty.buffer.checkAccessible", "false");
         System.setProperty("io.netty.buffer.checkBounds", "false");
 
         ByteBuf buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
 
-        // 序列化和反序列化简单对象
+        // Serialize and deserialize a simple object
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.clear();
-            // 把对象序列化到buffer中
+            // Serialize object into buffer
             ProtocolManager.write(buffer, simpleObject);
 
-            // 从buffer中反序列化出对象
+            // Deserialize object from buffer
             var packet = ProtocolManager.read(buffer);
         }
 
-        System.out.println(StringUtils.format("[zfoo]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[zfoo]     [SimpleObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
 
-        // 序列化和反序列化常规对象
+        // Serialize and deserialize a normal object
         startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.clear();
@@ -134,9 +134,9 @@ public class BenchmarkTesting {
             var packet = ProtocolManager.read(buffer);
         }
 
-        System.out.println(StringUtils.format("[zfoo]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[zfoo]     [NormalObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
 
-        // 序列化和反序列化复杂对象
+        // Serialize and deserialize a complex object
         startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.clear();
@@ -144,13 +144,13 @@ public class BenchmarkTesting {
             var packet = ProtocolManager.read(buffer);
         }
 
-        System.out.println(StringUtils.format("[zfoo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[zfoo]     [ComplexObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
     }
 
     @Test
     public void furyTest() {
         var buffer = MemoryBuffer.newHeapBuffer(1_0000);
-        // 序列化和反序列化简单对象
+        // Serialize and deserialize a simple object
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.writerIndex(0);
@@ -159,9 +159,9 @@ public class BenchmarkTesting {
             var obj = fury.deserialize(buffer);
         }
 
-        System.out.println(StringUtils.format("[fury]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[fury]     [SimpleObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
 
-        // 序列化和反序列化常规对象
+        // Serialize and deserialize a normal object
         startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.writerIndex(0);
@@ -170,9 +170,9 @@ public class BenchmarkTesting {
             var obj = fury.deserialize(buffer);
         }
 
-        System.out.println(StringUtils.format("[fury]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[fury]     [NormalObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
 
-        // 序列化和反序列化复杂对象
+        // Serialize and deserialize a complex object
         startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.writerIndex(0);
@@ -180,7 +180,7 @@ public class BenchmarkTesting {
             fury.serialize(buffer, complexObject);
             var obj = fury.deserialize(buffer);
         }
-        System.out.println(StringUtils.format("[fury]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[fury]     [ComplexObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
     }
 
     @Test
@@ -189,35 +189,35 @@ public class BenchmarkTesting {
             var output = new Output(1024 * 8);
             var input = new Input(output.getBuffer());
 
-            // 序列化和反序列化简单对象
+            // Serialize and deserialize a simple object
             long startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 var bytes = JSONB.toBytes(simpleObject);
                 var mess = JSONB.parseObject(bytes, SimpleObject.class);
 
-                // 这种通过流写入的方式速度奇慢
+                // writing via stream is extremely slow
                 // JSONB.writeTo(output, normalObject);
                 // var mess = JSONB.parseObject(input, NormalObject.class);
             }
 
-            System.out.println(StringUtils.format("[fastjsonb]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSONB.toBytes(simpleObject).length, System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[fastjsonb]     [SimpleObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSONB.toBytes(simpleObject).length, System.currentTimeMillis() - startTime));
 
-            // 序列化和反序列化常规对象
+            // Serialize and deserialize a normal object
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 var bytes = JSONB.toBytes(normalObject);
                 var mess = JSONB.parseObject(bytes, NormalObject.class);
             }
 
-            System.out.println(StringUtils.format("[fastjsonb]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSONB.toBytes(normalObject).length, System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[fastjsonb]     [NormalObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSONB.toBytes(normalObject).length, System.currentTimeMillis() - startTime));
 
-            // 序列化和反序列化复杂对象
+            // Serialize and deserialize a complex object
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 var bytes = JSONB.toBytes(complexObject);
                 var mess = JSONB.parseObject(bytes, ComplexObject.class);
             }
-            System.out.println(StringUtils.format("[fastjsonb]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSONB.toBytes(complexObject).length, System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[fastjsonb]     [ComplexObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSONB.toBytes(complexObject).length, System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -226,35 +226,35 @@ public class BenchmarkTesting {
     @Test
     public void fastJson2Test() {
         try {
-            // 序列化和反序列化简单对象
+            // Serialize and deserialize a simple object
             long startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 var str = JSON.toJSONString(simpleObject);
                 var mess = JSON.parseObject(str, SimpleObject.class);
 
-                // 这种通过流写入的方式速度奇慢
+                // writing via stream is extremely slow
                 // JSONB.writeTo(output, normalObject);
                 // var mess = JSONB.parseObject(input, NormalObject.class);
             }
 
-            System.out.println(StringUtils.format("[fastjson2]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSON.toJSONString(simpleObject).getBytes().length, System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[fastjson2]     [SimpleObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSON.toJSONString(simpleObject).getBytes().length, System.currentTimeMillis() - startTime));
 
-            // 序列化和反序列化常规对象
+            // Serialize and deserialize a normal object
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 var str = JSON.toJSONString(normalObject);
                 var mess = JSON.parseObject(str, NormalObject.class);
             }
 
-            System.out.println(StringUtils.format("[fastjson2]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(),JSON.toJSONString(normalObject).getBytes().length,System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[fastjson2]     [NormalObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(),JSON.toJSONString(normalObject).getBytes().length,System.currentTimeMillis() - startTime));
 
-            // 序列化和反序列化复杂对象
+            // Serialize and deserialize a complex object
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 var str = JSON.toJSONString(complexObject);
                 var mess = JSON.parseObject(str, ComplexObject.class);
             }
-            System.out.println(StringUtils.format("[fastjson2]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSON.toJSONString(complexObject).getBytes().length, System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[fastjson2]     [ComplexObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), JSON.toJSONString(complexObject).getBytes().length, System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -268,7 +268,7 @@ public class BenchmarkTesting {
             var output = new Output(1024 * 8);
             var input = new Input(output.getBuffer());
 
-            // 序列化和反序列化简单对象
+            // Serialize and deserialize a simple object
             long startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 input.reset();
@@ -277,9 +277,9 @@ public class BenchmarkTesting {
                 var mess = kryo.readObject(input, SimpleObject.class);
             }
 
-            System.out.println(StringUtils.format("[kryo]     [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[kryo]     [SimpleObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
 
-            // 序列化和反序列化常规对象
+            // Serialize and deserialize a normal object
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 input.reset();
@@ -288,9 +288,9 @@ public class BenchmarkTesting {
                 var mess = kryo.readObject(input, NormalObject.class);
             }
 
-            System.out.println(StringUtils.format("[kryo]     [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[kryo]     [NormalObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
 
-            // 序列化和反序列化复杂对象
+            // Serialize and deserialize a complex object
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 input.reset();
@@ -298,10 +298,10 @@ public class BenchmarkTesting {
                 kryo.writeObject(output, complexObject);
                 var mess = kryo.readObject(input, ComplexObject.class);
             }
-            System.out.println(StringUtils.format("[kryo]     [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[kryo]     [ComplexObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            System.err.println("JDK17 运行kryo会报错，等kryo修复bug");
+            System.err.println("JDK17 causes Kryo errors; waiting for Kryo bug fix");
         }
     }
 
@@ -311,7 +311,7 @@ public class BenchmarkTesting {
             var buffer = new byte[1024 * 8];
             var length = 0;
 
-            // 序列化和反序列化简单对象
+            // Serialize and deserialize a simple object
             long startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 var codedOutputStream = CodedOutputStream.newInstance(buffer);
@@ -320,9 +320,9 @@ public class BenchmarkTesting {
                 var codeInput = CodedInputStream.newInstance(buffer, 0, length);
                 var mess = ProtobufObject.ProtobufSimpleObject.parseFrom(codeInput);
             }
-            System.out.println(StringUtils.format("[protobuf] [简单对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[protobuf] [SimpleObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
 
-            // 序列化和反序列化常规对象
+            // Serialize and deserialize a normal object
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 var codedOutputStream = CodedOutputStream.newInstance(buffer);
@@ -331,9 +331,9 @@ public class BenchmarkTesting {
                 var codeInput = CodedInputStream.newInstance(buffer, 0, length);
                 var mess = ProtobufObject.ProtobufNormalObject.parseFrom(codeInput);
             }
-            System.out.println(StringUtils.format("[protobuf] [常规对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[protobuf] [NormalObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
 
-            // 序列化和反序列化复杂对象
+            // Serialize and deserialize a complex object
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 var codedOutputStream = CodedOutputStream.newInstance(buffer);
@@ -342,7 +342,7 @@ public class BenchmarkTesting {
                 var codeInput = CodedInputStream.newInstance(buffer, 0, length);
                 var mess = ProtobufObject.ProtobufComplexObject.parseFrom(codeInput);
             }
-            System.out.println(StringUtils.format("[protobuf] [复杂对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[protobuf] [ComplexObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), length, System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -419,7 +419,7 @@ public class BenchmarkTesting {
     public static final int threadNum = Runtime.getRuntime().availableProcessors() / 2;
     public static final ExecutorService[] executors = new ExecutorService[threadNum];
 
-    // kryo协议注册
+    // Kryo protocol registration
     public static final ThreadLocal<Kryo> kryos = new ThreadLocal<>() {
         @Override
         protected Kryo initialValue() {
@@ -451,14 +451,14 @@ public class BenchmarkTesting {
             kryo.register(ArrayList.class);
             kryo.register(HashSet.class);
             kryo.register(HashMap.class);
-            // 关闭循环引用，提高性能
+            // Disable circular reference tracking to improve performance
             kryo.setReferences(false);
             return kryo;
         }
     };
 
     static {
-        // zfoo协议注册(其实就是：将Set里面的协议号和对应的类注册好，这样子就可以根据协议号知道是反序列化为哪个类)
+        // zfoo protocol registration: maps protocol IDs to classes for deserialization
         ProtocolManager.initProtocolAuto(List.of(ComplexObject.class, NormalObject.class, SimpleObject.class, EmptyObject.class, VeryBigObject.class), GenerateOperation.NO_OPERATION);
 
         for (int i = 0; i < executors.length; i++) {
@@ -482,8 +482,8 @@ public class BenchmarkTesting {
         });
     }
 
-    // -------------------------------------------以下为测试用例---------------------------------------------------------------
-    // 简单类型
+    // -------------------------------------------Test cases below---------------------------------------------------------------
+    // Simple types
     public static final byte byteValue = 99;
     public static final short shortValue = 9999;
     public static final int intValue = 99999999;
@@ -492,7 +492,7 @@ public class BenchmarkTesting {
     public static final double doubleValue = 99999999.9D;
     public static final String stringValue = "hello";
 
-    // 数组类型
+    // Array types
     public static final boolean[] booleanArray = new boolean[]{true, false, true, false, true};
     public static final byte[] byteArray = new byte[]{Byte.MIN_VALUE, -99, 0, 99, Byte.MAX_VALUE};
     public static final short[] shortArray = new short[]{Short.MIN_VALUE, -99, 0, 99, Short.MAX_VALUE};
@@ -625,7 +625,7 @@ public class BenchmarkTesting {
         simpleObject.setC(intValue);
         simpleObject.setG(true);
 
-        // protobuf相关
+        // protobuf related
         var protobufObjectB = ProtobufObject.ObjectB.newBuilder().setFlag(false).build();
         var protobufObjectA = ProtobufObject.ObjectA.newBuilder()
                 .setA(Integer.MAX_VALUE)

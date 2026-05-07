@@ -35,48 +35,48 @@ public abstract class StringUtils {
     public static final String TAB = "    ";
     public static final String TAB_ASCII = "\t";
 
-    public static final String COMMA = ",";     // [com·ma || 'kɒmə] n.  逗点; 逗号
+    public static final String COMMA = ",";     // [com·ma || 'kɒmə] n. comma
     public static final String COMMA_REGEX = ",|，";
     public static final String COMMON_SPLIT_REGEX = "[,，\\s]+";
 
-    public static final String PERIOD = ".";    // 句号
+    public static final String PERIOD = ".";    // period
     public static final String PERIOD_REGEX = "\\.";
 
-    public static final String LEFT_SQUARE_BRACKET = "[";   // 左方括号
+    public static final String LEFT_SQUARE_BRACKET = "[";   // left square bracket
 
-    public static final String RIGHT_SQUARE_BRACKET = "]";  // 右方括号
+    public static final String RIGHT_SQUARE_BRACKET = "]";  // right square bracket
 
-    public static final String COLON = ":";     // 冒号[co·lon || 'kəʊlən]
+    public static final String COLON = ":";     // colon [co·lon || 'kəʊlən]
     public static final String COLON_REGEX = ":|：";
 
-    public static final String SEMICOLON = ";";     // 分号['semi'kәulәn]
+    public static final String SEMICOLON = ";";     // semicolon ['semi'kәulәn]
     public static final String SEMICOLON_REGEX = ";|；";
 
-    public static final String QUOTATION_MARK = "\"";   // 引号[quo·ta·tion || kwəʊ'teɪʃn]
+    public static final String QUOTATION_MARK = "\"";   // quotation mark [quo·ta·tion || kwəʊ'teɪʃn]
 
-    public static final String ELLIPSIS = "...";    // 省略号
+    public static final String ELLIPSIS = "...";    // ellipsis
 
-    public static final String EXCLAMATION_POINT = "!"; // 感叹号
+    public static final String EXCLAMATION_POINT = "!"; // exclamation point
 
-    public static final String DASH = "-";      //  破折号
+    public static final String DASH = "-";      // dash
 
-    public static final String QUESTION_MARK = "?"; // 问号
+    public static final String QUESTION_MARK = "?"; // question mark
 
-    public static final String HYPHEN = "-";    // 连接号，连接号与破折号的区别是，连接号的两头不用空格
+    public static final String HYPHEN = "-";    // hyphen, the difference from DASH is that hyphen has no spaces on either side
 
-    public static final String SLASH = "/";     // 斜线号
+    public static final String SLASH = "/";     // slash
 
-    public static final String EQUAL = "=";     // 等于号
+    public static final String EQUAL = "=";     // equal sign
 
-    public static final String BACK_SLASH = "\\";   //反斜线号
+    public static final String BACK_SLASH = "\\";   // back slash
 
-    public static final String VERTICAL_BAR = "|";  // 竖线
+    public static final String VERTICAL_BAR = "|";  // vertical bar
     public static final String VERTICAL_BAR_REGEX = "\\|";
 
     public static final String SHARP = "#";
     public static final String SHARP_REGEX = "\\#";
 
-    public static final String DOLLAR = "$";    // 美元符号
+    public static final String DOLLAR = "$";    // dollar sign
 
     public static final String EMPTY_JSON = "{}";
 
@@ -90,11 +90,11 @@ public abstract class StringUtils {
     public static final Charset DEFAULT_CHARSET = Charset.forName(DEFAULT_CHARSET_NAME);
 
     /**
-     * 用于随机选的数字
+     * Numbers for random selection
      */
     public static final String ARAB_NUMBER = "0123456789";
     /**
-     * 用于随机选的字符
+     * Characters for random selection
      */
     public static final String ENGLISH_CHAR = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -135,8 +135,8 @@ public abstract class StringUtils {
      * StringUtils.isBlank("    ")=true
      * StringUtils.isBlank(" b ")=false
      *
-     * @param cs 要检查的字符串
-     * @return 是否为空的字符串
+     * @param cs the string to check
+     * @return true if the string is empty
      */
     public static boolean isBlank(final CharSequence cs) {
         if (isEmpty(cs)) {
@@ -166,10 +166,10 @@ public abstract class StringUtils {
     //-----------------------------------------------------------------------
 
     /**
-     * 首字母小写(capitalize  ['kæpɪtlaɪz] vt.以大写字母写,【根】cap＝head（头）)
+     * Lowercase the first letter (capitalize  ['kæpɪtlaɪz] vt.- capitalize first letter)
      *
-     * @param str 被转换的字符串，可以为null
-     * @return 首字母小写的字符串，如果str为null，则返回null
+     * @param str the string to convert; may be null
+     * @return string with first letter lowercased; null if input is null
      */
     public static String uncapitalize(String str) {
         return changeFirstCharacterCase(str, false);
@@ -207,7 +207,7 @@ public abstract class StringUtils {
     //-----------------------------------------------------------------------
 
     /**
-     * 从第一个分隔符开始分割
+     * Split from the first separator
      * <p>Gets the substring before the first occurrence of a separator.
      * The separator is not returned.</p>
      *
@@ -259,7 +259,7 @@ public abstract class StringUtils {
     }
 
     /**
-     * 从第一个分隔符开始分割
+     * Split from the first separator
      * <p>Gets the substring after the first occurrence of a separator.
      * The separator is not returned.</p>
      *
@@ -350,7 +350,7 @@ public abstract class StringUtils {
      * Replaces each substring of the source String that matches the given regular expression with the given
      * replacement using the {@link Pattern#DOTALL} option.
      * <p>
-     * 在 DOTALL 模式中，表达式 .可以匹配任何字符，包括行结束符。默认情况下，此表达式不匹配行结束符。
+     * In DOTALL mode, '.' matches any character including line terminators. By default it does not match them.
      *
      * @param source      the source string
      * @param regex       the regular expression to which this string is to be matched
@@ -447,31 +447,31 @@ public abstract class StringUtils {
     }
 
     /**
-     * 格式化字符串
-     * 此方法只是简单将占位符 {} 按照顺序替换为参数
-     * 例：
-     * 通常使用：format("this is {} for {}", "a", "b") =》 this is a for b
+     * Format a string
+     * Replaces {} placeholders with arguments in order
+     * Example:
+     * Typical usage: format("this is {} for {}", "a", "b") => this is a for b
      *
-     * @param template 字符串模板
-     * @param args     参数列表
-     * @return 结果
+     * @param template string template
+     * @param args     argument list
+     * @return result
      */
     public static String format(final String template, final Object... args) {
         if (isBlank(template) || ArrayUtils.isEmpty(args)) {
             return template;
         }
 
-        // 初始化定义好的长度以获得更好的性能
+        // Initialize with a predefined length for better performance
         var builder = new StringBuilder(template.length() + 50);
 
-        // 记录已经处理到的位置
+        // Track the current read position
         var readIndex = 0;
         for (int i = 0; i < args.length; i++) {
-            // 占位符所在位置
+            // Position of the placeholder
             var placeholderIndex = template.indexOf(EMPTY_JSON, readIndex);
-            // 剩余部分无占位符
+            // No placeholder remaining
             if (placeholderIndex == -1) {
-                // 不带占位符的模板直接返回
+                // Return template directly if it has no placeholder at all
                 if (readIndex == 0) {
                     return template;
                 }
@@ -483,13 +483,13 @@ public abstract class StringUtils {
             readIndex = placeholderIndex + 2;
         }
 
-        // 字符串模板剩余部分不再包含占位符，加入剩余部分后返回结果
+        // Append the remaining part of the template which contains no more placeholders
         builder.append(template, readIndex, template.length());
         return builder.toString();
     }
 
     /**
-     * 格式化字符串，类似JavaScript的占位符${name}替换
+     * Format a string using JavaScript-style placeholder substitution like ${name}
      */
     public static String render(String template, Map<String, String> params) {
         var pattern = Pattern.compile("\\$\\{(\\w+)\\}");
@@ -510,11 +510,11 @@ public abstract class StringUtils {
     }
 
     /**
-     * 判断指定的词是否是不处理的词。
-     * 如果参数为空，则返回true，因为空也属于不处理的字符。
+     * Check whether the given character is a stop character.
+     * Returns true if the argument is null, because null is also treated as a stop character.
      *
-     * @param ch 指定的词
-     * @return 是否是不处理的词
+     * @param ch the character to check
+     * @return true if the character is a stop character
      */
     public static boolean isStopChar(char ch) {
         return Character.isWhitespace(ch) || STOP_WORD.contains(ch);

@@ -36,7 +36,7 @@ import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
 public enum CodeLanguage {
 
     /**
-     * Javassist字节码增强
+     * Javassist bytecode enhancement
      */
     Enhance(1, null),
 

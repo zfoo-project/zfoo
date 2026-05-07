@@ -47,7 +47,7 @@ public abstract class IOUtils {
      * @param input  the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE
-     * @throws IOException IO异常
+     * @throws IOException on I/O error
      */
     public static int copy(final InputStream input, final OutputStream output) throws IOException {
         byte[] buffer = new byte[BYTES_PER_KB];
@@ -69,7 +69,7 @@ public abstract class IOUtils {
      *
      * @param input the InputStream to read from
      * @return the requested byte array
-     * @throws IOException IO异常
+     * @throws IOException on I/O error
      */
     public static byte[] toByteArray(final InputStream input) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();

@@ -16,7 +16,7 @@ package com.zfoo.protocol.registration;
 import com.zfoo.protocol.util.StringUtils;
 
 /**
- * 模块id和模块名的封装
+ * Encapsulates a module ID and module name
  *
  * @author godotg
  */
@@ -30,7 +30,7 @@ public class ProtocolModule {
 
     public ProtocolModule(byte id, String name) {
         if (id < 0) {
-            throw new IllegalArgumentException(StringUtils.format("模块[{}]的id[{}]必须大于0", name, id));
+            throw new IllegalArgumentException(StringUtils.format("Module [{}] must have an id [{}] greater than 0", name, id));
         }
 
         this.id = id;

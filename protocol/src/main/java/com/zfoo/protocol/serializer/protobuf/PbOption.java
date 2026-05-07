@@ -14,16 +14,16 @@
 package com.zfoo.protocol.serializer.protobuf;
 
 /**
- * protocol buffer协议的Option的数据类型定义
+ * Defines the data type for a protobuf option
  */
 public class PbOption {
 
     /**
-     * 选项名称
+     * Option name
      */
     private String name;
     /**
-     * 选项对应的值
+     * Option value
      */
     private String value;
 

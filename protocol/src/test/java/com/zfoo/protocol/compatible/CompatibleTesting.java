@@ -26,7 +26,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import static com.zfoo.protocol.BenchmarkTesting.complexObject;
 import static com.zfoo.protocol.BenchmarkTesting.normalObject;
@@ -41,7 +40,7 @@ public class CompatibleTesting {
      * EN: The order of the bytecode-enhanced Map traversal order will be different, so the order of the serialized content will change.
      * You can see that the different bytes are not consecutive.
      * <p>
-     * CN: 字节码增强的Map遍历顺序会出现不一样，所以序列化的内容顺序会改变，可以看到不相同的字节并不是连续的
+     * Bytecode-enhanced Map traversal order may differ, so serialized byte order can change; non-matching bytes are not consecutive
      */
     @Test
     public void compatibleTest() throws IOException {
@@ -77,15 +76,15 @@ public class CompatibleTesting {
     @Test
     public void enhanceNormalTest() {
         var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 1_0000);
-        // 简单对象序列化和反序列化测试
-        // 序列化：把normalObject序列化一下写到buffer中
+        // Simple object serialization and deserialization test
+        // Serialize: write normalObject into buffer
         ProtocolManager.write(buffer, normalObject);
-        // 反序列化：从buffer中反序列化为协议包
+        // Deserialize: read protocol object from buffer
         var packet = ProtocolManager.read(buffer);
 
         buffer.clear();
 
-        // 复杂对象序列化和反序列化测试
+        // Complex object serialization and deserialization test
         ProtocolManager.write(buffer, complexObject);
         packet = ProtocolManager.read(buffer);
 

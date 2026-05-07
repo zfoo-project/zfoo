@@ -131,7 +131,7 @@ public class FileChannelMap<V> implements LpMap<V>, Closeable {
     }
 
     /**
-     * 获取从startKey到endKey的值
+     * Get values from startKey to endKey
      *
      * @param startKey inclusive
      * @param endKey   exclusive
@@ -205,11 +205,11 @@ public class FileChannelMap<V> implements LpMap<V>, Closeable {
 
             protocolRegistration.write(dbBuffer, value);
 
-            // db文件
+            // DB file
             var packetPosition = dbFileChannel.size();
-            // db文件数据的起始位置
+            // Start offset of data in the DB file
             indexBuffer.writeLong(packetPosition);
-            // db文件的值的大小
+            // Size of a value entry in the DB file
             indexBuffer.writeLong(dbBuffer.readableBytes());
             indexFileChannel.write(indexBuffer.nioBuffer(), key * 16);
             dbFileChannel.write(dbBuffer.nioBuffer(), packetPosition);

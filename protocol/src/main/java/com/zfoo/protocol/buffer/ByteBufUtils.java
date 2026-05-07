@@ -27,9 +27,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * zfoo的自定义私有协议格式，可以非常方便的对大部分数据定制序列化和反序列化实现，可以对大部分数据结构定制高性能实现方式
+ * zfoo's custom private protocol format; easily customizes Serialize/Deserialize for most data types with high-performance implementations
  * <p>
- * “可变长字节码算法”的压缩数据的算法，压缩数据和减少磁盘IO。google的ProtocolBuf和Facebook的thrift底层的通信协议都是由这个算法实现
+ * "Variable-length bytecode" compression algorithm; reduces data and I/O. Used by Google ProtocolBuffers and Facebook Thrift
  *
  * @author godotg
  */
@@ -40,7 +40,7 @@ public abstract class ByteBufUtils {
     public static final Float ZERO_FLOAT = Float.valueOf(0F);
 
     public static void adjustPadding(ByteBuf byteBuf, int predictionLength, int beforeWriteIndex) {
-        // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+        // Variable-length int; clear any over-reserved positions
         var currentWriteIndex = byteBuf.writerIndex();
         var predictionCount = writeIntCount(predictionLength);
         var length = currentWriteIndex - beforeWriteIndex - predictionCount;
@@ -133,7 +133,7 @@ public abstract class ByteBufUtils {
     }
 
     //---------------------------------int--------------------------------------
-    // 用Zigzag算法压缩int和long的值，再用Varint紧凑算法表示数字的有效位
+    // Use Zigzag to compress int/long values, then Varint to compactly represent the significant bits
     public static int writeInt(ByteBuf byteBuf, int value) {
         return writeVarInt(byteBuf, (value << 1) ^ (value >> 31));
     }
@@ -376,7 +376,7 @@ public abstract class ByteBufUtils {
             return;
         }
 
-        // 预估需要写入的字节数，并预留位置
+        // Estimate the bytes needed and reserve space
         var beforeWriteIndex = byteBuf.writerIndex();
         var maxLength = ByteBufUtil.utf8MaxBytes(value);
         var writeIntCountByte = writeInt(byteBuf, maxLength);
@@ -385,7 +385,7 @@ public abstract class ByteBufUtils {
 
         var currentWriteIndex = byteBuf.writerIndex();
 
-        // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+        // Variable-length int; clear any over-reserved positions
         var padding = writeIntCountByte - writeIntCount(length);
         if (padding == 0) {
             byteBuf.writerIndex(beforeWriteIndex);
@@ -407,7 +407,7 @@ public abstract class ByteBufUtils {
 
 
     //-----------------------------------------------------------------------
-    //---------------------------------以下方法会被字节码生成的代码调用--------------------------------------
+    //---------------------------------The following methods are called by bytecode-generated code--------------------------------------
     public static void writePacketCollection(ByteBuf byteBuf, Collection<?> collection, IProtocolRegistration protocolRegistration) {
         if (collection == null) {
             byteBuf.writeByte(0);

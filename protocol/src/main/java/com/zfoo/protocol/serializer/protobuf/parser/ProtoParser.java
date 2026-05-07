@@ -16,33 +16,32 @@ package com.zfoo.protocol.serializer.protobuf.parser;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.serializer.protobuf.*;
 import com.zfoo.protocol.serializer.protobuf.PbField.Cardinality;
-import com.zfoo.protocol.util.NumberUtils;
 import com.zfoo.protocol.util.StringUtils;
 
 import java.util.*;
 
 /**
- * proto文件的解析器
+ * Parser for proto files
  */
 public class ProtoParser {
     /**
-     * 需要解析的字符数组
+     * Character array to be parsed
      */
     protected char[] data;
     /**
-     * 解析的游标
+     * Parsing cursor position
      */
     protected int pos;
     /**
-     * 正在解析的行数
+     * Current line number being parsed
      */
     protected int row;
     /**
-     * 每行开始对应的游标
+     * Cursor positions for the start of each line
      */
     protected Map<Integer, Integer> rowsPos = new HashMap<>();
     /**
-     * 解析时临时存放解析的注释信息
+     * Temporary storage for parsed comment content
      */
     protected List<String> comments = new ArrayList<>();
 
@@ -161,7 +160,7 @@ public class ProtoParser {
             } else if ("reserved".equals(token)) {
                 notSupportReserved();
             } else if ("message".equals(token)) {
-                // 为了让用法简单，屏蔽内部类的消息定义
+                // Hide inner class message definitions to keep usage simple
                 // msg.addMessage(parseMessage());
                 notSupportInnerMessage();
             } else if (Cardinality.cardinalityOf(token) != null) {
@@ -261,7 +260,7 @@ public class ProtoParser {
     }
 
     /**
-     * 读取一个标识符
+     * Read an identifier token
      */
     private String readToken() throws RuntimeException {
         trim();
@@ -411,7 +410,7 @@ public class ProtoParser {
     }
 
     /**
-     * 解析判断语句块是否开始,去掉空格和空行后第一个字符为"{"的返回语句块开始
+     * Check if a block starts; the first non-whitespace character being '{' signals the start
      */
     private void blockStarted(String structName) throws RuntimeException {
         trim();
@@ -434,7 +433,7 @@ public class ProtoParser {
     }
 
     /**
-     * 解析判断语句块是否结束,语句块以"}"标示符为结束符
+     * Check if a block ends; block terminates with"}"as the terminator
      *
      * @return
      */
@@ -457,7 +456,7 @@ public class ProtoParser {
     }
 
     /**
-     * 解析判断Field是否结束,去掉空行和空格,以";"结束表示field解析解决
+     * Check if field parsing is done; strip empty lines and spaces; ';' signals end of field
      *
      * @return
      */
@@ -476,9 +475,9 @@ public class ProtoParser {
     }
 
     /**
-     * 解析判断去掉空格,tab建后第一个字符是否与提供的字符相同
+     * Check if the first non-whitespace/tab character matches the given character
      *
-     * @param endChar 指定的字符
+     * @param endChar the character to match
      * @return
      */
     private boolean isEndChar(char endChar) {
@@ -498,7 +497,7 @@ public class ProtoParser {
     }
 
     /**
-     * 读取单行的注释内容，如果读取到换行符或者文件结束则返回注释的内容
+     * Read a single-line comment; returns when a newline or EOF is encountered
      */
     private String readSingleLineComment() {
         var builder = new StringBuilder();
@@ -542,12 +541,12 @@ public class ProtoParser {
     }
 
     private boolean isMultiLineCommentFinish() {
-        //如果"*"后为空格则跳过空格
+        // Skip space after '*'
         if (pos + 1 < data.length) {
             char c2 = data[pos + 1];
             if (c2 == ' ') {
                 pos += 2;
-            } else if (c2 == '/') { //多行注释结束
+            } else if (c2 == '/') { // End of block comment
                 pos += 2;
                 trim();
                 nextLine();
@@ -594,7 +593,7 @@ public class ProtoParser {
     }
 
     /**
-     * 读取proto描述文件中的值，知道分号结束
+     * Read a value from the proto file until a semicolon
      */
     private ProtoValue readValueUtilSemicolon() throws RuntimeException {
         char c;
@@ -640,7 +639,7 @@ public class ProtoParser {
     }
 
     /**
-     * 读取proto描述文件中的值
+     * Read a value from the proto file
      *
      * @return
      * @throws RuntimeException
@@ -735,7 +734,7 @@ public class ProtoParser {
                 if (v.length() > 0 && v.charAt(v.length() - 1) == '\\') {
                     v.deleteCharAt(v.length() - 1);
                     v.append(c);
-                } else { //如果由引号引起来的字符串第二次出现引号时值结束
+                } else { // Second quote closes a quoted string
                     pos++;
                     trim();
                     if (data[pos] != ';' && data[pos] != ']' && data[pos] != ',') {
@@ -787,9 +786,9 @@ public class ProtoParser {
     }
 
     /**
-     * 去掉space,tab,'\r'回车
+     * Strip spaces, tabs, and carriage returns
      *
-     * @return 去掉空格和tab的个数
+     * @return number of stripped whitespace/tab characters
      */
     private int trim() {
         char c;
@@ -810,7 +809,7 @@ public class ProtoParser {
     }
 
     /**
-     * 判断是否当前字符为换行符，如果是换行符则进行换行
+     * Check if the current character is a newline; increment line counter if so
      */
     private boolean nextLine() {
         if (pos < data.length && data[pos] == '\r') {

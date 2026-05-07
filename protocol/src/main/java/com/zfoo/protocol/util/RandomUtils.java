@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.List;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -27,19 +26,19 @@ public abstract class RandomUtils {
 
 
     /**
-     * 用于随机选的字符和数字
+     * Characters and digits used for random selection
      */
     public static final String BASE_CHAR_NUMBER = StringUtils.ENGLISH_CHAR + StringUtils.ARAB_NUMBER;
 
     /**
-     * 使用ThreadLocalRandom产生随机数，能够解决多个线程发生的竞争争夺。
+     * Uses ThreadLocalRandom to avoid thread contention.
      */
     public static ThreadLocalRandom getRandom() {
         return ThreadLocalRandom.current();
     }
 
     /**
-     * 获取{@link SecureRandom}，类提供加密的强随机数生成器 (RNG)
+     * Get a {@link SecureRandom} instance; provides a cryptographically strong random number generator (RNG)
      */
     public static SecureRandom getSecureRandom() {
         try {
@@ -50,9 +49,9 @@ public abstract class RandomUtils {
     }
 
     /**
-     * 获取随机数产生器
+     * Get a random number generator
      *
-     * @param isSecure 是否为强随机数生成器 (RNG)
+     * @param isSecure true to return a cryptographically strong RNG
      * @return {@link Random}
      */
     public static Random getRandom(boolean isSecure) {
@@ -60,7 +59,7 @@ public abstract class RandomUtils {
     }
 
     /**
-     * 获得随机Boolean值
+     * Returns a random boolean value
      *
      * @return true or false
      */
@@ -69,165 +68,165 @@ public abstract class RandomUtils {
     }
 
     /**
-     * 获得指定范围内的随机数
+     * Returns a random number within the specified range
      *
-     * @param min 最小数（包含）
-     * @param max 最大数（不包含）
-     * @return 随机数
+     * @param min minimum (inclusive)
+     * @param max maximum (exclusive)
+     * @return random number
      */
     public static int randomInt(int min, int max) {
         return getRandom().nextInt(min, max);
     }
 
     /**
-     * 获得随机数[-2^32, 2^32)
+     * Returns a random number in [-2^32, 2^32)
      *
-     * @return 随机数
+     * @return random number
      */
     public static int randomInt() {
         return getRandom().nextInt();
     }
 
     /**
-     * 获得指定范围内的随机数 [0,limit)
+     * Returns a random number in [0, limit)
      *
-     * @param limit 限制随机数的范围，不包括这个数
-     * @return 随机数
+     * @param limit upper bound (exclusive)
+     * @return random number
      */
     public static int randomInt(int limit) {
         return getRandom().nextInt(limit);
     }
 
     /**
-     * 获得指定范围内的随机数[min, max)
+     * Returns a random number within the specified range[min, max)
      *
-     * @param min 最小数（包含）
-     * @param max 最大数（不包含）
-     * @return 随机数
+     * @param min minimum (inclusive)
+     * @param max maximum (exclusive)
+     * @return random number
      */
     public static long randomLong(long min, long max) {
         return getRandom().nextLong(min, max);
     }
 
     /**
-     * 获得随机数
+     * Returns a random number
      *
-     * @return 随机数
+     * @return random number
      */
     public static long randomLong() {
         return getRandom().nextLong();
     }
 
     /**
-     * 获得指定范围内的随机数 [0,limit)
+     * Returns a random number in [0, limit)
      *
-     * @param limit 限制随机数的范围，不包括这个数
-     * @return 随机数
+     * @param limit upper bound (exclusive)
+     * @return random number
      */
     public static long randomLong(long limit) {
         return getRandom().nextLong(limit);
     }
 
     /**
-     * 获得指定范围内的随机数
+     * Returns a random number within the specified range
      *
-     * @param min 最小数（包含）
-     * @param max 最大数（不包含）
-     * @return 随机数
+     * @param min minimum (inclusive)
+     * @param max maximum (exclusive)
+     * @return random number
      */
     public static double randomDouble(double min, double max) {
         return getRandom().nextDouble(min, max);
     }
 
     /**
-     * 获得指定范围内的随机数
+     * Returns a random number within the specified range
      *
-     * @param min          最小数（包含）
-     * @param max          最大数（不包含）
-     * @param scale        保留小数位数
-     * @param roundingMode 保留小数的模式 {@link RoundingMode}
-     * @return 随机数
+     * @param min          minimum (inclusive)
+     * @param max          maximum (exclusive)
+     * @param scale        number of decimal places
+     * @param roundingMode rounding mode {@link RoundingMode}
+     * @return random number
      */
     public static double randomDouble(double min, double max, int scale, RoundingMode roundingMode) {
         return NumberUtils.round(randomDouble(min, max), scale, roundingMode).doubleValue();
     }
 
     /**
-     * 获得随机数[0, 1)
+     * Returns a random number in [0, 1)
      *
-     * @return 随机数
+     * @return random number
      */
     public static double randomDouble() {
         return getRandom().nextDouble();
     }
 
     /**
-     * 获得指定范围内的随机数
+     * Returns a random number within the specified range
      *
-     * @param scale        保留小数位数
-     * @param roundingMode 保留小数的模式 {@link RoundingMode}
-     * @return 随机数
+     * @param scale        number of decimal places
+     * @param roundingMode rounding mode {@link RoundingMode}
+     * @return random number
      */
     public static double randomDouble(int scale, RoundingMode roundingMode) {
         return NumberUtils.round(randomDouble(), scale, roundingMode).doubleValue();
     }
 
     /**
-     * 获得指定范围内的随机数 [0,limit)
+     * Returns a random number in [0, limit)
      *
-     * @param limit 限制随机数的范围，不包括这个数
-     * @return 随机数
+     * @param limit upper bound (exclusive)
+     * @return random number
      */
     public static double randomDouble(double limit) {
         return getRandom().nextDouble(limit);
     }
 
     /**
-     * 获得指定范围内的随机数
+     * Returns a random number within the specified range
      *
-     * @param limit        限制随机数的范围，不包括这个数
-     * @param scale        保留小数位数
-     * @param roundingMode 保留小数的模式 {@link RoundingMode}
-     * @return 随机数
+     * @param limit        upper bound (exclusive)
+     * @param scale        number of decimal places
+     * @param roundingMode rounding mode {@link RoundingMode}
+     * @return random number
      */
     public static double randomDouble(double limit, int scale, RoundingMode roundingMode) {
         return NumberUtils.round(randomDouble(limit), scale, roundingMode).doubleValue();
     }
 
     /**
-     * 获得指定范围内的随机数[0, 1)
+     * Returns a random number within the specified range[0, 1)
      *
-     * @return 随机数
+     * @return random number
      */
     public static BigDecimal randomBigDecimal() {
         return NumberUtils.toBigDecimal(getRandom().nextDouble());
     }
 
     /**
-     * 获得指定范围内的随机数 [0,limit)
+     * Returns a random number in [0, limit)
      *
-     * @param limit 最大数（不包含）
-     * @return 随机数
+     * @param limit maximum (exclusive)
+     * @return random number
      */
     public static BigDecimal randomBigDecimal(BigDecimal limit) {
         return NumberUtils.toBigDecimal(getRandom().nextDouble(limit.doubleValue()));
     }
 
     /**
-     * 获得指定范围内的随机数
+     * Returns a random number within the specified range
      *
-     * @param min 最小数（包含）
-     * @param max 最大数（不包含）
-     * @return 随机数
+     * @param min minimum (inclusive)
+     * @param max maximum (exclusive)
+     * @return random number
      */
     public static BigDecimal randomBigDecimal(BigDecimal min, BigDecimal max) {
         return NumberUtils.toBigDecimal(getRandom().nextDouble(min.doubleValue(), max.doubleValue()));
     }
 
     /**
-     * 随机bytes
+     * Random bytes
      *
-     * @param length 长度
+     * @param length length
      * @return bytes
      */
     public static byte[] randomBytes(int length) {
@@ -237,58 +236,58 @@ public abstract class RandomUtils {
     }
 
     /**
-     * 随机获得列表中的元素
+     * Pick a random element from the list
      *
-     * @param <T>  元素类型
-     * @param list 列表
-     * @return 随机元素
+     * @param <T>  element type
+     * @param list the list
+     * @return random element
      */
     public static <T> T randomEle(List<T> list) {
         return randomEle(list, list.size());
     }
 
     /**
-     * 随机获得列表中的元素
+     * Pick a random element from the list
      *
-     * @param <T>   元素类型
-     * @param list  列表
-     * @param limit 限制列表的前N项
-     * @return 随机元素
+     * @param <T>   element type
+     * @param list  the list
+     * @param limit limit to first N items
+     * @return random element
      */
     public static <T> T randomEle(List<T> list, int limit) {
         return list.get(randomInt(limit));
     }
 
     /**
-     * 随机获得数组中的元素
+     * Pick a random element from the array
      *
-     * @param <T>   元素类型
-     * @param array 列表
-     * @return 随机元素
+     * @param <T>   element type
+     * @param array the array
+     * @return random element
      */
     public static <T> T randomEle(T[] array) {
         return randomEle(array, array.length);
     }
 
     /**
-     * 随机获得数组中的元素
+     * Pick a random element from the array
      *
-     * @param <T>   元素类型
-     * @param array 列表
-     * @param limit 限制列表的前N项
-     * @return 随机元素
+     * @param <T>   element type
+     * @param array the array
+     * @param limit limit to first N items
+     * @return random element
      */
     public static <T> T randomEle(T[] array, int limit) {
         return array[randomInt(limit)];
     }
 
     /**
-     * 随机获得列表中的一定量元素
+     * Pick a specified number of random elements from the list
      *
-     * @param <T>   元素类型
-     * @param list  列表
-     * @param count 随机取出的个数
-     * @return 随机元素
+     * @param <T>   element type
+     * @param list  the list
+     * @param count number of elements to pick
+     * @return random element
      */
     public static <T> List<T> randomEles(List<T> list, int count) {
         final List<T> result = new ArrayList<T>(count);
@@ -301,13 +300,13 @@ public abstract class RandomUtils {
     }
 
     /**
-     * 随机获得列表中的一定量的不重复元素，返回Set
+     * Pick a specified number of unique random elements, returned as a Set
      *
-     * @param <T>        元素类型
-     * @param collection 列表
-     * @param count      随机取出的个数
-     * @return 随机元素
-     * @throws IllegalArgumentException 需要的长度大于给定集合非重复总数
+     * @param <T>        element type
+     * @param collection the collection
+     * @param count      number of elements to pick
+     * @return random element
+     * @throws IllegalArgumentException if count exceeds the number of unique elements
      */
     public static <T> Set<T> randomEleSet(Collection<T> collection, int count) {
         ArrayList<T> source = new ArrayList<>(new HashSet<>(collection));
@@ -325,41 +324,41 @@ public abstract class RandomUtils {
     }
 
     /**
-     * 获得一个随机的字符串（只包含数字和字符）
+     * Returns a random alphanumeric string
      *
-     * @param length 字符串的长度
-     * @return 随机字符串
+     * @param length string length
+     * @return random string
      */
     public static String randomString(int length) {
         return randomString(BASE_CHAR_NUMBER, length);
     }
 
     /**
-     * 获得一个随机的字符串（只包含数字和大写字符）
+     * Returns a random string of digits and uppercase letters
      *
-     * @param length 字符串的长度
-     * @return 随机字符串
+     * @param length string length
+     * @return random string
      */
     public static String randomStringUpper(int length) {
         return randomString(BASE_CHAR_NUMBER, length).toUpperCase();
     }
 
     /**
-     * 获得一个只包含数字的字符串
+     * Returns a random numeric string
      *
-     * @param length 字符串的长度
-     * @return 随机字符串
+     * @param length string length
+     * @return random string
      */
     public static String randomNumbers(int length) {
         return randomString(StringUtils.ARAB_NUMBER, length);
     }
 
     /**
-     * 获得一个随机的字符串
+     * Returns a random string
      *
-     * @param baseString 随机字符选取的样本
-     * @param length     字符串的长度
-     * @return 随机字符串
+     * @param baseString character pool
+     * @param length     string length
+     * @return random string
      */
     public static String randomString(String baseString, int length) {
         final StringBuilder sb = new StringBuilder();
@@ -376,28 +375,28 @@ public abstract class RandomUtils {
     }
 
     /**
-     * 随机数字，数字为0~9单个数字
+     * Random digit character (0-9)
      *
-     * @return 随机数字字符
+     * @return random character
      */
     public static int randomNumber() {
         return randomChar(StringUtils.ARAB_NUMBER);
     }
 
     /**
-     * 随机字母或数字，小写
+     * Random lowercase alphanumeric character
      *
-     * @return 随机字符
+     * @return random character
      */
     public static char randomChar() {
         return randomChar(BASE_CHAR_NUMBER);
     }
 
     /**
-     * 随机字符
+     * Random character
      *
-     * @param baseString 随机字符选取的样本
-     * @return 随机字符
+     * @param baseString character pool
+     * @return random character
      */
     public static char randomChar(String baseString) {
         return baseString.charAt(getRandom().nextInt(baseString.length()));

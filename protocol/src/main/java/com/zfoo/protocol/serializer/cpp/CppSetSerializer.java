@@ -76,7 +76,7 @@ public class CppSetSerializer implements ICppSerializer {
         var size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int32_t {} = buffer.readInt();", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);
-        // unity里不支持HashSet的初始化大小
+        // Unity does not support specifying initial HashSet capacity
 //        builder.append("var " + result + " = new " + typeName + "(" + size + ");" + LS);
         builder.append(StringUtils.format("{} {};", typeName, result)).append(LS);
 

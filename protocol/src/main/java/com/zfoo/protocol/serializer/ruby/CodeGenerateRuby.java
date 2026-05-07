@@ -240,12 +240,12 @@ public class CodeGenerateRuby implements ICodeGenerate {
         var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
         for (var field : sequencedFields) {
             var fieldName = field.getName();
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Ruby);
             for (var fieldNote : fieldNotes) {
                 rbBuilder.append(fieldNote).append(LS);
             }
-            // 生成类型的注释
+            // Generate type comment
             rbBuilder.append(StringUtils.format("attr_accessor :{}", fieldName));
             rbBuilder.append(StringUtils.format("  # {}", CodeGenerateCsharp.toCsClassName(field.getGenericType().getTypeName())));
             rbBuilder.append(LS);

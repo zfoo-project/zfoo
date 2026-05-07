@@ -32,29 +32,29 @@ import java.util.*;
 public abstract class JsonUtils {
 
     /**
-     * 适用于任何场景下的json转换，只要在各个类方法中不调用configure方法，则MAPPER都是线程安全的
+     * For all JSON conversion use cases; thread-safe as long as configure() is not called on the instance
      */
     public static final ObjectMapper MAPPER = new ObjectMapper();
 
 
     /**
-     * 涡轮增压的jackson，会使用字节码增强技术
+     * Turbo-charged Jackson using bytecode enhancement
      */
     public static final ObjectMapper MAPPER_TURBO = new ObjectMapper();
 
     static {
-        //序列化
+        // Serialization
         MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         MAPPER.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         // MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        //序列化枚举是以toString()来输出，默认false，即默认以name()来输出
+        // Serialize enums using toString(); default is false (uses name())
         // MAPPER.configure(SerializationFeature.WRITE_ENUMS_USING_INDEX, true);
 
 
-        //反序列化
-        //当反序列化有未知属性则抛异常，true打开这个设置
+        // Deserialization
+        // Throw exception on unknown properties; set to true to enable
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-        //美化输出
+        // Pretty-print output
         DefaultPrettyPrinter prettyPrinter = (DefaultPrettyPrinter) MAPPER.getSerializationConfig().getDefaultPrettyPrinter();
         DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter(StringUtils.TAB_ASCII, FileUtils.LS);
         prettyPrinter.indentObjectsWith(indenter);
@@ -73,7 +73,7 @@ public abstract class JsonUtils {
         }
     }
 
-    //普通输出
+    // Compact output
     public static String object2String(Object object) {
         try {
             return MAPPER.writeValueAsString(object);
@@ -82,7 +82,7 @@ public abstract class JsonUtils {
         }
     }
 
-    // 格式化/美化/优雅的输出
+    // Format / pretty-print / elegant output
     public static String object2StringPrettyPrinter(Object object) {
         try {
             return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(object);
@@ -92,7 +92,7 @@ public abstract class JsonUtils {
     }
 
     /**
-     * 涡轮增压极大提升json转换性能，字节码增强
+     * Turbo-charges JSON conversion performance via bytecode enhancement
      */
     public static <T> T string2ObjectTurbo(String json, Class<T> clazz) {
         try {
@@ -103,7 +103,7 @@ public abstract class JsonUtils {
     }
 
     /**
-     * 涡轮增压极大提升json转换性能，字节码增强
+     * Turbo-charges JSON conversion performance via bytecode enhancement
      */
     public static String object2StringTurbo(Object object) {
         try {
@@ -122,7 +122,7 @@ public abstract class JsonUtils {
         }
     }
 
-    //元素不可重复
+    // Elements must be unique
     public static <T> Set<T> string2Set(String json, Class<T> clazz) {
         var collectionType = MAPPER.getTypeFactory().constructCollectionType(HashSet.class, clazz);
         try {
@@ -160,21 +160,21 @@ public abstract class JsonUtils {
     }
 
     /**
-     * 在js中获取属性名为nodeName的节点
+     * Get the node whose attribute name is nodeName
      * <p>
-     * 树模型是基于流式操作
+     * The tree model is based on streaming operations
      *
      * @param json     json string
-     * @param nodeName 节点名称
-     * @return 节点名称为nodeName的json节点，没有返回空
+     * @param nodeName node name
+     * @return the JSON node with name nodeName; null if not found
      */
     public static JsonNode getNode(String json, String nodeName) {
         try {
             var queue = new ArrayDeque<JsonNode>();
-            // 将Json串以树状结构读入内存
+            // Read JSON string into memory as a tree
             var rootNode = MAPPER.readTree(json);
             queue.add(rootNode);
-            // 深度优先遍历算法
+            // Depth-first traversal
             while (!queue.isEmpty()) {
                 var pollNode = queue.poll();
                 var resultNode = pollNode.get(nodeName);
@@ -182,7 +182,7 @@ public abstract class JsonUtils {
                     return resultNode;
                 }
                 var iterator = pollNode.elements();
-                // 循环遍历子节点下的信息
+                // Iterate over child nodes
                 while (iterator.hasNext()) {
                     var node = iterator.next();
                     queue.add(node);
@@ -198,14 +198,14 @@ public abstract class JsonUtils {
         try {
             var jsonMap = new HashMap<String, String>();
             var queue = new ArrayDeque<JsonNode>();
-            // 将Json串以树状结构读入内存
+            // Read JSON string into memory as a tree
             var rootNode = MAPPER.readTree(json);
             queue.add(rootNode);
-            // 深度优先遍历算法
+            // Depth-first traversal
             while (!queue.isEmpty()) {
                 var pollNode = queue.poll();
                 var iterator = pollNode.fields();
-                // 循环遍历子节点下的信息
+                // Iterate over child nodes
                 while (iterator.hasNext()) {
                     var node = iterator.next();
                     var field = node.getKey();

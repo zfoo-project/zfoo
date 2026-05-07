@@ -13,7 +13,7 @@ public class ByteBuffer {
 
 
     public void adjustPadding(int predictionLength, int beforewriteIndex) {
-        // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+        // Variable-length int; clear any over-reserved positions
         var currentwriteIndex = writeOffset;
         var predictionCount = writeIntCount(predictionLength);
         var length = currentwriteIndex - beforewriteIndex - predictionCount;
@@ -225,7 +225,7 @@ public class ByteBuffer {
         return 5;
     }
 
-    // 写入没有压缩的int
+    // Write uncompressed int
     public void writeRawInt(int value) {
         ensureCapacity(4);
         buffer[writeOffset++] = (byte) (value >>> 24);
@@ -234,7 +234,7 @@ public class ByteBuffer {
         buffer[writeOffset++] = (byte) value;
     }
 
-    // 读取没有压缩的int
+    // Read uncompressed int
     public int readRawInt() {
         return (buffer[readOffset++] & 255) << 24 | (buffer[readOffset++] & 255) << 16 | (buffer[readOffset++] & 255) << 8 | buffer[readOffset++] & 255;
     }

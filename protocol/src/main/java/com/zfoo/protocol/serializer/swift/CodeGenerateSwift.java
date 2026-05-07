@@ -202,7 +202,7 @@ public class CodeGenerateSwift implements ICodeGenerate {
             var field = sequencedFields.get(i);
             IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Swift);
             for (var fieldNote : fieldNotes) {
                 swiftBuilder.append(fieldNote).append(LS);
@@ -302,47 +302,47 @@ public class CodeGenerateSwift implements ICodeGenerate {
             default:
         }
 
-        // 将boolean转为bool
+        // Convert boolean to bool
         typeName = typeName.replaceAll("[B|b]oolean\\[", "Boolean");
         typeName = typeName.replace("<Boolean", "<Boolean");
         typeName = typeName.replace("Boolean>", "Boolean>");
 
-        // 将Byte转为byte
+        // Convert Byte to byte
         typeName = typeName.replace("Byte[", "Int8");
         typeName = typeName.replace("Byte>", "Int8>");
         typeName = typeName.replace("<Byte", "<Int8");
 
-        // 将Short转为short
+        // Convert Short to short
         typeName = typeName.replace("Short[", "Int16");
         typeName = typeName.replace("Short>", "Int16>");
         typeName = typeName.replace("<Short", "<Int16");
 
-        // 将Integer转为int
+        // Convert Integer to int
         typeName = typeName.replace("Integer[", "Int");
         typeName = typeName.replace("Integer>", "Int>");
         typeName = typeName.replace("<Integer", "<Int");
 
-        // 将Long转为long
+        // Convert Long to long
         typeName = typeName.replace("Long[", "Int64");
         typeName = typeName.replace("Long>", "Int64>");
         typeName = typeName.replace("<Long", "<Int64");
 
-        // 将Float转为float
+        // Convert Float to float
         typeName = typeName.replace("Float[", "Float32");
         typeName = typeName.replace("Float>", "Float32>");
         typeName = typeName.replace("<Float", "<Float32");
 
-        // 将Double转为double
+        // Convert Double to double
         typeName = typeName.replace("Double[", "Float64");
         typeName = typeName.replace("Double>", "Float64>");
         typeName = typeName.replace("<Double", "<Float64");
 
-        // 将Character转为Char
+        // Convert Character to Char
         typeName = typeName.replace("Character[", "String");
         typeName = typeName.replace("Character>", "String>");
         typeName = typeName.replace("<Character", "<String");
 
-        // 将String转为string
+        // Convert String to string
         typeName = typeName.replace("String[", "String");
         typeName = typeName.replace("String>", "String>");
         typeName = typeName.replace("<String", "<String");

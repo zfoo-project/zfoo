@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.util.*;
 
 /**
- * DOM(Document Object Model)文档对象模型
+ * DOM (Document Object Model) utility
  * <p>
  * Convenience methods for working with the DOM API,in particular for working with DOM Nodes and DOM Elements.
  * </p>
@@ -39,7 +39,7 @@ public abstract class DomUtils {
 
     private static final XmlMapper MAPPER = XmlMapper.builder()
             .defaultUseWrapper(false)
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)  // 当反序列化有未知属性则抛异常，true打开这个设置
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)  // Throw exception on unknown properties during deserialization; true enables this
             .build();
 
     public static <T> T string2Object(String xml, Class<T> clazz) {
@@ -70,7 +70,7 @@ public abstract class DomUtils {
 
 
     /**
-     * 获取包含有指定属性的Element
+     * Get the Element that contains the specified attribute
      */
     public static List<Element> getElementsByAttribute(Element element, String attribute, String attributeValue) {
         var elements = new ArrayList<Element>();
@@ -123,7 +123,7 @@ public abstract class DomUtils {
     }
 
     /**
-     * 只返回第一层的孩子节点，不返回第一层孩子节点的孩子节点
+     * Only returns direct children; does not recurse into grandchildren
      * <p>
      * Retrieves all child elements of the given DOM element
      * </p>

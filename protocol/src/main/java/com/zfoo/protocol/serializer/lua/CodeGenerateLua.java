@@ -261,7 +261,7 @@ public class CodeGenerateLua implements ICodeGenerate {
             var field = fields[i];
             var fieldRegistration = fieldRegistrations[i];
             var fieldName = field.getName();
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Lua);
             for (var fieldNote : fieldNotes) {
                 luaBuilder.append(fieldNote).append(LS);
@@ -273,7 +273,7 @@ public class CodeGenerateLua implements ICodeGenerate {
                 luaBuilder.append(StringUtils.format("{} = {},", fieldName, fieldDefaultValue));
             }
             var typeNote = CodeGenerateCsharp.toCsClassName(field.getGenericType().getTypeName());
-            // 生成类型的注释
+            // Generate type comment
             luaBuilder.append(" -- ").append(typeNote).append(LS);
         }
         return luaBuilder.toString();

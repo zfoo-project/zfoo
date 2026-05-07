@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 
 /**
  * EN: Make the fields of the old and new protocols compatible in different version
- * CN: 让新老协议的字段前后兼容
+ * Ensures forward and backward compatibility between old and new protocol fields
  *
  * @author godotg
  */
@@ -27,7 +27,7 @@ public @interface Compatible {
 
     /**
      * EN: new compatible field value must be always greater than old compatible field value
-     * CN: 新的兼容字段值必须始终大于旧的兼容字段
+     * The ordinal of a new compatible field must always be greater than that of existing compatible fields
      */
     int value();
 

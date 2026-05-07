@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 public interface IGoSerializer {
 
     /**
-     * 获取属性的类型
+     * Get the property type
      */
     String fieldType(Field field, IFieldRegistration fieldRegistration);
 

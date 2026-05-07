@@ -14,7 +14,7 @@
 package com.zfoo.protocol.serializer.protobuf;
 
 /**
- * protocol buffer的协议版本
+ * Protobuf syntax version
  */
 public enum Syntax {
 

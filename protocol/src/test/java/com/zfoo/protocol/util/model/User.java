@@ -18,11 +18,11 @@ import java.util.Map;
 
 /**
  * @author godotg
- */ //@JsonIgnoreProperties({"name", "age"})//可以将它看做是@JsonIgnore的批量操作
+ */ //@JsonIgnoreProperties({"name", "age"})// Batch equivalent of @JsonIgnore
 public class User {
     private String id;
-    //@JsonIgnore//作用在字段或方法上，用来完全忽略被注解的字段和方法对应的属性
-    //@JsonProperty//注意这里必须得有该注解，因为没有提供对应的getId和setId函数，而是其他的getter和setter，防止遗漏该属性
+    //@JsonIgnore// On field/method: completely ignore the annotated property
+    //@JsonProperty// Required here: no getId/setId provided; other getter/setter used instead to prevent property being omitted
     private String name;
     private String sex;
     private int age;

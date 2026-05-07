@@ -29,12 +29,12 @@ public interface IProtocolRegistration {
     Constructor<?> protocolConstructor();
 
     /**
-     * 序列化
+     * Serialize
      */
     void write(ByteBuf buffer, Object packet);
 
     /**
-     * 反序列化
+     * Deserialize
      */
     Object read(ByteBuf buffer);
 

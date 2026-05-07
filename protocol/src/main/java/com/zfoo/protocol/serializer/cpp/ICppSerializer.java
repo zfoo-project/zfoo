@@ -24,7 +24,7 @@ import java.lang.reflect.Field;
 public interface ICppSerializer {
 
     /**
-     * 获取属性的类型和默认值
+     * Get the property type and default value
      */
     Pair<String, String> fieldTypeDefaultValue(Field field, IFieldRegistration fieldRegistration);
 

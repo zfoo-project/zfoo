@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 
 /**
  * EN: The performance is much lower than ConcurrentHashMap of the JDK, and the purpose is to reduce the memory footprint of the Long wrapper type
- * CN: 性能远低于JDK自带的ConcurrentHashMap，主要就是减少Long包装类型的内存占用
+ * Performance is far below JDK's ConcurrentHashMap; the primary benefit is reducing memory overhead from Long boxing
  *
  * @author godotg
  */
@@ -31,11 +31,11 @@ public class ConcurrentHashMapLongObject<V> implements Map<Long, V> {
 
     public static final int DEFAULT_BUCKET_SIZE = 16;
 
-    // 分段锁
+    // Striped lock
     private int buckets;
     private int mask;
     private ReadWriteLock[] locks;
-    // bucket对应的分段map
+    // Striped map for each bucket
     private List<LongObjectHashMap<V>> maps;
 
     public ConcurrentHashMapLongObject(int buckets) {

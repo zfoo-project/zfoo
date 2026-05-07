@@ -17,23 +17,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * protocol buffer消息体的结构定义
+ * Defines the structure of a protobuf message
  */
 public class PbMessage {
     /**
-     * 消息的名称
+     * Message name
      */
     private String name;
     /**
-     * 协议Id
+     * Protocol ID
      */
     private short protocolId;
     /**
-     * 消息包含的Fields列表
+     * List of fields in the message
      */
     private List<PbField> fields = new ArrayList<>();
     /**
-     * 消息的备注信息
+     * Message documentation comment
      */
     private List<String> comments = new ArrayList<>();
 

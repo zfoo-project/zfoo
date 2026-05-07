@@ -19,7 +19,6 @@ import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.reflect.ISerializer;
 import com.zfoo.protocol.util.ReflectionUtils;
 import io.netty.buffer.ByteBuf;
-import io.netty.util.ReferenceCountUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -36,11 +35,11 @@ public class ProtocolRegistration implements IProtocolRegistration {
     private Field[] fields;
 
     /**
-     * 所有的协议里的发送顺序都是按字段名称排序
+     * All protocols serialize fields in alphabetical order by field name
      */
     private IFieldRegistration[] fieldRegistrations;
 
-    // 兼容相关
+    // Compatibility-related
     private boolean compatible;
     private int predictionLength;
 
@@ -96,14 +95,14 @@ public class ProtocolRegistration implements IProtocolRegistration {
         }
 
         if (compatible) {
-            // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+            // Variable-length int; clear any over-reserved positions
             ByteBufUtils.adjustPadding(byteBuf, predictionLength, beforeWriteIndex);
         }
     }
 
     @Override
     public Object read(ByteBuf byteBuf) {
-        // length为-1代表协议没有可兼容的部分，0代表为空对象，正数代表需要兼容的协议长度
+        // length=-1: no compatible part; 0: empty object; positive: compatible protocol byte length
         var length = ByteBufUtils.readInt(byteBuf);
         if (length == 0) {
             return null;
@@ -120,7 +119,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
                 var index = originFields.indexOf(field);
                 var packetFieldRegistration = fieldRegistrations[i];
 
-                // 协议向后兼容
+                // Backward-compatible protocol
                 if (field.isAnnotationPresent(Compatible.class)) {
                     if (!ByteBufUtils.compatibleRead(byteBuf, beforeReadIndex, length)) {
                         constructorParams[index] = packetFieldRegistration.defaultValue();
@@ -138,7 +137,7 @@ public class ProtocolRegistration implements IProtocolRegistration {
                 Field field = fields[i];
                 IFieldRegistration packetFieldRegistration = fieldRegistrations[i];
                 ISerializer serializer = packetFieldRegistration.serializer();
-                // 协议向后兼容
+                // Backward-compatible protocol
                 if (field.isAnnotationPresent(Compatible.class)) {
                     if (!ByteBufUtils.compatibleRead(byteBuf, beforeReadIndex, length)) {
                         ReflectionUtils.setField(field, object, packetFieldRegistration.defaultValue());

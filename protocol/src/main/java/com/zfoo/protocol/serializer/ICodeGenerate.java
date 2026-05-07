@@ -7,19 +7,19 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 协议修改过后的测试流程：
- * 1.测试Java的老协议和新协议的兼容性，NormalObject/ObjectA/ObjectB有几个兼容字段
- * 2.测试Java在字节码增强，CutDown，反射三种情况下的代码下的协议解析的准确性
- * 3.测试resource/compatible中有5种协议兼容情况需要测试
- * 4.1/2/3总共有2*3*5=30种情况
+ * Test workflow after modifying a protocol:
+ * 1. Test backward compatibility between old and new Java protocols; NormalObject/ObjectA/ObjectB have compatible fields
+ * 2. Test parsing accuracy under bytecode enhancement, CutDown, and reflection
+ * 3. Test 5 compatibility scenarios in resource/compatible
+ * 4. Steps 1/2/3 produce 2*3*5=30 test cases
  * <p>
- * 协议生成修改后的测试流程：
- * 1.测试老协议和新协议的兼容性，NormalObject/ObjectA/ObjectB有几个兼容字段
- * 2.测试普通生成，CutDown两种种情况下的代码下的协议解析的准确性
- * 3.测试merge，fold，default三种种生成方式
- * 4.测试resource/compatible中有5种协议兼容情况需要测试
- * 5.1/2/3/4总共2*2*3*5=60种情况
- * 6.简单的测试流程，NormalObject/ObjectA打开兼容字段，因为生成都是走的同一个方法直接测试非CutDown的fold
+ * Test workflow after modifying protocol generation:
+ * 1. Test compatibility; NormalObject/ObjectA/ObjectB have compatible fields
+ * 2. Test parsing accuracy under normal generation and CutDown
+ * 3. Test three generation modes: merge, fold, and default
+ * 4. Test 5 compatibility scenarios in resource/compatible
+ * 5. Steps 1/2/3/4 produce 2*2*3*5=60 test cases
+ * 6. Simple test: enable compat fields in NormalObject/ObjectA; directly test non-CutDown fold
  *
  * @author godotg
  */
@@ -28,17 +28,17 @@ public interface ICodeGenerate {
     void init(GenerateOperation generateOperation);
 
     /**
-     * 将一个包下的协议文件生成在一个协议文件里
+     * Generate all protocol files under a package into a single file
      */
     void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException;
 
     /**
-     * 折叠协议，生成协议文件会和Java源文件保持相同的目录结构
+     * Fold protocols; generated files mirror the Java source directory structure
      */
     void foldProtocol(List<ProtocolRegistration> registrations) throws IOException;
 
     /**
-     * 默认把所有的协议文件放在同一个更目录下，不做任何操作
+     * Default: place all protocol files in the same root directory; no further action
      */
     void defaultProtocol(List<ProtocolRegistration> registrations) throws IOException;
 

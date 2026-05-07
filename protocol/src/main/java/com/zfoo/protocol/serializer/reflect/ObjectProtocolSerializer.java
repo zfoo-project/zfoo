@@ -20,7 +20,7 @@ import com.zfoo.protocol.registration.field.ObjectProtocolField;
 import io.netty.buffer.ByteBuf;
 
 /**
- * 只要是protocol都是使用FieldSerializer
+ * All protocol objects use FieldSerializer
  *
  * @author godotg
  */

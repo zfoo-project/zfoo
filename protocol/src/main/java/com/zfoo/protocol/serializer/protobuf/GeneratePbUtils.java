@@ -47,7 +47,7 @@ public abstract class GeneratePbUtils {
 
     /**
      * EN: If the tag of a protobuf field exceeds this value, this field is considered to be a compatible protocol field
-     * CN: 如果protobuf的字段的tag超过这个值，则视这个字段为需要兼容的协议字段
+     * If a protobuf field tag exceeds this value, treat the field as backward-compatible
      */
     public static final int COMPATIBLE_FIELD_TAG = 1000;
 
@@ -293,18 +293,18 @@ public abstract class GeneratePbUtils {
     }
 
     private static void buildImports(PbGenerateOperation pbGenerateOperation, List<Proto> protos, Proto proto, String fieldType, Set<String> imports) {
-        // 基本数据类型不需要导入
+        // Primitive types do not require imports
         var typeProtobuf = PbType.typeOfProtobuf(fieldType);
         if (typeProtobuf != null) {
             return;
         }
 
-        // 属于同一个包不需要导入
+        // Same-package types do not require imports
         if (proto.getPbMessages().stream().anyMatch(it -> it.getName().equals(fieldType))) {
             return;
         }
 
-        // 遍历其它的proto找到需要导入的类
+        // Scan other proto files to find types that need to be imported
         for (var pt : protos) {
             for (var msg : pt.getPbMessages()) {
                 if (msg.getName().equals(fieldType)) {
@@ -502,7 +502,7 @@ public abstract class GeneratePbUtils {
             if (StringUtils.isBlank(split)) {
                 continue;
             }
-            // 首字母大写
+            // Capitalize the first letter
             builder.append(StringUtils.capitalize(split.trim()));
         }
         var outClassName = builder.toString();
@@ -561,18 +561,18 @@ public abstract class GeneratePbUtils {
     }
 
     private static void buildOneProtocolImports(PbGenerateOperation pbGenerateOperation, List<Proto> protos, Proto proto, String fieldType, Set<String> imports) {
-        // 基本数据类型不需要导入
+        // Primitive types do not require imports
         var typeProtobuf = PbType.typeOfProtobuf(fieldType);
         if (typeProtobuf != null) {
             return;
         }
 
-        // 属于同一个包不需要导入
+        // Same-package types do not require imports
         if (proto.getPbMessages().stream().anyMatch(it -> it.getName().equals(fieldType))) {
             return;
         }
 
-        // 遍历其它的proto找到需要导入的类
+        // Scan other proto files to find types that need to be imported
         for (var pt : protos) {
             for (var msg : pt.getPbMessages()) {
                 if (msg.getName().equals(fieldType)) {

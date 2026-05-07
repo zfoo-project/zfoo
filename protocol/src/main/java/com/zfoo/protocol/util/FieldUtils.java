@@ -3,11 +3,9 @@ package com.zfoo.protocol.util;
 import com.zfoo.protocol.exception.RunException;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Locale;
 
 /**
- * 属性工具类
+ * Field utility class
  *
  * @author veione
  */
@@ -27,11 +25,11 @@ public abstract class FieldUtils {
             clazz.getDeclaredMethod(methodName);
             return methodName;
         } catch (NoSuchMethodException e) {
-            // java的get方法对boolean值有可能对应get或者is，所以尝试获取两种不同的get方法，当两种都获取不到才抛异常
+            // Java getters for booleans may use 'get' or 'is'; try both and throw only if neither exists
         }
 
-        // 如果属性名的第一个字母是小写且第二个字母大写，那么该属性名直接用作 getter/setter。例如属性名为uName，对应的方法是getuName/setuName。
-        // 如果属性名以大写字母开头，属性名直接用作 getter/setter 方法中 get/set 的后部分。例如属性名为Name，对应的方法是getName/setName。
+        // If the first letter is lowercase and the second uppercase, use the name as-is. E.g., 'uName' -> 'getuName'/'setuName'.
+        // If the field name starts with an uppercase letter, append it directly to get/set. E.g., 'Name' -> 'getName'/'setName'.
         methodName = "get" + fieldName;
         try {
             clazz.getDeclaredMethod(methodName);
@@ -72,7 +70,7 @@ public abstract class FieldUtils {
 
     public static String getMethodToField(Class<?> clazz, String methodName) {
         try {
-            // 查看clazz时候真的有methodName方法
+            // Check if clazz actually has a method named methodName
             clazz.getDeclaredMethod(methodName);
         } catch (NoSuchMethodException e) {
             throw new RunException("clazz:[{}] has no getMethod:[{}]", clazz.getSimpleName(), methodName);

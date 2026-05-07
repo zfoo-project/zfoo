@@ -81,7 +81,7 @@ public class CodeGenerateRust implements ICodeGenerate {
         createTemplateFile();
 
 
-        // 生成mod文件
+        // Generate mod file
         var modBuilder = new StringBuilder();
         modBuilder.append("pub mod i_byte_buffer;").append(LS);
         modBuilder.append("pub mod byte_buffer;").append(LS);
@@ -144,7 +144,7 @@ public class CodeGenerateRust implements ICodeGenerate {
         createTemplateFile();
 
 
-        // 生成mod文件
+        // Generate mod file
         var modBuilder = new StringBuilder();
         modBuilder.append("pub mod i_byte_buffer;").append(LS);
         modBuilder.append("pub mod byte_buffer;").append(LS);
@@ -260,7 +260,7 @@ public class CodeGenerateRust implements ICodeGenerate {
         for (var field : sequencedFields) {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Rust);
             for (var fieldNote : fieldNotes) {
                 rustBuilder.append(fieldNote).append(LS);
@@ -283,7 +283,7 @@ public class CodeGenerateRust implements ICodeGenerate {
         for (var field : sequencedFields) {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Rust);
             for (var fieldNote : fieldNotes) {
                 rustBuilder.append(fieldNote).append(LS);
@@ -344,7 +344,7 @@ public class CodeGenerateRust implements ICodeGenerate {
         typeName = typeName.replaceAll("java.util.|java.lang.", StringUtils.EMPTY);
         typeName = typeName.replaceAll("[a-zA-Z0-9_.]*\\.", StringUtils.EMPTY);
 
-        // CSharp不适用基础类型的泛型，会影响性能
+        // C# does not support primitives as generics; it degrades performance
         switch (typeName) {
             case "boolean":
             case "Boolean":
@@ -380,54 +380,54 @@ public class CodeGenerateRust implements ICodeGenerate {
             default:
         }
 
-        // 将boolean转为bool
+        // Convert boolean to bool
         typeName = typeName.replaceAll("[B|b]oolean\\[", "bool");
         typeName = typeName.replace("<Boolean", "<bool");
         typeName = typeName.replace("Boolean>", "bool>");
 
-        // 将Byte转为byte
+        // Convert Byte to byte
         typeName = typeName.replace("Byte[", "i8");
         typeName = typeName.replace("Byte>", "i8>");
         typeName = typeName.replace("<Byte", "<i8");
 
-        // 将Short转为short
+        // Convert Short to short
         typeName = typeName.replace("Short[", "i16");
         typeName = typeName.replace("Short>", "i16>");
         typeName = typeName.replace("<Short", "<i16");
 
-        // 将Integer转为int
+        // Convert Integer to int
         typeName = typeName.replace("Integer[", "i32");
         typeName = typeName.replace("Integer>", "i32>");
         typeName = typeName.replace("<Integer", "<i32");
 
 
-        // 将Long转为long
+        // Convert Long to long
         typeName = typeName.replace("Long[", "i64");
         typeName = typeName.replace("Long>", "i64>");
         typeName = typeName.replace("<Long", "<i64");
 
-        // 将Float转为float
+        // Convert Float to float
         typeName = typeName.replace("Float[", "f32");
         typeName = typeName.replace("Float>", "f32>");
         typeName = typeName.replace("<Float", "<f32");
 
-        // 将Double转为double
+        // Convert Double to double
         typeName = typeName.replace("Double[", "f64");
         typeName = typeName.replace("Double>", "f64>");
         typeName = typeName.replace("<Double", "<f64");
 
-        // 将String转为string
+        // Convert String to string
         typeName = typeName.replace("String[", "String");
         typeName = typeName.replace("String>", "String>");
         typeName = typeName.replace("<String", "<String");
 
-        // 将Map转为map
+        // Convert Map to map
         typeName = typeName.replace("Map<", "HashMap<");
 
-        // 将Set转为set
+        // Convert Set to set
         typeName = typeName.replace("Set<", "HashSet<");
 
-        // 将List转为vector
+        // Convert List to vector
         typeName = typeName.replace("List<", "Vec<");
 
         return typeName;

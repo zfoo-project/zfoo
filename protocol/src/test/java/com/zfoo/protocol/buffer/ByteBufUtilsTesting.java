@@ -51,7 +51,7 @@ public class ByteBufUtilsTesting {
 
 
     /**
-     * 测试所有int值，运行时间太长，放弃测试
+     * Testing all int values takes too long; test skipped
      */
     @Ignore
     @Test

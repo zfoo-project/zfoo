@@ -128,7 +128,7 @@ public class FileHeapMap<V> implements LpMap<V> {
             fileOutputStream = FileUtils.openOutputStream(dbFile, false);
             buffer = ByteBufAllocator.DEFAULT.heapBuffer(1000);
 
-            // 写入长度
+            // Write length
             ByteBufUtils.writeLong(buffer, heapMap.map.size());
             buffer.readBytes(fileOutputStream, buffer.readableBytes());
 

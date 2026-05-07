@@ -30,7 +30,7 @@ import java.util.Set;
 import static com.zfoo.protocol.BenchmarkTesting.*;
 
 /**
- * 主要来测试极端大的对象序列化和反序列化情况，极端大的对象指的是字段多，对象大，方法大
+ * Tests serialization/deserialization of extremely large objects (many fields, large size, many methods)
  */
 public class VeryBigObject {
 
@@ -43,7 +43,7 @@ public class VeryBigObject {
 
         ByteBuf buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, 10_0000);
 
-        // 序列化和反序列化极端大的对象
+        // Serialize and deserialize an extremely large object
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < benchmark; i++) {
             buffer.clear();
@@ -51,7 +51,7 @@ public class VeryBigObject {
             var packet = ProtocolManager.read(buffer);
         }
 
-        System.out.println(StringUtils.format("[zfoo]     [超大对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
+        System.out.println(StringUtils.format("[zfoo]     [VeryBigObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), buffer.writerIndex(), System.currentTimeMillis() - startTime));
 
 
         try {
@@ -60,7 +60,7 @@ public class VeryBigObject {
             var output = new Output(10_0000);
             var input = new Input(output.getBuffer());
 
-            // 序列化和反序列化极端大的对象
+            // Serialize and deserialize an extremely large object
             startTime = System.currentTimeMillis();
             for (int i = 0; i < benchmark; i++) {
                 input.reset();
@@ -68,7 +68,7 @@ public class VeryBigObject {
                 kryo.writeObject(output, VeryBigObject.veryBigObject);
                 var mess = kryo.readObject(input, VeryBigObject.class);
             }
-            System.out.println(StringUtils.format("[kryo]     [超大对象] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
+            System.out.println(StringUtils.format("[kryo]     [VeryBigObject] [thread:{}] [size:{}] [time:{}]", Thread.currentThread().getName(), output.position(), System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             e.printStackTrace();
         }

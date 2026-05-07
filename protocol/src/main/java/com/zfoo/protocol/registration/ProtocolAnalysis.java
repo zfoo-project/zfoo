@@ -40,20 +40,17 @@ import static com.zfoo.protocol.ProtocolManager.*;
 public class ProtocolAnalysis {
 
     /**
-     * EN: Temp field will be destroyed after startup, and the class corresponding to the protocolId
-     * CN: 临时变量，启动完成就会销毁，协议Id对应的Class类
+     * Temp field: will be destroyed after startup. Maps protocolId to the corresponding Class.
      */
     private static Map<Short, Class<?>> protocolClassMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
     /**
-     * EN: Temp field, sub protocols
-     * CN: 临时变量，启动完成就会销毁，协议下包含的子协议，只包含一层子协议
+     * Temp field: will be destroyed after startup. Maps each protocol to its direct sub-protocols (one level only).
      */
     private static Map<Short, Set<Short>> subProtocolIdMap = new HashMap<>(MAX_PROTOCOL_NUM);
 
     /**
-     * EN: Temp field, name reserved keywords, The name of the protocol cannot be named with the following name
-     * CN: 临时变量，启动完成就会销毁，协议名称保留字符，即协议的名称不能用以下名称命名
+     * Temp field: will be destroyed after startup. Reserved names that cannot be used as protocol class names.
      */
     private static Set<String> protocolReserved = Set.of("IProtocol", "IProtocolRegistration", "ProtocolManager", "IFieldRegistration"
             , "Buffer", "ByteBuf", "IByteBuffer", "ByteBuffer", "LittleEndianByteBuffer", "NormalByteBuffer"
@@ -64,19 +61,17 @@ public class ProtocolAnalysis {
             , "Protocols");
 
     /**
-     * EN: Temp field, unsupported type
-     * CN: 临时变量，启动完成就会销毁，不支持的类型
+     * Temp field: will be destroyed after startup. Types that are not supported as protocol fields.
      */
     private static Set<Class<?>> unsupportedTypes = Set.of(char.class, Character.class);
 
     /**
-     * EN: Temp field, base type serializer
-     * CN: 临时变量，启动完成就会销毁，是基本类型序列化器
+     * Temp field: will be destroyed after startup. Serializers for base primitive types.
      */
     private static Map<Class<?>, ISerializer> baseSerializerMap = new HashMap<>(128);
 
     static {
-        // 初始化基础类型序列化器
+        // Initialize base type serializers
         baseSerializerMap.put(boolean.class, BoolSerializer.INSTANCE);
         baseSerializerMap.put(Boolean.class, BoolSerializer.INSTANCE);
         baseSerializerMap.put(byte.class, ByteSerializer.INSTANCE);
@@ -99,20 +94,20 @@ public class ProtocolAnalysis {
      */
     public static synchronized void analyze(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
         AssertionUtils.notNull(subProtocolIdMap, "[{}] initialization has already been completed, please do not repeat the initialization", ProtocolManager.class.getSimpleName());
-        // 检查协议类是否合法
+        // Validate protocol class
         for (var protocolClass : protocolClassSet) {
             var protocolId = getProtocolIdAndCheckClass(protocolClass);
             AssertionUtils.isTrue(protocolId >= 0, "[class:{}] must use annotation @Protocol annotation", protocolClass.getCanonicalName());
             initProtocolClass(protocolId, protocolClass);
         }
 
-        // 协议id和协议信息对应起来
+        // Map protocol ID to protocol info
         for (var protocolClass : protocolClassSet) {
             var registration = parseProtocolRegistration(protocolClass, ProtocolModule.DEFAULT_PROTOCOL_MODULE);
             protocols[registration.protocolId()] = registration;
         }
 
-        // 通过指定类注册的协议，全部使用字节码增强
+        // All protocols registered via specific classes use bytecode enhancement
         var enhanceList = Arrays.stream(protocols).filter(Objects::nonNull).toList();
         enhance(generateOperation, enhanceList);
     }
@@ -128,7 +123,7 @@ public class ProtocolAnalysis {
                 .sorted((a, b) -> a.getCanonicalName().compareTo(b.getCanonicalName()))
                 .toList();*/
 
-        // 检查协议类是否合法
+        // Validate protocol class
         var noProtocolClassList = new ArrayList<Class<?>>();
         for (var protocolClass : relevantClassSet) {
             var protocolId = getProtocolIdAndCheckClass(protocolClass);
@@ -148,20 +143,20 @@ public class ProtocolAnalysis {
             initProtocolClass(countProtocolId, protocolClass);
         }
 
-        // 协议id和协议信息对应起来
+        // Map protocol ID to protocol info
         for (var protocolClass : relevantClassSet) {
             var registration = parseProtocolRegistration(protocolClass, ProtocolModule.DEFAULT_PROTOCOL_MODULE);
             protocols[registration.protocolId()] = registration;
         }
 
-        // 通过指定类注册的协议，全部使用字节码增强
+        // All protocols registered via specific classes use bytecode enhancement
         var enhanceList = Arrays.stream(protocols).filter(Objects::nonNull).toList();
         enhance(generateOperation, enhanceList);
     }
 
     /**
      * EN: If the path of the package contains a classpath, the moduleId of the classpath is preferred, which means that the priority of the classpath will be higher.
-     * CN: 可以同时在一个protocol.xml文件中使用包路径和类路径。如果包的路径包含了类路径，则优先使用类路径的moduleId，也就是说类路径的优先级会更加的高。
+     * Both package paths and class paths can be used in a single protocol.xml file. When a package path contains a class path, the class path's moduleId takes priority.
      */
     public static synchronized void analyze(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
         AssertionUtils.notNull(subProtocolIdMap, "[{}] initialization has already been completed, please do not repeat the initialization", ProtocolManager.class.getSimpleName());
@@ -170,7 +165,7 @@ public class ProtocolAnalysis {
         var classModuleDefinitionMap = new HashMap<Class<?>, Byte>();
         var moduleDefinitionClassMap = new HashMap<Byte, Set<Class<?>>>();
 
-        // 先注册类，再注册包
+        // Register classes first, then packages
         for (var moduleDefinition : xmlProtocols.getModules()) {
             var moduleId = moduleDefinition.getId();
             var module = new ProtocolModule(moduleId, moduleDefinition.getName());
@@ -181,7 +176,7 @@ public class ProtocolAnalysis {
             if (CollectionUtils.isEmpty(moduleDefinition.getProtocols())) {
                 continue;
             }
-            //模块定义所有协议
+            // Module defines all protocols
             var protocolModuleSet = moduleDefinitionClassMap.computeIfAbsent(module.getId(), it -> new HashSet<>());
             for (var protocolDefinition : moduleDefinition.getProtocols()) {
                 var id = protocolDefinition.getId();
@@ -189,20 +184,20 @@ public class ProtocolAnalysis {
                 var enhance = protocolDefinition.isEnhance();
 
                 // Use the class path first to obtain the class name, and search the directory if it cannot be obtained
-                // 优先使用类路径获取类名，获取不到才去搜索目录
+                // Prefer class path to get the class name; fall back to directory scan if not found
                 Class<?> clazz = null;
                 try {
                     clazz = ClassUtils.forName(location);
                 } catch (Exception e) {
                 }
 
-                // 如果定义的是类，则需要检查一下格式
+                // If a class is defined, validate its format
                 if (clazz == null) {
                     continue;
                 }
 
                 var protocolId = getProtocolIdAndCheckClass(clazz);
-                // 没有使用Protocol注解，则使用xml定义的protocolId
+                // No @Protocol annotation; use the protocolId from XML
                 if (protocolId < 0) {
                     if (id < 0) {
                         throw new RunException("[{}] Can not find protocol id, use @Protocol annotation or specify id in xml", clazz.getSimpleName());
@@ -221,7 +216,7 @@ public class ProtocolAnalysis {
             }
         }
 
-        // 再注册包路径，扫描包开始注册
+        // Then register package paths by scanning
         for (var moduleDefinition : xmlProtocols.getModules()) {
             var moduleId = moduleDefinition.getId();
             var module = modules[moduleId];
@@ -229,7 +224,7 @@ public class ProtocolAnalysis {
                 continue;
             }
 
-            //模块定义所有协议
+            // Module defines all protocols
             var protocolModuleSet = moduleDefinitionClassMap.computeIfAbsent(module.getId(), it -> new HashSet<>());
             for (var protocolDefinition : moduleDefinition.getProtocols()) {
                 var id = protocolDefinition.getId();
@@ -237,20 +232,20 @@ public class ProtocolAnalysis {
                 var enhance = protocolDefinition.isEnhance();
 
                 // Use the class path first to obtain the class name, and search the directory if it cannot be obtained
-                // 优先使用类路径获取类名，获取不到才去搜索目录
+                // Prefer class path to get the class name; fall back to directory scan if not found
                 Class<?> clazz = null;
                 try {
                     clazz = ClassUtils.forName(location);
                 } catch (Exception e) {
                 }
 
-                // 如果定义的是类，则需要检查一下格式
+                // If a class is defined, validate its format
                 if (clazz != null) {
                     continue;
                 }
 
                 var packetClazzList = scanPackageList(protocolDefinition.getLocation());
-                // 是类路径的话一定不能指定protocol id
+                // If it is a class path, protocol id must not be specified
                 if (CollectionUtils.isEmpty(packetClazzList)) {
                     throw new RunException("can not scan any protocol class in [{}]", location);
                 }
@@ -259,7 +254,7 @@ public class ProtocolAnalysis {
                 }
 
                 for (Class<?> protocolClass : packetClazzList) {
-                    // 如果location已经指定过了，则优先使用class的绝对路径定义的moduleId
+                    // If location was already specified, prefer the moduleId from the class absolute path
                     if (classModuleDefinitionMap.containsKey(protocolClass)) {
                         continue;
                     }
@@ -282,11 +277,11 @@ public class ProtocolAnalysis {
             for (Class<?> clazz : packetClazzList) {
                 var protocolId = ProtocolManager.protocolId(clazz);
                 var registration = parseProtocolRegistration(clazz, module);
-                // Protocol注解或者xml任意一个定义了增强协议，那么就增强协议
+                // Enhance the protocol if either @Protocol annotation or XML defines enhancement
                 if ((clazz.isAnnotationPresent(Protocol.class) && clazz.getAnnotation(Protocol.class).enhance()) || protocolXmlEnhanceMap.get(clazz)) {
                     enhanceList.add(registration);
                 }
-                // 注册协议
+                // Register protocol
                 protocols[protocolId] = registration;
             }
         }
@@ -295,7 +290,7 @@ public class ProtocolAnalysis {
     }
 
     public static List<Class<?>> scanPackageList(String location) {
-        // 获取该路径下所有类
+        // Get all classes under the path
         var clazzNameSet = new HashSet<String>();
         try {
             var clazzList = ClassUtils.getAllClasses(location);
@@ -324,11 +319,11 @@ public class ProtocolAnalysis {
     }
 
     private static void enhanceProtocolBefore(GenerateOperation generateOperation) throws IOException, ClassNotFoundException {
-        // 检查协议格式
+        // Validate protocol format
         checkAllProtocolClass();
-        // 检查模块格式
+        // Validate module format
         checkAllModules();
-        // 生成协议
+        // Generate protocol
         GenerateProtocolFile.generate(generateOperation);
     }
 
@@ -336,12 +331,12 @@ public class ProtocolAnalysis {
         if (GraalVmUtils.isGraalVM()) {
             return;
         }
-        // 字节码增强
+        // Bytecode enhancement
         for (var registration : enhanceList) {
             protocols[registration.protocolId()] = EnhanceUtils.createProtocolRegistration((ProtocolRegistration) registration);
         }
 
-        // 字节码增强过后，初始化各个子协议成员变量
+        // After bytecode enhancement, initialize sub-protocol member variables
         for (var registration : enhanceList) {
             var enhanceProtocolRegistration = protocols[registration.protocolId()];
             var subProtocolIds = getAllSubProtocolIds(registration.protocolId());
@@ -378,11 +373,11 @@ public class ProtocolAnalysis {
                 continue;
             }
             if (!clazz.isRecord() && Modifier.isFinal(modifiers)) {
-                // 协议号中的属性的访问修饰符不能为final
+                // Protocol fields must not be final
                 throw new RunException("The access modifier for the [field:{}] attribute in the [{}] protocol number cannot be final", clazz.getCanonicalName(), field.getName());
             }
             if (!Modifier.isPublic(modifiers) && !Modifier.isPrivate(modifiers)) {
-                // 协议号中的属性的访问修饰符必须是public或者private
+                // Protocol fields must be public or private
                 throw new RunException("The access modifier of the [field:{}] attribute in the [{}] protocol number must be public or private", clazz.getCanonicalName(), field.getName());
             }
 
@@ -400,7 +395,7 @@ public class ProtocolAnalysis {
                 var order = field.getAnnotation(Compatible.class).value();
                 var oldField = compatibleFieldMap.put(order, field);
                 if (oldField != null) {
-                    // 协议号中的属性不能有相同的Compatible order顺序
+                    // Protocol fields must not have duplicate @Compatible ordinals
                     throw new RunException("[field:{}] and [field:{}] in the [{}] protocol number cannot have the same Compatible order [order:{}]"
                             , clazz.getCanonicalName(), oldField.getName(), field.getName(), oldField, order);
                 }
@@ -409,11 +404,11 @@ public class ProtocolAnalysis {
             }
         }
 
-        // 默认无法兼容的协议变量名称从小到大排序，如果想自定义私有协议规则，修改这个排序规则即可
-        // 如果为了增加协议的安全性，每个版本都可以重新修改协议排序规则，让每个版本的协议都不相同，间接实现加密
+        // By default, incompatible protocol fields are sorted alphabetically; customize this rule for private protocols
+        // For added security, update the field sort rule each version; different byte orderings per version act as a form of encryption
         notCompatibleFields.sort((a, b) -> a.getName().compareTo(b.getName()));
 
-        // 可兼容的协议变量默认都添加到最后
+        // Compatible protocol fields are appended at the end by default
         var compatibleFields = compatibleFieldMap.entrySet()
                 .stream()
                 .sorted((a, b) -> a.getKey() - b.getKey())
@@ -426,7 +421,7 @@ public class ProtocolAnalysis {
     public static ProtocolRegistration parseProtocolRegistration(Class<?> clazz, ProtocolModule module) {
         var protocolId = ProtocolManager.protocolId(clazz);
         var declaredFields = getFields(clazz);
-        // 对象需要被序列化的属性
+        // Fields of the object to be serialized
         var fields = customFieldOrder(clazz, declaredFields);
 
         try {
@@ -455,55 +450,55 @@ public class ProtocolAnalysis {
 
         ISerializer serializer = baseSerializerMap.get(fieldTypeClazz);
 
-        // 是一个基本类型变量
+        // Is a primitive type variable
         if (serializer != null) {
             return BaseField.valueOf(serializer);
         } else if (fieldTypeClazz.isArray()) {
-            // 是一个数组
+            // Is an array
             Class<?> arrayClazz = fieldTypeClazz.getComponentType();
 
             IFieldRegistration registration = typeToRegistration(clazz, arrayClazz);
             return ArrayField.valueOf(registration, field.getType().getComponentType());
         } else if (Set.class.isAssignableFrom(fieldTypeClazz)) {
             if (!fieldTypeClazz.equals(Set.class)) {
-                // 必须是Set接口类型
+                // Must be the Set interface type
                 throw new RunException("[class:{}] type declaration is incorrect, it must be of the Set interface type", clazz.getCanonicalName());
             }
 
             Type type = field.getGenericType();
 
             if (!(type instanceof ParameterizedType)) {
-                // 必须是泛型类
+                // Must be a generic class
                 throw new RunException("[class:{}] type declaration is incorrect, not a generic class[field:{}]", clazz.getCanonicalName(), field.getName());
             }
 
             Type[] types = ((ParameterizedType) type).getActualTypeArguments();
 
             if (types.length != 1) {
-                // Set类型必须声明泛型类
+                // Set type must declare generic type
                 throw new RunException("Set type declaration in [class:{}] is incorrect, and the generic class must be declared in [field:{}]", clazz.getCanonicalName(), field.getName());
             }
 
             IFieldRegistration registration = typeToRegistration(clazz, types[0]);
             return SetField.valueOf(registration, type);
         } else if (List.class.isAssignableFrom(fieldTypeClazz)) {
-            // 是一个List
+            // Is a List
             if (!fieldTypeClazz.equals(List.class)) {
-                // 必须是List接口类型
+                // Must be the List interface type
                 throw new RunException("[class:{}] type declaration is incorrect, it must be a List interface type", clazz.getCanonicalName());
             }
 
             Type type = field.getGenericType();
 
             if (!(type instanceof ParameterizedType)) {
-                // List类型必须声明泛型类
+                // List type must declare generic type
                 throw new RunException("[class:{}] type declaration is incorrect, not a generic class[field:{}]", clazz.getCanonicalName(), field.getName());
             }
 
             Type[] types = ((ParameterizedType) type).getActualTypeArguments();
 
             if (types.length != 1) {
-                // List类型必须声明泛型类
+                // List type must declare generic type
                 throw new RunException("List type declaration in [class:{}] is incorrect, and the generic class must be declared in [field:{}]", clazz.getCanonicalName(), field.getName());
             }
 
@@ -512,21 +507,21 @@ public class ProtocolAnalysis {
 
         } else if (Map.class.isAssignableFrom(fieldTypeClazz)) {
             if (!fieldTypeClazz.equals(Map.class)) {
-                // 必须是Map接口类型
+                // Must be the Map interface type
                 throw new RunException("[class:{}] type declaration is incorrect, it must be a Map interface type", clazz.getCanonicalName());
             }
 
             Type type = field.getGenericType();
 
             if (!(type instanceof ParameterizedType)) {
-                // Map类型必须声明泛型类
+                // Map type must declare generic type
                 throw new RunException("Map type declaration in [class:{}] is incorrect, and [field:{}] is not a generic class", clazz.getCanonicalName(), field.getName());
             }
 
             Type[] types = ((ParameterizedType) type).getActualTypeArguments();
 
             if (types.length != 2) {
-                // Map类型必须声明泛型类
+                // Map type must declare generic type
                 throw new RunException("Map type declaration in [class:{}] is incorrect, and the generic class must be declared in [field:{}]", clazz.getCanonicalName(), field.getName());
             }
 
@@ -536,7 +531,7 @@ public class ProtocolAnalysis {
             return MapField.valueOf(keyRegistration, valueRegistration, type);
         } else {
             checkUnsupportedType(fieldTypeClazz);
-            // 是一个协议引用变量
+            // Is a protocol reference variable
             if (!protocolIdMap.containsKey(fieldTypeClazz)) {
                 throw new RunException("sub protocol:[{}] needs to register in protocol:[{}]", fieldTypeClazz.getCanonicalName(), clazz.getCanonicalName());
             }
@@ -549,7 +544,7 @@ public class ProtocolAnalysis {
 
     private static IFieldRegistration typeToRegistration(Class<?> currentProtocolClass, Type type) {
         if (type instanceof ParameterizedType) {
-            // 泛型类
+            // Generic class
             Class<?> clazz = (Class<?>) ((ParameterizedType) type).getRawType();
             if (Set.class.equals(clazz)) {
                 // Set<Set<String>>
@@ -569,17 +564,17 @@ public class ProtocolAnalysis {
             Class<?> clazz = ((Class<?>) type);
             ISerializer serializer = baseSerializerMap.get(clazz);
             if (serializer != null) {
-                // 基础类型
+                // Primitive type
                 return BaseField.valueOf(serializer);
             } else if (clazz.isArray()) {
-                // 不支持多维数组或集合嵌套数组类型，仅支持一维数组
+                // Multi-dimensional arrays or collection-nested arrays are not supported; only one-dimensional arrays allowed
                 throw new RunException("Multi-dimensional array  or set nested arrays [type:{}] types are not supported, only one-dimensional arrays are supported", type);
             } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
-                // 不支持数组和集合联合使用类型
+                // Combining arrays with collections is not supported
                 throw new RunException("The combination of arrays and collections with the [type:{}] type is not supported", type);
             } else {
                 checkUnsupportedType(clazz);
-                // 是一个协议引用变量
+                // Is a protocol reference variable
                 if (!protocolIdMap.containsKey(clazz)) {
                     throw new RunException("sub protocol:[{}] needs to register in protocol:[{}]", clazz.getSimpleName(), currentProtocolClass.getCanonicalName());
                 }
@@ -595,7 +590,7 @@ public class ProtocolAnalysis {
 
     /**
      * EN: This method is only called when the protocol is generated, and cannot be called once it is run
-     * CN: 此方法仅在生成协议的时候调用，一旦运行，不能调用
+     * This method is called only during protocol generation; cannot be called once running
      */
     public static Set<Short> getFirstSubProtocolIds(short protocolId) {
         return subProtocolIdMap.getOrDefault(protocolId, Collections.emptySet());
@@ -603,10 +598,10 @@ public class ProtocolAnalysis {
 
     /**
      * EN: This method is only called when the protocol is generated, and cannot be called once it is run
-     * CN: 此方法仅在生成协议的时候调用，一旦运行，不能调用
+     * This method is called only during protocol generation; cannot be called once running
      */
     public static Set<Short> getAllSubProtocolIds(short protocolId) {
-        // 初始化完成过后不能调用getAllSubProtocolIds
+        // Cannot call getAllSubProtocolIds after initialization is complete
         AssertionUtils.notNull(subProtocolIdMap, "[{}] has been initially completed, and after the initialization is completed, you cannot call getAllSubProtocolIds", ProtocolAnalysis.class.getSimpleName());
 
         if (!subProtocolIdMap.containsKey(protocolId)) {
@@ -621,7 +616,7 @@ public class ProtocolAnalysis {
             var firstSubProtocolId = queue.poll();
             if (subProtocolIdMap.containsKey(firstSubProtocolId)) {
                 for (var subClassId : subProtocolIdMap.get(firstSubProtocolId)) {
-                    // 不支持循环引用协议
+                    // Circular protocol references are not supported
                     if (subClassId == protocolId) {
                         throw new RunException("[class:{}] contains circular reference protocol[class:{}] in the lower level protocol[class:{}]"
                                 , protocolClass.getSimpleName(), protocols[firstSubProtocolId].protocolConstructor().getDeclaringClass(), protocolClass.getSimpleName());
@@ -637,17 +632,17 @@ public class ProtocolAnalysis {
         return allSubProtocolIdSet;
     }
 
-    // 协议智能语法分析，错误的协议定义将无法启动程序并给出错误警告
+    // Smart protocol syntax analysis; incorrect protocol definitions will prevent startup and show an error
     //-----------------------------------------------------------------------
     public static void initProtocolClass(short protocolId, Class<?> clazz) {
-        // 协议号重复定义
+        // Duplicate protocol ID definition
         if (protocolIdMap.containsKey(clazz)) {
             throw new RunException("duplicate protocol:[{}] protocolId:[{}] and [protocolId:{}]", clazz.getSimpleName(), protocolIdMap.get(clazz), protocolId);
         }
         protocolIdMap.put(clazz, protocolId);
         protocolIdPrimitiveMap.putPrimitive(clazz.hashCode(), protocolId);
         var previousProtocolClass = protocolClassMap.put(protocolId, clazz);
-        // 协议号重复
+        // Duplicate protocol ID
         if (previousProtocolClass != null) {
             throw new RunException("[{}][{}] protocol number [protocolId:{}] is repeated", clazz.getCanonicalName(), previousProtocolClass.getCanonicalName(), protocolId);
         }
@@ -655,12 +650,12 @@ public class ProtocolAnalysis {
 
     public static short getProtocolIdAndCheckClass(Class<?> clazz) {
         checkUnsupportedType(clazz);
-        // 是否为一个简单的javabean
+        // Check if it is a simple JavaBean
         ReflectionUtils.assertIsPojoClass(clazz);
-        // 不能是泛型类
+        // Must not be a generic class
         AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}] can't be a generic class", clazz.getCanonicalName());
 
-        // 普通Pojo必须要有一个空的构造器
+        // POJO must have a no-args constructor
         if (!clazz.isRecord()) {
             Constructor<?> constructor = ReflectionUtils.publicEmptyConstructor(clazz);
         }
@@ -684,14 +679,14 @@ public class ProtocolAnalysis {
     }
 
     private static void checkAllModules() {
-        // 模块id不能重复
+        // Module ID must be unique
         var moduleIdSet = new HashSet<Byte>();
         Arrays.stream(modules)
                 .filter(Objects::nonNull)
                 .peek(it -> AssertionUtils.isTrue(!moduleIdSet.contains(it.getId()), "duplicate id in module [{}], and the id of modules cannot be duplicated", it))
                 .forEach(it -> moduleIdSet.add(it.getId()));
 
-        // 模块名称不能重复
+        // Module name must be unique
         var moduleNameSet = new HashSet<String>();
         Arrays.stream(modules)
                 .filter(Objects::nonNull)
@@ -700,9 +695,9 @@ public class ProtocolAnalysis {
     }
 
     private static void checkAllProtocolClass() {
-        // 检查协议格式
+        // Validate protocol format
 
-        // 协议的名称不能重复
+        // Protocol name must be unique
         var allProtocolNameMap = new HashMap<String, Class<?>>();
         for (var protocolRegistration : protocols) {
             if (protocolRegistration == null) {
@@ -711,13 +706,13 @@ public class ProtocolAnalysis {
 
             var protocolClass = protocolRegistration.protocolConstructor().getDeclaringClass();
             var protocolName = protocolClass.getSimpleName();
-            // 协议不能含有重复的名称
+            // Protocol must not have duplicate names
             if (allProtocolNameMap.containsKey(protocolName)) {
                 throw new RunException("[class:{}] and [class:{}] has duplicate protocol name, protocol cannot contain duplicate names"
                         , protocolClass.getCanonicalName(), allProtocolNameMap.get(protocolName).getCanonicalName());
             }
 
-            //协议的名称不能是保留名称
+            // Protocol class name must not be a reserved keyword
             if (protocolReserved.stream().anyMatch(it -> it.equalsIgnoreCase(protocolName))) {
                 throw new RunException("The name of the protocol [class:{}] cannot be a reserved name [{}]", protocolClass.getCanonicalName(), protocolName);
             }
@@ -726,11 +721,11 @@ public class ProtocolAnalysis {
         }
 
 
-        // 拓扑排序检查循环协议
+        // Topological sort to detect circular protocol dependencies
         if (subProtocolIdMap.isEmpty()) {
             return;
         }
-        // 先判断自循环引用
+        // Check for self-referencing protocols first
         for (var protocolEntry : subProtocolIdMap.entrySet()) {
             var protocolId = protocolEntry.getKey();
             var subProtocolSet = protocolEntry.getValue();
@@ -739,9 +734,9 @@ public class ProtocolAnalysis {
                 throw new RunException("[class:{}] cannot be circular reference protocol", protocolClass.getSimpleName());
             }
         }
-        // 入度
+        // In-degree
         var inDegree = new HashMap<Short, Integer>();
-        // 初始化入度
+        // Initialize in-degrees
         for (var protocolEntry : subProtocolIdMap.entrySet()) {
             var protocolId = protocolEntry.getKey();
             inDegree.put(protocolId, inDegree.getOrDefault(protocolId, 0));
@@ -769,13 +764,13 @@ public class ProtocolAnalysis {
             }
         }
         var circularReferenceProtocols = new ArrayList<String>();
-        // 入度不为0的表示存在循环引用的协议
+        // Non-zero in-degree means a circular protocol dependency exists
         for (var protocolEntry : inDegree.entrySet()) {
             if (protocolEntry.getValue() > 0) {
                 circularReferenceProtocols.add(protocols[protocolEntry.getKey()].protocolConstructor().getDeclaringClass().getSimpleName());
             }
         }
-        // 抛出所有存在循环引用的协议类名
+        // Throw listing all class names in the circular dependency
         if (!circularReferenceProtocols.isEmpty()) {
             throw new RunException("[class:{}] cannot be circular reference protocol", StringUtils.joinWith(",", circularReferenceProtocols.toArray()));
         }

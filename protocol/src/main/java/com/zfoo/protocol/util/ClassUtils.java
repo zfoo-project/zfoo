@@ -49,11 +49,11 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 扫描指定包下的class文件
+     * Scan class files under the specified package
      *
-     * @param packageName 包名称（xxx.xxx）
-     * @return 返回指定包下的class全称集合
-     * @throws IOException 假如扫描失败，则抛出该异常
+     * @param packageName package name（xxx.xxx）
+     * @return set of fully-qualified class names under the package
+     * @throws IOException if the scan fails
      */
     public static Set<String> getAllClasses(String packageName) throws IOException {
         Set<String> classSet = new HashSet<>();
@@ -61,11 +61,11 @@ public abstract class ClassUtils {
         Enumeration<URL> resourceUrls = getDefaultClassLoader().getResources(packagePath);
         while (resourceUrls.hasMoreElements()) {
             URL packageUrl = resourceUrls.nextElement();
-            // 如果是以文件的形式保存在服务器上
+            // If stored as files on the server
             if (isFileProtocol(packageUrl)) {
-                // file类型的扫描
+                // Scan as file type
                 File file = getFile(packageUrl);
-                // 以文件的方式扫描整个包下的文件 并添加到集合中
+                // Scan all files under the package as file entries and add to the collection
                 findClassesInPackageByFile(packageName, file, classSet);
             } else if (isJarProtocol(packageUrl)) {
                 findClassesInJarFile(packageName, packageUrl, classSet);
@@ -75,15 +75,15 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 扫描jar文件中的class
+     * Scan classes within a JAR file
      *
      * @param packageName
-     *            包名称
+     *            package name
      * @param packageUrl
-     *            jar的url
+     *            URL of the JAR
      * @param classSet
-     *            class全路径集合
-     * @throws IOException 假如解析出现io异常时，则抛出该异常
+     *            set of fully-qualified class names
+     * @throws IOException if an I/O error occurs during parsing
      */
     private static void findClassesInJarFile(String packageName, URL packageUrl,
                                              Set<String> classSet) throws IOException {
@@ -99,9 +99,9 @@ public abstract class ClassUtils {
             jarFileUrl = jarCon.getJarFileURL().toExternalForm();
             closeJarFile = !jarCon.getUseCaches();
         } else {
-            //不是JarURLConnection->需要依赖于URL文件解析。
-            //我们假设URL的格式为“jar:path!/entry”，只要遵循条目格式，协议就是任意的。
-            //我们还将处理带和不带前导“file:”前缀的路径。
+            // Not a JarURLConnection -> fall back to URL file parsing
+            // Assume URL format is "jar:path!/entry"; protocol is arbitrary if entry format is followed
+            // Handle paths both with and without a leading "file:" prefix
             String urlFile = packageUrl.getFile();
             try {
                 int separatorIndex = urlFile.indexOf(JAR_URL_SEPARATOR);
@@ -131,21 +131,21 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 获取指定jar文件中所有class名称（包名+类名称）格式为xx.xx.yy
+     * Get all class names (package + class) from a JAR file in xx.xx.yy format
      *
-     * @param jarFile jar文件
-     * @return class名称集合， 假如参数为null，返回大小为0的集合
+     * @param jarFile the JAR file
+     * @return set of class names; empty set if parameter is null
      */
     public Set<String> findByJarFile(JarFile jarFile) {
         return findByJarFile(StringUtils.EMPTY, jarFile);
     }
 
     /**
-     * 获取指定jar文件中所有class名称（包名+类名称） xx.xx.yy
+     * Get all class names from a JAR file filtered by package prefix (xx.xx.yy format)
      *
-     * @param packageName 包名前缀xx.xx
-     * @param jarFile jar文件
-     * @return class名称集合， 假如参数为null，返回大小为0的集合
+     * @param packageName package name prefix (xx.xx)
+     * @param jarFile the JAR file
+     * @return set of class names; empty set if parameter is null
      */
     public static Set<String> findByJarFile(String packageName, JarFile jarFile) {
         Set<String> classSet = new HashSet<>();
@@ -154,7 +154,7 @@ public abstract class ClassUtils {
         }
         String packageBasePath = packageName.replaceAll(StringUtils.PERIOD_REGEX, StringUtils.SLASH);
         if (!"".equals(packageBasePath) && !packageBasePath.endsWith("/")) {
-            // 根条目路径必须以斜杠结束，以允许正确的匹配。匹配sunjre在这里不返回斜杠，但是beajrockit返回。
+            // Root entry path must end with a slash for correct matching. Sun JRE omits the slash; BEA JRockit includes it.
             packageBasePath = packageBasePath + StringUtils.SLASH;
         }
         for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
@@ -174,7 +174,7 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 将给定的jar文件URL解析为JarFile对象
+     * Resolve the given JAR file URL to a JarFile object
      *
      * @param jarFileUrl
      */
@@ -191,42 +191,42 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 以文件的方式扫描整个包下的文件 并添加到集合中
+     * Scan all files under the package as file entries and add to the collection
      *
      * @param packageName
-     *            包名称
+     *            package name
      * @param dirOrFile
-     *            查找包对应的文件或文件夹
+     *            locate the file or directory for the package
      * @param classSet
-     *            class全路径集合
+     *            set of fully-qualified class names
      */
     private static void findClassesInPackageByFile(String packageName, File dirOrFile,
                                                    Set<String> classSet) {
-        // 如果不存在或者 也不是目录就直接返回
+        // Return if path does not exist or is not a directory
         if (!dirOrFile.exists()) {
             return;
         }
         if (!dirOrFile.isDirectory()) {
             return;
         }
-        // 如果存在 就获取包下的所有文件 包括目录
+        // Get all files under the package, including subdirectories
         File[] dirFiles = dirOrFile.listFiles();
         if (dirFiles == null) {
             return;
         }
 
-        // 循环所有文件
+        // Iterate over all files
         for (File file : dirFiles) {
             String name = file.getName();
-            // 如果是目录 则继续扫描
+            // If it is a directory, scan recursively
             if (file.isDirectory()) {
                 findClassesInPackageByFile(packageName + "." + name, file, classSet);
             } else {
                 String filename = file.getName();
-                // 如果是java类文件 去掉后面的.class 只留下类名
+                // If it is a .class file, strip the extension
                 String className = filename.substring(0, filename.length() - CLASS_FILE_EXT.length());
                 className = packageName + "." + className;
-                //去掉前缀“.”
+                // Strip the prefix“.”
                 if (className.startsWith(".")) {
                     className = className.substring(1);
                 }
@@ -237,7 +237,7 @@ public abstract class ClassUtils {
 
     public static File getFile(URL url) {
         if (!FILE_PROTOCOL.equals(url.getProtocol())) {
-            throw new IllegalArgumentException("给定的URL无法解析为绝对文件路径: " + url);
+            throw new IllegalArgumentException("The given URL cannot be resolved to an absolute file path: " + url);
         }
         try {
             return new File(toURI(url).getSchemeSpecificPart());
@@ -247,10 +247,10 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 用给定的URL创建URI
-     * 用“%20”编码替换URI的空格。
-     * @param url 要转换为URI实例的URL
-     * @return URI对象
+     * Create a URI from the given URL
+     * Replace spaces in URI with“%20”encoding.
+     * @param url the URL to convert to a URI
+     * @return URI object
      * @see java.net.URL#toURI()
      */
     public static URI toURI(URL url) {
@@ -258,24 +258,24 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 用给定的字符串创建URI
-     * 用“%20”编码替换URI的空格。
-     * @param location 要转换为URI实例的字符串
-     * @return URI对象
+     * Create a URI from the given string
+     * Replace spaces in URI with“%20”encoding.
+     * @param location the string to convert to a URI
+     * @return URI object
      */
     public static URI toURI(String location) {
         try {
             return new URI(location.replace(" ", "%20"));
         } catch (URISyntaxException e) {
-            throw new RunException("uri配置错误");
+            throw new RunException("URI configuration error");
         }
     }
 
     /**
-     * 判断给定的URL是不是file协议
+     * Check if the given URL uses the file protocol
      *
      * @param url url
-     * @return 假如是file协议，返回true，否则返回false
+     * @return true if the URL uses the file protocol, false otherwise
      */
     public static boolean isFileProtocol(URL url){
         if (url == null) {
@@ -285,10 +285,10 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 判断给定的URL是不是Jar协议
+     * Check if the given URL uses the JAR protocol
      *
      * @param url url
-     * @return 假如是Jar协议，返回true，否则返回false
+     * @return true if the URL uses the JAR protocol, false otherwise
      */
     public static boolean isJarProtocol(URL url){
         if (url == null) {
@@ -299,7 +299,7 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 在给定的连接上设置“useCaches”标志，对于基于JNLP的资源，设置false，其他资源该标志保留原样
+     * Set the 'useCaches' flag on the given connection;“useCaches”false for JNLP-based resources, unchanged for others
      *
      * @param urlConnection urlConnection
      */
@@ -310,9 +310,9 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 从类路径中读取文件
+     * Read a file from the classpath
      *
-     * @param filePath 一般指resources中的文件，也可以在jar中
+     * @param filePath typically a file in resources; may also be inside a JAR
      */
     public static InputStream getFileFromClassPath(String filePath) throws IOException {
         var classLoader = getDefaultClassLoader();
@@ -329,10 +329,10 @@ public abstract class ClassUtils {
     }
 
     /**
-     * 获取编译过后的类文件(*.class)的绝对路径
+     * Get the absolute path of the compiled class file (*.class)
      *
-     * @param clazz 类Class
-     * @return 对应类的绝对路径
+     * @param clazz the class
+     * @return absolute path of the corresponding class file
      */
     public static String getClassAbsPath(Class<?> clazz) {
         File file = new File(clazz.getResource("").getPath());
@@ -358,7 +358,7 @@ public abstract class ClassUtils {
 
 
     /**
-     * 返回和clazz相关的所有子协议，协议和protocol协议一致
+     * Return all sub-protocols related to clazz; follows the same protocol conventions
      */
     public static Set<Class<?>> relevantClass(Class<?> clazz) {
         var classSet = new HashSet<Class<?>>();
@@ -371,55 +371,55 @@ public abstract class ClassUtils {
             return classSet;
         }
 
-        // 是否为一个简单的javabean，为了防止不同层对象混用造成潜在的并发问题，特别是网络层和po层混用
-        // 不能是泛型类
+        // Check if it is a simple JavaBean; prevents cross-layer misuse causing concurrency issues
+        // Must not be a generic class
         AssertionUtils.isTrue(ArrayUtils.isEmpty(clazz.getTypeParameters()), "[class:{}] cannot be generic class", clazz.getCanonicalName());
 
         var filedList = ReflectionUtils.notStaticAndTransientFields(clazz);
 
         for (var field : filedList) {
-            // 是一个基本类型变量
+            // Is a primitive type variable
             var fieldType = field.getType();
             if (isBaseType(fieldType)) {
                 // do nothing
             } else if (fieldType.isArray()) {
-                // 是一个数组
+                // Is an array
                 Class<?> arrayClazz = fieldType.getComponentType();
                 relevantClass0(arrayClazz, classSet);
             } else if (Set.class.isAssignableFrom(fieldType)) {
-                AssertionUtils.isTrue(fieldType.equals(Set.class), "[class:{}]类型声明不正确，必须是Set接口类型", clazz.getCanonicalName());
+                AssertionUtils.isTrue(fieldType.equals(Set.class), "[class:{}] incorrect type declaration; must be the Set interface", clazz.getCanonicalName());
 
                 var type = field.getGenericType();
-                AssertionUtils.isTrue(type instanceof ParameterizedType, "[class:{}]类型声明不正确，不是泛型类[field:{}]", clazz.getCanonicalName(), field.getName());
+                AssertionUtils.isTrue(type instanceof ParameterizedType, "[class:{}] incorrect type declaration; field [field:{}] is not generic", clazz.getCanonicalName(), field.getName());
 
                 var types = ((ParameterizedType) type).getActualTypeArguments();
-                AssertionUtils.isTrue(types.length == 1, "[class:{}]中Set类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
+                AssertionUtils.isTrue(types.length == 1, "[class:{}] Set field [field:{}] must declare a generic type", clazz.getCanonicalName(), field.getName());
 
                 relevantClass0(types[0], classSet);
             } else if (List.class.isAssignableFrom(fieldType)) {
-                // 是一个List
-                AssertionUtils.isTrue(fieldType.equals(List.class), "[class:{}]类型声明不正确，必须是List接口类型", clazz.getCanonicalName());
+                // Is a List
+                AssertionUtils.isTrue(fieldType.equals(List.class), "[class:{}] incorrect type declaration; must be the List interface", clazz.getCanonicalName());
 
                 var type = field.getGenericType();
-                AssertionUtils.isTrue(type instanceof ParameterizedType, "[class:{}]类型声明不正确，不是泛型类[field:{}]", clazz.getCanonicalName(), field.getName());
+                AssertionUtils.isTrue(type instanceof ParameterizedType, "[class:{}] incorrect type declaration; field [field:{}] is not generic", clazz.getCanonicalName(), field.getName());
 
                 var types = ((ParameterizedType) type).getActualTypeArguments();
-                AssertionUtils.isTrue(types.length == 1, "[class:{}]中List类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
+                AssertionUtils.isTrue(types.length == 1, "[class:{}] List field [field:{}] must declare a generic type", clazz.getCanonicalName(), field.getName());
 
                 relevantClass0(types[0], classSet);
             } else if (Map.class.isAssignableFrom(fieldType)) {
                 if (!fieldType.equals(Map.class)) {
-                    throw new RunException("[class:{}]类型声明不正确，必须是Map接口类型", clazz.getCanonicalName());
+                    throw new RunException("[class:{}] incorrect type declaration; must be the Map interface", clazz.getCanonicalName());
                 }
 
                 var type = field.getGenericType();
                 if (!(type instanceof ParameterizedType)) {
-                    throw new RunException("[class:{}]中数组类型声明不正确，[field:{}]不是泛型类", clazz.getCanonicalName(), field.getName());
+                    throw new RunException("[class:{}] array field [field:{}] is not generic", clazz.getCanonicalName(), field.getName());
                 }
 
                 var types = ((ParameterizedType) type).getActualTypeArguments();
                 if (types.length != 2) {
-                    throw new RunException("[class:{}]中数组类型声明不正确，[field:{}]必须声明泛型类", clazz.getCanonicalName(), field.getName());
+                    throw new RunException("[class:{}] array field [field:{}] must declare a generic type", clazz.getCanonicalName(), field.getName());
                 }
 
                 var keyType = types[0];
@@ -436,7 +436,7 @@ public abstract class ClassUtils {
 
     private static void relevantClass0(Type type, Set<Class<?>> classSet) {
         if (type instanceof ParameterizedType) {
-            // 泛型类
+            // Generic class
             Class<?> clazz = (Class<?>) ((ParameterizedType) type).getRawType();
             if (Set.class.equals(clazz)) {
                 // Set<Set<String>>
@@ -461,10 +461,10 @@ public abstract class ClassUtils {
                 // do nothing
                 return;
             } else if (clazz.getComponentType() != null) {
-                // 是一个二维以上数组
-                throw new RunException("不支持多维数组或集合嵌套数组[type:{}]类型，仅支持一维数组", type);
+                // Is a multi-dimensional array
+                throw new RunException("Multi-dimensional or collection-nested arrays not supported for [type:{}]; only one-dimensional arrays are allowed", type);
             } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
-                throw new RunException("不支持数组和集合联合使用[type:{}]类型", type);
+                throw new RunException("Combining arrays with collections is not supported for [type:{}]", type);
             } else {
                 if (!classSet.add(clazz)) {
                     return;
@@ -473,7 +473,7 @@ public abstract class ClassUtils {
                 return;
             }
         }
-        throw new RunException("[type:{}]类型不正确", type);
+        throw new RunException("[type:{}] has an incorrect type", type);
     }
 
     public static boolean isBaseType(Class<?> clazz) {

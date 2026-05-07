@@ -286,7 +286,7 @@ public class CodeGenerateJava implements ICodeGenerate {
             var fieldName = field.getName();
             var propertyType = toJavaClassName(field.getGenericType().getTypeName());
             var propertyFullName = StringUtils.format("public {} {};", propertyType, fieldName);
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Java);
             for (var fieldNote : fieldNotes) {
                 javaBuilder.append(fieldNote).append(LS);

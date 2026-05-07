@@ -21,33 +21,33 @@ import java.text.NumberFormat;
 import java.util.Collection;
 
 /**
- * 数字工具类<br>
- * BigDecimal(double val)构造方法的结果有一定的不可预知性，例如：
+ * Number utility class<br>
+ * The BigDecimal(double val) constructor is unpredictable, e.g.:
  *
  * <pre>
  * new BigDecimal(0.1)
  * </pre>
  * <p>
- * 表示的不是0.1而是0.1000000000000000055511151231257827021181583404541015625
+ * does not represent 0.1 but 0.1000000000000000055511151231257827021181583404541015625
  * <p>
- * 这是因为0.1无法准确的表示为double。因此应该使用new BigDecimal(String)。
+ * because 0.1 cannot be represented exactly as a double. Use new BigDecimal(String) instead.
  *
  * @author godotg
  */
 public abstract class NumberUtils {
 
     /**
-     * 默认除法运算精度
+     * Default division scale
      */
     private static final int DEFAULT_DIV_SCALE = 10;
 
 
     /**
-     * 提供精确的加法运算<br>
-     * 如果传入多个值为null或者空，则返回0
+     * Provides accurate addition<br>
+     * Returns 0 if null or empty values are passed
      *
-     * @param values 多个被加值
-     * @return 和
+     * @param values values to add
+     * @return sum
      */
     public static BigDecimal add(Number... values) {
         if (ArrayUtils.isEmpty(values)) {
@@ -66,11 +66,11 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 提供精确的加法运算<br>
-     * 如果传入多个值为null或者空，则返回0
+     * Provides accurate addition<br>
+     * Returns 0 if null or empty values are passed
      *
-     * @param values 多个被加值
-     * @return 求和
+     * @param values values to add
+     * @return sum
      */
     public static BigDecimal add(String... values) {
         if (ArrayUtils.isEmpty(values)) {
@@ -89,11 +89,11 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 提供精确的加法运算<br>
-     * 如果传入多个值为null或者空，则返回0
+     * Provides accurate addition<br>
+     * Returns 0 if null or empty values are passed
      *
-     * @param values 多个被加值
-     * @return 求和
+     * @param values values to add
+     * @return sum
      */
     public static BigDecimal add(BigDecimal... values) {
         if (ArrayUtils.isEmpty(values)) {
@@ -113,11 +113,11 @@ public abstract class NumberUtils {
 
 
     /**
-     * 提供精确的减法运算<br>
-     * 如果传入多个值为null或者空，则返回0
+     * Provides accurate subtraction<br>
+     * Returns 0 if null or empty values are passed
      *
-     * @param values 多个被减值
-     * @return 差
+     * @param values values to subtract
+     * @return difference
      */
     public static BigDecimal sub(Number... values) {
         if (ArrayUtils.isEmpty(values)) {
@@ -136,11 +136,11 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 提供精确的减法运算<br>
-     * 如果传入多个值为null或者空，则返回0
+     * Provides accurate subtraction<br>
+     * Returns 0 if null or empty values are passed
      *
-     * @param values 多个被减值
-     * @return 差
+     * @param values values to subtract
+     * @return difference
      */
     public static BigDecimal sub(String... values) {
         if (ArrayUtils.isEmpty(values)) {
@@ -159,11 +159,11 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 提供精确的减法运算<br>
-     * 如果传入多个值为null或者空，则返回0
+     * Provides accurate subtraction<br>
+     * Returns 0 if null or empty values are passed
      *
-     * @param values 多个被减值
-     * @return 差
+     * @param values values to subtract
+     * @return difference
      */
     public static BigDecimal sub(BigDecimal... values) {
         if (ArrayUtils.isEmpty(values)) {
@@ -183,11 +183,11 @@ public abstract class NumberUtils {
 
 
     /**
-     * 提供精确的乘法运算<br>
-     * 如果传入多个值为null或者空，则返回0
+     * Provides accurate multiplication<br>
+     * Returns 0 if null or empty values are passed
      *
-     * @param values 多个被乘值
-     * @return 积
+     * @param values values to multiply
+     * @return product
      */
     public static BigDecimal mul(Number... values) {
         if (ArrayUtils.isEmpty(values)) {
@@ -206,22 +206,22 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 提供精确的乘法运算
+     * Provides accurate multiplication
      *
-     * @param a 被乘数
-     * @param b 乘数
-     * @return 积
+     * @param a multiplicand
+     * @param b multiplier
+     * @return product
      */
     public static BigDecimal mul(String a, String b) {
         return mul(new BigDecimal(a), new BigDecimal(b));
     }
 
     /**
-     * 提供精确的乘法运算<br>
-     * 如果传入多个值为null或者空，则返回0
+     * Provides accurate multiplication<br>
+     * Returns 0 if null or empty values are passed
      *
-     * @param values 多个被乘值
-     * @return 积
+     * @param values values to multiply
+     * @return product
      */
     public static BigDecimal mul(String... values) {
         if (ArrayUtils.isEmpty(values)) {
@@ -240,11 +240,11 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 提供精确的乘法运算<br>
-     * 如果传入多个值为null或者空，则返回0
+     * Provides accurate multiplication<br>
+     * Returns 0 if null or empty values are passed
      *
-     * @param values 多个被乘值
-     * @return 积
+     * @param values values to multiply
+     * @return product
      */
     public static BigDecimal mul(BigDecimal... values) {
         if (ArrayUtils.isEmpty(values)) {
@@ -264,22 +264,22 @@ public abstract class NumberUtils {
 
 
     /**
-     * 提供(相对)精确的除法运算,当发生除不尽的情况的时候,精确到小数点后10位,后面的四舍五入
+     * Provides (relatively) accurate division; if indivisible, rounds to 10 decimal places
      *
-     * @param a 被除数
-     * @param b 除数
-     * @return 两个参数的商
+     * @param a dividend
+     * @param b divisor
+     * @return quotient
      */
     public static BigDecimal div(Number a, Number b) {
         return div(a, b, DEFAULT_DIV_SCALE);
     }
 
     /**
-     * 提供(相对)精确的除法运算,当发生除不尽的情况的时候,精确到小数点后10位,后面的四舍五入
+     * Provides (relatively) accurate division; if indivisible, rounds to 10 decimal places
      *
-     * @param a 被除数
-     * @param b 除数
-     * @return 两个参数的商
+     * @param a dividend
+     * @param b divisor
+     * @return quotient
      */
     public static BigDecimal div(String a, String b) {
         return div(a, b, DEFAULT_DIV_SCALE);
@@ -287,63 +287,63 @@ public abstract class NumberUtils {
 
 
     /**
-     * 提供(相对)精确的除法运算,当发生除不尽的情况时,由scale指定精确度,后面的四舍五入
+     * Provides (relatively) accurate division; scale specifies precision; half-up rounding
      *
-     * @param a     被除数
-     * @param b     除数
-     * @param scale 精确度，如果为负值，取绝对值
-     * @return 两个参数的商
+     * @param a     dividend
+     * @param b     divisor
+     * @param scale precision; negative value uses its absolute value
+     * @return quotient
      */
     public static BigDecimal div(Number a, Number b, int scale) {
         return div(a, b, scale, RoundingMode.HALF_UP);
     }
 
     /**
-     * 提供(相对)精确的除法运算,当发生除不尽的情况时,由scale指定精确度,后面的四舍五入
+     * Provides (relatively) accurate division; scale specifies precision; half-up rounding
      *
-     * @param a     被除数
-     * @param b     除数
-     * @param scale 精确度，如果为负值，取绝对值
-     * @return 两个参数的商
+     * @param a     dividend
+     * @param b     divisor
+     * @param scale precision; negative value uses its absolute value
+     * @return quotient
      */
     public static BigDecimal div(String a, String b, int scale) {
         return div(a, b, scale, RoundingMode.HALF_UP);
     }
 
     /**
-     * 提供(相对)精确的除法运算,当发生除不尽的情况时,由scale指定精确度
+     * Provides (relatively) accurate division; scale specifies precision
      *
-     * @param a            被除数
-     * @param b            除数
-     * @param scale        精确度，如果为负值，取绝对值
-     * @param roundingMode 保留小数的模式 {@link RoundingMode}
-     * @return 两个参数的商
+     * @param a            dividend
+     * @param b            divisor
+     * @param scale        precision; negative value uses its absolute value
+     * @param roundingMode rounding mode {@link RoundingMode}
+     * @return quotient
      */
     public static BigDecimal div(Number a, Number b, int scale, RoundingMode roundingMode) {
         return div(a.toString(), b.toString(), scale, roundingMode);
     }
 
     /**
-     * 提供(相对)精确的除法运算,当发生除不尽的情况时,由scale指定精确度
+     * Provides (relatively) accurate division; scale specifies precision
      *
-     * @param a            被除数
-     * @param b            除数
-     * @param scale        精确度，如果为负值，取绝对值
-     * @param roundingMode 保留小数的模式 {@link RoundingMode}
-     * @return 两个参数的商
+     * @param a            dividend
+     * @param b            divisor
+     * @param scale        precision; negative value uses its absolute value
+     * @param roundingMode rounding mode {@link RoundingMode}
+     * @return quotient
      */
     public static BigDecimal div(String a, String b, int scale, RoundingMode roundingMode) {
         return div(new BigDecimal(a), new BigDecimal(b), scale, roundingMode);
     }
 
     /**
-     * 提供(相对)精确的除法运算,当发生除不尽的情况时,由scale指定精确度
+     * Provides (relatively) accurate division; scale specifies precision
      *
-     * @param a            被除数
-     * @param b            除数
-     * @param scale        精确度，如果为负值，取绝对值
-     * @param roundingMode 保留小数的模式 {@link RoundingMode}
-     * @return 两个参数的商
+     * @param a            dividend
+     * @param b            divisor
+     * @param scale        precision; negative value uses its absolute value
+     * @param roundingMode rounding mode {@link RoundingMode}
+     * @return quotient
      */
     public static BigDecimal div(BigDecimal a, BigDecimal b, int scale, RoundingMode roundingMode) {
         AssertionUtils.notNull(b, "Divisor must be not null !");
@@ -357,11 +357,11 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 提供精确的乘法运算<br>
-     * 如果传入多个值为null或者空，则返回0
+     * Provides accurate multiplication<br>
+     * Returns 0 if null or empty values are passed
      *
-     * @param values 多个被乘值
-     * @return 积
+     * @param values values to multiply
+     * @return product
      */
     public static BigDecimal div(BigDecimal... values) {
         if (ArrayUtils.isEmpty(values)) {
@@ -382,13 +382,13 @@ public abstract class NumberUtils {
     // ------------------------------------------------------------------------------------------- round
 
     /**
-     * 保留固定位数小数<br>
-     * 采用四舍五入策略 {@link RoundingMode#HALF_UP}<br>
-     * 例如保留2位小数：123.456789 =》 123.46
+     * Retain a fixed number of decimal places<br>
+     * Uses {@link RoundingMode#HALF_UP} rounding strategy<br>
+     * E.g., 2 decimal places: 123.456789 => 123.46
      *
-     * @param v     值
-     * @param scale 保留小数位数
-     * @return 新值
+     * @param v     the value
+     * @param scale number of decimal places
+     * @return new value
      */
     public static BigDecimal round(double v, int scale) {
         return round(v, scale, RoundingMode.HALF_UP);
@@ -396,52 +396,52 @@ public abstract class NumberUtils {
 
 
     /**
-     * 保留固定位数小数<br>
-     * 采用四舍五入策略 {@link RoundingMode#HALF_UP}<br>
-     * 例如保留2位小数：123.456789 =》 123.46
+     * Retain a fixed number of decimal places<br>
+     * Uses {@link RoundingMode#HALF_UP} rounding strategy<br>
+     * E.g., 2 decimal places: 123.456789 => 123.46
      *
-     * @param numberStr 数字值的字符串表现形式
-     * @param scale     保留小数位数
-     * @return 新值
+     * @param numberStr string representation of the number
+     * @param scale     number of decimal places
+     * @return new value
      */
     public static BigDecimal round(String numberStr, int scale) {
         return round(numberStr, scale, RoundingMode.HALF_UP);
     }
 
     /**
-     * 保留固定位数小数<br>
-     * 采用四舍五入策略 {@link RoundingMode#HALF_UP}<br>
-     * 例如保留2位小数：123.456789 =》 123.46
+     * Retain a fixed number of decimal places<br>
+     * Uses {@link RoundingMode#HALF_UP} rounding strategy<br>
+     * E.g., 2 decimal places: 123.456789 => 123.46
      *
-     * @param number 数字值
-     * @param scale  保留小数位数
-     * @return 新值
+     * @param number the number value
+     * @param scale  number of decimal places
+     * @return new value
      */
     public static BigDecimal round(BigDecimal number, int scale) {
         return round(number, scale, RoundingMode.HALF_UP);
     }
 
     /**
-     * 保留固定位数小数<br>
-     * 例如保留四位小数：123.456789 =》 123.4567
+     * Retain a fixed number of decimal places<br>
+     * E.g., 4 decimal places: 123.456789 => 123.4567
      *
-     * @param v            值
-     * @param scale        保留小数位数
-     * @param roundingMode 保留小数的模式 {@link RoundingMode}
-     * @return 新值
+     * @param v            the value
+     * @param scale        number of decimal places
+     * @param roundingMode rounding mode {@link RoundingMode}
+     * @return new value
      */
     public static BigDecimal round(double v, int scale, RoundingMode roundingMode) {
         return round(Double.toString(v), scale, roundingMode);
     }
 
     /**
-     * 保留固定位数小数<br>
-     * 例如保留四位小数：123.456789 =》 123.4567
+     * Retain a fixed number of decimal places<br>
+     * E.g., 4 decimal places: 123.456789 => 123.4567
      *
-     * @param numberStr    数字值的字符串表现形式
-     * @param scale        保留小数位数，如果传入小于0，则默认0
-     * @param roundingMode 保留小数的模式 {@link RoundingMode}，如果传入null则默认四舍五入
-     * @return 新值
+     * @param numberStr    string representation of the number
+     * @param scale        number of decimal places; defaults to 0 if negative
+     * @param roundingMode rounding mode {@link RoundingMode}; defaults to HALF_UP if null
+     * @return new value
      */
     public static BigDecimal round(String numberStr, int scale, RoundingMode roundingMode) {
         AssertionUtils.isTrue(StringUtils.isNotBlank(numberStr));
@@ -452,13 +452,13 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 保留固定位数小数<br>
-     * 例如保留四位小数：123.456789 =》 123.4567
+     * Retain a fixed number of decimal places<br>
+     * E.g., 4 decimal places: 123.456789 => 123.4567
      *
-     * @param number       数字值
-     * @param scale        保留小数位数，如果传入小于0，则默认0
-     * @param roundingMode 保留小数的模式 {@link RoundingMode}，如果传入null则默认四舍五入
-     * @return 新值
+     * @param number       the number
+     * @param scale        number of decimal places; defaults to 0 if negative
+     * @param roundingMode rounding mode {@link RoundingMode}; defaults to HALF_UP if null
+     * @return new value
      */
     public static BigDecimal round(BigDecimal number, int scale, RoundingMode roundingMode) {
         if (null == number) {
@@ -476,68 +476,68 @@ public abstract class NumberUtils {
 
 
     /**
-     * 四舍六入五成双计算法
+     * Banker's rounding (round-half-to-even)
      * <p>
-     * 四舍六入五成双是一种比较精确比较科学的计数保留法，是一种数字修约规则。
+     * Banker's rounding is a more accurate and scientific rounding rule.
      * </p>
      *
      * <pre>
-     * 算法规则:
-     * 四舍六入五考虑，
-     * 五后非零就进一，
-     * 五后皆零看奇偶，
-     * 五前为偶应舍去，
-     * 五前为奇要进一。
+     * Algorithm rules:
+     * 4 rounds down, 6 rounds up, 5 considers parity:
+     * if there are non-zero digits after 5, round up;
+     * if digits after 5 are all zero, check parity of the preceding digit.
+     * If the digit before 5 is even, round down,
+     * if it is odd, round up.
      * </pre>
      *
-     * @param number 需要科学计算的数据
-     * @param scale  保留的小数位
-     * @return 结果
+     * @param number the numeric value
+     * @param scale  number of decimal places to retain
+     * @return result
      */
     public static BigDecimal roundHalfEven(Number number, int scale) {
         return roundHalfEven(toBigDecimal(number), scale);
     }
 
     /**
-     * 四舍六入五成双计算法
+     * Banker's rounding (round-half-to-even)
      * <p>
-     * 四舍六入五成双是一种比较精确比较科学的计数保留法，是一种数字修约规则。
+     * Banker's rounding is a more accurate and scientific rounding rule.
      * </p>
      *
      * <pre>
-     * 算法规则:
-     * 四舍六入五考虑，
-     * 五后非零就进一，
-     * 五后皆零看奇偶，
-     * 五前为偶应舍去，
-     * 五前为奇要进一。
+     * Algorithm rules:
+     * 4 rounds down, 6 rounds up, 5 considers parity:
+     * if there are non-zero digits after 5, round up;
+     * if digits after 5 are all zero, check parity of the preceding digit.
+     * If the digit before 5 is even, round down,
+     * if it is odd, round up.
      * </pre>
      *
-     * @param value 需要科学计算的数据
-     * @param scale 保留的小数位
-     * @return 结果
+     * @param value the numeric value
+     * @param scale number of decimal places to retain
+     * @return result
      */
     public static BigDecimal roundHalfEven(BigDecimal value, int scale) {
         return round(value, scale, RoundingMode.HALF_EVEN);
     }
 
     /**
-     * 保留固定小数位数，舍去多余位数
+     * Retain a fixed number of decimal places, discarding excess digits
      *
-     * @param number 需要科学计算的数据
-     * @param scale  保留的小数位
-     * @return 结果
+     * @param number the numeric value
+     * @param scale  number of decimal places to retain
+     * @return result
      */
     public static BigDecimal roundDown(Number number, int scale) {
         return roundDown(toBigDecimal(number), scale);
     }
 
     /**
-     * 保留固定小数位数，舍去多余位数
+     * Retain a fixed number of decimal places, discarding excess digits
      *
-     * @param value 需要科学计算的数据
-     * @param scale 保留的小数位
-     * @return 结果
+     * @param value the numeric value
+     * @param scale number of decimal places to retain
+     * @return result
      */
     public static BigDecimal roundDown(BigDecimal value, int scale) {
         return round(value, scale, RoundingMode.DOWN);
@@ -546,65 +546,65 @@ public abstract class NumberUtils {
     // ------------------------------------------------------------------------------------------- decimalFormat
 
     /**
-     * 格式化double<br>
-     * 对 {@link DecimalFormat} 做封装<br>
+     * Format a double value<br>
+     * Wraps {@link DecimalFormat}<br>
      *
-     * @param pattern 格式 格式中主要以 # 和 0 两种占位符号来指定数字长度。0 表示如果位数不足则以 0 填充，# 表示只要有可能就把数字拉上这个位置。<br>
+     * @param pattern format string using # and 0 as placeholders. 0 pads with zeros; # shows digits only if present.<br>
      *                <ul>
-     *                <li>0 =》 取一位整数</li>
-     *                <li>0.00 =》 取一位整数和两位小数</li>
-     *                <li>00.000 =》 取两位整数和三位小数</li>
-     *                <li># =》 取所有整数部分</li>
-     *                <li>#.##% =》 以百分比方式计数，并取两位小数</li>
-     *                <li>#.#####E0 =》 显示为科学计数法，并取五位小数</li>
-     *                <li>,### =》 每三位以逗号进行分隔，例如：299,792,458</li>
-     *                <li>光速大小为每秒,###米 =》 将格式嵌入文本</li>
+     *                <li>0 =&gt; one integer digit</li>
+     *                <li>0.00 =&gt; one integer digit and two decimal places</li>
+     *                <li>00.000 =&gt; two integer digits and three decimal places</li>
+     *                <li># =&gt; all integer digits</li>
+     *                <li>#.##% =&gt; percentage with two decimal places</li>
+     *                <li>#.#####E0 =&gt; scientific notation with five decimal places</li>
+     *                <li>,### =&gt; comma-separated thousands, e.g. 299,792,458</li>
+     *                <li>Speed of light is ,### metres per second =&gt; embed format in text</li>
      *                </ul>
-     * @param value   值
-     * @return 格式化后的值
+     * @param value   the value
+     * @return formatted value
      */
     public static String decimalFormat(String pattern, double value) {
         return new DecimalFormat(pattern).format(value);
     }
 
     /**
-     * 格式化double<br>
-     * 对 {@link DecimalFormat} 做封装<br>
+     * Format a double value<br>
+     * Wraps {@link DecimalFormat}<br>
      *
-     * @param pattern 格式 格式中主要以 # 和 0 两种占位符号来指定数字长度。0 表示如果位数不足则以 0 填充，# 表示只要有可能就把数字拉上这个位置。<br>
+     * @param pattern format string using # and 0 as placeholders. 0 pads with zeros; # shows digits only if present.<br>
      *                <ul>
-     *                <li>0 =》 取一位整数</li>
-     *                <li>0.00 =》 取一位整数和两位小数</li>
-     *                <li>00.000 =》 取两位整数和三位小数</li>
-     *                <li># =》 取所有整数部分</li>
-     *                <li>#.##% =》 以百分比方式计数，并取两位小数</li>
-     *                <li>#.#####E0 =》 显示为科学计数法，并取五位小数</li>
-     *                <li>,### =》 每三位以逗号进行分隔，例如：299,792,458</li>
-     *                <li>光速大小为每秒,###米 =》 将格式嵌入文本</li>
+     *                <li>0 =&gt; one integer digit</li>
+     *                <li>0.00 =&gt; one integer digit and two decimal places</li>
+     *                <li>00.000 =&gt; two integer digits and three decimal places</li>
+     *                <li># =&gt; all integer digits</li>
+     *                <li>#.##% =&gt; percentage with two decimal places</li>
+     *                <li>#.#####E0 =&gt; scientific notation with five decimal places</li>
+     *                <li>,### =&gt; comma-separated thousands, e.g. 299,792,458</li>
+     *                <li>Speed of light is ,### metres per second =&gt; embed format in text</li>
      *                </ul>
-     * @param value   值
-     * @return 格式化后的值
+     * @param value   the value
+     * @return formatted value
      */
     public static String decimalFormat(String pattern, long value) {
         return new DecimalFormat(pattern).format(value);
     }
 
     /**
-     * 格式化金额输出，每三位用逗号分隔
+     * Format a monetary amount with comma-separated thousands
      *
-     * @param value 金额
-     * @return 格式化后的值
+     * @param value the amount
+     * @return formatted value
      */
     public static String decimalFormatMoney(double value) {
         return decimalFormat(",##0.00", value);
     }
 
     /**
-     * 格式化百分比，小数采用四舍五入方式
+     * Format as a percentage; decimals are rounded with half-up
      *
-     * @param number 值
-     * @param scale  保留小数位数
-     * @return 百分比
+     * @param number the value
+     * @param scale  number of decimal places
+     * @return percentage string
      */
     public static String formatPercent(double number, int scale) {
         final NumberFormat format = NumberFormat.getPercentInstance();
@@ -615,11 +615,11 @@ public abstract class NumberUtils {
     // ------------------------------------------------------------------------------------------- isXXX
 
     /**
-     * 判断String是否是整数<br>
-     * 支持8、10、16进制
+     * Check if a String is an integer<br>
+     * Supports octal, decimal, and hexadecimal
      *
      * @param s String
-     * @return 是否为整数
+     * @return true if the string is an integer
      */
     public static boolean isInteger(String s) {
         try {
@@ -631,11 +631,11 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 判断字符串是否是Long类型<br>
-     * 支持8、10、16进制
+     * Check if a String represents a Long value<br>
+     * Supports octal, decimal, and hexadecimal
      *
      * @param s String
-     * @return 是否为{@link Long}类型
+     * @return true if the string is a {@link Long}
      */
     public static boolean isLong(String s) {
         try {
@@ -647,10 +647,10 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 判断字符串是否是浮点数
+     * Check if a String is a floating-point number
      *
      * @param s String
-     * @return 是否为{@link Double}类型
+     * @return true if the string is a {@link Double}
      */
     public static boolean isDouble(String s) {
         try {
@@ -662,7 +662,7 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 判断字符串是否全部都为数字
+     * Check if all characters of the string are digits
      * <pre>
      * StringUtils.isNumeric(null)   = false
      * StringUtils.isNumeric("")     = false
@@ -688,11 +688,11 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 是否是质数（素数）<br>
-     * 质数表的质数又称素数。指整数在一个大于1的自然数中,除了1和此整数自身外,没法被其他自然数整除的数。
+     * Check if a number is prime<br>
+     * A prime (or prime number) is a natural number greater than 1 that cannot be divided evenly by any integer other than 1 and itself.
      *
-     * @param n 数字
-     * @return 是否是质数
+     * @param n the number
+     * @return true if the number is prime
      */
     public static boolean isPrimes(int n) {
         AssertionUtils.isTrue(n > 1, "The number must be > 1");
@@ -708,33 +708,33 @@ public abstract class NumberUtils {
     // ------------------------------------------------------------------------------------------- range
 
     /**
-     * 从0开始给定范围内的整数列表，步进为1
+     * Integer list from 0 to stop (inclusive), step 1
      *
-     * @param stop 结束（包含）
-     * @return 整数列表
+     * @param stop end (inclusive)
+     * @return list of integers
      */
     public static int[] range(int stop) {
         return range(0, stop);
     }
 
     /**
-     * 给定范围内的整数列表，步进为1
+     * Integer list from start to stop (inclusive), step 1
      *
-     * @param start 开始（包含）
-     * @param stop  结束（包含）
-     * @return 整数列表
+     * @param start start (inclusive)
+     * @param stop  end (inclusive)
+     * @return list of integers
      */
     public static int[] range(int start, int stop) {
         return range(start, stop, 1);
     }
 
     /**
-     * 给定范围内的整数列表
+     * Integer list within the given range
      *
-     * @param start 开始（包含）
-     * @param stop  结束（包含）
-     * @param step  步进
-     * @return 整数列表
+     * @param start start (inclusive)
+     * @param stop  end (inclusive)
+     * @param step  step
+     * @return list of integers
      */
     public static int[] range(int start, int stop, int step) {
         if (start < stop) {
@@ -756,25 +756,25 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 将给定范围内的整数添加到已有集合中，步进为1
+     * Add integers in range to the given collection, step 1
      *
-     * @param start  开始（包含）
-     * @param stop   结束（包含）
-     * @param values 集合
-     * @return 集合
+     * @param start  start (inclusive)
+     * @param stop   end (inclusive)
+     * @param values the collection to add to
+     * @return the collection
      */
     public static Collection<Integer> appendRange(int start, int stop, Collection<Integer> values) {
         return appendRange(start, stop, 1, values);
     }
 
     /**
-     * 将给定范围内的整数添加到已有集合中
+     * Add integers in range to the given collection
      *
-     * @param start  开始（包含）
-     * @param stop   结束（包含）
-     * @param step   步进
-     * @param values 集合
-     * @return 集合
+     * @param start  start (inclusive)
+     * @param stop   end (inclusive)
+     * @param step   step
+     * @param values the collection to add to
+     * @return the collection
      */
     public static Collection<Integer> appendRange(int start, int stop, int step, Collection<Integer> values) {
         if (start < stop) {
@@ -795,14 +795,14 @@ public abstract class NumberUtils {
     // ------------------------------------------------------------------------------------------- others
 
     /**
-     * 计算阶乘
+     * Calculate factorial
      * <p>
      * n! = n * (n-1) * ... * end
      * </p>
      *
-     * @param start 阶乘起始
-     * @param end   阶乘结束
-     * @return 结果
+     * @param start factorial start
+     * @param end   factorial end
+     * @return result
      */
     public static long factorial(long start, long end) {
         if (start < end) {
@@ -815,24 +815,24 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 计算阶乘
+     * Calculate factorial
      * <p>
      * n! = n * (n-1) * ... * 2 * 1
      * </p>
      *
-     * @param n 阶乘起始
-     * @return 结果
+     * @param n factorial start
+     * @return result
      */
     public static long factorial(long n) {
         return factorial(n, 1);
     }
 
     /**
-     * 平方根算法<br>
-     * 推荐使用 {@link Math#sqrt(double)}
+     * Square root algorithm<br>
+     * Prefer using {@link Math#sqrt(double)}
      *
-     * @param x 值
-     * @return 平方根
+     * @param x the value
+     * @return square root
      */
     public static long sqrt(long x) {
         long y = 0;
@@ -851,11 +851,11 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 最大公约数
+     * Greatest common divisor
      *
-     * @param m 第一个值
-     * @param n 第二个值
-     * @return 最大公约数
+     * @param m first value
+     * @param n second value
+     * @return Greatest common divisor
      */
     public static int divisor(int m, int n) {
         while (m % n != 0) {
@@ -867,21 +867,21 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 最小公倍数
+     * Least common multiple
      *
-     * @param m 第一个值
-     * @param n 第二个值
-     * @return 最小公倍数
+     * @param m first value
+     * @param n second value
+     * @return Least common multiple
      */
     public static int multiple(int m, int n) {
         return m * n / divisor(m, n);
     }
 
     /**
-     * 获得数字对应的二进制字符串
+     * Get the binary string representation of a number
      *
-     * @param number 数字
-     * @return 二进制字符串
+     * @param number the number
+     * @return binary string
      */
     public static String getBinaryStr(Number number) {
         if (number instanceof Long) {
@@ -894,9 +894,9 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 二进制转int
+     * Parse a binary string to int
      *
-     * @param binaryStr 二进制字符串
+     * @param binaryStr binary string
      * @return int
      */
     public static int binaryToInt(String binaryStr) {
@@ -904,9 +904,9 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 二进制转long
+     * Parse a binary string to long
      *
-     * @param binaryStr 二进制字符串
+     * @param binaryStr binary string
      * @return long
      */
     public static long binaryToLong(String binaryStr) {
@@ -917,9 +917,9 @@ public abstract class NumberUtils {
 
 
     /**
-     * 数字转{@link BigDecimal}
+     * Convert a number to {@link BigDecimal}
      *
-     * @param number 数字
+     * @param number the number
      * @return {@link BigDecimal}
      */
     public static BigDecimal toBigDecimal(Number number) {
@@ -930,9 +930,9 @@ public abstract class NumberUtils {
     }
 
     /**
-     * 数字转{@link BigDecimal}
+     * Convert a number to {@link BigDecimal}
      *
-     * @param number 数字
+     * @param number the number
      * @return {@link BigDecimal}
      */
     public static BigDecimal toBigDecimal(String number) {
@@ -941,24 +941,24 @@ public abstract class NumberUtils {
 
 
     /**
-     * 判断两个数字是否相邻，例如1和2相邻，1和3不相邻<br>
-     * 判断方法为做差取绝对值判断是否为1
+     * Check if two numbers are adjacent (differ by exactly 1)<br>
+     * Method: check that the absolute difference equals 1
      *
-     * @param number1 数字1
-     * @param number2 数字2
-     * @return 是否相邻
+     * @param number1 first number
+     * @param number2 second number
+     * @return true if the numbers are adjacent
      */
     public static boolean isBeside(long number1, long number2) {
         return Math.abs(number1 - number2) == 1;
     }
 
     /**
-     * 判断两个数字是否相邻，例如1和2相邻，1和3不相邻<br>
-     * 判断方法为做差取绝对值判断是否为1
+     * Check if two numbers are adjacent (differ by exactly 1)<br>
+     * Method: check that the absolute difference equals 1
      *
-     * @param number1 数字1
-     * @param number2 数字2
-     * @return 是否相邻
+     * @param number1 first number
+     * @param number2 second number
+     * @return true if the numbers are adjacent
      */
     public static boolean isBeside(int number1, int number2) {
         return Math.abs(number1 - number2) == 1;
@@ -966,22 +966,22 @@ public abstract class NumberUtils {
 
 
     /**
-     * 提供精确的幂运算
+     * Provides accurate power calculation
      *
-     * @param number 底数
-     * @param n      指数
-     * @return 幂的积
+     * @param number base
+     * @param n      exponent
+     * @return the power result
      */
     public static BigDecimal pow(Number number, int n) {
         return pow(toBigDecimal(number), n);
     }
 
     /**
-     * 提供精确的幂运算
+     * Provides accurate power calculation
      *
-     * @param number 底数
-     * @param n      指数
-     * @return 幂的积
+     * @param number base
+     * @param n      exponent
+     * @return the power result
      */
     public static BigDecimal pow(BigDecimal number, int n) {
         return number.pow(n);

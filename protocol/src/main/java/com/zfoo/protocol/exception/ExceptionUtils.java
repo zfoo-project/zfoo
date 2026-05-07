@@ -22,14 +22,14 @@ import java.util.Arrays;
 public abstract class ExceptionUtils {
 
     /**
-     * 获取异常全部信息，格式是：
+     * Get full exception information in the format:
      * <p>
-     * 类名称: 异常信息
-     * 异常堆栈
+     * ClassName: ExceptionMessage
+     * StackTrace
      * </p>
      *
      * @param throwable the throwable to get a message for, null returns empty string
-     * @return 异常的信息
+     * @return the exception information string
      */
     public static String getMessage(final Throwable throwable) {
         if (throwable == null) {

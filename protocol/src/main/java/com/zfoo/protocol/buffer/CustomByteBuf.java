@@ -20,14 +20,14 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 /**
- * 自定义协议格式，可以针对某些特定场景对做特定优化
+ * Custom protocol format optimized for specific scenarios
  *
  * @author godotg
  */
 public abstract class CustomByteBuf {
 
     // -------------------------------------------------------------------------------------------------------------
-    // 针对于int数组提高性能的简单方式
+    // Simple performance improvement for int arrays
     public static void writeIntArraySimple(ByteBuf byteBuf, int[] array) {
         if (array == null) {
             byteBuf.writeByte(0);
@@ -56,7 +56,7 @@ public abstract class CustomByteBuf {
         return ints;
     }
 
-    // 针对于int数组提高性能的复杂方式
+    // Advanced performance improvement for int arrays
     public static void writeIntArrayMemoryCopy(ByteBuf byteBuf, int[] array) {
         if (array == null) {
             byteBuf.writeByte(0);

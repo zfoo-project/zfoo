@@ -14,7 +14,7 @@
 package com.zfoo.protocol.serializer.protobuf;
 
 /**
- * protocol buffer中Map的Field的结构体定义
+ * Defines the structure for a Map field in protobuf
  */
 public class PbMapField extends PbField {
 

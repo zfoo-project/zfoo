@@ -31,10 +31,10 @@ public class TreeNode<T> {
 
 
     /**
-     * 创建树的结点
+     * Create a tree node
      *
-     * @param name   数据结点名称
-     * @param parent 父数据结点
+     * @param name   node name
+     * @param parent parent node
      */
 
     TreeNode(String name, TreeNode<T> parent) {
@@ -43,7 +43,7 @@ public class TreeNode<T> {
     }
 
     /**
-     * 检测数据结点名称是否合法
+     * Validate the node name
      */
     private static void checkName(String name) {
         if (StringUtils.isBlank(name) || name.contains(StringUtils.PERIOD)) {
@@ -53,7 +53,7 @@ public class TreeNode<T> {
 
 
     /**
-     * 获取数据结点的完整名称。
+     * Get the full name of the data node.
      */
     public String fullName() {
         if (parent == null) {
@@ -70,10 +70,10 @@ public class TreeNode<T> {
 
 
     /**
-     * 根据名称检查是否存在子数据结点
+     * Check if a child node with the given name exists
      *
-     * @param name 子数据结点名称
-     * @return 是否存在子数据结点
+     * @param name child node name
+     * @return true if the child node exists
      */
     public boolean hasChild(String name) {
         checkName(name);
@@ -92,10 +92,10 @@ public class TreeNode<T> {
     }
 
     /**
-     * 根据名称获取子数据结点
+     * Get the child node by name
      *
-     * @param name 子数据结点名称
-     * @return 指定名称的子数据结点，如果没有找到，则返回空
+     * @param name child node name
+     * @return the child node with the given name; null if not found
      */
     public TreeNode<T> childByName(String name) {
         checkName(name);
@@ -114,7 +114,7 @@ public class TreeNode<T> {
     }
 
     /**
-     * 获取所有子节点，包括父节点和子节点的子节点
+     * Get all child nodes recursively, including descendants
      */
     public List<TreeNode<T>> flatTreeNodes() {
         var result = new ArrayList<TreeNode<T>>();
@@ -143,10 +143,10 @@ public class TreeNode<T> {
 
 
     /**
-     * 根据名称获取或增加子数据结点
+     * Get or create the child node with the given name
      *
-     * @param name 子数据结点名称
-     * @return 指定名称的子数据结点，如果对应名称的子数据结点已存在，则返回已存在的子数据结点，否则增加子数据结点
+     * @param name child node name
+     * @return the existing or newly created child node with the given name
      */
     public TreeNode<T> getOrAddChild(String name) {
         var node = childByName(name);
@@ -167,9 +167,9 @@ public class TreeNode<T> {
 
 
     /**
-     * 根据名称移除子数据结点
+     * Remove the child node with the given name
      *
-     * @param name 子数据结点名称
+     * @param name child node name
      */
     public void removeChild(String name) {
         var node = childByName(name);

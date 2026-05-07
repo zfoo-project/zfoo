@@ -17,12 +17,12 @@ import javassist.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.lang.reflect.Modifier;
 import java.lang.reflect.*;
+import java.lang.reflect.Modifier;
 
 /*
- 测试javassist生成的类和普通用new关键字创建出来的类之间的区别<hr/>
- 测试发现两者从访问方法和访问变量的速度几乎没有什么区别，可以用javassist代理其它的类，不会影响速度<hr/>
+ Tests the difference between Javassist-generated classes and those created with new<hr/>
+ Results show virtually no speed difference; Javassist proxies can be used without performance impact<hr/>
  */
 @Ignore
 public class JavassistTesting {
@@ -37,7 +37,7 @@ public class JavassistTesting {
 
 
     /**
-     * 直接访问public的访问速度
+     * Speed of direct public field access
      */
     public void testA() {
         A a = new A();
@@ -55,7 +55,7 @@ public class JavassistTesting {
     }
 
     /**
-     * 用get和set方法访问成员变量的速度
+     * Speed of accessing fields via getters and setters
      */
     public void testB() {
         B b = new B();
@@ -73,7 +73,7 @@ public class JavassistTesting {
     }
 
     /*
-     通过反射直接操作属性访问变量的速度
+     Speed of accessing fields via reflection
      */
     public void testC() throws NoSuchFieldException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         Field aField = C.class.getDeclaredField("a");
@@ -111,7 +111,7 @@ public class JavassistTesting {
     }
 
     /*
-     通过javassist访问成员变量的速度
+     Speed of accessing fields via Javassist
      */
     @Test
     public void testD() throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {

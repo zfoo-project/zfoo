@@ -23,7 +23,7 @@ import com.zfoo.protocol.util.StringUtils;
 import java.lang.reflect.Field;
 
 /**
- * 对应于ObjectProtocolSerializer
+ * Corresponds to ObjectProtocolSerializer
  *
  * @author godotg
  */

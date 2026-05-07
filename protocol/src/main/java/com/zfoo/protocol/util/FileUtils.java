@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Queue;
 
 /**
- * 文件操作工具类
+ * File operation utility class
  *
  * @author godotg
  */
@@ -30,17 +30,17 @@ public abstract class FileUtils {
 
 
     /**
-     * 类Unix路径分隔符
+     * Unix-like path separator
      */
     private static final String UNIX_SEPARATOR = StringUtils.SLASH;
     /**
-     * Windows路径分隔符
+     * Windows path separator
      */
     private static final String WINDOWS_SEPARATOR = StringUtils.BACK_SLASH;
 
 
     /**
-     * 获取当前系统的换行分隔符
+     * Get the line separator for the current OS
      * <pre>
      * Windows: \r\n
      * Mac: \r
@@ -58,16 +58,16 @@ public abstract class FileUtils {
     /**
      * User's current working directory
      *
-     * @return 绝对路径路径
+     * @return absolute path
      */
     public static String getProAbsPath() {
         return System.getProperty("user.dir");
     }
 
     /**
-     * 连接父路径和子路径
+     * Join parent and child paths
      *
-     * @return 绝对路径
+     * @return absolute path
      */
     public static String joinPath(String parentPath, String childPath) {
         if (StringUtils.isEmpty(parentPath)) {
@@ -81,14 +81,14 @@ public abstract class FileUtils {
         return new File(parentPath, childPath).getAbsolutePath();
     }
 
-    //---------------------------------搜索文件--------------------------------------
+    //---------------------------------File search--------------------------------------
 
     /**
-     * 深度优先搜索文件
+     * Depth-first file search
      *
-     * @param file     需要搜索的文件
-     * @param fileName 需要搜索的目标文件名
-     * @return 搜索到的文件
+     * @param file     the directory to search
+     * @param fileName the target file name
+     * @return the found file
      */
     private static File searchFileInProject(File file, String fileName) {
         if (file.isFile() && file.getName().equals(fileName)) {
@@ -112,10 +112,10 @@ public abstract class FileUtils {
     }
 
     /**
-     * 广度优先搜索文件
+     * Breadth-first file search
      *
-     * @param fileOrDirectory 需要查找的文件夹
-     * @return 所有可读的文件
+     * @param fileOrDirectory the directory to search
+     * @return all readable files
      */
     public static List<File> getAllReadableFiles(File fileOrDirectory) {
         List<File> readableFileList = new ArrayList<>();
@@ -139,10 +139,10 @@ public abstract class FileUtils {
     }
 
     /**
-     * 搜索文件
+     * Search for a file
      *
-     * @param file 需要查找的文件
-     * @return 如果没有搜索到返回null
+     * @param file the file or directory to search
+     * @return the file if found; null otherwise
      */
     public static File searchFileInProject(File file) {
         return searchFileInProject(new File(getProAbsPath()), file.getName());
@@ -150,37 +150,37 @@ public abstract class FileUtils {
 
 
     /**
-     * 搜索文件
+     * Search for a file
      * <p>
-     * 注意：文件名必须是文件全称，包括文件名的后缀
+     * Note: the file name must include the extension
      *
-     * @param fileName 文件名的全称，包括文件名的后缀
-     * @return 如果没有搜索到返回null
+     * @param fileName the full file name including extension
+     * @return the file if found; null otherwise
      */
     public static File searchFileInProject(String fileName) {
         return searchFileInProject(new File(getProAbsPath()), fileName);
     }
 
-    //---------------------------------创建，删除文件--------------------------------------
+    //---------------------------------File creation and deletion--------------------------------------
 
     /**
-     * 在path文件夹下创建一个fileName文件
+     * Create a file named fileName under the path directory
      *
-     * @param path     路径
-     * @param fileName 文件名
-     * @return 新创建的File
-     * @throws IOException IO异常
+     * @param path     the directory path
+     * @param fileName the file name
+     * @return the newly created File
+     * @throws IOException on I/O error
      */
     public static File createFile(String path, String fileName) throws IOException {
         var file = createDirectory(path);
 
         var newFile = new File(file.getAbsoluteFile() + File.separator + fileName);
         if (newFile.exists()) {
-            throw new RuntimeException(StringUtils.format("文件已经存在[fileName:{}]", fileName));
+            throw new RuntimeException(StringUtils.format("File already exists [fileName:{}]", fileName));
         }
 
         if (!newFile.createNewFile()) {
-            throw new RuntimeException(StringUtils.format("创建文件[fileName:{}]失败", fileName));
+            throw new RuntimeException(StringUtils.format("Failed to create file [fileName:{}]", fileName));
         }
         return newFile;
     }
@@ -194,7 +194,7 @@ public abstract class FileUtils {
         }
 
         if (!newFile.createNewFile()) {
-            throw new RuntimeException(StringUtils.format("创建文件[fileName:{}]失败", fileName));
+            throw new RuntimeException(StringUtils.format("Failed to create file [fileName:{}]", fileName));
         }
         return newFile;
     }
@@ -236,7 +236,7 @@ public abstract class FileUtils {
         }
     }
 
-    // ------------------------------------------------复制文件------------------------------------------------
+    // ------------------------------------------------File copy------------------------------------------------
     /**
      * Copies a file to a new location.
      * <p>
@@ -402,7 +402,7 @@ public abstract class FileUtils {
     }
 
 
-    // ------------------------------------------------读取文件------------------------------------------------
+    // ------------------------------------------------File reading------------------------------------------------
 
     /**
      * Reads the contents of a file into a byte array.
@@ -449,33 +449,33 @@ public abstract class FileUtils {
     }
 
     /**
-     * 写入一个content
+     * Write content to a file
      *
-     * @param file    文件的绝对路径
-     * @param content 写入的内容
-     * @param append  是否追加
+     * @param file    absolute file path
+     * @param content content to write
+     * @param append  whether to append
      */
     public static void writeStringToFile(File file, String content, boolean append) {
-        // 字节流
+        // Byte stream
         FileOutputStream fileOutputStream = null;
-        // 转换流，设置编码集和解码集 .处理乱码问题，是字节到字符的桥梁
+        // Conversion stream: sets encoding; bridges bytes to characters and handles encoding issues
         OutputStreamWriter outputStreamWriter = null;
-        //处理流中的缓冲流，提高效率
+        // Buffered stream for improved efficiency
         BufferedWriter bufferedWriter = null;
-        // 如果不用缓冲流的话，程序是读一个数据，写一个数据，这样在数据量大的程序中非常影响效率。
-        // 缓冲流作用是把数据先写入缓冲区，等缓冲区满了，再把数据写到文件里。这样效率就大大提高了
+        // Without buffering, each byte is written individually which is very slow for large data.
+        // Buffered stream: writes to buffer first; flushes to file when full, greatly improving efficiency
         try {
-            // 以追加的方式打开文件
+            // Open file in append mode
             fileOutputStream = openOutputStream(file, append);
             outputStreamWriter = new OutputStreamWriter(fileOutputStream, StringUtils.DEFAULT_CHARSET_NAME);
             bufferedWriter = new BufferedWriter(outputStreamWriter);
-            bufferedWriter.write(content);// 写数据
+            bufferedWriter.write(content); // Write data
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
-            // Java的垃圾回收机制不会回收任何的物理资源，只会回收堆内存中对象所占用的内存
-            // finally总会被执行，即使try块中和catch块中有return，也会被执行。
-            // 用来显示回收数据库连接，网络连接，磁盘文件
+            // Java GC reclaims only heap memory; physical resources must be closed explicitly
+            // finally always executes, even when try or catch contains a return statement
+            // Used to explicitly close database connections, network connections, and files
             IOUtils.closeIO(bufferedWriter, outputStreamWriter, fileOutputStream);
         }
     }
@@ -492,7 +492,7 @@ public abstract class FileUtils {
         }
     }
 
-    //---------------------------------打开，关闭，文件流--------------------------------------
+    //---------------------------------Opening and closing file streams--------------------------------------
 
     /**
      * Opens a {@link FileInputStream} for the specified file, providing better
@@ -519,7 +519,7 @@ public abstract class FileUtils {
     }
 
     /**
-     * 如果文件不存在，则创建该文件。最好指定为true，以追加的方式打开文件
+     * If the file does not exist, create it. Prefer true to open in append mode
      * <p>
      * The parent directory will be created if it does not exist.The file will be created if it does not exist.
      *
@@ -550,13 +550,13 @@ public abstract class FileUtils {
     }
 
 
-    // ------------------------------------------------文件名称------------------------------------------------
+    // ------------------------------------------------File naming------------------------------------------------
 
     /**
-     * 获得文件的扩展名，扩展名不带“.”
+     * Get the file extension (without the leading dot)
      *
-     * @param fileName 文件名
-     * @return 扩展名
+     * @param fileName the file name
+     * @return extension
      */
     public static String fileExtName(String fileName) {
         if (StringUtils.isBlank(fileName)) {
@@ -570,7 +570,7 @@ public abstract class FileUtils {
     }
 
     /**
-     * 获得文件的名称，不带“.”和扩展名
+     * Get the file name (without extension)
      */
     public static String fileSimpleName(String fileName) {
         if (StringUtils.isBlank(fileName)) {

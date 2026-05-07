@@ -32,13 +32,13 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
- * 对应于ProtocolRegistration
+ * Corresponds to ProtocolRegistration
  *
  * @author godotg
  */
 public abstract class EnhanceUtils {
 
-    // 临时变量，是一个基本类型序列化器对应的增强类型序列化器
+    // Temporary variable: maps primitive type serializers to their enhanced counterparts
     private static Map<ISerializer, IEnhanceSerializer> enhanceSerializerMap = new HashMap<>();
 
     public static String byteBufUtils = ByteBufUtils.class.getSimpleName();
@@ -52,7 +52,7 @@ public abstract class EnhanceUtils {
 
         var classPool = ClassPool.getDefault();
 
-        // 导入需要的包
+        // Import required packages
         classPool.importPackage(ByteBufUtils.class.getName());
         classPool.importPackage(CollectionUtils.class.getName());
         classPool.importPackage(ArrayUtils.class.getName());
@@ -61,7 +61,7 @@ public abstract class EnhanceUtils {
         classPool.importPackage(Map.class.getName());
         classPool.importPackage(Set.class.getName());
 
-        // 增加类的路径
+        // Add class path
         for (var clazz : classArray) {
             if (classPool.find(clazz.getName()) == null) {
                 ClassClassPath classPath = new ClassClassPath(clazz);
@@ -103,25 +103,25 @@ public abstract class EnhanceUtils {
     }
 
     /**
-     * @param registration 需要增强的类
-     * @return 返回类的名称格式：EnhanceUtilsProtocolRegistration1
+     * @param registration the class to enhance
+     * @return class name in format: EnhanceUtilsProtocolRegistration1
      */
     public static IProtocolRegistration createProtocolRegistration(ProtocolRegistration registration) throws NotFoundException, CannotCompileException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         var classPool = ClassPool.getDefault();
         var protocolId = registration.getId();
         var packetFields = registration.getFieldRegistrations();
 
-        // 定义类名称
+        // Define class name
         CtClass enhanceClazz = classPool.makeClass(ProtocolRegistration.class.getName() + protocolId);
         enhanceClazz.addInterface(classPool.get(IProtocolRegistration.class.getName()));
 
-        // 定义类中的一个成员
+        // Define a member field
         CtField constructorFiled = new CtField(classPool.get(Constructor.class.getName()), "constructor", enhanceClazz);
         constructorFiled.setModifiers(Modifier.PRIVATE);
         enhanceClazz.addField(constructorFiled);
 
 
-        // 定义类所包含的所有子协议成员
+        // Define all sub-protocol member fields
         var allSubProtocolIds = ProtocolAnalysis.getAllSubProtocolIds(protocolId)
                 .stream()
                 .sorted((a, b) -> Short.compare(a, b))
@@ -133,13 +133,13 @@ public abstract class EnhanceUtils {
             enhanceClazz.addField(protocolRegistrationField);
         }
 
-        // 定义类的构造器
+        // Define the constructor
         CtConstructor constructor = new CtConstructor(classPool.get(new String[]{Constructor.class.getName()}), enhanceClazz);
         constructor.setBody("{this.constructor=$1;}");
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
-        // 定义类实现的接口方法
+        // Define the interface methods implemented by the class
         CtMethod protocolIdMethod = new CtMethod(classPool.get(short.class.getName()), "protocolId", null, enhanceClazz);
         protocolIdMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         protocolIdMethod.setBody("{return " + registration.protocolId() + ";}");
@@ -165,7 +165,7 @@ public abstract class EnhanceUtils {
         readMethod.setBody(readMethodBody(registration));
         enhanceClazz.addMethod(readMethod);
 
-        // 释放缓存
+        // Release cache
         enhanceClazz.detach();
 
         Class<?> resultClazz = enhanceClazz.toClass(IProtocolRegistration.class);
@@ -234,7 +234,7 @@ public abstract class EnhanceUtils {
                 var field = fields[i];
                 var fieldRegistration = fieldRegistrations[i];
                 int index = originFields.indexOf(field);
-                // protocol backwards compatibility，协议向后兼容
+                // Protocol backwards compatibility
                 if (field.isAnnotationPresent(Compatible.class)) {
                     var defaultReadObject = enhanceSerializer(fieldRegistration.serializer()).defaultValue(builder, field, fieldRegistration);
                     builder.append(StringUtils.format("if ({}.compatibleRead($1, beforeReadIndex, length)) {", byteBufUtils));
@@ -256,7 +256,7 @@ public abstract class EnhanceUtils {
             for (var i = 0; i < fields.length; i++) {
                 var field = fields[i];
                 var fieldRegistration = fieldRegistrations[i];
-                // protocol backwards compatibility，协议向后兼容
+                // Protocol backwards compatibility
                 if (field.isAnnotationPresent(Compatible.class)) {
                     builder.append(StringUtils.format("if ({}.compatibleRead($1, beforeReadIndex, length)) {", byteBufUtils));
                     var compatibleReadObject = enhanceSerializer(fieldRegistration.serializer()).readObject(builder, field, fieldRegistration);

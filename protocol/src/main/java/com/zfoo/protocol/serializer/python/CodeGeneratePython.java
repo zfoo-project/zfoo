@@ -243,13 +243,13 @@ public class CodeGeneratePython implements ICodeGenerate {
         for (var field : sequencedFields) {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Python);
             for (var fieldNote : fieldNotes) {
                 pyBuilder.append(fieldNote).append(LS);
             }
             var fieldDefaultValue = pySerializer(fieldRegistration.serializer()).fieldDefaultValue(field, fieldRegistration);
-            // 生成类型的注释
+            // Generate type comment
             pyBuilder.append(StringUtils.format("{} = {}", fieldName, fieldDefaultValue));
             pyBuilder.append(StringUtils.format("  # {}", CodeGenerateCsharp.toCsClassName(field.getGenericType().getTypeName())));
             pyBuilder.append(LS);

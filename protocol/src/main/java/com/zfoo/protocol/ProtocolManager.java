@@ -34,16 +34,17 @@ public class ProtocolManager {
     public static final byte MAX_MODULE_NUM = Byte.MAX_VALUE;
 
     /**
-     * The protocol corresponding to the protocolId.(协议号protocolId对应的协议，数组下标是协议号protocolId)
+     * The protocol corresponding to the protocolId. Array index equals the protocolId.
      */
     public static final IProtocolRegistration[] protocols = new IProtocolRegistration[MAX_PROTOCOL_NUM];
     /**
-     * The modules of the protocol.(协议的模块)
+     * The modules of the protocol.
      */
     public static final ProtocolModule[] modules = new ProtocolModule[MAX_MODULE_NUM];
 
     /**
-     * key:packet class，value:protocolId.(如果所有协议Class返回的hashcode都不相同（大概率事件），则使用高性能的HashMapIntShort)
+     * key: packet class, value: protocolId.
+     * If all protocol Class hashCodes are unique (which is highly likely), use the high-performance HashMapIntShort.
      */
     public static Map<Class<?>, Short> protocolIdMap = new HashMap<>();
     public static HashMapIntShort protocolIdPrimitiveMap = new HashMapIntShort();
@@ -101,7 +102,7 @@ public class ProtocolManager {
      */
     public static ProtocolModule moduleByModuleId(byte moduleId) {
         var module = modules[moduleId];
-        AssertionUtils.notNull(module, "[moduleId:{}]不存在", moduleId);
+        AssertionUtils.notNull(module, "[moduleId:{}] does not exist", moduleId);
         return module;
     }
 
@@ -132,7 +133,7 @@ public class ProtocolManager {
      * Register protocol
      *
      * @param protocolClassSet  A list of protocols that need to be initialized
-     * @param generateOperation Protocol configuration(需要生成哪些语言的协议文件 是否折叠等信息)
+     * @param generateOperation Protocol configuration (which languages to generate and whether to fold, etc.)
      */
     public static void initProtocol(Set<Class<?>> protocolClassSet, GenerateOperation generateOperation) {
         ProtocolAnalysis.analyze(protocolClassSet, generateOperation);
@@ -143,8 +144,7 @@ public class ProtocolManager {
     }
 
     /**
-     * EN:Register protocol and automatically generates a protocol ID if the subprotocol does not specify a protocol ID
-     * CN:子协议会自动注册协议号protocolId，如果子协议没有指定protocolId则自动生成protocolId
+     * Register protocol and automatically generate a protocol ID for sub-protocols that do not specify one.
      */
     public static void initProtocolAuto(List<Class<?>> protocolClassList, GenerateOperation generateOperation) {
         ProtocolAnalysis.analyzeAuto(protocolClassList, generateOperation);

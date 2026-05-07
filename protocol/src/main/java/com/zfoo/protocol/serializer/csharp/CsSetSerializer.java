@@ -86,7 +86,7 @@ public class CsSetSerializer implements ICsSerializer {
         var size = "size" + GenerateProtocolFile.localVariableId++;
         builder.append(StringUtils.format("int {} = buffer.ReadInt();", size)).append(LS);
         GenerateProtocolFile.addTab(builder, deep);
-        // unity里不支持HashSet的初始化大小
+        // Unity does not support specifying initial HashSet capacity
 //        builder.append("var " + result + " = new " + typeName + "(" + size + ");" + LS);
         builder.append(StringUtils.format("var {} = new {}();", result, typeName)).append(LS);
 

@@ -238,7 +238,7 @@ public class CodeGeneratePhp implements ICodeGenerate {
         for (var field : sequencedFields) {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.Php);
             for (var fieldNote : fieldNotes) {
                 phpBuilder.append(fieldNote).append(LS);
@@ -325,48 +325,48 @@ public class CodeGeneratePhp implements ICodeGenerate {
             default:
         }
 
-        // 将boolean转为bool
+        // Convert boolean to bool
         typeName = typeName.replaceAll("[B|b]oolean\\[", "boolean");
         typeName = typeName.replace("<Boolean", "<boolean");
         typeName = typeName.replace("Boolean>", "boolean>");
 
-        // 将Byte转为byte
+        // Convert Byte to byte
         typeName = typeName.replace("Byte[", "number");
         typeName = typeName.replace("Byte>", "number>");
         typeName = typeName.replace("<Byte", "<number");
 
-        // 将Short转为short
+        // Convert Short to short
         typeName = typeName.replace("Short[", "number");
         typeName = typeName.replace("Short>", "number>");
         typeName = typeName.replace("<Short", "<number");
 
-        // 将Integer转为int
+        // Convert Integer to int
         typeName = typeName.replace("Integer[", "number");
         typeName = typeName.replace("Integer>", "number>");
         typeName = typeName.replace("<Integer", "<number");
 
 
-        // 将Long转为long
+        // Convert Long to long
         typeName = typeName.replace("Long[", "number");
         typeName = typeName.replace("Long>", "number>");
         typeName = typeName.replace("<Long", "<number");
 
-        // 将Float转为float
+        // Convert Float to float
         typeName = typeName.replace("Float[", "number");
         typeName = typeName.replace("Float>", "number>");
         typeName = typeName.replace("<Float", "<number");
 
-        // 将Double转为double
+        // Convert Double to double
         typeName = typeName.replace("Double[", "number");
         typeName = typeName.replace("Double>", "number>");
         typeName = typeName.replace("<Double", "<number");
 
-        // 将Character转为Char
+        // Convert Character to Char
         typeName = typeName.replace("Character[", "string");
         typeName = typeName.replace("Character>", "string>");
         typeName = typeName.replace("<Character", "<string");
 
-        // 将String转为string
+        // Convert String to string
         typeName = typeName.replace("String[", "string");
         typeName = typeName.replace("String>", "string>");
         typeName = typeName.replace("<String", "<string");

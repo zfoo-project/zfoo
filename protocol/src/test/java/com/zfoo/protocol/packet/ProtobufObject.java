@@ -9165,7 +9165,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持单个byte，用int代替，增加了一点性能开销
+     * protobuf does not support single byte; use int instead (slight overhead)
      * </pre>
      *
      * <code>int32 a = 1;</code>
@@ -9189,7 +9189,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持单个short，用int代替，增加了一点性能开销
+     * protobuf does not support single short; use int instead (slight overhead)
      * </pre>
      *
      * <code>int32 b = 5;</code>
@@ -9203,7 +9203,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持单个short，用bytes代替，减少了一点性能开销
+     * protobuf does not support single short; use bytes instead (slight benefit)
      * </pre>
      *
      * <code>bytes bbb = 7;</code>
@@ -9397,7 +9397,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持char，用string代替，增加了一点性能开销
+     * protobuf does not support char; use string instead (slight overhead)
      * </pre>
      *
      * <code>string h = 29;</code>
@@ -9405,7 +9405,7 @@ public final class ProtobufObject {
     java.lang.String getH();
     /**
      * <pre>
-     * protobuf不支持char，用string代替，增加了一点性能开销
+     * protobuf does not support char; use string instead (slight overhead)
      * </pre>
      *
      * <code>string h = 29;</code>
@@ -9542,7 +9542,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+     * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
      * </pre>
      *
      * <code>repeated .ListListInteger ll = 38;</code>
@@ -9551,7 +9551,7 @@ public final class ProtobufObject {
         getLlList();
     /**
      * <pre>
-     * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+     * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
      * </pre>
      *
      * <code>repeated .ListListInteger ll = 38;</code>
@@ -9559,7 +9559,7 @@ public final class ProtobufObject {
     com.zfoo.protocol.packet.ProtobufObject.ListListInteger getLl(int index);
     /**
      * <pre>
-     * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+     * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
      * </pre>
      *
      * <code>repeated .ListListInteger ll = 38;</code>
@@ -9567,7 +9567,7 @@ public final class ProtobufObject {
     int getLlCount();
     /**
      * <pre>
-     * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+     * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
      * </pre>
      *
      * <code>repeated .ListListInteger ll = 38;</code>
@@ -9576,7 +9576,7 @@ public final class ProtobufObject {
         getLlOrBuilderList();
     /**
      * <pre>
-     * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+     * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
      * </pre>
      *
      * <code>repeated .ListListInteger ll = 38;</code>
@@ -9721,7 +9721,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapObjectA mmm = 53;</code>
@@ -9730,7 +9730,7 @@ public final class ProtobufObject {
         getMmmList();
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapObjectA mmm = 53;</code>
@@ -9738,7 +9738,7 @@ public final class ProtobufObject {
     com.zfoo.protocol.packet.ProtobufObject.MapObjectA getMmm(int index);
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapObjectA mmm = 53;</code>
@@ -9746,7 +9746,7 @@ public final class ProtobufObject {
     int getMmmCount();
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapObjectA mmm = 53;</code>
@@ -9755,7 +9755,7 @@ public final class ProtobufObject {
         getMmmOrBuilderList();
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapObjectA mmm = 53;</code>
@@ -9765,7 +9765,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -9774,7 +9774,7 @@ public final class ProtobufObject {
         getMmmmList();
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -9782,7 +9782,7 @@ public final class ProtobufObject {
     com.zfoo.protocol.packet.ProtobufObject.MapListListObjectA getMmmm(int index);
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -9790,7 +9790,7 @@ public final class ProtobufObject {
     int getMmmmCount();
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -9799,7 +9799,7 @@ public final class ProtobufObject {
         getMmmmOrBuilderList();
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -9809,7 +9809,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+     * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -9818,7 +9818,7 @@ public final class ProtobufObject {
         getMmmmmList();
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+     * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -9826,7 +9826,7 @@ public final class ProtobufObject {
     com.zfoo.protocol.packet.ProtobufObject.MapListMapInteger getMmmmm(int index);
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+     * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -9834,7 +9834,7 @@ public final class ProtobufObject {
     int getMmmmmCount();
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+     * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -9843,7 +9843,7 @@ public final class ProtobufObject {
         getMmmmmOrBuilderList();
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+     * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -9853,7 +9853,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated int32 s = 61;</code>
@@ -9861,7 +9861,7 @@ public final class ProtobufObject {
     java.util.List<java.lang.Integer> getSList();
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated int32 s = 61;</code>
@@ -9869,7 +9869,7 @@ public final class ProtobufObject {
     int getSCount();
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated int32 s = 61;</code>
@@ -9878,7 +9878,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListListInteger ss = 62;</code>
@@ -9887,7 +9887,7 @@ public final class ProtobufObject {
         getSsList();
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListListInteger ss = 62;</code>
@@ -9895,7 +9895,7 @@ public final class ProtobufObject {
     com.zfoo.protocol.packet.ProtobufObject.ListListInteger getSs(int index);
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListListInteger ss = 62;</code>
@@ -9903,7 +9903,7 @@ public final class ProtobufObject {
     int getSsCount();
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListListInteger ss = 62;</code>
@@ -9912,7 +9912,7 @@ public final class ProtobufObject {
         getSsOrBuilderList();
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListListInteger ss = 62;</code>
@@ -9922,7 +9922,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListObjectA sss = 63;</code>
@@ -9931,7 +9931,7 @@ public final class ProtobufObject {
         getSssList();
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListObjectA sss = 63;</code>
@@ -9939,7 +9939,7 @@ public final class ProtobufObject {
     com.zfoo.protocol.packet.ProtobufObject.ListObjectA getSss(int index);
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListObjectA sss = 63;</code>
@@ -9947,7 +9947,7 @@ public final class ProtobufObject {
     int getSssCount();
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListObjectA sss = 63;</code>
@@ -9956,7 +9956,7 @@ public final class ProtobufObject {
         getSssOrBuilderList();
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListObjectA sss = 63;</code>
@@ -9966,7 +9966,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated string ssss = 64;</code>
@@ -9975,7 +9975,7 @@ public final class ProtobufObject {
         getSsssList();
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated string ssss = 64;</code>
@@ -9983,7 +9983,7 @@ public final class ProtobufObject {
     int getSsssCount();
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated string ssss = 64;</code>
@@ -9991,7 +9991,7 @@ public final class ProtobufObject {
     java.lang.String getSsss(int index);
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated string ssss = 64;</code>
@@ -10001,7 +10001,7 @@ public final class ProtobufObject {
 
     /**
      * <pre>
-     * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+     * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -10010,7 +10010,7 @@ public final class ProtobufObject {
         getSssssList();
     /**
      * <pre>
-     * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+     * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -10018,7 +10018,7 @@ public final class ProtobufObject {
     com.zfoo.protocol.packet.ProtobufObject.MapIntegerString getSssss(int index);
     /**
      * <pre>
-     * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+     * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -10026,7 +10026,7 @@ public final class ProtobufObject {
     int getSssssCount();
     /**
      * <pre>
-     * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+     * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -10035,7 +10035,7 @@ public final class ProtobufObject {
         getSssssOrBuilderList();
     /**
      * <pre>
-     * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+     * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -10788,7 +10788,7 @@ public final class ProtobufObject {
     private int a_;
     /**
      * <pre>
-     * protobuf不支持单个byte，用int代替，增加了一点性能开销
+     * protobuf does not support single byte; use int instead (slight overhead)
      * </pre>
      *
      * <code>int32 a = 1;</code>
@@ -10828,7 +10828,7 @@ public final class ProtobufObject {
     private int b_;
     /**
      * <pre>
-     * protobuf不支持单个short，用int代替，增加了一点性能开销
+     * protobuf does not support single short; use int instead (slight overhead)
      * </pre>
      *
      * <code>int32 b = 5;</code>
@@ -10850,7 +10850,7 @@ public final class ProtobufObject {
     private com.google.protobuf.ByteString bbb_;
     /**
      * <pre>
-     * protobuf不支持单个short，用bytes代替，减少了一点性能开销
+     * protobuf does not support single short; use bytes instead (slight benefit)
      * </pre>
      *
      * <code>bytes bbb = 7;</code>
@@ -11192,7 +11192,7 @@ public final class ProtobufObject {
     private volatile java.lang.Object h_;
     /**
      * <pre>
-     * protobuf不支持char，用string代替，增加了一点性能开销
+     * protobuf does not support char; use string instead (slight overhead)
      * </pre>
      *
      * <code>string h = 29;</code>
@@ -11211,7 +11211,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持char，用string代替，增加了一点性能开销
+     * protobuf does not support char; use string instead (slight overhead)
      * </pre>
      *
      * <code>string h = 29;</code>
@@ -11468,7 +11468,7 @@ public final class ProtobufObject {
     private java.util.List<com.zfoo.protocol.packet.ProtobufObject.ListListInteger> ll_;
     /**
      * <pre>
-     * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+     * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
      * </pre>
      *
      * <code>repeated .ListListInteger ll = 38;</code>
@@ -11478,7 +11478,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+     * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
      * </pre>
      *
      * <code>repeated .ListListInteger ll = 38;</code>
@@ -11489,7 +11489,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+     * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
      * </pre>
      *
      * <code>repeated .ListListInteger ll = 38;</code>
@@ -11499,7 +11499,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+     * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
      * </pre>
      *
      * <code>repeated .ListListInteger ll = 38;</code>
@@ -11509,7 +11509,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+     * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
      * </pre>
      *
      * <code>repeated .ListListInteger ll = 38;</code>
@@ -11774,7 +11774,7 @@ public final class ProtobufObject {
     private java.util.List<com.zfoo.protocol.packet.ProtobufObject.MapObjectA> mmm_;
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapObjectA mmm = 53;</code>
@@ -11784,7 +11784,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapObjectA mmm = 53;</code>
@@ -11795,7 +11795,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapObjectA mmm = 53;</code>
@@ -11805,7 +11805,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapObjectA mmm = 53;</code>
@@ -11815,7 +11815,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapObjectA mmm = 53;</code>
@@ -11829,7 +11829,7 @@ public final class ProtobufObject {
     private java.util.List<com.zfoo.protocol.packet.ProtobufObject.MapListListObjectA> mmmm_;
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -11839,7 +11839,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -11850,7 +11850,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -11860,7 +11860,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -11870,7 +11870,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+     * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -11884,7 +11884,7 @@ public final class ProtobufObject {
     private java.util.List<com.zfoo.protocol.packet.ProtobufObject.MapListMapInteger> mmmmm_;
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+     * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -11894,7 +11894,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+     * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -11905,7 +11905,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+     * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -11915,7 +11915,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+     * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -11925,7 +11925,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+     * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -11939,7 +11939,7 @@ public final class ProtobufObject {
     private com.google.protobuf.Internal.IntList s_;
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated int32 s = 61;</code>
@@ -11950,7 +11950,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated int32 s = 61;</code>
@@ -11960,7 +11960,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated int32 s = 61;</code>
@@ -11974,7 +11974,7 @@ public final class ProtobufObject {
     private java.util.List<com.zfoo.protocol.packet.ProtobufObject.ListListInteger> ss_;
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListListInteger ss = 62;</code>
@@ -11984,7 +11984,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListListInteger ss = 62;</code>
@@ -11995,7 +11995,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListListInteger ss = 62;</code>
@@ -12005,7 +12005,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListListInteger ss = 62;</code>
@@ -12015,7 +12015,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListListInteger ss = 62;</code>
@@ -12029,7 +12029,7 @@ public final class ProtobufObject {
     private java.util.List<com.zfoo.protocol.packet.ProtobufObject.ListObjectA> sss_;
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListObjectA sss = 63;</code>
@@ -12039,7 +12039,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListObjectA sss = 63;</code>
@@ -12050,7 +12050,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListObjectA sss = 63;</code>
@@ -12060,7 +12060,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListObjectA sss = 63;</code>
@@ -12070,7 +12070,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+     * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .ListObjectA sss = 63;</code>
@@ -12084,7 +12084,7 @@ public final class ProtobufObject {
     private com.google.protobuf.LazyStringList ssss_;
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated string ssss = 64;</code>
@@ -12095,7 +12095,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated string ssss = 64;</code>
@@ -12105,7 +12105,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated string ssss = 64;</code>
@@ -12115,7 +12115,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持set，用数组代替，减少了很多性能开销
+     * protobuf does not support set; use arrays instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated string ssss = 64;</code>
@@ -12129,7 +12129,7 @@ public final class ProtobufObject {
     private java.util.List<com.zfoo.protocol.packet.ProtobufObject.MapIntegerString> sssss_;
     /**
      * <pre>
-     * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+     * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -12139,7 +12139,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+     * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -12150,7 +12150,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+     * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -12160,7 +12160,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+     * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -12170,7 +12170,7 @@ public final class ProtobufObject {
     }
     /**
      * <pre>
-     * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+     * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
      * </pre>
      *
      * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -14180,7 +14180,7 @@ public final class ProtobufObject {
       private int a_ ;
       /**
        * <pre>
-       * protobuf不支持单个byte，用int代替，增加了一点性能开销
+       * protobuf does not support single byte; use int instead (slight overhead)
        * </pre>
        *
        * <code>int32 a = 1;</code>
@@ -14190,7 +14190,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持单个byte，用int代替，增加了一点性能开销
+       * protobuf does not support single byte; use int instead (slight overhead)
        * </pre>
        *
        * <code>int32 a = 1;</code>
@@ -14203,7 +14203,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持单个byte，用int代替，增加了一点性能开销
+       * protobuf does not support single byte; use int instead (slight overhead)
        * </pre>
        *
        * <code>int32 a = 1;</code>
@@ -14302,7 +14302,7 @@ public final class ProtobufObject {
       private int b_ ;
       /**
        * <pre>
-       * protobuf不支持单个short，用int代替，增加了一点性能开销
+       * protobuf does not support single short; use int instead (slight overhead)
        * </pre>
        *
        * <code>int32 b = 5;</code>
@@ -14312,7 +14312,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持单个short，用int代替，增加了一点性能开销
+       * protobuf does not support single short; use int instead (slight overhead)
        * </pre>
        *
        * <code>int32 b = 5;</code>
@@ -14325,7 +14325,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持单个short，用int代替，增加了一点性能开销
+       * protobuf does not support single short; use int instead (slight overhead)
        * </pre>
        *
        * <code>int32 b = 5;</code>
@@ -14366,7 +14366,7 @@ public final class ProtobufObject {
       private com.google.protobuf.ByteString bbb_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <pre>
-       * protobuf不支持单个short，用bytes代替，减少了一点性能开销
+       * protobuf does not support single short; use bytes instead (slight benefit)
        * </pre>
        *
        * <code>bytes bbb = 7;</code>
@@ -14376,7 +14376,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持单个short，用bytes代替，减少了一点性能开销
+       * protobuf does not support single short; use bytes instead (slight benefit)
        * </pre>
        *
        * <code>bytes bbb = 7;</code>
@@ -14392,7 +14392,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持单个short，用bytes代替，减少了一点性能开销
+       * protobuf does not support single short; use bytes instead (slight benefit)
        * </pre>
        *
        * <code>bytes bbb = 7;</code>
@@ -15366,7 +15366,7 @@ public final class ProtobufObject {
       private java.lang.Object h_ = "";
       /**
        * <pre>
-       * protobuf不支持char，用string代替，增加了一点性能开销
+       * protobuf does not support char; use string instead (slight overhead)
        * </pre>
        *
        * <code>string h = 29;</code>
@@ -15385,7 +15385,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持char，用string代替，增加了一点性能开销
+       * protobuf does not support char; use string instead (slight overhead)
        * </pre>
        *
        * <code>string h = 29;</code>
@@ -15405,7 +15405,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持char，用string代替，增加了一点性能开销
+       * protobuf does not support char; use string instead (slight overhead)
        * </pre>
        *
        * <code>string h = 29;</code>
@@ -15422,7 +15422,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持char，用string代替，增加了一点性能开销
+       * protobuf does not support char; use string instead (slight overhead)
        * </pre>
        *
        * <code>string h = 29;</code>
@@ -15435,7 +15435,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持char，用string代替，增加了一点性能开销
+       * protobuf does not support char; use string instead (slight overhead)
        * </pre>
        *
        * <code>string h = 29;</code>
@@ -16310,7 +16310,7 @@ public final class ProtobufObject {
 
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16324,7 +16324,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16338,7 +16338,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16352,7 +16352,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16373,7 +16373,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16391,7 +16391,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16411,7 +16411,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16432,7 +16432,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16450,7 +16450,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16468,7 +16468,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16487,7 +16487,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16504,7 +16504,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16521,7 +16521,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16532,7 +16532,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16546,7 +16546,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16561,7 +16561,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16572,7 +16572,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -16584,7 +16584,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+       * protobuf does not support nested repeated; use a message wrapper instead (slight performance overhead)
        * </pre>
        *
        * <code>repeated .ListListInteger ll = 38;</code>
@@ -17442,7 +17442,7 @@ public final class ProtobufObject {
 
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17456,7 +17456,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17470,7 +17470,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17484,7 +17484,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17505,7 +17505,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17523,7 +17523,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17543,7 +17543,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17564,7 +17564,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17582,7 +17582,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17600,7 +17600,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17619,7 +17619,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17636,7 +17636,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17653,7 +17653,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17664,7 +17664,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17678,7 +17678,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17693,7 +17693,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17704,7 +17704,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17716,7 +17716,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapObjectA mmm = 53;</code>
@@ -17754,7 +17754,7 @@ public final class ProtobufObject {
 
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17768,7 +17768,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17782,7 +17782,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17796,7 +17796,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17817,7 +17817,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17835,7 +17835,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17855,7 +17855,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17876,7 +17876,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17894,7 +17894,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17912,7 +17912,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17931,7 +17931,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17948,7 +17948,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17965,7 +17965,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17976,7 +17976,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -17990,7 +17990,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -18005,7 +18005,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -18016,7 +18016,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -18028,7 +18028,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
+       * protobuf does not support object keys in maps; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListListObjectA mmmm = 54;</code>
@@ -18066,7 +18066,7 @@ public final class ProtobufObject {
 
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18080,7 +18080,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18094,7 +18094,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18108,7 +18108,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18129,7 +18129,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18147,7 +18147,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18167,7 +18167,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18188,7 +18188,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18206,7 +18206,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18224,7 +18224,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18243,7 +18243,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18260,7 +18260,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18277,7 +18277,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18288,7 +18288,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18302,7 +18302,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18317,7 +18317,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18328,7 +18328,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18340,7 +18340,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+       * protobuf does not support object map keys or sets; use arrays/lists instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapListMapInteger mmmmm = 55;</code>
@@ -18373,7 +18373,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated int32 s = 61;</code>
@@ -18385,7 +18385,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated int32 s = 61;</code>
@@ -18395,7 +18395,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated int32 s = 61;</code>
@@ -18405,7 +18405,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated int32 s = 61;</code>
@@ -18419,7 +18419,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated int32 s = 61;</code>
@@ -18432,7 +18432,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated int32 s = 61;</code>
@@ -18447,7 +18447,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated int32 s = 61;</code>
@@ -18473,7 +18473,7 @@ public final class ProtobufObject {
 
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18487,7 +18487,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18501,7 +18501,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18515,7 +18515,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18536,7 +18536,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18554,7 +18554,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18574,7 +18574,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18595,7 +18595,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18613,7 +18613,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18631,7 +18631,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18650,7 +18650,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18667,7 +18667,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18684,7 +18684,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18695,7 +18695,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18709,7 +18709,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18724,7 +18724,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18735,7 +18735,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18747,7 +18747,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListListInteger ss = 62;</code>
@@ -18785,7 +18785,7 @@ public final class ProtobufObject {
 
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18799,7 +18799,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18813,7 +18813,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18827,7 +18827,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18848,7 +18848,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18866,7 +18866,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18886,7 +18886,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18907,7 +18907,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18925,7 +18925,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18943,7 +18943,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18962,7 +18962,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18979,7 +18979,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -18996,7 +18996,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -19007,7 +19007,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -19021,7 +19021,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -19036,7 +19036,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -19047,7 +19047,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -19059,7 +19059,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
+       * protobuf does not support nested set/list; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .ListObjectA sss = 63;</code>
@@ -19092,7 +19092,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated string ssss = 64;</code>
@@ -19103,7 +19103,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated string ssss = 64;</code>
@@ -19113,7 +19113,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated string ssss = 64;</code>
@@ -19123,7 +19123,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated string ssss = 64;</code>
@@ -19134,7 +19134,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated string ssss = 64;</code>
@@ -19151,7 +19151,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated string ssss = 64;</code>
@@ -19168,7 +19168,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated string ssss = 64;</code>
@@ -19183,7 +19183,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated string ssss = 64;</code>
@@ -19196,7 +19196,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set，用数组代替，减少了很多性能开销
+       * protobuf does not support set; use arrays instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated string ssss = 64;</code>
@@ -19227,7 +19227,7 @@ public final class ProtobufObject {
 
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19241,7 +19241,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19255,7 +19255,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19269,7 +19269,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19290,7 +19290,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19308,7 +19308,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19328,7 +19328,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19349,7 +19349,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19367,7 +19367,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19385,7 +19385,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19404,7 +19404,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19421,7 +19421,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19438,7 +19438,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19449,7 +19449,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19463,7 +19463,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19478,7 +19478,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19489,7 +19489,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>
@@ -19501,7 +19501,7 @@ public final class ProtobufObject {
       }
       /**
        * <pre>
-       * protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+       * protobuf does not support set or nested maps; use an object wrapper instead (significant performance benefit)
        * </pre>
        *
        * <code>repeated .MapIntegerString sssss = 65;</code>

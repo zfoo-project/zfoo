@@ -26,25 +26,25 @@ import java.util.*;
 
 /**
  * EN: When generating the protocol, the document comments and field comments of the protocol will use this class
- * CN: 生成协议的时候，协议的文档注释和字段注释会使用这个类
+ * During protocol generation, this class handles documentation and field comments
  *
  * @author godotg
  */
 public abstract class GenerateProtocolNote {
 
-    // 临时变量，启动完成就会销毁，协议的文档，外层map的key为协议类；pair的key为总的注释，value为属性字段的注释，value表示的map的key为属性名称
-    // 比如在Test中的ComplexObject生成的pari是如下格式
+    // Temporary variable destroyed after startup; outer map key=protocol class; pair key=class comment, pair value=field comment map (key=field name)
+    // For example, the pair generated for ComplexObject in the test is in the following format:
     /**
      * key is docTitle note:
-     * // 复杂的对象
-     * // 包括了各种复杂的结构，数组，List，Set，Map
+     * // Complex object
+     * // Includes various complex structures: arrays, List, Set, Map
      * //
      * // @author godotg
      * // @version 1.0
      * <p>
      * value is field note:
-     * // byte的包装类型
-     * // 优先使用基础类型，包装类型会有装箱拆箱
+     * // Byte wrapper type
+     * // Prefer primitives; wrapper types incur boxing/unboxing overhead
      */
     private static Map<Short, Pair<String, Map<String, String>>> protocolNoteMap = new HashMap<>();
 

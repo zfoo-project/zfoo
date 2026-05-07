@@ -96,7 +96,7 @@ public abstract class CollectionUtils {
 
     /**
      * EN: The safety limit of the array initialization length prevents deserialization exceptions from causing a sudden increase in memory
-     * CN: 数组初始化长度的安全上限限制，防止反序列化异常导致内存突然升高
+     * Safe upper limit for array initialization length; prevents memory spikes from malformed deserialization
      */
     public static final long MAX_BYTE_LENGTH_ARRAY = 64 * IOUtils.BYTES_PER_MB;
     public static final long MAX_LENGTH_SHORT_ARRAY = IOUtils.BYTES_PER_MB / 2;
@@ -149,7 +149,7 @@ public abstract class CollectionUtils {
      * EN: Calculate the appropriate size for HashMap initialization. For safety, a maximum limit must be given
      * to the initialized collection to prevent deserialization of an illegal package from causing a sudden increase in memory.
      * <p>
-     * CN: 计算HashMap初始化合适的大小，为了安全必须给初始化的集合一个最大上限，防止反序列化一个不合法的包导致内存突然升高
+     * Compute an appropriate initial HashMap size; a maximum is required to prevent memory spikes from deserializing invalid packets
      */
     public static int comfortableCapacity(int capacity) {
         if (capacity >= MAX_SIZE_MAP) {
@@ -167,7 +167,7 @@ public abstract class CollectionUtils {
     }
 
 
-    // ----------------------------------归并排序----------------------------------
+    // ----------------------------------Merge Sort----------------------------------
 
     /**
      * Merges two sorted Collections, a and b, into a single, sorted List
@@ -286,7 +286,7 @@ public abstract class CollectionUtils {
 
 
     /**
-     * 获取集合的最后几个元素
+     * Get the last N elements of a collection
      */
     public static <T> List<T> subListLast(List<T> list, int num) {
         if (isEmpty(list)) {

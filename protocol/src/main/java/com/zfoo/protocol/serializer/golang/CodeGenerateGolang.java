@@ -200,7 +200,7 @@ public class CodeGenerateGolang implements ICodeGenerate {
             var fieldType = goSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
 
             var propertyFullName = StringUtils.format("{} {}", fieldName, fieldType);
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, field.getName(), CodeLanguage.Golang);
             for (var fieldNote : fieldNotes) {
                 goBuilder.append(fieldNote).append(LS);

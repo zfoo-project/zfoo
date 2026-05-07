@@ -15,7 +15,7 @@ package com.zfoo.protocol.serializer.protobuf;
 import com.zfoo.protocol.collection.ArrayUtils;
 
 /**
- * java的数据类型和protocol buffer的数据类型的对应关系以及默认值
+ * Mapping between Java data types and protobuf data types with default values
  */
 public enum PbTypeJava {
     INT("int", "Integer", 0),

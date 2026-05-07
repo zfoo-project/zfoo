@@ -17,45 +17,44 @@ import com.zfoo.protocol.serializer.protobuf.PbMessage;
 import com.zfoo.protocol.serializer.protobuf.PbOption;
 import com.zfoo.protocol.serializer.protobuf.Syntax;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * proto文件的结构定义
+ * Defines the structure of a proto file
  */
 public class Proto {
 
     /**
-     * 协议的起始Id
+     * Starting protocol ID
      */
     private short startProtocolId;
     /**
-     * Proto描述文件的名称
+     * Proto file name
      */
     private String name;
     /**
-     * Proto的可选信息
+     * Optional proto settings
      */
     private List<PbOption> options = new ArrayList<>();
     /**
-     * 文档版本没有指定默认为proto3
+     * Defaults to proto3 if no syntax version is specified
      */
     private Syntax syntax = Syntax.PROTO_3;
     /**
-     * proto文件的包名
+     * Package name of the proto file
      */
     private String protoPackage;
     /**
-     * 定义的消息列表
+     * List of defined messages
      */
     private List<PbMessage> pbMessages = new ArrayList<>();
     /**
-     * 文档导入的文件的路径列表
+     * List of imported file paths
      */
     private List<String> imports = new ArrayList<>();
     /**
-     * proto文件的单行注释列表
+     * List of single-line comments in the proto file
      */
     private List<String> comments = new ArrayList<>();
 

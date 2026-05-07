@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * 测试各种不同特征的数据类型的序列化和反序列化时间
- * 细致比较性能
+ * Tests serialization/deserialization time for various field types
+ * Detailed performance comparison
  */
 @Ignore
 public class FieldSpeedTesting {
@@ -96,7 +96,7 @@ public class FieldSpeedTesting {
         protobufSerializationSize = length;
         var singleLength = length / benchmark;
         var l = 0;
-        //在循环中去掉创建CodedInputStream的代码，保证比较耗时公平性
+        //Remove CodedInputStream creation from loop to ensure fair timing
         var codeInputs = new CodedInputStream[benchmark];
         for (int i = 0; i < benchmark; i++) {
             codeInputs[i] = CodedInputStream.newInstance(protobufBuff, l + singleLength, singleLength);
@@ -106,12 +106,12 @@ public class FieldSpeedTesting {
             var mess = FieldProtobufObject.IntObject.parseFrom(codeInputs[i]);
         }
         protobufDeserializationTime = System.currentTimeMillis() - startTime;
-        System.out.println(StringUtils.format("序列化   [zfoo]     [int类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
-        System.out.println(StringUtils.format("序列化   [kryo]     [int类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
-        System.out.println(StringUtils.format("序列化   [protobuf] [int类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
-        System.out.println(StringUtils.format("反序列化  [zfoo]     [int类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [kryo]     [int类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [protobuf] [int类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
+        System.out.println(StringUtils.format("Serialize [zfoo]     [int type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
+        System.out.println(StringUtils.format("Serialize [kryo]     [int type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
+        System.out.println(StringUtils.format("Serialize [protobuf] [int type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
+        System.out.println(StringUtils.format("Deserialize [zfoo]     [int type] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [kryo]     [int type] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [protobuf] [int type] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
     }
 
     @Test
@@ -156,7 +156,7 @@ public class FieldSpeedTesting {
         protobufSerializationSize = length;
         var singleLength = length / benchmark;
         var l = 0;
-        //在循环中去掉创建CodedInputStream的代码，保证比较耗时公平性
+        //Remove CodedInputStream creation from loop to ensure fair timing
         var codeInputs = new CodedInputStream[benchmark];
         for (int i = 0; i < benchmark; i++) {
             codeInputs[i] = CodedInputStream.newInstance(protobufBuff, l + singleLength, singleLength);
@@ -166,12 +166,12 @@ public class FieldSpeedTesting {
             var mess = FieldProtobufObject.IntObject.parseFrom(codeInputs[i]);
         }
         protobufDeserializationTime = System.currentTimeMillis() - startTime;
-        System.out.println(StringUtils.format("序列化   [zfoo]     [Integer类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
-        System.out.println(StringUtils.format("序列化   [kryo]     [Integer类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
-        System.out.println(StringUtils.format("序列化   [protobuf] [int类型]     [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
-        System.out.println(StringUtils.format("反序列化  [zfoo]     [Integer类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [kryo]     [Integer类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [protobuf] [int类型]     [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
+        System.out.println(StringUtils.format("Serialize [zfoo]     [Integer type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
+        System.out.println(StringUtils.format("Serialize [kryo]     [Integer type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
+        System.out.println(StringUtils.format("Serialize [protobuf] [int type]     [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
+        System.out.println(StringUtils.format("Deserialize [zfoo]     [Integer type] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [kryo]     [Integer type] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [protobuf] [int type]     [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
     }
 
     @Test
@@ -216,7 +216,7 @@ public class FieldSpeedTesting {
         protobufSerializationSize = length;
         var singleLength = length / benchmark;
         var l = 0;
-        //在循环中去掉创建CodedInputStream的代码，保证比较耗时公平性
+        //Remove CodedInputStream creation from loop to ensure fair timing
         var codeInputs = new CodedInputStream[benchmark];
         for (int i = 0; i < benchmark; i++) {
             codeInputs[i] = CodedInputStream.newInstance(protobufBuff, l + singleLength, singleLength);
@@ -226,12 +226,12 @@ public class FieldSpeedTesting {
             var mess = FieldProtobufObject.FloatObject.parseFrom(codeInputs[i]);
         }
         protobufDeserializationTime = System.currentTimeMillis() - startTime;
-        System.out.println(StringUtils.format("序列化   [zfoo]     [float类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
-        System.out.println(StringUtils.format("序列化   [kryo]     [float类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
-        System.out.println(StringUtils.format("序列化   [protobuf] [float类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
-        System.out.println(StringUtils.format("反序列化  [zfoo]     [float类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [kryo]     [float类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [protobuf] [float类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
+        System.out.println(StringUtils.format("Serialize [zfoo]     [float type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
+        System.out.println(StringUtils.format("Serialize [kryo]     [float type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
+        System.out.println(StringUtils.format("Serialize [protobuf] [float type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
+        System.out.println(StringUtils.format("Deserialize [zfoo]     [float type] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [kryo]     [float type] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [protobuf] [float type] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
     }
 
     @Test
@@ -276,7 +276,7 @@ public class FieldSpeedTesting {
         protobufSerializationSize = length;
         var singleLength = length / benchmark;
         var l = 0;
-        //在循环中去掉创建CodedInputStream的代码，保证比较耗时公平性
+        //Remove CodedInputStream creation from loop to ensure fair timing
         var codeInputs = new CodedInputStream[benchmark];
         for (int i = 0; i < benchmark; i++) {
             codeInputs[i] = CodedInputStream.newInstance(protobufBuff, l + singleLength, singleLength);
@@ -286,12 +286,12 @@ public class FieldSpeedTesting {
             var mess = FieldProtobufObject.BytesObject.parseFrom(codeInputs[i]);
         }
         protobufDeserializationTime = System.currentTimeMillis() - startTime;
-        System.out.println(StringUtils.format("序列化   [zfoo]     [byte数组类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
-        System.out.println(StringUtils.format("序列化   [kryo]     [byte数组类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
-        System.out.println(StringUtils.format("序列化   [protobuf] [byte数组类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
-        System.out.println(StringUtils.format("反序列化  [zfoo]     [byte数组类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [kryo]     [byte数组类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [protobuf] [byte数组类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
+        System.out.println(StringUtils.format("Serialize [zfoo]     [byte array type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
+        System.out.println(StringUtils.format("Serialize [kryo]     [byte array type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
+        System.out.println(StringUtils.format("Serialize [protobuf] [byte array type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
+        System.out.println(StringUtils.format("Deserialize [zfoo]     [byte array type] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [kryo]     [byte array type] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [protobuf] [byte array type] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
     }
 
     @Test
@@ -336,7 +336,7 @@ public class FieldSpeedTesting {
         protobufSerializationSize = length;
         var singleLength = length / benchmark;
         var l = 0;
-        //在循环中去掉创建CodedInputStream的代码，保证比较耗时公平性
+        //Remove CodedInputStream creation from loop to ensure fair timing
         var codeInputs = new CodedInputStream[benchmark];
         for (int i = 0; i < benchmark; i++) {
             codeInputs[i] = CodedInputStream.newInstance(protobufBuff, l + singleLength, singleLength);
@@ -346,12 +346,12 @@ public class FieldSpeedTesting {
             var mess = FieldProtobufObject.StringObject.parseFrom(codeInputs[i]);
         }
         protobufDeserializationTime = System.currentTimeMillis() - startTime;
-        System.out.println(StringUtils.format("序列化   [zfoo]     [string类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
-        System.out.println(StringUtils.format("序列化   [kryo]     [string类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
-        System.out.println(StringUtils.format("序列化   [protobuf] [string类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
-        System.out.println(StringUtils.format("反序列化  [zfoo]     [string类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [kryo]     [string类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [protobuf] [string类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
+        System.out.println(StringUtils.format("Serialize [zfoo]     [string type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
+        System.out.println(StringUtils.format("Serialize [kryo]     [string type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
+        System.out.println(StringUtils.format("Serialize [protobuf] [string type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
+        System.out.println(StringUtils.format("Deserialize [zfoo]     [string type] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [kryo]     [string type] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [protobuf] [string type] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
     }
 
     @Test
@@ -395,7 +395,7 @@ public class FieldSpeedTesting {
         protobufSerializationSize = length;
         var singleLength = length / benchmark;
         var l = 0;
-        //在循环中去掉创建CodedInputStream的代码，保证比较耗时公平性
+        //Remove CodedInputStream creation from loop to ensure fair timing
         var codeInputs = new CodedInputStream[benchmark];
         for (int i = 0; i < benchmark; i++) {
             codeInputs[i] = CodedInputStream.newInstance(protobufBuff, l + singleLength, singleLength);
@@ -405,12 +405,12 @@ public class FieldSpeedTesting {
             var mess = FieldProtobufObject.ListIntegerObject.parseFrom(codeInputs[i]);
         }
         protobufDeserializationTime = System.currentTimeMillis() - startTime;
-        System.out.println(StringUtils.format("序列化   [zfoo]     [list类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
-        System.out.println(StringUtils.format("序列化   [kryo]     [list类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
-        System.out.println(StringUtils.format("序列化   [protobuf] [list类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
-        System.out.println(StringUtils.format("反序列化  [zfoo]     [list类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [kryo]     [list类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [protobuf] [list类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
+        System.out.println(StringUtils.format("Serialize [zfoo]     [list type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
+        System.out.println(StringUtils.format("Serialize [kryo]     [list type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
+        System.out.println(StringUtils.format("Serialize [protobuf] [list type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
+        System.out.println(StringUtils.format("Deserialize [zfoo]     [list type] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [kryo]     [list type] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [protobuf] [list type] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
     }
 
     @Test
@@ -443,10 +443,10 @@ public class FieldSpeedTesting {
         }
         kryoDeserializationTime = System.currentTimeMillis() - startTime;
         output.close();
-        System.out.println(StringUtils.format("序列化   [zfoo]     [set类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
-        System.out.println(StringUtils.format("序列化   [kryo]     [set类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
-        System.out.println(StringUtils.format("反序列化  [zfoo]     [set类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [kryo]     [set类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
+        System.out.println(StringUtils.format("Serialize [zfoo]     [set type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
+        System.out.println(StringUtils.format("Serialize [kryo]     [set type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
+        System.out.println(StringUtils.format("Deserialize [zfoo]     [set type] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [kryo]     [set type] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
     }
 
     @Test
@@ -491,7 +491,7 @@ public class FieldSpeedTesting {
         protobufSerializationSize = length;
         var singleLength = length / benchmark;
         var l = 0;
-        //在循环中去掉创建CodedInputStream的代码，保证比较耗时公平性
+        //Remove CodedInputStream creation from loop to ensure fair timing
         var codeInputs = new CodedInputStream[benchmark];
         for (int i = 0; i < benchmark; i++) {
             codeInputs[i] = CodedInputStream.newInstance(protobufBuff, l + singleLength, singleLength);
@@ -501,12 +501,12 @@ public class FieldSpeedTesting {
             var mess = FieldProtobufObject.MapObject.parseFrom(codeInputs[i]);
         }
         protobufDeserializationTime = System.currentTimeMillis() - startTime;
-        System.out.println(StringUtils.format("序列化   [zfoo]     [map类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
-        System.out.println(StringUtils.format("序列化   [kryo]     [map类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
-        System.out.println(StringUtils.format("序列化   [protobuf] [map类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
-        System.out.println(StringUtils.format("反序列化  [zfoo]     [map类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [kryo]     [map类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [protobuf] [map类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
+        System.out.println(StringUtils.format("Serialize [zfoo]     [map type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
+        System.out.println(StringUtils.format("Serialize [kryo]     [map type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
+        System.out.println(StringUtils.format("Serialize [protobuf] [map type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
+        System.out.println(StringUtils.format("Deserialize [zfoo]     [map type] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [kryo]     [map type] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [protobuf] [map type] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
     }
 
     @Test
@@ -551,7 +551,7 @@ public class FieldSpeedTesting {
         protobufSerializationSize = length;
         var singleLength = length / benchmark;
         var l = 0;
-        //在循环中去掉创建CodedInputStream的代码，保证比较耗时公平性
+        //Remove CodedInputStream creation from loop to ensure fair timing
         var codeInputs = new CodedInputStream[benchmark];
         for (int i = 0; i < benchmark; i++) {
             codeInputs[i] = CodedInputStream.newInstance(protobufBuff, l + singleLength, singleLength);
@@ -561,12 +561,12 @@ public class FieldSpeedTesting {
             var mess = FieldProtobufObject.InnerObjectObject.parseFrom(codeInputs[i]);
         }
         protobufDeserializationTime = System.currentTimeMillis() - startTime;
-        System.out.println(StringUtils.format("序列化   [zfoo]     [内嵌Object类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
-        System.out.println(StringUtils.format("序列化   [kryo]     [内嵌Object类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
-        System.out.println(StringUtils.format("序列化   [protobuf] [内嵌Object类型] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
-        System.out.println(StringUtils.format("反序列化  [zfoo]     [内嵌Object类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [kryo]     [内嵌Object类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
-        System.out.println(StringUtils.format("反序列化  [protobuf] [内嵌Object类型] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
+        System.out.println(StringUtils.format("Serialize [zfoo]     [nested Object type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), zfooSerializationTime, zfooSerializationSize));
+        System.out.println(StringUtils.format("Serialize [kryo]     [nested Object type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), kryoSerializationTime, kryoSerializationSize));
+        System.out.println(StringUtils.format("Serialize [protobuf] [nested Object type] [thread:{}] [time:{}] [size:{}]", Thread.currentThread().getName(), protobufSerializationTime, protobufSerializationSize));
+        System.out.println(StringUtils.format("Deserialize [zfoo]     [nested Object type] [thread:{}] [time:{}]", Thread.currentThread().getName(), zfooDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [kryo]     [nested Object type] [thread:{}] [time:{}]", Thread.currentThread().getName(), kryoDeserializationTime));
+        System.out.println(StringUtils.format("Deserialize [protobuf] [nested Object type] [thread:{}] [time:{}]", Thread.currentThread().getName(), protobufDeserializationTime));
     }
 
     public static final int intAValue = -100000000;
@@ -765,7 +765,7 @@ public class FieldSpeedTesting {
             kryo.register(ArrayList.class);
             kryo.register(HashSet.class);
             kryo.register(HashMap.class);
-            // 关闭循环引用，提高性能
+            // Disable circular reference tracking to improve performance
             kryo.setReferences(false);
             return kryo;
         }

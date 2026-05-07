@@ -18,13 +18,11 @@ import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
 import com.zfoo.protocol.generate.GenerateProtocolNote;
 import com.zfoo.protocol.generate.GenerateProtocolPath;
-import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.registration.ProtocolRegistration;
 import com.zfoo.protocol.registration.field.IFieldRegistration;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.serializer.CodeTemplatePlaceholder;
 import com.zfoo.protocol.serializer.ICodeGenerate;
-import com.zfoo.protocol.serializer.enhance.EnhanceObjectProtocolSerializer;
 import com.zfoo.protocol.serializer.reflect.*;
 import com.zfoo.protocol.serializer.typescript.CodeGenerateTypeScript;
 import com.zfoo.protocol.util.ClassUtils;
@@ -36,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +82,7 @@ public class CodeGenerateGdScript implements ICodeGenerate {
     public void mergerProtocol(List<ProtocolRegistration> registrations) throws IOException {
         createByteBufferFile();
 
-        // 生成ProtocolManager.gd文件
+        // Generate ProtocolManager.gd file
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("gdscript/ProtocolManagerTemplate.gd");
         var protocol_manager_registrations = new StringBuilder();
         for (var registration : registrations) {
@@ -166,7 +163,7 @@ public class CodeGenerateGdScript implements ICodeGenerate {
     private void createTemplateFile(List<ProtocolRegistration> registrations) throws IOException {
         createByteBufferFile();
 
-        // 生成ProtocolManager.gd文件
+        // Generate ProtocolManager.gd file
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("gdscript/ProtocolManagerTemplate.gd");
         var protocol_manager_registrations = new StringBuilder();
         for (var registration : registrations) {
@@ -227,19 +224,19 @@ public class CodeGenerateGdScript implements ICodeGenerate {
         var fields = registration.getFields();
         var fieldRegistrations = registration.getFieldRegistrations();
         var gdBuilder = new StringBuilder();
-        // 生成源代码字段的时候，按照原始定义的方式生成
+        // Generate source code fields in their original declaration order
         var sequencedFields = ReflectionUtils.notStaticAndTransientFields(registration.getConstructor().getDeclaringClass());
         for (int i = 0; i < sequencedFields.size(); i++) {
             var field = sequencedFields.get(i);
             IFieldRegistration fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.GdScript);
             for (var fieldNote : fieldNotes) {
                 gdBuilder.append(fieldNote).append(LS);
             }
             var fieldType = gdSerializer(fieldRegistration.serializer()).fieldType(field, fieldRegistration);
-            // 生成类型的注释
+            // Generate type comment
             gdBuilder.append(StringUtils.format("var {}: {}", fieldName, fieldType));
             if (fieldType.equals("Dictionary") || fieldType.equals("Array")) {
                 var typeNote = CodeGenerateTypeScript.toTsClassName(field.getGenericType().toString());

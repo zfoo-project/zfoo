@@ -22,7 +22,7 @@ import com.zfoo.protocol.serializer.reflect.ObjectProtocolSerializer;
 public class ObjectProtocolField implements IFieldRegistration {
 
     /**
-     * 协议序列号是ProtocolRegistration的id
+     * The protocol ordinal is the ID of ProtocolRegistration
      */
     private short protocolId;
 

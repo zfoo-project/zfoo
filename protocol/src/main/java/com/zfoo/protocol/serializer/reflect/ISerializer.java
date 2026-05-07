@@ -22,11 +22,11 @@ import io.netty.buffer.ByteBuf;
 public interface ISerializer {
 
     /**
-     * 往buffer中写入这个值是多少，及其反序列化时要用的解析类型是啥
+     * Write the value to the buffer along with the type info needed for deserialization
      *
-     * @param buffer            buffer缓冲区，存储二进制数控
-     * @param object            要写入到buffer中的对象
-     * @param fieldRegistration 标记下反序列化时读取这个值要用啥类型方式读取
+     * @param buffer            buffer; stores binary-encoded data
+     * @param object            the object to write into the buffer
+     * @param fieldRegistration marks the type to use when reading this value during deserialization
      */
     void writeObject(ByteBuf buffer, Object object, IFieldRegistration fieldRegistration);
 

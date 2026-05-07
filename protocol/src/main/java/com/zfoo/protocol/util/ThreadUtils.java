@@ -82,7 +82,7 @@ public abstract class ThreadUtils {
     }
 
     /**
-     * 使用kill退出的方式，不能调用这个停止方法
+     * When the process is killed externally, this stop method will not be called
      */
     public static void shutdownApplication() {
         new Thread(() -> {

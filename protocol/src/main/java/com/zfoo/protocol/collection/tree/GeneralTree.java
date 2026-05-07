@@ -15,7 +15,7 @@ package com.zfoo.protocol.collection.tree;
 import com.zfoo.protocol.util.StringUtils;
 
 /**
- * 多叉树
+ * Multi-way (N-ary) tree
  *
  * @author godotg
  */
@@ -68,7 +68,7 @@ public class GeneralTree<T> {
 
 
     /**
-     * 移除所有数据结点
+     * Remove all data nodes
      */
     public void clear() {
         rootNode.clear();

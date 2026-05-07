@@ -39,7 +39,7 @@ public class MapSerializer implements ISerializer {
         Map<?, ?> map = (Map<?, ?>) object;
         MapField mapField = (MapField) fieldRegistration;
 
-        // map有几组key、value
+        // Number of key-value pairs in the map
         int size = map.size();
         if (size == 0) {
             ByteBufUtils.writeInt(buffer, 0);
@@ -47,7 +47,7 @@ public class MapSerializer implements ISerializer {
         }
         ByteBufUtils.writeInt(buffer, size);
 
-        // buffer中顺序写入
+        // Write sequentially into the buffer
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             mapField.getMapKeyRegistration().serializer().writeObject(buffer, entry.getKey(), mapField.getMapKeyRegistration());
 

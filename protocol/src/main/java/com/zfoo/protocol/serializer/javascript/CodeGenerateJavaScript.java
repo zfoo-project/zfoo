@@ -79,7 +79,7 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
         createTemplateFile();
 
 
-        // 生成ProtocolManager.js文件
+        // Generate ProtocolManager.js file
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolManagerTemplate.js");
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
@@ -127,7 +127,7 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
         createTemplateFile();
 
 
-        // 生成ProtocolManager.js文件
+        // Generate ProtocolManager.js file
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolManagerTemplate.js");
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
@@ -166,7 +166,7 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
         createTemplateFile();
 
 
-        // 生成ProtocolManager.js文件
+        // Generate ProtocolManager.js file
         var protocolManagerTemplate = ClassUtils.getFileFromClassPathToString("javascript/ProtocolManagerTemplate.js");
         var protocol_imports = new StringBuilder();
         var protocol_manager_registrations = new StringBuilder();
@@ -248,7 +248,7 @@ public class CodeGenerateJavaScript implements ICodeGenerate {
         for (var field : sequencedFields) {
             var fieldRegistration = fieldRegistrations[GenerateProtocolFile.indexOf(fields, field)];
             var fieldName = field.getName();
-            // 生成注释
+            // Generate comment
             var fieldNotes = GenerateProtocolNote.fieldNotes(protocolId, fieldName, CodeLanguage.JavaScript);
             for (var fieldNote : fieldNotes) {
                 fieldDefinitionBuilder.append(fieldNote).append(LS);

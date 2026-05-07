@@ -17,8 +17,8 @@ import com.zfoo.protocol.exception.RunException;
 import java.util.function.BiConsumer;
 
 /**
- * 类型固定的map，key为long，value为Object
- * 其中long必须大于等于0，value可以为null
+ * Fixed-type map with long keys and Object values
+ * The long key must be >= 0; value may be null
  *
  * @author godotg
  */
@@ -38,7 +38,7 @@ public interface LpMap<V> {
     }
 
     /**
-     * @return 返回被删除的那个值
+     * @return the removed value
      */
     V delete(long key);
 
@@ -54,7 +54,7 @@ public interface LpMap<V> {
 
     default void checkKey(long key) {
         if (key < 0) {
-            throw new RunException("key[{}]只能为大于等于0的正数", key);
+            throw new RunException("key[{}] must be a non-negative integer (>= 0)", key);
         }
     }
 }
