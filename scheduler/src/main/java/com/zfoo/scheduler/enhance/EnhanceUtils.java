@@ -28,7 +28,7 @@ import java.lang.reflect.Modifier;
 public abstract class EnhanceUtils {
 
     static {
-        // 适配Tomcat，因为Tomcat不是用的默认的类加载器，而Javassist用的是默认的加载器
+        // Adapt for Tomcat: Tomcat does not use the default class loader, but Javassist relies on it
         var classArray = new Class<?>[]{
                 IScheduler.class
         };
@@ -49,29 +49,29 @@ public abstract class EnhanceUtils {
         Object bean = reflectScheduler.getBean();
         Method method = reflectScheduler.getMethod();
 
-        // 定义类名称
+        // Define the class name
         CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.SCHEDULER) + UuidUtils.getLocalIntId());
         enhanceClazz.addInterface(classPool.get(IScheduler.class.getName()));
 
-        // 定义类中的一个成员
+        // Define a field in the class
         CtField field = new CtField(classPool.get(bean.getClass().getName()), "bean", enhanceClazz);
         field.setModifiers(Modifier.PRIVATE);
         enhanceClazz.addField(field);
 
-        // 定义类的构造器
+        // Define the constructor
         CtConstructor constructor = new CtConstructor(classPool.get(new String[]{bean.getClass().getName()}), enhanceClazz);
         constructor.setBody("{this.bean=$1;}");
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
-        // 定义类实现的接口方法
+        // Define the interface method implementation
         CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getName()), "invoke", null, enhanceClazz);
         invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         String invokeMethodBody = "{this.bean." + method.getName() + "();}";
         invokeMethod.setBody(invokeMethodBody);
         enhanceClazz.addMethod(invokeMethod);
 
-        // 释放缓存
+        // Release cached class
         enhanceClazz.detach();
 
         Class<?> resultClazz = enhanceClazz.toClass(IScheduler.class);

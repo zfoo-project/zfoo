@@ -17,7 +17,8 @@ import com.zfoo.protocol.util.ReflectionUtils;
 import java.lang.reflect.Method;
 
 /**
- * 动态代理被Scheduler注解标注的方法，为了避免反射最终会用javassist字节码增强的方法去代理ReflectScheduler
+ * Dynamic proxy for methods annotated with @Scheduler.
+ * To avoid reflection overhead, Javassist bytecode enhancement is used to proxy ReflectScheduler.
  *
  * @author godotg
  */

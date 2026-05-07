@@ -23,8 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * EN: Trigger timestamp, as long as the current timestamp is greater than this trigger event stamp, it is considered triggerable
- * CN: 触发时间戳，只要当前时间戳大于这个触发事件戳都视为可以触发
+ * Trigger timestamp: the scheduler fires whenever the current timestamp exceeds this value.
+ *
  * @author godotg
  */
 public class SchedulerDefinition {

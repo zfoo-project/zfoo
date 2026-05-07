@@ -39,19 +39,19 @@ public abstract class SchedulerBus {
 
     private static final List<SchedulerDefinition> schedulerDefList = new CopyOnWriteArrayList<>();
     /**
-     * scheduler默认只有一个单线程的线程池
+     * Scheduler uses a single-threaded executor by default
      */
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new SchedulerThreadFactory(1));
 
 
     /**
-     * 上一次trigger触发时间
+     * Timestamp of the last trigger invocation
      */
     private static long lastTriggerTimestamp = 0L;
 
 
     /**
-     * 在scheduler中，最小的triggerTimestamp
+     * The minimum triggerTimestamp among all registered schedulers
      */
     private static long minTriggerTimestamp = 0L;
 
@@ -101,7 +101,8 @@ public abstract class SchedulerBus {
     }
 
     /**
-     * 每一秒执行一次，如果这个任务执行时间过长超过，比如10秒，执行完成后，不会再执行10次
+     * Executed once per second. If this task takes longer than expected (e.g. 10 seconds),
+     * it will NOT catch up by running 10 times after completion.
      */
     private static void triggerPerSecond() {
         var currentTimeMillis = TimeUtils.currentTimeMillis();
@@ -111,7 +112,7 @@ public abstract class SchedulerBus {
         }
 
 
-        // 有人向前调整过机器时间，重新计算scheduler里的triggerTimestamp
+        // Someone moved the system clock backward; recalculate triggerTimestamp for all schedulers
         // var diff = timestamp - lastTriggerTimestamp;
         if (currentTimeMillis < lastTriggerTimestamp) {
             for (SchedulerDefinition schedulerDef : schedulerDefList) {
@@ -121,10 +122,10 @@ public abstract class SchedulerBus {
             refreshMinTriggerTimestamp();
         }
 
-        // diff > 0, 没有人调整时间或者有人向后调整过机器时间，可以忽略，因为向后调整时间时间戳一定会大于triggerTimestamp，所以一定会触发
+        // diff > 0: no clock adjustment, or clock was moved forward; can be ignored since the timestamp will exceed triggerTimestamp and will always trigger
         lastTriggerTimestamp = currentTimeMillis;
 
-        // 如果minSchedulerTriggerTimestamp大于timestamp，说明没有可执行的scheduler
+        // If minTriggerTimestamp is greater than currentTimeMillis, no scheduler is ready to execute
         if (currentTimeMillis < minTriggerTimestamp) {
             return;
         }
@@ -134,7 +135,7 @@ public abstract class SchedulerBus {
         for (var scheduler : schedulerDefList) {
             var triggerTimestamp = scheduler.getTriggerTimestamp();
             if (triggerTimestamp <= currentTimeMillis) {
-                // 到达触发时间，则执行runnable方法
+                // Trigger time reached, invoke the scheduler
                 try {
                     scheduler.getScheduler().invoke();
                 } catch (Exception e) {
@@ -142,7 +143,7 @@ public abstract class SchedulerBus {
                 } catch (Throwable t) {
                     logger.error("scheduler invoke error", t);
                 }
-                // 重新设置下一次的触发时间戳
+                // Reset the next trigger timestamp
                 triggerTimestamp = TimeUtils.nextTimestampByCronExpression(scheduler.getCronExpression(), timestampZonedDataTime);
                 scheduler.setTriggerTimestamp(triggerTimestamp);
             }
@@ -160,7 +161,7 @@ public abstract class SchedulerBus {
 
 
     /**
-     * 不断执行的周期循环任务
+     * Periodically recurring task that runs continuously
      */
     public static ScheduledFuture<?> scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
 
@@ -169,7 +170,7 @@ public abstract class SchedulerBus {
 
 
     /**
-     * 固定延迟执行的任务
+     * Task executed with a fixed delay
      */
     public static ScheduledFuture<?> schedule(Runnable runnable, long delay, TimeUnit unit) {
 
@@ -177,7 +178,7 @@ public abstract class SchedulerBus {
     }
 
     /**
-     * cron表达式执行的任务
+     * Task triggered by a cron expression
      */
     public static void scheduleCron(Runnable runnable, String cron) {
         if (SchedulerContext.isStop()) {
@@ -188,7 +189,7 @@ public abstract class SchedulerBus {
     }
 
     /**
-     * 立刻执行的任务
+     * Task executed immediately
      */
     public static void execute(Runnable runnable) {
         executor.execute(ThreadUtils.safeRunnable(runnable));

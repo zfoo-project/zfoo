@@ -27,9 +27,9 @@ public class StopWatch {
     }
 
     /**
-     * 从StopWatch被创建，到调用这个方法消耗的时间
+     * Elapsed time from when the StopWatch was created until this method is called.
      *
-     * @return 返回消耗的时间，保留两位小数，格式xx.xx
+     * @return elapsed time in seconds, rounded to two decimal places (format: xx.xx)
      */
     public String costSeconds() {
         var cost = cost() / (float) TimeUtils.MILLIS_PER_SECOND;

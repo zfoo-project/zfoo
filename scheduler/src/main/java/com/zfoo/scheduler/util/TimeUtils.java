@@ -30,29 +30,29 @@ import java.util.TimeZone;
  */
 public abstract class TimeUtils {
 
-    // 一秒钟对应的纳秒数
+    // Nanoseconds per second
     public static final long NANO_PER_SECOND = 1_000_000_000;
-    // 一秒钟对应的毫秒数
+    // Milliseconds per second
     public static final long MILLIS_PER_SECOND = 1 * 1000;
-    // 一分钟对应的毫秒数
+    // Milliseconds per minute
     public static final long MILLIS_PER_MINUTE = 1 * 60 * MILLIS_PER_SECOND;
-    // 一个小时对应的毫秒数
+    // Milliseconds per hour
     public static final long MILLIS_PER_HOUR = 1 * 60 * MILLIS_PER_MINUTE;
-    // 一天对应的毫秒数
+    // Milliseconds per day
     public static final long MILLIS_PER_DAY = 1 * 24 * MILLIS_PER_HOUR;
-    // 一周对应的毫秒数
+    // Milliseconds per week
     public static final long MILLIS_PER_WEEK = 1 * 7 * MILLIS_PER_DAY;
-    // 默认的时区
+    // Default time zone
     public static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getDefault();
-    // 默认的时区Id
+    // Default zone ID
     public static final ZoneId DEFAULT_ZONE_ID = TimeZone.getDefault().toZoneId();
 
 
-    // 统一的时间格式模板
+    // Standard date-time format template
     public static final String DATE_FORMAT_TEMPLATE = "yyyy-MM-dd HH:mm:ss";
-    // 简单的时间格式模板
+    // Simple date-time format template
     public static final String SIMPLE_DATE_FORMAT_TEMPLATE = "yyyyMMddHHmmss";
-    // 统一的时间格式模板
+    // Standard date-only format template
     public static final String DATE_FORMAT_TEMPLATE_FOR_DAY = "yyyy-MM-dd";
 
     private static final FastThreadLocalAdapter<SimpleDateFormat> DATE_FORMAT = new FastThreadLocalAdapter<>(() -> new SimpleDateFormat(DATE_FORMAT_TEMPLATE));
@@ -63,7 +63,7 @@ public abstract class TimeUtils {
 
     static {
         currentTimeMillis();
-        // 调用一下静态方法，使SchedulerBus静态代码块初始化
+        // Call a static method to trigger the static initializer of SchedulerBus
         SchedulerBus.refreshMinTriggerTimestamp();
     }
 
@@ -71,7 +71,7 @@ public abstract class TimeUtils {
     private static long timestamp = System.currentTimeMillis();
 
     /**
-     * 获取精确的时间戳
+     * Get the precise current timestamp in milliseconds
      */
     public static long currentTimeMillis() {
         timestamp = System.currentTimeMillis();
@@ -79,20 +79,19 @@ public abstract class TimeUtils {
     }
 
     /**
-     * CN：获取最多只有一秒延迟的粗略时间戳，适用于对时间精度要求不高的场景，比System.currentTimeMillis()的性能高10倍
-     * <p>
-     * EN：Obtain a coarse timestamp with a delay of up to one second, which is suitable for scenarios that do not require high time accuracy
+     * Obtain a coarse timestamp with a delay of up to one second, which is suitable for scenarios that
+     * do not require high time accuracy. Its performance is 10x faster than System.currentTimeMillis().
      */
     public static long now() {
         return timestamp;
     }
 
-    // --------------------------------------日期格式--------------------------------------
+    // -------------------------------------- Date Format --------------------------------------
 
     /**
-     * 把日期字符串转换成Date对象，统一的日期模板要遵循DATE_FORMAT_TEMPLATE="yyyy-MM-dd HH:mm:ss"
+     * Convert a date string to a Date object. The standard date template follows DATE_FORMAT_TEMPLATE="yyyy-MM-dd HH:mm:ss"
      *
-     * @param dateString 日期字符串，如：2018-02-12 10:12:50
+     * @param dateString date string, e.g. 2018-02-12 10:12:50
      * @return <code>Date</code>
      */
     public static Date stringToDate(String dateString) {
@@ -104,9 +103,9 @@ public abstract class TimeUtils {
     }
 
     /**
-     * 把long类型的时间戳转换成字符串格式的时间
+     * Convert a long timestamp to a formatted date-time string
      *
-     * @param time 时间戳
+     * @param time timestamp in milliseconds
      * @return yyyy-MM-dd HH:mm:ss
      */
     public static String timeToString(long time) {
@@ -128,7 +127,7 @@ public abstract class TimeUtils {
             throw new RuntimeException(e);
         }
     }
-    // --------------------------------------日期判断--------------------------------------
+    // -------------------------------------- Date Comparison --------------------------------------
 
     /**
      * <p>Checks if two date objects are on the same day ignoring time.</p>
@@ -191,10 +190,9 @@ public abstract class TimeUtils {
     }
 
     /**
-     * 判断两个日期是否是同一周，设置周一为一周的第一天
-     * <p>
-     * 2004-12-25”是星期六，也就是说它是2004年中第52周的星期六，那么“2004-12-26”到底是2004年的第几周哪，java中经测试取得的它的Week值是1，
-     * 那么也就是说它被看作2005年的第一周了，这个处理是比较好的。可以用来判断“2004-12-26”和“2005-1-1”是同一周。
+     * Check whether two timestamps fall in the same week, with Monday as the first day of the week.
+     * For example, "2004-12-25" is Saturday (week 52 of 2004), while "2004-12-26" has a WEEK_OF_YEAR
+     * value of 1 in Java (treated as week 1 of 2005), so "2004-12-26" and "2005-01-01" are considered the same week.
      */
     public static boolean isSameWeek(long time1, long time2) {
         Calendar cal1 = Calendar.getInstance();
@@ -206,13 +204,13 @@ public abstract class TimeUtils {
 
         int yearDiff = cal1.get(Calendar.YEAR) - cal2.get(Calendar.YEAR);
         if (yearDiff == 0 && cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)) {
-            // yearDiff==0,说明是同一年
+            // yearDiff==0 means they are in the same year
             return cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR);
         } else if (yearDiff == 1 && cal2.get(Calendar.MONTH) == 11) {
-            //yearDiff==1,说明cal比cal2大一年;java的一月用"0"标识，那么12月用"11"
+            // yearDiff==1 means cal1 is one year ahead of cal2; January is represented as "0" in Java, December as "11"
             return cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR);
         } else if (yearDiff == -1 && cal1.get(Calendar.MONTH) == 11) {
-            //yearDiff==-1,说明cal比cal2小一年
+            // yearDiff==-1 means cal1 is one year behind cal2
             return cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR);
         }
         return false;
@@ -227,11 +225,11 @@ public abstract class TimeUtils {
                 && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
     }
 
-    // --------------------------------------获取相关时间戳--------------------------------------
+    // -------------------------------------- Retrieve Related Timestamps --------------------------------------
 
 
     /**
-     * 获取给定时间戳对应的日期的0点时间戳
+     * Get the timestamp of midnight (00:00:00) for the given timestamp's date
      */
     public static long getZeroTimeOfDay(long time) {
         Calendar cal = Calendar.getInstance();
@@ -245,7 +243,7 @@ public abstract class TimeUtils {
 
 
     /**
-     * 获取给定时间戳对应的日期的最后时刻时间戳
+     * Get the timestamp of the last moment (23:59:59.999) for the given timestamp's date
      */
     public static long getLastTimeOfDay(long time) {
         Calendar cal = Calendar.getInstance();
@@ -257,7 +255,7 @@ public abstract class TimeUtils {
         return cal.getTimeInMillis();
     }
 
-    // 获取给定时间戳对应的日期的昨天这个时刻的时间戳
+    // Get the timestamp of yesterday at the same time as the given timestamp
     public static long getYesterdayTimeOfDay(long time) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time);
@@ -265,35 +263,35 @@ public abstract class TimeUtils {
         return cal.getTimeInMillis();
     }
 
-    // 获取给定时间戳对应小时的起始时间戳
+    // Get the start timestamp of the hour corresponding to the given timestamp
     public static long getStartTimeOfHour(long time) {
         var localDateTime = TimeUtils.timestampToLocalDateTime(time);
         var monday = localDateTime.withMinute(0).withSecond(0).withNano(0);
         return TimeUtils.localDateTimeToTimestamp(monday);
     }
 
-    // 获取给定时间戳对应周的第一天的起始时间戳
+    // Get the start timestamp of the first day of the week corresponding to the given timestamp
     public static long getStartTimeOfWeek(long time) {
         var localDateTime = TimeUtils.timestampToLocalDateTime(time);
         var monday = localDateTime.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY)).plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         return TimeUtils.localDateTimeToTimestamp(monday);
     }
 
-    // 获取给定时间戳对应月的第一天的起始时间戳
+    // Get the start timestamp of the first day of the month corresponding to the given timestamp
     public static long getStartTimeOfMonth(long time) {
         var localDateTime = TimeUtils.timestampToLocalDateTime(time);
         var oneOfMonth = localDateTime.with(TemporalAdjusters.firstDayOfMonth()).withHour(0).withMinute(0).withSecond(0).withNano(0);
         return TimeUtils.localDateTimeToTimestamp(oneOfMonth);
     }
 
-    // 获取给定时间戳对应月的最后一天的结束时间戳
+    // Get the end timestamp of the last day of the month corresponding to the given timestamp
     public static long getEndTimeOfMonth(long time) {
         var localDateTime = TimeUtils.timestampToLocalDateTime(time);
         var oneOfMonth = localDateTime.with(TemporalAdjusters.lastDayOfMonth()).withHour(23).withMinute(59).withSecond(59).withNano(0);
         return TimeUtils.localDateTimeToTimestamp(oneOfMonth);
     }
 
-    //获取上一个月月初的时间
+    // Get the start timestamp of the previous month
     public static long getLastMonthStart(long time) {
         var localDateTime = TimeUtils.timestampToLocalDateTime(time);
         var lastMonth = localDateTime.minusMonths(1);
@@ -301,7 +299,7 @@ public abstract class TimeUtils {
         return TimeUtils.localDateTimeToTimestamp(with);
     }
 
-    //获取上一个月月末的时间
+    // Get the end timestamp of the previous month
     public static long getLastMonthEnd(long time) {
         var localDateTime = TimeUtils.timestampToLocalDateTime(time);
         var lastMonth = localDateTime.minusMonths(1);
@@ -309,7 +307,7 @@ public abstract class TimeUtils {
         return TimeUtils.localDateTimeToTimestamp(with);
     }
 
-    //获取下一个月月初的时间
+    // Get the start timestamp of the next month
     public static long getNextMonthStart(long time) {
         var localDateTime = TimeUtils.timestampToLocalDateTime(time);
         var lastMonth = localDateTime.plusMonths(1);
@@ -317,7 +315,7 @@ public abstract class TimeUtils {
         return TimeUtils.localDateTimeToTimestamp(with);
     }
 
-    // 获取下一个月月末的时间
+    // Get the end timestamp of the next month
     public static long getNextMonthEnd(long time) {
         var localDateTime = TimeUtils.timestampToLocalDateTime(time);
         var lastMonth = localDateTime.plusMonths(1);
@@ -326,10 +324,10 @@ public abstract class TimeUtils {
     }
 
     /**
-     * LocalDateTime转毫秒时间戳
+     * Convert LocalDateTime to millisecond timestamp
      *
      * @param localDateTime LocalDateTime
-     * @return 时间戳
+     * @return timestamp in milliseconds
      */
     public static Long localDateTimeToTimestamp(LocalDateTime localDateTime) {
         var zoneId = ZoneId.systemDefault();
@@ -338,9 +336,9 @@ public abstract class TimeUtils {
     }
 
     /**
-     * 时间戳转LocalDateTime
+     * Convert millisecond timestamp to LocalDateTime
      *
-     * @param timestamp 时间戳
+     * @param timestamp timestamp in milliseconds
      * @return LocalDateTime
      */
     public static LocalDateTime timestampToLocalDateTime(long timestamp) {
@@ -349,13 +347,13 @@ public abstract class TimeUtils {
         return LocalDateTime.ofInstant(instant, zone);
     }
 
-    // --------------------------------------时间大小判断--------------------------------------
+    // -------------------------------------- Time Comparison --------------------------------------
     public static boolean timeBetween(long time, long from, long end) {
         return from <= time && time <= end;
     }
 
 
-    // --------------------------------------cron表达式--------------------------------------
+    // -------------------------------------- Cron Expression --------------------------------------
     public static long nextTimestampByCronExpression(CronExpression expression, long currentTimestamp) {
         var zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(currentTimestamp), DEFAULT_ZONE_ID);
         return nextTimestampByCronExpression(expression, zonedDateTime);

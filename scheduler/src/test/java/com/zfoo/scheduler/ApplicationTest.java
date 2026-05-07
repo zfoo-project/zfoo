@@ -18,8 +18,8 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * cron（译为克龙）代表100万年，是英文单词中最大的时间单位。
- * google（译为古戈尔）代表10的100次方，足够穷尽宇宙万物
+ * 'cron' means 1 million years - the largest time unit in English.
+ * 'googol' represents 10 to the power of 100 - enough to enumerate all things in the universe.
  *
  * @author godotg
  */
@@ -28,7 +28,7 @@ public class ApplicationTest {
 
     @Test
     public void startSchedulerTest() {
-        // 加载配置文件，配置文件中必须引入scheduler
+        // Load the configuration file (must import the scheduler module)
         var context = new ClassPathXmlApplicationContext("application.xml");
 
         ThreadUtils.sleep(10000);

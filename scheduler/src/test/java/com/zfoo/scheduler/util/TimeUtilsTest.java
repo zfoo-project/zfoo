@@ -29,22 +29,22 @@ public class TimeUtilsTest {
 
     @Test
     public void testLocalDate() {
-        // 取当前日期：
+        // Get current date:
         LocalDate today = LocalDate.now(); // -> 2014-12-24
-        // 根据年月日取日期：
+        // Construct date from year/month/day:
         LocalDate crischristmas = LocalDate.of(2014, 12, 25); // -> 2014-12-25
-        // 根据字符串取：
-        LocalDate endOfFeb = LocalDate.parse("2014-02-28"); // 严格按照ISO yyyy-MM-dd验证，02写成2都不行，当然也有一个重载方法允许自己定义格式
-        LocalDate.parse("2014-02-26"); // 无效日期无法通过：DateTimeParseException: Invalid date
-        // 取本月第1天：
+        // Parse from string:
+        LocalDate endOfFeb = LocalDate.parse("2014-02-28"); // Strict ISO yyyy-MM-dd; overloaded methods allow custom formats
+        LocalDate.parse("2014-02-26"); // Invalid date throws DateTimeParseException
+        // Get first day of this month:
         LocalDate firstDayOfThisMonth = today.with(TemporalAdjusters.firstDayOfMonth()); // 2017-03-01
-        // 取本月第2天：
+        // Get second day of this month:
         LocalDate secondDayOfThisMonth = today.withDayOfMonth(2); // 2017-03-02
-        // 取本月最后一天，再也不用计算是28，29，30还是31：
+        // Get last day of this month (no manual 28/29/30/31 needed):
         LocalDate lastDayOfThisMonth = today.with(TemporalAdjusters.lastDayOfMonth()); // 2017-12-31
-        // 取下一天：
-        LocalDate firstDayOf2015 = lastDayOfThisMonth.plusDays(1); // 变成了2018-01-01
-        // 取2017年1月第一个周一，用Calendar要死掉很多脑细胞：
+        // Get next day:
+        LocalDate firstDayOf2015 = lastDayOfThisMonth.plusDays(1); // results in 2018-01-01
+        // Get first Monday of January 2017 (much simpler than Calendar):
         LocalDate firstMondayOf2015 = LocalDate.parse("2017-01-01").with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY)); // 2017-01-02
     }
 
@@ -59,13 +59,13 @@ public class TimeUtilsTest {
         LocalTime time = LocalTime.of(0, 0, 0);
         LocalDateTime localDateTime = LocalDateTime.of(date, time);
         System.out.println(localDateTime);
-        //将localDateTime转换成时间戳
+        // Convert LocalDateTime to timestamp
         System.out.println("localDateTime:" + java.sql.Timestamp.valueOf(localDateTime).getTime());
     }
 
 
     /**
-     * 计算周五的活动下次开启的时间
+     * Calculate the next activation time for the Friday event
      */
     @Test
     public void test() {

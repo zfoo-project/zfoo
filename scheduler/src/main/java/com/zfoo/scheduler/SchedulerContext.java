@@ -63,13 +63,13 @@ public class SchedulerContext implements ApplicationListener<ApplicationContextE
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
         if (event instanceof ContextRefreshedEvent) {
-            // 初始化上下文
+            // Initialize context
             SchedulerContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
             inject();
-            // 启动位于SchedulerBus的static静态代码块中
+            // Startup is performed in the static initializer block of SchedulerBus
         } else if (event instanceof ContextClosedEvent) {
-            // 反射获取executor,关闭掉
+            // Obtain the executor via reflection and shut it down
             shutdown();
         }
     }
