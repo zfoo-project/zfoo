@@ -48,22 +48,22 @@ public class Uptime implements Comparable<Uptime> {
         var fifty = fiftyMinute / processors;
 
         if (usage >= 0.8) {
-            return StringUtils.format("uptime - cpu负载[{}][{}][{}][usage:{}][{}]过大，性能影响：危险"
+            return StringUtils.format("uptime - cpu load[{}][{}][{}][usage:{}][{}] too high, performance impact: CRITICAL"
                     , oneMinute, fiveMinute, fiftyMinute, OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
         }
 
         if (one > 5 || five > 5 || fifty > 5) {
-            return StringUtils.format("uptime - cpu负载[{}][{}][{}][usage:{}][{}]过大，性能影响：警告"
+            return StringUtils.format("uptime - cpu load[{}][{}][{}][usage:{}][{}] too high, performance impact: WARNING"
                     , oneMinute, fiveMinute, fiftyMinute, OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
         }
 
         if (one > 4 || five > 4 || fifty > 4) {
-            return StringUtils.format("uptime - cpu负载[{}][{}][{}][usage:{}][{}]，性能影响：高"
+            return StringUtils.format("uptime - cpu load[{}][{}][{}][usage:{}][{}], performance impact: HIGH"
                     , oneMinute, fiveMinute, fiftyMinute, OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
         }
 
         if (one > 3 || five > 3 || fifty > 3) {
-            return StringUtils.format("uptime - cpu负载[{}][{}][{}][usage:{}][{}]，性能影响：中，考虑优化"
+            return StringUtils.format("uptime - cpu load[{}][{}][{}][usage:{}][{}], performance impact: MEDIUM, consider optimizing"
                     , oneMinute, fiveMinute, fiftyMinute, OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
         }
 

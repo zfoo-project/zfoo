@@ -37,7 +37,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Oshi库封装的工具类，通过此工具类，可获取系统、硬件相关信息
+ * Utility class wrapping the OSHI library for retrieving system and hardware information
  *
  * @author godotg
  */
@@ -46,37 +46,37 @@ public abstract class OSUtils {
     private static final Logger logger = LoggerFactory.getLogger(OSUtils.class);
 
     /**
-     * cpu的数量
+     * CPU count
      */
     private static final int processors = Runtime.getRuntime().availableProcessors();
 
     /**
-     * 系统信息
+     * System info
      */
     private static final oshi.SystemInfo systemInfo = new oshi.SystemInfo();
 
     /**
-     * 硬件信息
+     * Hardware info
      */
     private static final HardwareAbstractionLayer hardware = systemInfo.getHardware();
 
     /**
-     * 操作系统信息
+     * OS info
      */
     private static final OperatingSystem os = systemInfo.getOperatingSystem();
 
     /**
-     * 磁盘io
+     * Disk I/O
      */
     private static final List<HWDiskStore> hwDiskStores = hardware.getDiskStores();
 
     /**
-     * 网络信息
+     * Network info
      */
     private static final List<NetworkIF> networkIFs = hardware.getNetworkIFs();
 
     /**
-     * cpu的tick次数信息
+     * CPU tick counts
      */
     private static long[] ticks = hardware.getProcessor().getSystemCpuLoadTicks();
 
@@ -85,25 +85,25 @@ public abstract class OSUtils {
     }
 
     /**
-     * 将小于0的num转为百分比，舍弃的部分将会做四舍五入
+     * Convert a value <= 1.0 to a percentage string; fractional part is rounded
      */
     public static String toPercent(double num) {
         if (num > 1) {
-            throw new RuntimeException("转为百分比的num必须小于1");
+            throw new RuntimeException("num must be less than 1 to convert to percentage");
         }
         var percentFormat = NumberFormat.getPercentInstance();
-        // 最大小数位数
+        // Maximum decimal digits
         percentFormat.setMaximumFractionDigits(2);
-        // 最大整数位数
+        // Maximum integer digits
         percentFormat.setMaximumIntegerDigits(3);
-        // 最小小数位数
+        // Minimum decimal digits
         percentFormat.setMinimumFractionDigits(2);
-        // 自动转换成百分比显示
+        // Automatically convert to percentage format
         return percentFormat.format(num);
     }
 
     /**
-     * 对应于Linux中的uptime命令，windows中无法统计，所以在windows返回的结果默认是-1
+     * Equivalent to the Linux 'uptime' command; returns -1 by default on Windows as it cannot be measured there
      */
     public static Uptime uptime() {
         var processor = hardware.getProcessor();
@@ -120,7 +120,7 @@ public abstract class OSUtils {
     }
 
     /**
-     * 对应于Linux中的df -h命令，兼容windows
+     * Equivalent to the Linux 'df -h' command, compatible with Windows
      */
     public static List<DiskFileSystem> df() {
         var fileSystems = os.getFileSystem().getFileStores();
@@ -153,7 +153,7 @@ public abstract class OSUtils {
     }
 
     /**
-     * 对应于Linux中的free命令，兼容windows
+     * Equivalent of Linux 'free' command; compatible with Windows
      */
     public static Memory free() {
         var memory = hardware.getMemory();
@@ -194,7 +194,7 @@ public abstract class OSUtils {
     }
 
     /**
-     * 对应于Linux中的sar -n DEV 1命令，兼容windows
+     * Equivalent of Linux 'sar -n DEV 1' command; compatible with Windows
      */
     public static List<Sar> sar() {
         var nameSarMap = new HashMap<String, List<Sar>>();
@@ -299,7 +299,7 @@ public abstract class OSUtils {
                 .directory(wd)
                 .start();
 
-        // 异步读取输出，避免缓冲区阻塞
+        // Asynchronously read output to avoid blocking due to buffer overflow
         var stdoutFuture = executors.submit(ThreadUtils.safeCallable(() -> StringUtils.bytesToString(IOUtils.toByteArray(process.getInputStream()))));
         var stderrFuture = executors.submit(ThreadUtils.safeCallable(() -> StringUtils.bytesToString(IOUtils.toByteArray(process.getErrorStream()))));
 
@@ -313,7 +313,7 @@ public abstract class OSUtils {
         var stdout = stdoutFuture.get(timeoutMillis, TimeUnit.MILLISECONDS);
         var stderr = stderrFuture.get(timeoutMillis, TimeUnit.MILLISECONDS);
 
-        // 获取线程的退出值，0代表正常退出，非0代表异常中止
+        // Get the process exit value; 0 means normal exit, non-zero means abnormal termination
         int exitValue = process.exitValue();
         if (exitValue != 0 || !stderr.isEmpty()) {
             logger.error("doExecCommand error executing command exitValue:[{}] stdout:[{}] stderr:[{}]", exitValue, stdout, stderr);

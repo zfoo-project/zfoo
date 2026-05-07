@@ -17,13 +17,13 @@ public class JvmUtils {
 
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
 
-        //堆内存
+        // Heap memory
         MemoryUsage heapMemoryUsage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
         list.add(new JvmMemory("heap", heapMemoryUsage));
 
         List<MemoryPoolMXBean> memoryPoolMXBeans = ManagementFactory.getMemoryPoolMXBeans();
         for (MemoryPoolMXBean mxBean : memoryPoolMXBeans) {
-            //获取堆内存明细
+            // Get heap memory details
             if (MemoryType.HEAP.equals(mxBean.getType())) {
                 MemoryUsage usage = mxBean.getUsage();
                 list.add(new JvmMemory(mxBean.getName(), usage));

@@ -15,27 +15,27 @@ package com.zfoo.monitor;
 public class SystemInfo {
 
     /**
-     * host名称
+     * hostname
      */
     private String hostname;
 
     /**
-     * 系统版本信息
+     * OS version info
      */
     private String version;
 
     /**
-     * 系统版本详细信息
+     * OS version detail info
      */
     private String versionDetail;
 
     /**
-     * core的逻辑核心个数
+     * number of logical CPU cores
      */
     private int cpuLogicCore;
 
     /**
-     * CPU型号信息
+     * CPU model info
      */
     private String cpuName;
 

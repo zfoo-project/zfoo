@@ -19,16 +19,16 @@ public class DiskStorage implements Comparable<DiskStorage> {
 
 	private String device;
 
-	// 每秒实际读取需求的数量
+	// Number of actual read requests per second
 	private long rs;
 
-	// 每秒实际读取的大小，单位为KB
+	// Actual read throughput per second in KB
 	private long rKBs;
 
-	// 每秒实际写入需求的数量
+	// Number of actual write requests per second
 	private long ws;
 
-	// 每秒实际写入的大小，单位为KB
+	// Actual write throughput per second in KB
 	private long wKBs;
 
 	public static DiskStorage valueOf(String device, long rs, long rKBs, long ws, long wKBs)

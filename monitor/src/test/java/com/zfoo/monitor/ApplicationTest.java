@@ -28,7 +28,7 @@ import oshi.SystemInfo;
 public class ApplicationTest {
 
     /**
-     * 仿Linux的uptime指令，可以用来监控cpu的负载，windows中无法统计，所以在windows返回的结果默认是-1
+     * Emulates Linux's 'uptime' command for monitoring CPU load; returns -1 on Windows
      */
     @Test
     public void uptimeTest() {
@@ -38,7 +38,7 @@ public class ApplicationTest {
     }
 
     /**
-     * 仿Linux的df指令，可以用来监控硬盘容量
+     * Emulates Linux's 'df' command for monitoring disk usage
      */
     @Test
     public void dfTest() {
@@ -50,7 +50,7 @@ public class ApplicationTest {
     }
 
     /**
-     * 仿Linux的free指令，可以用来监控内存占用
+     * Emulates Linux's 'free' command for monitoring memory usage
      */
     @Test
     public void freeTest() {
@@ -60,7 +60,7 @@ public class ApplicationTest {
     }
 
     /**
-     * 仿Linux的sar指令，可以用来监控网络IO
+     * Emulates Linux's 'sar' command for monitoring network I/O
      */
     @Test
     public void sarTest() {
@@ -72,7 +72,7 @@ public class ApplicationTest {
     }
 
     /**
-     * cpu的tick大小测试
+     * Test CPU tick size
      */
     @Test
     public void cpuTest() {

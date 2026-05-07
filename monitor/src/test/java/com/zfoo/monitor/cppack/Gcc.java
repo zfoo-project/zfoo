@@ -56,7 +56,7 @@ public class Gcc {
                 .collect(Collectors.joining(StringUtils.SPACE));
 
 
-        // 链接windows的网络库
+        // Link Windows network library (ws2_32)
         var libraryLink = new StringBuilder();
         if (Platform.isWindows()) {
             libraryLink.append("-lws2_32");
