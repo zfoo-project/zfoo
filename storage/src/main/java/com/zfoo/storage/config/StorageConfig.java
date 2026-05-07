@@ -23,10 +23,10 @@ public class StorageConfig {
 
     private String resourceLocation;
 
-    // 类的属性是否可写，如果为false则类的属性必须为private并且不能有set方法
+    // Whether class fields are writable; if false, fields must be private with no setters
     private boolean writeable;
 
-    // 未被使用的Storage是否回收，默认开启节省资源
+    // Whether unused Storage instances are recycled; default is true to save memory
     private boolean recycle;
 
     public String getId() {

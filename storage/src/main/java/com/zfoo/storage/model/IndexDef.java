@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 简化索引的名称，使用字段的名称作为索引的名称
+ * Simplified index name using the field name
  *
  * @author godotg
  */

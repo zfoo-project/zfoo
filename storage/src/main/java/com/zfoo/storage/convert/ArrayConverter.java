@@ -45,11 +45,11 @@ public class ArrayConverter implements ConditionalGenericConverter {
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
         var content = StringUtils.trim((String) source);
         var componentType = targetType.getType().getComponentType();
-        // null safe，content为空则返回长度为0的数组
+        // Null-safe: returns empty array if content is null
         if (StringUtils.isEmpty(content)) {
             return Array.newInstance(componentType, 0);
         }
-        // 如果为json格式，则以json格式解析
+        // If JSON format, parse as JSON
         if (content.startsWith("[") && content.endsWith("]")) {
             try {
                 return componentType.isPrimitive()

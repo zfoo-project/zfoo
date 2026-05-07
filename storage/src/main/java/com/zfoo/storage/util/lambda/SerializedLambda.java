@@ -3,7 +3,7 @@ package com.zfoo.storage.util.lambda;
 import java.io.*;
 
 /**
- * 当前类是 {@link java.lang.invoke.SerializedLambda } 的一个镜像
+ * A mirror of {@link java.lang.invoke.SerializedLambda}
  * <p>
  * Create by hcl at 2020/7/17
  */

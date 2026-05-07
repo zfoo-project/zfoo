@@ -24,17 +24,17 @@ import java.util.Map;
 public interface IStorageManager {
 
     /**
-     * 配置表初始化之前，先读取所有的excel
+     * Read all Excel files before initializing resource tables
      */
     void initBefore();
 
     /**
-     * 注入
+     * Inject
      */
     void inject();
 
     /**
-     * 程序加载过后，移除没有用到的配置表
+     * Remove unused resource tables after loading to free memory
      */
     void initAfter();
 

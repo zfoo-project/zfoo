@@ -27,7 +27,7 @@ public class StudentCsvResource {
     private int id;
 
     /**
-     * 索引，默认为可重复的索引
+     * Index; duplicate entries allowed by default
      */
     @Index
     private String name;
@@ -39,7 +39,7 @@ public class StudentCsvResource {
     private User user;
 
     /**
-     * 不想映射的字段必须加上transient关键字，这样就不会从Excel中去找对应的列
+     * Fields not to be mapped to Excel must be marked with 'transient'
      */
     private transient String notMapContent;
 

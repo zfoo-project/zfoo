@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * 转换一个String到一个POJO对象，且这个对象不能继承如何接口
+ * Converts a String to a POJO object; the object must not implement any interfaces
  *
  * @author godotg
  */

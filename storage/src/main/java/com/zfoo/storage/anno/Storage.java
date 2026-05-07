@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 /**
  *
  * EN: You can specify the corresponding resource file name (only the file name is specified, no file suffix is required)
- * CN: 可以指定对应的资源文件名（只指定文件名，不需要文件后缀），如果不指定资源文件名，则默认通过扫描路径获取与类名相同的文件资源
+ * Specifies the resource file name (name only, no extension); defaults to scanning for a file matching the class name
  *
  * @author godotg
  */

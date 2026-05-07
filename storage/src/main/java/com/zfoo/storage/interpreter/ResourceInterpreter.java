@@ -47,7 +47,7 @@ public class ResourceInterpreter {
         }
 
         var result = new ArrayList<T>();
-        //获取所有字段
+        // Get all fields
         var cellFieldMap = getCellFieldMap(resource, clazz);
         var fieldInfos = getFieldInfos(cellFieldMap, clazz);
 
@@ -56,7 +56,7 @@ public class ResourceInterpreter {
             Constructor<T> constructor = ReflectionUtils.getConstructor(clazz, constructParams);
 
             var iterator = resource.getRows().iterator();
-            // 从ROW_SERVER这行开始读取数据
+            // Start reading data from ROW_SERVER
             while (iterator.hasNext()) {
                 int index = 0;
                 var columns = iterator.next();
@@ -74,7 +74,7 @@ public class ResourceInterpreter {
             }
         } else {
             var iterator = resource.getRows().iterator();
-            // 从ROW_SERVER这行开始读取数据
+            // Start reading data from ROW_SERVER
             while (iterator.hasNext()) {
                 var columns = iterator.next();
                 var instance = ReflectionUtils.newInstance(clazz);
@@ -100,15 +100,15 @@ public class ResourceInterpreter {
         }
     }
 
-    // 优先使用ExcelFieldName注解表示的值当作列名
+    // @ExcelFieldName value takes priority as the column name
     private static String getExcelFieldName(Field field) {
         return field.isAnnotationPresent(AliasFieldName.class) ? field.getAnnotation(AliasFieldName.class).value() : field.getName();
     }
 
-    // 只读取代码里写的字段
+    // Only read fields declared in the code
     private static Collection<FieldInfo> getFieldInfos(Map<String, Integer> cellFieldMap, Class<?> clazz) {
         var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
-        // 检测field的合法性，field必须可以在excel中找到对应的列，有找不到的列在启动时候就发现
+        // Validate field: must have a matching column in Excel; missing columns are detected at startup
         for (var field : fieldList) {
             var fieldName = getExcelFieldName(field);
             if (!cellFieldMap.containsKey(fieldName)) {

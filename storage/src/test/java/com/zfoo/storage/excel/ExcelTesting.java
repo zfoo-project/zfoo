@@ -33,50 +33,50 @@ public class ExcelTesting {
 
     @Test
     public void createExcelTest() throws IOException {
-        //第一步创建workbook
+        //Step 1: create workbook
         var wb = WorkbookFactory.create(true);
 
-        //第二步创建sheet
-        var sheet = wb.createSheet("测试");
+        //Step 2: create sheet
+        var sheet = wb.createSheet("TestSheet");
 
-        //第三步创建行row:添加表头0行
+        // Step 3: create header row (row 0)
         var row = sheet.createRow(0);
         var style = wb.createCellStyle();
-        //style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  //居中
+        //style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  //center alignment
 
 
-        //第四步创建单元格
-        var cell = row.createCell(0); //第一个单元格
-        cell.setCellValue("姓名");
+        //Step 4: create cells
+        var cell = row.createCell(0); //first cell
+        cell.setCellValue("Name");
         cell.setCellStyle(style);
 
-        cell = row.createCell(1);         //第二个单元格
-        cell.setCellValue("年龄");
+        cell = row.createCell(1);         //second cell
+        cell.setCellValue("Age");
         cell.setCellStyle(style);
 
 
-        //第五步插入数据
+        //Step 5: insert data
         for (int i = 0; i < 5; i++) {
-            //创建行
+            //Create row
             row = sheet.createRow(i + 1);
-            //创建单元格并且添加数据
+            //Create cells and add data
             row.createCell(0).setCellValue("aa" + i);
             row.createCell(1).setCellValue(i);
         }
 
-        //第六步将生成excel文件保存到指定路径下
+        //Step 6: save Excel to the specified path
         FileOutputStream target = new FileOutputStream("target.xlsx");
         wb.write(target);
         target.close();
 
-        System.out.println("Excel文件生成成功...");
+        System.out.println("Excel file generated successfully...");
     }
 
     @Test
     public void readExcelTest() throws IOException {
         Workbook wb = WorkbookFactory.create(new File("target.xlsx"));
 
-        // 只读取第一个工作簿
+        // Read only the first worksheet
         Sheet sheet = wb.getSheetAt(0);
 
         Iterator<Row> iterator = sheet.iterator();
@@ -91,7 +91,7 @@ public class ExcelTesting {
             System.out.println(builder.toString());
         }
 
-        System.out.println("Excel文件读取成功");
+        System.out.println("Excel file read successfully");
     }
 
 }

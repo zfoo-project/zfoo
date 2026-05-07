@@ -15,17 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 配置文件资源
+ * Resource configuration data
  *
  * @author meiwei666
  */
 public class StorageData {
 
-    // 文件名
+    // File name
     private String name;
-    // 配置表字段名
+    // Resource table field names
     private List<StorageHeader> headers = new ArrayList<>();
-    // 配置表数据
+    // Resource table data
     private List<List<String>> rows = new ArrayList<>();
 
     public static StorageData valueOf(String name, List<StorageHeader> headers, List<List<String>> rows) {

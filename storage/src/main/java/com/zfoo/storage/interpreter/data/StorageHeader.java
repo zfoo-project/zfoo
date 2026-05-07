@@ -16,11 +16,11 @@ package com.zfoo.storage.interpreter.data;
  */
 public class StorageHeader {
 
-    //字段名
+    // Field name
     private String name;
-    //类型
+    // Field type
     private String type;
-    //列
+    // Column
     private int index;
 
     public static StorageHeader valueOf(String name, String type, int index) {

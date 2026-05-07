@@ -54,19 +54,19 @@ public class StorageManager implements IStorageManager {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageContext.class);
 
-    // ANT通配符有三种, ? :匹配任何单字符; * :匹配0或者任意数量的字符; ** :匹配0或者更多的目录
-    // 1. /project/*.a	匹配项目根路径下所有在project路径下的.a文件
-    // 2. /project/p?ttern	匹配项目根路径下 /project/pattern 和 /app/pXttern,但是不包括/app/pttern
-    // 3. /**/example	匹配项目根路径下 /project/example, /project/foow/example, 和 /example
-    // 4. /project/**/dir/file.*	匹配项目根路径下/project/dir/file.jsp, /project/foow/dir/file.html,/project/foow/bar/dir/file.pdf
-    // 5. /**/*.jsp	匹配项目根路径下任何的.jsp 文件
-    // classpath：和classpath*： 的区别，前者只会第一个加载到的类，后者会加载所有的类，包括jar文件下的类
+    // ANT wildcards: '?' one char, '*' any chars, '**' any path
+    // 1. /project/*.a	matches all .a files under /project
+    // 2. /project/p?ttern	matches /project/pattern and /project/pXttern (not pttern)
+    // 3. /**/example	matches any path ending with /example
+    // 4. /project/**/dir/file.*	matches /project/**/dir/file.*
+    // 5. /**/*.jsp	matches all .jsp files anywhere
+    // 'classpath:' loads first match; 'classpath*:' loads all including JARs
     private static final String SUFFIX_PATTERN = "**/*.class";
 
     private StorageConfig storageConfig;
 
     /**
-     * 在当前项目被依赖注入，被使用的Storage
+     * Storage resources that are dependency-injected in the current project
      */
     private final Map<Class<?>, IStorage<?, ?>> storageMap = new HashMap<>();
 
@@ -82,25 +82,25 @@ public class StorageManager implements IStorageManager {
     public void initBefore() {
         var resourceDefinitionMap = new HashMap<Class<?>, StorageDefinition>();
 
-        // 获取需要被映射的Excel的class类文件
+        // Get the class mapped to Excel
         var clazzSet = resourceClass();
         if (CollectionUtils.isEmpty(clazzSet)) {
             logger.warn("no any storages found, please check your config. If is in graalvm environment, make sure your storage be annotated with @GraalvmNativeStorage and can be scanned by spring @Component.");
             return;
         }
 
-        // 通过class类文件扫描excel文件地址
+        // Scan for Excel file path based on class
         for (var resourceClazz : clazzSet) {
             var resourceFile = resource(resourceClazz);
             StorageDefinition storageDefinition = new StorageDefinition(resourceClazz, resourceFile);
             if (resourceDefinitionMap.containsKey(resourceClazz)) {
-                // 类的资源定义已经存在
+                // Resource definition already registered
                 throw new RuntimeException(StringUtils.format("The resource definition of the class [{}] already exists [{}]", resourceClazz, storageDefinition));
             }
             resourceDefinitionMap.put(resourceClazz, storageDefinition);
         }
 
-        // 检查class字段是否合法
+        // Validate class fields
         if (!storageConfig.isWriteable()) {
             var allRelevantClass = new HashSet<Class<?>>();
             resourceDefinitionMap.values().forEach(it -> allRelevantClass.addAll(ClassUtils.relevantClass(it.getClazz())));
@@ -113,7 +113,7 @@ public class StorageManager implements IStorageManager {
                 var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
                 for (var field : fieldList) {
                     if (Modifier.isPublic(field.getModifiers())) {
-                        // 因为静态资源类是不能被修改的，资源类的属性不能被public修饰，用private修饰或者开启配置writeable属性
+                        // Static resource fields must be private; use writeable=true to allow setters
                         throw new RunException("Static resource classes cannot be modified, class:[{}] filed:{}[] cannot be modified by public, use private modified or enable writeable configuration", clazz, field.getName());
                     }
 
@@ -121,10 +121,10 @@ public class StorageManager implements IStorageManager {
                     try {
                         setMethodName = FieldUtils.fieldToSetMethod(clazz, field);
                     } catch (Exception e) {
-                        // 没有setMethod是正确的
+                        // No setter is correct for immutable resources
                     }
                     if (StringUtils.isNotBlank(setMethodName)) {
-                        // 因为静态资源类是不能被修改的，资源类的属性不能含有set方法[{}]，删除set方法或者开启配置writeable属性
+                        // Static resource fields must not have setters; remove the setter or enable writeable
                         throw new RunException("Static resource classes cannot be modified, [class:{}][filed:{}] cannot contain set method [{}], delete set method or enable writeable configuration", clazz, field.getName(), setMethodName);
                     }
                 }
@@ -150,7 +150,7 @@ public class StorageManager implements IStorageManager {
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
 
-            //防止被CGLIB代理时 直接赋值无效
+            // Prevent direct assignment being ignored when CGLIB-proxied
             var targetBean = Objects.requireNonNullElse(AopProxyUtils.getSingletonTarget(bean), bean);
 
             var clazz = targetBean.getClass();
@@ -181,7 +181,7 @@ public class StorageManager implements IStorageManager {
                 }
 
                 if (!keyClazz.getSimpleName().toLowerCase().contains(idFields[0].getType().getSimpleName().toLowerCase())) {
-                    // 注入静态类配置资源的类型和泛型类型不匹配
+                    // Injected type does not match the expected generic type
                     throw new RuntimeException(StringUtils.format("Inject static class configuration storage:[{}] key:[{}] type and generic type type:[{}] do not match", resourceClazz.getSimpleName(), idFields[0].getType().getSimpleName(), keyClazz.getSimpleName()));
                 }
 
@@ -223,7 +223,7 @@ public class StorageManager implements IStorageManager {
             throw new RunException("There is no [{}] defined Storage and unable to get it", clazz.getCanonicalName());
         }
         if (storage.isRecycle()) {
-            // Storage没有使用，为了节省内存提前释放了它；只有使用@StorageAutowired注解的Storage才能被动态获取或者关闭配置recycle属性
+            // Storage not in use; released to save memory. Use @StorageAutowired or recycle=false to keep it
             logger.warn("Storage [{}] is not used, it was freed to save memory; use @StorageAutowired or turn off recycle configuration", clazz.getCanonicalName());
         }
         return (T) storage;
@@ -245,7 +245,7 @@ public class StorageManager implements IStorageManager {
     }
 
     private Set<Class<?>> resourceClass() {
-        // graalvm环境 PathMatchingResourcePatternResolver/CachingMetadataReaderFactory 无法使用，所以直接在spring容器中获取
+        // In GraalVM: PathMatchingResourcePatternResolver unavailable; get resources from Spring context
         if (GraalVmUtils.isGraalVM()) {
             var applicationContext = StorageContext.getApplicationContext();
             var nativeResources = applicationContext.getBeansWithAnnotation(GraalvmNativeStorage.class);
@@ -301,7 +301,7 @@ public class StorageManager implements IStorageManager {
         var fileName = StringUtils.isEmpty(alias) ? clazz.getSimpleName() : alias;
 
         try {
-            // 一个class类只能匹配一个资源文件，如果匹配多个则会有歧义
+            // A class can match only one resource file; multiple matches are ambiguous
             var resourceSet = new HashSet<Resource>();
             var resourceLocations = StringUtils.tokenize(storageConfig.getResourceLocation(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
             for (var resourceLocation : resourceLocations) {
@@ -314,7 +314,7 @@ public class StorageManager implements IStorageManager {
                     // do nothing
                 }
 
-                // 通配符无法匹配根目录，所以如果找不到，再从根目录查找一遍
+                // Wildcards cannot match root directory; retry search from root
                 if (resources.isEmpty()) {
                     packageSearchPath = StringUtils.format("{}/{}.*", resourceLocation, fileName);
                     packageSearchPath = packageSearchPath.replaceAll("//", "/");

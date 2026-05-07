@@ -69,18 +69,18 @@ public class StorageContext implements ApplicationListener<ApplicationContextEve
 
         if (event instanceof ContextRefreshedEvent) {
             var stopWatch = new StopWatch();
-            // 初始化上下文
+            // Initialize context
             StorageContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
             instance.storageManager = applicationContext.getBean(IStorageManager.class);
 
-            // 初始化，并读取配置表
+            // Initialize and load resource tables
             instance.storageManager.initBefore();
 
-            // 注入配置表资源
+            // Inject resource table data
             instance.storageManager.inject();
 
-            // 移除没有被引用的不必要资源，为了节省服务器内存
+            // Remove unreferenced resources to save server memory
             instance.storageManager.initAfter();
             logger.info("Storage started successfully and cost [{}] seconds", stopWatch.costSeconds());
         } else if (event instanceof ContextClosedEvent) {

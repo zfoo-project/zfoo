@@ -54,20 +54,20 @@ public abstract class CsvReader {
 
 
     /**
-     * 构建配置表消息头
+     * Build resource table header
      */
     private static List<StorageHeader> getHeaders(Iterator<CSVRecord> iterator, String fileName) {
-        // 获取配置表的有效列名称，默认第一行就是字段名称
+        // Get valid column names from the resource table; row 1 is the field names by default
         var fieldRow = iterator.next();
         if (fieldRow == null) {
             throw new RunException("Failed to get attribute control column from csv file of resource [class:{}]", fileName);
         }
-        //默认第二行字段类型
+        // Row 2: field types (default)
         var typeRow = iterator.next();
         if (typeRow == null) {
             throw new RunException("Failed to get type control column from csv file of resource [class:{}]", fileName);
         }
-        // 默认第三行为描述，需要的时候再使用
+        // Row 3: descriptions (optional)
         var descRow = iterator.next();
 
         var headers = new ArrayList<StorageHeader>();

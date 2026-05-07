@@ -50,14 +50,14 @@ public class ExportBinaryTesting {
 
     }
 
-    // 对应的excel表格，变量对应excel中的列，只有定义过的变量才能导出，没有定义的变量不会导出
+    // Variables correspond to Excel columns; only declared variables are exported
     @Storage
     public record StudentResource(
             @Id
             int id,
             String idCard,
             String name,
-            @AliasFieldName("年龄")
+            @AliasFieldName("Age")
             int age,
             float score,
             String[] courses,
@@ -66,20 +66,20 @@ public class ExportBinaryTesting {
     ) {
     }
 
-    // 需要定义一个类将所有的excel对象包裹起来
+    // Define a wrapper class for all Excel objects
     public static class ResourceData {
 
         public Map<Integer, StudentResource> studentResources;
 
     }
 
-    // excel对应的java文件路径，比如ResourceData，StudentResource
+    // Java class path, e.g. ResourceData, StudentResource
     public static final String excelClassPath = "com.zfoo.storage.export";
-    // excel文件路径，如果是类路径以classpath开头，如果是目录文件路径则以file开头，这里的excel文件在java代码的resources/excel目录里属于类路径
+    // Excel path: 'classpath:' for classpath, 'file:' for filesystem
     public static final String excelFilePath = "classpath:/excel";
-    // excel输出的gdscript文件路径，会将excel转为gdscript对象
+    // Output GDScript file path
     public static final String gdscriptOutputPath = "D:\\github\\godot-bird\\excel";
-    // excel导出的二进制文件路径
+    // Output binary file path
     public static final String binaryOutputFilePath = "D:/github/godot-bird/excel/binary_data.cfg";
 
 
@@ -95,7 +95,7 @@ public class ExportBinaryTesting {
         storageManager.initBefore();
         storageManager.initAfter();
 
-        // 生成协议
+        // Generate protocol
         var protocols = new ArrayList<Class<?>>();
         protocols.add(ResourceData.class);
         protocols.addAll(storageManager.storageMap().keySet());
@@ -104,7 +104,7 @@ public class ExportBinaryTesting {
         operation.getGenerateLanguages().add(CodeLanguage.GdScript);
         ProtocolManager.initProtocolAuto(protocols, operation);
 
-        // 生成数据
+        // Generate data
         var resourceData = ExportUtils.autoWrapData(ResourceData.class, storageManager.storageMap());
         var buffer = new UnpooledHeapByteBuf(ByteBufAllocator.DEFAULT, 100, Integer.MAX_VALUE);
         ProtocolManager.write(buffer, resourceData);

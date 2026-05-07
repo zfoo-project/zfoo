@@ -30,7 +30,7 @@ public record TeacherResource(
         String idCard,
         @Index
         String name,
-        @AliasFieldName("年龄")
+        @AliasFieldName("Age")
         int age,
         float score,
         String[] courses,

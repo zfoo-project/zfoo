@@ -3,26 +3,26 @@ package com.zfoo.storage.util.function;
 import java.io.Serializable;
 
 /**
- * 只有一个参数的函数对象<br>
- * 接口灵感来自于<a href="http://actframework.org/">ActFramework</a><br>
- * 一个函数接口代表一个一个函数，用于包装一个函数为对象<br>
- * 在JDK8之前，Java的函数并不能作为参数传递，也不能作为返回值存在，此接口用于将一个函数包装成为一个对象，从而传递对象
+ * Single-parameter Function object<br>
+ * Inspired by ActFramework<a href="http://actframework.org/">ActFramework</a><br>
+ * A functional interface wrapping a function as an object<br>
+ * Before JDK 8, functions could not be passed/returned; this wraps a function as an object
  *
  * @author Looly
  *
- * @param <P> 参数类型
- * @param <R> 返回值类型
+ * @param <P> parameter type
+ * @param <R> return type
  * @since 4.2.2
  */
 @FunctionalInterface
 public interface Func1<P, R> extends Serializable {
 
 	/**
-	 * 执行函数
+	 * Execute the function
 	 *
-	 * @param parameter 参数
-	 * @return 函数执行结果
-	 * @throws Exception 自定义异常
+	 * @param parameter the parameter
+	 * @return function result
+	 * @throws Exception custom exception
 	 */
 	R apply(P parameter) throws Exception;
 

@@ -18,7 +18,7 @@ import java.lang.annotation.*;
 
 /**
  * EN: Injection of static data
- * CN: 静态数据的注入
+ * Injection of static data resources
  *
  * @author godotg
  */

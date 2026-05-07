@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 支持读取配置文件的类型后缀
+ * Supported file type suffixes for resource files
  *
  * @author godotg
  */

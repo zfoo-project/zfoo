@@ -38,16 +38,16 @@ import java.util.*;
 public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
     // func index of caches
     private ConcurrentReferenceHashMap<Func1<V, ?>, String> funcCaches = new ConcurrentReferenceHashMap<>();
-    // non-unique index (非唯一索引)
+    // non-unique index
     protected Map<String, Map<Object, List<V>>> indexMap = new HashMap<>();
-    // unique index (唯一索引)
+    // unique index
     protected Map<String, Map<Object, V>> uniqueIndexMap = new HashMap<>();
 
     protected Class<?> clazz;
     protected IdDef idDef;
     protected Map<String, IndexDef> indexDefMap;
     // EN: unused configuration tables will clear data to save memory.
-    // CN: 没有被使用的配置表会清除data数据，以达到节省内存的目的
+    // Unused resource tables have their data cleared to save memory
     protected boolean recycle = true;
 
     public static AbstractStorage<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
@@ -56,7 +56,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
 
         try {
             var list = ResourceInterpreter.read(inputStream, resourceClazz, suffix);
-            // 校验id是否重复
+            // Check for duplicate ids
             var set = new HashSet<>();
             for (var value : list) {
                 var id = ReflectionUtils.getField(idDef.getField(), value);
@@ -89,12 +89,12 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
         this.idDef = idDef;
         this.indexDefMap = indexDefMap;
         for (var value : values) {
-            // 添加资源
+            // Add resource
             @SuppressWarnings("unchecked")
             var v = (V) value;
-            // 添加索引
+            // Add index
             for (var def : indexDefMap.values()) {
-                // 使用field的名称作为索引的名称
+                // Use field name as the index name
                 var indexKey = def.getField().getName();
                 var indexValue = ReflectionUtils.getField(def.getField(), v);
                 if (def.isUnique()) {
@@ -165,7 +165,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
             return indexName;
         }
 
-        // 1. IDEA 调试模式下 lambda 表达式是一个代理
+        // 1. In IDEA debug mode, lambda is a proxy
         if (func instanceof Proxy) {
             try {
                 var lambda = new IdeaProxyLambdaMeta((Proxy) func);
@@ -174,7 +174,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
             }
         }
 
-        // 2. 反射读取
+        // 2. Read via reflection
         if (indexName == null) {
             try {
                 var method = func.getClass().getDeclaredMethod("writeReplace");
@@ -185,7 +185,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
             }
         }
 
-        // 3. 反射失败使用序列化的方式读取
+        // 3. Fallback to serialization if reflection fails
         if (indexName == null) {
             try {
                 var lambda = new ShadowLambdaMeta(SerializedLambda.extract(func));
@@ -194,7 +194,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
             }
         }
 
-        // 4. 通过将func带入到dataMap中求解，适合GraalVM环境中
+        // 4. Derive from dataMap (suitable for GraalVM environments)
         if (indexName == null) {
             try {
                 var fields = Arrays.stream(clazz.getDeclaredFields())
@@ -223,7 +223,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
             }
         }
 
-        // 所有的方法都取不到Func对应的属性名称则抛出异常
+        // Throw exception if no method can determine the Func field name
         if (indexName == null) {
             throw new RunException("can not get indexName from func:[{}]", func);
         }

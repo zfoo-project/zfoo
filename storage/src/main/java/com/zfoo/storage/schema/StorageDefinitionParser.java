@@ -29,19 +29,19 @@ import org.w3c.dom.Element;
  */
 public class StorageDefinitionParser implements BeanDefinitionParser {
 
-    // 配置标签名称
+    // Configuration tag name
     public static final String STORAGE = "storage";
 
 
     @Override
     public AbstractBeanDefinition parse(Element element, ParserContext parserContext) {
-        // 解析StorageConfig的配置
+        // Parse StorageConfig
         parseStorageConfig(element, parserContext);
 
-        // 注册StorageContext
+        // Register StorageContext
         registerBeanDefinition(parserContext);
 
-        // 注册StorageManager
+        // Register StorageManager
         var clazz = StorageManager.class;
         var name = StringUtils.uncapitalize(clazz.getName());
         var builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
@@ -80,7 +80,7 @@ public class StorageDefinitionParser implements BeanDefinitionParser {
         String name;
         BeanDefinitionBuilder builder;
 
-        // 注册StorageContext
+        // Register StorageContext
         clazz = StorageContext.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);

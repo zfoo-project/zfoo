@@ -1,7 +1,7 @@
 package com.zfoo.storage.util.lambda;
 
 /**
- * 基于 {@link SerializedLambda} 创建的元信息
+ * Metadata based on {@link SerializedLambda}
  * <p>
  * Create by hcl at 2021/7/7
  */

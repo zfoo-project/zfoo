@@ -18,7 +18,7 @@ import java.lang.annotation.*;
 
 /**
  * EN: the name of the index uses the name of the field attribute, implemented with HaspMap
- * CN: 索引的名称使用字段属性的名称，用HaspMap实现
+ * Index name uses the field name; implemented with HashMap
  *
  * @author godotg
  */

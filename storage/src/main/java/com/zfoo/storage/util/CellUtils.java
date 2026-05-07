@@ -32,9 +32,9 @@ public abstract class CellUtils {
     }
 
     /**
-     * 获取单元格值
+     * Get cell value
      *
-     * @return 值，类型可能为：Date、Double、Boolean、String
+     * @return value; possible types: Date, Double, Boolean, String
      */
     public static Object getCellValue(Cell cell) {
         if (cell == null) {
@@ -44,8 +44,8 @@ public abstract class CellUtils {
     }
 
     /**
-     * 获取单元格值<br>
-     * 如果单元格值为数字格式，则判断其格式中是否有小数部分，无则返回Long类型，否则返回Double类型
+     * Get cell value<br>
+     * For numeric cells: return Long if no fractional part, otherwise Double
      */
     private static Object getCellValue(Cell cell, CellType cellType) {
         Object value;
@@ -57,7 +57,7 @@ public abstract class CellUtils {
                 value = cell.getBooleanCellValue();
                 break;
             case FORMULA:
-                // 遇到公式时查找公式结果类型
+                // For formula cells, check the result type
                 value = getCellValue(cell, cell.getCachedFormulaResultType());
                 break;
             case BLANK:
@@ -78,9 +78,9 @@ public abstract class CellUtils {
     // -------------------------------------------------------------------------------------------------------------- Private method start
 
     /**
-     * 获取数字类型的单元格值
+     * Get numeric cell value
      *
-     * @return 单元格值，可能为Long、Double、Date
+     * @return cell value; type may be Long, Double, or Date
      */
     private static Object getNumericValue(Cell cell) {
         var value = cell.getNumericCellValue();
@@ -90,13 +90,13 @@ public abstract class CellUtils {
             return value;
         }
 
-        // 判断是否为日期
+        // Check if value is a date
         if (DateUtil.isCellDateFormatted(cell)) {
             return cell.getDateCellValue();
         }
 
         var format = style.getDataFormatString();
-        // 普通数字
+        // Plain number
         if (null != format && !format.contains(StringUtils.PERIOD)) {
             var longValue = (long) value;
             if (longValue == value) {

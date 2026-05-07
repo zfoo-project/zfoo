@@ -92,7 +92,7 @@ public abstract class ExportUtils {
                 .toList();
     }
 
-    // 将class里的map自动赋值storage
+    // Auto-assign class map to storage
     public static <T> T autoWrapData(Class<T> clazz, Map<Class<?>, IStorage<?, ?>> storageMap) {
         var instance = ReflectionUtils.newInstance(clazz);
 
@@ -148,25 +148,25 @@ public abstract class ExportUtils {
 
         for (char c : valueChars) {
             if (c == textDelimiter) {
-                // 字段值中存在包装符
+                // Field value contains a quote character
                 containsTextDelimiter = needsTextDelimiter = true;
                 break;
             } else if (c == fieldSeparator || c == '\n' || c == '\r') {
-                // 包含分隔符或换行符需要包装符包装
+                // Wrap with quotes if value contains delimiter or newline
                 needsTextDelimiter = true;
             }
         }
 
-        // 包装符开始
+        // Opening quote
         var builder = new StringBuilder();
         if (needsTextDelimiter) {
             builder.append(textDelimiter);
         }
 
-        // 正文
+        // Content
         if (containsTextDelimiter) {
             for (char c : valueChars) {
-                // 转义文本包装符
+                // Escape embedded quote
                 if (c == textDelimiter) {
                     builder.append(textDelimiter);
                 }
@@ -176,7 +176,7 @@ public abstract class ExportUtils {
             builder.append(valueChars);
         }
 
-        // 包装符结尾
+        // Closing quote
         if (needsTextDelimiter) {
             builder.append(textDelimiter);
         }

@@ -34,7 +34,7 @@ public class ExportCsvTesting {
         var outputDir = "E:\\workspace\\zfoo\\storage\\src\\test\\resources\\excel";
         ExportUtils.excel2csv(inputDir, outputDir);
 
-        // godot4.x导入csv，莫名奇妙生成了一些translation文件，批量修改一下文件的名称
+        // Godot 4.x generates unexpected translation files when importing CSV; batch rename them
         var csvFiles = ExportUtils.scanCsvFiles(outputDir);
         csvFiles.stream().forEach(it -> it.renameTo(new File(StringUtils.format("{}.txt", it.getAbsolutePath()))));
         csvFiles.stream().forEach(it -> FileUtils.deleteFile(it));
