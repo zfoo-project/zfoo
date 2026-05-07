@@ -19,22 +19,23 @@ import com.zfoo.protocol.util.ReflectionUtils;
 import java.lang.reflect.Method;
 
 /**
- * 动态代理被EventReceiver注解标注的方法，为了避免反射最终会用javassist字节码增强的方法去代理EventReceiverDefinition
+ * Dynamic proxy for methods annotated with @EventReceiver. To avoid reflection overhead,
+ * Javassist bytecode enhancement is used to proxy EventReceiverDefinition.
  *
  * @author godotg
  */
 public class EventReceiverDefinition implements IEventReceiver {
 
-    // 观察者的bean
+    // The observer's bean instance
     private Object bean;
 
-    // 被EventReceiver注解标注的方法
+    // The method annotated with @EventReceiver
     private Method method;
 
-    // 事件接收方式
+    // The event dispatching strategy
     private Bus bus;
 
-    // 接收的参数Class
+    // The event parameter class type
     private Class<? extends IEvent> eventClazz;
 
     public EventReceiverDefinition(Object bean, Method method, Bus bus, Class<? extends IEvent> eventClazz) {

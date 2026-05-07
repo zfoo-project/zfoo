@@ -50,7 +50,7 @@ public class EventContext implements ApplicationListener<ApplicationContextEvent
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
         if (event instanceof ContextRefreshedEvent) {
-            // 初始化上下文
+            // Initialize context
             EventContext.instance = this;
             instance.applicationContext = event.getApplicationContext();
         } else if (event instanceof ContextClosedEvent) {

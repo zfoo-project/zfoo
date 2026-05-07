@@ -23,14 +23,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class ApplicationTest {
 
-    // Event Bus tutorial, the core idea is the observer pattern.(核心思想是设计模式中的观察者模式)
+    // Event Bus tutorial. The core idea is the Observer design pattern.
     @Test
     public void startEventTest() {
-        // load the configuration file which must import event.(加载配置文件，配置文件中必须引入event)
+        // Load the configuration file (must import the event module)
         var context = new ClassPathXmlApplicationContext("application.xml");
 
         // see receiver method of MyController1 and MyController2
-        EventBus.post(MyNoticeEvent.valueOf("我的事件"));
+        EventBus.post(MyNoticeEvent.valueOf("my-event"));
 
         ThreadUtils.sleep(1000);
     }

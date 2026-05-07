@@ -20,20 +20,17 @@ import com.zfoo.protocol.util.RandomUtils;
 public interface IEvent {
 
     /**
-     * 这个返回的是一个用于确定事件在EventBus中的哪个线程池的执行的一个参数，只有异步事件才会有作用
+     * Returns a parameter used to determine which thread pool in EventBus the event should execute on. Only applies to async events.
      * <p>
-     * 比如cpu是四核，那么EventBus中的executors线程池的数量为8个，通过取余可以确定异步事件在哪个线程池中执行。
-     * 如果参数是0，0 % 8 = 0，那么异步事件最终会在executors[0]表示的线程池中执行
-     * 如果参数是1，1 % 8 = 1，那么异步事件最终会在executors[1]表示的线程池中执行
-     * 如果参数是8，8 % 8 = 0，那么异步事件最终会在executors[0]表示的线程池中执行
-     * 如果参数是9，9 % 8 = 1，那么异步事件最终会在executors[1]表示的线程池中执行
-     * <p>
-     * 通过返回的参数，可以轻松控制异步事件在哪个线程池中去执行。
-     * 因为EventBus中的线程池都是单线程线程池，如果将一些异步事件放在同一个线程池中执行，可以不用加锁，提高程序运行的效率。
-     * <p>
-     * 默认返回一个随机数，这就导致如果不重写这个方法，那么异步事件有可能会在EventBus中的任何一条线程池中去执行。
-     *
-     * @return 线程池的执行的一个参数
+     * For example, if the CPU has 4 cores, EventBus creates 8 executor thread pools. Modulo determines the target pool.
+     * If the value is 0: 0 % 8 = 0, the async event executes in executors[0].
+     * If the value is 1: 1 % 8 = 1, the async event executes in executors[1].
+     * If the value is 8: 8 % 8 = 0, the async event executes in executors[0].
+     * If the value is 9: 9 % 8 = 1, the async event executes in executors[1].
+     * By choosing the return value, you can control which thread pool handles the async event.
+     * Since each pool is single-threaded, routing related events to the same pool avoids locking and improves throughput.
+     * By default returns a random value, so async events may execute on any thread pool if this method is not overridden.
+     * @return the parameter used to select the target thread pool
      */
     default int executorHash() {
         return RandomUtils.randomInt();

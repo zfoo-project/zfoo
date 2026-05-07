@@ -45,7 +45,7 @@ public abstract class EventBus {
 
     /**
      * EN: The size of the thread pool. Event's thread pool is often used to do time-consuming operations, so set it a little bigger
-     * CN: 线程池的大小. event的线程池经常用来做一些耗时的操作，所以要设置大一点
+     * Thread pool size. The event thread pool is often used for time-consuming operations, so it should be set larger.
      */
     public static final int EXECUTORS_SIZE = MathUtil.safeFindNextPositivePowerOfTwo(Math.max(Runtime.getRuntime().availableProcessors(), 4) * 2);
     private static final int EXECUTOR_MASK = EXECUTORS_SIZE - 1;

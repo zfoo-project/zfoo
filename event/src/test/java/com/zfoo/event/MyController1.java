@@ -26,10 +26,10 @@ public class MyController1 {
 
     private static final Logger logger = LoggerFactory.getLogger(MyController1.class);
 
-    // 事件会被当前线程立刻执行，注意日志打印的线程号
+    // The event is executed immediately on the current thread; note the thread ID in the log
     @EventReceiver
     public void onMyNoticeEvent(MyNoticeEvent event) {
-        logger.info("方法1同步执行事件：" + event.getMessage());
+        logger.info("method1 sync event executed: " + event.getMessage());
     }
 
 }

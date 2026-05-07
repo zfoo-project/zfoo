@@ -30,7 +30,7 @@ import java.lang.reflect.Modifier;
 public abstract class EnhanceUtils {
 
     static {
-        // 适配Tomcat，因为Tomcat不是用的默认的类加载器，而Javassist用的是默认的加载器
+        // Adapt to Tomcat: Tomcat uses a custom class loader, while Javassist uses the default class loader
         var classArray = new Class<?>[]{
                 IEventReceiver.class,
                 IEvent.class
@@ -53,46 +53,46 @@ public abstract class EnhanceUtils {
         Method method = definition.getMethod();
         Class<?> clazz = definition.getEventClazz();
 
-        // 定义类名称
+        // Define the class name
         CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.EVENT) + UuidUtils.getLocalIntId());
         enhanceClazz.addInterface(classPool.get(IEventReceiver.class.getName()));
 
-        // 定义类中的一个成员bean
+        // Define a member field 'bean' in the class
         CtClass beanClass = classPool.get(bean.getClass().getName());
         CtField field = new CtField(beanClass, "bean", enhanceClazz);
         field.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
         enhanceClazz.addField(field);
 
-        // 定义类的构造器
-        // 创建构造函数参数数组
+        // Define the class constructor
+        // Create constructor parameter array
         CtClass[] parameterTypes = {beanClass};
         CtConstructor constructor = new CtConstructor(parameterTypes, enhanceClazz);
         constructor.setBody("{this.bean=$1;}");
         constructor.setModifiers(Modifier.PUBLIC);
         enhanceClazz.addConstructor(constructor);
 
-        // 定义类实现的接口方法invoker
+        // Define the 'invoke' method from the interface
         CtMethod invokeMethod = new CtMethod(classPool.get(void.class.getName()), "invoke", classPool.get(new String[]{IEvent.class.getName()}), enhanceClazz);
         invokeMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
-        String invokeMethodBody = StringUtils.format("{ this.bean.{}(({})$1); }", method.getName(), clazz.getName()); // 强制类型转换，转换为具体的Event类型的类型
+        String invokeMethodBody = StringUtils.format("{ this.bean.{}(({})$1); }", method.getName(), clazz.getName()); // Cast to the specific Event type
         invokeMethod.setBody(invokeMethodBody);
         enhanceClazz.addMethod(invokeMethod);
 
-        // 定义类实现的接口方法bus
+        // Define the 'bus' method from the interface
         CtMethod busMethod = new CtMethod(classPool.get(Bus.class.getName()), "bus", null, enhanceClazz);
         busMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         String busMethodBody = StringUtils.format("{ return {}.{}; }", Bus.class.getName(), definition.getBus());
         busMethod.setBody(busMethodBody);
         enhanceClazz.addMethod(busMethod);
 
-        // 定义类实现的接口方法getBean
+        // Define the 'getBean' method from the interface
         CtMethod beanMethod = new CtMethod(classPool.get(Object.class.getName()), "getBean", null, enhanceClazz);
         beanMethod.setModifiers(Modifier.PUBLIC + Modifier.FINAL);
         String beanMethodBody = "{ return this.bean; }";
         beanMethod.setBody(beanMethodBody);
         enhanceClazz.addMethod(beanMethod);
 
-        // 释放缓存
+        // Detach from pool to release cached class definition
         enhanceClazz.detach();
 
         Class<?> resultClazz = enhanceClazz.toClass(IEventReceiver.class);

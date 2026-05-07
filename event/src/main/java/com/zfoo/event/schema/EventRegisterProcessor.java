@@ -30,8 +30,8 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import java.lang.reflect.Modifier;
 
 /**
- * 这是一个后置处理器，在boot项目中注册EventContext时，会import导入EventRegisterProcessor这个组件，这是一个后置处理器，
- * 断点发现 在AbstractAutowireCapableBeanFactory或调用getBeanPostProcessors，这样子每一个Bean创建后都会走postProcessAfterInitialization这个方法
+ * A BeanPostProcessor registered via @Import when EventContext is set up in the boot module.
+ * Debugging reveals that AbstractAutowireCapableBeanFactory calls getBeanPostProcessors, so postProcessAfterInitialization is invoked after every bean is created.
  *
  * @author godotg
  */
@@ -84,7 +84,7 @@ public class EventRegisterProcessor implements BeanPostProcessor {
                 if (GraalVmUtils.isGraalVM()) {
                     EventBus.registerEventReceiver(eventClazz, receiverDefinition);
                 } else {
-                    // key:class类型 value:观察者 注册Event的receiverMap中
+                            // key: event class type, value: observer, registered in the receiverMap of EventBus
                     EventBus.registerEventReceiver(eventClazz, EnhanceUtils.createEventReceiver(receiverDefinition));
                 }
             }

@@ -29,7 +29,7 @@ public class MyController3 {
 
     @EventReceiver(Bus.VirtualThread)
     public void onMyNoticeEvent(MyNoticeEvent event) {
-        logger.info("方法3虚拟线程执行事件：" + event.getMessage());
+        logger.info("method3 virtual-thread event executed: " + event.getMessage());
     }
 
 }

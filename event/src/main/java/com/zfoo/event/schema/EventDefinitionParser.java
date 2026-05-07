@@ -32,13 +32,13 @@ public class EventDefinitionParser implements BeanDefinitionParser {
         String name;
         BeanDefinitionBuilder builder;
 
-        // 注册EventContext
+        // Register EventContext
         clazz = EventContext.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
         parserContext.getRegistry().registerBeanDefinition(name, builder.getBeanDefinition());
 
-        // 注册EventRegisterProcessor，event事件处理
+        // Register EventRegisterProcessor for event handling
         clazz = EventRegisterProcessor.class;
         name = StringUtils.uncapitalize(clazz.getName());
         builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);

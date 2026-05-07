@@ -16,9 +16,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ApplicationContextEvent;
 
 /**
- * 应用启动事件，这个使用spring自带的事件机制，自研的event事件仅用在业务逻辑
+ * Application startup event. This uses Spring's built-in event mechanism; the custom event system is used only for business logic.
  * <p>
- * 启动顺序为：AppStartBeforeEvent -> AppStartEvent -> AppStartAfterEvent
+ * Startup order: AppStartBeforeEvent -> AppStartEvent -> AppStartAfterEvent
  *
  * @author godotg
  */

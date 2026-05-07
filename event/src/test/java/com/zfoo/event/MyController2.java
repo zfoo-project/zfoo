@@ -28,12 +28,12 @@ public class MyController2 {
     private static final Logger logger = LoggerFactory.getLogger(MyController2.class);
 
     /**
-     * 同一个事件可以被重复注册和接受
-     * 异步事件会被不会立刻执行，注意日志打印的线程号
+     * The same event can be registered and received by multiple listeners
+     * Async events are NOT executed immediately; note the thread ID in the log
      */
     @EventReceiver(Bus.AsyncThread)
     public void onMyNoticeEvent(MyNoticeEvent event) {
-        logger.info("方法2异步执行事件：" + event.getMessage());
+        logger.info("method2 async event executed: " + event.getMessage());
     }
 
 }
