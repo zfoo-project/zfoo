@@ -44,7 +44,7 @@ public abstract class CellUtils {
     }
 
     /**
-     * Get cell value<br>
+     * Get cell value
      * For numeric cells: return Long if no fractional part, otherwise Double
      */
     private static Object getCellValue(Cell cell, CellType cellType) {
