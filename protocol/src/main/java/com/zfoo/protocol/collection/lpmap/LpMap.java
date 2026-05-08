@@ -18,7 +18,7 @@ import java.util.function.BiConsumer;
 
 /**
  * Fixed-type map with long keys and Object values
- * The long key must be >= 0; value may be null
+ * The long key must be ge than 0; value may be null
  *
  * @author godotg
  */

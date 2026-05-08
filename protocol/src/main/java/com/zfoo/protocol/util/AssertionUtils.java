@@ -64,10 +64,10 @@ public abstract class AssertionUtils {
     // ----------------------------------long----------------------------------
 
     /**
-     * lt: whether arg1 < arg2
-     * le: whether arg1 <= arg2
-     * gt: whether arg1 > arg2
-     * ge: whether arg1 >= arg2
+     * lt: whether arg1 less than arg2
+     * le: whether arg1 le than arg2
+     * gt: whether arg1 great than arg2
+     * ge: whether arg1 ge than arg2
      */
     public static void ge(long x, long y) {
         if (x < y) {

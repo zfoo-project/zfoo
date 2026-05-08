@@ -99,7 +99,7 @@ public abstract class ClassUtils {
             jarFileUrl = jarCon.getJarFileURL().toExternalForm();
             closeJarFile = !jarCon.getUseCaches();
         } else {
-            // Not a JarURLConnection -> fall back to URL file parsing
+            // Not a JarURLConnection fall back to URL file parsing
             // Assume URL format is "jar:path!/entry"; protocol is arbitrary if entry format is followed
             // Handle paths both with and without a leading "file:" prefix
             String urlFile = packageUrl.getFile();
