@@ -85,7 +85,7 @@ public abstract class OSUtils {
     }
 
     /**
-     * Convert a value <= 1.0 to a percentage string; fractional part is rounded
+     * Convert a value less 1.0 to a percentage string; fractional part is rounded
      */
     public static String toPercent(double num) {
         if (num > 1) {
