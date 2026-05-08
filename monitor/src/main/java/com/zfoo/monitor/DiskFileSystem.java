@@ -43,7 +43,7 @@ public class DiskFileSystem implements Comparable<DiskFileSystem> {
         var usage = usage();
         if (usage >= 0.8) {
             var temp = this.toGB();
-            return StringUtils.format("df - disk[name:{}] space too high[size:{}GB][available:{}GB][usage:{}][{}]"
+            return StringUtils.format("df - disk:[{}] space too high size:[{}]GB available:[{}]GB usage:[{}][{}]"
                     , name, temp.getSize(), temp.getAvailable(), OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
         }
         return StringUtils.EMPTY;

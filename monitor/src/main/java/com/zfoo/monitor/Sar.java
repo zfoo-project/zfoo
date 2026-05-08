@@ -58,11 +58,11 @@ public class Sar implements Comparable<Sar> {
 
     public String pressure() {
         if (rxpck >= 5_0000) {
-            return StringUtils.format("sar - NIC traffic[interface:{}] [rxpck:{}] [txpck:{}] [rxBytes:{}] [txBytes:{}] [inErrors:{}] [outErrors:{}] [inDrops:{}] [collisions:{}] [{}]", performance impact: CRITICAL"
+            return StringUtils.format("sar - NIC traffic [interface:{}] [rxpck:{}] [txpck:{}] [rxBytes:{}] [txBytes:{}] [inErrors:{}] [outErrors:{}] [inDrops:{}] [collisions:{}] [{}] performance impact: CRITICAL"
                     , name, rxpck, txpck, rxBytes, txBytes, inErrors, outErrors, inDrops, collisions, TimeUtils.timeToString(timestamp));
         }
         if (inErrors > 0 || outErrors > 0 || inDrops > 0 || collisions > 0) {
-            return StringUtils.format("sar - NIC traffic[interface:{}] [rxpck:{}] [txpck:{}] [rxBytes:{}] [txBytes:{}] [inErrors:{}] [outErrors:{}] [inDrops:{}] [collisions:{}] [{}]", performance impact: LOW"
+            return StringUtils.format("sar - NIC traffic[interface:{}] [rxpck:{}] [txpck:{}] [rxBytes:{}] [txBytes:{}] [inErrors:{}] [outErrors:{}] [inDrops:{}] [collisions:{}] [{}] performance impact: LOW"
                     , name, rxpck, txpck, rxBytes, txBytes, inErrors, outErrors, inDrops, collisions, TimeUtils.timeToString(timestamp));
         }
         return StringUtils.EMPTY;

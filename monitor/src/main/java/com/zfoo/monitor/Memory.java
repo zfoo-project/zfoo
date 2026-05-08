@@ -40,7 +40,7 @@ public class Memory implements Comparable<Memory> {
         var usage = 1D * (total - available) / total;
         if (usage >= 0.8) {
             var temp = this.toGB();
-            return StringUtils.format("free - memory usage too high[total:{}GB][available:{}GB][usage:{}][{}]"
+            return StringUtils.format("free - memory usage too high total:[{}]GB available:[{}]GB usage:[{}][{}]"
                     , temp.getTotal(), temp.getAvailable(), OSUtils.toPercent(usage), TimeUtils.timeToString(timestamp));
         }
         return StringUtils.EMPTY;
