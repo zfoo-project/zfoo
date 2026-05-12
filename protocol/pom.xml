@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -66,8 +66,8 @@
             </exclusions>
         </dependency>
 
-        <!-- 需要保持和spring-boot-starter-json里的jackson同样的版本-->
-        <!-- json，bytecode generation to replace use of Reflection for field access and method calls(Jackson涡轮增压，字节码增强解析json) -->
+        <!-- Must keep the same version as Jackson in spring-boot-starter-json -->
+        <!-- json, bytecode generation to replace use of Reflection for field access and method calls (Jackson turbocharger) -->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-afterburner</artifactId>
@@ -218,7 +218,7 @@
                 <version>${maven-jar-plugin.version}</version>
             </plugin>
 
-            <!-- deploy to maven repository should specify these tag.(部署到maven中央仓库必须指定下面的标签) -->
+            <!-- deploy to maven repository should specify these tags -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -289,7 +289,7 @@
     </build>
 
 
-    <!-- deploy to maven repository should specify these tag.(部署到maven中央仓库必须指定下面的标签) -->
+    <!-- deploy to maven repository should specify these tags -->
     <name>protocol</name>
     <description>zfoo protocol is binary serialization framework for Java/C++/js/ts/C#/Go/Lua/GDScript/Python</description>
     <url>https://github.com/zfoo-project/zfoo</url>

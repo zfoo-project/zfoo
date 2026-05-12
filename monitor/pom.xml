@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -152,7 +152,7 @@
                 <version>${maven-jar-plugin.version}</version>
             </plugin>
 
-            <!-- deploy to maven repository should specify these tag.(部署到maven中央仓库必须指定下面的标签) -->
+            <!-- deploy to maven repository should specify these tags -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -223,7 +223,7 @@
     </build>
 
 
-    <!-- deploy to maven repository should specify these tag.(部署到maven中央仓库必须指定下面的标签) -->
+    <!-- deploy to maven repository should specify these tags -->
     <name>monitor</name>
     <description>zfoo monitor is lightweight cpu, memory, hard disk, network monitoring</description>
     <url>https://github.com/zfoo-project/zfoo</url>

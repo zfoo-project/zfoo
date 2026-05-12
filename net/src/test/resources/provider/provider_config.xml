@@ -24,7 +24,7 @@
             <net:address name="${registry.address.name}" url="${registry.address.url}"/>
         </net:registry>
 
-        <!--1.这里声明自己是服务提供�?2.提供接口是myProviderModule模块下的接口 3.提供者的名字是myProvider1-->
+        <!--1. Declare this node as a service provider  2. The provided interface belongs to the myProviderModule module  3. The provider name is myProvider1-->
         <!--Multiple providers can be declared for the same module; consumers can select one, enabling provider-group routing-->
         <net:providers>
             <net:provider protocol-module="myProviderModule" provider="provider1"/>

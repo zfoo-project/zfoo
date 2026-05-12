@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -147,7 +147,7 @@
             </plugin>
 
 
-            <!-- deploy to maven repository should specify these tag.(部署到maven中央仓库必须指定下面的标签) -->
+            <!-- deploy to maven repository should specify these tags -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -217,7 +217,7 @@
     </build>
 
 
-    <!-- deploy to maven repository should specify these tag.(部署到maven中央仓库必须指定下面的标签) -->
+    <!-- deploy to maven repository should specify these tags -->
     <name>event</name>
     <description>zfoo event is used to decouple different modules and improve the quality of the code</description>
     <url>https://github.com/zfoo-project/zfoo</url>

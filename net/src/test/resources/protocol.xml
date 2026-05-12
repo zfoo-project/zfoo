@@ -3,14 +3,14 @@
 <!-- native: internal messages; common: shared by all modules; js: web-facing protocol that generates JavaScript files -->
 <protocols>
 
-    <!-- 配置包名称，会扫描包底下所有被@Protocol注解标注的协�?-->
+    <!-- Configure the package name; all classes annotated with @Protocol under the package will be scanned -->
     <module id="1" name="native">
         <protocol location="com.zfoo.net.router.attachment"/>
     </module>
 
     <!-- Specifying protocol IDs in XML provides a centralized overview of the ID space -->
     <module id="2" name="common">
-        <!-- 不写协议号，会使用协议里的@Protocol注解的id当做协议�?-->
+        <!-- If the protocol ID is not specified here, the id from the @Protocol annotation will be used -->
         <protocol location="com.zfoo.net.packet.common.Message"/>
         <protocol location="com.zfoo.net.packet.common.Error"/>
         <protocol location="com.zfoo.net.packet.common.Heartbeat"/>

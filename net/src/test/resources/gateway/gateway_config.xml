@@ -24,7 +24,7 @@
             <net:address name="firstZookeeper" url="127.0.0.1:2181"/>
         </net:registry>
 
-        <!--1.声明自己是个消费者 2.消费的接口是服务提供者是myProvider1提供的具体实现-->
+        <!--1. Declare this node as a consumer  2. The consumed interface is the concrete implementation provided by myProvider1-->
         <net:consumers>
             <net:consumer consumer="provider1"/>
         </net:consumers>

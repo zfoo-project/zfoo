@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    您也许已经注意到 XML 声明没有关闭标签。这不是错误。声明不属于XML本身的组成部分。
-    它不是 XML 元素，也不需要关闭标签。
+    You may have noticed that the XML declaration has no closing tag. This is not an error.
+    The declaration is not part of the XML document itself.
+    It is not an XML element, so it does not need a closing tag.
 -->
 
 <!--
-    默认的命名空间（Default Namespaces）为元素定义默认的命名空间可以让我们省去在所有的子元素中使用前缀的工作。
-    使用语法：xmlns=".......namespaceURI"，这样做的原因是每个xml都有一个根元素
+    Default Namespaces: Defining a default namespace for elements allows us to omit
+    the prefix in all child elements.
+    Syntax: xmlns=".......namespaceURI". The reason is that every XML document has a root element.
 -->
 
 <!--
-   1.第一步:添加xmlns:xsi属性，引入xsi命名空间
-   2.第二步:添加命名空间，可添加多个，但没有前缀的命名空间最多只能有1个
-   3.第三步:通过xsi命名空间下的属性schemaLocation指定每个命名空间XSD文件的URI，命名空间和相应URI一一对应，多个命名空间用空格分隔
-           本xml文件中要用到某些来自xsi代表的“http://www.w3.org/2001/XMLSchema-instance”这个命名空间的元素
-           比如用来引入无命名空间schema文件的noNamespaceSchemaLocation="XXX"；
-           以及引入自带命名空间的schema文件的schemaLocation="XXX"这些元素。
-           这些元素是包含在xsi命名空间中的，所有的xml文件只要引用这些元素 就要引入xsi这个命名空间。
-           xsi这三个字母不是硬性规定，只是大家都这么用，方便阅读而已。
-           xsi是http://www.w3.org/2001/XMLSchema-instance的别名。
-           第一个URI是名称空间的名字，第二个URI给出模式文档的位置
+   Step 1: Add the xmlns:xsi attribute to introduce the xsi namespace.
+   Step 2: Add namespace declarations; multiple can be added, but only one unprefixed namespace is allowed.
+   Step 3: Use the schemaLocation attribute under the xsi namespace to specify the XSD URI for each namespace,
+           pairing each namespace with its URI, separated by spaces.
+           This XML file uses elements from the namespace represented by xsi:
+           "http://www.w3.org/2001/XMLSchema-instance"
+           For example, noNamespaceSchemaLocation="XXX" is used to import schema files without a namespace,
+           and schemaLocation="XXX" is used for schema files with their own namespace.
+           These elements belong to the xsi namespace, so any XML file referencing them must import this namespace.
+           The prefix "xsi" is not mandatory; it is just a widely-used convention for readability.
+           xsi is an alias for http://www.w3.org/2001/XMLSchema-instance.
+           The first URI is the namespace name; the second URI gives the location of the schema document.
 -->
 
 <!--
-   一旦您拥有了可用的 XML Schema 实例命名空间：xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   您就可以使用 schemaLocation 属性了。此属性有两个值。第一个值是需要使用的命名空间。
-   第二个值是供命名空间使用的 XML schema 的位置：
+   Once you have the XML Schema instance namespace available: xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   you can use the schemaLocation attribute. This attribute takes two values.
+   The first value is the namespace to be used.
+   The second value is the location of the XML schema for that namespace:
 -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -47,9 +52,9 @@
     <context:component-scan base-package="com.zfoo.storage"/>
 
     <storage:storage id="resourceManager">
-        <!-- package以及location属性都支持同时指定多个路径，路径分隔符为, ;或者空格-->
+        <!-- Both 'package' and 'location' attributes support multiple paths separated by , ; or space -->
         <storage:scan package="com.zfoo.**.resource" recycle="false"/>
-        <!-- 如果是类路径以classpath开头，如果是目录文件路径则以file开头,-->
+        <!-- Use 'classpath:' prefix for classpath resources; use 'file:' prefix for filesystem paths -->
         <storage:resource location="classpath:/,classpath:/excel"/>
         <!-- <storage:resource location="file:C:\Users\godotg\Desktop\excel"/>-->
     </storage:storage>

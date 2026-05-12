@@ -105,7 +105,7 @@
             <version>${zfoo.version}</version>
         </dependency>
 
-        <!-- 依赖的测试库 -->
+        <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -179,7 +179,7 @@
             </plugin>
 
 
-            <!-- deploy to maven repository should specify these tag.(部署到maven中央仓库必须指定下面的标签) -->
+            <!-- deploy to maven repository should specify these tags -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -250,7 +250,7 @@
     </build>
 
 
-    <!-- deploy to maven repository should specify these tag.(部署到maven中央仓库必须指定下面的标签) -->
+    <!-- deploy to maven repository should specify these tags -->
     <name>boot</name>
     <description>zfoo boot makes it easy to create Spring Boot application using zfoo by using auto-configure</description>
     <url>https://github.com/zfoo-project/zfoo</url>

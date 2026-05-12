@@ -25,7 +25,7 @@
             <orm:address name="${mongodb.address.name}" url="${mongodb.address.url}"/>
         </orm:host>
 
-        <!-- 缓存策略 -->
+        <!-- Cache strategy -->
         <orm:caches>
             <orm:cache strategy="default" size="6000" expire-millisecond="60000"/>
             <orm:cache strategy="hundred" size="100" expire-millisecond="60000"/>
@@ -33,7 +33,7 @@
             <orm:cache strategy="threeThousand" size="3000" expire-millisecond="60000"/>
         </orm:caches>
 
-        <!-- 持久化策略 -->
+        <!-- Persistence strategy -->
         <orm:persisters>
             <orm:persister strategy="default" type="time" config="30000"/>
             <orm:persister strategy="cron30s" type="cron" config="0/30 * * * * ?"/>
