@@ -227,7 +227,7 @@ public class LazyCacheTesting {
         }
     }
 
-    // remove reason for expire test
+    // Test removal cause: EXPIRED
     @Test
     public void multipleThreadExpireTest() {
         int threadNum = Runtime.getRuntime().availableProcessors() + 1;
@@ -260,7 +260,7 @@ public class LazyCacheTesting {
         }
     }
 
-    // remove reason for replace test
+    // Test removal cause: REPLACED
     @Test
     public void multipleThreadReplaceTest() {
         int threadNum = Runtime.getRuntime().availableProcessors() + 1;

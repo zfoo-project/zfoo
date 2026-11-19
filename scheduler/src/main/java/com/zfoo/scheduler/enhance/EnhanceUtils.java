@@ -49,11 +49,11 @@ public abstract class EnhanceUtils {
         Object bean = reflectScheduler.getBean();
         Method method = reflectScheduler.getMethod();
 
-        // Define the class name
+        // Create the enhanced class with a unique name
         CtClass enhanceClazz = classPool.makeClass(EnhanceUtils.class.getName() + StringUtils.capitalize(NamespaceHandler.SCHEDULER) + UuidUtils.getLocalIntId());
         enhanceClazz.addInterface(classPool.get(IScheduler.class.getName()));
 
-        // Define a field in the class
+        // Define a field for the target bean
         CtField field = new CtField(classPool.get(bean.getClass().getName()), "bean", enhanceClazz);
         field.setModifiers(Modifier.PRIVATE);
         enhanceClazz.addField(field);
@@ -71,7 +71,7 @@ public abstract class EnhanceUtils {
         invokeMethod.setBody(invokeMethodBody);
         enhanceClazz.addMethod(invokeMethod);
 
-        // Release cached class
+        // Detach the CtClass from the ClassPool cache
         enhanceClazz.detach();
 
         Class<?> resultClazz = enhanceClazz.toClass(IScheduler.class);

@@ -28,7 +28,7 @@ public class ApplicationTest {
 
     @Test
     public void startSchedulerTest() {
-        // Load the configuration file (must import the scheduler module)
+        // Load the Spring XML configuration file (must include the scheduler element)
         var context = new ClassPathXmlApplicationContext("application.xml");
 
         ThreadUtils.sleep(10000);

@@ -27,9 +27,9 @@ public class StopWatch {
     }
 
     /**
-     * Elapsed time from when the StopWatch was created until this method is called.
+     * Returns the elapsed time from when this StopWatch was created until this method is called.
      *
-     * @return elapsed time in seconds, rounded to two decimal places (format: xx.xx)
+     * @return elapsed time in seconds, rounded to two decimal places (e.g., 0.12)
      */
     public String costSeconds() {
         var cost = cost() / (float) TimeUtils.MILLIS_PER_SECOND;

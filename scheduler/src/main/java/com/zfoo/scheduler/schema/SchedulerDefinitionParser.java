@@ -24,15 +24,15 @@ import org.w3c.dom.Element;
 /**
  * Analysis of when SchedulerContext is injected into the Spring container:
  * When running the test project (com.zfoo.scheduler.ApplicationTest), breakpoints reveal that
- * during the parsing of application.xml, the custom parsing is triggered inside
+ * during the parsing of application.xml, custom parsing is triggered inside
  * DefaultBeanDefinitionDocumentReader#parseBeanDefinitions when the "scheduler" XML element is encountered.
- * Since it is recognized as a custom element (determined by whether it belongs to the Spring namespace),
+ * Since it is recognized as a custom element (determined by whether it belongs to a non-Spring namespace),
  * parseCustomElement is called to handle the custom tag, which in turn invokes the parse() method
  * of the BeanDefinitionParser implementation, registering SchedulerContext as a bean in the Spring container.
  * <p>
- * Conclusion: In a SpringBoot project based on zfoo, XML files are not parsed at all;
+ * Conclusion: In a Spring Boot project based on zfoo, XML files are not parsed at all;
  * beans are registered via @Configuration classes instead.
- * Therefore, these BeanDefinitionParser#parse() implementations are never executed.
+ * Therefore, this BeanDefinitionParser#parse() implementation is never executed.
  *
  * @author godotg
  */

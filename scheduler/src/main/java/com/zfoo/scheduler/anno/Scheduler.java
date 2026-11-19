@@ -17,7 +17,7 @@ import org.springframework.aot.hint.annotation.Reflective;
 import java.lang.annotation.*;
 
 /**
- * time task scheduling based on cron expression
+ * Scheduled task annotation based on a cron expression.
  *
  * @author godotg
  */
