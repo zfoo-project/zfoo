@@ -34,7 +34,7 @@ import java.util.Map;
  * JMX gives Java developers a flexible way to monitor Java code, create intelligent agents, build distributed management middleware, and integrate into management/monitoring systems.
  * <p>
  * Per the JMX spec, an MBean interface exposes readable/writable attributes and defined methods callable by management applications.
- * Implementation class name must be the interface name without the 'MBean' suffix (e.g., 'Hello' for 'HelloMBean'). Non-compliance causes registration errors.
+ * The implementation class name must be the interface name without the 'MBean' suffix (e.g., 'Hello' for 'HelloMBean'). Non-compliance causes registration errors.
  *
  * @author godotg
  */
@@ -128,9 +128,9 @@ public class HotSwapServiceMBean implements IHotSwapServiceMBean {
 
             // Validate all class files to be updated in this pass
             Map<String, ClassFileDef> classFileDefMap = HotSwapContext.getHotSwapManager().getClassFileDefMap();
-            for (Map.Entry<String, ClassFileDef> entry : updateClassMap.entrySet()) {// Read all bytecode to be hot-swapped in this pass
+            for (Map.Entry<String, ClassFileDef> entry : updateClassMap.entrySet()) { // Read all bytecode to be hot-swapped in this pass
                 ClassFileDef classFileDef = entry.getValue();
-                // Files from the previous hot-swap
+                // File from the previous hot-swap
                 ClassFileDef lastClassFileDef = classFileDefMap.get(classFileDef.getClassName());
                 if (lastClassFileDef != null && !classFileDef.getClassName().equals(lastClassFileDef.getClassName())) {
                     logger.error("Hot-swap failed: class names inconsistent between passes [{}]-->[{}]"
