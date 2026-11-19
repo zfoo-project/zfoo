@@ -46,7 +46,6 @@ public abstract class GeneratePbUtils {
     private static String protocolOutputPath = StringUtils.EMPTY;
 
     /**
-     * EN: If the tag of a protobuf field exceeds this value, this field is considered to be a compatible protocol field
      * If a protobuf field tag exceeds this value, treat the field as backward-compatible
      */
     public static final int COMPATIBLE_FIELD_TAG = 1000;

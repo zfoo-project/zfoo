@@ -15,8 +15,7 @@ package com.zfoo.protocol.anno;
 import java.lang.annotation.*;
 
 /**
- * EN: Make the fields of the old and new protocols compatible in different version
- * Ensures forward and backward compatibility between old and new protocol fields
+ * Ensures forward and backward compatibility between old and new protocol fields across versions
  *
  * @author godotg
  */
@@ -26,7 +25,6 @@ import java.lang.annotation.*;
 public @interface Compatible {
 
     /**
-     * EN: new compatible field value must be always greater than old compatible field value
      * The ordinal of a new compatible field must always be greater than that of existing compatible fields
      */
     int value();

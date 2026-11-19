@@ -2,12 +2,12 @@ import '../IProtocolRegistration.dart';
 import '../IByteBuffer.dart';
 import './ObjectA.dart';
 import './ObjectB.dart';
-// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+// Normal object covering the common subset of all target language syntaxes
 class NormalObject {
   int a = 0;
   List<int> aaa = List.empty();
   int b = 0;
-  // 整数类型
+  // Integer type
   int c = 0;
   int d = 0;
   double e = 0.0;

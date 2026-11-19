@@ -62,16 +62,16 @@ message MapListMapInteger {
 }
 
 message ProtobufComplexObject {
-  // protobuf不支持单个byte，用int代替，增加了一点性能开销
+  // protobuf does not support single byte; use int instead, adding slight performance overhead
   int32 a = 1;
   int32 aa = 2;
   bytes aaa = 3;
   bytes aaaa = 4;
 
-  // protobuf不支持单个short，用int代替，增加了一点性能开销
+  // protobuf does not support single short; use int instead, adding slight performance overhead
   int32 b = 5;
   int32 bb = 6;
-  // protobuf不支持单个short，用bytes代替，减少了一点性能开销
+  // protobuf does not support single short; using bytes instead reduces performance overhead slightly
   bytes bbb = 7;
   bytes bbbb = 8;
 
@@ -100,7 +100,7 @@ message ProtobufComplexObject {
   repeated bool ggg = 27;
   repeated bool gggg = 28;
 
-  // protobuf不支持char，用string代替，增加了一点性能开销
+  // protobuf does not support char; use string instead, adding slight performance overhead
   string h = 29;
   string hh = 30;
   repeated string hhh = 31;
@@ -113,7 +113,7 @@ message ProtobufComplexObject {
   repeated ObjectA kkk = 36;
 
   repeated int32 l = 37;
-  // protobuf不支持嵌套repeated，用消息代替，减少了一点性能开销
+  // protobuf does not support nested repeated fields; use a message instead, reducing performance overhead slightly
   repeated ListListInteger ll = 38;
   repeated ListObjectA lll = 39;
   repeated string llll = 40;
@@ -121,16 +121,16 @@ message ProtobufComplexObject {
 
   map<int32, string> m = 51;
   map<int32, ObjectA> mm = 52;
-  repeated MapObjectA mmm = 53;           // protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
-  repeated MapListListObjectA mmmm = 54;  // protobuf不支持map的key为对象，用数组代替，减少了很多性能开销
-  repeated MapListMapInteger mmmmm = 55;  // protobuf不支持map的key为对象，用数组代替，不支持set，用list代替，减少了很多性能开销
+  repeated MapObjectA mmm = 53;           // protobuf does not support objects as map keys; use an array instead, greatly reducing performance overhead
+  repeated MapListListObjectA mmmm = 54;  // protobuf does not support objects as map keys; use an array instead, greatly reducing performance overhead
+  repeated MapListMapInteger mmmmm = 55;  // protobuf does not support objects as map keys (use an array instead) or sets (use a list instead), greatly reducing performance overhead
 
 
-  repeated int32 s = 61;                  // protobuf不支持set，用数组代替，减少了很多性能开销
-  repeated ListListInteger ss = 62;       // protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
-  repeated ListObjectA sss = 63;          // protobuf不支持嵌套set和list，用对象代替，减少了很多性能开销
-  repeated string ssss = 64;              // protobuf不支持set，用数组代替，减少了很多性能开销
-  repeated MapIntegerString sssss = 65;   // protobuf不支持set和嵌套map，用对象代替，减少了很多性能开销
+  repeated int32 s = 61;                  // protobuf does not support sets; use an array instead, greatly reducing performance overhead
+  repeated ListListInteger ss = 62;       // protobuf does not support nested sets and lists; use an object instead, greatly reducing performance overhead
+  repeated ListObjectA sss = 63;          // protobuf does not support nested sets and lists; use an object instead, greatly reducing performance overhead
+  repeated string ssss = 64;              // protobuf does not support sets; use an array instead, greatly reducing performance overhead
+  repeated MapIntegerString sssss = 65;   // protobuf does not support sets or nested maps; use an object instead, greatly reducing performance overhead
 }
 
 

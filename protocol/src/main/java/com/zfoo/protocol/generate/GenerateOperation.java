@@ -20,7 +20,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /**
- * EN: Action class for creating protocol files
  * Configuration class for protocol file generation
  *
  * @author godotg
@@ -28,27 +27,21 @@ import java.util.Set;
 public class GenerateOperation {
 
     /**
-     * EN: No protocol file is created
      * Do not generate any protocol files
      */
     public static final GenerateOperation NO_OPERATION = new GenerateOperation();
 
     /**
-     * EN: Generate one protocol file under a package
-     * CN: Generate all protocol files under a package into a single file
+     * Generate all protocol files under a package into a single file
      */
     private boolean mergeProtocol;
 
     /**
-     * EN: Fold the protocol. The generated protocol file will maintain the same directory structure as the Java source file.
-     * It will not be folded by default.
-     * <p>
      * Fold protocols; generated files mirror the Java source directory structure (default: not folded)
      */
     private boolean foldProtocol;
 
     /**
-     * EN: The path to generate the protocol, the default is the path of the currently running project
      * Output path for generated protocols; defaults to the current project path
      */
     private String protocolPath = StringUtils.EMPTY;
@@ -59,7 +52,6 @@ public class GenerateOperation {
     private String protocolParam;
 
     /**
-     * EN: The protocol files that need to be generated (c#, js, ts... and other languages that need to generate the protocol are listed)
      * List of target languages (C#, JS, TS, etc.) for which to generate protocol files
      */
     private final Set<CodeLanguage> generateLanguages = EnumSet.noneOf(CodeLanguage.class);

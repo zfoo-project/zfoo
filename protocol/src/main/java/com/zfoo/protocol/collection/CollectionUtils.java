@@ -95,8 +95,7 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * EN: The safety limit of the array initialization length prevents deserialization exceptions from causing a sudden increase in memory
-     * Safe upper limit for array initialization length; prevents memory spikes from malformed deserialization
+     * Safe upper limit for array initialization length; prevents memory spikes caused by malformed deserialization
      */
     public static final long MAX_BYTE_LENGTH_ARRAY = 64 * IOUtils.BYTES_PER_MB;
     public static final long MAX_LENGTH_SHORT_ARRAY = IOUtils.BYTES_PER_MB / 2;
@@ -146,10 +145,7 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * EN: Calculate the appropriate size for HashMap initialization. For safety, a maximum limit must be given
-     * to the initialized collection to prevent deserialization of an illegal package from causing a sudden increase in memory.
-     * <p>
-     * Compute an appropriate initial HashMap size; a maximum is required to prevent memory spikes from deserializing invalid packets
+     * Compute an appropriate initial HashMap size; a maximum limit is required to prevent memory spikes from deserializing invalid packets
      */
     public static int comfortableCapacity(int capacity) {
         if (capacity >= MAX_SIZE_MAP) {

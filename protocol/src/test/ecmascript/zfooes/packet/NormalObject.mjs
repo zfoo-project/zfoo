@@ -1,9 +1,9 @@
-// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+// Normal object covering the common subset of all target language syntaxes
 class NormalObject {
     a = 0; // number
     aaa = []; // Array<number>
     b = 0; // number
-    // 整数类型
+    // Integer type
     c = 0; // number
     d = 0; // number
     e = 0; // number

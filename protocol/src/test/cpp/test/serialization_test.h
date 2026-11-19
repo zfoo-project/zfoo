@@ -74,7 +74,7 @@ namespace serialization_test {
 
 
     void compatibleTest() {
-        // 读取二进制文件
+        // Read binary file
 //        ifstream file("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes", ios::out | ios::binary);
 //        ifstream file("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes", ios::out | ios::binary);
 //        ifstream file("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes", ios::out | ios::binary);

@@ -31,7 +31,7 @@ console.log(newPacket);
 console.log("source size " + byteBuffer.getWriteOffset());
 console.log("target size " + newByteBuffer.getWriteOffset());
 
-// set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
+// Set and map are unordered, so the input and output byte streams may differ at times, though their lengths are always identical
 // assert(byteBuffer.readOffset == newByteBuffer.writeOffset)
 byteBufferTest();
 

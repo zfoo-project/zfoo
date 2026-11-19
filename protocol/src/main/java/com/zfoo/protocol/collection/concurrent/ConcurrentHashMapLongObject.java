@@ -22,7 +22,6 @@ import java.util.function.Consumer;
 
 
 /**
- * EN: The performance is much lower than ConcurrentHashMap of the JDK, and the purpose is to reduce the memory footprint of the Long wrapper type
  * Performance is far below JDK's ConcurrentHashMap; the primary benefit is reducing memory overhead from Long boxing
  *
  * @author godotg

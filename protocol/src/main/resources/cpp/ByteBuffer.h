@@ -9,7 +9,7 @@
 #include <map>
 #include <memory>
 
-// 网络传输默认使用大端传输
+// Network transmission uses big-endian byte order by default
 namespace zfoo {
     using std::string;
     using std::vector;
@@ -1326,7 +1326,7 @@ namespace zfoo {
         inline void write(T value) {
             ensureCapacity(sizeof(T));
             // MSDN: The htons function converts a u_short from host to TCP/IP network byte order (which is big-endian).
-            // ** This mean the network byte order is big-endian **
+            // ** This means the network byte order is big-endian **
             if (IS_LITTLE_ENDIAN) {
                 swap_bytes<sizeof(T)>(reinterpret_cast<int8_t *>(&value));
             }

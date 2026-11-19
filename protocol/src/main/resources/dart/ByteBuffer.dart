@@ -21,7 +21,7 @@ class ByteBuffer implements IByteBuffer {
       writeInt(length);
       setWriteOffset(currentWriteIndex);
     } else {
-      // sublist of Int8List is deep clone
+      // sublist of Int8List creates a deep clone
       var retainedByteBuf =
           buffer.sublist(currentWriteIndex - length, currentWriteIndex);
       setWriteOffset(beforeWriteIndex);

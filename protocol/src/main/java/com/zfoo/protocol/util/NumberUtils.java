@@ -357,11 +357,11 @@ public abstract class NumberUtils {
     }
 
     /**
-     * Provides accurate multiplication<br>
+     * Provides accurate division<br>
      * Returns 0 if null or empty values are passed
      *
-     * @param values values to multiply
-     * @return product
+     * @param values values to divide
+     * @return quotient
      */
     public static BigDecimal div(BigDecimal... values) {
         if (ArrayUtils.isEmpty(values)) {

@@ -17,7 +17,7 @@ public class Main : MonoBehaviour
         luaEnv.DoString("CS.UnityEngine.Debug.Log('hello world')");
         
         var luaDebugBuilder = new StringBuilder();
-        // Rider的断点调试
+        // Rider breakpoint debugging
         // luaDebugBuilder.Append("package.cpath = package.cpath .. ';C:/Users/Administrator/AppData/Roaming/JetBrains/Rider2022.3/plugins/EmmyLua/debugger/emmy/windows/x64/?.dll'").Append(System.Environment.NewLine);
         // luaDebugBuilder.Append("local dbg = require('emmy_core')").Append(System.Environment.NewLine);
         // luaDebugBuilder.Append("dbg.tcpConnect('localhost', 9966)").Append(System.Environment.NewLine);
@@ -33,12 +33,12 @@ public class Main : MonoBehaviour
         byteBufferTestFunction.Call();
 
         
-        // 获取复杂对象的字节流
+        // Get the byte stream of ComplexObject
         var complexObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\complexObject.bytes");
         LuaFunction complexObjectTestFuction = luaEnv.Global.Get<LuaFunction>("complexObjectTest");
         complexObjectTestFuction.Call(complexObjectBytes);
         
-        // 获取普通对象的字节流
+        // Get the byte stream of NormalObject
         // var normalObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes");
         // var normalObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-out-compatible.bytes");
         // var normalObjectBytes = File.ReadAllBytes("D:\\Project\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-inner-compatible.bytes");

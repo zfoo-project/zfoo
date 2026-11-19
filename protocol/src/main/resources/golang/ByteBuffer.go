@@ -19,7 +19,7 @@ type ByteBuffer struct {
 }
 
 func (byteBuffer *ByteBuffer) AdjustPadding(predictionLength int, beforeWriteIndex int) {
-	// 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+	// Since a variable-length int is written, clear any excess reserved positions
 	var currentWriteIndex = byteBuffer.GetWriteOffset()
 	var predictionCount = byteBuffer.WriteIntCount(int32(predictionLength))
 	var length = currentWriteIndex - beforeWriteIndex - predictionCount
@@ -114,7 +114,7 @@ func (byteBuffer *ByteBuffer) IsReadable() bool {
 
 // -------------------------------------------------write/read-------------------------------------------------
 
-// 整形转换成字节
+// Convert int to bytes
 func IntToBytes(n int) []byte {
 	var x = int32(n)
 	bytesBuffer := bytes.NewBuffer([]byte{})
@@ -122,7 +122,7 @@ func IntToBytes(n int) []byte {
 	return bytesBuffer.Bytes()
 }
 
-// 字节转换成整形
+// Convert bytes to int
 func BytesToInt(b []byte) int {
 	bytesBuffer := bytes.NewBuffer(b)
 	var x int32
@@ -229,7 +229,7 @@ func (byteBuffer *ByteBuffer) ReadInt() int {
 
 func (byteBuffer *ByteBuffer) WriteIntCount(intValue int32) int {
 	var value uint32 = uint32(((intValue << 1) ^ (intValue >> 31)))
-	// 右移操作>>是带符号右移
+	// The right shift operator >> is a signed right shift
 	if value>>7 == 0 {
 		return 1
 	}
@@ -247,7 +247,7 @@ func (byteBuffer *ByteBuffer) WriteIntCount(intValue int32) int {
 
 func (byteBuffer *ByteBuffer) WriteInt32(intValue int32) {
 	var value uint32 = uint32(((intValue << 1) ^ (intValue >> 31)))
-	// 右移操作>>是带符号右移
+	// The right shift operator >> is a signed right shift
 	if value>>7 == 0 {
 		byteBuffer.WriteUByte(byte(value))
 		return
@@ -472,7 +472,7 @@ func (byteBuffer *ByteBuffer) ReadString() string {
 }
 
 func (byteBuffer *ByteBuffer) WriteChar(value string) {
-	// 如果为空则写入一个默认的字符0
+	// Write a default 0 character if empty
 	if len(value) == 0 {
 		byteBuffer.WriteInt(0)
 		byteBuffer.WriteUByte(0)

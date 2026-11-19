@@ -7,9 +7,9 @@ import (
 )
 
 func TestFibonacci(t *testing.T) {
-	// 预热
+	// Warm up
 	testFibonacci()
-	// 正式执行
+	// Actual execution
 	testFibonacci()
 }
 
@@ -31,14 +31,14 @@ func fibonacci(i int) int {
 /**
 public class MainTest {
     public static void main(String[] args) {
-        // java的jit预热
+        // Java JIT warm-up
         test();
-        // 正式执行
+        // Actual execution
         test();
     }
 
     static void test() {
-        // 正式执行
+        // Actual execution
         var startTime = System.currentTimeMillis();
         for (int i = 0; i < 10000; i++) {
             fibonacci(32);

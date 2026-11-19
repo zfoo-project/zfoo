@@ -148,7 +148,7 @@ public class DfaWordTree extends HashMap<Character, DfaWordTree> {
         var findWords = new ArrayList<String>();
         DfaWordTree current = this;
         int length = text.length();
-        // Buffer for characters found during search; flushed to findedWords on a complete match
+        // Buffer for characters found during search; flushed to findWords on a complete match
         StringBuilder wordBuffer;
         char currentChar;
         for (int i = 0; i < length; i++) {
@@ -157,10 +157,10 @@ public class DfaWordTree extends HashMap<Character, DfaWordTree> {
                 currentChar = text.charAt(j);
                 if (StringUtils.isStopChar(currentChar)) {
                     if (wordBuffer.length() > 0) {
-                        // Pause words in the middle of a keyword are included as part of the match
+                        // Stop characters in the middle of a keyword are included as part of the match
                         wordBuffer.append(currentChar);
                     } else {
-                        // Skip pause words that appear as the first character of a potential keyword
+                        // Skip stop characters that appear as the first character of a potential keyword
                         i++;
                     }
                     continue;
@@ -200,7 +200,7 @@ public class DfaWordTree extends HashMap<Character, DfaWordTree> {
      * Check if this node is a word-end marker
      *
      * @param c the character to check
-     * @return Check if this node is a word-end marker
+     * @return true if the character is a word-end marker
      */
     private boolean isEnd(Character c) {
         return this.endCharacterSet.contains(c);

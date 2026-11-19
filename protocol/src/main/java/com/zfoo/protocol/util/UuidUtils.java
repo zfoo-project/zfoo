@@ -37,7 +37,7 @@ public abstract class UuidUtils {
      */
     public static String getUUID() {
         String uuid = UUID.randomUUID().toString();
-        // Strip the “-”characters
+        // Strip the "-" characters
         return uuid.replaceAll("-", "");
     }
 

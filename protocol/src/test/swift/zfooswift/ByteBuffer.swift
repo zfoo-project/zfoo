@@ -6,7 +6,7 @@ class ByteBuffer {
     var readOffset: Int = 0
     
     func adjustPadding(_ predictionLength: Int, _ beforewriteIndex: Int) {
-        // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+        // Variable-length int; clear any over-reserved positions
         let currentwriteIndex = writeOffset
         let predictionCount = writeIntCount(predictionLength)
         let length = currentwriteIndex - beforewriteIndex - predictionCount

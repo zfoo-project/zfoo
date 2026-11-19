@@ -1,8 +1,8 @@
---默认为大端模式
---支持的lua版本为>=5.3
---支持标准的Lua是使用64-bit的int以及64-bit的双精度float
---当lua只能支持32位的整数类型时，可以考虑用Long来替代，需要修改原代码
---右移操作>>是无符号右移
+-- Defaults to big-endian mode
+-- Supported Lua version: >= 5.3
+-- Standard Lua uses 64-bit integers and 64-bit double-precision floats
+-- When Lua only supports 32-bit integers, consider replacing with Long (requires modifying the source code)
+-- The right shift operator >> is an unsigned right shift
 --local Long = require("Long")
 
 local ProtocolManager = require("{}.ProtocolManager")
@@ -34,9 +34,9 @@ end
 
 table.serializeTableToJson = serializeTableToJson;
 
--------------------------------------构造器-------------------------------------
+-------------------------------------Constructor-------------------------------------
 function ByteBuffer:new()
-    --buffer里的每一个元素为一个长度为1的字符串
+    -- Each element in buffer is a 1-character string
     local obj = {
         buffer = {},
         writeOffset = 1,
@@ -52,7 +52,7 @@ function ByteBuffer:new()
 end
 
 
--- C#传进来的byte数组到lua里就会变成string
+-- A byte array passed from C# becomes a string in Lua
 function readBytes(bytes)
     local buffer = ByteBuffer:new()
     buffer:writeBuffer(bytes)
@@ -61,7 +61,7 @@ function readBytes(bytes)
 end
 
 -------------------------------------UTF8-------------------------------------
--- 判断utf8字符byte长度
+-- Determine the byte length of a UTF-8 character
 -- 0xxxxxxx - 1 byte
 -- 110yxxxx - 192, 2 byte
 -- 1110yyyy - 225, 3 byte
@@ -82,10 +82,10 @@ local function chsize(char)
 end
 
 
--- 截取utf8 字符串
--- str:            要截取的字符串
--- startChar:    开始字符下标,从1开始
--- numChars:    要截取的字符长度
+-- Extract a UTF-8 substring
+-- str:          the string to slice
+-- startChar:    starting character index (1-based)
+-- numChars:     number of characters to extract
 local function utf8sub(str, startChar, numChars)
     local startIndex = 1
     while startChar > 1 do
@@ -126,7 +126,7 @@ function ByteBuffer:compatibleRead(beforeReadIndex, length)
     return length ~= -1 and self:getReadOffset() < length + beforeReadIndex
 end
 
--------------------------------------get和set-------------------------------------
+-------------------------------------get/set-------------------------------------
 function ByteBuffer:getBuffer()
     return self.buffer
 end
@@ -167,7 +167,7 @@ function ByteBuffer:isReadable()
     return self.writeOffset > self.readOffset
 end
 
--------------------------------------write和read-------------------------------------
+-------------------------------------write/read-------------------------------------
 
 --bool
 function ByteBuffer:writeBool(boolValue)
@@ -187,7 +187,7 @@ end
 
 
 --- byte
--- The byte is a number between -128 and 127, otherwise, the lua will get an error.
+-- The byte must be a number between -128 and 127; otherwise, Lua will raise an error.
 function ByteBuffer:writeByte(byteValue)
     local str = string.pack("b", byteValue)
     self:writeBuffer(str)
@@ -199,7 +199,7 @@ function ByteBuffer:readByte()
     return result
 end
 
--- The byte is a number between 0 and 255, otherwise, the lua will get an error.
+-- The byte must be a number between 0 and 255; otherwise, Lua will raise an error.
 function ByteBuffer:writeUByte(ubyteValue)
     self:writeRawByteStr(string.char(ubyteValue))
     return self
@@ -248,7 +248,7 @@ function ByteBuffer:writeIntCount(intValue)
         error("intValue must range between minInt:-2147483648 and maxInt:2147483647")
     end
 
-    --lua中的右移为无符号右移，要特殊处理
+    -- Right shift in Lua is unsigned, so special handling is required
     local mask = intValue >> 63
     local value = intValue << 1
     if (mask == 1) then
@@ -295,7 +295,7 @@ function ByteBuffer:writeLong(longValue)
         error("longValue must be integer")
     end
 
-    --lua中的右移为无符号右移，要特殊处理
+    -- Right shift in Lua is unsigned, so special handling is required
     local mask = longValue >> 63
     local value = longValue << 1
     if (mask == 1) then
@@ -421,7 +421,7 @@ function ByteBuffer:readLong()
     return (value >> 1) ~ -(value & 1)
 end
 
---固定8位的lua数字类型
+-- Fixed 8-byte Lua number type
 function ByteBuffer:writeLuaNumber(luaNumberValue)
     local str = string.pack(">n", luaNumberValue)
     self:writeBuffer(str)
@@ -480,7 +480,7 @@ function ByteBuffer:readString()
     return self:readBuffer(length)
 end
 
---- Write a encoded char array into buf
+--- Write an encoded char array into buf
 function ByteBuffer:writeBuffer(str)
     for i = 1, #str do
         self:writeRawByteStr(string.sub(str, i, i))
@@ -488,7 +488,7 @@ function ByteBuffer:writeBuffer(str)
     return self
 end
 
---- Read a byte array as string from current position, then update the position.
+--- Read a byte array as a string from the current position, then update the position.
 function ByteBuffer:readBuffer(length)
     local byteStrArray = self:getBytes(self.readOffset, self.readOffset + length - 1)
     self.readOffset = self.readOffset + length
@@ -512,8 +512,8 @@ function ByteBuffer:readRawByteStr()
     return byteStrValue
 end
 
---- Get all byte array as a lua string.
--- Do not update position.
+--- Get the entire byte array as a Lua string.
+-- Do not update the position.
 function ByteBuffer:getBytes(startIndex, endIndex)
     startIndex = startIndex or 1
     endIndex = endIndex or #self.buffer

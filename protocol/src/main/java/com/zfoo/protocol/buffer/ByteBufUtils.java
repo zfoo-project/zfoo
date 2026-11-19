@@ -27,9 +27,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * zfoo's custom private protocol format; easily customizes Serialize/Deserialize for most data types with high-performance implementations
+ * zfoo's custom private protocol format; easily customizes serialization and deserialization for most data types with high-performance implementations
  * <p>
- * "Variable-length bytecode" compression algorithm; reduces data and I/O. Used by Google ProtocolBuffers and Facebook Thrift
+ * "Variable-length byte" compression algorithm; reduces data size and disk I/O. Used by Google Protocol Buffers and Facebook Thrift
  *
  * @author godotg
  */

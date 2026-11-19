@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 namespace zfoocs
 {
-    // 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+    // Normal object covering the common subset of all target language syntaxes
     public class NormalObject
     {
         public byte a;
         public byte[] aaa;
         public short b;
-        // 整数类型
+        // Integer type
         public int c;
         public long d;
         public float e;

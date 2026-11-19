@@ -19,7 +19,7 @@ import java.util.List;
  * 3. Test three generation modes: merge, fold, and default
  * 4. Test 5 compatibility scenarios in resource/compatible
  * 5. Steps 1/2/3/4 produce 2*2*3*5=60 test cases
- * 6. Simple test: enable compat fields in NormalObject/ObjectA; directly test non-CutDown fold
+ * 6. Simple test: enable compatible fields in NormalObject/ObjectA; directly test non-CutDown fold
  *
  * @author godotg
  */

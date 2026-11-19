@@ -1,4 +1,4 @@
--- 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+-- Normal object covering the common subset of all target language syntaxes
 local NormalObject = {}
 
 function NormalObject:new()
@@ -6,7 +6,7 @@ function NormalObject:new()
         a = 0, -- byte
         aaa = {}, -- byte[]
         b = 0, -- short
-        -- 整数类型
+        -- Integer type
         c = 0, -- int
         d = 0, -- long
         e = 0, -- float

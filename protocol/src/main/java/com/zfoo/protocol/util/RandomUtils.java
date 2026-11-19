@@ -98,7 +98,7 @@ public abstract class RandomUtils {
     }
 
     /**
-     * Returns a random number within the specified range[min, max)
+     * Returns a random number within the specified range [min, max)
      *
      * @param min minimum (inclusive)
      * @param max maximum (exclusive)
@@ -194,7 +194,7 @@ public abstract class RandomUtils {
     }
 
     /**
-     * Returns a random number within the specified range[0, 1)
+     * Returns a random number within the specified range [0, 1)
      *
      * @return random number
      */
@@ -287,7 +287,7 @@ public abstract class RandomUtils {
      * @param <T>   element type
      * @param list  the list
      * @param count number of elements to pick
-     * @return random element
+     * @return list of random elements
      */
     public static <T> List<T> randomEles(List<T> list, int count) {
         final List<T> result = new ArrayList<T>(count);
@@ -305,7 +305,7 @@ public abstract class RandomUtils {
      * @param <T>        element type
      * @param collection the collection
      * @param count      number of elements to pick
-     * @return random element
+     * @return set of random elements
      * @throws IllegalArgumentException if count exceeds the number of unique elements
      */
     public static <T> Set<T> randomEleSet(Collection<T> collection, int count) {

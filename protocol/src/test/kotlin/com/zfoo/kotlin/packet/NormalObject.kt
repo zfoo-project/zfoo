@@ -4,12 +4,12 @@ import com.zfoo.kotlin.packet.ObjectB
 import com.zfoo.kotlin.IProtocolRegistration
 import com.zfoo.kotlin.ByteBuffer
 
-// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+// Normal object covering the common subset of all target language syntaxes
 class NormalObject {
     var a: Byte = 0
     var aaa: Array<Byte> = emptyArray()
     var b: Short = 0
-    // 整数类型
+    // Integer type
     var c: Int = 0
     var d: Long = 0
     var e: Float = 0f

@@ -159,7 +159,7 @@ function readLongVarint(buffer) {
 
     // 6th..9th
     for (; i < 4; ++i) {
-        // 最后一位直接写入
+        // Write the last byte directly
         if (pos === 8) {
             bits.hi = (bits.hi | buffer[pos] << i * 7 + 3) >>> 0;
             return bits;

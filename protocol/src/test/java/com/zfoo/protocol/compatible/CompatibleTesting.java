@@ -37,10 +37,8 @@ import static com.zfoo.protocol.BenchmarkTesting.normalObject;
 public class CompatibleTesting {
 
     /**
-     * EN: The order of the bytecode-enhanced Map traversal order will be different, so the order of the serialized content will change.
-     * You can see that the different bytes are not consecutive.
-     * <p>
-     * Bytecode-enhanced Map traversal order may differ, so serialized byte order can change; non-matching bytes are not consecutive
+     * Bytecode-enhanced Map traversal order may differ, so serialized byte order can change;
+     * the differing bytes are not consecutive.
      */
     @Test
     public void compatibleTest() throws IOException {

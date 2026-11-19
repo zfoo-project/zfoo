@@ -67,7 +67,7 @@ public enum CodeTemplatePlaceholder {
                     .filter(it -> lineTrim.startsWith(it.placeholder))
                     .findAny();
             var formatLine = line;
-            // A placeholder like 'space ${protocol_class} has extra leading spaces; each generated line gets the same indentation to align the multi-line block
+            // A placeholder like 'space ${protocol_class}' has extra leading spaces; each generated line gets the same indentation to align the multi-line block
             if (startPlaceholderOptional.isPresent()) {
                 var startPlaceholder = startPlaceholderOptional.get();
                 // calculate the tab length

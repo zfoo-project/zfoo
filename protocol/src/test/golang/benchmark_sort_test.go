@@ -7,9 +7,9 @@ import (
 )
 
 func TestBubbleSort(t *testing.T) {
-	// 预热
+	// Warm up
 	testBubbleSort()
-	// 正式执行
+	// Actual execution
 	testBubbleSort()
 }
 
@@ -23,7 +23,7 @@ func testBubbleSort() {
 	fmt.Println(time.Since(startTime).Milliseconds())
 }
 
-// 排序
+// Sort
 func bubbleSort(arr []int) {
 	for j := 0; j < len(arr)-1; j++ {
 		for k := 0; k < len(arr)-1-j; k++ {
@@ -39,14 +39,14 @@ func bubbleSort(arr []int) {
 /**
 public class MainTest {
     public static void main(String[] args) {
-        // java的jit预热
+        // Java JIT warm-up
         test();
-        // 正式执行
+        // Actual execution
         test();
     }
 
     static void test() {
-        // 正式执行
+        // Actual execution
         var startTime = System.currentTimeMillis();
         var array = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
         for (var i = 0; i < 100000000; i++) {

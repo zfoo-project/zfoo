@@ -51,7 +51,7 @@ public abstract class ClassUtils {
     /**
      * Scan class files under the specified package
      *
-     * @param packageName package name（xxx.xxx）
+     * @param packageName package name (xxx.xxx)
      * @return set of fully-qualified class names under the package
      * @throws IOException if the scan fails
      */
@@ -99,7 +99,7 @@ public abstract class ClassUtils {
             jarFileUrl = jarCon.getJarFileURL().toExternalForm();
             closeJarFile = !jarCon.getUseCaches();
         } else {
-            // Not a JarURLConnection fall back to URL file parsing
+            // Not a JarURLConnection; fall back to URL file parsing
             // Assume URL format is "jar:path!/entry"; protocol is arbitrary if entry format is followed
             // Handle paths both with and without a leading "file:" prefix
             String urlFile = packageUrl.getFile();
@@ -226,7 +226,7 @@ public abstract class ClassUtils {
                 // If it is a .class file, strip the extension
                 String className = filename.substring(0, filename.length() - CLASS_FILE_EXT.length());
                 className = packageName + "." + className;
-                // Strip the prefix“.”
+                // Strip the leading "."
                 if (className.startsWith(".")) {
                     className = className.substring(1);
                 }
@@ -248,7 +248,7 @@ public abstract class ClassUtils {
 
     /**
      * Create a URI from the given URL
-     * Replace spaces in URI with“%20”encoding.
+     * Replace spaces in URI with "%20" encoding.
      * @param url the URL to convert to a URI
      * @return URI object
      * @see java.net.URL#toURI()
@@ -259,7 +259,7 @@ public abstract class ClassUtils {
 
     /**
      * Create a URI from the given string
-     * Replace spaces in URI with“%20”encoding.
+     * Replace spaces in URI with "%20" encoding.
      * @param location the string to convert to a URI
      * @return URI object
      */
@@ -299,7 +299,7 @@ public abstract class ClassUtils {
     }
 
     /**
-     * Set the 'useCaches' flag on the given connection;“useCaches”false for JNLP-based resources, unchanged for others
+     * Set the 'useCaches' flag on the given connection; false for JNLP-based resources, unchanged for others
      *
      * @param urlConnection urlConnection
      */

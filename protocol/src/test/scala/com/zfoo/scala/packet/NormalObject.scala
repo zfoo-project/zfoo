@@ -5,12 +5,12 @@ import com.zfoo.scala.IProtocolRegistration
 import com.zfoo.scala.ByteBuffer
 import scala.collection.mutable
 
-// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+// Normal object covering the common subset of all target language syntaxes
 class NormalObject {
   var a: Byte = 0
   var aaa: Array[Byte] = _
   var b: Short = 0
-  // 整数类型
+  // Integer type
   var c: Int = 0
   var d: Long = 0L
   var e: Float = 0f

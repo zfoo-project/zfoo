@@ -9,12 +9,12 @@ from zfoopy import ByteBuffer
 def print_bytearray(array):
     signed_byte_array = struct.unpack('b' * len(array), array)
     for byte in signed_byte_array:
-        print(byte)  # 以字节形式输出每个字节的值
+        print(byte)  # Output each byte's value as a byte
 
 
 class ByteBufferTestCase(TestCase):
     def test_complex_object(self):
-        # 打开文件并读取内容
+        # Open the file and read its contents
         # with open('D://github//zfoo//protocol//src//test//resources//compatible//normal-no-compatible.bytes', 'rb') as file:
         # with open('D://github//zfoo//protocol//src//test//resources//compatible//normal-out-compatible.bytes', 'rb') as file:
         # with open('D://github//zfoo//protocol//src//test//resources//compatible//normal-inner-compatible.bytes', 'rb') as file:
@@ -22,7 +22,7 @@ class ByteBufferTestCase(TestCase):
         with open('D://github//zfoo//protocol//src//test//resources//compatible//normal-out-inner-inner-compatible.bytes', 'rb') as file:
             content = file.read()
 
-        # 将内容转为bytearray
+        # Convert contents to bytearray
         byte_array = bytearray(content)
         buffer = ByteBuffer.ByteBuffer()
         buffer.writeBytes(byte_array)
@@ -32,14 +32,14 @@ class ByteBufferTestCase(TestCase):
         newObj = ProtocolManager.read(buffer)
         bytes = buffer.toBytes()
 
-        # 打印bytearray
+        # Print bytearray
         print(byte_array)
         pass
 
     def test_bytearray(self):
         buffer = bytearray(10)
         for byte in buffer:
-            print(byte)  # 以字节形式输出每个字节的值
+            print(byte)  # Output each byte's value as a byte
         pass
 
     def test_buffer_raw_int(self):

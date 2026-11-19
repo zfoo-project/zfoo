@@ -55,7 +55,7 @@ public class ProtocolManager {
     }
 
     /**
-     * serialize the packet into the buffer
+     * Serialize the packet into the buffer
      */
     public static void write(ByteBuf buffer, Object packet) {
         var protocolId = protocolId(packet.getClass());
@@ -66,10 +66,10 @@ public class ProtocolManager {
     }
 
     /**
-     * deserialization a packet from the buffer
+     * Deserialize a packet from the buffer
      * <p>
-     * byte[] convert to ByteBuf using Unpooled.wrappedBuffer(byte[]) in netty
-     * ByteBuf convert to byte[] using ByteBufUtils.readAllBytes(ByteBuf) in zfoo
+     * Convert byte[] to ByteBuf using Unpooled.wrappedBuffer(byte[]) in Netty
+     * Convert ByteBuf to byte[] using ByteBufUtils.readAllBytes(ByteBuf) in zfoo
      */
     public static Object read(ByteBuf buffer) {
         short protocolId = -1;
@@ -144,7 +144,7 @@ public class ProtocolManager {
     }
 
     /**
-     * Register protocol and automatically generate a protocol ID for sub-protocols that do not specify one.
+     * Register protocols and automatically generate protocol IDs for sub-protocols that do not specify one.
      */
     public static void initProtocolAuto(List<Class<?>> protocolClassList, GenerateOperation generateOperation) {
         ProtocolAnalysis.analyzeAuto(protocolClassList, generateOperation);

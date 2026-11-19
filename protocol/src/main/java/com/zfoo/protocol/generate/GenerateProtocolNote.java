@@ -25,8 +25,7 @@ import com.zfoo.protocol.util.StringUtils;
 import java.util.*;
 
 /**
- * EN: When generating the protocol, the document comments and field comments of the protocol will use this class
- * During protocol generation, this class handles documentation and field comments
+ * Handles protocol documentation and field comments during protocol generation
  *
  * @author godotg
  */

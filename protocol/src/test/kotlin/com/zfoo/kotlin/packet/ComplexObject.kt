@@ -4,13 +4,13 @@ import com.zfoo.kotlin.packet.ObjectB
 import com.zfoo.kotlin.IProtocolRegistration
 import com.zfoo.kotlin.ByteBuffer
 
-// 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
+// Complex object with arrays, List, Set, and Map fields
 class ComplexObject {
-    // byte类型，最简单的整形
+    // byte type, simplest integer
     var a: Byte = 0
-    // byte的包装类型，优先使用基础类型，包装类型会有装箱拆箱
+    // Byte wrapper type; prefer primitives to avoid boxing/unboxing
     var aa: Byte = 0
-    // 数组类型
+    // Array type
     var aaa: Array<Byte> = emptyArray()
     var aaaa: Array<Byte> = emptyArray()
     var b: Short = 0
@@ -56,7 +56,7 @@ class ComplexObject {
     var sss: Set<Set<ObjectA>> = emptySet()
     var ssss: Set<String> = emptySet()
     var sssss: Set<Map<Int, String>> = emptySet()
-    // 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
+    // To modify while maintaining backward compatibility, add @Compatible with incrementing value
     var myCompatible: Int = 0
     var myObject: ObjectA? = null
 }

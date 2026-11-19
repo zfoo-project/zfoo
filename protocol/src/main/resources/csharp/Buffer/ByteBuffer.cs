@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-// CSharp字节保存在内存的低地址中是根据操作系统来的，所以有可能是大端模式，也有可能是小端模式
-// 右移操作>>是带符号右移
+// In C#, whether bytes are stored at lower memory addresses in big-endian or little-endian order depends on the operating system
+// The right shift operator >> is a signed right shift
 namespace zfoocs
 {
     public abstract class ByteBuffer
@@ -51,7 +51,7 @@ namespace zfoocs
         }
         
         public void AdjustPadding(int predictionLength, int beforeWriteIndex) {
-            // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+            // Since a variable-length int is written, clear any excess reserved positions
             var currentWriteIndex = GetWriteOffset();
             var predictionCount = WriteIntCount(predictionLength);
             var length = currentWriteIndex - beforeWriteIndex - predictionCount;
@@ -199,8 +199,8 @@ namespace zfoocs
         // *******************************************int***************************************************
         public void WriteInt(int intValue)
         {
-            // 用Zigzag算法压缩int和long的值
-            // 再用Varint紧凑算法表示数字的有效位
+            // Compress int and long values using the ZigZag algorithm
+            // Then encode the significant bits compactly using Varint
             uint value = (uint) ((intValue << 1) ^ (intValue >> 31));
 
             if (value >> 7 == 0)
@@ -270,8 +270,8 @@ namespace zfoocs
         
         public int WriteIntCount(int intValue)
         {
-            // 用Zigzag算法压缩int和long的值
-            // 再用Varint紧凑算法表示数字的有效位
+            // Compress int and long values using the ZigZag algorithm
+            // Then encode the significant bits compactly using Varint
             uint value = (uint) ((intValue << 1) ^ (intValue >> 31));
 
             if (value >> 7 == 0)
@@ -293,10 +293,10 @@ namespace zfoocs
             return 5;
         }
 
-        // 写入没有压缩的int
+        // Write uncompressed int
         public abstract void WriteRawInt(int value);
 
-        // 读取没有压缩的int
+        // Read uncompressed int
         public abstract int ReadRawInt();
 
         // *******************************************long**************************************************
@@ -493,20 +493,20 @@ namespace zfoocs
         private static readonly byte[] EMPTY_BYTE_ARRAY = new byte[] { };
 
         /// <summary>
-        /// 以字节数组的形式返回指定的 16 位有符号整数值。
+        /// Returns the specified 16-bit signed integer value as an array of bytes.
         /// </summary>
-        /// <param name="value">要转换的数字。</param>
-        /// <returns>长度为 2 的字节数组。</returns>
+        /// <param name="value">The number to convert.</param>
+        /// <returns>An array of bytes with length 2.</returns>
         public byte[] GetBytes(short value)
         {
             return BitConverter.GetBytes(value);
         }
 
         /// <summary>
-        /// 返回由字节数组中前两个字节转换来的 16 位有符号整数。
+        /// Returns a 16-bit signed integer converted from the first two bytes of a byte array.
         /// </summary>
-        /// <param name="value">字节数组。</param>
-        /// <returns>由两个字节构成的 16 位有符号整数。</returns>
+        /// <param name="value">An array of bytes.</param>
+        /// <returns>A 16-bit signed integer formed by two bytes.</returns>
         public short GetInt16(byte[] value)
         {
             return BitConverter.ToInt16(value, 0);
@@ -514,10 +514,10 @@ namespace zfoocs
 
 
         /// <summary>
-        /// 以字节数组的形式返回指定的 32 位有符号整数值。
+        /// Returns the specified 32-bit signed integer value as an array of bytes.
         /// </summary>
-        /// <param name="value">要转换的数字。</param>
-        /// <returns>长度为 4 的字节数组。</returns>
+        /// <param name="value">The number to convert.</param>
+        /// <returns>An array of bytes with length 4.</returns>
         public byte[] GetBytes(int value)
         {
             return BitConverter.GetBytes(value);
@@ -525,10 +525,10 @@ namespace zfoocs
 
 
         /// <summary>
-        /// 返回由字节数组中前四个字节转换来的 32 位有符号整数。
+        /// Returns a 32-bit signed integer converted from the first four bytes of a byte array.
         /// </summary>
-        /// <param name="value">字节数组。</param>
-        /// <returns>由四个字节构成的 32 位有符号整数。</returns>
+        /// <param name="value">An array of bytes.</param>
+        /// <returns>A 32-bit signed integer formed by four bytes.</returns>
         public int GetInt32(byte[] value)
         {
             return BitConverter.ToInt32(value, 0);
@@ -536,40 +536,40 @@ namespace zfoocs
 
 
         /// <summary>
-        /// 以字节数组的形式返回指定的单精度浮点值。
+        /// Returns the specified single-precision floating-point value as an array of bytes.
         /// </summary>
-        /// <param name="value">要转换的数字。</param>
-        /// <returns>长度为 4 的字节数组。</returns>
+        /// <param name="value">The number to convert.</param>
+        /// <returns>An array of bytes with length 4.</returns>
         public byte[] GetBytes(float value)
         {
             return BitConverter.GetBytes(value);
         }
 
         /// <summary>
-        /// 返回由字节数组中前四个字节转换来的单精度浮点数。
+        /// Returns a single-precision floating-point number converted from the first four bytes of a byte array.
         /// </summary>
-        /// <param name="value">字节数组。</param>
-        /// <returns>由四个字节构成的单精度浮点数。</returns>
+        /// <param name="value">An array of bytes.</param>
+        /// <returns>A single-precision floating-point number formed by four bytes.</returns>
         public float GetSingle(byte[] value)
         {
             return BitConverter.ToSingle(value, 0);
         }
 
         /// <summary>
-        /// 以字节数组的形式返回指定的双精度浮点值。
+        /// Returns the specified double-precision floating-point value as an array of bytes.
         /// </summary>
-        /// <param name="value">要转换的数字。</param>
-        /// <returns>长度为 8 的字节数组。</returns>
+        /// <param name="value">The number to convert.</param>
+        /// <returns>An array of bytes with length 8.</returns>
         public byte[] GetBytes(double value)
         {
             return BitConverter.GetBytes(value);
         }
 
         /// <summary>
-        /// 返回由字节数组中前八个字节转换来的双精度浮点数。
+        /// Returns a double-precision floating-point number converted from the first eight bytes of a byte array.
         /// </summary>
-        /// <param name="value">字节数组。</param>
-        /// <returns>由八个字节构成的双精度浮点数。</returns>
+        /// <param name="value">An array of bytes.</param>
+        /// <returns>A double-precision floating-point number formed by eight bytes.</returns>
         public double GetDouble(byte[] value)
         {
             return BitConverter.ToDouble(value, 0);
@@ -577,10 +577,10 @@ namespace zfoocs
 
 
         /// <summary>
-        /// 以 UTF-8 字节数组的形式返回指定的字符串。
+        /// Returns the specified string as a UTF-8 byte array.
         /// </summary>
-        /// <param name="value">要转换的字符串。</param>
-        /// <returns>UTF-8 字节数组。</returns>
+        /// <param name="value">The string to convert.</param>
+        /// <returns>A UTF-8 byte array.</returns>
         public byte[] GetBytes(string value)
         {
             if (value == null)
@@ -592,10 +592,10 @@ namespace zfoocs
         }
 
         /// <summary>
-        /// 返回由 UTF-8 字节数组转换来的字符串。
+        /// Returns a string converted from a UTF-8 byte array.
         /// </summary>
-        /// <param name="value">UTF-8 字节数组。</param>
-        /// <returns>字符串。</returns>
+        /// <param name="value">A UTF-8 byte array.</param>
+        /// <returns>A string.</returns>
         public string GetString(byte[] value)
         {
             if (value == null)

@@ -24,7 +24,7 @@ func adjustPadding(predictionLength: int, beforeWriteIndex: int):
 		writeInt(length)
 		setWriteOffset(currentWriteIndex)
 	else:
-		# get_partial_data of StreamPeerBuffer is deep clone
+		# get_partial_data of StreamPeerBuffer creates a deep clone
 		buffer.seek(currentWriteIndex - length)
 		var retainedByteBuf = buffer.get_partial_data(length)[1]
 		setWriteOffset(beforeWriteIndex)

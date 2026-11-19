@@ -2,7 +2,7 @@ local protocols = {}
 
 local ProtocolManager = {}
 
--- table扩展方法，map的大小
+-- table extension method for getting map size
 function table.mapSize(map)
     local size = 0
     for _,_ in pairs(map) do
@@ -21,9 +21,9 @@ end
 
 function ProtocolManager.write(buffer, packet)
     local protocolId = packet:protocolId()
-    -- 写入协议号
+    -- write protocol id to buffer
     buffer:writeShort(protocolId)
-    -- 写入包体
+    -- write packet
     ProtocolManager.getProtocol(protocolId):write(buffer, packet)
 end
 

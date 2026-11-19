@@ -1,10 +1,10 @@
 class_name NormalObject
 const PROTOCOL_ID: int = 101
-# 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+# Normal object covering the common subset of all target language syntaxes
 var a: int
 var aaa: Array[int]
 var b: int
-# 整数类型
+# Integer type
 var c: int
 var d: int
 var e: float

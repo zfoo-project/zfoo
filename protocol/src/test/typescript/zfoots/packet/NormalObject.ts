@@ -2,12 +2,12 @@ import IByteBuffer from '../IByteBuffer';
 import IProtocolRegistration from '../IProtocolRegistration';
 import ObjectA from './ObjectA';
 
-// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+// Normal object covering the common subset of all target language syntaxes
 class NormalObject {
     a: number = 0;
     aaa: Array<number> = [];
     b: number = 0;
-    // 整数类型
+    // Integer type
     c: number = 0;
     d: number = 0;
     e: number = 0;

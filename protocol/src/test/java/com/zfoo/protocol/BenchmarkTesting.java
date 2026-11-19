@@ -195,7 +195,7 @@ public class BenchmarkTesting {
                 var bytes = JSONB.toBytes(simpleObject);
                 var mess = JSONB.parseObject(bytes, SimpleObject.class);
 
-                // writing via stream is extremely slow
+                // Writing via stream is extremely slow
                 // JSONB.writeTo(output, normalObject);
                 // var mess = JSONB.parseObject(input, NormalObject.class);
             }
@@ -232,7 +232,7 @@ public class BenchmarkTesting {
                 var str = JSON.toJSONString(simpleObject);
                 var mess = JSON.parseObject(str, SimpleObject.class);
 
-                // writing via stream is extremely slow
+                // Writing via stream is extremely slow
                 // JSONB.writeTo(output, normalObject);
                 // var mess = JSONB.parseObject(input, NormalObject.class);
             }

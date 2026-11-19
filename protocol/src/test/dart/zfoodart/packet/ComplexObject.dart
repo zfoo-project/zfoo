@@ -2,13 +2,13 @@ import '../IProtocolRegistration.dart';
 import '../IByteBuffer.dart';
 import './ObjectA.dart';
 import './ObjectB.dart';
-// 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
+// Complex object with arrays, List, Set, and Map fields
 class ComplexObject {
-  // byte类型，最简单的整形
+  // byte type, simplest integer
   int a = 0;
-  // byte的包装类型，优先使用基础类型，包装类型会有装箱拆箱
+  // Byte wrapper type; prefer primitives to avoid boxing/unboxing
   int aa = 0;
-  // 数组类型
+  // Array type
   List<int> aaa = List.empty();
   List<int> aaaa = List.empty();
   int b = 0;
@@ -54,7 +54,7 @@ class ComplexObject {
   Set<Set<ObjectA>> sss = Set();
   Set<String> ssss = Set();
   Set<Map<int, String>> sssss = Set();
-  // 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
+  // To modify while maintaining backward compatibility, add @Compatible with incrementing value
   int myCompatible = 0;
   ObjectA? myObject = null;
 }

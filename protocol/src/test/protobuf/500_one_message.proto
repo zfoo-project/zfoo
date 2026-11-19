@@ -9,9 +9,9 @@ message SimpleObject {
   int64 aa = 1;
 }
 
-// 如果字段的tag超过1000，则视这个字段为需要兼容的协议字段
+// Fields with tag > 1000 are treated as protocol fields requiring backward compatibility
 message Proj {
-  // 这是属性的注释
+  // This is a field comment
   int64 id = 1;
   string name = 2;
   string repoPath = 3;

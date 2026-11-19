@@ -462,7 +462,7 @@ public abstract class FileUtils {
         OutputStreamWriter outputStreamWriter = null;
         // Buffered stream for improved efficiency
         BufferedWriter bufferedWriter = null;
-        // Without buffering, each byte is written individually which is very slow for large data.
+        // Without buffering, each byte is written individually, which is very slow for large data.
         // Buffered stream: writes to buffer first; flushes to file when full, greatly improving efficiency
         try {
             // Open file in append mode
@@ -519,9 +519,9 @@ public abstract class FileUtils {
     }
 
     /**
-     * If the file does not exist, create it. Prefer true to open in append mode
+     * If the file does not exist, create it. Prefer passing true to open in append mode.
      * <p>
-     * The parent directory will be created if it does not exist.The file will be created if it does not exist.
+     * The parent directory will be created if it does not exist. The file will be created if it does not exist.
      *
      * @param file   the file to open for output, must not be {@code null}
      * @param append if {@code true}, then bytes will be added to the end of the file rather than overwriting
