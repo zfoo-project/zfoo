@@ -36,7 +36,7 @@ import java.util.*;
  * @author godotg
  */
 public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
-    // func index of caches
+    // Cache of lambda functions to index field names
     private ConcurrentReferenceHashMap<Func1<V, ?>, String> funcCaches = new ConcurrentReferenceHashMap<>();
     // non-unique index
     protected Map<String, Map<Object, List<V>>> indexMap = new HashMap<>();
@@ -46,8 +46,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
     protected Class<?> clazz;
     protected IdDef idDef;
     protected Map<String, IndexDef> indexDefMap;
-    // EN: unused configuration tables will clear data to save memory.
-    // Unused resource tables have their data cleared to save memory
+    // Unused resource tables have their data cleared to save memory.
     protected boolean recycle = true;
 
     public static AbstractStorage<?, ?> parse(InputStream inputStream, Class<?> resourceClazz, String suffix) {
@@ -165,7 +164,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
             return indexName;
         }
 
-        // 1. In IDEA debug mode, lambda is a proxy
+        // 1. In IDEA debug mode, the lambda expression is a proxy
         if (func instanceof Proxy) {
             try {
                 var lambda = new IdeaProxyLambdaMeta((Proxy) func);
@@ -194,7 +193,7 @@ public abstract class AbstractStorage<K, V> implements IStorage<K, V> {
             }
         }
 
-        // 4. Derive from dataMap (suitable for GraalVM environments)
+        // 4. Resolve by applying func to resource entries (suitable for GraalVM environments)
         if (indexName == null) {
             try {
                 var fields = Arrays.stream(clazz.getDeclaredFields())

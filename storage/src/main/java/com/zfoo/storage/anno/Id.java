@@ -18,7 +18,7 @@ import org.springframework.aot.hint.annotation.Reflective;
 import java.lang.annotation.*;
 
 /**
- * primary key
+ * Primary key
  *
  * @author godotg
  */

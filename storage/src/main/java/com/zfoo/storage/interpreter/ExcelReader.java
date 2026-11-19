@@ -66,12 +66,12 @@ public abstract class ExcelReader {
     }
 
     private static List<StorageHeader> getHeaders(Iterator<Row> iterator, String resourceClassName) {
-        // Get valid column names from the resource table; row 1 is the field names by default
+        // Get valid column names from the resource table; row 1 contains the field names by default
         var fieldRow = iterator.next();
         if (fieldRow == null) {
             throw new RunException("Failed to get attribute control column from excel file of resource [class:{}]", resourceClassName);
         }
-        // Row 2: field types (default)
+        // Row 2: field types by default
         var typeRow = iterator.next();
         if (typeRow == null) {
             throw new RunException("Failed to get type control column from excel file of resource [class:{}]", resourceClassName);

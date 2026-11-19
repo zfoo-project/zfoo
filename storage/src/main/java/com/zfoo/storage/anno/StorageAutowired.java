@@ -17,8 +17,7 @@ import org.springframework.aot.hint.annotation.Reflective;
 import java.lang.annotation.*;
 
 /**
- * EN: Injection of static data
- * Injection of static data resources
+ * Annotation for injecting static data resources.
  *
  * @author godotg
  */

@@ -33,38 +33,38 @@ public class ExcelTesting {
 
     @Test
     public void createExcelTest() throws IOException {
-        //Step 1: create workbook
+        // Step 1: create workbook
         var wb = WorkbookFactory.create(true);
 
-        //Step 2: create sheet
+        // Step 2: create sheet
         var sheet = wb.createSheet("TestSheet");
 
         // Step 3: create header row (row 0)
         var row = sheet.createRow(0);
         var style = wb.createCellStyle();
-        //style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  //center alignment
+        // style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // center alignment
 
 
-        //Step 4: create cells
-        var cell = row.createCell(0); //first cell
+        // Step 4: create cells
+        var cell = row.createCell(0); // first cell
         cell.setCellValue("Name");
         cell.setCellStyle(style);
 
-        cell = row.createCell(1);         //second cell
+        cell = row.createCell(1);         // second cell
         cell.setCellValue("Age");
         cell.setCellStyle(style);
 
 
-        //Step 5: insert data
+        // Step 5: insert data
         for (int i = 0; i < 5; i++) {
-            //Create row
+            // Create row
             row = sheet.createRow(i + 1);
-            //Create cells and add data
+            // Create cells and add data
             row.createCell(0).setCellValue("aa" + i);
             row.createCell(1).setCellValue(i);
         }
 
-        //Step 6: save Excel to the specified path
+        // Step 6: save the Excel file to the specified path
         FileOutputStream target = new FileOutputStream("target.xlsx");
         wb.write(target);
         target.close();

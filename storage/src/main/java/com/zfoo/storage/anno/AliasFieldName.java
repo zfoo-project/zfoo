@@ -17,8 +17,7 @@ import org.springframework.aot.hint.annotation.Reflective;
 import java.lang.annotation.*;
 
 /**
- * EN: Specify the file column name. If not specified, the default column name will be consistent with the field name.
- * Specifies the Excel column name; defaults to the field name if not specified
+ * Specifies the resource file column name; defaults to the field name if not specified.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

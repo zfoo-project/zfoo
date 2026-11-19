@@ -17,9 +17,8 @@ import org.springframework.aot.hint.annotation.Reflective;
 import java.lang.annotation.*;
 
 /**
- *
- * EN: You can specify the corresponding resource file name (only the file name is specified, no file suffix is required)
- * Specifies the resource file name (name only, no extension); defaults to scanning for a file matching the class name
+ * Specifies the corresponding resource file name (name only, without extension);
+ * if not specified, defaults to scanning for a file matching the class name.
  *
  * @author godotg
  */

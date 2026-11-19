@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 /**
  * Function object<br>
- * Inspired by ActFramework<a href="http://actframework.org/">ActFramework</a><br>
+ * Inspired by <a href="http://actframework.org/">ActFramework</a><br>
  * A functional interface wrapping a function as an object<br>
- * Before JDK 8, functions could not be passed/returned; this wraps a function as an object
+ * Before JDK 8, functions could not be passed or returned; this wraps a function as an object
  *
  * @author Looly
  *
