@@ -84,7 +84,7 @@ public class EventRegisterProcessor implements BeanPostProcessor {
                 if (GraalVmUtils.isGraalVM()) {
                     EventBus.registerEventReceiver(eventClazz, receiverDefinition);
                 } else {
-                            // key: event class type, value: observer, registered in the receiverMap of EventBus
+                    // key: event class type, value: observer, registered in EventBus receiverMap
                     EventBus.registerEventReceiver(eventClazz, EnhanceUtils.createEventReceiver(receiverDefinition));
                 }
             }

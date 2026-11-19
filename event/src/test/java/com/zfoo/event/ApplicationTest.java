@@ -29,7 +29,7 @@ public class ApplicationTest {
         // Load the configuration file (must import the event module)
         var context = new ClassPathXmlApplicationContext("application.xml");
 
-        // see receiver method of MyController1 and MyController2
+        // See receiver methods in MyController1, MyController2, and MyController3
         EventBus.post(MyNoticeEvent.valueOf("my-event"));
 
         ThreadUtils.sleep(1000);

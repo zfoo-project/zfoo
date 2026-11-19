@@ -12,7 +12,7 @@
 package com.zfoo.event.anno;
 
 /**
- * event bus thread type
+ * Event bus thread type
  *
  * @author godotg
  */

@@ -28,8 +28,8 @@ public class MyController2 {
     private static final Logger logger = LoggerFactory.getLogger(MyController2.class);
 
     /**
-     * The same event can be registered and received by multiple listeners
-     * Async events are NOT executed immediately; note the thread ID in the log
+     * The same event can be registered and received by multiple listeners.
+     * Async events are NOT executed immediately; note the thread ID in the log.
      */
     @EventReceiver(Bus.AsyncThread)
     public void onMyNoticeEvent(MyNoticeEvent event) {

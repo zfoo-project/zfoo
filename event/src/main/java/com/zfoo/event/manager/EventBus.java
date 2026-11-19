@@ -44,7 +44,6 @@ public abstract class EventBus {
     private static final Logger logger = LoggerFactory.getLogger(EventBus.class);
 
     /**
-     * EN: The size of the thread pool. Event's thread pool is often used to do time-consuming operations, so set it a little bigger
      * Thread pool size. The event thread pool is often used for time-consuming operations, so it should be set larger.
      */
     public static final int EXECUTORS_SIZE = MathUtil.safeFindNextPositivePowerOfTwo(Math.max(Runtime.getRuntime().availableProcessors(), 4) * 2);
@@ -53,16 +52,16 @@ public abstract class EventBus {
     private static final ExecutorService[] executors = new ExecutorService[EXECUTORS_SIZE];
 
     /**
-     * event mapping
+     * Event receiver mapping
      */
     private static final Map<Class<? extends IEvent>, List<IEventReceiver>> receiverMap = new HashMap<>();
 
     /**
-     * event exception handler
+     * Event exception handler
      */
     public static TripleConsumer<IEventReceiver, IEvent, Throwable> exceptionFunction = null;
     /**
-     * event noReceiver handler
+     * Handler for events with no registered receivers
      */
     public static Consumer<IEvent> noReceiverFunction = event -> {};
 
@@ -99,9 +98,9 @@ public abstract class EventBus {
     }
 
     /**
-     * Publish the event
+     * Publish an event
      *
-     * @param event Event object
+     * @param event the event to publish
      */
     public static void post(IEvent event) {
         if (event == null) {
@@ -140,7 +139,7 @@ public abstract class EventBus {
     }
 
     /**
-     * Use the event thread specified by the hashcode to execute the task
+     * Execute the task on the event thread determined by the hash code
      */
     public static void asyncExecute(int hash, Runnable runnable) {
         executorOf(hash).execute(ThreadUtils.safeRunnable(runnable));
@@ -151,7 +150,7 @@ public abstract class EventBus {
     }
 
     /**
-     * Register the event and its counterpart observer
+     * Register an event type and its corresponding receiver
      */
     public static void registerEventReceiver(Class<? extends IEvent> eventType, IEventReceiver receiver) {
         receiverMap.computeIfAbsent(eventType, it -> new ArrayList<>(1)).add(receiver);
