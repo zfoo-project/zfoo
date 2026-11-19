@@ -24,7 +24,7 @@
             <net:address name="firstZookeeper" url="127.0.0.1:2181"/>
         </net:registry>
 
-        <!--1. Declare this node as a consumer  2. The consumed interface is the concrete implementation provided by myProvider1-->
+        <!-- 1. Declare this node as a consumer. 2. Consume the service implemented by provider myProvider1. -->
         <net:consumers>
             <net:consumer consumer="provider1"/>
         </net:consumers>

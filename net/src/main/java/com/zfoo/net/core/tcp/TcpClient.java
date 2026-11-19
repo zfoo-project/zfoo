@@ -31,8 +31,8 @@ public class TcpClient extends AbstractClient<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel channel) {
-                // The client's idle detection timeout is 60 s (shorter), allowing it to send heartbeats.
-                // The server's idle detection timeout is 180 s (longer); once idle is detected, the client is evicted.
+        // The client's idle detection timeout is 60 s (shorter), allowing it to send heartbeats.
+        // The server's idle detection timeout is 180 s (longer); once idle is detected, the client is evicted.
         channel.pipeline().addLast(new IdleStateHandler(0, 0, 60));
         channel.pipeline().addLast(new ClientIdleHandler());
         channel.pipeline().addLast(new TcpCodecHandler());

@@ -48,7 +48,7 @@ public class NioClientTest implements Runnable {
     public void run() {
         System.out.println("Client started successfully!");
         while (!stop) {
-            // non-blocking
+            // Wait up to 1001 ms without blocking indefinitely
             try {
                 selector.select(1001);
                 Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();

@@ -40,7 +40,7 @@ public class BenchmarkAsyncTest {
         var client = new TcpClient(HostAndPort.valueOf("127.0.0.1:9000"));
         var session = client.start();
 
-        // Async requests are sent together; the server queue may cause timeouts. Increase Router's DEFAULT_TIMEOUT if needed.
+        // Async requests are sent together; the server queue may cause timeouts. Increase Router's DEFAULT_TIMEOUT (currently 3 seconds) if needed.
         var threadNums = Runtime.getRuntime().availableProcessors();
         var requestNums = 1000;
         for (int i = 0; i < threadNums; i++) {

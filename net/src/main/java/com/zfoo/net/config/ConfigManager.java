@@ -82,8 +82,8 @@ public class ConfigManager implements IConfigManager {
             }
         }
 
-        // At this point, NetConfig is fully initialised via app.xml (consumers) + protocol.xml (module IDs)
-        // The registry now links providers and consumers together
+        // At this point, NetConfig is fully initialized via app.xml (consumers) + protocol.xml (module IDs)
+        // Next, the registry links providers and consumers together
         try {
             var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
             if (registryConfig != null) {

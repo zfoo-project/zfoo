@@ -82,10 +82,9 @@ public class FastTreeMapIntLong {
     }
 
     /**
-     * returns the index of entry for the least key greater than the specified key;
-     * if key greater than the max key, returns the last index of entry;
-     * if no such entry exists, returns the index of entry for the least key greater than the specified key;
-     * if no such entry exists, returns -1.
+     * Returns the index of the entry with the least key greater than or equal to the specified key;
+     * if {@code key} is greater than the maximum key, returns the last index;
+     * if the array is empty, returns -1.
      */
     public int indexOfNearestCeilingKey(int key) {
         if (ArrayUtils.isEmpty(keys)) {
@@ -120,7 +119,7 @@ public class FastTreeMapIntLong {
             }
         }
 
-        // If the exact key is found, it is its own nearest ceiling key
+        // Fallback if no ceiling index was matched
         if (nearestIndex == -1) {
             return 0;
         }

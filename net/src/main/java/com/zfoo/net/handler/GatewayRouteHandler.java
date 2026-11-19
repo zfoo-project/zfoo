@@ -105,7 +105,7 @@ public class GatewayRouteHandler extends ServerRouteHandler {
         // Fall back to the session's sid as the consistent-hash key.
         // Note: since sid changes on every reconnect, the client may be routed to a different server after reconnecting.
         // Override the gateway's forwarding strategy if custom behavior is needed.
-        // In most cases, logic should reach the uid-based routing above, not here.
+        // Unless you created a standalone TcpClient without login, requests should normally hit the uid-based routing above rather than reaching here.
         var sid = session.getSid();
         forwardingPacket(packet, gatewayAttachment, sid);
     }

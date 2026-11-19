@@ -237,7 +237,7 @@ public class ZookeeperRegistry implements IRegistry {
                     var registryConfig = NetContext.getConfigManager().getLocalConfig().getRegistry();
                     var builder = curator.create();
                     builder.creatingParentsIfNeeded();
-                            // Verify ZK connection authorisation
+                    // Verify ZK connection authorization
                     if (registryConfig.hasZookeeperAuthor()) {
                         var zookeeperAuthorStr = registryConfig.toZookeeperAuthor();
                         var aclList = List.of(new ACL(ZooDefs.Perms.ALL, new Id("digest", DigestAuthenticationProvider.generateDigest(zookeeperAuthorStr))));
@@ -322,7 +322,7 @@ public class ZookeeperRegistry implements IRegistry {
                         var providerRegister = Register.parseString(providerStr);
                         var localRegisterVO = NetContext.getConfigManager().getLocalConfig().toLocalRegister();
                         // If the newly started provider is one this consumer cares about, attempt to connect
-                        // This means: if multiple consumers start, they will eventually all connect
+                        // This means: if multiple matching providers start, this consumer will eventually connect to all of them
                         if (Register.providerHasConsumer(providerRegister, localRegisterVO)) {
                             providerRegisterSet.add(providerRegister);
                             checkConsumer();
@@ -467,7 +467,7 @@ public class ZookeeperRegistry implements IRegistry {
                 }
             });
 
-            // consumerClientList size >= 1 means the consumer successfully connected
+            // consumerClientList size == 1 means the consumer is already connected
             if (consumerClientList.size() == 1) {
                 var consumer = consumerClientList.get(0);
                 if (!SessionUtils.isActive(consumer)) {

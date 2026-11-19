@@ -47,11 +47,11 @@ public class TcpClientTest {
             var ask = new AsyncMessAsk();
             ask.setMessage("Hello, this is async client!");
 
-            // Router is just an interface; the actual implementation is retrieved from the Spring container after initialization
-            // To send network data, call asyncAsk; the first argument is the target session
-            // The 3rd argument specifies which thread handles the response (via CompletableFuture).
-            // Internally this still goes through the session and calls send()
-            // Response is still via BaseRouteHandler; non-null attachment triggers the CompletableFuture callback.
+            // Router is just an interface; the actual implementation is retrieved from the Spring container after initialization.
+            // To send network data, call asyncAsk; the first argument is the target session.
+            // The argument parameter determines which thread executes the task on the server; callbacks return on the caller thread via CompletableFuture.
+            // Internally this still goes through the session and calls send().
+            // The response is still dispatched through BaseRouteHandler, where a non-null attachment triggers CompletableFuture#complete().
             NetContext.getRouter().asyncAsk(session, ask, AsyncMessAnswer.class, null)
                     .whenComplete(answer -> {
                                 logger.info("async request received result[{}]", JsonUtils.object2String(answer));

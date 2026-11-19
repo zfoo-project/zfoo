@@ -15,24 +15,25 @@ public class FileReaderTest {
     @Test
     public void test() throws IOException {
         RandomAccessFile file = new RandomAccessFile("rainbow.txt", "rw");
-        // NIO always opens from a Channel; data can be read from Channel into Buffer or written from Buffer to Channel
+        // FileChannel cannot be set to non-blocking mode; it always operates in blocking mode.
+        // NIO operations always start from a Channel; data can be read into or written from a Buffer.
         FileChannel fileChannel = file.getChannel();
-        //create buffer with capacity of 48 bytes
+        // Create a buffer
         ByteBuffer buf = ByteBuffer.allocate(1000000000);
-        //read into buffer
+        // Read into the buffer
         int bytesRead = fileChannel.read(buf);
 
         while (bytesRead != -1) {
 
             System.out.println("Read " + bytesRead);
-            //make buffer ready for read
+            // Make buffer ready for reading
             buf.flip();
 
             while (buf.hasRemaining()) {
                 System.out.print((char) buf.get());
             }
 
-            //make buffer ready for writing
+            // Make buffer ready for writing
             buf.clear();
             bytesRead = fileChannel.read(buf);
         }

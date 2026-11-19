@@ -43,7 +43,7 @@ public class UdpClient extends AbstractClient<Channel> {
                 .option(ChannelOption.SO_BROADCAST, true)
                 .handler(this);
 
-                // bind(0) lets the OS pick a random available port
+        // bind(0) lets the OS pick a random available port
         var channelFuture = bootstrap.bind(0);
         channelFuture.syncUninterruptibly();
 

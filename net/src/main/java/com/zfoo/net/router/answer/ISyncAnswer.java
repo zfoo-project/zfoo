@@ -21,12 +21,12 @@ import com.zfoo.net.router.attachment.SignalAttachment;
 public interface ISyncAnswer<T> {
 
     /**
-     * The return packet for the synchronization request
+     * The response packet for the synchronous request.
      */
     T packet();
 
     /**
-     * attachment for synchronous and asynchronous request
+     * The attachment for the synchronous or asynchronous request.
      */
     SignalAttachment attachment();
 

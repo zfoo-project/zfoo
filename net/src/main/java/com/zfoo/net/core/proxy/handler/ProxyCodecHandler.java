@@ -41,7 +41,7 @@ public class ProxyCodecHandler extends ByteToMessageCodec<TunnelProtocolServer2C
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
-                // Not enough bytes to read a single int
+        // Not enough bytes to read a single int
         if (in.readableBytes() <= PacketService.PACKET_HEAD_LENGTH) {
             return;
         }

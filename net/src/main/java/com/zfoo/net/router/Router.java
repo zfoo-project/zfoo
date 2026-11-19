@@ -66,7 +66,7 @@ public class Router implements IRouter {
 
     /**
      * As the server receiver, the attachment received in receive() is stored here, applicable only to task threads.
-     * atReceiver sets the attachment and clears it after the method returns, no special attention needed.
+     * atReceiver sets the attachment and clears it after the method returns; no special attention is needed.
      * asyncAsk sets the attachment again and requires careful attention.
      */
     protected final FastThreadLocalAdapter<Object> serverReceiverAttachmentThreadLocal = new FastThreadLocalAdapter<>();
@@ -154,7 +154,7 @@ public class Router implements IRouter {
      * An Actor can be understood simply as a user or a player.
      * Because the uid of the same user/player is fixed, computing the consistent hash (taskExecutorHash) from uid always yields
      * the same result (sid is used if uid is unavailable), ensuring that all requests from the same user/player are always
-     * routed to the same thread on the same server via taskExecutorHash, thus eliminating concurrency and achieving lock-free design.
+     * routed to the same thread on the same server via taskExecutorHash, thus eliminating concurrency and achieving a lock-free design.
      * <p>
      * The Actor model in zfoo is a streamlined version that is transparent to the caller. In zfoo, actor = taskExecutorHash.
      * <p>

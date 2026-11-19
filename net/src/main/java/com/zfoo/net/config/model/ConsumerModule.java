@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 public class ConsumerModule {
 
-            // Load balancing strategy
+    // Load balancing strategy
     private String loadBalancer;
 
     // The provider name this consumer subscribes to

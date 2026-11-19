@@ -71,7 +71,7 @@ public abstract class MD5Utils {
         }
     }
 
-    // Converts a byte array to a lowercase hexadecimal string
+    // Converts a byte array to an uppercase hexadecimal string
     private static String byteArrayToHex(byte[] bytes) {
         // Each byte is 8 bits = 2 hex characters (2^8 == 16^2)
         var resultCharArray = new char[bytes.length * 2];

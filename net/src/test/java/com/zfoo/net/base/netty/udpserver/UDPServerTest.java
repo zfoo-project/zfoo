@@ -28,8 +28,8 @@ public class UDPServerTest {
     }
 
     public void init() {
-        // Configure single-thread NIO event loop
-        EventLoopGroup group = new NioEventLoopGroup(); // Single-thread NIO event loop
+        // Configure NIO event loop group
+        EventLoopGroup group = new NioEventLoopGroup(); // NIO event loop group
         try {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(group).channel(NioDatagramChannel.class)

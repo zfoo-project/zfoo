@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
-<!-- native: internal messages; common: shared by all modules; js: web-facing protocol that generates JavaScript files -->
+<!-- native: internal messages; common: shared by all modules; js: web-facing protocol that generates JavaScript protocol files -->
 <protocols>
 
-    <!-- Configure the package name; all classes annotated with @Protocol under the package will be scanned -->
+    <!-- Configure the package name; all classes annotated with @Protocol under this package will be scanned -->
     <module id="1" name="native">
         <protocol location="com.zfoo.net.router.attachment"/>
     </module>
 
     <!-- Specifying protocol IDs in XML provides a centralized overview of the ID space -->
     <module id="2" name="common">
-        <!-- If the protocol ID is not specified here, the id from the @Protocol annotation will be used -->
+        <!-- If the protocol ID is omitted here, the id from the @Protocol annotation will be used -->
         <protocol location="com.zfoo.net.packet.common.Message"/>
         <protocol location="com.zfoo.net.packet.common.Error"/>
         <protocol location="com.zfoo.net.packet.common.Heartbeat"/>
