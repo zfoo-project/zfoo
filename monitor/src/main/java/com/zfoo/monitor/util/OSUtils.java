@@ -85,7 +85,7 @@ public abstract class OSUtils {
     }
 
     /**
-     * Convert a value less 1.0 to a percentage string; fractional part is rounded
+     * Convert a value less than or equal to 1.0 to a percentage string; the fractional part is rounded
      */
     public static String toPercent(double num) {
         if (num > 1) {
@@ -153,7 +153,7 @@ public abstract class OSUtils {
     }
 
     /**
-     * Equivalent of Linux 'free' command; compatible with Windows
+     * Equivalent to the Linux 'free' command; compatible with Windows
      */
     public static Memory free() {
         var memory = hardware.getMemory();
@@ -194,7 +194,7 @@ public abstract class OSUtils {
     }
 
     /**
-     * Equivalent of Linux 'sar -n DEV 1' command; compatible with Windows
+     * Equivalent to the Linux 'sar -n DEV 1' command; compatible with Windows
      */
     public static List<Sar> sar() {
         var nameSarMap = new HashMap<String, List<Sar>>();
@@ -299,7 +299,7 @@ public abstract class OSUtils {
                 .directory(wd)
                 .start();
 
-        // Asynchronously read output to avoid blocking due to buffer overflow
+        // Asynchronously read output to avoid blocking when the pipe buffer fills up
         var stdoutFuture = executors.submit(ThreadUtils.safeCallable(() -> StringUtils.bytesToString(IOUtils.toByteArray(process.getInputStream()))));
         var stderrFuture = executors.submit(ThreadUtils.safeCallable(() -> StringUtils.bytesToString(IOUtils.toByteArray(process.getErrorStream()))));
 
