@@ -33,8 +33,7 @@ public interface IOrmManager {
     void initAfter();
 
     /**
-     * EN:Get Mongo Client, through which you can get other databases or do some other complex operations
-     * Get the MongoClient instance for accessing other databases or performing complex operations
+     * Get the MongoClient instance for accessing other databases or performing complex operations.
      */
     MongoClient mongoClient();
 

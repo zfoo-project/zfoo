@@ -127,7 +127,7 @@ public abstract class MongoIdUtils {
      *
      * @param collectionName collection name for storage
      * @param documentName   document ID name
-     * @return the incremented unique ID
+     * @return the current maximum ID
      */
     public static long getMaxIdFromMongo(String collectionName, String documentName) {
         var collection = OrmContext.getOrmManager().getCollection(collectionName);
