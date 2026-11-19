@@ -16,7 +16,7 @@ import org.springframework.aot.hint.annotation.Reflective;
 import java.lang.annotation.*;
 
 /**
- * Receive annotations for events (observers).
+ * Annotation marking an event receiver (observer) method.
  *
  * @author godotg
  */

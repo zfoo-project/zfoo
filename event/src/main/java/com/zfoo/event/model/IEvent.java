@@ -29,7 +29,7 @@ public interface IEvent {
      * If the value is 9: 9 % 8 = 1, the async event executes in executors[1].
      * By choosing the return value, you can control which thread pool handles the async event.
      * Since each pool is single-threaded, routing related events to the same pool avoids locking and improves throughput.
-     * By default returns a random value, so async events may execute on any thread pool if this method is not overridden.
+     * By default, it returns a random value, so async events may execute on any thread pool if this method is not overridden.
      * @return the parameter used to select the target thread pool
      */
     default int executorHash() {
