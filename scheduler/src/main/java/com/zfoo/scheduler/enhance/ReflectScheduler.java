@@ -17,8 +17,8 @@ import com.zfoo.protocol.util.ReflectionUtils;
 import java.lang.reflect.Method;
 
 /**
- * Dynamic proxy for methods annotated with @Scheduler.
- * To avoid reflection overhead, Javassist bytecode enhancement is used to proxy ReflectScheduler.
+ * Reflection-based scheduler for methods annotated with @Scheduler.
+ * To avoid reflection overhead, Javassist bytecode enhancement is used to generate an IScheduler proxy instead (except on GraalVM).
  *
  * @author godotg
  */

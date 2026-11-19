@@ -35,7 +35,7 @@ public class TimeUtilsTest {
         LocalDate crischristmas = LocalDate.of(2014, 12, 25); // -> 2014-12-25
         // Parse from string:
         LocalDate endOfFeb = LocalDate.parse("2014-02-28"); // Strict ISO yyyy-MM-dd; overloaded methods allow custom formats
-        LocalDate.parse("2014-02-26"); // Invalid date throws DateTimeParseException
+        LocalDate.parse("2014-02-26"); // An invalid date (e.g., 2014-02-29) throws DateTimeParseException
         // Get first day of this month:
         LocalDate firstDayOfThisMonth = today.with(TemporalAdjusters.firstDayOfMonth()); // 2017-03-01
         // Get second day of this month:

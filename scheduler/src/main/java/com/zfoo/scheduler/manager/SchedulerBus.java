@@ -39,13 +39,13 @@ public abstract class SchedulerBus {
 
     private static final List<SchedulerDefinition> schedulerDefList = new CopyOnWriteArrayList<>();
     /**
-     * Scheduler uses a single-threaded executor by default
+     * SchedulerBus uses a single-threaded executor by default
      */
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new SchedulerThreadFactory(1));
 
 
     /**
-     * Timestamp of the last trigger invocation
+     * Timestamp of the last trigger check
      */
     private static long lastTriggerTimestamp = 0L;
 
@@ -101,8 +101,8 @@ public abstract class SchedulerBus {
     }
 
     /**
-     * Executed once per second. If this task takes longer than expected (e.g. 10 seconds),
-     * it will NOT catch up by running 10 times after completion.
+     * Executed once per second. If execution takes too long (e.g., 10 seconds),
+     * missed triggers will NOT be caught up (it will not run 10 times upon completion).
      */
     private static void triggerPerSecond() {
         var currentTimeMillis = TimeUtils.currentTimeMillis();
@@ -112,7 +112,7 @@ public abstract class SchedulerBus {
         }
 
 
-        // Someone moved the system clock backward; recalculate triggerTimestamp for all schedulers
+        // System clock was moved backward; recalculate triggerTimestamp for all schedulers
         // var diff = timestamp - lastTriggerTimestamp;
         if (currentTimeMillis < lastTriggerTimestamp) {
             for (SchedulerDefinition schedulerDef : schedulerDefList) {
@@ -122,10 +122,11 @@ public abstract class SchedulerBus {
             refreshMinTriggerTimestamp();
         }
 
-        // diff > 0: no clock adjustment, or clock was moved forward; can be ignored since the timestamp will exceed triggerTimestamp and will always trigger
+        // If the clock was not moved backward (currentTimeMillis >= lastTriggerTimestamp), no recalculation is needed:
+        // advancing the clock forward will trigger any tasks whose triggerTimestamp <= currentTimeMillis
         lastTriggerTimestamp = currentTimeMillis;
 
-        // If minTriggerTimestamp is greater than currentTimeMillis, no scheduler is ready to execute
+        // If currentTimeMillis is less than minTriggerTimestamp, no scheduler is ready to execute
         if (currentTimeMillis < minTriggerTimestamp) {
             return;
         }
@@ -135,7 +136,7 @@ public abstract class SchedulerBus {
         for (var scheduler : schedulerDefList) {
             var triggerTimestamp = scheduler.getTriggerTimestamp();
             if (triggerTimestamp <= currentTimeMillis) {
-                // Trigger time reached, invoke the scheduler
+                // Trigger time reached; invoke the scheduler
                 try {
                     scheduler.getScheduler().invoke();
                 } catch (Exception e) {
@@ -143,7 +144,7 @@ public abstract class SchedulerBus {
                 } catch (Throwable t) {
                     logger.error("scheduler invoke error", t);
                 }
-                // Reset the next trigger timestamp
+                // Compute and update the next trigger timestamp
                 triggerTimestamp = TimeUtils.nextTimestampByCronExpression(scheduler.getCronExpression(), timestampZonedDataTime);
                 scheduler.setTriggerTimestamp(triggerTimestamp);
             }
@@ -161,7 +162,7 @@ public abstract class SchedulerBus {
 
 
     /**
-     * Periodically recurring task that runs continuously
+     * Schedules a task to run periodically at a fixed rate (initial delay 0)
      */
     public static ScheduledFuture<?> scheduleAtFixedRate(Runnable runnable, long period, TimeUnit unit) {
 
@@ -170,7 +171,7 @@ public abstract class SchedulerBus {
 
 
     /**
-     * Task executed with a fixed delay
+     * Schedules a one-shot task to execute after the specified delay
      */
     public static ScheduledFuture<?> schedule(Runnable runnable, long delay, TimeUnit unit) {
 
@@ -178,7 +179,7 @@ public abstract class SchedulerBus {
     }
 
     /**
-     * Task triggered by a cron expression
+     * Schedules a recurring task using a cron expression
      */
     public static void scheduleCron(Runnable runnable, String cron) {
         if (SchedulerContext.isStop()) {
@@ -189,7 +190,7 @@ public abstract class SchedulerBus {
     }
 
     /**
-     * Task executed immediately
+     * Executes a task immediately on the scheduler executor
      */
     public static void execute(Runnable runnable) {
         executor.execute(ThreadUtils.safeRunnable(runnable));

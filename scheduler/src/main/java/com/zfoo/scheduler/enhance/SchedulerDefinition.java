@@ -23,7 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Trigger timestamp: the scheduler fires whenever the current timestamp exceeds this value.
+ * Scheduler definition holding the cron expression, task invoker, and trigger timestamp
+ * (fires whenever the current timestamp reaches or exceeds this value).
  *
  * @author godotg
  */
@@ -42,7 +43,7 @@ public class SchedulerDefinition {
         if (GraalVmUtils.isGraalVM()) {
             schedulerDef.scheduler = ReflectScheduler.valueOf(bean, method);
         } else {
-            // bytecode enhancements to avoid reflection
+            // Use bytecode enhancement to avoid reflection
             schedulerDef.scheduler = EnhanceUtils.createScheduler(ReflectScheduler.valueOf(bean, method));
         }
         schedulerDef.triggerTimestamp = TimeUtils.nextTimestampByCronExpression(cronExpression, TimeUtils.currentTimeMillis());

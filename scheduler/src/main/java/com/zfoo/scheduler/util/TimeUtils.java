@@ -67,11 +67,11 @@ public abstract class TimeUtils {
         SchedulerBus.refreshMinTriggerTimestamp();
     }
 
-    // volatile reduces the cache hit ratio of the CPU
+    // Not declared volatile because volatile reduces the CPU cache hit ratio
     private static long timestamp = System.currentTimeMillis();
 
     /**
-     * Get the precise current timestamp in milliseconds
+     * Get the precise current timestamp in milliseconds and update the cached timestamp.
      */
     public static long currentTimeMillis() {
         timestamp = System.currentTimeMillis();
@@ -79,8 +79,8 @@ public abstract class TimeUtils {
     }
 
     /**
-     * Obtain a coarse timestamp with a delay of up to one second, which is suitable for scenarios that
-     * do not require high time accuracy. Its performance is 10x faster than System.currentTimeMillis().
+     * Get a coarse timestamp updated approximately once per second, suitable for scenarios that
+     * do not require high time accuracy (about 10x faster than System.currentTimeMillis()).
      */
     public static long now() {
         return timestamp;
@@ -89,7 +89,7 @@ public abstract class TimeUtils {
     // -------------------------------------- Date Format --------------------------------------
 
     /**
-     * Convert a date string to a Date object. The standard date template follows DATE_FORMAT_TEMPLATE="yyyy-MM-dd HH:mm:ss"
+     * Convert a date string to a Date object. The standard date template follows DATE_FORMAT_TEMPLATE="yyyy-MM-dd HH:mm:ss".
      *
      * @param dateString date string, e.g. 2018-02-12 10:12:50
      * @return <code>Date</code>
@@ -192,7 +192,7 @@ public abstract class TimeUtils {
     /**
      * Check whether two timestamps fall in the same week, with Monday as the first day of the week.
      * For example, "2004-12-25" is Saturday (week 52 of 2004), while "2004-12-26" has a WEEK_OF_YEAR
-     * value of 1 in Java (treated as week 1 of 2005), so "2004-12-26" and "2005-01-01" are considered the same week.
+     * value of 1 in Java (treated as week 1 of 2005), so "2004-12-26" and "2005-01-01" are considered to be in the same week.
      */
     public static boolean isSameWeek(long time1, long time2) {
         Calendar cal1 = Calendar.getInstance();
@@ -229,7 +229,7 @@ public abstract class TimeUtils {
 
 
     /**
-     * Get the timestamp of midnight (00:00:00) for the given timestamp's date
+     * Get the start-of-day timestamp (00:00:00.000) for the given timestamp's date
      */
     public static long getZeroTimeOfDay(long time) {
         Calendar cal = Calendar.getInstance();

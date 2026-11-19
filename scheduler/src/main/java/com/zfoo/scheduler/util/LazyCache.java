@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiConsumer;
 
 /**
- * lazy detect the expiration time
+ * Cache with lazy expiration detection.
  *
  * @author godotg
  */
@@ -28,16 +28,12 @@ public class LazyCache<K, V> {
 
     public static enum RemovalCause {
         /**
-         * The entry was manually removed by the user. This can result from the user invoking any of the
-         * following methods on the cache or map view.
-         * remove()
+         * The entry was manually removed by the user via {@link #remove(Object)}.
          */
         EXPLICIT,
 
         /**
-         * The entry itself was not actually removed, but its value was replaced by the user. This can
-         * result from the user invoking any of the following methods on the cache or map view.
-         * put()
+         * The entry itself was not removed, but its value was replaced by the user via {@link #put(Object, Object)}.
          */
         REPLACED,
 
