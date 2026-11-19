@@ -32,8 +32,8 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 @ImportRuntimeHints(GraalvmOrmHints.class)
 public class OrmAutoConfiguration {
 
-    // OrmConfig in the specific business
-    // If the OrmConfig bean is not configured in the business, then the Orm automatic assembly here will not take effect.
+    // OrmConfig is provided by the application.
+    // If no OrmConfig bean is configured, ORM auto-configuration will not take effect.
     @Bean
     @ConditionalOnBean(OrmConfig.class)
     public OrmManager ormManager(OrmConfig ormConfig) {

@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Register runtime hints for the token library
+ * Register GraalVM runtime hints for the orm module
  *
  * @author godotg
  */
