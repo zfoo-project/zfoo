@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -11,7 +11,7 @@
 
     <properties>
         <zfoo.version>4.1.4</zfoo.version>
-        <!-- spring and spring boot -->
+        <!-- Spring and Spring Boot -->
         <spring.version>6.2.6</spring.version>
         <spring.boot.version>3.4.5</spring.boot.version>
         <junit.version>4.13.2</junit.version>
@@ -20,14 +20,14 @@
         <bytebuddy.version>1.17.6</bytebuddy.version>
         <!-- network framework -->
         <netty.version>4.1.122.Final</netty.version>
-        <!-- zookeeper -->
+        <!-- ZooKeeper -->
         <curator.version>5.8.0</curator.version>
         <!-- hardware detection -->
         <oshi.version>6.8.2</oshi.version>
         <!-- Office document parsing -->
         <poi.version>5.4.1</poi.version>
         <csv.version>1.14.0</csv.version>
-        <!-- maven core plugin -->
+        <!-- Maven core plugins -->
         <native-maven-plugin.version>0.10.6</native-maven-plugin.version>
         <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
@@ -36,13 +36,13 @@
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
         <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
-        <!-- deploy maven repository -->
+        <!-- Maven deployment plugins -->
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
         <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
-        <!-- encoding and java version -->
+        <!-- encoding and Java version -->
         <project.build.sourceEncoding>${file.encoding}</project.build.sourceEncoding>
         <maven.compiler.encoding>${file.encoding}</maven.compiler.encoding>
         <java.version>17</java.version>
@@ -152,7 +152,7 @@
                 <version>${maven-jar-plugin.version}</version>
             </plugin>
 
-            <!-- deploy to maven repository should specify these tags -->
+            <!-- Plugins required when deploying to the Maven Central repository -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -223,7 +223,7 @@
     </build>
 
 
-    <!-- deploy to maven repository should specify these tags -->
+    <!-- Tags required when deploying to the Maven Central repository -->
     <name>monitor</name>
     <description>zfoo monitor is lightweight cpu, memory, hard disk, network monitoring</description>
     <url>https://github.com/zfoo-project/zfoo</url>

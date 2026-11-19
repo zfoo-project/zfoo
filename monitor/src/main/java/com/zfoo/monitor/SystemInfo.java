@@ -15,7 +15,7 @@ package com.zfoo.monitor;
 public class SystemInfo {
 
     /**
-     * hostname
+     * Hostname
      */
     private String hostname;
 
@@ -30,7 +30,7 @@ public class SystemInfo {
     private String versionDetail;
 
     /**
-     * number of logical CPU cores
+     * Number of logical CPU cores
      */
     private int cpuLogicCore;
 
