@@ -1,11 +1,11 @@
 package zfoogo
 
-// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+// Normal object covering the common subset of all target language syntaxes
 type NormalObject struct {
 	A int8
 	Aaa []int8
 	B int16
-	// 整数类型
+	// Integer type
 	C int
 	D int64
 	E float32

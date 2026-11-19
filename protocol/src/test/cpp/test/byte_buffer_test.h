@@ -127,7 +127,7 @@ namespace byte_buffer_test {
     }
 //    void string_utf8_test(ByteBuffer &buffer) {
 //        using namespace std;
-//        string str = "我爱的人。。。..";
+//        string str = "The person I love.....";
 //        wstring utf8_str = buffer.string_to_utf8(str);
 //        string str_origin = buffer.utf8_to_string(utf8_str);
 //

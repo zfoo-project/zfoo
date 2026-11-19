@@ -1,9 +1,9 @@
-# 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+# Normal object covering the common subset of all target language syntaxes
 class NormalObject
   attr_accessor :a  # byte
   attr_accessor :aaa  # byte[]
   attr_accessor :b  # short
-  # 整数类型
+  # Integer type
   attr_accessor :c  # int
   attr_accessor :d  # long
   attr_accessor :e  # float

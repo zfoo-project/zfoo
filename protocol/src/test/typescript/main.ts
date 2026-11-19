@@ -7,14 +7,14 @@ function assert(flag: boolean): void {
     }
 }
 
-// 如果是在idea中运行，需要先安装插件：Run Configuration for TypeScript
-// 如果是在idea中运行，需要先安装插件：Run Configuration for TypeScript
-// 如果是在idea中运行，需要先安装插件：Run Configuration for TypeScript
-// 如果是在idea中运行，需要先安装插件：Run Configuration for TypeScript
-// 如果是在idea中运行，需要先安装插件：Run Configuration for TypeScript
-// 如果是在idea中运行，需要先安装插件：Run Configuration for TypeScript
-// 如果是在idea中运行，需要先安装插件：Run Configuration for TypeScript
-// 如果是在idea中运行，需要先安装插件：Run Configuration for TypeScript
+// If running in IntelliJ IDEA, install the plugin first: Run Configuration for TypeScript
+// If running in IntelliJ IDEA, install the plugin first: Run Configuration for TypeScript
+// If running in IntelliJ IDEA, install the plugin first: Run Configuration for TypeScript
+// If running in IntelliJ IDEA, install the plugin first: Run Configuration for TypeScript
+// If running in IntelliJ IDEA, install the plugin first: Run Configuration for TypeScript
+// If running in IntelliJ IDEA, install the plugin first: Run Configuration for TypeScript
+// If running in IntelliJ IDEA, install the plugin first: Run Configuration for TypeScript
+// If running in IntelliJ IDEA, install the plugin first: Run Configuration for TypeScript
 console.log("Hello world");
 
 // const data = fs.readFileSync('C:\\github\\zfoo\\protocol\\src\\test\\resources\\compatible\\normal-no-compatible.bytes');
@@ -30,7 +30,7 @@ const byteBuffer = new ByteBuffer();
 byteBuffer.writeBytes(arrayBytes);
 
 const packet = ProtocolManager.read(byteBuffer);
-// complexObjec是老的协议，所以序列化回来myCompatible是nil，所以要重新赋值
+// ComplexObject is an older protocol, so myCompatible is nil after deserialization and must be reassigned
 console.log(packet);
 
 const newByteBuffer = new ByteBuffer();
@@ -42,7 +42,7 @@ console.log("source size " + byteBuffer.getWriteOffset());
 console.log("target size " + newByteBuffer.getWriteOffset());
 // assert(byteBuffer.readOffset <= newByteBuffer.writeOffset);
 //
-// // set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
+// // Set and map are unordered, so the input and output byte streams may differ at times, though their lengths are always identical
 // const length = newByteBuffer.writeOffset;
 // byteBuffer.setReadOffset(0);
 // newByteBuffer.setReadOffset(0);

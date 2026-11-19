@@ -13,20 +13,20 @@ const minShort = -32768;
 const maxInt = 2147483647;
 const minInt = -2147483648;
 
-// UTF-8编码与解码
+// UTF-8 encoding and decoding
 // const encoder = new TextEncoder();
 // const decoder = new TextDecoder();
 
-// nodejs的测试环境需要用以下方式特殊处理
+// Node.js test environments require special handling as follows
 const util = require('util');
 const encoder = new util.TextEncoder('utf-8');
 const decoder = new util.TextDecoder('utf-8');
 
-// 现在所有主流浏览器都支持TextDecoder，只有微信小程序不支持TextDecoder（微信浏览器也支持，微信的小程序和浏览器不是同一个js环境）
+// All mainstream browsers now support TextDecoder, except WeChat Mini Programs (WeChat Browser also supports it; Mini Programs and the browser use different JS environments)
 // https://developers.weixin.qq.com/community/develop/doc/000ca85023ce78c8484e0d1d256400
-// 如果在微信小程序中使用，需要按照上面的链接全局引入TextEncoder相关依赖
+// If used in WeChat Mini Programs, globally import the TextEncoder-related polyfills per the link above
 
-// 在js中long可以支持的最大值
+// Maximum long value supported in JS
 // const maxLong = 9007199254740992;
 // const minLong = -9007199254740992;
 
@@ -40,7 +40,7 @@ function copy(original: ArrayBuffer, newLength: number) {
 }
 
 function encodeZigzagInt(n: number) {
-    // 有效位左移一位+符号位右移31位
+    // Shift significant bits left by 1 XOR sign bit shifted right by 31
     return (n << 1) ^ (n >> 31);
 }
 

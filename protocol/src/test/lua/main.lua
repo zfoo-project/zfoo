@@ -2,7 +2,7 @@ local ByteBuffer = require("zfoolua.ByteBuffer")
 local ProtocolManager = require("zfoolua.ProtocolManager")
 
 
--------------------------------------ProtocolManager的测试-------------------------------------
+-------------------------------------ProtocolManager Tests-------------------------------------
 function complexObjectTest(bytes)
     print("complex size ", #bytes)
     ProtocolManager.initProtocol()
@@ -15,7 +15,7 @@ function complexObjectTest(bytes)
     ProtocolManager.write(newByteBuffer, packet)
     assert(#byteBuffer.buffer <= #newByteBuffer.buffer)
 
-    -- set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
+    -- Set and map are unordered, so the input and output byte streams may differ at times, though their lengths are always identical
     --for i = 1, #byteBuffer.buffer do
     --    print(i)
     --    assert(byteBuffer.buffer[i] == newByteBuffer.buffer[i], i)
@@ -35,7 +35,7 @@ function normalObjectTest(bytes)
     local newByteBuffer = ByteBuffer:new()
     ProtocolManager.write(newByteBuffer, packet)
 
-    -- set和map是无序的，所以有的时候输入和输出的字节流有可能不一致，但是长度一定是一致的
+    -- Set and map are unordered, so the input and output byte streams may differ at times, though their lengths are always identical
     --for i = 1, #byteBuffer.buffer do
     --    print(i)
     --    assert(byteBuffer.buffer[i] == newByteBuffer.buffer[i], i)
@@ -48,7 +48,7 @@ function normalObjectTest(bytes)
 end
 
 
--------------------------------------ByteBuffer的测试-------------------------------------
+-------------------------------------ByteBuffer Tests-------------------------------------
 function byteBufferTest()
     local byteBuffer = ByteBuffer:new()
 

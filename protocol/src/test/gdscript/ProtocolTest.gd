@@ -2,7 +2,7 @@ extends Node2D
 
 const ProtocolManager = preload("res://zfoogd/ProtocolManager.gd")
 
-# 测试参数
+# Test parameters
 #op.setFoldProtocol(true);
 #op.setProtocolPath("D:\\github\\godot-bird\\protocoltest");
 #op.getGenerateLanguages().add(CodeLanguage.GdScript);

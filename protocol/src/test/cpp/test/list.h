@@ -22,7 +22,7 @@ namespace zfoo {
 
     public:
         List() {
-            //默认构造函数，创建大小为100的空间
+            // Default constructor, creates space of size 100
             max_list_size = 10;
             head = new T[max_list_size];
             length = 0;
@@ -53,15 +53,15 @@ namespace zfoo {
 
 
         ~List() {
-            // 程序完成后，自动调用，释放数组空间
+            // Automatically called when the program finishes to release array space
             if (head != nullptr) {
                 delete[] head;
                 std::cout << "deconstructor" << std::endl;
             }
         }
 
-        bool isEmpty() const { return length == 0; };     //判断线性表是否为空
-        int size() const { return length; };              //返回线性表长度
+        bool isEmpty() const { return length == 0; };     // Check whether the linear list is empty
+        int size() const { return length; };              // Return the length of the linear list
 
         void add(T &x) {
             if (length >= max_list_size) {
@@ -90,7 +90,7 @@ namespace zfoo {
             if (index < 0) {
                 return false;
             }
-            // 开始移除
+            // Start removing
             length--;
             if (index == length) {
                 return true;

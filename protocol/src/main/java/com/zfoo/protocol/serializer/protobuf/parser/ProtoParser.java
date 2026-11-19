@@ -433,7 +433,7 @@ public class ProtoParser {
     }
 
     /**
-     * Check if a block ends; block terminates with"}"as the terminator
+     * Check if a block ends; block terminates with "}" as the terminator
      *
      * @return
      */

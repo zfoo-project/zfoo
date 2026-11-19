@@ -5,7 +5,7 @@ namespace zfoocs
     public class LittleEndianByteBuffer : ByteBuffer
     {
         /**
-        * 翻转字节数组，如果本地字节序列为低字节序列，则进行翻转以转换为高字节序列
+        * Reverse the byte array: if the native byte order is little-endian, reverse it to convert to big-endian
         */
         private static byte[] reverse(byte[] bytes)
         {

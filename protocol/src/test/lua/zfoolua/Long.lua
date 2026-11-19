@@ -68,7 +68,7 @@ function Long:fromString(str, radix)
         error("str不是string类型参数")
     end
 
-    --进制必须在2到36
+    -- Radix must be between 2 and 36
     if radix < 2 or 36 < radix then
         error("range radix error")
     end
@@ -101,7 +101,7 @@ function Long:fromString(str, radix)
     return result
 end
 
---转为10进制的string符号的long
+-- Convert to a signed base-10 string representation of Long
 function Long:toString()
     local radix = 10
     if (Long:isZero()) then
@@ -152,7 +152,7 @@ function Long:negate()
     if self:equals(MIN_VALUE) then
         return clone(MIN_VALUE)
     end
-    --正数转为负数的二进制编码，取反加1
+    -- Convert positive number to negative two's complement: invert bits and add 1
     local notSelf = fromBits(~self.low, ~self.high)
     return notSelf:add(ONE)
 end
@@ -414,7 +414,7 @@ function Long:writeLong(byteBuffer, longValue)
         end
     end
 
-    --写入Long
+    -- Write Long
     local value = Long:fromString(longValue)
     value:encodeZigzagLong()
     local count = 0
@@ -442,13 +442,13 @@ local function fromByteBuffer(byteBuffer)
     local i = 0
     local pos = 1
     if (count > 4) then
-        --先读入1到4位
+        -- Read bytes 1 to 4 first
         while i < 4 do
             bits.low = (bits.low | ((byteBuffer[pos] & 127) << (i * 7))) & 0xFFFFFFFF
             i = i + 1
             pos = pos + 1
         end
-        --读第5位，第5位底位置读到low，高位置读到high
+        -- Read the 5th byte; lower bits go to low, upper bits go to high
         bits.low = (bits.low | ((byteBuffer[pos] & 127) << 28)) & 0xFFFFFFFF
         bits.high = (bits.high | ((byteBuffer[pos] & 127) >> 4)) & 0xFFFFFFFF
         if (byteBuffer[pos] < 128) then
@@ -469,7 +469,7 @@ local function fromByteBuffer(byteBuffer)
         return bits
     end
 
-    --读最后4位
+    -- Read the last 4 bytes
     while i < 4 do
         if (pos == 9) then
             bits.high = (bits.high | (byteBuffer[pos] << (i * 7 + 3))) & 0xFFFFFFFF

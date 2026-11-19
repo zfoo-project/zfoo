@@ -15,7 +15,6 @@ package com.zfoo.protocol.anno;
 import java.lang.annotation.*;
 
 /**
- * EN: Unique protocol number
  * The unique protocol ID
  *
  * @author meiw
@@ -28,7 +27,6 @@ public @interface Protocol {
     short id() default 0;
 
     /**
-     * EN: Use Javassist bytecode to enhance serialization of the protocol
      * Serialize the protocol using Javassist bytecode enhancement
      */
     boolean enhance() default true;

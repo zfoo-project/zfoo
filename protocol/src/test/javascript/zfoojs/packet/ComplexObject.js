@@ -1,10 +1,10 @@
-// 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
+// Complex object with arrays, List, Set, and Map fields
 const ComplexObject = function() {
-    // byte类型，最简单的整形
+    // byte type, simplest integer
     this.a = 0; // number
-    // byte的包装类型，优先使用基础类型，包装类型会有装箱拆箱
+    // Byte wrapper type; prefer primitives to avoid boxing/unboxing
     this.aa = 0; // number
-    // 数组类型
+    // Array type
     this.aaa = []; // Array<number>
     this.aaaa = []; // Array<number>
     this.b = 0; // number
@@ -50,7 +50,7 @@ const ComplexObject = function() {
     this.sss = new Set(); // Set<Set<ObjectA>>
     this.ssss = new Set(); // Set<string>
     this.sssss = new Set(); // Set<Map<number, string>>
-    // 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
+    // To modify while maintaining backward compatibility, add @Compatible with incrementing value
     this.myCompatible = 0; // number
     this.myObject = null; // ObjectA | null
 };

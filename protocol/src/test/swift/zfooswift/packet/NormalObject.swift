@@ -1,11 +1,11 @@
 import Foundation
 
-// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+// Normal object covering the common subset of all target language syntaxes
 class NormalObject : IProtocol {
     var a: Int8 = 0
     var aaa: Array<Int8> = []
     var b: Int16 = 0
-    // 整数类型
+    // Integer type
     var c: Int = 0
     var d: Int64 = 0
     var e: Float32 = 0.0

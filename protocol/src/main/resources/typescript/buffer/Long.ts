@@ -13,7 +13,7 @@ type WasmExports = {
 let wasm: WasmExports;
 
 try {
-  // nodejs环境无法使用
+  // Not available in Node.js environments
   wasm = new WebAssembly.Instance(
     new WebAssembly.Module(
       new Uint8Array([
@@ -123,7 +123,7 @@ export class Long {
   }
 
   /**
-   * Converts the Long to a the nearest floating-point representation of this value (double, 53 bit mantissa).
+   * Converts the Long to the nearest floating-point representation of this value (double, 53 bit mantissa).
    */
   toNumber() {
     if (this.unsigned) {

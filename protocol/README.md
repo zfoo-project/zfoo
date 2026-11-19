@@ -2,128 +2,105 @@ English | [简体中文](./README_CN.md)
 
 ### Ⅰ. Introduction
 
-- A decentralized serialization library, secure, private, reliable, and compatible, allowing everyone to have a unique
-  set of protocols
-- The protocol can customize the private protocol format to make your protocol more secure, and supports adding fields
-  and being compatible with previous and subsequent protocols
-- Support to generate ProtoBuf's Proto file to Pojo protocol file, and the generated protocol can be converted to other
-  protocols and used by Java
-- The protocol is currently natively supported **C++ Rust Java/Kotlin/Scala JavaScript/TypeScript/ES C# Go Php Ruby Lua
-  GDScript Python Dart Swift**
+- A decentralized network serialization library: secure, reliable, with customizable private protocol formats and backward and forward compatibility, allowing everyone to have a unique set of protocols
+- Supports generating POJO protocol files from Protobuf `.proto` files; the generated protocols can be converted to other protocols and used in Java
+- Currently natively supports **C++ Rust Java/Kotlin/Scala JavaScript/TypeScript/ES C# Go PHP Ruby Lua GDScript Python Dart Swift**
 
-### Ⅱ. Quick use
+### Ⅱ. Quick Start
 
-- Environment requirement **JDK 17+**, support **OpenJDK**, **Oracle JDK** and **native GraalVM**
+- Environment requirement: **JDK 17+**, supporting **OpenJDK**, **Oracle JDK**, and **native GraalVM**
 
 ```
-// The zfoo protocol is registered and can only be initialized once
+// Register the zfoo protocol; it can only be initialized once
 ProtocolManager.initProtocol(Set.of(ComplexObject.class, ObjectA.class, ObjectB.class));
 
-// serialization
+// Serialization
 ProtocolManager.write(byteBuf, complexObject);
 
-// deserialization
+// Deserialization
 var packet = ProtocolManager.read(buffer);
 ```
 
-### Ⅲ. Performance testing
+### Ⅲ. Performance Testing
 
 - [Benchmark Test](src/test/java/com/zfoo/protocol/BenchmarkTesting.java)
 
-- Test the environment
+- Test environment
 
 ```
-system：win10
-cpu： i9900k
-memory：64g
+system: win10
+cpu: i9900k
+memory: 64g
 ```
 
-- Single-threaded test with abscissa as the number of objects serialized and deserialized and time spent in milliseconds
-  on the ordinate
+- Single-threaded test, where the x-axis represents the number of serialized and deserialized objects and the y-axis represents the time spent in milliseconds
   ![Image text](../doc/image/protocol/simple_object.png)
   ![Image text](../doc/image/protocol/normal_object.png)
   ![Image text](../doc/image/protocol/complex_object.png)
 
-### Ⅳ. Why fast
+### Ⅳ. Why It Is Fast
 
-- Use Javassist bytecode to enhance the dynamic generation of serialization and deserialization functions for sequential
-  execution, and sequential functions can be easily JIT compiled to achieve extreme performance
-- Natively integrated with netty's high-performance ByteBuf, support Zero Copy
-- With primitive type collection, there is no boxing and unboxing, invalid GCs are avoided, and the performance is fast
-  enough
-- thread-safe and lock-free, without any performance loss in multi-threaded environment
-- No reflection, no unsafe operations, support GraalVM
-- Flattening the call depth of the method stack, and there is no performance penalty for nesting data structures, such
-  as List<Set<Map<>>>; Comparing kryo and protobuf data structure nesting results in a performance penalty
-- There is no risk of vulnerability injection, only bytecode enhancement will be performed during initialization, and no
-  bytecode operations will be performed in the later stage
-- Taking advantage of the principle of program locality, the serializer is placed in the short[] array, and the object
-  serialization and deserialization will only look for the serializer once
+- Uses Javassist bytecode enhancement to dynamically generate sequential serialization and deserialization functions, which can be easily JIT-compiled to achieve extreme performance
+- Natively integrated with Netty's high-performance ByteBuf, supporting Zero Copy
+- Uses primitive type collections to avoid boxing and unboxing, eliminating unnecessary GC and delivering high performance
+- Inherently thread-safe and lock-free, with no performance loss in multi-threaded environments
+- No reflection, no unsafe operations, and supports GraalVM
+- Flattens method stack call depth so nested data structures (such as `List<Set<Map<>>>`) incur no performance penalty, unlike Kryo and Protobuf
+- No risk of vulnerability injection: bytecode enhancement is performed only during initialization, with no further bytecode operations afterwards
+- Takes advantage of program locality by storing serializers in a `short[]` array, so object serialization and deserialization look up the serializer only once
 
 ```
-The data compression volume is small, and the compression volume is smaller than that of Kryo and Protobuf; Smaller than kryo because kryo needs to write the registration number of each object
-Intelligent syntax, incorrect protocol definitions will fail to start the program and give an error warning
-Improve development efficiency, fully support POJO development, very easy to use
+Small compressed data size, smaller than both Kryo and Protobuf (smaller than Kryo because Kryo needs to write the registration ID of each object)
+Intelligent syntax analysis: invalid protocol definitions prevent the program from starting and emit error warnings
+Improves development efficiency with full POJO development support and ease of use
 ```
 
-### Ⅴ. Why small
+### Ⅴ. Why It Is Small
 
-- Lightweight implementation, core serialization and deserialization code of about a thousand lines
-- Optimized the zigzag and varint encoding algorithms for int and long, avoiding some redundant method calls and bit
-  operations
-- The data compression volume is small, and the compression volume is smaller than that of Kryo and Protobuf; Smaller
-  than kryo because kryo needs to write the registration number of each object
-- Intelligent syntax, incorrect protocol definitions will fail to start the program and give an error warning
-- Improve development efficiency, fully support POJO development, very easy to use
+- Lightweight implementation, with around a thousand lines of core serialization and deserialization code
+- Optimized zigzag and varint encoding algorithms for int and long, avoiding redundant method calls and bit operations
+- Small compressed data size, smaller than both Kryo and Protobuf (smaller than Kryo because Kryo needs to write the registration ID of each object)
+- Intelligent syntax analysis: invalid protocol definitions prevent the program from starting and emit error warnings
+- Improves development efficiency, fully supports POJO development, and is very easy to use
 
 ```
-The current size of the serialized object is as follows:
-Simple objects, zfoo package size 8, kryo package size 5, protobuf package size 8
-Regular objects, ZFOO package size 430, KRYO package size 483, Protobuf package size 793
-For complex objects, ZFOO package size 2216, KRYO package size 2528, and Protobuf package size 5091
+The current sizes of serialized objects are as follows:
+Simple object: zfoo packet size 8, kryo packet size 5, protobuf packet size 8
+Normal object: zfoo packet size 430, kryo packet size 483, protobuf packet size 793
+Complex object: zfoo packet size 2216, kryo packet size 2528, protobuf packet size 5091
 ```
 
-### Ⅵ. Data type
+### Ⅵ. Data Types
 
-- Default data format support eliminates the need for users to register
-  manually.[Reference class definition](src/test/java/com/zfoo/protocol/packet/ComplexObject.java)
-    - boolean，byte，short，int，long，float，double，String
-    - Boolean，Byte，Short，Integer，Long，Float，Double，String，If it is null during serialization, a default value will be
-      given
-    - int[]，Integer[]，If it is null, it is parsed as an array of length 0
-        - Native generic List, Set, Map, deserialization return type Hash Set, Array List, Hash Map, and null pointer
-          safe (returns a collection of size 0)
-        - List<Integer>，You must specify a generic class if [1,1,null,1] is sent and [1,1,0,1] is received
-        - List<XXXClass>，If [obj,obj,null,obj] is sent, [obj,obj,null,obj] is received, that is, the reference type is
-          null before serialization, and it is also null after serialization
+- Built-in data format support eliminates the need for manual registration. [Reference class definition](src/test/java/com/zfoo/protocol/packet/ComplexObject.java)
+    - boolean, byte, short, int, long, float, double, String
+    - Boolean, Byte, Short, Integer, Long, Float, Double, String: if null during serialization, a default value will be assigned
+    - int[], Integer[]: if null, parsed as an array of length 0
+        - Native generic List, Set, Map: deserialization returns HashSet, ArrayList, HashMap, and is null-pointer safe (returns a collection of size 0)
+        - List<Integer>: a generic type must be specified; if [1,1,null,1] is sent, [1,1,0,1] is received
+        - List<XXXClass>: if [obj,obj,null,obj] is sent, [obj,obj,null,obj] is received—that is, reference types that are null before serialization remain null after deserialization
 
-- Unsupported data formats, because ZFOO automatically recognizes unsupported types and gives error warnings, so users
-  don't have to care too much
-    - int[][]，Arrays above two dimensions, considering that not all languages support multidimensional arrays
-    - List<Integer>[]，Map<Integer, Integer>[]，The Java language itself does not support generic class arrays
-    - List<int[]>，Map<Integer, Integer[]>，Generics are set in arrays, which looks strange and has few actual uses
-    - char or Character, many other languages do not support char and can be replaced with string
-    - Enumerated classes, many other languages do not support enumerated classes and can be replaced with int or string
-    - Custom generic class XXX Class, <T>generic classes are prone to performance and parsing problems in many
-      frameworks, and are not supported in all languages
-    - Circular references, although the underlying support circular references, but considering that circular references
-      bring semantically difficult to understand and prone to errors, so they are blocked
+- Unsupported data formats (zfoo automatically detects unsupported types and emits error warnings, so users don't need to worry about them):
+    - int[][]: arrays with two or more dimensions, considering that not all languages support multidimensional arrays
+    - List<Integer>[], Map<Integer, Integer>[]: Java itself does not support arrays of generic types
+    - List<int[]>, Map<Integer, Integer[]>: arrays nested inside generics look awkward and are rarely used in practice
+    - char or Character: many other languages do not support char; it can be replaced with String
+    - Enum classes: many other languages do not support enum classes; they can be replaced with int or String
+    - Custom generic class XXXClass<T>: generic classes are prone to performance and parsing problems in many frameworks, and are not supported in all languages
+    - Circular references: although supported at the lower level, circular references are semantically hard to understand and error-prone, so they are blocked
 
-### Ⅶ. Protocol specifications
+### Ⅶ. Protocol Specifications
 
-- The protocol class must be a simple javabean, not inheriting from any other class, but can inherit an interface
+- The protocol class must be a simple JavaBean that does not inherit from any other class, though it can implement interfaces
 
-- The protocol number is defined as a short type to reduce the packet size and memory size, a packet can be reduced by 2
-  bytes, and the application memory of each protocol can also be reduced by 6 byte(protocols + IProtocolRegistration +
-  protocolIdMap)
+- The protocol ID is defined as a short type to reduce packet size and memory usage: each packet saves 2 bytes, and application memory for each protocol is reduced by 6 bytes (protocols + IProtocolRegistration + protocolIdMap)
 
 ```
-It is difficult for a project's protocol body class to exceed 3 w, and there will be tools that automatically package 
-your protocol number a little more compactly, so that your protocol number will not exceed 3 w
+A project's protocol classes rarely exceed 30,000, and tools are provided to automatically pack your protocol IDs more compactly so they will not exceed 30,000.
 ```
 
-- There are four ways to indicate that the protocol class
-    - The first uses annotations: @Protocol(id = protocolId)
+- There are four ways to specify the protocol ID for a protocol class:
+    - First: using the annotation `@Protocol(id = protocolId)`
       ```
       @Protocol(id = 104)
       public class SimpleObject {
@@ -134,8 +111,7 @@ your protocol number a little more compactly, so that your protocol number will 
       }
       ```
 
-    - The second use: Register the agreement through Protocol Manager.initProtocolAuto() without writing the protocol
-      number
+    - Second: registering protocols via `ProtocolManager.initProtocolAuto()` without explicitly writing protocol IDs
       ```
       public class SimpleObject {
       
@@ -146,7 +122,7 @@ your protocol number a little more compactly, so that your protocol number will 
       }
       ```
 
-    - The third use: Register the protocol through ProtocolManager.initProtocol(xmlProtocols) in the protocol.xml file
+    - Third: registering protocols via `ProtocolManager.initProtocol(xmlProtocols)` with protocol IDs defined in the `protocol.xml` file
       ```
       <protocols>
           <!-- Use class path -->
@@ -159,7 +135,7 @@ your protocol number a little more compactly, so that your protocol number will 
               <protocol id="105" location="com.zfoo.protocol.packet.VeryBigObject"/>
               <protocol id="106" location="com.zfoo.protocol.packet.EmptyObject"/>
           </module>
-          <!-- Use a package name scans all protocol classes under the package path -->
+          <!-- Using a package name scans all protocol classes under that package path -->
           <module id="2" name="native">
               <protocol location="com.zfoo.net.packet.common"/>
               <protocol location="com.zfoo.tank.common.protocol.common"/>
@@ -167,8 +143,7 @@ your protocol number a little more compactly, so that your protocol number will 
       </protocols>
       ```   
 
-    - The fourth use: generate a protocol with a protocol number by defining a proto file, so that the protocol can be
-      easily registered
+    - Fourth: generating protocols with protocol IDs by defining a `.proto` file for easy registration
       ```
       syntax = "proto3";
       package test.message;
@@ -186,32 +161,21 @@ your protocol number a little more compactly, so that your protocol number will 
       }
       ```
 
-- If you add a field for version compatibility, you need to add a Compatible annotation, and the order needs to be
-  naturally increased, so as to ensure that the old and new protocols can be compatible with each other, Protocol
-  nesting is also still compatible
-- In order to be compatible with versions and avoid modifying field names, default uses field names to read and write
-  in the natural order of strings (can also be customized), so it will cause exceptions in serialization
-- The official environment does not necessarily have to delete an unwanted field in order to be version compatible and
-  avoid reducing fields
-- Among the six principles of design patterns, the principle of opening and closing is open to expansion and closed to
-  modification. The design of the protocol should also adhere to this principle when it comes to functionality,
-  prioritizing the addition of new protocols over modifying existing ones
+- If you add a field for version compatibility, you need to add a `@Compatible` annotation, and its order must increase sequentially so that old and new protocols remain compatible with each other; nested protocols also remain compatible
+- To maintain version compatibility, avoid renaming fields: by default, fields are read and written in the natural lexicographical order of their names (this can also be customized), so renaming a field will cause serialization exceptions
+- In production, avoid removing fields for version compatibility—there is no need to delete an unused field, so reducing fields is not supported
+- Among the six principles of design patterns, the Open-Closed Principle states that entities should be open for extension and closed for modification. Protocol design should follow this principle as well, prioritizing adding new protocols over modifying existing ones
 
-### Ⅷ. The difference between zfoo and Protobuf
+### Ⅷ. Differences Between zfoo and Protobuf
 
-- Protobuf can delete fields, but ZFOO does not support deleting fields, which improves performance by 1x and reduces
-  the size by 1x at the expense
+- Protobuf allows deleting fields, whereas zfoo does not support deleting fields, trading that off for 2x performance and half the packet size
 
 ```
-In fact, the officially launched project almost did not encounter anyone who would delete the field, 
-and if this field was deleted, the server had to change the code not to reference the deleted field, 
-and the client had to change the code not to reference the deleted field, which doubled the workload. 
-If either of them forgets to modify the code, it will directly report an error, 
-so adding a discarded field @Deprecated comment to this field in the actual project can avoid a lot of unnecessary trouble.
+In fact, in production projects it is very rare to delete a field. If a field is deleted, both the server and the client have to update their code to stop referencing it, doubling the workload.
+If either side forgets to update its code, errors will occur immediately. Therefore, marking an obsolete field with @Deprecated in actual projects avoids a lot of unnecessary trouble.
 ```
 
-- zfoo takes the intersection of type declarations in all languages, instead of protobuf taking the union, simplifying
-  the type implementation of protobuf
+- zfoo takes the intersection of type declarations across all languages rather than Protobuf's union, simplifying Protobuf's type implementation
     - protobuf
       ```
       double
@@ -243,15 +207,14 @@ so adding a discarded field @Deprecated comment to this field in the actual proj
       string
       ```
 
-- zfoo takes the intersection of the grammars of all languages, instead of the union of protobuf, and adds the grammar
-  implementation of protobuf
+- zfoo takes the intersection of syntax across all languages rather than Protobuf's union, while extending Protobuf's syntax support
     - protobuf
       ```
       Collection nesting syntax is not supported
       ```
     - zfoo
       ```
-      Supports nested collection syntax
+      Nested collection syntax is supported
       ```
 
-- Simplified protobuf syntax, no enumeration, no oneof, no optional
+- Simplified Protobuf syntax: no enums, no oneof, and no optional

@@ -166,7 +166,7 @@ public abstract class StringUtils {
     //-----------------------------------------------------------------------
 
     /**
-     * Lowercase the first letter (capitalize  ['kæpɪtlaɪz] vt.- capitalize first letter)
+     * Lowercase the first letter (capitalize ['kæpɪtlaɪz] vt. capitalize first letter)
      *
      * @param str the string to convert; may be null
      * @return string with first letter lowercased; null if input is null
@@ -483,7 +483,7 @@ public abstract class StringUtils {
             readIndex = placeholderIndex + 2;
         }
 
-        // Append the remaining part of the template which contains no more placeholders
+        // Append the remaining part of the template, which contains no more placeholders
         builder.append(template, readIndex, template.length());
         return builder.toString();
     }

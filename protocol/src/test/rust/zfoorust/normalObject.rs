@@ -9,13 +9,13 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use crate::zfoorust::i_byte_buffer::{IByteBuffer, IPacket};
 use crate::zfoorust::objectA::ObjectA;
-// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+// Normal object covering the common subset of all target language syntaxes
 #[derive(Clone)]
 pub struct NormalObject {
     pub a: i8,
     pub aaa: Vec<i8>,
     pub b: i16,
-    // 整数类型
+    // Integer type
     pub c: i32,
     pub d: i64,
     pub e: f32,
@@ -47,7 +47,7 @@ impl NormalObject {
             a: 0,
             aaa: Vec::new(),
             b: 0,
-            // 整数类型
+            // Integer type
             c: 0,
             d: 0,
             e: 0f32,

@@ -2,12 +2,12 @@
 
 namespace zfoophp;
 
-// 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+// Normal object covering the common subset of all target language syntaxes
 class NormalObject {
     var int $a = 0;
     var array $aaa = array();
     var int $b = 0;
-    // 整数类型
+    // Integer type
     var int $c = 0;
     var int $d = 0;
     var float $e = 0;

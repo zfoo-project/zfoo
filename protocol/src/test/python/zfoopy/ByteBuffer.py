@@ -351,7 +351,7 @@ class ByteBuffer():
         if (length <= 0):
             return empty_str
         byte_array = self.buffer[self.readOffset:self.readOffset + length]
-        # 使用utf-8编码进行解码
+        # Decode using UTF-8 encoding
         value = byte_array.decode('utf-8')
         self.readOffset += length
         return value

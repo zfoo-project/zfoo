@@ -1,13 +1,13 @@
--- 复杂的对象，包括了各种复杂的结构，数组，List，Set，Map
+-- Complex object with arrays, List, Set, and Map fields
 local ComplexObject = {}
 
 function ComplexObject:new()
     local obj = {
-        -- byte类型，最简单的整形
+        -- byte type, simplest integer
         a = 0, -- byte
-        -- byte的包装类型，优先使用基础类型，包装类型会有装箱拆箱
+        -- Byte wrapper type; prefer primitives to avoid boxing/unboxing
         aa = 0, -- byte
-        -- 数组类型
+        -- Array type
         aaa = {}, -- byte[]
         aaaa = {}, -- byte[]
         b = 0, -- short
@@ -53,7 +53,7 @@ function ComplexObject:new()
         sss = {}, -- HashSet<HashSet<ObjectA>>
         ssss = {}, -- HashSet<string>
         sssss = {}, -- HashSet<Dictionary<int, string>>
-        -- 如果要修改协议并且兼容老协议，需要加上Compatible注解，保持Compatible注解的value自增
+        -- To modify while maintaining backward compatibility, add @Compatible with incrementing value
         myCompatible = 0, -- int
         myObject = nil -- ObjectA
     }

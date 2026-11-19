@@ -4,7 +4,7 @@ import "400_one_map.proto";
 import "500_one_message.proto";
 
 
-// 如果字段的tag超过1000，则视这个字段为需要兼容的协议字段
+// Fields with tag > 1000 are treated as protocol fields requiring backward compatibility
 message AllType {
   bool     field1 = 1;
   bytes    field2 = 2;
@@ -21,7 +21,7 @@ message AllType {
   sint32   field14 = 14;
   sint64   field15 = 15;
   string   field16 = 16;
-  // 这是注释
+  // This is a comment
   uint32   field17 = 17;
   uint64   field18 = 1001;
 }

@@ -9,7 +9,7 @@
 #include <map>
 #include <memory>
 
-// 网络传输默认使用大端传输
+// Network transmission uses big-endian byte order by default
 namespace zfoo {
     using std::string;
     using std::vector;

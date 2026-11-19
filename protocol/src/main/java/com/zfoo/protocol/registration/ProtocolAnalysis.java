@@ -155,8 +155,8 @@ public class ProtocolAnalysis {
     }
 
     /**
-     * EN: If the path of the package contains a classpath, the moduleId of the classpath is preferred, which means that the priority of the classpath will be higher.
-     * Both package paths and class paths can be used in a single protocol.xml file. When a package path contains a class path, the class path's moduleId takes priority.
+     * Both package paths and class paths can be used in a single protocol.xml file.
+     * When a package path contains a class path, the class path's moduleId takes priority.
      */
     public static synchronized void analyze(XmlProtocols xmlProtocols, GenerateOperation generateOperation) {
         AssertionUtils.notNull(subProtocolIdMap, "[{}] initialization has already been completed, please do not repeat the initialization", ProtocolManager.class.getSimpleName());
@@ -183,7 +183,6 @@ public class ProtocolAnalysis {
                 var location = protocolDefinition.getLocation();
                 var enhance = protocolDefinition.isEnhance();
 
-                // Use the class path first to obtain the class name, and search the directory if it cannot be obtained
                 // Prefer class path to get the class name; fall back to directory scan if not found
                 Class<?> clazz = null;
                 try {
@@ -231,7 +230,6 @@ public class ProtocolAnalysis {
                 var location = protocolDefinition.getLocation();
                 var enhance = protocolDefinition.isEnhance();
 
-                // Use the class path first to obtain the class name, and search the directory if it cannot be obtained
                 // Prefer class path to get the class name; fall back to directory scan if not found
                 Class<?> clazz = null;
                 try {
@@ -589,16 +587,14 @@ public class ProtocolAnalysis {
 
 
     /**
-     * EN: This method is only called when the protocol is generated, and cannot be called once it is run
-     * This method is called only during protocol generation; cannot be called once running
+     * Called only during protocol generation; cannot be called once running
      */
     public static Set<Short> getFirstSubProtocolIds(short protocolId) {
         return subProtocolIdMap.getOrDefault(protocolId, Collections.emptySet());
     }
 
     /**
-     * EN: This method is only called when the protocol is generated, and cannot be called once it is run
-     * This method is called only during protocol generation; cannot be called once running
+     * Called only during protocol generation; cannot be called once running
      */
     public static Set<Short> getAllSubProtocolIds(short protocolId) {
         // Cannot call getAllSubProtocolIds after initialization is complete

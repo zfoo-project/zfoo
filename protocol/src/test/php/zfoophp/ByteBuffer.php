@@ -15,13 +15,13 @@ class ByteBuffer
     public function __construct()
     {
         $this->buffer = str_pad("", 128);
-        // 大端序还是小端序
+        // Big-endian or little-endian
         $this->bigEndian = pack("L", 1) === "\x00\x00\x00\x01";
     }
 
     public function adjustPadding(int $predictionLength, int $beforewriteIndex): void
     {
-        // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+        // Variable-length int; clear any over-reserved positions
         $currentwriteIndex = $this->writeOffset;
         $predictionCount = $this->writeIntCount($predictionLength);
         $length = $currentwriteIndex - $beforewriteIndex - $predictionCount;
@@ -102,7 +102,7 @@ class ByteBuffer
     // -------------------------------------------------write/read-------------------------------------------------
     public function writeBytes(string $bytes): void
     {
-        // 如果容量不够则扩容一倍
+        // Double capacity if insufficient
         $length = strlen($bytes);
         while ($length > $this->getCapacity()) {
             $this->buffer = str_pad($this->buffer, strlen($this->buffer) * 2);

@@ -18,9 +18,9 @@ namespace zfoo {
 
     void write(ByteBuffer &buffer, IProtocol *packet) {
         auto protocolId = packet->protocolId();
-        // 写入协议号
+        // write protocol id to buffer
         buffer.writeShort(protocolId);
-        // 写入包体
+        // write packet
         getProtocol(protocolId)->write(buffer, packet);
     }
 

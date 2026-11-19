@@ -5,13 +5,13 @@
 #include "zfoocpp/Packet/ObjectA.h"
 #include "zfoocpp/Packet/ObjectB.h"
 namespace zfoo {
-    // 常规的对象，取所有语言语法的交集，基本上所有语言都支持下面的语法
+    // Normal object covering the common subset of all target language syntaxes
     class NormalObject : public IProtocol {
     public:
         int8_t a;
         vector<int8_t> aaa;
         int16_t b;
-        // 整数类型
+        // Integer type
         int32_t c;
         int64_t d;
         float e;

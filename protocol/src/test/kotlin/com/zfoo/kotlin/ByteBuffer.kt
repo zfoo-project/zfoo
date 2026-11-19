@@ -5,7 +5,7 @@ class ByteBuffer {
     private var writeOffset = 0
     private var readOffset = 0
     fun adjustPadding(predictionLength: Int, beforewriteIndex: Int) {
-        // 因为写入的是可变长的int，如果预留的位置过多，则清除多余的位置
+        // Variable-length int; clear any over-reserved positions
         val currentwriteIndex = writeOffset
         val predictionCount = writeIntCount(predictionLength)
         val length = currentwriteIndex - beforewriteIndex - predictionCount
@@ -204,7 +204,7 @@ class ByteBuffer {
         } else 5
     }
 
-    // 写入没有压缩的int
+    // Write uncompressed int
     fun writeRawInt(value: Int) {
         ensureCapacity(4)
         buffer[writeOffset++] = (value ushr 24).toByte()
@@ -213,7 +213,7 @@ class ByteBuffer {
         buffer[writeOffset++] = value.toByte()
     }
 
-    // 读取没有压缩的int
+    // Read uncompressed int
     fun readRawInt(): Int {
         return buffer[readOffset++].toInt() and 255 shl 24 or (buffer[readOffset++].toInt() and 255 shl 16) or (buffer[readOffset++].toInt() and 255 shl 8) or (buffer[readOffset++].toInt() and 255)
     }
