@@ -1,22 +1,20 @@
 English | [简体中文](./README_CN.md)
 
-### Ⅰ. Introduction
+### I. Introduction
 
-- [hotswap](https://github.com/zfoo-project/zfoo/blob/main/hotswap/README.md) Hot update code, no need to stop the
-  server, no additional configuration, one line of code to enable hot update
+- [hotswap](https://github.com/zfoo-project/zfoo/blob/main/hotswap/README.md) Hot-swap code without stopping the server or any extra configuration—enable hot-swapping with a single line of code.
 
-### Ⅱ. Stand-alone hot update
+### II. Standalone Hot-Swap
 
-- directly pass in the class file that needs hot update
-    ```
-    // pass in the class file that needs to be updated
+- Directly pass in the `.class` file bytes to be hot-swapped:
+    ```java
+    // Pass in the .class file bytes to be updated
     HotSwapUtils.hotswapClass(bytes);
     ```
 
-### Ⅲ. Distributed Hot Update
+### III. Distributed Hot-Swap
 
-- upload the class files that need to be updated to the zookeeper registration center, and other servers monitor the
-  class files that need to be updated, and update the code when they are monitored
+- Upload the `.class` files to be updated to the ZooKeeper registry; other servers watch for updated class files and hot-swap the code upon detecting changes.
 
-- [tank](https://github.com/zfoo-project/tank-game-server/blob/main/common/src/main/java/com/zfoo/tank/common/util/HotUtils.java)
-  Distributed hot update code implementation
+- [tank](https://github.com/zfoo-project/tank-game-server/blob/main/common/src/main/java/com/zfoo/tank/common/util/HotUtils.java):
+  Distributed hot-swap code implementation

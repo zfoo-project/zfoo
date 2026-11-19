@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class ApplicationTest {
 
-    // Hot-swap tutorial: add JVM arg -Djdk.attach.allowAttachSelf=true; without it, Byte Buddy hot-swap is used instead of Javassist
+    // Hot-swap tutorial: add JVM argument -Djdk.attach.allowAttachSelf=true; without it, Byte Buddy hot-swap is used instead of Javassist
     // Javassist hot-swap is lighter; if it fails, Byte Buddy is used automatically
     @Test
     public void startHotSwapTest() throws IOException {

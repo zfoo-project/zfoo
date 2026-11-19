@@ -17,10 +17,9 @@ import java.io.IOException;
 import java.lang.instrument.ClassDefinition;
 
 /**
- * Hotswap java class
+ * Hot-swap Java classes.
  * <p>
- * EN: Prefer using simple Javassist for hot updates, followed by Byte Buddy hot updates
- * Prefer Javassist for hot-swapping (simpler); Byte Buddy uses more complex ASM. Spring Boot web projects prefer Byte Buddy for hot-swapping
+ * Prefers simpler Javassist for hot-swapping; Byte Buddy uses the more complex ASM library and is used in Spring Boot web projects.
  *
  * @author godotg
  */
@@ -29,13 +28,13 @@ public abstract class HotSwapUtils {
     private static final Logger logger = LoggerFactory.getLogger(HotSwapUtils.class);
 
     /**
-     * need to add JVM startup parameters: -Djdk.attach.allowAttachSelf=true
+     * Requires the JVM startup parameter: -Djdk.attach.allowAttachSelf=true
      * <p>
-     * JVM startup parameter: since JDK 11, the JVM does not allow self-attachment by default. Add -Djdk.attach.allowAttachSelf=true to enable it
+     * Since JDK 11, the JVM does not allow self-attachment by default, so add -Djdk.attach.allowAttachSelf=true to enable it.
      * <p>
-     * note: JAVA_HOME environment variable must be configured; unknown errors may occur without it
-     * note: Using -cp or -Djava.ext.dirs may cause unknown hot-swap errors; recommend packaging with maven-shade-plugin or spring-boot-maven-plugin
-     * note: Using -cp may occasionally cause java.lang.NoClassDefFoundError, especially in Lambda expressions and static Enum classes
+     * Note: The JAVA_HOME environment variable must be configured; otherwise, unknown errors may occur.
+     * Note: Using -cp or -Djava.ext.dirs may cause unknown hot-swap errors; packaging the project into a single JAR with maven-shade-plugin or spring-boot-maven-plugin is recommended.
+     * Note: Using -cp may occasionally cause java.lang.NoClassDefFoundError, especially in lambda expressions and static enum classes.
      *
      * @param bytes bytecode from a .class file
      */
@@ -78,7 +77,7 @@ public abstract class HotSwapUtils {
         try {
             byteArrayInputStream = new ByteArrayInputStream(bytes);
             ctClass = ClassPool.getDefault().makeClass(byteArrayInputStream);
-            // Javassist hot update
+            // Javassist hot-swap
             HotSwapAgent.redefine(clazz, ctClass);
             logger.info("Javassist hot update [{}] succeeded", clazz);
         } catch (Throwable t) {
@@ -95,7 +94,7 @@ public abstract class HotSwapUtils {
 
     private static void hotswapClassByByteBuddy(Class<?> clazz, byte[] bytes) {
         try {
-            // Byte Buddy hot update
+            // Byte Buddy hot-swap
             var instrumentation = ByteBuddyAgent.install();
             instrumentation.redefineClasses(new ClassDefinition(clazz, bytes));
             logger.info("ByteBuddy hot update class:[{}] succeeded", clazz.getName());

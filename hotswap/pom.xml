@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -27,7 +27,7 @@
         <!-- Office document parsing -->
         <poi.version>5.4.1</poi.version>
         <csv.version>1.14.0</csv.version>
-        <!-- maven core plugin -->
+        <!-- maven core plugins -->
         <native-maven-plugin.version>0.10.6</native-maven-plugin.version>
         <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
@@ -36,7 +36,7 @@
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
         <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
-        <!-- deploy maven repository -->
+        <!-- deploy to maven repository -->
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
@@ -159,7 +159,7 @@
             </plugin>
 
 
-            <!-- deploy to maven repository should specify these tags -->
+            <!-- These tags must be specified when deploying to a Maven repository -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -230,7 +230,7 @@
     </build>
 
 
-    <!-- deploy to maven repository should specify these tags -->
+    <!-- These tags must be specified when deploying to a Maven repository -->
     <name>hotswap</name>
     <description>zfoo hotswap can update code without shutdown the server</description>
     <url>https://github.com/zfoo-project/zfoo</url>
