@@ -20,7 +20,7 @@ import org.bson.codecs.pojo.TypeWithTypeParameters;
 import java.util.Map;
 
 /**
- * The official MongoDB driver only supports String keys; MapCodecProvider adds support for primitive-type keys
+ * The official MongoDB driver only supports String keys; MapCodecProvider adds support for primitive-type keys.
  * All 8 Java primitive types are supported: char, boolean, byte, short, int, long, float, double
  *
  * @author lqh

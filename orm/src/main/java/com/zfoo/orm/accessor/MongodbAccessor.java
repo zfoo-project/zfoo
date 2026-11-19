@@ -93,7 +93,7 @@ public class MongodbAccessor implements IAccessor {
 
             var result = collection.bulkWrite(batchList, new BulkWriteOptions().ordered(false));
             if (result.getMatchedCount() != entities.size()) {
-                // The expected update count does not match the actual update count in batch operation
+                // The expected update count does not match the actual update count in the batch operation
                 logger.warn("database:[{}] update size:[{}] not equal with matched size:[{}](some entity of id not exist in database)"
                         , entityClazz.getSimpleName(), entities.size(), result.getMatchedCount());
             }

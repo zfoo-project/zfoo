@@ -30,7 +30,7 @@ public interface IEntityWrapper<PK extends Comparable<PK>, E extends IEntity<PK>
     /**
      * Document write version; getter and setter for the version field.
      * <p>
-     * On write, compares the entity's version with the DB version; if they differ the write is rejected; if equal, data is written and version is incremented.
+     * On write, compares the entity's version with the DB version; if they differ, the write is rejected; if equal, the data is written and the version is incremented.
      * Prevents multiple servers from modifying the same document simultaneously, ensuring data consistency in a distributed environment.
      * In a distributed environment, stateful servers exist; a gateway may route a user to server A, but after adding server B, the next request might go to B.
      * Even with consistent hashing, there is still a chance that some requests are routed to different servers.

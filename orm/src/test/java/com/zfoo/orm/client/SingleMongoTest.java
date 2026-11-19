@@ -37,7 +37,7 @@ public class SingleMongoTest {
 //            .credential(MongoCredential.createCredential("root", "admin", "123456".toCharArray()))
             .build());
 
-    // If MongoDB in secure mode, authentication is required.
+    // If MongoDB is in secure mode, authentication is required.
     // Now connect to your databases
     private final MongoDatabase mongodb = mongoClient.getDatabase("test");
 
@@ -131,7 +131,7 @@ public class SingleMongoTest {
         // Find and iterate all documents in collection 'student'
         MongoCollection<Document> collection = mongodb.getCollection("student");
 
-        // Update one document
+        // Update matching documents
         collection.updateMany(eq("age", 10), new Document("$set", new Document("name", "new hello mongodb")));
 
         collection.find().forEach(doc -> System.out.println(doc.toJson()));
@@ -209,7 +209,7 @@ public class SingleMongoTest {
             var key = j;
             var value = j;
             try {
-                // Insert a document
+                // Update a document
                 Document document = new Document("_id", key)
                         .append("name0", value);
                 collection.updateOne(eq("_id", key), new Document("$set", document));
@@ -268,7 +268,7 @@ public class SingleMongoTest {
                         var key = j;
                         var value = j;
                         try {
-                            // Insert a document
+                            // Update a document
                             Document document = new Document("_id", key)
                                     .append("name", value);
                             collection.updateOne(eq("_id", key), new Document("$set", document));

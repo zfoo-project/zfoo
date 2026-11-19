@@ -168,7 +168,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     for (var stack : Thread.currentThread().getStackTrace()) {
                         builder.append(FileUtils.LS).append(stack);
                     }
-                    // Concurrent write risk: the thread for the 1st and 2nd update are different
+                    // Concurrent write risk: the 1st and 2nd updates occurred on different threads
                     if (pnodeThread == null) {
                         logger.warn("[{}][id:{}] concurrent write warning, first update [threadId:{}], second update [threadId:{}], current stack trace as following:{}"
                                 , entity.getClass().getSimpleName(), entity.id(), pnodeThreadId, currentThreadId, builder);
@@ -323,7 +323,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 currentUpdateList.forEach(k->k.resetTime(currentTime));
 
                 if (result.getMatchedCount() != entities.size()) {
-                    // The expected update count does not match the actual update count in batch operation
+                    // The expected update count does not match the actual update count in the batch operation
                     logger.warn("database:[{}] update size:[{}] not equal with matched size:[{}](some entity of id not exist in database)"
                             , clazz.getSimpleName(), entities.size(), result.getMatchedCount());
                 }
@@ -361,8 +361,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                     continue;
                 }
 
-                // mostly because the document that needs to be updated is the same as the document in the database
-                // Begin fallback operation (most cases: cached document already matches database)
+                // Begin fallback operation (mostly because the document to update matches the one in the database)
                 logger.warn("doPersistWithVersion(): [{}] batch update [{}] not equal to final update [{}], and try to use persistAndCompareVersion() to update every single entity."
                         , clazz.getSimpleName(), currentUpdateList.size(), result.getMatchedCount());
             } catch (Throwable t) {
@@ -407,7 +406,7 @@ public class EntityCache<PK extends Comparable<PK>, E extends IEntity<PK>> imple
                 continue;
             }
 
-            // DB version larger: cache is stale, evict it, reload on next access
+            // DB version is larger: cache is stale; evict it and reload immediately
             caches.remove(id);
             load(id);
             logger.warn("[database:{}] document of entity [id:{}] version [{}] is greater than cache [vs:{}] and reload db entity to cache", clazz.getSimpleName(), id, dbEntityVersion, entityVersion);

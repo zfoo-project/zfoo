@@ -18,8 +18,7 @@ package com.zfoo.orm.model;
 public interface IEntity<PK extends Comparable<PK>> {
 
     /**
-     * EN: The primary key of a document. The type of primary key only supports int long float double String ObjectId
-     * Document primary key. Supported types: int, long, float, double, String, ObjectId.
+     * The primary key of the document. Supported types: int, long, float, double, String, ObjectId.
      */
     PK id();
 

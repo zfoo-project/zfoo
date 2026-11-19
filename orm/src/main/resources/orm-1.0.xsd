@@ -42,7 +42,7 @@
         <xsd:attribute name="url" type="xsd:string" use="required"/>
     </xsd:complexType>
 
-    <!-- 缓存 -->
+    <!-- Cache -->
     <xsd:complexType name="cache">
         <xsd:attribute name="strategy" type="xsd:string" use="required"/>
         <xsd:attribute name="size" type="xsd:string" use="required"/>
@@ -57,9 +57,9 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <!-- 持久化管理器 -->
-    <!-- queue:队列的大小（正数有界队列，负数无界队列），列如：(name="example",type="queue",config="-1") -->
-    <!-- time:cron表达式，列如：（time:0,30 * * * * *） -->
+    <!-- Persistence manager -->
+    <!-- queue: queue size (positive for bounded queue, negative for unbounded queue), e.g., (name="example", type="queue", config="-1") -->
+    <!-- time: cron expression, e.g., (time:0,30 * * * * *) -->
     <xsd:simpleType name="persister-type">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="queue"/>

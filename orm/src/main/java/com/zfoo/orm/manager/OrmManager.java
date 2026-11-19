@@ -256,7 +256,7 @@ public class OrmManager implements IOrmManager {
             throw new RunException("EntityCaches that do not have [] defined", clazz.getCanonicalName());
         }
         if (!usable) {
-            // Orm does not use EntityCacheAutowired here to save memory; only entities annotated with @EntityCacheAutowired can be retrieved dynamically
+            // Released early to save memory if @EntityCacheAutowired is not used; only entities injected with @EntityCacheAutowired can be retrieved dynamically
             throw new RunException("Orm does not use [] EntityCacheAutowired annotation, which are released in advance to save memory", clazz.getCanonicalName());
         }
         @SuppressWarnings("unchecked")
@@ -291,7 +291,7 @@ public class OrmManager implements IOrmManager {
 
     private Map<Class<? extends IEntity<?>>, EntityDef> entityClass() {
         var classSet = new HashSet<>();
-        // in graalvm environment, PathMatchingResourcePatternResolver/CachingMetadataReaderFactory unable to use, so get it directly in the spring container
+        // In a GraalVM environment, PathMatchingResourcePatternResolver/CachingMetadataReaderFactory cannot be used, so retrieve them directly from the Spring container
         if (GraalVmUtils.isGraalVM()) {
             var applicationContext = OrmContext.getApplicationContext();
             var classes = applicationContext.getBeansWithAnnotation(GraalvmNativeEntityCache.class)
@@ -444,7 +444,7 @@ public class OrmManager implements IOrmManager {
         AssertionUtils.isTrue(returnTypeOfGetIdMethod.equals(idFieldType), "[{}] getIdMethod:[{}] return type:[{}] must be equal with type id:[{}]"
                 , clazz.getSimpleName(), getIdMethod.getName(),returnTypeOfGetIdMethod.getName(), idFieldType.getName());
 
-        // Assign a random value to the id field and call id(), verify they match to avoid bugs
+        // Assign a random value to the id field and call id() to verify they match and avoid bugs
         var entityInstance = ReflectionUtils.newInstance(clazz);
         Object idFiledValue = null;
         if (idFieldType.equals(int.class) || idFieldType.equals(Integer.class)) {
@@ -484,7 +484,7 @@ public class OrmManager implements IOrmManager {
         if (ArrayUtils.isNotEmpty(versionFields)) {
             AssertionUtils.isTrue(versionFields.length == 1, "The Entity[{}] must have only one @Version annotation", clazz.getSimpleName());
             var versionField = versionFields[0];
-            // idField must be declared private
+            // versionField must be declared private
             AssertionUtils.isTrue(Modifier.isPrivate(versionField.getModifiers()), "The version of the Entity[{}] must be private", clazz.getSimpleName());
             AssertionUtils.isTrue(versionField.getType().equals(long.class), "The version type of the Entity[{}] must be long", clazz.getSimpleName());
         }
@@ -615,7 +615,7 @@ public class OrmManager implements IOrmManager {
                 // do nothing
                 return false;
             } else if (clazz.getComponentType() != null) {
-                // ORM does not support multi-dimensional arrays or collections nested with arrays; only 1D arrays are supported
+                // ORM does not support multi-dimensional arrays or collections containing arrays; only 1D arrays are supported
                 throw new RunException("class:[{}] type:[{}] does not support multi-dimensional arrays or nested arrays, and only supports one-dimensional arrays"
                         , currentEntityClass.getSimpleName(), clazz.getSimpleName());
             } else if (clazz.equals(List.class) || clazz.equals(Set.class) || clazz.equals(Map.class)) {
