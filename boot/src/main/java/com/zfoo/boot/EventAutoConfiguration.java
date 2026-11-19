@@ -20,8 +20,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * Register the EventRegisterProcessor bean through the @Import annotation,
- * and when each bean is injected into the IOC container, it will pass through the EventRegisterProcessor.
+ * Registers the EventRegisterProcessor bean through the {@code @Import} annotation,
+ * so each bean injected into the IoC container is processed by EventRegisterProcessor.
  *
  * @author godotg
  */

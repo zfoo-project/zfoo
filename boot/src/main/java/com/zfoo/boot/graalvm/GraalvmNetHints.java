@@ -35,7 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Register runtime hints for the token library
+ * Register GraalVM runtime hints for the net module
  *
  * @author godotg
  */
@@ -50,7 +50,7 @@ public class GraalvmNetHints implements RuntimeHintsRegistrar {
         var classes = new HashSet<Class<?>>();
         classes.add(NetConfig.class);
 
-        // atachment
+        // attachment
         classes.add(SignalAttachment.class);
         classes.add(GatewayAttachment.class);
         classes.add(UdpAttachment.class);

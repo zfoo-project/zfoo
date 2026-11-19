@@ -30,7 +30,7 @@ import java.util.List;
 import static org.springframework.aot.hint.MemberCategory.*;
 
 /**
- * Register runtime hints for the token library
+ * Register GraalVM runtime hints for the protocol module
  *
  * @author godotg
  */
@@ -52,7 +52,7 @@ public class GraalvmProtocolHints implements RuntimeHintsRegistrar {
 
         HintUtils.registerRelevantClasses(hints, classes);
 
-        // netty
+        // Netty
         var nettyClassList = List.of(AbstractByteBufAllocator.class, AbstractReferenceCountedByteBuf.class);
         for(var clazz : nettyClassList) {
             hints.reflection().registerType(clazz, DECLARED_FIELDS, INVOKE_PUBLIC_CONSTRUCTORS, INVOKE_DECLARED_METHODS);

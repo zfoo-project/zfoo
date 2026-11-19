@@ -27,7 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Register runtime hints for the token library
+ * Register GraalVM runtime hints for the storage module
  *
  * @author godotg
  */
