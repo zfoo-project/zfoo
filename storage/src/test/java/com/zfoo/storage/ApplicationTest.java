@@ -42,7 +42,7 @@ public class ApplicationTest {
     @Test
     public void startStorageTest() {
         // Load config file (must import the storage module)
-        // 'scan': package containing Excel-mapped classes; Excel files auto-discovered in subdirs
+        // 'scan': package containing Excel-mapped classes; Excel files are automatically discovered in subdirectories
         // 'resource': path where Excel files are located
         var context = new ClassPathXmlApplicationContext("application.xml");
 
@@ -51,21 +51,21 @@ public class ApplicationTest {
 
         IStorage<Integer, StudentResource> storage1 = StorageContext.getStorageManager().getStorage(StudentResource.class);
 
-        //Get data by primary key
+        // Get data by primary key
         StudentResource studentResource = StorageContext.get(StudentResource.class, 1001);
         TeacherResource teacherResource = StorageContext.get(TeacherResource.class, 1001);
-        //Get name index list
+        // Get name index list
         List<StudentResource> nameIndexList = StorageContext.getIndexes(StudentResource.class, StudentResource::getName, "james1");
         // Get age index list
         List<StudentResource> ageIndexList = StorageContext.getIndexes(StudentResource.class, StudentResource::getAge, 10);
 
-        //Get Storage instance
+        // Get Storage instance
         IStorage<Integer, StudentResource> storage = context.getBean(StorageManager.class).getStorage(StudentResource.class);
 
         var studentManager = context.getBean(StudentManager.class);
         var studentResources = studentManager.studentResources;
         var studentCsvResources = studentManager.studentCsvResources;
-        // Without @Resource alias, class and Excel names must match; without @ExcelFieldName, fields map to same-named columns
+        // Without a @Resource alias, class and Excel names must match; without @ExcelFieldName, fields map to columns with the same name
         for (StudentResource resource : studentResources.getAll()) {
             logger.info(JsonUtils.object2String(resource));
         }

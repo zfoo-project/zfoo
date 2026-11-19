@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import java.lang.annotation.*;
 
 /**
- * graalvm build must use this annotation to specify path, because native build cannot scan classes and files
+ * GraalVM native builds must use this annotation to specify the resource path, because native builds cannot scan classes and files.
  *
  * @author godotg
  */
@@ -31,7 +31,7 @@ import java.lang.annotation.*;
 public @interface GraalvmNativeStorage {
 
     /**
-     * graalvm build must specify resource path
+     * Resource path required for GraalVM native builds.
      */
     @AliasFor(annotation=Component.class)
     String value();

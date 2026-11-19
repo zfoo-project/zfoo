@@ -100,7 +100,7 @@ public class ResourceInterpreter {
         }
     }
 
-    // @ExcelFieldName value takes priority as the column name
+    // @AliasFieldName value takes priority as the column name
     private static String getExcelFieldName(Field field) {
         return field.isAnnotationPresent(AliasFieldName.class) ? field.getAnnotation(AliasFieldName.class).value() : field.getName();
     }
@@ -108,7 +108,7 @@ public class ResourceInterpreter {
     // Only read fields declared in the code
     private static Collection<FieldInfo> getFieldInfos(Map<String, Integer> cellFieldMap, Class<?> clazz) {
         var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
-        // Validate field: must have a matching column in Excel; missing columns are detected at startup
+        // Validate fields: each field must have a matching column in Excel; missing columns are detected at startup
         for (var field : fieldList) {
             var fieldName = getExcelFieldName(field);
             if (!cellFieldMap.containsKey(fieldName)) {

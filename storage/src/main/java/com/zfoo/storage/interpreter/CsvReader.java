@@ -54,15 +54,15 @@ public abstract class CsvReader {
 
 
     /**
-     * Build resource table header
+     * Build resource table headers
      */
     private static List<StorageHeader> getHeaders(Iterator<CSVRecord> iterator, String fileName) {
-        // Get valid column names from the resource table; row 1 is the field names by default
+        // Get valid column names from the resource table; row 1 contains the field names by default
         var fieldRow = iterator.next();
         if (fieldRow == null) {
             throw new RunException("Failed to get attribute control column from csv file of resource [class:{}]", fileName);
         }
-        // Row 2: field types (default)
+        // Row 2: field types by default
         var typeRow = iterator.next();
         if (typeRow == null) {
             throw new RunException("Failed to get type control column from csv file of resource [class:{}]", fileName);

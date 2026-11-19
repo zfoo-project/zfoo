@@ -56,9 +56,9 @@ public class ConversionTest {
     @Test
     public void string2Map() {
         ConversionService conversionService = csfb.getObject();
-        //Json to Map
+        // Json to Map
         String str = "{\"1\":1,\"2\":2,\"3\":3}";
-        // Note: 3rd arg must NOT be TypeDescriptor.valueOf(map.getClass()); specify key and value types explicitly
+        // Note: the 3rd argument must NOT be TypeDescriptor.valueOf(map.getClass()); specify the Map key and value types explicitly
         @SuppressWarnings("unchecked")
         var map = (Map<Integer, Integer>) conversionService.convert(str, TypeDescriptor.valueOf(String.class), TypeDescriptor.map(HashMap.class, TypeDescriptor.valueOf(String.class), TypeDescriptor.valueOf(Integer.class)));
 

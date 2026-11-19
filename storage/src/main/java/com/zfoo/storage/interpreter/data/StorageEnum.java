@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Supported file type suffixes for resource files
+ * Supported file extensions for resource files
  *
  * @author godotg
  */

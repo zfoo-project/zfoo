@@ -92,7 +92,7 @@ public abstract class ExportUtils {
                 .toList();
     }
 
-    // Auto-assign class map to storage
+    // Automatically populate Map fields in the class from storage
     public static <T> T autoWrapData(Class<T> clazz, Map<Class<?>, IStorage<?, ?>> storageMap) {
         var instance = ReflectionUtils.newInstance(clazz);
 

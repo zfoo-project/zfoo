@@ -34,7 +34,7 @@ public abstract class ConvertUtils {
 
     public static ConversionService customConvert(Set<?> customConverts) {
         var converters = new HashSet<>();
-        // default convert
+        // Default converters
         converters.add(ArrayConverter.INSTANCE);
         converters.add(ListConverter.INSTANCE);
         converters.add(SetConverter.INSTANCE);
@@ -42,7 +42,7 @@ public abstract class ConvertUtils {
         converters.add(JsonToObjectConverter.INSTANCE);
         converters.add(StringToClassConverter.INSTANCE);
         converters.add(StringToDateConverter.INSTANCE);
-        // custom convert
+        // Custom converters
         converters.addAll(customConverts);
 
         ConversionServiceFactoryBean conversionServiceFactoryBean = new ConversionServiceFactoryBean();
@@ -67,7 +67,7 @@ public abstract class ConvertUtils {
         if (StringUtils.isEmpty(content)) {
             return Array.newInstance(componentType, 0);
         }
-        // Use commas, semicolons, newline separators to parse
+        // Parse using comma, semicolon, or newline delimiters
         var list = convertToList(content, componentType);
         Object array = Array.newInstance(componentType, list.size());
         for (var i = 0; i < list.size(); i++) {

@@ -54,13 +54,13 @@ public class StorageManager implements IStorageManager {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageContext.class);
 
-    // ANT wildcards: '?' one char, '*' any chars, '**' any path
+    // ANT wildcards: '?' matches any single character, '*' matches 0 or more characters, '**' matches 0 or more directories
     // 1. /project/*.a	matches all .a files under /project
-    // 2. /project/p?ttern	matches /project/pattern and /project/pXttern (not pttern)
-    // 3. /**/example	matches any path ending with /example
-    // 4. /project/**/dir/file.*	matches /project/**/dir/file.*
+    // 2. /project/p?ttern	matches /project/pattern and /project/pXttern, but not /project/pttern
+    // 3. /**/example	matches paths like /project/example, /project/foo/example, and /example
+    // 4. /project/**/dir/file.*	matches paths like /project/dir/file.jsp, /project/foo/dir/file.html, and /project/foo/bar/dir/file.pdf
     // 5. /**/*.jsp	matches all .jsp files anywhere
-    // 'classpath:' loads first match; 'classpath*:' loads all including JARs
+    // 'classpath:' loads only the first matching resource; 'classpath*:' loads all matching resources, including those in JARs
     private static final String SUFFIX_PATTERN = "**/*.class";
 
     private StorageConfig storageConfig;
@@ -82,14 +82,14 @@ public class StorageManager implements IStorageManager {
     public void initBefore() {
         var resourceDefinitionMap = new HashMap<Class<?>, StorageDefinition>();
 
-        // Get the class mapped to Excel
+        // Get classes mapped to Excel
         var clazzSet = resourceClass();
         if (CollectionUtils.isEmpty(clazzSet)) {
             logger.warn("no any storages found, please check your config. If is in graalvm environment, make sure your storage be annotated with @GraalvmNativeStorage and can be scanned by spring @Component.");
             return;
         }
 
-        // Scan for Excel file path based on class
+        // Scan for Excel file paths based on resource classes
         for (var resourceClazz : clazzSet) {
             var resourceFile = resource(resourceClazz);
             StorageDefinition storageDefinition = new StorageDefinition(resourceClazz, resourceFile);
@@ -113,7 +113,7 @@ public class StorageManager implements IStorageManager {
                 var fieldList = ReflectionUtils.notStaticAndTransientFields(clazz);
                 for (var field : fieldList) {
                     if (Modifier.isPublic(field.getModifiers())) {
-                        // Static resource fields must be private; use writeable=true to allow setters
+                        // Static resource fields cannot be public; make them private or enable writeable=true
                         throw new RunException("Static resource classes cannot be modified, class:[{}] filed:{}[] cannot be modified by public, use private modified or enable writeable configuration", clazz, field.getName());
                     }
 
@@ -121,7 +121,7 @@ public class StorageManager implements IStorageManager {
                     try {
                         setMethodName = FieldUtils.fieldToSetMethod(clazz, field);
                     } catch (Exception e) {
-                        // No setter is correct for immutable resources
+                        // Having no setter is expected for immutable resources
                     }
                     if (StringUtils.isNotBlank(setMethodName)) {
                         // Static resource fields must not have setters; remove the setter or enable writeable
@@ -223,7 +223,7 @@ public class StorageManager implements IStorageManager {
             throw new RunException("There is no [{}] defined Storage and unable to get it", clazz.getCanonicalName());
         }
         if (storage.isRecycle()) {
-            // Storage not in use; released to save memory. Use @StorageAutowired or recycle=false to keep it
+            // Storage is unused and was freed to save memory; use @StorageAutowired or set recycle=false to keep it
             logger.warn("Storage [{}] is not used, it was freed to save memory; use @StorageAutowired or turn off recycle configuration", clazz.getCanonicalName());
         }
         return (T) storage;
@@ -245,7 +245,7 @@ public class StorageManager implements IStorageManager {
     }
 
     private Set<Class<?>> resourceClass() {
-        // In GraalVM: PathMatchingResourcePatternResolver unavailable; get resources from Spring context
+        // In GraalVM, PathMatchingResourcePatternResolver is unavailable; fetch resources from the Spring context
         if (GraalVmUtils.isGraalVM()) {
             var applicationContext = StorageContext.getApplicationContext();
             var nativeResources = applicationContext.getBeansWithAnnotation(GraalvmNativeStorage.class);
@@ -314,7 +314,7 @@ public class StorageManager implements IStorageManager {
                     // do nothing
                 }
 
-                // Wildcards cannot match root directory; retry search from root
+                // Wildcards cannot match the root directory; retry searching directly in the root directory
                 if (resources.isEmpty()) {
                     packageSearchPath = StringUtils.format("{}/{}.*", resourceLocation, fileName);
                     packageSearchPath = packageSearchPath.replaceAll("//", "/");

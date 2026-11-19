@@ -50,7 +50,7 @@ public class ExportBinaryTesting {
 
     }
 
-    // Variables correspond to Excel columns; only declared variables are exported
+    // Fields correspond to Excel columns; only declared fields are exported
     @Storage
     public record StudentResource(
             @Id
@@ -73,7 +73,7 @@ public class ExportBinaryTesting {
 
     }
 
-    // Java class path, e.g. ResourceData, StudentResource
+    // Package path of Java classes corresponding to Excel sheets, e.g. ResourceData, StudentResource
     public static final String excelClassPath = "com.zfoo.storage.export";
     // Excel path: 'classpath:' for classpath, 'file:' for filesystem
     public static final String excelFilePath = "classpath:/excel";

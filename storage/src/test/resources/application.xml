@@ -21,13 +21,13 @@
            For example, noNamespaceSchemaLocation="XXX" is used to import schema files without a namespace,
            and schemaLocation="XXX" is used for schema files with their own namespace.
            These elements belong to the xsi namespace, so any XML file referencing them must import this namespace.
-           The prefix "xsi" is not mandatory; it is just a widely-used convention for readability.
+           The prefix "xsi" is not mandatory; it is just a widely used convention for readability.
            xsi is an alias for http://www.w3.org/2001/XMLSchema-instance.
            The first URI is the namespace name; the second URI gives the location of the schema document.
 -->
 
 <!--
-   Once you have the XML Schema instance namespace available: xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   Once you have the XML Schema instance namespace available (xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"),
    you can use the schemaLocation attribute. This attribute takes two values.
    The first value is the namespace to be used.
    The second value is the location of the XML schema for that namespace:
@@ -52,9 +52,9 @@
     <context:component-scan base-package="com.zfoo.storage"/>
 
     <storage:storage id="resourceManager">
-        <!-- Both 'package' and 'location' attributes support multiple paths separated by , ; or space -->
+        <!-- Both the 'package' and 'location' attributes support multiple paths separated by commas, semicolons, or spaces -->
         <storage:scan package="com.zfoo.**.resource" recycle="false"/>
-        <!-- Use 'classpath:' prefix for classpath resources; use 'file:' prefix for filesystem paths -->
+        <!-- Use the 'classpath:' prefix for classpath resources and the 'file:' prefix for filesystem paths -->
         <storage:resource location="classpath:/,classpath:/excel"/>
         <!-- <storage:resource location="file:C:\Users\godotg\Desktop\excel"/>-->
     </storage:storage>

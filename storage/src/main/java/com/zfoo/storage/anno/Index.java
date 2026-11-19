@@ -17,8 +17,7 @@ import org.springframework.aot.hint.annotation.Reflective;
 import java.lang.annotation.*;
 
 /**
- * EN: the name of the index uses the name of the field attribute, implemented with HaspMap
- * Index name uses the field name; implemented with HashMap
+ * Uses the field name as the index name; implemented with HashMap.
  *
  * @author godotg
  */

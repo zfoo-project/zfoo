@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
-<!--xsd文件本身是xml文件，第一行是xml声明-->
-<!-- 第一行必须要，
-        version属性指定版本，
-        encoding属性编码格式，
-        standalone属性,如果是yes，则表示这个XML文档是独立的，不能引用外部的DTD规范文件；如果是no，则该XML文档不是独立的，表示可以用外部的DTD规范文档
-        XML的属性值须加引号 -->
+<!-- An XSD file itself is an XML file; the first line is the XML declaration -->
+<!-- The first line is required:
+        the version attribute specifies the XML version,
+        the encoding attribute specifies the character encoding,
+        and the standalone attribute specifies whether this XML document is standalone (yes: cannot reference external DTD files; no: not standalone and can use external DTD files).
+        XML attribute values must be enclosed in quotes. -->
 
-<!--**************************************分割线**************************************************-->
+<!--************************************** Divider **************************************************-->
 
-<!--第一个xmlns表示schema中用到的元素和数据类型来自命名空间"http://www.w3.org/2001/XMLSchema"。
-        同时它还规定了来自命名空间 "http://www.w3.org/2001/XMLSchema" 的元素和数据类型应该使用前缀 xsd，可以为任何自定义名称：-->
+<!-- The first xmlns attribute specifies that elements and data types used in this schema come from the namespace "http://www.w3.org/2001/XMLSchema".
+        It also stipulates that elements and data types from "http://www.w3.org/2001/XMLSchema" should use the prefix xsd (which can be any custom name): -->
 
-<!--第二个xmlns表示引用spring中beans的命名空间-->
+<!-- The second xmlns attribute references the Spring beans namespace -->
 
-<!--xmlns="http://www.zfoo.com/schema/user" ,指出默认的命名空间是 "http://www.zfoo.com/schema/user" -->
-<!--targetNamespace显示被此 schema 定义的元素 (note, to, from, heading, body) 来自命名空间：
+<!-- xmlns="http://www.zfoo.com/schema/user" specifies that the default namespace is "http://www.zfoo.com/schema/user" -->
+<!-- targetNamespace indicates that the elements defined by this schema (note, to, from, heading, body) come from the namespace:
         http://www.zfoo.com/schema/user -->
 
-<!--elementFormDefault指出任何 XML 实例文档所使用的且在此 schema 中声明过的元素必须被命名空间限定。 -->
-<!--attributeFormDefault属性:
-        指定XML文档使用schema中定义的局部属性时是否必须使用命名空间限定
-        qualified:必须通过命名空间前缀限定unqualified：（默认值）无须通过命名空间前缀限定 -->
+<!-- elementFormDefault specifies that any elements used by an XML instance document and declared in this schema must be namespace-qualified. -->
+<!-- attributeFormDefault attribute:
+        Specifies whether local attributes defined in this schema must be namespace-qualified when used in an XML document:
+        qualified: must be qualified with a namespace prefix; unqualified: (default) does not need to be qualified with a namespace prefix -->
 
-<!--**************************************分割线**************************************************-->
+<!--************************************** Divider **************************************************-->
 
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 
@@ -34,8 +34,8 @@
             attributeFormDefault="unqualified">
 
 
-    <!-- scan扫描包类型 -->
-    <!-- package声明类型 -->
+    <!-- scan package type -->
+    <!-- package declaration type -->
     <xsd:complexType name="scan">
         <xsd:attribute name="package" type="xsd:string" use="required"/>
         <xsd:attribute name="writeable" type="xsd:boolean" default="false"/>
@@ -43,9 +43,9 @@
     </xsd:complexType>
 
 
-    <!-- 格式声明类型 -->
+    <!-- Format declaration type -->
     <xsd:complexType name="resource">
-        <!-- 本地资源路径 -->
+        <!-- Local resource path -->
         <xsd:attribute name="location" type="xsd:string" use="required"/>
     </xsd:complexType>
 
@@ -57,7 +57,7 @@
         <xsd:attribute name="id" type="xsd:string" use="required"/>
     </xsd:complexType>
 
-    <!-- 表示定义标签 -->
+    <!-- Defines the element tag -->
     <xsd:element name="storage" type="configType"/>
 
 
