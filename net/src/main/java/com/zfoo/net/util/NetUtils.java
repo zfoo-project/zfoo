@@ -61,10 +61,10 @@ public class NetUtils {
      */
     public static String longToIpv4(long longIP) {
         final StringBuilder sb = new StringBuilder();
-        // Shift right 24 bits to get the first octet
+        // Extract the first octet (decimal-packed, 3 digits per octet)
         sb.append((longIP / 1_000_000_000));
         sb.append(".");
-        // Clear the top 8 bits and shift right 16 bits for the second octet
+        // Extract the second octet
         sb.append(longIP / 1_000_000 % 1_000);
         sb.append(".");
         sb.append(longIP / 1_000 % 1_000);
@@ -172,7 +172,7 @@ public class NetUtils {
 
     /**
      * Finds an available port in the range [1024, 65535].<br>
-     * Iterates sequentially up to (65535 - 1024) times.<br>
+     * Scans sequentially from 1024 to 65535.<br>
      *
      * @return an available port number
      */
@@ -182,7 +182,7 @@ public class NetUtils {
 
     /**
      * Finds an available port in the range [{@code minPort}, 65535].<br>
-     * Iterates sequentially up to (65535 - minPort) times.<br>
+     * Scans sequentially from {@code minPort} to 65535.<br>
      *
      * @param minPort the minimum port number (inclusive)
      * @return an available port number
@@ -193,7 +193,7 @@ public class NetUtils {
 
     /**
      * Finds an available port in the range [{@code minPort}, {@code maxPort}].<br>
-     * Iterates sequentially up to (maxPort - minPort) times.<br>
+     * Scans sequentially from {@code minPort} to {@code maxPort}.<br>
      *
      * @param minPort the minimum port number (inclusive)
      * @param maxPort the maximum port number (inclusive)

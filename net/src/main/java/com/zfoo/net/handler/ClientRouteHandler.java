@@ -53,7 +53,7 @@ public class ClientRouteHandler extends BaseRouteHandler {
         NetContext.getSessionManager().removeClientSession(session);
         EventBus.post(ClientSessionInactiveEvent.valueOf(session));
 
-                // If a consumer session becomes inactive, trigger a consumer-check event to attempt reconnection
+        // If a consumer session becomes inactive, trigger a consumer-check event to attempt reconnection
         if (session.getConsumerRegister() != null) {
             NetContext.getConfigManager().getRegistry().checkConsumer();
         }

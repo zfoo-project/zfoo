@@ -15,7 +15,7 @@ package com.zfoo.net.packet;
 import com.zfoo.protocol.ProtocolManager;
 
 /**
- * The interface of IPacket is just an identification interface
+ * Marker interface for network packet classes.
  *
  * @author godotg
  */

@@ -34,14 +34,14 @@ public class JsonTcpCodecHandler extends ByteToMessageCodec<EncodedPacketInfo> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
-                // Not enough bytes to read a single int
+        // Not enough bytes to read a single int
         if (in.readableBytes() <= PACKET_HEAD_LENGTH) {
             return;
         }
         in.markReaderIndex();
         var length = in.readInt();
 
-        // Reject illegal lengths to prevent oversized packets from exhausting bandwidth; tune max size to your use-case
+        // Reject illegal lengths to prevent oversized packets from exhausting bandwidth; tune max size to your use case
         if (length < 0 || length > IOUtils.BYTES_PER_MB) {
             throw new IllegalArgumentException(StringUtils.format("illegal packet [length:{}]", length));
         }

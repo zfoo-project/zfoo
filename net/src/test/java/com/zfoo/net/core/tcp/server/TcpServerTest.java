@@ -27,9 +27,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class TcpServerTest {
 
     /**
-     * Standalone server tutorial. After startup, run startClientTest in TcpClientTest
+     * Standalone server tutorial. After startup, run startClient in com.zfoo.net.core.tcp.client.TcpClientTest.
      * <p>
-     * Once started, run startClientTest in TcpClientTest to connect.
+     * Once connected to the server, startClient continuously sends messages to the server.
      */
     @Test
     public void startServer() {

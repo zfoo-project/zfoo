@@ -39,7 +39,7 @@ public class CreateNodeAuthTest {
         acls.add(aclDigest);
         acls.add(aclIp);
 
-        // Create a node with authorization using jaysunxiao:123456 credentials
+        // Create a node with authorization using godotg:123456 credentials
         String path = curator.create()
                 .creatingParentsIfNeeded()
                 .withMode(CreateMode.PERSISTENT)

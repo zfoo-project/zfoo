@@ -42,9 +42,12 @@ public class GatewayTest {
 
     /**
      * Start ZooKeeper first, then run the test methods below in order:
-     * 3. Run clientTest
+     * 1. Service provider (startProvider0 / startProvider1 / startProvider2)
+     * 2. Gateway (startGateway)
+     * 3. Client test (clientSyncTest / clientAsyncTest)
      * <p>
      * Messages are forwarded through the gateway to the service provider.
+     */
     @Test
     public void startProvider0() {
         var context = new ClassPathXmlApplicationContext("provider/provider_config.xml");
@@ -81,7 +84,7 @@ public class GatewayTest {
     }
 
     /**
-     * Client side: client first requests data from the gateway.
+     * Client side: the client sends requests to the gateway (since it connects directly to the gateway).
      */
     @Test
     public void clientSyncTest() {
@@ -103,7 +106,7 @@ public class GatewayTest {
             var thread = new Thread(() -> {
                 for (int j = 0; j < 10000; j++) {
                     try {
-                        // Note: 2nd parameter must be xxxRequest (not xxxAsk); 3rd argument null => random provider.
+                        // Note: the request packet must be xxxRequest (not xxxAsk) since the gateway forwards it to a Provider; passing null for argument routes to a random provider.
                         var response = NetContext.getRouter().syncAsk(session, request, GatewayToProviderResponse.class, null).packet();
                         logger.info("client request[{}] received response[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));
                     } catch (Exception e) {
@@ -137,7 +140,7 @@ public class GatewayTest {
             var thread = new Thread(() -> {
                 for (int j = 0; j < 1000; j++) {
                     try {
-                        // Note: 2nd parameter must be xxxRequest (not xxxAsk); 3rd argument null => random provider.
+                        // Note: the request packet must be xxxRequest (not xxxAsk) since the gateway forwards it to a Provider; passing null for argument routes to a random provider.
                         NetContext.getRouter().asyncAsk(session, request, GatewayToProviderResponse.class, null)
                                 .whenComplete(response -> {
                                     logger.info("client request[{}] received response[{}]", atomicInteger.incrementAndGet(), JsonUtils.object2String(response));

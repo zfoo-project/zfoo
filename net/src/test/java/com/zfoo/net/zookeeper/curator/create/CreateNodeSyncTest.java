@@ -11,7 +11,7 @@ import org.junit.Test;
 @Ignore
 public class CreateNodeSyncTest {
     //RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3); // exponential backoff strategy
-    //RetryPolicy retryPolicy = new RetryNTimes(5, 1000); // retry at most N times, sleep 1s between each
+    //RetryPolicy retryPolicy = new RetryNTimes(5, 1000); // retry at most 5 times, sleep 1s between each
     @Test
     public void test() throws Exception {
         // Stop retrying once the total elapsed time exceeds the maximum

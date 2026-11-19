@@ -36,7 +36,7 @@ public interface IConsumer {
      * Send a packet without waiting for a response.
      * <p>
      * Example: see FriendController#atApplyFriendRequest in com.zfoo.app.zapp.chat.controller.
-     * The client sends a friend-request, the chat service processes it, then fires the message directly to the gateway.
+     * The client sends a friend request, the chat service processes it, and then sends the message directly to the gateway.
      *
      * @param packet   the packet to send
      * @param argument the parameter used for load-balancing calculation (e.g., user ID),

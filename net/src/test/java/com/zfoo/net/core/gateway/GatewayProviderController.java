@@ -33,7 +33,7 @@ public class GatewayProviderController {
     private static final Logger logger = LoggerFactory.getLogger(GatewayProviderController.class);
 
     /**
-     * Note: if the 2nd parameter ends with 'Request', the 3rd parameter must be GatewayAttachment type (see PacketBus scan logic)
+     * Note: if the 2nd parameter ends with 'Request', the 3rd parameter must be of type GatewayAttachment (see Router#registerPacketReceiverDefinition).
      */
     @PacketReceiver
     public void atGatewayToProviderRequest(Session session, GatewayToProviderRequest request, GatewayAttachment gatewayAttachment) {

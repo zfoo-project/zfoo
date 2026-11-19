@@ -51,11 +51,11 @@ public class CreateNodeSyncAuthTest {
 
         /*
          * Permission scheme: ip, digest
-         * Authorization ID
-         * 		ip:  ip
+         * Authorization ID:
+         * 		ip: specific IP address
          * 		digest: username:Base64(SHA-1(username:password))
          * Permission flags: CREATE(C), DELETE(D), READ(R), WRITE(W), ADMIN(A)
-         * 		
+         * 		Note: single permission, full permissions, or composite permissions
          *
          * ACL entry = scheme + ID + permission
          * */
@@ -76,7 +76,7 @@ public class CreateNodeSyncAuthTest {
             }
 
             try {
-                // username and passwordnode_test
+                // Without authorization, /node_test cannot be accessed
                 zookeeper.getData("/node_test", false, stat);
                 somethingDone = true;
             } catch (Exception e) {

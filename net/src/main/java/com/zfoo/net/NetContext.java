@@ -58,7 +58,7 @@ public class NetContext implements ApplicationListener<ApplicationContextEvent>,
 
     /**
      * When using the Consumer, the provided interface has no Session parameter.
-     * Sessions are obtained via the load-balancing strategy (ConsumerSession) and messages are sent through it.
+     * The target session (ConsumerSession) is obtained via a load-balancing strategy and used to send the message.
      * For example: when a web client sends a request to a game server, the web side holds no session,
      * so it must use Consumer to make the request.
      */

@@ -35,7 +35,7 @@ public class TcpServerTest {
         var context = new ClassPathXmlApplicationContext("config.xml");
 
         // Print the names of all beans currently managed by Spring
-        // Conclusion: by parsing the custom XML tags, the following beans are self-registered:
+        // Conclusion: by parsing the custom XML tags, the following beans are automatically registered:
         // Network-related beans: NetConfig, NetContext, ConfigManager, PacketService, Router, Consumer, SessionManager
         String[] beanNames = context.getBeanDefinitionNames();
         for (String beanName : beanNames) {
@@ -43,8 +43,8 @@ public class TcpServerTest {
         }
 
         // Start up a TCP server
-        // Note: the SessionManager bean registered earlier manages all active connection sessions
-        // This is the benefit of Spring: decoupled initialization - SessionManager lifecycle is managed by Spring
+        // Note: the SessionManager bean registered earlier manages all active connection sessions.
+        // This is the benefit of Spring: decoupled initialization — SessionManager's lifecycle is managed by Spring.
         var server = new TcpServer(HostAndPort.valueOf("127.0.0.1:9000"));
         server.start();
 
