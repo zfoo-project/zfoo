@@ -16,6 +16,7 @@ package com.zfoo.net.config.model;
 import com.zfoo.net.consumer.registry.Register;
 import com.zfoo.protocol.generate.GenerateOperation;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -24,6 +25,10 @@ import java.util.Objects;
 public class NetConfig {
     private String id;
     private String protocolLocation;
+    /**
+     * Packages to scan for annotated protocols in the default module, instead of loading protocolLocation.
+     */
+    private List<String> protocolPackages;
     /**
      * {@link GenerateOperation}
      */
@@ -79,6 +84,14 @@ public class NetConfig {
 
     public void setProtocolLocation(String protocolLocation) {
         this.protocolLocation = protocolLocation;
+    }
+
+    public List<String> getProtocolPackages() {
+        return protocolPackages;
+    }
+
+    public void setProtocolPackages(List<String> protocolPackages) {
+        this.protocolPackages = protocolPackages;
     }
 
     public boolean isMergeProtocol() {
@@ -164,6 +177,7 @@ public class NetConfig {
         NetConfig netConfig = (NetConfig) o;
         return Objects.equals(id, netConfig.id) &&
                 Objects.equals(protocolLocation, netConfig.protocolLocation) &&
+                Objects.equals(protocolPackages, netConfig.protocolPackages) &&
                 Objects.equals(registry, netConfig.registry) &&
                 Objects.equals(monitor, netConfig.monitor) &&
                 Objects.equals(provider, netConfig.provider) &&
@@ -172,6 +186,6 @@ public class NetConfig {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, protocolLocation, registry, monitor, provider, consumer);
+        return Objects.hash(id, protocolLocation, protocolPackages, registry, monitor, provider, consumer);
     }
 }
