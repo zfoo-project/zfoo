@@ -37,6 +37,22 @@ task: task thread pool and task dispatching
   - Requests from clients to servers end with `Request`, and replies end with `Response`.
   - Calls between servers end with `Ask`, and replies end with `Answer`.
 
+#### Register protocols without XML (JVM)
+
+When providing a `NetConfig` bean, set `protocolPackages` **instead of** `protocolLocation` to scan the listed packages and their subpackages for `@Protocol` classes. Include the built-in message and attachment packages if your application uses them (e.g. Ping/Pong with `syncAsk`).
+
+```java
+@Bean
+public NetConfig netConfig() {
+    var config = new NetConfig();
+    config.setId("demo");
+    config.setProtocolPackages(List.of("example.messages", "com.zfoo.net.packet.common", "com.zfoo.net.router.attachment"));
+    return config;
+}
+```
+
+Replace `example.messages` with your protocol package. Each listed package must contain protocols. All scanned classes use their annotated IDs and the default module; keep using XML if you need named modules or IDs assigned in XML.
+
 #### Background
 
 ```

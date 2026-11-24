@@ -32,6 +32,22 @@ task，任务线程池，任务的分发
   - 客户端对服务器的请求以Request结尾，返回以Response结尾
   - 服务器内部之间的调用以Ask结尾，返回以Answer结尾。
 
+#### 不用 XML 注册协议（JVM）
+
+提供 `NetConfig` Bean 时，可用 `protocolPackages` **替代** `protocolLocation`。框架会扫描指定包及其子包中的 `@Protocol` 类。如果使用内置消息或附件（如用 `syncAsk` 收发 Ping/Pong），也要包含相应的包。
+
+```java
+@Bean
+public NetConfig netConfig() {
+    var config = new NetConfig();
+    config.setId("demo");
+    config.setProtocolPackages(List.of("example.messages", "com.zfoo.net.packet.common", "com.zfoo.net.router.attachment"));
+    return config;
+}
+```
+
+将 `example.messages` 换成你的协议包，每个指定的包都应包含协议类。扫描到的类使用注解中的协议号，归入默认模块；如果需要命名模块或在 XML 中分配协议号，仍可使用原有的 XML 配置。
+
 #### 诞生背景
 
 ```

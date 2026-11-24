@@ -13,12 +13,14 @@
 package com.zfoo.net.packet;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.config.model.NetConfig;
 import com.zfoo.protocol.ProtocolManager;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.registration.ProtocolAnalysis;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.DomUtils;
 import com.zfoo.protocol.util.NumberUtils;
@@ -28,6 +30,7 @@ import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
@@ -57,7 +60,6 @@ public class PacketService implements IPacketService {
         var applicationContext = NetContext.getApplicationContext();
 
         var netConfig = NetContext.getConfigManager().getLocalConfig();
-        var protocolLocation = netConfig.getProtocolLocation();
 
         var generateOperation = new GenerateOperation();
         generateOperation.setMergeProtocol(netConfig.isMergeProtocol());
@@ -76,20 +78,44 @@ public class PacketService implements IPacketService {
         // Set the protocol generation filter
         GenerateProtocolFile.generateProtocolFilter = GenerateProtocolFile.DefaultNetGenerateProtocolFilter;
 
-        // Parse protocol.xml and generate ProtocolRegistration objects
-        var resource = applicationContext.getResource(ResourceUtils.CLASSPATH_URL_PREFIX + protocolLocation);
-        try {
-            var xmlProtocols = DomUtils.inputStream2Object(resource.getInputStream(), XmlProtocols.class);
-            ProtocolManager.initProtocol(xmlProtocols, generateOperation);
-        } catch (IOException e) {
-            logger.error(ExceptionUtils.getMessage(e));
-            throw new RuntimeException(e);
-        }
+        initProtocols(netConfig, applicationContext, generateOperation);
 
         // Register protocol receivers
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
             NetContext.getRouter().registerPacketReceiverDefinition(bean);
+        }
+    }
+
+    static void initProtocols(NetConfig config, ResourceLoader resources, GenerateOperation generateOperation) {
+        var packages = config.getProtocolPackages();
+        boolean scanPackages = CollectionUtils.isNotEmpty(packages);
+        if (scanPackages == StringUtils.isNotBlank(config.getProtocolLocation())) {
+            throw new IllegalArgumentException("Configure exactly one of protocolLocation and protocolPackages");
+        }
+        if (scanPackages) {
+            var protocols = new HashSet<Class<?>>();
+            for (var packageName : packages) {
+                if (StringUtils.isBlank(packageName)) {
+                    throw new IllegalArgumentException("protocolPackages must not contain a blank package name");
+                }
+                var classes = ProtocolAnalysis.scanPackageList(packageName.trim());
+                if (classes.isEmpty()) {
+                    throw new IllegalArgumentException("No @Protocol classes found in package: " + packageName);
+                }
+                protocols.addAll(classes);
+            }
+            ProtocolManager.initProtocol(protocols, generateOperation);
+            return;
+        }
+
+        var resource = resources.getResource(ResourceUtils.CLASSPATH_URL_PREFIX + config.getProtocolLocation());
+        try (var input = resource.getInputStream()) {
+            var xmlProtocols = DomUtils.inputStream2Object(input, XmlProtocols.class);
+            ProtocolManager.initProtocol(xmlProtocols, generateOperation);
+        } catch (IOException e) {
+            logger.error(ExceptionUtils.getMessage(e));
+            throw new RuntimeException(e);
         }
     }
 
