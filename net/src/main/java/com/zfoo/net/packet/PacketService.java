@@ -13,7 +13,11 @@
 package com.zfoo.net.packet;
 
 import com.zfoo.net.NetContext;
+import com.zfoo.net.core.broker.BrokerRegisterAsk;
+import com.zfoo.net.packet.common.Ping;
+import com.zfoo.net.router.attachment.SignalAttachment;
 import com.zfoo.protocol.ProtocolManager;
+import com.zfoo.protocol.anno.Protocol;
 import com.zfoo.protocol.buffer.ByteBufUtils;
 import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
@@ -29,17 +33,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.NativeDetector;
+import org.springframework.core.io.Resource;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * @author godotg
  */
 public class PacketService implements IPacketService {
+
+    private static final String PACKAGE_PREFIX = "package:";
+    private static final String IDENTIFIER = "\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*";
+    private static final Pattern PACKAGE_NAME = Pattern.compile(IDENTIFIER + "(?:\\." + IDENTIFIER + ")*");
 
     private static final Logger logger = LoggerFactory.getLogger(PacketService.class);
 
@@ -88,12 +105,66 @@ public class PacketService implements IPacketService {
 
     protected void initProtocols(ApplicationContext context, String protocolLocation, GenerateOperation generateOperation) {
         var resource = context.getResource(ResourceUtils.CLASSPATH_URL_PREFIX + protocolLocation);
+        var packageName = protocolPackage(protocolLocation, resource);
+        if (packageName != null) {
+            initProtocolPackages(context, List.of(packageName), true, generateOperation);
+            return;
+        }
         try (var input = resource.getInputStream()) {
             var xmlProtocols = DomUtils.inputStream2Object(input, XmlProtocols.class);
             ProtocolManager.initProtocol(xmlProtocols, generateOperation);
         } catch (IOException e) {
             logger.error(ExceptionUtils.getMessage(e));
             throw new RuntimeException(e);
+        }
+    }
+
+    static String protocolPackage(String location, Resource resource) {
+        if (location == null) {
+            return null;
+        }
+        if (location.startsWith(PACKAGE_PREFIX)) {
+            var name = location.substring(PACKAGE_PREFIX.length());
+            if (!PACKAGE_NAME.matcher(name).matches()) {
+                throw new IllegalArgumentException("Expected a Java package name after package: " + location);
+            }
+            return name;
+        }
+        // Existing resource names (even without an extension) and XML paths retain their meaning.
+        if (location.toLowerCase(Locale.ROOT).endsWith(".xml")
+                || !PACKAGE_NAME.matcher(location).matches() || resource.exists()) {
+            return null;
+        }
+        return location;
+    }
+
+    protected void initProtocolPackages(ApplicationContext context, Collection<String> roots, boolean requireMatch, GenerateOperation operation) {
+        if (NativeDetector.inNativeImage()) {
+            throw new IllegalStateException("Set NetConfig.protocolLocation to an XML resource in a native image");
+        }
+        var scanner = new ClassPathScanningCandidateComponentProvider(false, context.getEnvironment());
+        scanner.setResourceLoader(context);
+        scanner.addIncludeFilter(new AnnotationTypeFilter(Protocol.class));
+
+        var protocols = new HashSet<Class<?>>();
+        for (var root : roots) {
+            addProtocols(scanner, context, root, protocols);
+        }
+        if (requireMatch && protocols.isEmpty()) {
+            throw new IllegalArgumentException("No @Protocol classes found in " + roots);
+        }
+        for (var root : List.of(Ping.class.getPackageName(), SignalAttachment.class.getPackageName(), BrokerRegisterAsk.class.getPackageName())) {
+            addProtocols(scanner, context, root, protocols);
+        }
+        ProtocolManager.initProtocol(protocols, operation);
+    }
+
+    private void addProtocols(ClassPathScanningCandidateComponentProvider scanner, ApplicationContext context, String root, Set<Class<?>> protocols) {
+        for (var candidate : scanner.findCandidateComponents(root)) {
+            var type = ClassUtils.resolveClassName(candidate.getBeanClassName(), context.getClassLoader());
+            if (!type.isEnum()) {
+                protocols.add(type);
+            }
         }
     }
 

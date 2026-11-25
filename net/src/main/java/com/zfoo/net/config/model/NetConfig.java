@@ -23,6 +23,7 @@ import java.util.Objects;
  */
 public class NetConfig {
     private String id;
+    /** Classpath XML resource or a Java package of annotated protocols (e.g. package:com.example.messages). */
     private String protocolLocation;
     /**
      * {@link GenerateOperation}

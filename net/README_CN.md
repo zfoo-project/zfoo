@@ -32,6 +32,8 @@ task，任务线程池，任务的分发
   - 客户端对服务器的请求以Request结尾，返回以Response结尾
   - 服务器内部之间的调用以Ask结尾，返回以Answer结尾。
 
+在 JVM 上，可以用 `NetConfig.setProtocolLocation("com.example.messages")` 或 XML 的 `protocol-location` 属性扫描指定包及其子包中的 `@Protocol` 类。如果同名的 classpath 资源存在，优先读取资源；用 `package:com.example.messages` 可以明确指定包。原来的 `config/protocol.xml` 等 XML 路径仍按资源读取。Spring Boot 下不填时的行为见 [Boot 协议扫描](../boot/README.md#protocol-discovery-on-the-jvm)。
+
 #### 诞生背景
 
 ```

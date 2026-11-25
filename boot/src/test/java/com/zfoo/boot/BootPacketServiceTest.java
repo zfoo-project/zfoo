@@ -69,6 +69,17 @@ public class BootPacketServiceTest {
     }
 
     @Test
+    public void explicitPackageDoesNotFallBackToBootRoots() {
+        try (var context = new GenericApplicationContext()) {
+            AutoConfigurationPackages.register(context, ScanApplication.class.getPackageName());
+            context.refresh();
+            var error = Assert.assertThrows(IllegalArgumentException.class, () -> new BootPacketService()
+                    .initProtocols(context, "example.missing.messages", GenerateOperation.NO_OPERATION));
+            Assert.assertTrue(error.getMessage().contains("example.missing.messages"));
+        }
+    }
+
+    @Test
     public void missingBootRootsDoNotTriggerAClasspathWideScan() {
         try (var context = new GenericApplicationContext()) {
             context.refresh();
