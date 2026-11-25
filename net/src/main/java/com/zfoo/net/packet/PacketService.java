@@ -27,6 +27,7 @@ import com.zfoo.protocol.xml.XmlProtocols;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
@@ -76,20 +77,23 @@ public class PacketService implements IPacketService {
         // Set the protocol generation filter
         GenerateProtocolFile.generateProtocolFilter = GenerateProtocolFile.DefaultNetGenerateProtocolFilter;
 
-        // Parse protocol.xml and generate ProtocolRegistration objects
-        var resource = applicationContext.getResource(ResourceUtils.CLASSPATH_URL_PREFIX + protocolLocation);
-        try {
-            var xmlProtocols = DomUtils.inputStream2Object(resource.getInputStream(), XmlProtocols.class);
-            ProtocolManager.initProtocol(xmlProtocols, generateOperation);
-        } catch (IOException e) {
-            logger.error(ExceptionUtils.getMessage(e));
-            throw new RuntimeException(e);
-        }
+        initProtocols(applicationContext, protocolLocation, generateOperation);
 
         // Register protocol receivers
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
         for (var bean : componentBeans.values()) {
             NetContext.getRouter().registerPacketReceiverDefinition(bean);
+        }
+    }
+
+    protected void initProtocols(ApplicationContext context, String protocolLocation, GenerateOperation generateOperation) {
+        var resource = context.getResource(ResourceUtils.CLASSPATH_URL_PREFIX + protocolLocation);
+        try (var input = resource.getInputStream()) {
+            var xmlProtocols = DomUtils.inputStream2Object(input, XmlProtocols.class);
+            ProtocolManager.initProtocol(xmlProtocols, generateOperation);
+        } catch (IOException e) {
+            logger.error(ExceptionUtils.getMessage(e));
+            throw new RuntimeException(e);
         }
     }
 
