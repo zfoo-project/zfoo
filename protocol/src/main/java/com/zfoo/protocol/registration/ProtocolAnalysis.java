@@ -168,11 +168,14 @@ public class ProtocolAnalysis {
         // Register classes first, then packages
         for (var moduleDefinition : xmlProtocols.getModules()) {
             var moduleId = moduleDefinition.getId();
-            var module = new ProtocolModule(moduleId, moduleDefinition.getName());
-            AssertionUtils.isTrue(module.getId() > 0, "[module:{}] [id:{}] must be greater than or equal to 1", module.getName(), moduleId);
-            AssertionUtils.isNull(modules[module.getId()], "duplicate [module:{}] [id:{}] Exception!", module.getName(), moduleId);
-
-            modules[module.getId()] = module;
+            AssertionUtils.isTrue(moduleId >= 0, "[module:{}] [id:{}] must be greater than or equal to 0", moduleDefinition.getName(), moduleId);
+            var module = moduleId == 0
+                    ? ProtocolModule.DEFAULT_PROTOCOL_MODULE
+                    : new ProtocolModule(moduleId, moduleDefinition.getName());
+            if (moduleId != 0) {
+                AssertionUtils.isNull(modules[moduleId], "duplicate [module:{}] [id:{}] Exception!", module.getName(), moduleId);
+                modules[moduleId] = module;
+            }
             if (CollectionUtils.isEmpty(moduleDefinition.getProtocols())) {
                 continue;
             }

@@ -23,10 +23,13 @@ import com.zfoo.protocol.collection.CollectionUtils;
 import com.zfoo.protocol.exception.ExceptionUtils;
 import com.zfoo.protocol.generate.GenerateOperation;
 import com.zfoo.protocol.generate.GenerateProtocolFile;
+import com.zfoo.protocol.registration.ProtocolModule;
 import com.zfoo.protocol.serializer.CodeLanguage;
 import com.zfoo.protocol.util.DomUtils;
 import com.zfoo.protocol.util.NumberUtils;
 import com.zfoo.protocol.util.StringUtils;
+import com.zfoo.protocol.xml.XmlModuleDefinition;
+import com.zfoo.protocol.xml.XmlProtocolDefinition;
 import com.zfoo.protocol.xml.XmlProtocols;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
@@ -35,28 +38,23 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.NativeDetector;
-import org.springframework.core.io.Resource;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
- * @author godotg
+ * @author jaysunxiao
  */
 public class PacketService implements IPacketService {
-
-    private static final String PACKAGE_PREFIX = "package:";
-    private static final String IDENTIFIER = "\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*";
-    private static final Pattern PACKAGE_NAME = Pattern.compile(IDENTIFIER + "(?:\\." + IDENTIFIER + ")*");
 
     private static final Logger logger = LoggerFactory.getLogger(PacketService.class);
 
@@ -75,7 +73,7 @@ public class PacketService implements IPacketService {
         var applicationContext = NetContext.getApplicationContext();
 
         var netConfig = NetContext.getConfigManager().getLocalConfig();
-        var protocolLocation = netConfig.getProtocolLocation();
+        var protocolLocations = netConfig.getProtocolLocations();
 
         var generateOperation = new GenerateOperation();
         generateOperation.setMergeProtocol(netConfig.isMergeProtocol());
@@ -94,7 +92,7 @@ public class PacketService implements IPacketService {
         // Set the protocol generation filter
         GenerateProtocolFile.generateProtocolFilter = GenerateProtocolFile.DefaultNetGenerateProtocolFilter;
 
-        initProtocols(applicationContext, protocolLocation, generateOperation);
+        initProtocols(applicationContext, protocolLocations, generateOperation);
 
         // Register protocol receivers
         var componentBeans = applicationContext.getBeansWithAnnotation(Component.class);
@@ -103,44 +101,45 @@ public class PacketService implements IPacketService {
         }
     }
 
-    protected void initProtocols(ApplicationContext context, String protocolLocation, GenerateOperation generateOperation) {
-        var resource = context.getResource(ResourceUtils.CLASSPATH_URL_PREFIX + protocolLocation);
-        var packageName = protocolPackage(protocolLocation, resource);
-        if (packageName != null) {
-            initProtocolPackages(context, List.of(packageName), true, generateOperation);
+    protected void initProtocols(ApplicationContext context, List<String> protocolLocations, GenerateOperation generateOperation) {
+        var packageNames = new ArrayList<String>();
+        var modules = new ArrayList<XmlModuleDefinition>();
+        for (var protocolLocation : protocolLocations) {
+            var resource = context.getResource(ResourceUtils.CLASSPATH_URL_PREFIX + protocolLocation);
+            if (!protocolLocation.toLowerCase(Locale.ROOT).endsWith(".xml") && !resource.exists()) {
+                packageNames.add(protocolLocation);
+                continue;
+            }
+            try (var input = resource.getInputStream()) {
+                var xmlProtocols = DomUtils.inputStream2Object(input, XmlProtocols.class);
+                modules.addAll(xmlProtocols.getModules());
+            } catch (IOException e) {
+                logger.error(ExceptionUtils.getMessage(e));
+                throw new RuntimeException(e);
+            }
+        }
+        if (!packageNames.isEmpty() && NativeDetector.inNativeImage()) {
+            throw new IllegalStateException("Set NetConfig.protocolLocations to XML resources in a native image");
+        }
+        if (!packageNames.isEmpty()) {
+            var protocols = packageNames.stream()
+                    .distinct()
+                    .map(XmlProtocolDefinition::new)
+                    .toList();
+            var defaultModule = ProtocolModule.DEFAULT_PROTOCOL_MODULE;
+            modules.add(new XmlModuleDefinition(defaultModule.getId(), defaultModule.getName(), protocols));
+        }
+        if (modules.isEmpty()) {
             return;
         }
-        try (var input = resource.getInputStream()) {
-            var xmlProtocols = DomUtils.inputStream2Object(input, XmlProtocols.class);
-            ProtocolManager.initProtocol(xmlProtocols, generateOperation);
-        } catch (IOException e) {
-            logger.error(ExceptionUtils.getMessage(e));
-            throw new RuntimeException(e);
-        }
-    }
-
-    static String protocolPackage(String location, Resource resource) {
-        if (location == null) {
-            return null;
-        }
-        if (location.startsWith(PACKAGE_PREFIX)) {
-            var name = location.substring(PACKAGE_PREFIX.length());
-            if (!PACKAGE_NAME.matcher(name).matches()) {
-                throw new IllegalArgumentException("Expected a Java package name after package: " + location);
-            }
-            return name;
-        }
-        // Existing resource names (even without an extension) and XML paths retain their meaning.
-        if (location.toLowerCase(Locale.ROOT).endsWith(".xml")
-                || !PACKAGE_NAME.matcher(location).matches() || resource.exists()) {
-            return null;
-        }
-        return location;
+        var xmlProtocols = new XmlProtocols();
+        xmlProtocols.setModules(modules);
+        ProtocolManager.initProtocol(xmlProtocols, generateOperation);
     }
 
     protected void initProtocolPackages(ApplicationContext context, Collection<String> roots, boolean requireMatch, GenerateOperation operation) {
         if (NativeDetector.inNativeImage()) {
-            throw new IllegalStateException("Set NetConfig.protocolLocation to an XML resource in a native image");
+            throw new IllegalStateException("Set NetConfig.protocolLocations to XML resources in a native image");
         }
         var scanner = new ClassPathScanningCandidateComponentProvider(false, context.getEnvironment());
         scanner.setResourceLoader(context);

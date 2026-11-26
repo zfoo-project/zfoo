@@ -29,10 +29,13 @@ import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.w3c.dom.Element;
 
+import java.util.List;
+
 /**
- * @author godotg
+ * @author jaysunxiao
  */
 public class NetDefinitionParser implements BeanDefinitionParser {
 
@@ -98,8 +101,12 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         // Parse the node/application id
         resolvePlaceholder("id", "id", builder, element, parserContext);
 
-        // Classpath XML resource or Java package containing @Protocol classes
-        resolvePlaceholder("protocol-location", "protocolLocation", builder, element, parserContext);
+        // Classpath XML resources or Java packages containing @Protocol classes
+        var protocolLocations = new ManagedList<String>();
+        var locationValue = parserContext.getReaderContext().getEnvironment()
+                .resolvePlaceholders(element.getAttribute("protocol-locations"));
+        protocolLocations.addAll(List.of(StringUtils.tokenize(locationValue, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS)));
+        builder.addPropertyValue("protocolLocations", protocolLocations);
 
         // Whether all protocols are merged into a single file
         resolvePlaceholder("merge-protocol", "mergeProtocol", builder, element, parserContext);

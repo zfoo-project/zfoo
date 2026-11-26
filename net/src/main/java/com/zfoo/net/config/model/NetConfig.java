@@ -16,15 +16,19 @@ package com.zfoo.net.config.model;
 import com.zfoo.net.consumer.registry.Register;
 import com.zfoo.protocol.generate.GenerateOperation;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
- * @author godotg
+ * @author jaysunxiao
  */
 public class NetConfig {
     private String id;
-    /** Classpath XML resource or a Java package of annotated protocols (e.g. package:com.example.messages). */
-    private String protocolLocation;
+    /**
+     * Classpath XML resources or Java packages containing annotated protocols.
+     * Each location type is detected automatically.
+     */
+    private List<String> protocolLocations = List.of();
     /**
      * {@link GenerateOperation}
      */
@@ -74,12 +78,12 @@ public class NetConfig {
         this.id = id;
     }
 
-    public String getProtocolLocation() {
-        return protocolLocation;
+    public List<String> getProtocolLocations() {
+        return protocolLocations;
     }
 
-    public void setProtocolLocation(String protocolLocation) {
-        this.protocolLocation = protocolLocation;
+    public void setProtocolLocations(List<String> protocolLocations) {
+        this.protocolLocations = protocolLocations == null ? List.of() : List.copyOf(protocolLocations);
     }
 
     public boolean isMergeProtocol() {
@@ -164,7 +168,7 @@ public class NetConfig {
         }
         NetConfig netConfig = (NetConfig) o;
         return Objects.equals(id, netConfig.id) &&
-                Objects.equals(protocolLocation, netConfig.protocolLocation) &&
+                Objects.equals(protocolLocations, netConfig.protocolLocations) &&
                 Objects.equals(registry, netConfig.registry) &&
                 Objects.equals(monitor, netConfig.monitor) &&
                 Objects.equals(provider, netConfig.provider) &&
@@ -173,6 +177,6 @@ public class NetConfig {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, protocolLocation, registry, monitor, provider, consumer);
+        return Objects.hash(id, protocolLocations, registry, monitor, provider, consumer);
     }
 }

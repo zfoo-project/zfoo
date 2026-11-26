@@ -37,7 +37,7 @@ task: task thread pool and task dispatching
   - Requests from clients to servers end with `Request`, and replies end with `Response`.
   - Calls between servers end with `Ask`, and replies end with `Answer`.
 
-On the JVM, `NetConfig.setProtocolLocation("com.example.messages")` (or the `protocol-location` XML attribute) scans the package and its subpackages for `@Protocol` classes. Existing classpath resources take precedence; use `package:com.example.messages` to explicitly request a package. XML paths such as `config/protocol.xml` are still loaded as resources. See [Boot protocol discovery](../boot/README.md#protocol-discovery-on-the-jvm) for the default when using Spring Boot.
+On the JVM, `NetConfig.setProtocolLocations(List.of("protocol.xml", "com.example.messages"))` loads multiple protocol sources. The `protocol-locations` XML attribute accepts comma-, semicolon-, or whitespace-separated values, for example `protocol-locations="protocol.xml; com.example.messages"`. Existing classpath resources take precedence; other values are scanned as Java packages. Multiple XML resources are merged before protocol initialization, and package locations can be mixed with XML resources. Explicit XML definitions take precedence over package scanning. See [Boot protocol discovery](../boot/README.md#protocol-discovery-on-the-jvm) for the default when using Spring Boot.
 
 #### Background
 

@@ -33,4 +33,8 @@ public class XmlProtocols {
     public List<XmlModuleDefinition> getModules() {
         return modules;
     }
+
+    public void setModules(List<XmlModuleDefinition> modules) {
+        this.modules = modules;
+    }
 }

@@ -85,7 +85,7 @@ public class BootPacketServiceTest {
             context.refresh();
             var error = Assert.assertThrows(IllegalStateException.class, () -> new BootPacketService()
                     .initProtocols(context, null, GenerateOperation.NO_OPERATION));
-            Assert.assertTrue(error.getMessage().contains("protocolLocation"));
+            Assert.assertTrue(error.getMessage().contains("protocolLocations"));
         }
     }
 }

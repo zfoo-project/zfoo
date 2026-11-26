@@ -37,6 +37,15 @@ public class XmlModuleDefinition {
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<XmlProtocolDefinition> protocols;
 
+    public XmlModuleDefinition() {
+    }
+
+    public XmlModuleDefinition(byte id, String name, List<XmlProtocolDefinition> protocols) {
+        this.id = id;
+        this.name = name;
+        this.protocols = protocols;
+    }
+
     public byte getId() {
         return id;
     }

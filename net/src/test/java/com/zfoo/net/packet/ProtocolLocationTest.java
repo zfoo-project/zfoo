@@ -21,31 +21,19 @@ import io.netty.buffer.Unpooled;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.io.ClassPathResource;
+
+import java.util.List;
 
 public class ProtocolLocationTest {
     @Test
-    public void distinguishesPackagesFromResources() {
-        var existing = new ClassPathResource("protocol.xml");
-        var missing = new ClassPathResource("not-on-the-classpath.xml");
-        Assert.assertTrue(existing.exists());
-        Assert.assertNull(PacketService.protocolPackage("messages.config", existing));
-        Assert.assertNull(PacketService.protocolPackage("missing.xml", missing));
-        Assert.assertNull(PacketService.protocolPackage("config/messages", missing));
-        Assert.assertEquals("messages.config", PacketService.protocolPackage("messages.config", missing));
-        Assert.assertEquals("messages.xml", PacketService.protocolPackage("package:messages.xml", existing));
-        for (var location : new String[]{"package:", "package:org..messages", "package:org.*"}) {
-            Assert.assertThrows(IllegalArgumentException.class, () -> PacketService.protocolPackage(location, missing));
-        }
-    }
-
-    @Test
-    public void barePackageWorksWithoutSpringBoot() {
+    public void multiplePackagesWorkWithoutSpringBoot() {
         try (var context = new GenericApplicationContext()) {
             context.refresh();
             var service = new PacketService();
-            service.initProtocols(context, UdpHelloRequest.class.getPackageName(), GenerateOperation.NO_OPERATION);
-            Assert.assertFalse(ProtocolManager.isProtocolClass(TcpHelloRequest.class));
+            service.initProtocols(context, List.of(
+                    UdpHelloRequest.class.getPackageName(),
+                    TcpHelloRequest.class.getPackageName()), GenerateOperation.NO_OPERATION);
+            Assert.assertTrue(ProtocolManager.isProtocolClass(TcpHelloRequest.class));
 
             var buffer = Unpooled.buffer();
             try {

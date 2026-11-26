@@ -18,7 +18,7 @@
 
     <context:component-scan base-package="com.zfoo"/>
 
-    <net:net id="applicationNameTest" protocol-location="protocol.xml">
+    <net:net id="applicationNameTest" protocol-locations="protocol.xml; com.zfoo.net.packet.common">
     </net:net>
 
 </beans>
