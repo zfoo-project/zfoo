@@ -98,7 +98,7 @@ public class NetDefinitionParser implements BeanDefinitionParser {
         // Parse the node/application id
         resolvePlaceholder("id", "id", builder, element, parserContext);
 
-        // Location of protocol.xml; writing just "protocol.xml" reads from the resources directory
+        // Classpath XML resource or Java package containing @Protocol classes
         resolvePlaceholder("protocol-location", "protocolLocation", builder, element, parserContext);
 
         // Whether all protocols are merged into a single file
